@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-avatar · IS Web Components</title>
   <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/palettes.css" />
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/media/avatar.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
@@ -13,6 +14,7 @@
   <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
+  <script src="../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
@@ -32,19 +34,135 @@
       </section>
 
       <section class="section" id="examples">
-        <h2>Formas y escala</h2>
+        <h2>Formas</h2>
+        <p class="lede"><code class="code">shape="circle"</code> · <code class="code">square"</code> · <code class="code">rounded"</code> — el border-radius se aplica al contenedor.</p>
         <div class="demo">
           <div class="demo-row" style="align-items:center;gap:1rem;flex-wrap:wrap">
             <span style="font-size:3rem"><is-avatar initials="CR" shape="circle" label="Círculo"></is-avatar></span>
             <span style="font-size:3rem"><is-avatar initials="SQ" shape="square" label="Cuadrado"></is-avatar></span>
             <span style="font-size:3rem"><is-avatar initials="RD" shape="rounded" label="Rounded"></is-avatar></span>
-            <span style="font-size:4rem"><is-avatar initials="XL" label="Grande"></is-avatar></span>
-            <span style="font-size:1.5rem"><is-avatar initials="SM" label="Chico"></is-avatar></span>
           </div>
         </div>
         <pre class="code">&lt;span style="font-size:3rem"&gt;
   &lt;is-avatar initials="AB" shape="rounded"&gt;&lt;/is-avatar&gt;
 &lt;/span&gt;</pre>
+      </section>
+
+      <section class="section" id="scale">
+        <h2>Escala con font-size</h2>
+        <p class="lede">Como la caja es <code class="code">1em × 1em</code>, basta con subir el <code class="code">font-size</code> del padre.</p>
+        <div class="demo">
+          <div class="demo-row" style="align-items:center;gap:1rem;flex-wrap:wrap">
+            <span style="font-size:1rem"><is-avatar initials="XS" label="XS"></is-avatar></span>
+            <span style="font-size:1.5rem"><is-avatar initials="SM" label="SM"></is-avatar></span>
+            <span style="font-size:2rem"><is-avatar initials="MD" label="MD"></is-avatar></span>
+            <span style="font-size:3rem"><is-avatar initials="LG" label="LG"></is-avatar></span>
+            <span style="font-size:4rem"><is-avatar initials="XL" label="XL"></is-avatar></span>
+            <span style="font-size:6rem"><is-avatar initials="XXL" label="XXL"></is-avatar></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <h2>Origen del contenido</h2>
+        <p class="lede">Prioridad: <code class="code">image</code> → <code class="code">initials</code> → slot <code class="code">icon</code>. Si la imagen falla al cargar, emite <code class="code">is-error</code> y cae a <code class="code">initials</code>.</p>
+        <div class="demo">
+          <div class="demo-row" style="align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem">
+            <is-avatar image="https://i.pravatar.cc/80?u=2" label="Foto"></is-avatar>
+            <is-avatar initials="NS" label="Sin foto, iniciales"></is-avatar>
+            <is-avatar label="Solo icono">
+              <is-icon slot="icon" icon="mdi:cog"></is-icon>
+            </is-avatar>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="stacks">
+        <h2>Stack / group de avatares</h2>
+        <p class="lede">Varios avatares juntos con margin-left negativo, como en chats o listas.</p>
+        <div class="demo">
+          <div style="display:flex;align-items:center;font-size:2rem;padding:0.5rem">
+            <is-avatar image="https://i.pravatar.cc/80?u=10" label="Ana" shape="circle"></is-avatar>
+            <is-avatar image="https://i.pravatar.cc/80?u=11" label="Bea" shape="circle" style="margin-left:-0.6em"></is-avatar>
+            <is-avatar image="https://i.pravatar.cc/80?u=12" label="Carol" shape="circle" style="margin-left:-0.6em"></is-avatar>
+            <is-avatar initials="+5" label="5 más" shape="circle" style="margin-left:-0.6em;background:var(--is-accent);color:var(--is-accent-fg)"></is-avatar>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="list">
+        <h2>Patrón lista de usuarios</h2>
+        <p class="lede">Avatar + nombre + email, alineado con la línea base.</p>
+        <div class="demo">
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem">
+            <li style="display:flex;align-items:center;gap:0.75rem">
+              <span style="font-size:2rem">
+                <is-avatar image="https://i.pravatar.cc/80?u=20" label="Lucía" shape="circle"></is-avatar>
+              </span>
+              <span>
+                <div><strong>Lucía Gómez</strong></div>
+                <div style="font-size:0.85em;opacity:0.7">lucia.gomez@demo.com</div>
+              </span>
+            </li>
+            <li style="display:flex;align-items:center;gap:0.75rem">
+              <span style="font-size:2rem">
+                <is-avatar initials="MR" label="Marcos" shape="circle"></is-avatar>
+              </span>
+              <span>
+                <div><strong>Marcos Reyes</strong></div>
+                <div style="font-size:0.85em;opacity:0.7">marcos.reyes@demo.com</div>
+              </span>
+            </li>
+            <li style="display:flex;align-items:center;gap:0.75rem">
+              <span style="font-size:2rem">
+                <is-avatar image="https://i.pravatar.cc/80?u=21" label="Sara" shape="rounded"></is-avatar>
+              </span>
+              <span>
+                <div><strong>Sara Pereira</strong></div>
+                <div style="font-size:0.85em;opacity:0.7">sara.pereira@demo.com</div>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="icons">
+        <h2>Icono fallback por slot</h2>
+        <p class="lede">Sin imagen ni iniciales, el slot <code class="code">icon</code> pinta cualquier <code class="code">&lt;is-icon&gt;</code>.</p>
+        <div class="demo">
+          <div class="demo-row" style="align-items:center;gap:1rem;flex-wrap:wrap;font-size:2.5rem">
+            <is-avatar label="Usuario">
+              <is-icon slot="icon" icon="mdi:account"></is-icon>
+            </is-avatar>
+            <is-avatar label="Bot">
+              <is-icon slot="icon" icon="mdi:robot"></is-icon>
+            </is-avatar>
+            <is-avatar label="Soporte">
+              <is-icon slot="icon" icon="mdi:lifebuoy"></is-icon>
+            </is-avatar>
+            <is-avatar label="Comunidad">
+              <is-icon slot="icon" icon="mdi:account-group"></is-icon>
+            </is-avatar>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="error">
+        <h2>Imagen rota</h2>
+        <p class="lede">Si <code class="code">image</code> falla y hay <code class="code">initials</code>, el avatar cae a las iniciales automáticamente y emite <code class="code">is-error</code>.</p>
+        <div class="demo">
+          <div style="display:flex;align-items:center;gap:1rem;font-size:2.5rem">
+            <is-avatar image="https://invalid.example/x.jpg" initials="ER" label="Error fallback" id="errAv"></is-avatar>
+            <span id="errLog" style="font-size:0.9rem">Esperando error…</span>
+          </div>
+        </div>
+        <script>
+          const a = document.getElementById('errAv');
+          const log = document.getElementById('errLog');
+          a.addEventListener('is-error', () => {
+            log.textContent = '✓ is-error emitido — avatar cayó a iniciales "ER"';
+          });
+        </script>
       </section>
 
       <section class="section" id="reference">
@@ -66,7 +184,13 @@
       <h1>is-avatar</h1>
       <is-scrollspy target="is-main" trigger="section.section">
         <a href="#intro">Introducción</a>
-        <a href="#examples">Ejemplos</a>
+        <a href="#examples">Formas</a>
+        <a href="#scale">Escala</a>
+        <a href="#sources">Origen</a>
+        <a href="#stacks">Stack</a>
+        <a href="#list">Lista</a>
+        <a href="#icons">Icono</a>
+        <a href="#error">Imagen rota</a>
         <a href="#reference">Referencia</a>
       </is-scrollspy>
     </aside>

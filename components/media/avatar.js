@@ -121,6 +121,7 @@ import './icon.js';
 
       this.setAttribute('role', 'img');
       this.setAttribute('aria-label', label || initials || 'Avatar');
+      this.dataset.shape = this.shape;
 
       const showImage = Boolean(image) && !this.#imgFailed;
       this.#initials.hidden = true;
