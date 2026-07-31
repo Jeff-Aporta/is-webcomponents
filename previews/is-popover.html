@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-popover · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/helpers/popover.js"></script>
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .stack { display: flex; flex-direction: column; gap: 0.65rem; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-popover&gt;</h2>
+        <p class="lede">
+          Panel flotante con contenido interactivo. Ancla con <code class="code">for</code>.
+          Cierra con Escape, click fuera o <code class="code">data-popover="close"</code>.
+        </p>
+        <div class="demo">
+          <is-button id="pop1">Show popover</is-button>
+          <is-popover for="pop1">
+            <div class="stack">
+              <p style="margin:0">This popover contains interactive content.</p>
+              <is-button variant="brand" data-popover="close">Take Action</is-button>
+            </div>
+          </is-popover>
+        </div>
+        <pre class="code">&lt;is-button id="pop1"&gt;Show popover&lt;/is-button&gt;
+&lt;is-popover for="pop1"&gt;
+  …contenido…
+  &lt;is-button data-popover="close"&gt;Dismiss&lt;/is-button&gt;
+&lt;/is-popover&gt;</pre>
+      </section>
+      <section class="section" id="placement">
+        <h2>Placement</h2>
+        <div class="demo grid">
+          <is-button id="p-top">Top</is-button>
+          <is-popover for="p-top" placement="top">I'm on the top</is-popover>
+          <is-button id="p-bottom">Bottom</is-button>
+          <is-popover for="p-bottom" placement="bottom">I'm on the bottom</is-popover>
+          <is-button id="p-left">Left</is-button>
+          <is-popover for="p-left" placement="left">I'm on the left</is-popover>
+          <is-button id="p-right">Right</is-button>
+          <is-popover for="p-right" placement="right">I'm on the right</is-popover>
+        </div>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>for</code> <code>open</code></td><td>ancla + estado</td></tr>
+            <tr><td><code>placement</code> <code>distance</code> <code>skidding</code></td><td>posicionamiento</td></tr>
+            <tr><td><code>without-arrow</code></td><td>sin flecha</td></tr>
+            <tr><td><code>show()</code> <code>hide()</code></td><td>métodos</td></tr>
+            <tr><td>events</td><td>is-show / is-hide (cancelables) + after-*</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-popover</h1>
+      <nav><a href="#intro">Intro</a><a href="#placement">Placement</a><a href="#reference">Referencia</a></nav>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

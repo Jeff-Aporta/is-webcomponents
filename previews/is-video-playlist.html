@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-video-playlist · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/media/video-playlist.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/divider.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .cluster { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+    .placement-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      gap: 1rem;
+    }
+    .placement-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+    .placement-card is-video-playlist { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-video-playlist&gt;</h2>
+        <p class="lede">
+          Agrupa varios <code class="code">&lt;is-video&gt;</code> con una lista lateral
+          (thumbnail + título + duración), igual que
+          <a href="https://webawesome.com/docs/components/video-playlist/" target="_blank" rel="noopener">Web Awesome Video Playlist</a>.
+          La lista es <code class="code">flex-direction: column</code>.
+        </p>
+        <div class="demo demo--with-code">
+          <is-video-playlist id="pl" autoplay-next placement="bottom">
+            <is-video
+              title="Flor (MP4)"
+              poster="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice.jpg"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+            ></is-video>
+            <is-video
+              title="Flor (WebM)"
+              poster="https://interactive-examples.mdn.mozilla.net/media/cc0-images/elephant.jpg"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
+            ></is-video>
+            <is-video
+              title="Sin poster"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+            ></is-video>
+          </is-video-playlist>
+        </div>
+        <pre class="code">&lt;is-video-playlist autoplay-next placement="bottom"&gt;
+  &lt;is-video title="Flor (MP4)" poster="…" src="flower.mp4" controls&gt;&lt;/is-video&gt;
+  &lt;is-video title="Flor (WebM)" poster="…" src="flower.webm" controls&gt;&lt;/is-video&gt;
+&lt;/is-video-playlist&gt;</pre>
+      </section>
+
+      <section class="section" id="placement">
+        <h2>Placement</h2>
+        <p class="lede">
+          <code class="code">placement</code>: <code class="code">left</code> |
+          <code class="code">top</code> | <code class="code">right</code> |
+          <code class="code">bottom</code> (default, como WA).
+        </p>
+        <div class="demo">
+          <div class="cluster" style="margin-bottom:0.75rem">
+            <is-button id="placeLeft" appearance="outlined">left</is-button>
+            <is-button id="placeTop" appearance="outlined">top</is-button>
+            <is-button id="placeRight" appearance="outlined">right</is-button>
+            <is-button id="placeBottom" appearance="filled">bottom</is-button>
+          </div>
+          <is-video-playlist id="plPlace" placement="bottom" style="max-height:28rem">
+            <is-video
+              title="Clip A"
+              poster="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice.jpg"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+            ></is-video>
+            <is-video
+              title="Clip B"
+              poster="https://interactive-examples.mdn.mozilla.net/media/cc0-images/elephant.jpg"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
+            ></is-video>
+          </is-video-playlist>
+        </div>
+        <pre class="code">&lt;is-video-playlist placement="right"&gt;…&lt;/is-video-playlist&gt;</pre>
+      </section>
+
+      <section class="section" id="nav">
+        <h2>Navegación programática</h2>
+        <div class="demo">
+          <is-video-playlist id="demoNav" placement="bottom">
+            <is-video
+              title="Primero"
+              poster="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice.jpg"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+            ></is-video>
+            <is-video
+              title="Segundo"
+              poster="https://interactive-examples.mdn.mozilla.net/media/cc0-images/elephant.jpg"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
+            ></is-video>
+            <is-video
+              title="Tercero"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+            ></is-video>
+          </is-video-playlist>
+          <is-divider style="margin:0.75rem 0"></is-divider>
+          <div class="cluster">
+            <is-button appearance="filled" id="navFirst">First</is-button>
+            <is-button appearance="filled" id="navPrev">Previous</is-button>
+            <is-button appearance="filled" id="navNext">Next</is-button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="events">
+        <h2>Eventos</h2>
+        <p class="lede" id="eventLog">Sin cambios aún.</p>
+        <div class="demo">
+          <is-video-playlist id="eventPl" placement="right" style="max-height:22rem">
+            <is-video
+              title="Alpha"
+              poster="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice.jpg"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+            ></is-video>
+            <is-video
+              title="Beta"
+              poster="https://interactive-examples.mdn.mozilla.net/media/cc0-images/elephant.jpg"
+              controls
+              playsinline
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
+            ></is-video>
+          </is-video-playlist>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>placement</code></td><td><code>left</code> | <code>top</code> | <code>right</code> | <code>bottom</code></td></tr>
+            <tr><td><code>autoplay-next</code></td><td>boolean</td></tr>
+            <tr><td><code>controls</code></td><td>reenvía a cada <code>is-video</code></td></tr>
+            <tr><td><code>goTo(i)</code> <code>next()</code> <code>previous()</code></td><td>navegación</td></tr>
+            <tr><td><code>is-video-change</code></td><td><code>{ previousIndex, currentIndex, video }</code></td></tr>
+            <tr><td>parts</td><td><code>video-playlist</code> <code>playlist</code> <code>playlist-item</code> <code>playlist-thumbnail</code> <code>playlist-title</code> <code>playlist-duration</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-video-playlist</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#placement">Placement</a>
+        <a href="#nav">Navegación</a>
+        <a href="#events">Eventos</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const placePl = document.getElementById('plPlace');
+    const placeBtns = [
+      ['placeLeft', 'left'],
+      ['placeTop', 'top'],
+      ['placeRight', 'right'],
+      ['placeBottom', 'bottom'],
+    ];
+    for (const [id, val] of placeBtns) {
+      document.getElementById(id)?.addEventListener('click', () => {
+        placePl.placement = val;
+        for (const [bid] of placeBtns) {
+          const b = document.getElementById(bid);
+          if (b) b.setAttribute('appearance', bid === id ? 'filled' : 'outlined');
+        }
+      });
+    }
+
+    const nav = document.getElementById('demoNav');
+    document.getElementById('navFirst')?.addEventListener('click', () => nav.goTo(0));
+    document.getElementById('navPrev')?.addEventListener('click', () => nav.previous());
+    document.getElementById('navNext')?.addEventListener('click', () => nav.next());
+
+    const log = document.getElementById('eventLog');
+    document.getElementById('eventPl')?.addEventListener('is-video-change', (e) => {
+      const t = e.detail.video?.getAttribute('title') || '';
+      log.textContent = `Changed from index ${e.detail.previousIndex} → ${e.detail.currentIndex}: "${t}"`;
+    });
+  </script>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IS Web Components</title>
+  <meta name="description" content="Galería de Web Components de Insoft.">
+  <link rel="stylesheet" href="styles/is-base.css">
+  <link rel="stylesheet" href="styles/shell.css">
+  <link rel="icon" href="https://api.iconify.design/mdi/widgets-outline.svg?color=%231e90ff&width=64&height=64" type="image/svg+xml">
+  <script type="module" src="components/actions/button.js"></script>
+  <script type="module" src="components/actions/button-group.js"></script>
+  <script type="module" src="components/actions/copy-button.js"></script>
+  <script type="module" src="components/actions/check-icon-button.js"></script>
+  <script type="module" src="components/actions/dropdown.js"></script>
+  <script type="module" src="components/actions/dropdown-item.js"></script>
+  <script type="module" src="components/media/icon.js"></script>
+  <script type="module" src="components/media/avatar.js"></script>
+  <script type="module" src="components/feedback/spinner.js"></script>
+  <script type="module" src="components/feedback/badge.js"></script>
+  <script type="module" src="components/feedback/tag.js"></script>
+  <script type="module" src="components/feedback/skeleton.js"></script>
+  <script type="module" src="components/feedback/progress-bar.js"></script>
+  <script type="module" src="components/feedback/progress-ring.js"></script>
+  <script type="module" src="components/feedback/theme-toggle.js"></script>
+  <script type="module" src="components/feedback/toast.js"></script>
+  <script type="module" src="components/feedback/toast-item.js"></script>
+  <script type="module" src="components/feedback/tooltip.js"></script>
+  <script type="module" src="components/layout/split-panel.js"></script>
+  <script type="module" src="components/layout/card.js"></script>
+  <script type="module" src="components/layout/divider.js"></script>
+  <script type="module" src="components/helpers/popup.js"></script>
+  <script type="module" src="components/helpers/popover.js"></script>
+  <script type="module" src="components/helpers/relative-time.js"></script>
+  <script type="module" src="components/helpers/format-date.js"></script>
+  <script type="module" src="components/helpers/format-number.js"></script>
+  <script type="module" src="components/helpers/format-bytes.js"></script>
+  <script type="module" src="components/helpers/intersection-observer.js"></script>
+  <script type="module" src="components/helpers/mutation-observer.js"></script>
+  <script type="module" src="components/helpers/resize-observer.js"></script>
+  <script type="module" src="components/forms/option.js"></script>
+  <script type="module" src="components/forms/combobox.js"></script>
+  <script type="module" src="components/forms/file-input.js"></script>
+  <script type="module" src="components/forms/date-input.js"></script>
+  <script type="module" src="components/forms/date-picker.js"></script>
+  <script type="module" src="components/data/data-grid.js"></script>
+  <script type="module" src="components/media/video.js"></script>
+  <script type="module" src="components/media/video-playlist.js"></script>
+  <script type="module" src="components/charts/chart.js"></script>
+  <script type="module" src="components/charts/bar-chart.js"></script>
+  <script type="module" src="components/charts/line-chart.js"></script>
+  <script type="module" src="components/charts/pie-chart.js"></script>
+  <script type="module" src="components/charts/doughnut-chart.js"></script>
+  <script type="module" src="components/charts/radar-chart.js"></script>
+  <script type="module" src="components/charts/polar-area-chart.js"></script>
+  <script type="module" src="components/charts/scatter-chart.js"></script>
+  <script type="module" src="components/charts/bubble-chart.js"></script>
+  <script type="module" src="components/charts/sparkline.js"></script>
+</head>
+<body>
+  <header class="shell-bar">
+    <div class="brand-wrap" id="brandWrap">
+      <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="Insoft — elegir paleta" title="Elegir paleta">
+        <span id="brandLead">ins</span><span class="brand__accent" id="brandAccent">oft</span>
+      </button>
+      <ul class="brand-menu" id="brandMenu" role="listbox" hidden>
+        <li role="option" tabindex="-1" data-palette="insoft" aria-selected="true">Insoft</li>
+        <li role="option" tabindex="-1" data-palette="contapyme" aria-selected="false">ContaPyme</li>
+        <li role="option" tabindex="-1" data-palette="agrowin" aria-selected="false">AgroWin</li>
+      </ul>
+    </div>
+
+    <is-button class="shell-icon-btn" id="fullscreenBtn" variant="neutral" appearance="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
+      <is-icon slot="start" icon="mdi:open-in-new"></is-icon>
+    </is-button>
+
+    <is-theme-toggle id="themeToggle" dark="true"></is-theme-toggle>
+  </header>
+
+  <is-split-panel id="mainSplit" class="main-split" orientation="horizontal" position-in-pixels="200" primary="start" storage-key="gallery-nav">
+    <nav class="shell-nav" slot="start" id="shellNav" aria-label="Componentes"></nav>
+    <iframe class="preview-frame" slot="end" id="previewFrame" title="Vista del componente"></iframe>
+  </is-split-panel>
+
+  <script type="module">
+    import components from './manifest.js';
+
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const shellNav = document.getElementById('shellNav');
+    const frame = document.getElementById('previewFrame');
+    const brand = document.getElementById('brand');
+    const brandMenu = document.getElementById('brandMenu');
+    const brandWrap = document.getElementById('brandWrap');
+    const brandLead = document.getElementById('brandLead');
+    const brandAccent = document.getElementById('brandAccent');
+    const params = new URLSearchParams(location.search);
+    const themes = new Set(['light', 'dark']);
+    const palettes = new Set(['insoft', 'contapyme', 'agrowin']);
+    const brands = {
+      insoft:    { lead: 'ins',  accent: 'oft',  label: 'Insoft',    leadColor: '#000',     accentColor: '#d71920' },
+      contapyme: { lead: 'conta', accent: 'pyme', label: 'ContaPyme', leadColor: '#000',    accentColor: '#fff'    },
+      agrowin:   { lead: 'agro', accent: 'win',  label: 'AgroWin',   leadColor: '#000',    accentColor: '#fff'    }
+    };
+
+    const setMenuOpen = (open) => {
+      brand.setAttribute('aria-expanded', open ? 'true' : 'false');
+      brandMenu.hidden = !open;
+      brandWrap.classList.toggle('is-open', open);
+    };
+
+    // --- b64url helpers (inline; pattern from isa-patyia-paws router.ts) ---
+    const b64urlEncode = (input) => {
+      const bytes = new TextEncoder().encode(input);
+      let bin = '';
+      bytes.forEach((b) => { bin += String.fromCharCode(b); });
+      return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    };
+    const b64urlDecode = (input) => {
+      let pad = String(input).replace(/-/g, '+').replace(/_/g, '/');
+      while (pad.length % 4) pad += '=';
+      const bin = atob(pad);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    };
+
+    const readStateParam = () => {
+      const raw = params.get('s');
+      if (!raw) return null;
+      try { return JSON.parse(b64urlDecode(raw)); } catch { return null; }
+    };
+
+    // --- build nav (alfabético por título) ---
+    const navSkip = new Set(['is-option', 'is-toast-item']);
+    const navItems = components
+      .filter((c) => !navSkip.has(c.tag))
+      .slice()
+      .sort((a, b) => a.title.localeCompare(b.title, 'es', { sensitivity: 'base' }));
+    for (const component of navItems) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'shell-nav__item';
+      btn.dataset.tag = component.tag;
+      btn.setAttribute('aria-label', `${component.title} ${component.tag}`);
+      const title = document.createElement('span');
+      title.className = 'shell-nav__title';
+      title.textContent = component.title;
+      const tag = document.createElement('span');
+      tag.className = 'shell-nav__tag';
+      tag.textContent = `<${component.tag}>`;
+      btn.append(title, tag);
+      btn.addEventListener('click', () => selectComponent(component.tag));
+      shellNav.appendChild(btn);
+    }
+
+    // --- initial state ---
+    const stateFromUrl = readStateParam();
+    let theme = themes.has(stateFromUrl?.theme)
+      ? stateFromUrl.theme
+      : (themes.has(localStorage.getItem('is-theme')) ? localStorage.getItem('is-theme') : 'dark');
+    let palette = palettes.has(stateFromUrl?.palette)
+      ? stateFromUrl.palette
+      : (palettes.has(localStorage.getItem('is-palette')) ? localStorage.getItem('is-palette') : 'insoft');
+    let component = components.find(item => item.tag === (stateFromUrl && stateFromUrl.component)) ?? components[0];
+
+    function encodeState(obj) {
+      return b64urlEncode(JSON.stringify(obj));
+    }
+
+    /** Preview URL: ?s= solo con valores iniciales de esa carga (no se reescribe al toglear). */
+    function previewSrc(page) {
+      return `previews/${page}?s=${encodeState({ embed: true, theme, palette })}`;
+    }
+
+    function sendContext() {
+      frame.contentWindow?.postMessage({ type: 'is-context', theme, palette }, location.origin);
+    }
+
+    function updateUrl() {
+      // Gallery: s solo navega el componente. theme/palette no van en la URL live.
+      const encoded = encodeState({ component: component.tag });
+      const next = new URL(location.href);
+      next.search = '?s=' + encoded;
+      history.replaceState(null, '', next);
+    }
+
+    function renderContext() {
+      root.classList.toggle('theme-light', theme === 'light');
+      root.classList.toggle('theme-dark', theme === 'dark');
+      root.dataset.theme = theme;
+      root.dataset.palette = palette;
+      themeToggle.dark = theme === 'dark';
+      for (const node of shellNav.querySelectorAll('.shell-nav__item')) {
+        node.setAttribute('aria-current', node.dataset.tag === component.tag ? 'true' : 'false');
+      }
+      scrollNavToCurrent();
+      for (const opt of brandMenu.querySelectorAll('[role="option"]')) {
+        opt.setAttribute('aria-selected', opt.dataset.palette === palette ? 'true' : 'false');
+      }
+      const brandData = brands[palette];
+      brandLead.textContent = brandData.lead;
+      brandAccent.textContent = brandData.accent;
+      brandLead.style.color = brandData.leadColor;
+      brandAccent.style.color = brandData.accentColor;
+      brand.setAttribute('aria-label', `${brandData.label} — elegir paleta`);
+      document.title = `${component.title} | ${brandData.label}`;
+      localStorage.setItem('is-theme', theme);
+      localStorage.setItem('is-palette', palette);
+      updateUrl();
+      sendContext();
+    }
+
+    /** Centra el ítem activo en el viewport del nav (sin scrollear la página). */
+    function scrollNavToCurrent() {
+      const current = shellNav.querySelector('.shell-nav__item[aria-current="true"]');
+      if (!current) return;
+      const delta =
+        current.getBoundingClientRect().top -
+        shellNav.getBoundingClientRect().top -
+        (shellNav.clientHeight - current.offsetHeight) / 2;
+      shellNav.scrollTo({ top: shellNav.scrollTop + delta, behavior: 'smooth' });
+    }
+
+    function selectComponent(tag) {
+      const next = components.find(item => item.tag === tag) ?? components[0];
+      if (next === component) return;
+      component = next;
+      frame.src = previewSrc(component.page);
+      renderContext();
+    }
+
+    frame.addEventListener('load', () => {
+      sendContext();
+      // clic dentro del iframe no burbujea al parent → cerrar menú ahí
+      try {
+        frame.contentDocument?.addEventListener('pointerdown', () => setMenuOpen(false), { capture: true });
+      } catch { /* cross-origin */ }
+    });
+    brand.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setMenuOpen(brandMenu.hidden);
+    });
+    brandMenu.addEventListener('click', (e) => {
+      const opt = e.target.closest('[data-palette]');
+      if (!opt) return;
+      palette = opt.dataset.palette;
+      if (!palettes.has(palette)) palette = 'insoft';
+      setMenuOpen(false);
+      renderContext();
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (!brandWrap.contains(e.target)) setMenuOpen(false);
+    }, true);
+    // focus al iframe (o blur de la ventana) también cierra
+    window.addEventListener('blur', () => {
+      queueMicrotask(() => {
+        if (document.activeElement === frame) setMenuOpen(false);
+      });
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    });
+    themeToggle.addEventListener('theme-toggle', (e) => {
+      // El toggle ya cambió el contenedor (html); sincronizar estado de la galería
+      theme = e.detail?.theme === 'light' ? 'light' : 'dark';
+      renderContext();
+    });
+    fullscreenBtn.addEventListener('click', () => {
+      // s con theme/palette = iniciales de esa ventana; no se actualizan al toglear ahí
+      window.open(`previews/${component.page}?s=${encodeState({ theme, palette })}`, '_blank', 'noopener');
+    });
+
+    frame.src = previewSrc(component.page);
+    renderContext();
+
+    // --- split-panel nav: clamp + persist vía storage-key="gallery-nav" ---
+    const mainSplit = document.getElementById('mainSplit');
+    const NAV_MIN = 140;
+    const NAV_MAX = 280;
+    const clampNav = (n) => Math.min(NAV_MAX, Math.max(NAV_MIN, Math.round(n)));
+    mainSplit?.addEventListener('reposition', () => {
+      const px = clampNav(mainSplit.positionInPixels);
+      if (px !== Math.round(mainSplit.positionInPixels)) mainSplit.positionInPixels = px;
+    });
+
+    // --- mobile: convertir a vertical si narrow ---
+    const mql = window.matchMedia('(max-width: 640px)');
+    const syncOrientation = () => {
+      if (!mainSplit) return;
+      mainSplit.orientation = mql.matches ? 'vertical' : 'horizontal';
+    };
+    mql.addEventListener?.('change', syncOrientation);
+    syncOrientation();
+  </script>
+</body>
+</html>

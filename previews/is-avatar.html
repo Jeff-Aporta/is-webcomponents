@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-avatar · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/media/avatar.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-avatar&gt;</h2>
+        <p class="lede">Avatar con imagen, iniciales o icono fallback. Caja = <code class="code">1em × 1em</code>; escala con <code class="code">font-size</code>.</p>
+        <div class="demo">
+          <div class="demo-row" style="align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem">
+            <is-avatar initials="JD" label="Juan Díaz"></is-avatar>
+            <is-avatar image="https://i.pravatar.cc/80?u=1" label="Usuario demo"></is-avatar>
+            <is-avatar label="Sin foto"></is-avatar>
+            <is-avatar image="https://invalid.example/no.jpg" initials="FB" label="Imagen rota → iniciales"></is-avatar>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="examples">
+        <h2>Formas y escala</h2>
+        <div class="demo">
+          <div class="demo-row" style="align-items:center;gap:1rem;flex-wrap:wrap">
+            <span style="font-size:3rem"><is-avatar initials="CR" shape="circle" label="Círculo"></is-avatar></span>
+            <span style="font-size:3rem"><is-avatar initials="SQ" shape="square" label="Cuadrado"></is-avatar></span>
+            <span style="font-size:3rem"><is-avatar initials="RD" shape="rounded" label="Rounded"></is-avatar></span>
+            <span style="font-size:4rem"><is-avatar initials="XL" label="Grande"></is-avatar></span>
+            <span style="font-size:1.5rem"><is-avatar initials="SM" label="Chico"></is-avatar></span>
+          </div>
+        </div>
+        <pre class="code">&lt;span style="font-size:3rem"&gt;
+  &lt;is-avatar initials="AB" shape="rounded"&gt;&lt;/is-avatar&gt;
+&lt;/span&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>image</code></td><td>—</td><td>URL de imagen.</td></tr>
+            <tr><td><code>initials</code></td><td>—</td><td>Hasta 2 letras si no hay imagen.</td></tr>
+            <tr><td><code>label</code></td><td>—</td><td>aria-label.</td></tr>
+            <tr><td><code>shape</code></td><td>circle</td><td>circle · square · rounded.</td></tr>
+            <tr><td><code>loading</code></td><td>eager</td><td>eager · lazy.</td></tr>
+          </tbody>
+        </table>
+        <p class="lede">Evento <code class="code">is-error</code> al fallar la imagen. Sin <code class="code">size</code> ni <code class="code">--size</code> — usa <code class="code">font-size</code>.</p>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-avatar</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#examples">Ejemplos</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a =>
+        a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

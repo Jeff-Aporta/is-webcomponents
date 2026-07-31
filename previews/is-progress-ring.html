@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-progress-ring · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/feedback/progress-ring.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .ring-scale {
+      display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1.75rem;
+    }
+    .ring-card {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    }
+    .ring-card__cap {
+      font-family: var(--is-mono); font-size: 0.7rem; color: var(--is-text-dim);
+    }
+    .ring-inline {
+      display: inline-flex; align-items: center; gap: 0.65rem;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--is-border-soft);
+      border-radius: var(--is-radius-sm);
+      background: color-mix(in srgb, var(--is-bg) 60%, transparent);
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>Progress Ring</h2>
+        <p class="lede"><code class="code">&lt;is-progress-ring&gt;</code></p>
+        <p class="lede">
+          Anillo SVG de progreso. La caja es <code class="code">1em × 1em</code>:
+          escala solo con <code class="code">font-size</code> del contexto (o del propio host).
+        </p>
+        <div class="demo">
+          <div class="ring-scale" style="font-size: 4.5rem">
+            <is-progress-ring value="75" label="75% completado"></is-progress-ring>
+            <is-progress-ring value="40" label="40%"></is-progress-ring>
+            <is-progress-ring value="100" label="Completo"
+              style="--indicator-color: var(--is-color-success-500)"></is-progress-ring>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="scale">
+        <h2>Escala por font-size</h2>
+        <p class="lede">Mismo componente; solo cambia el tamaño tipográfico del contenedor.</p>
+        <div class="demo">
+          <div class="ring-scale">
+            <div class="ring-card" style="font-size: 2rem">
+              <is-progress-ring value="60" label="60%"></is-progress-ring>
+              <span class="ring-card__cap">2rem</span>
+            </div>
+            <div class="ring-card" style="font-size: 3.5rem">
+              <is-progress-ring value="60" label="60%"></is-progress-ring>
+              <span class="ring-card__cap">3.5rem</span>
+            </div>
+            <div class="ring-card" style="font-size: 5.5rem">
+              <is-progress-ring value="60" label="60%"
+                style="--indicator-color: var(--is-color-success-500)"></is-progress-ring>
+              <span class="ring-card__cap">5.5rem</span>
+            </div>
+            <div class="ring-card" style="font-size: 7rem">
+              <is-progress-ring value="60" label="60%"
+                style="--track-width: 2; --indicator-width: 5"></is-progress-ring>
+              <span class="ring-card__cap">7rem · stroke más grueso</span>
+            </div>
+          </div>
+        </div>
+        <pre class="code" data-lang="html">&lt;span style="font-size:4rem"&gt;
+  &lt;is-progress-ring value="75" label="Completado"&gt;&lt;/is-progress-ring&gt;
+&lt;/span&gt;</pre>
+      </section>
+
+      <section class="section" id="inline">
+        <h2>Inline en UI</h2>
+        <div class="demo">
+          <div class="demo-stack" style="gap:0.75rem">
+            <div class="ring-inline" style="font-size:1.75rem">
+              <is-progress-ring value="35" label="Descarga 35%"></is-progress-ring>
+              <span style="font-size:0.95rem">Descargando… <strong>35%</strong></span>
+            </div>
+            <div class="ring-inline" style="font-size:1.75rem">
+              <is-progress-ring value="90" label="Sync 90%"
+                style="--indicator-color: var(--is-color-warning-500)"></is-progress-ring>
+              <span style="font-size:0.95rem">Sincronizando · casi listo</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo / var</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td>0–100</td></tr>
+            <tr><td><code>label</code></td><td>a11y</td></tr>
+            <tr><td><code>font-size</code></td><td>Define el diámetro (1em)</td></tr>
+            <tr><td><code>--track-width</code> / <code>--indicator-width</code></td><td>Grosor SVG</td></tr>
+            <tr><td><code>--indicator-color</code> / <code>--track-color</code></td><td>Colores</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-progress-ring</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#scale">Escala</a>
+        <a href="#inline">Inline</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.sidebar nav a').forEach(a =>
+          a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+      }
+    }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

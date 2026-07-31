@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-date-input · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/forms/date-input.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-date-input&gt;</h2>
+        <p class="lede">Campo de fecha ISO con popup de calendario. Métodos <code>show()</code> / <code>hide()</code>.</p>
+        <div class="demo">
+          <is-date-input id="di" label="Fecha de inicio" hint="Formato yyyy-mm-dd" name="start" value="2026-07-30" style="max-width:16rem"></is-date-input>
+        </div>
+      </section>
+      <section class="section" id="examples">
+        <h2>Con min / max</h2>
+        <div class="demo">
+          <is-date-input label="Vencimiento" min="2026-01-01" max="2026-12-31" required locale="es" style="max-width:16rem"></is-date-input>
+        </div>
+        <pre class="code">&lt;is-date-input label="Fecha" value="2026-07-30" min="2026-01-01" max="2026-12-31"&gt;&lt;/is-date-input&gt;</pre>
+        <p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td>ISO yyyy-mm-dd</td></tr>
+            <tr><td><code>min</code> / <code>max</code></td><td>—</td></tr>
+            <tr><td><code>locale</code></td><td>document.lang</td></tr>
+            <tr><td><code>disabled</code> / <code>required</code></td><td>false</td></tr>
+          </tbody>
+        </table>
+        <p class="lede">Eventos: <code>is-change</code>, <code>is-input</code>. Form-associated + ElementInternals si está disponible.</p>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-date-input</h1>
+      <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+    const log = document.getElementById('log');
+    document.getElementById('di')?.addEventListener('is-change', e => { log.textContent = 'is-change → ' + JSON.stringify(e.detail); });
+  </script>
+</body>
+</html>

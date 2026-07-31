@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-check-icon-button · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-check-icon-button de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/check-icon-button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <style>
+    .cluster { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .on-dark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      background: #111;
+      color: #fff;
+    }
+  </style>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-check-icon-button&gt;</h2>
+        <p class="lede">
+          Botón icon-only con dos estados mutuamente excluyentes.
+          Un solo icono visible según <code class="code">checked</code>.
+          Lo usan <code class="code">is-video</code> (play/mute) e <code class="code">is-theme-toggle</code>.
+        </p>
+
+        <div class="demo">
+          <span class="demo-label">play / pause</span>
+          <div class="cluster">
+            <is-check-icon-button
+              id="demoPlay"
+              icon="mdi:play"
+              checked-icon="mdi:pause"
+              label="Reproducir"
+              checked-label="Pausar"
+            ></is-check-icon-button>
+            <span id="playState" class="demo-label">paused</span>
+          </div>
+        </div>
+
+        <pre class="code">&lt;is-check-icon-button
+  icon="mdi:play"
+  checked-icon="mdi:pause"
+  label="Reproducir"
+  checked-label="Pausar"
+&gt;&lt;/is-check-icon-button&gt;</pre>
+      </section>
+
+      <section class="section" id="mute">
+        <h2>Mute / volume</h2>
+        <div class="demo">
+          <span class="demo-label">appearance=plain</span>
+          <div class="on-dark">
+            <is-check-icon-button
+              appearance="plain"
+              icon="mdi:volume-high"
+              checked-icon="mdi:volume-off"
+              label="Silenciar"
+              checked-label="Activar sonido"
+            ></is-check-icon-button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="theme">
+        <h2>Theme icons</h2>
+        <p class="lede">Mismo patrón que el toggle de tema (noche ↔ sol).</p>
+        <div class="demo">
+          <is-check-icon-button
+            icon="mdi:weather-night"
+            checked-icon="mdi:weather-sunny"
+            label="Cambiar a tema oscuro"
+            checked-label="Cambiar a tema claro"
+            checked
+          ></is-check-icon-button>
+        </div>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <table class="props">
+          <thead><tr><th>Atributo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>checked</code></td><td>Estado activo (reflected)</td></tr>
+            <tr><td><code>icon</code></td><td>Iconify id cuando unchecked</td></tr>
+            <tr><td><code>checked-icon</code></td><td>Iconify id cuando checked</td></tr>
+            <tr><td><code>label</code> / <code>checked-label</code></td><td>aria-label por estado</td></tr>
+            <tr><td><code>appearance</code></td><td><code>plain</code> para barras oscuras</td></tr>
+            <tr><td><code>disabled</code></td><td>Deshabilita interacción</td></tr>
+          </tbody>
+        </table>
+        <table class="props" style="margin-top:1rem">
+          <thead><tr><th>Evento</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-change</code></td><td><code>{ checked: boolean }</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+    <nav class="toc" slot="end" aria-label="Contenido">
+      <h1>is-check-icon-button</h1>
+      <a href="#intro">Intro</a>
+      <a href="#mute">Mute</a>
+      <a href="#theme">Theme</a>
+      <a href="#api">API</a>
+    </nav>
+  </is-split-panel>
+
+  <script type="module">
+    const play = document.getElementById('demoPlay');
+    const state = document.getElementById('playState');
+    play?.addEventListener('is-change', (e) => {
+      state.textContent = e.detail.checked ? 'playing' : 'paused';
+    });
+  </script>
+</body>
+</html>

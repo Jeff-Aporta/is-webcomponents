@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-relative-time · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/helpers/relative-time.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-relative-time&gt;</h2>
+        <p class="lede">Fechas relativas con <code class="code">Intl.RelativeTimeFormat</code>.</p>
+        <div class="demo">
+          <p>Actualizado <is-relative-time date="2026-07-30T10:00:00" sync></is-relative-time></p>
+        </div>
+      </section>
+      <section class="section" id="examples">
+        <h2>Formatos</h2>
+        <div class="demo">
+          <ul>
+            <li><is-relative-time date="2026-07-29T12:00:00" format="long"></is-relative-time></li>
+            <li><is-relative-time date="2026-07-31T12:00:00" format="short"></is-relative-time></li>
+            <li><is-relative-time date="2026-08-05T12:00:00" format="narrow"></is-relative-time></li>
+          </ul>
+        </div>
+        <pre class="code">&lt;is-relative-time date="2026-07-30T10:00:00" sync&gt;&lt;/is-relative-time&gt;</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>date</code></td><td>ISO o timestamp</td></tr>
+            <tr><td><code>format</code></td><td>long · short · narrow</td></tr>
+            <tr><td><code>numeric</code></td><td>auto · always</td></tr>
+            <tr><td><code>sync</code></td><td>actualiza cada 30s</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-relative-time</h1>
+      <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

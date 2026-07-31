@@ -1,0 +1,13 @@
+{
+  "name": "app-webcomponents",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Galería de Web Components de Insoft — shell de preview con componentes vanilla.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

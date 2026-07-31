@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-tooltip · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/feedback/tooltip.js"></script>
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .grid { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-tooltip&gt;</h2>
+        <p class="lede">Tip breve anclado con <code class="code">for</code>. Depende de <code class="code">is-popup</code>.</p>
+        <div class="demo">
+          <is-button id="tip-target">Hover Me</is-button>
+          <is-tooltip for="tip-target">This is a tooltip</is-tooltip>
+        </div>
+        <pre class="code">&lt;is-button id="tip-target"&gt;Hover Me&lt;/is-button&gt;
+&lt;is-tooltip for="tip-target"&gt;This is a tooltip&lt;/is-tooltip&gt;</pre>
+      </section>
+      <section class="section" id="placement">
+        <h2>Placement</h2>
+        <div class="demo grid">
+          <is-button id="t-top">top</is-button>
+          <is-tooltip for="t-top" placement="top">top</is-tooltip>
+          <is-button id="t-right">right</is-button>
+          <is-tooltip for="t-right" placement="right">right</is-tooltip>
+          <is-button id="t-bottom">bottom</is-button>
+          <is-tooltip for="t-bottom" placement="bottom">bottom</is-tooltip>
+          <is-button id="t-left">left</is-button>
+          <is-tooltip for="t-left" placement="left">left</is-tooltip>
+        </div>
+      </section>
+      <section class="section" id="trigger">
+        <h2>Trigger click / manual</h2>
+        <div class="demo grid">
+          <is-button id="t-click">Click to Toggle</is-button>
+          <is-tooltip for="t-click" trigger="click">Click again to dismiss</is-tooltip>
+          <is-button id="t-manual-btn">Toggle Manually</is-button>
+          <is-tooltip id="t-manual" for="t-manual-btn" trigger="manual">Manual tooltip</is-tooltip>
+        </div>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>for</code></td><td>id del target</td></tr>
+            <tr><td><code>trigger</code></td><td>hover focus | click | manual</td></tr>
+            <tr><td><code>placement</code> <code>distance</code> <code>skidding</code></td><td>posicionamiento</td></tr>
+            <tr><td><code>show()</code> <code>hide()</code></td><td>métodos</td></tr>
+            <tr><td>events</td><td>is-show, is-after-show, is-hide, is-after-hide</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-tooltip</h1>
+      <nav>
+        <a href="#intro">Intro</a>
+        <a href="#placement">Placement</a>
+        <a href="#trigger">Trigger</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const tip = document.getElementById('t-manual');
+    document.getElementById('t-manual-btn')?.addEventListener('click', () => { tip.open = !tip.open; });
+  </script>
+</body>
+</html>

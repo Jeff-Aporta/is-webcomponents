@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-icon · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-icon&gt;</h2>
+        <p class="lede">
+          API única de iconos del kit. Usa <code class="code">icon="grupo:nombre"</code> (ids Iconify)
+          o <code class="code">src</code> para un SVG/imagen. Escala con <code class="code">font-size</code>.
+          Iconify se carga solo como dependencia interna.
+        </p>
+        <div class="demo">
+          <div class="demo-row" style="font-size:1.5rem; gap:1rem; align-items:center;">
+            <is-icon icon="mdi:home"></is-icon>
+            <is-icon icon="mdi:check-circle" style="color:var(--is-accent)"></is-icon>
+            <is-icon icon="mdi:star" label="Favorito"></is-icon>
+            <is-icon icon="mdi:cog-outline"></is-icon>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="examples">
+        <h2>Ejemplos</h2>
+        <div class="demo">
+          <span class="demo-label">src personalizado</span>
+          <is-icon src="https://api.iconify.design/mdi/heart.svg?color=%23e03131" label="Corazón" style="font-size:1.5rem"></is-icon>
+        </div>
+        <pre class="code">&lt;is-icon icon="mdi:home"&gt;&lt;/is-icon&gt;
+&lt;is-icon icon="mdi:check-circle"&gt;&lt;/is-icon&gt;
+&lt;is-icon src="/logo.svg" label="Logo"&gt;&lt;/is-icon&gt;</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>icon</code></td><td>—</td><td>Iconify id <code>grupo:nombre</code> (ej. <code>mdi:home</code>).</td></tr>
+            <tr><td><code>label</code></td><td>—</td><td>aria-label; vacío → aria-hidden.</td></tr>
+            <tr><td><code>src</code></td><td>—</td><td>URL img/svg (gana sobre icon).</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-icon</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#examples">Ejemplos</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a =>
+        a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

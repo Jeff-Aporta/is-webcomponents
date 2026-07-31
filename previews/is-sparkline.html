@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-sparkline · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/charts/sparkline.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .spark-row { display: flex; flex-wrap: wrap; gap: 1.25rem 2rem; align-items: center; }
+    .spark-metric { display: inline-flex; align-items: baseline; gap: 0.5rem; font-size: 1rem; }
+    .spark-metric is-sparkline { width: 5.5em; height: 1.35em; }
+    .spark-big is-sparkline { width: 12em; height: 3em; }
+    .spark-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .spark-table th, .spark-table td {
+      padding: 0.55em 0.75em; border-bottom: 1px solid var(--is-border-soft); text-align: left;
+    }
+    .spark-table is-sparkline { width: 6em; height: 1.25em; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>Sparkline</h2>
+        <p class="lede"><code class="code">&lt;is-sparkline&gt;</code></p>
+        <p class="lede">
+          Tendencias compactas, del tamaño de una palabra. Encajan en texto o celdas de tabla
+          sin robar espacio a un chart completo.
+        </p>
+        <div class="demo">
+          <p class="spark-metric" style="margin:0;font-size:1.05rem">
+            Daily Wordle guesses
+            <is-sparkline data="12 15 11 14 9 10 8 7 9 6" label="Wordle guesses trend"></is-sparkline>
+            are trending down.
+          </p>
+        </div>
+        <p class="lede" style="margin-top:0.75rem">Incluye siempre un <code class="code">label</code> accesible (no se ve, lo lee el screen reader).</p>
+      </section>
+
+      <section class="section" id="data">
+        <h2>Datos</h2>
+        <p class="lede">Números separados por espacio o coma (<code class="code">data</code> o <code class="code">values</code>). Mínimo 2.</p>
+        <div class="demo">
+          <div class="spark-row">
+            <span class="spark-metric">Ventas <is-sparkline data="3 5 4 8 6 9 7 10" label="Ventas"></is-sparkline></span>
+            <span class="spark-metric">Barras <is-sparkline type="bar" data="2 1 3 2 4 1 2" label="Errores"></is-sparkline></span>
+          </div>
+        </div>
+        <pre class="code" data-lang="html">&lt;is-sparkline data="3 5 4 8 6 9 7 10" label="Ventas"&gt;&lt;/is-sparkline&gt;
+&lt;is-sparkline type="bar" data="2 1 3 2 4 1 2" label="Errores"&gt;&lt;/is-sparkline&gt;</pre>
+      </section>
+
+      <section class="section" id="appearance">
+        <h2>Appearance</h2>
+        <p class="lede"><code class="code">solid</code> (default), <code class="code">gradient</code> o <code class="code">line</code>.</p>
+        <div class="demo spark-big">
+          <div class="spark-row">
+            <is-sparkline appearance="solid" data="4 6 5 9 7 11 8 12" label="solid"></is-sparkline>
+            <is-sparkline appearance="gradient" data="4 6 5 9 7 11 8 12" label="gradient"></is-sparkline>
+            <is-sparkline appearance="line" data="4 6 5 9 7 11 8 12" label="line"></is-sparkline>
+          </div>
+        </div>
+        <pre class="code" data-lang="html">&lt;is-sparkline appearance="solid" data="…"&gt;&lt;/is-sparkline&gt;
+&lt;is-sparkline appearance="gradient" data="…"&gt;&lt;/is-sparkline&gt;
+&lt;is-sparkline appearance="line" data="…"&gt;&lt;/is-sparkline&gt;</pre>
+      </section>
+
+      <section class="section" id="trend">
+        <h2>Trend</h2>
+        <p class="lede">Color semántico: <code class="code">positive</code> · <code class="code">negative</code> · <code class="code">neutral</code>.</p>
+        <div class="demo">
+          <div class="spark-row">
+            <span class="spark-metric">Revenue +25%
+              <is-sparkline trend="positive" data="4 5 6 7 8 9 10 12" label="Revenue up"></is-sparkline>
+            </span>
+            <span class="spark-metric">Churn −15%
+              <is-sparkline trend="negative" data="12 11 10 9 8 7 6 5" label="Churn down"></is-sparkline>
+            </span>
+            <span class="spark-metric">Users stable
+              <is-sparkline trend="neutral" data="8 9 8 9 8 9 8 9" label="Users stable"></is-sparkline>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="curve">
+        <h2>Curve</h2>
+        <div class="demo spark-big">
+          <div class="spark-row">
+            <is-sparkline curve="linear" data="2 8 3 9 4 7" label="linear"></is-sparkline>
+            <is-sparkline curve="natural" data="2 8 3 9 4 7" label="natural"></is-sparkline>
+            <is-sparkline curve="step" data="2 8 3 9 4 7" label="step"></is-sparkline>
+          </div>
+        </div>
+        <pre class="code" data-lang="html">&lt;is-sparkline curve="linear|natural|step" data="…"&gt;&lt;/is-sparkline&gt;</pre>
+      </section>
+
+      <section class="section" id="tables">
+        <h2>En tablas</h2>
+        <div class="demo">
+          <table class="spark-table">
+            <thead><tr><th>Metric</th><th>Trend</th><th>Change</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Page Views</td>
+                <td><is-sparkline trend="positive" data="10 12 11 15 18 20 22" label="Page views"></is-sparkline></td>
+                <td>+31%</td>
+              </tr>
+              <tr>
+                <td>Bounce Rate</td>
+                <td><is-sparkline trend="negative" data="40 42 45 44 48 50 52" label="Bounce rate"></is-sparkline></td>
+                <td>+8%</td>
+              </tr>
+              <tr>
+                <td>Avg. Session</td>
+                <td><is-sparkline trend="neutral" data="3.2 3.1 3.3 3.2 3.2 3.1 3.2" label="Avg session"></is-sparkline></td>
+                <td>0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td><code>data</code> / <code>values</code></td><td>Números separados por espacio/coma</td></tr>
+            <tr><td><code>type</code></td><td>line (default) · bar</td></tr>
+            <tr><td><code>appearance</code></td><td>solid · gradient · line</td></tr>
+            <tr><td><code>curve</code></td><td>linear · natural · step</td></tr>
+            <tr><td><code>trend</code></td><td>positive · negative · neutral</td></tr>
+            <tr><td><code>label</code></td><td>a11y (obligatorio en demos)</td></tr>
+            <tr><td><code>--fill-color-1</code> / <code>--line-color</code> / <code>--line-width</code></td><td>CSS</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-sparkline</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#data">Datos</a>
+        <a href="#appearance">Appearance</a>
+        <a href="#trend">Trend</a>
+        <a href="#curve">Curve</a>
+        <a href="#tables">Tablas</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.sidebar nav a').forEach(a =>
+          a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+      }
+    }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  font-family: var(--is-sans, inherit);
+  color: var(--is-text, inherit);
+  box-sizing: border-box;
+
+  .option {
+    display: block;
+    padding: 0.45em 0.75em;
+    cursor: pointer;
+    border-radius: var(--is-radius-sm, 0.375em);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover { background: var(--is-control-bg-hover, #e9ecef); }
+  }
+}
+
+:host([disabled]) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+:host([selected]) .option,
+:host([data-active]) .option {
+  background: var(--is-accent-bg, rgb(224 49 49 / 12%));
+  color: var(--is-brand-text, var(--is-color-brand-700, #a61e1e));
+}

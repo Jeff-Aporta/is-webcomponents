@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-line-chart · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/charts/line-chart.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-line-chart&gt;</h2>
+        <p class="lede">Tendencias en el tiempo.</p>
+        <div class="demo" style="height:16rem">
+          <is-line-chart>
+            <script type="application/json">
+              {"data":{"labels":["Ene","Feb","Mar","Abr","May","Jun"],"datasets":[{"label":"Visitas","data":[4200,4800,5100,4900,5500,6200]}]}}
+            </script>
+          </is-line-chart>
+        </div>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end"><h1>is-line-chart</h1><nav><a href="#intro">Introducción</a></nav></aside>
+  </is-split-panel>
+  
+</body>
+</html>

@@ -1,0 +1,42 @@
+:host {
+  --track-height: 0.5em;
+  --track-color: var(--is-control-bg, #e9ecef);
+  --indicator-color: var(--is-color-brand-500, #339af0);
+  display: block;
+  width: 100%;
+  font-family: var(--is-font-family, system-ui, sans-serif);
+  font-size: inherit;
+
+  .track {
+    position: relative;
+    width: 100%;
+    height: var(--track-height);
+    background: var(--track-color);
+    border-radius: 999px;
+    overflow: hidden;
+    .indicator {
+      height: 100%;
+      background: var(--indicator-color);
+      border-radius: inherit;
+      transition: width 200ms ease;
+      min-width: 0;
+      &.is-indeterminate {
+        width: 40% !important;
+        animation: indeterminate 1.2s ease-in-out infinite;
+      }
+    }
+  }
+
+  .label {
+    display: block;
+    margin-top: 0.35em;
+    color: var(--is-text-soft, #868e96);
+    font-size: 0.85em;
+    &:empty { display: none; }
+  }
+}
+
+@keyframes indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}

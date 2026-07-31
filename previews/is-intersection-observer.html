@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-intersection-observer · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/helpers/intersection-observer.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <style>
+    .io-scroller {
+      height: 280px;
+      overflow: auto;
+      border: 1px solid var(--is-border);
+      border-radius: var(--is-radius);
+      background: var(--is-bg);
+      padding: 1rem;
+      scroll-behavior: smooth;
+    }
+    .io-spacer {
+      height: 120px;
+      display: grid;
+      place-items: center;
+      color: var(--is-text-dim);
+      font-size: 0.8rem;
+      border: 1px dashed var(--is-border-soft);
+      border-radius: var(--is-radius-sm);
+      margin-bottom: 0.75rem;
+    }
+    .io-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.75rem;
+      border-radius: var(--is-radius);
+      border: 1px solid var(--is-border);
+      background: var(--is-bg-elev);
+      color: var(--is-text-soft);
+      opacity: 0.45;
+      transform: translateY(10px);
+      transition: opacity 280ms ease, transform 280ms ease, background 280ms ease, border-color 280ms ease, color 280ms ease;
+    }
+    .io-card.is-in {
+      opacity: 1;
+      transform: none;
+      background: color-mix(in srgb, var(--is-color-brand-500) 14%, var(--is-bg-elev));
+      border-color: color-mix(in srgb, var(--is-color-brand-500) 45%, var(--is-border));
+      color: var(--is-text);
+    }
+    .io-card.is-in .io-badge {
+      background: var(--is-brand-soft);
+      color: var(--is-brand-text);
+    }
+    .io-badge {
+      flex: 0 0 auto;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.25em 0.55em;
+      border-radius: 999px;
+      background: var(--is-control-bg);
+      color: var(--is-text-dim);
+    }
+    .io-uses {
+      display: grid;
+      gap: 0.65rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .io-uses li {
+      display: grid;
+      grid-template-columns: 1.5rem 1fr;
+      gap: 0.55rem;
+      align-items: start;
+      color: var(--is-text-soft);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .io-uses is-icon {
+      width: 1.15em;
+      height: 1.15em;
+      color: var(--is-accent);
+      margin-top: 0.15em;
+    }
+    .io-diagram {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.75rem;
+      align-items: center;
+      margin: 1rem 0 0;
+    }
+    .io-diagram__pane {
+      border: 1px solid var(--is-border);
+      border-radius: var(--is-radius-sm);
+      background: var(--is-bg);
+      padding: 0.75rem;
+      min-height: 7rem;
+      position: relative;
+    }
+    .io-diagram__pane strong {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--is-text-dim);
+      margin-bottom: 0.5rem;
+    }
+    .io-diagram__box {
+      height: 1.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.35rem;
+      background: var(--is-control-bg);
+      border: 1px solid var(--is-border-soft);
+    }
+    .io-diagram__box.on {
+      background: color-mix(in srgb, var(--is-color-success-500) 35%, var(--is-control-bg));
+      border-color: var(--is-color-success-500);
+    }
+    .io-diagram__box.off { opacity: 0.35; }
+    .io-diagram__viewport {
+      outline: 2px dashed var(--is-accent);
+      outline-offset: -6px;
+      border-radius: inherit;
+    }
+    .io-diagram__arrow {
+      color: var(--is-text-dim);
+      font-size: 1.4rem;
+    }
+    @media (max-width: 720px) {
+      .io-diagram { grid-template-columns: 1fr; }
+      .io-diagram__arrow { transform: rotate(90deg); justify-self: center; }
+    }
+  </style>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-intersection-observer&gt;</h2>
+        <p class="lede">
+          Responde a una pregunta simple: <strong>¿este elemento está (parcialmente) visible
+          dentro de un contenedor?</strong> Si sí, aplica una clase y/o dispara el evento
+          <code class="code">is-intersect</code>.
+        </p>
+
+        <div class="callout">
+          <strong>En la vida real</strong> sirve para revelar animaciones al hacer scroll,
+          lazy-load de imágenes/secciones, pausar un video fuera de vista, o marcar el ítem
+          activo del índice lateral (como hace este mismo preview).
+        </div>
+
+        <ul class="io-uses">
+          <li>
+            <is-icon icon="mdi:eye-outline" aria-hidden="true"></is-icon>
+            <span><strong>No es un timer.</strong> El navegador avisa solo cuando el elemento entra o sale de la zona visible — más barato que escuchar <code class="code">scroll</code>.</span>
+          </li>
+          <li>
+            <is-icon icon="mdi:vector-intersection" aria-hidden="true"></is-icon>
+            <span><strong>Intersección</strong> = overlap entre el hijo observado y el <em>root</em> (viewport o un panel con scroll).</span>
+          </li>
+          <li>
+            <is-icon icon="mdi:percent-outline" aria-hidden="true"></is-icon>
+            <span><strong>threshold</strong> (0–1) = cuánto del elemento debe verse. <code class="code">0.5</code> = al menos la mitad.</span>
+          </li>
+        </ul>
+
+        <div class="io-diagram" aria-hidden="true">
+          <div class="io-diagram__pane">
+            <strong>Página (contenido largo)</strong>
+            <div class="io-diagram__box off"></div>
+            <div class="io-diagram__box on"></div>
+            <div class="io-diagram__box on"></div>
+            <div class="io-diagram__box off"></div>
+          </div>
+          <div class="io-diagram__arrow">→</div>
+          <div class="io-diagram__pane io-diagram__viewport">
+            <strong>Root / viewport</strong>
+            <div class="io-diagram__box on"></div>
+            <div class="io-diagram__box on"></div>
+            <div style="font-size:0.75rem;color:var(--is-text-dim);margin-top:0.5rem">Solo estos disparan “en vista”</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="scroll">
+        <h2>Demo: scroll en un panel</h2>
+        <p class="lede">
+          Desplázate <em>dentro</em> del panel. Cada tarjeta arranca atenuada; al entrar
+          (≥&nbsp;40&nbsp;% visible) recibe la clase <code class="code">is-in</code> y se ilumina.
+          El log muestra el evento.
+        </p>
+
+        <div class="demo" data-code='<div id="scroller" class="io-scroller">
+  <is-intersection-observer
+    root="#scroller"
+    intersect-class="is-in"
+    threshold="0.4">
+    <article class="io-card" data-label="A">…</article>
+    <article class="io-card" data-label="B">…</article>
+  </is-intersection-observer>
+</div>'>
+          <span class="demo-label">root = #scroller · threshold = 0.4</span>
+          <div id="scroller" class="io-scroller">
+            <div class="io-spacer">↓ baja para revelar las tarjetas ↓</div>
+            <is-intersection-observer id="ioScroll" root="#scroller" intersect-class="is-in" threshold="0.4">
+              <article class="io-card" data-label="A">
+                <span>Tarjeta A — fade al entrar</span>
+                <span class="io-badge" data-badge>fuera</span>
+              </article>
+              <article class="io-card" data-label="B">
+                <span>Tarjeta B</span>
+                <span class="io-badge" data-badge>fuera</span>
+              </article>
+              <article class="io-card" data-label="C">
+                <span>Tarjeta C</span>
+                <span class="io-badge" data-badge>fuera</span>
+              </article>
+              <article class="io-card" data-label="D">
+                <span>Tarjeta D</span>
+                <span class="io-badge" data-badge>fuera</span>
+              </article>
+            </is-intersection-observer>
+            <div class="io-spacer">fin del scroll</div>
+          </div>
+          <div class="log" id="ioLog" aria-live="polite" style="margin-top:12px">
+            <div class="row hint">Los eventos <code class="code">is-intersect</code> aparecen aquí al entrar/salir.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="once">
+        <h2>Demo: una sola vez (<code class="code">once</code>)</h2>
+        <p class="lede">
+          Con <code class="code">once</code>, tras la primera entrada deja de observar ese hijo.
+          Ideal para animaciones de “reveal” que no deben repetirse al subir/bajar.
+        </p>
+        <div class="demo">
+          <span class="demo-label">once · threshold 0.25</span>
+          <div id="scrollerOnce" class="io-scroller" style="height:200px">
+            <div class="io-spacer">↓ scroll ↓</div>
+            <is-intersection-observer root="#scrollerOnce" intersect-class="is-in" threshold="0.25" once>
+              <article class="io-card" data-label="once-1">
+                <span>Reveal permanente (no vuelve a “fuera”)</span>
+                <span class="io-badge">esperando</span>
+              </article>
+              <article class="io-card" data-label="once-2">
+                <span>Otra animación one-shot</span>
+                <span class="io-badge">esperando</span>
+              </article>
+            </is-intersection-observer>
+            <div class="io-spacer">fin</div>
+          </div>
+        </div>
+        <pre class="code">&lt;is-intersection-observer root="#scroller" intersect-class="is-in" threshold="0.4" once&gt;
+  &lt;article class="io-card"&gt;…&lt;/article&gt;
+&lt;/is-intersection-observer&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo / evento</th><th>Qué hace</th></tr></thead>
+          <tbody>
+            <tr><td><code>root</code></td><td>Selector del contenedor con scroll. Sin él → viewport de la página.</td></tr>
+            <tr><td><code>root-margin</code></td><td>Expande/encoge el área (ej. <code>0px 0px -20% 0px</code>).</td></tr>
+            <tr><td><code>threshold</code></td><td>Fracción visible 0–1 para considerar “intersecta”.</td></tr>
+            <tr><td><code>intersect-class</code></td><td>Clase CSS que se pone/quita en el hijo.</td></tr>
+            <tr><td><code>once</code></td><td>Tras la 1ª entrada, deja de observar ese hijo.</td></tr>
+            <tr><td><code>disabled</code></td><td>Apaga el observer.</td></tr>
+            <tr><td><code>is-intersect</code></td><td>Evento. <code>detail.entry</code> es el <code>IntersectionObserverEntry</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-intersection-observer</h1>
+      <nav>
+        <a href="#intro">Concepto</a>
+        <a href="#scroll">Demo scroll</a>
+        <a href="#once">Once</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const toc = new IntersectionObserver(
+      (es) => es.forEach((e) => {
+        if (e.isIntersecting) {
+          document.querySelectorAll('.sidebar nav a').forEach((a) =>
+            a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+        }
+      }),
+      { rootMargin: '-30% 0px -55% 0px' }
+    );
+    document.querySelectorAll('section.section').forEach((s) => toc.observe(s));
+
+    const log = document.getElementById('ioLog');
+    document.getElementById('ioScroll').addEventListener('is-intersect', (e) => {
+      const entry = e.detail.entry;
+      const el = entry.target;
+      const label = el.getAttribute('data-label') || '?';
+      const badge = el.querySelector('[data-badge]');
+      const ratio = entry.intersectionRatio.toFixed(2);
+      const on = entry.isIntersecting;
+      if (badge) badge.textContent = on ? `en vista · ${ratio}` : 'fuera';
+
+      log.querySelector('.hint')?.closest('.row')?.remove();
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `<span class="t">${new Date().toLocaleTimeString()}</span>
+        <span class="e"> ${label}: ${on ? 'entra' : 'sale'} (ratio ${ratio})</span>`;
+      log.prepend(row);
+      while (log.children.length > 8) log.lastElementChild.remove();
+    });
+  </script>
+</body>
+</html>

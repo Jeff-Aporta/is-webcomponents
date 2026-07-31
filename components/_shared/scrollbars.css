@@ -1,0 +1,46 @@
+/**
+ * Scrollbars themizados dentro de Shadow DOM.
+ * Inyectado por adoptCss en cada is-*. Tokens: --is-scrollbar-* (is-base / paleta).
+ */
+:host {
+  scrollbar-width: thin;
+  scrollbar-color: var(--is-scrollbar-thumb) var(--is-scrollbar-track);
+}
+
+:host,
+:host * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--is-scrollbar-thumb) var(--is-scrollbar-track);
+}
+
+:host::-webkit-scrollbar,
+:host *::-webkit-scrollbar {
+  width: var(--is-scrollbar-size, 0.5rem);
+  height: var(--is-scrollbar-size, 0.5rem);
+}
+
+:host::-webkit-scrollbar-track,
+:host *::-webkit-scrollbar-track {
+  background: var(--is-scrollbar-track, transparent);
+  border-radius: var(--is-scrollbar-radius, 999px);
+}
+
+:host::-webkit-scrollbar-thumb,
+:host *::-webkit-scrollbar-thumb {
+  background: var(--is-scrollbar-thumb);
+  border-radius: var(--is-scrollbar-radius, 999px);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+:host::-webkit-scrollbar-thumb:hover,
+:host *::-webkit-scrollbar-thumb:hover {
+  background: var(--is-scrollbar-thumb-hover);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+:host::-webkit-scrollbar-corner,
+:host *::-webkit-scrollbar-corner {
+  background: transparent;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-tag · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/feedback/tag.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-tag&gt;</h2>
+        <p class="lede">Etiqueta interactiva con variantes y botón de quitar opcional. Escala con <code class="code">font-size</code> del contexto.</p>
+        <div class="demo">
+          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
+            <is-tag>General</is-tag>
+            <is-tag variant="brand">Insoft</is-tag>
+            <is-tag with-remove id="rmTag">Removible</is-tag>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="examples">
+        <h2>Escala por contexto</h2>
+        <div class="demo">
+          <div class="demo-row" style="align-items:center;gap:.5rem;flex-wrap:wrap">
+            <span style="font-size:.75rem"><is-tag>0.75rem</is-tag></span>
+            <span style="font-size:1rem"><is-tag>1rem</is-tag></span>
+            <span style="font-size:1.25rem"><is-tag pill>1.25rem pill</is-tag></span>
+          </div>
+        </div>
+        <pre class="code">&lt;span style="font-size:1.25rem"&gt;
+  &lt;is-tag pill&gt;Grande&lt;/is-tag&gt;
+&lt;/span&gt;</pre>
+        <div class="log" id="tagLog" aria-live="polite" style="margin-top:12px"><div class="row hint">Quita el tag removible para ver el evento.</div></div>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>variant</code></td><td>neutral</td></tr>
+            <tr><td><code>appearance</code></td><td>filled-outlined</td></tr>
+            <tr><td><code>with-remove</code></td><td>false</td></tr>
+            <tr><td><code>pill</code></td><td>false</td></tr>
+          </tbody>
+        </table>
+        <p class="lede">Evento <code class="code">is-remove</code> al pulsar quitar. Sin atributo <code class="code">size</code> — usa <code class="code">font-size</code>.</p>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-tag</h1>
+      <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+    document.getElementById('rmTag').addEventListener('is-remove', () => {
+      document.getElementById('tagLog').innerHTML = '<div class="row"><span class="e">is-remove disparado</span></div>';
+    });
+  </script>
+</body>
+</html>

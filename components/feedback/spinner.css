@@ -1,0 +1,29 @@
+:host {
+  --track-width: 0.15em;
+  --track-color: var(--is-control-border, #dee2e6);
+  --indicator-color: var(--is-color-brand-500, #339af0);
+  --speed: 0.75s;
+  display: inline-flex;
+  vertical-align: middle;
+  font-size: inherit;
+  width: 1em;
+  height: 1em;
+
+  .spinner {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: var(--track-width) solid var(--track-color);
+    border-top-color: var(--indicator-color);
+    animation: spin var(--speed) linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spinner { animation: none; border-top-color: var(--indicator-color); opacity: 0.85; }
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

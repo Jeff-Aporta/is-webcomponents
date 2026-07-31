@@ -1,0 +1,7 @@
+:host {
+  display: inline;
+  .bytes {
+    display: inline;
+    font-variant-numeric: tabular-nums;
+  }
+}

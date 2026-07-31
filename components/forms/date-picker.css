@@ -1,0 +1,106 @@
+:host {
+  --is-datepicker-border: var(--is-border, #d0d7de);
+  --is-datepicker-bg: var(--is-bg-elev, #fff);
+  --is-datepicker-radius: var(--is-radius, 0.625em);
+  display: inline-block;
+  font-family: var(--is-sans, inherit);
+  color: var(--is-text, inherit);
+  box-sizing: border-box;
+
+  .base {
+    width: min(18.5em, 100%);
+    padding: 0.85em;
+    background: var(--is-datepicker-bg);
+    border: 1px solid var(--is-datepicker-border);
+    border-radius: var(--is-datepicker-radius);
+    box-shadow: var(--is-shadow, none);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+    margin-bottom: 0.65em;
+  }
+
+  .nav-title {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    text-transform: capitalize;
+  }
+
+  .nav-btn {
+    width: 2em;
+    height: 2em;
+    border: 0;
+    border-radius: var(--is-radius-sm, 0.375em);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1.25em;
+    line-height: 1;
+    &:hover { background: var(--is-control-bg-hover, #e9ecef); }
+  }
+
+  .weekdays, .grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.15em;
+  }
+
+  .wd {
+    text-align: center;
+    font-size: 0.7em;
+    color: var(--is-text-dim, #7a8390);
+    padding: 0.25em 0;
+    text-transform: capitalize;
+  }
+
+  .day {
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    &:hover:not(:disabled) { background: var(--is-control-bg-hover, #e9ecef); }
+  }
+
+  .day.empty {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .day[data-today] {
+    box-shadow: inset 0 0 0 1px var(--is-color-brand-500, #e03131);
+  }
+
+  .day[data-in-range] {
+    background: var(--is-accent-bg, rgb(224 49 49 / 12%));
+    border-radius: 0;
+  }
+
+  .day[data-selected] {
+    background: var(--is-color-brand-600, #c92a2a);
+    color: var(--is-on-brand, #fff);
+    border-radius: 999px;
+  }
+
+  .day:disabled,
+  .day[data-disabled] {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+:host([mode="range"]) .day[data-selected][data-in-range] {
+  border-radius: 999px;
+}

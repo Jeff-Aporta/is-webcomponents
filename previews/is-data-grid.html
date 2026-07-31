@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-data-grid · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/data/data-grid.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-data-grid&gt;</h2>
+        <p class="lede">Tabla con sort, selección, paginación y filtro de texto. Sin virtualización (v1).</p>
+        <div class="demo">
+          <is-data-grid id="grid" selectable filterable page-size="5"></is-data-grid>
+        </div>
+        <p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p>
+      </section>
+      <section class="section" id="examples">
+        <h2>Uso</h2>
+        <pre class="code" data-lang="javascript">const grid = document.querySelector('is-data-grid');
+grid.columns = [
+  { field: 'id', headerName: 'ID', width: 64 },
+  { field: 'name', headerName: 'Nombre', sortable: true },
+  { field: 'city', headerName: 'Ciudad' }
+];
+grid.rows = [
+  { id: 1, name: 'Ana', city: 'Bogotá' },
+  { id: 2, name: 'Luis', city: 'Medellín' }
+];</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td><code>columns</code> / <code>rows</code></td><td>props JS</td></tr>
+            <tr><td><code>selectable</code></td><td>columna checkbox</td></tr>
+            <tr><td><code>page-size</code></td><td>default 10</td></tr>
+            <tr><td><code>filterable</code></td><td>filtro texto</td></tr>
+            <tr><td><code>selectedRows</code> / <code>selectedIndices</code></td><td>get/set</td></tr>
+          </tbody>
+        </table>
+        <p class="lede">Eventos: <code>is-sort</code>, <code>is-select</code>, <code>is-page-change</code>. Parts: <code>table</code>, <code>thead</code>, <code>tbody</code>, <code>pagination</code>.</p>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-data-grid</h1>
+      <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const root = document.documentElement;
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+
+    const cities = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga', 'Pereira', 'Manizales'];
+    const names = ['Ana', 'Luis', 'María', 'Carlos', 'Sofía', 'Diego', 'Valentina', 'Andrés', 'Camila', 'Julián', 'Laura', 'Pedro'];
+    const grid = document.getElementById('grid');
+    grid.columns = [
+      { field: 'id', headerName: 'ID', width: 56, sortable: true },
+      { field: 'name', headerName: 'Nombre', sortable: true },
+      { field: 'city', headerName: 'Ciudad', sortable: true },
+      { field: 'age', headerName: 'Edad', width: 72, sortable: true }
+    ];
+    grid.rows = names.map((name, i) => ({
+      id: i + 1,
+      name,
+      city: cities[i % cities.length],
+      age: 22 + ((i * 3) % 40)
+    }));
+    const log = document.getElementById('log');
+    grid.addEventListener('is-select', e => { log.textContent = 'is-select → ' + e.detail.selectedIndices.join(', '); });
+    grid.addEventListener('is-sort', e => { log.textContent = 'is-sort → ' + JSON.stringify(e.detail); });
+    grid.addEventListener('is-page-change', e => { log.textContent = 'is-page-change → ' + JSON.stringify(e.detail); });
+  </script>
+</body>
+</html>

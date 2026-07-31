@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-dropdown · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/dropdown.js"></script>
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/layout/divider.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .cluster { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
+    #log { color: var(--is-text-soft); font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-dropdown&gt;</h2>
+        <p class="lede">
+          Menú anclado a un trigger. Usa <code class="code">is-popup</code>,
+          <code class="code">is-dropdown-item</code>, <code class="code">is-divider</code> e iconos.
+        </p>
+        <div class="demo">
+          <is-dropdown id="dd">
+            <is-button slot="trigger" with-caret>Options</is-button>
+            <is-dropdown-item value="edit">
+              <is-icon slot="icon" icon="mdi:pencil"></is-icon>
+              Edit
+            </is-dropdown-item>
+            <is-dropdown-item value="dup">
+              <is-icon slot="icon" icon="mdi:content-copy"></is-icon>
+              Duplicate
+            </is-dropdown-item>
+            <is-divider></is-divider>
+            <is-dropdown-item value="delete" variant="danger">
+              <is-icon slot="icon" icon="mdi:delete"></is-icon>
+              Delete
+            </is-dropdown-item>
+          </is-dropdown>
+          <p id="log" class="lede">selección: —</p>
+        </div>
+        <pre class="code">&lt;is-dropdown&gt;
+  &lt;is-button slot="trigger" with-caret&gt;Options&lt;/is-button&gt;
+  &lt;is-dropdown-item value="edit"&gt;Edit&lt;/is-dropdown-item&gt;
+  &lt;is-divider&gt;&lt;/is-divider&gt;
+  &lt;is-dropdown-item value="delete" variant="danger"&gt;Delete&lt;/is-dropdown-item&gt;
+&lt;/is-dropdown&gt;</pre>
+      </section>
+
+      <section class="section" id="checkbox">
+        <h2>Checkable + details</h2>
+        <div class="demo">
+          <is-dropdown>
+            <is-button slot="trigger" with-caret>View</is-button>
+            <is-dropdown-item type="checkbox" checked value="canvas">Show canvas</is-dropdown-item>
+            <is-dropdown-item type="checkbox" value="grid">Show grid</is-dropdown-item>
+            <is-divider></is-divider>
+            <is-dropdown-item value="prefs">
+              Preferences…
+              <span slot="details">⌘,</span>
+            </is-dropdown-item>
+          </is-dropdown>
+        </div>
+      </section>
+
+      <section class="section" id="submenu">
+        <h2>Submenu</h2>
+        <div class="demo">
+          <is-dropdown>
+            <is-button slot="trigger" with-caret>File</is-button>
+            <is-dropdown-item value="new">New</is-dropdown-item>
+            <is-dropdown-item value="open">Open</is-dropdown-item>
+            <is-divider></is-divider>
+            <is-dropdown-item>
+              Export
+              <is-dropdown-item slot="submenu" value="pdf">PDF</is-dropdown-item>
+              <is-dropdown-item slot="submenu" value="docx">Word</is-dropdown-item>
+              <is-dropdown-item slot="submenu" value="csv">CSV</is-dropdown-item>
+            </is-dropdown-item>
+          </is-dropdown>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td>slots</td><td><code>trigger</code> + default items</td></tr>
+            <tr><td><code>placement</code></td><td>default <code>bottom-start</code></td></tr>
+            <tr><td><code>is-select</code></td><td>detail.item — cancelable para no cerrar</td></tr>
+            <tr><td>item attrs</td><td>value, type=checkbox, checked, disabled, variant=danger</td></tr>
+            <tr><td>item slots</td><td>icon, details, submenu</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-dropdown</h1>
+      <nav>
+        <a href="#intro">Intro</a>
+        <a href="#checkbox">Checkbox</a>
+        <a href="#submenu">Submenu</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    document.getElementById('dd')?.addEventListener('is-select', (e) => {
+      document.getElementById('log').textContent = `selección: ${e.detail.item.value}`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-video · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/media/video.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-video&gt;</h2>
+        <p class="lede">Reproductor con barra de controles propia. Escala al ancho del contenedor.</p>
+        <div class="demo">
+          <is-video
+            id="v1"
+            controls
+            playsinline
+            src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+            style="max-width:36rem"
+          ></is-video>
+        </div>
+        <p class="lede" id="log">eventos: —</p>
+      </section>
+      <section class="section" id="examples">
+        <h2>Sin controles / muted</h2>
+        <div class="demo">
+          <is-video
+            muted
+            loop
+            playsinline
+            controls="false"
+            src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+            style="max-width:20rem"
+          ></is-video>
+        </div>
+        <pre class="code">&lt;is-video
+  controls
+  playsinline
+  src="video.mp4"
+&gt;&lt;/is-video&gt;</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>src</code> <code>poster</code></td><td>media</td></tr>
+            <tr><td><code>controls</code></td><td>default true</td></tr>
+            <tr><td><code>muted</code> <code>loop</code> <code>autoplay</code> <code>playsinline</code></td><td>boolean</td></tr>
+            <tr><td><code>play()</code> <code>pause()</code></td><td>métodos</td></tr>
+            <tr><td>events</td><td>is-play, is-pause, is-ended (+ play/pause/ended)</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-video</h1>
+      <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const v = document.getElementById('v1');
+    const log = document.getElementById('log');
+    for (const ev of ['is-play', 'is-pause', 'is-ended']) {
+      v.addEventListener(ev, () => { log.textContent = `eventos: ${ev}`; });
+    }
+  </script>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

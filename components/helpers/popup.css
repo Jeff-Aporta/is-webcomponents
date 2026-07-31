@@ -1,0 +1,92 @@
+:host {
+  display: contents;
+  --arrow-size: 8px;
+  --arrow-color: var(--is-color-brand-500, #339af0);
+  --show-duration: 150ms;
+  --hide-duration: 100ms;
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+.base {
+  display: contents;
+}
+
+.anchor-slot {
+  display: contents;
+}
+
+.popup {
+  position: absolute;
+  z-index: 900;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: var(--auto-size-available-width, none);
+  max-height: var(--auto-size-available-height, none);
+}
+
+.popup[hidden] {
+  display: none !important;
+}
+
+.arrow {
+  position: absolute;
+  width: var(--arrow-size);
+  height: var(--arrow-size);
+  background: var(--arrow-color);
+  transform: rotate(45deg);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.arrow[hidden] {
+  display: none !important;
+}
+
+.hover-bridge {
+  position: absolute;
+  z-index: 899;
+  pointer-events: auto;
+  background: transparent;
+}
+
+.hover-bridge[hidden] {
+  display: none !important;
+}
+
+/* Built-in animation classes (apply on ::part(popup)) */
+:host(.show) .popup,
+.popup.show {
+  animation: is-popup-fade-in var(--show-duration) ease;
+}
+:host(.hide) .popup,
+.popup.hide {
+  animation: is-popup-fade-out var(--hide-duration) ease;
+}
+:host(.show-with-scale) .popup,
+.popup.show-with-scale {
+  animation: is-popup-scale-in var(--show-duration) ease;
+}
+:host(.hide-with-scale) .popup,
+.popup.hide-with-scale {
+  animation: is-popup-scale-out var(--hide-duration) ease;
+}
+
+@keyframes is-popup-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes is-popup-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes is-popup-scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes is-popup-scale-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.92); }
+}

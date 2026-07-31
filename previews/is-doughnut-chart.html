@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-doughnut-chart · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/charts/doughnut-chart.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-doughnut-chart&gt;</h2>
+        <p class="lede">Proporciones con centro hueco.</p>
+        <div class="demo" style="height:16rem">
+          <is-doughnut-chart>
+            <script type="application/json">
+              {"data":{"labels":["Dev","Diseño","QA","Reuniones"],"datasets":[{"label":"Horas","data":[35,20,15,18]}]}}
+            </script>
+          </is-doughnut-chart>
+        </div>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end"><h1>is-doughnut-chart</h1><nav><a href="#intro">Introducción</a></nav></aside>
+  </is-split-panel>
+  
+</body>
+</html>

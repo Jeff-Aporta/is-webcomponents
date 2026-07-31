@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-toast · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/feedback/toast.js"></script>
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-toast id="toaster" placement="top-end"></is-toast>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-toast&gt;</h2>
+        <p class="lede">Contenedor fijo de notificaciones. Crea ítems con <code class="code">create()</code> o declara <code class="code">&lt;is-toast-item&gt;</code>.</p>
+        <div
+          class="demo"
+          data-code='&lt;is-toast id="toaster" placement="top-end"&gt;&lt;/is-toast&gt;
+
+&lt;is-button variant="brand" id="btn-brand"&gt;brand&lt;/is-button&gt;
+&lt;is-button variant="success" id="btn-success"&gt;success&lt;/is-button&gt;
+&lt;is-button variant="warning" id="btn-warning"&gt;warning&lt;/is-button&gt;
+&lt;is-button variant="danger" id="btn-danger"&gt;danger&lt;/is-button&gt;
+&lt;is-button variant="neutral" id="btn-sticky"&gt;sticky (duration 0)&lt;/is-button&gt;
+
+&lt;script type="module"&gt;
+  const toaster = document.getElementById("toaster");
+
+  document.getElementById("btn-brand").addEventListener("click", () =&gt; {
+    toaster.create("Mensaje brand", { variant: "brand" });
+  });
+  document.getElementById("btn-success").addEventListener("click", () =&gt; {
+    toaster.create("Operación correcta", { variant: "success" });
+  });
+  document.getElementById("btn-warning").addEventListener("click", () =&gt; {
+    toaster.create("Revisa los datos", { variant: "warning" });
+  });
+  document.getElementById("btn-danger").addEventListener("click", () =&gt; {
+    toaster.create("Error al guardar", { variant: "danger" });
+  });
+  document.getElementById("btn-sticky").addEventListener("click", () =&gt; {
+    toaster.create("Quédate hasta cerrar", { variant: "neutral", duration: 0 });
+  });
+&lt;/script&gt;'
+        >
+          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
+            <is-button variant="brand" id="btn-brand">brand</is-button>
+            <is-button variant="success" id="btn-success">success</is-button>
+            <is-button variant="warning" id="btn-warning">warning</is-button>
+            <is-button variant="danger" id="btn-danger">danger</is-button>
+            <is-button variant="neutral" id="btn-sticky">sticky (duration 0)</is-button>
+          </div>
+        </div>
+        <pre class="code" data-lang="javascript">const toaster = document.getElementById('toaster');
+
+document.getElementById('btn-brand').addEventListener('click', () => {
+  toaster.create('Mensaje brand', { variant: 'brand' });
+});
+document.getElementById('btn-success').addEventListener('click', () => {
+  toaster.create('Operación correcta', { variant: 'success' });
+});
+document.getElementById('btn-warning').addEventListener('click', () => {
+  toaster.create('Revisa los datos', { variant: 'warning' });
+});
+document.getElementById('btn-danger').addEventListener('click', () => {
+  toaster.create('Error al guardar', { variant: 'danger' });
+});
+document.getElementById('btn-sticky').addEventListener('click', () => {
+  toaster.create('Quédate hasta cerrar', { variant: 'neutral', duration: 0 });
+});</pre>
+      </section>
+
+      <section class="section" id="placement">
+        <h2>Placement</h2>
+        <p class="lede">
+          Seis anclas: <code class="code">top|bottom</code> ×
+          <code class="code">start|center|end</code>
+          (logical; en LTR start=izquierda, end=derecha).
+        </p>
+        <div
+          class="demo"
+          data-code='&lt;is-toast id="toaster" placement="top-end"&gt;&lt;/is-toast&gt;
+
+&lt;is-button data-place="top-start"&gt;top-start&lt;/is-button&gt;
+&lt;is-button data-place="top-center"&gt;top-center&lt;/is-button&gt;
+&lt;is-button data-place="top-end"&gt;top-end&lt;/is-button&gt;
+&lt;is-button data-place="bottom-start"&gt;bottom-start&lt;/is-button&gt;
+&lt;is-button data-place="bottom-center"&gt;bottom-center&lt;/is-button&gt;
+&lt;is-button data-place="bottom-end"&gt;bottom-end&lt;/is-button&gt;
+
+&lt;script type="module"&gt;
+  const toaster = document.getElementById("toaster");
+  document.querySelectorAll("[data-place]").forEach((btn) =&gt; {
+    btn.addEventListener("click", () =&gt; {
+      const placement = btn.dataset.place;
+      toaster.placement = placement;
+      toaster.create(placement, { variant: "brand" });
+    });
+  });
+&lt;/script&gt;'
+        >
+          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
+            <is-button data-place="top-start">top-start</is-button>
+            <is-button data-place="top-center">top-center</is-button>
+            <is-button data-place="top-end">top-end</is-button>
+            <is-button data-place="bottom-start">bottom-start</is-button>
+            <is-button data-place="bottom-center">bottom-center</is-button>
+            <is-button data-place="bottom-end">bottom-end</is-button>
+          </div>
+        </div>
+        <pre class="code" data-lang="javascript">const toaster = document.getElementById('toaster');
+
+document.querySelectorAll('[data-place]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const placement = btn.dataset.place; // top-start | top-center | …
+    toaster.placement = placement;
+    toaster.create(placement, { variant: 'brand' });
+  });
+});</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>placement</code></td><td>top-start · top-center · top-end · bottom-start · bottom-center · bottom-end (default top-end)</td></tr>
+            <tr><td><code>create(msg, opts)</code></td><td>variant, icon, duration, allowHtml → Promise&lt;is-toast-item&gt;</td></tr>
+            <tr><td><code>is-toast-item</code></td><td>variant, duration, open · show()/hide() · is-after-show/hide</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-toast</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#placement">Placement</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const toaster = document.getElementById('toaster');
+
+    document.getElementById('btn-brand').addEventListener('click', () => {
+      toaster.create('Mensaje brand', { variant: 'brand' });
+    });
+    document.getElementById('btn-success').addEventListener('click', () => {
+      toaster.create('Operación correcta', { variant: 'success' });
+    });
+    document.getElementById('btn-warning').addEventListener('click', () => {
+      toaster.create('Revisa los datos', { variant: 'warning' });
+    });
+    document.getElementById('btn-danger').addEventListener('click', () => {
+      toaster.create('Error al guardar', { variant: 'danger' });
+    });
+    document.getElementById('btn-sticky').addEventListener('click', () => {
+      toaster.create('Quédate hasta cerrar', { variant: 'neutral', duration: 0 });
+    });
+
+    document.querySelectorAll('[data-place]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const placement = btn.dataset.place;
+        toaster.placement = placement;
+        toaster.create(placement, { variant: 'brand' });
+      });
+    });
+  </script>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.sidebar nav a').forEach(a =>
+          a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+      }
+    }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

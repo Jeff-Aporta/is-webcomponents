@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-copy-button · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-copy-button de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/actions/copy-button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <style>
+    .cluster { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .stack { display: flex; flex-direction: column; gap: 0.75rem; }
+    .from-input {
+      font: inherit;
+      padding: 0.45em 0.7em;
+      border: 1px solid var(--is-border);
+      border-radius: 6px;
+      background: var(--is-bg-elev, transparent);
+      color: var(--is-text);
+      max-width: 280px;
+      width: 100%;
+    }
+  </style>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-copy-button&gt;</h2>
+        <p class="lede">
+          Copia texto al portapapeles con feedback de éxito/error.
+        </p>
+
+        <div class="demo">
+          <span class="demo-label">caso mínimo</span>
+          <is-copy-button value="https://insoft.com.co"></is-copy-button>
+        </div>
+
+        <div class="callout">
+          <strong>Requiere contexto seguro.</strong>
+          <code class="code">clipboard.writeText()</code> necesita HTTPS o localhost.
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-copy-button</span> <span class="attr">value</span>=<span class="val">"https://insoft.com.co"</span><span class="tag">&gt;&lt;/is-copy-button&gt;</span></pre>
+      </section>
+
+      <section class="section" id="from">
+        <h2>Copiar desde otros elementos</h2>
+        <p class="lede">
+          Usa <code class="code">from</code> para apuntar a un <code class="code">id</code>.
+          Si hay <code class="code">value</code> y <code class="code">from</code>, gana <code class="code">from</code>.
+        </p>
+
+        <div class="demo stack">
+          <div class="cluster">
+            <span id="my-phone">+57 300 123 4567</span>
+            <is-copy-button from="my-phone"></is-copy-button>
+          </div>
+          <div class="cluster">
+            <input id="my-input" class="from-input" type="text" value="Texto del usuario" />
+            <is-copy-button from="my-input.value"></is-copy-button>
+          </div>
+          <div class="cluster">
+            <a id="my-link" href="https://insoft.com.co">Sitio Insoft</a>
+            <is-copy-button from="my-link[href]"></is-copy-button>
+          </div>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;span</span> <span class="attr">id</span>=<span class="val">"my-phone"</span><span class="tag">&gt;</span>+57 300 123 4567<span class="tag">&lt;/span&gt;</span>
+<span class="tag">&lt;is-copy-button</span> <span class="attr">from</span>=<span class="val">"my-phone"</span><span class="tag">&gt;&lt;/is-copy-button&gt;</span>
+
+<span class="tag">&lt;is-copy-button</span> <span class="attr">from</span>=<span class="val">"my-input.value"</span><span class="tag">&gt;&lt;/is-copy-button&gt;</span>
+<span class="tag">&lt;is-copy-button</span> <span class="attr">from</span>=<span class="val">"my-link[href]"</span><span class="tag">&gt;&lt;/is-copy-button&gt;</span></pre>
+      </section>
+
+      <section class="section" id="labels">
+        <h2>Labels custom</h2>
+        <div class="demo">
+          <is-copy-button
+            value="Labels custom"
+            copy-label="Clic para copiar"
+            success-label="¡Listo!"
+            error-label="Tu navegador no lo soporta"
+          ></is-copy-button>
+        </div>
+      </section>
+
+      <section class="section" id="icons">
+        <h2>Iconos custom</h2>
+        <div class="demo">
+          <is-copy-button value="Iconos custom">
+            <is-icon slot="copy-icon" icon="mdi:clipboard-outline"></is-icon>
+            <is-icon slot="success-icon" icon="mdi:thumb-up"></is-icon>
+            <is-icon slot="error-icon" icon="mdi:close-circle"></is-icon>
+          </is-copy-button>
+        </div>
+      </section>
+
+      <section class="section" id="trigger">
+        <h2>Trigger custom</h2>
+        <p class="lede">Slot default: mete un <code class="code">is-button</code> u otro control.</p>
+        <div class="demo">
+          <is-copy-button value="Desde un botón custom">
+            <is-button appearance="outlined" style="font-size:.8125rem">
+              <is-icon slot="start" icon="mdi:content-copy"></is-icon>
+              Copiar al portapapeles
+            </is-button>
+          </is-copy-button>
+        </div>
+      </section>
+
+      <section class="section" id="disabled">
+        <h2>Disabled</h2>
+        <div class="demo">
+          <is-copy-button value="No se puede copiar" disabled></is-copy-button>
+        </div>
+      </section>
+
+      <section class="section" id="errors">
+        <h2>Manejo de errores</h2>
+        <p class="lede">Sin <code class="code">value</code> ni <code class="code">from</code> válido → <code class="code">is-error</code>.</p>
+        <div class="demo cluster">
+          <is-copy-button id="errBtn"></is-copy-button>
+          <span class="card-meta" id="errLog">Haz clic para forzar error.</span>
+        </div>
+      </section>
+
+      <section class="section" id="duration">
+        <h2>Feedback duration</h2>
+        <div class="demo cluster">
+          <is-copy-button value="Rápido" feedback-duration="250" copy-label="250ms"></is-copy-button>
+          <is-copy-button value="Lento" feedback-duration="3000" copy-label="3s"></is-copy-button>
+        </div>
+      </section>
+
+      <section class="section" id="tooltip-mode">
+        <h2>Tooltip mode</h2>
+        <div class="demo cluster">
+          <is-copy-button value="full" tooltip="full" copy-label="full"></is-copy-button>
+          <is-copy-button value="copy" tooltip="copy" copy-label="copy (solo feedback)"></is-copy-button>
+          <is-copy-button value="none" tooltip="none" copy-label="none"></is-copy-button>
+        </div>
+      </section>
+
+      <section class="section" id="placement">
+        <h2>Tooltip placement</h2>
+        <div class="demo cluster" style="gap: 1.5rem; padding: 2rem 1rem;">
+          <is-copy-button value="top" tooltip-placement="top" copy-label="top"></is-copy-button>
+          <is-copy-button value="right" tooltip-placement="right" copy-label="right"></is-copy-button>
+          <is-copy-button value="bottom" tooltip-placement="bottom" copy-label="bottom"></is-copy-button>
+          <is-copy-button value="left" tooltip-placement="left" copy-label="left"></is-copy-button>
+        </div>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API live</h2>
+        <div class="demo cluster">
+          <is-copy-button id="apiCopy" value="hola-is-copy"></is-copy-button>
+        </div>
+        <div class="api-log" id="apiLog"><div class="row"><span class="hint">Eventos is-copy / is-error aparecerán aquí.</span></div></div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="api-table">
+          <thead><tr><th>Attr</th><th>Tipo</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td>string</td><td>''</td></tr>
+            <tr><td><code>from</code></td><td>string</td><td>''</td></tr>
+            <tr><td><code>copy-label</code></td><td>string</td><td>'' → Copiar</td></tr>
+            <tr><td><code>success-label</code></td><td>string</td><td>'' → Copiado</td></tr>
+            <tr><td><code>error-label</code></td><td>string</td><td>'' → Error</td></tr>
+            <tr><td><code>feedback-duration</code></td><td>number</td><td>1000</td></tr>
+            <tr><td><code>tooltip</code></td><td>full | copy | none</td><td>full</td></tr>
+            <tr><td><code>tooltip-placement</code></td><td>top | right | bottom | left</td><td>top</td></tr>
+            <tr><td><code>disabled</code></td><td>boolean</td><td>false</td></tr>
+          </tbody>
+        </table>
+        <p class="lede" style="margin-top: 1rem;">
+          Events: <code class="code">is-copy</code>, <code class="code">is-error</code>.
+          States: <code class="code">:state(success)</code>, <code class="code">:state(error)</code>.
+        </p>
+      </section>
+    </main>
+
+    <aside class="sidebar" slot="end">
+      <nav aria-label="En esta página">
+        <a href="#intro">Intro</a>
+        <a href="#from">From</a>
+        <a href="#labels">Labels</a>
+        <a href="#icons">Iconos</a>
+        <a href="#trigger">Trigger</a>
+        <a href="#disabled">Disabled</a>
+        <a href="#errors">Errores</a>
+        <a href="#duration">Duration</a>
+        <a href="#tooltip-mode">Tooltip</a>
+        <a href="#placement">Placement</a>
+        <a href="#api">API</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const sections = document.querySelectorAll('section.section');
+    const navLinks = document.querySelectorAll('.sidebar nav a');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+        }
+      });
+    }, { rootMargin: '-30% 0px -55% 0px' });
+    sections.forEach(s => obs.observe(s));
+
+    const apiLog = document.getElementById('apiLog');
+    const errLog = document.getElementById('errLog');
+    const logLine = (el, msg) => {
+      if (el === apiLog) el.querySelector('.hint')?.closest('.row')?.remove();
+      const t = new Date().toLocaleTimeString();
+      if (el === apiLog) {
+        el.insertAdjacentHTML('afterbegin',
+          `<div class="row"><span class="t">[${t}]</span> <span class="e">${msg}</span></div>`);
+      } else {
+        el.textContent = msg;
+      }
+    };
+
+    document.getElementById('apiCopy').addEventListener('is-copy', (e) => {
+      logLine(apiLog, `is-copy → "${e.detail.value}"`);
+    });
+    document.getElementById('apiCopy').addEventListener('is-error', () => {
+      logLine(apiLog, 'is-error');
+    });
+    document.getElementById('errBtn').addEventListener('is-error', () => {
+      logLine(errLog, 'is-error emitido (sin value).');
+    });
+    document.getElementById('errBtn').addEventListener('is-copy', () => {
+      logLine(errLog, 'is-copy (inesperado)');
+    });
+  </script>
+</body>
+</html>

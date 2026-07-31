@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-chart · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/charts/chart.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-chart&gt;</h2>
+        <p class="lede">Wrapper themed sobre Chart.js. Datos vía <code>config</code> o JSON hijo.</p>
+        <div class="demo" style="height:16rem">
+          <is-chart id="demoChart" label="Ingresos vs gastos" x-label="Mes" y-label="Miles">
+            <script type="application/json">
+              {
+                "type": "bar",
+                "data": {
+                  "labels": ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+                  "datasets": [
+                    { "label": "Ingresos", "data": [48, 56, 62, 58, 71, 68] },
+                    { "label": "Gastos", "data": [35, 38, 40, 42, 45, 43] }
+                  ]
+                }
+              }
+            </script>
+          </is-chart>
+        </div>
+      </section>
+      <section class="section" id="js">
+        <h2>Config por JavaScript</h2>
+        <div class="demo" style="height:14rem">
+          <is-chart id="jsChart" type="line" without-legend></is-chart>
+        </div>
+        <pre class="code">const el = document.querySelector('#jsChart');
+el.config = {
+  type: 'line',
+  data: {
+    labels: ['Q1','Q2','Q3','Q4'],
+    datasets: [{ label: 'Ventas', data: [420, 580, 630, 710] }]
+  }
+};</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo / prop</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>type</code></td><td>bar</td></tr>
+            <tr><td><code>config</code> (prop)</td><td>—</td></tr>
+            <tr><td><code>legend-position</code></td><td>top</td></tr>
+            <tr><td><code>index-axis</code></td><td>x</td></tr>
+            <tr><td><code>stacked</code> / <code>without-*</code></td><td>false</td></tr>
+            <tr><td><code>chart</code> (prop)</td><td>instancia Chart.js</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-chart</h1>
+      <nav><a href="#intro">Introducción</a><a href="#js">JavaScript</a><a href="#reference">Referencia</a></nav>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    await customElements.whenDefined('is-chart');
+    const el = document.querySelector('#jsChart');
+    el.config = {
+      type: 'line',
+      data: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [{ label: 'Ventas', data: [420, 580, 630, 710] }],
+      },
+    };
+  </script>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

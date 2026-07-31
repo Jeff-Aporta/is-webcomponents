@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-date-picker · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/forms/date-picker.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-date-picker&gt;</h2>
+        <p class="lede">Calendario inline siempre visible. Modo <code>single</code> o <code>range</code>.</p>
+        <div class="demo">
+          <is-date-picker id="dp" value="2026-07-30" locale="es"></is-date-picker>
+        </div>
+        <p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p>
+      </section>
+      <section class="section" id="examples">
+        <h2>Rango</h2>
+        <div class="demo">
+          <is-date-picker mode="range" min="2026-01-01" max="2026-12-31" locale="es"></is-date-picker>
+        </div>
+        <pre class="code">&lt;is-date-picker value="2026-07-30" locale="es"&gt;&lt;/is-date-picker&gt;
+&lt;is-date-picker mode="range" min="2026-01-01" max="2026-12-31"&gt;&lt;/is-date-picker&gt;</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td>— · rango: <code>start/end</code></td></tr>
+            <tr><td><code>mode</code></td><td>single · range</td></tr>
+            <tr><td><code>min</code> / <code>max</code></td><td>—</td></tr>
+            <tr><td><code>locale</code></td><td>document.lang</td></tr>
+          </tbody>
+        </table>
+        <p class="lede">Evento <code>is-change</code>: <code>{ value }</code> o <code>{ start, end }</code>.</p>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-date-picker</h1>
+      <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+    const log = document.getElementById('log');
+    document.getElementById('dp')?.addEventListener('is-change', e => { log.textContent = 'is-change → ' + JSON.stringify(e.detail); });
+  </script>
+</body>
+</html>

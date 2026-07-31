@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-divider · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/layout/divider.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-divider&gt;</h2>
+        <p class="lede">Separador horizontal o vertical. Opacidad default <code class="code">20</code>; color vía tokens del theme.</p>
+        <div class="demo">
+          <p>Sección A</p>
+          <is-divider></is-divider>
+          <p>Sección B</p>
+        </div>
+      </section>
+
+      <section class="section" id="examples">
+        <h2>Vertical · opacidad · colores</h2>
+        <div class="demo">
+          <div style="display:flex;align-items:stretch;height:3rem;gap:0">
+            <span style="padding:0 1rem;display:flex;align-items:center">Izq</span>
+            <is-divider orientation="vertical"></is-divider>
+            <span style="padding:0 1rem;display:flex;align-items:center">Der</span>
+          </div>
+        </div>
+        <div class="demo">
+          <div class="demo-row" style="flex-direction:column;gap:0;width:100%">
+            <span class="demo-label">opacity 20 · 50 · 100</span>
+            <is-divider opacity="20"></is-divider>
+            <is-divider opacity="50"></is-divider>
+            <is-divider opacity="100"></is-divider>
+          </div>
+        </div>
+        <div class="demo">
+          <div class="demo-row" style="flex-direction:column;gap:0.35rem;width:100%">
+            <span class="demo-label">color theme</span>
+            <is-divider color="text" opacity="80"></is-divider>
+            <is-divider color="brand" opacity="80"></is-divider>
+            <is-divider color="success" opacity="80"></is-divider>
+            <is-divider color="warning" opacity="80"></is-divider>
+            <is-divider color="danger" opacity="80"></is-divider>
+            <is-divider color="border" opacity="100"></is-divider>
+          </div>
+        </div>
+        <pre class="code">&lt;is-divider&gt;&lt;/is-divider&gt;
+&lt;is-divider opacity="80" color="brand"&gt;&lt;/is-divider&gt;
+&lt;is-divider orientation="vertical" color="accent"&gt;&lt;/is-divider&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo / var</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>orientation</code></td><td>horizontal</td></tr>
+            <tr><td><code>opacity</code></td><td>20 (0–100)</td></tr>
+            <tr><td><code>color</code></td><td>text · text-soft · text-dim · border · control · brand · accent · success · warning · danger</td></tr>
+            <tr><td><code>--color</code></td><td>override CSS (gana sobre attr color si se setea en el host)</td></tr>
+            <tr><td><code>--opacity</code></td><td>0.2</td></tr>
+            <tr><td><code>--width</code></td><td>1px</td></tr>
+            <tr><td><code>--spacing</code></td><td>0.75em</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-divider</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#examples">Ejemplos</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a =>
+        a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

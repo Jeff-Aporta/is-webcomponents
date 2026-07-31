@@ -1,0 +1,59 @@
+:host {
+  --color: var(--is-control-bg, #e9ecef);
+  --sheen-color: color-mix(in srgb, var(--color) 55%, #fff);
+  display: block;
+  position: relative;
+  height: 1em;
+  width: 100%;
+  min-height: 0.75rem;
+  border-radius: 0.25em;
+  overflow: hidden;
+  background: var(--color);
+}
+
+:host .indicator {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color);
+  border-radius: inherit;
+}
+
+:host([effect="sheen"]) .indicator,
+:host(:not([effect])) .indicator {
+  background: linear-gradient(
+    90deg,
+    var(--color) 0%,
+    var(--sheen-color) 45%,
+    var(--color) 90%
+  );
+  background-size: 200% 100%;
+  animation: is-skeleton-sheen 1.4s ease-in-out infinite;
+}
+
+:host([effect="pulse"]) .indicator {
+  animation: is-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+:host([effect="none"]) .indicator {
+  animation: none;
+  background: var(--color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([effect="sheen"]) .indicator,
+  :host(:not([effect])) .indicator,
+  :host([effect="pulse"]) .indicator {
+    animation: none;
+  }
+}
+
+@keyframes is-skeleton-sheen {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@keyframes is-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}

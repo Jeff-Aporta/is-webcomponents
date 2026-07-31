@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-bar-chart · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/charts/bar-chart.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-bar-chart&gt;</h2>
+        <p class="lede">Barras para comparar cantidades entre categorías.</p>
+        <div class="demo" style="height:16rem">
+          <is-bar-chart stacked>
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Excelente", "Bueno", "Regular", "Malo"],
+                  "datasets": [{ "label": "Respuestas", "data": [45, 30, 18, 7] }]
+                }
+              }
+            </script>
+          </is-bar-chart>
+        </div>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-bar-chart</h1>
+      <nav><a href="#intro">Introducción</a></nav>
+    </aside>
+  </is-split-panel>
+  
+</body>
+</html>

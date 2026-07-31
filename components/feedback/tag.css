@@ -1,0 +1,87 @@
+:host {
+  --_bg: var(--is-control-bg, #f1f3f5);
+  --_border: var(--is-control-border, #dee2e6);
+  --_text: var(--is-control-text, #495057);
+  display: inline-flex;
+  vertical-align: middle;
+  font-family: var(--is-font-family, system-ui, sans-serif);
+  font-size: inherit;
+  font-weight: 500;
+  line-height: 1;
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 0.4em 0.7em;
+    border-radius: 0.35em;
+    background: var(--_bg);
+    border: 1px solid var(--_border);
+    color: var(--_text);
+    box-sizing: border-box;
+    white-space: nowrap;
+    .prefix:not(:empty), .suffix:not(:empty) { display: inline-flex; align-items: center; }
+    .prefix:empty, .suffix:empty { display: none; }
+    .remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-inline-start: 0.15em;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      opacity: 0.7;
+      font-size: 1.1em;
+      line-height: 0;
+      border-radius: 2px;
+      &:hover { opacity: 1; }
+      &:focus-visible { outline: 2px solid var(--is-focus, #339af0); outline-offset: 1px; }
+      &[hidden] { display: none !important; }
+    }
+  }
+
+  &[pill] .tag { border-radius: 999px; }
+
+  &[variant="brand"] {
+    --_bg: var(--is-color-brand-100, #d0ebff);
+    --_border: var(--is-color-brand-500, #339af0);
+    --_text: var(--is-color-brand-700, #1971c2);
+  }
+  &[variant="neutral"] {
+    --_bg: var(--is-control-bg, #f1f3f5);
+    --_border: var(--is-control-border, #dee2e6);
+    --_text: var(--is-control-text, #495057);
+  }
+  &[variant="success"] {
+    --_bg: var(--is-color-success-100, #d3f9d8);
+    --_border: var(--is-color-success-500, #40c057);
+    --_text: var(--is-color-success-700, #237a35);
+  }
+  &[variant="warning"] {
+    --_bg: var(--is-color-warning-100, #fff3bf);
+    --_border: var(--is-color-warning-500, #f59f00);
+    --_text: var(--is-color-warning-700, #9a4f00);
+  }
+  &[variant="danger"] {
+    --_bg: var(--is-color-danger-100, #ffe3e3);
+    --_border: var(--is-color-danger-500, #fa5252);
+    --_text: var(--is-color-danger-700, #b02525);
+  }
+
+  &[appearance="filled"] .tag {
+    background: var(--_border);
+    color: var(--is-on-brand, #fff);
+    border-color: var(--_border);
+  }
+  &[appearance="outlined"] .tag {
+    background: transparent;
+    border-color: var(--_border);
+    color: var(--_text);
+  }
+  &[appearance="accent"] .tag {
+    border-left-width: 3px;
+    border-left-color: var(--_border);
+  }
+}

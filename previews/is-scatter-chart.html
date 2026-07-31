@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-scatter-chart · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/charts/scatter-chart.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .demo--chart { height: 22rem; display: flex; flex-direction: column; }
+    .demo--chart-sm { height: 18rem; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>Scatter Chart</h2>
+        <p class="lede"><code class="code">&lt;is-scatter-chart&gt;</code></p>
+        <p class="lede">
+          Muestra la relación entre dos variables con puntos en una rejilla.
+          Ideal para correlaciones, clusters y outliers.
+        </p>
+        <div class="demo demo--chart">
+          <is-scatter-chart label="Measurements" x-label="Height (cm)" y-label="Weight (kg)">
+            <script type="application/json">
+              {
+                "data": {
+                  "datasets": [{
+                    "label": "Measurements",
+                    "data": [
+                      { "x": 158, "y": 55 }, { "x": 163, "y": 62 }, { "x": 165, "y": 68 },
+                      { "x": 170, "y": 72 }, { "x": 173, "y": 75 }, { "x": 175, "y": 80 },
+                      { "x": 178, "y": 78 }, { "x": 180, "y": 85 }, { "x": 183, "y": 82 },
+                      { "x": 188, "y": 90 }
+                    ]
+                  }]
+                }
+              }
+            </script>
+          </is-scatter-chart>
+        </div>
+        <p class="lede" style="margin-top:1rem">A diferencia de barras/líneas, cada punto es un objeto <code class="code">{ x, y }</code>.</p>
+      </section>
+
+      <section class="section" id="json">
+        <h2>Datos con JSON</h2>
+        <div class="demo demo--chart demo--chart-sm">
+          <is-scatter-chart label="Students" x-label="Hours studied" y-label="Score">
+            <script type="application/json">
+              {
+                "data": {
+                  "datasets": [{
+                    "label": "Students",
+                    "data": [
+                      { "x": 2, "y": 65 }, { "x": 3, "y": 72 }, { "x": 4, "y": 78 },
+                      { "x": 5, "y": 82 }, { "x": 6, "y": 88 }, { "x": 7, "y": 85 },
+                      { "x": 8, "y": 92 }, { "x": 9, "y": 95 }
+                    ]
+                  }]
+                }
+              }
+            </script>
+          </is-scatter-chart>
+        </div>
+        <pre class="code" data-lang="html">&lt;is-scatter-chart label="Students" x-label="Hours" y-label="Score"&gt;
+  &lt;script type="application/json"&gt;
+    { "data": { "datasets": [{ "label": "Students", "data": [{ "x": 2, "y": 65 }, …] }] } }
+  &lt;/script&gt;
+&lt;/is-scatter-chart&gt;</pre>
+      </section>
+
+      <section class="section" id="js">
+        <h2>Datos con JavaScript</h2>
+        <div class="demo demo--chart demo--chart-sm">
+          <is-scatter-chart id="scatterJs" label="Students" x-label="Hours" y-label="Score"></is-scatter-chart>
+        </div>
+        <pre class="code" data-lang="javascript">const chart = document.querySelector('#scatterJs');
+chart.config = {
+  data: {
+    datasets: [{
+      label: 'Students',
+      data: [
+        { x: 2, y: 65 }, { x: 3, y: 72 }, { x: 4, y: 78 },
+        { x: 5, y: 82 }, { x: 6, y: 88 }, { x: 7, y: 85 },
+        { x: 8, y: 92 }, { x: 9, y: 95 },
+      ],
+    }],
+  },
+};</pre>
+      </section>
+
+      <section class="section" id="multi">
+        <h2>Múltiples datasets</h2>
+        <p class="lede">Compara grupos; cada dataset recibe su color de la serie fija.</p>
+        <div class="demo demo--chart">
+          <is-scatter-chart id="scatterMulti" label="Study methods" x-label="Hours" y-label="Score"></is-scatter-chart>
+        </div>
+        <pre class="code" data-lang="javascript">datasets: [
+  { label: 'Tutored', data: [{ x: 3, y: 78 }, …] },
+  { label: 'Self-study', data: [{ x: 3, y: 68 }, …] },
+]</pre>
+      </section>
+
+      <section class="section" id="options">
+        <h2>Grid y ejes</h2>
+        <div class="demo demo--chart demo--chart-sm">
+          <is-scatter-chart grid="y" x-label="Temp (°F)" y-label="Sales" label="Ice cream">
+            <script type="application/json">
+              {
+                "data": {
+                  "datasets": [{
+                    "label": "Ice cream sales",
+                    "data": [
+                      { "x": 68, "y": 120 }, { "x": 74, "y": 175 }, { "x": 79, "y": 210 },
+                      { "x": 84, "y": 280 }, { "x": 89, "y": 340 }, { "x": 95, "y": 410 }
+                    ]
+                  }]
+                }
+              }
+            </script>
+          </is-scatter-chart>
+        </div>
+        <pre class="code" data-lang="html">&lt;is-scatter-chart grid="y" x-label="Temp" y-label="Sales"&gt;…&lt;/is-scatter-chart&gt;
+&lt;is-scatter-chart without-legend without-animation&gt;…&lt;/is-scatter-chart&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo / prop</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td><code>type</code></td><td>Fijo <code>scatter</code></td></tr>
+            <tr><td>Puntos</td><td><code>{ x, y }</code> (opcional: props extra para tooltips)</td></tr>
+            <tr><td><code>x-label</code> / <code>y-label</code> / <code>grid</code></td><td>Ejes</td></tr>
+            <tr><td><code>config</code></td><td>Objeto Chart.js</td></tr>
+            <tr><td><code>--fill-color-*</code> / <code>--border-color-*</code> / <code>--point-radius</code></td><td>Serie fija</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-scatter-chart</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#json">JSON</a>
+        <a href="#js">JavaScript</a>
+        <a href="#multi">Múltiples</a>
+        <a href="#options">Opciones</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    await customElements.whenDefined('is-scatter-chart');
+    document.querySelector('#scatterJs').config = {
+      data: {
+        datasets: [{
+          label: 'Students',
+          data: [
+            { x: 2, y: 65 }, { x: 3, y: 72 }, { x: 4, y: 78 }, { x: 5, y: 82 },
+            { x: 6, y: 88 }, { x: 7, y: 85 }, { x: 8, y: 92 }, { x: 9, y: 95 },
+          ],
+        }],
+      },
+    };
+    document.querySelector('#scatterMulti').config = {
+      data: {
+        datasets: [
+          {
+            label: 'Tutored',
+            data: [
+              { x: 3, y: 78 }, { x: 4, y: 82 }, { x: 5, y: 86 }, { x: 6, y: 90 }, { x: 7, y: 94 },
+            ],
+          },
+          {
+            label: 'Self-study',
+            data: [
+              { x: 3, y: 68 }, { x: 4, y: 72 }, { x: 5, y: 77 }, { x: 7, y: 84 }, { x: 8, y: 89 },
+            ],
+          },
+        ],
+      },
+    };
+  </script>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.sidebar nav a').forEach(a =>
+          a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+      }
+    }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

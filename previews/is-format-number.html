@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-format-number · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/helpers/format-number.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+      <section class="section" id="intro">
+        <h2>&lt;is-format-number&gt;</h2>
+        <p class="lede">Números con <code class="code">Intl.NumberFormat</code>. Locale = <code class="code">lang</code> del documento.</p>
+        <div class="demo">
+          <p>Precio: <is-format-number value="1234567.89" type="currency" currency="COP"></is-format-number></p>
+        </div>
+      </section>
+
+      <section class="section" id="types">
+        <h2>Tipos (<code>type</code>)</h2>
+        <div class="demo">
+          <ul>
+            <li>decimal (default): <is-format-number value="1234.5" type="decimal"></is-format-number></li>
+            <li>percent: <is-format-number value="0.875" type="percent"></is-format-number></li>
+            <li>currency COP: <is-format-number value="12500" type="currency" currency="COP"></is-format-number></li>
+            <li>currency USD: <is-format-number value="99.9" type="currency" currency="USD"></is-format-number></li>
+            <li>currency EUR: <is-format-number value="49.99" type="currency" currency="EUR"></is-format-number></li>
+          </ul>
+        </div>
+        <pre class="code" data-lang="html">&lt;is-format-number value="0.875" type="percent"&gt;&lt;/is-format-number&gt;
+&lt;is-format-number value="99.9" type="currency" currency="USD"&gt;&lt;/is-format-number&gt;</pre>
+      </section>
+
+      <section class="section" id="digits">
+        <h2>Dígitos fraccionarios</h2>
+        <div class="demo">
+          <ul>
+            <li>min 2: <is-format-number value="1234.5" minimum-fraction-digits="2"></is-format-number></li>
+            <li>max 0: <is-format-number value="1234.56" maximum-fraction-digits="0"></is-format-number></li>
+            <li>min 2 · max 4: <is-format-number value="1.2" minimum-fraction-digits="2" maximum-fraction-digits="4"></is-format-number></li>
+            <li>currency + max 0: <is-format-number value="99.9" type="currency" currency="USD" maximum-fraction-digits="0"></is-format-number></li>
+          </ul>
+        </div>
+        <pre class="code" data-lang="html">&lt;is-format-number value="1234.5" minimum-fraction-digits="2"&gt;&lt;/is-format-number&gt;
+&lt;is-format-number value="1234.56" maximum-fraction-digits="0"&gt;&lt;/is-format-number&gt;</pre>
+      </section>
+
+      <section class="section" id="edge">
+        <h2>Casos límite</h2>
+        <div class="demo">
+          <ul>
+            <li>0 → <is-format-number value="0"></is-format-number></li>
+            <li>Negativo → <is-format-number value="-42.5" minimum-fraction-digits="1"></is-format-number></li>
+            <li>Grande → <is-format-number value="1000000000"></is-format-number></li>
+            <li>Sin value → «<is-format-number></is-format-number>»</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td>número</td></tr>
+            <tr><td><code>type</code></td><td>decimal · currency · percent · unit</td></tr>
+            <tr><td><code>currency</code></td><td>ISO 4217 (requerido útil con type=currency)</td></tr>
+            <tr><td><code>minimum-fraction-digits</code></td><td>mínimo de decimales</td></tr>
+            <tr><td><code>maximum-fraction-digits</code></td><td>máximo de decimales</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <aside class="sidebar" slot="end">
+      <h1>is-format-number</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#types">Tipos</a>
+        <a href="#digits">Dígitos</a>
+        <a href="#edge">Límite</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

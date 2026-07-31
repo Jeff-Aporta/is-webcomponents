@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-button-group · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-button-group de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/actions/button-group.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <main class="main" slot="start">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-button-group&gt;</h2>
+        <p class="lede">
+          Agrupa botones relacionados en una sola unidad visual. Ideal para toolbars,
+          controles segmentados o acciones que van juntas.
+        </p>
+
+        <div class="demo">
+          <span class="demo-label">caso mínimo</span>
+          <is-button-group label="Alineación">
+            <is-button appearance="filled">Izquierda</is-button>
+            <is-button appearance="filled">Centro</is-button>
+            <is-button appearance="filled">Derecha</is-button>
+          </is-button-group>
+        </div>
+
+        <div class="callout">
+          <strong>Dale siempre un <code class="code">label</code>.</strong>
+          No se muestra en pantalla, pero los lectores de pantalla lo anuncian.
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-button-group</span> <span class="attr">label</span>=<span class="val">"Alineación"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">appearance</span>=<span class="val">"filled"</span><span class="tag">&gt;</span>Izquierda<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">appearance</span>=<span class="val">"filled"</span><span class="tag">&gt;</span>Centro<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">appearance</span>=<span class="val">"filled"</span><span class="tag">&gt;</span>Derecha<span class="tag">&lt;/is-button&gt;</span>
+<span class="tag">&lt;/is-button-group&gt;</span></pre>
+      </section>
+
+      <section class="section" id="orientation">
+        <h2>Orientation</h2>
+        <p class="lede">
+          Con <code class="code">orientation="vertical"</code> los botones se apilan.
+        </p>
+
+        <div class="demo">
+          <is-button-group orientation="vertical" label="Opciones">
+            <is-button appearance="filled">Arriba</is-button>
+            <is-button appearance="filled">Medio</is-button>
+            <is-button appearance="filled">Abajo</is-button>
+          </is-button-group>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-button-group</span> <span class="attr">orientation</span>=<span class="val">"vertical"</span> <span class="attr">label</span>=<span class="val">"Opciones"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">appearance</span>=<span class="val">"filled"</span><span class="tag">&gt;</span>Arriba<span class="tag">&lt;/is-button&gt;</span>
+  ...
+<span class="tag">&lt;/is-button-group&gt;</span></pre>
+      </section>
+
+      <section class="section" id="pill">
+        <h2>Pill</h2>
+        <p class="lede">
+          Añade <code class="code">pill</code> a cada botón para redondear los extremos del grupo.
+        </p>
+
+        <div class="demo">
+          <is-button-group label="Alineación">
+            <is-button appearance="filled" pill>Izquierda</is-button>
+            <is-button appearance="filled" pill>Centro</is-button>
+            <is-button appearance="filled" pill>Derecha</is-button>
+          </is-button-group>
+        </div>
+      </section>
+
+      <section class="section" id="split">
+        <h2>Split button</h2>
+        <p class="lede">
+          Empareja un botón primario con uno de caret para acciones secundarias.
+          (Con <code class="code">is-dropdown</code>: usa <code class="code">with-caret</code> en el trigger.)
+        </p>
+
+        <div class="demo">
+          <is-button-group label="Guardar">
+            <is-button appearance="filled" variant="brand">Guardar</is-button>
+            <is-button appearance="filled" variant="brand" aria-label="Más opciones">
+              <is-icon icon="mdi:chevron-down"></is-icon>
+            </is-button>
+          </is-button-group>
+        </div>
+      </section>
+
+      <section class="section" id="toolbar">
+        <h2>Toolbar</h2>
+        <p class="lede">
+          Combina varios grupos en una barra de herramientas con botones solo-icono.
+        </p>
+
+        <div class="demo demo-row" style="gap: 0.75rem; flex-wrap: wrap;">
+          <is-button-group label="Historial">
+            <is-button appearance="filled" aria-label="Deshacer">
+              <is-icon icon="mdi:undo"></is-icon>
+            </is-button>
+            <is-button appearance="filled" aria-label="Rehacer">
+              <is-icon icon="mdi:redo"></is-icon>
+            </is-button>
+          </is-button-group>
+
+          <is-button-group label="Formato">
+            <is-button appearance="filled" aria-label="Negrita">
+              <is-icon icon="mdi:format-bold"></is-icon>
+            </is-button>
+            <is-button appearance="filled" aria-label="Cursiva">
+              <is-icon icon="mdi:format-italic"></is-icon>
+            </is-button>
+            <is-button appearance="filled" aria-label="Subrayado">
+              <is-icon icon="mdi:format-underline"></is-icon>
+            </is-button>
+          </is-button-group>
+
+          <is-button-group label="Alineación">
+            <is-button appearance="filled" aria-label="Izquierda">
+              <is-icon icon="mdi:format-align-left"></is-icon>
+            </is-button>
+            <is-button appearance="filled" aria-label="Centro">
+              <is-icon icon="mdi:format-align-center"></is-icon>
+            </is-button>
+            <is-button appearance="filled" aria-label="Derecha">
+              <is-icon icon="mdi:format-align-right"></is-icon>
+            </is-button>
+          </is-button-group>
+        </div>
+      </section>
+
+      <section class="section" id="native">
+        <h2>Botones nativos</h2>
+        <p class="lede">También funciona con <code class="code">&lt;button&gt;</code> nativos.</p>
+
+        <div class="demo">
+          <is-button-group label="Alineación">
+            <button type="button" class="native-demo">Izquierda</button>
+            <button type="button" class="native-demo">Centro</button>
+            <button type="button" class="native-demo">Derecha</button>
+          </is-button-group>
+        </div>
+
+        <style>
+          .native-demo {
+            font: inherit;
+            padding: 0.55em 1em;
+            border: 1px solid var(--is-border);
+            background: var(--is-control-bg, #f1f3f5);
+            color: var(--is-text);
+            cursor: pointer;
+          }
+        </style>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API live</h2>
+        <div class="demo">
+          <is-button-group id="apiGroup" label="Demo">
+            <is-button appearance="filled">A</is-button>
+            <is-button appearance="filled">B</is-button>
+            <is-button appearance="filled">C</is-button>
+          </is-button-group>
+        </div>
+        <div class="demo-row" style="margin-top: 0.75rem; gap: 0.5rem;">
+          <is-button id="apiOrient" appearance="outlined">Toggle orientation</is-button>
+          <is-button id="apiLabel" appearance="outlined">Cambiar label</is-button>
+        </div>
+        <div class="api-log" id="apiLog"><div class="row"><span class="hint">Acciones de API aparecerán aquí.</span></div></div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="api-table">
+          <thead><tr><th>Attr</th><th>Tipo</th><th>Default</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td><code>label</code></td><td>string</td><td>''</td><td>Nombre accesible del grupo</td></tr>
+            <tr><td><code>orientation</code></td><td>horizontal | vertical</td><td>horizontal</td><td>Reflejado</td></tr>
+          </tbody>
+        </table>
+        <p class="lede" style="margin-top: 1rem;">Slot default: uno o más <code class="code">is-button</code>. Part: <code class="code">::part(base)</code>.</p>
+      </section>
+    </main>
+
+    <aside class="sidebar" slot="end">
+      <nav aria-label="En esta página">
+        <a href="#intro">Intro</a>
+        <a href="#orientation">Orientation</a>
+        <a href="#pill">Pill</a>
+        <a href="#split">Split</a>
+        <a href="#toolbar">Toolbar</a>
+        <a href="#native">Nativos</a>
+        <a href="#api">API</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const sections = document.querySelectorAll('section.section');
+    const navLinks = document.querySelectorAll('.sidebar nav a');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+        }
+      });
+    }, { rootMargin: '-30% 0px -55% 0px' });
+    sections.forEach(s => obs.observe(s));
+
+    const apiGroup = document.getElementById('apiGroup');
+    const apiLog = document.getElementById('apiLog');
+    const logLine = (msg) => {
+      apiLog.querySelector('.hint')?.closest('.row')?.remove();
+      const t = new Date().toLocaleTimeString();
+      apiLog.insertAdjacentHTML('afterbegin',
+        `<div class="row"><span class="t">[${t}]</span> <span class="e">${msg}</span></div>`);
+    };
+    document.getElementById('apiOrient').addEventListener('click', () => {
+      apiGroup.orientation = apiGroup.orientation === 'vertical' ? 'horizontal' : 'vertical';
+      logLine(`orientation = '${apiGroup.orientation}'`);
+    });
+    document.getElementById('apiLabel').addEventListener('click', () => {
+      apiGroup.label = apiGroup.label === 'Demo' ? 'Grupo demo' : 'Demo';
+      logLine(`label = '${apiGroup.label}'`);
+    });
+  </script>
+</body>
+</html>
