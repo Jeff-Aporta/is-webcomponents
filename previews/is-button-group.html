@@ -14,6 +14,7 @@
   <script type="module" src="../components/actions/button-group.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
 
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
@@ -425,17 +426,6 @@
   </is-split-panel>
 
   <script>
-    const sections = document.querySelectorAll('section.section');
-    const navLinks = document.querySelectorAll('.sidebar nav a');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
-        }
-      });
-    }, { rootMargin: '-30% 0px -55% 0px' });
-    sections.forEach(s => obs.observe(s));
-
     const introLog = document.getElementById('introLog');
     document.querySelector('#intro is-button-group').addEventListener('is-change', (e) => {
       introLog.innerHTML = `vista: <code class="code">${e.detail.value || '—'}</code>`;

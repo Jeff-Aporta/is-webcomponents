@@ -23,6 +23,7 @@ export default [
   { tag: 'is-main', title: 'Main', category: 'layout', script: '../components/layout/main.js', style: '../components/layout/main.css', page: 'is-main.html' },
   { tag: 'is-card', title: 'Card', category: 'layout', script: '../components/layout/card.js', style: '../components/layout/card.css', page: 'is-card.html' },
   { tag: 'is-divider', title: 'Divider', category: 'layout', script: '../components/layout/divider.js', style: '../components/layout/divider.css', page: 'is-divider.html' },
+  { tag: 'is-scrollspy', title: 'Scrollspy', category: 'layout', script: '../components/layout/scrollspy.js', style: '../components/layout/scrollspy.css', page: 'is-scrollspy.html' },
   { tag: 'is-popover', title: 'Popover', category: 'helpers', script: '../components/helpers/popover.js', style: '../components/helpers/popover.css', page: 'is-popover.html' },
   { tag: 'is-combobox', title: 'Combobox', category: 'forms', script: '../components/forms/combobox.js', style: '../components/forms/combobox.css', page: 'is-combobox.html' },
   { tag: 'is-option', title: 'Option', category: 'forms', script: '../components/forms/option.js', style: '../components/forms/option.css', page: 'is-combobox.html' },

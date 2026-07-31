@@ -13,6 +13,7 @@
   <script type="module" src="../components/media/icon.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
 
   <!-- CodeMirror via CDN (runMode only, no editor) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
@@ -815,7 +816,7 @@ btn.<span class="attr">setCustomValidity</span>(<span class="str">'Revisa los ca
     <!-- ============== SIDEBAR ============== -->
     <aside class="sidebar" slot="end">
       <h1>is-button</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#variants">Variantes</a>
         <a href="#appearances">Apariencias</a>
@@ -836,24 +837,12 @@ btn.<span class="attr">setCustomValidity</span>(<span class="str">'Revisa los ca
         <a href="#events">Eventos</a>
         <a href="#playground">Playground</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 
   <script>
     // ============ Active section in sidebar ============
-    const sections = document.querySelectorAll('section.section');
-    const navLinks = document.querySelectorAll('.sidebar nav a');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const id = e.target.id;
-          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-        }
-      });
-    }, { rootMargin: '-30% 0px -55% 0px' });
-    sections.forEach(s => obs.observe(s));
-
     // ============ Loading demo ============
     const loadingDemo = document.getElementById('loadingDemo');
     loadingDemo.addEventListener('click', () => {

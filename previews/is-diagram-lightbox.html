@@ -11,6 +11,7 @@
   <script type="module" src="../components/diagrams/sequence-diagram.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/forms/select.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
@@ -104,10 +105,10 @@
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-diagram-lightbox</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#api">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 

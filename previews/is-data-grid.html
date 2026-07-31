@@ -10,6 +10,7 @@
   <script type="module" src="../components/data/data-grid.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -384,7 +385,7 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-data-grid</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#columns">Columnas</a>
         <a href="#layout">Ancho y anclaje</a>
@@ -399,17 +400,11 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
         <a href="#export">Exportación</a>
         <a href="#keyboard">Teclado</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 
   <script type="module">
-    const obs = new IntersectionObserver((es) => es.forEach((e) => {
-      if (!e.isIntersecting) return;
-      document.querySelectorAll('.sidebar nav a').forEach((a) => a.classList.toggle('active', a.getAttribute('href') === `#${e.target.id}`));
-    }), { rootMargin: '-30% 0px -55% 0px' });
-    document.querySelectorAll('section.section').forEach((s) => obs.observe(s));
-
     /* ── Datos de ejemplo ─────────────────────────────────────────────── */
     const CITIES = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga', 'Pereira'];
     const NAMES = ['Ana', 'Luis', 'María', 'Carlos', 'Sofía', 'Diego', 'Valentina', 'Andrés', 'Camila', 'Julián', 'Laura', 'Pedro', 'Elena', 'Mateo', 'Lucía', 'Tomás'];

@@ -74,7 +74,8 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
   color: var(--is-text);
   text-decoration: none;
 }
-.sidebar nav a.active {
+.sidebar nav a.active,
+.sidebar nav a.is-scrollspy-active {
   background: var(--is-accent-bg);
   color: var(--is-brand-text);
   font-weight: 650;

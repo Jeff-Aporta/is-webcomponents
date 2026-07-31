@@ -11,6 +11,7 @@
   <script type="module" src="../components/diagrams/diagram-lightbox.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -205,13 +206,13 @@
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-sequence-diagram</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#json">Configuración JSON</a>
         <a href="#alt">Ramas alt</a>
         <a href="#viewer">Visor</a>
         <a href="#api">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 

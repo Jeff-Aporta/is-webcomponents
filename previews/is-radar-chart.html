@@ -10,6 +10,7 @@
   <script type="module" src="../components/charts/radar-chart.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -158,14 +159,14 @@ chart.config = {
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-radar-chart</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#json">JSON</a>
         <a href="#js">JavaScript</a>
         <a href="#multi">Múltiples</a>
         <a href="#options">Opciones</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
   <script type="module">
@@ -187,13 +188,6 @@ chart.config = {
     };
   </script>
   <script>
-    const obs = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) {
-        document.querySelectorAll('.sidebar nav a').forEach(a =>
-          a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
-      }
-    }), { rootMargin: '-30% 0px -55% 0px' });
-    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
-  </script>
+    </script>
 </body>
 </html>

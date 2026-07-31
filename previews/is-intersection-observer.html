@@ -10,6 +10,7 @@
   <script type="module" src="../components/helpers/intersection-observer.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <style>
     .io-scroller {
       height: 280px;
@@ -285,27 +286,16 @@
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-intersection-observer</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Concepto</a>
         <a href="#scroll">Demo scroll</a>
         <a href="#once">Once</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 
   <script>
-    const toc = new IntersectionObserver(
-      (es) => es.forEach((e) => {
-        if (e.isIntersecting) {
-          document.querySelectorAll('.sidebar nav a').forEach((a) =>
-            a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
-        }
-      }),
-      { rootMargin: '-30% 0px -55% 0px' }
-    );
-    document.querySelectorAll('section.section').forEach((s) => toc.observe(s));
-
     const log = document.getElementById('ioLog');
     document.getElementById('ioScroll').addEventListener('is-intersect', (e) => {
       const entry = e.detail.entry;

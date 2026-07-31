@@ -12,6 +12,7 @@
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
@@ -379,7 +380,7 @@ sp.<span class="attr">addEventListener</span>(<span class="str">'reposition'</sp
     <!-- ============== SIDEBAR ============== -->
     <aside class="sidebar" slot="end">
       <h1>is-split-panel</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#horizontal">Horizontal</a>
         <a href="#vertical">Vertical</a>
@@ -389,24 +390,12 @@ sp.<span class="attr">addEventListener</span>(<span class="str">'reposition'</sp
         <a href="#keyboard">Teclado</a>
         <a href="#methods">API JS</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 
   <script>
     // sidebar active section
-    const sections = document.querySelectorAll('section.section');
-    const navLinks = document.querySelectorAll('.sidebar nav a');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const id = e.target.id;
-          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-        }
-      });
-    }, { rootMargin: '-30% 0px -55% 0px' });
-    sections.forEach(s => obs.observe(s));
-
     // API demo
     const apiSplit = document.getElementById('apiSplit');
     const apiPos = document.getElementById('apiPos');

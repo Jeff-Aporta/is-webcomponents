@@ -10,6 +10,7 @@
   <script type="module" src="../components/layout/divider.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -78,19 +79,14 @@
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-divider</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#examples">Ejemplos</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
   <script>
-    const obs = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a =>
-        a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
-    }), { rootMargin: '-30% 0px -55% 0px' });
-    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
-  </script>
+    </script>
 </body>
 </html>

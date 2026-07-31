@@ -12,6 +12,7 @@
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script type="module" src="../components/layout/card.js"></script>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
@@ -296,7 +297,7 @@ c.<span class="attr">addEventListener</span>(<span class="str">'slotchange'</spa
     <!-- ============== SIDEBAR ============== -->
     <aside class="sidebar" slot="end">
       <h1>is-card</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#appearances">Apariencias</a>
         <a href="#vertical-full">Header + media + footer</a>
@@ -304,24 +305,12 @@ c.<span class="attr">addEventListener</span>(<span class="str">'slotchange'</spa
         <a href="#header-footer-actions">Header / footer actions</a>
         <a href="#methods">API JS</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 
   <script>
     // sidebar active section
-    const sections = document.querySelectorAll('section.section');
-    const navLinks = document.querySelectorAll('.sidebar nav a');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const id = e.target.id;
-          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-        }
-      });
-    }, { rootMargin: '-30% 0px -55% 0px' });
-    sections.forEach(s => obs.observe(s));
-
     // API demo
     const apiCard = document.getElementById('apiCard');
     const apiLog  = document.getElementById('apiLog');

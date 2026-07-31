@@ -13,6 +13,7 @@
   <script type="module" src="../components/actions/copy-button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
@@ -250,17 +251,6 @@
   </is-split-panel>
 
   <script>
-    const sections = document.querySelectorAll('section.section');
-    const navLinks = document.querySelectorAll('.sidebar nav a');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
-        }
-      });
-    }, { rootMargin: '-30% 0px -55% 0px' });
-    sections.forEach(s => obs.observe(s));
-
     const apiLog = document.getElementById('apiLog');
     const errLog = document.getElementById('errLog');
     const logLine = (el, msg) => {

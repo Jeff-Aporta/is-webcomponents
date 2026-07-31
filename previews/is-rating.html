@@ -11,6 +11,7 @@
   <script type="module" src="../components/media/icon.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -268,7 +269,7 @@ rating.clear();   // también por API</pre>
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-rating</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#basics">Básicos</a>
         <a href="#precision">Precisión</a>
@@ -281,7 +282,7 @@ rating.clear();   // también por API</pre>
         <a href="#form">Formulario</a>
         <a href="#keyboard">Teclado</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 
@@ -328,8 +329,6 @@ rating.clear();   // también por API</pre>
     f.addEventListener('reset', () => { out.textContent = 'FormData: —'; });
   </script>
   <script>
-    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
-    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
-  </script>
+    </script>
 </body>
 </html>

@@ -11,6 +11,7 @@
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -362,7 +363,7 @@
 
     <aside class="sidebar" slot="end">
       <h1>is-popover</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Intro</a>
         <a href="#placement">Placement</a>
         <a href="#flip">flip</a>
@@ -370,7 +371,7 @@
         <a href="#autosize">auto-size</a>
         <a href="#trigger">trigger</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 </body>

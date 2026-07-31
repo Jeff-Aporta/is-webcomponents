@@ -1,0 +1,35 @@
+/* <is-scrollspy> — contenedor con IO que resalta enlaces en el nav.
+ *
+ * Por defecto se renderiza como columna vertical de enlaces. El consumer
+ * puede controlar el `display` del host para layouts distintos (grid,
+ * bar, etc.). Los <a href="#id"> viven en el light DOM y aquí solo
+ * definimos los hooks para el estado activo.
+ */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+::slotted(a) {
+  display: block;
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--is-text-soft);
+  text-decoration: none;
+  transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+::slotted(a:hover) {
+  background: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
+  color: var(--is-text);
+  text-decoration: none;
+}
+::slotted(a.is-scrollspy-active) {
+  background: var(--is-accent-bg);
+  color: var(--is-brand-text);
+  font-weight: 650;
+  box-shadow: inset 2.5px 0 0 var(--is-accent);
+}
+

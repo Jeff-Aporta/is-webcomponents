@@ -12,6 +12,7 @@
   <script type="module" src="../components/media/icon.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -253,7 +254,7 @@ slider.valueLabelFormat = (bytes) =&gt; format(bytes); // 1 MB, 2 GB…</pre>
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-slider</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#continuous">Continuo</a>
         <a href="#sizes">Tamaños</a>
@@ -267,7 +268,7 @@ slider.valueLabelFormat = (bytes) =&gt; format(bytes); // 1 MB, 2 GB…</pre>
         <a href="#scale">Escala no lineal</a>
         <a href="#keyboard">Teclado</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
 
@@ -312,8 +313,6 @@ slider.valueLabelFormat = (bytes) =&gt; format(bytes); // 1 MB, 2 GB…</pre>
     paintScale();
   </script>
   <script>
-    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
-    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
-  </script>
+    </script>
 </body>
 </html>

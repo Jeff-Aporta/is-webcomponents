@@ -10,6 +10,7 @@
   <script type="module" src="../components/helpers/format-date.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
   <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -157,7 +158,7 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-format-date</h1>
-      <nav>
+      <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#inputs">Entradas</a>
         <a href="#locales">Locales</a>
@@ -165,7 +166,7 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
         <a href="#time">Hora</a>
         <a href="#timezone">Zona</a>
         <a href="#reference">Referencia</a>
-      </nav>
+      </is-scrollspy>
     </aside>
   </is-split-panel>
   <script type="module">
@@ -242,13 +243,6 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
     probe.addEventListener('input', renderProbe);
     renderProbe();
 
-    const obs = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) {
-        document.querySelectorAll('.sidebar nav a').forEach(a =>
-          a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
-      }
-    }), { rootMargin: '-30% 0px -55% 0px' });
-    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
-  </script>
+    </script>
 </body>
 </html>
