@@ -269,6 +269,127 @@
 
     .home-meta is-tag { font-size: 0.72rem; }
 
+    /* ── Snippet CDN ─────────────────────────────────────────────────── */
+    .home-cdn {
+      display: grid;
+      gap: 0.4rem;
+      margin-top: 0.9rem;
+      max-width: 36rem;
+      width: 100%;
+    }
+
+    .home-cdn__tabs {
+      display: inline-flex;
+      gap: 0.25rem;
+      padding: 0.2rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--is-bg-elev) 70%, transparent);
+      border: 1px solid color-mix(in srgb, var(--is-border) 80%, transparent);
+      width: max-content;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .home-cdn__tab {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--is-text-soft);
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+    }
+
+    .home-cdn__tab[aria-pressed="true"] {
+      background: var(--is-accent);
+      color: var(--is-on-brand, #fff);
+    }
+
+    .home-cdn__panel {
+      position: relative;
+      background: color-mix(in srgb, var(--is-bg-elev) 90%, transparent);
+      border: 1px solid color-mix(in srgb, var(--is-border) 75%, transparent);
+      border-radius: 0.75rem;
+      padding: 0.85rem 0.95rem 0.95rem;
+      box-shadow: 0 12px 28px rgb(0 0 0 / 20%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .home-cdn__panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .home-cdn__hint {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--is-text-soft);
+      letter-spacing: 0.02em;
+    }
+
+    .home-cdn__copy {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--is-border) 80%, transparent);
+      background: color-mix(in srgb, var(--is-bg-soft) 80%, transparent);
+      color: var(--is-text);
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 120ms ease, border-color 120ms ease;
+    }
+
+    .home-cdn__copy:hover { background: var(--is-bg); }
+    .home-cdn__copy[aria-pressed="true"] {
+      background: color-mix(in srgb, var(--is-color-success-500, #40c057) 22%, transparent);
+      border-color: color-mix(in srgb, var(--is-color-success-500, #40c057) 60%, transparent);
+      color: var(--is-color-success-500, #40c057);
+    }
+
+    .home-cdn__pre {
+      margin: 0;
+      padding: 0.7rem 0.8rem;
+      background: var(--is-code-bg, #0f1318);
+      border: 1px solid var(--is-code-border, #1f262e);
+      border-radius: 0.5rem;
+      font-family: var(--is-mono, ui-monospace, Consolas, monospace);
+      font-size: 0.78rem;
+      line-height: 1.55;
+      color: var(--is-code-text, #d4d8de);
+      white-space: pre;
+      overflow-x: auto;
+      tab-size: 2;
+    }
+
+    .home-cdn__pre[data-lang]::before {
+      content: attr(data-lang);
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--is-text-soft);
+      margin-bottom: 0.35rem;
+      opacity: 0.65;
+    }
+
+    .home-cdn__panel[hidden] { display: none; }
+
     /* ── Showcase con charts en 3D ─────────────────────────────────── */
     .home-stage {
       position: relative;
@@ -507,6 +628,35 @@
           <is-tag>CDN / ES modules</is-tag>
           <is-tag variant="success">3 paletas</is-tag>
           <is-tag variant="warning">80+ componentes</is-tag>
+        </div>
+
+        <div class="home-cdn" aria-label="Consumo por CDN">
+          <div class="home-cdn__tabs" role="tablist" aria-label="Pestañas de consumo">
+            <button type="button" class="home-cdn__tab" role="tab" aria-pressed="true" data-tab="js">JS + CSS</button>
+            <button type="button" class="home-cdn__tab" role="tab" aria-pressed="false" data-tab="bundle">Bundle único</button>
+          </div>
+
+          <div class="home-cdn__panel" data-panel="js">
+            <div class="home-cdn__panel-header">
+              <span class="home-cdn__hint">Carga el tema base y los componentes que necesites</span>
+              <button type="button" class="home-cdn__copy" data-copy="js" aria-label="Copiar snippet JS y CSS">
+                <is-icon icon="mdi:content-copy"></is-icon>
+                Copiar
+              </button>
+            </div>
+            <pre class="home-cdn__pre" data-lang="html" id="cdnJsCss"></pre>
+          </div>
+
+          <div class="home-cdn__panel" data-panel="bundle" hidden>
+            <div class="home-cdn__panel-header">
+              <span class="home-cdn__hint">Bundle precompilado con todos los componentes</span>
+              <button type="button" class="home-cdn__copy" data-copy="bundle" aria-label="Copiar snippet bundle">
+                <is-icon icon="mdi:content-copy"></is-icon>
+                Copiar
+              </button>
+            </div>
+            <pre class="home-cdn__pre" data-lang="html" id="cdnBundle"></pre>
+          </div>
         </div>
       </section>
 
@@ -845,6 +995,100 @@
     document.getElementById('ctaExplore')?.addEventListener('click', () => postSelect('is-button'));
     document.getElementById('ctaButton')?.addEventListener('click', () => postSelect('is-button'));
     document.getElementById('ctaCharts')?.addEventListener('click', () => postSelect('is-bar-chart'));
+
+    /* ── Snippet de consumo por CDN ─────────────────────────────────── */
+    const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
+
+    const jsCssSnippet =
+`<link rel="stylesheet" href="${CDN}/is-base.min.css">
+
+<!-- Solo carga los componentes que necesites -->
+<script type="module" src="${CDN}/button.min.js"><\/script>
+<script type="module" src="${CDN}/card.min.js"><\/script>
+<script type="module" src="${CDN}/chart.min.js"><\/script>
+<script type="module" src="${CDN}/data-grid.min.js"><\/script>
+<script type="module" src="${CDN}/bar-chart.min.js"><\/script>
+
+<!-- Cada .min.js carga su .min.css hermano dentro de su Shadow DOM. -->
+
+<is-button variant="brand">Explorar</is-button>
+<is-data-grid columns='[{"field":"id","headerName":"ID"}]' rows='[{"id":1}]'></is-data-grid>`;
+
+    const bundleSnippet =
+`<link rel="stylesheet" href="${CDN}/is-base.min.css">
+
+<!-- Import map para resolver "is-*" al CDN de jsDelivr -->
+<script type="importmap">
+{
+  "imports": {
+    "@is-webcomponents/": "${CDN}/"
+  }
+}
+<\/script>
+
+<script type="module">
+  import '@is-webcomponents/button.min.js';
+  import '@is-webcomponents/card.min.js';
+  import '@is-webcomponents/data-grid.min.js';
+  import '@is-webcomponents/chart.min.js';
+<\/script>
+
+<is-button variant="brand">Hola mundo</is-button>`;
+
+    document.getElementById('cdnJsCss').textContent = jsCssSnippet;
+    document.getElementById('cdnBundle').textContent = bundleSnippet;
+
+    // Resaltado por CodeMirror si está disponible.
+    if (typeof window.__isHighlightCode === 'function') {
+      window.__isHighlightCode(document.getElementById('cdnJsCss'));
+      window.__isHighlightCode(document.getElementById('cdnBundle'));
+    }
+
+    // Tabs.
+    const tabs = document.querySelectorAll('.home-cdn__tab');
+    const panels = document.querySelectorAll('.home-cdn__panel');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
+        panels.forEach((p) => { p.hidden = p.dataset.panel !== target; });
+      });
+    });
+
+    // Copy-to-clipboard.
+    const writeText = async (text) => {
+      if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    };
+
+    document.querySelectorAll('.home-cdn__copy').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const key = btn.dataset.copy;
+        const text = key === 'bundle' ? bundleSnippet : jsCssSnippet;
+        try {
+          await writeText(text);
+          btn.setAttribute('aria-pressed', 'true');
+          const label = btn.querySelector('is-icon');
+          if (label) label.setAttribute('icon', 'mdi:check');
+          btn.lastChild && (btn.lastChild.textContent = ' Copiado');
+          setTimeout(() => {
+            btn.removeAttribute('aria-pressed');
+            if (label) label.setAttribute('icon', 'mdi:content-copy');
+            btn.lastChild && (btn.lastChild.textContent = ' Copiar');
+          }, 1500);
+        } catch {
+          btn.lastChild && (btn.lastChild.textContent = ' Error');
+          setTimeout(() => { btn.lastChild && (btn.lastChild.textContent = ' Copiar'); }, 1500);
+        }
+      });
+    });
   </script>
 </body>
 </html>
