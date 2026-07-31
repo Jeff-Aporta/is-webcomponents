@@ -1,0 +1,101 @@
+:host {
+  display: contents;
+}
+
+.popconfirm {
+  --bg: var(--is-bg-2, #181b22);
+  --fg: var(--is-text, #e8eaf1);
+  --border: var(--is-border, #2a2f3a);
+  --brand: var(--is-brand, dodgerblue);
+  --brand-fg: var(--is-brand-fg, #fff);
+  --danger: var(--is-danger, #f64e60);
+
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  font-size: 0.9rem;
+  min-width: 200px;
+  max-width: 320px;
+  position: relative;
+  animation: popconfirm-in 0.15s ease-out;
+}
+
+@keyframes popconfirm-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.message {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.cancel,
+.confirm {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.confirm {
+  background: var(--brand);
+  color: var(--brand-fg);
+  border-color: var(--brand);
+}
+
+.cancel:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.confirm:hover {
+  background: color-mix(in srgb, var(--brand) 85%, #fff 15%);
+}
+
+.arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+}
+
+.popconfirm[data-placement="top"] .arrow,
+.popconfirm[data-placement="top-start"] .arrow,
+.popconfirm[data-placement="top-end"] .arrow {
+  bottom: -12px;
+  border-top-color: var(--bg);
+}
+
+.popconfirm[data-placement="bottom"] .arrow,
+.popconfirm[data-placement="bottom-start"] .arrow,
+.popconfirm[data-placement="bottom-end"] .arrow {
+  top: -12px;
+  border-bottom-color: var(--bg);
+}
+
+.popconfirm[data-placement="start"] .arrow {
+  right: -12px;
+  border-left-color: var(--bg);
+}
+
+.popconfirm[data-placement="end"] .arrow {
+  left: -12px;
+  border-right-color: var(--bg);
+}
+
+:host([hide-arrow]) .arrow {
+  display: none;
+}

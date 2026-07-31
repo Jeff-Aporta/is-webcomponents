@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-gauge · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-gauge de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
+  <script type="module" src="../components/data/gauge.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .gauge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      align-items: center;
+    }
+    .gauge-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: var(--is-bg-2, #181b22);
+      border: 1px solid var(--is-border, #2a2f3a);
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-gauge">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-gauge&gt;</h2>
+        <p class="lede">
+          Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,
+          custom min/max, unidad, formato y tamaño.
+        </p>
+
+        <div class="demo">
+          <div class="gauge-grid">
+            <div class="gauge-cell">
+              <is-gauge id="g1" value="67" label="Conversión" unit="%"></is-gauge>
+            </div>
+            <div class="gauge-cell">
+              <is-gauge value="42" label="CPU" unit="%" variant="warning"></is-gauge>
+            </div>
+            <div class="gauge-cell">
+              <is-gauge value="92" label="RAM" unit="%" variant="success"></is-gauge>
+            </div>
+            <div class="gauge-cell">
+              <is-gauge value="15" label="Errores" unit="%" variant="danger"></is-gauge>
+            </div>
+          </div>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-gauge</span> <span class="attr">value</span>=<span class="val">"67"</span> <span class="attr">label</span>=<span class="val">"Conversión"</span> <span class="attr">unit</span>=<span class="val">"%"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-gauge&gt;</span></pre>
+      </section>
+
+      <section class="section" id="sizes">
+        <h2>Tamaños</h2>
+        <p class="lede">small, medium, large.</p>
+
+        <div class="demo">
+          <div class="gauge-grid">
+            <div class="gauge-cell"><is-gauge size="small" value="42" label="Small"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge size="medium" value="42" label="Medium"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge size="large" value="42" label="Large"></is-gauge></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="half">
+        <h2>Semicírculo</h2>
+        <p class="lede">Con <code class="code">half</code> pinta solo medio arco.</p>
+
+        <div class="demo">
+          <div class="gauge-grid">
+            <div class="gauge-cell"><is-gauge half value="68" label="Velocímetro"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge half value="42" label="Velocímetro" variant="warning"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge half value="88" label="Velocímetro" variant="success"></is-gauge></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="format">
+        <h2>Formato</h2>
+        <p class="lede">Con <code class="code">format</code> controla los decimales.</p>
+
+        <div class="demo">
+          <div class="gauge-grid">
+            <div class="gauge-cell"><is-gauge value="3.14159" label="π" format="0.00"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge value="12345" label="USD" format="0,0" unit="€"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge value="0.5" label="CTR" format="0.0%" unit=""></is-gauge></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="interactive">
+        <h2>Interactivo</h2>
+        <p class="lede">Vinculado a un slider.</p>
+
+        <div class="demo">
+          <is-gauge id="gInteractive" value="50" label="Dinámico"></is-gauge>
+          <is-slider id="gSlider" min="0" max="100" value="50" label="Valor"></is-slider>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-gauge&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td>number</td><td>0</td><td>Valor actual.</td></tr>
+            <tr><td><code>min</code></td><td>number</td><td>0</td><td>Mínimo.</td></tr>
+            <tr><td><code>max</code></td><td>number</td><td>100</td><td>Máximo.</td></tr>
+            <tr><td><code>label</code></td><td>string</td><td>—</td><td>Etiqueta.</td></tr>
+            <tr><td><code>unit</code></td><td>string</td><td>—</td><td>Unidad (e.g. "%").</td></tr>
+            <tr><td><code>format</code></td><td>string</td><td>0</td><td>Intl format.</td></tr>
+            <tr><td><code>size</code></td><td>small | medium | large</td><td>medium</td><td>Tamaño.</td></tr>
+            <tr><td><code>thickness</code></td><td>number</td><td>8</td><td>Ancho del trazo.</td></tr>
+            <tr><td><code>variant</code></td><td>brand | success | warning | danger</td><td>brand</td><td>Color.</td></tr>
+            <tr><td><code>half</code></td><td>boolean</td><td>false</td><td>Semicírculo.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-gauge</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#sizes">Tamaños</a>
+        <a href="#half">Semicírculo</a>
+        <a href="#format">Formato</a>
+        <a href="#interactive">Interactivo</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script type="module">
+    const g = document.getElementById('gInteractive');
+    const s = document.getElementById('gSlider');
+    s.addEventListener('is-input', (e) => {
+      g.setAttribute('value', e.detail.value);
+    });
+  </script>
+</body>
+</html>

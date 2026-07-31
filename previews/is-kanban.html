@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-kanban · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-kanban / is-kanban-column / is-kanban-card de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/data/kanban.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-kanban">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-kanban&gt;</h2>
+        <p class="lede">
+          Tablero kanban con columnas y tarjetas. Cada columna tiene un accent
+          color, badge automático con el conteo, slots de header-actions y
+          cards con cover, heading, meta, tag y footer.
+        </p>
+
+        <div class="demo">
+          <is-kanban id="kb1">
+            <is-kanban-column title="Pending" accent="dodgerblue">
+              <is-kanban-card heading="Diseñar landing" meta="Asignado a Ana" tag="Design" tag-variant="brand">
+                Maquetar la nueva landing con el sistema de paneles.
+              </is-kanban-card>
+              <is-kanban-card heading="Investigar SSO" meta="Asignado a Diego" tag="R&amp;D" tag-variant="warning">
+                Contactar con Auth0 y Okta para comparar planes.
+              </is-kanban-card>
+              <is-kanban-card heading="Newsletter mensual" meta="Pendiente de copy" tag="Marketing" tag-variant="neutral">
+                Preparar el email de finales de mes.
+              </is-kanban-card>
+            </is-kanban-column>
+            <is-kanban-column title="In progress" accent="var(--is-warning, #ffa800)">
+              <is-kanban-card heading="Implementar /api/v2" meta="Backend ⋅ 70%" tag="Backend" tag-variant="warning">
+                <span slot="footer">
+                  <is-icon icon="mdi:clock-outline"></is-icon>
+                  <span>3 días</span>
+                </span>
+              </is-kanban-card>
+              <is-kanban-card heading="Bug: scrollspy" meta="Frontend" tag="Frontend" tag-variant="brand">
+                El observer no se desconecta al cambiar de pestaña.
+              </is-kanban-card>
+            </is-kanban-column>
+            <is-kanban-column title="QA" accent="var(--is-success, #0bb783)">
+              <is-kanban-card heading="Refactor pagination" meta="PR #429" tag="Refactor" tag-variant="success">
+                Sustituir el paginador custom por is-pagination.
+              </is-kanban-card>
+            </is-kanban-column>
+            <is-kanban-column title="Done" accent="var(--is-success, #0bb783)">
+              <is-kanban-card heading="Calendar widget" tag="UI" tag-variant="success">Componente terminado y desplegado.</is-kanban-card>
+            </is-kanban-column>
+          </is-kanban>
+          <p id="kLog">Click sobre una card: <code class="code">—</code></p>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-kanban&gt;</span>
+  <span class="tag">&lt;is-kanban-column</span> <span class="attr">title</span>=<span class="val">"Pending"</span> <span class="attr">accent</span>=<span class="val">"dodgerblue"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;is-kanban-card</span> <span class="attr">heading</span>=<span class="val">"Diseñar landing"</span> <span class="attr">tag</span>=<span class="val">"Design"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-kanban-card&gt;</span>
+  <span class="tag">&lt;/is-kanban-column&gt;</span>
+<span class="tag">&lt;/is-kanban&gt;</span></pre>
+      </section>
+
+      <section class="section" id="cover">
+        <h2>Con cover</h2>
+        <p class="lede">Atributo <code class="code">cover</code> muestra una imagen de cabecera.</p>
+
+        <div class="demo">
+          <is-kanban>
+            <is-kanban-column title="Features" accent="dodgerblue">
+              <is-kanban-card heading="Versión 2.0" tag="Release" tag-variant="brand" cover="https://picsum.photos/id/1015/600/300">
+                Lanzamiento de la nueva versión con is-stepper.
+              </is-kanban-card>
+              <is-kanban-card heading="Componentes nuevos" tag="Component" tag-variant="success" cover="https://picsum.photos/id/1025/600/300">
+                8 componentes añadidos en la fase 8.
+              </is-kanban-card>
+            </is-kanban-column>
+          </is-kanban>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-kanban-column&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>title</code></td><td>string</td><td>—</td><td>Nombre de la columna.</td></tr>
+            <tr><td><code>accent</code></td><td>string</td><td>brand</td><td>Color de acento.</td></tr>
+            <tr><td><code>badge</code></td><td>string</td><td>—</td><td>Override del conteo.</td></tr>
+          </tbody>
+        </table>
+
+        <h3><code class="code">&lt;is-kanban-card&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>heading</code></td><td>string</td><td>—</td><td>Título de la card.</td></tr>
+            <tr><td><code>meta</code></td><td>string</td><td>—</td><td>Subtítulo.</td></tr>
+            <tr><td><code>tag</code></td><td>string</td><td>—</td><td>Tag de la cabecera.</td></tr>
+            <tr><td><code>tag-variant</code></td><td>brand | neutral | success | warning | danger</td><td>neutral</td><td>Color del tag.</td></tr>
+            <tr><td><code>cover</code></td><td>string</td><td>—</td><td>URL de imagen.</td></tr>
+            <tr><td><code>without-shadow</code></td><td>boolean</td><td>false</td><td>Sin sombra.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-kanban-card-click</code></td><td>Click. <code>detail: { card, column }</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-kanban</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#cover">Con cover</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const kb = document.getElementById('kb1');
+    const log = document.getElementById('kLog');
+    kb.addEventListener('is-kanban-card-click', (e) => {
+      const heading = e.detail.card.getAttribute('heading');
+      const col = e.detail.column.getAttribute('title');
+      log.innerHTML = `Click sobre una card: <code class="code">${col} → ${heading}</code>`;
+    });
+  </script>
+</body>
+</html>

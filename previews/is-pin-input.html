@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-pin-input · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-pin-input de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
+  <script type="module" src="../components/forms/pin-input.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-pin-input">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-pin-input&gt;</h2>
+        <p class="lede">
+          Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,
+          Backspace retrocede, pegar reparte todos los dígitos, navegación con
+          flechas y soporte para enmascarar el contenido.
+        </p>
+
+        <div class="demo">
+          <is-pin-input id="otp1" length="6"></is-pin-input>
+          <p>Valor: <code class="code" id="otp1Val">—</code></p>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-pin-input</span> <span class="attr">length</span>=<span class="val">"6"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-pin-input&gt;</span></pre>
+      </section>
+
+      <section class="section" id="lengths">
+        <h2>Diferentes longitudes</h2>
+        <p class="lede">3, 4, 5, 6, 8 dígitos.</p>
+
+        <div class="demo">
+          <div style="display:flex;flex-direction:column;gap:0.75rem">
+            <div>
+              <small>3 dígitos</small>
+              <is-pin-input length="3"></is-pin-input>
+            </div>
+            <div>
+              <small>4 dígitos</small>
+              <is-pin-input length="4"></is-pin-input>
+            </div>
+            <div>
+              <small>6 dígitos</small>
+              <is-pin-input length="6"></is-pin-input>
+            </div>
+            <div>
+              <small>8 dígitos</small>
+              <is-pin-input length="8"></is-pin-input>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sizes">
+        <h2>Tamaños</h2>
+        <p class="lede">small, medium, large.</p>
+
+        <div class="demo">
+          <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start">
+            <div><small>small</small><is-pin-input size="small" length="6"></is-pin-input></div>
+            <div><small>medium</small><is-pin-input size="medium" length="6"></is-pin-input></div>
+            <div><small>large</small><is-pin-input size="large" length="6"></is-pin-input></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="text">
+        <h2>Tipo texto</h2>
+        <p class="lede">Con <code class="code">type="text"</code> admite letras y números.</p>
+
+        <div class="demo">
+          <is-pin-input length="6" type="text" placeholder="·"></is-pin-input>
+        </div>
+      </section>
+
+      <section class="section" id="mask">
+        <h2>Enmascarado</h2>
+        <p class="lede">Con <code class="code">mask</code> los caracteres se ocultan con bullets.</p>
+
+        <div class="demo">
+          <is-pin-input length="6" mask></is-pin-input>
+        </div>
+      </section>
+
+      <section class="section" id="states">
+        <h2>Estados</h2>
+        <p class="lede">Disabled e invalid.</p>
+
+        <div class="demo">
+          <div style="display:flex;flex-direction:column;gap:0.75rem">
+            <div>
+              <small>disabled</small>
+              <is-pin-input length="6" disabled value="123456"></is-pin-input>
+            </div>
+            <div>
+              <small>invalid</small>
+              <is-pin-input id="otpErr" length="6" invalid></is-pin-input>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-pin-input&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>length</code></td><td>number</td><td>6</td><td>Cantidad de dígitos (3-8).</td></tr>
+            <tr><td><code>type</code></td><td>number | text</td><td>number</td><td>Tipo de carácter aceptado.</td></tr>
+            <tr><td><code>size</code></td><td>small | medium | large</td><td>medium</td><td>Tamaño.</td></tr>
+            <tr><td><code>mask</code></td><td>boolean</td><td>false</td><td>Oculta el contenido.</td></tr>
+            <tr><td><code>disabled</code></td><td>boolean</td><td>false</td><td>Deshabilita.</td></tr>
+            <tr><td><code>invalid</code></td><td>boolean</td><td>false</td><td>Marca error.</td></tr>
+            <tr><td><code>placeholder</code></td><td>string</td><td>—</td><td>Marcador para casillas vacías.</td></tr>
+            <tr><td><code>value</code></td><td>string</td><td>—</td><td>Valor inicial.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-pin-change</code></td><td>Cambia cualquier dígito. <code>detail: { value, index }</code>.</td></tr>
+            <tr><td><code>is-pin-complete</code></td><td>Todos los dígitos completos.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-pin-input</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#lengths">Longitudes</a>
+        <a href="#sizes">Tamaños</a>
+        <a href="#text">Tipo texto</a>
+        <a href="#mask">Enmascarado</a>
+        <a href="#states">Estados</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const otp1 = document.getElementById('otp1');
+    const otp1Val = document.getElementById('otp1Val');
+    otp1.addEventListener('is-pin-change', (e) => {
+      otp1Val.textContent = e.detail.value || '—';
+    });
+    otp1.addEventListener('is-pin-complete', (e) => {
+      otp1Val.textContent = e.detail.value + ' ✓';
+    });
+  </script>
+</body>
+</html>
