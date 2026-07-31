@@ -2,6 +2,15 @@ import { buildTree, layoutTree, layoutRadialTree } from '../_shared/tree-layout.
 import { countIconifyTokens, extractLeadingIconifyToken } from '../_shared/tk-iconify-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import {
+  makeCostGrid,
+  snapDiagramGrid,
+} from '../_shared/diagram-grid.js';
+import {
+  routeOrthogonal,
+  pixelToGrid,
+  gridPathToSvg,
+} from '../_shared/diagram-astar.js';
 
 /**
  * Especificación y layout de mindmaps (sin Mermaid).
@@ -147,31 +156,92 @@ export function computeMindmapLayout(spec) {
     });
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
 
-  // Aristas: una curva por cada relación padre-hijo del árbol (saltando la raíz sintética).
+  // Aristas: para tree layout usamos A* ortogonal (L-shape con un solo giro,
+  // sube o baja según la posición vertical del hijo). Para radial conservamos
+  // curvas Bézier porque la rejilla cartesiana pierde el sentido radial.
+  const isTree = spec.layout === 'tree';
   const edges = [];
-  (function walkEdges(node) {
-    for (const c of node.children) {
-      if (!node.synthetic) {
-        const from = nodeById.get(node.id);
-        const to = nodeById.get(c.id);
-        if (from && to) {
-          const p1 = anchorTowards(from, to.x + to.w / 2);
-          const p2 = anchorTowards(to, from.x + from.w / 2);
-          const dx = (p2.x - p1.x) / 2;
-          const path = `M${p1.x},${p1.y} C${p1.x + dx},${p1.y} ${p1.x + dx},${p2.y} ${p2.x},${p2.y}`;
-          edges.push({
-            id: `${node.id}->${c.id}`,
-            from: node.id,
-            to: c.id,
-            path,
-            hue: to.hue,
-            width: to.depth <= 1 ? 2.4 : Math.max(1.2, 2.4 - (to.depth - 1) * 0.4),
-          });
+
+  if (isTree) {
+    // Rejilla de costos para A* ortogonal: bloquea cada nodo para que las
+    // aristas rodeen su contorno, y deja un pasillo limpio entre filas.
+    const width = Math.max(...nodes.map((n) => n.x + n.w + 8), 80);
+    const height = Math.max(...nodes.map((n) => n.y + n.h + 8), 80);
+    const grid = makeCostGrid(width, height);
+    for (const n of nodes) {
+      // Bloquea la caja del nodo con un margen para que la arista pase por fuera.
+      const pad = 4;
+      for (let r = Math.floor((n.y - pad) / grid.grid); r <= Math.ceil((n.y + n.h + pad) / grid.grid); r++) {
+        for (let c = Math.floor((n.x - pad) / grid.grid); c <= Math.ceil((n.x + n.w + pad) / grid.grid); c++) {
+          if (r < 0 || c < 0 || r >= grid.rows || c >= grid.cols) continue;
+          grid.cost[r * grid.cols + c] = Infinity;
         }
       }
-      walkEdges(c);
     }
-  })(root);
+
+    (function walkEdges(node) {
+      for (const c of node.children) {
+        if (!node.synthetic) {
+          const from = nodeById.get(node.id);
+          const to = nodeById.get(c.id);
+          if (from && to) {
+            const p1 = anchorTowards(from, to.x + to.w / 2);
+            const p2 = anchorTowards(to, from.x + from.w / 2);
+            // Sale/entra un par de celdas para evitar colgar la línea del borde.
+            const fromDir = p2.x >= p1.x ? 1 : -1;
+            const stepX = grid.grid * 2;
+            const a1 = { x: p1.x + fromDir * stepX, y: p1.y };
+            const a2 = { x: p2.x - fromDir * stepX, y: p2.y };
+            const start = pixelToGrid(snapDiagramGrid(a1.x), snapDiagramGrid(a1.y), grid.grid);
+            const end = pixelToGrid(snapDiagramGrid(a2.x), snapDiagramGrid(a2.y), grid.grid);
+            const points = routeOrthogonal(start, end, grid);
+            const polyline = gridPathToSvg(points, grid.grid);
+            // Encadena: M desde p1 al primer punto A*, polilínea A*, L al p2.
+            const segs = [`M${p1.x},${p1.y}`];
+            const aStart = { x: start.col * grid.grid, y: start.row * grid.grid };
+            segs.push(`L${aStart.x},${aStart.y}`);
+            if (polyline) segs.push(polyline.slice(1));
+            const aEnd = { x: end.col * grid.grid, y: end.row * grid.grid };
+            segs.push(`L${aEnd.x},${aEnd.y}`);
+            segs.push(`L${p2.x},${p2.y}`);
+            edges.push({
+              id: `${node.id}->${c.id}`,
+              from: node.id,
+              to: c.id,
+              path: segs.join(' '),
+              hue: to.hue,
+              width: to.depth <= 1 ? 2.4 : Math.max(1.2, 2.4 - (to.depth - 1) * 0.4),
+            });
+          }
+        }
+        walkEdges(c);
+      }
+    })(root);
+  } else {
+    (function walkEdges(node) {
+      for (const c of node.children) {
+        if (!node.synthetic) {
+          const from = nodeById.get(node.id);
+          const to = nodeById.get(c.id);
+          if (from && to) {
+            const p1 = anchorTowards(from, to.x + to.w / 2);
+            const p2 = anchorTowards(to, from.x + from.w / 2);
+            const dx = (p2.x - p1.x) / 2;
+            const path = `M${p1.x},${p1.y} C${p1.x + dx},${p1.y} ${p1.x + dx},${p2.y} ${p2.x},${p2.y}`;
+            edges.push({
+              id: `${node.id}->${c.id}`,
+              from: node.id,
+              to: c.id,
+              path,
+              hue: to.hue,
+              width: to.depth <= 1 ? 2.4 : Math.max(1.2, 2.4 - (to.depth - 1) * 0.4),
+            });
+          }
+        }
+        walkEdges(c);
+      }
+    })(root);
+  }
 
   let width = 0;
   let height = 0;

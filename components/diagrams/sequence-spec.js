@@ -78,8 +78,8 @@ export function sequenceThemeLight() {
     panel: 'transparent',
     border: 'rgba(100,116,139,0.32)',
     accent: '#475569',
-    altFill: 'transparent',
-    altBorder: 'rgba(100,116,139,0.38)',
+    altFill: 'rgba(99,102,241,0.06)',
+    altBorder: 'rgba(99,102,241,0.55)',
     chipFill: 'rgba(255,255,255,0.9)',
     dotText: '#ffffff',
   };
@@ -93,8 +93,8 @@ export function sequenceThemeDark() {
     panel: 'transparent',
     border: 'rgba(148,163,184,0.26)',
     accent: '#cbd5e1',
-    altFill: 'transparent',
-    altBorder: 'rgba(148,163,184,0.32)',
+    altFill: 'rgba(129,140,248,0.08)',
+    altBorder: 'rgba(129,140,248,0.55)',
     chipFill: 'rgba(13,27,42,0.9)',
     dotText: '#0b1f33',
   };

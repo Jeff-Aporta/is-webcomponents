@@ -373,7 +373,7 @@ class IsSequenceDiagram extends HTMLElement {
     const g = svgEl('g', { class: 'seq-alt' });
     g.appendChild(svgEl('rect', {
       x: altBox.x, y: altBox.y, width: altBox.w, height: altBox.h, rx: TK_DIAGRAM_RADIUS_PX,
-      fill: 'transparent', stroke: theme.altBorder, 'stroke-width': '1', 'stroke-dasharray': '5 4',
+      fill: theme.altFill, stroke: theme.altBorder, 'stroke-width': '1.2', 'stroke-dasharray': '5 4',
     }));
     const t = svgEl('text', {
       x: altBox.x + 10, y: altBox.y + 14, fill: theme.muted,
