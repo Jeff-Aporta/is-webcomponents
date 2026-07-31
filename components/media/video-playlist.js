@@ -38,17 +38,17 @@ import './icon.js';
   TEMPLATE.innerHTML = /* html */ `
     <div part="base video-playlist" class="video-playlist">
       <div class="player">
-        <header part="header" class="player-header">
-          <div class="player-header__text">
-            <h3 part="title" class="player-title"></h3>
-            <p part="channel" class="player-channel"></p>
-          </div>
-          <div class="player-header__actions" part="header-actions">
-            <slot name="config"></slot>
-          </div>
-        </header>
         <div class="stage">
           <slot></slot>
+          <header part="header" class="player-header">
+            <div class="player-header__text">
+              <h3 part="title" class="player-title"></h3>
+              <p part="channel" class="player-channel"></p>
+            </div>
+            <div class="player-header__actions" part="header-actions">
+              <slot name="config"></slot>
+            </div>
+          </header>
           <div class="player-toolbar" part="player-toolbar">
             <slot name="tools-left" part="tools-left" class="tools tools-left"></slot>
             <button type="button" class="vp-tool vp-play" part="play-button" aria-label="Reproducir / pausar">

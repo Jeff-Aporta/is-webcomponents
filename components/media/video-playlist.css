@@ -55,18 +55,21 @@
   background: #000;
 }
 
-/* Cabecera estilo YouTube: título + canal bajo el reproductor (parte superior
-   del bloque del player). Fondo oscuro semi-transparente. */
+/* Cabecera estilo YouTube: position absolute en la parte superior del
+   reproductor, sobre el video, con gradiente inferior para legibilidad. */
 .player-header {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.6rem 0.85rem;
-  background: linear-gradient(180deg, color-mix(in srgb, #000 88%, transparent), color-mix(in srgb, #000 70%, transparent));
+  background: linear-gradient(180deg, color-mix(in srgb, #000 82%, transparent), color-mix(in srgb, #000 0%, transparent));
   color: #fff;
-  border-bottom: 1px solid color-mix(in srgb, #fff 10%, transparent);
   min-width: 0;
+  z-index: 2;
 }
 
 .player-header__text {
