@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-carousel · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-carousel / is-carousel-item de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/palettes.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/navigation/carousel.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .slide {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      border-radius: 0.5rem;
+    }
+    .slide.s1 { background: linear-gradient(135deg, #3699ff, #1f5aa6); }
+    .slide.s2 { background: linear-gradient(135deg, #f64e60, #b5283a); }
+    .slide.s3 { background: linear-gradient(135deg, #0bb783, #086c4d); }
+    .slide.s4 { background: linear-gradient(135deg, #ffa800, #cc8400); }
+    .slide.s5 { background: linear-gradient(135deg, #8950fc, #5a30a8); }
+  </style>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-carousel">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-carousel&gt;</h2>
+        <p class="lede">
+          Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,
+          indicadores, scroll-snap y soporte para swipe en touch.
+        </p>
+
+        <div class="demo">
+          <is-carousel id="c1" loop>
+            <is-carousel-item><div class="slide s1">Slide 1</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">Slide 2</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">Slide 3</div></is-carousel-item>
+            <is-carousel-item><div class="slide s4">Slide 4</div></is-carousel-item>
+            <is-carousel-item><div class="slide s5">Slide 5</div></is-carousel-item>
+          </is-carousel>
+          <p id="c1Log" class="lede">Slide: <code class="code">0</code></p>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-carousel</span> <span class="attr">loop</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-carousel-item&gt;</span>Slide 1<span class="tag">&lt;/is-carousel-item&gt;</span>
+  <span class="tag">&lt;is-carousel-item&gt;</span>Slide 2<span class="tag">&lt;/is-carousel-item&gt;</span>
+  …
+<span class="tag">&lt;/is-carousel&gt;</span></pre>
+      </section>
+
+      <section class="section" id="autoplay">
+        <h2>Autoplay</h2>
+        <p class="lede">Con <code class="code">autoplay="2000"</code> avanza cada 2 segundos. Se pausa al hover.</p>
+
+        <div class="demo">
+          <is-carousel autoplay="2000" loop>
+            <is-carousel-item><div class="slide s1">Auto 1</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">Auto 2</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">Auto 3</div></is-carousel-item>
+            <is-carousel-item><div class="slide s4">Auto 4</div></is-carousel-item>
+          </is-carousel>
+        </div>
+      </section>
+
+      <section class="section" id="per-page">
+        <h2>Múltiples slides por página</h2>
+        <p class="lede">Con <code class="code">slides-per-page="3"</code>.</p>
+
+        <div class="demo">
+          <is-carousel slides-per-page="3" loop>
+            <is-carousel-item><div class="slide s1">A</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">B</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">C</div></is-carousel-item>
+            <is-carousel-item><div class="slide s4">D</div></is-carousel-item>
+            <is-carousel-item><div class="slide s5">E</div></is-carousel-item>
+            <is-carousel-item><div class="slide s1">F</div></is-carousel-item>
+          </is-carousel>
+        </div>
+      </section>
+
+      <section class="section" id="vertical">
+        <h2>Vertical</h2>
+        <p class="lede">Con <code class="code">vertical</code>.</p>
+
+        <div class="demo">
+          <is-carousel vertical style="max-width: 320px;">
+            <is-carousel-item><div class="slide s1">Top</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">Middle</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">Bottom</div></is-carousel-item>
+          </is-carousel>
+        </div>
+      </section>
+
+      <section class="section" id="ratio">
+        <h2>Aspect ratio personalizado</h2>
+        <p class="lede">Con <code class="code">aspect-ratio="4/3"</code> o cualquier valor CSS.</p>
+
+        <div class="demo">
+          <is-carousel aspect-ratio="4/3">
+            <is-carousel-item><div class="slide s1">4:3 #1</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">4:3 #2</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">4:3 #3</div></is-carousel-item>
+          </is-carousel>
+        </div>
+      </section>
+
+      <section class="section" id="plain">
+        <h2>Sin indicadores ni controles</h2>
+        <p class="lede">Con <code class="code">without-indicators without-controls</code> solo swipe.</p>
+
+        <div class="demo">
+          <is-carousel without-indicators without-controls style="max-width: 320px;">
+            <is-carousel-item><div class="slide s1">A</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">B</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">C</div></is-carousel-item>
+          </is-carousel>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-carousel&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>active</code></td><td>number</td><td>0</td><td>Slide activo (0-indexed).</td></tr>
+            <tr><td><code>loop</code></td><td>boolean</td><td>false</td><td>Vuelve al inicio al llegar al final.</td></tr>
+            <tr><td><code>autoplay</code></td><td>number (ms)</td><td>0</td><td>Avance automático (0 = desactivado).</td></tr>
+            <tr><td><code>vertical</code></td><td>boolean</td><td>false</td><td>Orientación vertical.</td></tr>
+            <tr><td><code>slides-per-page</code></td><td>number</td><td>1</td><td>Slides visibles por vista.</td></tr>
+            <tr><td><code>aspect-ratio</code></td><td>string</td><td>16/9</td><td>CSS aspect-ratio del contenedor.</td></tr>
+            <tr><td><code>without-controls</code></td><td>boolean</td><td>false</td><td>Oculta prev/next.</td></tr>
+            <tr><td><code>without-indicators</code></td><td>boolean</td><td>false</td><td>Oculta los puntos.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>API</h3>
+        <pre class="code">carousel.next();        // Avanza
+carousel.prev();        // Retrocede
+carousel.pause();       // Pausa autoplay
+carousel.play();        // Reanuda autoplay
+carousel.active = 2;    // Salta a slide
+carousel.getViewport(); // Devuelve el viewport del scroll</pre>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-carousel-change</code></td><td>Cambia el slide. <code>detail: { from, to, item }</code>.</td></tr>
+            <tr><td><code>is-carousel-play</code></td><td>Comienza autoplay.</td></tr>
+            <tr><td><code>is-carousel-pause</code></td><td>Pausa autoplay. <code>detail: { reason }</code>.</td></tr>
+            <tr><td><code>is-carousel-slide-end</code></td><td>Termina un swipe.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-carousel</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#autoplay">Autoplay</a>
+        <a href="#per-page">Per page</a>
+        <a href="#vertical">Vertical</a>
+        <a href="#ratio">Aspect ratio</a>
+        <a href="#plain">Sin chrome</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const c1 = document.getElementById('c1');
+    const c1Log = document.getElementById('c1Log');
+    c1.addEventListener('is-carousel-change', (e) => {
+      c1Log.innerHTML = `Slide: <code class="code">${e.detail.to}</code>`;
+    });
+  </script>
+</body>
+</html>

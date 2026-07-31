@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-tree · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-tree / is-tree-item de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/palettes.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/forms/checkbox.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/navigation/tree.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-tree">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-tree&gt;</h2>
+        <p class="lede">
+          Árbol jerárquico accesible: expansión, selección, navegación por teclado
+          (↑/↓/←/→/Home/End/Enter/Space), iconos por slot y selección
+          <code class="code">single</code> | <code class="code">leaf</code> | <code class="code">multiple</code> | <code class="code">none</code>.
+        </p>
+
+        <div class="demo">
+          <is-tree id="tree1" selection="single" expanded>
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder"></is-icon>
+              Documentos
+              <is-tree-item>
+                <is-icon slot="icon" icon="mdi:file-document"></is-icon>
+                facturas-2024.pdf
+              </is-tree-item>
+              <is-tree-item>
+                <is-icon slot="icon" icon="mdi:file-document"></is-icon>
+                contratos.odt
+              </is-tree-item>
+            </is-tree-item>
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder"></is-icon>
+              Proyectos
+              <is-tree-item>
+                <is-icon slot="icon" icon="mdi:folder"></is-icon>
+                ContaPyme
+                <is-tree-item>
+                  <is-icon slot="icon" icon="mdi:language-typescript"></is-icon>
+                  app.ts
+                </is-tree-item>
+                <is-tree-item>
+                  <is-icon slot="icon" icon="mdi:language-css3"></is-icon>
+                  styles.css
+                </is-tree-item>
+              </is-tree-item>
+              <is-tree-item>
+                <is-icon slot="icon" icon="mdi:folder"></is-icon>
+                Insoft
+                <is-tree-item>
+                  <is-icon slot="icon" icon="mdi:react"></is-icon>
+                  index.jsx
+                </is-tree-item>
+              </is-tree-item>
+            </is-tree-item>
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:image"></is-icon>
+              Capturas
+            </is-tree-item>
+          </is-tree>
+          <p id="tree1Log" class="lede">Seleccionado: <code class="code">—</code></p>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-tree</span> <span class="attr">selection</span>=<span class="val">"single"</span> <span class="attr">expanded</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-tree-item&gt;</span>
+    <span class="tag">&lt;is-icon</span> <span class="attr">slot</span>=<span class="val">"icon"</span> <span class="attr">icon</span>=<span class="val">"mdi:folder"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-icon&gt;</span>
+    Documentos
+    <span class="tag">&lt;is-tree-item&gt;</span>facturas-2024.pdf<span class="tag">&lt;/is-tree-item&gt;</span>
+  <span class="tag">&lt;/is-tree-item&gt;</span>
+<span class="tag">&lt;/is-tree&gt;</span></pre>
+      </section>
+
+      <section class="section" id="multiple">
+        <h2>Selección múltiple</h2>
+        <p class="lede">Con <code class="code">selection="multiple"</code> cada nodo tiene su checkbox.</p>
+
+        <div class="demo">
+          <is-tree id="tree2" selection="multiple">
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder"></is-icon>
+              Backend
+              <is-tree-item>Python</is-tree-item>
+              <is-tree-item>Node.js</is-tree-item>
+              <is-tree-item>Go</is-tree-item>
+            </is-tree-item>
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder"></is-icon>
+              Frontend
+              <is-tree-item>React</is-tree-item>
+              <is-tree-item>Vue</is-tree-item>
+              <is-tree-item>Svelte</is-tree-item>
+            </is-tree-item>
+          </is-tree>
+          <p id="tree2Log" class="lede">Seleccionados: <code class="code">—</code></p>
+        </div>
+      </section>
+
+      <section class="section" id="leaf">
+        <h2>Selección solo-leaf</h2>
+        <p class="lede">Con <code class="code">selection="leaf"</code> las carpetas no se pueden seleccionar.</p>
+
+        <div class="demo">
+          <is-tree id="tree3" selection="leaf">
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder-account"></is-icon>
+              Usuarios
+              <is-tree-item>admin</is-tree-item>
+              <is-tree-item>jperez</is-tree-item>
+              <is-tree-item>mlopez</is-tree-item>
+            </is-tree-item>
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder-account"></is-icon>
+              Invitados
+              <is-tree-item>guest</is-tree-item>
+            </is-tree-item>
+          </is-tree>
+        </div>
+      </section>
+
+      <section class="section" id="none">
+        <h2>Sin selección</h2>
+        <p class="lede">Con <code class="code">selection="none"</code> solo expande/colapsa.</p>
+
+        <div class="demo">
+          <is-tree id="tree4" selection="none">
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder"></is-icon>
+              Sólo expansión
+              <is-tree-item>uno</is-tree-item>
+              <is-tree-item>dos</is-tree-item>
+            </is-tree-item>
+          </is-tree>
+        </div>
+      </section>
+
+      <section class="section" id="disabled">
+        <h2>Disabled</h2>
+        <p class="lede">El atributo <code class="code">disabled</code> bloquea interacción.</p>
+
+        <div class="demo">
+          <is-tree selection="single">
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder"></is-icon>
+              Producción
+              <is-tree-item disabled>db-master</is-tree-item>
+              <is-tree-item disabled>db-replica</is-tree-item>
+            </is-tree-item>
+            <is-tree-item>
+              <is-icon slot="icon" icon="mdi:folder"></is-icon>
+              Staging
+              <is-tree-item>db-1</is-tree-item>
+            </is-tree-item>
+          </is-tree>
+        </div>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-tree&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>selection</code></td><td>none | single | leaf | multiple</td><td>single</td><td>Modo de selección.</td></tr>
+            <tr><td><code>expanded</code></td><td>boolean</td><td>false</td><td>Inicia todos los nodos expandidos.</td></tr>
+          </tbody>
+        </table>
+
+        <h3><code class="code">&lt;is-tree-item&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>expanded</code></td><td>boolean</td><td>false</td><td>El nodo está expandido.</td></tr>
+            <tr><td><code>selected</code></td><td>boolean</td><td>false</td><td>El nodo está seleccionado.</td></tr>
+            <tr><td><code>disabled</code></td><td>boolean</td><td>false</td><td>Bloquea interacción.</td></tr>
+            <tr><td><code>has-children</code></td><td>boolean</td><td>auto</td><td>Fuerza presencia de hijos.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-tree-select</code></td><td>Selección. <code>detail: { item, selected, selectedItems }</code>.</td></tr>
+            <tr><td><code>is-tree-toggle</code></td><td>Expande/colapsa. <code>detail: { item, expanded }</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-tree</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#multiple">Múltiple</a>
+        <a href="#leaf">Solo leaf</a>
+        <a href="#none">Sin selección</a>
+        <a href="#disabled">Disabled</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const tree1 = document.getElementById('tree1');
+    const tree1Log = document.getElementById('tree1Log');
+    tree1.addEventListener('is-tree-select', (e) => {
+      tree1Log.innerHTML = `Seleccionado: <code class="code">${e.detail.item.textContent.trim().split('\n')[0]}</code>`;
+    });
+
+    const tree2 = document.getElementById('tree2');
+    const tree2Log = document.getElementById('tree2Log');
+    tree2.addEventListener('is-tree-select', (e) => {
+      const labels = e.detail.selectedItems.map((it) => it.textContent.trim().split('\n')[0]);
+      tree2Log.innerHTML = `Seleccionados: <code class="code">${labels.length ? labels.join(', ') : '—'}</code>`;
+    });
+  </script>
+</body>
+</html>

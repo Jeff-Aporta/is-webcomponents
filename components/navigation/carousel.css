@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  position: relative;
+  --ctrl-bg: var(--is-bg-2, #181b22);
+  --ctrl-fg: var(--is-text, #e8eaf1);
+  --ctrl-border: var(--is-border, #2a2f3a);
+  --indicator-active: var(--is-brand, dodgerblue);
+  --indicator: var(--is-border, #2a2f3a);
+}
+
+.carousel {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--aspect-ratio, 16/9);
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: var(--is-bg-2, #181b22);
+  border: 1px solid var(--ctrl-border);
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.viewport::-webkit-scrollbar { display: none; }
+
+.carousel[data-orientation="vertical"] .viewport {
+  scroll-snap-type: y mandatory;
+}
+
+.track {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.track[data-orientation="vertical"] {
+  flex-direction: column;
+}
+
+::slotted(is-carousel-item) {
+  display: block;
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.indicators {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  z-index: 2;
+}
+
+.indicators[hidden] {
+  display: none;
+}
+
+.indicators button {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: var(--indicator);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.indicators button[aria-selected="true"] {
+  background: var(--indicator-active);
+  transform: scale(1.4);
+}
+
+.ctrl {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--ctrl-border);
+  background: var(--ctrl-bg);
+  color: var(--ctrl-fg);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.ctrl:hover {
+  background: color-mix(in srgb, var(--ctrl-bg) 70%, var(--ctrl-fg) 30%);
+}
+
+.ctrl[hidden] {
+  display: none;
+}
+
+.prev {
+  left: 0.5rem;
+}
+
+.next {
+  right: 0.5rem;
+}
+
+/* Item internal */
+.citem {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
