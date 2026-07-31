@@ -186,7 +186,7 @@
       history.replaceState(null, '', next);
     }
 
-    function renderContext() {
+    function renderContext({ navSmooth = false } = {}) {
       root.classList.toggle('theme-light', theme === 'light');
       root.classList.toggle('theme-dark', theme === 'dark');
       root.dataset.theme = theme;
@@ -195,7 +195,7 @@
       for (const node of shellNav.querySelectorAll('.shell-nav__item')) {
         node.setAttribute('aria-current', node.dataset.tag === component.tag ? 'true' : 'false');
       }
-      scrollNavToCurrent();
+      scheduleScrollNavToCurrent({ smooth: navSmooth });
       for (const opt of brandMenu.querySelectorAll('[role="option"]')) {
         opt.setAttribute('aria-selected', opt.dataset.palette === palette ? 'true' : 'false');
       }
@@ -213,14 +213,47 @@
     }
 
     /** Centra el ítem activo en el viewport del nav (sin scrollear la página). */
-    function scrollNavToCurrent() {
+    function scrollNavToCurrent({ smooth = false } = {}) {
       const current = shellNav.querySelector('.shell-nav__item[aria-current="true"]');
       if (!current) return;
-      const delta =
-        current.getBoundingClientRect().top -
-        shellNav.getBoundingClientRect().top -
-        (shellNav.clientHeight - current.offsetHeight) / 2;
-      shellNav.scrollTo({ top: shellNav.scrollTop + delta, behavior: 'smooth' });
+      // Esperar a que el panel tenga tamaño (tras F5 el split aún no midió).
+      if (shellNav.clientHeight < 8 && shellNav.clientWidth < 8) return;
+
+      const horizontal = getComputedStyle(shellNav).flexDirection === 'row';
+      const behavior = smooth ? 'smooth' : 'auto';
+      if (horizontal) {
+        const delta =
+          current.getBoundingClientRect().left -
+          shellNav.getBoundingClientRect().left -
+          (shellNav.clientWidth - current.offsetWidth) / 2;
+        shellNav.scrollTo({ left: shellNav.scrollLeft + delta, behavior });
+      } else {
+        const delta =
+          current.getBoundingClientRect().top -
+          shellNav.getBoundingClientRect().top -
+          (shellNav.clientHeight - current.offsetHeight) / 2;
+        shellNav.scrollTo({ top: shellNav.scrollTop + delta, behavior });
+      }
+    }
+
+    let scrollNavRaf = 0;
+    /** Reintenta tras el próximo layout (F5 / split / resize). */
+    function scheduleScrollNavToCurrent(opts = {}) {
+      const run = () => scrollNavToCurrent(opts);
+      run();
+      cancelAnimationFrame(scrollNavRaf);
+      scrollNavRaf = requestAnimationFrame(() => {
+        run();
+        requestAnimationFrame(run);
+      });
+    }
+
+    /** Extra passes tras boot — el split restaura tamaño async desde storage. */
+    function bootScrollNavToCurrent() {
+      scheduleScrollNavToCurrent();
+      setTimeout(() => scrollNavToCurrent(), 0);
+      setTimeout(() => scrollNavToCurrent(), 100);
+      setTimeout(() => scrollNavToCurrent(), 300);
     }
 
     function selectComponent(tag) {
@@ -228,7 +261,7 @@
       if (next === component) return;
       component = next;
       frame.src = previewSrc(component.page);
-      renderContext();
+      renderContext({ navSmooth: true });
     }
 
     frame.addEventListener('load', () => {
@@ -274,6 +307,7 @@
 
     frame.src = previewSrc(component.page);
     renderContext();
+    bootScrollNavToCurrent();
 
     // --- split-panel nav: clamp + persist vía storage-key="gallery-nav" ---
     const mainSplit = document.getElementById('mainSplit');
@@ -283,13 +317,25 @@
     mainSplit?.addEventListener('reposition', () => {
       const px = clampNav(mainSplit.positionInPixels);
       if (px !== Math.round(mainSplit.positionInPixels)) mainSplit.positionInPixels = px;
+      scheduleScrollNavToCurrent();
     });
+
+    customElements.whenDefined('is-split-panel').then(() => bootScrollNavToCurrent());
+    window.addEventListener('load', () => bootScrollNavToCurrent());
+    if (typeof ResizeObserver !== 'undefined') {
+      let roT = 0;
+      new ResizeObserver(() => {
+        clearTimeout(roT);
+        roT = setTimeout(() => scrollNavToCurrent(), 40);
+      }).observe(shellNav);
+    }
 
     // --- mobile: convertir a vertical si narrow ---
     const mql = window.matchMedia('(max-width: 640px)');
     const syncOrientation = () => {
       if (!mainSplit) return;
       mainSplit.orientation = mql.matches ? 'vertical' : 'horizontal';
+      scheduleScrollNavToCurrent();
     };
     mql.addEventListener?.('change', syncOrientation);
     syncOrientation();
