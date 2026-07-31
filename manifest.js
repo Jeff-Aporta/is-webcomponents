@@ -29,6 +29,8 @@ export default [
   { tag: 'is-divider', title: 'Divider', category: 'layout', script: '../components/layout/divider.js', style: '../components/layout/divider.css', page: 'is-divider.html' },
   { tag: 'is-scrollspy', title: 'Scrollspy', category: 'layout', script: '../components/layout/scrollspy.js', style: '../components/layout/scrollspy.css', page: 'is-scrollspy.html' },
   { tag: 'is-popover', title: 'Popover', category: 'helpers', script: '../components/helpers/popover.js', style: '../components/helpers/popover.css', page: 'is-popover.html' },
+  { tag: 'is-breadcrumb', title: 'Breadcrumb', category: 'navigation', script: '../components/navigation/breadcrumb.js', style: '../components/navigation/breadcrumb.css', page: 'is-breadcrumb.html' },
+  { tag: 'is-breadcrumb-item', title: 'Breadcrumb Item', category: 'navigation', script: '../components/navigation/breadcrumb-item.js', style: '../components/navigation/breadcrumb-item.css', page: 'is-breadcrumb.html' },
   { tag: 'is-combobox', title: 'Combobox', category: 'forms', script: '../components/forms/combobox.js', style: '../components/forms/combobox.css', page: 'is-combobox.html' },
   { tag: 'is-option', title: 'Option', category: 'forms', script: '../components/forms/option.js', style: '../components/forms/option.css', page: 'is-combobox.html' },
   { tag: 'is-checkbox', title: 'Checkbox', category: 'forms', script: '../components/forms/checkbox.js', style: '../components/forms/checkbox.css', page: 'is-checkbox.html' },

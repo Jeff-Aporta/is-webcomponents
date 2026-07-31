@@ -1,0 +1,58 @@
+/* <is-breadcrumb-item> — paso individual. */
+
+:host {
+  --_gap: 0.4em;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_gap);
+  font-size: inherit;
+  font-family: inherit;
+  color: var(--is-text-muted, #6c757d);
+  position: relative;
+}
+
+:host([current]) {
+  color: var(--is-text, inherit);
+  font-weight: 600;
+}
+
+/* Si hay icono, lo muestra; vacío, lo oculta. */
+.start,
+.end {
+  display: inline-flex;
+  align-items: center;
+}
+.start:empty,
+.end:empty { display: none; }
+
+.label {
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  cursor: default;
+}
+a.label {
+  cursor: pointer;
+  color: var(--is-link, inherit);
+  text-decoration: none;
+  border-radius: calc(var(--is-radius, 0.25em));
+  transition: color 120ms ease;
+}
+a.label:hover { color: var(--is-link-hover, inherit); text-decoration: underline; }
+a.label:focus-visible { outline: 2px solid var(--is-focus, #339af0); outline-offset: 2px; }
+
+/* El separador se oculta en el último item. */
+:host(:last-of-type) .separator { display: none; }
+
+.separator {
+  color: var(--is-text-muted, #6c757d);
+  display: inline-flex;
+  align-items: center;
+  margin: 0 var(--_gap);
+  opacity: 0.6;
+}
+
+/* El separador del primer item: hidden. */
+:host(:first-of-type) .separator { display: none; }
