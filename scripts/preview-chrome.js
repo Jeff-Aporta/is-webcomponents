@@ -8,6 +8,10 @@
 import '../components/feedback/theme-toggle.js';
 import '../components/actions/button.js';
 import '../components/media/icon.js';
+import components from '../manifest.js';
+// Expone el manifest a `window.__IS_MANIFEST__` para que `demo-code.js`
+// pueda agrupar los `<script>` por categoría en el snippet "Ver código".
+window.__IS_MANIFEST__ = components;
 
 const THEMES = new Set(['light', 'dark']);
 const PALETTES = new Set(['insoft', 'contapyme', 'agrowin']);

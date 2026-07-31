@@ -1,5 +1,17 @@
 /**
- * Añade a cada `.demo` un botón info que muestra el HTML del ejemplo.
+ * demo-code.js — botón "Ver código del ejemplo" en cada `.demo`.
+ *
+ * El snippet que se copia/pega es **completo y portable**:
+ *   - Carga el tema base y la paleta de marca por separado (is-base.min.css
+ *     + palettes.min.css) para que el ejemplo se vea exactamente igual al
+ *     preview actual (mismo theme + palette).
+ *   - Incluye un `<link>` y un `<script type="module">` por cada componente
+ *     `is-*` que aparezca en el demo (descubierto por convención de nombre).
+ *   - Añade comentario con las opciones alternativas: bundles por categoría y
+ *     el bundle único (`all.min.js`).
+ *   - El HTML del demo va dentro de un `<div class="theme-X" data-palette="Y">`
+ *     para que el snippet funcione al pegarlo en cualquier HTML.
+ *
  * Override opcional: data-code="..." | data-no-code
  * Depende de highlight-pre.js (window.__isHighlightCode) e is-icon.
  */
@@ -21,11 +33,76 @@
     return customElements.whenDefined('is-icon');
   };
 
-  /** Serializa el contenido del demo (sin el chrome del botón/popover). */
-  const sourceFromDemo = (demo) => {
-    const raw = demo.getAttribute('data-code');
-    if (raw != null && raw !== '') return raw.trim();
+  /** CDN base — el snippet debe usar URLs públicas para que sea portable. */
+  const CDN_BASE = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
 
+  /** Theme + palette activos en el contexto actual (root). */
+  const ctxTheme = () => document.documentElement.dataset.theme || 'dark';
+  const ctxPalette = () => document.documentElement.dataset.palette || 'insoft';
+
+  /** Componentes que sí exponen CSS propio (los demás sólo JS). */
+  const COMPONENTS_WITH_CSS = new Set([
+    'avatar', 'badge', 'block-diagram', 'button', 'button-group', 'bar-chart',
+    'bubble-chart', 'card', 'chart', 'check-icon-button', 'checkbox',
+    'class-diagram', 'color-picker', 'combobox', 'copy-button', 'data-grid',
+    'date-field', 'date-input', 'date-picker', 'date-range-input',
+    'date-range-picker', 'date-time-field', 'date-time-input',
+    'diagram-lightbox', 'divider', 'doughnut-chart', 'dropdown',
+    'dropdown-item', 'er-diagram', 'file-input', 'flowchart',
+    'funnel-chart', 'gantt', 'input', 'lightbox', 'line-chart', 'main',
+    'marks-cartesian', 'marks-funnel', 'marks-radial', 'marks-waterfall',
+    'mindmap', 'month-calendar', 'mutation-observer', 'pie-chart',
+    'polar-area-chart', 'popover', 'popup', 'progress-bar', 'progress-ring',
+    'radio', 'radio-group', 'radar-chart', 'rating', 'relative-time',
+    'resize-observer', 'scatter-chart', 'select', 'sequence-diagram',
+    'skeleton', 'slider', 'sparkline', 'split-panel', 'state-diagram',
+    'switch', 'tag', 'textarea', 'theme-toggle', 'timeline',
+    'time-clock', 'time-field', 'time-input', 'toast', 'toast-item',
+    'tooltip', 'treemap', 'video', 'video-playlist', 'waterfall-chart',
+    'year-calendar',
+  ]);
+
+  /** Carga tag → category del manifest. Lo usa `buildSnippet` para el comentario
+   *  de bundles por categoría. La promesa se inicializa al boot y se reutiliza. */
+  const manifestPromise = (() => {
+    if (Array.isArray(window.__IS_MANIFEST__)) {
+      return Promise.resolve(window.__IS_MANIFEST__);
+    }
+    try {
+      const self = [...document.scripts].find((s) => s.src.includes('demo-code.js'));
+      const base = self ? new URL('..', self.src).href : new URL('..', location.href).href;
+      return import(new URL('manifest.js', base).href)
+        .then((m) => m.default || m)
+        .catch(() => []);
+    } catch {
+      return Promise.resolve([]);
+    }
+  })();
+
+  /** Devuelve un Set con los nombres cortos (sin prefijo `is-`) de los
+   *  componentes <is-*> que aparecen dentro del demo. */
+  const collectTags = (root) => {
+    const tags = new Set();
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+    if (root.nodeType === 1 && root.tagName.toLowerCase().startsWith('is-')) {
+      tags.add(root.tagName.toLowerCase().slice(3));
+    }
+    let n;
+    while ((n = walker.nextNode())) {
+      const tag = n.tagName.toLowerCase();
+      if (tag.startsWith('is-')) tags.add(tag.slice(3));
+    }
+    return [...tags].sort();
+  };
+
+  /** Indenta cada línea de `text` con `n` espacios extra. */
+  const indent = (text, n) => {
+    const pad = ' '.repeat(n);
+    return text.split('\n').map((l) => l.length ? pad + l : l).join('\n');
+  };
+
+  /** HTML pretty del demo sin el chrome del propio botón. */
+  const serializeDemoHtml = (demo) => {
     const parts = [];
     for (const node of demo.childNodes) {
       if (node.nodeType === 1) {
@@ -56,6 +133,90 @@
       }
     }
     return out.join('\n');
+  };
+
+  /** Construye el snippet completo: head con CDN + body con el demo envuelto. */
+  const buildSnippet = async (demo) => {
+    const raw = demo.getAttribute('data-code');
+    const inner = raw != null && raw !== ''
+      ? raw.trim()
+      : serializeDemoHtml(demo);
+
+    const tags = collectTags(demo);
+    const theme = ctxTheme();
+    const palette = ctxPalette();
+
+    const links = tags
+      .filter((t) => COMPONENTS_WITH_CSS.has(t))
+      .map((t) => `  <link rel="stylesheet" href="${CDN_BASE}/${t}.min.css">`)
+      .join('\n');
+    const scripts = tags
+      .map((t) => `  <script type="module" src="${CDN_BASE}/${t}.min.js"><\/script>`)
+      .join('\n');
+
+    const lines = [];
+    lines.push('<!DOCTYPE html>');
+    lines.push(`<html lang="es" class="theme-${theme}" data-theme="${theme}" data-palette="${palette}">`);
+    lines.push('<head>');
+    lines.push('  <meta charset="UTF-8">');
+    lines.push('  <meta name="viewport" content="width=device-width, initial-scale=1">');
+    lines.push('  <title>IS Web Components · snippet</title>');
+    lines.push('');
+    lines.push('  <!-- 1. Tema base (tokens dark/light sin marca) -->');
+    lines.push(`  <link rel="stylesheet" href="${CDN_BASE}/is-base.min.css">`);
+    lines.push('');
+    lines.push('  <!-- 2. Paleta de marca (Insoft / ContaPyme / AgroWin) -->');
+    lines.push(`  <link rel="stylesheet" href="${CDN_BASE}/palettes.min.css">`);
+    if (links) {
+      lines.push('');
+      lines.push('  <!-- 3. CSS por componente -->');
+      lines.push(links);
+    }
+    lines.push('</head>');
+    lines.push('<body>');
+    lines.push(`  <div class="theme-${theme}" data-palette="${palette}" style="padding:1.5rem;font-family:var(--is-sans,system-ui);background:var(--is-bg);color:var(--is-text);min-height:100vh">`);
+    lines.push(indent(inner, 4));
+    lines.push('  </div>');
+    if (scripts) {
+      lines.push('');
+      lines.push('  <!-- 4. JS por componente -->');
+      lines.push(scripts);
+    }
+    lines.push('</body>');
+    lines.push('</html>');
+
+    // Comentario de alternativas (categoría y all).
+    const manifest = await manifestPromise;
+    const catMap = {};
+    if (Array.isArray(manifest)) {
+      for (const e of manifest) {
+        const tag = String(e.tag || '').replace(/^is-/, '');
+        if (tag && e.category) catMap[tag] = e.category;
+      }
+    }
+    const cats = new Set();
+    for (const t of tags) {
+      const cat = catMap[t];
+      if (cat) cats.add(cat);
+    }
+    if (cats.size) {
+      lines.push('');
+      lines.push('<!-- ── Alternativas ───────────────────────────────────────── -->');
+      lines.push('<!-- Si usas varios componentes de la misma categoría, puedes');
+      lines.push('     cargar el bundle por categoría (incluye todo lo de arriba): -->');
+      for (const cat of cats) {
+        lines.push(`<!--   <link rel="stylesheet" href="${CDN_BASE}/${cat}.min.css">  (CSS por categoría) -->`);
+        lines.push(`<!--   <script type="module" src="${CDN_BASE}/${cat}.min.js"><\/script>  (toda la categoría) -->`);
+      }
+      lines.push('<!--');
+      lines.push('     O el bundle único (todo IS Web Components en un archivo): -->');
+      lines.push(`<!--   <link rel="stylesheet" href="${CDN_BASE}/is-base.min.css"> -->`);
+      lines.push(`<!--   <link rel="stylesheet" href="${CDN_BASE}/palettes.min.css"> -->`);
+      lines.push(`<!--   <script type="module" src="${CDN_BASE}/all.min.js"><\/script>  (todos los componentes) -->`);
+      lines.push('-->');
+    }
+
+    return lines.join('\n');
   };
 
   const highlight = (pre) => {
@@ -100,17 +261,19 @@
     const pre = pop.querySelector('pre');
     const copyBtn = pop.querySelector('.demo-code-pop__copy');
 
-    const fill = () => {
-      if (pre.dataset.filled === '1') return;
-      pre.textContent = sourceFromDemo(demo);
+    let lastSnippet = '';
+    const renderSnippet = async () => {
+      lastSnippet = await buildSnippet(demo);
+      if (pre.dataset.filled === '1' && pre.textContent === lastSnippet) return;
+      pre.textContent = lastSnippet;
       delete pre.dataset.cm;
       highlight(pre);
       pre.dataset.filled = '1';
     };
 
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', async (e) => {
       e.stopPropagation();
-      fill();
+      await renderSnippet();
       if (typeof pop.showPopover === 'function') {
         const r = btn.getBoundingClientRect();
         const w = Math.min(36 * 16, innerWidth - 32);
@@ -127,9 +290,9 @@
     });
 
     copyBtn.addEventListener('click', async () => {
-      const text = sourceFromDemo(demo);
+      await renderSnippet();
       try {
-        await navigator.clipboard.writeText(text);
+        await navigator.clipboard.writeText(lastSnippet);
         copyBtn.textContent = 'Copiado';
         setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 1200);
       } catch {

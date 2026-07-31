@@ -40,11 +40,17 @@
           <is-card>Hola mundo</is-card>
         </div>
 
-        <div class="callout">
-          <strong>Importar:</strong> un solo
-          <code class="code"><span class="tag">&lt;script</span> <span class="attr">type</span>=<span class="val">"module"</span> <span class="attr">src</span>=<span class="val">"components/layout/card.js"</span><span class="tag">&gt;&lt;/script&gt;</span></code>
-          define el custom element automáticamente.
-        </div>
+        <div class="callout callout--cdn">
+  <strong>Importar (CDN):</strong>
+  <p>Carga el tema base y los componentes que necesites:</p>
+  <pre class="code">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/is-base.min.css"&gt;</pre>
+  <p>Este componente suelto:</p>
+  <pre class="code">&lt;script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/card.min.js"&gt;&lt;/script&gt;</pre>
+  <p>Incluido en su categoría <code>layout.min.js</code>:</p>
+  <pre class="code">&lt;script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/layout.min.js"&gt;&lt;/script&gt;</pre>
+  <p>Incluido en el bundle único <code>all.min.js</code>:</p>
+  <pre class="code">&lt;script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/all.min.js"&gt;&lt;/script&gt;</pre>
+</div>
 
         <pre class="code"><span class="tag">&lt;is-card&gt;</span>Hola mundo<span class="tag">&lt;/is-card&gt;</span></pre>
       </section>
