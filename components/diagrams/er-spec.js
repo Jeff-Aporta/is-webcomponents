@@ -1,5 +1,5 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
-import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid } from '../_shared/diagram-grid.js';
+import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
@@ -213,8 +213,12 @@ export function computeErLayout(spec) {
     // Deja hueco para dibujar la marca de cardinalidad antes de salir a rutear.
     const out = stepOut(a, sides.fromSide, 18);
     const into = stepOut(b, sides.toSide, 18);
-    const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
-    const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
+    // Snap direccional: nunca redondea de vuelta hacia el nodo del que se aleja
+    // (ver snapPointAwayFromSide — corrige el redondeo-al-más-cercano de antes).
+    const outSnap = snapPointAwayFromSide(out, sides.fromSide, grid.grid);
+    const intoSnap = snapPointAwayFromSide(into, sides.toSide, grid.grid);
+    const aGrid = pixelToGrid(outSnap.x, outSnap.y, grid.grid);
+    const bGrid = pixelToGrid(intoSnap.x, intoSnap.y, grid.grid);
     const points = routeOrthogonal(aGrid, bGrid, grid);
 
     const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);

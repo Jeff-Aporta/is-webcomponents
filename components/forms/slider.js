@@ -13,7 +13,6 @@ import {
  *   shift-step     salto con Shift+flechas y PageUp/PageDown (default step × 10)
  *   marks          boolean (uno por step) | "0:0°C, 20:20°C" | "0,20,37"
  *   orientation    horizontal (default) | vertical
- *   size           medium (default) | small
  *   track          normal (default) | none | inverted
  *   value-label    off (default) | auto | on
  *   min-distance   separación mínima entre thumbs de un rango
@@ -59,14 +58,14 @@ import {
 
   const OBSERVED = [
     'name', 'value', 'min', 'max', 'step', 'shift-step', 'marks',
-    'orientation', 'size', 'track', 'value-label', 'with-tooltip',
+    'orientation', 'track', 'value-label', 'with-tooltip',
     'min-distance', 'disable-swap', 'range', 'format',
     'disabled', 'readonly', 'required', 'label', 'hint',
   ];
 
   const PROPS = [
     'name', 'value', 'values', 'min', 'max', 'step', 'shiftStep', 'marks',
-    'orientation', 'size', 'track', 'valueLabel', 'minDistance', 'disableSwap',
+    'orientation', 'track', 'valueLabel', 'minDistance', 'disableSwap',
     'format', 'scale', 'valueLabelFormat', 'getAriaValueText',
     'disabled', 'readonly', 'required', 'label', 'hint',
   ];
@@ -254,8 +253,6 @@ import {
     }
     set orientation(v) { this.setAttribute('orientation', v === 'vertical' ? 'vertical' : 'horizontal'); }
 
-    get size() { return this.getAttribute('size') === 'small' ? 'small' : 'medium'; }
-    set size(v) { this.setAttribute('size', v === 'small' ? 'small' : 'medium'); }
 
     get track() {
       const v = this.getAttribute('track');

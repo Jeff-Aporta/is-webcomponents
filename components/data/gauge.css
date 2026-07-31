@@ -16,9 +16,15 @@
   justify-content: center;
 }
 
+/* El diámetro lo pone el CSS en em (antes venía en px desde JS, por eso hacía
+   falta el atributo `size`). 7.5em = los 120px del tamaño medio anterior. */
 svg {
   display: block;
+  width: var(--gauge-size, 7.5em);
+  height: var(--gauge-size, 7.5em);
 }
+
+svg[data-half="true"] { height: calc(var(--gauge-size, 7.5em) / 2); }
 
 .track {
   fill: none;
@@ -57,22 +63,19 @@ svg[data-half="true"] ~ .content {
 }
 
 .value {
-  font-size: 1.5rem;
+  font-size: 1.5em;
   font-weight: 700;
   font-feature-settings: 'tnum' 1;
   color: var(--fg);
   line-height: 1;
 }
 
-svg[data-size="small"] ~ .content .value { font-size: 1rem; }
-svg[data-size="large"] ~ .content .value { font-size: 2rem; }
 
 .label {
-  font-size: 0.75rem;
+  font-size: 0.75em;
   color: var(--muted);
   margin-top: 0.25rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-svg[data-size="large"] ~ .content .label { font-size: 0.85rem; }

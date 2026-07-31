@@ -1,3 +1,7 @@
+/* <is-video> — chrome tipo YouTube: barra de progreso propia sobre una fila
+   de controles, scrim inferior, auto-ocultado y overlay de play central.
+   El acento de marca sustituye al rojo de YouTube. */
+
 :host {
   display: block;
   position: relative;
@@ -10,7 +14,22 @@
   aspect-ratio: 16 / 9;
   max-width: 100%;
   box-sizing: border-box;
+
+  --is-video-accent: var(--is-accent, #f03);
+  --played: 0%;
+  --buffered: 0%;
+  --vol: 100%;
 }
+
+:host(:fullscreen) {
+  aspect-ratio: auto;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+/* Cursor fuera cuando el chrome se esconde (igual que YouTube) */
+:host([data-idle]) { cursor: none; }
 
 .wrap {
   position: relative;
@@ -33,41 +52,229 @@
 
 slot { display: none; }
 
+/* ── Scrim inferior: legibilidad sin tapar la imagen ────────────────── */
+.scrim {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 9em;
+  pointer-events: none;
+  background: linear-gradient(to top,
+    rgb(0 0 0 / 72%) 0%,
+    rgb(0 0 0 / 45%) 35%,
+    transparent 100%);
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+
+/* ── Play grande central ────────────────────────────────────────────── */
+.big-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 3.6em;
+  height: 3.6em;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 45%);
+  /* Anillo: sobre un fotograma negro el relleno no se ve, el borde sí. */
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 22%), 0 6px 20px rgb(0 0 0 / 35%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: inherit;
+  cursor: pointer;
+  transition: transform 220ms cubic-bezier(.2,.7,.3,1), opacity 220ms ease,
+              background-color 160ms ease;
+}
+
+.big-play is-icon { font-size: 2em; }
+.big-play:hover {
+  background: color-mix(in srgb, var(--is-video-accent) 82%, #000);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 30%), 0 8px 26px rgb(0 0 0 / 45%);
+}
+.big-play:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+:host([data-playing]) .big-play,
+:host([data-no-controls]) .big-play {
+  opacity: 0;
+  transform: scale(1.35);
+  pointer-events: none;
+}
+
+/* ── Chrome inferior ────────────────────────────────────────────────── */
 .controls {
   position: absolute;
   inset-inline: 0;
   bottom: 0;
   display: flex;
-  align-items: center;
-  gap: 0.5em;
-  padding: 0.5em 0.65em;
-  background: linear-gradient(transparent, color-mix(in srgb, #000 75%, transparent));
+  flex-direction: column;
+  gap: 0.1em;
+  padding: 0 0.6em 0.35em;
   box-sizing: border-box;
+  transition: opacity 200ms ease, transform 200ms ease;
 }
+
 .controls[hidden] { display: none !important; }
 
-.ctrl {
-  flex-shrink: 0;
-  font-size: 1.25em;
-  color: inherit;
+/* Auto-ocultado: solo mientras reproduce y sin interacción reciente */
+:host([data-idle]) .controls {
+  opacity: 0;
+  transform: translateY(0.8em);
+  pointer-events: none;
 }
 
+:host([data-idle]) .scrim { opacity: 0; }
+
+/* ── Barra de progreso ──────────────────────────────────────────────── */
+.progress {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 1.1em;      /* zona de click generosa, barra fina dentro */
+  cursor: pointer;
+  touch-action: none;
+}
+
+.bar {
+  position: relative;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 28%);
+  transition: height 120ms ease;
+  overflow: hidden;
+}
+
+.progress:hover .bar,
+.progress:focus-within .bar { height: 5px; }
+
+.buffered,
+.played {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.buffered {
+  width: var(--buffered);
+  background: rgb(255 255 255 / 42%);
+}
+
+.played {
+  width: var(--played);
+  background: var(--is-video-accent);
+}
+
+/* Scrubber: aparece al pasar el ratón, como YouTube */
+.thumb {
+  position: absolute;
+  top: 50%;
+  left: var(--played);
+  width: 0.85em;
+  height: 0.85em;
+  border-radius: 50%;
+  background: var(--is-video-accent);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 120ms ease;
+  pointer-events: none;
+}
+
+.progress:hover .thumb,
+.progress:focus-within .thumb { transform: translate(-50%, -50%) scale(1); }
+
+/* El input real queda encima, invisible: mantiene teclado y a11y. */
 .seek {
-  flex: 1 1 auto;
-  min-width: 0;
-  accent-color: var(--is-color-brand-500, #339af0);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
   cursor: pointer;
 }
 
-.time {
-  font-size: 0.75em;
+.seek:focus { outline: none; }
+.seek:focus-visible + .bar { outline: 2px solid #fff; outline-offset: 3px; }
+.seek::-webkit-slider-runnable-track { background: transparent; height: 100%; }
+.seek::-webkit-slider-thumb { -webkit-appearance: none; width: 1px; height: 1px; opacity: 0; }
+.seek::-moz-range-track { background: transparent; }
+.seek::-moz-range-thumb { width: 1px; height: 1px; border: 0; opacity: 0; }
+
+/* Tooltip de tiempo sobre la barra */
+.tip {
+  position: absolute;
+  bottom: 1.5em;
+  left: 0;
+  transform: translateX(-50%);
+  padding: 0.15em 0.45em;
+  border-radius: 0.25em;
+  background: rgb(0 0 0 / 82%);
+  font-size: 0.72em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  opacity: 0.9;
-  flex-shrink: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
 }
 
-/* Volumen: slider se revela al hover / focus del grupo */
+.progress:hover .tip { opacity: 1; }
+
+/* ── Fila de botones ────────────────────────────────────────────────── */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.15em;
+  min-width: 0;
+}
+
+.row .spacer { flex: 1 1 auto; }
+
+.ctrl,
+.iconbtn {
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  width: 2.1em;
+  height: 2.1em;
+  padding: 0;
+  border: 0;
+  border-radius: 0.3em;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 1.15em;
+  cursor: pointer;
+  opacity: 0.92;
+  transition: opacity 120ms ease, background-color 120ms ease;
+}
+
+.iconbtn:hover,
+.ctrl:hover { opacity: 1; background: rgb(255 255 255 / 12%); }
+
+.iconbtn:focus-visible,
+.ctrl:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+.iconbtn[hidden] { display: none; }
+
+.time {
+  flex-shrink: 0;
+  margin-inline: 0.4em 0.2em;
+  font-size: 0.78em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  opacity: 0.92;
+}
+
+.time .sep { opacity: 0.6; margin-inline: 0.15em; }
+
+/* ── Volumen: se despliega al hover, como YouTube ───────────────────── */
 .vol {
   display: flex;
   align-items: center;
@@ -78,28 +285,130 @@ slot { display: none; }
 .volume {
   width: 0;
   min-width: 0;
+  height: 1.1em;
   margin: 0;
   padding: 0;
   opacity: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
   overflow: hidden;
   pointer-events: none;
-  accent-color: var(--is-color-brand-500, #339af0);
   cursor: pointer;
-  transition:
-    width 160ms ease,
-    opacity 120ms ease,
-    margin 160ms ease;
+  transition: width 180ms cubic-bezier(.2,.7,.3,1), opacity 140ms ease, margin 180ms ease;
 }
 
 .vol:hover .volume,
 .vol:focus-within .volume,
 .vol:has(.volume:active) .volume {
   width: 4.75em;
-  margin-inline-start: 0.25em;
+  margin-inline: 0.15em 0.35em;
   opacity: 1;
   pointer-events: auto;
 }
 
+/* Pista blanca con relleno según nivel (misma lectura que YouTube) */
+.volume::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to right,
+    #fff 0 var(--vol), rgb(255 255 255 / 30%) var(--vol) 100%);
+}
+
+.volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0.75em;
+  height: 0.75em;
+  margin-top: calc((3px - 0.75em) / 2);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.volume::-moz-range-track {
+  height: 3px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 30%);
+}
+
+.volume::-moz-range-progress { height: 3px; border-radius: 2px; background: #fff; }
+
+.volume::-moz-range-thumb {
+  width: 0.75em;
+  height: 0.75em;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* ── Menú de velocidad ──────────────────────────────────────────────── */
+.settings { position: relative; flex-shrink: 0; }
+
+.menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.4em);
+  z-index: 2;
+  min-width: 7.5em;
+  margin: 0;
+  padding: 0.3em;
+  list-style: none;
+  border-radius: 0.4em;
+  background: rgb(28 28 28 / 96%);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 45%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.menu[hidden] { display: none; }
+
+.menu__head {
+  padding: 0.25em 0.5em 0.4em;
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
+  padding: 0.35em 0.5em;
+  border: 0;
+  border-radius: 0.25em;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 0.8em;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover { background: rgb(255 255 255 / 14%); }
+.menu button[aria-checked="true"] { color: var(--is-video-accent); font-weight: 700; }
+
+.menu button::before {
+  content: "";
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.45;
+}
+
+.menu button[aria-checked="true"]::before {
+  background: currentColor;
+  box-shadow: inset 0 0 0 2px rgb(28 28 28);
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .volume { transition: none; }
+  .volume,
+  .controls,
+  .scrim,
+  .big-play,
+  .bar,
+  .thumb { transition: none; }
 }

@@ -2,7 +2,7 @@
   display: block;
   position: fixed;
   z-index: 100;
-  --size: 3.5rem;
+  --size: 3.5em;
 }
 
 :host([position="bottom-end"]) { bottom: 1.5rem; right: 1.5rem; }
@@ -26,7 +26,6 @@
   cursor: pointer;
   background: var(--is-brand, dodgerblue);
   color: var(--is-brand-fg, #fff);
-  font-size: 1rem;
   font-weight: 500;
   transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -47,8 +46,6 @@
   box-shadow: none;
 }
 
-.fab[data-size="small"] { --size: 2.5rem; font-size: 0.85rem; }
-.fab[data-size="large"] { --size: 4.5rem; font-size: 1.15rem; }
 
 .fab[data-variant="brand"] { background: var(--is-brand, dodgerblue); color: var(--is-brand-fg, #fff); }
 .fab[data-variant="neutral"] {

@@ -67,9 +67,14 @@
 .tm-node.is-dim { opacity: 0.32; }
 
 .tm-node__rect {
-  transition: filter 0.12s ease-out;
+  transition: filter 0.12s ease-out, stroke-width 0.12s ease-out;
+}
+
+.tm-node__header {
+  pointer-events: none;
 }
 
 .tm-node.is-active .tm-node__rect {
-  filter: brightness(1.1);
+  filter: brightness(1.12);
+  stroke-width: 3;
 }

@@ -17,7 +17,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   without-buttons    boolean  — sin botones prev/next
  *   without-headings   boolean
  *   max-target         number   — máximo de items en target.
- *   size               small | medium | large (default 'medium')
  *
  * Atributos <is-transfer-item>
  *   value        string
@@ -72,7 +71,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const TRANSFER_OBSERVED = ['source-title', 'target-title', 'searchable', 'without-buttons', 'without-headings', 'max-target', 'size'];
+  const TRANSFER_OBSERVED = ['source-title', 'target-title', 'searchable', 'without-buttons', 'without-headings', 'max-target'];
 
   class IsTransfer extends HTMLElement {
     static get observedAttributes() { return TRANSFER_OBSERVED; }
@@ -109,7 +108,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#mounted = true;
       if (!this.hasAttribute('source-title')) this.setAttribute('source-title', 'Disponibles');
       if (!this.hasAttribute('target-title')) this.setAttribute('target-title', 'Asignados');
-      if (!this.hasAttribute('size')) this.setAttribute('size', 'medium');
       this.#bindControls();
       this.#bindSearch();
       this.#render();
@@ -140,8 +138,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const titleTarget = this.getAttribute('target-title') || 'Asignados';
       this.#titleSource.textContent = titleSource;
       this.#titleTarget.textContent = titleTarget;
-      const s = this.getAttribute('size') || 'medium';
-      this.shadowRoot.querySelector('.transfer').dataset.size = s;
       this.#panelSource.querySelector('.search').hidden = !this.hasAttribute('searchable');
       this.#panelTarget.querySelector('.search').hidden = !this.hasAttribute('searchable');
       this.shadowRoot.querySelector('.controls').hidden = this.hasAttribute('without-buttons');

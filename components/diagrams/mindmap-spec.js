@@ -5,11 +5,12 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
 import {
   makeCostGrid,
   snapDiagramGrid,
+  snapPointAwayFromSide,
 } from '../_shared/diagram-grid.js';
 import {
   routeOrthogonal,
   pixelToGrid,
-  gridPathToSvg,
+  buildOrthogonalPath,
 } from '../_shared/diagram-astar.js';
 
 /**
@@ -100,10 +101,34 @@ function annotateHue(node, depth, inheritedHue, topCounter) {
 }
 
 /** Punto de anclaje de un nodo hacia otro: borde izq/der según posición relativa. */
-function anchorTowards(node, otherCx) {
+/**
+ * Ancla hacia el lado de `node` que de verdad mira al otro nodo (centro
+ * `otherCx,otherCy`) — no siempre izq/der: en el layout radial un hijo puede
+ * quedar arriba o abajo del padre, y forzar una salida horizontal ahí produce
+ * un tramo largo que choca contra otras ramas del abanico. Se elige el eje
+ * dominante (|dx| vs |dy|) y, dentro de ese eje, el lado correspondiente.
+ * El eje que NO cambia queda snapeado a 8px (mismo motivo que edgeAnchor()
+ * en node-link-layout.js: si no, el tramo manual de salida sale en diagonal).
+ */
+function anchorTowards(node, otherCx, otherCy) {
   const nodeCx = node.x + node.w / 2;
-  const toRight = otherCx >= nodeCx;
-  return { x: toRight ? node.x + node.w : node.x, y: node.y + node.h / 2 };
+  const nodeCy = node.y + node.h / 2;
+  const dx = otherCx - nodeCx;
+  const dy = otherCy - nodeCy;
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    const toRight = dx >= 0;
+    return { x: toRight ? node.x + node.w : node.x, y: snapDiagramGrid(nodeCy), side: toRight ? 'right' : 'left' };
+  }
+  const toBottom = dy >= 0;
+  return { x: snapDiagramGrid(nodeCx), y: toBottom ? node.y + node.h : node.y, side: toBottom ? 'bottom' : 'top' };
+}
+
+/** Desplaza un punto `d` px hacia afuera del nodo, según el lado del ancla. */
+function stepOutPoint(p, side, d) {
+  if (side === 'top') return { x: p.x, y: p.y - d };
+  if (side === 'bottom') return { x: p.x, y: p.y + d };
+  if (side === 'left') return { x: p.x - d, y: p.y };
+  return { x: p.x + d, y: p.y };
 }
 
 /**
@@ -156,92 +181,73 @@ export function computeMindmapLayout(spec) {
     });
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
 
-  // Aristas: para tree layout usamos A* ortogonal (L-shape con un solo giro,
-  // sube o baja según la posición vertical del hijo). Para radial conservamos
-  // curvas Bézier porque la rejilla cartesiana pierde el sentido radial.
-  const isTree = spec.layout === 'tree';
+  // Aristas: A* ortogonal para los dos modos (tree y radial). Antes el modo
+  // radial usaba curvas Bézier "orgánicas" — se unifica con el mismo lenguaje
+  // visual angular que el resto de los diagramas (flowchart, ER, etc.), con
+  // sus nodos ya bloqueados en la rejilla de costos para que las ramas los
+  // rodeen en vez de atravesarlos.
   const edges = [];
 
-  if (isTree) {
-    // Rejilla de costos para A* ortogonal: bloquea cada nodo para que las
-    // aristas rodeen su contorno, y deja un pasillo limpio entre filas.
-    const width = Math.max(...nodes.map((n) => n.x + n.w + 8), 80);
-    const height = Math.max(...nodes.map((n) => n.y + n.h + 8), 80);
-    const grid = makeCostGrid(width, height);
-    for (const n of nodes) {
-      // Bloquea la caja del nodo con un margen para que la arista pase por fuera.
-      const pad = 4;
-      for (let r = Math.floor((n.y - pad) / grid.grid); r <= Math.ceil((n.y + n.h + pad) / grid.grid); r++) {
-        for (let c = Math.floor((n.x - pad) / grid.grid); c <= Math.ceil((n.x + n.w + pad) / grid.grid); c++) {
-          if (r < 0 || c < 0 || r >= grid.rows || c >= grid.cols) continue;
-          grid.cost[r * grid.cols + c] = Infinity;
-        }
+  // Rejilla de costos para A* ortogonal: bloquea cada nodo para que las
+  // aristas rodeen su contorno, y deja un pasillo limpio entre filas/anillos.
+  const gridW = Math.max(...nodes.map((n) => n.x + n.w + 8), 80);
+  const gridH = Math.max(...nodes.map((n) => n.y + n.h + 8), 80);
+  const grid = makeCostGrid(gridW, gridH);
+  for (const n of nodes) {
+    // Bloquea la caja del nodo con un margen para que la arista pase por fuera.
+    const pad = 4;
+    for (let r = Math.floor((n.y - pad) / grid.grid); r <= Math.ceil((n.y + n.h + pad) / grid.grid); r++) {
+      for (let c = Math.floor((n.x - pad) / grid.grid); c <= Math.ceil((n.x + n.w + pad) / grid.grid); c++) {
+        if (r < 0 || c < 0 || r >= grid.rows || c >= grid.cols) continue;
+        grid.cost[r * grid.cols + c] = Infinity;
       }
     }
-
-    (function walkEdges(node) {
-      for (const c of node.children) {
-        if (!node.synthetic) {
-          const from = nodeById.get(node.id);
-          const to = nodeById.get(c.id);
-          if (from && to) {
-            const p1 = anchorTowards(from, to.x + to.w / 2);
-            const p2 = anchorTowards(to, from.x + from.w / 2);
-            // Sale/entra un par de celdas para evitar colgar la línea del borde.
-            const fromDir = p2.x >= p1.x ? 1 : -1;
-            const stepX = grid.grid * 2;
-            const a1 = { x: p1.x + fromDir * stepX, y: p1.y };
-            const a2 = { x: p2.x - fromDir * stepX, y: p2.y };
-            const start = pixelToGrid(snapDiagramGrid(a1.x), snapDiagramGrid(a1.y), grid.grid);
-            const end = pixelToGrid(snapDiagramGrid(a2.x), snapDiagramGrid(a2.y), grid.grid);
-            const points = routeOrthogonal(start, end, grid);
-            const polyline = gridPathToSvg(points, grid.grid);
-            // Encadena: M desde p1 al primer punto A*, polilínea A*, L al p2.
-            const segs = [`M${p1.x},${p1.y}`];
-            const aStart = { x: start.col * grid.grid, y: start.row * grid.grid };
-            segs.push(`L${aStart.x},${aStart.y}`);
-            if (polyline) segs.push(polyline.slice(1));
-            const aEnd = { x: end.col * grid.grid, y: end.row * grid.grid };
-            segs.push(`L${aEnd.x},${aEnd.y}`);
-            segs.push(`L${p2.x},${p2.y}`);
-            edges.push({
-              id: `${node.id}->${c.id}`,
-              from: node.id,
-              to: c.id,
-              path: segs.join(' '),
-              hue: to.hue,
-              width: to.depth <= 1 ? 2.4 : Math.max(1.2, 2.4 - (to.depth - 1) * 0.4),
-            });
-          }
-        }
-        walkEdges(c);
-      }
-    })(root);
-  } else {
-    (function walkEdges(node) {
-      for (const c of node.children) {
-        if (!node.synthetic) {
-          const from = nodeById.get(node.id);
-          const to = nodeById.get(c.id);
-          if (from && to) {
-            const p1 = anchorTowards(from, to.x + to.w / 2);
-            const p2 = anchorTowards(to, from.x + from.w / 2);
-            const dx = (p2.x - p1.x) / 2;
-            const path = `M${p1.x},${p1.y} C${p1.x + dx},${p1.y} ${p1.x + dx},${p2.y} ${p2.x},${p2.y}`;
-            edges.push({
-              id: `${node.id}->${c.id}`,
-              from: node.id,
-              to: c.id,
-              path,
-              hue: to.hue,
-              width: to.depth <= 1 ? 2.4 : Math.max(1.2, 2.4 - (to.depth - 1) * 0.4),
-            });
-          }
-        }
-        walkEdges(c);
-      }
-    })(root);
   }
+
+  (function walkEdges(node) {
+    for (const c of node.children) {
+      if (!node.synthetic) {
+        const from = nodeById.get(node.id);
+        const to = nodeById.get(c.id);
+        if (from && to) {
+          const toCx = to.x + to.w / 2;
+          const toCy = to.y + to.h / 2;
+          const fromCx = from.x + from.w / 2;
+          const fromCy = from.y + from.h / 2;
+          const p1 = anchorTowards(from, toCx, toCy);
+          const p2 = anchorTowards(to, fromCx, fromCy);
+          // Sale/entra por el eje que corresponde al lado elegido (no siempre
+          // x: en radial el hijo puede quedar arriba/abajo del padre). El
+          // ancho/alto de nodo no está snapeado a 8px, así que el punto de
+          // salida puede quedar a menos de un paso de rejilla del borde
+          // bloqueado; snapPointAwayFromSide redondea SIEMPRE alejándose del
+          // nodo (nunca "al más cercano", que podría rodar de vuelta al bloqueo).
+          const stepOutDist = grid.grid * 3;
+          const a1 = stepOutPoint(p1, p1.side, stepOutDist);
+          const a2 = stepOutPoint(p2, p2.side, stepOutDist);
+          const startPx = snapPointAwayFromSide(a1, p1.side, grid.grid);
+          const endPx = snapPointAwayFromSide(a2, p2.side, grid.grid);
+          const start = pixelToGrid(startPx.x, startPx.y, grid.grid);
+          const end = pixelToGrid(endPx.x, endPx.y, grid.grid);
+          const points = routeOrthogonal(start, end, grid);
+          // buildOrthogonalPath empalma con points[0]/points[last] (el punto
+          // REAL donde arrancó la ruta), no con `start`/`end`: si el punto
+          // pedido caía bloqueado, nearestOpenCell lo desplaza, y unir con el
+          // punto pedido en vez del real deja una costura en diagonal.
+          const path = buildOrthogonalPath(p1, p2, start, end, points, grid.grid);
+          edges.push({
+            id: `${node.id}->${c.id}`,
+            from: node.id,
+            to: c.id,
+            path,
+            hue: to.hue,
+            width: to.depth <= 1 ? 2.4 : Math.max(1.2, 2.4 - (to.depth - 1) * 0.4),
+          });
+        }
+      }
+      walkEdges(c);
+    }
+  })(root);
 
   let width = 0;
   let height = 0;

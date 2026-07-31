@@ -97,11 +97,16 @@ export function computeTimelineLayout(spec, opts = {}) {
   const domain = [min - pad, max + pad];
   const scale = timeScale(domain, [0, axisLen]);
 
-  // Colisión: eventos separados por menos de MIN_GAP_PX se empaquetan en
-  // "carriles" (lejanía a la línea) reutilizando el packing de intervalos.
-  const MIN_GAP_PX = orientation === 'horizontal' ? 96 : 46;
+  // Colisión: la tarjeta se dibuja CENTRADA sobre su marca de tiempo (cardX/Y
+  // es dotX/Y ± mitad del tamaño), así que su huella real ocupa tiempo a
+  // ambos lados del evento, no solo hacia adelante. El gap mínimo debe cubrir
+  // el ancho/alto real de la tarjeta (más un respiro) — antes usaba 96px con
+  // una tarjeta de 168px de ancho, así que dos eventos cercanos podían quedar
+  // en el mismo carril con sus tarjetas superpuestas.
+  const CARD_FOOTPRINT_PX = orientation === 'horizontal' ? CARD_W : CARD_H;
+  const MIN_GAP_PX = CARD_FOOTPRINT_PX + 16;
   const minGapMs = Math.max(1, Math.abs(scale.invert(MIN_GAP_PX) - scale.invert(0)));
-  const packed = packLanes(events.map((e) => ({ id: e.id, start: e.ms, end: e.ms + minGapMs })));
+  const packed = packLanes(events.map((e) => ({ id: e.id, start: e.ms - minGapMs / 2, end: e.ms + minGapMs / 2 })));
   const laneOf = new Map(packed.map((p) => [p.id, p.lane]));
 
   let maxAboveDepth = 0;

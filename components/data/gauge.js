@@ -13,7 +13,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   max         number
  *   label       string
  *   unit        string  (e.g. "%")
- *   size        small | medium | large (default 'medium')
  *   thickness   number  (px)
  *   variant     brand | success | warning | danger (default 'brand')
  *   half        boolean — semicírculo.
@@ -38,7 +37,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'size', 'thickness', 'variant', 'half', 'format', 'show-value'];
+  const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'variant', 'half', 'format', 'show-value'];
 
   class IsGauge extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -77,7 +76,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const max = this.#num(this.getAttribute('max') || 100);
       const label = this.getAttribute('label') || '';
       const unit = this.getAttribute('unit') || '';
-      const size = this.getAttribute('size') || 'medium';
       const variant = this.getAttribute('variant') || 'brand';
       const half = this.hasAttribute('half');
       const format = this.getAttribute('format');
@@ -104,9 +102,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#track.setAttribute('stroke-dasharray', String(arc));
 
       // tamaño
-      const sizes = { small: 80, medium: 120, large: 160 };
-      this.#svg.style.width = `${sizes[size] || sizes.medium}px`;
-      this.#svg.style.height = half ? `${(sizes[size] || sizes.medium) / 2}px` : `${sizes[size] || sizes.medium}px`;
       if (thickness) {
         this.#circle.style.strokeWidth = String(thickness);
         this.#track.style.strokeWidth = String(thickness);
@@ -116,7 +111,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
       }
 
       this.#svg.dataset.variant = variant;
-      this.#svg.dataset.size = size;
 
       // Value y label
       if (showValue) {

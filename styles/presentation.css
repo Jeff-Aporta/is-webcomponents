@@ -372,38 +372,30 @@ is-main.main {
   height: 1.15em;
 }
 
+/* El panel vive dentro de <is-dropdown>: el anclaje y el reposicionado los
+   hace el componente (dialog en top layer), así que aquí sólo va la caja.
+   Antes era un popover con top/left calculados a mano que se despegaba. */
+.demo-code-dd {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 3;
+}
+
+.demo-code-dd .demo-code-btn { position: static; top: auto; right: auto; }
+
 .demo-code-pop {
   box-sizing: border-box;
-  width: min(36rem, calc(100vw - 2rem));
-  max-height: min(70vh, 28rem);
+  display: flex;
+  flex-direction: column;
+  width: min(32rem, calc(100vw - 3rem));
+  max-height: min(70vh, 26rem);
   margin: 0;
   padding: 0;
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius);
-  background: var(--is-bg-elev);
-  color: var(--is-text);
-  box-shadow: var(--is-shadow);
   overflow: hidden;
-  flex-direction: column;
+  color: var(--is-text);
 }
-.demo-code-pop:popover-open {
-  display: flex;
-  position: fixed;
-  inset: unset;
-  top: max(0.75rem, var(--demo-code-y, 20%));
-  left: max(0.75rem, min(var(--demo-code-x, 1rem), calc(100vw - min(36rem, 100vw - 2rem) - 0.75rem)));
-}
-.demo-code-pop--fallback:not([hidden]) {
-  display: flex;
-}
-.demo-code-pop--fallback {
-  position: absolute;
-  top: 3rem;
-  right: 0.65rem;
-  left: 0.65rem;
-  width: auto;
-  z-index: 4;
-}
+
 .demo-code-pop__bar {
   display: flex;
   align-items: center;
@@ -420,18 +412,7 @@ is-main.main {
   text-transform: uppercase;
   color: var(--is-text-dim);
 }
-.demo-code-pop__copy {
-  appearance: none;
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius-sm);
-  background: var(--is-control-bg);
-  color: var(--is-control-text);
-  font: inherit;
-  font-size: 0.75rem;
-  padding: 0.25em 0.65em;
-  cursor: pointer;
-}
-.demo-code-pop__copy:hover { background: var(--is-control-bg-hover); }
+.demo-code-pop__copy { font-size: 0.9rem; }
 .demo-code-pop__pre {
   margin: 0 !important;
   border: 0 !important;
@@ -1050,3 +1031,34 @@ is-icon {
 is-button is-icon {
   color: currentColor;
 }
+
+/* --- Snippets con botón de copiar (docs-chrome.js) ------------------- */
+
+/* Todo `pre.code` queda envuelto aquí para colgar el botón en la esquina. */
+.code-block {
+  position: relative;
+  display: block;
+  margin: 12px 0 18px;
+}
+
+.code-block > pre.code { margin: 0; }
+
+.code-block__copy {
+  position: absolute;
+  top: 0.45em;
+  right: 0.45em;
+  z-index: 2;
+  font-size: 0.85em;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+/* Se revela al acercarse; con foco por teclado siempre visible. */
+.code-block:hover .code-block__copy,
+.code-block:focus-within .code-block__copy { opacity: 1; }
+
+@media (hover: none) {
+  .code-block__copy { opacity: 1; }
+}
+
+.callout--cdn .code-block { margin: 8px 0 14px; }

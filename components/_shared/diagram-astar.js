@@ -81,6 +81,11 @@ function astarSegment(start, end, g, turnCost) {
   };
 
   let goalKey = -1;
+  // Mejor nodo visto (más cerca del destino) — si el destino resulta
+  // inalcanzable, se reconstruye el camino hasta aquí en vez de un salto
+  // recto: el resultado sigue siendo ortogonal, nunca atraviesa obstáculos.
+  let bestKey = sk;
+  let bestDist = manhattan(start, end);
   while (open.size) {
     const ck = open.pop();
     const cur = decode(ck);
@@ -88,6 +93,8 @@ function astarSegment(start, end, g, turnCost) {
       goalKey = ck;
       break;
     }
+    const d0 = manhattan(cur, end);
+    if (d0 < bestDist) { bestDist = d0; bestKey = ck; }
     const cg = gScore.get(ck) ?? Infinity;
     for (let d = 0; d < 4; d++) {
       const nc = cur.col + DIRS[d].col;
@@ -104,10 +111,13 @@ function astarSegment(start, end, g, turnCost) {
     }
   }
 
-  if (goalKey === -1) return [start, end];
+  // Sin ruta al destino (obstáculo/zona ocupa el único corredor posible):
+  // se usa el mejor nodo alcanzado en vez de una línea recta start→end, que
+  // podría cruzar en diagonal justo el obstáculo que se quería rodear.
+  const finalKey = goalKey === -1 ? bestKey : goalKey;
 
   const path = [];
-  let k = goalKey;
+  let k = finalKey;
   let node = decode(k);
   path.push({ col: node.col, row: node.row });
   while (cameFrom.has(k)) {
@@ -115,6 +125,13 @@ function astarSegment(start, end, g, turnCost) {
     path.unshift({ col: prev.col, row: prev.row });
     k = prev.key;
     node = decode(k);
+  }
+  if (goalKey === -1 && (path[path.length - 1].col !== end.col || path[path.length - 1].row !== end.row)) {
+    // Tramo final recto pero SIEMPRE ortogonal (nunca diagonal): primero se
+    // alinea un eje, luego el otro — dos segmentos rectos, no un salto libre.
+    const last = path[path.length - 1];
+    if (last.col !== end.col) path.push({ col: end.col, row: last.row });
+    path.push({ col: end.col, row: end.row });
   }
   return collapseColinear(path);
 }
@@ -134,6 +151,27 @@ function collapseColinear(points) {
   return out;
 }
 
+/**
+ * Si `cell` cae en una celda bloqueada, busca la más cercana libre (anillos
+ * crecientes, Chebyshev). Sin esto, un waypoint o ancla que quede sobre un
+ * obstáculo (p. ej. dentro de una zona de exclusión) hace que `astarSegment`
+ * no pueda alcanzarla y caiga en su fallback de línea recta — una diagonal
+ * que atraviesa el propio obstáculo que se quería evitar.
+ */
+function nearestOpenCell(g, cell, maxRadius = 8) {
+  if (cellCost(g, cell.col, cell.row) !== COST_BLOCKED) return cell;
+  for (let r = 1; r <= maxRadius; r++) {
+    for (let dc = -r; dc <= r; dc++) {
+      for (let dr = -r; dr <= r; dr++) {
+        if (Math.max(Math.abs(dc), Math.abs(dr)) !== r) continue; // solo el borde del anillo
+        const c = { col: cell.col + dc, row: cell.row + dr };
+        if (cellCost(g, c.col, c.row) !== COST_BLOCKED) return c;
+      }
+    }
+  }
+  return cell; // rodeado por completo: se deja igual, astarSegment hará el fallback
+}
+
 /** Ruta ortogonal A* con obstáculos y waypoints forzados. */
 export function routeOrthogonal(start, end, g, opts = {}) {
   const turnCost = opts.turnCost ?? 2;
@@ -148,7 +186,10 @@ export function routeOrthogonal(start, end, g, opts = {}) {
     }
     applyForbiddenRegions(g);
   }
-  const stops = [start, ...waypoints, end];
+  const safeStart = nearestOpenCell(g, start);
+  const safeEnd = nearestOpenCell(g, end);
+  const safeWaypoints = waypoints.map((w) => nearestOpenCell(g, w));
+  const stops = [safeStart, ...safeWaypoints, safeEnd];
   const full = [stops[0]];
   for (let i = 0; i < stops.length - 1; i++) {
     const seg = astarSegment(stops[i], stops[i + 1], g, turnCost);
@@ -287,8 +328,14 @@ function arrowFromPolyline(points, grid = TK_DIAGRAM_GRID) {
  *   L b                → entra al destino
  */
 export function buildOrthogonalPath(a, b, aGrid, bGrid, points, grid = TK_DIAGRAM_GRID) {
-  const outPx = { x: aGrid.col * grid, y: aGrid.row * grid };
-  const intoPx = { x: bGrid.col * grid, y: bGrid.row * grid };
+  // outPx/intoPx se derivan de `points` (el arranque/fin REAL de la polyline),
+  // no de aGrid/bGrid: si el ancla pedida caía en una celda bloqueada,
+  // `routeOrthogonal` la desplaza a la celda libre más cercana (ver
+  // `nearestOpenCell`) y ese es el punto con el que de verdad hay que
+  // empalmar — usar aGrid/bGrid aquí dejaría una costura en diagonal de una
+  // celda entre el tramo de salida y el resto de la ruta.
+  const outPx = points.length ? gridToPixel(points[0], grid) : { x: aGrid.col * grid, y: aGrid.row * grid };
+  const intoPx = points.length ? gridToPixel(points[points.length - 1], grid) : { x: bGrid.col * grid, y: bGrid.row * grid };
   const segs = [`M${a.x},${a.y}`, `L${outPx.x},${outPx.y}`];
   const star = gridPathToSvg(points, grid);
   if (star) segs.push(star.slice(1));

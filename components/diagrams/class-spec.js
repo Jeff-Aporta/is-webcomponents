@@ -1,5 +1,5 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
-import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid } from '../_shared/diagram-grid.js';
+import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
@@ -266,10 +266,14 @@ export function computeClassLayout(spec) {
     const b = edgeAnchor(to, sides.toSide);
 
     // El anclaje cae sobre el borde bloqueado: se sale un paso antes de rutear.
-    const out = stepOut(a, sides.fromSide, 10);
-    const into = stepOut(b, sides.toSide, 10);
-    const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
-    const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
+    const out = stepOut(a, sides.fromSide, 16);
+    const into = stepOut(b, sides.toSide, 16);
+    // Snap direccional: nunca redondea de vuelta hacia el nodo del que se aleja
+    // (ver snapPointAwayFromSide — corrige el redondeo-al-más-cercano de antes).
+    const outSnap = snapPointAwayFromSide(out, sides.fromSide, grid.grid);
+    const intoSnap = snapPointAwayFromSide(into, sides.toSide, grid.grid);
+    const aGrid = pixelToGrid(outSnap.x, outSnap.y, grid.grid);
+    const bGrid = pixelToGrid(intoSnap.x, intoSnap.y, grid.grid);
     const points = routeOrthogonal(aGrid, bGrid, grid);
 
     const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);

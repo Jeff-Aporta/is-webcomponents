@@ -1,7 +1,6 @@
 /* <is-callout> — superficies con borde y fondo suaves. */
 
 :host {
-  --spacing: var(--is-space-l, 1rem);
   --callout-bg: var(--is-bg-elev, #f1f3f5);
   --callout-border: var(--is-border, #dee2e6);
   --callout-text: var(--is-text, #212529);
@@ -12,40 +11,15 @@
   font-family: var(--is-font-family, system-ui, sans-serif);
   color: var(--callout-text);
 
-  /* size scale: padding + icon size */
-  --_pad-y: calc(var(--spacing) * 0.85);
-  --_pad-x: var(--spacing);
+  /* Escala: todo en em y relativo a --spacing, que también es em. Cambiar el
+     font-size del contexto (o del propio elemento) reescala el componente
+     entero. Sin variantes de tamaño: el atributo `size` ya no existe. */
+  --spacing: 1em;
+  --_pad-y: 0.85em;
+  --_pad-x: 1em;
   --_icon-size: 1.4em;
-  --_gap: calc(var(--spacing) * 0.65);
-  --_radius: calc(var(--is-radius, 0.625em));
-
-  &[size="xs"] {
-    --_pad-y: calc(var(--spacing) * 0.4);
-    --_pad-x: calc(var(--spacing) * 0.65);
-    --_icon-size: 1em;
-    font-size: 0.8125rem;
-  }
-  &[size="s"] {
-    --_pad-y: calc(var(--spacing) * 0.6);
-    --_pad-x: calc(var(--spacing) * 0.8);
-    --_icon-size: 1.15em;
-    font-size: 0.875rem;
-  }
-  &[size="m"] {
-    font-size: 0.9375rem;
-  }
-  &[size="l"] {
-    --_pad-y: calc(var(--spacing) * 1.1);
-    --_pad-x: calc(var(--spacing) * 1.25);
-    --_icon-size: 1.65em;
-    font-size: 1.0625rem;
-  }
-  &[size="xl"] {
-    --_pad-y: calc(var(--spacing) * 1.4);
-    --_pad-x: calc(var(--spacing) * 1.6);
-    --_icon-size: 2em;
-    font-size: 1.1875rem;
-  }
+  --_gap: 0.65em;
+  --_radius: var(--is-radius, 0.625em);
 
   /* ----- variants ----- */
   &[variant="brand"] {

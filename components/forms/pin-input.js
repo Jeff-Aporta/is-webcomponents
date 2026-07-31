@@ -11,7 +11,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
  * Atributos
  *   length       number  (3-8, default 6)
  *   type         number | text   (default 'number')
- *   size         small | medium | large (default 'medium')
  *   mask         boolean — si true, muestra asteriscos.
  *   disabled     boolean
  *   invalid      boolean
@@ -40,7 +39,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['length', 'type', 'size', 'mask', 'disabled', 'invalid', 'placeholder', 'value', 'autocomplete'];
+  const OBSERVED = ['length', 'type', 'mask', 'disabled', 'invalid', 'placeholder', 'value', 'autocomplete'];
 
   class IsPinInput extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -68,7 +67,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#mounted = true;
       if (!this.hasAttribute('length')) this.setAttribute('length', '6');
       if (!this.hasAttribute('type')) this.setAttribute('type', 'number');
-      if (!this.hasAttribute('size')) this.setAttribute('size', 'medium');
       this.#render();
       this.#hiddenInput.addEventListener('input', this.#onHiddenInput = () => {
         // write-only sync
@@ -91,7 +89,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'length' || name === 'type' || name === 'size' || name === 'placeholder' || name === 'mask') {
+      if (name === 'length' || name === 'type' || name === 'placeholder' || name === 'mask') {
         this.#render();
       }
       if (name === 'disabled' || name === 'invalid' || name === 'autocomplete') this.#syncState();
@@ -131,10 +129,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #render() {
       const len = this.#length();
       const t = this.#type();
-      const size = this.getAttribute('size') || 'medium';
       const placeholder = this.getAttribute('placeholder') || '';
       const mask = this.hasAttribute('mask');
-      this.#root.dataset.size = size;
       // Ensure values array length.
       while (this.#values.length < len) this.#values.push('');
       if (this.#values.length > len) this.#values = this.#values.slice(0, len);

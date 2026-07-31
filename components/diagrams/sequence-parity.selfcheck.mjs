@@ -90,8 +90,18 @@ assert.strictEqual(
 );
 
 // 6. Temas y tooltip.
-assert.strictEqual(diff(mine.sequenceThemeDark(), orig.sequenceThemeDark()), null, 'tema dark difiere');
-assert.strictEqual(diff(mine.sequenceThemeLight(), orig.sequenceThemeLight()), null, 'tema light difiere');
+// Los campos estructurales (texto/grid/chip) deben seguir siendo idénticos al
+// original; el tinte del alt-box (altFill/altBorder) es una mejora visual
+// deliberada posterior al port (antes era 'transparent' + borde punteado
+// gris, ahora lleva un tinte índigo con presencia propia) — se excluye a
+// propósito de la comparación byte a byte.
+const THEME_VISUAL_FIELDS = new Set(['altFill', 'altBorder']);
+function diffThemeStructural(a, b) {
+  const filtered = (obj) => Object.fromEntries(Object.entries(obj).filter(([k]) => !THEME_VISUAL_FIELDS.has(k)));
+  return diff(filtered(a), filtered(b));
+}
+assert.strictEqual(diffThemeStructural(mine.sequenceThemeDark(), orig.sequenceThemeDark()), null, 'tema dark difiere en campos estructurales');
+assert.strictEqual(diffThemeStructural(mine.sequenceThemeLight(), orig.sequenceThemeLight()), null, 'tema light difiere en campos estructurales');
 const m1 = mine.tk1437191SequenceSpec().messages[0];
 assert.strictEqual(
   mine.sequenceMessageTooltipText(m1),

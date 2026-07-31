@@ -13,7 +13,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *               (default 'neutral', reflected)
  *   appearance  accent | filled | outlined | filled-outlined | plain
  *               (default 'filled-outlined', reflected)
- *   size        xs | s | m | l | xl     (default 'm', reflected)
  *   icon        nombre Iconify para mostrar a la izquierda (ej. "mdi:bell").
  *               Si no se da, se elige uno por variante.
  *
@@ -48,11 +47,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['variant', 'appearance', 'size', 'icon'];
+  const OBSERVED = ['variant', 'appearance', 'icon'];
 
   const VALID_VARIANT = ['brand', 'neutral', 'success', 'warning', 'danger'];
   const VALID_APPEARANCE = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
-  const VALID_SIZE = ['xs', 's', 'm', 'l', 'xl'];
 
   const ICON_BY_VARIANT = {
     brand: 'mdi:information-outline',
@@ -83,7 +81,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#upgradeProperties();
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'neutral');
       if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'filled-outlined');
-      if (!this.hasAttribute('size')) this.setAttribute('size', 'm');
 
       // ¿El usuario puso un <is-icon slot="icon"> manualmente?
       const slotted = this.querySelector(':scope > [slot="icon"]');
@@ -112,10 +109,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
         this.setAttribute('appearance', 'filled-outlined');
         return;
       }
-      if (name === 'size' && newVal && !VALID_SIZE.includes(newVal)) {
-        this.setAttribute('size', 'm');
-        return;
-      }
       if (name === 'icon') this.#syncDefaultIcon();
     }
 
@@ -137,15 +130,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
     set appearance(v) {
       if (v == null || v === '') this.removeAttribute('appearance');
       else if (VALID_APPEARANCE.includes(v)) this.setAttribute('appearance', v);
-    }
-
-    get size() {
-      const v = this.getAttribute('size');
-      return VALID_SIZE.includes(v) ? v : 'm';
-    }
-    set size(v) {
-      if (v == null || v === '') this.removeAttribute('size');
-      else if (VALID_SIZE.includes(v)) this.setAttribute('size', v);
     }
 
     get icon() { return this.getAttribute('icon') || ''; }

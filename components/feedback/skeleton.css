@@ -38,10 +38,14 @@
   animation: is-skeleton-sheen 1.85s ease-in-out infinite;
 }
 
-/* pulse: late y vuelve (visible gracias al host transparente) */
+/* pulse: late y vuelve (visible gracias al host transparente).
+   `alternate` con dos keyframes en vez de 0/50/100: así la curva de ida es el
+   espejo exacto de la de vuelta y el latido aparece y desaparece igual de
+   rápido. Con tres keyframes el ease-in-out se aplicaba por tramo y el pulso
+   se notaba a tirones. */
 :host([effect="pulse"]) .indicator {
   background: var(--color);
-  animation: is-skeleton-pulse 1.55s ease-in-out infinite;
+  animation: is-skeleton-pulse 0.9s ease-in-out infinite alternate;
 }
 
 :host([effect="none"]) .indicator {
@@ -64,6 +68,6 @@
 }
 
 @keyframes is-skeleton-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.32; }
+  from { opacity: 1; }
+  to { opacity: 0.32; }
 }

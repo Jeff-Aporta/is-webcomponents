@@ -11,7 +11,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   icon        string  — iconify id del icono principal.
  *   position    bottom-end | bottom-start | top-end | top-start | inline (default 'bottom-end')
  *   variant     brand | neutral | custom-color (default 'brand')
- *   size        small | medium | large  (default 'medium')
  *   href        string — si se define, renderiza <a>.
  *   pulse       boolean — animación de pulso para llamar la atención.
  *   extended    boolean — ancho extendido con label.
@@ -38,9 +37,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </button>
   `;
 
-  const OBSERVED = ['icon', 'position', 'variant', 'size', 'href', 'pulse', 'extended', 'without-shadow', 'label'];
+  const OBSERVED = ['icon', 'position', 'variant', 'href', 'pulse', 'extended', 'without-shadow', 'label'];
   const VALID_VARIANT = ['brand', 'neutral', 'danger', 'success', 'warning'];
-  const VALID_SIZE = ['small', 'medium', 'large'];
   const VALID_POSITION = ['bottom-end', 'bottom-start', 'top-end', 'top-start', 'inline'];
 
   class IsFab extends HTMLElement {
@@ -96,21 +94,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
       else if (VALID_VARIANT.includes(v)) this.setAttribute('variant', v);
     }
 
-    get size() {
-      const v = this.getAttribute('size');
-      return VALID_SIZE.includes(v) ? v : 'medium';
-    }
-    set size(v) {
-      if (v == null || v === '') this.removeAttribute('size');
-      else if (VALID_SIZE.includes(v)) this.setAttribute('size', v);
-    }
-
     #sync() {
       const variant = this.variant;
-      const size = this.size;
       const position = this.position;
       this.#root.dataset.variant = variant;
-      this.#root.dataset.size = size;
       this.dataset.position = position;
       this.#root.classList.toggle('pulse', this.hasAttribute('pulse'));
       this.#root.classList.toggle('extended', this.hasAttribute('extended'));

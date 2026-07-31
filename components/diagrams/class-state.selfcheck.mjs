@@ -94,4 +94,27 @@ for (const e of stateLayout.edges) {
   assert.ok(typeof e.path === 'string' && e.path.startsWith('M'), `transición ${e.id} tiene path SVG`);
 }
 
+/* ───────────────────────── sin diagonales (regresión) ───────────────────────── */
+// Mismo motor de ruteo que flowchart-spec — ver flowchart-spec.selfcheck.mjs
+// para el historial completo del bug (applyRectCost, buildOrthogonalPath,
+// stepOut insuficiente frente a la cuantización de 8px).
+function parsePathPoints(d) {
+  const tokens = d.match(/[ML]\s*-?\d+(?:\.\d+)?[\s,]+-?\d+(?:\.\d+)?/g) || [];
+  return tokens.map((t) => {
+    const n = t.match(/-?\d+(?:\.\d+)?/g).map(Number);
+    return { x: n[0], y: n[1] };
+  });
+}
+function assertNoDiagonals(path, label) {
+  const pts = parsePathPoints(path);
+  const distinct = pts.filter((p, i) => i === 0 || p.x !== pts[i - 1].x || p.y !== pts[i - 1].y);
+  for (let i = 1; i < distinct.length; i++) {
+    const a = distinct[i - 1];
+    const b = distinct[i];
+    assert.ok(a.x === b.x || a.y === b.y, `${label}: segmento diagonal (${a.x},${a.y}) → (${b.x},${b.y})`);
+  }
+}
+for (const e of classLayout.edges) assertNoDiagonals(e.path, `class ${e.from}->${e.to}`);
+for (const e of stateLayout.edges) assertNoDiagonals(e.path, `state ${e.from}->${e.to}`);
+
 console.log('class/state self-check: PASS');

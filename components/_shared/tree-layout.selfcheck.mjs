@@ -93,6 +93,27 @@ function rectsOverlap(a, b) {
   }
 }
 
+// 5b) layoutRadialTree: con etiquetas anchas y desiguales, ningún par de
+//     nodos de la MISMA profundidad debe solaparse (bug real: un radio fijo
+//     por profundidad ignoraba el ancho del texto y la asignación angular,
+//     proporcional a cantidad de hojas, dejaba hermanos encimados).
+{
+  const labels = ['Contabilidad', 'RH', 'Facturación electrónica y nómina', 'Compras', 'Inventario', 'Tesorería', 'Impuestos', 'Reportes gerenciales'];
+  const nodes = [{ id: 'root' }, ...labels.map((label, i) => ({ id: `n${i}`, parent: 'root', label }))];
+  const root = buildTree(nodes);
+  const measure = (n) => ({ w: Math.max(40, (n.label ?? '').length * 7 + 20), h: 24 });
+  const { nodes: out } = layoutRadialTree(root, { radiusStep: 70, measure });
+  const ring = out.filter((n) => n.depth === 1);
+  for (let i = 0; i < ring.length; i++) {
+    for (let j = i + 1; j < ring.length; j++) {
+      const a = ring[i];
+      const b = ring[j];
+      const overlap = a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+      assert.ok(!overlap, `nodos radiales ${a.id} y ${b.id} se solapan`);
+    }
+  }
+}
+
 // 6) squarify: los rectángulos producidos teselan EXACTAMENTE la caja de entrada
 //    (suma de áreas == área de la caja) y ninguno se sale de los límites.
 {

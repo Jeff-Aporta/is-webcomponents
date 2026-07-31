@@ -15,7 +15,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   trend       string (e.g. "+12.5%" o "-3.2%")
  *   trend-direction up | down | flat   (auto-detect si trend empieza con + o -)
  *   icon        string (iconify id)
- *   size        small | medium | large  (default 'medium')
  *   variant     brand | neutral | success | warning | danger (default 'neutral')
  *
  * Slots
@@ -44,7 +43,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['label', 'value', 'helper', 'trend', 'trend-direction', 'icon', 'size', 'variant'];
+  const OBSERVED = ['label', 'value', 'helper', 'trend', 'trend-direction', 'icon', 'variant'];
 
   class IsStat extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -69,23 +68,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#sync();
     }
 
-    get size() {
-      const v = this.getAttribute('size');
-      return v === 'small' || v === 'large' ? v : 'medium';
-    }
-    set size(v) {
-      if (v == null || v === '') this.removeAttribute('size');
-      else this.setAttribute('size', v);
-    }
-
     #sync() {
       const label = this.getAttribute('label');
       const value = this.getAttribute('value');
       const helper = this.getAttribute('helper');
       const trend = this.getAttribute('trend');
       const variant = this.getAttribute('variant') || 'neutral';
-      const size = this.size;
-      this.#root.dataset.size = size;
       this.#root.dataset.variant = variant;
       const direction = this.#detectTrendDirection(trend);
       this.#root.dataset.trend = direction;

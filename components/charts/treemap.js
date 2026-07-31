@@ -1,7 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './treemap-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/sequence-spec.js';
-import { tkHueToCss, tkHueToHex } from '../_shared/tk-hue.js';
+import { tkHueToCss } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
 
@@ -149,6 +149,13 @@ class IsTreemap extends HTMLElement {
     const dark = !document.documentElement.classList.contains('theme-light');
     const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#wrap.dataset.theme = dark ? 'dark' : 'light';
+    // El tema del secuencia no trae un color de superficie real (`panel` es
+    // 'transparent'); lo leemos del sistema para usarlo como gap entre
+    // tesela — igual que pie/doughnut usan `--chart-surface` como separador
+    // en vez del propio color de cada porción.
+    const cs = getComputedStyle(this);
+    theme.surface = cs.getPropertyValue('--is-bg-elev').trim() || (dark ? '#1c2128' : '#ffffff');
+    theme.headerTint = dark ? 'rgba(0,0,0,.22)' : 'rgba(0,0,0,.10)';
 
     const availW = this.#wrap.clientWidth || 0;
     const layout = computeTreemapLayout(spec, {
@@ -201,15 +208,29 @@ class IsTreemap extends HTMLElement {
     // dejando visible solo la franja superior como rótulo del contenedor.
     for (const n of layout.nodes) {
       const fill = (n.hue != null && tkHueToCss(n.hue, 62, n.lightness)) || theme.accent;
-      const strokeColor = (n.hue != null && tkHueToHex(n.hue)) || theme.border;
       const g = svgEl('g', { class: 'tm-node' });
       g.dataset.nodeId = n.id;
       if (this.isViewer) g.style.cursor = 'pointer';
 
+      // El gap entre teselas usa el color de SUPERFICIE (como pie/doughnut
+      // separan sus rebanadas), no el tono propio del nodo — así se leen
+      // como tiles distintos en vez de un bloque continuo del mismo color.
+      const rx = Math.min(3, n.w / 2, n.h / 2);
       g.appendChild(svgEl('rect', {
-        x: n.x, y: n.y, width: n.w, height: n.h,
-        fill, stroke: strokeColor, 'stroke-width': 1, class: 'tm-node__rect',
+        x: n.x, y: n.y, width: n.w, height: n.h, rx,
+        fill, stroke: theme.surface, 'stroke-width': 2, class: 'tm-node__rect',
       }));
+
+      // Franja de cabecera del contenedor: un tinte propio (no solo texto en
+      // negrita sobre el mismo color) para que se lea como encabezado y no
+      // como parte plana del relleno.
+      if (n.hasChildren) {
+        const headerH = Math.min(14, n.h);
+        g.appendChild(svgEl('rect', {
+          x: n.x + 1, y: n.y + 1, width: Math.max(n.w - 2, 0), height: Math.max(headerH - 2, 0),
+          fill: theme.headerTint, class: 'tm-node__header',
+        }));
+      }
 
       if (n.showLabel) {
         const t = svgEl('text', {

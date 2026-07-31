@@ -1,7 +1,7 @@
 :host {
   display: inline-block;
-  --cell-size: 2.5rem;
-  --gap: 0.5rem;
+  --cell-size: 2.5em;
+  --gap: 0.5em;
   --bg: var(--is-bg-2, #181b22);
   --fg: var(--is-text, #e8eaf1);
   --border: var(--is-border, #2a2f3a);
@@ -33,12 +33,12 @@
   width: var(--cell-size);
   height: var(--cell-size);
   text-align: center;
-  font-size: 1.25rem;
+  font-size: 1.25em;
   font-weight: 500;
   background: var(--bg);
   color: var(--fg);
   border: 1px solid var(--border);
-  border-radius: 0.5rem;
+  border-radius: 0.5em;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
   caret-color: transparent;
@@ -49,10 +49,6 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 25%, transparent);
 }
 
-.pin[data-size="small"] { --cell-size: 2rem; }
-.pin[data-size="small"] .cell { font-size: 1rem; }
-.pin[data-size="large"] { --cell-size: 3rem; }
-.pin[data-size="large"] .cell { font-size: 1.5rem; }
 
 :host([disabled]) .cell {
   opacity: 0.5;

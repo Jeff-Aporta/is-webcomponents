@@ -234,11 +234,57 @@ export function layoutRadialTree(root, opts = {}) {
   assignAngle(rootEntry, 0, Math.PI * 2);
 
   const maxDepth = entries.reduce((m, e) => Math.max(m, e.depth), 0);
-  const cx = Math.max(radiusStep, maxDepth * radiusStep + 60);
+
+  // Radio por profundidad, calculado anillo por anillo: un radio fijo
+  // (depth * radiusStep) ignora el tamaño real de las etiquetas — un anillo
+  // con texto largo puede chocar contra el anterior, y la asignación angular
+  // (proporcional a hojas, no a ancho tangencial) puede dejar dos hermanos
+  // encimados en el mismo anillo. Cada anillo parte de radiusStep + la mitad
+  // del nodo más grande del anillo anterior y de sí mismo, y si aun así se
+  // solapa entre sí, crece hasta que no.
+  const byDepth = new Map();
+  for (const e of entries) {
+    if (!byDepth.has(e.depth)) byDepth.set(e.depth, []);
+    byDepth.get(e.depth).push(e);
+  }
+
+  function maxHalfExtent(ring) {
+    return ring.reduce((m, e) => Math.max(m, Math.max(e.w, e.h) / 2), 0);
+  }
+
+  function ringOverlapsAt(ring, r) {
+    const boxes = ring.map((e) => ({
+      x: r * Math.cos(e.angle) - e.w / 2, y: r * Math.sin(e.angle) - e.h / 2, w: e.w, h: e.h,
+    }));
+    for (let i = 0; i < boxes.length; i++) {
+      for (let j = i + 1; j < boxes.length; j++) {
+        const a = boxes[i];
+        const b = boxes[j];
+        if (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y) return true;
+      }
+    }
+    return false;
+  }
+
+  const radiusAtDepth = [0];
+  for (let d = 1; d <= maxDepth; d++) {
+    const ring = byDepth.get(d) ?? [];
+    const prevHalf = maxHalfExtent(byDepth.get(d - 1) ?? []);
+    const curHalf = maxHalfExtent(ring);
+    let r = radiusAtDepth[d - 1] + radiusStep + prevHalf + curHalf;
+    let guard = 0;
+    while (ringOverlapsAt(ring, r) && guard < 32) {
+      r += radiusStep / 2;
+      guard += 1;
+    }
+    radiusAtDepth[d] = r;
+  }
+
+  const cx = Math.max(radiusStep, radiusAtDepth[maxDepth] + 60);
   const cy = cx;
 
   const outNodes = entries.map((e) => {
-    const r = e.depth * radiusStep;
+    const r = radiusAtDepth[e.depth];
     const x = snap8(cx + r * Math.cos(e.angle) - e.w / 2);
     const y = snap8(cy + r * Math.sin(e.angle) - e.h / 2);
     return { id: e.id, x, y, w: e.w, h: e.h, depth: e.depth };

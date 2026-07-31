@@ -14,11 +14,6 @@
 
 :host([hidden]) { display: none !important; }
 
-:host([size="small"]) {
-  --is-slider-track-size: 0.25em;
-  --is-slider-thumb-size: 0.85em;
-}
-
 :host([variant="neutral"]) { --is-slider-fill: var(--is-control-border, #59636e); }
 :host([variant="success"]) { --is-slider-fill: var(--is-color-success-500, #40c057); }
 :host([variant="warning"]) { --is-slider-fill: var(--is-color-warning-500, #f59f00); }

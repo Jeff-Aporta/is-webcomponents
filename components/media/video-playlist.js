@@ -702,24 +702,46 @@ import './icon.js';
         item.setAttribute('aria-selected', String(active));
         item.setAttribute('aria-label', active ? `${title}, currently playing` : title);
 
+        // Columna de índice: número, y ▶ en el que suena (patrón YouTube).
+        const idx = document.createElement('span');
+        idx.className = 'playlist-item-index';
+        idx.setAttribute('aria-hidden', 'true');
+        if (active) {
+          const ico = document.createElement('is-icon');
+          ico.setAttribute('icon', 'mdi:play');
+          idx.appendChild(ico);
+        } else {
+          idx.textContent = String(i + 1);
+        }
+        item.appendChild(idx);
+
+        // La miniatura lleva la duración encima, como en YouTube.
+        const thumbWrap = document.createElement('div');
+        thumbWrap.className = 'playlist-item-thumb';
         if (poster) {
           const img = document.createElement('img');
           img.className = 'playlist-thumbnail';
           img.setAttribute('part', 'playlist-thumbnail');
           img.src = poster;
-          img.alt = title;
+          img.alt = '';
           img.loading = 'lazy';
           img.decoding = 'async';
           img.addEventListener('error', () => {
             img.replaceWith(this.#makePlaceholder());
           }, { once: true });
-          item.appendChild(img);
+          thumbWrap.appendChild(img);
         } else {
-          item.appendChild(this.#makePlaceholder());
+          thumbWrap.appendChild(this.#makePlaceholder());
         }
+        if (duration) {
+          const durEl = document.createElement('span');
+          durEl.className = 'playlist-item-duration';
+          durEl.setAttribute('part', 'playlist-duration');
+          durEl.textContent = duration;
+          thumbWrap.appendChild(durEl);
+        }
+        item.appendChild(thumbWrap);
 
-        const info = document.createElement('div');
-        info.className = 'playlist-item-info';
         const content = document.createElement('div');
         content.className = 'playlist-item-content';
 
@@ -735,16 +757,14 @@ import './icon.js';
         if (ch) channelEl.textContent = ch;
         content.appendChild(channelEl);
 
-        if (duration) {
-          const durEl = document.createElement('div');
-          durEl.className = 'playlist-item-duration';
-          durEl.setAttribute('part', 'playlist-duration');
-          durEl.textContent = duration;
-          content.appendChild(durEl);
+        if (active) {
+          const now = document.createElement('div');
+          now.className = 'playlist-item-now';
+          now.textContent = 'Reproduciendo';
+          content.appendChild(now);
         }
 
-        info.appendChild(content);
-        item.appendChild(info);
+        item.appendChild(content);
         frag.appendChild(item);
       });
       this.#listEl.replaceChildren(frag);

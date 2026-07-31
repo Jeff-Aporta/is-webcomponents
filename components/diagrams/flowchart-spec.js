@@ -1,5 +1,8 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
-import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid } from '../_shared/diagram-grid.js';
+import {
+  makeCostGrid, blockRect, applyRectCost, snapDiagramGrid,
+  readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
+} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { countIconifyTokens, extractLeadingIconifyToken } from '../_shared/tk-iconify-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
@@ -123,6 +126,9 @@ export function flowchartSpecFromPayload(payload) {
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
     direction: DIRECTIONS.has(dir) ? dir : (dir === 'TD' ? 'TB' : 'TB'),
     groups: readGroups(src),
+    // Zonas donde nodos y aristas tienen prohibido entrar (espaciado estético).
+    // Mismo espacio de coordenadas que los nodos, antes del margen del lienzo.
+    exclusionZones: readExclusionZones(src.exclusionZones),
     nodes,
     edges,
   };
@@ -138,6 +144,7 @@ export function flowchartSpecToJson(spec) {
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.groups?.length) out.groups = spec.groups;
+  if (spec.exclusionZones?.length) out.exclusionZones = spec.exclusionZones;
   out.nodes = spec.nodes.map((n) => {
     const row = { id: n.id, label: n.label };
     if (n.shape !== 'rect') row.shape = n.shape;
@@ -150,6 +157,7 @@ export function flowchartSpecToJson(spec) {
     if (e.label) row.label = e.label;
     if (e.kind !== 'solid') row.kind = e.kind;
     if (e.group) row.group = e.group;
+    if (e.waypoints?.length) row.waypoints = e.waypoints;
     return row;
   });
   return out;
@@ -243,14 +251,20 @@ export function computeFlowchartLayout(spec, overrides = null) {
 
   const offsetX = MARGIN.left;
   const offsetY = MARGIN.top + headerH;
+  const zones = spec.exclusionZones ?? [];
 
   const nodes = placed.nodes.map((n) => {
     const s = specById.get(n.id);
     const ov = overrides?.nodes?.[n.id];
+    const hasOverridePos = ov?.x != null && ov?.y != null;
+    // Una posición editada a mano gana sobre el auto-layout: no se nudgea.
+    const auto = !hasOverridePos && zones.length
+      ? nudgeRectFromZones({ x: n.x, y: n.y, w: n.w, h: n.h }, zones)
+      : n;
     return {
       id: n.id,
-      x: (ov?.x ?? n.x) + offsetX,
-      y: (ov?.y ?? n.y) + offsetY,
+      x: (ov?.x ?? auto.x) + offsetX,
+      y: (ov?.y ?? auto.y) + offsetY,
       w: n.w,
       h: n.h,
       layer: n.layer,
@@ -277,6 +291,8 @@ export function computeFlowchartLayout(spec, overrides = null) {
   const grid = makeCostGrid(width, height);
   const posById = new Map(nodes.map((n) => [n.id, n]));
   for (const n of nodes) blockRect(grid, n.x - 6, n.y - 6, n.w + 12, n.h + 12);
+  // Zonas de exclusión: ni nodos (ya nudgeados) ni aristas pueden cruzarlas.
+  blockExclusionZones(grid, zones, offsetX, offsetY);
 
   const routed = spec.edges.map((e, i) => {
     const from = posById.get(e.from);
@@ -286,14 +302,24 @@ export function computeFlowchartLayout(spec, overrides = null) {
     const b = edgeAnchor(to, sides.toSide);
 
     // El anclaje cae sobre el borde bloqueado: se sale un paso antes de rutear.
-    const out = stepOut(a, sides.fromSide, 10);
-    const into = stepOut(b, sides.toSide, 10);
-    const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
-    const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
-    // Convierte waypoints píxel → grid antes de pasarlos al A*.
-    const wpGrid = (e.waypoints ?? []).map((w) =>
-      pixelToGrid(snapDiagramGrid(w.x), snapDiagramGrid(w.y), grid.grid),
-    );
+    const out = stepOut(a, sides.fromSide, 16);
+    const into = stepOut(b, sides.toSide, 16);
+    // Snap direccional: nunca redondea de vuelta hacia el nodo del que se aleja
+    // (ver snapPointAwayFromSide — corrige el redondeo-al-más-cercano de antes).
+    const outSnap = snapPointAwayFromSide(out, sides.fromSide, grid.grid);
+    const intoSnap = snapPointAwayFromSide(into, sides.toSide, grid.grid);
+    const aGrid = pixelToGrid(outSnap.x, outSnap.y, grid.grid);
+    const bGrid = pixelToGrid(intoSnap.x, intoSnap.y, grid.grid);
+    // Convierte waypoints píxel → grid antes de pasarlos al A*, recortados al
+    // lienzo: un waypoint fuera de rango (dato de usuario, no del layout) no
+    // debe forzar a A* fuera de la rejilla, donde cae en su fallback recto.
+    const wpGrid = (e.waypoints ?? []).map((w) => {
+      const cell = pixelToGrid(snapDiagramGrid(w.x), snapDiagramGrid(w.y), grid.grid);
+      return {
+        col: Math.max(0, Math.min(grid.cols - 1, cell.col)),
+        row: Math.max(0, Math.min(grid.rows - 1, cell.row)),
+      };
+    });
     const points = wpGrid.length
       ? routeOrthogonal(aGrid, bGrid, grid, { waypoints: wpGrid })
       : routeOrthogonal(aGrid, bGrid, grid);
@@ -330,6 +356,9 @@ export function computeFlowchartLayout(spec, overrides = null) {
     nodes,
     edges: routed,
     groups: legendGroups,
+    // Rects en coords del lienzo final (con el mismo offset que los nodos),
+    // listos para dibujarse como zona sutil sin recalcular nada en el componente.
+    exclusionZones: zones.map((z) => ({ x: z.x + offsetX, y: z.y + offsetY, w: z.w, h: z.h, label: z.label })),
     title: title || undefined,
     subtitle: subtitle || undefined,
     titleY,
