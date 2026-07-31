@@ -1,5 +1,5 @@
 import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid } from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg } from '../_shared/diagram-astar.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { countIconifyTokens, extractLeadingIconifyToken } from '../_shared/tk-iconify-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
@@ -196,13 +196,11 @@ export function computeBlockLayout(spec) {
 
     const out = stepOut(a, sides.fromSide, 10);
     const into = stepOut(b, sides.toSide, 10);
-    const points = routeOrthogonal(
-      pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid),
-      pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid),
-      grid,
-    );
+    const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
+    const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
+    const points = routeOrthogonal(aGrid, bGrid, grid);
 
-    const path = `M${a.x},${a.y} ${gridPathToSvg(points, grid.grid).slice(1)} L${b.x},${b.y}`;
+    const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
     const tip = arrowTip(b, sides.toSide);
     const mid = points.length
       ? { x: points[Math.floor(points.length / 2)].col * grid.grid, y: points[Math.floor(points.length / 2)].row * grid.grid }

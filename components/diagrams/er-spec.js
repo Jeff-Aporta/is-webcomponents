@@ -1,6 +1,6 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid } from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg } from '../_shared/diagram-astar.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
 /**
@@ -213,13 +213,12 @@ export function computeErLayout(spec) {
     // Deja hueco para dibujar la marca de cardinalidad antes de salir a rutear.
     const out = stepOut(a, sides.fromSide, 18);
     const into = stepOut(b, sides.toSide, 18);
-    const points = routeOrthogonal(
-      pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid),
-      pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid),
-      grid,
-    );
+    const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
+    const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
+    const points = routeOrthogonal(aGrid, bGrid, grid);
 
-    const path = `M${a.x},${a.y} ${gridPathToSvg(points, grid.grid).slice(1)} L${b.x},${b.y}`;
+    const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
+
     const mid = points.length
       ? { x: points[Math.floor(points.length / 2)].col * grid.grid, y: points[Math.floor(points.length / 2)].row * grid.grid }
       : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };

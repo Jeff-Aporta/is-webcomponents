@@ -5,6 +5,7 @@ import {
   COST_BLOCKED,
   snapDiagramGrid,
   TK_DIAGRAM_GRID,
+  applyForbiddenRegions,
 } from './diagram-grid.js';
 
 const DIRS = [
@@ -136,13 +137,107 @@ function collapseColinear(points) {
 /** Ruta ortogonal A* con obstáculos y waypoints forzados. */
 export function routeOrthogonal(start, end, g, opts = {}) {
   const turnCost = opts.turnCost ?? 2;
-  const stops = [start, ...(opts.waypoints ?? []), end];
+  const waypoints = (opts.waypoints ?? []).filter((w) => w && Number.isFinite(w.col) && Number.isFinite(w.row));
+  if (opts.forbiddenRegions) {
+    if (Array.isArray(opts.forbiddenRegions)) {
+      for (const r of opts.forbiddenRegions) {
+        if (!g.forbidden) g.forbidden = new Map();
+        const id = r.id || `fr-${Math.random().toString(36).slice(2, 9)}`;
+        g.forbidden.set(id, r);
+      }
+    }
+    applyForbiddenRegions(g);
+  }
+  const stops = [start, ...waypoints, end];
   const full = [stops[0]];
   for (let i = 0; i < stops.length - 1; i++) {
     const seg = astarSegment(stops[i], stops[i + 1], g, turnCost);
     for (let j = 1; j < seg.length; j++) full.push(seg[j]);
   }
-  return collapseColinear(full);
+  const out = collapseColinear(full);
+  if (opts.forbiddenRegions && Array.isArray(opts.forbiddenRegions)) {
+    for (const r of opts.forbiddenRegions) {
+      if (r.id && g.forbidden?.has(r.id)) g.forbidden.delete(r.id);
+    }
+  }
+  return out;
+}
+
+/**
+ * Estética: cuenta cuántos giros de 90° tiene la polyline.
+ * Útil como heurística para preferir rutas "menos serpenteantes".
+ */
+export function countTurns(points) {
+  if (!points || points.length < 3) return 0;
+  let turns = 0;
+  let prevDx = 0, prevDy = 0;
+  for (let i = 1; i < points.length; i++) {
+    const dx = points[i].col - points[i - 1].col;
+    const dy = points[i].row - points[i - 1].row;
+    if (i > 1 && (dx !== prevDx || dy !== prevDy)) turns++;
+    prevDx = dx;
+    prevDy = dy;
+  }
+  return turns;
+}
+
+/** Longitud Manhattan total de la polyline (suma de |dx|+|dy|). */
+export function manhattanLength(points) {
+  if (!points || points.length < 2) return 0;
+  let total = 0;
+  for (let i = 1; i < points.length; i++) {
+    total += Math.abs(points[i].col - points[i - 1].col) + Math.abs(points[i].row - points[i - 1].row);
+  }
+  return total;
+}
+
+/**
+ * Genera candidatos de waypoints a lo largo del "corredor" entre start y end.
+ * Si start→end es horizontal, los candidatos son (midCol, ±offset) por encima
+ * y por debajo del eje. Si es vertical, análogo. Sirve para sugerir rutas
+ * que evitan obstáculos grandes atravesando por arriba o por abajo.
+ */
+export function suggestWaypoints(start, end, g, count = 4) {
+  const dx = end.col - start.col;
+  const dy = end.row - start.row;
+  const out = [];
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    const midCol = Math.round((start.col + end.col) / 2);
+    const halfRows = Math.max(2, Math.floor(g.rows / (count + 2)));
+    for (let i = 1; i <= count; i++) {
+      const off = i * halfRows;
+      out.push({ col: midCol, row: Math.max(1, Math.min(g.rows - 2, start.row - off)) });
+      out.push({ col: midCol, row: Math.max(1, Math.min(g.rows - 2, start.row + off)) });
+    }
+  } else {
+    const midRow = Math.round((start.row + end.row) / 2);
+    const halfCols = Math.max(2, Math.floor(g.cols / (count + 2)));
+    for (let i = 1; i <= count; i++) {
+      const off = i * halfCols;
+      out.push({ col: Math.max(1, Math.min(g.cols - 2, start.col - off)), row: midRow });
+      out.push({ col: Math.max(1, Math.min(g.cols - 2, start.col + off)), row: midRow });
+    }
+  }
+  return out;
+}
+
+/**
+ * Prueba la ruta directa + N rutas con waypoints sugeridos, y devuelve la
+ * de menor "costo estético" = turnos + longitud (con peso). Útil cuando el
+ * ruteo directo cae en diagonal zigzagueante y queremos forzar un corredor.
+ */
+export function routeWithAesthetics(start, end, g, opts = {}) {
+  const suggest = opts.suggestCount ?? 4;
+  const turnWeight = opts.turnWeight ?? 4;
+  const candidates = [start, ...suggestWaypoints(start, end, g, suggest), end];
+  let best = null;
+  for (let i = 0; i < candidates.length - 1; i++) {
+    const wp = candidates.slice(i + 1, -1);
+    const path = routeOrthogonal(start, end, g, { ...opts, waypoints: wp });
+    const cost = countTurns(path) * turnWeight + manhattanLength(path);
+    if (!best || cost < best.cost) best = { path, cost, waypoints: wp };
+  }
+  return best?.path ?? routeOrthogonal(start, end, g, opts);
 }
 
 export function gridToPixel(p, grid = TK_DIAGRAM_GRID) {
@@ -176,6 +271,30 @@ function arrowFromPolyline(points, grid = TK_DIAGRAM_GRID) {
     arrowTipY: b.y,
     arrowDir: (b.x >= a.x ? 1 : -1),
   };
+}
+
+/**
+ * Construye un path SVG ortogonal entre dos anclas reales (fuera de grid).
+ * Los anclas `a` y `b` están en píxeles; el A* corre entre dos puntos de
+ * rejilla interiores (`aGrid`/`bGrid`). Esta función los une con segmentos
+ * estrictamente horizontales o verticales — sin diagonales.
+ *
+ * Estructura del path:
+ *   M a                → arranca en el borde del nodo origen
+ *   L outPx(aGrid)     → sale recto hasta el primer punto del A*
+ *   <polyline A*>      → ortogonal entre aGrid y bGrid
+ *   L intoPx(bGrid)    → recto hasta antes del borde del nodo destino
+ *   L b                → entra al destino
+ */
+export function buildOrthogonalPath(a, b, aGrid, bGrid, points, grid = TK_DIAGRAM_GRID) {
+  const outPx = { x: aGrid.col * grid, y: aGrid.row * grid };
+  const intoPx = { x: bGrid.col * grid, y: bGrid.row * grid };
+  const segs = [`M${a.x},${a.y}`, `L${outPx.x},${outPx.y}`];
+  const star = gridPathToSvg(points, grid);
+  if (star) segs.push(star.slice(1));
+  segs.push(`L${intoPx.x},${intoPx.y}`);
+  segs.push(`L${b.x},${b.y}`);
+  return segs.join(' ');
 }
 
 /** Mensaje horizontal entre dos lifelines (A* sobre la rejilla de costos). */

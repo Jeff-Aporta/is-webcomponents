@@ -1,6 +1,6 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid } from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg } from '../_shared/diagram-astar.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
@@ -268,13 +268,11 @@ export function computeClassLayout(spec) {
     // El anclaje cae sobre el borde bloqueado: se sale un paso antes de rutear.
     const out = stepOut(a, sides.fromSide, 10);
     const into = stepOut(b, sides.toSide, 10);
-    const points = routeOrthogonal(
-      pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid),
-      pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid),
-      grid,
-    );
+    const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
+    const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
+    const points = routeOrthogonal(aGrid, bGrid, grid);
 
-    const path = `M${a.x},${a.y} ${gridPathToSvg(points, grid.grid).slice(1)} L${b.x},${b.y}`;
+    const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
     const targetTip = tipAt(b, sides.toSide);
     const sourceTip = tipAt(a, sides.fromSide);
     const mid = points.length

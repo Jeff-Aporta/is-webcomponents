@@ -1,6 +1,6 @@
 import { parseDate, addDuration, timeScale, niceTimeTicks } from '../_shared/lane-layout.js';
 import { makeCostGrid, blockRect, snapDiagramGrid } from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg } from '../_shared/diagram-astar.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
@@ -187,12 +187,10 @@ export function computeGanttLayout(spec, opts = {}) {
         : { x: to.x, y: to.y + to.h / 2 };
       const out = { x: a.x + 8, y: a.y };
       const into = { x: b.x - 8, y: b.y };
-      const points = routeOrthogonal(
-        pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid),
-        pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid),
-        grid,
-      );
-      const path = `M${a.x},${a.y} ${gridPathToSvg(points, grid.grid).slice(1)} L${b.x},${b.y}`;
+      const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
+      const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
+      const points = routeOrthogonal(aGrid, bGrid, grid);
+      const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
       arrows.push({
         id: `${depId}->${t.id}`, from: depId, to: t.id, path,
         arrowTipX: b.x, arrowTipY: b.y, arrowAngle: 0,
