@@ -7,6 +7,15 @@ import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { iconifyApiUrl } from '../_shared/tk-iconify-inline.js';
 import { ensureIconify } from '../_shared/iconify-loader.js';
 import { registerDiagramKind } from './diagram-kinds.js';
+import {
+  loadOverrides,
+  saveOverrides,
+  emitLayoutChange,
+  applyOverrides,
+  attachNodeDrag,
+  snap as snapToGrid,
+  openInlineEditor,
+} from '../_shared/diagram-edit.js';
 
 /**
  * <is-flowchart> — diagrama de flujo en SVG, sin Mermaid.
@@ -35,7 +44,7 @@ function svgEl(tag, attrs = {}) {
 }
 
 class IsFlowchart extends HTMLElement {
-  static get observedAttributes() { return ['variant']; }
+  static get observedAttributes() { return ['variant', 'mode', 'persist', 'storage-key']; }
 
   #wrap; #svg; #tooltipEl;
   #payload = null;
@@ -51,6 +60,8 @@ class IsFlowchart extends HTMLElement {
   #edgeNodes = new Map();
   #hoverId = null;
   #ownLightbox = null;
+  #overrides = null;
+  #dragDetach = null;
 
   constructor() {
     super();
@@ -71,6 +82,7 @@ class IsFlowchart extends HTMLElement {
   connectedCallback() {
     this.#mounted = true;
     ensureIconify().catch(() => { /* sin CDN el texto sigue siendo legible */ });
+    this.#overrides = loadOverrides(this, this.getAttribute('storage-key')) || { nodes: {}, edges: {} };
     this.#readJsonSlot();
     this.#mo = new MutationObserver(() => this.#readJsonSlot());
     this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
@@ -83,6 +95,11 @@ class IsFlowchart extends HTMLElement {
     this.#wrap.addEventListener('click', this.#onClick);
     this.#queueRender();
   }
+
+  get mode() { return this.getAttribute('mode') || 'read'; }
+  set mode(v) { this.setAttribute('mode', v); }
+  get overrides() { return this.#overrides; }
+  set overrides(v) { this.#overrides = v || { nodes: {}, edges: {} }; this.#queueRender(); }
 
   disconnectedCallback() {
     this.#mounted = false;
@@ -162,10 +179,12 @@ class IsFlowchart extends HTMLElement {
     this.#theme = theme;
     this.#wrap.dataset.theme = dark ? 'dark' : 'light';
 
-    const layout = computeFlowchartLayout(visible);
+    const layout = computeFlowchartLayout(visible, this.#overrides);
     this.#layout = layout;
     this.#buildSvg(layout, theme);
     this.#wrap.classList.toggle('is-viewer', this.isViewer);
+    this.#wrap.classList.toggle('is-editable', this.mode === 'edit');
+    if (this.mode === 'edit') this.#installEditInteractions();
   }
 
   #buildSvg(layout, theme) {
@@ -361,6 +380,16 @@ class IsFlowchart extends HTMLElement {
   /* ── hover ── */
 
   #onClick = (e) => {
+    // Modo edición: doble click en nodo → editor inline.
+    if (this.mode === 'edit') {
+      const nodeEl = e.composedPath().find((x) => x?.dataset?.nodeId);
+      if (nodeEl && e.detail === 2) {
+        e.preventDefault();
+        const entry = this.#nodeNodes.get(nodeEl.dataset.nodeId);
+        if (entry) this.#openEditorForNode(entry.n);
+      }
+      return;
+    }
     if (this.isViewer) {
       const item = e.composedPath().find((x) => x?.dataset?.groupId);
       if (item) {
@@ -376,6 +405,57 @@ class IsFlowchart extends HTMLElement {
     this.dispatchEvent(ev);
     if (!ev.defaultPrevented && !this.hasAttribute('without-viewer')) this.#openOwnViewer();
   };
+
+  /* ── edit mode: drag de nodos + editor inline ── */
+
+  #installEditInteractions() {
+    this.#dragDetach?.();
+    this.#dragDetach = null;
+    for (const { g, n } of this.#nodeNodes.values()) {
+      g.style.cursor = 'grab';
+      const entry = this.#nodeNodes.get(g.dataset.nodeId);
+      const detach = attachNodeDrag(
+        g,
+        (dx, dy) => {
+          // Preview: trasladamos el grupo en SVG coords. Como el viewBox
+          // está en SVG coords (1:1 con layout interno), usamos dx/dy tal
+          // cual. Si el SVG está escalado por CSS, la sensación es que el
+          // cursor "arrastra" más rápido que el nodo — aceptable para
+          // el primer piloto. Se recalculará en el snap final.
+          entry.n.x += dx;
+          entry.n.y += dy;
+        },
+        () => {
+          const cur = entry.n;
+          cur.x = snapToGrid(cur.x);
+          cur.y = snapToGrid(cur.y);
+          this.#overrides.nodes[cur.id] ??= {};
+          this.#overrides.nodes[cur.id].x = cur.x;
+          this.#overrides.nodes[cur.id].y = cur.y;
+          saveOverrides(this, this.getAttribute('storage-key'), this.#overrides);
+          emitLayoutChange(this, { nodeId: cur.id, x: cur.x, y: cur.y, overrides: this.#overrides });
+          this.#queueRender();
+        },
+      );
+      this.#dragDetach = detach;
+    }
+  }
+
+  #openEditorForNode(node) {
+    const rect = this.getBoundingClientRect();
+    openInlineEditor({
+      anchor: { x: rect.left + node.x, y: rect.top + node.y - 36 },
+      initial: { label: node.label, hue: node.hue },
+      onSave: ({ label, hue }) => {
+        if (!this.#overrides.nodes[node.id]) this.#overrides.nodes[node.id] = {};
+        if (label) this.#overrides.nodes[node.id].label = label;
+        if (Number.isFinite(hue)) this.#overrides.nodes[node.id].hue = hue;
+        saveOverrides(this, this.getAttribute('storage-key'), this.#overrides);
+        emitLayoutChange(this, { nodeId: node.id, overrides: this.#overrides });
+        this.#queueRender();
+      },
+    });
+  }
 
   async #openOwnViewer() {
     await import('./diagram-lightbox.js');

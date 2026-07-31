@@ -70,6 +70,15 @@ function readNode(raw, i) {
 
 function readEdge(raw, i) {
   const r = asRecord(raw);
+  // Waypoints opcionales: fuerzan el A* a pasar por coordenadas en píxeles.
+  // Cada item es { x, y } en el plano del SVG. Sirven para guiar la ruta
+  // estéticamente cuando el algoritmo directo cae en zigzag.
+  const waypoints = Array.isArray(r.waypoints)
+    ? r.waypoints
+        .map((w) => asRecord(w))
+        .filter((w) => Number.isFinite(w.x) && Number.isFinite(w.y))
+        .map((w) => ({ x: Number(w.x), y: Number(w.y) }))
+    : undefined;
   return {
     id: String(r.id ?? `e${i}`),
     from: String(r.from ?? r.source ?? ''),
@@ -77,6 +86,7 @@ function readEdge(raw, i) {
     label: String(r.label ?? '').trim() || undefined,
     kind: r.kind === 'dashed' || r.kind === 'thick' ? r.kind : 'solid',
     group: String(r.group ?? '') || undefined,
+    waypoints: waypoints?.length ? waypoints : undefined,
   };
 }
 
@@ -199,7 +209,15 @@ const MARGIN = { top: 16, right: 20, bottom: 20, left: 20 };
  * spec → geometría lista para pintar.
  * @returns {{width:number, height:number, nodes:Array, edges:Array, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
  */
-export function computeFlowchartLayout(spec) {
+/**
+ * spec → objeto listo para pintar.
+ *
+ * Acepta un parámetro opcional `overrides` con la forma:
+ *   { nodes: { [id]: { x?, y?, label?, hue? } }, edges: { [id]: { label?, hue? } } }
+ * Si un nodo tiene x/y en overrides, se respeta esa posición exacta en lugar
+ * de la calculada por el layout Sugiyama. Sirve para el modo edición.
+ */
+export function computeFlowchartLayout(spec, overrides = null) {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
@@ -228,18 +246,19 @@ export function computeFlowchartLayout(spec) {
 
   const nodes = placed.nodes.map((n) => {
     const s = specById.get(n.id);
+    const ov = overrides?.nodes?.[n.id];
     return {
       id: n.id,
-      x: n.x + offsetX,
-      y: n.y + offsetY,
+      x: (ov?.x ?? n.x) + offsetX,
+      y: (ov?.y ?? n.y) + offsetY,
       w: n.w,
       h: n.h,
       layer: n.layer,
-      label: s.label,
+      label: ov?.label ?? s.label,
       shape: s.shape,
       icon: s.icon,
       description: s.description,
-      hue: s.hue ?? (s.group ? groupHue.get(s.group) : undefined),
+      hue: ov?.hue ?? s.hue ?? (s.group ? groupHue.get(s.group) : undefined),
       group: s.group,
     };
   });
@@ -271,7 +290,13 @@ export function computeFlowchartLayout(spec) {
     const into = stepOut(b, sides.toSide, 10);
     const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
     const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
-    const points = routeOrthogonal(aGrid, bGrid, grid);
+    // Convierte waypoints píxel → grid antes de pasarlos al A*.
+    const wpGrid = (e.waypoints ?? []).map((w) =>
+      pixelToGrid(snapDiagramGrid(w.x), snapDiagramGrid(w.y), grid.grid),
+    );
+    const points = wpGrid.length
+      ? routeOrthogonal(aGrid, bGrid, grid, { waypoints: wpGrid })
+      : routeOrthogonal(aGrid, bGrid, grid);
 
     const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
     const tip = arrowTip(b, sides.toSide);
@@ -282,11 +307,12 @@ export function computeFlowchartLayout(spec) {
     // La etiqueta ocupa espacio: encarece la zona para que otras aristas la esquiven.
     if (e.label) applyRectCost(grid, mid.x - 30, mid.y - 9, 60, 18, 6, true);
 
+    const eOv = overrides?.edges?.[e.id];
     return {
       id: e.id ?? `e${i}`,
       from: e.from,
       to: e.to,
-      label: e.label,
+      label: eOv?.label ?? e.label,
       kind: e.kind,
       path,
       arrowTipX: tip.x,
@@ -294,7 +320,7 @@ export function computeFlowchartLayout(spec) {
       arrowAngle: tip.angle,
       labelX: mid.x,
       labelY: mid.y,
-      hue: e.group ? groupHue.get(e.group) : undefined,
+      hue: eOv?.hue ?? (e.group ? groupHue.get(e.group) : undefined),
     };
   });
 
