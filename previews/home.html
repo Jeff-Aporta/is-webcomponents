@@ -28,6 +28,7 @@
   <script type="module" src="../components/charts/bubble-chart.js"></script>
   <script type="module" src="../components/feedback/tag.js"></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
   <style>
     html, body { height: 100%; margin: 0; }
     body { overflow: hidden; }
@@ -47,21 +48,26 @@
     .home {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-      gap: clamp(1.5rem, 4vw, 3.5rem);
-      align-items: center;
+      grid-template-areas:
+        "hero stage"
+        "lab  lab";
+      gap: clamp(1.5rem, 4vw, 3.5rem) clamp(1.5rem, 4vw, 3.5rem);
       min-height: 100%;
       padding: clamp(1.75rem, 4.5vw, 4rem) clamp(1.25rem, 4vw, 3.5rem);
       box-sizing: border-box;
     }
 
+    .home-hero { grid-area: hero; align-self: start; min-width: 0; }
+    .home-stage { grid-area: stage; align-self: start; min-width: 0; }
+    .home-lab   { grid-area: lab; }
+
     /* ── Charts lab: grid ancho debajo del hero/showcase ──────────────── */
     .home-lab {
-      grid-column: 1 / -1;
       display: grid;
       gap: 1rem;
       perspective: 1400px;
       perspective-origin: 50% 30%;
-      margin-top: clamp(2rem, 5vw, 4rem);
+      margin-top: clamp(1rem, 3vw, 2rem);
     }
 
     .home-lab__head {
@@ -276,6 +282,8 @@
       margin-top: 0.9rem;
       max-width: 36rem;
       width: 100%;
+      position: relative;
+      z-index: 5;
     }
 
     .home-cdn__tabs {
@@ -361,6 +369,12 @@
       color: var(--is-color-success-500, #40c057);
     }
 
+    .home-cdn__actions {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
     .home-cdn__pre {
       margin: 0;
       padding: 0.7rem 0.8rem;
@@ -396,6 +410,7 @@
       min-height: 30rem;
       perspective: 1400px;
       perspective-origin: 60% 50%;
+      overflow: hidden;
     }
 
     .home-stage__grid {
@@ -580,6 +595,10 @@
     @media (max-width: 960px) {
       .home {
         grid-template-columns: 1fr;
+        grid-template-areas:
+          "hero"
+          "stage"
+          "lab";
         align-items: start;
       }
       .home-stage__grid { transform: none; }
@@ -639,23 +658,35 @@
           <div class="home-cdn__panel" data-panel="js">
             <div class="home-cdn__panel-header">
               <span class="home-cdn__hint">Carga el tema base y los componentes que necesites</span>
-              <button type="button" class="home-cdn__copy" data-copy="js" aria-label="Copiar snippet JS y CSS">
-                <is-icon icon="mdi:content-copy"></is-icon>
-                Copiar
-              </button>
+              <div class="home-cdn__actions">
+                <button type="button" class="home-cdn__copy" data-copy="js" aria-label="Copiar snippet JS y CSS">
+                  <is-icon icon="mdi:content-copy"></is-icon>
+                  Copiar
+                </button>
+                <button type="button" class="home-cdn__copy" data-download="js" aria-label="Descargar index.html de prueba">
+                  <is-icon icon="mdi:download-outline"></is-icon>
+                  Descargar HTML
+                </button>
+              </div>
             </div>
-            <pre class="home-cdn__pre" data-lang="html" id="cdnJsCss"></pre>
+            <pre class="code home-cdn__pre" data-lang="html" id="cdnJsCss"></pre>
           </div>
 
           <div class="home-cdn__panel" data-panel="bundle" hidden>
             <div class="home-cdn__panel-header">
               <span class="home-cdn__hint">Bundle precompilado con todos los componentes</span>
-              <button type="button" class="home-cdn__copy" data-copy="bundle" aria-label="Copiar snippet bundle">
-                <is-icon icon="mdi:content-copy"></is-icon>
-                Copiar
-              </button>
+              <div class="home-cdn__actions">
+                <button type="button" class="home-cdn__copy" data-copy="bundle" aria-label="Copiar snippet bundle">
+                  <is-icon icon="mdi:content-copy"></is-icon>
+                  Copiar
+                </button>
+                <button type="button" class="home-cdn__copy" data-download="bundle" aria-label="Descargar index.html de prueba">
+                  <is-icon icon="mdi:download-outline"></is-icon>
+                  Descargar HTML
+                </button>
+              </div>
             </div>
-            <pre class="home-cdn__pre" data-lang="html" id="cdnBundle"></pre>
+            <pre class="code home-cdn__pre" data-lang="html" id="cdnBundle"></pre>
           </div>
         </div>
       </section>
@@ -996,99 +1027,8 @@
     document.getElementById('ctaButton')?.addEventListener('click', () => postSelect('is-button'));
     document.getElementById('ctaCharts')?.addEventListener('click', () => postSelect('is-bar-chart'));
 
-    /* ── Snippet de consumo por CDN ─────────────────────────────────── */
-    const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
-
-    const jsCssSnippet =
-`<link rel="stylesheet" href="${CDN}/is-base.min.css">
-
-<!-- Solo carga los componentes que necesites -->
-<script type="module" src="${CDN}/button.min.js"><\/script>
-<script type="module" src="${CDN}/card.min.js"><\/script>
-<script type="module" src="${CDN}/chart.min.js"><\/script>
-<script type="module" src="${CDN}/data-grid.min.js"><\/script>
-<script type="module" src="${CDN}/bar-chart.min.js"><\/script>
-
-<!-- Cada .min.js carga su .min.css hermano dentro de su Shadow DOM. -->
-
-<is-button variant="brand">Explorar</is-button>
-<is-data-grid columns='[{"field":"id","headerName":"ID"}]' rows='[{"id":1}]'></is-data-grid>`;
-
-    const bundleSnippet =
-`<link rel="stylesheet" href="${CDN}/is-base.min.css">
-
-<!-- Import map para resolver "is-*" al CDN de jsDelivr -->
-<script type="importmap">
-{
-  "imports": {
-    "@is-webcomponents/": "${CDN}/"
-  }
-}
-<\/script>
-
-<script type="module">
-  import '@is-webcomponents/button.min.js';
-  import '@is-webcomponents/card.min.js';
-  import '@is-webcomponents/data-grid.min.js';
-  import '@is-webcomponents/chart.min.js';
-<\/script>
-
-<is-button variant="brand">Hola mundo</is-button>`;
-
-    document.getElementById('cdnJsCss').textContent = jsCssSnippet;
-    document.getElementById('cdnBundle').textContent = bundleSnippet;
-
-    // Resaltado por CodeMirror si está disponible.
-    if (typeof window.__isHighlightCode === 'function') {
-      window.__isHighlightCode(document.getElementById('cdnJsCss'));
-      window.__isHighlightCode(document.getElementById('cdnBundle'));
-    }
-
-    // Tabs.
-    const tabs = document.querySelectorAll('.home-cdn__tab');
-    const panels = document.querySelectorAll('.home-cdn__panel');
-    tabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.tab;
-        tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
-        panels.forEach((p) => { p.hidden = p.dataset.panel !== target; });
-      });
-    });
-
-    // Copy-to-clipboard.
-    const writeText = async (text) => {
-      if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.cssText = 'position:fixed;left:-9999px;top:0';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      ta.remove();
-    };
-
-    document.querySelectorAll('.home-cdn__copy').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const key = btn.dataset.copy;
-        const text = key === 'bundle' ? bundleSnippet : jsCssSnippet;
-        try {
-          await writeText(text);
-          btn.setAttribute('aria-pressed', 'true');
-          const label = btn.querySelector('is-icon');
-          if (label) label.setAttribute('icon', 'mdi:check');
-          btn.lastChild && (btn.lastChild.textContent = ' Copiado');
-          setTimeout(() => {
-            btn.removeAttribute('aria-pressed');
-            if (label) label.setAttribute('icon', 'mdi:content-copy');
-            btn.lastChild && (btn.lastChild.textContent = ' Copiar');
-          }, 1500);
-        } catch {
-          btn.lastChild && (btn.lastChild.textContent = ' Error');
-          setTimeout(() => { btn.lastChild && (btn.lastChild.textContent = ' Copiar'); }, 1500);
-        }
-      });
-    });
+    // El resto (snippets, copy, download) vive en scripts/home-cdn.js
   </script>
+  <script type="module" src="../scripts/home-cdn.js"></script>
 </body>
 </html>
