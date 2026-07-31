@@ -1,0 +1,144 @@
+/* <is-drawer> — panel deslizante desde un borde del viewport. */
+
+:host {
+  --size: 380px;
+  --spacing: var(--is-space-l, 1rem);
+  --backdrop-color: rgba(0, 0, 0, 0.45);
+  --show-duration: 220ms;
+  --hide-duration: 180ms;
+
+  --_radius: calc(var(--is-radius, 0.75em));
+  --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18), 8px 0 24px rgba(0, 0, 0, 0.18);
+
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Por defecto: oculto pero proyectando slots (visibility preserva slot projection). */
+:host(:not([data-state])) .drawer { visibility: hidden; }
+:host(:not([data-state])) .backdrop { visibility: hidden; }
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--backdrop-color);
+  opacity: 0;
+  pointer-events: auto;
+}
+
+.drawer {
+  position: fixed;
+  background: var(--is-bg, #fff);
+  color: var(--is-text, inherit);
+  box-shadow: var(--_shadow);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  pointer-events: auto;
+  outline: none;
+  overflow: hidden;
+}
+
+:host([placement="end"]) .drawer,
+:host([placement="start"]) .drawer {
+  width: min(var(--size), calc(100vw - 2 * var(--spacing)));
+  height: 100vh;
+  top: 0;
+  bottom: 0;
+}
+:host([placement="end"])   .drawer { right: 0; left: auto; }
+:host([placement="start"]) .drawer { left: 0;  right: auto; }
+
+:host([placement="top"]),
+:host([placement="bottom"]) {
+  --_shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+:host([placement="top"]),
+:host([placement="bottom"]) .drawer {
+  height: min(var(--size), calc(100vh - 2 * var(--spacing)));
+  width: 100vw;
+  left: 0;
+  right: 0;
+}
+:host([placement="top"])    .drawer { top: 0;    bottom: auto; }
+:host([placement="bottom"]) .drawer { bottom: 0; top: auto; }
+
+:host([placement="end"]) .drawer,
+:host([placement="top"]) .drawer {
+  border-top-left-radius: var(--_radius);
+  border-bottom-left-radius: var(--_radius);
+}
+:host([placement="start"]) .drawer,
+:host([placement="bottom"]) .drawer {
+  border-top-right-radius: var(--_radius);
+  border-bottom-right-radius: var(--_radius);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing);
+  padding: calc(var(--spacing) * 0.85) var(--spacing);
+  border-bottom: 1px solid var(--is-border, transparent);
+  font-family: var(--is-font-family, inherit);
+}
+
+.title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 1.125rem;
+  font-weight: 650;
+  color: inherit;
+  line-height: 1.3;
+}
+.title:empty { display: none; }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  flex: 0 0 auto;
+}
+.header-actions:empty { display: none; }
+
+.close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--is-text-muted, #6c757d);
+  cursor: pointer;
+  border-radius: 999px;
+  font-size: 1rem;
+  transition: background 120ms ease, color 120ms ease;
+}
+.close-btn:hover { background: var(--is-bg-elev, #f1f3f5); color: var(--is-text, #212529); }
+.close-btn:focus-visible { outline: 2px solid var(--is-focus, #339af0); outline-offset: 2px; }
+
+.body {
+  padding: var(--spacing);
+  overflow-y: auto;
+  min-height: 0;
+  font-family: var(--is-font-family, inherit);
+}
+.body ::slotted(:first-child) { margin-top: 0; }
+.body ::slotted(:last-child)  { margin-bottom: 0; }
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5em;
+  padding: calc(var(--spacing) * 0.65) var(--spacing);
+  border-top: 1px solid var(--is-border, transparent);
+  background: var(--is-bg-elev, transparent);
+}
+.footer:empty, .footer[hidden] { display: none; }
+.footer ::slotted(*) { margin: 0; }

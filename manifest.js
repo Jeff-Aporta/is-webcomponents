@@ -25,6 +25,7 @@ export default [
   { tag: 'is-callout', title: 'Callout', category: 'layout', script: '../components/layout/callout.js', style: '../components/layout/callout.css', page: 'is-callout.html' },
   { tag: 'is-details', title: 'Details', category: 'layout', script: '../components/layout/details.js', style: '../components/layout/details.css', page: 'is-details.html' },
   { tag: 'is-dialog', title: 'Dialog', category: 'layout', script: '../components/layout/dialog.js', style: '../components/layout/dialog.css', page: 'is-dialog.html' },
+  { tag: 'is-drawer', title: 'Drawer', category: 'layout', script: '../components/layout/drawer.js', style: '../components/layout/drawer.css', page: 'is-drawer.html' },
   { tag: 'is-divider', title: 'Divider', category: 'layout', script: '../components/layout/divider.js', style: '../components/layout/divider.css', page: 'is-divider.html' },
   { tag: 'is-scrollspy', title: 'Scrollspy', category: 'layout', script: '../components/layout/scrollspy.js', style: '../components/layout/scrollspy.css', page: 'is-scrollspy.html' },
   { tag: 'is-popover', title: 'Popover', category: 'helpers', script: '../components/helpers/popover.js', style: '../components/helpers/popover.css', page: 'is-popover.html' },
