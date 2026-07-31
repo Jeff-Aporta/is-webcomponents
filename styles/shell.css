@@ -170,34 +170,75 @@ body {
     user-select: none;
   }
 
+  /* El item ahora es <details> — quitamos el marker nativo y damos estilo al summary. */
   & .shell-nav__item {
-    appearance: none;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.05em;
-    border: 1px solid transparent;
-    border-radius: 0.35em;
+    display: block;
+    border: 0;
     background: transparent;
     color: var(--is-text);
-    /* ~70% de la altura original (el 50% quedó demasiado bajo) */
-    padding: 0.28em 0.5em 0.28em 0.95em;
-    margin-inline-start: 0.35em;
-    text-align: left;
-    font: inherit;
-    font-size: 0.9em;
-    line-height: 1.22;
-    cursor: pointer;
-    transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 
-    &:hover { background: var(--is-control-bg-hover); }
+    & > summary {
+      list-style: none;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "title toggle"
+        "tag   toggle";
+      align-items: center;
+      column-gap: 0.4em;
+      row-gap: 0.05em;
+      padding: 0.28em 0.5em 0.28em 0.95em;
+      margin-inline-start: 0.35em;
+      border: 1px solid transparent;
+      border-radius: 0.35em;
+      background: transparent;
+      color: var(--is-text);
+      font: inherit;
+      font-size: 0.9em;
+      line-height: 1.22;
+      transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 
-    &:focus-visible {
-      outline: 2px solid var(--is-focus);
-      outline-offset: 1px;
+      &:hover { background: var(--is-control-bg-hover); }
+      &:focus-visible {
+        outline: 2px solid var(--is-focus);
+        outline-offset: 1px;
+      }
+      &::-webkit-details-marker { display: none; }
+
+      & .shell-nav__title {
+        grid-area: title;
+        line-height: 1.22;
+      }
+      & .shell-nav__tag {
+        grid-area: tag;
+        font-family: var(--is-mono, ui-monospace, monospace);
+        font-size: 0.72em;
+        font-weight: 500;
+        line-height: 1.15;
+        color: var(--is-text-dim);
+        word-break: break-all;
+      }
+      & .shell-nav__cdn-toggle {
+        grid-area: toggle;
+        appearance: none;
+        padding: 0.18em 0.5em;
+        font-size: 0.65em;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        border: 1px solid var(--is-control-border);
+        border-radius: 999px;
+        background: var(--is-control-bg);
+        color: var(--is-control-text);
+        cursor: pointer;
+        line-height: 1;
+
+        &:hover { filter: brightness(1.05); }
+      }
     }
 
-    &[aria-current="true"] {
+    &[aria-current="true"] > summary {
       background: var(--is-brand-soft);
       border-color: var(--is-brand-soft-active);
       color: var(--is-brand-text);
@@ -208,25 +249,73 @@ body {
       }
     }
 
-    &.shell-nav__item--home {
+    &.shell-nav__item--home > summary {
       margin-inline-start: 0;
       padding-inline-start: 0.5em;
       margin-block-end: 0.35em;
       font-weight: 600;
     }
-  }
 
-  & .shell-nav__title {
-    line-height: 1.22;
-  }
+    & .shell-nav__cdn {
+      display: grid;
+      gap: 0.5em;
+      padding: 0.55em 0.6em 0.7em;
+      margin: 0.15em 0 0.35em 0.95em;
+      border-left: 2px solid var(--is-border);
+      background: color-mix(in srgb, var(--is-bg) 75%, transparent);
+      border-radius: 0.25em;
+      font-size: 0.78em;
+    }
 
-  & .shell-nav__tag {
-    font-family: var(--is-mono, ui-monospace, monospace);
-    font-size: 0.72em;
-    font-weight: 500;
-    line-height: 1.15;
-    color: var(--is-text-dim);
-    word-break: break-all;
+    & .shell-nav__cdn-row {
+      display: grid;
+      gap: 0.25em;
+      min-width: 0;
+    }
+
+    & .shell-nav__cdn-label {
+      font-size: 0.85em;
+      color: var(--is-text-dim);
+      line-height: 1.2;
+      & code { font-family: var(--is-mono, ui-monospace, monospace); color: var(--is-text); }
+    }
+
+    & .shell-nav__cdn-pre {
+      margin: 0;
+      padding: 0.4em 0.5em;
+      font-family: var(--is-mono, ui-monospace, monospace);
+      font-size: 0.85em;
+      background: var(--is-bg);
+      color: var(--is-text);
+      border: 1px solid var(--is-border);
+      border-radius: 0.3em;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.35;
+      max-height: 5.5em;
+      overflow: auto;
+    }
+
+    & .shell-nav__copy {
+      appearance: none;
+      justify-self: end;
+      padding: 0.2em 0.55em;
+      font-size: 0.78em;
+      font-weight: 600;
+      border: 1px solid var(--is-control-border);
+      border-radius: 0.3em;
+      background: var(--is-control-bg);
+      color: var(--is-control-text);
+      cursor: pointer;
+      line-height: 1.2;
+
+      &:hover { background: var(--is-control-bg-hover); }
+      &.is-copied {
+        background: var(--is-success-soft, color-mix(in srgb, var(--is-success-500, #2f9e44) 18%, transparent));
+        color: var(--is-success-700, var(--is-text));
+        border-color: var(--is-success-500, transparent);
+      }
+    }
   }
 }
 

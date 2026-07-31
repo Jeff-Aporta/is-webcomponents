@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-details · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-details de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/feedback/badge.js"></script>
+  <script type="module" src="../components/layout/details.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-details">
+
+      <!-- ===== 1. INTRO ===== -->
+      <section class="section" id="intro">
+        <h2>&lt;is-details&gt;</h2>
+        <p class="lede">
+          Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente
+          accesible al <code class="code">&lt;details&gt;</code> nativo, con apariencias,
+          iconos, animaciones y comportamiento de accordion opcional.
+        </p>
+
+        <div class="demo">
+          <span class="demo-label">caso mínimo</span>
+          <is-details summary="¿Qué es Insoft?">
+            Insoft es un ERP modular para empresas medianas que necesitan integrar
+            contabilidad, inventario, facturación y CRM en una sola plataforma.
+          </is-details>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">summary</span>=<span class="val">"¿Qué es Insoft?"</span><span class="tag">&gt;</span>
+  Insoft es un ERP modular…
+<span class="tag">&lt;/is-details&gt;</span></pre>
+      </section>
+
+      <!-- ===== 2. APARIENCIAS ===== -->
+      <section class="section" id="appearances">
+        <h2>Apariencias</h2>
+        <p class="lede">
+          El atributo <code class="code">appearance</code> ajusta el fondo y borde.
+          Default: <code class="code">outlined</code>.
+        </p>
+
+        <div class="demo-stack">
+          <is-details appearance="outlined" summary="outlined">Borde 1px, fondo transparente.</is-details>
+          <is-details appearance="filled" summary="filled">Fondo elevado, sin borde.</is-details>
+          <is-details appearance="filled-outlined" summary="filled-outlined">Fondo + borde.</is-details>
+          <is-details appearance="plain" summary="plain">Sin fondo ni borde, solo espaciado.</is-details>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">appearance</span>=<span class="val">"filled"</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span></pre>
+      </section>
+
+      <!-- ===== 3. POSICIÓN DEL ICONO ===== -->
+      <section class="section" id="icon-placement">
+        <h2>Posición del icono</h2>
+        <p class="lede">
+          <code class="code">icon-placement</code>: <code class="code">start</code> o
+          <code class="code">end</code>. Default: <code class="code">end</code>.
+        </p>
+
+        <div class="demo-stack">
+          <is-details icon-placement="end" summary="icono al final (default)">Contenido que se revela al hacer click.</is-details>
+          <is-details icon-placement="start" summary="icono al inicio">El chevron rota 180° al expandir y se ubica a la izquierda.</is-details>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">icon-placement</span>=<span class="val">"start"</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span></pre>
+      </section>
+
+      <!-- ===== 4. ICONO CUSTOM ===== -->
+      <section class="section" id="custom-icons">
+        <h2>Iconos custom</h2>
+        <p class="lede">
+          Slots <code class="code">expand-icon</code> y <code class="code">collapse-icon</code>
+          para reemplazar el chevron por defecto.
+        </p>
+
+        <div class="demo-stack">
+          <is-details summary="Resumen con icono plus/minus">
+            <is-icon slot="expand-icon" icon="mdi:plus" aria-hidden="true"></is-icon>
+            <is-icon slot="collapse-icon" icon="mdi:minus" aria-hidden="true"></is-icon>
+            Al expandirse se muestra un signo menos; al colapsarse, un más.
+          </is-details>
+
+          <is-details summary="Pregunta frecuente" icon-placement="start">
+            <is-icon slot="expand-icon" icon="mdi:help-circle-outline" aria-hidden="true"></is-icon>
+            <is-icon slot="collapse-icon" icon="mdi:help-circle" aria-hidden="true"></is-icon>
+            Cambia el icono según el estado.
+          </is-details>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-icon</span> <span class="attr">slot</span>=<span class="val">"expand-icon"</span> <span class="attr">icon</span>=<span class="val">"mdi:plus"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-icon&gt;</span>
+  <span class="tag">&lt;is-icon</span> <span class="attr">slot</span>=<span class="val">"collapse-icon"</span> <span class="attr">icon</span>=<span class="val">"mdi:minus"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-icon&gt;</span>
+  Contenido…
+<span class="tag">&lt;/is-details&gt;</span></pre>
+      </section>
+
+      <!-- ===== 5. SUMMARY RICO ===== -->
+      <section class="section" id="rich-summary">
+        <h2>Summary rico (slot)</h2>
+        <p class="lede">
+          En lugar del atributo <code class="code">summary</code>, usa el slot
+          <code class="code">summary</code> para contenido rico (iconos, badges, etc.).
+        </p>
+
+        <div class="demo-stack">
+          <is-details>
+            <div slot="summary">
+              <strong>Pedido #A-10293</strong>
+              <is-badge variant="success" appearance="filled" style="margin-left:.5em">Enviado</is-badge>
+            </div>
+            Cliente: Distribuidora del Norte · Total: $1.245,00 · 3 ítems.
+          </is-details>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-details&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">slot</span>=<span class="val">"summary"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;strong&gt;</span>Pedido #A-10293<span class="tag">&lt;/strong&gt;</span>
+    <span class="tag">&lt;is-badge</span> <span class="attr">variant</span>=<span class="val">"success"</span><span class="tag">&gt;</span>Enviado<span class="tag">&lt;/is-badge&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  Cliente: …
+<span class="tag">&lt;/is-details&gt;</span></pre>
+      </section>
+
+      <!-- ===== 6. ACCORDION ===== -->
+      <section class="section" id="accordion">
+        <h2>Accordion (varios <code>name</code>)</h2>
+        <p class="lede">
+          Cuando varios <code class="code">is-details</code> comparten el atributo
+          <code class="code">name</code>, abrir uno cierra los demás.
+        </p>
+
+        <div class="demo-stack">
+          <is-details name="faq" summary="¿Cómo cambio de plan?">
+            Ve a Configuración → Plan y elige el nuevo plan. El cambio se aplica al final del ciclo.
+          </is-details>
+          <is-details name="faq" summary="¿Puedo exportar mis datos?">
+            Sí. En Configuración → Datos encontrarás exports en CSV, JSON y Excel.
+          </is-details>
+          <is-details name="faq" summary="¿Cómo cancelo la cuenta?">
+            Puedes cancelar desde Configuración → Plan → Cancelar. Mantienes acceso hasta el fin del ciclo.
+          </is-details>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">name</span>=<span class="val">"faq"</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span>
+<span class="tag">&lt;is-details</span> <span class="attr">name</span>=<span class="val">"faq"</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span></pre>
+      </section>
+
+      <!-- ===== 7. OPEN / DISABLED ===== -->
+      <section class="section" id="states">
+        <h2>Estados</h2>
+        <p class="lede">
+          <code class="code">open</code> para abrir por defecto; <code class="code">disabled</code>
+          bloquea la interacción.
+        </p>
+
+        <div class="demo-stack">
+          <is-details open summary="Empieza abierto por defecto">
+            El atributo <code class="code">open</code> lo deja expandido desde el primer render.
+          </is-details>
+          <is-details disabled summary="Bloqueado (no se puede expandir)">
+            El atributo <code class="code">disabled</code> desactiva el toggle.
+          </is-details>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">open</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span>
+<span class="tag">&lt;is-details</span> <span class="attr">disabled</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span></pre>
+      </section>
+
+      <!-- ===== 8. API JS ===== -->
+      <section class="section" id="methods">
+        <h2>API JavaScript</h2>
+        <p class="lede">
+          Métodos: <code class="code">show()</code>, <code class="code">hide()</code>,
+          <code class="code">toggle()</code>. Propiedades: <code class="code">open</code>,
+          <code class="code">summary</code>, <code class="code">name</code>.
+        </p>
+
+        <div class="demo">
+          <is-details id="apiDetails" summary="Demo controlada">
+            Esto lo abro y cierro desde los botones de abajo.
+          </is-details>
+          <div class="card-row-actions" style="margin-top:.5em">
+            <is-button id="btnOpen">show()</is-button>
+            <is-button id="btnClose">hide()</is-button>
+            <is-button id="btnToggle" appearance="outlined">toggle()</is-button>
+          </div>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">id</span>=<span class="val">"apiDetails"</span> <span class="attr">summary</span>=<span class="val">"Demo"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span>
+<span class="tag">&lt;script&gt;</span>
+  document.getElementById('btnOpen').onclick  = () => document.getElementById('apiDetails').show();
+  document.getElementById('btnClose').onclick = () => document.getElementById('apiDetails').hide();
+  document.getElementById('btnToggle').onclick = () => document.getElementById('apiDetails').toggle();
+<span class="tag">&lt;/script&gt;</span></pre>
+      </section>
+
+      <!-- ===== 9. EVENTOS ===== -->
+      <section class="section" id="events">
+        <h2>Eventos</h2>
+        <p class="lede">
+          Burbujean y son <code class="code">composed: true</code>: <code class="code">is-show</code>,
+          <code class="code">is-after-show</code>, <code class="code">is-hide</code>,
+          <code class="code">is-after-hide</code>.
+        </p>
+
+        <div class="demo">
+          <is-details id="evtDetails" summary="Pulsa y mira la consola">
+            El evento <code class="code">is-after-show</code> se dispara tras la animación de apertura.
+          </is-details>
+          <div id="evtLog" class="callout" style="margin-top:.5em">Log:</div>
+        </div>
+
+        <pre class="code">document.getElementById('evtDetails').addEventListener('is-after-show', () =&gt; {
+  console.log('abierto');
+});</pre>
+      </section>
+
+      <!-- ===== 10. REFERENCIA ===== -->
+      <section class="section" id="reference">
+        <h2>Referencia completa</h2>
+
+        <h3>Atributos / propiedades</h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>open</code></td><td>boolean</td><td>false</td><td>Estado expandido. Reflected.</td></tr>
+            <tr><td><code>summary</code></td><td>string</td><td>—</td><td>Texto del summary si no se usa el slot.</td></tr>
+            <tr><td><code>name</code></td><td>string</td><td>—</td><td>Grupo accordion.</td></tr>
+            <tr><td><code>disabled</code></td><td>boolean</td><td>false</td><td>Bloquea la interacción.</td></tr>
+            <tr><td><code>appearance</code></td><td>filled · outlined · filled-outlined · plain</td><td>outlined</td><td>Tratamiento visual.</td></tr>
+            <tr><td><code>icon-placement</code></td><td>start · end</td><td>end</td><td>Lado del chevron.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Slots</h3>
+        <table class="ref">
+          <thead><tr><th>Slot</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>(default)</code></td><td>Contenido principal.</td></tr>
+            <tr><td><code>summary</code></td><td>Summary propio (gana sobre el atributo).</td></tr>
+            <tr><td><code>expand-icon</code></td><td>Icono de expandido.</td></tr>
+            <tr><td><code>collapse-icon</code></td><td>Icono de colapsado.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Métodos</h3>
+        <table class="ref">
+          <thead><tr><th>Método</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>show()</code></td><td>Abre (con animación).</td></tr>
+            <tr><td><code>hide()</code></td><td>Cierra (con animación).</td></tr>
+            <tr><td><code>toggle()</code></td><td>Alterna.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Cuándo</th><th>Cancelable</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-show</code></td><td>Antes de abrir.</td><td>sí (solo desde click)</td></tr>
+            <tr><td><code>is-after-show</code></td><td>Tras la animación de apertura.</td><td>no</td></tr>
+            <tr><td><code>is-hide</code></td><td>Antes de cerrar.</td><td>sí (solo desde click)</td></tr>
+            <tr><td><code>is-after-hide</code></td><td>Tras la animación de cierre.</td><td>no</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS Parts</h3>
+        <table class="ref">
+          <thead><tr><th>Part</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>::part(base)</code></td><td>Contenedor raíz.</td></tr>
+            <tr><td><code>::part(header)</code></td><td>Wrapper del botón summary.</td></tr>
+            <tr><td><code>::part(summary)</code></td><td>Botón summary.</td></tr>
+            <tr><td><code>::part(icon)</code></td><td>Wrapper del chevron.</td></tr>
+            <tr><td><code>::part(content)</code></td><td>Wrapper del contenido colapsable.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS custom properties</h3>
+        <table class="ref">
+          <thead><tr><th>Variable</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>--spacing</code></td><td><code>var(--is-space-m)</code></td><td>Padding del header / contenido.</td></tr>
+            <tr><td><code>--show-duration</code></td><td>180ms</td><td>Duración de apertura.</td></tr>
+            <tr><td><code>--hide-duration</code></td><td>160ms</td><td>Duración de cierre.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-details</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#appearances">Apariencias</a>
+        <a href="#icon-placement">Posición del icono</a>
+        <a href="#custom-icons">Iconos custom</a>
+        <a href="#rich-summary">Summary rico</a>
+        <a href="#accordion">Accordion</a>
+        <a href="#states">Estados</a>
+        <a href="#methods">API JS</a>
+        <a href="#events">Eventos</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    // API demo
+    const api = document.getElementById('apiDetails');
+    document.getElementById('btnOpen').onclick  = () => api.show();
+    document.getElementById('btnClose').onclick = () => api.hide();
+    document.getElementById('btnToggle').onclick = () => api.toggle();
+
+    // Eventos demo
+    const evt = document.getElementById('evtDetails');
+    const log = document.getElementById('evtLog');
+    const line = (msg) => {
+      const t = new Date().toLocaleTimeString();
+      log.textContent += `\n[${t}] ${msg}`;
+    };
+    evt.addEventListener('is-show',       () => line('is-show'));
+    evt.addEventListener('is-after-show', () => line('is-after-show'));
+    evt.addEventListener('is-hide',       () => line('is-hide'));
+    evt.addEventListener('is-after-hide', () => line('is-after-hide'));
+  </script>
+</body>
+</html>

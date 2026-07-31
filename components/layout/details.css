@@ -1,0 +1,135 @@
+/* <is-details> — disclosure colapsable. */
+
+:host {
+  --spacing: var(--is-space-m, 0.875rem);
+  --show-duration: 180ms;
+  --hide-duration: 160ms;
+
+  --_bg: var(--is-bg-elev, #f8f9fa);
+  --_border: var(--is-border, #dee2e6);
+  --_text: var(--is-text, #212529);
+  --_header-bg: transparent;
+  --_header-bg-hover: color-mix(in srgb, var(--is-bg-elev) 70%, transparent);
+
+  display: block;
+  font-family: var(--is-font-family, system-ui, sans-serif);
+  color: var(--_text);
+  border-radius: calc(var(--is-radius, 0.625em));
+  box-sizing: border-box;
+
+  &[appearance="outlined"],
+  &:not([appearance]) {
+    background: var(--_bg);
+    border: 1px solid var(--_border);
+    --_header-bg-hover: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
+  }
+  &[appearance="filled"] {
+    background: var(--is-bg-elev, #f1f3f5);
+    border: 0;
+  }
+  &[appearance="filled-outlined"] {
+    background: var(--is-bg-elev, #f1f3f5);
+    border: 1px solid var(--_border);
+  }
+  &[appearance="plain"] {
+    background: transparent;
+    border: 0;
+  }
+
+  &[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .root {
+    border-radius: inherit;
+    overflow: hidden;
+  }
+
+  .header {
+    display: block;
+    background: var(--_header-bg);
+  }
+
+  .summary-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.65em;
+    width: 100%;
+    padding: calc(var(--spacing) * 0.85) var(--spacing);
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    text-align: start;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: inherit;
+    transition: background 140ms ease;
+  }
+  :host([icon-placement="end"]) .summary-btn { flex-direction: row; }
+  :host([icon-placement="start"]) .summary-btn { flex-direction: row-reverse; }
+  .summary-btn:hover:not([disabled]) { background: var(--_header-bg-hover); }
+  .summary-btn:focus-visible {
+    outline: 2px solid var(--is-focus, #339af0);
+    outline-offset: -2px;
+  }
+  .summary-btn[disabled] { cursor: not-allowed; }
+
+  .summary-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    /* Si el usuario proyecta un slot="summary" rico, el texto del atributo
+       queda vacío y no rompe el layout. */
+    &:empty { display: contents; }
+  }
+
+  .summary-icon {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.1em;
+    height: 1.1em;
+    color: var(--is-text-muted, #6c757d);
+    transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    line-height: 0;
+  }
+  .summary-icon ::slotted(is-icon),
+  .summary-icon ::slotted(iconify-icon) {
+    font-size: 1.1em;
+    color: inherit;
+  }
+  .summary-icon[data-state="open"] {
+    transform: rotate(180deg);
+  }
+
+  /* Animación al rotar sincrónica con la altura */
+  .root[data-state="opening"] .summary-icon,
+  .root[data-state="closing"] .summary-icon {
+    transform: rotate(0deg);
+  }
+
+  .content {
+    overflow: hidden;
+    will-change: height;
+  }
+  .content[hidden] { display: none; }
+  .content ::slotted(*) { box-sizing: border-box; }
+  .content ::slotted(:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .content ::slotted(:last-child) {
+    margin-bottom: 0;
+    padding-bottom: var(--spacing);
+  }
+  .content ::slotted(*:not(:last-child)) {
+    padding-inline: var(--spacing);
+    padding-bottom: calc(var(--spacing) * 0.6);
+  }
+
+  /* Estado disabled del botón host → cursor y aria */
+  &[disabled] .summary-btn { cursor: not-allowed; }
+}

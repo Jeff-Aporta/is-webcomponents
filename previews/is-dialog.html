@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-dialog · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-dialog de Insoft." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/layout/scrollspy.js"></script>
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/forms/input.js"></script>
+  <script type="module" src="../components/layout/dialog.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-dialog">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-dialog&gt;</h2>
+        <p class="lede">
+          Modal accesible que requiere la atención inmediata del usuario. Equivalente
+          a <code class="code">&lt;dialog&gt;</code> nativo, con header, footer, animaciones,
+          light-dismiss y API declarativa <code class="code">data-dialog="close"</code>.
+        </p>
+
+        <div class="demo">
+          <is-button id="openStandard">Abrir diálogo</is-button>
+        </div>
+
+        <is-dialog id="dlgStandard" label="Diálogo estándar">
+          <p>Esto es un diálogo estándar. Puedes poner cualquier contenido aquí.</p>
+          <div slot="footer">
+            <is-button data-dialog="close" appearance="outlined">Cancelar</is-button>
+            <is-button data-dialog="close" variant="brand">Aceptar</is-button>
+          </div>
+        </is-dialog>
+
+        <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">onclick</span>=<span class="val">"document.getElementById('dlg').open = true"</span><span class="tag">&gt;</span>Abrir<span class="tag">&lt;/is-button&gt;</span>
+<span class="tag">&lt;is-dialog</span> <span class="attr">id</span>=<span class="val">"dlg"</span> <span class="attr">label</span>=<span class="val">"Título"</span><span class="tag">&gt;</span>
+  Contenido.
+  <span class="tag">&lt;div</span> <span class="attr">slot</span>=<span class="val">"footer"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;is-button</span> <span class="attr">data-dialog</span>=<span class="val">"close"</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/is-dialog&gt;</span></pre>
+      </section>
+
+      <section class="section" id="no-header">
+        <h2>Sin header</h2>
+        <p class="lede">
+          <code class="code">without-header</code> oculta el header y el botón de cerrar.
+        </p>
+
+        <div class="demo">
+          <is-button id="openNoHeader">Abrir sin header</is-button>
+        </div>
+
+        <is-dialog id="dlgNoHeader" without-header>
+          <p>¡Mira mamá, sin header! A veces solo necesitas un diálogo limpio y simple.</p>
+          <div slot="footer">
+            <is-button data-dialog="close" appearance="outlined">Cerrar</is-button>
+          </div>
+        </is-dialog>
+
+        <pre class="code"><span class="tag">&lt;is-dialog</span> <span class="attr">without-header</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-dialog&gt;</span></pre>
+      </section>
+
+      <section class="section" id="width">
+        <h2>Ancho</h2>
+        <p class="lede">
+          Define <code class="code">--width</code> en el host para cambiar el ancho preferido.
+          Se reduce automáticamente en pantallas pequeñas.
+        </p>
+
+        <div class="demo">
+          <is-button id="openWide">Diálogo ancho</is-button>
+        </div>
+
+        <is-dialog id="dlgWide" label="Diálogo ancho" style="--width: 800px">
+          <p>Este diálogo es más ancho que el predeterminado, útil cuando necesitas más espacio para el contenido.</p>
+          <div slot="footer">
+            <is-button data-dialog="close" variant="brand">Entendido</is-button>
+          </div>
+        </is-dialog>
+
+        <pre class="code"><span class="tag">&lt;is-dialog</span> <span class="attr">style</span>=<span class="val">"--width: 800px"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-dialog&gt;</span></pre>
+      </section>
+
+      <section class="section" id="header-actions">
+        <h2>Acciones en el header</h2>
+        <p class="lede">
+          El slot <code class="code">header-actions</code> añade botones a la derecha del título
+          (el botón de cerrar va siempre al final).
+        </p>
+
+        <div class="demo">
+          <is-button id="openActions">Abrir</is-button>
+        </div>
+
+        <is-dialog id="dlgActions" label="Con header-actions">
+          <div slot="header-actions">
+            <is-button appearance="plain" aria-label="Maximizar">
+              <is-icon slot="start" icon="mdi:arrow-top-right-bottom-left" aria-hidden="true"></is-icon>
+            </is-button>
+          </div>
+          <p>Añade acciones custom al header.</p>
+          <div slot="footer">
+            <is-button data-dialog="close" variant="brand">OK</is-button>
+          </div>
+        </is-dialog>
+
+        <pre class="code"><span class="tag">&lt;is-dialog</span> <span class="attr">label</span>=<span class="val">"…"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">slot</span>=<span class="val">"header-actions"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;is-button&gt;</span>…<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  …
+<span class="tag">&lt;/is-dialog&gt;</span></pre>
+      </section>
+
+      <section class="section" id="light-dismiss">
+        <h2>Light dismiss</h2>
+        <p class="lede">
+          <code class="code">light-dismiss</code> cierra el diálogo al hacer click fuera.
+        </p>
+
+        <div class="demo">
+          <is-button id="openLD">Abrir (click fuera cierra)</is-button>
+        </div>
+
+        <is-dialog id="dlgLD" label="Light dismiss" light-dismiss>
+          <p>Haz click fuera del diálogo para cerrarlo.</p>
+        </is-dialog>
+
+        <pre class="code"><span class="tag">&lt;is-dialog</span> <span class="attr">light-dismiss</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-dialog&gt;</span></pre>
+      </section>
+
+      <section class="section" id="prevent-close">
+        <h2>Prevenir el cierre</h2>
+        <p class="lede">
+          Cancela el evento <code class="code">is-hide</code> con
+          <code class="code">event.preventDefault()</code> para impedir el cierre. Si el usuario
+          intenta cerrar, el diálogo pulsa brevemente para llamar la atención.
+        </p>
+
+        <div class="demo">
+          <is-button id="openPrevent">Diálogo protegido</is-button>
+        </div>
+
+        <is-dialog id="dlgPrevent" label="¿Salir sin guardar?">
+          <p>Este diálogo solo se cierra con el botón "Guardar y salir". Si cierras con Escape o el botón X, el diálogo pulsa brevemente.</p>
+          <div slot="footer">
+            <is-button id="btnForceClose" variant="brand">Guardar y salir</is-button>
+          </div>
+        </is-dialog>
+
+        <pre class="code">dialog.addEventListener('is-hide', (e) =&gt; {
+  if (e.detail.source !== closeButton) e.preventDefault();
+});</pre>
+      </section>
+
+      <section class="section" id="form">
+        <h2>Diálogo con formulario</h2>
+        <p class="lede">
+          Un caso típico: edición de un registro en un diálogo.
+        </p>
+
+        <div class="demo">
+          <is-button id="openForm">Editar perfil</is-button>
+        </div>
+
+        <is-dialog id="dlgForm" label="Editar perfil" style="--width: 480px">
+          <form id="profileForm" style="display:grid;gap:.75em">
+            <label>Nombre
+              <is-input name="name" required value="Jeff Aporta"></is-input>
+            </label>
+            <label>Email
+              <is-input name="email" type="email" required value="jeff@example.com"></is-input>
+            </label>
+            <label>Bio
+              <is-input name="bio" value="Ingeniero"></is-input>
+            </label>
+          </form>
+          <div slot="footer">
+            <is-button id="btnFormCancel" data-dialog="close" appearance="outlined">Cancelar</is-button>
+            <is-button id="btnFormSave" variant="brand">Guardar</is-button>
+          </div>
+        </is-dialog>
+
+        <pre class="code"><span class="tag">&lt;is-dialog</span> <span class="attr">label</span>=<span class="val">"Editar perfil"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;form&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Nombre <span class="tag">&lt;is-input</span> <span class="attr">name</span>=<span class="val">"name"</span> <span class="attr">required</span><span class="tag">&gt;</span><span class="tag">&lt;/is-input&gt;</span><span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;/form&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">slot</span>=<span class="val">"footer"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;is-button</span> <span class="attr">data-dialog</span>=<span class="val">"close"</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
+    <span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Guardar<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/is-dialog&gt;</span></pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia completa</h2>
+
+        <h3>Atributos / propiedades</h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>open</code></td><td>boolean</td><td>false</td><td>Estado visible. Reflected.</td></tr>
+            <tr><td><code>label</code></td><td>string</td><td>—</td><td>Título del header (a11y).</td></tr>
+            <tr><td><code>without-header</code></td><td>boolean</td><td>false</td><td>Oculta el header y el botón de cerrar.</td></tr>
+            <tr><td><code>light-dismiss</code></td><td>boolean</td><td>false</td><td>Cierra al click fuera.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Slots</h3>
+        <table class="ref">
+          <thead><tr><th>Slot</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>(default)</code></td><td>Contenido del body.</td></tr>
+            <tr><td><code>label</code></td><td>Título propio (gana sobre el atributo).</td></tr>
+            <tr><td><code>header-actions</code></td><td>Acciones adicionales en el header.</td></tr>
+            <tr><td><code>footer</code></td><td>Pie del diálogo.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Métodos</h3>
+        <table class="ref">
+          <thead><tr><th>Método</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>show()</code></td><td>Abre.</td></tr>
+            <tr><td><code>hide()</code></td><td>Cierra.</td></tr>
+            <tr><td><code>toggle()</code></td><td>Alterna.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Cancelable</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-show</code></td><td>no</td><td>Antes de abrir.</td></tr>
+            <tr><td><code>is-after-show</code></td><td>no</td><td>Tras la animación de apertura.</td></tr>
+            <tr><td><code>is-hide</code></td><td>sí</td><td>Antes de cerrar. <code>detail.source</code> indica qué elemento lo pidió.</td></tr>
+            <tr><td><code>is-after-hide</code></td><td>no</td><td>Tras la animación de cierre.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS Parts</h3>
+        <table class="ref">
+          <thead><tr><th>Part</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>::part(dialog)</code></td><td>Contenedor del diálogo.</td></tr>
+            <tr><td><code>::part(header)</code></td><td>Header.</td></tr>
+            <tr><td><code>::part(title)</code></td><td>Título.</td></tr>
+            <tr><td><code>::part(close-button)</code></td><td>Botón de cerrar.</td></tr>
+            <tr><td><code>::part(header-actions)</code></td><td>Acciones del header.</td></tr>
+            <tr><td><code>::part(body)</code></td><td>Body.</td></tr>
+            <tr><td><code>::part(footer)</code></td><td>Footer.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS custom properties</h3>
+        <table class="ref">
+          <thead><tr><th>Variable</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>--width</code></td><td><code>500px</code></td><td>Ancho preferido.</td></tr>
+            <tr><td><code>--spacing</code></td><td><code>var(--is-space-l, 1rem)</code></td><td>Padding interno.</td></tr>
+            <tr><td><code>--backdrop-color</code></td><td><code>rgba(0,0,0,0.55)</code></td><td>Color del fondo.</td></tr>
+            <tr><td><code>--show-duration</code></td><td>200ms</td><td>Duración apertura.</td></tr>
+            <tr><td><code>--hide-duration</code></td><td>160ms</td><td>Duración cierre.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-dialog</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#no-header">Sin header</a>
+        <a href="#width">Ancho</a>
+        <a href="#header-actions">Header actions</a>
+        <a href="#light-dismiss">Light dismiss</a>
+        <a href="#prevent-close">Prevenir cierre</a>
+        <a href="#form">Con formulario</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    document.getElementById('openStandard').onclick  = () => document.getElementById('dlgStandard').open = true;
+    document.getElementById('openNoHeader').onclick  = () => document.getElementById('dlgNoHeader').open = true;
+    document.getElementById('openWide').onclick      = () => document.getElementById('dlgWide').open = true;
+    document.getElementById('openActions').onclick   = () => document.getElementById('dlgActions').open = true;
+    document.getElementById('openLD').onclick        = () => document.getElementById('dlgLD').open = true;
+    document.getElementById('openForm').onclick      = () => document.getElementById('dlgForm').open = true;
+    document.getElementById('openPrevent').onclick   = () => document.getElementById('dlgPrevent').open = true;
+
+    // Demo prevent-close: solo el botón "Guardar y salir" cierra.
+    const dlgPrevent = document.getElementById('dlgPrevent');
+    const btnForce   = document.getElementById('btnForceClose');
+    dlgPrevent.addEventListener('is-hide', (e) => {
+      if (e.detail.source !== btnForce) e.preventDefault();
+    });
+    btnForce.addEventListener('click', () => dlgPrevent.hide());
+
+    // Demo form
+    const dlgForm = document.getElementById('dlgForm');
+    const btnFormSave = document.getElementById('btnFormSave');
+    btnFormSave.addEventListener('click', () => {
+      const fd = new FormData(document.getElementById('profileForm'));
+      const obj = Object.fromEntries(fd.entries());
+      console.log('save', obj);
+      dlgForm.hide();
+    });
+  </script>
+</body>
+</html>
