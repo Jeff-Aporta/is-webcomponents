@@ -47,40 +47,99 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--is-accent) 6%, transparent) 0%, transparent 120px),
     var(--is-bg-soft);
-  border-left: 0;
+  border-left: 1px solid color-mix(in srgb, var(--is-border) 60%, transparent);
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--is-control-border) 70%, transparent) transparent;
 }
 
+.sidebar::-webkit-scrollbar { width: 9px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+  background-color: color-mix(in srgb, var(--is-control-border) 70%, transparent);
+}
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--is-accent) 45%, var(--is-control-border));
+}
+
+/* El preview-chrome está clavado dentro de is-main.main con sticky.
+   No flota sobre el viewport, así que el sidebar no necesita hueco arriba. */
+html:not([data-embed="1"]) .sidebar h1 { top: 0.5rem; }
+
+/* Título pegado arriba: el índice puede ser largo y se pierde la referencia. */
 .sidebar h1 {
-  font-size: 0.95rem;
-  font-weight: 800;
-  margin: 0 10px 18px;
-  letter-spacing: -0.03em;
-  color: var(--is-text);
+  position: sticky;
+  top: -22px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+  padding: 6px 10px 10px;
+  color: var(--is-text-dim);
+  background: linear-gradient(180deg,
+    var(--is-bg-soft) 60%,
+    color-mix(in srgb, var(--is-bg-soft) 0%, transparent));
 }
 
-.sidebar nav { display: flex; flex-direction: column; gap: 3px; }
-.sidebar nav a {
+.sidebar h1::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--is-border), transparent);
+}
+
+/* El TOC de las previews vive en <is-scrollspy>, no en <nav>: los <a> son
+   light DOM, así que la regla global de enlaces (color: var(--is-accent))
+   los pintaba todos de rojo y el ::slotted del componente no gana el
+   cascade. Ambos selectores comparten estilo. */
+.sidebar nav,
+.sidebar is-scrollspy { display: flex; flex-direction: column; gap: 2px; }
+.sidebar nav a,
+.sidebar is-scrollspy a {
+  position: relative;
   display: block;
-  padding: 8px 12px;
+  padding: 7px 12px 7px 14px;
   font-size: 0.8125rem;
   font-weight: 500;
+  line-height: 1.35;
   color: var(--is-text-soft);
-  border-radius: 0;
-  transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease;
+  border-radius: 6px;
+  transition: background 140ms ease, color 140ms ease, padding-left 140ms ease;
 }
-.sidebar nav a:hover {
-  background: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
+.sidebar nav a:hover,
+.sidebar is-scrollspy a:hover {
+  background: color-mix(in srgb, var(--is-bg-elev) 85%, transparent);
   color: var(--is-text);
+  padding-left: 17px;
   text-decoration: none;
 }
 .sidebar nav a.active,
-.sidebar nav a.is-scrollspy-active {
+.sidebar nav a.is-scrollspy-active,
+.sidebar is-scrollspy a.is-scrollspy-active {
   background: var(--is-accent-bg);
   color: var(--is-brand-text);
   font-weight: 650;
-  /* indicador sin pelear con border-radius */
-  box-shadow: inset 2.5px 0 0 var(--is-accent);
+}
+/* Barra de acento como pseudo: convive con el border-radius. */
+.sidebar nav a.active::before,
+.sidebar nav a.is-scrollspy-active::before,
+.sidebar is-scrollspy a.is-scrollspy-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--is-accent);
 }
 
 .main,
@@ -888,10 +947,11 @@ table.ref td:first-child { width: 36%; }
 /* --- Preview chrome (theme + palette; hidden when ?embed=1) ---------- */
 
 .preview-chrome {
-  position: fixed;
+  position: sticky;
   z-index: 20;
   top: 0.65rem;
-  right: 1rem;
+  margin-left: auto;
+  margin-right: 0.65rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
