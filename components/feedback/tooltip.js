@@ -6,6 +6,11 @@ import '../helpers/popup.js';
  *
  * Attrs: for, open, placement, trigger, distance, skidding,
  *        show-delay, hide-delay, disabled, without-arrow
+ *
+ * trigger (default "hover focus"): combina hover | focus | click. Además
+ *   manual → solo show()/hide(), y se cierra con click fuera o Escape
+ *   none   → solo show()/hide(), sin cierre automático (lo controla el dueño)
+ *
  * Methods: show(), hide()
  * Events: is-show, is-after-show, is-hide, is-after-hide
  * Parts: ::part(tooltip) ::part(body) ::part(base__popup) ::part(base__arrow)
@@ -23,6 +28,7 @@ import '../helpers/popup.js';
       flip
       shift
       arrow
+      hover-bridge
       placement="top"
       distance="8"
     >
@@ -67,6 +73,8 @@ import '../helpers/popup.js';
       this.#unbindTarget();
       clearTimeout(this.#showTimer);
       clearTimeout(this.#hideTimer);
+      document.removeEventListener('pointerdown', this.#onDocPointer, true);
+      document.removeEventListener('keydown', this.#onDocKey, true);
     }
 
     attributeChangedCallback(name) {
@@ -102,7 +110,7 @@ import '../helpers/popup.js';
     get showDelay() { return Number(this.getAttribute('show-delay') ?? 150); }
     set showDelay(v) { this.setAttribute('show-delay', String(v)); }
 
-    get hideDelay() { return Number(this.getAttribute('hide-delay')) || 0; }
+    get hideDelay() { return Number(this.getAttribute('hide-delay') ?? 120); }
     set hideDelay(v) { this.setAttribute('hide-delay', String(v)); }
 
     get withoutArrow() { return this.hasAttribute('without-arrow'); }
@@ -120,6 +128,7 @@ import '../helpers/popup.js';
       this.#popup.distance = this.distance;
       this.#popup.skidding = this.skidding;
       this.#popup.arrow = !this.withoutArrow;
+      this.#popup.hoverBridge = true;
       this.#popup.style.setProperty('--arrow-color', 'var(--is-tooltip-bg, #212529)');
     }
 
@@ -139,6 +148,7 @@ import '../helpers/popup.js';
       if (this.#hasTrigger('hover')) {
         el.addEventListener('pointerenter', this.#onEnter);
         el.addEventListener('pointerleave', this.#onLeave);
+        this.#popup.addEventListener('is-hover-bridge', this.#onBridge);
       }
       if (this.#hasTrigger('focus')) {
         el.addEventListener('focus', this.#onFocus, true);
@@ -155,6 +165,7 @@ import '../helpers/popup.js';
     }
 
     #unbindTarget() {
+      this.#popup.removeEventListener('is-hover-bridge', this.#onBridge);
       const el = this.#target;
       if (!el) return;
       el.removeEventListener('pointerenter', this.#onEnter);
@@ -170,7 +181,8 @@ import '../helpers/popup.js';
       this.#hovering = true;
       clearTimeout(this.#hideTimer);
       clearTimeout(this.#showTimer);
-      this.#showTimer = setTimeout(() => this.open = true, this.showDelay);
+      if (this.open) return;
+      this.#showTimer = setTimeout(() => { this.open = true; }, this.showDelay);
     };
 
     #onLeave = () => {
@@ -181,6 +193,20 @@ import '../helpers/popup.js';
       this.#hideTimer = setTimeout(() => {
         if (!this.#hovering) this.open = false;
       }, this.hideDelay);
+    };
+
+    #onBridge = (e) => {
+      if (this.disabled || this.#hasTrigger('manual')) return;
+      if (e.detail?.hovering) {
+        this.#hovering = true;
+        clearTimeout(this.#hideTimer);
+      } else {
+        this.#hovering = false;
+        clearTimeout(this.#hideTimer);
+        this.#hideTimer = setTimeout(() => {
+          if (!this.#hovering) this.open = false;
+        }, this.hideDelay);
+      }
     };
 
     #onFocus = () => {
@@ -194,10 +220,28 @@ import '../helpers/popup.js';
       if (!this.#hovering) this.open = false;
     };
 
-    #onClick = () => {
+    #onClick = (e) => {
       if (this.disabled || this.#hasTrigger('manual')) return;
+      e.stopPropagation();
       this.open = !this.open;
     };
+
+    #onDocPointer = (e) => {
+      if (!this.open) return;
+      const path = e.composedPath();
+      if (path.includes(this)) return;
+      if (this.#target && path.includes(this.#target)) return;
+      this.hide();
+    };
+
+    #onDocKey = (e) => {
+      if (!this.open) return;
+      if (e.key === 'Escape') this.hide();
+    };
+
+    #needsOutsideDismiss() {
+      return this.#hasTrigger('click') || this.#hasTrigger('manual');
+    }
 
     #doShow() {
       if (this.disabled) {
@@ -210,7 +254,15 @@ import '../helpers/popup.js';
         return;
       }
       this.#popup.active = true;
-      this.#popup.reposition();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (this.open && this.#mounted) this.#popup.reposition();
+        });
+      });
+      if (this.#needsOutsideDismiss()) {
+        document.addEventListener('pointerdown', this.#onDocPointer, true);
+        document.addEventListener('keydown', this.#onDocKey, true);
+      }
       this.dispatchEvent(new CustomEvent('is-after-show', { bubbles: true, composed: true }));
     }
 
@@ -221,6 +273,8 @@ import '../helpers/popup.js';
         return;
       }
       this.#popup.active = false;
+      document.removeEventListener('pointerdown', this.#onDocPointer, true);
+      document.removeEventListener('keydown', this.#onDocKey, true);
       this.dispatchEvent(new CustomEvent('is-after-hide', { bubbles: true, composed: true }));
     }
   }

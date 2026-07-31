@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/helpers/format-number.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-format-number">
       <section class="section" id="intro">
         <h2>&lt;is-format-number&gt;</h2>
         <p class="lede">Números con <code class="code">Intl.NumberFormat</code>. Locale = <code class="code">lang</code> del documento.</p>
@@ -27,13 +28,28 @@
       <section class="section" id="types">
         <h2>Tipos (<code>type</code>)</h2>
         <div class="demo">
-          <ul>
-            <li>decimal (default): <is-format-number value="1234.5" type="decimal"></is-format-number></li>
-            <li>percent: <is-format-number value="0.875" type="percent"></is-format-number></li>
-            <li>currency COP: <is-format-number value="12500" type="currency" currency="COP"></is-format-number></li>
-            <li>currency USD: <is-format-number value="99.9" type="currency" currency="USD"></is-format-number></li>
-            <li>currency EUR: <is-format-number value="49.99" type="currency" currency="EUR"></is-format-number></li>
-          </ul>
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">decimal · 1234,5</code>
+              <is-format-number class="format-grid__value" value="1234.5" type="decimal"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">percent · 0,875</code>
+              <is-format-number class="format-grid__value" value="0.875" type="percent"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">currency COP · 12.500</code>
+              <is-format-number class="format-grid__value" value="12500" type="currency" currency="COP"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">currency USD · 99,9</code>
+              <is-format-number class="format-grid__value" value="99.9" type="currency" currency="USD"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">currency EUR · 49,99</code>
+              <is-format-number class="format-grid__value" value="49.99" type="currency" currency="EUR"></is-format-number>
+            </div>
+          </div>
         </div>
         <pre class="code" data-lang="html">&lt;is-format-number value="0.875" type="percent"&gt;&lt;/is-format-number&gt;
 &lt;is-format-number value="99.9" type="currency" currency="USD"&gt;&lt;/is-format-number&gt;</pre>
@@ -42,12 +58,24 @@
       <section class="section" id="digits">
         <h2>Dígitos fraccionarios</h2>
         <div class="demo">
-          <ul>
-            <li>min 2: <is-format-number value="1234.5" minimum-fraction-digits="2"></is-format-number></li>
-            <li>max 0: <is-format-number value="1234.56" maximum-fraction-digits="0"></is-format-number></li>
-            <li>min 2 · max 4: <is-format-number value="1.2" minimum-fraction-digits="2" maximum-fraction-digits="4"></is-format-number></li>
-            <li>currency + max 0: <is-format-number value="99.9" type="currency" currency="USD" maximum-fraction-digits="0"></is-format-number></li>
-          </ul>
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">min 2 · 1234,5</code>
+              <is-format-number class="format-grid__value" value="1234.5" minimum-fraction-digits="2"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">max 0 · 1234,56</code>
+              <is-format-number class="format-grid__value" value="1234.56" maximum-fraction-digits="0"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">min 2 · max 4 · 1,2</code>
+              <is-format-number class="format-grid__value" value="1.2" minimum-fraction-digits="2" maximum-fraction-digits="4"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">currency + max 0 · 99,9</code>
+              <is-format-number class="format-grid__value" value="99.9" type="currency" currency="USD" maximum-fraction-digits="0"></is-format-number>
+            </div>
+          </div>
         </div>
         <pre class="code" data-lang="html">&lt;is-format-number value="1234.5" minimum-fraction-digits="2"&gt;&lt;/is-format-number&gt;
 &lt;is-format-number value="1234.56" maximum-fraction-digits="0"&gt;&lt;/is-format-number&gt;</pre>
@@ -56,12 +84,24 @@
       <section class="section" id="edge">
         <h2>Casos límite</h2>
         <div class="demo">
-          <ul>
-            <li>0 → <is-format-number value="0"></is-format-number></li>
-            <li>Negativo → <is-format-number value="-42.5" minimum-fraction-digits="1"></is-format-number></li>
-            <li>Grande → <is-format-number value="1000000000"></is-format-number></li>
-            <li>Sin value → «<is-format-number></is-format-number>»</li>
-          </ul>
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">0</code>
+              <is-format-number class="format-grid__value" value="0"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">negativo · -42,5</code>
+              <is-format-number class="format-grid__value" value="-42.5" minimum-fraction-digits="1"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">grande · 1.000.000.000</code>
+              <is-format-number class="format-grid__value" value="1000000000"></is-format-number>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">sin value</code>
+              <is-format-number class="format-grid__value">«<span></span>»</is-format-number>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -78,7 +118,7 @@
           </tbody>
         </table>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-format-number</h1>
       <nav>

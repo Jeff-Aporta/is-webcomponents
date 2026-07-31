@@ -12,6 +12,7 @@
   <script type="module" src="../components/media/icon.js"></script>
   <script type="module" src="../components/layout/divider.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -22,11 +23,12 @@
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-dropdown">
       <section class="section" id="intro">
         <h2>&lt;is-dropdown&gt;</h2>
         <p class="lede">
-          Menú anclado a un trigger. Usa <code class="code">is-popup</code>,
+          Menú anclado a un trigger. Panel en <code class="code">&lt;dialog&gt;</code> modal
+          (top layer) para no quedar debajo de otras secciones. Items:
           <code class="code">is-dropdown-item</code>, <code class="code">is-divider</code> e iconos.
         </p>
         <div class="demo">
@@ -96,6 +98,7 @@
           <thead><tr><th>API</th><th>Detalle</th></tr></thead>
           <tbody>
             <tr><td>slots</td><td><code>trigger</code> + default items</td></tr>
+            <tr><td>panel</td><td><code>&lt;dialog showModal&gt;</code> — top layer (no stacking bajo secciones)</td></tr>
             <tr><td><code>placement</code></td><td>default <code>bottom-start</code></td></tr>
             <tr><td><code>is-select</code></td><td>detail.item — cancelable para no cerrar</td></tr>
             <tr><td>item attrs</td><td>value, type=checkbox, checked, disabled, variant=danger</td></tr>
@@ -103,7 +106,7 @@
           </tbody>
         </table>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-dropdown</h1>
       <nav>

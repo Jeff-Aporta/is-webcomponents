@@ -10,6 +10,7 @@
   <script type="module" src="../components/helpers/mutation-observer.js"></script>
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <style>
     .mo-grid {
       display: grid;
@@ -108,7 +109,7 @@
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-mutation-observer">
 
       <section class="section" id="intro">
         <h2>&lt;is-mutation-observer&gt;</h2>
@@ -205,8 +206,7 @@
           </tbody>
         </table>
       </section>
-    </main>
-
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-mutation-observer</h1>
       <nav>

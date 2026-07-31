@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-block-diagram · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/diagrams/block-diagram.js"></script>
+  <script type="module" src="../components/diagrams/diagram-lightbox.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-block-diagram">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-block-diagram&gt;</h2>
+        <p class="lede">
+          Diagrama de bloques en SVG, sin Mermaid. A diferencia de
+          <code>&lt;is-flowchart&gt;</code>, los bloques no se organizan en capas: se
+          ubican en una rejilla de <code>columns</code> columnas fijas, fluyendo de
+          izquierda a derecha y bajando de fila cuando no caben.
+        </p>
+        <p>
+          Las flechas entre bloques siguen ruteando con el mismo A* sobre la rejilla
+          de costos que el resto de los diagramas, así que rodean las cajas en vez
+          de atravesarlas.
+        </p>
+        <div class="demo" style="height:22rem">
+          <is-block-diagram>
+            <script type="application/json">
+              {
+                "blockDiagram": {
+                  "title": "Arquitectura de la plataforma",
+                  "columns": 3,
+                  "groups": [
+                    { "id": "g1", "name": "Frontend", "hue": 239 },
+                    { "id": "g2", "name": "Backend", "hue": 199 },
+                    { "id": "g3", "name": "Datos", "hue": 160 }
+                  ],
+                  "blocks": [
+                    { "id": "ui", "label": "Portal web", "group": "g1", "span": 2, "icon": "mdi:monitor" },
+                    { "id": "app", "label": "App móvil", "group": "g1", "icon": "mdi:cellphone" },
+                    { "id": "api", "label": "API", "group": "g2", "span": 3, "shape": "round", "icon": "mdi:api" },
+                    { "id": "db", "label": "Base de datos", "group": "g3", "icon": "mdi:database" },
+                    { "id": "cache", "label": "Caché", "group": "g3", "icon": "mdi:memory" },
+                    { "id": "cola", "label": "Cola de eventos", "group": "g3", "icon": "mdi:tray-full" }
+                  ],
+                  "edges": [
+                    { "from": "ui", "to": "api", "label": "HTTPS" },
+                    { "from": "app", "to": "api", "label": "HTTPS" },
+                    { "from": "api", "to": "db" },
+                    { "from": "api", "to": "cache" },
+                    { "from": "api", "to": "cola" }
+                  ]
+                }
+              }
+            </script>
+          </is-block-diagram>
+        </div>
+      </section>
+
+      <section class="section" id="span">
+        <h2>Span y formas</h2>
+        <p>
+          <code>span</code> hace que un bloque ocupe N columnas (por defecto 1) y
+          <code>shape</code> admite <code>rect</code> (por defecto) o <code>round</code>.
+        </p>
+        <div class="demo" style="height:12rem">
+          <is-block-diagram>
+            <script type="application/json">
+              {
+                "blockDiagram": {
+                  "columns": 4,
+                  "blocks": [
+                    { "id": "a", "label": "1 col" },
+                    { "id": "b", "label": "1 col", "shape": "round" },
+                    { "id": "c", "label": "2 columnas", "span": 2 }
+                  ]
+                }
+              }
+            </script>
+          </is-block-diagram>
+        </div>
+      </section>
+
+      <section class="section" id="api">
+        <h2>Referencia</h2>
+
+        <h3>Atributos</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Valores</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>variant</code></td><td><code>inline</code> · <code>viewer</code></td><td>inline abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación.</td></tr>
+            <tr><td><code>without-viewer</code></td><td>booleano</td><td>Desactiva la apertura automática del visor.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Esquema del JSON</h3>
+        <table class="ref">
+          <thead><tr><th>Campo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>columns</code></td><td>Número de columnas de la rejilla (default 3).</td></tr>
+            <tr><td><code>blocks[].span</code></td><td>Columnas que ocupa el bloque (default 1); hace wrap si no cabe en la fila.</td></tr>
+            <tr><td><code>blocks[].shape</code></td><td><code>rect</code> (default) · <code>round</code>.</td></tr>
+            <tr><td><code>blocks[].icon</code></td><td>Id Iconify, p. ej. <code>mdi:monitor</code>.</td></tr>
+            <tr><td><code>blocks[].group</code></td><td>Id del grupo; define el color del bloque.</td></tr>
+            <tr><td><code>edges[].from</code> · <code>to</code></td><td>Ids de bloque. Una arista a un id inexistente se descarta.</td></tr>
+            <tr><td><code>groups[].hue</code></td><td>Tono HSL 0–360.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Propiedades y eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>payload</code></td><td>Configuración JSON; alternativa al script hijo.</td></tr>
+            <tr><td><code>layout</code></td><td>Geometría calculada (solo lectura).</td></tr>
+            <tr><td><code>turtle</code></td><td>API de la animación: play / pause / stop / next / prev.</td></tr>
+            <tr><td><code>hiddenGroups</code></td><td>Set de grupos ocultos; al cambiar, el diagrama se re-diseña sin esos bloques.</td></tr>
+            <tr><td><code>is-render</code></td><td>Evento: el SVG terminó de construirse.</td></tr>
+            <tr><td><code>is-turtle-state</code></td><td>Evento: estado de la animación.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-block-diagram</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#span">Span y formas</a>
+        <a href="#api">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

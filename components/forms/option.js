@@ -1,21 +1,26 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 
 /**
- * <is-option> — Opción para is-combobox (y listboxes similares).
+ * <is-option> — Opción para is-combobox / is-select (listboxes).
  *
- * Atributos: value, disabled, selected
- * Slot: default (etiqueta)
+ * Atributos: value, disabled, selected, group
+ * Slots: default (etiqueta), start (icono/avatar), description (texto secundario)
+ * Parts: base, start, label, description
  */
 
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="option" role="option">
-      <slot></slot>
+      <span part="start" class="start"><slot name="start"></slot></span>
+      <span class="body">
+        <span part="label" class="label"><slot></slot></span>
+        <span part="description" class="description"><slot name="description"></slot></span>
+      </span>
     </div>
   `;
 
-  const OBSERVED = ['value', 'disabled', 'selected'];
+  const OBSERVED = ['value', 'disabled', 'selected', 'group'];
 
   class IsOption extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -42,7 +47,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     get value() {
-      return this.hasAttribute('value') ? this.getAttribute('value') : (this.textContent || '').trim();
+      return this.hasAttribute('value') ? this.getAttribute('value') : this.label;
     }
     set value(v) {
       if (v == null) this.removeAttribute('value');
@@ -55,7 +60,23 @@ import { adoptCss } from '../_shared/adopt-css.js';
     get selected() { return this.hasAttribute('selected'); }
     set selected(v) { this.toggleAttribute('selected', !!v); }
 
-    get label() { return (this.textContent || '').trim(); }
+    /** Cabecera bajo la que agrupar la opción en el listbox */
+    get group() { return this.getAttribute('group') ?? ''; }
+    set group(v) { v == null || v === '' ? this.removeAttribute('group') : this.setAttribute('group', String(v)); }
+
+    get description() {
+      return (this.querySelector(':scope > [slot="description"]')?.textContent || '').trim();
+    }
+
+    /** Solo el contenido del slot por defecto: los slots con nombre no son etiqueta */
+    get label() {
+      let out = '';
+      for (const node of this.childNodes) {
+        if (node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('slot')) continue;
+        out += node.textContent || '';
+      }
+      return out.trim();
+    }
 
     #sync() {
       this.#root.setAttribute('aria-selected', String(this.selected));

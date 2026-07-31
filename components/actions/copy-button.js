@@ -1,11 +1,16 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import '../feedback/tooltip.js';
 
 /**
  * <is-copy-button> — Web Component (vanilla).
  *
  * Copia texto al portapapeles con feedback visual (éxito / error).
  * Requiere contexto seguro (HTTPS o localhost) para clipboard.writeText().
+ *
+ * Compone <is-tooltip> (posicionamiento, flip, flecha) e <is-icon>. El tooltip
+ * va en `trigger="none"`: quién lo abre y con qué texto lo decide el estado de
+ * la copia (reposo / éxito / error), no el hover del propio tooltip.
  *
  * Atributos
  *   value               string a copiar
@@ -15,7 +20,8 @@ import '../media/icon.js';
  *   error-label         tooltip si falla
  *   feedback-duration   ms de feedback (default 1000)
  *   tooltip             full | copy | none  (default full)
- *   tooltip-placement   top | right | bottom | left  (default top)
+ *   tooltip-placement   cualquier placement de is-popup: top | top-start |
+ *                       top-end | bottom* | left* | right*  (default top)
  *   disabled            boolean
  *
  * Slots
@@ -26,15 +32,14 @@ import '../media/icon.js';
  *
  * Events (bubbles + composed): is-copy { value }, is-error
  * Custom states: :state(success) :state(error)
- * CSS Parts: button, copy-icon, success-icon, error-icon, feedback
+ * CSS Parts: button, copy-icon, success-icon, error-icon,
+ *            feedback (burbuja del tooltip), feedback-body
  */
 
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-
-
-    <div class="trigger">
+    <span class="trigger" id="anchor">
       <slot></slot>
       <button part="button" class="button" type="button" id="copy-btn">
         <span part="copy-icon" class="icon" data-state="copy">
@@ -47,12 +52,25 @@ import '../media/icon.js';
           <slot name="error-icon"><is-icon icon="mdi:close"></is-icon></slot>
         </span>
       </button>
-      <div part="feedback" class="tip" role="tooltip" data-placement="top" hidden></div>
-      <div class="sr-only" aria-live="polite"></div>
-    </div>
+    </span>
+    <is-tooltip
+      class="tip"
+      exportparts="tooltip: feedback, body: feedback-body"
+      for="anchor"
+      trigger="none"
+      placement="top"
+    ></is-tooltip>
+    <span class="sr-only" aria-live="polite"></span>
   `;
 
   const LABELS = { copy: 'Copiar', success: 'Copiado', error: 'Error' };
+
+  const PLACEMENTS = [
+    'top', 'top-start', 'top-end',
+    'bottom', 'bottom-start', 'bottom-end',
+    'left', 'left-start', 'left-end',
+    'right', 'right-start', 'right-end',
+  ];
 
   class IsCopyButton extends HTMLElement {
     static get observedAttributes() {
@@ -81,7 +99,7 @@ import '../media/icon.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector('.button');
-      this.#tip = shadow.querySelector('.tip');
+      this.#tip = shadow.querySelector('is-tooltip');
       this.#live = shadow.querySelector('.sr-only');
       this.#icons = {
         copy: shadow.querySelector('[data-state="copy"]'),
@@ -106,6 +124,7 @@ import '../media/icon.js';
       this.#onSlotChange();
       this.#syncDisabled();
       this.#syncTipPlacement();
+      this.#syncTipMode();
       this.#syncLabel();
       this.#wireHover();
     }
@@ -136,7 +155,11 @@ import '../media/icon.js';
     get errorLabel() { return this.getAttribute('error-label') ?? ''; }
     set errorLabel(v) { v ? this.setAttribute('error-label', v) : this.removeAttribute('error-label'); }
     get feedbackDuration() {
-      const n = Number(this.getAttribute('feedback-duration'));
+      // Ojo: Number(null) es 0, así que hay que descartar el atributo ausente
+      // antes de convertir o el feedback dura 0 ms.
+      const raw = this.getAttribute('feedback-duration');
+      if (raw == null || raw.trim() === '') return 1000;
+      const n = Number(raw);
       return Number.isFinite(n) && n >= 0 ? n : 1000;
     }
     set feedbackDuration(v) { this.setAttribute('feedback-duration', String(v)); }
@@ -147,7 +170,7 @@ import '../media/icon.js';
     set tooltip(v) { this.setAttribute('tooltip', v === 'copy' || v === 'none' ? v : 'full'); }
     get tooltipPlacement() {
       const v = this.getAttribute('tooltip-placement');
-      return ['top', 'right', 'bottom', 'left'].includes(v) ? v : 'top';
+      return PLACEMENTS.includes(v) ? v : 'top';
     }
     set tooltipPlacement(v) { this.setAttribute('tooltip-placement', v); }
 
@@ -190,11 +213,13 @@ import '../media/icon.js';
     }
 
     #syncTipPlacement() {
-      this.#tip.dataset.placement = this.tooltipPlacement;
+      this.#tip.placement = this.tooltipPlacement;
     }
 
     #syncTipMode() {
-      if (this.tooltip === 'none') this.#hideTip();
+      const off = this.tooltip === 'none';
+      this.#tip.disabled = off;
+      if (off) this.#hideTip();
     }
 
     #syncLabel() {
@@ -220,23 +245,22 @@ import '../media/icon.js';
         this.#hoverOpen = false;
         if (this.#status === 'rest') this.#hideTip();
       };
-      this.#btn.addEventListener('mouseenter', show);
-      this.#btn.addEventListener('mouseleave', hide);
-      this.#btn.addEventListener('focus', show);
-      this.#btn.addEventListener('blur', hide);
+      // En el wrapper, no en el botón: así el tooltip también sale con un
+      // trigger custom slotted. focus/blur no burbujean → captura.
+      const anchor = this.shadowRoot.querySelector('.trigger');
+      anchor.addEventListener('mouseenter', show);
+      anchor.addEventListener('mouseleave', hide);
+      anchor.addEventListener('focus', show, true);
+      anchor.addEventListener('blur', hide, true);
     }
 
     #showTip() {
       if (this.tooltip === 'none') return;
-      this.#tip.hidden = false;
-      requestAnimationFrame(() => this.#tip.toggleAttribute('data-open', true));
+      this.#tip.show();
     }
 
     #hideTip() {
-      this.#tip.removeAttribute('data-open');
-      const done = () => { if (!this.#tip.hasAttribute('data-open')) this.#tip.hidden = true; };
-      this.#tip.addEventListener('transitionend', done, { once: true });
-      setTimeout(done, 200);
+      this.#tip.hide();
     }
 
     async #handleCopy() {

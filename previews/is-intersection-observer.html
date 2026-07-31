@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/helpers/intersection-observer.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <style>
     .io-scroller {
       height: 280px;
@@ -143,7 +144,7 @@
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-intersection-observer">
 
       <section class="section" id="intro">
         <h2>&lt;is-intersection-observer&gt;</h2>
@@ -281,8 +282,7 @@
           </tbody>
         </table>
       </section>
-    </main>
-
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-intersection-observer</h1>
       <nav>

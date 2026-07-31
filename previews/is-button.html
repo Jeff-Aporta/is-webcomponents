@@ -12,6 +12,7 @@
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/media/icon.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
 
   <!-- CodeMirror via CDN (runMode only, no editor) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
@@ -24,7 +25,7 @@
 <body>
 
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-button">
 
       <!-- ===== 1. INTRO ===== -->
       <section class="section" id="intro">
@@ -590,7 +591,7 @@ is-button:state(icon-button) {
             <tr><td><code>click()</code></td><td>Nativo. Dispara un click programático.</td></tr>
             <tr><td><code>focus(options?)</code></td><td>Nativo. Foco en el botón.</td></tr>
             <tr><td><code>blur()</code></td><td>Nativo. Quita el foco.</td></tr>
-            <tr><td><code>setFocus(options?)</code></td><td>Helper equivalente a <code>focus()</code> con la signature de WA.</td></tr>
+            <tr><td><code>setFocus(options?)</code></td><td>Helper equivalente a <code>focus()</code> (misma signature).</td></tr>
             <tr><td><code>checkValidity()</code></td><td>Validez (form-associated).</td></tr>
             <tr><td><code>reportValidity()</code></td><td>Muestra mensaje de validación del form.</td></tr>
             <tr><td><code>setCustomValidity(msg)</code></td><td>Marca error custom para validación del form.</td></tr>
@@ -802,8 +803,7 @@ btn.<span class="attr">setCustomValidity</span>(<span class="str">'Revisa los ca
         </table>
       </section>
 
-    </main>
-
+    </is-main>
     <!-- ============== SIDEBAR ============== -->
     <aside class="sidebar" slot="end">
       <h1>is-button</h1>

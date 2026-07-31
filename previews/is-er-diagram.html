@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-er-diagram · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/diagrams/er-diagram.js"></script>
+  <script type="module" src="../components/diagrams/diagram-lightbox.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-er-diagram">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-er-diagram&gt;</h2>
+        <p class="lede">
+          Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus
+          atributos y las relaciones entre ellas; el componente ubica las cajas,
+          rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo.
+        </p>
+        <p>
+          Comparte motor con <code>&lt;is-flowchart&gt;</code>: mismo esquema JSON de
+          grupos/leyenda, mismo visor a pantalla completa y la misma animación tortuga.
+        </p>
+        <div class="demo" style="height:26rem">
+          <is-er-diagram>
+            <script type="application/json">
+              {
+                "erDiagram": {
+                  "title": "Facturación electrónica",
+                  "direction": "LR",
+                  "groups": [
+                    { "id": "g1", "name": "Facturación", "hue": 199 },
+                    { "id": "g2", "name": "Terceros", "hue": 239 }
+                  ],
+                  "entities": [
+                    { "id": "FACTURA", "name": "FACTURA", "group": "g1",
+                      "attributes": [
+                        { "name": "id", "type": "int", "key": "PK" },
+                        { "name": "cliente_id", "type": "int", "key": "FK" },
+                        { "name": "fecha", "type": "date" },
+                        { "name": "total", "type": "decimal" }
+                      ] },
+                    { "id": "ITEM", "name": "ITEM_FACTURA", "group": "g1",
+                      "attributes": [
+                        { "name": "id", "type": "int", "key": "PK" },
+                        { "name": "factura_id", "type": "int", "key": "FK" },
+                        { "name": "producto_id", "type": "int", "key": "FK" },
+                        { "name": "cantidad", "type": "decimal" }
+                      ] },
+                    { "id": "CLIENTE", "name": "CLIENTE", "group": "g2",
+                      "attributes": [
+                        { "name": "id", "type": "int", "key": "PK" },
+                        { "name": "nombre", "type": "varchar" }
+                      ] },
+                    { "id": "PRODUCTO", "name": "PRODUCTO", "group": "g2",
+                      "attributes": [
+                        { "name": "id", "type": "int", "key": "PK" },
+                        { "name": "nombre", "type": "varchar" },
+                        { "name": "precio", "type": "decimal" }
+                      ] }
+                  ],
+                  "relations": [
+                    { "from": "FACTURA", "to": "CLIENTE", "label": "pertenece a", "fromCard": "many", "toCard": "one", "identifying": true },
+                    { "from": "FACTURA", "to": "ITEM", "label": "contiene", "fromCard": "one", "toCard": "many", "identifying": true },
+                    { "from": "ITEM", "to": "PRODUCTO", "label": "referencia", "fromCard": "zeroOrOne", "toCard": "zeroOrMany", "identifying": false }
+                  ]
+                }
+              }
+            </script>
+          </is-er-diagram>
+        </div>
+      </section>
+
+      <section class="section" id="cardinalidad">
+        <h2>Cardinalidad</h2>
+        <p>
+          Cada extremo de una relación admite <code>one</code>, <code>many</code>,
+          <code>zeroOrOne</code> y <code>zeroOrMany</code>, dibujados como pata de
+          gallo / marca de uno / círculo de opcionalidad, igual que la notación
+          crow's foot clásica. <code>identifying: false</code> dibuja la línea punteada.
+        </p>
+        <div class="demo" style="height:16rem">
+          <is-er-diagram>
+            <script type="application/json">
+              {
+                "erDiagram": {
+                  "direction": "LR",
+                  "entities": [
+                    { "id": "A", "name": "A", "attributes": [{ "name": "id", "type": "int", "key": "PK" }] },
+                    { "id": "B", "name": "B", "attributes": [{ "name": "id", "type": "int", "key": "PK" }] }
+                  ],
+                  "relations": [
+                    { "from": "A", "to": "B", "label": "1 a N", "fromCard": "one", "toCard": "many" }
+                  ]
+                }
+              }
+            </script>
+          </is-er-diagram>
+        </div>
+      </section>
+
+      <section class="section" id="api">
+        <h2>Referencia</h2>
+
+        <h3>Atributos</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Valores</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>variant</code></td><td><code>inline</code> · <code>viewer</code></td><td>inline abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación.</td></tr>
+            <tr><td><code>without-viewer</code></td><td>booleano</td><td>Desactiva la apertura automática del visor.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Esquema del JSON</h3>
+        <table class="ref">
+          <thead><tr><th>Campo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>direction</code></td><td><code>TB</code> · <code>BT</code> · <code>LR</code> (default) · <code>RL</code>.</td></tr>
+            <tr><td><code>entities[].id</code></td><td>Identificador que referencian las relaciones.</td></tr>
+            <tr><td><code>entities[].attributes[].key</code></td><td><code>PK</code> · <code>FK</code>; se pinta como badge junto al nombre.</td></tr>
+            <tr><td><code>entities[].group</code></td><td>Id del grupo; tiñe el encabezado de la caja.</td></tr>
+            <tr><td><code>relations[].fromCard</code> · <code>toCard</code></td><td><code>one</code> · <code>many</code> · <code>zeroOrOne</code> · <code>zeroOrMany</code>.</td></tr>
+            <tr><td><code>relations[].identifying</code></td><td><code>true</code> (default, línea sólida) · <code>false</code> (línea punteada).</td></tr>
+            <tr><td><code>groups[].hue</code></td><td>Tono HSL 0–360.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Propiedades y eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>payload</code></td><td>Configuración JSON; alternativa al script hijo.</td></tr>
+            <tr><td><code>layout</code></td><td>Geometría calculada (solo lectura).</td></tr>
+            <tr><td><code>turtle</code></td><td>API de la animación: play / pause / stop / next / prev.</td></tr>
+            <tr><td><code>hiddenGroups</code></td><td>Set de grupos ocultos; al cambiar, el diagrama se re-diseña sin esas entidades.</td></tr>
+            <tr><td><code>is-render</code></td><td>Evento: el SVG terminó de construirse.</td></tr>
+            <tr><td><code>is-turtle-state</code></td><td>Evento: estado de la animación.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-er-diagram</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#cardinalidad">Cardinalidad</a>
+        <a href="#api">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

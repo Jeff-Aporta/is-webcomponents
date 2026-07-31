@@ -1,0 +1,311 @@
+:host {
+  --is-select-border-radius: var(--is-radius-sm, 0.375em);
+  --is-select-border: var(--is-control-border, #adb5bd);
+  --is-select-bg: var(--is-control-bg, #f1f3f5);
+  --is-select-text: var(--is-control-text, #212529);
+  --is-select-focus: var(--is-focus, var(--is-accent, #339af0));
+  --is-select-danger: var(--is-color-danger-500, #fa5252);
+  --is-select-danger-text: var(--is-danger-text, var(--is-color-danger-600, #e03131));
+  display: block;
+  position: relative;
+  font-family: var(--is-sans, inherit);
+  color: var(--is-text, inherit);
+  box-sizing: border-box;
+
+  /* Las reglas de autor ganan a `[hidden]` del UA: hay que reafirmarlo */
+  [hidden] { display: none !important; }
+
+  .form-control {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+  }
+
+  .label {
+    font-size: 0.875em;
+    font-weight: 500;
+    color: var(--is-text-soft, inherit);
+  }
+
+  .hint {
+    font-size: 0.8em;
+    color: var(--is-text-dim, #7a8390);
+  }
+
+  .error-text {
+    font-size: 0.8em;
+    color: var(--is-select-danger-text);
+  }
+
+  .base {
+    display: flex;
+    align-items: center;
+    gap: 0.15em;
+    min-height: 2.5em;
+    padding: 0.2em 0.35em 0.2em 0.75em;
+    background: var(--is-select-bg);
+    border: 1px solid var(--is-select-border);
+    border-radius: var(--is-select-border-radius);
+    color: var(--is-select-text);
+    cursor: pointer;
+    &:focus-within {
+      outline: 2px solid var(--is-select-focus);
+      outline-offset: 1px;
+    }
+  }
+
+  .trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    flex: 1;
+    min-width: 0;
+    padding: 0.25em 0;
+    outline: none;
+  }
+
+  /* `contents` evita que el hueco del slot vacío genere gap en el trigger */
+  .start {
+    display: contents;
+    color: var(--is-text-dim, #7a8390);
+  }
+
+  .content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .display {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+  }
+
+  .display.is-placeholder {
+    color: var(--is-text-dim, #7a8390);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    font-size: 0.8em;
+  }
+
+  .clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75em;
+    height: 1.75em;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--is-text-dim, #7a8390);
+    border-radius: var(--is-select-border-radius);
+    cursor: pointer;
+    &:hover { background: var(--is-control-bg-hover, #e9ecef); color: var(--is-text, inherit); }
+  }
+
+  .caret {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5em;
+    color: var(--is-text-dim, #7a8390);
+    transition: transform 0.15s ease;
+  }
+
+  /* Dialog a viewport completo en top layer → no lo clippea overflow */
+  .popup {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    overflow: visible;
+    outline: none;
+  }
+
+  .popup::backdrop {
+    background: transparent;
+  }
+
+  .listbox {
+    position: fixed;
+    z-index: 1;
+    box-sizing: border-box;
+    max-height: 16em;
+    overflow: auto;
+    padding: 0.35em;
+    background: var(--is-bg-elev, #fff);
+    border: 1px solid var(--is-border, #d0d7de);
+    border-radius: var(--is-radius, 0.625em);
+    box-shadow: var(--is-shadow, 0 8px 24px rgb(0 0 0 / 12%));
+    color: var(--is-text, inherit);
+  }
+
+  .group-label {
+    padding: 0.5em 0.6em 0.2em;
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--is-text-dim, #7a8390);
+    cursor: default;
+  }
+
+  .group + .group .group-label {
+    margin-top: 0.25em;
+    border-top: 1px solid var(--is-border-soft, #e1e4e8);
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.45em 0.6em;
+    border-radius: var(--is-radius-sm, 0.375em);
+    cursor: pointer;
+    line-height: 1.3;
+    &:hover { background: var(--is-control-bg-hover, #e9ecef); }
+  }
+
+  .option-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .option-label {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .option-desc {
+    display: block;
+    font-size: 0.8em;
+    line-height: 1.35;
+    color: var(--is-text-dim, #7a8390);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .option-start {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    line-height: 0;
+    font-size: 1.15em;
+    color: var(--is-text-dim, #7a8390);
+  }
+
+  /* Sin `checkmarks` el marco no existe: solo el icono ocupa su hueco */
+  .mark {
+    display: contents;
+  }
+
+  .check {
+    flex: none;
+    visibility: hidden;
+    color: var(--is-accent, currentColor);
+  }
+
+  .option[aria-selected="true"] {
+    background: var(--is-accent-bg, rgb(224 49 49 / 12%));
+    color: var(--is-brand-text, var(--is-accent, inherit));
+    .check { visibility: visible; }
+    .option-desc { color: inherit; opacity: 0.75; }
+  }
+
+  .option[data-active] {
+    outline: 1px solid var(--is-select-focus);
+    outline-offset: -1px;
+  }
+
+  .option[data-disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+:host([disabled]) {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+:host([full-width]) {
+  width: 100%;
+}
+
+:host([open]) .base,
+:host(:state(open)) .base {
+  outline: 2px solid var(--is-select-focus);
+  outline-offset: 1px;
+}
+
+:host([open]) .caret,
+:host(:state(open)) .caret {
+  transform: rotate(180deg);
+}
+
+/* --- appearance (variants de MUI) ---------------------------------- */
+
+:host([appearance="filled"]) .base {
+  border-color: transparent;
+  border-bottom-color: var(--is-select-border);
+  border-radius: var(--is-select-border-radius) var(--is-select-border-radius) 0 0;
+}
+
+:host([appearance="underlined"]) .base {
+  background: transparent;
+  border-color: transparent;
+  border-bottom-color: var(--is-select-border);
+  border-radius: 0;
+  padding-inline: 0.15em;
+}
+
+/* --- error --------------------------------------------------------- */
+
+:host([error]) {
+  --is-select-border: var(--is-select-danger);
+  --is-select-focus: var(--is-select-danger);
+}
+
+:host([error]) .label {
+  color: var(--is-select-danger-text);
+}
+
+/* --- checkmarks (solo en multiple) --------------------------------- */
+
+:host([multiple][checkmarks]) .mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-sizing: border-box;
+  width: 1.15em;
+  height: 1.15em;
+  border: 1px solid var(--is-control-border, #adb5bd);
+  border-radius: 0.25em;
+}
+
+:host([multiple][checkmarks]) .check {
+  font-size: 0.85em;
+  color: var(--is-on-brand, #fff);
+}
+
+:host([multiple][checkmarks]) .option[aria-selected="true"] .mark {
+  background: var(--is-accent, #339af0);
+  border-color: var(--is-accent, #339af0);
+}

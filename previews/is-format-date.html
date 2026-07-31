@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/helpers/format-date.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-format-date">
       <section class="section" id="intro">
         <h2>&lt;is-format-date&gt;</h2>
         <p class="lede">Formatea fechas con <code class="code">Intl.DateTimeFormat</code>. Cualquier locale BCP&nbsp;47 vía <code class="code">locale</code> (o <code class="code">lang</code> del documento).</p>
@@ -28,11 +29,20 @@
       <section class="section" id="inputs">
         <h2>Entradas de <code>date</code></h2>
         <div class="demo">
-          <ul>
-            <li>ISO datetime → <is-format-date date="2026-07-30T17:30:00"></is-format-date></li>
-            <li>YYYY-MM-DD → <is-format-date date="2026-07-30" year="numeric" month="short" day="numeric"></is-format-date></li>
-            <li>timestamp ms → <is-format-date date="1753896600000" year="numeric" month="short" day="numeric"></is-format-date></li>
-          </ul>
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">ISO datetime</code>
+              <is-format-date class="format-grid__value" date="2026-07-30T17:30:00"></is-format-date>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">YYYY-MM-DD</code>
+              <is-format-date class="format-grid__value" date="2026-07-30" year="numeric" month="short" day="numeric"></is-format-date>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">timestamp ms</code>
+              <is-format-date class="format-grid__value" date="1753896600000" year="numeric" month="short" day="numeric"></is-format-date>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -60,24 +70,48 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
       <section class="section" id="parts">
         <h2>Partes de fecha</h2>
         <div class="demo">
-          <ul>
-            <li>weekday long → <is-format-date date="2026-07-30" weekday="long"></is-format-date></li>
-            <li>month short → <is-format-date date="2026-07-30" month="short" day="numeric"></is-format-date></li>
-            <li>month narrow → <is-format-date date="2026-07-30" month="narrow" day="numeric" year="2-digit"></is-format-date></li>
-            <li>era → <is-format-date date="2026-07-30" era="short" year="numeric" month="long" day="numeric"></is-format-date></li>
-            <li>year 2-digit → <is-format-date date="2026-07-30" year="2-digit" month="numeric" day="numeric"></is-format-date></li>
-          </ul>
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">weekday long</code>
+              <is-format-date class="format-grid__value" date="2026-07-30" weekday="long"></is-format-date>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">month short</code>
+              <is-format-date class="format-grid__value" date="2026-07-30" month="short" day="numeric"></is-format-date>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">month narrow · 2-digit</code>
+              <is-format-date class="format-grid__value" date="2026-07-30" month="narrow" day="numeric" year="2-digit"></is-format-date>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">era · long</code>
+              <is-format-date class="format-grid__value" date="2026-07-30" era="short" year="numeric" month="long" day="numeric"></is-format-date>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">year 2-digit</code>
+              <is-format-date class="format-grid__value" date="2026-07-30" year="2-digit" month="numeric" day="numeric"></is-format-date>
+            </div>
+          </div>
         </div>
       </section>
 
       <section class="section" id="time">
         <h2>Hora · hour-format</h2>
         <div class="demo">
-          <ul>
-            <li>24h → <is-format-date date="2026-07-30T17:30:45" hour="numeric" minute="numeric" second="numeric" hour-format="24"></is-format-date></li>
-            <li>12h → <is-format-date date="2026-07-30T17:30:45" hour="numeric" minute="numeric" second="numeric" hour-format="12"></is-format-date></li>
-            <li>auto → <is-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="auto"></is-format-date></li>
-          </ul>
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">24h</code>
+              <is-format-date class="format-grid__value" date="2026-07-30T17:30:45" hour="numeric" minute="numeric" second="numeric" hour-format="24"></is-format-date>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">12h</code>
+              <is-format-date class="format-grid__value" date="2026-07-30T17:30:45" hour="numeric" minute="numeric" second="numeric" hour-format="12"></is-format-date>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">auto</code>
+              <is-format-date class="format-grid__value" date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="auto"></is-format-date>
+            </div>
+          </div>
         </div>
         <pre class="code" data-lang="html">&lt;is-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="24"&gt;&lt;/is-format-date&gt;
 &lt;is-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="12"&gt;&lt;/is-format-date&gt;</pre>
@@ -86,20 +120,23 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
       <section class="section" id="timezone">
         <h2>Zona horaria</h2>
         <div class="demo">
-          <ul>
-            <li>UTC short →
-              <is-format-date date="2026-07-30T17:30:00Z" time-zone="UTC" time-zone-name="short"
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">UTC · short</code>
+              <is-format-date class="format-grid__value" date="2026-07-30T17:30:00Z" time-zone="UTC" time-zone-name="short"
                 year="numeric" month="short" day="numeric" hour="numeric" minute="numeric"></is-format-date>
-            </li>
-            <li>America/Bogota long →
-              <is-format-date date="2026-07-30T17:30:00Z" time-zone="America/Bogota" time-zone-name="long"
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">America/Bogota · long</code>
+              <is-format-date class="format-grid__value" date="2026-07-30T17:30:00Z" time-zone="America/Bogota" time-zone-name="long"
                 year="numeric" month="short" day="numeric" hour="numeric" minute="numeric" hour-format="24"></is-format-date>
-            </li>
-            <li>Europe/Madrid shortOffset →
-              <is-format-date date="2026-07-30T17:30:00Z" time-zone="Europe/Madrid" time-zone-name="shortOffset"
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">Europe/Madrid · shortOffset</code>
+              <is-format-date class="format-grid__value" date="2026-07-30T17:30:00Z" time-zone="Europe/Madrid" time-zone-name="shortOffset"
                 hour="numeric" minute="numeric" hour-format="24"></is-format-date>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -117,7 +154,7 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
           </tbody>
         </table>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-format-date</h1>
       <nav>

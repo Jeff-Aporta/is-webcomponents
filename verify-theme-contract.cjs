@@ -37,5 +37,11 @@ assert(/id="fullscreenBtn"[\s\S]*?appearance="plain"[\s\S]*?pill/.test(html) || 
 assert(/<is-button\b[^>]*id="fullscreenBtn"[^>]*>[\s\n]*<is-icon[^>]*>[\s\n]*<\/is-icon>[\s\n]*<\/is-button>/.test(html), 'fullscreen button must be icon-only is-button');
 assert(/<is-theme-toggle\b[^>]*id="themeToggle"/.test(html), 'theme toggle must be is-theme-toggle');
 assert(preview.includes('https://www.youtube.com/@JeffAporta'), 'JeffAporta channel missing');
-assert(!/webawesome|Web Awesome|\bwa-[a-z]/i.test(preview), 'Web Awesome reference remains');
+const WA_RE = /webawesome|Web Awesome|\bwa-[a-z]/i;
+assert(!WA_RE.test(preview), 'Web Awesome reference remains in is-button preview');
+const previewsDir = path.join(root, 'previews');
+for (const name of fs.readdirSync(previewsDir).filter((f) => f.endsWith('.html'))) {
+  const body = fs.readFileSync(path.join(previewsDir, name), 'utf8');
+  assert(!WA_RE.test(body), `Web Awesome reference remains in previews/${name}`);
+}
 console.log('theme contract: ok');

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/actions/check-icon-button.js"></script>
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/media/avatar.js"></script>
+  <script type="module" src="../components/feedback/badge.js"></script>
+  <script type="module" src="../components/feedback/tag.js"></script>
+  <script type="module" src="../components/feedback/progress-bar.js"></script>
+  <script type="module" src="../components/layout/card.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/charts/chart.js"></script>
+  <script type="module" src="../components/charts/bar-chart.js"></script>
+  <script type="module" src="../components/charts/line-chart.js"></script>
+  <script type="module" src="../components/charts/doughnut-chart.js"></script>
+  <script type="module" src="../components/charts/radar-chart.js"></script>
+  <script type="module" src="../components/charts/sparkline.js"></script>
+  <script type="module" src="../components/charts/polar-area-chart.js"></script>
+  <script type="module" src="../components/charts/pie-chart.js"></script>
+  <script type="module" src="../components/charts/scatter-chart.js"></script>
+  <script type="module" src="../components/charts/bubble-chart.js"></script>
+  <script type="module" src="../components/feedback/tag.js"></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { overflow: hidden; }
+
+    is-main.home-main {
+      display: block;
+      height: 100%;
+      padding: 0;
+      overflow: auto;
+      background:
+        radial-gradient(1100px 540px at 6% -8%, color-mix(in srgb, var(--is-accent) 22%, transparent), transparent 55%),
+        radial-gradient(900px 520px at 96% 6%, color-mix(in srgb, var(--is-color-brand-700, #1e5fbf) 28%, transparent), transparent 55%),
+        radial-gradient(700px 380px at 50% 110%, color-mix(in srgb, var(--is-color-brand-300, #74c0fc) 16%, transparent), transparent 60%),
+        var(--is-bg);
+    }
+
+    .home {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+      align-items: center;
+      min-height: 100%;
+      padding: clamp(1.75rem, 4.5vw, 4rem) clamp(1.25rem, 4vw, 3.5rem);
+      box-sizing: border-box;
+    }
+
+    /* ── Charts lab: grid ancho debajo del hero/showcase ──────────────── */
+    .home-lab {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 1rem;
+      perspective: 1400px;
+      perspective-origin: 50% 30%;
+      margin-top: clamp(2rem, 5vw, 4rem);
+    }
+
+    .home-lab__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: 0.85rem;
+    }
+
+    .home-lab__title {
+      margin: 0;
+      font-size: clamp(1.4rem, 2.4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--is-text);
+    }
+
+    .home-lab__title em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--is-accent), color-mix(in srgb, var(--is-accent) 50%, #fff 50%));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .home-lab__lede {
+      margin: 0;
+      max-width: 36rem;
+      font-size: 0.95rem;
+      color: var(--is-text-soft);
+      line-height: 1.5;
+    }
+
+    .home-lab__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .home-lab__chips is-tag {
+      font-size: 0.72rem;
+    }
+
+    .home-lab__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+      gap: 1rem;
+      transform: rotateY(-3deg) rotateX(2deg);
+      transform-style: preserve-3d;
+      transition: transform 600ms cubic-bezier(.2,.7,.3,1);
+    }
+
+    .home-lab__grid:hover {
+      transform: rotateY(-1deg) rotateX(0.5deg);
+    }
+
+    .lab-card {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 0.5rem;
+      padding: 0.95rem 1rem 1rem;
+      background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
+      border: 1px solid color-mix(in srgb, var(--is-border) 70%, transparent);
+      border-radius: 0.85rem;
+      box-shadow:
+        0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset,
+        0 16px 36px rgb(0 0 0 / 22%),
+        0 2px 6px rgb(0 0 0 / 16%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transform-style: preserve-3d;
+      min-width: 0;
+    }
+
+    .lab-card:hover { transform: translateZ(8px); }
+
+    .lab-card__title {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--is-text-soft);
+    }
+
+    .lab-card__plot { min-height: 11rem; }
+
+    .lab-card__plot is-bar-chart,
+    .lab-card__plot is-line-chart,
+    .lab-card__plot is-pie-chart,
+    .lab-card__plot is-doughnut-chart,
+    .lab-card__plot is-polar-area-chart,
+    .lab-card__plot is-radar-chart,
+    .lab-card__plot is-scatter-chart,
+    .lab-card__plot is-bubble-chart {
+      display: block;
+      width: 100%;
+      height: 11rem;
+    }
+
+    .lab-card__plot--tall is-radar-chart { height: 13rem; }
+
+    .lab-card__sparklines {
+      display: grid;
+      gap: 0.5rem;
+      padding-top: 0.4rem;
+    }
+
+    .lab-card__sparklines .row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.3rem 0;
+      border-bottom: 1px dashed color-mix(in srgb, var(--is-border) 60%, transparent);
+      font-size: 0.85rem;
+    }
+
+    .lab-card__sparklines .row:last-child { border-bottom: 0; }
+
+    .lab-card__sparklines .row b { font-variant-numeric: tabular-nums; }
+
+    .lab-card__sparklines is-sparkline { width: 6rem; }
+
+    @media (max-width: 960px) {
+      .home-lab__grid { transform: none; }
+      .home-lab__grid:hover { transform: none; }
+      .lab-card:hover { transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .home-lab__grid,
+      .home-lab__grid:hover,
+      .lab-card:hover { transform: none; }
+    }
+
+    .home-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.4rem;
+      max-width: 36rem;
+    }
+
+    .home-kicker {
+      margin: 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--is-text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .home-kicker::before {
+      content: "";
+      width: 1.8rem;
+      height: 1px;
+      background: var(--is-accent);
+    }
+
+    .home-title {
+      margin: 0;
+      font-size: clamp(2.25rem, 4.6vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      color: var(--is-text);
+    }
+
+    .home-title__accent {
+      background: linear-gradient(135deg, var(--is-accent), color-mix(in srgb, var(--is-accent) 50%, #fff 50%));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .home-lede {
+      margin: 0;
+      max-width: 32rem;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: var(--is-text-soft);
+    }
+
+    .home-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.4rem;
+    }
+
+    .home-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.4rem 0 0;
+    }
+
+    .home-meta is-tag { font-size: 0.72rem; }
+
+    /* ── Showcase con charts en 3D ─────────────────────────────────── */
+    .home-stage {
+      position: relative;
+      min-height: 30rem;
+      perspective: 1400px;
+      perspective-origin: 60% 50%;
+    }
+
+    .home-stage__grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1rem;
+      transform: rotateY(-7deg) rotateX(3deg);
+      transform-style: preserve-3d;
+      transition: transform 600ms cubic-bezier(.2,.7,.3,1);
+    }
+
+    /* Glow de fondo para dar profundidad */
+    .home-stage__grid::before {
+      content: "";
+      position: absolute;
+      inset: -15% -10% -10% -10%;
+      background: radial-gradient(ellipse at 30% 30%, color-mix(in srgb, var(--is-accent) 26%, transparent), transparent 60%);
+      filter: blur(40px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .home-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-width: 0;
+    }
+
+    .home-col--b { margin-top: 1.5rem; }
+
+    .tile {
+      position: relative;
+      background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
+      border: 1px solid color-mix(in srgb, var(--is-border) 70%, transparent);
+      border-radius: 0.85rem;
+      box-shadow:
+        0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset,
+        0 16px 36px rgb(0 0 0 / 25%),
+        0 2px 6px rgb(0 0 0 / 18%);
+      padding: 0.9rem 1rem;
+      min-width: 0;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transform-style: preserve-3d;
+    }
+
+    .tile--accent {
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--is-accent) 92%, #000),
+        color-mix(in srgb, var(--is-color-brand-700) 80%, #000));
+      border-color: transparent;
+      color: #fff;
+      box-shadow:
+        0 1px 0 rgb(255 255 255 / 18%) inset,
+        0 18px 40px color-mix(in srgb, var(--is-accent) 40%, transparent);
+    }
+
+    .tile--accent .tile__muted { color: rgb(255 255 255 / 78%); }
+    .tile--accent .tile__title { color: #fff; }
+
+    .tile__eyebrow {
+      margin: 0 0 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      opacity: 0.85;
+    }
+
+    .tile__title {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--is-text);
+    }
+
+    .tile__muted {
+      margin: 0.35rem 0 0;
+      font-size: 0.78rem;
+      color: var(--is-text-soft);
+    }
+
+    /* Charts dentro de tile: tipografía consistente */
+    .tile is-bar-chart,
+    .tile is-line-chart,
+    .tile is-doughnut-chart,
+    .tile is-radar-chart,
+    .tile is-polar-area-chart {
+      display: block;
+      width: 100%;
+    }
+
+    .tile--chart-bar is-bar-chart { height: 9rem; }
+    .tile--chart-line is-line-chart { height: 7.5rem; }
+    .tile--chart-donut is-doughnut-chart { height: 10rem; }
+    .tile--chart-radar is-radar-chart { height: 10rem; }
+    .tile--chart-polar is-polar-area-chart { height: 10rem; }
+
+    .tile__row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-top: 0.75rem;
+    }
+
+    .tile__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    /* KPI card con sparkline */
+    .kpi {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 0.65rem;
+    }
+
+    .kpi__value {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .kpi__delta {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--is-color-success-500, #40c057);
+    }
+
+    .kpi__spark {
+      grid-column: 1 / -1;
+      height: 2.25rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Lista de checks */
+    .tile__list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .tile__list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--is-text);
+      line-height: 1.35;
+    }
+
+    .tile__list is-icon { flex-shrink: 0; margin-top: 0.1rem; color: var(--is-accent); }
+
+    /* Avatar + meta */
+    .tile__msg {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .tile__msg-body { flex: 1; min-width: 0; }
+    .tile__msg-body strong { display: block; font-size: 0.82rem; }
+    .tile__msg-body span { font-size: 0.72rem; color: var(--is-text-soft); }
+
+    /* Tilt al pasar el ratón */
+    .home-stage__grid:hover {
+      transform: rotateY(-2deg) rotateX(1deg);
+    }
+
+    .tile:hover {
+      transform: translateZ(8px);
+    }
+
+    @media (max-width: 960px) {
+      .home {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+      .home-stage__grid { transform: none; }
+      .home-stage__grid:hover { transform: none; }
+      .home-col--b { margin-top: 0; }
+      .home-stage { min-height: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .home-stage__grid,
+      .home-stage__grid:hover,
+      .tile:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <is-main class="home-main" remember-scroll storage-key="docs-home">
+    <div class="home">
+      <section class="home-hero" aria-labelledby="homeTitle">
+        <p class="home-kicker">IS Web Components</p>
+        <h1 class="home-title" id="homeTitle">
+          <span class="home-title__accent">Construye más rápido</span>
+          con UI nativa y tokens de marca
+        </h1>
+        <p class="home-lede">
+          Galería de Web Components vanilla (<code class="code">is-*</code>) para
+          Insoft, ContaPyme y AgroWin. Shadow DOM, tokens <code class="code">--is-*</code>
+          y charts animados listos para producción.
+        </p>
+        <div class="home-actions">
+          <is-button id="ctaExplore" variant="brand" appearance="filled">
+            Explorar componentes
+            <is-icon slot="end" icon="mdi:arrow-right"></is-icon>
+          </is-button>
+          <is-button id="ctaButton" variant="neutral" appearance="outlined">
+            Ver is-button
+          </is-button>
+          <is-button id="ctaCharts" variant="neutral" appearance="outlined">
+            Ver charts
+          </is-button>
+        </div>
+        <div class="home-meta">
+          <is-tag variant="brand">Vanilla</is-tag>
+          <is-tag>CDN / ES modules</is-tag>
+          <is-tag variant="success">3 paletas</is-tag>
+          <is-tag variant="warning">80+ componentes</is-tag>
+        </div>
+      </section>
+
+      <aside class="home-stage" aria-label="Vista previa de componentes">
+        <div class="home-stage__grid">
+
+          <!-- Columna izquierda -->
+          <div class="home-col">
+
+            <!-- KPI con sparkline -->
+            <div class="tile">
+              <p class="tile__eyebrow">Ingresos · últimos 30 días</p>
+              <div class="kpi">
+                <div>
+                  <div class="kpi__value">$ 248.5k</div>
+                  <div class="kpi__delta">▲ 12.4% vs mes anterior</div>
+                </div>
+                <is-badge variant="success">+12%</is-badge>
+              </div>
+              <div class="kpi__spark">
+                <is-sparkline
+                  data="12 18 14 22 19 28 24 31 27 34 30 36 33 40 37 44 42 48 46 52"
+                  label="Ingresos diarios"
+                  style="width:100%;height:100%"></is-sparkline>
+              </div>
+            </div>
+
+            <!-- Bar chart: ingresos por categoría -->
+            <div class="tile tile--chart-bar">
+              <p class="tile__eyebrow">Por categoría</p>
+              <p class="tile__title">Ingresos del mes</p>
+              <is-bar-chart without-legend>
+                <script type="application/json">
+                  {
+                    "data": {
+                      "labels": ["Servicios", "Productos", "Suscripciones", "Soporte", "Otros"],
+                      "datasets": [{ "label": "Ingresos", "data": [82, 64, 48, 31, 14] }]
+                    },
+                    "options": { "plugins": { "legend": { "display": false } } }
+                  }
+                </script>
+              </is-bar-chart>
+            </div>
+
+            <!-- Doughnut chart: distribución -->
+            <div class="tile tile--chart-donut">
+              <p class="tile__eyebrow">Mix de cartera</p>
+              <p class="tile__title">Activos vs Pasivos</p>
+              <is-doughnut-chart without-legend>
+                <script type="application/json">
+                  {
+                    "data": {
+                      "labels": ["Activo corriente", "Activo no corriente", "Pasivo corriente", "Pasivo no corriente", "Patrimonio"],
+                      "datasets": [{ "data": [35, 28, 18, 9, 10] }]
+                    },
+                    "options": {
+                      "cutout": "62%",
+                      "plugins": { "legend": { "display": false } }
+                    }
+                  }
+                </script>
+              </is-doughnut-chart>
+            </div>
+
+          </div>
+
+          <!-- Columna derecha (offset) -->
+          <div class="home-col home-col--b">
+
+            <!-- Line chart: tendencia -->
+            <div class="tile tile--chart-line">
+              <p class="tile__eyebrow">MRR · 6 meses</p>
+              <p class="tile__title">Tendencia de crecimiento</p>
+              <is-line-chart without-legend>
+                <script type="application/json">
+                  {
+                    "data": {
+                      "labels": ["Jun", "Jul", "Ago", "Sep", "Oct", "Nov"],
+                      "datasets": [{
+                        "label": "MRR",
+                        "data": [42, 48, 53, 61, 68, 74],
+                        "fill": true,
+                        "curved": true,
+                        "showPoints": true
+                      }]
+                    },
+                    "options": { "plugins": { "legend": { "display": false } } }
+                  }
+                </script>
+              </is-line-chart>
+            </div>
+
+            <!-- Polar chart: distribución por canal -->
+            <div class="tile tile--chart-polar">
+              <p class="tile__eyebrow">Adquisición</p>
+              <p class="tile__title">Canales del mes</p>
+              <is-polar-area-chart without-legend>
+                <script type="application/json">
+                  {
+                    "data": {
+                      "labels": ["Orgánico", "Directo", "Social", "Email", "Referral", "Paid"],
+                      "datasets": [{ "data": [34, 28, 22, 18, 12, 9] }]
+                    },
+                    "options": { "plugins": { "legend": { "display": false } } }
+                  }
+                </script>
+              </is-polar-area-chart>
+            </div>
+
+            <!-- Tarjeta de features -->
+            <div class="tile">
+              <p class="tile__title" style="margin-bottom:0.65rem">Listo para producción</p>
+              <ul class="tile__list">
+                <li>
+                  <is-icon icon="mdi:check-circle"></is-icon>
+                  <span><strong>Actions</strong> — button, dropdown, copy-button</span>
+                </li>
+                <li>
+                  <is-icon icon="mdi:check-circle"></is-icon>
+                  <span><strong>Feedback</strong> — toast, tooltip, progress</span>
+                </li>
+                <li>
+                  <is-icon icon="mdi:check-circle"></is-icon>
+                  <span><strong>Charts</strong> — bar, line, donut, polar, radar</span>
+                </li>
+                <li>
+                  <is-icon icon="mdi:check-circle"></is-icon>
+                  <span><strong>Data</strong> — grid virtualizado, formatos i18n</span>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+      </aside>
+
+      <section class="home-lab" aria-labelledby="homeLabTitle">
+        <div class="home-lab__head">
+          <div>
+            <h2 class="home-lab__title" id="homeLabTitle">
+              Charts <em>lab</em>
+            </h2>
+            <p class="home-lab__lede">
+              Catálogo vivo con todas las series de charts: barras agrupadas/apiladas/horizontales,
+              líneas con área y escalonadas, pie, doughnut, polar, radar, scatter y bubble.
+              Mismas APIs, mismos tokens, mismo shadow DOM.
+            </p>
+          </div>
+          <div class="home-lab__chips">
+            <is-tag variant="brand">12 tipos</is-tag>
+            <is-tag>Sin dependencias</is-tag>
+            <is-tag variant="success">SVG puro</is-tag>
+            <is-tag variant="warning">Tokens --is-*</is-tag>
+          </div>
+        </div>
+
+        <div class="home-lab__grid">
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Bar · una serie</h3>
+            <div class="lab-card__plot">
+              <is-bar-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"],
+                    "datasets": [{ "label": "Ventas", "data": [4200000, 5100000, 3800000, 6400000, 5900000, 7200000] }] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Bar · 3 series agrupadas</h3>
+            <div class="lab-card__plot">
+              <is-bar-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Q1","Q2","Q3","Q4"], "datasets": [
+                    { "label": "Ingresos", "data": [32, 45, 38, 52] },
+                    { "label": "Costos", "data": [22, 28, 25, 31] },
+                    { "label": "Utilidad", "data": [10, 17, 13, 21] } ] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Bar · apilada</h3>
+            <div class="lab-card__plot">
+              <is-bar-chart stacked without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Ene","Feb","Mar","Abr"], "datasets": [
+                    { "label": "Contado", "data": [18, 22, 20, 27] },
+                    { "label": "Crédito", "data": [12, 15, 18, 14] },
+                    { "label": "Anticipos", "data": [5, 7, 6, 9] } ] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Bar · horizontal</h3>
+            <div class="lab-card__plot">
+              <is-bar-chart index-axis="y" without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Bogotá","Medellín","Cali","Barranquilla","Bucaramanga"],
+                    "datasets": [{ "label": "Clientes", "data": [1240, 890, 610, 430, 280] }] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Line · 2 series, curva</h3>
+            <div class="lab-card__plot">
+              <is-line-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"], "datasets": [
+                    { "label": "2025", "data": [30, 42, 38, 55, 48, 62], "tension": 0.4 },
+                    { "label": "2024", "data": [25, 30, 34, 40, 39, 45], "tension": 0.4 } ] } }
+                </script>
+              </is-line-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Line · área rellena</h3>
+            <div class="lab-card__plot">
+              <is-line-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["L","M","X","J","V","S","D"], "datasets": [
+                    { "label": "Visitas", "data": [120, 190, 170, 240, 280, 210, 150], "fill": true, "tension": 0.4 } ] } }
+                </script>
+              </is-line-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Pie</h3>
+            <div class="lab-card__plot">
+              <is-pie-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Contado","Crédito 30","Crédito 60","Crédito 90"],
+                    "datasets": [{ "label": "Cartera", "data": [45, 25, 18, 12] }] } }
+                </script>
+              </is-pie-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Doughnut</h3>
+            <div class="lab-card__plot">
+              <is-doughnut-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Inventario","Cartera","Bancos","Activo fijo"],
+                    "datasets": [{ "label": "Activos", "data": [3200, 2100, 1450, 5300] }] } }
+                </script>
+              </is-doughnut-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Polar area</h3>
+            <div class="lab-card__plot">
+              <is-polar-area-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Norte","Sur","Este","Oeste","Centro"],
+                    "datasets": [{ "label": "Cobertura", "data": [11, 16, 7, 14, 9] }] } }
+                </script>
+              </is-polar-area-chart>
+            </div>
+          </article>
+
+          <article class="lab-card lab-card__plot--tall">
+            <h3 class="lab-card__title">Radar · 2 series</h3>
+            <div class="lab-card__plot">
+              <is-radar-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Liquidez","Rentabilidad","Endeudamiento","Eficiencia","Crecimiento"],
+                    "datasets": [
+                      { "label": "Empresa", "data": [65, 78, 45, 82, 70] },
+                      { "label": "Sector", "data": [55, 62, 60, 58, 52] } ] } }
+                </script>
+              </is-radar-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Scatter</h3>
+            <div class="lab-card__plot">
+              <is-scatter-chart x-label="Antigüedad (días)" y-label="Saldo" without-legend>
+                <script type="application/json">
+                  { "data": { "datasets": [
+                    { "label": "Facturas", "data": [
+                      {"x":5,"y":120},{"x":18,"y":340},{"x":32,"y":210},{"x":45,"y":560},
+                      {"x":60,"y":430},{"x":75,"y":720},{"x":88,"y":510},{"x":95,"y":880} ] } ] } }
+                </script>
+              </is-scatter-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Bubble</h3>
+            <div class="lab-card__plot">
+              <is-bubble-chart x-label="Margen %" y-label="Volumen" without-legend>
+                <script type="application/json">
+                  { "data": { "datasets": [
+                    { "label": "Productos", "data": [
+                      {"x":12,"y":40,"r":10},{"x":24,"y":75,"r":18},{"x":33,"y":55,"r":8},
+                      {"x":45,"y":90,"r":24},{"x":58,"y":62,"r":14} ] } ] } }
+                </script>
+              </is-bubble-chart>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <h3 class="lab-card__title">Sparklines inline</h3>
+            <div class="lab-card__sparklines">
+              <div class="row"><span>Ventas</span><is-sparkline trend="positive" values="4,6,5,8,7,11,13"></is-sparkline><b>+18%</b></div>
+              <div class="row"><span>Cartera vencida</span><is-sparkline trend="negative" values="12,11,13,9,8,6,5"></is-sparkline><b>−22%</b></div>
+              <div class="row"><span>Rotación</span><is-sparkline trend="neutral" type="bar" values="5,7,6,8,6,7,7"></is-sparkline><b>=</b></div>
+              <div class="row"><span>Margen (gradiente)</span><is-sparkline appearance="gradient" curve="natural" values="3,5,4,7,6,9,12"></is-sparkline><b>+31%</b></div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </is-main>
+
+  <script type="module">
+    const postSelect = (tag) => {
+      try { parent.postMessage({ type: 'is-select', tag }, location.origin); }
+      catch { /* noop */ }
+    };
+    document.getElementById('ctaExplore')?.addEventListener('click', () => postSelect('is-button'));
+    document.getElementById('ctaButton')?.addEventListener('click', () => postSelect('is-button'));
+    document.getElementById('ctaCharts')?.addEventListener('click', () => postSelect('is-bar-chart'));
+  </script>
+</body>
+</html>

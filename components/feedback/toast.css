@@ -19,8 +19,7 @@
   inset-inline-start: 50%;
   transform: translateX(-50%);
 }
-:host([placement="top-end"]),
-:host(:not([placement])) {
+:host([placement="top-end"]) {
   inset-block-start: 0;
   inset-inline-end: 0;
 }
@@ -33,7 +32,8 @@
   inset-inline-start: 50%;
   transform: translateX(-50%);
 }
-:host([placement="bottom-end"]) {
+:host([placement="bottom-end"]),
+:host(:not([placement])) {
   inset-block-end: 0;
   inset-inline-end: 0;
 }

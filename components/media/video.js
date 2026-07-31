@@ -4,7 +4,7 @@ import '../actions/check-icon-button.js';
 /**
  * <is-video> — Web Component (vanilla).
  *
- * Clone simplificado de wa-video.
+ * Reproductor de vídeo con controles propios.
  *
  * Atributos
  *   src, poster
@@ -19,7 +19,8 @@ import '../actions/check-icon-button.js';
  * También reenvía play/pause/ended nativos (bubbles, composed)
  *
  * CSS Parts: ::part(video) ::part(controls) ::part(play-button)
- *            ::part(mute-button) ::part(time) ::part(seek)
+ *            ::part(mute-button) ::part(volume) ::part(volume-slider)
+ *            ::part(time) ::part(seek)
  */
 
 (() => {
@@ -40,15 +41,26 @@ import '../actions/check-icon-button.js';
         ></is-check-icon-button>
         <input part="seek" class="seek" type="range" min="0" max="1000" value="0" aria-label="Posición" />
         <span part="time" class="time">0:00 / 0:00</span>
-        <is-check-icon-button
-          part="mute-button"
-          class="ctrl mute"
-          appearance="plain"
-          icon="mdi:volume-high"
-          checked-icon="mdi:volume-off"
-          label="Silenciar"
-          checked-label="Activar sonido"
-        ></is-check-icon-button>
+        <div part="volume" class="vol">
+          <is-check-icon-button
+            part="mute-button"
+            class="ctrl mute"
+            appearance="plain"
+            icon="mdi:volume-high"
+            checked-icon="mdi:volume-off"
+            label="Silenciar"
+            checked-label="Activar sonido"
+          ></is-check-icon-button>
+          <input
+            part="volume-slider"
+            class="volume"
+            type="range"
+            min="0"
+            max="100"
+            value="100"
+            aria-label="Volumen"
+          />
+        </div>
       </div>
     </div>
   `;
@@ -71,11 +83,13 @@ import '../actions/check-icon-button.js';
     #controls;
     #playBtn;
     #muteBtn;
+    #volume;
     #seek;
     #time;
     #slot;
     #mounted = false;
     #seeking = false;
+    #lastVolume = 1;
 
     constructor() {
       super();
@@ -87,6 +101,7 @@ import '../actions/check-icon-button.js';
       this.#controls = shadow.querySelector('.controls');
       this.#playBtn = shadow.querySelector('.play');
       this.#muteBtn = shadow.querySelector('.mute');
+      this.#volume = shadow.querySelector('.volume');
       this.#seek = shadow.querySelector('.seek');
       this.#time = shadow.querySelector('.time');
       this.#slot = shadow.querySelector('slot');
@@ -102,7 +117,25 @@ import '../actions/check-icon-button.js';
         }
       });
       this.#muteBtn.addEventListener('is-change', (e) => {
-        this.muted = e.detail.checked;
+        if (e.detail.checked) {
+          if (this.#video.volume > 0) this.#lastVolume = this.#video.volume;
+          this.muted = true;
+        } else {
+          this.muted = false;
+          if (this.#video.volume === 0) {
+            this.#video.volume = this.#lastVolume || 1;
+          }
+        }
+      });
+      this.#volume.addEventListener('input', () => {
+        const v = Number(this.#volume.value) / 100;
+        this.#video.volume = v;
+        if (v > 0) {
+          this.#lastVolume = v;
+          this.muted = false;
+        } else {
+          this.muted = true;
+        }
       });
       this.#seek.addEventListener('pointerdown', () => { this.#seeking = true; });
       this.#seek.addEventListener('pointerup', () => { this.#seeking = false; this.#applySeek(); });
@@ -118,7 +151,7 @@ import '../actions/check-icon-button.js';
       this.#video.addEventListener('ended', this.#onEnded);
       this.#video.addEventListener('timeupdate', this.#onTime);
       this.#video.addEventListener('loadedmetadata', this.#onTime);
-      this.#video.addEventListener('volumechange', this.#syncMuteUi);
+      this.#video.addEventListener('volumechange', this.#syncVolumeUi);
 
       this.#slot.addEventListener('slotchange', () => this.#distributeSlot());
     }
@@ -128,7 +161,7 @@ import '../actions/check-icon-button.js';
       this.#syncAttrs();
       this.#syncControlsVisibility();
       this.#syncPlayUi();
-      this.#syncMuteUi();
+      this.#syncVolumeUi();
       this.#distributeSlot();
     }
 
@@ -136,7 +169,7 @@ import '../actions/check-icon-button.js';
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'controls') this.#syncControlsVisibility();
       else this.#syncAttrs();
-      if (name === 'muted') this.#syncMuteUi();
+      if (name === 'muted') this.#syncVolumeUi();
     }
 
     get src() { return this.getAttribute('src') ?? ''; }
@@ -217,10 +250,19 @@ import '../actions/check-icon-button.js';
       this.#playBtn.checked = !this.#video.paused;
     }
 
-    #syncMuteUi = () => {
+    #syncVolumeUi = () => {
       const muted = this.#video.muted || this.#video.volume === 0;
       this.#muteBtn.checked = muted;
       this.toggleAttribute('muted', this.#video.muted);
+      const level = muted ? 0 : this.#video.volume;
+      this.#volume.value = String(Math.round(level * 100));
+      if (this.#video.volume > 0) this.#lastVolume = this.#video.volume;
+      // Icono según nivel (solo cuando no está muteado)
+      if (!muted) {
+        if (level < 0.35) this.#muteBtn.icon = 'mdi:volume-low';
+        else if (level < 0.7) this.#muteBtn.icon = 'mdi:volume-medium';
+        else this.#muteBtn.icon = 'mdi:volume-high';
+      }
     };
 
     #applySeek() {

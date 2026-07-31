@@ -10,20 +10,21 @@
   <script type="module" src="../components/feedback/toast.js"></script>
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
-  <is-toast id="toaster" placement="top-end"></is-toast>
+  <is-toast id="toaster" placement="bottom-end"></is-toast>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-toast">
       <section class="section" id="intro">
         <h2>&lt;is-toast&gt;</h2>
         <p class="lede">Contenedor fijo de notificaciones. Crea ítems con <code class="code">create()</code> o declara <code class="code">&lt;is-toast-item&gt;</code>.</p>
         <div
           class="demo"
-          data-code='&lt;is-toast id="toaster" placement="top-end"&gt;&lt;/is-toast&gt;
+          data-code='&lt;is-toast id="toaster" placement="bottom-end"&gt;&lt;/is-toast&gt;
 
 &lt;is-button variant="brand" id="btn-brand"&gt;brand&lt;/is-button&gt;
 &lt;is-button variant="success" id="btn-success"&gt;success&lt;/is-button&gt;
@@ -87,7 +88,7 @@ document.getElementById('btn-sticky').addEventListener('click', () => {
         </p>
         <div
           class="demo"
-          data-code='&lt;is-toast id="toaster" placement="top-end"&gt;&lt;/is-toast&gt;
+          data-code='&lt;is-toast id="toaster" placement="bottom-end"&gt;&lt;/is-toast&gt;
 
 &lt;is-button data-place="top-start"&gt;top-start&lt;/is-button&gt;
 &lt;is-button data-place="top-center"&gt;top-center&lt;/is-button&gt;
@@ -132,13 +133,13 @@ document.querySelectorAll('[data-place]').forEach((btn) => {
         <table class="ref">
           <thead><tr><th>API</th><th>Detalle</th></tr></thead>
           <tbody>
-            <tr><td><code>placement</code></td><td>top-start · top-center · top-end · bottom-start · bottom-center · bottom-end (default top-end)</td></tr>
+            <tr><td><code>placement</code></td><td>top-start · top-center · top-end · bottom-start · bottom-center · bottom-end (default bottom-end)</td></tr>
             <tr><td><code>create(msg, opts)</code></td><td>variant, icon, duration, allowHtml → Promise&lt;is-toast-item&gt;</td></tr>
             <tr><td><code>is-toast-item</code></td><td>variant, duration, open · show()/hide() · is-after-show/hide</td></tr>
           </tbody>
         </table>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-toast</h1>
       <nav>

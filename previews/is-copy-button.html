@@ -12,6 +12,7 @@
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/actions/copy-button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
@@ -19,6 +20,14 @@
   <style>
     .cluster { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
     .stack { display: flex; flex-direction: column; gap: 0.75rem; }
+    /* Hueco generoso: los tooltips de los 12 placements se despliegan sin taparse */
+    .placements {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+      gap: 2.5rem 1rem;
+      justify-items: center;
+      padding: 2rem 1rem;
+    }
     .from-input {
       font: inherit;
       padding: 0.45em 0.7em;
@@ -37,7 +46,7 @@
 <body>
 
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-copy-button">
 
       <section class="section" id="intro">
         <h2>&lt;is-copy-button&gt;</h2>
@@ -47,7 +56,8 @@
 
         <div class="demo">
           <span class="demo-label">caso mínimo</span>
-          <is-copy-button value="https://insoft.com.co"></is-copy-button>
+          <!-- Hueco entre el chip y el botón: el tooltip de feedback sale arriba -->
+          <is-copy-button value="https://insoft.com.co" style="margin-top: 2.75rem;"></is-copy-button>
         </div>
 
         <div class="callout">
@@ -158,12 +168,30 @@
 
       <section class="section" id="placement">
         <h2>Tooltip placement</h2>
-        <div class="demo cluster" style="gap: 1.5rem; padding: 2rem 1rem;">
-          <is-copy-button value="top" tooltip-placement="top" copy-label="top"></is-copy-button>
-          <is-copy-button value="right" tooltip-placement="right" copy-label="right"></is-copy-button>
-          <is-copy-button value="bottom" tooltip-placement="bottom" copy-label="bottom"></is-copy-button>
-          <is-copy-button value="left" tooltip-placement="left" copy-label="left"></is-copy-button>
+        <p class="lede">
+          El tooltip es un <code class="code">is-tooltip</code> interno, así que acepta los
+          doce placements de <code class="code">is-popover</code> y hace flip solo si no cabe
+          en la dirección pedida.
+        </p>
+
+        <div class="demo">
+          <div class="placements">
+            <is-copy-button value="top" tooltip-placement="top" copy-label="top"></is-copy-button>
+            <is-copy-button value="top-start" tooltip-placement="top-start" copy-label="top-start"></is-copy-button>
+            <is-copy-button value="top-end" tooltip-placement="top-end" copy-label="top-end"></is-copy-button>
+            <is-copy-button value="right" tooltip-placement="right" copy-label="right"></is-copy-button>
+            <is-copy-button value="right-start" tooltip-placement="right-start" copy-label="right-start"></is-copy-button>
+            <is-copy-button value="right-end" tooltip-placement="right-end" copy-label="right-end"></is-copy-button>
+            <is-copy-button value="bottom" tooltip-placement="bottom" copy-label="bottom"></is-copy-button>
+            <is-copy-button value="bottom-start" tooltip-placement="bottom-start" copy-label="bottom-start"></is-copy-button>
+            <is-copy-button value="bottom-end" tooltip-placement="bottom-end" copy-label="bottom-end"></is-copy-button>
+            <is-copy-button value="left" tooltip-placement="left" copy-label="left"></is-copy-button>
+            <is-copy-button value="left-start" tooltip-placement="left-start" copy-label="left-start"></is-copy-button>
+            <is-copy-button value="left-end" tooltip-placement="left-end" copy-label="left-end"></is-copy-button>
+          </div>
         </div>
+
+        <pre class="code"><span class="tag">&lt;is-copy-button</span> <span class="attr">value</span>=<span class="val">"…"</span> <span class="attr">tooltip-placement</span>=<span class="val">"bottom-start"</span><span class="tag">&gt;&lt;/is-copy-button&gt;</span></pre>
       </section>
 
       <section class="section" id="api">
@@ -171,12 +199,12 @@
         <div class="demo cluster">
           <is-copy-button id="apiCopy" value="hola-is-copy"></is-copy-button>
         </div>
-        <div class="api-log" id="apiLog"><div class="row"><span class="hint">Eventos is-copy / is-error aparecerán aquí.</span></div></div>
+        <div class="log" id="apiLog"><div class="row"><span class="hint">Eventos is-copy / is-error aparecerán aquí.</span></div></div>
       </section>
 
       <section class="section" id="reference">
         <h2>Referencia</h2>
-        <table class="api-table">
+        <table class="ref">
           <thead><tr><th>Attr</th><th>Tipo</th><th>Default</th></tr></thead>
           <tbody>
             <tr><td><code>value</code></td><td>string</td><td>''</td></tr>
@@ -186,17 +214,23 @@
             <tr><td><code>error-label</code></td><td>string</td><td>'' → Error</td></tr>
             <tr><td><code>feedback-duration</code></td><td>number</td><td>1000</td></tr>
             <tr><td><code>tooltip</code></td><td>full | copy | none</td><td>full</td></tr>
-            <tr><td><code>tooltip-placement</code></td><td>top | right | bottom | left</td><td>top</td></tr>
+            <tr><td><code>tooltip-placement</code></td><td>los 12 de <code>is-popover</code>: top | top-start | top-end | bottom* | left* | right*</td><td>top</td></tr>
             <tr><td><code>disabled</code></td><td>boolean</td><td>false</td></tr>
           </tbody>
         </table>
-        <p class="lede" style="margin-top: 1rem;">
-          Events: <code class="code">is-copy</code>, <code class="code">is-error</code>.
-          States: <code class="code">:state(success)</code>, <code class="code">:state(error)</code>.
-        </p>
-      </section>
-    </main>
 
+        <table class="ref" style="margin-top: 1rem;">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td>eventos</td><td><code>is-copy</code> con <code>{ value }</code> · <code>is-error</code></td></tr>
+            <tr><td>states</td><td><code>:state(success)</code> · <code>:state(error)</code> · <code>:state(disabled)</code></td></tr>
+            <tr><td>parts</td><td><code>button</code> · <code>copy-icon</code> · <code>success-icon</code> · <code>error-icon</code> · <code>feedback</code> (burbuja) · <code>feedback-body</code></td></tr>
+            <tr><td>compone</td><td><code class="code">is-tooltip</code> (posición, flip, flecha) e <code class="code">is-icon</code></td></tr>
+            <tr><td>tokens</td><td><code>--is-tooltip-bg</code> y <code>--is-tooltip-fg</code> mandan en la burbuja; éxito y error la tiñen solos</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </is-main>
     <aside class="sidebar" slot="end">
       <nav aria-label="En esta página">
         <a href="#intro">Intro</a>

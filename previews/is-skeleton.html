@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/feedback/skeleton.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-skeleton">
       <section class="section" id="intro">
         <h2>Skeleton</h2>
         <p class="lede"><code class="code">&lt;is-skeleton&gt;</code></p>
@@ -52,11 +53,11 @@
           <tbody>
             <tr><td><code>effect</code></td><td>sheen (none · pulse)</td></tr>
             <tr><td><code>--color</code></td><td>control-bg</td></tr>
-            <tr><td><code>--sheen-color</code></td><td>mezcla clara</td></tr>
+            <tr><td><code>--sheen-color</code></td><td>highlight ghost (texto ~11% alpha)</td></tr>
           </tbody>
         </table>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-skeleton</h1>
       <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>

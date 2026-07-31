@@ -152,32 +152,33 @@
   --is-logo-accent: #fff;
 }
 
-/* surfaces: tint azul frío */
+/* surfaces / bg: azul desaturado 75% (marca dodgerblue intacta) — c * 0.25 */
 .theme-dark[data-palette="contapyme"] {
-  --is-bg: color-mix(in srgb, #1e90ff 5%, #0a0e14);
-  --is-bg-soft: color-mix(in srgb, #1e90ff 6%, #121820);
-  --is-bg-elev: color-mix(in srgb, #1e90ff 7%, #18202a);
-  --is-border: color-mix(in srgb, #1e90ff 10%, #273040);
-  --is-border-soft: color-mix(in srgb, #1e90ff 8%, #1c2430);
-  --is-code-bg: color-mix(in srgb, #1e90ff 4.5%, #0d1218);
-  --is-control-bg: color-mix(in srgb, #1e90ff 5.5%, #1c2430);
-  --is-control-bg-hover: color-mix(in srgb, #1e90ff 7%, #283242);
-  --is-control-bg-active: color-mix(in srgb, #1e90ff 8%, #344054);
-  --is-control-border: color-mix(in srgb, #1e90ff 12%, #59636e);
-  --is-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, #1e90ff 14%, rgb(0 0 0 / 25%));
+  --is-bg: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 5%, #0a0e14);
+  --is-bg-soft: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 6%, #121820);
+  --is-bg-elev: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 7%, #18202a);
+  --is-border: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 10%, #273040);
+  --is-border-soft: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 8%, #1c2430);
+  --is-code-bg: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 4.5%, #0d1218);
+  --is-control-bg: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 5.5%, #1c2430);
+  --is-control-bg-hover: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 7%, #283242);
+  --is-control-bg-active: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 8%, #344054);
+  --is-control-border: color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 12%, #59636e);
+  --is-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, oklch(from #1e90ff l calc(c * 0.25) h) 14%, rgb(0 0 0 / 25%));
 }
 .theme-light[data-palette="contapyme"] {
-  --is-bg: color-mix(in srgb, #1e90ff 3%, #fff);
-  --is-bg-soft: color-mix(in srgb, #1e90ff 5%, #f3f7fb);
-  --is-bg-elev: color-mix(in srgb, #1e90ff 2.5%, #fff);
-  --is-border: color-mix(in srgb, #1e90ff 12%, #d0d7de);
-  --is-border-soft: color-mix(in srgb, #1e90ff 8%, #e1e4e8);
-  --is-code-bg: color-mix(in srgb, #1e90ff 4%, #f3f7fb);
-  --is-control-bg: color-mix(in srgb, #1e90ff 5%, #eef3f8);
-  --is-control-bg-hover: color-mix(in srgb, #1e90ff 6%, #e4ebf3);
-  --is-control-bg-active: color-mix(in srgb, #1e90ff 7%, #d8e2ec);
-  --is-control-border: color-mix(in srgb, #1e90ff 14%, #adb5bd);
-  --is-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, #1e90ff 10%, rgb(0 0 0 / 6%));
+  --is-contapyme-surface: oklch(from #1e90ff l calc(c * 0.25) h);
+  --is-bg: color-mix(in srgb, var(--is-contapyme-surface) 3%, #fff);
+  --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 5%, #f3f7fb);
+  --is-bg-elev: color-mix(in srgb, var(--is-contapyme-surface) 2.5%, #fff);
+  --is-border: color-mix(in srgb, var(--is-contapyme-surface) 12%, #d0d7de);
+  --is-border-soft: color-mix(in srgb, var(--is-contapyme-surface) 8%, #e1e4e8);
+  --is-code-bg: color-mix(in srgb, var(--is-contapyme-surface) 4%, #f3f7fb);
+  --is-control-bg: color-mix(in srgb, var(--is-contapyme-surface) 5%, #eef3f8);
+  --is-control-bg-hover: color-mix(in srgb, var(--is-contapyme-surface) 6%, #e4ebf3);
+  --is-control-bg-active: color-mix(in srgb, var(--is-contapyme-surface) 7%, #d8e2ec);
+  --is-control-border: color-mix(in srgb, var(--is-contapyme-surface) 14%, #adb5bd);
+  --is-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--is-contapyme-surface) 10%, rgb(0 0 0 / 6%));
 }
 
 [data-palette="agrowin"] {
@@ -198,32 +199,33 @@
   --is-logo-accent: #17200a;
 }
 
-/* surfaces: tint oliva — dark más profundo; light más claro */
+/* surfaces / bg: oliva desaturado 70% (marca yellowgreen intacta) — c * 0.3 */
 .theme-dark[data-palette="agrowin"] {
-  --is-bg: color-mix(in srgb, #2f4a08 22%, #050704);
-  --is-bg-soft: color-mix(in srgb, #3a5c0c 18%, #0a0e06);
-  --is-bg-elev: color-mix(in srgb, #456e10 16%, #10160a);
-  --is-border: color-mix(in srgb, #5a8a18 14%, #1c2412);
-  --is-border-soft: color-mix(in srgb, #456e10 12%, #141a0c);
-  --is-code-bg: color-mix(in srgb, #2f4a08 18%, #080c05);
-  --is-control-bg: color-mix(in srgb, #3a5c0c 14%, #141c0e);
-  --is-control-bg-hover: color-mix(in srgb, #456e10 16%, #1c2812);
-  --is-control-bg-active: color-mix(in srgb, #527a14 18%, #243216);
-  --is-control-border: color-mix(in srgb, #6b9a28 20%, #3a4430);
-  --is-shadow: 0 1px 0 rgb(255 255 255 / 2%), 0 8px 24px color-mix(in srgb, #1a2e04 35%, rgb(0 0 0 / 40%));
+  --is-bg: color-mix(in srgb, oklch(from #2f4a08 l calc(c * 0.3) h) 22%, #050505);
+  --is-bg-soft: color-mix(in srgb, oklch(from #3a5c0c l calc(c * 0.3) h) 18%, #0a0a0a);
+  --is-bg-elev: color-mix(in srgb, oklch(from #456e10 l calc(c * 0.3) h) 16%, #101010);
+  --is-border: color-mix(in srgb, oklch(from #5a8a18 l calc(c * 0.3) h) 14%, #1c1c1c);
+  --is-border-soft: color-mix(in srgb, oklch(from #456e10 l calc(c * 0.3) h) 12%, #141414);
+  --is-code-bg: color-mix(in srgb, oklch(from #2f4a08 l calc(c * 0.3) h) 18%, #080808);
+  --is-control-bg: color-mix(in srgb, oklch(from #3a5c0c l calc(c * 0.3) h) 14%, #141414);
+  --is-control-bg-hover: color-mix(in srgb, oklch(from #456e10 l calc(c * 0.3) h) 16%, #1c1c1c);
+  --is-control-bg-active: color-mix(in srgb, oklch(from #527a14 l calc(c * 0.3) h) 18%, #242424);
+  --is-control-border: color-mix(in srgb, oklch(from #6b9a28 l calc(c * 0.3) h) 20%, #3a3a3a);
+  --is-shadow: 0 1px 0 rgb(255 255 255 / 2%), 0 8px 24px color-mix(in srgb, oklch(from #1a2e04 l calc(c * 0.3) h) 35%, rgb(0 0 0 / 40%));
 }
 .theme-light[data-palette="agrowin"] {
-  --is-bg: color-mix(in srgb, #9acd32 1%, #fefffd);
-  --is-bg-soft: color-mix(in srgb, #9acd32 2%, #fbfcf7);
+  --is-agrowin-surface: oklch(from #9acd32 l calc(c * 0.3) h);
+  --is-bg: color-mix(in srgb, var(--is-agrowin-surface) 1%, #fefefe);
+  --is-bg-soft: color-mix(in srgb, var(--is-agrowin-surface) 2%, #fbfbfb);
   --is-bg-elev: #fff;
-  --is-border: color-mix(in srgb, #9acd32 6%, #dde3d0);
-  --is-border-soft: color-mix(in srgb, #9acd32 4%, #ebefe3);
-  --is-code-bg: color-mix(in srgb, #9acd32 1.5%, #fbfcf7);
-  --is-control-bg: color-mix(in srgb, #9acd32 2.5%, #f5f7f0);
-  --is-control-bg-hover: color-mix(in srgb, #9acd32 4%, #eef2e6);
-  --is-control-bg-active: color-mix(in srgb, #9acd32 5.5%, #e6ecd8);
-  --is-control-border: color-mix(in srgb, #9acd32 8%, #b8c4a8);
-  --is-shadow: 0 1px 0 rgb(0 0 0 / 3%), 0 8px 24px color-mix(in srgb, #9acd32 4%, rgb(0 0 0 / 5%));
+  --is-border: color-mix(in srgb, var(--is-agrowin-surface) 6%, #e0e0e0);
+  --is-border-soft: color-mix(in srgb, var(--is-agrowin-surface) 4%, #ececec);
+  --is-code-bg: color-mix(in srgb, var(--is-agrowin-surface) 1.5%, #fbfbfb);
+  --is-control-bg: color-mix(in srgb, var(--is-agrowin-surface) 2.5%, #f5f5f5);
+  --is-control-bg-hover: color-mix(in srgb, var(--is-agrowin-surface) 4%, #eeeeee);
+  --is-control-bg-active: color-mix(in srgb, var(--is-agrowin-surface) 5.5%, #e6e6e6);
+  --is-control-border: color-mix(in srgb, var(--is-agrowin-surface) 8%, #b8b8b8);
+  --is-shadow: 0 1px 0 rgb(0 0 0 / 3%), 0 8px 24px color-mix(in srgb, var(--is-agrowin-surface) 4%, rgb(0 0 0 / 5%));
 }
 
 /* light: texto brand + soft pasteles (paleta define valores dark-first) */

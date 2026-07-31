@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-funnel-chart · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/charts/funnel-chart.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-funnel-chart">
+      <section class="section" id="intro">
+        <h2>&lt;is-funnel-chart&gt;</h2>
+        <p class="lede">Embudo para seguir la conversión entre etapas de un proceso.</p>
+        <div class="demo" style="height:16rem">
+          <is-funnel-chart>
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Visitas", "Registros", "Cotizaciones", "Cierres"],
+                  "datasets": [{ "label": "Conversión", "data": [4200, 1800, 640, 210] }]
+                }
+              }
+            </script>
+          </is-funnel-chart>
+        </div>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-funnel-chart</h1>
+      <nav><a href="#intro">Introducción</a></nav>
+    </aside>
+  </is-split-panel>
+
+</body>
+</html>

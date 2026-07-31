@@ -82,7 +82,9 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
   box-shadow: inset 2.5px 0 0 var(--is-accent);
 }
 
-.main {
+.main,
+is-main.main {
+  display: block;
   box-sizing: border-box;
   position: relative;
   height: 100%;
@@ -216,6 +218,10 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
     var(--is-shadow);
   overflow: hidden;
 }
+/* is-copy-button lleva un is-tooltip dentro de su shadow: :has() no lo ve. */
+.demo:has(is-tooltip, is-popover, is-dropdown, is-popup, is-copy-button, is-lightbox, is-diagram-lightbox) {
+  overflow: visible;
+}
 .demo::before {
   content: "";
   position: absolute;
@@ -229,14 +235,41 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
   opacity: 0.55;
 }
 .demo > * { position: relative; z-index: 1; }
+/* Overlays: su z-index interno no cruza el stacking del host; subir el host
+   para que no lo tapen siblings posteriores (#log, captions, etc.). */
+.demo > :is(is-dropdown, is-popup, is-tooltip, is-popover, is-combobox, is-date-picker, is-date-input, is-lightbox, is-diagram-lightbox) {
+  z-index: 5;
+}
 
-/* Charts: llenan la altura del demo (fit height) */
+/* Charts / playlist: llenan la altura del demo (fit height) */
 .demo:has(is-chart, is-bar-chart, is-line-chart, is-pie-chart, is-doughnut-chart,
   is-radar-chart, is-polar-area-chart, is-scatter-chart, is-bubble-chart) {
   min-height: 16rem;
 }
 .demo > :is(is-chart, is-bar-chart, is-line-chart, is-pie-chart, is-doughnut-chart,
   is-radar-chart, is-polar-area-chart, is-scatter-chart, is-bubble-chart) {
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-height: 0;
+  height: auto;
+}
+
+.demo:has(is-video-playlist) {
+  min-height: 22rem;
+}
+.demo > is-video-playlist {
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-height: 0;
+  height: auto;
+}
+
+.demo:has(is-sequence-diagram) {
+  min-height: 18rem;
+}
+.demo > is-sequence-diagram {
   flex: 1 1 auto;
   align-self: stretch;
   width: 100%;
@@ -370,6 +403,9 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
 }
 .demo-label::before { content: none; }
 
+/* Como flex item de .demo (columna) el chip se estiraría a todo el ancho */
+.demo > .demo-label { align-self: flex-start; }
+
 .demo-caption {
   display: block;
   margin: 0 0 0.75em;
@@ -415,6 +451,86 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
 .demo-locale-card is-format-date {
   font-size: 0.92rem;
   color: var(--is-text-soft);
+}
+
+/* Grid de filas (etiqueta + valor) para demos de format-bytes/format-number/format-date.
+   La primera columna es la firma del ejemplo y la segunda el valor renderizado; en
+   columnas anchas se ven 2×N pero sin partir una fila a la mitad. */
+.format-grid {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, max-content) 1fr;
+  gap: 0.4rem 1.25rem;
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.format-grid__row {
+  display: contents;
+}
+
+.format-grid__tag {
+  align-self: center;
+  justify-self: start;
+  font-family: var(--is-mono, ui-monospace, Consolas, monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  color: var(--is-text-soft);
+  background: color-mix(in srgb, var(--is-bg-soft) 70%, transparent);
+  padding: 0.18em 0.55em;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--is-border) 60%, transparent);
+  white-space: nowrap;
+}
+
+.format-grid__value {
+  align-self: center;
+  justify-self: start;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--is-text);
+  /* Permitir que un valor largo no rompa el grid. */
+  min-width: 0;
+}
+
+@media (max-width: 38rem) {
+  .format-grid { grid-template-columns: 1fr; gap: 0.25rem 0; }
+  .format-grid__row { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; align-items: baseline; }
+  .format-grid__value { flex: 1 1 auto; }
+}
+
+/* Variante en cards: cada fila vive en una tarjeta con borde sutil y aire.
+   La rejilla interna deja la firma (`.format-grid__tag`) arriba a la izquierda
+   y el valor destacado abajo a la derecha. Pensada para entradas, presets y
+   listas de ejemplos cortos (3–6 filas). */
+.format-grid--cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.75rem;
+}
+
+.format-grid--cards .format-grid__row {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-content: space-between;
+  gap: 0.4rem 0.6rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius, 0.5em);
+  background: color-mix(in srgb, var(--is-bg-elev, #1c2128) 70%, transparent);
+  min-height: 4.5rem;
+}
+
+.format-grid--cards .format-grid__tag {
+  align-self: start;
+  justify-self: start;
+}
+
+.format-grid--cards .format-grid__value {
+  align-self: end;
+  justify-self: end;
+  text-align: right;
+  font-size: 1.1rem;
+  line-height: 1.25;
 }
 
 .demo-row {
@@ -771,15 +887,15 @@ table.ref td:first-child { width: 36%; }
 /* --- Preview chrome (theme + palette; hidden when ?embed=1) ---------- */
 
 .preview-chrome {
-  position: sticky;
-  z-index: 5;
-  top: 0;
+  position: fixed;
+  z-index: 20;
+  top: 0.65rem;
+  right: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   width: max-content;
-  max-width: 100%;
-  margin: 0 0 0.75rem auto;
+  max-width: calc(100% - 2rem);
   padding: 0.35rem 0.45rem 0.35rem 0.65rem;
   border-radius: 999px;
   background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
@@ -788,6 +904,13 @@ table.ref td:first-child { width: 36%; }
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
+}
+
+/* El main reserva un poco de aire arriba para que el chrome fixed no tape el
+   primer heading al cargar. El valor coincide con la altura aprox. del chrome
+   + su offset. */
+is-main.main {
+  scroll-padding-top: 4rem;
 }
 
 .preview-chrome[hidden] {
@@ -839,7 +962,7 @@ html[data-embed="1"] .preview-chrome {
 }
 
 .preview-chrome__save {
-  font-size: 1.05rem;
+  font-size: 1.15rem; /* a la par del is-theme-toggle vecino */
   flex-shrink: 0;
 }
 

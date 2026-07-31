@@ -66,3 +66,40 @@ slot { display: none; }
   opacity: 0.9;
   flex-shrink: 0;
 }
+
+/* Volumen: slider se revela al hover / focus del grupo */
+.vol {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 0;
+}
+
+.volume {
+  width: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  accent-color: var(--is-color-brand-500, #339af0);
+  cursor: pointer;
+  transition:
+    width 160ms ease,
+    opacity 120ms ease,
+    margin 160ms ease;
+}
+
+.vol:hover .volume,
+.vol:focus-within .volume,
+.vol:has(.volume:active) .volume {
+  width: 4.75em;
+  margin-inline-start: 0.25em;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .volume { transition: none; }
+}

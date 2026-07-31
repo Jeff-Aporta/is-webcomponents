@@ -12,6 +12,7 @@ import '../media/icon.js';
  *   checked-icon    Iconify id cuando checked (ej. mdi:pause)
  *   label           aria-label unchecked
  *   checked-label   aria-label checked (fallback: label)
+ *   appearance      "plain" → compacto y hereda color (chrome oscura: vídeo)
  *   disabled        boolean
  *
  * Events (bubbles, composed)
@@ -23,7 +24,7 @@ import '../media/icon.js';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <button part="button" class="btn" type="button">
+    <button part="button" class="btn" type="button" tabindex="-1" aria-hidden="true">
       <is-icon part="icon" class="ico" aria-hidden="true"></is-icon>
     </button>
   `;
@@ -44,7 +45,9 @@ import '../media/icon.js';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector('.btn');
       this.#ico = shadow.querySelector('.ico');
-      this.#btn.addEventListener('click', this.#onClick);
+      // El control accesible es el host, no el <button> interno: escuchar aquí
+      // hace que el click del usuario (que burbujea) y `el.click()` coincidan.
+      this.addEventListener('click', this.#onClick);
     }
 
     connectedCallback() {
@@ -131,14 +134,8 @@ import '../media/icon.js';
 
       this.#btn.disabled = this.disabled;
       this.setAttribute('aria-pressed', String(on));
-      if (label) {
-        this.setAttribute('aria-label', label);
-        this.#btn.setAttribute('aria-label', label);
-      } else {
-        this.removeAttribute('aria-label');
-        this.#btn.removeAttribute('aria-label');
-      }
-      this.#btn.tabIndex = -1;
+      if (label) this.setAttribute('aria-label', label);
+      else this.removeAttribute('aria-label');
       this.setAttribute('tabindex', this.disabled ? '-1' : '0');
     }
   }

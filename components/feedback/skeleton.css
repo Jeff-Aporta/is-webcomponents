@@ -1,6 +1,7 @@
 :host {
-  --color: var(--is-control-bg, #e9ecef);
-  --sheen-color: color-mix(in srgb, var(--color) 55%, #fff);
+  /* Base soft; sheen = brillo fantasma (bajo contraste), no metal */
+  --color: var(--is-control-bg, #21262d);
+  --sheen-color: color-mix(in srgb, var(--is-text, #fff) 11%, transparent);
   display: block;
   position: relative;
   height: 1em;
@@ -8,36 +9,45 @@
   min-height: 0.75rem;
   border-radius: 0.25em;
   overflow: hidden;
-  background: var(--color);
+  /* Transparente: si no, pulse se “aplana” contra este fondo */
+  background: transparent;
 }
 
-:host .indicator {
+.indicator {
   display: block;
   width: 100%;
   height: 100%;
-  background: var(--color);
   border-radius: inherit;
+  background: var(--color);
 }
 
+/* sheen (default): barrido ghost sobre el color base */
 :host([effect="sheen"]) .indicator,
 :host(:not([effect])) .indicator {
-  background: linear-gradient(
-    90deg,
-    var(--color) 0%,
-    var(--sheen-color) 45%,
-    var(--color) 90%
+  background-image: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 42%,
+    var(--sheen-color) 50%,
+    transparent 58%,
+    transparent 100%
   );
-  background-size: 200% 100%;
-  animation: is-skeleton-sheen 1.4s ease-in-out infinite;
+  background-color: var(--color);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: is-skeleton-sheen 1.85s ease-in-out infinite;
 }
 
+/* pulse: late y vuelve (visible gracias al host transparente) */
 :host([effect="pulse"]) .indicator {
-  animation: is-skeleton-pulse 1.4s ease-in-out infinite;
+  background: var(--color);
+  animation: is-skeleton-pulse 1.55s ease-in-out infinite;
 }
 
 :host([effect="none"]) .indicator {
-  animation: none;
   background: var(--color);
+  background-image: none;
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -49,11 +59,11 @@
 }
 
 @keyframes is-skeleton-sheen {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
 }
 
 @keyframes is-skeleton-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.45; }
+  50% { opacity: 0.32; }
 }

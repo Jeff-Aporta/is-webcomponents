@@ -1,5 +1,5 @@
 /**
- * Motor de posicionamiento anclado (estilo Floating UI / wa-popup).
+ * Motor de posicionamiento anclado (flip / shift / arrow).
  * Sin dependencias — usa getBoundingClientRect + flip/shift.
  */
 
@@ -35,6 +35,86 @@ function getRect(el) {
   return null;
 }
 
+/** Ancestros en el flat tree (cruza shadow hosts). */
+function* flatAncestors(el) {
+  let node = el;
+  while (node) {
+    let parent = node.parentElement;
+    if (!parent) {
+      const root = node.getRootNode?.();
+      if (root instanceof ShadowRoot && root.host) {
+        yield root.host;
+        node = root.host;
+        continue;
+      }
+      break;
+    }
+    yield parent;
+    node = parent;
+  }
+}
+
+/** Dialog modal o popover abierto: se pinta en el top layer. */
+function isTopLayer(node) {
+  try {
+    return node.matches(':modal, :popover-open');
+  } catch {
+    return node.localName === 'dialog' && node.hasAttribute('open');
+  }
+}
+
+/**
+ * Contenedor que atrapa `position: fixed` (transform / filter / etc.).
+ * Si hay uno, top/left CSS deben restarse de su getBoundingClientRect.
+ */
+function fixedContainingBlockRect(el) {
+  // El propio popup puede ser el elemento del top layer (un popover), no solo
+  // vivir dentro de uno (un dialog modal).
+  if (isTopLayer(el)) return null;
+  for (const node of flatAncestors(el)) {
+    if (!(node instanceof Element) || node === document.documentElement || node === document.body) {
+      continue;
+    }
+    // Un dialog modal / popover corta la cadena: el top layer no hereda el
+    // containing block de sus ancestros, así que un transform más arriba no
+    // atrapa al popup y `fixed` se resuelve contra el viewport.
+    if (isTopLayer(node)) return null;
+    const s = getComputedStyle(node);
+    const traps =
+      (s.transform && s.transform !== 'none')
+      || (s.perspective && s.perspective !== 'none')
+      || (s.filter && s.filter !== 'none')
+      || (s.backdropFilter && s.backdropFilter !== 'none')
+      || (s.contain && /(paint|layout|strict|content)/.test(s.contain))
+      || /\b(transform|perspective|filter)\b/.test(s.willChange || '');
+    if (traps) return getRect(node);
+  }
+  return null;
+}
+
+/** Mide el popup sin flicker (no oculta si ya está visible). */
+function measurePopupSize(popupEl) {
+  if (!popupEl.hasAttribute('hidden')) {
+    return { width: popupEl.offsetWidth, height: popupEl.offsetHeight };
+  }
+  const prevPos = popupEl.style.position;
+  const prevVis = popupEl.style.visibility;
+  const prevTop = popupEl.style.top;
+  const prevLeft = popupEl.style.left;
+  popupEl.removeAttribute('hidden');
+  popupEl.style.visibility = 'hidden';
+  popupEl.style.position = 'fixed';
+  popupEl.style.top = '0';
+  popupEl.style.left = '0';
+  const size = { width: popupEl.offsetWidth, height: popupEl.offsetHeight };
+  popupEl.setAttribute('hidden', '');
+  popupEl.style.visibility = prevVis;
+  popupEl.style.position = prevPos;
+  popupEl.style.top = prevTop;
+  popupEl.style.left = prevLeft;
+  return size;
+}
+
 function viewportBoundary(padding = 0) {
   return {
     top: padding,
@@ -47,8 +127,8 @@ function viewportBoundary(padding = 0) {
 }
 
 function scrollParentBoundary(el, padding = 0) {
-  let node = el?.parentElement;
-  while (node && node !== document.body) {
+  for (const node of flatAncestors(el)) {
+    if (!(node instanceof Element) || node === document.body) continue;
     const s = getComputedStyle(node);
     const ox = s.overflowX;
     const oy = s.overflowY;
@@ -63,7 +143,6 @@ function scrollParentBoundary(el, padding = 0) {
         height: r.height - padding * 2,
       };
     }
-    node = node.parentElement;
   }
   return viewportBoundary(padding);
 }
@@ -134,59 +213,48 @@ function availableSize(coords, size, boundary, autoSize) {
 function arrowOffset(placement, anchor, popupCoords, popupSize, arrowSize, arrowPadding, arrowPlacement) {
   const side = sideOf(placement);
   const align = arrowPlacement === 'anchor' ? 'anchor' : arrowPlacement;
+  // El rombo es `arrowSize * 2` por lado (cuadrado rotado 45°); su diagonal
+  // visible es `arrowSize * √2`. Por convención histórica del kit, `arrowSize`
+  // sigue siendo la diagonal horizontal/vertical de la flecha, así que la
+  // hacemos coincidir con un rombo cuyo lado de cuadrado es `arrowSize * 2`.
+  const side2 = arrowSize * 2;
   const result = { top: '', left: '', right: '', bottom: '' };
 
   if (side === 'top' || side === 'bottom') {
     let x;
     if (align === 'start') x = arrowPadding;
-    else if (align === 'end') x = popupSize.width - arrowSize - arrowPadding;
-    else if (align === 'center') x = (popupSize.width - arrowSize) / 2;
+    else if (align === 'end') x = popupSize.width - side2 - arrowPadding;
+    else if (align === 'center') x = (popupSize.width - side2) / 2;
     else {
       const anchorCenter = anchor.left + anchor.width / 2;
-      x = anchorCenter - popupCoords.left - arrowSize / 2;
-      x = Math.max(arrowPadding, Math.min(popupSize.width - arrowSize - arrowPadding, x));
+      x = anchorCenter - popupCoords.left - arrowSize;
+      x = Math.max(arrowPadding, Math.min(popupSize.width - side2 - arrowPadding, x));
     }
     result.left = `${x}px`;
-    if (side === 'top') result.bottom = `${-arrowSize / 2}px`;
-    else result.top = `${-arrowSize / 2}px`;
+    // La flecha comparte lado con el borde del popup. Para `top`, su base
+    // queda en `bottom: 0` y asoma `arrowSize` hacia arriba; para `bottom`,
+    // su base queda en `top: 0` y asoma `arrowSize` hacia abajo.
+    if (side === 'top') result.bottom = `0px`;
+    else result.top = `0px`;
   } else {
     let y;
     if (align === 'start') y = arrowPadding;
-    else if (align === 'end') y = popupSize.height - arrowSize - arrowPadding;
-    else if (align === 'center') y = (popupSize.height - arrowSize) / 2;
+    else if (align === 'end') y = popupSize.height - side2 - arrowPadding;
+    else if (align === 'center') y = (popupSize.height - side2) / 2;
     else {
       const anchorCenter = anchor.top + anchor.height / 2;
-      y = anchorCenter - popupCoords.top - arrowSize / 2;
-      y = Math.max(arrowPadding, Math.min(popupSize.height - arrowSize - arrowPadding, y));
+      y = anchorCenter - popupCoords.top - arrowSize;
+      y = Math.max(arrowPadding, Math.min(popupSize.height - side2 - arrowPadding, y));
     }
     result.top = `${y}px`;
-    if (side === 'left') result.right = `${-arrowSize / 2}px`;
-    else result.left = `${-arrowSize / 2}px`;
+    if (side === 'left') result.right = `0px`;
+    else result.left = `0px`;
   }
   return result;
 }
 
 /**
  * @param {object} opts
- * @param {Element|{getBoundingClientRect:Function}} opts.anchor
- * @param {HTMLElement} opts.popupEl
- * @param {string} opts.placement
- * @param {number} [opts.distance]
- * @param {number} [opts.skidding]
- * @param {boolean} [opts.flip]
- * @param {string} [opts.flipFallbackPlacements] space-separated
- * @param {'best-fit'|'initial'} [opts.flipFallbackStrategy]
- * @param {number} [opts.flipPadding]
- * @param {boolean} [opts.shift]
- * @param {number} [opts.shiftPadding]
- * @param {''|'horizontal'|'vertical'|'both'} [opts.autoSize]
- * @param {number} [opts.autoSizePadding]
- * @param {'viewport'|'scroll'} [opts.boundary]
- * @param {'absolute'|'fixed'} [opts.strategy]
- * @param {boolean} [opts.arrow]
- * @param {number} [opts.arrowSize]
- * @param {number} [opts.arrowPadding]
- * @param {string} [opts.arrowPlacement]
  */
 export function computePosition(opts) {
   const {
@@ -214,22 +282,17 @@ export function computePosition(opts) {
   const anchor = getRect(anchorRef);
   if (!anchor || !popupEl) return null;
 
-  // Measure natural size
-  const wasHidden = popupEl.hasAttribute('hidden');
-  if (wasHidden) popupEl.removeAttribute('hidden');
-  const prevVis = popupEl.style.visibility;
-  popupEl.style.visibility = 'hidden';
-  const size = {
-    width: popupEl.offsetWidth,
-    height: popupEl.offsetHeight,
-  };
-  popupEl.style.visibility = prevVis;
-  if (wasHidden) popupEl.setAttribute('hidden', '');
+  const size = measurePopupSize(popupEl);
 
   const pad = Math.max(flipPadding, shiftPadding, autoSizePadding);
   const bound = boundary === 'scroll'
     ? scrollParentBoundary(popupEl, pad)
     : viewportBoundary(pad);
+
+  // Si la flecha está activa, su mitad exterior ocupa `arrowSize` por encima
+  // del borde del popup. Lo añadimos a la `distance` para que la separación
+  // entre el cuerpo del popup y el ancla siga siendo la pedida por el usuario.
+  const effectiveDistance = arrow ? distance + arrowSize : distance;
 
   const candidates = [preferred];
   if (flip) {
@@ -250,7 +313,7 @@ export function computePosition(opts) {
   let best = null;
   let bestOverflow = Infinity;
   for (const p of candidates) {
-    const coords = computeCoords(anchor, size, p, distance, skidding);
+    const coords = computeCoords(anchor, size, p, effectiveDistance, skidding);
     const overflow = overflowAmount(coords, size, bound);
     if (overflow < bestOverflow) {
       bestOverflow = overflow;
@@ -262,31 +325,38 @@ export function computePosition(opts) {
     }
   }
 
-  if (!best) best = computeCoords(anchor, size, preferred, distance, skidding);
+  if (!best) best = computeCoords(anchor, size, preferred, effectiveDistance, skidding);
 
   if (flip && bestOverflow > 0 && flipFallbackStrategy === 'initial') {
-    best = { ...computeCoords(anchor, size, preferred, distance, skidding), placement: preferred };
+    best = { ...computeCoords(anchor, size, preferred, effectiveDistance, skidding), placement: preferred };
   }
 
   best = applyShift(best, size, bound, shift);
   const avail = availableSize(best, size, bound, autoSize);
 
-  // Convert fixed coords → absolute relative to offsetParent if needed
+  const viewportTop = best.top;
+  const viewportLeft = best.left;
   let top = best.top;
   let left = best.left;
-  if (strategy === 'absolute') {
+
+  if (strategy === 'fixed') {
+    const cb = fixedContainingBlockRect(popupEl);
+    if (cb) {
+      top = best.top - cb.top;
+      left = best.left - cb.left;
+    }
+  } else {
     const offsetParent = popupEl.offsetParent || document.documentElement;
     const parentRect = offsetParent.getBoundingClientRect();
     const parentStyle = getComputedStyle(offsetParent);
     const bl = parseFloat(parentStyle.borderLeftWidth) || 0;
     const bt = parseFloat(parentStyle.borderTopWidth) || 0;
-    top = best.top - parentRect.top - bt + (offsetParent.scrollTop || 0);
-    left = best.left - parentRect.left - bl + (offsetParent.scrollLeft || 0);
-    // For fixed-positioned ancestors / body as offsetParent, use viewport-relative via fixed strategy
     if (offsetParent === document.body || offsetParent === document.documentElement) {
-      // Keep viewport coords when using absolute on body — switch to fixed-like top/left
       top = best.top + window.scrollY;
       left = best.left + window.scrollX;
+    } else {
+      top = best.top - parentRect.top - bt + (offsetParent.scrollTop || 0);
+      left = best.left - parentRect.left - bl + (offsetParent.scrollLeft || 0);
     }
   }
 
@@ -297,6 +367,8 @@ export function computePosition(opts) {
   return {
     top,
     left,
+    viewportTop,
+    viewportLeft,
     placement: best.placement,
     strategy,
     availableWidth: avail.width,

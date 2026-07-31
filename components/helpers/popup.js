@@ -13,6 +13,7 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
  * Props: anchor (Element | string | VirtualElement)
  * Methods: reposition()
  * Events: is-reposition  { placement, x, y }
+ *         is-hover-bridge { hovering }
  * Parts: ::part(popup) ::part(arrow) ::part(hover-bridge) ::part(anchor)
  */
 
@@ -23,7 +24,19 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       <slot name="anchor" class="anchor-slot" part="anchor"></slot>
       <div class="popup" part="popup" hidden>
         <slot></slot>
-        <div class="arrow" part="arrow" hidden></div>
+        <div class="arrow" part="arrow" hidden>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <!-- Rombo: punta arriba/abajo/izq/der a 1px del borde del viewBox
+                 en escala 1:1 con el cuadrado de 16x16 que renderiza arrowSize.
+                 El triangulo exterior cierra sobre el borde del popup; el
+                 interior esta 1px mas adentro para que el stroke de 1px no
+                 sangre dentro del contenido. -->
+            <polygon class="arrow-fill"
+              points="8,8 8,1 15,8 8,15 1,8"></polygon>
+            <polygon class="arrow-stroke"
+              points="8,8 8,2 14,8 8,14 2,8"></polygon>
+          </svg>
+        </div>
       </div>
       <div class="hover-bridge" part="hover-bridge" hidden></div>
     </div>
@@ -49,6 +62,8 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     #mounted = false;
     #ro = null;
     #raf = 0;
+    #measuring = false;
+    #bridgeBound = false;
 
     constructor() {
       super();
@@ -152,7 +167,6 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     get autoSizePadding() { return Number(this.getAttribute('auto-size-padding')) || 0; }
     set autoSizePadding(v) { this.setAttribute('auto-size-padding', String(v)); }
 
-    /** Element | id string | VirtualElement */
     get anchor() {
       if (this.#anchorRef) return this.#anchorRef;
       return this.#anchorEl;
@@ -166,37 +180,54 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     }
 
     reposition() {
-      if (!this.active || !this.#mounted) return;
+      if (!this.active || !this.#mounted || this.#measuring) return;
       const anchor = this.#getAnchorTarget();
       if (!anchor) return;
 
       const arrowSize = parseFloat(getComputedStyle(this).getPropertyValue('--arrow-size')) || 8;
-      const result = computePosition({
-        anchor,
-        popupEl: this.#popup,
-        placement: this.placement,
-        distance: this.distance,
-        skidding: this.skidding,
-        flip: this.flip,
-        flipFallbackPlacements: this.flipFallbackPlacements,
-        flipFallbackStrategy: this.flipFallbackStrategy,
-        flipPadding: this.flipPadding,
-        shift: this.shift,
-        shiftPadding: this.shiftPadding,
-        autoSize: this.autoSize,
-        autoSizePadding: this.autoSizePadding,
-        boundary: this.boundary,
-        strategy: this.strategy,
-        arrow: this.arrow,
-        arrowSize,
-        arrowPadding: this.arrowPadding,
-        arrowPlacement: this.arrowPlacement,
-      });
+      this.#measuring = true;
+      let result;
+      try {
+        result = computePosition({
+          anchor,
+          popupEl: this.#popup,
+          placement: this.placement,
+          distance: this.distance,
+          skidding: this.skidding,
+          flip: this.flip,
+          flipFallbackPlacements: this.flipFallbackPlacements,
+          flipFallbackStrategy: this.flipFallbackStrategy,
+          flipPadding: this.flipPadding,
+          shift: this.shift,
+          shiftPadding: this.shiftPadding,
+          autoSize: this.autoSize,
+          autoSizePadding: this.autoSizePadding,
+          boundary: this.boundary,
+          strategy: this.strategy,
+          arrow: this.arrow,
+          arrowSize,
+          arrowPadding: this.arrowPadding,
+          arrowPlacement: this.arrowPlacement,
+        });
+      } finally {
+        this.#measuring = false;
+      }
       if (!result) return;
 
+      const nextTop = `${result.top}px`;
+      const nextLeft = `${result.left}px`;
+      if (
+        this.#popup.style.position === result.strategy
+        && this.#popup.style.top === nextTop
+        && this.#popup.style.left === nextLeft
+        && this.#popup.dataset.currentPlacement === result.placement
+      ) {
+        return;
+      }
+
       this.#popup.style.position = result.strategy;
-      this.#popup.style.top = `${result.top}px`;
-      this.#popup.style.left = `${result.left}px`;
+      this.#popup.style.top = nextTop;
+      this.#popup.style.left = nextLeft;
       this.#popup.dataset.currentPlacement = result.placement;
       this.dataset.currentPlacement = result.placement;
 
@@ -223,7 +254,8 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
         this.#arrow.hidden = true;
       }
 
-      this.#updateBridge(result, anchor);
+      this.#updateBridge(result);
+      this.#bindBridgeEvents();
 
       this.dispatchEvent(new CustomEvent('is-reposition', {
         bubbles: true,
@@ -240,7 +272,6 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     #resolveAnchor() {
       if (this.#anchorRef && (this.#anchorRef instanceof Element || isVirtualElement(this.#anchorRef))) {
         this.#anchorEl = this.#anchorRef instanceof Element ? this.#anchorRef : null;
-        // virtual stays in #anchorRef
         if (this.active) this.#setupListeners();
         return;
       }
@@ -261,7 +292,9 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       if (this.active) {
         this.#popup.hidden = false;
         this.#setupListeners();
-        requestAnimationFrame(() => this.reposition());
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => this.reposition());
+        });
       } else {
         this.#popup.hidden = true;
         this.#bridge.hidden = true;
@@ -278,9 +311,11 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       this.#onScroll = onScroll;
       this.#onResize = onResize;
 
+      // Solo ancla: observar el popup causa loop RO ↔ reposition (flicker)
       if (typeof ResizeObserver !== 'undefined') {
-        this.#ro = new ResizeObserver(() => this.#schedule());
-        this.#ro.observe(this.#popup);
+        this.#ro = new ResizeObserver(() => {
+          if (!this.#measuring) this.#schedule();
+        });
         const a = this.#getAnchorTarget();
         if (a instanceof Element) this.#ro.observe(a);
       }
@@ -308,46 +343,77 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       this.#raf = requestAnimationFrame(() => this.reposition());
     }
 
-    #updateBridge(result, anchor) {
+    #bindBridgeEvents() {
+      if (this.#bridgeBound) return;
+      this.#bridgeBound = true;
+      this.#bridge.addEventListener('pointerenter', () => {
+        this.dispatchEvent(new CustomEvent('is-hover-bridge', {
+          bubbles: true,
+          composed: true,
+          detail: { hovering: true },
+        }));
+      });
+      this.#bridge.addEventListener('pointerleave', () => {
+        this.dispatchEvent(new CustomEvent('is-hover-bridge', {
+          bubbles: true,
+          composed: true,
+          detail: { hovering: false },
+        }));
+      });
+    }
+
+    #updateBridge(result) {
       if (!this.hoverBridge || !result.anchor) {
         this.#bridge.hidden = true;
         return;
       }
       const a = result.anchor;
       const side = result.placement.split('-')[0];
-      const dist = this.distance;
+      // El bridge cubre la franja entre el ancla y el cuerpo del popup. Si la
+      // flecha está activa, esa franja incluye la mitad exterior del rombo.
+      const arrowSize = parseFloat(getComputedStyle(this).getPropertyValue('--arrow-size')) || 8;
+      const dist = this.distance + (this.arrow ? arrowSize : 0);
       if (dist <= 0) {
         this.#bridge.hidden = true;
         return;
       }
 
+      const popLeft = result.viewportLeft ?? result.left;
+      const popTop = result.viewportTop ?? result.top;
+      const popW = result.popupSize.width;
+      const popH = result.popupSize.height;
+
       this.#bridge.hidden = false;
       this.#bridge.style.position = result.strategy;
-      // Bridge fills the gap between anchor and popup in viewport coords then convert like popup
       let top; let left; let width; let height;
       if (side === 'top') {
         top = a.top - dist;
-        left = Math.min(a.left, result.left);
-        width = Math.max(a.right, result.left + result.popupSize.width) - left;
+        left = Math.min(a.left, popLeft);
+        width = Math.max(a.right, popLeft + popW) - left;
         height = dist;
       } else if (side === 'bottom') {
         top = a.bottom;
-        left = Math.min(a.left, result.left);
-        width = Math.max(a.right, result.left + result.popupSize.width) - left;
+        left = Math.min(a.left, popLeft);
+        width = Math.max(a.right, popLeft + popW) - left;
         height = dist;
       } else if (side === 'left') {
         left = a.left - dist;
-        top = Math.min(a.top, result.top);
+        top = Math.min(a.top, popTop);
         width = dist;
-        height = Math.max(a.bottom, result.top + result.popupSize.height) - top;
+        height = Math.max(a.bottom, popTop + popH) - top;
       } else {
         left = a.right;
-        top = Math.min(a.top, result.top);
+        top = Math.min(a.top, popTop);
         width = dist;
-        height = Math.max(a.bottom, result.top + result.popupSize.height) - top;
+        height = Math.max(a.bottom, popTop + popH) - top;
       }
 
-      if (result.strategy === 'absolute') {
+      if (result.strategy === 'fixed') {
+        const dx = (result.viewportLeft ?? result.left) - result.left;
+        const dy = (result.viewportTop ?? result.top) - result.top;
+        top -= dy;
+        left -= dx;
+      } else {
         top += window.scrollY;
         left += window.scrollX;
       }

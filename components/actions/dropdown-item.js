@@ -1,8 +1,13 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { computePosition } from '../_shared/position.js';
 import '../media/icon.js';
 
 /**
  * <is-dropdown-item> — ítem de menú para is-dropdown.
+ *
+ * El submenú va en un popover (top layer) y se posiciona con computePosition: el
+ * menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría
+ * recortado y le abriría scroll horizontal.
  *
  * Attrs: value, type (normal|checkbox), checked, disabled, variant (default|danger)
  * Slots: default (label), icon, details, submenu
@@ -29,6 +34,8 @@ import '../media/icon.js';
     </div>
   `;
 
+  const SUPPORTS_POPOVER = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
+
   const OBSERVED = ['value', 'type', 'checked', 'disabled', 'variant', 'submenu-open'];
 
   class IsDropdownItem extends HTMLElement {
@@ -40,6 +47,7 @@ import '../media/icon.js';
     #submenu;
     #submenuSlot;
     #mounted = false;
+    #raf = 0;
 
     constructor() {
       super();
@@ -50,6 +58,7 @@ import '../media/icon.js';
       this.#check = shadow.querySelector('.checkmark');
       this.#submenuIcon = shadow.querySelector('.submenu-icon');
       this.#submenu = shadow.querySelector('.submenu');
+      if (SUPPORTS_POPOVER) this.#submenu.popover = 'manual';
       this.#submenuSlot = shadow.querySelector('slot[name="submenu"]');
       this.#submenuSlot.addEventListener('slotchange', () => this.#syncSubmenu());
       this.#row.addEventListener('click', this.#onClick);
@@ -61,6 +70,12 @@ import '../media/icon.js';
       if (!this.hasAttribute('tabindex')) this.tabIndex = this.disabled ? -1 : 0;
       this.#render();
       this.#syncSubmenu();
+    }
+
+    disconnectedCallback() {
+      this.#mounted = false;
+      this.#teardownReposition();
+      this.#hideSubmenuPanel();
     }
 
     attributeChangedCallback() {
@@ -124,10 +139,70 @@ import '../media/icon.js';
       this.#row.setAttribute('aria-disabled', String(this.disabled));
       this.tabIndex = this.disabled ? -1 : 0;
       this.toggleAttribute('data-has-submenu', this.hasSubmenu);
-      this.#submenu.hidden = !this.submenuOpen;
+      this.#syncSubmenuPanel();
       this.#row.classList.toggle('danger', this.variant === 'danger');
       this.#row.classList.toggle('checked', this.checked);
       this.#row.classList.toggle('disabled', this.disabled);
+    }
+
+    #syncSubmenuPanel() {
+      if (this.submenuOpen && this.hasSubmenu) this.#showSubmenuPanel();
+      else this.#hideSubmenuPanel();
+    }
+
+    #showSubmenuPanel() {
+      const el = this.#submenu;
+      el.hidden = false;
+      if (SUPPORTS_POPOVER && !el.matches(':popover-open')) {
+        try { el.showPopover(); } catch { /* ya abierto o sin soporte */ }
+      }
+      this.#positionSubmenu();
+      this.#setupReposition();
+    }
+
+    #hideSubmenuPanel() {
+      const el = this.#submenu;
+      this.#teardownReposition();
+      if (SUPPORTS_POPOVER && el.matches(':popover-open')) {
+        try { el.hidePopover(); } catch { /* noop */ }
+      }
+      el.hidden = true;
+    }
+
+    #positionSubmenu() {
+      const result = computePosition({
+        anchor: this.#row,
+        popupEl: this.#submenu,
+        placement: 'right-start',
+        distance: 2,
+        flip: true,
+        shift: true,
+        strategy: 'fixed',
+        boundary: 'viewport',
+      });
+      if (!result) return;
+      Object.assign(this.#submenu.style, {
+        top: `${result.top}px`,
+        left: `${result.left}px`,
+      });
+      this.#submenu.dataset.currentPlacement = result.placement;
+    }
+
+    #onReposition = () => {
+      if (!this.submenuOpen) return;
+      cancelAnimationFrame(this.#raf);
+      this.#raf = requestAnimationFrame(() => this.#positionSubmenu());
+    };
+
+    #setupReposition() {
+      window.addEventListener('resize', this.#onReposition, { passive: true });
+      window.addEventListener('scroll', this.#onReposition, true);
+    }
+
+    #teardownReposition() {
+      cancelAnimationFrame(this.#raf);
+      window.removeEventListener('resize', this.#onReposition);
+      window.removeEventListener('scroll', this.#onReposition, true);
     }
 
     #onClick = (e) => {

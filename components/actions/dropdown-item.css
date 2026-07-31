@@ -105,12 +105,15 @@
   display: none !important;
 }
 
+/* Popover en el top layer: hay que anular el `inset: 0` y el `margin: auto` de
+ * la hoja del UA, porque top/left los fija computePosition. */
 .submenu {
-  position: absolute;
-  inset-inline-start: 100%;
-  top: 0;
+  position: fixed;
+  inset: auto;
   z-index: 2;
   min-width: 10rem;
+  width: max-content;
+  max-width: min(20rem, 90vw);
   margin: 0;
   padding: 0.35em;
   border-radius: var(--is-radius, 0.5em);

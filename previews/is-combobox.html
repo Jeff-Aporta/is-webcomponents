@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/forms/combobox.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-combobox">
       <section class="section" id="intro">
         <h2>&lt;is-combobox&gt;</h2>
         <p class="lede">Input + listbox filtrable con teclado y opciones <code>is-option</code>.</p>
@@ -57,7 +58,7 @@
         </table>
         <p class="lede">Eventos: <code>is-change</code>, <code>is-input</code>, <code>is-show</code>, <code>is-hide</code>. Teclado: ↑↓ Enter Esc.</p>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-combobox</h1>
       <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>

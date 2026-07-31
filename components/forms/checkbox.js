@@ -1,0 +1,295 @@
+import { adoptCss } from '../_shared/adopt-css.js';
+import '../media/icon.js';
+import {
+  attachFormInternals,
+  clearValidity,
+  setCustomState,
+  setFormValue,
+  setValidity,
+} from '../_shared/form-associated.js';
+
+/**
+ * <is-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
+ *
+ * Atributos
+ *   name, value (default "on"), hint
+ *   variant             brand (default) | neutral | success | warning | danger
+ *   label-placement     end (default) | start | top | bottom
+ *   icon                nombre de <is-icon> para el estado sin marcar
+ *   checked-icon        nombre de <is-icon> para el estado marcado (default mdi:check)
+ *   indeterminate-icon  nombre de <is-icon> para el estado mixto (default mdi:minus)
+ *   checked, indeterminate, disabled, readonly, required, error   (boolean)
+ *
+ * Slots: default (etiqueta), hint
+ * Parts: form-control, base, control, mark, label, hint
+ * Custom states: checked, indeterminate, disabled, readonly, error
+ * Events: is-change { checked, value }
+ *
+ * Sin atributo `size`: escala con el font-size del contexto.
+ */
+
+(() => {
+  const TEMPLATE = document.createElement('template');
+  TEMPLATE.innerHTML = /* html */ `
+    <div part="form-control" class="form-control">
+      <div part="base" class="base">
+        <span part="control" class="control">
+          <is-icon part="mark" class="mark" hidden></is-icon>
+        </span>
+        <span part="label" class="label" id="label"><slot></slot></span>
+      </div>
+      <div part="hint" class="hint" id="hint" hidden><slot name="hint"></slot></div>
+    </div>
+  `;
+
+  const OBSERVED = [
+    'name', 'value', 'checked', 'disabled', 'readonly', 'required', 'indeterminate',
+    'error', 'hint', 'variant', 'label-placement',
+    'icon', 'checked-icon', 'indeterminate-icon',
+  ];
+
+  const PROPS = [
+    'name', 'value', 'checked', 'disabled', 'readonly', 'required', 'indeterminate',
+    'error', 'hint', 'variant', 'labelPlacement',
+    'icon', 'checkedIcon', 'indeterminateIcon',
+  ];
+
+  const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
+
+  /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
+  function hasSlotted(slot) {
+    return slot.assignedNodes().some(
+      (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
+    );
+  }
+
+  class IsCheckbox extends HTMLElement {
+    static formAssociated = true;
+    static get observedAttributes() { return OBSERVED; }
+
+    #internals = null;
+    #control;
+    #mark;
+    #labelEl;
+    #labelSlot;
+    #hintEl;
+    #hintSlot;
+    #mounted = false;
+    #formDisabled = false;
+    #defaultsRead = false;
+    #defaultChecked = false;
+    #defaultIndeterminate = false;
+
+    constructor() {
+      super();
+      const shadow = this.attachShadow({ mode: 'open' });
+      adoptCss(shadow, import.meta.url);
+      shadow.appendChild(TEMPLATE.content.cloneNode(true));
+
+      this.#control = shadow.querySelector('.control');
+      this.#mark = shadow.querySelector('.mark');
+      this.#labelEl = shadow.getElementById('label');
+      this.#labelSlot = this.#labelEl.querySelector('slot');
+      this.#hintEl = shadow.getElementById('hint');
+      this.#hintSlot = this.#hintEl.querySelector('slot');
+      this.#internals = attachFormInternals(this);
+
+      this.addEventListener('click', this.#onClick);
+      this.addEventListener('keydown', this.#onKey);
+      this.#labelSlot.addEventListener('slotchange', this.#syncSlots);
+      this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
+    }
+
+    connectedCallback() {
+      this.#mounted = true;
+      if (!this.#defaultsRead) {
+        this.#defaultsRead = true;
+        this.#defaultChecked = this.checked;
+        this.#defaultIndeterminate = this.indeterminate;
+      }
+      this.#upgradeProps();
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'checkbox');
+      this.#syncSlots();
+      this.#sync();
+    }
+
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.#mounted || oldVal === newVal) return;
+      if (name === 'hint') {
+        this.#syncSlots();
+        return;
+      }
+      this.#sync();
+    }
+
+    get checked() { return this.hasAttribute('checked'); }
+    set checked(v) { this.toggleAttribute('checked', !!v); }
+
+    get indeterminate() { return this.hasAttribute('indeterminate'); }
+    set indeterminate(v) { this.toggleAttribute('indeterminate', !!v); }
+
+    get disabled() { return this.hasAttribute('disabled'); }
+    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+
+    get readonly() { return this.hasAttribute('readonly'); }
+    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+
+    get required() { return this.hasAttribute('required'); }
+    set required(v) { this.toggleAttribute('required', !!v); }
+
+    get error() { return this.hasAttribute('error'); }
+    set error(v) { this.toggleAttribute('error', !!v); }
+
+    get value() { return this.getAttribute('value') ?? 'on'; }
+    set value(v) { v == null || v === '' ? this.removeAttribute('value') : this.setAttribute('value', String(v)); }
+
+    get name() { return this.getAttribute('name') ?? ''; }
+    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', v); }
+
+    get hint() { return this.getAttribute('hint') ?? ''; }
+    set hint(v) { v == null ? this.removeAttribute('hint') : this.setAttribute('hint', String(v)); }
+
+    get variant() {
+      const v = this.getAttribute('variant');
+      return VARIANTS.includes(v) ? v : 'brand';
+    }
+    set variant(v) { this.setAttribute('variant', VARIANTS.includes(v) ? v : 'brand'); }
+
+    get labelPlacement() {
+      const v = this.getAttribute('label-placement');
+      return PLACEMENTS.includes(v) ? v : 'end';
+    }
+    set labelPlacement(v) { this.setAttribute('label-placement', PLACEMENTS.includes(v) ? v : 'end'); }
+
+    get icon() { return this.getAttribute('icon') ?? ''; }
+    set icon(v) { v == null || v === '' ? this.removeAttribute('icon') : this.setAttribute('icon', String(v)); }
+
+    get checkedIcon() { return this.getAttribute('checked-icon') ?? ''; }
+    set checkedIcon(v) { v == null || v === '' ? this.removeAttribute('checked-icon') : this.setAttribute('checked-icon', String(v)); }
+
+    get indeterminateIcon() { return this.getAttribute('indeterminate-icon') ?? ''; }
+    set indeterminateIcon(v) { v == null || v === '' ? this.removeAttribute('indeterminate-icon') : this.setAttribute('indeterminate-icon', String(v)); }
+
+    get form() { return this.#internals?.form ?? null; }
+    get validity() { return this.#internals?.validity ?? null; }
+    get validationMessage() { return this.#internals?.validationMessage ?? ''; }
+
+    checkValidity() { return this.#internals?.checkValidity() ?? true; }
+    reportValidity() { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg) {
+      if (msg) setValidity(this.#internals, { customError: true }, msg, this.#control);
+      else this.#updateValidity();
+    }
+
+    formResetCallback() {
+      this.toggleAttribute('checked', this.#defaultChecked);
+      this.toggleAttribute('indeterminate', this.#defaultIndeterminate);
+      this.#sync();
+    }
+
+    formDisabledCallback(disabled) {
+      this.#formDisabled = !!disabled;
+      this.#sync();
+    }
+
+    #upgradeProps() {
+      for (const p of PROPS) {
+        if (Object.prototype.hasOwnProperty.call(this, p)) {
+          const v = this[p];
+          delete this[p];
+          this[p] = v;
+        }
+      }
+    }
+
+    #emit(name, detail = {}) {
+      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
+    }
+
+    get #isDisabled() { return this.disabled || this.#formDisabled; }
+
+    #syncSlots = () => {
+      const hint = this.hint.trim();
+      const hasHintSlot = hasSlotted(this.#hintSlot);
+      if (!hasHintSlot && this.#hintSlot.textContent !== hint) this.#hintSlot.textContent = hint;
+      this.#hintEl.hidden = !hint && !hasHintSlot;
+      this.#labelEl.hidden = !hasSlotted(this.#labelSlot);
+      try {
+        this.#internals.ariaDescribedByElements = this.#hintEl.hidden ? [] : [this.#hintEl];
+      } catch { /* motores sin ariaDescribedByElements */ }
+    };
+
+    #sync() {
+      const disabled = this.#isDisabled;
+      const readonly = this.readonly;
+      const mixed = this.indeterminate;
+      const checked = this.checked;
+
+      this.setAttribute('aria-checked', mixed ? 'mixed' : String(checked));
+      this.setAttribute('aria-disabled', String(disabled));
+      if (readonly) this.setAttribute('aria-readonly', 'true');
+      else this.removeAttribute('aria-readonly');
+      if (this.error) this.setAttribute('aria-invalid', 'true');
+      else this.removeAttribute('aria-invalid');
+      if (this.required) this.setAttribute('aria-required', 'true');
+      else this.removeAttribute('aria-required');
+      this.setAttribute('tabindex', disabled ? '-1' : '0');
+
+      const icon = mixed
+        ? (this.indeterminateIcon || 'mdi:minus')
+        : checked ? (this.checkedIcon || 'mdi:check') : this.icon;
+      if (icon) this.#mark.setAttribute('icon', icon);
+      else this.#mark.removeAttribute('icon');
+      this.#mark.hidden = !icon;
+
+      setCustomState(this.#internals, 'checked', checked && !mixed);
+      setCustomState(this.#internals, 'indeterminate', mixed);
+      setCustomState(this.#internals, 'disabled', disabled);
+      setCustomState(this.#internals, 'readonly', readonly);
+      setCustomState(this.#internals, 'error', this.error);
+
+      setFormValue(this.#internals, checked ? this.value : null);
+      this.#updateValidity();
+    }
+
+    #updateValidity() {
+      if (this.required && !this.checked) {
+        setValidity(this.#internals, { valueMissing: true }, 'Marque esta casilla', this.#control);
+        return;
+      }
+      clearValidity(this.#internals, this.#control);
+    }
+
+    /** Toggle por interacción: el estado mixto se limpia al primer clic. */
+    #toggle() {
+      if (this.#isDisabled || this.readonly) return;
+      const next = !this.checked;
+      if (this.indeterminate) this.indeterminate = false;
+      this.checked = next;
+      this.#emit('is-change', { checked: next, value: this.value });
+    }
+
+    #onClick = (e) => {
+      if (this.#isDisabled) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
+      }
+      // El texto de ayuda no forma parte del control.
+      if (e.composedPath().includes(this.#hintEl)) return;
+      this.#toggle();
+    };
+
+    #onKey = (e) => {
+      if (e.key !== ' ' && e.key !== 'Spacebar') return;
+      e.preventDefault();
+      this.#toggle();
+    };
+  }
+
+  if (!customElements.get('is-checkbox')) {
+    customElements.define('is-checkbox', IsCheckbox);
+  }
+  if (typeof window !== 'undefined') window.IsCheckbox = IsCheckbox;
+})();

@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/media/avatar.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-avatar">
       <section class="section" id="intro">
         <h2>&lt;is-avatar&gt;</h2>
         <p class="lede">Avatar con imagen, iniciales o icono fallback. Caja = <code class="code">1em × 1em</code>; escala con <code class="code">font-size</code>.</p>
@@ -59,7 +60,7 @@
         </table>
         <p class="lede">Evento <code class="code">is-error</code> al fallar la imagen. Sin <code class="code">size</code> ni <code class="code">--size</code> — usa <code class="code">font-size</code>.</p>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-avatar</h1>
       <nav>

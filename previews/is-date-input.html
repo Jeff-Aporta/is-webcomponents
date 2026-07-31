@@ -8,46 +8,96 @@
   <link rel="stylesheet" href="../styles/is-base.css" />
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/forms/date-input.js"></script>
+  <script type="module" src="../components/forms/time-input.js"></script>
+  <script type="module" src="../components/forms/date-time-input.js"></script>
+  <script type="module" src="../components/forms/date-range-input.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-date-input">
       <section class="section" id="intro">
         <h2>&lt;is-date-input&gt;</h2>
-        <p class="lede">Campo de fecha ISO con popup de calendario. Métodos <code>show()</code> / <code>hide()</code>.</p>
-        <div class="demo">
-          <is-date-input id="di" label="Fecha de inicio" hint="Formato yyyy-mm-dd" name="start" value="2026-07-30" style="max-width:16rem"></is-date-input>
+        <p class="lede">Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel.</p>
+        <div class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+          <is-date-input id="di" label="Fecha" value="2026-07-30" locale="es" clearable></is-date-input>
+          <is-date-input label="Con barra" value="2026-07-30" locale="es" action-bar></is-date-input>
         </div>
-      </section>
-      <section class="section" id="examples">
-        <h2>Con min / max</h2>
-        <div class="demo">
-          <is-date-input label="Vencimiento" min="2026-01-01" max="2026-12-31" required locale="es" style="max-width:16rem"></is-date-input>
-        </div>
-        <pre class="code">&lt;is-date-input label="Fecha" value="2026-07-30" min="2026-01-01" max="2026-12-31"&gt;&lt;/is-date-input&gt;</pre>
         <p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p>
       </section>
+
+      <section class="section" id="time">
+        <h2>&lt;is-time-input&gt;</h2>
+        <p class="lede"><code>panel</code> elige la superficie: columnas, lista o reloj analógico.</p>
+        <div class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+          <is-time-input label="Columnas" value="09:30" locale="es"></is-time-input>
+          <is-time-input label="Lista" value="09:30" locale="es" panel="list"></is-time-input>
+          <is-time-input label="Reloj" value="09:30" ampm locale="en-US" panel="clock"></is-time-input>
+        </div>
+      </section>
+
+      <section class="section" id="datetime">
+        <h2>&lt;is-date-time-input&gt;</h2>
+        <div class="demo">
+          <is-date-time-input id="dti" label="Cita" locale="es" action-bar></is-date-time-input>
+        </div>
+      </section>
+
+      <section class="section" id="range">
+        <h2>&lt;is-date-range-input&gt;</h2>
+        <p class="lede">Dos campos (inicio y fin) con el calendario de rango y atajos en el panel.</p>
+        <div class="demo">
+          <is-date-range-input
+            id="ri"
+            start-label="Desde"
+            end-label="Hasta"
+            locale="es"
+            calendars="2"
+            shortcuts="this-week last-7-days current-month reset"
+          ></is-date-range-input>
+        </div>
+      </section>
+
+      <section class="section" id="mobile">
+        <h2>Variante móvil</h2>
+        <p class="lede"><code>variant="mobile"</code> centra el panel, atenúa el fondo y muestra toolbar + barra de acciones.</p>
+        <div class="demo">
+          <is-date-input label="Móvil" locale="es" variant="mobile" value="2026-07-30"></is-date-input>
+        </div>
+      </section>
+
       <section class="section" id="reference">
         <h2>Referencia</h2>
         <table class="ref">
           <thead><tr><th>Atributo</th><th>Default</th></tr></thead>
           <tbody>
-            <tr><td><code>value</code></td><td>ISO yyyy-mm-dd</td></tr>
-            <tr><td><code>min</code> / <code>max</code></td><td>—</td></tr>
-            <tr><td><code>locale</code></td><td>document.lang</td></tr>
-            <tr><td><code>disabled</code> / <code>required</code></td><td>false</td></tr>
+            <tr><td><code>value</code></td><td>fecha · HH:mm · fechaTHora · inicio/fin</td></tr>
+            <tr><td><code>variant</code></td><td>desktop · mobile</td></tr>
+            <tr><td><code>action-bar</code></td><td>off (obligatoria en mobile)</td></tr>
+            <tr><td><code>close-on-select</code></td><td>auto (off si hay action-bar)</td></tr>
+            <tr><td><code>placement</code></td><td>bottom-start</td></tr>
+            <tr><td><code>panel</code> (time)</td><td>sections · list · clock</td></tr>
+            <tr><td><code>start-label</code> / <code>end-label</code></td><td>solo range</td></tr>
+            <tr><td>resto</td><td>se reenvían al campo y al panel</td></tr>
           </tbody>
         </table>
-        <p class="lede">Eventos: <code>is-change</code>, <code>is-input</code>. Form-associated + ElementInternals si está disponible.</p>
+        <p class="lede">Eventos: <code>is-change { value, source }</code>, <code>is-show</code>, <code>is-hide</code>. Métodos: <code>show()</code>, <code>hide()</code>.</p>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-date-input</h1>
-      <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>
+      <nav>
+        <a href="#intro">Fecha</a>
+        <a href="#time">Hora</a>
+        <a href="#datetime">Fecha y hora</a>
+        <a href="#range">Rango</a>
+        <a href="#mobile">Móvil</a>
+        <a href="#reference">Referencia</a>
+      </nav>
     </aside>
   </is-split-panel>
   <script>

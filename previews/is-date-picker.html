@@ -8,30 +8,87 @@
   <link rel="stylesheet" href="../styles/is-base.css" />
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/forms/date-picker.js"></script>
+  <script type="module" src="../components/forms/month-calendar.js"></script>
+  <script type="module" src="../components/forms/year-calendar.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-date-picker">
       <section class="section" id="intro">
         <h2>&lt;is-date-picker&gt;</h2>
-        <p class="lede">Calendario inline siempre visible. Modo <code>single</code> o <code>range</code>.</p>
+        <p class="lede">Calendario inline (DateCalendar de <a href="https://mui.com/x/react-date-pickers/" target="_blank" rel="noopener">MUI X</a>). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un <code>is-dropdown</code>.</p>
         <div class="demo">
           <is-date-picker id="dp" value="2026-07-30" locale="es"></is-date-picker>
         </div>
         <p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p>
       </section>
-      <section class="section" id="examples">
+
+      <section class="section" id="range">
         <h2>Rango</h2>
+        <p class="lede">Tras elegir el inicio, el calendario pinta el rango tentativo hasta el día bajo el cursor o el foco, y el extremo móvil se marca con un anillo.</p>
         <div class="demo">
           <is-date-picker mode="range" min="2026-01-01" max="2026-12-31" locale="es"></is-date-picker>
         </div>
-        <pre class="code">&lt;is-date-picker value="2026-07-30" locale="es"&gt;&lt;/is-date-picker&gt;
-&lt;is-date-picker mode="range" min="2026-01-01" max="2026-12-31"&gt;&lt;/is-date-picker&gt;</pre>
       </section>
+
+      <section class="section" id="views">
+        <h2>Vistas</h2>
+        <p class="lede"><code>view</code> fuerza la vista; <code>views</code> limita las permitidas. Un picker de solo mes/año fija valor al elegir mes.</p>
+        <div class="demo cluster" style="gap:1.5rem;align-items:flex-start">
+          <div>
+            <div class="demo-label">open-to="year"</div>
+            <is-date-picker locale="es" open-to="year" value="2026-07-30"></is-date-picker>
+          </div>
+          <div>
+            <div class="demo-label">views="month year"</div>
+            <is-date-picker locale="es" views="month year" view="month" value="2026-07-01"></is-date-picker>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="week">
+        <h2>Semana y rejilla</h2>
+        <p class="lede"><code>first-day-of-week</code>, <code>show-outside-days</code>, <code>fixed-weeks</code> y <code>show-week-numbers</code>.</p>
+        <div class="demo cluster" style="gap:1.5rem;align-items:flex-start">
+          <div>
+            <div class="demo-label">domingo + outside + week numbers</div>
+            <is-date-picker locale="en-US" first-day-of-week="0" show-outside-days fixed-weeks show-week-numbers value="2026-07-15"></is-date-picker>
+          </div>
+          <div>
+            <div class="demo-label">fines de semana off</div>
+            <is-date-picker locale="es" disabled-days="0 6" value="2026-07-15"></is-date-picker>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="disable">
+        <h2>Deshabilitado</h2>
+        <div class="demo cluster" style="gap:1.5rem;align-items:flex-start">
+          <div>
+            <div class="demo-label">disable-past</div>
+            <is-date-picker locale="es" disable-past></is-date-picker>
+          </div>
+          <div>
+            <div class="demo-label">disabled-dates</div>
+            <is-date-picker locale="es" value="2026-07-01" disabled-dates="2026-07-04 2026-07-05 2026-07-20"></is-date-picker>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="standalone">
+        <h2>Mes y año sueltos</h2>
+        <p class="lede"><code>is-month-calendar</code> e <code>is-year-calendar</code> también se usan solos.</p>
+        <div class="demo cluster" style="gap:1.5rem;align-items:flex-start">
+          <is-month-calendar year="2026" value="2026-07" locale="es" style="width:16em"></is-month-calendar>
+          <is-year-calendar value="2026" min="2010" max="2035" style="width:16em"></is-year-calendar>
+        </div>
+      </section>
+
       <section class="section" id="reference">
         <h2>Referencia</h2>
         <table class="ref">
@@ -39,16 +96,32 @@
           <tbody>
             <tr><td><code>value</code></td><td>— · rango: <code>start/end</code></td></tr>
             <tr><td><code>mode</code></td><td>single · range</td></tr>
+            <tr><td><code>view</code> / <code>views</code> / <code>open-to</code></td><td>day · day month year · day</td></tr>
             <tr><td><code>min</code> / <code>max</code></td><td>—</td></tr>
-            <tr><td><code>locale</code></td><td>document.lang</td></tr>
+            <tr><td><code>locale</code> / <code>first-day-of-week</code></td><td>document.lang · Intl</td></tr>
+            <tr><td><code>show-outside-days</code> / <code>fixed-weeks</code> / <code>show-week-numbers</code></td><td>off</td></tr>
+            <tr><td><code>disable-past</code> / <code>disable-future</code></td><td>off</td></tr>
+            <tr><td><code>disabled-dates</code> / <code>disabled-days</code></td><td>—</td></tr>
+            <tr><td><code>nav</code></td><td>both · prev · next · none</td></tr>
+            <tr><td><code>frameless</code></td><td>off (para meter varios en una tarjeta)</td></tr>
+            <tr><td><code>preview-to</code></td><td>— (rango tentativo impuesto desde fuera)</td></tr>
           </tbody>
         </table>
-        <p class="lede">Evento <code>is-change</code>: <code>{ value }</code> o <code>{ start, end }</code>.</p>
+        <p class="lede">Eventos: <code>is-change</code>, <code>is-view-change</code>, <code>is-month-change</code>, <code>is-day-hover</code>. Métodos: <code>navigate(n)</code>, <code>focusDate(iso)</code>, <code>clear()</code>.</p>
+        <p class="lede">Parts: <code>base</code>, <code>nav</code>, <code>month-label</code>, <code>month-select</code>, <code>year-select</code>, <code>weekdays</code>, <code>grid</code>, <code>day</code>, <code>week-number</code>, <code>month-view</code>, <code>year-view</code>.</p>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-date-picker</h1>
-      <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#range">Rango</a>
+        <a href="#views">Vistas</a>
+        <a href="#week">Semana</a>
+        <a href="#disable">Deshabilitado</a>
+        <a href="#standalone">Mes / año</a>
+        <a href="#reference">Referencia</a>
+      </nav>
     </aside>
   </is-split-panel>
   <script>

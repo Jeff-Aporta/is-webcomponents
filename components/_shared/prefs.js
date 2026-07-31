@@ -3,10 +3,8 @@
  *
  * Forma:
  * {
- *   "is-split-panel": {
- *     "gallery-nav": { "positionInPixels": 200, "position": 18.5 },
- *     "docs-toc": { "positionInPixels": 220 }
- *   }
+ *   "is-split-panel": { "gallery-nav": { "positionInPixels": 200 } },
+ *   "is-main": { "docs-is-button": { "top": 420, "savedAt": 1710000000000 } }
  * }
  *
  * ROOT_KEY = "is-components"

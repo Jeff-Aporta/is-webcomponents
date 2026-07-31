@@ -6,28 +6,30 @@
   aspect-ratio: 4 / 1;
   box-sizing: border-box;
 
-  --fill-color-1: color-mix(in srgb, #339af0 35%, transparent);
-  --border-color-1: #339af0;
-  --line-color: #339af0;
+  /* Sin trend: sigue el acento de la marca activa. */
+  --line-color: var(--is-accent, #339af0);
+  --fill-color-1: color-mix(in srgb, var(--is-accent, #339af0) 28%, transparent);
+  --border-color-1: var(--is-accent, #339af0);
   --line-width: 1.5;
 }
 
+/* Con trend el color es semántico: reutiliza los tokens de estado del sistema. */
 :host([trend="positive"]) {
-  --fill-color-1: color-mix(in srgb, #40c057 35%, transparent);
-  --border-color-1: #40c057;
-  --line-color: #40c057;
+  --line-color: var(--is-success-text, #40c057);
+  --border-color-1: var(--is-success-text, #40c057);
+  --fill-color-1: color-mix(in srgb, var(--is-success-text, #40c057) 28%, transparent);
 }
 
 :host([trend="negative"]) {
-  --fill-color-1: color-mix(in srgb, #fa5252 35%, transparent);
-  --border-color-1: #fa5252;
-  --line-color: #fa5252;
+  --line-color: var(--is-danger-text, #fa5252);
+  --border-color-1: var(--is-danger-text, #fa5252);
+  --fill-color-1: color-mix(in srgb, var(--is-danger-text, #fa5252) 28%, transparent);
 }
 
 :host([trend="neutral"]) {
-  --fill-color-1: color-mix(in srgb, #868e96 35%, transparent);
-  --border-color-1: #868e96;
-  --line-color: #868e96;
+  --line-color: var(--is-text-dim, #868e96);
+  --border-color-1: var(--is-text-dim, #868e96);
+  --fill-color-1: color-mix(in srgb, var(--is-text-dim, #868e96) 28%, transparent);
 }
 
 :host([hidden]) { display: none; }
@@ -38,8 +40,15 @@
   height: 100%;
 }
 
-canvas {
+.chart-svg {
   display: block;
-  width: 100% !important;
-  height: 100% !important;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.spark-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }

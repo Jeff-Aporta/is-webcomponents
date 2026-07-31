@@ -25,6 +25,8 @@ import '../media/icon.js';
  *  value        string   (form data)
  *  form, formaction, formenctype, formmethod,
  *  formnovalidate, formtarget                                (form association)
+ *  aria-label, aria-pressed, aria-expanded, aria-haspopup,
+ *  aria-current                                              (se reenvían al inner)
  *
  * Slots
  *  default   etiqueta del botón
@@ -100,9 +102,15 @@ import '../media/icon.js';
     "formnovalidate", "formtarget"
   ];
 
+  // El role lo tiene el <button> interno: sin reenviar, un aria-* en el host
+  // no llega a AT. Solo los que no dependen de IDs del documento externo.
+  const ARIA_FORWARD = [
+    "aria-label", "aria-pressed", "aria-expanded", "aria-haspopup", "aria-current"
+  ];
+
   class IsButton extends HTMLElement {
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, ...ARIA_FORWARD]; }
 
     #internals = null;
     #initialAttrs = new Map();
@@ -281,6 +289,12 @@ import '../media/icon.js';
         const v = this.getAttribute(attr);
         if (v == null) b.removeAttribute(prop);
         else b.setAttribute(prop, v);
+      }
+
+      for (const attr of ARIA_FORWARD) {
+        const v = this.getAttribute(attr);
+        if (v == null) b.removeAttribute(attr);
+        else b.setAttribute(attr, v);
       }
     }
 

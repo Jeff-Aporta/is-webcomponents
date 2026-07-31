@@ -9,7 +9,7 @@ import './toast-item.js';
  *
  * Atributos
  *   placement  top-start | top-center | top-end |
- *              bottom-start | bottom-center | bottom-end  (default top-end)
+ *              bottom-start | bottom-center | bottom-end  (default bottom-end)
  *
  * Métodos
  *   create(message, options?) → Promise<is-toast-item>
@@ -59,22 +59,22 @@ import './toast-item.js';
 
     connectedCallback() {
       this.#mounted = true;
-      if (!this.hasAttribute('placement')) this.setAttribute('placement', 'top-end');
+      if (!this.hasAttribute('placement')) this.setAttribute('placement', 'bottom-end');
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal)) {
-        this.setAttribute('placement', 'top-end');
+        this.setAttribute('placement', 'bottom-end');
       }
     }
 
     get placement() {
       const v = this.getAttribute('placement');
-      return VALID_PLACEMENT.includes(v) ? v : 'top-end';
+      return VALID_PLACEMENT.includes(v) ? v : 'bottom-end';
     }
     set placement(v) {
-      this.setAttribute('placement', VALID_PLACEMENT.includes(v) ? v : 'top-end');
+      this.setAttribute('placement', VALID_PLACEMENT.includes(v) ? v : 'bottom-end');
     }
 
     /**

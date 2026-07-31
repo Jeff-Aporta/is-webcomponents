@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-rating · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/forms/rating.js"></script>
+  <script type="module" src="../components/media/icon.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .stack { display: grid; gap: 1.25rem; width: fit-content; }
+    .row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-rating">
+      <section class="section" id="intro">
+        <h2>&lt;is-rating&gt;</h2>
+        <p class="lede">
+          Valoración form-associated con paridad funcional con el
+          <a href="https://mui.com/material-ui/react-rating/" target="_blank" rel="noreferrer">Rating de MUI</a>:
+          precisión arbitraria, iconos propios, textos de hover, variantes de color y reset.
+        </p>
+        <div class="demo">
+          <is-rating id="demo" label="Satisfacción" value="3" name="rating"></is-rating>
+        </div>
+        <p class="lede" id="log">value: <code class="code">3</code></p>
+        <pre class="code">&lt;is-rating label="Satisfacción" value="3" name="rating"&gt;&lt;/is-rating&gt;</pre>
+      </section>
+
+      <section class="section" id="basics">
+        <h2>Básicos</h2>
+        <p class="lede">
+          <code class="code">max</code> define cuántos iconos hay.
+          El tamaño no es un atributo: los iconos escalan con el
+          <code class="code">font-size</code> del contexto (o con
+          <code class="code">--is-rating-size</code>).
+        </p>
+        <div class="demo">
+          <div class="stack">
+            <is-rating label="Por defecto (max 5)" value="2"></is-rating>
+            <is-rating label="10 iconos" max="10" value="7"></is-rating>
+            <is-rating label="Contexto grande" value="3" style="font-size:1.5rem;"></is-rating>
+            <is-rating label="Deshabilitado" value="2" disabled></is-rating>
+            <is-rating label="Obligatorio" required></is-rating>
+          </div>
+        </div>
+        <pre class="code">&lt;is-rating label="10 iconos" max="10" value="7"&gt;&lt;/is-rating&gt;
+&lt;is-rating value="3" style="font-size:1.5rem"&gt;&lt;/is-rating&gt;</pre>
+      </section>
+
+      <section class="section" id="precision">
+        <h2>Precisión</h2>
+        <p class="lede">
+          <code class="code">precision</code> fija la granularidad del valor: <code class="code">1</code> (default),
+          <code class="code">0.5</code>, <code class="code">0.25</code> o <code class="code">0.1</code>.
+          El icono se rellena con la fracción exacta, no por mitades.
+          <code class="code">allow-half</code> sigue funcionando como alias de <code class="code">precision="0.5"</code>.
+        </p>
+        <div class="demo">
+          <div class="stack">
+            <is-rating label="precision 1 (default)" value="3" show-label label-format="{v} / {max}"></is-rating>
+            <is-rating label="precision 0.5" precision="0.5" value="3.5" show-label label-format="{v} / {max}"></is-rating>
+            <is-rating label="precision 0.25" precision="0.25" value="2.75" show-label label-format="{v} / {max}"></is-rating>
+            <is-rating label="precision 0.1" precision="0.1" value="4.3" show-label label-format="{v} / {max}"></is-rating>
+            <is-rating label="allow-half (compat)" allow-half value="2.5" show-label label-format="{v} / {max}"></is-rating>
+          </div>
+        </div>
+        <pre class="code">&lt;is-rating precision="0.25" value="2.75"&gt;&lt;/is-rating&gt;
+&lt;is-rating allow-half value="2.5"&gt;&lt;/is-rating&gt;   &lt;!-- = precision="0.5" --&gt;</pre>
+      </section>
+
+      <section class="section" id="icons">
+        <h2>Iconos personalizados</h2>
+        <p class="lede">
+          <code class="code">icon</code> y <code class="code">empty-icon</code> aceptan cualquier nombre de
+          <code class="code">is-icon</code> (Iconify, <code class="code">grupo:nombre</code>).
+          Si solo se define <code class="code">icon</code>, el hueco reutiliza ese mismo icono en gris.
+        </p>
+        <div class="demo">
+          <div class="stack">
+            <is-rating label="Corazones" icon="tabler:heart-filled" empty-icon="tabler:heart" variant="danger" value="3"></is-rating>
+            <is-rating label="Pulgares" icon="tabler:thumb-up-filled" empty-icon="tabler:thumb-up" max="3" value="2"></is-rating>
+            <is-rating label="Rayos (mismo icono en hueco)" icon="tabler:bolt-filled" value="2"></is-rating>
+            <is-rating label="Círculos · precision 0.5" icon="tabler:circle-filled" empty-icon="tabler:circle" precision="0.5" value="3.5"></is-rating>
+          </div>
+        </div>
+        <pre class="code">&lt;is-rating icon="tabler:heart-filled" empty-icon="tabler:heart" variant="danger" value="3"&gt;&lt;/is-rating&gt;</pre>
+      </section>
+
+      <section class="section" id="highlight">
+        <h2>Resaltar solo el seleccionado</h2>
+        <p class="lede">
+          Con <code class="code">highlight-selected-only</code> el hover y la selección marcan únicamente
+          el icono del valor actual, no los anteriores (equivale al ejemplo <em>Radio group</em> de MUI).
+        </p>
+        <div class="demo">
+          <div class="stack">
+            <is-rating
+              id="faces"
+              label="¿Cómo fue tu experiencia?"
+              highlight-selected-only
+              max="5"
+              value="2"
+              show-label></is-rating>
+            <is-rating label="Normal (acumulativo)" value="2" show-label></is-rating>
+          </div>
+        </div>
+        <pre class="code">&lt;is-rating highlight-selected-only value="2" show-label&gt;&lt;/is-rating&gt;
+
+rating.labels = ['Muy malo', 'Malo', 'Normal', 'Bueno', 'Excelente'];</pre>
+      </section>
+
+      <section class="section" id="labels">
+        <h2>Textos de hover</h2>
+        <p class="lede">
+          <code class="code">show-label</code> muestra junto a los iconos el texto del valor bajo el cursor
+          (o del valor actual si no hay hover). El texto sale, por orden de prioridad, de la propiedad
+          <code class="code">getLabelText</code>, de la propiedad <code class="code">labels</code>
+          (índice 0 = valor 1) o del atributo <code class="code">label-format</code> con
+          <code class="code">{v}</code> y <code class="code">{max}</code>.
+          El mismo texto alimenta el <code class="code">aria-label</code> de cada icono y el
+          <code class="code">aria-valuetext</code> del control.
+        </p>
+        <div class="demo">
+          <div class="stack">
+            <is-rating id="labelled" label="labels (array)" value="4" show-label></is-rating>
+            <is-rating label="label-format" value="3" show-label label-format="{v} de {max} estrellas"></is-rating>
+            <is-rating id="fn" label="getLabelText (función)" precision="0.5" value="3.5" show-label></is-rating>
+          </div>
+          <p class="lede" id="hoverLog">hover: <code class="code">—</code></p>
+        </div>
+        <pre class="code">rating.labels = ['Pésimo', 'Malo', 'Normal', 'Bueno', 'Excelente'];
+rating.getLabelText = (v) =&gt; `${v} punto${v === 1 ? '' : 's'}`;
+
+rating.addEventListener('is-hover', (e) =&gt; {
+  console.log(e.detail.phantomValue, e.detail.label);
+});</pre>
+      </section>
+
+      <section class="section" id="color">
+        <h2>Color</h2>
+        <p class="lede">
+          <code class="code">variant</code> redefine <code class="code">--is-rating-color</code>.
+          El hueco usa siempre <code class="code">--is-rating-empty</code>.
+        </p>
+        <div class="demo">
+          <div class="stack">
+            <is-rating label="brand (default)" value="3"></is-rating>
+            <is-rating variant="neutral" label="neutral" value="3"></is-rating>
+            <is-rating variant="success" label="success" value="3"></is-rating>
+            <is-rating variant="warning" label="warning" value="3"></is-rating>
+            <is-rating variant="danger" label="danger" value="3"></is-rating>
+            <is-rating label="Token propio" value="3" style="--is-rating-color:#845ef7;"></is-rating>
+          </div>
+        </div>
+        <pre class="code">&lt;is-rating variant="success" value="3"&gt;&lt;/is-rating&gt;
+&lt;is-rating style="--is-rating-color:#845ef7" value="3"&gt;&lt;/is-rating&gt;</pre>
+      </section>
+
+      <section class="section" id="readonly">
+        <h2>Solo lectura y fracciones</h2>
+        <p class="lede">
+          En <code class="code">readonly</code> el valor no se ajusta a <code class="code">precision</code>:
+          puede mostrar cualquier fracción, que es lo habitual para una media de valoraciones.
+        </p>
+        <div class="demo">
+          <div class="stack">
+            <div class="row">
+              <is-rating readonly value="3.7" label="Media de 128 opiniones"></is-rating>
+            </div>
+            <is-rating readonly value="4.28" label="4,28 · sin precision"></is-rating>
+            <is-rating readonly value="2.1" icon="tabler:heart-filled" empty-icon="tabler:heart" variant="danger" label="Fracción con icono propio"></is-rating>
+          </div>
+        </div>
+        <pre class="code">&lt;is-rating readonly value="3.7"&gt;&lt;/is-rating&gt;</pre>
+      </section>
+
+      <section class="section" id="clearable">
+        <h2>Reset (clearable)</h2>
+        <p class="lede">
+          Con <code class="code">clearable</code>, volver a pulsar el valor ya seleccionado lo pone a
+          <code class="code">0</code> (solo si <code class="code">value &gt;= 1</code>).
+          <code class="code">Delete</code> y <code class="code">Backspace</code> hacen lo mismo desde el teclado.
+          Sin el atributo, el segundo clic no hace nada.
+        </p>
+        <div class="demo">
+          <div class="stack">
+            <is-rating id="clearDemo" label="clearable" clearable value="3"></is-rating>
+            <is-rating label="Sin clearable" value="3"></is-rating>
+          </div>
+          <p class="lede" id="clearLog">value: <code class="code">3</code></p>
+        </div>
+        <pre class="code">&lt;is-rating clearable value="3"&gt;&lt;/is-rating&gt;
+
+rating.clear();   // también por API</pre>
+      </section>
+
+      <section class="section" id="form">
+        <h2>Dentro de un &lt;form&gt;</h2>
+        <p class="lede">
+          El valor se envía bajo <code class="code">name</code>; con <code class="code">value = 0</code>
+          la entrada se omite y <code class="code">required</code> bloquea el envío.
+          <code class="code">form.reset()</code> vuelve al valor del atributo.
+        </p>
+        <div class="demo">
+          <form id="f" style="display:grid; gap:0.75rem; width:fit-content;">
+            <is-rating name="calidad" label="Calidad" required></is-rating>
+            <is-rating name="precio" label="Precio" precision="0.5" value="3.5"></is-rating>
+            <div class="row">
+              <button type="submit">Enviar</button>
+              <button type="reset">Reiniciar</button>
+            </div>
+          </form>
+        </div>
+        <p class="lede" id="out">FormData: —</p>
+      </section>
+
+      <section class="section" id="keyboard">
+        <h2>Teclado</h2>
+        <table class="ref">
+          <thead><tr><th>Tecla</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td><code>←</code> <code>↓</code></td><td>− <code>precision</code></td></tr>
+            <tr><td><code>→</code> <code>↑</code></td><td>+ <code>precision</code></td></tr>
+            <tr><td><code>Home</code></td><td>0</td></tr>
+            <tr><td><code>End</code></td><td><code>max</code></td></tr>
+            <tr><td><code>Delete</code> <code>Backspace</code></td><td>0, solo con <code>clearable</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>name</code></td><td>clave en FormData (omitida si value = 0)</td></tr>
+            <tr><td><code>value</code></td><td>0 … <code>max</code> (default 0)</td></tr>
+            <tr><td><code>max</code></td><td>número de iconos (default 5)</td></tr>
+            <tr><td><code>precision</code></td><td>granularidad: <code>1</code> (default) · <code>0.5</code> · <code>0.25</code> · <code>0.1</code></td></tr>
+            <tr><td><code>allow-half</code></td><td>alias histórico de <code>precision="0.5"</code></td></tr>
+            <tr><td><code>icon</code> <code>empty-icon</code></td><td>nombres de <code>is-icon</code>; sin <code>empty-icon</code> se reutiliza <code>icon</code></td></tr>
+            <tr><td><code>highlight-selected-only</code></td><td>resalta solo el icono del valor, no los anteriores</td></tr>
+            <tr><td><code>variant</code></td><td><code>brand</code> (default) · <code>neutral</code> · <code>success</code> · <code>warning</code> · <code>danger</code></td></tr>
+            <tr><td><code>label-format</code></td><td>plantilla del texto, ej. <code>"{v} de {max}"</code></td></tr>
+            <tr><td><code>show-label</code></td><td>muestra el texto del hover/valor junto a los iconos</td></tr>
+            <tr><td><code>clearable</code></td><td>reclicar el valor actual (o <code>Delete</code>) lo pone a 0</td></tr>
+            <tr><td><code>label</code></td><td>texto o slot homónimo</td></tr>
+            <tr><td><code>disabled</code> <code>readonly</code> <code>required</code></td><td>boolean; en <code>readonly</code> el valor admite cualquier fracción</td></tr>
+            <tr><td>propiedades JS</td><td><code>value</code> <code>labels</code> (índice 0 = valor 1) <code>getLabelText(v)</code> <code>precision</code> <code>icon</code> <code>emptyIcon</code> <code>variant</code></td></tr>
+            <tr><td>métodos</td><td><code>clear()</code> <code>focus()</code> <code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code></td></tr>
+            <tr><td>parts</td><td><code>form-control</code> <code>label</code> <code>base</code> <code>star</code> <code>icon-empty</code> <code>icon-filled</code> <code>hover-label</code></td></tr>
+            <tr><td>states</td><td><code>blank</code> <code>disabled</code> <code>readonly</code></td></tr>
+            <tr><td>events</td><td><code>is-change</code> · <code>is-hover</code> (<code>detail.phantomValue</code>, <code>detail.label</code>)</td></tr>
+            <tr><td>tokens</td><td><code>--is-rating-size</code> <code>--is-rating-gap</code> <code>--is-rating-color</code> <code>--is-rating-empty</code> <code>--is-rating-focus</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-rating</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#basics">Básicos</a>
+        <a href="#precision">Precisión</a>
+        <a href="#icons">Iconos</a>
+        <a href="#highlight">Solo el seleccionado</a>
+        <a href="#labels">Textos de hover</a>
+        <a href="#color">Color</a>
+        <a href="#readonly">Solo lectura</a>
+        <a href="#clearable">Reset</a>
+        <a href="#form">Formulario</a>
+        <a href="#keyboard">Teclado</a>
+        <a href="#reference">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+
+  <script type="module">
+    const demo = document.getElementById('demo');
+    const log = document.getElementById('log');
+    demo.addEventListener('is-change', (e) => {
+      log.innerHTML = `value: <code class="code">${e.detail.value}</code>`;
+    });
+
+    // highlight-selected-only + labels
+    const faces = document.getElementById('faces');
+    faces.labels = ['Muy malo', 'Malo', 'Normal', 'Bueno', 'Excelente'];
+
+    // labels / getLabelText
+    const labelled = document.getElementById('labelled');
+    labelled.labels = ['Pésimo', 'Malo', 'Normal', 'Bueno', 'Excelente'];
+
+    const fn = document.getElementById('fn');
+    fn.getLabelText = (v) => (v === 0 ? 'Sin valorar' : `${v} punto${v === 1 ? '' : 's'}`);
+
+    const hoverLog = document.getElementById('hoverLog');
+    for (const el of [labelled, fn]) {
+      el.addEventListener('is-hover', (e) => {
+        const { phantomValue, label } = e.detail;
+        hoverLog.innerHTML = `hover: <code class="code">${phantomValue === null ? '—' : `${phantomValue} · ${label}`}</code>`;
+      });
+    }
+
+    // clearable
+    const clearDemo = document.getElementById('clearDemo');
+    const clearLog = document.getElementById('clearLog');
+    clearDemo.addEventListener('is-change', (e) => {
+      clearLog.innerHTML = `value: <code class="code">${e.detail.value}</code>`;
+    });
+
+    const f = document.getElementById('f');
+    const out = document.getElementById('out');
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = [...new FormData(f)].map(([k, v]) => `${k}=${v}`).join(' · ');
+      out.textContent = `FormData: ${data || '—'}`;
+    });
+    f.addEventListener('reset', () => { out.textContent = 'FormData: —'; });
+  </script>
+  <script>
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -55% 0px' });
+    document.querySelectorAll('section.section').forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

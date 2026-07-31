@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/helpers/resize-observer.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-resize-observer">
       <section class="section" id="intro">
         <h2>&lt;is-resize-observer&gt;</h2>
         <p class="lede">Observa hijos directos y emite <code class="code">is-resize</code> con entries.</p>
@@ -36,7 +37,7 @@
           </tbody>
         </table>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-resize-observer</h1>
       <nav><a href="#intro">Introducción</a><a href="#reference">Referencia</a></nav>

@@ -1,46 +1,271 @@
+@import url('../_shared/diagram-kit.css');
+
 :host {
   display: block;
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 12rem;
+  min-height: 12em;
   box-sizing: border-box;
 
-  /* Serie fija (estilo WA) — no depende de paleta de marca */
-  --border-color-1: #339af0;
-  --border-color-2: #e64980;
-  --border-color-3: #40c057;
-  --border-color-4: #fab005;
-  --border-color-5: #7950f2;
-  --border-color-6: #fd7e14;
-  --fill-color-1: color-mix(in srgb, #339af0 40%, transparent);
-  --fill-color-2: color-mix(in srgb, #e64980 40%, transparent);
-  --fill-color-3: color-mix(in srgb, #40c057 40%, transparent);
-  --fill-color-4: color-mix(in srgb, #fab005 40%, transparent);
-  --fill-color-5: color-mix(in srgb, #7950f2 40%, transparent);
-  --fill-color-6: color-mix(in srgb, #fd7e14 40%, transparent);
-  --grid-color: color-mix(in srgb, var(--is-border, #2a3038) 70%, transparent);
+  /* Tipografía: todo en em, escala con el font-size del contexto. */
+  font-family: var(--is-sans, ui-sans-serif, system-ui, sans-serif);
+  --chart-tick-size: 0.6875em;
+  --chart-legend-size: 0.75em;
+  --chart-title-size: 0.875em;
+  --chart-tooltip-size: 0.75em;
+
+  /* Superficie y tinta */
   --chart-text: var(--is-text, #e6e8eb);
-  --line-border-width: 2;
-  --point-radius: 3;
-  --border-width: 1;
+  --chart-muted: var(--is-text-dim, #7a8390);
+  --chart-surface: var(--is-bg-elev, #1c2128);
+  --grid-color: color-mix(in srgb, var(--is-border, #2a3038) 85%, transparent);
+  --chart-axis-color: color-mix(in srgb, var(--is-border, #2a3038) 100%, transparent);
+
+  /* Geometría de marks — unitless (px), legibles desde JS */
+  --chart-bar-radius: 4;
+  --chart-bar-gap: 2;
+  --chart-line-width: 2;
+  --chart-point-radius: 3;
+  --chart-slice-gap: 2;
+  --chart-doughnut-ratio: 0.62;
+
+  /* Overrides opcionales por serie (vacíos = usa la paleta de marca).
+     Definir --border-color-1..8 / --fill-color-1..8 fuerza el color de esa serie. */
+  --border-color-1: ;
+  --border-color-2: ;
+  --border-color-3: ;
+  --border-color-4: ;
+  --border-color-5: ;
+  --border-color-6: ;
+  --border-color-7: ;
+  --border-color-8: ;
+  --fill-color-1: ;
+  --fill-color-2: ;
+  --fill-color-3: ;
+  --fill-color-4: ;
+  --fill-color-5: ;
+  --fill-color-6: ;
+  --fill-color-7: ;
+  --fill-color-8: ;
 }
 
 :host([hidden]) { display: none; }
 
+/* ---- Layout: leyenda y plot son hermanos en flujo, nunca se superponen ---- */
+
 .wrap {
   position: absolute;
   inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+  min-height: 0;
+}
+
+.wrap[data-legend="bottom"] { flex-direction: column-reverse; }
+.wrap[data-legend="start"] { flex-direction: row; }
+.wrap[data-legend="end"] { flex-direction: row-reverse; }
+
+.chart-svg {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  overflow: visible;
+}
+
+.slot-hidden { display: none !important; }
+
+/* ---- Ejes y grid: recesivos ---- */
+
+.grid-line {
+  stroke: var(--grid-color);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.grid-line[data-zero="true"] {
+  stroke: var(--chart-axis-color);
+  stroke-width: 1.5;
+}
+
+.axis-line {
+  stroke: var(--chart-axis-color);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.tick-label {
+  font-size: var(--chart-tick-size);
+  fill: var(--chart-muted);
+}
+
+.axis-title {
+  font-size: var(--chart-tick-size);
+  fill: var(--chart-muted);
+  font-weight: 500;
+}
+
+.chart-title {
+  font-size: var(--chart-title-size);
+  font-weight: 600;
+  fill: var(--chart-text);
+}
+
+/* ---- Marks ---- */
+
+.mark {
+  transition: opacity 120ms ease-out, filter 120ms ease-out;
+}
+
+.mark-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mark-point {
+  stroke: var(--chart-surface);
+  stroke-width: 2;
+  paint-order: stroke;
+}
+
+/* El ancho lo fija cada mark (0 cuando hay una sola rebanada). */
+.mark-slice {
+  stroke: var(--chart-surface);
+  stroke-linejoin: round;
+}
+
+/* Atenúa el resto al pasar el mouse sobre una mark */
+.marks[data-hover] .mark:not([data-active]) { opacity: 0.35; }
+.marks[data-hover] .mark[data-active] { filter: brightness(1.08); }
+
+.slice-value {
+  font-size: var(--chart-tick-size);
+  font-weight: 600;
+  fill: var(--chart-text);
+  pointer-events: none;
+}
+
+.center-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  fill: var(--chart-text);
+}
+
+.center-caption {
+  font-size: var(--chart-tick-size);
+  fill: var(--chart-muted);
+}
+
+/* ---- Entrada animada ---- */
+
+@keyframes is-chart-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes is-chart-draw {
+  from { stroke-dashoffset: var(--dash, 0); }
+  to { stroke-dashoffset: 0; }
+}
+
+.animate .marks {
+  animation: is-chart-rise 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.animate .mark-line {
+  animation: is-chart-draw 620ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate .marks,
+  .animate .mark-line { animation: none; }
+}
+
+/* ---- Leyenda ---- */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.375em 0.875em;
+  justify-content: center;
+  flex: 0 0 auto;
+  font-size: var(--chart-legend-size);
+  line-height: 1.4;
+}
+
+.wrap[data-legend="start"] .legend,
+.wrap[data-legend="end"] .legend {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  max-width: 40%;
+  overflow: auto;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  background: none;
+  border: none;
+  border-radius: var(--is-radius-sm, 0.375em);
+  color: var(--chart-text);
+  cursor: pointer;
+  padding: 0.15em 0.3em;
+  font: inherit;
+  transition: opacity 120ms ease-out, background-color 120ms ease-out;
+}
+
+.legend-item:hover { background: color-mix(in srgb, var(--chart-text) 8%, transparent); }
+
+.legend-item:focus-visible {
+  outline: 2px solid var(--is-focus, #4aabff);
+  outline-offset: 1px;
+}
+
+.legend-item[aria-pressed="false"] {
+  opacity: 0.45;
+}
+
+.legend-item[aria-pressed="false"] .legend-label { text-decoration: line-through; }
+
+.legend-swatch {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 0.2em;
+  flex: none;
+}
+
+/* ---- Crosshair ---- */
+
+.crosshair {
+  stroke: var(--chart-axis-color);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  pointer-events: none;
+}
+
+/* ---- Estado vacío ---- */
+
+.empty {
+  font-size: var(--chart-legend-size);
+  fill: var(--chart-muted);
+}
+
+/* ── Variante viewer: el chart llena el escenario del visor ── */
+
+:host([variant="viewer"]) {
   width: 100%;
   height: 100%;
 }
 
-canvas {
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-}
+.wrap.is-viewer { cursor: default; }
 
-.slot-hidden {
-  display: none !important;
-}
+/* Inline: el clic abre el visor, igual que en los diagramas. */
+:host(:not([variant="viewer"]):not([without-viewer])) .wrap { cursor: zoom-in; }

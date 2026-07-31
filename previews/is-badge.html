@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/feedback/badge.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-badge">
       <section class="section" id="intro">
         <h2>&lt;is-badge&gt;</h2>
         <p class="lede">Etiqueta compacta con variantes semánticas y apariencias.</p>
@@ -30,12 +31,19 @@
       <section class="section" id="examples">
         <h2>Variantes y apariencias</h2>
         <div class="demo">
-          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
+          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
             <is-badge variant="brand" appearance="accent">accent</is-badge>
             <is-badge variant="brand" appearance="filled">filled</is-badge>
             <is-badge variant="brand" appearance="outlined">outlined</is-badge>
             <is-badge variant="brand" appearance="filled-outlined">filled-outlined</is-badge>
             <is-badge variant="danger" pill attention="bounce">pill bounce</is-badge>
+          </div>
+          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
+            <is-badge variant="neutral" appearance="filled">neutral</is-badge>
+            <is-badge variant="success" appearance="filled">success</is-badge>
+            <is-badge variant="warning" appearance="outlined">warning</is-badge>
+            <is-badge variant="danger" appearance="accent">danger</is-badge>
+            <is-badge attention="pulse">pulse</is-badge>
           </div>
         </div>
         <pre class="code">&lt;is-badge variant="success" appearance="filled"&gt;OK&lt;/is-badge&gt;
@@ -54,7 +62,7 @@
         </table>
         <p class="lede">Slots: default, start, end.</p>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-badge</h1>
       <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>

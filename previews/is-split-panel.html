@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
@@ -58,7 +59,7 @@
 <body>
 
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-split-panel">
 
       <!-- ===== INTRO ===== -->
       <section class="section" id="intro">
@@ -367,8 +368,7 @@ sp.<span class="attr">addEventListener</span>(<span class="str">'reposition'</sp
         </table>
       </section>
 
-    </main>
-
+    </is-main>
     <!-- ============== SIDEBAR ============== -->
     <aside class="sidebar" slot="end">
       <h1>is-split-panel</h1>

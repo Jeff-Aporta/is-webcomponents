@@ -113,7 +113,7 @@ function mount() {
     </is-button>
   `;
 
-  const main = document.querySelector('main.main');
+  const main = document.querySelector('is-main.main, main.main');
   if (main) main.prepend(bar);
   else document.body.appendChild(bar);
 

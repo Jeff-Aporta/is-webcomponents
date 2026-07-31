@@ -1,0 +1,201 @@
+/**
+ * Kit visual compartido por charts y diagramas.
+ *
+ * Define el lenguaje que estrenó <is-sequence-diagram>: tooltip de vidrio,
+ * chip de etiqueta, atenuación de lo no enfocado y tipografía inline. Cada
+ * componente lo importa desde su propio .css y encima pone solo su geometría.
+ *
+ * El tema claro se marca con `[data-theme="light"]` en el contenedor, puesto
+ * desde JS: :host-context() no existe en Firefox ni Safari.
+ */
+
+/* ── Tooltip de vidrio ── */
+
+.dg-tooltip {
+  position: absolute;
+  z-index: 30;
+  pointer-events: none;
+  max-width: 22rem;
+  max-height: 60vh;
+  overflow: auto;
+  padding: 0.4em 0.65em;
+  border-radius: 0.625em;
+  border: 1px solid rgb(148 163 184 / 22%);
+  background: rgb(13 27 42 / 55%);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  color: #e2e8f0;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 40%), inset 0 1px 0 rgb(255 255 255 / 6%);
+  white-space: nowrap;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.dg-tooltip[hidden] { display: none; }
+
+/* Los diagramas muestran descripciones largas; ahí sí conviene que fluya. */
+.dg-tooltip.is-rich { white-space: normal; }
+
+.dg-tooltip__title {
+  display: block;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: inherit;
+}
+
+.dg-tooltip__step {
+  opacity: 0.7;
+  margin-right: 0.25em;
+}
+
+.dg-tooltip__desc {
+  display: block;
+  margin-top: 0.35em;
+  line-height: 1.45;
+  opacity: 0.92;
+  white-space: normal;
+}
+
+.dg-tooltip__desc img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 4px 0;
+}
+
+/* Fila valor: swatch + nombre + cifra alineada a la derecha. */
+.dg-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  opacity: 0.92;
+}
+
+.dg-tooltip__value {
+  margin-left: auto;
+  padding-left: 0.75em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  opacity: 1;
+}
+
+.dg-swatch {
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  flex: none;
+}
+
+.dg-swatch--square { border-radius: 0.2em; }
+
+/* ── Chip de etiqueta (tortuga y anotaciones) ── */
+
+.dg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 210px;
+  padding: 3px 8px 3px 4px;
+  border-radius: 7px;
+  border: 1px solid currentColor;
+  background: rgb(13 27 42 / 94%);
+  color: #e2e8f0;
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: normal;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 38%);
+}
+
+.dg-chip__idx {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* ── Hover: se resalta lo enfocado y se atenúa el resto ── */
+
+.dg-mark,
+.dg-dimmable {
+  transition: opacity 0.18s ease, filter 0.12s ease-out;
+}
+
+.dg-dimmable.is-dim { opacity: 0.35; }
+.dg-dimmable.is-active { filter: brightness(1.06); }
+
+/* ── Leyenda ── */
+
+.dg-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  background: none;
+  border: none;
+  border-radius: var(--is-radius-sm, 0.375em);
+  color: inherit;
+  cursor: pointer;
+  padding: 0.15em 0.3em;
+  font: inherit;
+  transition: opacity 120ms ease-out, background-color 120ms ease-out;
+}
+
+.dg-legend-item:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+
+.dg-legend-item:focus-visible {
+  outline: 2px solid var(--is-focus, #4aabff);
+  outline-offset: 1px;
+}
+
+.dg-legend-item[aria-pressed="false"] { opacity: 0.45; }
+.dg-legend-item[aria-pressed="false"] .dg-legend-label { text-decoration: line-through; }
+
+/* ── Tipografía inline (markdown de las etiquetas) ── */
+
+.tk-inline-code {
+  font-family: var(--is-mono, Consolas, Monaco, monospace);
+  font-size: 0.88em;
+  padding: 0.08em 0.32em;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--is-accent, #1e90ff) 12%, transparent);
+}
+
+.tk-inline-link { color: var(--is-brand-text, #74bdff); }
+
+.tk-inline-iconify {
+  width: 0.95em;
+  height: 0.95em;
+  vertical-align: -0.12em;
+  margin: 0 0.22em;
+}
+
+/* ── Rejilla y ejes recesivos ── */
+
+.dg-grid-line {
+  stroke-width: 1;
+  opacity: 0.6;
+  shape-rendering: crispEdges;
+}
+
+/* ── Tema claro ── */
+
+[data-theme="light"] .dg-tooltip {
+  background: rgb(255 255 255 / 60%);
+  color: #0b2e4e;
+  border-color: rgb(30 144 255 / 22%);
+  box-shadow:
+    0 0 20px rgb(30 144 255 / 15%),
+    0 8px 24px rgb(15 23 42 / 12%),
+    inset 0 1px 0 rgb(255 255 255 / 50%);
+}
+
+[data-theme="light"] .dg-chip {
+  background: rgb(255 255 255 / 96%);
+  color: #0b2e4e;
+}

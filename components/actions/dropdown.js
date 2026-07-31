@@ -1,35 +1,31 @@
 import { adoptCss } from '../_shared/adopt-css.js';
-import '../helpers/popup.js';
+import { computePosition, PLACEMENTS } from '../_shared/position.js';
 import './dropdown-item.js';
 import '../layout/divider.js';
 
 /**
  * <is-dropdown> — menú anclado a un trigger.
  *
+ * El panel usa <dialog showModal()> (top layer) para no quedar debajo de
+ * headings/secciones/overflow de ancestros — mismo patrón que is-combobox.
+ *
  * Slots: trigger | default (items / dividers / headings)
  * Attrs: open, placement (default bottom-start), distance, skidding
  * Events: is-show, is-after-show, is-hide, is-after-hide, is-select { item }
- * Parts: ::part(menu)
+ * Parts: ::part(dialog) ::part(menu)
  */
 
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-popup
-      class="popup"
-      strategy="fixed"
-      flip
-      shift
-      placement="bottom-start"
-      distance="0"
-    >
-      <span slot="anchor" class="trigger-wrap">
-        <slot name="trigger"></slot>
-      </span>
-      <div part="menu" class="menu" role="menu" tabindex="-1" hidden>
+    <span class="trigger-wrap" part="trigger-wrap">
+      <slot name="trigger"></slot>
+    </span>
+    <dialog part="dialog" class="popup" tabindex="-1">
+      <div part="menu" class="menu" role="menu" tabindex="-1">
         <slot></slot>
       </div>
-    </is-popup>
+    </dialog>
   `;
 
   const OBSERVED = ['open', 'placement', 'distance', 'skidding'];
@@ -37,19 +33,20 @@ import '../layout/divider.js';
   class IsDropdown extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
 
-    #popup;
+    #dialog;
     #menu;
     #triggerSlot;
     #defaultSlot;
     #mounted = false;
     #triggerEl = null;
+    #raf = 0;
 
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#popup = shadow.querySelector('is-popup');
+      this.#dialog = shadow.querySelector('dialog');
       this.#menu = shadow.querySelector('.menu');
       this.#triggerSlot = shadow.querySelector('slot[name="trigger"]');
       this.#defaultSlot = shadow.querySelector('slot:not([name])');
@@ -57,11 +54,14 @@ import '../layout/divider.js';
       this.#triggerSlot.addEventListener('slotchange', () => this.#bindTrigger());
       this.#defaultSlot.addEventListener('slotchange', () => this.#syncCheckboxPad());
       this.addEventListener('is-dropdown-item-select', this.#onItemSelect);
+
+      this.#dialog.addEventListener('click', this.#onDialogClick);
+      this.#dialog.addEventListener('cancel', this.#onDialogCancel);
+      this.#dialog.addEventListener('close', this.#onDialogClose);
     }
 
     connectedCallback() {
       this.#mounted = true;
-      this.#syncPopup();
       this.#bindTrigger();
       this.#syncCheckboxPad();
       if (this.open) this.#doShow(true);
@@ -70,8 +70,8 @@ import '../layout/divider.js';
     disconnectedCallback() {
       this.#mounted = false;
       this.#unbindTrigger();
-      document.removeEventListener('pointerdown', this.#onDocPointer, true);
-      document.removeEventListener('keydown', this.#onDocKey, true);
+      this.#teardownListeners();
+      if (this.#dialog.open) this.#dialog.close();
     }
 
     attributeChangedCallback(name) {
@@ -79,13 +79,18 @@ import '../layout/divider.js';
       if (name === 'open') {
         if (this.open) this.#doShow();
         else this.#doHide();
-      } else this.#syncPopup();
+      } else if (this.open) {
+        this.#reposition();
+      }
     }
 
     get open() { return this.hasAttribute('open'); }
     set open(v) { this.toggleAttribute('open', !!v); }
 
-    get placement() { return this.getAttribute('placement') || 'bottom-start'; }
+    get placement() {
+      const v = this.getAttribute('placement') || 'bottom-start';
+      return PLACEMENTS.includes(v) ? v : 'bottom-start';
+    }
     set placement(v) { this.setAttribute('placement', v); }
 
     get distance() { return Number(this.getAttribute('distance')) || 0; }
@@ -101,12 +106,6 @@ import '../layout/divider.js';
       return this.#defaultSlot.assignedElements({ flatten: true }).filter(
         (el) => el.localName === 'is-dropdown-item' && !el.disabled,
       );
-    }
-
-    #syncPopup() {
-      this.#popup.placement = this.placement;
-      this.#popup.distance = this.distance;
-      this.#popup.skidding = this.skidding;
     }
 
     #bindTrigger() {
@@ -151,24 +150,35 @@ import '../layout/divider.js';
       if (ok) this.hide();
     };
 
-    #onDocPointer = (e) => {
-      if (!this.open) return;
-      const path = e.composedPath();
-      if (path.includes(this)) return;
+    /** Clic en la superficie del dialog (fuera del menú) → cerrar. */
+    #onDialogClick = (e) => {
+      if (e.target !== this.#dialog) return;
       this.hide();
+    };
+
+    #onDialogCancel = (e) => {
+      e.preventDefault();
+      this.hide();
+      this.#triggerEl?.focus?.();
+    };
+
+    /** Si el dialog se cierra por otro medio, sincronizar open. */
+    #onDialogClose = () => {
+      if (this.open) this.removeAttribute('open');
     };
 
     #onDocKey = (e) => {
       if (!this.open) return;
-      if (e.key === 'Escape') {
-        this.hide();
-        this.#triggerEl?.focus?.();
-        return;
-      }
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         this.#focusItem(e.key === 'ArrowDown' ? 1 : -1);
       }
+    };
+
+    #onReposition = () => {
+      if (!this.open) return;
+      cancelAnimationFrame(this.#raf);
+      this.#raf = requestAnimationFrame(() => this.#reposition());
     };
 
     #focusItem(delta) {
@@ -179,6 +189,46 @@ import '../layout/divider.js';
       next?.focus?.();
     }
 
+    #reposition() {
+      const anchor = this.#triggerEl;
+      if (!anchor || !this.#dialog.open) return;
+
+      const result = computePosition({
+        anchor,
+        popupEl: this.#menu,
+        placement: this.placement,
+        distance: this.distance,
+        skidding: this.skidding,
+        flip: true,
+        shift: true,
+        strategy: 'fixed',
+        boundary: 'viewport',
+      });
+      if (!result) return;
+
+      Object.assign(this.#menu.style, {
+        position: 'fixed',
+        top: `${result.top}px`,
+        left: `${result.left}px`,
+        right: 'auto',
+        bottom: 'auto',
+      });
+      this.#menu.dataset.currentPlacement = result.placement;
+    }
+
+    #setupListeners() {
+      document.addEventListener('keydown', this.#onDocKey, true);
+      window.addEventListener('resize', this.#onReposition, { passive: true });
+      window.addEventListener('scroll', this.#onReposition, true);
+    }
+
+    #teardownListeners() {
+      document.removeEventListener('keydown', this.#onDocKey, true);
+      window.removeEventListener('resize', this.#onReposition);
+      window.removeEventListener('scroll', this.#onReposition, true);
+      cancelAnimationFrame(this.#raf);
+    }
+
     #doShow(silent) {
       if (!silent) {
         const ev = new CustomEvent('is-show', { bubbles: true, composed: true, cancelable: true });
@@ -187,12 +237,16 @@ import '../layout/divider.js';
           return;
         }
       }
-      this.#menu.hidden = false;
-      this.#popup.active = true;
-      this.#popup.reposition();
+
+      if (!this.#dialog.open) {
+        this.#dialog.showModal();
+      }
+      this.#reposition();
+      // Segunda pasada tras layout del menú (medidas reales)
+      requestAnimationFrame(() => this.#reposition());
+
       this.#triggerEl?.setAttribute('aria-expanded', 'true');
-      document.addEventListener('pointerdown', this.#onDocPointer, true);
-      document.addEventListener('keydown', this.#onDocKey, true);
+      this.#setupListeners();
       requestAnimationFrame(() => this.items[0]?.focus?.());
       this.dispatchEvent(new CustomEvent('is-after-show', { bubbles: true, composed: true }));
     }
@@ -205,12 +259,11 @@ import '../layout/divider.js';
           return;
         }
       }
-      this.#menu.hidden = true;
-      this.#popup.active = false;
+
       this.#triggerEl?.setAttribute('aria-expanded', 'false');
       this.querySelectorAll('is-dropdown-item').forEach((el) => el.closeSubmenu?.());
-      document.removeEventListener('pointerdown', this.#onDocPointer, true);
-      document.removeEventListener('keydown', this.#onDocKey, true);
+      this.#teardownListeners();
+      if (this.#dialog.open) this.#dialog.close();
       this.dispatchEvent(new CustomEvent('is-after-hide', { bubbles: true, composed: true }));
     }
   }

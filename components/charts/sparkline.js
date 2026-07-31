@@ -1,55 +1,38 @@
 import { adoptCss } from '../_shared/adopt-css.js';
-import { loadChartJs } from '../_shared/chart-js.js';
+import { pathLine, pathArea, roundedBarRect } from '../_shared/svg-chart-engine.js';
 
-/**
- * <is-sparkline> — mini chart inline (estilo WA).
- *
- * Atributos: data | values, type (line|bar), appearance (solid|gradient|line),
- *            curve (linear|natural|step), trend (positive|negative|neutral), label
- */
+const SVG_NS = 'http://www.w3.org/2000/svg';
 
 (() => {
-  function resolveColor(el, prop, fallback) {
-    const raw = getComputedStyle(el).getPropertyValue(prop).trim() || fallback;
-    if (!raw.includes('var(') && !raw.includes('color-mix(')) return raw;
-    const probe = document.createElement('span');
-    probe.style.color = raw;
-    probe.style.position = 'absolute';
-    probe.style.visibility = 'hidden';
-    el.appendChild(probe);
-    const resolved = getComputedStyle(probe).color;
-    probe.remove();
-    return resolved && resolved !== 'rgba(0, 0, 0, 0)' ? resolved : fallback;
-  }
-
   class IsSparkline extends HTMLElement {
     static get observedAttributes() {
       return ['values', 'data', 'type', 'label', 'appearance', 'curve', 'trend'];
     }
 
-    #canvas;
-    #chart = null;
+    #svg;
     #data = [];
     #mounted = false;
+    #ro = null;
 
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
-      shadow.innerHTML = /* html */ `<div part="sparkline" class="wrap"><canvas part="canvas"></canvas></div>`;
+      shadow.innerHTML = /* html */ `<div part="sparkline" class="wrap"><svg part="canvas" class="chart-svg"></svg></div>`;
       adoptCss(shadow, import.meta.url);
-      this.#canvas = shadow.querySelector('canvas');
+      this.#svg = shadow.querySelector('svg');
     }
 
     connectedCallback() {
       this.#mounted = true;
       this.#parseValuesAttr();
+      this.#ro = new ResizeObserver(() => this.#render());
+      this.#ro.observe(this);
       this.#render();
     }
 
     disconnectedCallback() {
       this.#mounted = false;
-      this.#chart?.destroy();
-      this.#chart = null;
+      this.#ro?.disconnect();
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
@@ -64,71 +47,97 @@ import { loadChartJs } from '../_shared/chart-js.js';
       this.#render();
     }
 
-    get chart() { return this.#chart; }
-
     #parseValuesAttr() {
       const raw = this.getAttribute('data') ?? this.getAttribute('values');
       if (raw == null) return;
       this.#data = raw.split(/[\s,]+/).map(Number).filter(Number.isFinite);
     }
 
-    async #render() {
+    #render() {
       if (!this.#mounted) return;
-      const Chart = await loadChartJs();
-      if (!this.#mounted) return;
+      const rect = this.getBoundingClientRect();
+      const width = Math.max(rect.width, 1);
+      const height = Math.max(rect.height, 1);
+      this.#svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      while (this.#svg.firstChild) this.#svg.removeChild(this.#svg.firstChild);
+      if (!this.#data.length) return;
 
-      const fill = resolveColor(this, '--fill-color-1', 'rgba(51,154,240,.35)');
-      const border = resolveColor(this, '--border-color-1', '#339af0')
-        || resolveColor(this, '--line-color', '#339af0');
+      const cs = getComputedStyle(this);
+      const border = cs.getPropertyValue('--line-color').trim() || '#339af0';
+      const fill = cs.getPropertyValue('--fill-color-1').trim() || 'rgba(51,154,240,.35)';
+      const lineWidth = Number(cs.getPropertyValue('--line-width').trim()) || 1.5;
       const type = this.getAttribute('type') === 'bar' ? 'bar' : 'line';
       const appearance = this.getAttribute('appearance') || 'solid';
       const curve = this.getAttribute('curve') || 'linear';
-      const label = this.getAttribute('label') || '';
-      const lineWidth = Number(getComputedStyle(this).getPropertyValue('--line-width').trim()) || 1.5;
 
-      let tension = 0.35;
-      if (curve === 'linear') tension = 0;
-      else if (curve === 'natural') tension = 0.4;
-      else if (curve === 'step') tension = 0;
+      // El sparkline usa el rango propio de la serie: forzar el 0 aplanaría
+      // series como [100, 102, 101] hasta volverlas una línea recta.
+      const dataMin = Math.min(...this.#data);
+      const dataMax = Math.max(...this.#data);
+      const pad = 2;
+      const inner = Math.max(height - pad * 2, 1);
 
-      const fillArea = appearance !== 'line' && type === 'line';
-      let bg = fill;
-      if (appearance === 'gradient' && type === 'line') {
-        const ctx = this.#canvas.getContext('2d');
-        const g = ctx.createLinearGradient(0, 0, 0, this.#canvas.height || 24);
-        g.addColorStop(0, fill);
-        g.addColorStop(1, 'rgba(0,0,0,0)');
-        bg = g;
+      if (type === 'bar') {
+        // Las barras sí se miden desde cero (o desde el mínimo si hay negativos).
+        const base = Math.min(dataMin, 0);
+        const span = (dataMax - base) || 1;
+        const bw = (width - pad * 2) / this.#data.length;
+        this.#data.forEach((v, i) => {
+          const h = Math.max(((v - base) / span) * inner, 1);
+          const x = pad + i * bw;
+          const y = height - pad - h;
+          const p = document.createElementNS(SVG_NS, 'path');
+          p.setAttribute('d', roundedBarRect(x + 1, y, Math.max(bw - 2, 1), h, 2, 'top'));
+          p.setAttribute('fill', border);
+          this.#svg.appendChild(p);
+        });
+        return;
       }
 
-      this.#chart?.destroy();
-      this.#chart = new Chart(this.#canvas, {
-        type,
-        data: {
-          labels: this.#data.map((_, i) => String(i + 1)),
-          datasets: [{
-            label,
-            data: this.#data,
-            backgroundColor: type === 'bar' ? fill : bg,
-            borderColor: border,
-            borderWidth: lineWidth,
-            pointRadius: 0,
-            tension: curve === 'step' ? 0 : tension,
-            stepped: curve === 'step',
-            fill: fillArea,
-          }],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: false,
-          plugins: { legend: { display: false }, tooltip: { enabled: true } },
-          scales: {
-            x: { display: false },
-            y: { display: false },
-          },
-        },
-      });
+      const span = (dataMax - dataMin) || 1;
+      const min = dataMin;
+
+      const points = this.#data.map((v, i) => ({
+        x: pad + (i / Math.max(this.#data.length - 1, 1)) * (width - pad * 2),
+        y: height - pad - ((v - min) / span) * inner,
+      }));
+
+      if (appearance !== 'line') {
+        const area = document.createElementNS(SVG_NS, 'path');
+        area.setAttribute('d', pathArea(points, height - pad, { curve }));
+        area.setAttribute('stroke', 'none');
+        if (appearance === 'gradient') {
+          // El degradado parte del color sólido: con el fill ya translúcido
+          // el resultado quedaba casi invisible.
+          const gid = `sg${Math.random().toString(36).slice(2)}`;
+          const defs = document.createElementNS(SVG_NS, 'defs');
+          defs.innerHTML = `<linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="${border}" stop-opacity="0.35"/>
+            <stop offset="1" stop-color="${border}" stop-opacity="0"/>
+          </linearGradient>`;
+          this.#svg.appendChild(defs);
+          area.setAttribute('fill', `url(#${gid})`);
+        } else {
+          area.setAttribute('fill', fill);
+        }
+        this.#svg.appendChild(area);
+      }
+
+      const line = document.createElementNS(SVG_NS, 'path');
+      line.setAttribute('d', pathLine(points, { curve }));
+      line.setAttribute('stroke', border);
+      line.setAttribute('stroke-width', String(lineWidth));
+      line.setAttribute('class', 'spark-line');
+      this.#svg.appendChild(line);
+
+      // Punto final: ancla la lectura en el valor más reciente.
+      const last = points[points.length - 1];
+      const dot = document.createElementNS(SVG_NS, 'circle');
+      dot.setAttribute('cx', last.x);
+      dot.setAttribute('cy', last.y);
+      dot.setAttribute('r', String(Math.max(lineWidth, 1.5)));
+      dot.setAttribute('fill', border);
+      this.#svg.appendChild(dot);
     }
   }
 

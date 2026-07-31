@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/charts/sparkline.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -26,7 +27,7 @@
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-sparkline">
       <section class="section" id="intro">
         <h2>Sparkline</h2>
         <p class="lede"><code class="code">&lt;is-sparkline&gt;</code></p>
@@ -143,7 +144,7 @@
           </tbody>
         </table>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-sparkline</h1>
       <nav>

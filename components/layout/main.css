@@ -1,0 +1,5 @@
+/* is-main: sin shadow; el layout lo aporta class="main" (presentation.css). */
+:host {
+  display: block;
+  box-sizing: border-box;
+}

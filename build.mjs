@@ -1,8 +1,8 @@
 // build.mjs — CDN artifacts: flat dist/cdn/{tag}.min.js + {tag}.min.css + is-base.min.css
-import { readdir, mkdir, stat, rm, writeFile } from 'node:fs/promises';
+import { access, readdir, mkdir, stat, rm, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execFileSync } from 'node:child_process';
+import { build } from 'esbuild';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const dist = join(root, 'dist', 'cdn');
@@ -11,12 +11,18 @@ const compRoot = join(root, 'components');
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 
-const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-const esbuild = (args) =>
-  execFileSync(npx, ['--yes', 'esbuild', ...args], {
-    stdio: ['ignore', 'ignore', 'inherit'],
-    shell: process.platform === 'win32',
+const bundleJs = (entry, outfile) =>
+  build({
+    entryPoints: [entry],
+    outfile,
+    bundle: true,
+    minify: true,
+    format: 'esm',
+    target: 'es2020',
+    legalComments: 'none',
   });
+
+const bundleCss = (entry, outfile) => build({ entryPoints: [entry], outfile, minify: true });
 
 async function walk(dir, out = []) {
   for (const name of await readdir(dir, { withFileTypes: true })) {
@@ -39,27 +45,22 @@ for (const inFile of entries) {
   const outJs = join(dist, `${tag}.min.js`);
   const outCss = join(dist, `${tag}.min.css`);
 
-  esbuild([
-    inFile,
-    '--bundle',
-    '--minify',
-    '--format=esm',
-    '--target=es2020',
-    '--legal-comments=none',
-    `--outfile=${outJs}`,
-  ]);
+  await bundleJs(inFile, outJs);
 
-  esbuild([cssIn, '--minify', `--outfile=${outCss}`]);
+  // No todo módulo trae CSS propio (helpers como diagram-kinds no tienen shadow)
+  const hasCss = await access(cssIn).then(() => true, () => false);
+  if (hasCss) await bundleCss(cssIn, outCss);
 
-  const [jsIn, jsOut, cssOut] = await Promise.all([stat(inFile), stat(outJs), stat(outCss)]);
+  const [jsIn, jsOut] = await Promise.all([stat(inFile), stat(outJs)]);
+  const cssSize = hasCss ? String((await stat(outCss)).size) : '—';
   console.log(
-    `  ${tag.padEnd(18)} js ${String(jsIn.size).padStart(6)}→${String(jsOut.size).padStart(6)}  css ${String(cssOut.size).padStart(6)}`,
+    `  ${tag.padEnd(18)} js ${String(jsIn.size).padStart(6)}→${String(jsOut.size).padStart(6)}  css ${cssSize.padStart(6)}`,
   );
 }
 
 const baseIn = join(root, 'styles', 'is-base.css');
 const baseOut = join(dist, 'is-base.min.css');
-esbuild([baseIn, '--minify', `--outfile=${baseOut}`]);
+await bundleCss(baseIn, baseOut);
 const baseStat = await stat(baseOut);
 console.log(`  ${'is-base'.padEnd(18)} css ${String(baseStat.size).padStart(6)}`);
 

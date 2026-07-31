@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-diagram-lightbox · IS Web Components</title>
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <script type="module" src="../components/diagrams/diagram-lightbox.js"></script>
+  <script type="module" src="../components/diagrams/sequence-diagram.js"></script>
+  <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
+  <script type="module" src="../components/actions/button.js"></script>
+  <script type="module" src="../components/forms/select.js"></script>
+  <script src="../scripts/highlight-pre.js" defer></script>
+  <script src="../scripts/demo-code.js" defer></script>
+  <script type="module" src="../scripts/preview-chrome.js"></script>
+  <style>
+    .demo { display: flex; flex-direction: column; gap: 0.65rem; }
+    .demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+    .demo-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+    .demo-bar is-select { min-width: 12rem; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--is-accent) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--is-accent) 30%, transparent);
+      color: var(--is-accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-diagram-lightbox">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-diagram-lightbox&gt;</h2>
+        <p class="lede">
+          Visor a pantalla completa pensado para diagramas: hereda del
+          <code class="code">&lt;is-lightbox&gt;</code> genérico el zoom anclado al
+          cursor, el pan y el dialog top-layer, y le suma la barra de la animación
+          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel
+          de código JSON y el enlace compartible con el payload en <code class="code">?d=</code>.
+        </p>
+
+        <div class="demo">
+          <div class="demo-bar">
+            <span class="pill" aria-hidden="true">Demo</span>
+            <is-select id="preset" label="Preset" value="tk1437191">
+              <is-option value="tk1437191" label="Facturación electrónica"></is-option>
+              <is-option value="tk1431662" label="Onboarding de cliente"></is-option>
+            </is-select>
+            <is-button id="openViewer" variant="brand" appearance="filled">
+              Abrir el visor
+              <is-icon slot="end" icon="mdi:arrow-right"></is-icon>
+            </is-button>
+          </div>
+          <is-diagram-lightbox id="lb" kind="sequence"></is-diagram-lightbox>
+        </div>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <p class="lede">
+          Configura el diagrama con <code class="code">payload</code> (objeto JS) o con
+          un <code class="code">&lt;script type="application/json"&gt;</code> hijo, y abre
+          con <code class="code">open = true</code> o el método <code class="code">show()</code>.
+        </p>
+
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code class="code">kind</code></td><td><code class="code">"sequence"</code> por defecto. Hoy sólo diagrama de secuencia; la barra se adapta a la API turtle del nodo.</td></tr>
+            <tr><td><code class="code">payload</code></td><td>Objeto con la configuración del diagrama (<code class="code">preset</code>, <code class="code">sequence</code>, etc.).</td></tr>
+            <tr><td><code class="code">open</code> · <code class="code">show()</code> · <code class="code">hide()</code></td><td>Visibilidad del dialog.</td></tr>
+            <tr><td>Hereda de <code class="code">&lt;is-lightbox&gt;</code></td><td>zoom, pan, slot <code class="code">toolbar</code>, eventos <code class="code">is-open</code>, <code class="code">is-close</code>, <code class="code">is-reposition</code>, <code class="code">is-share</code>.</td></tr>
+            <tr><td><code class="code">is-turtle-state</code></td><td>detail: <code class="code">{ playing, idx, total, replay }</code></td></tr>
+            <tr><td><code class="code">is-toggle-group</code></td><td>detail: <code class="code">{ id }</code> — clic en una leyenda de grupo del diagrama.</td></tr>
+          </tbody>
+        </table>
+
+        <pre class="code" data-lang="html">&lt;is-diagram-lightbox id="lb" kind="sequence"&gt;&lt;/is-diagram-lightbox&gt;
+
+&lt;script type="module"&gt;
+  const lb = document.getElementById('lb');
+  lb.payload = { preset: 'tk1437191' };
+  lb.open = true;
+
+  // O abrirlo con un click:
+  lb.addEventListener('is-share', (e) =&gt; {
+    console.log('Compartir:', e.detail.url);
+  });
+&lt;/script&gt;</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-diagram-lightbox</h1>
+      <nav>
+        <a href="#intro">Introducción</a>
+        <a href="#api">Referencia</a>
+      </nav>
+    </aside>
+  </is-split-panel>
+
+  <script type="module">
+    const lb = document.getElementById('lb');
+    const preset = document.getElementById('preset');
+
+    const open = () => {
+      lb.payload = { preset: preset.value };
+      lb.open = true;
+    };
+
+    document.getElementById('openViewer').addEventListener('click', open);
+    preset.addEventListener('input', () => {
+      // Mantén el payload sincronizado con la selección cuando el visor esté abierto.
+      if (lb.open) lb.payload = { preset: preset.value };
+    });
+  </script>
+</body>
+</html>

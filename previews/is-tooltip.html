@@ -10,6 +10,7 @@
   <script type="module" src="../components/feedback/tooltip.js"></script>
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -19,10 +20,10 @@
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-tooltip">
       <section class="section" id="intro">
         <h2>&lt;is-tooltip&gt;</h2>
-        <p class="lede">Tip breve anclado con <code class="code">for</code>. Depende de <code class="code">is-popup</code>.</p>
+        <p class="lede">Tip breve anclado con <code class="code">for</code>. Depende de <code class="code">is-popover</code>.</p>
         <div class="demo">
           <is-button id="tip-target">Hover Me</is-button>
           <is-tooltip for="tip-target">This is a tooltip</is-tooltip>
@@ -45,12 +46,48 @@
       </section>
       <section class="section" id="trigger">
         <h2>Trigger click / manual</h2>
+        <p class="lede">Clic fuera o <code class="code">Escape</code> cierra el tip.</p>
         <div class="demo grid">
           <is-button id="t-click">Click to Toggle</is-button>
-          <is-tooltip for="t-click" trigger="click">Click again to dismiss</is-tooltip>
+          <is-tooltip for="t-click" trigger="click">Click nuevamente o fuera para cerrar</is-tooltip>
           <is-button id="t-manual-btn">Toggle Manually</is-button>
           <is-tooltip id="t-manual" for="t-manual-btn" trigger="manual">Manual tooltip</is-tooltip>
         </div>
+      </section>
+
+      <section class="section" id="html">
+        <h2>Contenido HTML largo</h2>
+        <p class="lede">
+          El slot acepta markup. Útil para tips densos; preferir
+          <code class="code">trigger="click"</code> si hay enlaces o texto seleccionable.
+        </p>
+        <div class="demo">
+          <is-button id="t-html" variant="brand">Auditoría · tip largo</is-button>
+          <is-tooltip
+            for="t-html"
+            trigger="click"
+            placement="bottom-start"
+            style="--max-width: 22rem"
+          >
+            <p><strong>Resumen de cumplimiento</strong></p>
+            <p>
+              Este tip muestra contenido enriquecido para revisar wrapping,
+              contraste y dismiss al clic fuera.
+            </p>
+            <ul>
+              <li>Tokens <code>--is-*</code> y tipografía del tema</li>
+              <li>Máximo ancho vía <code>--max-width</code></li>
+              <li>Enlace de ejemplo:
+                <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tooltip_role" target="_blank" rel="noopener">ARIA tooltip</a>
+              </li>
+            </ul>
+            <p>Última revisión: sprint actual · owner: Design System</p>
+          </is-tooltip>
+        </div>
+        <pre class="code">&lt;is-tooltip for="t-html" trigger="click" style="--max-width:22rem"&gt;
+  &lt;p&gt;&lt;strong&gt;Resumen&lt;/strong&gt;&lt;/p&gt;
+  &lt;ul&gt;&lt;li&gt;…&lt;/li&gt;&lt;/ul&gt;
+&lt;/is-tooltip&gt;</pre>
       </section>
       <section class="section" id="reference">
         <h2>Referencia</h2>
@@ -58,20 +95,23 @@
           <thead><tr><th>API</th><th>Detalle</th></tr></thead>
           <tbody>
             <tr><td><code>for</code></td><td>id del target</td></tr>
-            <tr><td><code>trigger</code></td><td>hover focus | click | manual</td></tr>
+            <tr><td><code>trigger</code></td><td>hover focus | click | manual — click/manual: fuera + Escape cierra</td></tr>
+            <tr><td><code>--max-width</code></td><td>ancho del tip (default 16rem)</td></tr>
+            <tr><td>slot</td><td>texto o HTML (p, ul, a, code…)</td></tr>
             <tr><td><code>placement</code> <code>distance</code> <code>skidding</code></td><td>posicionamiento</td></tr>
             <tr><td><code>show()</code> <code>hide()</code></td><td>métodos</td></tr>
             <tr><td>events</td><td>is-show, is-after-show, is-hide, is-after-hide</td></tr>
           </tbody>
         </table>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-tooltip</h1>
       <nav>
         <a href="#intro">Intro</a>
         <a href="#placement">Placement</a>
         <a href="#trigger">Trigger</a>
+        <a href="#html">HTML</a>
         <a href="#reference">Referencia</a>
       </nav>
     </aside>

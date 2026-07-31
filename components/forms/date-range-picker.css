@@ -1,0 +1,85 @@
+/* hidden en un nodo interno debe ganar al display propio del componente. */
+[hidden] {
+  display: none !important;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host {
+  --is-daterange-border: var(--is-border, #d0d7de);
+  --is-daterange-bg: var(--is-bg-elev, #fff);
+  display: inline-block;
+  font-family: var(--is-sans, inherit);
+  color: var(--is-text, inherit);
+  box-sizing: border-box;
+
+  .base {
+    display: flex;
+    align-items: stretch;
+    gap: 0.85em;
+    padding: 0.85em;
+    background: var(--is-daterange-bg);
+    border: 1px solid var(--is-daterange-border);
+    border-radius: var(--is-radius, 0.625em);
+    box-shadow: var(--is-shadow, none);
+  }
+
+  .shortcuts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+    padding-inline-end: 0.85em;
+    border-inline-end: 1px solid var(--is-daterange-border);
+    min-width: 9.5em;
+  }
+
+  .presets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+  }
+
+  .calendars {
+    display: flex;
+    gap: 1.25em;
+  }
+
+  /* Separador entre meses: ayuda a leer que son dos rejillas, no una de 14. */
+  .calendars > is-date-picker + is-date-picker {
+    padding-inline-start: 1.25em;
+    border-inline-start: 1px solid var(--is-daterange-border);
+  }
+}
+
+@media (max-width: 40em) {
+  :host .base {
+    flex-direction: column;
+  }
+
+  :host .shortcuts {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-inline-end: 0;
+    border-inline-end: 0;
+    padding-bottom: 0.6em;
+    border-bottom: 1px solid var(--is-daterange-border);
+  }
+
+  :host .presets {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  :host .calendars {
+    flex-direction: column;
+  }
+
+  :host .calendars > is-date-picker + is-date-picker {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+    padding-top: 1em;
+    border-top: 1px solid var(--is-daterange-border);
+  }
+}

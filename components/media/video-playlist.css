@@ -1,6 +1,8 @@
 :host {
   display: block;
   max-width: 100%;
+  height: 100%;
+  min-height: 0;
   box-sizing: border-box;
   font-family: var(--is-font-family, system-ui, sans-serif);
   font-size: inherit;
@@ -25,9 +27,11 @@
   border-radius: var(--is-radius, 0.5em);
   overflow: hidden;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
 }
 
-/* placement: bottom (default, WA) | top | left | right */
+/* placement: bottom (default) | top | left | right */
 .video-playlist[data-placement="bottom"] {
   flex-direction: column;
 }
@@ -44,16 +48,104 @@
 }
 
 .player {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
   background: #000;
 }
 
+.stage {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 12rem;
+  background: #000;
+  overflow: hidden;
+}
+
 .player ::slotted(is-video) {
   width: 100%;
+  height: 100%;
+  max-height: 100%;
+  aspect-ratio: auto;
   display: block;
   border-radius: 0;
+}
+
+.player-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: color-mix(in srgb, #000 72%, transparent);
+  color: #fff;
+  border-top: 1px solid color-mix(in srgb, #fff 12%, transparent);
+}
+
+.player-chrome__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.player-chrome__status {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-left: 0.35rem;
+  white-space: nowrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--is-radius-sm, 0.25em);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, #fff 14%, transparent);
+}
+
+.nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.nav-btn is-icon {
+  font-size: 1.25rem;
+}
+
+.autoplay {
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.autoplay-chrome {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  cursor: pointer;
+  user-select: none;
+  color: inherit;
+}
+
+.autoplay-chrome__text {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  white-space: nowrap;
 }
 
 .playlist {
@@ -62,6 +154,13 @@
   padding: var(--is-space-m, 1em);
   overflow: auto;
   min-width: 0;
+}
+
+.playlist-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: var(--is-space-xs, 0.5em);
 }
 
 .video-playlist[data-placement="left"] .playlist,
@@ -78,7 +177,7 @@
 }
 
 .playlist-heading {
-  margin: 0 0 var(--is-space-xs, 0.5em) 0;
+  margin: 0;
   font-size: var(--is-font-size-m, 1em);
   font-weight: 600;
   line-height: 1.3;

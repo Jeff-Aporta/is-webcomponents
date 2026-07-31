@@ -40,6 +40,16 @@
   <script type="module" src="components/helpers/resize-observer.js"></script>
   <script type="module" src="components/forms/option.js"></script>
   <script type="module" src="components/forms/combobox.js"></script>
+  <script type="module" src="components/forms/checkbox.js"></script>
+  <script type="module" src="components/forms/switch.js"></script>
+  <script type="module" src="components/forms/radio.js"></script>
+  <script type="module" src="components/forms/radio-group.js"></script>
+  <script type="module" src="components/forms/input.js"></script>
+  <script type="module" src="components/forms/textarea.js"></script>
+  <script type="module" src="components/forms/slider.js"></script>
+  <script type="module" src="components/forms/rating.js"></script>
+  <script type="module" src="components/forms/select.js"></script>
+  <script type="module" src="components/forms/color-picker.js"></script>
   <script type="module" src="components/forms/file-input.js"></script>
   <script type="module" src="components/forms/date-input.js"></script>
   <script type="module" src="components/forms/date-picker.js"></script>
@@ -132,27 +142,84 @@
       try { return JSON.parse(b64urlDecode(raw)); } catch { return null; }
     };
 
-    // --- build nav (alfabético por título) ---
-    const navSkip = new Set(['is-option', 'is-toast-item']);
-    const navItems = components
-      .filter((c) => !navSkip.has(c.tag))
-      .slice()
-      .sort((a, b) => a.title.localeCompare(b.title, 'es', { sensitivity: 'base' }));
-    for (const component of navItems) {
+    // --- home + catalog (home no está en manifest) ---
+    const HOME = { tag: 'home', title: 'Home', page: 'home.html' };
+    const catalog = [HOME, ...components];
+
+    // --- build nav (Home + agrupado por categoría) ---
+    const navSkip = new Set(['is-option', 'is-radio', 'is-toast-item', 'is-dropdown-item']);
+    const categoryMeta = {
+      actions: { id: 'actions', label: 'Acciones' },
+      media: { id: 'media', label: 'Media' },
+      feedback: { id: 'feedback', label: 'Feedback' },
+      layout: { id: 'layout', label: 'Layout' },
+      forms: { id: 'forms', label: 'Formularios' },
+      data: { id: 'data', label: 'Datos' },
+      'data-viz': { id: 'data-viz', label: 'Gráficos' },
+      diagrams: { id: 'diagrams', label: 'Diagramas' },
+      helpers: { id: 'helpers', label: 'Helpers' },
+    };
+    const categoryOrder = Object.keys(categoryMeta);
+
+    {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'shell-nav__item';
-      btn.dataset.tag = component.tag;
-      btn.setAttribute('aria-label', `${component.title} ${component.tag}`);
+      btn.className = 'shell-nav__item shell-nav__item--home';
+      btn.dataset.tag = HOME.tag;
+      btn.setAttribute('aria-label', 'Home — inicio');
       const title = document.createElement('span');
       title.className = 'shell-nav__title';
-      title.textContent = component.title;
+      title.textContent = HOME.title;
       const tag = document.createElement('span');
       tag.className = 'shell-nav__tag';
-      tag.textContent = `<${component.tag}>`;
+      tag.textContent = 'Inicio';
       btn.append(title, tag);
-      btn.addEventListener('click', () => selectComponent(component.tag));
+      btn.addEventListener('click', () => selectComponent(HOME.tag));
       shellNav.appendChild(btn);
+    }
+
+    const navItems = components.filter((c) => !navSkip.has(c.tag));
+    const byCategory = new Map();
+    for (const c of navItems) {
+      const key = categoryMeta[c.category] ? c.category : 'helpers';
+      if (!byCategory.has(key)) byCategory.set(key, []);
+      byCategory.get(key).push(c);
+    }
+    for (const list of byCategory.values()) {
+      list.sort((a, b) => a.title.localeCompare(b.title, 'es', { sensitivity: 'base' }));
+    }
+    for (const key of categoryOrder) {
+      const list = byCategory.get(key);
+      if (!list?.length) continue;
+      const meta = categoryMeta[key];
+      const group = document.createElement('div');
+      group.className = 'shell-nav__group';
+      group.setAttribute('role', 'group');
+      group.setAttribute('aria-labelledby', `nav-cat-${meta.id}`);
+
+      const heading = document.createElement('div');
+      heading.className = 'shell-nav__heading';
+      heading.id = `nav-cat-${meta.id}`;
+      heading.textContent = meta.label;
+      group.appendChild(heading);
+
+      for (const component of list) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'shell-nav__item';
+        btn.dataset.tag = component.tag;
+        btn.setAttribute('aria-label', `${component.title} ${component.tag}`);
+        const title = document.createElement('span');
+        title.className = 'shell-nav__title';
+        title.textContent = component.title;
+        const tag = document.createElement('span');
+        tag.className = 'shell-nav__tag';
+        tag.textContent = `<${component.tag}>`;
+        btn.append(title, tag);
+        btn.addEventListener('click', () => selectComponent(component.tag));
+        group.appendChild(btn);
+      }
+      shellNav.appendChild(group);
     }
 
     // --- initial state ---
@@ -163,7 +230,7 @@
     let palette = palettes.has(stateFromUrl?.palette)
       ? stateFromUrl.palette
       : (palettes.has(localStorage.getItem('is-palette')) ? localStorage.getItem('is-palette') : 'insoft');
-    let component = components.find(item => item.tag === (stateFromUrl && stateFromUrl.component)) ?? components[0];
+    let component = catalog.find(item => item.tag === (stateFromUrl && stateFromUrl.component)) ?? HOME;
 
     function encodeState(obj) {
       return b64urlEncode(JSON.stringify(obj));
@@ -257,12 +324,19 @@
     }
 
     function selectComponent(tag) {
-      const next = components.find(item => item.tag === tag) ?? components[0];
+      const next = catalog.find(item => item.tag === tag) ?? HOME;
       if (next === component) return;
       component = next;
       frame.src = previewSrc(component.page);
       renderContext({ navSmooth: true });
     }
+
+    window.addEventListener('message', (e) => {
+      if (e.origin !== location.origin) return;
+      if (e.data?.type === 'is-select' && typeof e.data.tag === 'string') {
+        selectComponent(e.data.tag);
+      }
+    });
 
     frame.addEventListener('load', () => {
       sendContext();

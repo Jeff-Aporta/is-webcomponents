@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/feedback/tag.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-tag">
       <section class="section" id="intro">
         <h2>&lt;is-tag&gt;</h2>
         <p class="lede">Etiqueta interactiva con variantes y botón de quitar opcional. Escala con <code class="code">font-size</code> del contexto.</p>
@@ -54,7 +55,7 @@
         </table>
         <p class="lede">Evento <code class="code">is-remove</code> al pulsar quitar. Sin atributo <code class="code">size</code> — usa <code class="code">font-size</code>.</p>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-tag</h1>
       <nav><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></nav>

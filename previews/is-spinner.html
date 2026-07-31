@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/feedback/spinner.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
+  <script type="module" src="../components/layout/main.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
@@ -48,7 +49,7 @@
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <main class="main" slot="start">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-spinner">
       <section class="section" id="intro">
         <h2>&lt;is-spinner&gt;</h2>
         <p class="lede">Indicador de carga animado. Sin atributos; personalizable vía CSS vars.</p>
@@ -99,7 +100,7 @@
         </table>
         <p class="lede">Part: <code class="code">::part(spinner)</code>. role=status.</p>
       </section>
-    </main>
+    </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-spinner</h1>
       <nav>
