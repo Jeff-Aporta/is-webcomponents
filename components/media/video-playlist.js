@@ -1,68 +1,101 @@
 /**
- * <is-video-playlist> — player + lista (estilo playlist / YouTube).
+ * <is-video-playlist> — player + lista tipo YouTube.
+ *
+ * Cada clip es un <is-video> dentro del slot default. El componente
+ * renderiza un reproductor con cabecera (título + canal) y una barra
+ * inferior estilo YouTube con controles + herramientas inyectadas
+ * (anterior / siguiente / autoplay) mediante slots.
  *
  * Atributos
- *   placement      left | top | right | bottom (default: bottom)
- *   autoplay-next  boolean — al terminar uno, reproduce el siguiente (toggle en UI)
- *   controls       forwarded a cada is-video (si está presente)
+ *   placement      left | right | bottom (default: bottom)
+ *   autoplay-next  boolean — al terminar uno, reproduce el siguiente
+ *   accordion      auto | open | closed (default auto: cerrado en móvil)
+ *   channel        caption opcional que se muestra bajo el título
+ *
+ * Slots
+ *   default        is-video (uno por clip)
+ *   tools-left     botones / iconos que se muestran a la izquierda del play
+ *                  (el playlist inyecta prev/next aquí por defecto)
+ *   tools-right    botones / iconos que se muestran a la derecha del vol
+ *                  (el playlist inyecta autoplay aquí por defecto)
+ *   config         botón / menú opcional en la cabecera YouTube
  *
  * Métodos: goTo(index), next(), previous(), play(index)
- * Events: is-video-change, is-change
- * Parts: video-playlist, playlist, playlist-item, playlist-thumbnail,
- *        playlist-title, playlist-duration, player-chrome, nav-button, autoplay
+ * Eventos: is-video-change, is-change
+ *
+ * Parts: video-playlist, playlist-head, playlist-toggle, playlist-items,
+ *        playlist-item, playlist-title, playlist-duration, channel,
+ *        title, header, header-actions, player-toolbar, tools-left,
+ *        tools-right
  */
 
 import { adoptCss } from '../_shared/adopt-css.js';
 import './video.js';
 import './icon.js';
-import '../actions/check-icon-button.js';
 
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div part="base video-playlist" class="video-playlist">
       <div class="player">
+        <header part="header" class="player-header">
+          <div class="player-header__text">
+            <h3 part="title" class="player-title"></h3>
+            <p part="channel" class="player-channel"></p>
+          </div>
+          <div class="player-header__actions" part="header-actions">
+            <slot name="config"></slot>
+          </div>
+        </header>
         <div class="stage">
           <slot></slot>
-        </div>
-          <div part="player-chrome" class="player-chrome">
-          <div class="player-chrome__nav">
-            <button type="button" part="nav-button" class="nav-btn first" aria-label="Primero" title="Primero">
-              <is-icon icon="mdi:skip-backward" aria-hidden="true"></is-icon>
+          <div class="player-toolbar" part="player-toolbar">
+            <slot name="tools-left" part="tools-left" class="tools tools-left"></slot>
+            <button type="button" class="vp-tool vp-play" part="play-button" aria-label="Reproducir / pausar">
+              <is-icon icon="mdi:play" aria-hidden="true"></is-icon>
             </button>
-            <button type="button" part="nav-button" class="nav-btn prev" aria-label="Anterior" title="Anterior">
-              <is-icon icon="mdi:skip-previous" aria-hidden="true"></is-icon>
+            <input type="range" class="vp-seek" part="seek" min="0" max="1000" value="0" aria-label="Posición" />
+            <span class="vp-time" part="time">0:00 / 0:00</span>
+            <button type="button" class="vp-tool vp-mute" part="mute-button" aria-label="Silenciar / activar sonido">
+              <is-icon icon="mdi:volume-high" aria-hidden="true"></is-icon>
             </button>
-            <button type="button" part="nav-button" class="nav-btn next" aria-label="Siguiente" title="Siguiente">
-              <is-icon icon="mdi:skip-next" aria-hidden="true"></is-icon>
-            </button>
-            <span class="player-chrome__status" part="status"></span>
-          </div>
-          <div class="autoplay-chrome" title="Autoplay">
-            <span class="autoplay-chrome__text">Autoplay</span>
-            <is-check-icon-button
-              part="autoplay"
-              class="autoplay"
-              appearance="plain"
-              icon="mdi:playlist-play"
-              checked-icon="mdi:playlist-check"
-              label="Activar autoplay"
-              checked-label="Desactivar autoplay"
-            ></is-check-icon-button>
+            <input type="range" class="vp-volume" part="volume-slider" min="0" max="100" value="100" aria-label="Volumen" />
+            <slot name="tools-right" part="tools-right" class="tools tools-right"></slot>
           </div>
         </div>
       </div>
-      <div part="playlist" class="playlist">
-        <div class="playlist-head">
-          <h3 id="playlist-label" class="playlist-heading">Playlist</h3>
-        </div>
-        <div class="playlist-items" role="listbox" aria-labelledby="playlist-label"></div>
-      </div>
+      <section part="playlist" class="playlist" aria-label="Lista de vídeos">
+        <header class="playlist-head">
+          <h3 id="playlist-label" class="playlist-heading">
+            Playlist <span part="status" class="playlist-count"></span>
+          </h3>
+          <button
+            type="button"
+            part="playlist-toggle"
+            class="playlist-toggle"
+            aria-controls="playlist-items"
+            aria-expanded="true"
+            title="Mostrar / ocultar lista"
+          >
+            <is-icon icon="mdi:chevron-up" aria-hidden="true"></is-icon>
+          </button>
+        </header>
+        <div
+          id="playlist-items"
+          part="playlist-items"
+          class="playlist-items"
+          role="listbox"
+          aria-labelledby="playlist-label"
+        ></div>
+      </section>
     </div>
   `;
 
-  const OBSERVED = ['autoplay-next', 'placement', 'controls'];
-  const PLACEMENTS = new Set(['left', 'top', 'right', 'bottom']);
+  const OBSERVED = ['autoplay-next', 'placement', 'channel', 'accordion'];
+  // `top` se eliminó: ocupaba la zona superior con la lista delante del
+  // reproductor y no resultaba usable. Si alguien lo manda, lo ignoramos.
+  const PLACEMENTS = new Set(['left', 'right', 'bottom']);
+  const ACCORDIONS = new Set(['auto', 'open', 'closed']);
   const posterCache = new WeakMap();
 
   function fmtTime(sec) {
@@ -77,6 +110,10 @@ import '../actions/check-icon-button.js';
   function videoTitle(v, i) {
     const t = (v.getAttribute('title') || v.title || '').trim();
     return t || `Video ${i + 1}`;
+  }
+
+  function videoChannel(v) {
+    return (v.getAttribute('channel') || v.getAttribute('data-channel') || '').trim();
   }
 
   function videoPosterAttr(v) {
@@ -121,16 +158,25 @@ import '../actions/check-icon-button.js';
     #root;
     #listEl;
     #slot;
-    #status;
-    #autoplayBtn;
-    #btnFirst;
-    #btnPrev;
-    #btnNext;
+    #titleEl;
+    #channelEl;
+    #countEl;
+    #toggleBtn;
+    #playBtn;
+    #seekEl;
+    #timeEl;
+    #muteBtn;
+    #volumeEl;
+    #playIcon;
+    #muteIcon;
+    #accordionOpen = true;
     #index = 0;
     #mounted = false;
     #boundEnded = null;
     #metaHandlers = new WeakMap();
     #attrObs = null;
+    #mediaObs = null;
+    #seeking = false;
 
     constructor() {
       super();
@@ -140,28 +186,41 @@ import '../actions/check-icon-button.js';
 
       this.#root = shadow.querySelector('.video-playlist');
       this.#listEl = shadow.querySelector('.playlist-items');
-      this.#slot = shadow.querySelector('slot');
-      this.#status = shadow.querySelector('.player-chrome__status');
-      this.#autoplayBtn = shadow.querySelector('.autoplay');
-      this.#btnFirst = shadow.querySelector('.first');
-      this.#btnPrev = shadow.querySelector('.prev');
-      this.#btnNext = shadow.querySelector('.next');
+      this.#slot = shadow.querySelector('slot:not([name])');
+      this.#titleEl = shadow.querySelector('.player-title');
+      this.#channelEl = shadow.querySelector('.player-channel');
+      this.#countEl = shadow.querySelector('.playlist-count');
+      this.#toggleBtn = shadow.querySelector('.playlist-toggle');
+      this.#playBtn = shadow.querySelector('.vp-play');
+      this.#seekEl = shadow.querySelector('.vp-seek');
+      this.#timeEl = shadow.querySelector('.vp-time');
+      this.#muteBtn = shadow.querySelector('.vp-mute');
+      this.#volumeEl = shadow.querySelector('.vp-volume');
+      this.#playIcon = this.#playBtn.querySelector('is-icon');
+      this.#muteIcon = this.#muteBtn.querySelector('is-icon');
 
       this.#slot.addEventListener('slotchange', () => this.#refresh());
       this.#listEl.addEventListener('click', this.#onListClick);
       this.#listEl.addEventListener('keydown', this.#onListKeydown);
-      this.#btnFirst.addEventListener('click', () => this.goTo(0));
-      this.#btnPrev.addEventListener('click', () => this.previous());
-      this.#btnNext.addEventListener('click', () => this.next());
-      this.#autoplayBtn.addEventListener('is-change', (e) => {
-        this.autoplayNext = e.detail.checked;
-      });
+      this.#toggleBtn.addEventListener('click', () => this.#toggleAccordion());
+
+      // Controles nativos del player-toolbar.
+      this.#playBtn.addEventListener('click', () => this.#togglePlay());
+      this.#muteBtn.addEventListener('click', () => this.#toggleMute());
+      this.#volumeEl.addEventListener('input', () => this.#setVolume(this.#volumeEl.value));
+      this.#seekEl.addEventListener('pointerdown', () => { this.#seeking = true; });
+      this.#seekEl.addEventListener('pointerup', () => { this.#seeking = false; this.#applySeek(); });
+      this.#seekEl.addEventListener('change', () => { this.#seeking = false; this.#applySeek(); });
+      this.#seekEl.addEventListener('input', () => this.#previewSeek());
     }
 
     connectedCallback() {
       this.#mounted = true;
       this.#syncPlacement();
+      this.#syncAccordion();
+      this.#buildDefaultTools();
       this.#syncAutoplayUi();
+      this.#syncChannel();
       this.#refresh();
     }
 
@@ -169,14 +228,17 @@ import '../actions/check-icon-button.js';
       this.#unbindVideos();
       this.#attrObs?.disconnect();
       this.#attrObs = null;
+      this.#mediaObs?.disconnect();
+      this.#mediaObs = null;
       this.#mounted = false;
     }
 
     attributeChangedCallback(name) {
       if (!this.#mounted) return;
       if (name === 'placement') this.#syncPlacement();
-      if (name === 'controls') this.#forwardControls();
       if (name === 'autoplay-next') this.#syncAutoplayUi();
+      if (name === 'accordion') this.#syncAccordion();
+      if (name === 'channel') this.#syncChannel();
     }
 
     get autoplayNext() { return this.hasAttribute('autoplay-next'); }
@@ -191,10 +253,19 @@ import '../actions/check-icon-button.js';
       this.setAttribute('placement', PLACEMENTS.has(next) ? next : 'bottom');
     }
 
-    get controls() { return this.getAttribute('controls'); }
-    set controls(v) {
-      if (v == null || v === false) this.removeAttribute('controls');
-      else this.setAttribute('controls', v === true ? '' : String(v));
+    get channel() { return this.getAttribute('channel') || ''; }
+    set channel(v) {
+      if (v == null || v === '') this.removeAttribute('channel');
+      else this.setAttribute('channel', String(v));
+    }
+
+    get accordion() {
+      const v = (this.getAttribute('accordion') || 'auto').toLowerCase();
+      return ACCORDIONS.has(v) ? v : 'auto';
+    }
+    set accordion(v) {
+      const next = String(v || 'auto').toLowerCase();
+      this.setAttribute('accordion', ACCORDIONS.has(next) ? next : 'auto');
     }
 
     get index() { return this.#index; }
@@ -205,13 +276,13 @@ import '../actions/check-icon-button.js';
       );
     }
 
-    goTo(index) {
-      return this.#activate(index, { play: true });
+    get #active() {
+      const list = this.videos;
+      return list[this.#index];
     }
 
-    play(index) {
-      return this.goTo(index);
-    }
+    goTo(index) { return this.#activate(index, { play: true }); }
+    play(index) { return this.goTo(index); }
 
     next() {
       const list = this.videos;
@@ -227,22 +298,126 @@ import '../actions/check-icon-button.js';
 
     #syncPlacement() {
       this.#root.dataset.placement = this.placement;
-      this.setAttribute('placement', this.placement);
+      if (this.getAttribute('placement') !== this.placement) {
+        this.setAttribute('placement', this.placement);
+      }
+    }
+
+    #syncChannel() {
+      const text = this.channel;
+      this.#channelEl.textContent = text;
+      this.#channelEl.hidden = !text;
+    }
+
+    #syncAccordion() {
+      const mode = this.accordion;
+      if (mode === 'open') {
+        this.#setAccordion(true);
+        return;
+      }
+      if (mode === 'closed') {
+        this.#setAccordion(false);
+        return;
+      }
+      const mq = window.matchMedia('(max-width: 720px)');
+      const open = !mq.matches;
+      this.#setAccordion(open);
+      if (!this.#mediaObs) {
+        const handler = () => this.#syncAccordion();
+        mq.addEventListener('change', handler);
+        this.#mediaObs = { mq, handler };
+      }
+    }
+
+    #setAccordion(open) {
+      this.#accordionOpen = open;
+      this.#root.dataset.accordion = open ? 'open' : 'closed';
+      this.#toggleBtn.setAttribute('aria-expanded', String(open));
+      const icon = this.#toggleBtn.querySelector('is-icon');
+      if (icon) icon.setAttribute('icon', open ? 'mdi:chevron-up' : 'mdi:chevron-down');
+    }
+
+    #toggleAccordion() {
+      if (this.accordion === 'auto') this.setAttribute('accordion', this.#accordionOpen ? 'closed' : 'open');
+      else this.#setAccordion(!this.#accordionOpen);
     }
 
     #syncAutoplayUi() {
-      const on = this.autoplayNext;
-      this.#autoplayBtn.checked = on;
-      this.#autoplayBtn.title = on ? 'Autoplay on' : 'Autoplay off';
+      // La UI de autoplay vive en tools-right; si el usuario provee un botón
+      // custom, sincronizamos su `aria-pressed`. Si no, el playlist inyecta
+      // su propio botón (#buildDefaultTools).
+      for (const node of this.#toolRightChildren()) {
+        if (node.tagName === 'BUTTON') node.setAttribute('aria-pressed', String(this.autoplayNext));
+      }
     }
 
-    #forwardControls() {
-      if (!this.hasAttribute('controls')) return;
-      const val = this.getAttribute('controls');
-      for (const v of this.videos) {
-        if (val === 'false' || val === 'none') v.setAttribute('controls', 'false');
-        else v.setAttribute('controls', '');
+    /** Construye las herramientas por defecto (first / prev / next / autoplay)
+     *  si el usuario no las ha inyectado. Se activan salvo que el atributo
+     *  `no-default-tools` esté presente. */
+    #buildDefaultTools() {
+      // Si el usuario desactivó los defaults, no hacemos nada.
+      if (this.hasAttribute('no-default-tools')) return;
+      // Solo añadimos los defaults que falten.
+      if (this.#toolLeftChildren().length === 0) {
+        const first = document.createElement('button');
+        first.type = 'button';
+        first.className = 'vp-default vp-first';
+        first.setAttribute('slot', 'tools-left');
+        first.setAttribute('aria-label', 'Primero');
+        first.title = 'Primero';
+        first.innerHTML = '<is-icon icon="mdi:skip-backward" aria-hidden="true"></is-icon>';
+        first.addEventListener('click', () => this.goTo(0));
+        this.appendChild(first);
+
+        const prev = document.createElement('button');
+        prev.type = 'button';
+        prev.className = 'vp-default vp-prev';
+        prev.setAttribute('slot', 'tools-left');
+        prev.setAttribute('aria-label', 'Anterior');
+        prev.title = 'Anterior';
+        prev.innerHTML = '<is-icon icon="mdi:skip-previous" aria-hidden="true"></is-icon>';
+        prev.addEventListener('click', () => this.previous());
+        this.appendChild(prev);
+
+        const next = document.createElement('button');
+        next.type = 'button';
+        next.className = 'vp-default vp-next';
+        next.setAttribute('slot', 'tools-left');
+        next.setAttribute('aria-label', 'Siguiente');
+        next.title = 'Siguiente';
+        next.innerHTML = '<is-icon icon="mdi:skip-next" aria-hidden="true"></is-icon>';
+        next.addEventListener('click', () => this.next());
+        this.appendChild(next);
       }
+      if (this.#toolRightChildren().length === 0) {
+        const autoplay = document.createElement('button');
+        autoplay.type = 'button';
+        autoplay.className = 'vp-default vp-autoplay';
+        autoplay.setAttribute('slot', 'tools-right');
+        autoplay.setAttribute('aria-pressed', String(this.autoplayNext));
+        autoplay.setAttribute('aria-label', 'Autoplay');
+        autoplay.title = 'Autoplay';
+        autoplay.innerHTML = `
+          <is-icon icon="mdi:playlist-play" aria-hidden="true"></is-icon>
+          <span class="vp-autoplay__label">Autoplay</span>
+        `;
+        autoplay.addEventListener('click', () => {
+          this.autoplayNext = !this.autoplayNext;
+        });
+        this.appendChild(autoplay);
+      }
+    }
+
+    /** Lista de nodos proyectados en slot="tools-right" (light DOM). */
+    #toolRightChildren() {
+      const slot = this.shadowRoot.querySelector('slot[name="tools-right"]');
+      return slot ? slot.assignedElements({ flatten: true }) : [];
+    }
+
+    /** Lista de nodos proyectados en slot="tools-left" (light DOM). */
+    #toolLeftChildren() {
+      const slot = this.shadowRoot.querySelector('slot[name="tools-left"]');
+      return slot ? slot.assignedElements({ flatten: true }) : [];
     }
 
     #onListClick = (e) => {
@@ -277,12 +452,14 @@ import '../actions/check-icon-button.js';
       this.#unbindVideos();
       const list = this.videos;
       if (this.#index >= list.length) this.#index = Math.max(0, list.length - 1);
-      this.#forwardControls();
       this.#bindVideos(list);
       this.#watchAttrs(list);
       this.#applyActive(list, { emit: false });
       this.#rebuildList(list);
-      this.#updateStatus(list);
+      this.#updateCount(list);
+      this.#updateHeader(list);
+      this.#syncAutoplayUi();
+      this.#syncActiveMediaState();
     }
 
     #bindVideos(list) {
@@ -291,14 +468,12 @@ import '../actions/check-icon-button.js';
         const listNow = this.videos;
         const active = listNow[this.#index];
         if (e.target !== active && e.currentTarget !== active) return;
-        // Siguiente clip; al llegar al último se detiene (no vuelve al primero)
         if (this.#index >= listNow.length - 1) return;
         this.next();
       };
       for (const v of list) {
         v.addEventListener('is-ended', this.#boundEnded);
         const onMeta = () => {
-          // Precargar un frame para poster si falta
           try {
             const media = v.media;
             if (media && !videoPosterAttr(v) && media.readyState >= 2) {
@@ -316,13 +491,29 @@ import '../actions/check-icon-button.js';
             }
           } catch { /* noop */ }
           this.#rebuildList(this.videos);
-          this.#updateStatus(this.videos);
+          this.#updateCount(this.videos);
+          this.#updateHeader(this.videos);
+          this.#syncActiveMediaState();
         };
         this.#metaHandlers.set(v, onMeta);
         v.media?.addEventListener('loadedmetadata', onMeta);
         v.media?.addEventListener('loadeddata', onMeta);
         if (v.media?.readyState >= 1) onMeta();
+        // Reenviamos eventos nativos del <video> al playlist para que el
+        // player-toolbar refleje el estado.
+        const onPlay = () => this.#syncPlayUi();
+        const onPause = () => this.#syncPlayUi();
+        const onTime = () => this.#syncTimeUi();
+        const onVol = () => this.#syncVolumeUi();
+        v.media?.addEventListener('play', onPlay);
+        v.media?.addEventListener('pause', onPause);
+        v.media?.addEventListener('timeupdate', onTime);
+        v.media?.addEventListener('loadedmetadata', onTime);
+        v.media?.addEventListener('volumechange', onVol);
+        v.addEventListener('is-play', onPlay);
+        v.addEventListener('is-pause', onPlay);
       }
+      this.#syncActiveMediaState();
     }
 
     #unbindVideos() {
@@ -343,12 +534,15 @@ import '../actions/check-icon-button.js';
     #watchAttrs(list) {
       this.#attrObs?.disconnect();
       this.#attrObs = new MutationObserver(() => {
-        if (this.#mounted) this.#rebuildList(this.videos);
+        if (this.#mounted) {
+          this.#rebuildList(this.videos);
+          this.#updateHeader(this.videos);
+        }
       });
       for (const v of list) {
         this.#attrObs.observe(v, {
           attributes: true,
-          attributeFilter: ['title', 'poster', 'duration', 'src'],
+          attributeFilter: ['title', 'channel', 'poster', 'duration', 'src'],
         });
       }
     }
@@ -362,7 +556,9 @@ import '../actions/check-icon-button.js';
       this.#index = i;
       this.#applyActive(list, { emit: changed, previousIndex });
       this.#rebuildList(list);
-      this.#updateStatus(list);
+      this.#updateCount(list);
+      this.#updateHeader(list);
+      this.#syncActiveMediaState();
       if (!play) return;
       return list[this.#index]?.play?.();
     }
@@ -370,7 +566,6 @@ import '../actions/check-icon-button.js';
     #applyActive(list, { emit = false, previousIndex = this.#index } = {}) {
       list.forEach((v, i) => {
         const on = i === this.#index;
-        // Mantener en layout (no display:none) para que carguen metadata/poster
         v.toggleAttribute('data-active', on);
         v.removeAttribute('hidden');
         v.style.position = 'absolute';
@@ -380,31 +575,114 @@ import '../actions/check-icon-button.js';
         v.style.opacity = on ? '1' : '0';
         v.style.pointerEvents = on ? 'auto' : 'none';
         v.style.zIndex = on ? '1' : '0';
+        // Desactivamos la barra de controles nativa del <is-video>; el
+        // playlist muestra su propia barra (player-toolbar) encima.
+        v.setAttribute('controls', 'false');
         if (!on) v.pause?.();
       });
-      const many = list.length > 1;
-      this.#btnFirst.disabled = !many || this.#index === 0;
-      this.#btnPrev.disabled = !many || this.#index === 0;
-      this.#btnNext.disabled = !many || this.#index >= list.length - 1;
       if (emit) {
         const video = list[this.#index];
         this.dispatchEvent(new CustomEvent('is-video-change', {
-          bubbles: true,
-          composed: true,
+          bubbles: true, composed: true,
           detail: { previousIndex, currentIndex: this.#index, video },
         }));
         this.dispatchEvent(new CustomEvent('is-change', {
-          bubbles: true,
-          composed: true,
+          bubbles: true, composed: true,
           detail: { index: this.#index },
         }));
       }
     }
 
-    #updateStatus(list) {
+    /** Sincroniza los controles del player-toolbar con el media del is-video activo. */
+    #syncActiveMediaState() {
+      const active = this.#active;
+      const media = active?.media;
+      if (!media) {
+        this.#playIcon?.setAttribute('icon', 'mdi:play');
+        this.#muteIcon?.setAttribute('icon', 'mdi:volume-high');
+        this.#timeEl.textContent = '0:00 / 0:00';
+        this.#seekEl.value = '0';
+        return;
+      }
+      this.#syncPlayUi();
+      this.#syncVolumeUi();
+      this.#syncTimeUi();
+    }
+
+    #syncPlayUi = () => {
+      const media = this.#active?.media;
+      if (!media || !this.#playIcon) return;
+      this.#playIcon.setAttribute('icon', media.paused ? 'mdi:play' : 'mdi:pause');
+    };
+
+    #syncVolumeUi = () => {
+      const media = this.#active?.media;
+      if (!media || !this.#muteIcon || !this.#volumeEl) return;
+      const muted = media.muted || media.volume === 0;
+      this.#muteIcon.setAttribute('icon', muted
+        ? 'mdi:volume-off'
+        : (media.volume < 0.35 ? 'mdi:volume-low' : media.volume < 0.7 ? 'mdi:volume-medium' : 'mdi:volume-high')
+      );
+      this.#volumeEl.value = String(Math.round((muted ? 0 : media.volume) * 100));
+    };
+
+    #syncTimeUi = () => {
+      const media = this.#active?.media;
+      if (!media) return;
+      const d = media.duration || 0;
+      const t = media.currentTime || 0;
+      this.#timeEl.textContent = `${fmtTime(t)} / ${fmtTime(d)}`;
+      if (!this.#seeking && d > 0) {
+        this.#seekEl.value = String(Math.round((t / d) * 1000));
+      }
+    };
+
+    #previewSeek() {
+      const media = this.#active?.media;
+      if (!media?.duration) return;
+      const t = (Number(this.#seekEl.value) / 1000) * media.duration;
+      this.#timeEl.textContent = `${fmtTime(t)} / ${fmtTime(media.duration)}`;
+    }
+
+    #applySeek() {
+      const media = this.#active?.media;
+      if (!media?.duration) return;
+      media.currentTime = (Number(this.#seekEl.value) / 1000) * media.duration;
+    }
+
+    #togglePlay() {
+      const media = this.#active?.media;
+      if (!media) return;
+      if (media.paused) this.#active.play?.();
+      else this.#active.pause?.();
+    }
+
+    #toggleMute() {
+      const media = this.#active?.media;
+      if (!media) return;
+      media.muted = !media.muted;
+    }
+
+    #setVolume(pct) {
+      const media = this.#active?.media;
+      if (!media) return;
+      const v = Number(pct) / 100;
+      media.volume = v;
+      media.muted = v === 0;
+    }
+
+    #updateCount(list) {
       const total = list.length || 0;
       const cur = total ? this.#index + 1 : 0;
-      this.#status.textContent = total ? `${cur} / ${total}` : '';
+      this.#countEl.textContent = total ? `${cur} / ${total}` : '';
+    }
+
+    #updateHeader(list) {
+      const v = list[this.#index];
+      this.#titleEl.textContent = v ? videoTitle(v, this.#index) : '';
+      const channel = (this.channel || (v ? videoChannel(v) : '') || '').trim();
+      this.#channelEl.textContent = channel;
+      this.#channelEl.hidden = !channel;
     }
 
     #rebuildList(list) {
@@ -450,6 +728,12 @@ import '../actions/check-icon-button.js';
         titleEl.setAttribute('part', 'playlist-title');
         titleEl.textContent = title;
         content.appendChild(titleEl);
+
+        const channelEl = document.createElement('div');
+        channelEl.className = 'playlist-item-channel';
+        const ch = videoChannel(v);
+        if (ch) channelEl.textContent = ch;
+        content.appendChild(channelEl);
 
         if (duration) {
           const durEl = document.createElement('div');
