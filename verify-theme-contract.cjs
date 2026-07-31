@@ -24,7 +24,7 @@ assert(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`
 assert(!/\b(?:height|padding(?:-inline)?|gap):\s*\d+(?:\.\d+)?px/.test(component), 'component geometry must use em');
 const manifestPath = path.join(root, 'manifest.js');
 const generatorPath = path.join(root, 'generate-templates.mjs');
-const previewPath = path.join(root, 'previews/is-button.html');
+const previewPath = path.join(root, 'previews/actions/is-button.html');
 const systemPath = path.join(root, 'styles/is-base.css');
 const shellPath = path.join(root, 'styles/shell.css');
 for (const file of [manifestPath, generatorPath, previewPath, systemPath, shellPath]) {
@@ -40,8 +40,20 @@ assert(preview.includes('https://www.youtube.com/@JeffAporta'), 'JeffAporta chan
 const WA_RE = /webawesome|Web Awesome|\bwa-[a-z]/i;
 assert(!WA_RE.test(preview), 'Web Awesome reference remains in is-button preview');
 const previewsDir = path.join(root, 'previews');
-for (const name of fs.readdirSync(previewsDir).filter((f) => f.endsWith('.html'))) {
-  const body = fs.readFileSync(path.join(previewsDir, name), 'utf8');
-  assert(!WA_RE.test(body), `Web Awesome reference remains in previews/${name}`);
+const collectHtml = (dir) => {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      out.push(...collectHtml(full));
+    } else if (entry.isFile() && entry.name.endsWith('.html')) {
+      out.push(path.relative(root, full));
+    }
+  }
+  return out;
+};
+for (const rel of collectHtml(previewsDir)) {
+  const body = fs.readFileSync(path.join(root, rel), 'utf8');
+  assert(!WA_RE.test(body), `Web Awesome reference remains in ${rel}`);
 }
 console.log('theme contract: ok');
