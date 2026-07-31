@@ -47,6 +47,8 @@ class IsTimeline extends HTMLElement {
   #eventNodes = new Map();
   #hoverId = null;
   #ownLightbox = null;
+  #ro = null;
+  #lastWidth = 0;
 
   constructor() {
     super();
@@ -76,6 +78,17 @@ class IsTimeline extends HTMLElement {
     this.#wrap.addEventListener('mousemove', this.#onMouseMove);
     this.#wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.#wrap.addEventListener('click', this.#onClick);
+    // Re-layout cuando cambia el ancho del contenedor (fit-width).
+    if (typeof ResizeObserver !== 'undefined') {
+      this.#ro = new ResizeObserver(() => {
+        const w = this.#wrap.clientWidth;
+        if (w && Math.abs(w - this.#lastWidth) > 4) {
+          this.#lastWidth = w;
+          this.#queueRender();
+        }
+      });
+      this.#ro.observe(this.#wrap);
+    }
     this.#queueRender();
   }
 
@@ -83,6 +96,7 @@ class IsTimeline extends HTMLElement {
     this.#mounted = false;
     this.#mo?.disconnect();
     this.#themeObs?.disconnect();
+    this.#ro?.disconnect();
     this.#wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.#wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.#wrap.removeEventListener('click', this.#onClick);
@@ -153,7 +167,12 @@ class IsTimeline extends HTMLElement {
 
     // `Date.now()` se llama solo aquí (en el componente), nunca dentro del
     // módulo de spec puro, para que el layout siga siendo determinista.
-    const layout = computeTimelineLayout(visible, { now: Date.now() });
+    const availW = this.#wrap.clientWidth || 0;
+    const layout = computeTimelineLayout(visible, {
+      now: Date.now(),
+      width: availW > 80 ? Math.max(160, availW - 8) : undefined,
+    });
+    this.#lastWidth = availW;
     this.#layout = layout;
     this.#buildSvg(layout, theme);
     this.#wrap.classList.toggle('is-viewer', this.isViewer);
@@ -166,7 +185,7 @@ class IsTimeline extends HTMLElement {
     this.#svg.setAttribute('aria-label', layout.title || 'Línea de tiempo');
     this.#svg.style.cssText = this.isViewer
       ? 'width:100%;height:100%;max-width:none;display:block;margin:0 auto'
-      : `width:100%;max-width:${W}px;height:auto;display:block;margin:0 auto`;
+      : 'width:100%;max-width:100%;height:auto;display:block;margin:0 auto';
     this.#svg.innerHTML = '';
     this.#eventNodes.clear();
     this.#hoverId = null;

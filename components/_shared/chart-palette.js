@@ -50,7 +50,7 @@ export function withAlpha(hex, alpha) {
   return `rgb(${r} ${g} ${b} / ${alpha})`;
 }
 
-export function getFillColors(el, count, alpha = 0.22) {
+export function getFillColors(el, count, alpha = 0.35) {
   return getCategoricalColors(el, count).map((hex) => withAlpha(hex, alpha));
 }
 

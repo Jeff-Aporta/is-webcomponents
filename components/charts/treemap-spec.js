@@ -79,8 +79,8 @@ function layoutSubtree(node, rect, isTopSynthetic) {
   }
 }
 
-const W = 640;
-const H = 380;
+const DEFAULT_W = 640;
+const DEFAULT_H = 380;
 
 /** ¿Cabe el texto en el rect, a ojo (según el conteo de caracteres)? */
 function labelFits(label, rect) {
@@ -94,7 +94,16 @@ function labelFits(label, rect) {
  * el rect del padre primero y que sus hijos lo tapen dejando visible solo la
  * franja superior (el rótulo del contenedor).
  */
-export function computeTreemapLayout(spec) {
+/**
+ * spec → objeto `{width, height, nodes, title, subtitle, total}` listo para pintar.
+ * `nodes` viene en orden pre-order (padres antes que hijos), clave para dibujar
+ * el rect del padre primero y que sus hijos lo tapen dejando visible solo la
+ * franja superior (el rótulo del contenedor).
+ *
+ * Acepta `opts.width` y `opts.height` para que el componente re-tesele
+ * cuando el contenedor cambia de tamaño (fit-width).
+ */
+export function computeTreemapLayout(spec, opts = {}) {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const headerH = title ? (subtitle ? 40 : 26) : (subtitle ? 20 : 4);
@@ -102,6 +111,9 @@ export function computeTreemapLayout(spec) {
   const root = buildTree(spec.nodes);
   annotateHue(root, undefined, { i: 0 }, 0, true);
 
+  const W = Math.max(160, opts.width ?? DEFAULT_W);
+  // Mantiene el ratio 640:380 si el caller solo pasa width.
+  const H = opts.height ?? Math.round((W / DEFAULT_W) * DEFAULT_H);
   const canvasH = H;
   layoutSubtree(root, { x: 0, y: headerH, w: W, h: canvasH }, !!root.synthetic);
 

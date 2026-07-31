@@ -50,6 +50,8 @@ class IsTreemap extends HTMLElement {
   #nodeNodes = new Map();
   #hoverId = null;
   #ownLightbox = null;
+  #ro = null;
+  #lastWidth = 0;
 
   constructor() {
     super();
@@ -79,6 +81,16 @@ class IsTreemap extends HTMLElement {
     this.#wrap.addEventListener('mousemove', this.#onMouseMove);
     this.#wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.#wrap.addEventListener('click', this.#onClick);
+    if (typeof ResizeObserver !== 'undefined') {
+      this.#ro = new ResizeObserver(() => {
+        const w = this.#wrap.clientWidth;
+        if (w && Math.abs(w - this.#lastWidth) > 4) {
+          this.#lastWidth = w;
+          this.#queueRender();
+        }
+      });
+      this.#ro.observe(this.#wrap);
+    }
     this.#queueRender();
   }
 
@@ -86,6 +98,7 @@ class IsTreemap extends HTMLElement {
     this.#mounted = false;
     this.#mo?.disconnect();
     this.#themeObs?.disconnect();
+    this.#ro?.disconnect();
     this.#wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.#wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.#wrap.removeEventListener('click', this.#onClick);
@@ -137,7 +150,11 @@ class IsTreemap extends HTMLElement {
     const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#wrap.dataset.theme = dark ? 'dark' : 'light';
 
-    const layout = computeTreemapLayout(spec);
+    const availW = this.#wrap.clientWidth || 0;
+    const layout = computeTreemapLayout(spec, {
+      width: availW > 80 ? Math.max(160, availW - 8) : undefined,
+    });
+    this.#lastWidth = availW;
     this.#layout = layout;
     this.#buildSvg(layout, theme);
     this.#wrap.classList.toggle('is-viewer', this.isViewer);
@@ -150,7 +167,7 @@ class IsTreemap extends HTMLElement {
     this.#svg.setAttribute('aria-label', layout.title || 'Treemap');
     this.#svg.style.cssText = this.isViewer
       ? 'width:100%;height:100%;max-width:none;display:block;margin:0 auto'
-      : `width:100%;max-width:${W}px;height:auto;display:block;margin:0 auto`;
+      : 'width:100%;max-width:100%;height:auto;display:block;margin:0 auto';
     this.#svg.innerHTML = '';
     this.#nodeNodes.clear();
     this.#hoverId = null;
