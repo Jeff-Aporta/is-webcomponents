@@ -4,10 +4,16 @@
  * Standalone: controles + localStorage. La URL (?s=) solo se escribe al pulsar
  * «Guardar» (y se copia al portapapeles).
  * Embebido (s.embed / data-embed): oculta controles; aplica is-context del parent.
+ *
+ * Además inyecta automáticamente un `<is-cdn-snippet>` al final de la página
+ * del componente, leyendo tag/categoría desde el nombre del archivo y el
+ * manifest expuesto por `window.__IS_MANIFEST__`. Los snippets ya no viven
+ * en el sidebar — la nav solo lista los componentes.
  */
 import '../components/feedback/theme-toggle.js';
 import '../components/actions/button.js';
 import '../components/media/icon.js';
+import '../components/feedback/cdn-snippet.js';
 import components from '../manifest.js';
 // Expone el manifest a `window.__IS_MANIFEST__` para que `demo-code.js`
 // pueda agrupar los `<script>` por categoría en el snippet "Ver código".
@@ -85,6 +91,39 @@ addEventListener('message', ({ data, origin }) => {
   if (data.palette) applyPalette(data.palette);
 });
 
+/**
+ * Inyecta un <is-cdn-snippet> al final del contenedor principal con los
+ * enlaces del componente actual. Si la página no es de un componente (p. ej.
+ * `home.html`) o no se encuentra en el manifest, no hace nada.
+ *
+ * Se monta una sola vez por página; si el usuario ya escribió un
+ * `<is-cdn-snippet>` a mano, no lo duplica.
+ */
+function mountCdnSnippet() {
+  if (document.querySelector('is-cdn-snippet[data-auto-cdn]')) return;
+
+  const file = location.pathname.split('/').pop() || '';
+  const m = /^is-([a-z0-9-]+)\.html$/i.exec(file);
+  if (!m) return;
+
+  // tag canónico: is-<name>; algunos componentes comparten página (p. ej.
+  // is-tab + is-tab-panel). Cuando hay varias entradas con la misma `page`,
+  // el panel del componente se completa con el primero; las filas se siguen
+  // construyendo por tag individual, así que no perdemos información.
+  const matches = components.filter((c) => c.page === file);
+  if (!matches.length) return;
+
+  const host = document.querySelector('is-main.main, main.main');
+  if (!host) return;
+
+  const snippet = document.createElement('is-cdn-snippet');
+  snippet.dataset.autoCdn = '1';
+  snippet.setAttribute('tag', matches[0].tag);
+  snippet.setAttribute('category', matches[0].category || '');
+  snippet.setAttribute('title', `CDN · ${matches[0].title || matches[0].tag}`);
+  host.appendChild(snippet);
+}
+
 function mount() {
   if (document.getElementById('previewChrome')) return;
 
@@ -124,6 +163,7 @@ function mount() {
   if (embedded) {
     bar.hidden = true;
     bar.setAttribute('inert', '');
+    mountCdnSnippet();
     return;
   }
 
@@ -169,10 +209,13 @@ function mount() {
       }, 1600);
     }
   });
+
+  mountCdnSnippet();
 }
 
 await customElements.whenDefined('is-theme-toggle');
 await customElements.whenDefined('is-button');
+await customElements.whenDefined('is-cdn-snippet');
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', mount, { once: true });
 } else {

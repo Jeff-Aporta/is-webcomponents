@@ -148,12 +148,13 @@
     const catalog = [HOME, ...components];
 
     // --- build nav (Home + agrupado por categoría) ---
-    const navSkip = new Set(['is-option', 'is-radio', 'is-toast-item', 'is-dropdown-item']);
+    const navSkip = new Set(['is-option', 'is-radio', 'is-toast-item', 'is-dropdown-item', 'is-cdn-snippet']);
     const categoryMeta = {
       actions: { id: 'actions', label: 'Acciones' },
       media: { id: 'media', label: 'Media' },
       feedback: { id: 'feedback', label: 'Feedback' },
       layout: { id: 'layout', label: 'Layout' },
+      navigation: { id: 'navigation', label: 'Navegación' },
       forms: { id: 'forms', label: 'Formularios' },
       data: { id: 'data', label: 'Datos' },
       'data-viz': { id: 'data-viz', label: 'Gráficos' },
@@ -179,23 +180,7 @@
       shellNav.appendChild(btn);
     }
 
-    const CDN_BASE = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
-
-    const cdnSnippet = (component) => {
-      const fileTag = component.tag.replace(/^is-/, '');
-      const cat = component.category;
-      const block = (file, label) =>
-        `<div class="shell-nav__cdn-row"><span class="shell-nav__cdn-label">${label}</span>` +
-        `<pre class="shell-nav__cdn-pre" data-snippet="1">&lt;script type="module" src="${CDN_BASE}/${file}"&gt;&lt;/script&gt;</pre>` +
-        `<button type="button" class="shell-nav__copy" data-copy="${CDN_BASE}/${file}" aria-label="Copiar enlace ${label}">Copiar</button></div>`;
-      return [
-        block(`${fileTag}.min.js`, `Individual <code>${fileTag}.min.js</code>`),
-        block(`${cat}.min.js`, `Categoría <code>${cat}.min.js</code>`),
-        block(`all.min.js`, `Bundle <code>all.min.js</code>`),
-      ].join('');
-    };
-
-    const navItems = components.filter((c) => !navSkip.has(c.tag));
+    const navItems = components.filter((c) => !navSkip.has(c.tag) && c.page);
     const byCategory = new Map();
     for (const c of navItems) {
       const key = categoryMeta[c.category] ? c.category : 'helpers';
@@ -221,75 +206,23 @@
       group.appendChild(heading);
 
       for (const component of list) {
-        const item = document.createElement('details');
+        const item = document.createElement('button');
+        item.type = 'button';
         item.className = 'shell-nav__item';
         item.dataset.tag = component.tag;
-
-        const summary = document.createElement('summary');
-        summary.setAttribute('aria-label', `${component.title} ${component.tag}`);
+        item.setAttribute('aria-label', `${component.title} ${component.tag}`);
         const title = document.createElement('span');
         title.className = 'shell-nav__title';
         title.textContent = component.title;
         const tag = document.createElement('span');
         tag.className = 'shell-nav__tag';
         tag.textContent = `<${component.tag}>`;
-        const toggle = document.createElement('button');
-        toggle.type = 'button';
-        toggle.className = 'shell-nav__cdn-toggle';
-        toggle.setAttribute('aria-label', `Ver snippets CDN de ${component.title}`);
-        toggle.title = 'Ver snippets CDN';
-        toggle.textContent = 'CDN';
-        // El botón solo abre/cierra el panel; no navega.
-        toggle.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          item.open = !item.open;
-        });
-        summary.append(title, tag, toggle);
-        // Click sobre el summary navega al componente, no abre el panel.
-        summary.addEventListener('click', (e) => {
-          if (e.target.closest('.shell-nav__cdn-toggle')) return;
-          e.preventDefault();
-          selectComponent(component.tag);
-        });
-
-        const body = document.createElement('div');
-        body.className = 'shell-nav__cdn';
-        body.innerHTML = cdnSnippet(component);
-
-        item.append(summary, body);
+        item.append(title, tag);
+        item.addEventListener('click', () => selectComponent(component.tag));
         group.appendChild(item);
       }
       shellNav.appendChild(group);
     }
-
-    // --- event delegation: copiar snippets CDN desde la nav ---
-    shellNav.addEventListener('click', async (e) => {
-      const copyBtn = e.target.closest('.shell-nav__copy');
-      if (!copyBtn) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const url = copyBtn.dataset.copy;
-      const text = `<script type="module" src="${url}"><\/script>`;
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        // fallback
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-      }
-      const original = copyBtn.textContent;
-      copyBtn.textContent = '✓ Copiado';
-      copyBtn.classList.add('is-copied');
-      setTimeout(() => {
-        copyBtn.textContent = original;
-        copyBtn.classList.remove('is-copied');
-      }, 1200);
-    });
 
     // --- initial state ---
     const stateFromUrl = readStateParam();

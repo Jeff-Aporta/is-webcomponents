@@ -21,6 +21,7 @@
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
+  <script src="../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
   <style>
     .fab-stage {
@@ -61,9 +62,9 @@
         <p class="lede">small, medium (default), large.</p>
 
         <div class="demo">
-          <is-fab icon="mdi:bell" size="small" position="inline" label="Notificación"></is-fab>
-          <is-fab icon="mdi:bell" size="medium" position="inline" label="Notificación"></is-fab>
-          <is-fab icon="mdi:bell" size="large" position="inline" label="Notificación"></is-fab>
+          <is-fab icon="mdi:bell" style="font-size:0.75em" position="inline" label="Notificación"></is-fab>
+          <is-fab icon="mdi:bell" position="inline" label="Notificación"></is-fab>
+          <is-fab icon="mdi:bell" style="font-size:1.3em" position="inline" label="Notificación"></is-fab>
         </div>
       </section>
 
@@ -125,7 +126,6 @@
             <tr><td><code>icon</code></td><td>string</td><td>mdi:plus</td><td>Iconify id.</td></tr>
             <tr><td><code>position</code></td><td>bottom-end | bottom-start | top-end | top-start | inline</td><td>bottom-end</td><td>Posición fija.</td></tr>
             <tr><td><code>variant</code></td><td>brand | neutral | danger | success | warning</td><td>brand</td><td>Color.</td></tr>
-            <tr><td><code>size</code></td><td>small | medium | large</td><td>medium</td><td>Tamaño.</td></tr>
             <tr><td><code>extended</code></td><td>boolean</td><td>false</td><td>Forma pill con label.</td></tr>
             <tr><td><code>pulse</code></td><td>boolean</td><td>false</td><td>Pulso de atención.</td></tr>
             <tr><td><code>label</code></td><td>string</td><td>—</td><td>aria-label.</td></tr>

@@ -8,6 +8,7 @@
   <meta name="description" content="Documentación y demos del componente is-callout de Insoft." />
 
   <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/palettes.css" />
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/actions/button.js"></script>
   <script type="module" src="../components/layout/split-panel.js"></script>
@@ -21,6 +22,7 @@
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
+  <script src="../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
@@ -94,11 +96,11 @@
         </p>
 
         <div class="demo-stack">
-          <is-callout size="xs">XS · callout mínimo.</is-callout>
-          <is-callout size="s">S · un poco más de énfasis.</is-callout>
-          <is-callout size="m">M · tamaño por defecto.</is-callout>
-          <is-callout size="l">L · más énfasis.</is-callout>
-          <is-callout size="xl">XL · énfasis máximo.</is-callout>
+          <is-callout style="font-size:0.8em">0.8em · callout mínimo.</is-callout>
+          <is-callout style="font-size:0.9em">0.9em · un poco más de énfasis.</is-callout>
+          <is-callout>1em · hereda el tamaño del contexto.</is-callout>
+          <is-callout style="font-size:1.15em">1.15em · más énfasis.</is-callout>
+          <is-callout style="font-size:1.3em">1.3em · énfasis máximo.</is-callout>
         </div>
 
         <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">size</span>=<span class="val">"l"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span></pre>
@@ -204,7 +206,6 @@
           <tbody>
             <tr><td><code>variant</code></td><td>brand · neutral · success · warning · danger</td><td>neutral</td><td>Tono. Reflected.</td></tr>
             <tr><td><code>appearance</code></td><td>accent · filled · outlined · filled-outlined · plain</td><td>filled-outlined</td><td>Tratamiento visual. Reflected.</td></tr>
-            <tr><td><code>size</code></td><td>xs · s · m · l · xl</td><td>m</td><td>Tamaño. Reflected.</td></tr>
             <tr><td><code>icon</code></td><td>string</td><td>(según variant)</td><td>Iconify id para el icono por defecto. Vacío = sin icono.</td></tr>
           </tbody>
         </table>

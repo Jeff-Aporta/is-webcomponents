@@ -20,6 +20,7 @@
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
+  <script src="../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
   <style>
     .gauge-grid {
@@ -78,9 +79,9 @@
 
         <div class="demo">
           <div class="gauge-grid">
-            <div class="gauge-cell"><is-gauge size="small" value="42" label="Small"></is-gauge></div>
-            <div class="gauge-cell"><is-gauge size="medium" value="42" label="Medium"></is-gauge></div>
-            <div class="gauge-cell"><is-gauge size="large" value="42" label="Large"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge style="font-size:0.7em" value="42" label="0.7em"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge value="42" label="1em"></is-gauge></div>
+            <div class="gauge-cell"><is-gauge style="font-size:1.35em" value="42" label="1.35em"></is-gauge></div>
           </div>
         </div>
       </section>
@@ -134,7 +135,6 @@
             <tr><td><code>label</code></td><td>string</td><td>—</td><td>Etiqueta.</td></tr>
             <tr><td><code>unit</code></td><td>string</td><td>—</td><td>Unidad (e.g. "%").</td></tr>
             <tr><td><code>format</code></td><td>string</td><td>0</td><td>Intl format.</td></tr>
-            <tr><td><code>size</code></td><td>small | medium | large</td><td>medium</td><td>Tamaño.</td></tr>
             <tr><td><code>thickness</code></td><td>number</td><td>8</td><td>Ancho del trazo.</td></tr>
             <tr><td><code>variant</code></td><td>brand | success | warning | danger</td><td>brand</td><td>Color.</td></tr>
             <tr><td><code>half</code></td><td>boolean</td><td>false</td><td>Semicírculo.</td></tr>

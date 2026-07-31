@@ -19,6 +19,7 @@ export default [
   { tag: 'is-toast', title: 'Toast', category: 'feedback', script: '../components/feedback/toast.js', style: '../components/feedback/toast.css', page: 'is-toast.html' },
   { tag: 'is-toast-item', title: 'Toast Item', category: 'feedback', script: '../components/feedback/toast-item.js', style: '../components/feedback/toast-item.css', page: 'is-toast.html' },
   { tag: 'is-tooltip', title: 'Tooltip', category: 'feedback', script: '../components/feedback/tooltip.js', style: '../components/feedback/tooltip.css', page: 'is-tooltip.html' },
+  { tag: 'is-cdn-snippet', title: 'CDN Snippet', category: 'feedback', script: '../components/feedback/cdn-snippet.js', style: '../components/feedback/cdn-snippet.css' },
   { tag: 'is-split-panel', title: 'Panel dividido', category: 'layout', script: '../components/layout/split-panel.js', style: '../components/layout/split-panel.css', page: 'is-split-panel.html' },
   { tag: 'is-main', title: 'Main', category: 'layout', script: '../components/layout/main.js', style: '../components/layout/main.css', page: 'is-main.html' },
   { tag: 'is-card', title: 'Card', category: 'layout', script: '../components/layout/card.js', style: '../components/layout/card.css', page: 'is-card.html' },

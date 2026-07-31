@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-slider · IS Web Components</title>
   <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/palettes.css" />
   <link rel="stylesheet" href="../styles/presentation.css" />
   <script type="module" src="../components/forms/slider.js"></script>
   <script type="module" src="../components/forms/input.js"></script>
@@ -15,6 +16,7 @@
   <script type="module" src="../components/layout/scrollspy.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
+  <script src="../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
   <style>
     .stack { display: grid; gap: 1.5rem; max-width: 28rem; }
@@ -58,14 +60,14 @@
 
       <section class="section" id="sizes">
         <h2>Tamaños</h2>
-        <p class="lede"><code class="code">size="small"</code> reduce pista y thumb.</p>
+        <p class="lede">El tamaño va en <code class="code">em</code>: baja el <code class="code">font-size</code> y pista, thumb y etiquetas se reducen a la vez.</p>
         <div class="demo">
           <div class="stack">
-            <is-slider size="small" label="small" value="70" value-label="auto"></is-slider>
+            <is-slider style="font-size:0.8em" label="0.8em" value="70" value-label="auto"></is-slider>
             <is-slider label="medium (default)" value="50" value-label="auto"></is-slider>
           </div>
         </div>
-        <pre class="code">&lt;is-slider size="small" value="70" value-label="auto"&gt;&lt;/is-slider&gt;
+        <pre class="code">&lt;is-slider style="font-size:0.8em" value="70" value-label="auto"&gt;&lt;/is-slider&gt;
 &lt;is-slider value="50" value-label="auto"&gt;&lt;/is-slider&gt;</pre>
       </section>
 
@@ -234,7 +236,6 @@ slider.valueLabelFormat = (bytes) =&gt; format(bytes); // 1 MB, 2 GB…</pre>
             <tr><td><code>shift-step</code></td><td>salto de Shift + flechas y PageUp/PageDown (default step × 10)</td></tr>
             <tr><td><code>marks</code></td><td>boolean · <code>"0:0°C, 20:20°C"</code> · propiedad <code>[{ value, label }]</code></td></tr>
             <tr><td><code>orientation</code></td><td><code>horizontal</code> (default) · <code>vertical</code></td></tr>
-            <tr><td><code>size</code></td><td><code>medium</code> (default) · <code>small</code></td></tr>
             <tr><td><code>track</code></td><td><code>normal</code> (default) · <code>none</code> · <code>inverted</code></td></tr>
             <tr><td><code>value-label</code></td><td><code>off</code> (default) · <code>auto</code> · <code>on</code></td></tr>
             <tr><td><code>min-distance</code> <code>disable-swap</code></td><td>separación mínima y bloqueo de cruce en rangos</td></tr>

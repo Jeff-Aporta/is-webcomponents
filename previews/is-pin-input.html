@@ -20,6 +20,7 @@
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
+  <script src="../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
 </head>
 <body>
@@ -75,9 +76,9 @@
 
         <div class="demo">
           <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start">
-            <div><small>small</small><is-pin-input size="small" length="6"></is-pin-input></div>
-            <div><small>medium</small><is-pin-input size="medium" length="6"></is-pin-input></div>
-            <div><small>large</small><is-pin-input size="large" length="6"></is-pin-input></div>
+            <div><small>0.8em</small><is-pin-input style="font-size:0.8em" length="6"></is-pin-input></div>
+            <div><small>1em</small><is-pin-input length="6"></is-pin-input></div>
+            <div><small>1.25em</small><is-pin-input style="font-size:1.25em" length="6"></is-pin-input></div>
           </div>
         </div>
       </section>
@@ -127,7 +128,6 @@
           <tbody>
             <tr><td><code>length</code></td><td>number</td><td>6</td><td>Cantidad de dígitos (3-8).</td></tr>
             <tr><td><code>type</code></td><td>number | text</td><td>number</td><td>Tipo de carácter aceptado.</td></tr>
-            <tr><td><code>size</code></td><td>small | medium | large</td><td>medium</td><td>Tamaño.</td></tr>
             <tr><td><code>mask</code></td><td>boolean</td><td>false</td><td>Oculta el contenido.</td></tr>
             <tr><td><code>disabled</code></td><td>boolean</td><td>false</td><td>Deshabilita.</td></tr>
             <tr><td><code>invalid</code></td><td>boolean</td><td>false</td><td>Marca error.</td></tr>

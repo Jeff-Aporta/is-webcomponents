@@ -21,6 +21,7 @@
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <script src="../scripts/demo-code.js" defer></script>
+  <script src="../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
   <style>
     .stats-grid {
@@ -67,9 +68,9 @@
 
         <div class="demo">
           <div class="stats-grid">
-            <is-stat size="small" label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
-            <is-stat size="medium" label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
-            <is-stat size="large" label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
+            <is-stat style="font-size:0.85em" label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
+            <is-stat label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
+            <is-stat style="font-size:1.25em" label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
           </div>
         </div>
       </section>
@@ -116,7 +117,6 @@
             <tr><td><code>trend</code></td><td>string</td><td>—</td><td>Valor de cambio (e.g. "+12.5%").</td></tr>
             <tr><td><code>trend-direction</code></td><td>up | down | flat</td><td>auto</td><td>Dirección manual.</td></tr>
             <tr><td><code>icon</code></td><td>string</td><td>—</td><td>Iconify id.</td></tr>
-            <tr><td><code>size</code></td><td>small | medium | large</td><td>medium</td><td>Tamaño.</td></tr>
             <tr><td><code>variant</code></td><td>brand | neutral | success | warning | danger</td><td>neutral</td><td>Color.</td></tr>
           </tbody>
         </table>

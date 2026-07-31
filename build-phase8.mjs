@@ -18,6 +18,7 @@ const NEW = [
   ['components/data/transfer.js', 'components/data/transfer.css'],
   ['components/data/gauge.js', 'components/data/gauge.css'],
   ['components/data/kanban.js', 'components/data/kanban.css'],
+  ['components/feedback/cdn-snippet.js', 'components/feedback/cdn-snippet.css'],
 ];
 
 const bundleJs = (entry, out) => build({
