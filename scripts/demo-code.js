@@ -146,13 +146,30 @@
     const theme = ctxTheme();
     const palette = ctxPalette();
 
-    const links = tags
-      .filter((t) => COMPONENTS_WITH_CSS.has(t))
-      .map((t) => `  <link rel="stylesheet" href="${CDN_BASE}/${t}.min.css">`)
-      .join('\n');
-    const scripts = tags
-      .map((t) => `  <script type="module" src="${CDN_BASE}/${t}.min.js"><\/script>`)
-      .join('\n');
+    const cssTags = tags.filter((t) => COMPONENTS_WITH_CSS.has(t));
+    const links = [
+      `  <!-- 1. Tema base (tokens dark/light sin marca) -->`,
+      `  <link rel="stylesheet" href="${CDN_BASE}/is-base.min.css">`,
+      ``,
+      `  <!-- 2. Paleta de marca (Insoft / ContaPyme / AgroWin) -->`,
+      `  <link rel="stylesheet" href="${CDN_BASE}/palettes.min.css">`,
+    ];
+    if (cssTags.length) {
+      links.push('');
+      links.push('  <!-- 3. CSS por componente -->');
+      for (const t of cssTags) {
+        links.push(`  <link rel="stylesheet" href="${CDN_BASE}/${t}.min.css">`);
+      }
+    }
+
+    const scripts = [];
+    if (tags.length) {
+      scripts.push('');
+      scripts.push('  <!-- 4. JS por componente (defer: ejecuta tras parsear el HTML) -->');
+      for (const t of tags) {
+        scripts.push(`  <script type="module" src="${CDN_BASE}/${t}.min.js" defer><\/script>`);
+      }
+    }
 
     const lines = [];
     lines.push('<!DOCTYPE html>');
@@ -162,30 +179,19 @@
     lines.push('  <meta name="viewport" content="width=device-width, initial-scale=1">');
     lines.push('  <title>IS Web Components · snippet</title>');
     lines.push('');
-    lines.push('  <!-- 1. Tema base (tokens dark/light sin marca) -->');
-    lines.push(`  <link rel="stylesheet" href="${CDN_BASE}/is-base.min.css">`);
-    lines.push('');
-    lines.push('  <!-- 2. Paleta de marca (Insoft / ContaPyme / AgroWin) -->');
-    lines.push(`  <link rel="stylesheet" href="${CDN_BASE}/palettes.min.css">`);
-    if (links) {
-      lines.push('');
-      lines.push('  <!-- 3. CSS por componente -->');
-      lines.push(links);
-    }
+    lines.push(...links);
     lines.push('</head>');
     lines.push('<body>');
     lines.push(`  <div class="theme-${theme}" data-palette="${palette}" style="padding:1.5rem;font-family:var(--is-sans,system-ui);background:var(--is-bg);color:var(--is-text);min-height:100vh">`);
     lines.push(indent(inner, 4));
     lines.push('  </div>');
-    if (scripts) {
-      lines.push('');
-      lines.push('  <!-- 4. JS por componente -->');
-      lines.push(scripts);
+    if (scripts.length) {
+      lines.push(...scripts);
     }
     lines.push('</body>');
     lines.push('</html>');
 
-    // Comentario de alternativas (categoría y all).
+    // Comentario de alternativas (categoría y all) — sólo referencia, no se incluyen.
     const manifest = await manifestPromise;
     const catMap = {};
     if (Array.isArray(manifest)) {
@@ -201,18 +207,16 @@
     }
     if (cats.size) {
       lines.push('');
-      lines.push('<!-- ── Alternativas ───────────────────────────────────────── -->');
-      lines.push('<!-- Si usas varios componentes de la misma categoría, puedes');
-      lines.push('     cargar el bundle por categoría (incluye todo lo de arriba): -->');
+      lines.push('<!-- ── Alternativas (descomenta si prefieres bundles por categoría) ── -->');
       for (const cat of cats) {
-        lines.push(`<!--   <link rel="stylesheet" href="${CDN_BASE}/${cat}.min.css">  (CSS por categoría) -->`);
-        lines.push(`<!--   <script type="module" src="${CDN_BASE}/${cat}.min.js"><\/script>  (toda la categoría) -->`);
+        lines.push(`<!--   <link rel="stylesheet" href="${CDN_BASE}/${cat}.min.css">                  (CSS por categoría) -->`);
+        lines.push(`<!--   <script type="module" src="${CDN_BASE}/${cat}.min.js" defer><\/script>  (toda la categoría) -->`);
       }
       lines.push('<!--');
-      lines.push('     O el bundle único (todo IS Web Components en un archivo): -->');
+      lines.push('     O el bundle único (toda la librería en un solo archivo): -->');
       lines.push(`<!--   <link rel="stylesheet" href="${CDN_BASE}/is-base.min.css"> -->`);
       lines.push(`<!--   <link rel="stylesheet" href="${CDN_BASE}/palettes.min.css"> -->`);
-      lines.push(`<!--   <script type="module" src="${CDN_BASE}/all.min.js"><\/script>  (todos los componentes) -->`);
+      lines.push(`<!--   <script type="module" src="${CDN_BASE}/all.min.js" defer><\/script>  (todos los componentes) -->`);
       lines.push('-->');
     }
 

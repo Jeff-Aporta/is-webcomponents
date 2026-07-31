@@ -154,11 +154,12 @@
 }
 
 :host([appearance='segmented']) ::slotted([selected]) {
-  --is-control-bg: color-mix(in srgb, var(--is-button-group-accent) 18%, var(--is-bg-elev, #fff));
-  --is-control-bg-hover: color-mix(in srgb, var(--is-button-group-accent) 26%, var(--is-bg-elev, #fff));
-  --is-control-bg-active: color-mix(in srgb, var(--is-button-group-accent) 32%, var(--is-bg-elev, #fff));
-  --is-control-border: color-mix(in srgb, var(--is-button-group-accent) 45%, transparent);
-  --is-control-text: var(--is-button-group-accent);
+  --_sel: var(--is-button-selected-color, var(--is-button-group-accent));
+  --is-control-bg: color-mix(in srgb, var(--_sel) 18%, var(--is-bg-elev, #fff));
+  --is-control-bg-hover: color-mix(in srgb, var(--_sel) 26%, var(--is-bg-elev, #fff));
+  --is-control-bg-active: color-mix(in srgb, var(--_sel) 32%, var(--is-bg-elev, #fff));
+  --is-control-border: color-mix(in srgb, var(--_sel) 45%, transparent);
+  --is-control-text: var(--_sel);
   border-radius: var(--is-button-border-radius, 6px);
   box-shadow: 0 1px 3px rgb(0 0 0 / 22%);
 }
@@ -174,11 +175,12 @@
 
 :host([appearance='joined']) ::slotted([selected]),
 :host([appearance='separated']) ::slotted([selected]) {
-  --is-control-bg: color-mix(in srgb, var(--is-button-group-accent) 16%, transparent);
-  --is-control-bg-hover: color-mix(in srgb, var(--is-button-group-accent) 24%, transparent);
-  --is-control-bg-active: color-mix(in srgb, var(--is-button-group-accent) 30%, transparent);
-  --is-control-border: color-mix(in srgb, var(--is-button-group-accent) 60%, transparent);
-  --is-control-text: var(--is-button-group-accent);
+  --_sel: var(--is-button-selected-color, var(--is-button-group-accent));
+  --is-control-bg: color-mix(in srgb, var(--_sel) 16%, transparent);
+  --is-control-bg-hover: color-mix(in srgb, var(--_sel) 24%, transparent);
+  --is-control-bg-active: color-mix(in srgb, var(--_sel) 30%, transparent);
+  --is-control-border: color-mix(in srgb, var(--_sel) 60%, transparent);
+  --is-control-text: var(--_sel);
 }
 
 /* ---- modificadores --------------------------------------------------- */

@@ -11,6 +11,9 @@ import '../media/icon.js';
  * Atributos
  *  variant      brand | neutral | success | warning | danger   (default: neutral)
  *  appearance   filled | outlined | plain                     (default: filled)
+ *  hue          number (0-360)  color propio para el highlight cuando está
+ *                             [selected] dentro de <is-button-group>. Si no
+ *                             se define, el grupo usa su --is-accent.
  *  disabled     boolean
  *  loading      boolean
  *  pill         boolean
@@ -94,7 +97,7 @@ import '../media/icon.js';
   // --- 2. Custom element ----------------------------------------------
 
   const OBSERVED = [
-    "variant", "appearance",
+    "variant", "appearance", "hue",
     "disabled", "loading", "pill", "with-caret",
     "href", "target", "rel", "download",
     "type", "title", "name", "value",
@@ -154,6 +157,7 @@ import '../media/icon.js';
       this.#updateIconOnly();
       this.#updateLinkState();
       this.#updateLoadingState();
+      this.#syncHue();
       this.#wireEvents();    // re-envía focus/blur/click como is-* custom events
     }
 
@@ -167,6 +171,8 @@ import '../media/icon.js';
         this.#syncDisabled();
       } else if (name === "loading") {
         this.#updateLoadingState();
+      } else if (name === "hue") {
+        this.#syncHue();
       } else {
         this.#syncAttrs();
       }
@@ -196,6 +202,23 @@ import '../media/icon.js';
     }
 
     // ---- público ---------------------------------------------------
+
+    /**
+     * Hue HSL opcional (0-360). Cuando está presente, el botón expone
+     *   --is-button-selected-hue
+     * en el :host para que <is-button-group> lo consuma en el highlight
+     * del estado [selected]. Si no se define, el grupo usa su --is-accent.
+     */
+    get hue() {
+      const raw = this.getAttribute("hue");
+      if (raw == null || raw === "") return null;
+      const n = Number(raw);
+      return Number.isFinite(n) ? n : null;
+    }
+    set hue(v) {
+      if (v == null || v === "") this.removeAttribute("hue");
+      else this.setAttribute("hue", String(v));
+    }
 
     setFocus(options) { this.#btn.focus(options); }
     get validity()    { return this.#internals?.validity ?? super.validity; }
@@ -340,6 +363,24 @@ import '../media/icon.js';
         this.#syncDisabled(true);
       } else {
         this.#syncDisabled();
+      }
+    }
+
+    /**
+     * Publica el hue en una CSS var del host para que el padre
+     * (p.ej. <is-button-group>) pinte el highlight del estado [selected]
+     * con el color del botón. Si no hay hue, la var queda sin definir y
+     * el consumidor cae a su propio --is-accent.
+     */
+    #syncHue() {
+      const h = this.hue;
+      if (h == null) {
+        this.style.removeProperty("--is-button-selected-hue");
+        this.style.removeProperty("--is-button-selected-color");
+      } else {
+        const norm = ((h % 360) + 360) % 360;
+        this.style.setProperty("--is-button-selected-hue", String(norm));
+        this.style.setProperty("--is-button-selected-color", `hsl(${norm} 70% 45%)`);
       }
     }
   }
