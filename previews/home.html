@@ -27,6 +27,8 @@
   <script type="module" src="../components/charts/scatter-chart.js"></script>
   <script type="module" src="../components/charts/bubble-chart.js"></script>
   <script type="module" src="../components/feedback/tag.js"></script>
+  <script type="module" src="../components/diagrams/timeline.js"></script>
+  <script type="module" src="../components/diagrams/flowchart.js"></script>
   <script type="module" src="../scripts/preview-chrome.js"></script>
   <script src="../scripts/highlight-pre.js" defer></script>
   <style>
@@ -60,6 +62,185 @@
     .home-hero { grid-area: hero; align-self: start; min-width: 0; }
     .home-stage { grid-area: stage; align-self: start; min-width: 0; }
     .home-lab   { grid-area: lab; }
+
+    /* ── Collage 3D: masonry vertical con cards superpuestas y parallax horizontal ── */
+    .home-collage {
+      grid-area: lab;
+      position: relative;
+      margin-top: clamp(2rem, 6vw, 4rem);
+      padding: clamp(1rem, 3vw, 2rem) 0;
+      overflow: hidden;
+      perspective: 1600px;
+      perspective-origin: 50% 30%;
+    }
+
+    .home-collage__track {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.25rem;
+      transform-style: preserve-3d;
+    }
+
+    .collage-card {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 0.5rem;
+      padding: 0.9rem 1rem 1rem;
+      background:
+        linear-gradient(180deg,
+          color-mix(in srgb, var(--is-bg-elev) 92%, transparent),
+          color-mix(in srgb, var(--is-bg-elev) 80%, transparent)),
+        color-mix(in srgb, var(--is-accent) 6%, transparent);
+      border: 1px solid color-mix(in srgb, var(--is-border) 70%, transparent);
+      border-radius: 0.9rem;
+      box-shadow:
+        0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset,
+        0 16px 36px rgb(0 0 0 / 22%),
+        0 2px 6px rgb(0 0 0 / 16%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transform-style: preserve-3d;
+      transition: transform 500ms cubic-bezier(.2,.7,.3,1), box-shadow 500ms ease;
+      will-change: transform;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .collage-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--is-accent) 60%, transparent),
+        transparent 40%,
+        color-mix(in srgb, var(--is-color-brand-300, #74c0fc) 50%, transparent));
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .collage-card:hover {
+      transform: translateZ(28px) rotateX(-2deg);
+      box-shadow:
+        0 1px 0 color-mix(in srgb, #fff 8%, transparent) inset,
+        0 28px 60px rgb(0 0 0 / 30%),
+        0 4px 12px rgb(0 0 0 / 18%);
+    }
+
+    .collage-card__title {
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--is-text-soft);
+    }
+
+    .collage-card__plot {
+      position: relative;
+      z-index: 1;
+      min-height: 9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .collage-card__meta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+      color: var(--is-text-soft);
+    }
+
+    .collage-card__meta b {
+      color: var(--is-text);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+
+    /* Variantes de tamaño — masonry-like por filas */
+    .collage-card--wide { grid-column: span 2; }
+    .collage-card--tall { grid-row: span 2; }
+    .collage-card--tall .collage-card__plot { min-height: 18rem; }
+    .collage-card--xl { grid-column: span 2; grid-row: span 2; }
+    .collage-card--xl .collage-card__plot { min-height: 18rem; }
+
+    /* Charts dentro de cada card */
+    .collage-card is-bar-chart,
+    .collage-card is-line-chart,
+    .collage-card is-pie-chart,
+    .collage-card is-doughnut-chart,
+    .collage-card is-polar-area-chart,
+    .collage-card is-radar-chart,
+    .collage-card is-scatter-chart,
+    .collage-card is-bubble-chart,
+    .collage-card is-sparkline {
+      display: block;
+      width: 100%;
+      height: 9rem;
+    }
+
+    .collage-card--tall is-bar-chart,
+    .collage-card--tall is-line-chart,
+    .collage-card--tall is-radar-chart { height: 14rem; }
+
+    .collage-card__hero {
+      position: relative;
+      z-index: 1;
+      padding: 1rem 0;
+    }
+
+    .collage-card__hero h4 {
+      margin: 0 0 0.4rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--is-text);
+    }
+
+    .collage-card__hero p {
+      margin: 0;
+      font-size: 0.78rem;
+      color: var(--is-text-soft);
+      line-height: 1.45;
+    }
+
+    /* Ajustes responsive: el collage pasa a 2 columnas */
+    @media (max-width: 1100px) {
+      .home-collage__track { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .collage-card--xl { grid-column: span 2; grid-row: span 1; }
+      .collage-card--xl .collage-card__plot { min-height: 12rem; }
+    }
+
+    @media (max-width: 760px) {
+      .home-collage__track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .collage-card--wide, .collage-card--xl { grid-column: span 2; }
+      .collage-card--tall { grid-row: span 1; }
+    }
+
+    @media (max-width: 480px) {
+      .home-collage__track { grid-template-columns: 1fr; }
+      .collage-card--wide, .collage-card--xl, .collage-card--tall {
+        grid-column: span 1; grid-row: span 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .collage-card, .collage-card:hover { transform: none !important; }
+    }
 
     /* ── Charts lab: grid ancho debajo del hero/showcase ──────────────── */
     .home-lab {
@@ -825,6 +1006,196 @@
         </div>
       </aside>
 
+      <section class="home-collage" aria-labelledby="homeCollageTitle">
+        <div class="home-lab__head">
+          <div>
+            <h2 class="home-lab__title" id="homeCollageTitle">
+              Componentes <em>en acción</em>
+            </h2>
+            <p class="home-lab__lede">
+              Una vuelta rápida por todo el catálogo: charts, formatos, diagramas y controles.
+              Cada card está ligeramente inclinada; al hacer scroll, las filas se desfasan en
+              profundidad para dar sensación de carrusel apilado.
+            </p>
+          </div>
+          <div class="home-lab__chips">
+            <is-tag variant="brand">3D collage</is-tag>
+            <is-tag>Parallax scroll</is-tag>
+            <is-tag variant="success">Live data</is-tag>
+          </div>
+        </div>
+
+        <div class="home-collage__track" id="homeCollageTrack">
+          <article class="collage-card collage-card--xl">
+            <h3 class="collage-card__title">Mix de cartera</h3>
+            <div class="collage-card__plot">
+              <is-doughnut-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Activos","Pasivos","Patrimonio"], "datasets": [
+                    { "data": [62, 23, 15], "backgroundColor": ["#339af0","#fa5252","#40c057"] } ] } }
+                </script>
+              </is-doughnut-chart>
+            </div>
+            <div class="collage-card__meta"><span>Distribución</span><b>62% / 23% / 15%</b></div>
+          </article>
+
+          <article class="collage-card collage-card--tall">
+            <h3 class="collage-card__title">Ventas por sede</h3>
+            <div class="collage-card__plot">
+              <is-bar-chart index-axis="y" without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Bogotá","Medellín","Cali","Barranquilla","Bucaramanga","Pereira"],
+                    "datasets": [{ "label": "Clientes", "data": [1240, 890, 610, 430, 280, 195] }] } }
+                </script>
+              </is-bar-chart>
+            </div>
+            <div class="collage-card__meta"><span>Top</span><b>Bogotá · 1.240</b></div>
+          </article>
+
+          <article class="collage-card">
+            <h3 class="collage-card__title">Tendencia</h3>
+            <div class="collage-card__plot">
+              <is-line-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"], "datasets": [
+                    { "label": "2025", "data": [30, 42, 38, 55, 48, 62], "tension": 0.4, "fill": true } ] } }
+                </script>
+              </is-line-chart>
+            </div>
+            <div class="collage-card__meta"><span>Δ YoY</span><b style="color:#40c057">+38%</b></div>
+          </article>
+
+          <article class="collage-card collage-card--wide">
+            <h3 class="collage-card__title">Composición</h3>
+            <div class="collage-card__plot">
+              <is-pie-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Contado","Crédito 30","Crédito 60","Anticipos"], "datasets": [
+                    { "data": [44, 28, 18, 10] } ] } }
+                </script>
+              </is-pie-chart>
+            </div>
+            <div class="collage-card__meta"><span>Modalidad</span><b>Contado · 44%</b></div>
+          </article>
+
+          <article class="collage-card">
+            <h3 class="collage-card__title">Radar</h3>
+            <div class="collage-card__plot">
+              <is-radar-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Velocidad","Calidad","Soporte","Precio","UX"], "datasets": [
+                    { "label": "Q3", "data": [85, 92, 70, 88, 95],
+                      "backgroundColor": "color-mix(in srgb, #fa5252 38%, transparent)",
+                      "borderColor": "#fa5252" },
+                    { "label": "Q2", "data": [72, 78, 90, 65, 80],
+                      "backgroundColor": "color-mix(in srgb, #339af0 38%, transparent)",
+                      "borderColor": "#339af0" } ] } }
+                </script>
+              </is-radar-chart>
+            </div>
+            <div class="collage-card__meta"><span>KPI</span><b>UX · 95</b></div>
+          </article>
+
+          <article class="collage-card collage-card--wide">
+            <h3 class="collage-card__title">SLA semanal</h3>
+            <div class="collage-card__plot">
+              <is-polar-area-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["L","M","X","J","V","S","D"], "datasets": [
+                    { "data": [98, 95, 92, 99, 96, 88, 75] } ] } }
+                </script>
+              </is-polar-area-chart>
+            </div>
+            <div class="collage-card__meta"><span>Promedio</span><b>92%</b></div>
+          </article>
+
+          <article class="collage-card">
+            <h3 class="collage-card__title">Tráfico vs ventas</h3>
+            <div class="collage-card__plot">
+              <is-scatter-chart without-legend>
+                <script type="application/json">
+                  { "data": { "datasets": [
+                    { "label": "Web", "data": [
+                      { "x": 120, "y": 14 }, { "x": 240, "y": 22 }, { "x": 360, "y": 31 },
+                      { "x": 480, "y": 38 }, { "x": 600, "y": 52 }, { "x": 720, "y": 65 } ] } ] } }
+                </script>
+              </is-scatter-chart>
+            </div>
+            <div class="collage-card__meta"><span>r</span><b>0.94</b></div>
+          </article>
+
+          <article class="collage-card">
+            <h3 class="collage-card__title">Hora pico</h3>
+            <div class="collage-card__plot">
+              <is-bubble-chart without-legend>
+                <script type="application/json">
+                  { "data": { "datasets": [
+                    { "label": "Visitas", "data": [
+                      { "x": 8, "y": 12, "r": 4 }, { "x": 10, "y": 22, "r": 9 }, { "x": 12, "y": 38, "r": 14 },
+                      { "x": 14, "y": 52, "r": 22 }, { "x": 16, "y": 48, "r": 18 }, { "x": 18, "y": 32, "r": 12 },
+                      { "x": 20, "y": 18, "r": 6 } ] } ] } }
+                </script>
+              </is-bubble-chart>
+            </div>
+            <div class="collage-card__meta"><span>Pico</span><b>14h</b></div>
+          </article>
+
+          <article class="collage-card collage-card--xl">
+            <h3 class="collage-card__title">Flujo de operación</h3>
+            <div class="collage-card__plot" style="min-height:14rem">
+              <is-flowchart style="width:100%;height:14rem">
+                <script type="application/json">
+                  { "flowchart": { "direction": "LR", "nodes": [
+                    { "id":"lead", "label":"Lead", "shape":"stadium" },
+                    { "id":"calif", "label":"Califica", "shape":"diamond" },
+                    { "id":"prop", "label":"Propuesta" },
+                    { "id":"neg", "label":"Negociación", "shape":"hexagon" },
+                    { "id":"win", "label":"Cierre", "shape":"round" } ],
+                    "edges": [
+                      { "from":"lead", "to":"calif" },
+                      { "from":"calif", "to":"prop" },
+                      { "from":"prop", "to":"neg" },
+                      { "from":"neg", "to":"win", "label":"OK" } ] } }
+                </script>
+              </is-flowchart>
+            </div>
+            <div class="collage-card__meta"><span>Embudo</span><b>5 etapas</b></div>
+          </article>
+
+          <article class="collage-card">
+            <h3 class="collage-card__title">Distribución geográfica</h3>
+            <div class="collage-card__plot">
+              <is-radar-chart without-legend>
+                <script type="application/json">
+                  { "data": { "labels": ["Norte","Sur","Oriente","Occidente","Centro"], "datasets": [
+                    { "label": "Cobertura", "data": [78, 65, 82, 71, 90],
+                      "backgroundColor": "color-mix(in srgb, #845ef7 38%, transparent)",
+                      "borderColor": "#845ef7" } ] } }
+                </script>
+              </is-radar-chart>
+            </div>
+            <div class="collage-card__meta"><span>Top</span><b>Centro · 90</b></div>
+          </article>
+
+          <article class="collage-card collage-card--tall">
+            <h3 class="collage-card__title">Cronograma</h3>
+            <div class="collage-card__plot">
+              <is-timeline style="height:18rem">
+                <script type="application/json">
+                  { "timeline": { "orientation": "vertical", "events": [
+                    { "id":"kickoff", "label":"Kick-off", "date":"2025-08-04" },
+                    { "id":"diseno", "label":"Diseño", "date":"2025-08-18" },
+                    { "id":"dev", "label":"Desarrollo", "date":"2025-09-08" },
+                    { "id":"qa", "label":"QA", "date":"2025-09-22" },
+                    { "id":"go", "label":"Go live", "date":"2025-10-06" } ] } }
+                </script>
+              </is-timeline>
+            </div>
+            <div class="collage-card__meta"><span>Trimestre</span><b>Q3 → Q4</b></div>
+          </article>
+        </div>
+      </section>
+
       <section class="home-lab" aria-labelledby="homeLabTitle">
         <div class="home-lab__head">
           <div>
@@ -1030,5 +1401,48 @@
     // El resto (snippets, copy, download) vive en scripts/home-cdn.js
   </script>
   <script type="module" src="../scripts/home-cdn.js"></script>
+  <script type="module">
+    // Parallax del collage 3D: cada card se traslada horizontalmente en
+    // función del scroll vertical del contenedor, simulando un carrusel
+    // apilado en perspectiva. Desactivado con prefers-reduced-motion.
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const main = document.querySelector('is-main.home-main');
+    const track = document.getElementById('homeCollageTrack');
+    if (main && track && !reduce) {
+      const cards = [...track.querySelectorAll('.collage-card')];
+      // Cada card recibe un "lane" en función de su índice para crear el
+      // desfase: pares a la derecha, impares a la izquierda, con magnitud
+      // proporcional al scroll vertical del contenedor.
+      cards.forEach((c, i) => {
+        c.dataset.lane = (i % 2 === 0 ? 1 : -1) * (1 + Math.floor(i / 2) * 0.35);
+      });
+      let raf = 0;
+      const apply = () => {
+        raf = 0;
+        const rect = main.getBoundingClientRect();
+        // progreso del collage dentro del viewport, 0 al entrar, 1 al salir
+        const viewportH = window.innerHeight;
+        const top = rect.top;
+        const total = rect.height + viewportH;
+        const t = Math.min(1, Math.max(0, (viewportH - top) / total));
+        for (const c of cards) {
+          const lane = Number(c.dataset.lane) || 0;
+          const tz = lane * 6; // profundidad por lane
+          const ty = -lane * 8 * (1 - t);
+          const rx = -lane * 1.4;
+          const px = lane * 22 * (1 - t);
+          c.style.transform =
+            `translate3d(${px}px, ${ty}px, ${tz}px) rotateY(${lane * 1.2}deg) rotateX(${rx}deg)`;
+        }
+      };
+      const onScroll = () => {
+        if (raf) return;
+        raf = requestAnimationFrame(apply);
+      };
+      main.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      apply();
+    }
+  </script>
 </body>
 </html>
