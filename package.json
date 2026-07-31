@@ -5,8 +5,8 @@
   "description": "Galería de Web Components de Insoft — shell de preview con componentes vanilla.",
   "type": "module",
   "scripts": {
-    "build": "node build.mjs",
-    "dev": "node serve.mjs"
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/serve.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.25.0"

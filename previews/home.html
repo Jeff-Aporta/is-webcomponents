@@ -511,11 +511,7 @@
       display: grid;
       grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
       gap: 1rem;
-      /* Origen a la derecha: el giro se aleja del hero en vez de invadirlo. */
-      transform-origin: 100% 50%;
-      transform: rotateY(-6deg) rotateX(3deg);
       transform-style: preserve-3d;
-      transition: transform 700ms cubic-bezier(.2,.7,.3,1);
     }
 
     .home-stage__grid::before {
@@ -531,8 +527,6 @@
         radial-gradient(closest-side, color-mix(in srgb, var(--hue-d) 24%, transparent), transparent 78%) 76% 72% / 66% 66% no-repeat;
       filter: blur(48px);
     }
-
-    .home-stage__grid:hover { transform: rotateY(-3deg) rotateX(1.2deg); }
 
     .home-col {
       display: flex;
@@ -593,7 +587,7 @@
     }
 
     .tile:hover {
-      transform: translateZ(26px);
+      transform: translateZ(28px) rotateY(2.5deg) rotateX(-1.5deg);
       box-shadow: var(--shadow-pop);
     }
 
@@ -1037,12 +1031,8 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
       gap: 1.15rem;
-      transform: rotateX(2.5deg);
       transform-style: preserve-3d;
-      transition: transform 700ms cubic-bezier(.2,.7,.3,1);
     }
-
-    .home-lab__grid:hover { transform: rotateX(0.5deg); }
 
     .lab-card {
       position: relative;
@@ -1081,7 +1071,7 @@
     }
 
     .lab-card:hover {
-      transform: translateZ(24px);
+      transform: translateZ(26px) rotateY(2deg) rotateX(-1.2deg);
       box-shadow: var(--shadow-pop);
       z-index: 2;
     }
@@ -1144,10 +1134,6 @@
         align-items: start;
       }
       .home-hero { max-width: none; }
-      .home-stage__grid,
-      .home-stage__grid:hover { transform: none; }
-      .home-lab__grid,
-      .home-lab__grid:hover { transform: none; }
       .home-col--b { margin-top: 0; }
       .home-collage__track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .collage-card--s,
@@ -1181,10 +1167,6 @@
 
       .home-hero:hover .home-title,
       .home-hero:hover .home-actions,
-      .home-stage__grid,
-      .home-stage__grid:hover,
-      .home-lab__grid,
-      .home-lab__grid:hover,
       .tile:hover,
       .lab-card:hover { transform: none !important; }
 

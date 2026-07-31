@@ -18,7 +18,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = dirname(fileURLToPath(import.meta.url)) + '/..';
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const previewsDir = join(root, 'previews');
 
 const SIDEBAR_NAV_OPEN = /(\s*)<nav>(\s*)/g;
@@ -74,10 +74,16 @@ async function migrate(file) {
   return { changed: false, reason: 'no-match' };
 }
 
-const entries = await readdir(previewsDir, { withFileTypes: true });
-const files = entries
-  .filter((e) => e.isFile() && e.name.startsWith('is-') && e.name.endsWith('.html'))
-  .map((e) => join(previewsDir, e.name));
+async function walk(dir) {
+  const out = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...await walk(full));
+    else if (entry.isFile() && entry.name.endsWith('.html')) out.push(full);
+  }
+  return out;
+}
+const files = await walk(previewsDir);
 
 let nChanged = 0;
 let nAlready = 0;
