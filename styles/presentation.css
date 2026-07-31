@@ -838,6 +838,11 @@ html[data-embed="1"] .preview-chrome {
   font-size: 1.15rem;
 }
 
+.preview-chrome__save {
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
 /* --- Responsive ----------------------------------------------------- */
 
 @media (max-width: 900px) {
