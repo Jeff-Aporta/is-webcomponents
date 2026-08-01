@@ -180,14 +180,15 @@
       btn.type = 'button';
       btn.className = 'shell-nav__item shell-nav__item--home';
       btn.dataset.tag = HOME.tag;
-      btn.setAttribute('aria-label', 'Home — inicio');
+      btn.setAttribute('aria-label', 'Inicio — home');
+      // El item "Inicio" del home reusa el styling de los items regulares
+      // (vertical title, mismo highlight en aria-current) y deja solo el
+      // titulo "Inicio" — sin `<home>` tag, porque la pagina inicial no
+      // es un componente del catalogo, es un atajo a la portada.
       const title = document.createElement('span');
       title.className = 'shell-nav__title';
-      title.textContent = HOME.title;
-      const tag = document.createElement('span');
-      tag.className = 'shell-nav__tag';
-      tag.textContent = 'Inicio';
-      btn.append(title, tag);
+      title.textContent = 'Inicio';
+      btn.append(title);
       btn.addEventListener('click', () => selectComponent(HOME.tag));
       shellNav.appendChild(btn);
     }
