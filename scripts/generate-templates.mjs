@@ -25,9 +25,9 @@ for (const component of components) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${component.tag} · IS Web Components</title>
-  <link rel="stylesheet" href="../styles/is-base.css">
-  <link rel="stylesheet" href="../styles/presentation.css">
-  <script type="module" src="../components/media/icon.js"></script>
+  <link rel="stylesheet" href="../../styles/is-base.css">
+  <link rel="stylesheet" href="../../styles/presentation.css">
+  <script type="module" src="../../components/media/icon.js"></script>
   <script type="module" src="${component.script}"></script>
 </head>
 <body>
