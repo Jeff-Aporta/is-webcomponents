@@ -56,6 +56,8 @@ const REMOTE_SVG_URL = (prefix, name) => `https://api.iconify.design/${prefix}/$
 const indexCache = new Map();
 /** Cache de base usada por coleccion: prefix -> string|null. */
 const baseCache = new Map();
+/** Cache de raw SVG: `${prefix}:${name}` -> string (texto SVG). */
+const rawCache = new Map();
 const inflight = new Map();
 
 function candidateBases() {
@@ -142,6 +144,64 @@ export function hasIconLocalSync(prefix, name) {
 export async function hasIconLocal(prefix, name) {
   const set = await fetchIndex(prefix);
   return set instanceof Set && set.has(name);
+}
+
+/**
+ * Devuelve el TEXTO CRUDO del SVG (no una URL), elegido entre local,
+ * jsDelivr CDN del repo y el endpoint SVG de Iconify como último recurso.
+ *
+ * Esto es lo que `<is-icon>` necesita para inyectar el SVG **inline** dentro
+ * de su Shadow DOM y que `currentColor` del documento se propague al `fill`
+ * del SVG. Cuando el SVG se sirve como `<img src>`, los colores se
+ * "congelan" y siempre aparecen negros.
+ *
+ * El resultado se cachea en memoria por icono. Si todo falla (red, 404),
+ * devuelve null y el caller debe caer al fallback `<iconify-icon>`.
+ *
+ * @param {string} prefix
+ * @param {string} name
+ * @param {AbortSignal} [signal]
+ * @returns {Promise<string|null>}
+ */
+export async function resolveIconRaw(prefix, name, signal) {
+  if (!prefix || !name) return null;
+  const key = `${prefix}:${name}`;
+  if (rawCache.has(key)) return rawCache.get(key);
+
+  const sources = [];
+
+  // 1) Local: assets/icons/{prefix}/{name}.svg servido por el sitio.
+  const set = await fetchIndex(prefix);
+  if (set instanceof Set && set.has(name)) {
+    const base = baseCache.get(prefix) || './';
+    sources.push(base + 'assets/icons/' + LOCAL_SVG_PATH(prefix, name));
+  }
+  // 2) CDN absoluto del repo (jsDelivr). Mismo contenido que el local
+  //    si ya hicimos push, asi que es un buen segundo intento.
+  sources.push(`https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/assets/icons/${prefix}/${name}.svg`);
+  // 3) Endpoint SVG de Iconify (oficial). Cualquier icono, cualquier
+  //    coleccion, latencia ~50ms. Sirve el SVG sin envolver.
+  sources.push(REMOTE_SVG_URL(prefix, name));
+
+  for (const url of sources) {
+    try {
+      const res = await fetch(url, { signal, cache: 'force-cache' });
+      if (!res.ok) continue;
+      const text = await res.text();
+      if (text && text.includes('<svg')) {
+        rawCache.set(key, text);
+        return text;
+      }
+    } catch {
+      // Red offline, CORS o abort; probar siguiente fuente.
+    }
+  }
+  return null;
+}
+
+/** Invalida el cache de raw SVG (util para tests). */
+export function clearRawCache() {
+  rawCache.clear();
 }
 
 // ----------------------------------------------------------------------------

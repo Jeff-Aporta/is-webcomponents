@@ -13,14 +13,17 @@
     justify-content: center;
     line-height: 0;
 
-    .img {
-      display: block;
-      width: 1em;
-      height: 1em;
-      object-fit: contain;
+    .inline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
       color: inherit;
       fill: currentColor;
       stroke: currentColor;
+      width: 1em;
+      height: 1em;
+      & > svg { width: 1em; height: 1em; display: block; fill: currentColor; }
       &[hidden] { display: none !important; }
     }
 

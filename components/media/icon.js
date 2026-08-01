@@ -1,5 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
-import { resolveIconSvg, ensureIconify } from '../_shared/iconify-loader.js';
+import { resolveIconRaw, ensureIconify } from '../_shared/iconify-loader.js';
 
 /**
  * <is-icon> — Web Component (vanilla).
@@ -25,7 +25,7 @@ import { resolveIconSvg, ensureIconify } from '../_shared/iconify-loader.js';
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <span class="wrap" part="icon">
-      <img class="img" alt="" hidden />
+      <span class="inline" aria-hidden="true" hidden></span>
       <iconify-icon class="ii" aria-hidden="true" hidden></iconify-icon>
     </span>
   `;
@@ -36,8 +36,8 @@ import { resolveIconSvg, ensureIconify } from '../_shared/iconify-loader.js';
     static get observedAttributes() { return OBSERVED; }
 
     #ii;
-    #img;
-    #imgErrored = false;
+    #inline;
+    #inlineErrored = false;
     #mounted = false;
     #renderGen = 0;
     #abortCtrl = null;
@@ -47,9 +47,8 @@ import { resolveIconSvg, ensureIconify } from '../_shared/iconify-loader.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#img = shadow.querySelector('.img');
+      this.#inline = shadow.querySelector('.inline');
       this.#ii = shadow.querySelector('.ii');
-      this.#img.addEventListener('error', () => this.#onImgError());
     }
 
     connectedCallback() {
@@ -125,39 +124,33 @@ import { resolveIconSvg, ensureIconify } from '../_shared/iconify-loader.js';
       if (src) {
         this.#ii.setAttribute('hidden', '');
         this.#ii.removeAttribute('icon');
-        this.#img.removeAttribute('hidden');
-        this.#img.alt = label;
-        this.#imgErrored = false;
-        this.#img.src = src;
+        this.#inline.innerHTML = '';
+        this.#inlineErrored = false;
+        await this.#mountInlineFromUrl(src, gen);
         return;
       }
 
       // Caso 2: icono Iconify
-      this.#img.setAttribute('hidden', '');
-      this.#img.removeAttribute('src');
+      this.#inline.innerHTML = '';
+      this.#ii.setAttribute('hidden', '');
+      this.#ii.removeAttribute('icon');
 
-      if (!icon) {
-        this.#ii.setAttribute('hidden', '');
-        this.#ii.removeAttribute('icon');
-        return;
-      }
+      if (!icon) return;
 
       const [prefix, name] = icon.split(':', 2);
-      if (!prefix || !name) {
-        this.#ii.setAttribute('hidden', '');
-        return;
-      }
+      if (!prefix || !name) return;
 
-      // Intentar SVG directo (local o CDN api)
+      // Intentar SVG inline (local, jsDelivr o Iconify API)
       try {
-        const svgUrl = await resolveIconSvg(prefix, name);
-        if (svgUrl && gen === this.#renderGen) {
+        const raw = await resolveIconRaw(prefix, name, this.#abortCtrl.signal);
+        if (raw && gen === this.#renderGen) {
           this.#ii.setAttribute('hidden', '');
           this.#ii.removeAttribute('icon');
-          this.#img.removeAttribute('hidden');
-          this.#img.alt = label;
-          this.#imgErrored = false;
-          this.#img.src = svgUrl;
+          this.#inlineErrored = false;
+          this.#inline.innerHTML = raw;
+          this.#inline.removeAttribute('hidden');
+          // Asegurarse de que el SVG inline herede `currentColor`.
+          this.#normalizeInlineSvg();
           return;
         }
       } catch {
@@ -168,39 +161,64 @@ import { resolveIconSvg, ensureIconify } from '../_shared/iconify-loader.js';
 
       // Caso 3: fallback a <iconify-icon>
       if (this.fallback === 'none') {
-        this.#ii.setAttribute('hidden', '');
-        this.#ii.removeAttribute('icon');
+        this.#inline.setAttribute('hidden', '');
         return;
       }
       try {
         await ensureIconify();
       } catch {
-        this.#ii.setAttribute('hidden', '');
+        this.#inline.setAttribute('hidden', '');
         return;
       }
       if (!this.#mounted || gen !== this.#renderGen) return;
+      this.#inline.setAttribute('hidden', '');
       this.#ii.removeAttribute('hidden');
       this.#ii.setAttribute('icon', icon);
       this.#ii.removeAttribute('width');
       this.#ii.removeAttribute('height');
     }
 
-    /** Cuando el SVG local/remoto falla (404, etc.), cae al <iconify-icon>. */
-    #onImgError() {
-      if (this.#imgErrored) return;
-      this.#imgErrored = true;
-      this.#img.setAttribute('hidden', '');
-      this.#img.removeAttribute('src');
-      const icon = this.icon;
-      if (!icon) return;
-      if (this.fallback === 'none') return;
-      ensureIconify()
-        .then(() => {
-          if (!this.#mounted) return;
-          this.#ii.removeAttribute('hidden');
-          this.#ii.setAttribute('icon', icon);
-        })
-        .catch(() => {});
+    /**
+     * Caso `src` manual (URL absoluta): trae el raw SVG por fetch y lo
+     * inyecta inline. Si falla, no cae al fallback (es un src del usuario).
+     */
+    async #mountInlineFromUrl(url, gen) {
+      try {
+        const res = await fetch(url, { signal: this.#abortCtrl.signal });
+        if (!res.ok) throw new Error('svg fetch failed');
+        const text = await res.text();
+        if (gen !== this.#renderGen || !text.includes('<svg')) return;
+        this.#inline.innerHTML = text;
+        this.#inline.removeAttribute('hidden');
+        this.#normalizeInlineSvg();
+      } catch {
+        this.#inline.setAttribute('hidden', '');
+      }
+    }
+
+    /**
+     * Normaliza el SVG inline para que `currentColor` funcione aunque el
+     * icono venga con fill="black" o fill="#000" del CDN. Forzamos
+     * fill="currentColor" y stroke="currentColor" en todos los hijos.
+     */
+    #normalizeInlineSvg() {
+      const svg = this.#inline.querySelector('svg');
+      if (!svg) return;
+      // viewBox siempre; ancho/alto flexible a 1em.
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+      svg.setAttribute('width', '1em');
+      svg.setAttribute('height', '1em');
+      svg.setAttribute('focusable', 'false');
+      svg.style.fill = 'currentColor';
+      svg.style.stroke = 'currentColor';
+      for (const el of svg.querySelectorAll('*')) {
+        // No pisar elementos sin fill/stroke.
+        const fill = el.getAttribute('fill');
+        const stroke = el.getAttribute('stroke');
+        if (fill && fill !== 'none') el.style.fill = 'currentColor';
+        if (stroke && stroke !== 'none') el.style.stroke = 'currentColor';
+      }
     }
   }
 

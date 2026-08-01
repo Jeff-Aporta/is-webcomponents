@@ -465,6 +465,17 @@ El test `tests/codemirror-theme.test.mjs` protege este contrato.
   porque así se guarda en `manifest.js` desde el folderize de previews.
   Comparar por basename (`(c.page || '').split('/').pop() === file`) para
   que matchee tanto si el page viene folderizado como si no.
+- Si vas a tocar `components/media/icon.js` o `components/_shared/iconify-loader.js`,
+  **corre `tests/icon-currentcolor.test.mjs`**. `<is-icon>` **NO** debe
+  cargar el SVG como `<img src>` (rompe `currentColor` y los iconos
+  aparecen negros sobre fondos claros). El flujo correcto es:
+  `resolveIconRaw()` trae el texto SVG por fetch y el componente lo
+  inyecta **inline** con `innerHTML` en su Shadow DOM. Ademas, hay una
+  funcion `#normalizeInlineSvg()` que fuerza `fill: currentColor` y
+  `stroke: currentColor` en el `<svg>` y sus hijos, para que SVGs con
+  `fill="#000"` del CDN hereden el color del host. Los fuentes del raw
+  en orden son: local `assets/icons/`, jsDelivr CDN del repo, y
+  `api.iconify.design` como último recurso.
 
 ## 10. Cuando algo falla y no sabes por qué
 
