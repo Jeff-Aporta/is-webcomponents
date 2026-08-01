@@ -104,7 +104,7 @@ body {
     top: calc(100% + 0.4em);
     left: 0;
     z-index: 20;
-    min-width: 10.5em;
+    min-width: 11em;
     margin: 0;
     padding: 0.35em;
     list-style: none;
@@ -114,19 +114,59 @@ body {
     box-shadow: var(--is-shadow);
 
     & [role="option"] {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 0.55em;
       padding: 0.5em 0.7em;
       border-radius: 0.4em;
       color: var(--is-text);
       font-size: 0.875rem;
       font-weight: 600;
       cursor: pointer;
+      /* Apagado por defecto: cada item no seleccionado se distingue del activo. */
+      opacity: 0.55;
+      transition: opacity 120ms ease, background-color 120ms ease, color 120ms ease;
 
-      &:hover { background: var(--is-control-bg-hover); }
+      &:hover { opacity: 1; background: var(--is-control-bg-hover); }
+      /* focus (teclado): mismo nivel visual que hover para no perdernos. */
+      &:focus-visible { opacity: 1; outline: 2px solid var(--is-focus); outline-offset: -2px; }
+
       &[aria-selected="true"] {
+        opacity: 1;
         background: var(--is-brand-soft);
         color: var(--is-brand-text);
       }
+    }
+
+    /* Punto de color: gradiente de marca por paleta, ring neutro. */
+    & [data-palette="insoft"]    .brand-menu__swatch { background: var(--is-color-brand-500, #e03131); }
+    & [data-palette="contapyme"] .brand-menu__swatch { background: var(--is-color-brand-500, dodgerblue); }
+    & [data-palette="agrowin"]   .brand-menu__swatch { background: var(--is-color-brand-500, yellowgreen); }
+
+    & .brand-menu__swatch {
+      flex: 0 0 auto;
+      width: 0.85em;
+      height: 0.85em;
+      border-radius: 50%;
+      /* ring neutro para que destaque sobre fondos suaves */
+      box-shadow: 0 0 0 1px var(--is-border);
+    }
+
+    & .brand-menu__label {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    & .brand-menu__check {
+      flex: 0 0 auto;
+      width: 1em;
+      height: 1em;
+      /* Oculto cuando no es el activo — reserva el ancho para que el
+         texto no salte de posición al cambiar la selección. */
+      visibility: hidden;
+    }
+    & [aria-selected="true"] .brand-menu__check {
+      visibility: visible;
     }
   }
 

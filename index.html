@@ -72,12 +72,24 @@
   <header class="shell-bar">
     <div class="brand-wrap" id="brandWrap">
       <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="Insoft — elegir paleta" title="Elegir paleta">
-        <span id="brandLead">ins</span><span class="brand__accent" id="brandAccent">oft</span>
+        <span id="brandLead">in</span><span class="brand__accent" id="brandAccent">Soft</span>
       </button>
-      <ul class="brand-menu" id="brandMenu" role="listbox" hidden>
-        <li role="option" tabindex="-1" data-palette="insoft" aria-selected="true">Insoft</li>
-        <li role="option" tabindex="-1" data-palette="contapyme" aria-selected="false">ContaPyme</li>
-        <li role="option" tabindex="-1" data-palette="agrowin" aria-selected="false">AgroWin</li>
+      <ul class="brand-menu" id="brandMenu" role="listbox" hidden aria-label="Paleta de marca">
+        <li role="option" tabindex="-1" data-palette="insoft" aria-selected="true">
+          <span class="brand-menu__swatch" aria-hidden="true"></span>
+          <span class="brand-menu__label">Insoft</span>
+          <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
+        </li>
+        <li role="option" tabindex="-1" data-palette="contapyme" aria-selected="false">
+          <span class="brand-menu__swatch" aria-hidden="true"></span>
+          <span class="brand-menu__label">ContaPyme</span>
+          <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
+        </li>
+        <li role="option" tabindex="-1" data-palette="agrowin" aria-selected="false">
+          <span class="brand-menu__swatch" aria-hidden="true"></span>
+          <span class="brand-menu__label">AgroWin</span>
+          <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
+        </li>
       </ul>
     </div>
 
