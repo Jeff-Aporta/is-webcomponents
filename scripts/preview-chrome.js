@@ -110,7 +110,11 @@ function mountCdnSnippet() {
   // is-tab + is-tab-panel). Cuando hay varias entradas con la misma `page`,
   // el panel del componente se completa con el primero; las filas se siguen
   // construyendo por tag individual, así que no perdemos información.
-  const matches = components.filter((c) => c.page === file);
+  //
+  // El manifest guarda `page` folderizado (e.g. `actions/is-button.html`).
+  // Comparamos por basename para que coincida tanto si el `page` viene
+  // con categoria como si viene solo con el nombre de archivo.
+  const matches = components.filter((c) => (c.page || '').split('/').pop() === file);
   if (!matches.length) return;
 
   const host = document.querySelector('is-main.main, main.main');

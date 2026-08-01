@@ -459,6 +459,12 @@ El test `tests/codemirror-theme.test.mjs` protege este contrato.
 - **No** uses `cd "..."; cmd1 && cmd2 && cmd3 && ...` en PowerShell. Usa `;`
   o un script `.mjs`.
 - **No** declares "listo" sin haber corrido `tests/run-all.mjs`.
+- Si vas a tocar `scripts/preview-chrome.js` (inyecta `<is-cdn-snippet>` en
+  cada preview), **corre `tests/cdn-snippet-match.test.mjs`**. El matching
+  debe tolerar `page` con prefijo de categoría (`'actions/is-button.html'`)
+  porque así se guarda en `manifest.js` desde el folderize de previews.
+  Comparar por basename (`(c.page || '').split('/').pop() === file`) para
+  que matchee tanto si el page viene folderizado como si no.
 
 ## 10. Cuando algo falla y no sabes por qué
 
