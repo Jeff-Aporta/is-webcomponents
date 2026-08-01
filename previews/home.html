@@ -829,9 +829,12 @@
          sin pisar el transform (antes iba inline y mataba el :hover). */
       --px: 0px; --py: 0px; --pz: 0px; --pry: 0deg; --prx: 0deg;
       --lift: 0px;
+      --tilt-y: 0deg;
+      --tilt-x: 0deg;
       transform:
         translate3d(var(--px), var(--py), calc(var(--pz) + var(--lift)))
-        rotateY(var(--pry)) rotateX(var(--prx));
+        rotateY(calc(var(--pry) + var(--tilt-y)))
+        rotateX(calc(var(--prx) + var(--tilt-x)));
       transition: transform 480ms cubic-bezier(.2,.7,.3,1), box-shadow 480ms ease;
     }
 
@@ -877,11 +880,53 @@
 
     .collage-card:hover {
       --lift: 40px;
+      --tilt-y: 2deg;
+      --tilt-x: -1.5deg;
       box-shadow: var(--shadow-pop);
       z-index: 4;
     }
 
     .collage-card:hover::after { opacity: 0.85; }
+
+    /* Botón "abrir demo": lo inyecta JS en cada card que tenga un is-*
+       compatible. Top-right, sutil por defecto, opaco al hover. */
+    .card-demo {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      z-index: 3;
+      appearance: none;
+      width: 1.7rem;
+      height: 1.7rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid var(--hairline);
+      background: var(--glass-strong);
+      color: var(--is-text-soft);
+      cursor: pointer;
+      opacity: 0.55;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: opacity 220ms ease, color 200ms ease, border-color 200ms ease,
+                  background 200ms ease, transform 220ms cubic-bezier(.2,.7,.3,1);
+    }
+    .card-demo:hover,
+    .card-demo:focus-visible {
+      opacity: 1;
+      color: var(--is-text);
+      border-color: color-mix(in srgb, var(--card-hue, var(--hue-a)) 60%, transparent);
+      background: color-mix(in srgb, var(--card-hue, var(--hue-a)) 14%, var(--glass-strong));
+      transform: translateY(-1px);
+      outline: none;
+    }
+    .card-demo is-icon {
+      width: 0.9rem;
+      height: 0.9rem;
+      pointer-events: none;
+    }
 
     .collage-card__title {
       margin: 0;
@@ -1171,6 +1216,78 @@
       .lab-card:hover { transform: none !important; }
 
       .collage-card { transform: none !important; transition: box-shadow 200ms ease; }
+    }
+
+    /* ═══════════════ LIGHT MODE ═════════════════════════════════════
+       El diseño base asume dark mode: shadows negras fuertes, halos
+       con hues oscuros, gradientes que en light mode quedan demasiado
+       pesados. Aquí se suavizan sombras, se baja la opacidad de los
+       halos aurora y se refuerza el highlight blanco (que en dark era
+       casi invisible y en light ayuda a definir los cantos). */
+    [data-theme="light"] .home {
+      --shadow-lift:
+        0 1px 0 color-mix(in srgb, #fff 75%, transparent) inset,
+        0 10px 24px rgb(0 0 0 / 9%),
+        0 2px 6px rgb(0 0 0 / 5%);
+      --shadow-pop:
+        0 1px 0 color-mix(in srgb, #fff 92%, transparent) inset,
+        0 20px 44px rgb(0 0 0 / 13%),
+        0 4px 12px rgb(0 0 0 / 7%);
+    }
+
+    [data-theme="light"] .home-title {
+      text-shadow:
+        0 1px 0 color-mix(in srgb, #fff 70%, transparent),
+        0 2px 6px rgb(0 0 0 / 7%),
+        0 16px 32px rgb(0 0 0 / 10%);
+    }
+
+    [data-theme="light"] is-main.home-main::before {
+      opacity: 0.32;
+    }
+
+    [data-theme="light"] .home-hero::before {
+      opacity: 0.28;
+    }
+
+    [data-theme="light"] .home-hero::after {
+      opacity: 0.55;
+    }
+
+    [data-theme="light"] .home-stage__grid::before,
+    [data-theme="light"] .home-showcase::before {
+      opacity: 0.5;
+    }
+
+    [data-theme="light"] .home-cdn__panel {
+      box-shadow: 0 10px 24px rgb(0 0 0 / 9%);
+    }
+
+    [data-theme="light"] .home-kicker {
+      box-shadow:
+        0 1px 0 color-mix(in srgb, #fff 75%, transparent) inset,
+        0 4px 14px color-mix(in srgb, var(--hue-a) 14%, transparent);
+    }
+
+    [data-theme="light"] .home-actions #ctaExplore {
+      box-shadow:
+        0 6px 18px color-mix(in srgb, var(--hue-a) 22%, transparent),
+        0 2px 4px color-mix(in srgb, var(--hue-a) 14%, transparent);
+    }
+
+    [data-theme="light"] .home-cdn__tab[aria-pressed="true"] {
+      box-shadow: 0 4px 12px color-mix(in srgb, var(--hue-a) 22%, transparent);
+    }
+
+    [data-theme="light"] .collage-ribbon {
+      box-shadow:
+        0 1px 0 color-mix(in srgb, #fff 60%, transparent) inset,
+        0 8px 18px rgb(0 0 0 / 10%);
+    }
+
+    [data-theme="light"] .tile::after,
+    [data-theme="light"] .collage-card::after {
+      opacity: 0.25;
     }
   </style>
 </head>
@@ -1996,6 +2113,39 @@
       }
       // Segundo grupo idéntico → el -50% empalma sin salto.
       for (const node of [...track.children]) track.appendChild(node.cloneNode(true));
+    }
+  </script>
+  <script type="module">
+    // Botón "abrir demo" en cada card con un is-* compatible. Detecta el
+    // primer is-* soportado dentro de la card, monta el icono en la
+    // esquina superior derecha y al hacer click postSelect(tag) al padre.
+    const demoable = new Set([
+      'is-bar-chart', 'is-line-chart', 'is-doughnut-chart', 'is-pie-chart',
+      'is-polar-area-chart', 'is-radar-chart', 'is-scatter-chart',
+      'is-bubble-chart', 'is-sparkline', 'is-flowchart', 'is-timeline',
+    ]);
+    const postSelect = (tag) => {
+      try { parent.postMessage({ type: 'is-select', tag }, location.origin); }
+      catch { /* noop */ }
+    };
+    for (const card of document.querySelectorAll('.tile, .collage-card, .lab-card')) {
+      const comp = [...card.querySelectorAll('*')]
+        .find(el => demoable.has(el.tagName.toLowerCase()));
+      if (!comp) continue;
+      const tag = comp.tagName.toLowerCase();
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'card-demo';
+      btn.title = 'Abrir demo';
+      btn.setAttribute('aria-label', `Abrir demo de ${tag}`);
+      const icon = document.createElement('is-icon');
+      icon.setAttribute('icon', 'mdi:open-in-new');
+      btn.appendChild(icon);
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        postSelect(tag);
+      });
+      card.appendChild(btn);
     }
   </script>
 </body>

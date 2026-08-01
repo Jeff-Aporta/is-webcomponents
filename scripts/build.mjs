@@ -139,6 +139,7 @@ await writeFile(
     '  <name>.min.css           — component styles (must sit next to the .min.js)',
     '  <category>.min.js        — every component of a category in one file (actions, media, forms, ...)',
     '  all.min.js               — every component in a single file',
+    '  assets/icons/            — Iconify SVGs (one subfolder per collection, plus one {prefix}.json index).',
     '  Custom element tags keep the is-* prefix (e.g. button.min.js → <is-button>).',
     '',
     'Usage:',
@@ -151,5 +152,43 @@ await writeFile(
     '',
   ].join('\n'),
 );
+
+// ── Iconos locales ───────────────────────────────────────────────
+// Si existen assets/icons/{prefix}/{name}.svg (generados por
+// scripts/download-icons.mjs), los copiamos junto al bundle para que
+// <is-icon> pueda servirlos directamente desde el CDN jsDelivr sin
+// depender del script iconify-icon de Iconify.
+const iconsSrc = join(root, 'assets', 'icons');
+const iconsOut = join(dist, 'assets', 'icons');
+try {
+  await access(iconsSrc);
+  await rm(iconsOut, { recursive: true, force: true });
+  await mkdir(iconsOut, { recursive: true });
+  // Copia solo los archivos publicos (no .state/).
+  const copy = async (srcDir, dstDir) => {
+    await mkdir(dstDir, { recursive: true });
+    for (const entry of await readdir(srcDir, { withFileTypes: true })) {
+      if (entry.name.startsWith('.')) continue; // omite .state y dotfiles
+      const sp = join(srcDir, entry.name);
+      const dp = join(dstDir, entry.name);
+      if (entry.isDirectory()) await copy(sp, dp);
+      else await import('node:fs/promises').then((fs) => fs.copyFile(sp, dp));
+    }
+  };
+  await copy(iconsSrc, iconsOut);
+  let iconFiles = 0;
+  const walkIcons = async (d) => {
+    for (const e of await readdir(d, { withFileTypes: true })) {
+      const p = join(d, e.name);
+      if (e.isDirectory()) await walkIcons(p);
+      else iconFiles++;
+    }
+  };
+  await walkIcons(iconsOut);
+  const ic = await stat(iconsOut).catch(() => null);
+  if (ic) console.log(`  assets/icons         ${(iconFiles).toString().padStart(6)} files copied into dist/cdn/assets/icons/`);
+} catch {
+  // No hay assets/icons/ todavia; ignorar.
+}
 
 console.log(`OK dist/cdn  ${entries.length} components + is-base + ${byCategory.size} categories + all`);
