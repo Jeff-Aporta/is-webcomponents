@@ -9,3 +9,15 @@ Thumbs.db
 .idea/
 dist/**/*.map
 .impeccable/
+
+# Estado parcial de descarga de iconos (se regenera con scripts/download-icons.mjs)
+assets/icons/.state/
+
+# Iconos descargados: commiteamos solo las dos colecciones mas usadas del repo
+# (mdi y tabler). El resto se regenera bajo demanda con `node scripts/download-icons.mjs`.
+assets/icons/*
+!assets/icons/mdi/
+!assets/icons/tabler/
+!assets/icons/mdi.json
+!assets/icons/tabler.json
+!assets/icons/manifest.json

@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "dev": "node scripts/serve.mjs"
+    "dev": "node scripts/serve.mjs",
+    "icons:download": "node scripts/download-icons.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.25.0"
