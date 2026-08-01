@@ -13,6 +13,12 @@ dist/**/*.map
 # Estado parcial de descarga de iconos (se regenera con scripts/download-icons.mjs)
 assets/icons/.state/
 
+# Tests locales: el repo commitea los .test.mjs pero ignora artefactos
+# generados (snapshots, reports, node:test --test-reporter outputs).
+tests/*.tmp
+tests/coverage/
+tests/.cache/
+
 # Iconos descargados: commiteamos solo las dos colecciones mas usadas del repo
 # (mdi y tabler). El resto se regenera bajo demanda con `node scripts/download-icons.mjs`.
 assets/icons/*
