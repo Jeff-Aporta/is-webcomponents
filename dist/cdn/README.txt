@@ -4,6 +4,7 @@ CDN flat artifacts
   <name>.min.css           — component styles (must sit next to the .min.js)
   <category>.min.js        — every component of a category in one file (actions, media, forms, ...)
   all.min.js               — every component in a single file
+  assets/icons/            — Iconify SVGs (one subfolder per collection, plus one {prefix}.json index).
   Custom element tags keep the is-* prefix (e.g. button.min.js → <is-button>).
 
 Usage:
