@@ -2,10 +2,18 @@
  * Highlight all <pre class="code"> with CodeMirror runMode.
  * - Dedenta indentación del HTML fuente
  * - Detecta modo: data-lang | heurística (html / javascript / css)
- * - Theme material-darker
+ * - Theme reactivo al data-theme de <html>:
+ *     dark  -> material-darker
+ *     light -> mdn-like  (alto contraste sobre fondo blanco)
+ * - Re-pinta cuando cambia el tema (emite 'is-codemirror-theme-changed'
+ *   en document, y expone reapplyTheme()).
  */
 (() => {
   const CDN = 'https://cdn.jsdelivr.net/npm/codemirror@5.65.16';
+  const THEMES = {
+    dark: { id: 'material-darker', css: `${CDN}/theme/material-darker.min.css`, className: 'cm-s-material-darker' },
+    light: { id: 'mdn-like', css: `${CDN}/theme/mdn-like.min.css`, className: 'cm-s-mdn-like' },
+  };
 
   const ensureCss = (href) => {
     if ([...document.querySelectorAll('link[rel="stylesheet"]')].some((l) => l.href === href || l.getAttribute('href') === href)) return;
@@ -115,19 +123,31 @@
     return 'javascript';
   };
 
+  /** Lee el tema actual del documento (mirror del is-theme-toggle). */
+  const resolveThemeId = () => {
+    const t = (document.documentElement.dataset.theme || 'dark').toLowerCase();
+    return THEMES[t] ? t : 'dark';
+  };
+
   const paintOne = (el) => {
     if (typeof CodeMirror?.runMode !== 'function') return;
     if (el.classList.contains('demo-code-pop__pre') && !el.textContent.trim() && !el.dataset.forceCm) return;
 
-    const original = el.textContent;
-    const mode = resolveMode(el, original);
-    const text = softFormat(original, mode);
+    const source = el.dataset.cmSource ?? el.textContent;
+    const mode = el.dataset.cmMode || resolveMode(el, source);
+    const text = softFormat(source, mode);
+    const themeId = resolveThemeId();
+    const theme = THEMES[themeId];
 
     el.textContent = '';
     CodeMirror.runMode(text, mode, el);
-    el.classList.add('cm-s-material-darker');
+    // Limpia cualquier clase cm-s-* que pudieramos haber puesto antes,
+    // para que no se acumulen los dos themes.
+    for (const t of Object.values(THEMES)) el.classList.remove(t.className);
+    el.classList.add(theme.className);
     el.dataset.cm = '1';
     el.dataset.cmMode = mode;
+    el.dataset.cmTheme = themeId;
     // Guarda texto limpio para copiar / re-pintar
     el.dataset.cmSource = text;
   };
@@ -144,12 +164,33 @@
     targets.forEach(paintOne);
   };
 
+  /** Re-pinta los <pre> ya pintados con el theme actual. Llamalo cuando
+   *  cambia document.documentElement.dataset.theme. */
+  const reapplyTheme = () => {
+    if (typeof CodeMirror?.runMode !== 'function') {
+      // Todavia no cargo CodeMirror: re-pintara cuando boot() termine.
+      return false;
+    }
+    const target = resolveThemeId();
+    // Asegura que el CSS del theme este cargado (lazy).
+    ensureCss(THEMES[target].css);
+    const all = [...document.querySelectorAll('pre.code[data-cm]')];
+    all.forEach(paintOne);
+    document.dispatchEvent(new CustomEvent('is-codemirror-theme-changed', { detail: { theme: target, count: all.length } }));
+    return true;
+  };
+
   window.__isHighlightCode = paint;
   window.__isFormatCode = softFormat;
+  window.__isReapplyCodeTheme = reapplyTheme;
 
   const boot = async () => {
+    // Cargamos el CSS del theme actual Y el del opuesto para que el switch
+    // sea instantaneo cuando el usuario cambie el theme (solo ~1KB cada uno).
+    const initial = resolveThemeId();
     ensureCss(`${CDN}/lib/codemirror.min.css`);
-    ensureCss(`${CDN}/theme/material-darker.min.css`);
+    ensureCss(THEMES[initial].css);
+    ensureCss(THEMES[initial === 'dark' ? 'light' : 'dark'].css);
 
     if (!window.CodeMirror) await loadScript(`${CDN}/lib/codemirror.min.js`);
     if (typeof CodeMirror.runMode !== 'function') {
@@ -161,6 +202,24 @@
     if (!CodeMirror.modes?.htmlmixed) await loadScript(`${CDN}/mode/htmlmixed/htmlmixed.min.js`);
 
     paint();
+
+    // Escucha cambios de data-theme en <html>. El <is-theme-toggle> emite
+    // 'is-theme-change' en document; ademas cubrimos el caso de quien
+    // cambie data-theme directamente (backcompat / tests).
+    const onThemeChange = () => reapplyTheme();
+    document.addEventListener('is-theme-change', onThemeChange);
+
+    // Algunas implementaciones (preview-chrome.js) reescriben
+    // documentElement.dataset.* directamente. Usa MutationObserver para
+    // cubrir ese caso sin obligar al consumidor a emitir el evento.
+    new MutationObserver((muts) => {
+      for (const m of muts) {
+        if (m.type === 'attributes' && m.attributeName === 'data-theme') {
+          onThemeChange();
+          break;
+        }
+      }
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   };
 
   if (document.readyState === 'loading') {

@@ -121,6 +121,12 @@ import '../actions/check-icon-button.js';
         composed: true,
         detail: { theme: next, dark: next === 'dark', container },
       }));
+      // Tambien emite 'is-theme-change' en document para que modulos
+      // globales (highlight-pre, demos, etc.) reaccionen sin necesidad
+      // de conocer el contenedor concreto donde se aplico el tema.
+      document.dispatchEvent(new CustomEvent('is-theme-change', {
+        detail: { theme: next, dark: next === 'dark' },
+      }));
     };
 
     #render() {

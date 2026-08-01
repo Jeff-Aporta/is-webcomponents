@@ -394,6 +394,49 @@ rotura**, y si no, vuelve a leer §6 antes de parchar.
 5. **No** crees snapshots binarios (Playwright traces, etc.) — `tests/` está
    en `.gitignore` y no se commitea.
 
+## 8.5 Highlighter de `<pre class="code">` (scripts/highlight-pre.js)
+
+Esta rutina pinta con CodeMirror todos los `<pre class="code">` de los previews.
+**El theme de CodeMirror es reactivo al `data-theme` de `<html>`**, no fijo:
+
+| Tema de la app | Theme de CodeMirror aplicado | CSS cargada |
+|---|---|---|
+| `dark`  | `material-darker` (negro, texto claro) | `theme/material-darker.min.css` |
+| `light` | `mdn-like` (blanco, alto contraste) | `theme/mdn-like.min.css` |
+
+El switch ocurre:
+
+1. En el boot: lee `document.documentElement.dataset.theme` y elige el theme
+   correspondiente. Ademas carga el CSS del **otro** theme para que el cambio
+   en vivo sea instantáneo (solo ~1 KB extra cada uno).
+2. En tiempo de ejecución: escucha `document` para:
+   - `is-theme-change` (el evento que emite `<is-theme-toggle>` al alternar).
+   - `MutationObserver` sobre `data-theme` en `<html>` (por si alguien lo
+     cambia directamente sin pasar por el toggle).
+
+Al disparar, llama `reapplyTheme()` que:
+
+- Re-pinta los `<pre.code[data-cm]>` ya pintados con el nuevo theme.
+- Limpia la clase `cm-s-*` anterior antes de aplicar la nueva (no se
+  acumulan).
+- Emite `is-codemirror-theme-changed` en `document` para que otros modulos
+  globales puedan reaccionar.
+
+Tambien expone `window.__isReapplyCodeTheme()` para re-pintar manualmente
+(test, hot-reload, integraciones).
+
+**Errores a NO repetir:**
+
+- ❌ **NO** hardcodees la clase `cm-s-material-darker` en `paintOne()`.
+  Debes aplicar la que devuelve `resolveThemeId()` para cada `<pre>`.
+- ❌ **NO** te olvides de `ensureCss(THEMES[target].css)` dentro de
+  `reapplyTheme()` si el CSS del theme destino no se cargo en el boot
+  (defensa por si alguien borra la precarga del boot).
+- ❌ **NO** asumas que el selector `pre.code` te los da ya pintados.
+  Usa `pre.code[data-cm]` para re-pintar solo los que ya pasaron por CM.
+
+El test `tests/codemirror-theme.test.mjs` protege este contrato.
+
 ## 9. Reglas de oro (resumen ejecutivo)
 
 - Lee este archivo entero antes de tocar el repo.
@@ -406,6 +449,11 @@ rotura**, y si no, vuelve a leer §6 antes de parchar.
 - Si vas a tocar `manifest.js`, **corre `tests/manifest-paths.test.mjs`**.
 - Si vas a tocar `styles/is-base.css` o `palettes.css`, **corre
   `tests/theme-contract.test.mjs`**.
+- Si vas a tocar `scripts/highlight-pre.js` (theme de CodeMirror en
+  `<pre class="code">`), **corre `tests/codemirror-theme.test.mjs`**. Cuando
+  el documento está en `data-theme="light"` el highlighter **NO** debe
+  aplicar `cm-s-material-darker` (eso da texto blanco sobre fondo gris y
+  es ilegible). Aplica `cm-s-mdn-like` por defecto.
 - Si vas a crear un componente nuevo, **asegúrate de que su preview existe
   en `previews/<category>/` con los paths `../../...` correctos**.
 - **No** uses `cd "..."; cmd1 && cmd2 && cmd3 && ...` en PowerShell. Usa `;`
