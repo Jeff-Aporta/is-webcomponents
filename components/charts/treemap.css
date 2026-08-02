@@ -78,3 +78,37 @@
   filter: brightness(1.12);
   stroke-width: 3;
 }
+
+/* ── Tooltip ───────────────────────────────────────────────────────────
+   Mismo fallo que tenia is-chart: el JS fija `left`/`top`, lo que exige
+   estar fuera del flujo. Sin `position: absolute` el tooltip era un <div>
+   estatico que empujaba el treemap al aparecer. */
+.tm-tooltip {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  max-width: 16em;
+  padding: 0.45em 0.6em;
+  border: 1px solid var(--is-border, #2a3038);
+  border-radius: 0.4em;
+  background: color-mix(in srgb, var(--is-bg-elev, #1c2128) 96%, transparent);
+  color: var(--is-text, #e6e8eb);
+  font-size: 0.75em;
+  line-height: 1.35;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 28%);
+}
+
+.tm-tooltip[hidden] { display: none !important; }
+
+.tm-tooltip .dg-tooltip__title { font-weight: 650; margin-bottom: 0.25em; }
+.tm-tooltip .dg-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  white-space: nowrap;
+}
+.tm-tooltip .dg-tooltip__value {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}

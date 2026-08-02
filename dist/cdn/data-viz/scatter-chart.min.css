@@ -1,1 +1,1 @@
-@import"./chart.css";:host{min-height:18rem;--point-radius: 5}
+@import"./chart.min.css";:host{min-height:18rem;--point-radius: 5}

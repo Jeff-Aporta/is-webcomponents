@@ -2,7 +2,7 @@
 // + {tag}.min.css + is-base.min.css/palettes.min.css en la raiz.
 // Ademas genera bundles por categoria (categoria.min.js) y all.min.js para
 // poder cargar varios componentes con un solo <script type="module" src="..."></script>.
-import { access, readdir, mkdir, stat, rm, writeFile } from 'node:fs/promises';
+import { access, readdir, mkdir, stat, rm, writeFile, readFile } from 'node:fs/promises';
 import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
@@ -120,6 +120,27 @@ const externalComponents = {
   },
 };
 
+// Los CSS de componente hacen `@import url('../_shared/<x>.css')`. Ese import
+// se resuelve EN EL NAVEGADOR contra la ruta del .css publicado, asi que el
+// archivo tiene que existir tambien en dist. Sin esto, chart y los 9 diagramas
+// perdian entero el kit compartido (diagram-kit.css) en el bundle: entre otras
+// cosas, `.dg-tooltip { position: absolute }`, y el tooltip pasaba a ocupar
+// espacio en el flujo y empujaba el grafico al hacer hover.
+const sharedImports = new Set();
+for (const file of entries) {
+  const cssFile = file.replace(/\.js$/i, '.css');
+  let css = '';
+  try { css = await readFile(cssFile, 'utf8'); } catch { continue; }
+  for (const m of css.matchAll(/@import\s+url\(\s*['"]\.\.\/_shared\/([\w.-]+\.css)['"]\s*\)/g)) {
+    sharedImports.add(m[1]);
+  }
+}
+for (const name of sharedImports) {
+  await mkdir(join(dist, '_shared'), { recursive: true });
+  await bundleCss(join(compRoot, '_shared', name), join(dist, '_shared', name));
+  console.log(`  ${('_shared/' + name).padEnd(28)} css (destino de @import)`);
+}
+
 const scrollbarsIn = join(compRoot, '_shared', 'scrollbars.css');
 const emittedFolders = new Set();
 
@@ -148,6 +169,36 @@ for (const inFile of entries) {
   console.log(
     `  ${(folder + '/' + tag).padEnd(28)} js ${String(jsIn.size).padStart(6)}→${String(jsOut.size).padStart(6)}  css ${cssSize.padStart(6)}`,
   );
+}
+
+// Reescribe los @import a hermanos: en fuente son `./chart.css`, pero en dist
+// el archivo se llama `chart.min.css`. Sin esto los 10 charts tipados
+// (bar, line, pie...) importaban una ruta inexistente y perdian la hoja base
+// entera en el bundle publicado. Los `_shared/*.css` se emiten con su nombre
+// original, asi que no se tocan.
+{
+  const { readFile: rf, writeFile: wf } = await import('node:fs/promises');
+  const dirs = (await readdir(dist, { withFileTypes: true }))
+    .filter((d) => d.isDirectory() && d.name !== 'assets')
+    .map((d) => d.name);
+  let arreglados = 0;
+  for (const dir of dirs) {
+    const abs = join(dist, dir);
+    const files = await readdir(abs);
+    const minSet = new Set(files.filter((f) => f.endsWith('.min.css')));
+    for (const f of files.filter((x) => x.endsWith('.min.css'))) {
+      const file = join(abs, f);
+      const css = await rf(file, 'utf8');
+      const next = css.replace(
+        /@import\s*(url\(\s*)?["'](\.\/)?([\w-]+)\.css["']\s*\)?/g,
+        (whole, urlOpen, dot, name) => (minSet.has(`${name}.min.css`)
+          ? `@import"./${name}.min.css"`
+          : whole),
+      );
+      if (next !== css) { await wf(file, next); arreglados += 1; }
+    }
+  }
+  if (arreglados) console.log(`  @import hermanos reescritos a .min.css en ${arreglados} archivos`);
 }
 
 const baseIn = join(root, 'styles', 'is-base.css');

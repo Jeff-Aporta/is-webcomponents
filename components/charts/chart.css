@@ -269,3 +269,56 @@
 
 /* Inline: el clic abre el visor, igual que en los diagramas. */
 :host(:not([color="viewer"]):not([without-viewer])) .wrap { cursor: zoom-in; }
+
+/* ── Tooltip ───────────────────────────────────────────────────────────
+   El JS lo coloca con `transform: translate(x, y)` relativo a `.wrap`, lo
+   que SOLO funciona si esta fuera del flujo. Sin estas reglas era un <div>
+   estatico: el transform lo movia visualmente pero seguia ocupando alto,
+   asi que al hacer hover el texto del tooltip empujaba y comprimia el
+   grafico. El `.tooltip` vivia con la clase `dg-tooltip` heredada del
+   data-grid y su CSS nunca se incluyo aqui. */
+.tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  pointer-events: none;
+  max-width: 16em;
+  padding: 0.45em 0.6em;
+  border: 1px solid var(--is-border, #2a3038);
+  border-radius: 0.4em;
+  background: color-mix(in srgb, var(--chart-surface) 96%, transparent);
+  color: var(--chart-text);
+  font-size: var(--chart-tooltip-size);
+  line-height: 1.35;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 28%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.tooltip[hidden] { display: none !important; }
+
+.dg-tooltip__title {
+  font-weight: 650;
+  margin-bottom: 0.25em;
+}
+
+.dg-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  white-space: nowrap;
+}
+
+.dg-tooltip__value {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+
+.dg-swatch {
+  width: 0.65em;
+  height: 0.65em;
+  border-radius: 0.15em;
+  flex: none;
+}
