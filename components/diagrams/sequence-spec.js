@@ -8,10 +8,10 @@ import {
 } from '../_shared/diagram-grid.js';
 import { routeSequenceHorizontal, routeSequenceSelf } from '../_shared/diagram-astar.js';
 import {
-  countIconifyTokens,
-  extractLeadingIconifyToken,
-  hasIconifyJsonSugar,
-} from '../_shared/tk-iconify-inline.js';
+  countIconTokens,
+  extractLeadingIconToken,
+  hasIconJsonSugar,
+} from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
@@ -19,7 +19,7 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
 const ICON_INLINE_W = 16;
 function diagramLabelW(label) {
   const plain = richTextPlain(label);
-  const icons = countIconifyTokens(label);
+  const icons = countIconTokens(label);
   const est = Math.ceil(plain.length * 6.2) + 24 + icons * ICON_INLINE_W;
   return snapDiagramGrid(Math.min(360, Math.max(72, est)));
 }
@@ -60,7 +60,7 @@ function readActor(raw, i) {
   // Conserva el label COMPLETO (con el sugar) para persistencia round-trip;
   // el ícono líder se extrae al avatar en computeSequenceLayout (display).
   const rawLabel = String(raw.label ?? `Actor ${i + 1}`);
-  const leading = extractLeadingIconifyToken(rawLabel);
+  const leading = extractLeadingIconToken(rawLabel);
   return {
     id: String(raw.id ?? `a${i}`),
     label: rawLabel,
@@ -285,9 +285,9 @@ const CHIP_H = 18;
 /** Ancho de la caja del actor según su etiqueta (descuenta tokens {{icon}}). */
 function actorBoxWidth(label, _kind) {
   const plain = richTextPlain(label);
-  const icons = countIconifyTokens(label);
+  const icons = countIconTokens(label);
   // Reserva ~50px para el avatar (icono) + paddings, a la izquierda del label.
-  const avatarPad = hasIconifyJsonSugar(label) ? 16 : 50;
+  const avatarPad = hasIconJsonSugar(label) ? 16 : 50;
   const est = Math.ceil(plain.length * 6.4) + avatarPad + icons * ICON_INLINE_W;
   return snapDiagramGrid(Math.min(240, Math.max(96, est)));
 }
@@ -356,7 +356,7 @@ export function computeSequenceLayout(spec) {
   const actors = spec.actors;
   const idx = new Map(actors.map((a, i) => [a.id, i]));
   // Etiqueta sin el sugar líder (el ícono va al avatar circular).
-  const actorLabels = actors.map((a) => extractLeadingIconifyToken(a.label)?.rest ?? a.label);
+  const actorLabels = actors.map((a) => extractLeadingIconToken(a.label)?.rest ?? a.label);
   const boxW = actors.map((a, i) => actorBoxWidth(actorLabels[i], a.kind ?? 'participant'));
   const groupHueMap = new Map((spec.groups ?? []).map((gp) => [gp.id, gp.hue]));
 

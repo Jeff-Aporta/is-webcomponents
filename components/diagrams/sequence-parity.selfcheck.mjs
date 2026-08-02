@@ -128,14 +128,14 @@ if (existsSync(HTML_SRC)) {
     assert.strictEqual(myMd.inlineMdWeb(s), origHtml.inlineMdWeb(s), `inlineMdWeb difiere en: ${s}`);
   }
 
-  const origIcon = await import(pathToFileURL('C:/ContaPyme/Personal/apps/jagudeloe/frontend/dist/js/core/tk-iconify-inline.js').href);
-  const myIcon = await import('../_shared/tk-iconify-inline.js');
+  const origIcon = await import(pathToFileURL('C:/ContaPyme/Personal/apps/jagudeloe/frontend/dist/js/core/tk-icon-inline.js').href);
+  const myIcon = await import('../_shared/tk-icon-inline.js');
   for (const s of samples) {
-    assert.strictEqual(myIcon.stripIconifyTokensPlain(s), origIcon.stripIconifyTokensPlain(s), `strip difiere: ${s}`);
-    assert.strictEqual(myIcon.countIconifyTokens(s), origIcon.countIconifyTokens(s), `count difiere: ${s}`);
+    assert.strictEqual(myIcon.stripIconTokensPlain(s), origIcon.stripIconTokensPlain(s), `strip difiere: ${s}`);
+    assert.strictEqual(myIcon.countIconTokens(s), origIcon.countIconTokens(s), `count difiere: ${s}`);
     assert.strictEqual(
-      JSON.stringify(myIcon.extractLeadingIconifyToken(s)),
-      JSON.stringify(origIcon.extractLeadingIconifyToken(s)),
+      JSON.stringify(myIcon.extractLeadingIconToken(s)),
+      JSON.stringify(origIcon.extractLeadingIconToken(s)),
       `extractLeading difiere: ${s}`,
     );
   }

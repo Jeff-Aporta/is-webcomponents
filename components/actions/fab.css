@@ -28,7 +28,8 @@
   color: var(--is-brand-fg, #fff);
   font-weight: 500;
   transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.12);
+  --fab-shadow: 0 4px 8px rgba(0, 0, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--fab-shadow);
   padding: 0;
   overflow: hidden;
 }
@@ -81,21 +82,34 @@
   display: inline;
 }
 
-.fab.pulse::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: currentColor;
-  opacity: 0.4;
-  animation: fab-pulse 2s infinite;
-  pointer-events: none;
+/* El pulso es un ANILLO de box-shadow, no un ::before:
+   - `.fab` tiene overflow:hidden, asi que un pseudo-elemento escalado queda
+     recortado por el propio boton y el brillo nunca sale ni toma su tamano.
+   - box-shadow se pinta FUERA de la caja y respeta el border-radius exacto,
+     asi el halo calca la forma del trigger (circulo o pildora extendida).
+   - El color sale del fondo del boton (la marca), no de currentColor, que
+     es el color del TEXTO (blanco) y lavaba el boton. */
+.fab.pulse {
+  animation: fab-pulse 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
 @keyframes fab-pulse {
-  0% { transform: scale(1); opacity: 0.4; }
-  50% { transform: scale(1.15); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
+  0% {
+    box-shadow: var(--fab-shadow),
+                0 0 0 0 color-mix(in srgb, var(--is-brand, dodgerblue) 55%, transparent);
+  }
+  70% {
+    box-shadow: var(--fab-shadow),
+                0 0 0 14px color-mix(in srgb, var(--is-brand, dodgerblue) 0%, transparent);
+  }
+  100% {
+    box-shadow: var(--fab-shadow),
+                0 0 0 0 color-mix(in srgb, var(--is-brand, dodgerblue) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab.pulse { animation: none; }
 }
 
 is-icon {

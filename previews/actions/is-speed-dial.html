@@ -3,17 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
-  <script type="module" src="../../components/layout/demo.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-speed-dial · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
   <link rel="stylesheet" href="../../styles/palettes.css" />
   <link rel="stylesheet" href="../../styles/presentation.css" />
-  <script type="module" src="../../components/actions/speed-dial.js"></script>
-  <script type="module" src="../../components/layout/split-panel.js"></script>
-  <script type="module" src="../../components/layout/main.js"></script>
-  <script type="module" src="../../components/layout/scrollspy.js"></script>
-  <script type="module" src="../../components/media/icon.js"></script>
   <script src="../../scripts/highlight-pre.js" defer></script>
   <script src="../../scripts/demo-code.js" defer></script>
   <script src="../../scripts/docs-chrome.js" defer></script>
@@ -37,6 +32,20 @@
       border-radius: var(--is-radius); padding: .55rem .75rem;
       max-height: 9rem; overflow: auto;
     }
+    /* Lienzos del demo radial: `transform` crea el containing block para que
+       el abanico se calcule (y se acote) contra ESTA caja, no el viewport. */
+    .radial-stage {
+      position: relative;
+      transform: translateZ(0);
+      display: grid;
+      place-items: center;
+      height: 340px;
+      border: 1px dashed var(--is-border);
+      border-radius: 0.6rem;
+      background: var(--is-bg);
+    }
+    .radial-stage--tall { height: 440px; }
+    .radial-stage--corner { place-items: end start; padding: 1rem; }
   </style>
 </head>
 <body>
@@ -82,6 +91,87 @@
         </is-demo>
       </section>
 
+      <section class="section" id="radial">
+        <h2>Radial</h2>
+        <p class="lede">
+          <code class="code">direction="radial"</code> reparte las acciones en un abanico
+          alrededor del trigger. El ángulo inicial y la amplitud del arco se calculan
+          según el espacio libre dentro del contenedor, y cuando el arco no alcanza para
+          todas las acciones se abren <strong>anillos concéntricos</strong> con los
+          elementos desfasados medio paso (distribución en panal).
+        </p>
+
+        <is-demo class="demo" heading="360° completo, sentido horario">
+          <div class="radial-stage">
+            <is-speed-dial direction="radial" icon="mdi:plus" label="Crear" open
+                           boundary=".radial-stage">
+              <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:calendar" label="Evento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:account" label="Contacto"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:tag" label="Etiqueta"></is-speed-dial-action>
+            </is-speed-dial>
+          </div>
+        </is-demo>
+
+        <is-demo class="demo" heading="Arco de 180° antihorario con ángulo inicial fijo">
+          <div class="radial-stage">
+            <is-speed-dial direction="radial" icon="mdi:cog" label="Ajustes" open
+                           arc="180" start-angle="-90" sweep="counter-clockwise"
+                           boundary=".radial-stage">
+              <is-speed-dial-action icon="mdi:brush" label="Tema"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:translate" label="Idioma"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:bell" label="Avisos"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:shield" label="Privacidad"></is-speed-dial-action>
+            </is-speed-dial>
+          </div>
+        </is-demo>
+
+        <is-demo class="demo" heading="Panal: 14 acciones no caben en un anillo">
+          <div class="radial-stage radial-stage--tall">
+            <is-speed-dial direction="radial" icon="mdi:apps" label="Todo" open
+                           boundary=".radial-stage--tall">
+              <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:calendar" label="Evento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:account" label="Contacto"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:tag" label="Etiqueta"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:chart-bar" label="Reporte"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:email" label="Correo"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:map-marker" label="Ubicación"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:music" label="Audio"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:video" label="Video"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:code-tags" label="Código"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:folder" label="Carpeta"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:star" label="Favorito"></is-speed-dial-action>
+            </is-speed-dial>
+          </div>
+        </is-demo>
+
+        <p class="lede">
+          Pega el dial contra una esquina y el abanico se recorta y se gira solo hacia
+          donde hay sitio:
+        </p>
+        <is-demo class="demo" heading="Contra la esquina: arco y ángulo automáticos">
+          <div class="radial-stage radial-stage--corner">
+            <is-speed-dial direction="radial" icon="mdi:plus" label="Crear" open
+                           boundary=".radial-stage--corner">
+              <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:calendar" label="Evento"></is-speed-dial-action>
+            </is-speed-dial>
+          </div>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-speed-dial direction="radial" arc="180" start-angle="-90"
+               sweep="counter-clockwise" boundary=".mi-lienzo"&gt;
+  &lt;is-speed-dial-action icon="mdi:brush" label="Tema"&gt;&lt;/is-speed-dial-action&gt;
+&lt;/is-speed-dial&gt;</pre>
+      </section>
+
       <section class="section" id="api">
         <h2>API</h2>
         <pre class="code">const dial = document.querySelector('is-speed-dial');
@@ -109,6 +199,7 @@ dial.addEventListener('is-toggle', e =&gt; console.log('open=', e.detail.open));
         <a href="#intro">Introducción</a>
         <a href="#up">Arriba</a>
         <a href="#dirs">Direcciones</a>
+        <a href="#radial">Radial</a>
         <a href="#api">API</a>
         <a href="#log">Bitácora</a>
       </is-scrollspy>

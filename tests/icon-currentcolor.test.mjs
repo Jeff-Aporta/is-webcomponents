@@ -10,7 +10,7 @@
 //   2. El template tiene `<span class="inline">` (no `<img class="img">`).
 //   3. Existe una funcion que normaliza el SVG inline para forzar
 //      `fill: currentColor` y `stroke: currentColor`.
-//   4. components/_shared/iconify-loader.js expone `resolveIconRaw` y
+//   4. components/_shared/icon-loader.js expone `resolveIconRaw` y
 //      `clearRawCache` y los SVGs se cachean en memoria.
 //   5. Si el servidor esta arriba, cargar un preview real y verificar que
 //      el path del icono resuelve a `currentColor` (no a `none`/`#000`).
@@ -27,7 +27,7 @@ const root = dirname(here);
 
 const iconJsPath = join(root, 'components/media/icon.js');
 const iconCssPath = join(root, 'components/media/icon.css');
-const loaderJsPath = join(root, 'components/_shared/iconify-loader.js');
+const loaderJsPath = join(root, 'components/_shared/icon-loader.js');
 
 const iconJs = await readFile(iconJsPath, 'utf8');
 const iconCss = await readFile(iconCssPath, 'utf8');
@@ -62,15 +62,15 @@ assert.ok(
 
 assert.ok(
   /export\s+(async\s+)?function\s+resolveIconRaw/.test(loaderJs),
-  'iconify-loader.js debe exportar resolveIconRaw(prefix, name, signal)'
+  'icon-loader.js debe exportar resolveIconRaw(prefix, name, signal)'
 );
 assert.ok(
   /rawCache/.test(loaderJs),
-  'iconify-loader.js debe cachear el raw SVG por icono'
+  'icon-loader.js debe cachear el raw SVG por icono'
 );
 assert.ok(
   /export\s+function\s+clearRawCache/.test(loaderJs),
-  'iconify-loader.js debe exportar clearRawCache (util para tests)'
+  'icon-loader.js debe exportar clearRawCache (util para tests)'
 );
 
 // --- Test opcional contra el dev server ------------------------------------

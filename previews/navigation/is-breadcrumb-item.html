@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-breadcrumb-item · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-breadcrumb-item de Insoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-breadcrumb-item">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-breadcrumb-item&gt;</h2>
+        <p class="lede">Cada eslabón de un <code class="code">&lt;is-breadcrumb&gt;</code>. Puede ser enlace (<code class="code">href</code>) o texto plano cuando es la página actual.</p>
+
+        <is-demo class="demo">
+          <is-breadcrumb>
+            <is-breadcrumb-item href="#"><is-icon slot="start" icon="mdi:home"></is-icon>Inicio</is-breadcrumb-item>
+            <is-breadcrumb-item href="#">Contabilidad</is-breadcrumb-item>
+            <is-breadcrumb-item href="#">Comprobantes</is-breadcrumb-item>
+            <is-breadcrumb-item>Detalle</is-breadcrumb-item>
+          </is-breadcrumb>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-breadcrumb&gt;
+  &lt;is-breadcrumb-item href="#"&gt;&lt;is-icon slot="start" icon="mdi:home"&gt;&lt;/is-icon&gt;Inicio&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item href="#"&gt;Contabilidad&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item href="#"&gt;Comprobantes&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item&gt;Detalle&lt;/is-breadcrumb-item&gt;
+&lt;/is-breadcrumb&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/navigation/breadcrumb-item.js</code>.
+        </p>
+        <pre class="code" data-no-copy>&lt;is-breadcrumb-item&gt; — un paso individual dentro de un &lt;is-breadcrumb&gt;.
+
+Si tiene `href` (incluido `href=""`), el item se renderiza como &lt;a href&gt;.
+Con `href=""` se marca como current page (aria-current="page", CSS [current]).
+Si no tiene href, se renderiza como &lt;span&gt; (SPAs: el desarrollador maneja eventos).
+
+Atributos
+  href    string  — opcional: el item se vuelve enlace. "" = current page.
+  target  string  — opcional.
+  rel     string  — opcional.
+  icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start.
+
+Slots
+  (default)  texto del item.
+  start      icono propio al inicio (gana sobre icon).
+  end        icono propio al final.
+  separator  override del separador (chevron-right por default).
+
+CSS Parts: ::part(label) ::part(separator) ::part(start) ::part(end)</pre>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-breadcrumb-item</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

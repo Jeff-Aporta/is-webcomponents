@@ -13,6 +13,9 @@
  *
  * Atributos
  *   heading       string  — título pequeño sobre el contenido (opcional).
+ *   contain       boolean — crea un containing block para que los hijos con
+ *                 `position: fixed` (is-fab, is-speed-dial, is-toast…) queden
+ *                 anclados al demo y no al viewport.
  *   data-no-code  boolean — desactiva el botón "Ver código".
  *
  * El contenido va en light DOM a propósito: los estilos de la página y el

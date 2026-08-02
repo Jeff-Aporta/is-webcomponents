@@ -138,7 +138,11 @@ is-main.main {
   position: relative;
   height: 100%;
   min-height: 0;
-  padding: 36px clamp(24px, 4vw, 48px) 88px;
+  /* Expuestos como variables: el preview-chrome los cancela con margenes
+     negativos para poder anclarse a 10px del borde real de is-main. */
+  --main-pad-top: 36px;
+  --main-pad-x: clamp(24px, 4vw, 48px);
+  padding: var(--main-pad-top) var(--main-pad-x) 88px;
   max-width: none;
   margin: 0;
   width: 100%;
@@ -334,6 +338,18 @@ body::-webkit-scrollbar-corner {
 .demo > * { position: relative; z-index: 1; }
 /* <is-demo> reusa el chrome de .demo; el heading es su label opcional. */
 is-demo.demo { display: flex; }
+
+/* Demos de componentes anclados al viewport (is-fab, is-speed-dial, is-toast…).
+   `transform` crea un containing block, asi que los hijos `position: fixed`
+   se anclan a ESTA caja en vez de al viewport y no se escapan del demo.
+   Sin esto el FAB del ejemplo se va a la esquina de la pagina. */
+is-demo[contain],
+.demo--contain {
+  position: relative;
+  transform: translateZ(0);
+  min-height: 220px;
+  overflow: hidden;
+}
 .demo__heading {
   margin: 0 0 10px;
   font-size: 0.72rem;
@@ -968,9 +984,14 @@ table.ref td:first-child { width: 36%; }
 .preview-chrome {
   position: sticky;
   z-index: 20;
-  top: 0.65rem;
+  /* 10px del borde real de is-main. Hay que descontar su padding en los dos
+     ejes: el chrome es un hijo dentro de la caja de contenido y, ademas, el
+     `top` de sticky se resuelve contra el borde de contenido (ya pasado el
+     padding), no contra el borde del scroller. */
+  top: calc(10px - var(--main-pad-top, 36px));
+  margin-top: calc(10px - var(--main-pad-top, 36px));
   margin-left: auto;
-  margin-right: 0.65rem;
+  margin-right: calc(10px - var(--main-pad-x, 48px));
   display: flex;
   align-items: center;
   gap: 0.5rem;

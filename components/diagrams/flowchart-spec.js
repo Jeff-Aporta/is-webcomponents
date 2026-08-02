@@ -4,7 +4,7 @@ import {
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
 } from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
-import { countIconifyTokens, extractLeadingIconifyToken } from '../_shared/tk-iconify-inline.js';
+import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
@@ -40,7 +40,7 @@ function asRecord(v) {
 /** Ancho estimado de la caja según su etiqueta, descontando tokens {{icon}}. */
 function nodeWidth(label, shape) {
   const plain = richTextPlain(label);
-  const icons = countIconifyTokens(label);
+  const icons = countIconTokens(label);
   const est = Math.ceil(plain.length * 7.1) + 32 + icons * ICON_INLINE_W;
   const base = snapDiagramGrid(Math.min(MAX_W, Math.max(MIN_W, est)));
   // Rombo y círculo necesitan más caja para que el texto no se salga del contorno.
@@ -58,7 +58,7 @@ function nodeHeight(shape) {
 function readNode(raw, i) {
   const r = asRecord(raw);
   const rawLabel = String(r.label ?? r.text ?? r.id ?? `Nodo ${i + 1}`);
-  const leading = extractLeadingIconifyToken(rawLabel);
+  const leading = extractLeadingIconToken(rawLabel);
   const shape = FLOW_SHAPES.has(String(r.shape)) ? String(r.shape) : 'rect';
   return {
     id: String(r.id ?? `n${i}`),

@@ -28,10 +28,9 @@ assets/icons/*
 !assets/icons/tabler.json
 !assets/icons/manifest.json
 
-# Iconos copiados al bundle por scripts/build.mjs (308k archivos, regenerables).
-# OJO: la regla `assets/icons/*` de arriba está anclada a la raíz del repo y
-# NO cubre esta ruta, por eso se declara aparte.
-dist/cdn/assets/
+# dist/cdn/assets/ NO se ignora: GitHub Pages sirve el sistema de iconos desde
+# ahi (is-icon resuelve dist/cdn/assets/icons/<prefix>/<name>.svg). La regla
+# `assets/icons/*` de arriba esta anclada a la raiz y no alcanza esta ruta.
 
 # Scratch local (fuentes vendorizadas, tarballs de terceros).
 tmp/

@@ -3,7 +3,7 @@
 // Verifica que <is-icon> resuelve iconos a SVG local (no cae al fallback
 // <iconify-icon>) en un preview cualquiera. Esto protege contra:
 //   - <is-icon icon="X:Y"> sin descargar localmente (cae a CDN, ok pero lento).
-//   - Bug en iconify-loader.js que rompe la cadena local.
+//   - Bug en icon-loader.js que rompe la cadena local.
 //   - assets/icons/{prefix}/ vacio aunque el .json diga que existe.
 //
 // Requiere el dev server arriba:  node scripts/serve.mjs 8391

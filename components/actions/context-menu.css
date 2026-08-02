@@ -10,8 +10,18 @@
   min-width: 12rem;
   max-width: 22rem;
   box-shadow: var(--is-shadow, 0 18px 44px rgba(0,0,0,.26)), 0 0 0 1px color-mix(in srgb, var(--is-text) 4%, transparent) inset;
+  /* El UA aplica a <dialog>: position:absolute, inset-inline 0, width:fit-content
+     y margin:auto. Con solo `left`/`top` desde JS, el `right:0` heredado y el
+     margin auto RE-CENTRAN el panel y nunca aparece en el cursor. Hay que
+     neutralizar el inset completo y el margin. */
+  position: fixed;
+  inset: auto;
+  right: auto;
+  bottom: auto;
   margin: 0;
-  position: fixed; /* sobreescrito por JS en openAt() */
+  width: max-content;
+  max-height: min(70vh, 32rem);
+  overflow-y: auto;
   z-index: 1000;
 }
 

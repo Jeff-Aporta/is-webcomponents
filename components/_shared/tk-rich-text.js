@@ -1,4 +1,4 @@
-import { stripIconifyTokensPlain } from './tk-iconify-inline.js';
+import { stripIconTokensPlain } from './tk-icon-inline.js';
 
 const HTML_TAG = /(<[^>]+>)/g;
 
@@ -37,7 +37,7 @@ export function richTextPlain(raw) {
       if (seg.type === 'html') {
         return seg.value.replace(/<[^>]+>/g, ' ');
       }
-      return stripIconifyTokensPlain(
+      return stripIconTokensPlain(
         seg.value
           .replace(/\*\*([^*]+)\*\*/g, '$1')
           .replace(/`([^`]+)`/g, '$1')

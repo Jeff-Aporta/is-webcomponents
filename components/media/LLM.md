@@ -23,7 +23,7 @@ Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mis
 
 ## Reusar antes de crear
 
-- `../_shared/iconify-loader.js`
+- `../_shared/icon-loader.js`
 - `../_shared/adopt-css.js`
 
 ## Dependencias compartidas

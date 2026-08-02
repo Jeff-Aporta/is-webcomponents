@@ -4,8 +4,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
-import { iconifyApiUrl } from '../_shared/tk-iconify-inline.js';
-import { ensureIconify } from '../_shared/iconify-loader.js';
+import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 
 /**
@@ -73,7 +72,6 @@ class IsBlockDiagram extends HTMLElement {
 
   connectedCallback() {
     this.#mounted = true;
-    ensureIconify().catch(() => { /* sin CDN el texto sigue siendo legible */ });
     this.#readJsonSlot();
     this.#mo = new MutationObserver(() => this.#readJsonSlot());
     this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
@@ -316,10 +314,8 @@ class IsBlockDiagram extends HTMLElement {
       const textRight = b.x + b.w - 10;
 
       if (hasIcon) {
-        g.appendChild(svgEl('image', {
-          href: iconifyApiUrl(b.icon, b.hue, 32),
-          x: b.x + 8, y: b.y + b.h / 2 - 8, width: 16, height: 16,
-          preserveAspectRatio: 'xMidYMid meet',
+        g.appendChild(svgIconGroup(b.icon, {
+          x: b.x + 8, y: b.y + b.h / 2 - 8, size: 16, hue: b.hue,
         }));
       }
 

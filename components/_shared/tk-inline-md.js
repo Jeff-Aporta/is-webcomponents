@@ -1,4 +1,4 @@
-import { replaceIconifyTokensWeb } from './tk-iconify-inline.js';
+import { replaceIconTokensWeb } from './tk-icon-inline.js';
 import { richTextInline, richTextEsc } from './tk-rich-text.js';
 
 function esc(s) {
@@ -18,7 +18,7 @@ function applyInlineMdPlainWeb(plain) {
 }
 
 function applyInlineMdWeb(plain) {
-  return replaceIconifyTokensWeb(plain, applyInlineMdPlainWeb);
+  return replaceIconTokensWeb(plain, applyInlineMdPlainWeb);
 }
 
 /** Igual que inlineMd, con `<code class="tk-inline-code">` para el driver JSX. */

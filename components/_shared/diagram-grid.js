@@ -1,6 +1,6 @@
 /** Rejilla de alineación para diagramas SVG (secuencia / flujo). */
 
-import { countIconifyTokens, stripIconifyTokensPlain } from './tk-iconify-inline.js';
+import { countIconTokens, stripIconTokensPlain } from './tk-icon-inline.js';
 
 export const TK_DIAGRAM_GRID = 8;
 
@@ -11,8 +11,8 @@ export function snapDiagramGrid(value, grid = TK_DIAGRAM_GRID) {
 }
 
 export function diagramLabelWidth(text, min = 120, max = 320) {
-  const plain = stripIconifyTokensPlain(text);
-  const icons = countIconifyTokens(text);
+  const plain = stripIconTokensPlain(text);
+  const icons = countIconTokens(text);
   const est = Math.ceil(plain.length * 6.2) + 20 + icons * 18;
   return snapDiagramGrid(Math.min(max, Math.max(min, est)));
 }

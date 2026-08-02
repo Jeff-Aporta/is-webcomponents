@@ -76,8 +76,8 @@
   transition: opacity 0.18s ease;
 }
 
-.tl-event-label .tk-inline-iconify,
-.tl-event-label iconify-icon.tk-inline-iconify {
+.tl-event-label .tk-inline-icon,
+.tl-event-label is-icon.tk-inline-icon {
   width: 1em;
   height: 1em;
   vertical-align: -0.14em;

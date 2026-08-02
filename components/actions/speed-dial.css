@@ -98,3 +98,56 @@
 .action[data-variant="success"] .ico { background: color-mix(in srgb, var(--is-success, #16a34a) 18%, transparent); color: var(--is-success, #16a34a); }
 .action[data-variant="warning"] .ico { background: color-mix(in srgb, var(--is-warning, #d97706) 18%, transparent); color: var(--is-warning, #d97706); }
 .action[data-variant="danger"] .ico { background: color-mix(in srgb, var(--is-danger, #dc2626) 18%, transparent); color: var(--is-danger, #dc2626); }
+
+/* ── direction="radial" ────────────────────────────────────────────────
+   El JS calcula --sd-x / --sd-y por accion (coordenadas polares respecto
+   al centro del trigger) y aquí solo se aplican. El contenedor deja de
+   apilar en flex: cada accion se posiciona absoluta sobre el centro. */
+.root[data-direction="radial"] {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.root[data-direction="radial"] .actions {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.root[data-direction="radial"] .actions ::slotted(is-speed-dial-action) {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Cerrado: todas colapsadas en el centro, bajo el trigger. */
+  transform: translate(-50%, -50%) scale(0.6);
+  transform-origin: center;
+}
+
+:host([direction="radial"][open]) .actions ::slotted(is-speed-dial-action) {
+  /* Abierto: cada una viaja a su coordenada polar. */
+  transform: translate(calc(-50% + var(--sd-x, 0px)), calc(-50% + var(--sd-y, 0px))) scale(1);
+}
+
+/* El trigger queda por encima del abanico colapsado. */
+.root[data-direction="radial"] .trigger { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .actions ::slotted(is-speed-dial-action) { transition: none; }
+}
+
+/* En radial las acciones son BOTONES CIRCULARES de icono: la geometria del
+   abanico asume items uniformes y redondos. Con la pildora (icono + etiqueta)
+   el icono queda descentrado respecto al radio y los calculos de colision
+   dejan de valer. El padre marca cada accion con data-radial; la etiqueta
+   pasa a tooltip nativo + aria-label, que ya pone el JS. */
+:host([data-radial]) .action {
+  width: 2.75em;
+  height: 2.75em;
+  padding: 0;
+  gap: 0;
+  justify-content: center;
+  border-radius: 50%;
+}
+:host([data-radial]) .action .label { display: none; }
+:host([data-radial]) .action .ico { margin: 0; }

@@ -125,8 +125,8 @@ Documentación de cabecera preservada desde fuente:
 - [`./sequence-spec.js`](./sequence-spec.js)
 - [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
-- [`../_shared/tk-iconify-inline.js`](../_shared/tk-iconify-inline.js)
-- [`../_shared/iconify-loader.js`](../_shared/iconify-loader.js)
+- [`../_shared/tk-icon-inline.js`](../_shared/tk-icon-inline.js)
+- [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
 Tags del módulo: `<is-mindmap>`.

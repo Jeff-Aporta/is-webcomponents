@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-kanban-card · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-kanban-card de Insoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-kanban-card">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-kanban-card&gt;</h2>
+        <p class="lede">Tarjeta de un tablero. Es arrastrable entre columnas y admite encabezado, meta, etiqueta y pie.</p>
+
+        <is-demo class="demo">
+          <is-kanban>
+            <is-kanban-column title="Tareas">
+              <is-kanban-card heading="Conciliar banco" meta="Vence hoy" tag="Urgente" tag-variant="danger">
+                Revisar extracto de agosto.
+              </is-kanban-card>
+              <is-kanban-card heading="Cierre de mes" meta="3 días" tag="Normal">
+                Cuadrar cuentas de resultado.
+              </is-kanban-card>
+            </is-kanban-column>
+            <is-kanban-column title="Hechas"></is-kanban-column>
+          </is-kanban>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-kanban&gt;
+  &lt;is-kanban-column title="Tareas"&gt;
+    &lt;is-kanban-card heading="Conciliar banco" meta="Vence hoy" tag="Urgente" tag-variant="danger"&gt;
+      Revisar extracto de agosto.
+    &lt;/is-kanban-card&gt;
+    &lt;is-kanban-card heading="Cierre de mes" meta="3 días" tag="Normal"&gt;
+      Cuadrar cuentas de resultado.
+    &lt;/is-kanban-card&gt;
+  &lt;/is-kanban-column&gt;
+  &lt;is-kanban-column title="Hechas"&gt;&lt;/is-kanban-column&gt;
+&lt;/is-kanban&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/data/kanban.js</code>.
+        </p>
+        <pre class="code" data-no-copy>&lt;is-kanban&gt; + &lt;is-kanban-column&gt; + &lt;is-kanban-card&gt; — Tablero (vanilla, zero dependencies).
+
+  &lt;is-kanban&gt;
+    &lt;is-kanban-column title="Pendiente"&gt;
+      &lt;is-kanban-card heading="Tarea 1"&gt;Descripción&lt;/is-kanban-card&gt;
+    &lt;/is-kanban-column&gt;
+  &lt;/is-kanban&gt;
+
+Atributos &lt;is-kanban&gt;
+  columns        number — nº columnas visibles al estilo "compact".
+  orientation    column | row — layout de los stacks (default column:
+                 stacks lado a lado; row: stacks apilados en filas).
+
+Atributos &lt;is-kanban-column&gt;
+  title          string
+  accent         string (color, e.g. dodgerblue, #0bb783)
+  badge          string — opcional en el header.
+
+Atributos &lt;is-kanban-card&gt;
+  heading        string
+  meta           string — bajo el heading.
+  tag            string — texto de la badge lateral.
+  tag-variant    brand | neutral | success | warning | danger
+  cover          string — URL de imagen de cabecera.
+  without-shadow boolean
+
+Slots
+  &lt;is-kanban-column&gt;
+    (default)       cards.
+    header-actions  elementos en la cabecera.
+  &lt;is-kanban-card&gt;
+    (default)        descripción.
+    footer           pie de la card.
+
+Eventos
+  is-kanban-card-click  detail: { card, column }
+  is-kanban-move        detail: { card, from, to } — card soltada en otra
+                        columna (o reordenada en la misma).</pre>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-kanban-card</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

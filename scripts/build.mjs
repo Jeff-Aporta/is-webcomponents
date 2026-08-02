@@ -12,8 +12,15 @@ const root = dirname(here);
 const dist = join(root, 'dist', 'cdn');
 const compRoot = join(root, 'components');
 
-await rm(dist, { recursive: true, force: true });
+// Limpieza selectiva: se borran los artefactos de codigo pero NO
+// dist/cdn/assets/. Ahi viven ~317k SVG que no cambian entre builds; borrarlos
+// y recopiarlos en cada corrida hace el build lento y, sobre todo, dispara los
+// file watchers del editor (Live Server recarga en bucle mientras se compila).
 await mkdir(dist, { recursive: true });
+for (const entry of await readdir(dist, { withFileTypes: true })) {
+  if (entry.name === 'assets') continue;
+  await rm(join(dist, entry.name), { recursive: true, force: true });
+}
 
 const bundleJs = (entry, outfile) =>
   build({
@@ -198,31 +205,27 @@ const iconsSrc = join(root, 'assets', 'icons');
 const iconsOut = join(dist, 'assets', 'icons');
 try {
   await access(iconsSrc);
-  await rm(iconsOut, { recursive: true, force: true });
   await mkdir(iconsOut, { recursive: true });
-  // Copia solo los archivos publicos (no .state/).
+  // Copia INCREMENTAL: solo los archivos que faltan o cambiaron de tamano.
+  // Un `rm -rf` + copia completa reescribia 317k archivos en cada build.
+  const { copyFile } = await import('node:fs/promises');
+  let copied = 0;
+  let kept = 0;
   const copy = async (srcDir, dstDir) => {
     await mkdir(dstDir, { recursive: true });
     for (const entry of await readdir(srcDir, { withFileTypes: true })) {
       if (entry.name.startsWith('.')) continue; // omite .state y dotfiles
       const sp = join(srcDir, entry.name);
       const dp = join(dstDir, entry.name);
-      if (entry.isDirectory()) await copy(sp, dp);
-      else await import('node:fs/promises').then((fs) => fs.copyFile(sp, dp));
+      if (entry.isDirectory()) { await copy(sp, dp); continue; }
+      const [src, dst] = await Promise.all([stat(sp), stat(dp).catch(() => null)]);
+      if (dst && dst.size === src.size && dst.mtimeMs >= src.mtimeMs) { kept += 1; continue; }
+      await copyFile(sp, dp);
+      copied += 1;
     }
   };
   await copy(iconsSrc, iconsOut);
-  let iconFiles = 0;
-  const walkIcons = async (d) => {
-    for (const e of await readdir(d, { withFileTypes: true })) {
-      const p = join(d, e.name);
-      if (e.isDirectory()) await walkIcons(p);
-      else iconFiles++;
-    }
-  };
-  await walkIcons(iconsOut);
-  const ic = await stat(iconsOut).catch(() => null);
-  if (ic) console.log(`  assets/icons         ${(iconFiles).toString().padStart(6)} files copied into dist/cdn/assets/icons/`);
+  console.log(`  assets/icons         ${String(copied).padStart(6)} copiados, ${kept} ya al dia en dist/cdn/assets/icons/`);
 } catch {
   // No hay assets/icons/ todavia; ignorar.
 }

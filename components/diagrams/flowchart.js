@@ -4,8 +4,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
-import { iconifyApiUrl } from '../_shared/tk-iconify-inline.js';
-import { ensureIconify } from '../_shared/iconify-loader.js';
+import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import {
   loadOverrides,
@@ -81,7 +80,6 @@ class IsFlowchart extends HTMLElement {
 
   connectedCallback() {
     this.#mounted = true;
-    ensureIconify().catch(() => { /* sin CDN el texto sigue siendo legible */ });
     this.#overrides = loadOverrides(this, this.getAttribute('storage-key')) || { nodes: {}, edges: {} };
     this.#readJsonSlot();
     this.#mo = new MutationObserver(() => this.#readJsonSlot());
@@ -339,10 +337,8 @@ class IsFlowchart extends HTMLElement {
       const textRight = n.x + n.w - 10;
 
       if (hasIcon) {
-        g.appendChild(svgEl('image', {
-          href: iconifyApiUrl(n.icon, n.hue, 32),
-          x: n.x + 8, y: n.y + n.h / 2 - 8, width: 16, height: 16,
-          preserveAspectRatio: 'xMidYMid meet',
+        g.appendChild(svgIconGroup(n.icon, {
+          x: n.x + 8, y: n.y + n.h / 2 - 8, size: 16, hue: n.hue,
         }));
       }
 

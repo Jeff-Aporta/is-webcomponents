@@ -72,19 +72,53 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-      if (oldVal === newVal) return;
+      // #bindTarget usa #host, que se asigna en connectedCallback: sin este
+      // guard un atributo puesto en el markup se procesa demasiado pronto.
+      if (oldVal === newVal || !this.#host) return;
       if (name === 'for' || name === 'disabled') this.#bindTarget();
     }
 
     get isOpen() { return this.#panel.open; }
 
+    /**
+     * Abre el menú anclado a un punto del viewport. Se muestra primero para
+     * poder medirlo y despues se coloca: si no cabe hacia la derecha/abajo se
+     * voltea sobre el punto, y en ultimo caso se pega al borde.
+     */
     openAt(x, y) {
       if (this.hasAttribute('disabled')) return;
-      this.#panel.style.left = `${x}px`;
-      this.#panel.style.top = `${y}px`;
-      if (!this.#panel.open) this.#panel.show();
+      const panel = this.#panel;
+      // Medir fuera de vista para que no haya un frame en la esquina.
+      panel.style.visibility = 'hidden';
+      panel.style.left = '0px';
+      panel.style.top = '0px';
+      if (!panel.open) panel.show();
+
+      const margin = 8;
+      const rect = panel.getBoundingClientRect();
+      const vw = document.documentElement.clientWidth;
+      const vh = document.documentElement.clientHeight;
+
+      let left = x;
+      let top = y;
+      // Voltear sobre el punto si se sale; si tampoco cabe, pegar al borde.
+      if (left + rect.width + margin > vw) left = x - rect.width;
+      if (left < margin) left = Math.max(margin, vw - rect.width - margin);
+      if (top + rect.height + margin > vh) top = y - rect.height;
+      if (top < margin) top = Math.max(margin, vh - rect.height - margin);
+
+      panel.style.left = `${Math.round(left)}px`;
+      panel.style.top = `${Math.round(top)}px`;
+      panel.style.visibility = '';
+
       this.setAttribute('open', '');
       this.dispatchEvent(new CustomEvent('is-open', { bubbles: true, composed: true, detail: { x, y } }));
+    }
+
+    /** Abre el menú anclado a un elemento (esquina inferior izquierda). */
+    openAtElement(el) {
+      const r = (el || this.#target || this).getBoundingClientRect();
+      this.openAt(r.left, r.bottom + 4);
     }
 
     close() {

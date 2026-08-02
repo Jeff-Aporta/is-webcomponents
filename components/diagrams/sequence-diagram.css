@@ -98,16 +98,16 @@
 }
 
 /* Iconos inline dentro de las etiquetas de mensaje/actor. */
-.seq-label .tk-inline-iconify,
-.seq-label iconify-icon.tk-inline-iconify {
+.seq-label .tk-inline-icon,
+.seq-label is-icon.tk-inline-icon {
   width: 0.95em;
   height: 0.95em;
   vertical-align: -0.12em;
   margin: 0 0.22em;
 }
 
-.seq-actor-label .tk-inline-iconify,
-.seq-actor-label iconify-icon.tk-inline-iconify {
+.seq-actor-label .tk-inline-icon,
+.seq-actor-label is-icon.tk-inline-icon {
   width: 1em;
   height: 1em;
   vertical-align: -0.14em;

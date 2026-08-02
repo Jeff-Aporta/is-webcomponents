@@ -100,14 +100,18 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-icon> — Web Component (vanilla).
-> Resolucion de iconos, en orden:
->   1. Local: si `assets/icons/{prefix}/{name}.svg` existe (descargado por
->      `node scripts/download-icons.mjs`), se sirve como <img>.
->   2. CDN: si falla el local o no existe, se sirve el .svg desde
->      https://api.iconify.design/{prefix}/{name}.svg
->   3. Fallback final: <iconify-icon> (CDN iconify.min.js) si fetch falla
->      por red o porque el navegador esta offline.
+> <is-icon> — Web Component (vanilla, zero dependencies).
+> UNICA API de iconos del kit. No depende del web component <iconify-icon>
+> ni de ningun script externo: el SVG se trae por fetch del sistema de
+> iconos propio y se inyecta INLINE en el Shadow DOM, para que
+> `currentColor` del contexto se propague al fill del path.
+> Bases que prueba, en orden (ver _shared/icon-loader.js):
+>   1. dist/cdn/assets/icons/ relativo al modulo (bundle CDN).
+>   2. assets/icons/ en la raiz del repo (codigo fuente).
+>   3. GitHub Pages del proyecto.
+>   4. jsDelivr sobre el repo.
+> Estados: `data-loading` mientras resuelve, `data-missing` si el icono no
+> existe en ninguna base (hueco del tamano del icono, sin caja rota).
 > Atributos
 >   icon    string  — "grupo:nombre" Iconify (ej. mdi:home). Preferido.
 >   label   string  — a11y; si vacío → aria-hidden
@@ -117,7 +121,7 @@ Documentación de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/iconify-loader.js`](../_shared/iconify-loader.js)
+- [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 
 Tags del módulo: `<is-icon>`.
 

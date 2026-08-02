@@ -45,8 +45,7 @@
     line-height: 1;
     padding-top: 0.1em;
 }
-  .icon ::slotted(is-icon),
-  .icon ::slotted(iconify-icon) {
+  .icon ::slotted(is-icon) {
     font-size: inherit;
   color: inherit;
 }

@@ -37,8 +37,8 @@ Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mis
 - `../_shared/adopt-css.js`
 - `../_shared/tk-hue.js`
 - `../_shared/tk-inline-md.js`
-- `../_shared/tk-iconify-inline.js`
-- `../_shared/iconify-loader.js`
+- `../_shared/tk-icon-inline.js`
+- `../_shared/icon-loader.js`
 - `../_shared/diagram-grid.js`
 - `../_shared/tk-color.js`
 - `../_shared/path-turtle.js`

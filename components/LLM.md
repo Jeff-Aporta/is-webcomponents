@@ -146,7 +146,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - Charts: [`_shared/svg-chart-engine.js`](_shared/svg-chart-engine.js), [`_shared/chart-palette.js`](_shared/chart-palette.js), marks.
 - Diagramas: specs/layout/turtle/edit/kind registry existentes.
 - Grid: [`_shared/grid-data.js`](_shared/grid-data.js), [`_shared/grid-types.js`](_shared/grid-types.js), [`_shared/grid-ui.js`](_shared/grid-ui.js).
-- Iconos: [`_shared/iconify-loader.js`](_shared/iconify-loader.js). Preferencias: [`_shared/prefs.js`](_shared/prefs.js).
+- Iconos: [`_shared/icon-loader.js`](_shared/icon-loader.js) — resuelve el SVG desde `assets/icons/` / `dist/cdn/assets/icons/`. Preferencias: [`_shared/prefs.js`](_shared/prefs.js).
 
 ## Qué hacer
 
@@ -161,7 +161,10 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - El bloque "Consumo por CDN" lo pinta SOLO `<is-cdn-snippet>` (auto-inyectado por `preview-chrome.js`); nunca duplicar un callout CDN a mano ni desde otros scripts.
 - `dist/cdn` está folderizado por categoría: `dist/cdn/<categoria>/<tag>.min.js` (+ `.min.css` + `scrollbars.css` hermanos), `dist/cdn/<categoria>/category.<categoria>.min.js` y `dist/cdn/all.min.js` en la raíz. Cualquier URL de CDN nueva deriva la categoría del manifest, nunca se arma plana.
 - Medir progreso de scroll SIEMPRE con el rect del contenido relativo al del scroller. `is-main` es el contenedor scrolleable: su propio `getBoundingClientRect()` no cambia al scrollear.
+- Iconos: SIEMPRE `<is-icon icon="prefix:name">`. El sistema de iconos es propio (231 familias / 317.522 SVG en `assets/icons/`, publicados en `dist/cdn/assets/icons/`) y `is-icon` inyecta el SVG inline para que `currentColor` funcione.
+- Las bases de iconos se derivan de `import.meta.url`, no de `location.pathname`: asi el bundle publicado encuentra sus assets sin importar la profundidad de la pagina que lo embebe.
 - Verificar higiene con `node scripts/audit-components.mjs` (también corre como test).
+- En los previews, cargar SIEMPRE `dist/cdn/all.min.js` (un solo archivo cacheado) en vez de módulos sueltos de `components/`.
 - Leer consumidores; corregir raíz común.
 - Un MD por módulo JS/CSS; listar todos tags.
 - Localizar segmento `components/`; no asumir cantidad de `../`.
@@ -183,6 +186,8 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - No emitir artefactos planos en la raíz de `dist/cdn` (solo `all.min.js`, `is-base.min.css`, `palettes.min.css`, `README.txt`, `assets/`): eran ~200 archivos en un mismo nivel, imposibles de navegar.
 - No medir scroll con el rect del propio scroller (`is-main`): queda constante y el efecto nunca se dispara (bug real del parallax del home).
 - No filtrar tests por prefijo de nombre (`f.includes('cdn-')`): excluía silenciosamente tests offline. Lista explícita de los que necesitan servidor.
+- No usar `<iconify-icon>` ni cargar `code.iconify.design`: se eliminó del proyecto. Tampoco `api.iconify.design` en runtime — el sistema de iconos es propio y se sirve con el bundle.
+- No servir un icono como `<img src>` cuando debe heredar color: el SVG queda "congelado" en su color original. Inyectarlo inline.
 - No crear MD por child multi-tag ni presentar marks/specs/shared como elementos.
 - No duplicar stdlib/platform/shared ni añadir tooling innecesario.
 - No crear size variants, borrar archivos o crear commits automáticos.
@@ -210,6 +215,10 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 19. `dist/cdn` plano acumuló ~200 archivos en un nivel: build folderizado por categoría + `tests/cdn-folders.test.mjs` que falla si reaparece un artefacto plano en la raíz.
 20. El parallax del home medía `main.getBoundingClientRect()` siendo `main` el scroller: progreso congelado y componentes sin reaccionar al scroll. Medir el contenido contra el viewport del scroller.
 21. `run-all.mjs` filtraba por substring `cdn-` y saltaba tests que no necesitaban servidor: lista explícita `NEEDS_SERVER`.
+22. `<iconify-icon>` (script de terceros) convivía con `is-icon` y duplicaba el sistema de iconos: eliminado de componentes, diagramas y CSS; `tests/no-iconify.test.mjs` impide que vuelva.
+23. El favicon y algunos demos pegaban a `api.iconify.design` en runtime: ahora usan `assets/favicon.svg` y los assets propios.
+24. El build hacía `rm -rf dist/cdn` y recopiaba los ~317k iconos en CADA corrida. Eso disparaba el watcher de Live Server y la página recargaba en bucle (el fetch de index.html aparecía cancelado en DevTools). Ahora la limpieza preserva `dist/cdn/assets/` y la copia es incremental; además `.vscode/settings.json` excluye esas rutas del watcher.
+25. Cada preview cargaba entre 6 y 15 módulos sueltos de `components/`. Ahora todas cargan el único `dist/cdn/all.min.js`, que el navegador cachea entre páginas: cambiar de demo ya no pide archivos nuevos.
 
 ## Reglas obligatorias para LLM
 

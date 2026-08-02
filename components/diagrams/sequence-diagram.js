@@ -8,11 +8,10 @@ import {
 } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '../_shared/diagram-grid.js';
-import { iconifyApiUrl, hasIconifyJsonSugar } from '../_shared/tk-iconify-inline.js';
+import { svgIconGroup, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { contrastFontColor } from '../_shared/tk-color.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
-import { ensureIconify } from '../_shared/iconify-loader.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 
 /**
@@ -101,8 +100,7 @@ class IsSequenceDiagram extends HTMLElement {
 
   connectedCallback() {
     this.#mounted = true;
-    // Las etiquetas con {{iconify}} rinden <iconify-icon> dentro de foreignObject.
-    ensureIconify().catch(() => { /* sin CDN el texto sigue siendo legible */ });
+    // Las etiquetas con {{iconify}} rinden <is-icon> dentro de foreignObject.
     this.#readJsonSlot();
     this.#mo = new MutationObserver(() => this.#readJsonSlot());
     this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
@@ -309,7 +307,7 @@ class IsSequenceDiagram extends HTMLElement {
     for (const a of actors) {
       const bw = a.w;
       const bx = a.x - bw / 2;
-      const iconInLabel = hasIconifyJsonSugar(a.label);
+      const iconInLabel = hasIconJsonSugar(a.label);
       const iconCx = bx + 18;
       const labelLeft = iconInLabel ? bx + 8 : bx + 32;
       const labelRight = bx + bw - 8;
@@ -325,10 +323,8 @@ class IsSequenceDiagram extends HTMLElement {
       if (!iconInLabel) {
         const fill = tkHueToHex(a.hue) ?? '#64748b';
         g.appendChild(svgEl('circle', { cx: iconCx, cy: a.y, r: 16 * 0.74, fill, opacity: 0.16 }));
-        g.appendChild(svgEl('image', {
-          href: iconifyApiUrl(a.icon, a.hue, 32),
-          x: iconCx - 8, y: a.y - 8, width: 16, height: 16,
-          preserveAspectRatio: 'xMidYMid meet',
+        g.appendChild(svgIconGroup(a.icon, {
+          x: iconCx - 8, y: a.y - 8, size: 16, hue: a.hue,
         }));
       }
 

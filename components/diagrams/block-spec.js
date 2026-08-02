@@ -1,6 +1,6 @@
 import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
-import { countIconifyTokens, extractLeadingIconifyToken } from '../_shared/tk-iconify-inline.js';
+import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
@@ -27,7 +27,7 @@ function asRecord(v) {
 function readBlock(raw, i) {
   const r = asRecord(raw);
   const rawLabel = String(r.label ?? r.id ?? `Bloque ${i + 1}`);
-  const leading = extractLeadingIconifyToken(rawLabel);
+  const leading = extractLeadingIconToken(rawLabel);
   return {
     id: String(r.id ?? `b${i}`),
     label: rawLabel,
@@ -92,7 +92,7 @@ export function resolveBlockSpec(payload) {
 
 function blockUnitWidth(label) {
   const plain = richTextPlain(label);
-  const icons = countIconifyTokens(label);
+  const icons = countIconTokens(label);
   const est = Math.ceil(plain.length * 7) + 32 + icons * 18;
   return snapDiagramGrid(Math.min(MAX_UNIT_W, Math.max(MIN_UNIT_W, est)));
 }

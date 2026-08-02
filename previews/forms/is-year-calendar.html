@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-year-calendar · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-year-calendar de Insoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-year-calendar">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-year-calendar&gt;</h2>
+        <p class="lede">Vista de los 12 meses de un año para saltar rápido de periodo.</p>
+
+        <is-demo class="demo">
+          <is-year-calendar value="2026-08"></is-year-calendar>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-year-calendar value="2026-08"&gt;&lt;/is-year-calendar&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/forms/year-calendar.js</code>.
+        </p>
+        <pre class="code" data-no-copy>&lt;is-year-calendar&gt; — Rejilla de años desplazable (MUI YearCalendar).
+
+Atributos: value (yyyy), min, max (ISO o yyyy), columns, disabled, readonly
+Events: is-change  detail { value, year }</pre>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-year-calendar</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

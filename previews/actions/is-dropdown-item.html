@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-dropdown-item · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-dropdown-item de Insoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-dropdown-item">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-dropdown-item&gt;</h2>
+        <p class="lede">Item de un <code class="code">&lt;is-dropdown&gt;</code>. Aporta el estado (activo, deshabilitado), el slot de icono y el valor que viaja en el evento de selección.</p>
+
+        <is-demo class="demo">
+          <is-dropdown placement="bottom-start">
+            <is-button slot="trigger" variant="brand">Acciones</is-button>
+            <is-dropdown-item value="edit"><is-icon slot="start" icon="mdi:pencil"></is-icon>Editar</is-dropdown-item>
+            <is-dropdown-item value="dup"><is-icon slot="start" icon="mdi:content-copy"></is-icon>Duplicar</is-dropdown-item>
+            <is-dropdown-item value="del" variant="danger"><is-icon slot="start" icon="mdi:trash-can"></is-icon>Eliminar</is-dropdown-item>
+            <is-dropdown-item value="off" disabled>No disponible</is-dropdown-item>
+          </is-dropdown>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-dropdown placement="bottom-start"&gt;
+  &lt;is-button slot="trigger" variant="brand"&gt;Acciones&lt;/is-button&gt;
+  &lt;is-dropdown-item value="edit"&gt;&lt;is-icon slot="start" icon="mdi:pencil"&gt;&lt;/is-icon&gt;Editar&lt;/is-dropdown-item&gt;
+  &lt;is-dropdown-item value="dup"&gt;&lt;is-icon slot="start" icon="mdi:content-copy"&gt;&lt;/is-icon&gt;Duplicar&lt;/is-dropdown-item&gt;
+  &lt;is-dropdown-item value="del" variant="danger"&gt;&lt;is-icon slot="start" icon="mdi:trash-can"&gt;&lt;/is-icon&gt;Eliminar&lt;/is-dropdown-item&gt;
+  &lt;is-dropdown-item value="off" disabled&gt;No disponible&lt;/is-dropdown-item&gt;
+&lt;/is-dropdown&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/actions/dropdown-item.js</code>.
+        </p>
+        <pre class="code" data-no-copy>&lt;is-dropdown-item&gt; — ítem de menú para is-dropdown.
+
+El submenú va en un popover (top layer) y se posiciona con computePosition: el
+menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría
+recortado y le abriría scroll horizontal.
+
+Attrs: value, type (normal|checkbox), checked, disabled, variant (default|danger)
+Slots: default (label), icon, details, submenu
+Methods: openSubmenu(), closeSubmenu()
+Parts: checkmark, icon, label, details, submenu, submenu-icon</pre>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-dropdown-item</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

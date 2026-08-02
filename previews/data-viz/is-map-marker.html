@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-map-marker · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-map-marker de Insoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-map-marker">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-map-marker&gt;</h2>
+        <p class="lede">Marcador posicionado por longitud y latitud dentro de un <code class="code">&lt;is-maps&gt;</code>.</p>
+
+        <is-demo class="demo">
+          <is-maps viewbox="-80,-5,-66,13" style="height:320px">
+            <is-map-marker lon="-74.07" lat="4.71" label="Bogotá"></is-map-marker>
+            <is-map-marker lon="-75.56" lat="6.25" label="Medellín"></is-map-marker>
+            <is-map-marker lon="-76.53" lat="3.45" label="Cali"></is-map-marker>
+          </is-maps>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-maps viewbox="-80,-5,-66,13" style="height:320px"&gt;
+  &lt;is-map-marker lon="-74.07" lat="4.71" label="Bogotá"&gt;&lt;/is-map-marker&gt;
+  &lt;is-map-marker lon="-75.56" lat="6.25" label="Medellín"&gt;&lt;/is-map-marker&gt;
+  &lt;is-map-marker lon="-76.53" lat="3.45" label="Cali"&gt;&lt;/is-map-marker&gt;
+&lt;/is-maps&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/data-viz/maps.js</code>.
+        </p>
+        <pre class="code" data-no-copy>&lt;is-maps&gt; — Visualizador geográfico.
+
+Modo nativo (default): lienzo SVG que mapea coordenadas (lat, lon) a un
+viewport interno mediante una proyección equirectangular. Permite
+marcadores, zoom y pan, todo sin dependencias externas.
+
+Modo tile: atributo `engine="tile"` y un `&lt;script type="application/json"&gt;`
+con `{ tileUrl, attribution, zoom, center }` para apuntar a un proveedor
+(OpenStreetMap, etc.) embebido vía iframe (no requiere libs en este bundle).
+
+Atributos
+  viewbox       cuadro inicial: "minLon,minLat,maxLon,maxLat" (default mundo)
+  zoom          zoom inicial 1..n para vista controlada por JS
+  engine        svg | tile
+  interactive   boolean — false desactiva pan/zoom (mostrar)
+
+Marcadores
+  &lt;is-map-marker lat="4.6" lon="-74.0" label="Bogotá"&gt;
+    &lt;span slot="popup"&gt;Capital de Colombia&lt;/span&gt;
+  &lt;/is-map-marker&gt;
+
+Eventos
+  is-viewport   detail: { minLon, minLat, maxLon, maxLat }
+  is-marker-click  detail: { marker }</pre>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-map-marker</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

@@ -1,5 +1,5 @@
 import { buildTree, layoutTree, layoutRadialTree } from '../_shared/tree-layout.js';
-import { countIconifyTokens, extractLeadingIconifyToken } from '../_shared/tk-iconify-inline.js';
+import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import {
@@ -32,7 +32,7 @@ function asRecord(v) {
 function readNode(raw, i) {
   const r = asRecord(raw);
   const rawLabel = String(r.label ?? r.text ?? r.id ?? `Idea ${i + 1}`);
-  const leading = extractLeadingIconifyToken(rawLabel);
+  const leading = extractLeadingIconToken(rawLabel);
   return {
     id: String(r.id ?? `n${i}`),
     parent: r.parent != null ? String(r.parent) : undefined,
@@ -71,7 +71,7 @@ const LEAF_H = 24;
 /** Ancho estimado según el texto (descuenta tokens {{icon}}), con un padding acorde al estilo del nivel. */
 function nodeWidth(label, depth, hasIcon) {
   const plain = richTextPlain(label);
-  const icons = countIconifyTokens(label) + (hasIcon ? 1 : 0);
+  const icons = countIconTokens(label) + (hasIcon ? 1 : 0);
   const perChar = depth === 0 ? 7.4 : depth === 1 ? 6.8 : 6.2;
   const pad = depth === 0 ? 44 : depth === 1 ? 32 : 14;
   return Math.round(Math.ceil(plain.length * perChar) + pad + icons * ICON_INLINE_W);

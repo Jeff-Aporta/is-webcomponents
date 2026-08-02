@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-tab-panel · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-tab-panel de Insoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-tab-panel">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-tab-panel&gt;</h2>
+        <p class="lede">Contenido asociado a una <code class="code">&lt;is-tab&gt;</code>. Solo se muestra el panel cuyo <code class="code">name</code> coincide con el <code class="code">panel</code> de la pestaña activa.</p>
+
+        <is-demo class="demo">
+          <is-tab-group>
+            <is-tab slot="nav" panel="uno">Uno</is-tab>
+            <is-tab slot="nav" panel="dos">Dos</is-tab>
+            <is-tab-panel name="uno">
+              <p>El panel es un contenedor normal: acepta cualquier contenido.</p>
+              <is-tag variant="brand">Contenido rico</is-tag>
+            </is-tab-panel>
+            <is-tab-panel name="dos">Segundo panel.</is-tab-panel>
+          </is-tab-group>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-tab-group&gt;
+  &lt;is-tab slot="nav" panel="uno"&gt;Uno&lt;/is-tab&gt;
+  &lt;is-tab slot="nav" panel="dos"&gt;Dos&lt;/is-tab&gt;
+  &lt;is-tab-panel name="uno"&gt;
+    &lt;p&gt;El panel es un contenedor normal: acepta cualquier contenido.&lt;/p&gt;
+    &lt;is-tag variant="brand"&gt;Contenido rico&lt;/is-tag&gt;
+  &lt;/is-tab-panel&gt;
+  &lt;is-tab-panel name="dos"&gt;Segundo panel.&lt;/is-tab-panel&gt;
+&lt;/is-tab-group&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/navigation/tab-group.js</code>.
+        </p>
+        <pre class="code" data-no-copy>&lt;is-tab-group&gt;, &lt;is-tab&gt;, &lt;is-tab-panel&gt; — Web Components (vanilla, zero dependencies).
+
+Tres componentes cohabitantes:
+
+  &lt;is-tab-group active="general" placement="top" activation="auto"&gt;
+    &lt;is-tab slot="nav" panel="general"&gt;General&lt;/is-tab&gt;
+    &lt;is-tab slot="nav" panel="custom" disabled&gt;Custom&lt;/is-tab&gt;
+    &lt;is-tab-panel name="general"&gt;…&lt;/is-tab-panel&gt;
+    &lt;is-tab-panel name="custom"&gt;…&lt;/is-tab-panel&gt;
+  &lt;/is-tab-group&gt;
+
+Atributos &lt;is-tab-group&gt;
+  active        string   — nombre del panel activo.
+  placement     top | bottom | start | end  (default 'top')
+  activation    auto | manual (default 'auto')
+  without-scroll-controls  boolean (default false)
+
+Atributos &lt;is-tab&gt;
+  panel         string   — nombre del panel al que apunta (required).
+  disabled      boolean
+  closable      boolean  — muestra un botón de cerrar (slot close-button).
+
+Atributos &lt;is-tab-panel&gt;
+  name          string   — id único dentro del tab-group (required).
+
+Slots
+  &lt;is-tab-group&gt;
+    nav        — tabs (se proyectan automáticamente).
+    (default)  — paneles.
+  &lt;is-tab&gt;
+    (default)   label del tab.
+    start       icono al inicio.
+    end         icono al final.
+    close-button  botón de cerrar (cuando closable).
+  &lt;is-tab-panel&gt;
+    (default)  contenido del panel.
+
+Eventos
+  is-tab-show   detail: { name, panel, tab } — al activar un panel.
+  is-tab-hide   detail: { name, panel, tab } — al ocultar un panel.
+  is-tab-close  detail: { tab, name }  — cuando se hace click en el close-btn de un is-tab closable.
+
+CSS Parts
+  is-tab-group: ::part(tab-group) ::part(nav) ::part(body) ::part(tabs)
+  is-tab: ::part(base) ::part(active-indicator)
+  is-tab-panel: ::part(base)</pre>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-tab-panel</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

@@ -82,8 +82,8 @@
   transition: opacity 0.18s ease;
 }
 
-.block-node-label .tk-inline-iconify,
-.block-node-label iconify-icon.tk-inline-iconify {
+.block-node-label .tk-inline-icon,
+.block-node-label is-icon.tk-inline-icon {
   width: 1em;
   height: 1em;
   vertical-align: -0.14em;
