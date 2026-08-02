@@ -211,7 +211,8 @@ import { resolveIconRaw, ensureIconify } from '../_shared/iconify-loader.js';
       svg.setAttribute('height', '1em');
       svg.setAttribute('focusable', 'false');
       svg.style.fill = 'currentColor';
-      svg.style.stroke = 'currentColor';
+      // OJO: no forzar stroke a nivel de <svg> — los iconos de relleno no
+      // traen stroke y añadírselo contornea cada path (se ven engrosados).
       for (const el of svg.querySelectorAll('*')) {
         // No pisar elementos sin fill/stroke.
         const fill = el.getAttribute('fill');

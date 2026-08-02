@@ -23,7 +23,11 @@ import { dirname, join } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const ALL = process.env.PORT != null;
-const only = (f) => (ALL ? true : !f.includes('cdn-'));
+// Tests que necesitan el dev server levantado (hacen fetch a localhost).
+// Antes se filtraba por el prefijo `cdn-`, lo que también excluía tests
+// offline como cdn-folders/cdn-snippet-match sin que nadie lo notara.
+const NEEDS_SERVER = new Set(['cdn-icons.test.mjs']);
+const only = (f) => (ALL ? true : !NEEDS_SERVER.has(f));
 
 const files = (await readdir(here)).filter((f) => f.endsWith('.test.mjs') && only(f)).sort();
 console.log(`corriendo ${files.length} tests${ALL ? ' (con servidor)' : ' (sin servidor)'}\n`);

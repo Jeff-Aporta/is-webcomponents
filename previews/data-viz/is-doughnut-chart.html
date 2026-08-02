@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-doughnut-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,13 +24,13 @@
       <section class="section" id="intro">
         <h2>&lt;is-doughnut-chart&gt;</h2>
         <p class="lede">Proporciones con centro hueco.</p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-doughnut-chart>
             <script type="application/json">
               {"data":{"labels":["Dev","Diseño","QA","Reuniones"],"datasets":[{"label":"Horas","data":[35,20,15,18]}]}}
             </script>
           </is-doughnut-chart>
-        </div>
+        </is-demo>
       </section>
     </is-main>
     <aside class="sidebar" slot="end"><h1>is-doughnut-chart</h1><is-scrollspy target="is-main"><a href="#intro">Introducción</a></is-scrollspy></aside>

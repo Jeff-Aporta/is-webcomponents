@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -84,7 +85,7 @@
           ejecución. Los colores salen de la paleta de marca activa y se revalidan al
           cambiar de tema: pruébalo con el selector de paleta del encabezado.
         </p>
-        <div class="demo" style="height:17rem">
+        <is-demo class="demo" style="height:17rem">
           <is-chart type="bar" label="Ingresos vs gastos" x-label="Mes" y-label="Millones COP">
             <script type="application/json">
               {
@@ -98,7 +99,7 @@
               }
             </script>
           </is-chart>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="comparacion">
@@ -408,9 +409,9 @@
         </p>
 
         <h3>Config por JavaScript</h3>
-        <div class="demo" style="height:14rem">
+        <is-demo class="demo" style="height:14rem">
           <is-chart id="jsChart" type="line" without-legend></is-chart>
-        </div>
+        </is-demo>
         <pre class="code">const el = document.querySelector('#jsChart');
 el.config = {
   data: {

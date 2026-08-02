@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-button · IS Web Components</title>
   <meta name="description" content="Documentación y playground del componente is-button de Insoft." />
@@ -38,7 +39,7 @@
           Shadow DOM y sin frameworks.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">// El caso más simple</span>
           <div class="demo-row">
             <is-button>Hola mundo</is-button>
@@ -48,7 +49,7 @@
               Aprobado
             </is-button>
           </div>
-        </div>
+        </is-demo>
 
       </section>
 
@@ -61,7 +62,7 @@
         </p>
 
         <h3>Matriz variant × appearance</h3>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="matrix">
             <div></div>
             <div class="cell-label">filled</div>
@@ -93,7 +94,7 @@
             <div class="demo-cell"><is-button variant="danger" appearance="outlined">Danger</is-button></div>
             <div class="demo-cell"><is-button variant="danger" appearance="plain">Danger</is-button></div>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"success"</span><span class="tag">&gt;</span>Aprobado<span class="tag">&lt;/is-button&gt;</span>
 <span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"danger"</span> <span class="attr">appearance</span>=<span class="val">"outlined"</span><span class="tag">&gt;</span>Eliminar<span class="tag">&lt;/is-button&gt;</span></pre>
@@ -105,7 +106,7 @@
         <p class="lede">Tres niveles de énfasis visual. Úsalos para jerarquizar acciones.</p>
 
         <h4>filled — acción principal</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button variant="brand" appearance="filled">Primario</is-button>
             <is-button variant="success" appearance="filled">Confirmar</is-button>
@@ -113,10 +114,10 @@
             <is-button variant="danger"  appearance="filled">Eliminar</is-button>
             <is-button variant="neutral" appearance="filled">Secundario</is-button>
           </div>
-        </div>
+        </is-demo>
 
         <h4>outlined — acción secundaria</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button variant="brand" appearance="outlined">Primario</is-button>
             <is-button variant="success" appearance="outlined">Confirmar</is-button>
@@ -124,10 +125,10 @@
             <is-button variant="danger"  appearance="outlined">Eliminar</is-button>
             <is-button variant="neutral" appearance="outlined">Secundario</is-button>
           </div>
-        </div>
+        </is-demo>
 
         <h4>plain — acción terciaria / contextual</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button variant="brand" appearance="plain">Primario</is-button>
             <is-button variant="success" appearance="plain">Confirmar</is-button>
@@ -135,7 +136,7 @@
             <is-button variant="danger"  appearance="plain">Eliminar</is-button>
             <is-button variant="neutral" appearance="plain">Secundario</is-button>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <!-- ===== 4. ESCALA POR CONTEXTO ===== -->
@@ -143,7 +144,7 @@
         <h2>Escala por contexto</h2>
         <p class="lede">El componente usa unidades <code class="code">em</code>. Cambia <code class="code">font-size</code> en cualquier ancestro para escalarlo completo.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row" style="align-items: flex-end;">
             <span style="font-size: .8125rem"><is-button>Compacto</is-button></span>
             <span style="font-size: 1rem"><is-button>Normal</is-button></span>
@@ -153,7 +154,7 @@
             <span style="font-size: 1rem"><is-button variant="brand" appearance="outlined">Normal</is-button></span>
             <span style="font-size: 1.25rem"><is-button variant="brand" appearance="outlined">Grande</is-button></span>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;div</span> <span class="attr">style</span>=<span class="val">"font-size: 1.25rem"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Grande<span class="tag">&lt;/is-button&gt;</span>
@@ -169,7 +170,7 @@
         </p>
 
         <h4>Icono al inicio (start)</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button variant="brand">
               <is-icon icon="mdi:content-save-outline"></is-icon>
@@ -188,10 +189,10 @@
               Editar
             </is-button>
           </div>
-        </div>
+        </is-demo>
 
         <h4>Icono al final (end)</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button variant="brand" appearance="outlined">
               Continuar
@@ -202,10 +203,10 @@
               <is-icon icon="mdi:download"></is-icon>
             </is-button>
           </div>
-        </div>
+        </is-demo>
 
         <h4>Ambos lados</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button variant="brand">
               <is-icon icon="mdi:bell-outline"></is-icon>
@@ -213,7 +214,7 @@
               <is-icon icon="mdi:arrow-right"></is-icon>
             </is-button>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;svg</span> <span class="attr">slot</span>=<span class="val">"start"</span> <span class="attr">viewBox</span>=<span class="val">"0 0 16 16"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/svg&gt;</span>
@@ -230,7 +231,7 @@
           y se vuelve cuadrado.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button variant="neutral" appearance="outlined" title="Ajustes">
               <is-icon icon="mdi:cog-outline"></is-icon>
@@ -269,7 +270,7 @@
               <is-icon icon="mdi:pencil-outline"></is-icon>
             </is-button></span>
           </div>
-        </div>
+        </is-demo>
 
         <div class="callout">
           <strong>Tip:</strong> usa siempre <code class="code">title="..."</code> en icon-only para accesibilidad (label del tooltip + nombre accesible).
@@ -280,7 +281,7 @@
       <section class="section" id="pill">
         <h2>Pill</h2>
         <p class="lede"><code class="code">pill</code> aplica <code class="code">border-radius: 999px</code>.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button pill variant="brand">Pill brand</is-button>
             <is-button pill variant="success" appearance="outlined">Pill outlined</is-button>
@@ -290,14 +291,14 @@
               Crear nuevo
             </is-button>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <!-- ===== 8. CARET ===== -->
       <section class="section" id="caret">
         <h2>Con caret</h2>
         <p class="lede">Útil para menús desplegables o acciones que revelan algo.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button with-caret variant="brand">Acciones</is-button>
             <is-button with-caret variant="neutral" appearance="outlined">Filtros</is-button>
@@ -305,7 +306,7 @@
             <span style="font-size: .8125rem"><is-button with-caret variant="success">Aplicar</is-button></span>
             <span style="font-size: 1.25rem"><is-button with-caret>Más opciones</is-button></span>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <!-- ===== 9. LOADING ===== -->
@@ -315,7 +316,7 @@
           <code class="code">loading</code> deshabilita la interacción, oculta label/iconos/caret
           y muestra un spinner. Aplica <code class="code">aria-busy="true"</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button loading variant="brand">Guardando…</is-button>
             <is-button loading variant="success" appearance="outlined">Enviando</is-button>
@@ -326,21 +327,21 @@
             </is-button>
             <span style="font-size: 1.25rem"><is-button loading variant="brand" pill>Procesando</is-button></span>
           </div>
-        </div>
+        </is-demo>
 
         <h4>Demo interactivo</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="loadingDemo" variant="brand">Iniciar carga</is-button>
           <pre class="code" style="margin: 12px 0 0;">btn.<span class="attr">toggleAttribute</span>(<span class="str">'loading'</span>);
 btn.<span class="attr">toggleAttribute</span>(<span class="str">'loading'</span>);  <span class="com">// o false</span></pre>
-        </div>
+        </is-demo>
       </section>
 
       <!-- ===== 10. DISABLED ===== -->
       <section class="section" id="disabled">
         <h2>Disabled</h2>
         <p class="lede">El botón se atenúa, no recibe eventos y se quita del tab order.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button disabled>Default</is-button>
             <is-button disabled variant="brand">Brand</is-button>
@@ -353,7 +354,7 @@ btn.<span class="attr">toggleAttribute</span>(<span class="str">'loading'</span>
             </is-button>
             <is-button disabled pill variant="success">Pill disabled</is-button>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <!-- ===== 11. LINK ===== -->
@@ -365,7 +366,7 @@ btn.<span class="attr">toggleAttribute</span>(<span class="str">'loading'</span>
           y soporta <code class="code">target</code>, <code class="code">rel</code> y <code class="code">download</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button href="https://www.youtube.com/@JeffAporta" target="_blank" rel="noopener" variant="brand">
               Jeff Aporta en YouTube
@@ -380,7 +381,7 @@ btn.<span class="attr">toggleAttribute</span>(<span class="str">'loading'</span>
               <is-icon icon="mdi:link-variant"></is-icon>
             </is-button></span>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">href</span>=<span class="val">"https://www.youtube.com/@JeffAporta"</span> <span class="attr">target</span>=<span class="val">"_blank"</span> <span class="attr">rel</span>=<span class="val">"noopener"</span><span class="tag">&gt;</span>
   Jeff Aporta en YouTube
@@ -401,7 +402,7 @@ btn.<span class="attr">toggleAttribute</span>(<span class="str">'loading'</span>
           y se asocia a un <code class="code">&lt;form&gt;</code> con <code class="code">form="id"</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <form id="demoForm" style="display: grid; gap: 12px; max-width: 480px;">
             <label style="display: grid; gap: 4px; font-size: 0.85rem;">
               <span>Email</span>
@@ -422,7 +423,7 @@ btn.<span class="attr">toggleAttribute</span>(<span class="str">'loading'</span>
 
             <div id="formOut" class="log" aria-live="polite"></div>
           </form>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">type</span>=<span class="val">"submit"</span> <span class="attr">variant</span>=<span class="val">"brand"</span> <span class="attr">name</span>=<span class="val">"action"</span> <span class="attr">value</span>=<span class="val">"save"</span><span class="tag">&gt;</span>Guardar<span class="tag">&lt;/is-button&gt;</span></pre>
       </section>
@@ -516,9 +517,9 @@ is-button:state(icon-button) {
             stroke-dasharray: 12 6;
           }
         </style>
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="customSpinnerBtn" loading variant="danger">Cargando con spinner custom</is-button>
-        </div>
+        </is-demo>
 
         <pre class="code">is-button:state(loading)::part(spinner) svg {
   stroke: var(--is-color-danger-500);
@@ -549,7 +550,7 @@ is-button:state(icon-button) {
 --is-button-transition-duration</pre>
 
         <h4>Demo en vivo — cambia tokens a un botón individual</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row" style="align-items: flex-end;">
             <is-button id="themed1" variant="brand" pill>Themed 1</is-button>
             <is-button id="themed2" variant="success" pill>Themed 2</is-button>
@@ -574,7 +575,7 @@ is-button:state(icon-button) {
               --is-button-border-width: 2px;
             }
           </style>
-        </div>
+        </is-demo>
       </section>
 
       <!-- ===== 17. METHODS (API JS) ===== -->
@@ -604,7 +605,7 @@ btn.validationMessage    <span class="com">// string</span>
 btn.willValidate         <span class="com">// boolean</span></pre>
 
         <h4>Demo</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="apiBtn" variant="brand">Hazme click</is-button>
           <div class="demo-row" style="margin-top: 12px;">
             <button id="apiFocus" type="button" class="theme-toggle" style="position: static;">focus()</button>
@@ -613,7 +614,7 @@ btn.willValidate         <span class="com">// boolean</span></pre>
             <button id="apiDis"   type="button" class="theme-toggle" style="position: static;">toggle disabled</button>
             <button id="apiError" type="button" class="theme-toggle" style="position: static;">setCustomValidity</button>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="kw">const</span> btn = document.<span class="attr">querySelector</span>(<span class="str">'#apiBtn'</span>);
 btn.<span class="attr">click</span>();
@@ -643,13 +644,13 @@ btn.<span class="attr">setCustomValidity</span>(<span class="str">'Revisa los ca
         </table>
 
         <h4>Demo en vivo</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row">
             <is-button id="evtBtn" variant="brand">Probar eventos</is-button>
             <is-button id="evtBtn2" variant="success" appearance="outlined">Segundo botón</is-button>
           </div>
           <div id="evtLog" class="log" aria-live="polite"></div>
-        </div>
+        </is-demo>
       </section>
 
       <!-- ===== 19. PLAYGROUND ===== -->

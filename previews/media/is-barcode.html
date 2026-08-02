@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-barcode · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/media/barcode.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+  <style>
+    .bc-row { padding: 1rem 0; border-bottom: 1px dashed var(--is-border); }
+    .bc-row:last-child { border-bottom: 0; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-barcode">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-barcode&gt;</h2>
+        <p class="lede">Genera códigos de barras en SVG puro. Soporta <code>EAN-13</code> (productos) y <code>Code 128</code> (alfanumérico). QR queda como siguiente paso vía lib externa.</p>
+      </section>
+
+      <section class="section" id="ean">
+        <h2>EAN-13 (productos)</h2>
+        <p>Calcula dígito verificador automáticamente si pasás 12 dígitos.</p>
+        <is-demo class="demo">
+          <div class="bc-row"><is-barcode type="ean13" value="770123456789"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="ean13" value="750103131130"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="ean13" value="400638133393"></is-barcode></div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="c128">
+        <h2>Code 128 (general)</h2>
+        <is-demo class="demo">
+          <div class="bc-row"><is-barcode type="code128" value="INSOFT-2026-001"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="LOTE-7782-A"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="CEDULA 1234567890"></is-barcode></div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="style">
+        <h2>Personalización</h2>
+        <is-demo class="demo">
+          <div class="bc-row"><is-barcode type="ean13" value="770123456789" height="80"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="DEMO-INSOFT" fg="var(--is-accent)" show-text></is-barcode></div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">// Atributos
+// value        texto a codificar (requerido)
+// type         ean13 | code128 (default code128)
+// height       alto en píxeles (default 60)
+// fg           color de barras
+// bg           fondo (default transparent)
+// show-text    imprime el texto debajo
+// quiet        zonas de silencio EAN13 en módulos (default 9)
+
+// API JS
+// Acceso al SVG: bar.shadowRoot.querySelector('svg')</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-barcode</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#ean">EAN-13</a>
+        <a href="#c128">Code 128</a>
+        <a href="#style">Estilo</a>
+        <a href="#api">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script>
+  </script>
+</body>
+</html>

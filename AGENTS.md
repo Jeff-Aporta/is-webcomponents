@@ -314,6 +314,213 @@ Solo commiteamos `mdi/` (7447) y `tabler/` (6184) → 5 MB. El resto se
 regenera con `npm run icons:download`. El `.gitignore` ya lo deja claro; **no
 lo desanotes**.
 
+### 6.16 Scrollbars consistentes en todos los `is-*` y secciones de demos
+
+El look del scrollbar está centralizado en dos archivos:
+
+- `components/_shared/scrollbars.css` — inyectado por `adopt-css.js` en
+  el shadow DOM de cada `is-*`. Aplica `scrollbar-color` y los pseudo
+  elementos WebKit a `:host` y a todos sus descendientes.
+- `styles/is-base.css` (`* { scrollbar-color: ... }`) — light DOM del
+  documento.
+- `styles/presentation.css` (reglas adicionales para `.main`,
+  `is-main.main`, `.sidebar`, `.section`, `.demo`, `html`, `body`) —
+  refuerza el estilo WebKit en las superficies del docs/playground.
+
+**Tokens**: `--is-scrollbar-size`, `--is-scrollbar-radius`,
+`--is-scrollbar-track`, `--is-scrollbar-thumb`,
+`--is-scrollbar-thumb-hover`. Todos viven en `:root`/`.theme-dark`/
+`.theme-light` dentro de `is-base.css`. Las paletas (`palettes.css`)
+pueden sobreescribirlos si quieren un thumb de marca.
+
+**Fallbacks en shadow**: si el consumidor monta un `is-*` sin cargar
+`is-base.css`, las CSS custom properties no llegan al shadow. Para esos
+casos, `scrollbars.css` define `--is-scrollbar-*-fallback` en `:host`
+para que el thumb sea visible (gris neutro derivado de `--is-control-border`
+y hover con tinte de acento rojo). El `var(..., fallback)` en cada
+propiedad garantiza que nunca se quede sin color.
+
+**Si añades un componente nuevo**: basta con llamar a `adoptCss(this.shadowRoot,
+import.meta.url)` en el constructor (patrón ya documentado). No hace falta
+importar `scrollbars.css` manualmente.
+
+### 6.17 Helpers de reuso centralizados en `_shared/`
+
+Para evitar el copia-y-pega que se acumuló en 82 componentes, los siguientes
+helpers viven en `components/_shared/`:
+
+| Helper | Reemplaza |
+|---|---|
+| `_shared/intent.js` (`INTENT`, `DEFAULT_INTENT`, `normalizeIntent`, `setEnumAttr`) | `VALID_VARIANT = ['brand', 'neutral', ...]` repetido en 13 archivos |
+| `_shared/tone.js` (`TONE`, `DEFAULT_TONE`, `normalizeTone`) | `VALID_APPEARANCE = ['accent', 'filled', ...]` repetido en 5 archivos |
+| `_shared/upgrade-properties.js` (`upgradeProperties`) | `#upgradeProperties()` inline en 15 archivos |
+| `_shared/dom-utils.js` (`hasSlotted`, `assignedNodes`, `assignedElements`) | `function hasSlotted(slot)` repetido 6 veces |
+| `_shared/misc-utils.js` (`tidy`, `clampTo`, `isValidNumber`) | `tidy(n, unit)` + `clampTo(n, min, max)` repetidos en 3 archivos |
+| `_shared/modal-base.js` (`ModalBase`) | ciclo de vida del modal duplicado en `dialog.js` (372) y `drawer.js` (378) |
+| `_shared/element-base.js` (`ElementBase`) | boilerplate de Shadow DOM (initShadow, mounted flag, lifecycle hooks) |
+| `_shared/form-control-mixin.js` (`MixinFormControl`, `formControlTemplate`) | label + hint + error-text repetidos en form controls |
+
+**Cuándo usar cada uno**:
+
+- Componente con atributo `variant` semántico → `intent.js`. Importa
+  `INTENT`, `DEFAULT_INTENT`, `normalizeIntent`. Default: `DEFAULT_INTENT`
+  (`'brand'`). Si el componente debe tener `'neutral'` como default,
+  mantenlo como literal en su `connectedCallback`.
+- Componente con atributo `appearance` (relleno) → `tone.js`.
+- Custom element que recibe atributos antes de `connectedCallback` →
+  `upgradeProperties(this, [...attrs])`. NO re-implementes el `#upgradeProperties`
+  inline.
+- Componente con slots que pueden recibir contenido del consumidor
+  (`<is-checkbox>`, `<is-switch>`, `<is-input>`, `<is-textarea>`, etc.) →
+  `hasSlotted(slot)` de `dom-utils.js`.
+- Componente numérico (`<is-slider>`, `<is-rating>`, `<is-format>`) →
+  `tidy(n, unit)` y `clampTo(n, min, max)` de `misc-utils.js`.
+- Modal (`<is-dialog>`, `<is-drawer>`, futuros) → `extends ModalBase`.
+- Componente sin lógica especial (`<is-callout>`, `<is-button>`) →
+  `extends ElementBase` para evitar boilerplate.
+
+**Patrón canónico de setter con enum** (componente con `variant`):
+
+```js
+import { INTENT, DEFAULT_INTENT, normalizeIntent, setEnumAttr } from '../_shared/intent.js';
+
+// En connectedCallback:
+if (!this.hasAttribute('variant')) this.setAttribute('variant', DEFAULT_INTENT);
+
+// En attributeChangedCallback, red de seguridad para valores inválidos:
+if (name === 'variant' && newVal && !INTENT.includes(newVal)) {
+  this.setAttribute('variant', DEFAULT_INTENT);
+}
+
+// Setter:
+get variant() { return this.getAttribute('variant') ?? DEFAULT_INTENT; }
+set variant(v) { setEnumAttr(this, 'variant', normalizeIntent(v)); }
+```
+
+`setEnumAttr(this, 'variant', normalizeIntent(v))` rechaza valores fuera
+de la enum sin lanzar error: `'patata'` se traduce a `'brand'`. Esto evita
+que la API rompa el componente si el consumer le pasa un valor raro.
+
+**Regla**: si tu componente repite un patrón que ya tiene un helper,
+úsalo. Si el patrón no existe, **primero** crea el helper en `_shared/` y
+luego migra los archivos existentes antes de añadir lógica nueva.
+
+### 6.18 ModalBase — el bug del `#mounted` huérfano
+
+Cuando se extrajo `ModalBase` para centralizar el ciclo de vida de
+modales, **`<is-dialog>` y `<is-drawer>` quedaron sin migrar** y
+siguieron implementando toda la lógica a mano (focus trap, keydown,
+animaciones, light-dismiss, data-attribute de close). El bug sintomático
+era el `#mounted = false` declarado en el cuerpo de la clase de
+`dialog.js` — un campo privado de bookkeeping que solo servía para
+ignorar `attributeChangedCallback` antes del mount.
+
+**Síntoma**: 372 líneas en `dialog.js`, 378 en `drawer.js`, ~80%
+idénticas. Riesgo alto de divergencia (un bugfix en uno se olvidaba en
+el otro).
+
+**Fix**: ambos ahora extienden `ModalBase`. La subclase solo define:
+
+- `static __TEMPLATE` (mismo HTML que ya tenían).
+- `get modalClass()` — selector del contenedor dentro del shadow
+  (`'.dialog'` o `'.drawer'`).
+- `get closeAttr()` — atributo data-* para close declarativo
+  (`'data-dialog'` o `'data-drawer'`).
+- `animateOpen()` / `animateClose()` — devuelven `Promise<void>` con
+  las keyframes específicas de cada componente.
+- Atributos adicionales (`placement` en drawer).
+- `onConnected()` / `onAttributeChanged()` — hooks opcionales del
+  ciclo de vida.
+
+**Acceso a refs desde subclases**: `ModalBase` declara `#modal` y
+`#backdrop` como campos privados. Como JS no permite acceso cross-class
+a privados, expone dos getters públicos:
+
+```js
+get $modal()    { return this.#modal; }
+get $backdrop() { return this.shadowRoot.querySelector('.backdrop'); }
+```
+
+Las subclases usan `this.$modal` y `this.$backdrop` en sus
+`animateOpen()` / `animateClose()` para no tener que re-querySelector
+cada vez.
+
+**Resultado**: `dialog.js` pasó de 372 a ~120 líneas, `drawer.js` de
+378 a ~150. La lógica de focus trap, Escape, light-dismiss,
+`is-show`/`is-hide`/`is-after-show`/`is-after-hide` y pulse de
+"preventDefault" viven en un solo sitio.
+
+### 6.19 `<is-ag-grid>` — motor `datagrid-core` + mimicus-react
+
+El data-grid se reescribió desde cero separando el **núcleo de datos**
+del **render**. El núcleo vive en `components/data/datagrid-core/` y
+proviene del port del repo
+[mimicus-react/src/datagrid/core](https://github.com/Jeff-Aporta/mimicus-react/tree/main/src/datagrid/core).
+El componente `<is-ag-grid>` es la capa de presentación que consume ese
+núcleo.
+
+**`datagrid-core/` (10 módulos):**
+
+| Archivo                       | Responsabilidad |
+| ---                           | --- |
+| `types.js`                    | Enums `ColumnType`, `Density`, `SelectionMode`, `PinSide`, `FilterType`, `AggFunc`. JSDoc typedefs. |
+| `value-formatter.js`          | `getCellValue`, `formatCellValue`, `cellText`. |
+| `column-state.js`             | `resolveColumns`, `setColumnWidth`, `setColumnPinned`, `setColumnHidden`, `moveColumn`, `autosizeColumn`. |
+| `viewport.js`                 | `rowWindow`, `columnLayout`, `colWindow`, `applyFlex`. |
+| `selection.js`                | `toggleRowSelection`, `selectAll`, `clearSelection`, `headerCheckboxState`. |
+| `csv-export.js`               | `rowsToCsv` (con BOM, sólo seleccionadas opcional). |
+| `pipeline-filtering.js`       | Filtros: text, number, date, set. |
+| `pipeline-sorting.js`         | `sortRows`, `cycleSort`. |
+| `pipeline-grouping.js`        | `buildDisplayRows`, `aggregateGroup`. |
+| `grid-model.js`               | `createGridModel({rows, columns, …})` ⇒ `GridApi` (store observable con `subscribe`). |
+| `index.js`                    | Barrel de re-exports. |
+
+**El wrapper `is-ag-grid`** (`components/data/ag-grid.js`) hace:
+
+1. Lee filas/columnas desde atributo `rows` / `columns` o desde
+   `<script type="application/json">` (acepta `src=...` con fetch).
+2. Construye el modelo con `createGridModel` y se suscribe.
+3. Renderiza cabecera (con sort icons, filtros activos, drag handle para
+   resize, pin left/right, ⋮ menu), body (con virtual scroll por filas),
+   footer (pager + count + selected), group panel y toolbar.
+4. Gestiona HeaderMenu, FilterPopover, drag-reorder, drag-resize.
+5. Persistencia opcional con `remember-state` + `storage-key`.
+6. API retrocompatible legacy: `g.api.goToPage(n)`,
+   `g.api.setFilter(field, op, value)`, `g.api.refresh()`, etc. La nueva
+   firma de `setFilter(colId, filterObj | null)` se detecta por tipo del
+   segundo argumento.
+
+**Atributos nuevos respecto a la versión vieja:**
+
+- `get-row-id`, `density`, `group-by`, `remember-state`, `storage-key`,
+  `toolbar`.
+
+**Columnas nuevas:**
+
+- `flex`, `rowGroup`, `enableRowGroup`, `aggFunc`, `cellStyle`,
+  `filterType` (`text`/`number`/`date`/`set`), `minWidth`, `maxWidth`,
+  pinned (`left`/`right`).
+
+**Eventos nuevos:**
+
+- `is-state-loaded`, `is-column-reorder`, `is-column-resize`,
+  `is-column-pin`, `is-column-hide`.
+
+**Patrón de detección de datos en `#readData()`**: el primer
+`<script type="application/json">` son columnas, el segundo son filas.
+Si el primer script es claramente rows (no tiene `field`), se corrige
+automáticamente. Esto evita el bug histórico que hacía que las columnas
+se rellenaran con `col-N` autogenerados.
+
+**Anti-patterns NO usar:**
+
+- No usar `getAttribute('rows')` directamente — el helper hace auto-fix
+  inteligente entre cols y rows.
+- No hardcodear `DENSITY_ROW_HEIGHT` en subclases; usar siempre
+  `this.#rowHeight()` que respeta `--is-grid-row-h`.
+- No insertar overrides de `--is-...` para el color del scrollbar dentro
+  del shadow — heredan del light DOM via custom property cascades.
+
 ## 7. Tests (lo nuevo de esta sesión)
 
 Hemos creado tests en `tests/` que **detectan los errores de §6 antes de que

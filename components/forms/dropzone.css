@@ -1,0 +1,108 @@
+/* is-dropzone */
+:host {
+  display: block;
+  font: inherit;
+  color: var(--is-text);
+}
+.root { display: flex; flex-direction: column; gap: .85rem; }
+
+.zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: .35rem;
+  padding: 2rem 1rem;
+  border: 2px dashed var(--is-border);
+  border-radius: var(--is-radius, 12px);
+  background:
+    repeating-linear-gradient(135deg,
+      color-mix(in srgb, var(--is-text) 3%, transparent) 0 6px,
+      transparent 6px 12px);
+  cursor: pointer;
+  outline: 0;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+.zone:focus-visible, .zone.is-over {
+  border-color: var(--is-accent);
+  background:
+    color-mix(in srgb, var(--is-accent) 10%, transparent);
+}
+.zone .ico { font-size: 2rem; color: var(--is-accent); }
+.zone .title { font-size: 1rem; }
+.zone .sub { color: var(--is-text-soft); font-size: .85rem; }
+
+.queue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+.row {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr 6rem auto auto;
+  align-items: center;
+  gap: .65rem;
+  padding: .5rem .65rem;
+  background: var(--is-bg-elev);
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius, 8px);
+}
+.thumb {
+  width: 2.6rem; height: 2.6rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--is-bg-soft) 80%, transparent);
+  display: grid; place-items: center;
+  overflow: hidden;
+  color: var(--is-text-soft);
+  font-size: 1.25rem;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.meta { min-width: 0; }
+.name {
+  display: block;
+  font-weight: 600;
+  font-size: .82rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.size { color: var(--is-text-soft); font-size: .7rem; }
+
+progress {
+  appearance: none;
+  height: 6px;
+  border: 0;
+  width: 100%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--is-text) 12%, transparent);
+  overflow: hidden;
+}
+progress::-webkit-progress-bar { background: color-mix(in srgb, var(--is-text) 12%, transparent); }
+progress::-webkit-progress-value { background: var(--is-accent); transition: width 120ms ease; }
+progress::-moz-progress-bar { background: var(--is-accent); }
+
+.status {
+  font-size: .7rem;
+  color: var(--is-text-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.status-done .status { color: var(--is-success, #16a34a); }
+.status-uploading .status { color: var(--is-accent); }
+.status-error .status { color: var(--is-danger, #dc2626); }
+
+.del {
+  border: 0;
+  background: transparent;
+  color: var(--is-text-soft);
+  width: 1.85rem; height: 1.85rem;
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+  display: grid; place-items: center;
+}
+.del:hover { background: var(--is-danger, #dc2626); color: white; }

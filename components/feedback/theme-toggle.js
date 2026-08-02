@@ -114,8 +114,8 @@ import '../actions/check-icon-button.js';
       const container = this.themeContainer;
       this.#applying = true;
       applyTheme(container, next);
-      this.dark = next === 'dark';
       this.#applying = false;
+      this.#render();
       this.dispatchEvent(new CustomEvent('theme-toggle', {
         bubbles: true,
         composed: true,
@@ -129,8 +129,26 @@ import '../actions/check-icon-button.js';
       }));
     };
 
+    /** Re-sincroniza el icono desde fuera (p.ej. is-context por postMessage)
+     *  releyendo el tema real del container. */
+    forceSync() {
+      this.dark = readTheme(this.themeContainer) === 'dark';
+      this.#render();
+    }
+
     #render() {
-      this.#btn.checked = this.dark;
+      const want = this.dark;
+      const btn = this.#btn;
+      // toggleAttribute no dispara attributeChangedCallback si el atributo
+      // ya está en el valor deseado y el icono interno se queda pegado:
+      // forzar siempre el ciclo remove + set.
+      if (want) {
+        if (btn.hasAttribute('checked')) btn.removeAttribute('checked');
+        btn.setAttribute('checked', '');
+      } else {
+        if (!btn.hasAttribute('checked')) btn.setAttribute('checked', '');
+        btn.removeAttribute('checked');
+      }
     }
   }
 

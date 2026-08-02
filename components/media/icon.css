@@ -20,7 +20,7 @@
       line-height: 0;
       color: inherit;
       fill: currentColor;
-      stroke: currentColor;
+      /* sin stroke: los iconos de relleno se contornean y ennegrecen */
       width: 1em;
       height: 1em;
       & > svg { width: 1em; height: 1em; display: block; fill: currentColor; }

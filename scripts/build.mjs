@@ -1,4 +1,5 @@
-// build.mjs — CDN artifacts: flat dist/cdn/{tag}.min.js + {tag}.min.css + is-base.min.css
+// build.mjs — CDN artifacts folderizados: dist/cdn/{categoria}/{tag}.min.js
+// + {tag}.min.css + is-base.min.css/palettes.min.css en la raiz.
 // Ademas genera bundles por categoria (categoria.min.js) y all.min.js para
 // poder cargar varios componentes con un solo <script type="module" src="..."></script>.
 import { access, readdir, mkdir, stat, rm, writeFile } from 'node:fs/promises';
@@ -25,9 +26,14 @@ const bundleJs = (entry, outfile) =>
     legalComments: 'none',
   });
 
+// bundle:false — los .min.js de cada tag ya están compilados y minificados;
+// aquí solo generamos un archivo que los importa. Si se hiciera bundle:true
+// esbuild inlinearía todo en un único módulo y `import.meta.url` (usado por
+// adoptCss para localizar el .css hermano de cada componente) apuntaría al
+// archivo de categoría/all en vez del componente, rompiendo el CSS.
 const bundleVirtual = async (outfile, virtualEntry, sourcefile) => {
   const r = await build({
-    bundle: true,
+    bundle: false,
     minify: true,
     format: 'esm',
     target: 'es2020',
@@ -47,7 +53,7 @@ async function walk(dir, out = []) {
     if (name.isDirectory()) {
       if (name.name === '_shared') continue;
       await walk(p, out);
-    } else if (/\.js$/.test(name.name)) {
+    } else if (/\.js$/.test(name.name) && name.name !== 'index.js') {
       out.push(p);
     }
   }
@@ -72,11 +78,35 @@ for (const e of entries) {
   tagToComponent.set(tag, e);
 }
 
+// Carpeta de salida por tag: la categoria del manifest manda; los modulos
+// internos (marks, specs, datagrid-core...) usan su carpeta top-level en
+// components/ como fallback.
+const manifestCategoryByTag = new Map(
+  manifest.map((m) => [m.tag.replace(/^is-/, ''), m.category]),
+);
+const folderFor = (file) => {
+  const tag = basename(file).replace(/\.js$/, '');
+  if (manifestCategoryByTag.has(tag)) return manifestCategoryByTag.get(tag);
+  return relative(compRoot, file).split(/[\\/]/)[0];
+};
+
+const scrollbarsIn = join(compRoot, '_shared', 'scrollbars.css');
+const emittedFolders = new Set();
+
 for (const inFile of entries) {
   const tag = basename(inFile).replace(/\.js$/, '');
+  const folder = folderFor(inFile);
+  const outDir = join(dist, folder);
+  await mkdir(outDir, { recursive: true });
   const cssIn = inFile.replace(/\.js$/i, '.css');
-  const outJs = join(dist, `${tag}.min.js`);
-  const outCss = join(dist, `${tag}.min.css`);
+  const outJs = join(outDir, `${tag}.min.js`);
+  const outCss = join(outDir, `${tag}.min.css`);
+
+  // adoptCss busca ./scrollbars.css junto al modulo: emitirlo una vez por carpeta.
+  if (!emittedFolders.has(folder)) {
+    emittedFolders.add(folder);
+    await bundleCss(scrollbarsIn, join(outDir, 'scrollbars.css'));
+  }
 
   await bundleJs(inFile, outJs);
 
@@ -86,7 +116,7 @@ for (const inFile of entries) {
   const [jsIn, jsOut] = await Promise.all([stat(inFile), stat(outJs)]);
   const cssSize = hasCss ? String((await stat(outCss)).size) : '—';
   console.log(
-    `  ${tag.padEnd(18)} js ${String(jsIn.size).padStart(6)}→${String(jsOut.size).padStart(6)}  css ${cssSize.padStart(6)}`,
+    `  ${(folder + '/' + tag).padEnd(28)} js ${String(jsIn.size).padStart(6)}→${String(jsOut.size).padStart(6)}  css ${cssSize.padStart(6)}`,
   );
 }
 
@@ -113,41 +143,47 @@ const entriesImport = (tags) =>
 for (const [category, items] of byCategory) {
   const tags = items.map((m) => m.tag.replace(/^is-/, '')).filter((t) => tagToComponent.has(t));
   if (!tags.length) continue;
+  // El bundle vive DENTRO de la carpeta de la categoria: los imports
+  // relativos './<tag>.min.js' resuelven a sus hermanos.
   const virtualEntry = `// categoria: ${category}\n${entriesImport(tags)}\n`;
-  const out = join(dist, `${category}.min.js`);
+  const outName = `${category}/category.${category}.min.js`;
+  await mkdir(join(dist, category), { recursive: true });
+  const out = join(dist, category, `category.${category}.min.js`);
   await bundleVirtual(out, virtualEntry, out);
   const outStat = await stat(out);
-  console.log(`  ${(category + '.min').padEnd(18)} js ${String(outStat.size).padStart(6)}  (${tags.length} comps)`);
+  console.log(`  ${outName.padEnd(34)} js ${String(outStat.size).padStart(6)}  (${tags.length} comps)`);
 }
 
 // ── Bundle all ───────────────────────────────────────────────────
-// Re-exporta cada <tag>.min.js, esto incluye TODOS los modulos JS.
+// Re-importa cada <categoria>/<tag>.min.js desde la raiz de dist/cdn.
 // Los CSS los carga cada componente en su shadow (adoptCss).
-const allTags = entries.map((e) => basename(e).replace(/\.js$/, '')).sort();
-const allVirtual = `// all.min.js — todos los componentes de IS Web Components\n${entriesImport(allTags)}\n`;
+const allPaths = entries
+  .map((e) => `${folderFor(e)}/${basename(e).replace(/\.js$/, '')}`)
+  .sort();
+const allVirtual = `// all.min.js — todos los componentes de IS Web Components\n${allPaths.map((p) => `import './${p}.min.js';`).join('\n')}\n`;
 const allOut = join(dist, 'all.min.js');
 await bundleVirtual(allOut, allVirtual, allOut);
 const allStat = await stat(allOut);
-console.log(`  ${'all.min'.padEnd(18)} js ${String(allStat.size).padStart(6)}  (${allTags.length} comps)`);
+console.log(`  ${'all.min'.padEnd(18)} js ${String(allStat.size).padStart(6)}  (${allPaths.length} comps)`);
 
 await writeFile(
   join(dist, 'README.txt'),
   [
-    'CDN flat artifacts',
-    '  is-base.min.css          — themes + brand palettes (link in the host app)',
-    '  <name>.min.js            — single component (bundles adopt-css; loads sibling .min.css into shadow)',
-    '  <name>.min.css           — component styles (must sit next to the .min.js)',
-    '  <category>.min.js        — every component of a category in one file (actions, media, forms, ...)',
-    '  all.min.js               — every component in a single file',
-    '  assets/icons/            — Iconify SVGs (one subfolder per collection, plus one {prefix}.json index).',
-    '  Custom element tags keep the is-* prefix (e.g. button.min.js → <is-button>).',
+    'CDN artifacts (folderizados por categoria)',
+    '  is-base.min.css                          — themes + brand palettes (link in the host app)',
+    '  palettes.min.css                         — paletas de marca',
+    '  <categoria>/<name>.min.js                — componente individual (carga su .min.css hermano en el shadow)',
+    '  <categoria>/<name>.min.css               — estilos del componente (junto al .min.js)',
+    '  <categoria>/category.<categoria>.min.js  — todos los componentes de esa categoria',
+    '  all.min.js                               — todos los componentes en un archivo',
+    '  assets/icons/                            — SVGs Iconify + <prefix>.json + index.json',
+    '  Los tags conservan el prefijo is-* (p.ej. actions/button.min.js → <is-button>).',
     '',
-    'Usage:',
+    'Uso:',
     '  <link rel="stylesheet" href=".../is-base.min.css">',
-    '  <script type="module" src=".../button.min.js"></script>',
-    '  <!-- button.min.css is fetched automatically by the component -->',
-    '  <!-- or grab several at once: -->',
-    '  <script type="module" src=".../actions.min.js"></script>',
+    '  <script type="module" src=".../actions/button.min.js"></script>',
+    '  <!-- el .min.css lo trae el propio componente -->',
+    '  <script type="module" src=".../actions/category.actions.min.js"></script>',
     '  <script type="module" src=".../all.min.js"></script>',
     '',
   ].join('\n'),

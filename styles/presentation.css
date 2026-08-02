@@ -47,22 +47,12 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--is-accent) 6%, transparent) 0%, transparent 120px),
     var(--is-bg-soft);
-  border-left: 1px solid color-mix(in srgb, var(--is-border) 60%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--is-accent) 45%, var(--is-border));
+  font-family: "Manrope", var(--is-sans);
+  font-weight: 400;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--is-control-border) 70%, transparent) transparent;
-}
-
-.sidebar::-webkit-scrollbar { width: 9px; }
-.sidebar::-webkit-scrollbar-track { background: transparent; }
-.sidebar::-webkit-scrollbar-thumb {
-  border: 3px solid transparent;
-  border-radius: 999px;
-  background-clip: content-box;
-  background-color: color-mix(in srgb, var(--is-control-border) 70%, transparent);
-}
-.sidebar:hover::-webkit-scrollbar-thumb {
-  background-color: color-mix(in srgb, var(--is-accent) 45%, var(--is-control-border));
+  scrollbar-color: var(--is-scrollbar-thumb) transparent;
 }
 
 /* El preview-chrome está clavado dentro de is-main.main con sticky.
@@ -111,14 +101,13 @@ html:not([data-embed="1"]) .sidebar h1 { top: 0.5rem; }
   font-weight: 500;
   line-height: 1.35;
   color: var(--is-text-soft);
-  border-radius: 6px;
-  transition: background 140ms ease, color 140ms ease, padding-left 140ms ease;
+  transition: background 140ms ease, color 140ms ease, translate 140ms ease;
 }
 .sidebar nav a:hover,
 .sidebar is-scrollspy a:hover {
   background: color-mix(in srgb, var(--is-bg-elev) 85%, transparent);
   color: var(--is-text);
-  padding-left: 17px;
+  translate: 3px 0;
   text-decoration: none;
 }
 .sidebar nav a.active,
@@ -159,6 +148,66 @@ is-main.main {
     radial-gradient(900px 420px at 12% -8%, color-mix(in srgb, var(--is-accent) 11%, transparent), transparent 60%),
     radial-gradient(700px 360px at 92% 8%, color-mix(in srgb, var(--is-bg-elev) 70%, transparent), transparent 55%),
     var(--is-bg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--is-scrollbar-thumb) var(--is-scrollbar-track);
+}
+
+/* --- Scrollbar consistente en superficies de los demos ----------------
+ * El is-base.css ya pone `* { scrollbar-color: ... }`; aquí consolidamos
+ * el estilo WebKit (track invisible, thumb con padding-clip, hover con
+ * acento) para que cualquier `.section`, `.main`, `.sidebar`, `<is-main>`
+ * o `.demo` con overflow muestre el mismo thumb que el sidebar TOC. */
+.main::-webkit-scrollbar,
+is-main.main::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar,
+.section::-webkit-scrollbar,
+.demo::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: var(--is-scrollbar-size);
+  height: var(--is-scrollbar-size);
+}
+.main::-webkit-scrollbar-track,
+is-main.main::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track,
+.section::-webkit-scrollbar-track,
+.demo::-webkit-scrollbar-track,
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: var(--is-scrollbar-track);
+  border-radius: var(--is-scrollbar-radius);
+}
+.main::-webkit-scrollbar-thumb,
+is-main.main::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb,
+.section::-webkit-scrollbar-thumb,
+.demo::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: var(--is-scrollbar-thumb);
+  border-radius: var(--is-scrollbar-radius);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.main:hover::-webkit-scrollbar-thumb,
+is-main.main:hover::-webkit-scrollbar-thumb,
+.sidebar:hover::-webkit-scrollbar-thumb,
+.section:hover::-webkit-scrollbar-thumb,
+.demo:hover::-webkit-scrollbar-thumb,
+html:hover::-webkit-scrollbar-thumb,
+body:hover::-webkit-scrollbar-thumb {
+  background: var(--is-scrollbar-thumb-hover);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.main::-webkit-scrollbar-corner,
+is-main.main::-webkit-scrollbar-corner,
+.sidebar::-webkit-scrollbar-corner,
+.section::-webkit-scrollbar-corner,
+.demo::-webkit-scrollbar-corner,
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /* --- Theme toggle --------------------------------------------------- */
@@ -282,19 +331,17 @@ is-main.main {
 .demo:has(is-tooltip, is-popover, is-dropdown, is-popup, is-copy-button, is-lightbox, is-diagram-lightbox) {
   overflow: visible;
 }
-.demo::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--is-border-soft) 80%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--is-border-soft) 80%, transparent) 1px, transparent 1px);
-  background-size: 20px 20px;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 20%, transparent 75%);
-  pointer-events: none;
-  opacity: 0.55;
-}
 .demo > * { position: relative; z-index: 1; }
+/* <is-demo> reusa el chrome de .demo; el heading es su label opcional. */
+is-demo.demo { display: flex; }
+.demo__heading {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--is-text-soft);
+}
 /* Overlays: su z-index interno no cruza el stacking del host; subir el host
    para que no lo tapen siblings posteriores (#log, captions, etc.). */
 .demo > :is(is-dropdown, is-popup, is-tooltip, is-popover, is-combobox, is-date-picker, is-date-input, is-lightbox, is-diagram-lightbox) {
@@ -637,7 +684,7 @@ pre.code {
   line-height: 1.55;
   tab-size: 2;
   white-space: pre;
-  border-left: 3px solid color-mix(in srgb, var(--is-accent) 55%, var(--is-border));
+  border-left: 1px solid color-mix(in srgb, var(--is-accent) 35%, var(--is-border));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
 }
 /* CodeMirror runMode tokens — specificity > theme CDN (carga async) */
@@ -764,11 +811,7 @@ table.ref td:first-child { width: 36%; }
   justify-content: center;
   min-height: 220px;
   padding: 32px;
-  background:
-    linear-gradient(to right, color-mix(in srgb, var(--is-border-soft) 70%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--is-border-soft) 70%, transparent) 1px, transparent 1px),
-    var(--is-bg-soft);
-  background-size: 24px 24px, 24px 24px, auto;
+  background: var(--is-bg-soft);
   border: 1px solid var(--is-border);
   border-radius: var(--is-radius);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
@@ -855,11 +898,10 @@ table.ref td:first-child { width: 36%; }
 
 .callout {
   background: color-mix(in srgb, var(--is-accent) 7%, var(--is-bg-soft));
-  border: 1px solid color-mix(in srgb, var(--is-accent) 28%, var(--is-border-soft));
-  border-left: 3px solid var(--is-accent);
+  border: 1px solid color-mix(in srgb, var(--is-accent) 32%, var(--is-border-soft));
   padding: 12px 16px;
   margin: 14px 0 20px;
-  border-radius: 0 var(--is-radius-sm) var(--is-radius-sm) 0;
+  border-radius: var(--is-radius-sm);
   font-size: 0.9rem;
   color: var(--is-text-soft);
   line-height: 1.5;
@@ -905,11 +947,7 @@ table.ref td:first-child { width: 36%; }
   border-radius: var(--is-radius);
   padding: 20px;
   margin: 12px 0 28px;
-  background:
-    linear-gradient(to right, color-mix(in srgb, var(--is-border-soft) 65%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--is-border-soft) 65%, transparent) 1px, transparent 1px),
-    var(--is-bg-soft);
-  background-size: 20px 20px, 20px 20px, auto;
+  background: var(--is-bg-soft);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
   display: flex;
   align-items: flex-start;
@@ -1012,8 +1050,8 @@ html[data-embed="1"] .preview-chrome {
 
 @media (max-width: 900px) {
   .sidebar {
-    border-left: 1px solid var(--is-border-soft);
-    border-top: 0;
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--is-accent) 45%, var(--is-border));
   }
   .main { padding: 24px 20px 60px; }
   .playground { grid-template-columns: 1fr; }

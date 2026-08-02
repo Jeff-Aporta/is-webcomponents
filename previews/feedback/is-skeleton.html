@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-skeleton · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -24,15 +25,15 @@
         <h2>Skeleton</h2>
         <p class="lede"><code class="code">&lt;is-skeleton&gt;</code></p>
         <p class="lede">Placeholder de carga con efecto <code class="code">sheen</code> (default) o <code class="code">pulse</code>.</p>
-        <div class="demo" style="max-width:320px">
+        <is-demo class="demo" style="max-width:320px">
           <is-skeleton style="height:.875rem;margin-bottom:.5rem"></is-skeleton>
           <is-skeleton style="height:.875rem;width:80%;margin-bottom:.5rem"></is-skeleton>
           <is-skeleton style="height:4rem;border-radius:8px"></is-skeleton>
-        </div>
+        </is-demo>
       </section>
       <section class="section" id="examples">
         <h2>Efectos</h2>
-        <div class="demo" style="max-width:280px;display:flex;flex-direction:column;gap:1rem">
+        <is-demo class="demo" style="max-width:280px;display:flex;flex-direction:column;gap:1rem">
           <div>
             <span class="demo-label">sheen</span>
             <is-skeleton effect="sheen" style="height:1rem"></is-skeleton>
@@ -45,7 +46,7 @@
             <span class="demo-label">none</span>
             <is-skeleton effect="none" style="height:1rem"></is-skeleton>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-skeleton effect="sheen" style="height:1rem"&gt;&lt;/is-skeleton&gt;
 &lt;is-skeleton effect="pulse" style="height:1rem"&gt;&lt;/is-skeleton&gt;</pre>
       </section>

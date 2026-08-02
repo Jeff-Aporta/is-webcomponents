@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-flowchart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -34,7 +35,7 @@
           JSON, mismo visor a pantalla completa y la misma animación tortuga, que
           aquí recorre las aristas en orden.
         </p>
-        <div class="demo" style="height:30rem">
+        <is-demo class="demo" style="height:30rem">
           <is-flowchart>
             <script type="application/json">
               {
@@ -73,7 +74,7 @@
               }
             </script>
           </is-flowchart>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="direccion">
@@ -83,7 +84,7 @@
           <code>LR</code> y <code>RL</code>. <code>TD</code> se acepta como alias de
           <code>TB</code>, igual que en Mermaid.
         </p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-flowchart>
             <script type="application/json">
               {
@@ -104,7 +105,7 @@
               }
             </script>
           </is-flowchart>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="formas">
@@ -115,7 +116,7 @@
           <code>diamond</code>, <code>hexagon</code>, <code>parallelogram</code>,
           <code>cylinder</code> y <code>subroutine</code>.
         </p>
-        <div class="demo" style="height:22rem">
+        <is-demo class="demo" style="height:22rem">
           <is-flowchart>
             <script type="application/json">
               {
@@ -142,7 +143,7 @@
               }
             </script>
           </is-flowchart>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="ciclos">
@@ -152,7 +153,7 @@
           vez de colgarse intentando ordenar un grafo cíclico. Los reprocesos y los
           reintentos se declaran sin ceremonia.
         </p>
-        <div class="demo" style="height:24rem">
+        <is-demo class="demo" style="height:24rem">
           <is-flowchart>
             <script type="application/json">
               {
@@ -178,7 +179,7 @@
               }
             </script>
           </is-flowchart>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

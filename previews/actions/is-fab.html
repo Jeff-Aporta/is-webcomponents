@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-fab · IS Web Components</title>
   <meta name="description" content="Documentación y demos de is-fab (Floating Action Button) de Insoft." />
@@ -47,12 +48,12 @@
           extendidas, pulso de atención y posicionamiento en cualquier esquina.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="fab-stage">
             <is-fab id="fb1" icon="mdi:plus" position="bottom-end" label="Crear"></is-fab>
           </div>
           <p>Click: <span id="fbLog">0</span></p>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-fab</span> <span class="attr">icon</span>=<span class="val">"mdi:plus"</span> <span class="attr">label</span>=<span class="val">"Crear"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-fab&gt;</span></pre>
       </section>
@@ -61,59 +62,59 @@
         <h2>Tamaños</h2>
         <p class="lede">small, medium (default), large.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-fab icon="mdi:bell" style="font-size:0.75em" position="inline" label="Notificación"></is-fab>
           <is-fab icon="mdi:bell" position="inline" label="Notificación"></is-fab>
           <is-fab icon="mdi:bell" style="font-size:1.3em" position="inline" label="Notificación"></is-fab>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="variants">
         <h2>Variantes</h2>
         <p class="lede">brand, neutral, danger, success, warning.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-fab icon="mdi:plus" variant="brand" position="inline" label="brand"></is-fab>
           <is-fab icon="mdi:pencil" variant="neutral" position="inline" label="neutral"></is-fab>
           <is-fab icon="mdi:trash-can" variant="danger" position="inline" label="danger"></is-fab>
           <is-fab icon="mdi:check" variant="success" position="inline" label="success"></is-fab>
           <is-fab icon="mdi:alert" variant="warning" position="inline" label="warning"></is-fab>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="extended">
         <h2>Extendido</h2>
         <p class="lede">Con <code class="code">extended</code> el FAB tiene label al lado del icono.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-fab icon="mdi:plus" extended label="Nuevo proyecto" position="inline"></is-fab>
           <is-fab icon="mdi:share" variant="neutral" extended label="Compartir" position="inline"></is-fab>
           <is-fab icon="mdi:download" variant="success" extended label="Descargar" position="inline"></is-fab>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="positions">
         <h2>Posiciones</h2>
         <p class="lede">bottom-end (default), bottom-start, top-end, top-start.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="fab-stage">
             <is-fab icon="mdi:plus" position="top-start" label="top-start"></is-fab>
             <is-fab icon="mdi:pencil" position="top-end" label="top-end"></is-fab>
             <is-fab icon="mdi:share" position="bottom-start" label="bottom-start"></is-fab>
             <is-fab icon="mdi:check" variant="success" position="bottom-end" label="bottom-end"></is-fab>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="pulse">
         <h2>Pulso</h2>
         <p class="lede">Con <code class="code">pulse</code> el FAB anima un anillo de atención cada 2s.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-fab icon="mdi:bell" pulse variant="warning" position="inline" label="Notificaciones"></is-fab>
           <is-fab icon="mdi:message" pulse variant="brand" position="inline" label="Mensajes"></is-fab>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

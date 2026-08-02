@@ -1,16 +1,16 @@
-CDN flat artifacts
-  is-base.min.css          — themes + brand palettes (link in the host app)
-  <name>.min.js            — single component (bundles adopt-css; loads sibling .min.css into shadow)
-  <name>.min.css           — component styles (must sit next to the .min.js)
-  <category>.min.js        — every component of a category in one file (actions, media, forms, ...)
-  all.min.js               — every component in a single file
-  assets/icons/            — Iconify SVGs (one subfolder per collection, plus one {prefix}.json index).
-  Custom element tags keep the is-* prefix (e.g. button.min.js → <is-button>).
+CDN artifacts (folderizados por categoria)
+  is-base.min.css                          — themes + brand palettes (link in the host app)
+  palettes.min.css                         — paletas de marca
+  <categoria>/<name>.min.js                — componente individual (carga su .min.css hermano en el shadow)
+  <categoria>/<name>.min.css               — estilos del componente (junto al .min.js)
+  <categoria>/category.<categoria>.min.js  — todos los componentes de esa categoria
+  all.min.js                               — todos los componentes en un archivo
+  assets/icons/                            — SVGs Iconify + <prefix>.json + index.json
+  Los tags conservan el prefijo is-* (p.ej. actions/button.min.js → <is-button>).
 
-Usage:
+Uso:
   <link rel="stylesheet" href=".../is-base.min.css">
-  <script type="module" src=".../button.min.js"></script>
-  <!-- button.min.css is fetched automatically by the component -->
-  <!-- or grab several at once: -->
-  <script type="module" src=".../actions.min.js"></script>
+  <script type="module" src=".../actions/button.min.js"></script>
+  <!-- el .min.css lo trae el propio componente -->
+  <script type="module" src=".../actions/category.actions.min.js"></script>
   <script type="module" src=".../all.min.js"></script>

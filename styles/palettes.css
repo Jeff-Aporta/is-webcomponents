@@ -21,6 +21,12 @@
 /* ─── INSOFT (default) ──────────────────────────────────────────── */
 
 [data-palette="insoft"] {
+  --is-color-info-50: #e7f5ff;
+  --is-color-info-100: #d0ebff;
+  --is-color-info-500: #228be6;
+  --is-color-info-600: #1c7ed6;
+  --is-color-info-700: #1864ab;
+  --is-color-info-800: #145591;
   --is-color-brand-50: #fff1f1;
   --is-color-brand-100: #ffd9d9;
   --is-color-brand-500: #e03131;
@@ -69,6 +75,12 @@
 /* ─── CONTAPYME (azul) ─────────────────────────────────────────── */
 
 [data-palette="contapyme"] {
+  --is-color-info-50: #e7f5ff;
+  --is-color-info-100: #d0ebff;
+  --is-color-info-500: #228be6;
+  --is-color-info-600: #1c7ed6;
+  --is-color-info-700: #1864ab;
+  --is-color-info-800: #145591;
   --is-color-brand-50: #e8f4ff;
   --is-color-brand-100: #cce7ff;
   --is-color-brand-500: dodgerblue;
@@ -118,6 +130,12 @@
 /* ─── AGROWIN (verde) ──────────────────────────────────────────── */
 
 [data-palette="agrowin"] {
+  --is-color-info-50: #e7f5ff;
+  --is-color-info-100: #d0ebff;
+  --is-color-info-500: #228be6;
+  --is-color-info-600: #1c7ed6;
+  --is-color-info-700: #1864ab;
+  --is-color-info-800: #145591;
   --is-color-brand-50: #f4fae9;
   --is-color-brand-100: #e4f2c8;
   --is-color-brand-500: yellowgreen;

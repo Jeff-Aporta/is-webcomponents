@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-scatter-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -31,7 +32,7 @@
           Muestra la relación entre dos variables con puntos en una rejilla.
           Ideal para correlaciones, clusters y outliers.
         </p>
-        <div class="demo demo--chart">
+        <is-demo class="demo demo--chart">
           <is-scatter-chart label="Measurements" x-label="Height (cm)" y-label="Weight (kg)">
             <script type="application/json">
               {
@@ -49,13 +50,13 @@
               }
             </script>
           </is-scatter-chart>
-        </div>
+        </is-demo>
         <p class="lede" style="margin-top:1rem">A diferencia de barras/líneas, cada punto es un objeto <code class="code">{ x, y }</code>.</p>
       </section>
 
       <section class="section" id="json">
         <h2>Datos con JSON</h2>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-scatter-chart label="Students" x-label="Hours studied" y-label="Score">
             <script type="application/json">
               {
@@ -72,7 +73,7 @@
               }
             </script>
           </is-scatter-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-scatter-chart label="Students" x-label="Hours" y-label="Score"&gt;
   &lt;script type="application/json"&gt;
     { "data": { "datasets": [{ "label": "Students", "data": [{ "x": 2, "y": 65 }, …] }] } }
@@ -82,9 +83,9 @@
 
       <section class="section" id="js">
         <h2>Datos con JavaScript</h2>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-scatter-chart id="scatterJs" label="Students" x-label="Hours" y-label="Score"></is-scatter-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">const chart = document.querySelector('#scatterJs');
 chart.config = {
   data: {
@@ -103,9 +104,9 @@ chart.config = {
       <section class="section" id="multi">
         <h2>Múltiples datasets</h2>
         <p class="lede">Compara grupos; cada dataset recibe su color de la serie fija.</p>
-        <div class="demo demo--chart">
+        <is-demo class="demo demo--chart">
           <is-scatter-chart id="scatterMulti" label="Study methods" x-label="Hours" y-label="Score"></is-scatter-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">datasets: [
   { label: 'Tutored', data: [{ x: 3, y: 78 }, …] },
   { label: 'Self-study', data: [{ x: 3, y: 68 }, …] },
@@ -114,7 +115,7 @@ chart.config = {
 
       <section class="section" id="options">
         <h2>Grid y ejes</h2>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-scatter-chart grid="y" x-label="Temp (°F)" y-label="Sales" label="Ice cream">
             <script type="application/json">
               {
@@ -130,7 +131,7 @@ chart.config = {
               }
             </script>
           </is-scatter-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-scatter-chart grid="y" x-label="Temp" y-label="Sales"&gt;…&lt;/is-scatter-chart&gt;
 &lt;is-scatter-chart without-legend without-animation&gt;…&lt;/is-scatter-chart&gt;</pre>
       </section>

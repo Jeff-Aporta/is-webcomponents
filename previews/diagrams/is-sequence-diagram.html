@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-sequence-diagram · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -34,13 +35,13 @@
           controles de la animación tortuga, tooltips por paso y leyenda de
           grupos que puedes encender y apagar.
         </p>
-        <div class="demo" style="height:26rem">
+        <is-demo class="demo" style="height:26rem">
           <is-sequence-diagram>
             <script type="application/json">
               { "preset": "tk1437191" }
             </script>
           </is-sequence-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="json">
@@ -50,7 +51,7 @@
           las lifelines, <code class="code">messages</code> los pasos y
           <code class="code">groups</code> el color por tono HSL (0–360).
         </p>
-        <div class="demo" style="height:22rem">
+        <is-demo class="demo" style="height:22rem">
           <is-sequence-diagram>
             <script type="application/json">
               {
@@ -83,7 +84,7 @@
               }
             </script>
           </is-sequence-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="alt">
@@ -92,7 +93,7 @@
           Con <code class="code">alt.branches</code> el diagrama encierra los pasos
           condicionales en una caja punteada y rotula cada rama.
         </p>
-        <div class="demo" style="height:24rem">
+        <is-demo class="demo" style="height:24rem">
           <is-sequence-diagram>
             <script type="application/json">
               {
@@ -133,7 +134,7 @@
               }
             </script>
           </is-sequence-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="viewer">

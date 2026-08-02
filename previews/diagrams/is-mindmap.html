@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-mindmap · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -33,7 +34,7 @@
           Cada nodo hereda el tono de su ancestro de nivel 1, salvo que fije el
           suyo propio, así cada rama se lee de un solo color de punta a punta.
         </p>
-        <div class="demo" style="height:28rem">
+        <is-demo class="demo" style="height:28rem">
           <is-mindmap>
             <script type="application/json">
               {
@@ -60,7 +61,7 @@
               }
             </script>
           </is-mindmap>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="layout-tree">
@@ -70,7 +71,7 @@
           árbol horizontal (izquierda → derecha), útil cuando las ramas tienen
           textos largos.
         </p>
-        <div class="demo" style="height:20rem">
+        <is-demo class="demo" style="height:20rem">
           <is-mindmap>
             <script type="application/json">
               {
@@ -89,7 +90,7 @@
               }
             </script>
           </is-mindmap>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

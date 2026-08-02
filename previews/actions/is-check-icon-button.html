@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-check-icon-button · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-check-icon-button de Insoft." />
@@ -79,7 +80,7 @@
           (play/pausa, mute) e <code class="code">is-theme-toggle</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <span class="demo-label">caso mínimo</span>
             <div class="cluster">
@@ -93,7 +94,7 @@
               <span class="card-meta" id="playState">estado: paused</span>
             </div>
           </div>
-        </div>
+        </is-demo>
 
         <div class="callout">
           <strong>Los dos labels son obligatorios.</strong>
@@ -117,7 +118,7 @@
           semántica: tú eliges los iconos y los labels.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="cluster" style="gap: 1.25rem;">
             <is-check-icon-button icon="mdi:play" checked-icon="mdi:pause"
               label="Reproducir" checked-label="Pausar"></is-check-icon-button>
@@ -132,7 +133,7 @@
             <is-check-icon-button icon="mdi:eye-off-outline" checked-icon="mdi:eye"
               label="Mostrar contraseña" checked-label="Ocultar contraseña"></is-check-icon-button>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="appearance">
@@ -142,7 +143,7 @@
           contenedor: es la variante para chrome oscura sobre vídeo o imágenes.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <span class="demo-label">default · sobre superficie normal</span>
             <div class="cluster">
@@ -165,7 +166,7 @@
                 label="Pantalla completa" checked-label="Salir de pantalla completa"></is-check-icon-button>
             </div>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-check-icon-button</span> <span class="attr">appearance</span>=<span class="val">"plain"</span> <span class="attr">icon</span>=<span class="val">"mdi:volume-high"</span> <span class="attr">checked-icon</span>=<span class="val">"mdi:volume-off"</span>
   <span class="attr">label</span>=<span class="val">"Silenciar"</span> <span class="attr">checked-label</span>=<span class="val">"Activar sonido"</span><span class="tag">&gt;&lt;/is-check-icon-button&gt;</span></pre>
@@ -173,7 +174,7 @@
 
       <section class="section" id="states">
         <h2>Estados</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="state-grid">
             <div>
               <span class="demo-label">unchecked</span>
@@ -196,7 +197,7 @@
                 label="Añadir a favoritos" checked-label="Quitar de favoritos" disabled checked></is-check-icon-button>
             </div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="keyboard">
@@ -215,7 +216,7 @@
 
       <section class="section" id="api">
         <h2>API live</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <div class="cluster">
               <is-check-icon-button id="apiBtn" icon="mdi:microphone" checked-icon="mdi:microphone-off"
@@ -225,7 +226,7 @@
               <is-button id="apiDisable" appearance="outlined">Toggle disabled</is-button>
             </div>
           </div>
-        </div>
+        </is-demo>
         <div class="log" id="apiLog"><div class="row"><span class="hint">Eventos is-change aparecerán aquí.</span></div></div>
       </section>
 

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-popconfirm · IS Web Components</title>
   <meta name="description" content="Documentación y demos de is-popconfirm de Insoft." />
@@ -35,7 +36,7 @@
           la pantalla. Perfecto para "¿Seguro que quieres borrar?" en línea.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="btnDelete" variant="danger">
             <is-icon slot="start" icon="mdi:trash-can"></is-icon>
             Borrar elemento
@@ -45,7 +46,7 @@
             <is-button slot="cancel">Cancelar</is-button>
           </is-popconfirm>
           <p id="pcLog">Última acción: <code class="code">—</code></p>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">id</span>=<span class="val">"btnDelete"</span><span class="tag">&gt;</span>Borrar<span class="tag">&lt;/is-button&gt;</span>
 <span class="tag">&lt;is-popconfirm</span> <span class="attr">for</span>=<span class="val">"btnDelete"</span> <span class="attr">message</span>=<span class="val">"¿Seguro?"</span><span class="tag">&gt;</span>
@@ -58,7 +59,7 @@
         <h2>Posiciones</h2>
         <p class="lede">top, top-start, top-end, bottom, bottom-start, bottom-end, start, end.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
             <is-button id="pc1">top</is-button>
             <is-popconfirm for="pc1" message="Top popconfirm" placement="top"></is-popconfirm>
@@ -84,14 +85,14 @@
             <is-button id="pc8">end</is-button>
             <is-popconfirm for="pc8" placement="end" message="End"></is-popconfirm>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="custom">
         <h2>Slot message</h2>
         <p class="lede">El contenido del slot <code class="code">message</code> reemplaza el atributo.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="pcMega">Power action</is-button>
           <is-popconfirm for="pcMega" placement="bottom" hide-arrow>
             <div slot="message">
@@ -103,7 +104,7 @@
             <is-button slot="cancel">Cancelar</is-button>
             <is-button slot="confirm" variant="danger">Reiniciar</is-button>
           </is-popconfirm>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

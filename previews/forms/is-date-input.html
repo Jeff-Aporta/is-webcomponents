@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-date-input · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -26,34 +27,34 @@
       <section class="section" id="intro">
         <h2>&lt;is-date-input&gt;</h2>
         <p class="lede">Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel.</p>
-        <div class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+        <is-demo class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
           <is-date-input id="di" label="Fecha" value="2026-07-30" locale="es" clearable></is-date-input>
           <is-date-input label="Con barra" value="2026-07-30" locale="es" action-bar></is-date-input>
-        </div>
+        </is-demo>
         <p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p>
       </section>
 
       <section class="section" id="time">
         <h2>&lt;is-time-input&gt;</h2>
         <p class="lede"><code>panel</code> elige la superficie: columnas, lista o reloj analógico.</p>
-        <div class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+        <is-demo class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
           <is-time-input label="Columnas" value="09:30" locale="es"></is-time-input>
           <is-time-input label="Lista" value="09:30" locale="es" panel="list"></is-time-input>
           <is-time-input label="Reloj" value="09:30" ampm locale="en-US" panel="clock"></is-time-input>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="datetime">
         <h2>&lt;is-date-time-input&gt;</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-date-time-input id="dti" label="Cita" locale="es" action-bar></is-date-time-input>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="range">
         <h2>&lt;is-date-range-input&gt;</h2>
         <p class="lede">Dos campos (inicio y fin) con el calendario de rango y atajos en el panel.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-date-range-input
             id="ri"
             start-label="Desde"
@@ -62,15 +63,15 @@
             calendars="2"
             shortcuts="this-week last-7-days current-month reset"
           ></is-date-range-input>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="mobile">
         <h2>Variante móvil</h2>
         <p class="lede"><code>variant="mobile"</code> centra el panel, atenúa el fondo y muestra toolbar + barra de acciones.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-date-input label="Móvil" locale="es" variant="mobile" value="2026-07-30"></is-date-input>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

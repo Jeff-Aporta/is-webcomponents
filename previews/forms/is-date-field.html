@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-date-field · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -25,36 +26,36 @@
       <section class="section" id="intro">
         <h2>&lt;is-date-field&gt;</h2>
         <p class="lede">Campo editable por secciones (DateField de MUI X). Cada sección es un spinbutton: flechas, dígitos, izquierda/derecha, Retroceso. El orden lo decide el locale.</p>
-        <div class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+        <is-demo class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
           <is-date-field id="df" label="Fecha" value="2026-07-30" locale="es" clearable></is-date-field>
           <is-date-field label="Date" value="2026-07-30" locale="en-US" clearable></is-date-field>
-        </div>
+        </is-demo>
         <p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p>
       </section>
 
       <section class="section" id="time">
         <h2>&lt;is-time-field&gt;</h2>
-        <div class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+        <is-demo class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
           <is-time-field label="Hora 24 h" value="14:05" hour24 locale="es"></is-time-field>
           <is-time-field label="Time" value="14:05" ampm locale="en-US"></is-time-field>
           <is-time-field label="Con segundos" value="14:05:30" hour24 seconds locale="es"></is-time-field>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="datetime">
         <h2>&lt;is-date-time-field&gt;</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-date-time-field id="dtf" label="Fecha y hora" value="2026-07-30T09:30" locale="es" clearable></is-date-time-field>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="validation">
         <h2>Validación</h2>
-        <div class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+        <is-demo class="demo cluster" style="gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
           <is-date-field label="Requerido" required locale="es"></is-date-field>
           <is-date-field label="Min 2026-08-01" value="2026-07-15" min="2026-08-01" locale="es"></is-date-field>
           <is-date-field label="Solo lectura" value="2026-07-30" readonly locale="es"></is-date-field>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

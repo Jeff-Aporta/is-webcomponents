@@ -37,7 +37,7 @@ const applyTheme = (theme) => {
   root.classList.toggle('theme-dark', theme === 'dark');
   root.dataset.theme = theme;
   const toggle = document.getElementById('previewTheme');
-  if (toggle) toggle.dark = theme === 'dark';
+  if (toggle && typeof toggle.forceSync === 'function') toggle.forceSync();
 };
 
 const applyPalette = (palette) => {
@@ -180,8 +180,7 @@ function mount() {
       applyTheme(theme);
       persist();
     } else {
-      const toggle = document.getElementById('previewTheme');
-      if (toggle) toggle.dark = root.dataset.theme === 'dark';
+      document.getElementById('previewTheme')?.forceSync?.();
     }
   });
   document.getElementById('previewPalette')?.addEventListener('change', (e) => {

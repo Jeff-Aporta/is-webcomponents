@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-block-diagram · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -35,7 +36,7 @@
           de costos que el resto de los diagramas, así que rodean las cajas en vez
           de atravesarlas.
         </p>
-        <div class="demo" style="height:22rem">
+        <is-demo class="demo" style="height:22rem">
           <is-block-diagram>
             <script type="application/json">
               {
@@ -66,7 +67,7 @@
               }
             </script>
           </is-block-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="span">
@@ -75,7 +76,7 @@
           <code>span</code> hace que un bloque ocupe N columnas (por defecto 1) y
           <code>shape</code> admite <code>rect</code> (por defecto) o <code>round</code>.
         </p>
-        <div class="demo" style="height:12rem">
+        <is-demo class="demo" style="height:12rem">
           <is-block-diagram>
             <script type="application/json">
               {
@@ -90,7 +91,7 @@
               }
             </script>
           </is-block-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

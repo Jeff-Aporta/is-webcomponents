@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-mention · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/forms/mention.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+  <style>
+    .mention-wrap { padding: 1.25rem; border: 1px solid var(--is-border); border-radius: var(--is-radius); background: var(--is-bg-elev); }
+    .mention-wrap > is-mention { width: 100%; }
+    pre.log {
+      font-family: ui-monospace, monospace; font-size: .8rem;
+      background: var(--is-bg-elev); border: 1px solid var(--is-border);
+      border-radius: var(--is-radius); padding: .55rem .75rem;
+      max-height: 9rem; overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-mention">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-mention&gt;</h2>
+        <p class="lede">Input con autocompletado al tipear <code class="code">@</code> (usuario) o <code class="code">#</code> (etiqueta). Popup se posiciona y se navega con flechas + Enter.</p>
+      </section>
+
+      <section class="section" id="basico">
+        <h2>Básico</h2>
+        <is-demo class="demo">
+          <div class="mention-wrap">
+            <label for="cmt" style="font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)">Comentario</label>
+            <is-mention id="cmt" trigger="@#" placeholder="Escribe @ o # para autocompletar…">
+              <script type="application/json">
+                {
+                  "@": ["Ana Ramírez", "Pedro Castaño", "Sofía Velez", "Jorge Arias", "Lina Mora", "Camilo Pérez", "Valentina López"],
+                  "#": ["urgente", "bug", "idea", "blocked", "wip", "ready-to-ship", "tech-debt"]
+                }
+              </script>
+            </is-mention>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="trigger">
+        <h2>Disparador personalizable</h2>
+        <p>Limitá los triggers con el atributo <code class="code">trigger</code>.</p>
+        <is-demo class="demo">
+          <div class="mention-wrap">
+            <label style="font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)">Solo usuarios</label>
+            <is-mention trigger="@" placeholder="Tipeá @ para nombrar…">
+              <script type="application/json">
+                { "@": ["Ana", "Pedro", "Sofía", "Jorge", "Lina", "Camilo"] }
+              </script>
+            </is-mention>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">const m = document.querySelector('is-mention');
+m.value;          // string con tokens ya insertos: "uy @Ana esto es #urgente"
+m.suggestions;    // { "@": [...], "#": [...] }
+m.addEventListener('is-select', e =&gt; {
+  console.log('elegiste:', e.detail.trigger, e.detail.item, e.detail.range);
+});
+
+// Sugerencias vía propiedad (alternativa al script)
+m.suggestions = { '@': persons, '#': tags };
+
+// Atributos:
+// trigger   caracteres que abren el popup (default "@#")
+// max-items tope del popup (default 8)</pre>
+      </section>
+
+      <section class="section" id="log">
+        <h2>Bitácora</h2>
+        <pre class="log" id="log"></pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-mention</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#basico">Básico</a>
+        <a href="#trigger">Trigger</a>
+        <a href="#api">API</a>
+        <a href="#log">Bitácora</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const log = document.getElementById('log');
+    const append = (line) => { log.textContent = line + '\n' + log.textContent; log.scrollTop = 0; };
+    document.querySelectorAll('is-mention').forEach((m) => {
+      m.addEventListener('is-select', (e) => append(`select ${e.detail.trigger}${e.detail.item}`));
+      m.addEventListener('is-change', (e) => append(`change: ${e.detail.value}`));
+    });
+  </script>
+</body>
+</html>

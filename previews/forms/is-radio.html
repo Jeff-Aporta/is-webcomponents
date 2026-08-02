@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-radio · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -35,14 +36,14 @@
           El grupo es el elemento <em>form-associated</em>: publica el valor, valida y gobierna el teclado.
           Los <code class="code">is-radio</code> son las opciones y solo avisan al grupo cuando se eligen.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-radio-group id="plan" name="plan" value="pro" label="Plan" hint="Flechas para navegar, Espacio para elegir">
             <is-radio value="free">Gratis</is-radio>
             <is-radio value="pro">Profesional</is-radio>
             <is-radio value="empresa">Empresa</is-radio>
             <is-radio value="legacy" disabled>Heredado (no disponible)</is-radio>
           </is-radio-group>
-        </div>
+        </is-demo>
         <div class="log" id="rgLog" aria-live="polite" style="margin-top:12px"><div class="row hint">Elige una opción para ver el evento.</div></div>
         <pre class="code">&lt;is-radio-group name="plan" value="pro" label="Plan"&gt;
   &lt;is-radio value="free"&gt;Gratis&lt;/is-radio&gt;
@@ -58,7 +59,7 @@
           lo heredan todos los radios. Un <code class="code">is-radio</code> con <code class="code">variant</code>
           propio sobrescribe al del grupo.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-radio-group row value="a" label="brand (default)">
               <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
@@ -80,7 +81,7 @@
               <is-radio value="d" variant="danger">variant="danger"</is-radio>
             </is-radio-group>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-radio-group variant="success" row&gt;
   &lt;is-radio value="c"&gt;Hereda success&lt;/is-radio&gt;
   &lt;is-radio value="d" variant="danger"&gt;Se sale del grupo&lt;/is-radio&gt;
@@ -95,7 +96,7 @@
           <code class="code">top</code> y <code class="code">bottom</code>. Se puede fijar en el grupo para todos
           los hijos o en cada radio.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="spread">
             <is-radio-group label-placement="top" row value="t" label="top">
               <is-radio value="t">Top</is-radio><is-radio value="t2">Otro</is-radio>
@@ -110,7 +111,7 @@
               <is-radio value="e">End</is-radio><is-radio value="e2">Otro</is-radio>
             </is-radio-group>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-radio-group label-placement="top" row&gt;…&lt;/is-radio-group&gt;
 &lt;is-radio value="x" label-placement="start"&gt;Solo este&lt;/is-radio&gt;</pre>
       </section>
@@ -121,7 +122,7 @@
           El slot <code class="code">description</code> añade texto secundario bajo la etiqueta, con el color
           atenuado del tema. No entra en el <code class="code">value</code> implícito.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-radio-group name="soporte" value="std" label="Nivel de soporte">
             <is-radio value="std">
               Estándar
@@ -136,7 +137,7 @@
               <span slot="description">Solo para contratos anuales.</span>
             </is-radio>
           </is-radio-group>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-radio value="prio"&gt;
   Prioritario
   &lt;span slot="description"&gt;Respuesta en 4 h&lt;/span&gt;
@@ -150,7 +151,7 @@
           <code class="code">row</code> es el alias booleano de <code class="code">orientation="horizontal"</code>
           (el nombre que usa MUI); si pones ambos, gana <code class="code">orientation</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-radio-group name="envio" value="normal" row label="row">
               <is-radio value="normal">Normal</is-radio>
@@ -162,7 +163,7 @@
               <is-radio value="express">Express</is-radio>
             </is-radio-group>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-radio-group row&gt;…&lt;/is-radio-group&gt;
 &lt;is-radio-group orientation="horizontal"&gt;…&lt;/is-radio-group&gt;</pre>
       </section>
@@ -176,7 +177,7 @@
           Es presentacional: no altera <code class="code">checkValidity()</code>, solo marca
           <code class="code">aria-invalid</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-radio-group id="errDemo" name="acepta" label="Condiciones" hint="Elige una opción"
               error-text="Debes elegir una opción para continuar">
@@ -187,7 +188,7 @@
               <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
             </is-radio-group>
           </div>
-        </div>
+        </is-demo>
         <div class="demo-row" style="gap:.5rem;margin-top:12px">
           <is-button appearance="outlined" id="btnError">Alternar error</is-button>
         </div>
@@ -203,7 +204,7 @@ grupo.errorText = '';   // limpia mensaje y estado</pre>
           selección. <code class="code">disabled</code> saca el grupo del formulario y del orden de tabulación.
           Los dos se propagan a todos los radios sin tocarlos uno a uno.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-radio-group name="tema" value="auto" readonly row label="readonly" hint="Prueba a moverte con las flechas">
               <is-radio value="claro">Claro</is-radio>
@@ -221,7 +222,7 @@ grupo.errorText = '';   // limpia mensaje y estado</pre>
               <is-radio value="c">Disponible</is-radio>
             </is-radio-group>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-radio-group readonly value="auto"&gt;…&lt;/is-radio-group&gt;</pre>
       </section>
 
@@ -232,7 +233,7 @@ grupo.errorText = '';   // limpia mensaje y estado</pre>
           <code class="code">required</code>, bloquea el envío mientras no haya selección.
           <code class="code">reset()</code> vuelve al <code class="code">value</code> inicial.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <form id="demoForm">
             <div class="demo-row" style="flex-direction:column;align-items:flex-start;gap:.9rem">
               <is-radio-group name="pago" required label="Forma de pago" hint="Obligatorio">
@@ -246,7 +247,7 @@ grupo.errorText = '';   // limpia mensaje y estado</pre>
               </div>
             </div>
           </form>
-        </div>
+        </is-demo>
         <div class="log" id="formLog" aria-live="polite" style="margin-top:12px"><div class="row hint">Envía sin elegir nada para ver la validación.</div></div>
       </section>
 
@@ -272,7 +273,7 @@ grupo.errorText = '';   // limpia mensaje y estado</pre>
           Las flechas mueven foco y selección a la vez, saltando los deshabilitados. Con
           <code class="code">readonly</code> mueven solo el foco.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-radio-group value="b" label="Prueba el teclado" hint="Los pares están deshabilitados">
             <is-radio value="a" disabled>Uno (disabled)</is-radio>
             <is-radio value="b">Dos</is-radio>
@@ -280,7 +281,7 @@ grupo.errorText = '';   // limpia mensaje y estado</pre>
             <is-radio value="d">Cuatro</is-radio>
             <is-radio value="e">Cinco</is-radio>
           </is-radio-group>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

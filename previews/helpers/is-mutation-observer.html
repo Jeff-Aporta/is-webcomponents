@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-mutation-observer · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -152,7 +153,7 @@
           Cada botón provoca una mutación concreta — mírala reflejada en el código y en el log.
         </p>
 
-        <div class="demo" data-code='<is-mutation-observer child-list attr="data-x">
+        <is-demo class="demo" data-code='<is-mutation-observer child-list attr="data-x">
   <div id="moTarget">Contenido editable</div>
 </is-mutation-observer>'>
           <span class="demo-label">child-list + attr=&quot;data-x&quot;</span>
@@ -193,7 +194,7 @@
           <div class="log" id="moLog" aria-live="polite" style="margin-top:12px">
             <div class="row hint">Las mutaciones aparecen aquí con tipo y detalle.</div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

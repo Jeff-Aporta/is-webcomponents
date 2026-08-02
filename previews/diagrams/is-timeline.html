@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-timeline · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -29,7 +30,7 @@
           fecha; el componente los reparte a lo largo de un eje y separa los
           que caen demasiado cerca en el tiempo para que no se encimen.
         </p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-timeline>
             <script type="application/json">
               {
@@ -51,7 +52,7 @@
               }
             </script>
           </is-timeline>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="vertical">
@@ -60,7 +61,7 @@
           <code>orientation: "vertical"</code> pone el eje a la izquierda y
           apila los eventos a la derecha, en orden cronológico.
         </p>
-        <div class="demo" style="height:20rem">
+        <is-demo class="demo" style="height:20rem">
           <is-timeline>
             <script type="application/json">
               {
@@ -76,7 +77,7 @@
               }
             </script>
           </is-timeline>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

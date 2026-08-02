@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Explorador de iconos · IS Web Components</title>
+  <meta name="description" content="Explora las 232 familias de iconos Iconify servidas por el CDN de IS Web Components: buscador, playground de color y tamaño, snippets listos para copiar." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/actions/button.js"></script>
+  <script type="module" src="../../components/media/icon.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+
+  <style>
+    body { margin: 0; }
+    .xp {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px clamp(16px, 4vw, 40px) 64px;
+    }
+    .xp-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+    .xp-head h1 { margin: 0 0 4px; font-size: 1.5rem; }
+    .xp-head .count { color: var(--is-text-soft); font-size: 0.85rem; }
+    .xp-search {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 16px 0 22px;
+      padding: 0.55rem 0.9rem;
+      border: 1px solid var(--is-border);
+      border-radius: 0.6rem;
+      background: var(--is-bg-elev);
+    }
+    .xp-search input {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      color: var(--is-text);
+      font: inherit;
+      outline: none;
+    }
+
+    /* — vista familias — */
+    .fam-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .fam {
+      display: grid;
+      gap: 6px;
+      padding: 12px 14px;
+      border: 1px solid var(--is-border);
+      border-radius: 0.6rem;
+      background: var(--is-bg-elev);
+      color: inherit;
+      text-decoration: none;
+      transition: border-color 140ms ease, transform 140ms ease;
+    }
+    .fam:hover { border-color: var(--is-accent); transform: translateY(-1px); text-decoration: none; }
+    .fam b { font-size: 0.9rem; }
+    .fam small { color: var(--is-text-soft); }
+    .fam .sample { display: flex; gap: 8px; font-size: 1.15rem; color: var(--is-text-soft); min-height: 1.3em; }
+
+    /* — vista familia — */
+    .tools {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      padding: 10px 0;
+      background: var(--is-bg);
+      border-bottom: 1px solid var(--is-border-soft);
+      margin-bottom: 14px;
+    }
+    .tools label { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--is-text-soft); }
+    .tools input[type="color"] { inline-size: 34px; block-size: 26px; border: 1px solid var(--is-border); border-radius: 6px; background: none; padding: 1px; cursor: pointer; }
+    .tools input[type="range"] { accent-color: var(--is-accent); }
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+      gap: 8px;
+    }
+    .icon-cell {
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      padding: 12px 6px 8px;
+      border: 1px solid transparent;
+      border-radius: 0.55rem;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      transition: background 120ms ease, border-color 120ms ease;
+    }
+    .icon-cell:hover { background: var(--is-bg-elev); border-color: var(--is-border); }
+    .icon-cell.sel { border-color: var(--is-accent); background: color-mix(in srgb, var(--is-accent) 10%, transparent); }
+    .icon-cell is-icon { font-size: var(--xp-size, 1.6rem); color: var(--xp-color, currentColor); }
+    .icon-cell small {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.62rem;
+      color: var(--is-text-soft);
+    }
+    .more { margin: 18px auto; display: block; }
+
+    /* panel selección */
+    .pick {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 9;
+      width: min(340px, calc(100vw - 32px));
+      padding: 14px 16px;
+      border: 1px solid var(--is-border);
+      border-radius: 0.7rem;
+      background: var(--is-bg-elev);
+      box-shadow: 0 14px 40px rgb(0 0 0 / 30%);
+      display: grid;
+      gap: 8px;
+    }
+    .pick[hidden] { display: none; }
+    .pick .big { font-size: 2.4rem; color: var(--xp-color, currentColor); justify-self: center; }
+    .pick pre {
+      margin: 0;
+      padding: 8px 10px;
+      border-radius: 0.4rem;
+      background: var(--is-code-bg, #0f1318);
+      color: var(--is-code-text, #d4d8de);
+      font-family: var(--is-mono, ui-monospace, monospace);
+      font-size: 0.72rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .crumb { font-size: 0.8rem; margin-bottom: 4px; }
+    .crumb a { color: var(--is-accent); }
+  </style>
+</head>
+<body>
+  <is-main>
+    <div class="xp" id="app">
+      <p style="color:var(--is-text-soft)">Cargando índice de iconos…</p>
+    </div>
+  </is-main>
+
+  <div class="pick" id="pick" hidden>
+    <is-icon class="big" id="pickIcon" icon="mdi:home"></is-icon>
+    <b id="pickName" style="text-align:center;font-size:0.85rem"></b>
+    <pre id="pickSnippet"></pre>
+    <div style="display:flex;gap:8px;justify-content:end">
+      <is-button id="pickCopy" variant="brand" appearance="filled">Copiar HTML</is-button>
+      <is-button id="pickClose" variant="neutral" appearance="outlined">Cerrar</is-button>
+    </div>
+  </div>
+
+  <script type="module">
+    const app = document.getElementById('app');
+    const base = new URL('../../assets/icons/', location.href);
+    const params = new URLSearchParams(location.search);
+    const family = params.get('f');
+    const PAGE = 240;
+
+    const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+    async function loadJson(name) {
+      const r = await fetch(new URL(name, base));
+      if (!r.ok) throw new Error(name);
+      return r.json();
+    }
+
+    /* ── Vista: todas las familias ─────────────────────────────── */
+    async function renderIndex() {
+      const { families, total } = await loadJson('index.json');
+      app.innerHTML = `
+        <div class="xp-head">
+          <h1>Explorador de iconos</h1>
+          <span class="count">${families.length} familias · ${total.toLocaleString('es')} iconos</span>
+        </div>
+        <div class="xp-search"><is-icon icon="mdi:magnify"></is-icon>
+          <input id="q" type="search" placeholder="Buscar familia (mdi, tabler, lucide...)" autofocus></div>
+        <div class="fam-grid" id="grid"></div>`;
+      const grid = document.getElementById('grid');
+      const q = document.getElementById('q');
+      const paint = () => {
+        const term = q.value.trim().toLowerCase();
+        const list = term ? families.filter((f) => f.prefix.includes(term)) : families;
+        grid.innerHTML = list.map((f) => `
+          <a class="fam" href="?f=${f.prefix}">
+            <b>${f.prefix}</b>
+            <small>${f.count.toLocaleString('es')} iconos</small>
+            <span class="sample" data-prefix="${f.prefix}"></span>
+          </a>`).join('');
+        // muestras perezosas: 3 iconos por familia visibles
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            io.unobserve(e.target);
+            const prefix = e.target.dataset.prefix;
+            loadJson(`${prefix}.json`).then((d) => {
+              e.target.innerHTML = d.icons.slice(0, 4)
+                .map((n) => `<is-icon icon="${prefix}:${n}"></is-icon>`).join('');
+            }).catch(() => {});
+          }
+        }, { rootMargin: '120px' });
+        grid.querySelectorAll('.sample').forEach((el) => io.observe(el));
+      };
+      q.addEventListener('input', paint);
+      paint();
+    }
+
+    /* ── Vista: una familia (full page compartible ?f=mdi) ─────── */
+    async function renderFamily(prefix) {
+      let data;
+      try { data = await loadJson(`${prefix}.json`); }
+      catch {
+        app.innerHTML = `<p>No existe la familia <code>${esc(prefix)}</code>. <a href="icon-explorer.html">Volver</a></p>`;
+        return;
+      }
+      document.title = `${prefix} · Explorador de iconos`;
+      app.innerHTML = `
+        <p class="crumb"><a href="icon-explorer.html">← Todas las familias</a></p>
+        <div class="xp-head">
+          <h1>${prefix}</h1>
+          <span class="count">${data.icons.length.toLocaleString('es')} iconos</span>
+        </div>
+        <div class="xp-search"><is-icon icon="mdi:magnify"></is-icon>
+          <input id="q" type="search" placeholder="Buscar en ${prefix}..." autofocus></div>
+        <div class="tools">
+          <label>Color <input type="color" id="tColor" value="#e8eaf1"></label>
+          <label><input type="checkbox" id="tInherit" checked> Heredar del tema</label>
+          <label>Tamaño <input type="range" id="tSize" min="16" max="64" value="26"> <span id="tSizeVal">26px</span></label>
+        </div>
+        <div class="icon-grid" id="grid"></div>
+        <is-button class="more" id="more" variant="neutral" appearance="outlined">Mostrar más</is-button>`;
+
+      const grid = document.getElementById('grid');
+      const q = document.getElementById('q');
+      const more = document.getElementById('more');
+      const tColor = document.getElementById('tColor');
+      const tInherit = document.getElementById('tInherit');
+      const tSize = document.getElementById('tSize');
+      const tSizeVal = document.getElementById('tSizeVal');
+      let filtered = data.icons;
+      let shown = 0;
+
+      const applyTools = () => {
+        grid.style.setProperty('--xp-size', tSize.value + 'px');
+        tSizeVal.textContent = tSize.value + 'px';
+        const pick = document.getElementById('pick');
+        if (tInherit.checked) {
+          grid.style.removeProperty('--xp-color');
+          pick.style.removeProperty('--xp-color');
+        } else {
+          grid.style.setProperty('--xp-color', tColor.value);
+          pick.style.setProperty('--xp-color', tColor.value);
+        }
+        syncSnippet();
+      };
+      tColor.addEventListener('input', () => { tInherit.checked = false; applyTools(); });
+      tInherit.addEventListener('change', applyTools);
+      tSize.addEventListener('input', applyTools);
+
+      const appendPage = () => {
+        const frag = document.createDocumentFragment();
+        for (const name of filtered.slice(shown, shown + PAGE)) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'icon-cell';
+          btn.dataset.name = name;
+          btn.innerHTML = `<is-icon icon="${prefix}:${name}"></is-icon><small>${name}</small>`;
+          frag.appendChild(btn);
+        }
+        grid.appendChild(frag);
+        shown = Math.min(shown + PAGE, filtered.length);
+        more.hidden = shown >= filtered.length;
+      };
+      const repaint = () => { grid.innerHTML = ''; shown = 0; appendPage(); };
+      more.addEventListener('click', appendPage);
+      q.addEventListener('input', () => {
+        const term = q.value.trim().toLowerCase();
+        filtered = term ? data.icons.filter((n) => n.includes(term)) : data.icons;
+        repaint();
+      });
+
+      /* selección + snippet */
+      const pick = document.getElementById('pick');
+      const pickIcon = document.getElementById('pickIcon');
+      const pickName = document.getElementById('pickName');
+      const pickSnippet = document.getElementById('pickSnippet');
+      let current = null;
+      const snippetFor = (name) => {
+        const style = (!tInherit.checked)
+          ? ` style="color:${tColor.value};font-size:${tSize.value}px"`
+          : (tSize.value !== '26' ? ` style="font-size:${tSize.value}px"` : '');
+        return `<is-icon icon="${prefix}:${name}"${style}></is-icon>`;
+      };
+      const syncSnippet = () => {
+        if (!current) return;
+        pickSnippet.textContent = snippetFor(current);
+      };
+      grid.addEventListener('click', (e) => {
+        const cell = e.target.closest('.icon-cell');
+        if (!cell) return;
+        grid.querySelector('.icon-cell.sel')?.classList.remove('sel');
+        cell.classList.add('sel');
+        current = cell.dataset.name;
+        pickIcon.setAttribute('icon', `${prefix}:${current}`);
+        pickName.textContent = `${prefix}:${current}`;
+        syncSnippet();
+        pick.hidden = false;
+      });
+      document.getElementById('pickClose').addEventListener('click', () => { pick.hidden = true; });
+      document.getElementById('pickCopy').addEventListener('click', async (e) => {
+        try { await navigator.clipboard.writeText(pickSnippet.textContent); } catch {}
+        const b = e.currentTarget;
+        b.textContent = '¡Copiado!';
+        setTimeout(() => { b.textContent = 'Copiar HTML'; }, 1200);
+      });
+
+      applyTools();
+      appendPage();
+    }
+
+    (family ? renderFamily(family) : renderIndex()).catch((err) => {
+      app.innerHTML = `<p>Error cargando el índice de iconos: ${esc(String(err))}</p>`;
+    });
+  </script>
+</body>
+</html>

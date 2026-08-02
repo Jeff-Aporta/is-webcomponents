@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-progress-ring · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -85,7 +86,7 @@
           escala solo con <code class="code">font-size</code> del contexto (o del propio host).
           El centro muestra un valor corto; el detalle va fuera del anillo.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="ring-row">
             <div class="ring-card" style="font-size: 5rem">
               <is-progress-ring value="75" label="75%"></is-progress-ring>
@@ -107,13 +108,13 @@
               <p class="ring-card__cap">success</p>
             </div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="scale">
         <h2>Escala por font-size</h2>
         <p class="lede">Mismo componente; solo cambia el tamaño tipográfico del contenedor.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="ring-row">
             <div class="ring-card" style="font-size: 2rem">
               <is-progress-ring value="60" label="60%"></is-progress-ring>
@@ -140,7 +141,7 @@
               <p class="ring-card__cap">7rem · stroke</p>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;span style="font-size:4rem"&gt;
   &lt;is-progress-ring value="75" label="75%"&gt;&lt;/is-progress-ring&gt;
 &lt;/span&gt;</pre>
@@ -149,7 +150,7 @@
       <section class="section" id="inline">
         <h2>Inline en UI</h2>
         <p class="lede">El anillo lleva el %, el contexto narrativo queda al lado.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-stack" style="gap:0.75rem">
             <div class="ring-inline" style="font-size:2.25rem">
               <is-progress-ring value="35" label="35%"></is-progress-ring>
@@ -170,7 +171,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

@@ -75,7 +75,7 @@ import '../media/icon.js';
 
     connectedCallback() {
       this.#mounted = true;
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'neutral');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
       if (!this.hasAttribute('duration')) this.setAttribute('duration', String(DEFAULT_DURATION));
       if (this.hasAttribute('open')) this.show();
       else this.hidden = true;
@@ -124,6 +124,12 @@ import '../media/icon.js';
 
     get open() { return this.hasAttribute('open'); }
     set open(v) { this.toggleAttribute('open', !!v); }
+
+    /** Relanza el countdown con la duración actual (usado por toast.promise). */
+    restartTimer() {
+      if (this.hasAttribute('open')) this.#restartCountdown();
+      return this;
+    }
 
     show() {
       if (this.#showing) return this;

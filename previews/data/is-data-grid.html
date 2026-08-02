@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-data-grid · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -39,11 +40,11 @@
           quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,
           agrupación con agregación, tree data, pivot, virtualización y exportación.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-full" class="grid-tall" show-toolbar quick-filter checkbox-selection
             pagination page-size="10" page-size-options="10,25,50" editable undo-redo clipboard
             tab-navigation="all"></is-data-grid>
-        </div>
+        </is-demo>
         <p class="out" id="out-full"></p>
         <p class="empty-note">
           El snippet del botón <span class="icon-inline" aria-hidden="true"><is-icon icon="mdi:information-outline"></is-icon></span>
@@ -63,9 +64,9 @@
           operadores por defecto. <code>valueGetter</code> alimenta orden y filtro, <code>valueFormatter</code>
           solo el texto y <code>renderCell</code> devuelve nodos.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-cols" class="grid-short" header-filters></is-data-grid>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">grid.columns = [
   { field: 'name', headerName: 'Nombre', flex: 1, minWidth: 140 },
   { field: 'gross', headerName: 'Bruto', type: 'number' },
@@ -104,9 +105,9 @@
           <button data-act="autosize">Ajustar al contenido</button>
           <button data-act="hide-city">Ocultar/mostrar Ciudad</button>
         </div>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-layout" class="grid-short"></is-data-grid>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">grid.columnGroupingModel = [
   { groupId: 'persona', headerName: 'Persona', children: [
     { groupId: 'ident', headerName: 'Identidad', children: [{ field: 'name' }, { field: 'email' }] },
@@ -132,9 +133,9 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           <button data-act="undo">Undo</button>
           <button data-act="redo">Redo</button>
         </div>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-edit" class="grid-short" editable clipboard undo-redo cell-selection></is-data-grid>
-        </div>
+        </is-demo>
         <p class="out" id="out-edit"></p>
       </section>
 
@@ -151,9 +152,9 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           <button data-act="select-none">Limpiar</button>
           <button data-act="copy">Copiar selección</button>
         </div>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-select" class="grid-short" checkbox-selection cell-selection></is-data-grid>
-        </div>
+        </is-demo>
         <p class="out" id="out-select"></p>
       </section>
 
@@ -170,9 +171,9 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           <button data-act="filter-or">Cambiar a O</button>
           <button data-act="filter-clear">Limpiar filtros</button>
         </div>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-sort" class="grid-short" show-toolbar quick-filter header-filters></is-data-grid>
-        </div>
+        </is-demo>
         <p class="out" id="out-sort"></p>
       </section>
 
@@ -191,12 +192,12 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           <button data-act="expand">Expandir todo</button>
           <button data-act="collapse">Colapsar todo</button>
         </div>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-group" class="grid-short"></is-data-grid>
-        </div>
-        <div class="demo" style="margin-top:1rem">
+        </is-demo>
+        <is-demo class="demo" style="margin-top:1rem">
           <is-data-grid id="g-tree" class="grid-short" tree-data></is-data-grid>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="pivot">
@@ -205,9 +206,9 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           <code>pivotModel</code> cruza filas y columnas con funciones de agregación: las columnas se generan a
           partir de los valores encontrados.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-pivot" class="grid-short"></is-data-grid>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">grid.pivotModel = {
   rows: ['city'],
   columns: ['role'],
@@ -222,9 +223,9 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           (<kbd>Ctrl+Enter</kbd> también lo alterna). <code>pinnedRows</code> fija filas arriba y abajo,
           y <code>row-reorder</code> permite arrastrarlas.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-detail" class="grid-short" row-reorder detail-height="120"></is-data-grid>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="virtual">
@@ -234,9 +235,9 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           permite alto variable. Al llegar al final se emite <code>is-rows-scroll-end</code> y, si hay
           <code>rowsLoader</code>, se piden más filas (modo servidor / lazy loading).
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-virtual" class="grid-tall" show-toolbar quick-filter density="compact"></is-data-grid>
-        </div>
+        </is-demo>
         <p class="out" id="out-virtual"></p>
       </section>
 
@@ -258,9 +259,9 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           <button data-act="empty">Sin filas</button>
           <button data-act="restore">Restaurar</button>
         </div>
-        <div class="demo">
+        <is-demo class="demo">
           <is-data-grid id="g-density" class="grid-short"></is-data-grid>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="export">

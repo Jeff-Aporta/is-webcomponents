@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-intersection-observer · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -204,7 +205,7 @@
           El log muestra el evento.
         </p>
 
-        <div class="demo" data-code='<div id="scroller" class="io-scroller">
+        <is-demo class="demo" data-code='<div id="scroller" class="io-scroller">
   <is-intersection-observer
     root="#scroller"
     intersect-class="is-in"
@@ -239,7 +240,7 @@
           <div class="log" id="ioLog" aria-live="polite" style="margin-top:12px">
             <div class="row hint">Los eventos <code class="code">is-intersect</code> aparecen aquí al entrar/salir.</div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="once">
@@ -248,7 +249,7 @@
           Con <code class="code">once</code>, tras la primera entrada deja de observar ese hijo.
           Ideal para animaciones de “reveal” que no deben repetirse al subir/bajar.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">once · threshold 0.25</span>
           <div id="scrollerOnce" class="io-scroller" style="height:200px">
             <div class="io-spacer">↓ scroll ↓</div>
@@ -264,7 +265,7 @@
             </is-intersection-observer>
             <div class="io-spacer">fin</div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-intersection-observer root="#scroller" intersect-class="is-in" threshold="0.4" once&gt;
   &lt;article class="io-card"&gt;…&lt;/article&gt;
 &lt;/is-intersection-observer&gt;</pre>

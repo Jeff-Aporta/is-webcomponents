@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-er-diagram · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -33,7 +34,7 @@
           Comparte motor con <code>&lt;is-flowchart&gt;</code>: mismo esquema JSON de
           grupos/leyenda, mismo visor a pantalla completa y la misma animación tortuga.
         </p>
-        <div class="demo" style="height:26rem">
+        <is-demo class="demo" style="height:26rem">
           <is-er-diagram>
             <script type="application/json">
               {
@@ -80,7 +81,7 @@
               }
             </script>
           </is-er-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="cardinalidad">
@@ -91,7 +92,7 @@
           gallo / marca de uno / círculo de opcionalidad, igual que la notación
           crow's foot clásica. <code>identifying: false</code> dibuja la línea punteada.
         </p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-er-diagram>
             <script type="application/json">
               {
@@ -108,7 +109,7 @@
               }
             </script>
           </is-er-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

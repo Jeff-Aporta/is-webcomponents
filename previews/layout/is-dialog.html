@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-dialog · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-dialog de Insoft." />
@@ -39,9 +40,9 @@
           light-dismiss y API declarativa <code class="code">data-dialog="close"</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openStandard">Abrir diálogo</is-button>
-        </div>
+        </is-demo>
 
         <is-dialog id="dlgStandard" label="Diálogo estándar">
           <p>Esto es un diálogo estándar. Puedes poner cualquier contenido aquí.</p>
@@ -66,9 +67,9 @@
           <code class="code">without-header</code> oculta el header y el botón de cerrar.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openNoHeader">Abrir sin header</is-button>
-        </div>
+        </is-demo>
 
         <is-dialog id="dlgNoHeader" without-header>
           <p>¡Mira mamá, sin header! A veces solo necesitas un diálogo limpio y simple.</p>
@@ -87,9 +88,9 @@
           Se reduce automáticamente en pantallas pequeñas.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openWide">Diálogo ancho</is-button>
-        </div>
+        </is-demo>
 
         <is-dialog id="dlgWide" label="Diálogo ancho" style="--width: 800px">
           <p>Este diálogo es más ancho que el predeterminado, útil cuando necesitas más espacio para el contenido.</p>
@@ -108,9 +109,9 @@
           (el botón de cerrar va siempre al final).
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openActions">Abrir</is-button>
-        </div>
+        </is-demo>
 
         <is-dialog id="dlgActions" label="Con header-actions">
           <div slot="header-actions">
@@ -138,9 +139,9 @@
           <code class="code">light-dismiss</code> cierra el diálogo al hacer click fuera.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openLD">Abrir (click fuera cierra)</is-button>
-        </div>
+        </is-demo>
 
         <is-dialog id="dlgLD" label="Light dismiss" light-dismiss>
           <p>Haz click fuera del diálogo para cerrarlo.</p>
@@ -157,9 +158,9 @@
           intenta cerrar, el diálogo pulsa brevemente para llamar la atención.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openPrevent">Diálogo protegido</is-button>
-        </div>
+        </is-demo>
 
         <is-dialog id="dlgPrevent" label="¿Salir sin guardar?">
           <p>Este diálogo solo se cierra con el botón "Guardar y salir". Si cierras con Escape o el botón X, el diálogo pulsa brevemente.</p>
@@ -179,9 +180,9 @@
           Un caso típico: edición de un registro en un diálogo.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openForm">Editar perfil</is-button>
-        </div>
+        </is-demo>
 
         <is-dialog id="dlgForm" label="Editar perfil" style="--width: 480px">
           <form id="profileForm" style="display:grid;gap:.75em">

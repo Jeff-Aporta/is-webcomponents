@@ -9,7 +9,7 @@ import '../media/icon.js';
  * y expone parts + custom states para personalización desde fuera.
  *
  * Atributos
- *  variant      brand | neutral | success | warning | danger   (default: neutral)
+ *  variant      brand | neutral | success | warning | danger   (default: brand)
  *  appearance   filled | outlined | plain                     (default: filled)
  *  hue          number (0-360)  color propio para el highlight cuando está
  *                             [selected] dentro de <is-button-group>. Si no
@@ -151,6 +151,7 @@ import '../media/icon.js';
     connectedCallback() {
       this.#mounted = true;
       this.#upgradeProperties();
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
       this.#syncTag();       // <button> o <a> según href
       this.#syncAttrs();     // propaga atributos al inner
       this.#syncDisabled();

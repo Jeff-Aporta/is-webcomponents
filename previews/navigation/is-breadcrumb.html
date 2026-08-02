@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-breadcrumb · IS Web Components</title>
   <meta name="description" content="Documentación y demos de is-breadcrumb e is-breadcrumb-item de Insoft." />
@@ -38,14 +39,14 @@
           ARIA roles y separador automático entre items.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-breadcrumb label="Catálogo">
             <is-breadcrumb-item href="/">Catálogo</is-breadcrumb-item>
             <is-breadcrumb-item href="/ropa">Ropa</is-breadcrumb-item>
             <is-breadcrumb-item href="/ropa/mujer">Mujer</is-breadcrumb-item>
             <is-breadcrumb-item href="">Camisetas</is-breadcrumb-item>
           </is-breadcrumb>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-breadcrumb</span> <span class="attr">label</span>=<span class="val">"Catálogo"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;is-breadcrumb-item</span> <span class="attr">href</span>=<span class="val">"/"</span><span class="tag">&gt;</span>Catálogo<span class="tag">&lt;/is-breadcrumb-item&gt;</span>
@@ -59,14 +60,14 @@
         <h2>SPAs — eventos de click</h2>
         <p class="lede">Sin <code class="code">href</code>, los items se renderizan como texto sin enlace. Conecta tú los handlers.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-breadcrumb id="bcSpa" label="Navegación SPA">
             <is-breadcrumb-item>Inicio</is-breadcrumb-item>
             <is-breadcrumb-item>Productos</is-breadcrumb-item>
             <is-breadcrumb-item>Detalle</is-breadcrumb-item>
           </is-breadcrumb>
           <p id="bcLog">Última navegación: ninguna</p>
-        </div>
+        </is-demo>
 
         <pre class="code">bc.addEventListener('click', (e) =&gt; {
   const item = e.target.closest('is-breadcrumb-item');
@@ -112,7 +113,7 @@
         <h2>Separador custom</h2>
         <p class="lede">Cambia el slot <code class="code">separator</code> de cada item — o sólo el último que se ignora.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-breadcrumb label="Slash">
             <is-breadcrumb-item href="/home">
               <span slot="separator">/</span>
@@ -127,7 +128,7 @@
               Guía
             </is-breadcrumb-item>
           </is-breadcrumb>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-breadcrumb-item</span> <span class="attr">href</span>=<span class="val">"/home"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;span</span> <span class="attr">slot</span>=<span class="val">"separator"</span><span class="tag">&gt;</span>/<span class="tag">&lt;/span&gt;</span>

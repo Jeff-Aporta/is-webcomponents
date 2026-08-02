@@ -116,6 +116,70 @@ import './toast-item.js';
       return item;
     }
 
+    /**
+     * Patrón Promise estilo react-hot-toast:
+     *   toaster.promise(fetchData(), {
+     *     loading: 'Cargando…',
+     *     success: (data) => `${data.total} filas`,
+     *     error: (err) => `Falló: ${err.message}`,
+     *   })
+     *
+     * Cada callback acepta string | fn(valor) | { message, options }.
+     * Reusa el MISMO toast (update) en vez de crear otro.
+     *
+     * @template T
+     * @param {Promise<T>} p
+     * @param {{ loading?: any, success?: any, error?: any }} [callbacks]
+     * @returns {Promise<T>} la promesa original (re-throw en error)
+     */
+    async promise(p, callbacks = {}) {
+      const loading = this.#normalizePromiseMsg(callbacks.loading, undefined, 'Cargando…');
+      const item = await this.create(loading.message, {
+        variant: 'neutral',
+        icon: 'mdi:loading',
+        duration: 0,
+        ...loading.options,
+      });
+      item.querySelector('is-icon[slot="icon"]')?.setAttribute('data-loading', '');
+      try {
+        const data = await p;
+        const ok = this.#normalizePromiseMsg(callbacks.success, data, 'Listo');
+        this.#update(item, ok.message, { variant: 'success', icon: DEFAULT_ICONS.success, ...ok.options });
+        return data;
+      } catch (err) {
+        const bad = this.#normalizePromiseMsg(callbacks.error, err, 'Algo salió mal');
+        this.#update(item, bad.message, { variant: 'danger', icon: DEFAULT_ICONS.danger, ...bad.options });
+        throw err;
+      }
+    }
+
+    /** string | fn(valor) | { message, options } → { message, options } */
+    #normalizePromiseMsg(cb, value, fallback) {
+      if (typeof cb === 'function') return { message: String(cb(value)), options: {} };
+      if (cb && typeof cb === 'object') return { message: String(cb.message ?? fallback), options: cb.options || {} };
+      return { message: String(cb ?? fallback), options: {} };
+    }
+
+    /** Actualiza un toast vivo: mensaje, variant, icono y relanza el timer. */
+    #update(item, message, options = {}) {
+      if (!item?.isConnected) return;
+      const variant = VALID_VARIANT.includes(options.variant) ? options.variant : item.variant;
+      item.variant = variant;
+      // Reemplazar texto conservando el slot icon.
+      for (const n of [...item.childNodes]) {
+        if (n.nodeType === Node.TEXT_NODE || (n instanceof HTMLElement && n.slot !== 'icon')) n.remove();
+      }
+      item.appendChild(document.createTextNode(String(message ?? '')));
+      const iconEl = item.querySelector('is-icon[slot="icon"]');
+      if (iconEl) {
+        iconEl.removeAttribute('data-loading');
+        if (options.icon) iconEl.setAttribute('icon', options.icon);
+      }
+      const duration = options.duration != null ? Number(options.duration) : 5000;
+      item.duration = Number.isFinite(duration) ? Math.max(0, duration) : 5000;
+      item.restartTimer?.();
+    }
+
     #onItemHide = (e) => {
       const item = e.target;
       if (!(item instanceof HTMLElement) || item.localName !== 'is-toast-item') return;

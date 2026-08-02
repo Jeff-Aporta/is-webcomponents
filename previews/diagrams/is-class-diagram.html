@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-class-diagram · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -35,7 +36,7 @@
           JSON, mismo visor a pantalla completa y la misma animación tortuga,
           que aquí recorre las relaciones en orden.
         </p>
-        <div class="demo" style="height:30rem">
+        <is-demo class="demo" style="height:30rem">
           <is-class-diagram>
             <script type="application/json">
               {
@@ -71,7 +72,7 @@
               }
             </script>
           </is-class-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="relaciones">
@@ -84,7 +85,7 @@
           <code>dependency</code> (línea punteada) y <code>realization</code>
           (punteada con triángulo hueco).
         </p>
-        <div class="demo" style="height:22rem">
+        <is-demo class="demo" style="height:22rem">
           <is-class-diagram>
             <script type="application/json">
               {
@@ -109,7 +110,7 @@
               }
             </script>
           </is-class-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="compartimentos">
@@ -119,7 +120,7 @@
           compartimentos vacíos (sin atributos, sin métodos) se omiten junto
           con su línea divisoria.
         </p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-class-diagram>
             <script type="application/json">
               {
@@ -140,7 +141,7 @@
               }
             </script>
           </is-class-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

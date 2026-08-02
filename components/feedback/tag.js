@@ -8,7 +8,7 @@ import '../media/icon.js';
  * Escala con font-size del contexto (métricas en em).
  *
  * Atributos
- *   variant       brand | neutral | success | warning | danger (default neutral)
+ *   variant       brand | neutral | info | success | warning | danger (default brand)
  *   appearance    accent | filled | outlined | filled-outlined (default filled-outlined)
  *   pill          boolean
  *   with-remove   boolean — muestra botón de quitar
@@ -32,7 +32,7 @@ import '../media/icon.js';
   `;
 
   const OBSERVED = ['variant', 'appearance', 'pill', 'with-remove', 'remove-label'];
-  const VALID_VARIANT = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const VALID_VARIANT = ['brand', 'neutral', 'info', 'success', 'warning', 'danger'];
   const VALID_APPEARANCE = ['accent', 'filled', 'outlined', 'filled-outlined'];
 
   class IsTag extends HTMLElement {
@@ -52,7 +52,7 @@ import '../media/icon.js';
 
     connectedCallback() {
       this.#mounted = true;
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'neutral');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
       if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'filled-outlined');
       this.#syncRemove();
     }

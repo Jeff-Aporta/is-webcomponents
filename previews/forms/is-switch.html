@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-switch · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -37,13 +38,13 @@
           mismo contrato de formulario que <code class="code">is-checkbox</code>, con carril y perilla deslizante,
           color por <code class="code">variant</code>, iconos en la perilla y rótulos dentro del carril.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-switch name="notificaciones" checked>Notificaciones</is-switch>
             <is-switch name="beta">Funciones beta</is-switch>
             <is-switch name="bloqueado" checked disabled>Bloqueado por política</is-switch>
           </div>
-        </div>
+        </is-demo>
         <div class="log" id="swLog" aria-live="polite" style="margin-top:12px"><div class="row hint">Cambia un interruptor para ver el evento.</div></div>
       </section>
 
@@ -53,7 +54,7 @@
           <code class="code">variant</code> equivale a la prop <code class="code">color</code> de MUI: redefine el
           carril encendido, el halo de la perilla y el anillo de foco.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <is-switch checked>brand (default)</is-switch>
             <is-switch variant="neutral" checked>neutral</is-switch>
@@ -61,7 +62,7 @@
             <is-switch variant="warning" checked>warning</is-switch>
             <is-switch variant="danger" checked>danger</is-switch>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-switch variant="success" checked&gt;success&lt;/is-switch&gt;</pre>
       </section>
 
@@ -71,26 +72,26 @@
           <code class="code">label-placement</code> equivale a <code class="code">labelPlacement</code> del
           <code class="code">FormControlLabel</code> de MUI.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="placements">
             <is-switch checked>end (default)</is-switch>
             <is-switch label-placement="start" checked>start</is-switch>
             <is-switch label-placement="top" checked>top</is-switch>
             <is-switch label-placement="bottom" checked>bottom</is-switch>
           </div>
-        </div>
+        </is-demo>
         <p class="lede">
           Para un panel de ajustes con la etiqueta a la izquierda y el interruptor pegado al borde derecho,
           combina <code class="code">label-placement="start"</code> con
           <code class="code">::part(base) { justify-content: space-between }</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="settings">
             <is-switch label-placement="start" checked>Modo compacto</is-switch>
             <is-switch label-placement="start">Sonidos de la interfaz</is-switch>
             <is-switch label-placement="start" checked>Guardado automático</is-switch>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">.settings { display: flex; flex-direction: column; }
 .settings is-switch::part(base) { justify-content: space-between; }</pre>
       </section>
@@ -102,13 +103,13 @@
           nombres de <code class="code">is-icon</code>, como el ejemplo de <em>customized switches</em> de MUI.
           Al usarlos el control crece para dar sitio al glifo.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <is-switch icon="mdi:weather-night" checked-icon="mdi:white-balance-sunny" variant="warning" checked>Tema claro</is-switch>
             <is-switch icon="mdi:close" checked-icon="mdi:check" variant="success">Sincronizar</is-switch>
             <is-switch checked-icon="mdi:lock" checked>Bloquear pantalla</is-switch>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-switch icon="mdi:weather-night" checked-icon="mdi:white-balance-sunny"
   variant="warning" checked&gt;Tema claro&lt;/is-switch&gt;</pre>
       </section>
@@ -119,13 +120,13 @@
           <code class="code">on-label</code> y <code class="code">off-label</code> pintan un texto corto dentro del
           carril, en el hueco que deja la perilla. Pensados para dos o tres caracteres.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <is-switch on-label="ON" off-label="OFF" checked>Encendido</is-switch>
             <is-switch on-label="SÍ" off-label="NO" variant="success">Confirmación</is-switch>
             <is-switch on-label="24h" off-label="12h" checked>Formato de hora</is-switch>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-switch on-label="ON" off-label="OFF" checked&gt;Encendido&lt;/is-switch&gt;</pre>
       </section>
 
@@ -136,13 +137,13 @@
           navegable con <code class="code">Tab</code>. <code class="code">disabled</code> saca el control del orden
           de tabulación y no aporta entrada al <code class="code">FormData</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-switch name="ro1" checked readonly>Solo lectura (encendido)</is-switch>
             <is-switch name="ro2" readonly>Solo lectura (apagado)</is-switch>
             <is-switch name="di1" checked disabled>Deshabilitado</is-switch>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-switch name="ro1" checked readonly&gt;Solo lectura&lt;/is-switch&gt;</pre>
       </section>
 
@@ -153,7 +154,7 @@
           <code class="code">error</code> tiñe carril y ayuda con el color de peligro y marca
           <code class="code">aria-invalid</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-switch hint="Se aplica de inmediato, sin guardar." checked>Sincronización en la nube</is-switch>
             <is-switch error hint="Actívalo para poder facturar electrónicamente." required>Firma electrónica</is-switch>
@@ -162,7 +163,7 @@
               <span slot="hint">El texto de ayuda también admite un <b>slot</b>.</span>
             </is-switch>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-switch error hint="Actívalo para poder facturar electrónicamente." required&gt;
   Firma electrónica
 &lt;/is-switch&gt;</pre>
@@ -174,7 +175,7 @@
           Apagado no aporta entrada al <code class="code">FormData</code>, igual que una casilla nativa. Con
           <code class="code">required</code> reporta <code class="code">valueMissing</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <form id="demoForm">
             <div class="stack">
               <is-switch name="privacidad" value="si" required>Acepto la política de privacidad (obligatorio)</is-switch>
@@ -186,7 +187,7 @@
               </div>
             </div>
           </form>
-        </div>
+        </is-demo>
         <div class="log" id="formLog" aria-live="polite" style="margin-top:12px"><div class="row hint">Envía el formulario para ver el FormData.</div></div>
         <pre class="code">&lt;is-switch name="boletin" value="semanal" checked&gt;Boletín semanal&lt;/is-switch&gt;</pre>
       </section>
@@ -197,13 +198,13 @@
           Sin atributo <code class="code">size</code>: carril y perilla se miden en <code class="code">em</code> y
           heredan el <code class="code">font-size</code> del contenedor.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <span style="font-size:.8rem"><is-switch checked>0.8rem</is-switch></span>
             <span style="font-size:1rem"><is-switch checked>1rem</is-switch></span>
             <span style="font-size:1.35rem"><is-switch checked>1.35rem</is-switch></span>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;span style="font-size:1.35rem"&gt;&lt;is-switch checked&gt;Grande&lt;/is-switch&gt;&lt;/span&gt;</pre>
       </section>
 

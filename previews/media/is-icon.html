@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-icon · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -27,21 +28,27 @@
           o <code class="code">src</code> para un SVG/imagen. Escala con <code class="code">font-size</code>.
           Iconify se carga solo como dependencia interna.
         </p>
-        <div class="demo">
+        <p>
+          <a href="icon-explorer.html" target="_blank" rel="noopener">
+            <is-icon icon="mdi:magnify"></is-icon>
+            Abrir el explorador de iconos — 232 familias con buscador, playground de color/tamaño y snippets
+          </a>
+        </p>
+        <is-demo class="demo">
           <div class="demo-row" style="font-size:1.5rem; gap:1rem; align-items:center;">
             <is-icon icon="mdi:home"></is-icon>
             <is-icon icon="mdi:check-circle" style="color:var(--is-accent)"></is-icon>
             <is-icon icon="mdi:star" label="Favorito"></is-icon>
             <is-icon icon="mdi:cog-outline"></is-icon>
           </div>
-        </div>
+        </is-demo>
       </section>
       <section class="section" id="examples">
         <h2>Ejemplos</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">src personalizado</span>
           <is-icon src="https://api.iconify.design/mdi/heart.svg?color=%23e03131" label="Corazón" style="font-size:1.5rem"></is-icon>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-icon icon="mdi:home"&gt;&lt;/is-icon&gt;
 &lt;is-icon icon="mdi:check-circle"&gt;&lt;/is-icon&gt;
 &lt;is-icon src="/logo.svg" label="Logo"&gt;&lt;/is-icon&gt;</pre>

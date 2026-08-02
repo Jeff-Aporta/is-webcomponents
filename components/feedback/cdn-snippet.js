@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { escapeHtml, copyText } from '../_shared/dom-utils.js';
 import '../media/icon.js';
 
 /**
@@ -51,6 +52,17 @@ import '../media/icon.js';
           </div>
           <pre class="cdn__pre" data-slot="category-pre"></pre>
         </li>
+        <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
+          <div class="cdn__row-head">
+            <span class="cdn__label cdn__dep-name">Dependencia · <code data-slot="dep-name"></code></span>
+            <button type="button" class="cdn__copy" data-copy="dep" aria-label="Copiar enlaces de la dependencia">
+              <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
+              Copiar
+            </button>
+          </div>
+          <pre class="cdn__pre" data-slot="dep-pre"></pre>
+          <p class="cdn__dep-note" data-slot="dep-note" hidden></p>
+        </li>
         <li class="cdn__row" data-kind="all">
           <div class="cdn__row-head">
             <span class="cdn__label">Bundle · <code>all.min.js</code> (todos los componentes)</span>
@@ -65,13 +77,14 @@ import '../media/icon.js';
     </section>
   `;
 
-  const OBSERVED = ['tag', 'category', 'base', 'title'];
+  const OBSERVED = ['tag', 'category', 'base', 'title', 'dependencies'];
 
   class IsCdnSnippet extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
 
     #mounted = false;
     #urls = { single: '', category: '', all: '' };
+    #deps = [];
 
     constructor() {
       super();
@@ -84,11 +97,66 @@ import '../media/icon.js';
     connectedCallback() {
       this.#mounted = true;
       this.#render();
+      // El slot deps puede llegar después del connected (parser HTML).
+      this.shadowRoot.addEventListener('slotchange', () => this.#render());
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
       this.#render();
+    }
+
+    /** Deps: atributo `dependencies` (JSON) o slot deps con script JSON. */
+    #parseDeps() {
+      let raw = this.getAttribute('dependencies');
+      if (!raw) {
+        const script = this.querySelector('script[type="application/json"][slot="deps"]');
+        raw = script?.textContent || '';
+      }
+      if (!raw.trim()) { this.#deps = []; return; }
+      try {
+        const data = JSON.parse(raw);
+        this.#deps = Array.isArray(data)
+          ? data.filter((d) => d && (d.js || d.css)).map((d) => ({
+              name: String(d.name || 'dependencia'),
+              version: d.version ? String(d.version) : '',
+              css: d.css ? String(d.css) : '',
+              js: d.js ? String(d.js) : '',
+              note: d.note ? String(d.note) : '',
+            }))
+          : [];
+      } catch { this.#deps = []; }
+    }
+
+    /** Snippet de una dep: <link> del css (si hay) + <script> del js. */
+    #buildDepSnippet(dep) {
+      const lines = [];
+      if (dep.css) lines.push(`<link rel="stylesheet" href="${dep.css}">`);
+      if (dep.js) lines.push(`<script src="${dep.js}"><\/script>`);
+      return lines.join('\n');
+    }
+
+    #renderDeps() {
+      const root = this.shadowRoot;
+      const template = root.querySelector('[data-kind="dep"][hidden]');
+      if (!template) return;
+      // Limpiar filas dep previas (todas menos la plantilla oculta).
+      for (const row of root.querySelectorAll('[data-kind="dep"]:not([hidden])')) row.remove();
+      const list = root.querySelector('.cdn__list');
+      for (const dep of this.#deps) {
+        const clone = template.cloneNode(true);
+        clone.hidden = false;
+        const label = clone.querySelector('[data-slot="dep-name"]');
+        if (label) label.textContent = dep.version ? `${dep.name}@${dep.version}` : dep.name;
+        const pre = clone.querySelector('[data-slot="dep-pre"]');
+        const snippet = this.#buildDepSnippet(dep);
+        if (pre) pre.textContent = snippet;
+        const note = clone.querySelector('[data-slot="dep-note"]');
+        if (note) { note.textContent = dep.note; note.hidden = !dep.note; }
+        const btn = clone.querySelector('[data-copy="dep"]');
+        if (btn) btn.dataset.copyValue = snippet;
+        list.insertBefore(clone, template);
+      }
     }
 
     #buildUrls() {
@@ -97,18 +165,12 @@ import '../media/icon.js';
       const category = this.getAttribute('category');
       const fileTag = (tag || '').replace(/^is-/, '');
       this.#urls = {
-        single:   tag ? `${base}/${fileTag}.min.js` : '',
-        category: (tag && category) ? `${base}/${category}.min.js` : '',
+        single:   (tag && category) ? `${base}/${category}/${fileTag}.min.js` : '',
+        category: (tag && category) ? `${base}/${category}/category.${category}.min.js` : '',
         all:      `${base}/all.min.js`,
       };
     }
 
-    #escape(s) {
-      return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
 
     #render() {
       const root = this.shadowRoot;
@@ -127,17 +189,20 @@ import '../media/icon.js';
       const title = this.getAttribute('title');
       if (titleEl && title) titleEl.textContent = title;
 
-      if (fileTagEl) fileTagEl.textContent = tag ? `${tag.replace(/^is-/, '')}.min.js` : '—';
-      if (catLabelEl) catLabelEl.textContent = category ? `${category}.min.js` : '—';
+      if (fileTagEl) fileTagEl.textContent = (tag && category) ? `${category}/${tag.replace(/^is-/, '')}.min.js` : '—';
+      if (catLabelEl) catLabelEl.textContent = category ? `${category}/category.${category}.min.js` : '—';
 
-      const mk = (url) => url ? `<script type="module" src="${this.#escape(url)}"><\/script>` : '—';
-      if (singlePre) singlePre.innerHTML = this.#escape(mk(this.#urls.single));
-      if (catPre) catPre.innerHTML = this.#escape(mk(this.#urls.category));
-      if (allPre) allPre.innerHTML = this.#escape(mk(this.#urls.all));
+      const mk = (url) => url ? `<script type="module" src="${escapeHtml(url)}"><\/script>` : '—';
+      if (singlePre) singlePre.innerHTML = escapeHtml(mk(this.#urls.single));
+      if (catPre) catPre.innerHTML = escapeHtml(mk(this.#urls.category));
+      if (allPre) allPre.innerHTML = escapeHtml(mk(this.#urls.all));
 
       // Si no hay tag, ocultamos la fila individual para no mostrar placeholder inútil.
       const singleRow = root.querySelector('[data-kind="single"]');
       if (singleRow) singleRow.hidden = !tag;
+
+      this.#parseDeps();
+      this.#renderDeps();
     }
 
     #onCopy = async (e) => {
@@ -145,21 +210,11 @@ import '../media/icon.js';
       if (!btn) return;
       e.preventDefault();
       const kind = btn.dataset.copy;
-      const url = this.#urls[kind];
-      if (!url) return;
-      const text = `<script type="module" src="${url}"><\/script>`;
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.setAttribute('readonly', '');
-        ta.style.cssText = 'position:fixed;left:-9999px;top:0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-      }
+      const text = kind === 'dep'
+        ? (btn.dataset.copyValue || '')
+        : (this.#urls[kind] ? `<script type="module" src="${this.#urls[kind]}"><\/script>` : '');
+      if (!text) return;
+      await copyText(text);
       const original = btn.innerHTML;
       btn.innerHTML = '<is-icon icon="mdi:check" aria-hidden="true"></is-icon> Copiado';
       btn.classList.add('is-copied');

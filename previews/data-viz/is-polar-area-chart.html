@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-polar-area-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -47,7 +48,7 @@
           el <strong>radio</strong> refleja la magnitud (a diferencia de un pie, donde el tamaño
           es el ángulo). Ideal para comparar escalas en el mismo “reloj”.
         </p>
-        <div class="demo demo--chart">
+        <is-demo class="demo demo--chart">
           <is-polar-area-chart label="Mix energético (GW)">
             <script type="application/json">
               {
@@ -58,13 +59,13 @@
               }
             </script>
           </is-polar-area-chart>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="datos">
         <h2>Datos</h2>
         <p class="lede">JSON hijo <code class="code">application/json</code> o propiedad <code class="code">config</code>. El <code class="code">type</code> queda fijo en <code class="code">polarArea</code>.</p>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-polar-area-chart label="Canales de tráfico">
             <script type="application/json">
               {
@@ -75,7 +76,7 @@
               }
             </script>
           </is-polar-area-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-polar-area-chart label="Canales de tráfico"&gt;
   &lt;script type="application/json"&gt;
     {
@@ -93,7 +94,7 @@
         <p class="lede">Misma API de presentación que <code class="code">is-chart</code>: leyenda, animación, título.</p>
 
         <span class="demo-label">legend-position="end"</span>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-polar-area-chart label="NPS por segmento" legend-position="end">
             <script type="application/json">
               {
@@ -104,10 +105,10 @@
               }
             </script>
           </is-polar-area-chart>
-        </div>
+        </is-demo>
 
         <span class="demo-label">without-legend</span>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-polar-area-chart without-legend>
             <script type="application/json">
               {
@@ -118,10 +119,10 @@
               }
             </script>
           </is-polar-area-chart>
-        </div>
+        </is-demo>
 
         <span class="demo-label">without-animation</span>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-polar-area-chart label="Sin animación" without-animation>
             <script type="application/json">
               {
@@ -132,7 +133,7 @@
               }
             </script>
           </is-polar-area-chart>
-        </div>
+        </is-demo>
 
         <pre class="code" data-lang="html">&lt;is-polar-area-chart legend-position="end" label="NPS"&gt;…&lt;/is-polar-area-chart&gt;
 &lt;is-polar-area-chart without-legend&gt;…&lt;/is-polar-area-chart&gt;
@@ -145,7 +146,7 @@
           Colores por sector vía <code class="code">--fill-color-1..6</code> y
           <code class="code">--border-color-1..6</code> en el host (o un ancestro).
         </p>
-        <div class="demo demo--chart">
+        <is-demo class="demo demo--chart">
           <is-polar-area-chart class="polar-theme-demo" label="Paleta custom">
             <script type="application/json">
               {
@@ -156,7 +157,7 @@
               }
             </script>
           </is-polar-area-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="css">is-polar-area-chart.mi-tema {
   --fill-color-1: color-mix(in srgb, #38bdf8 72%, transparent);
   --fill-color-2: color-mix(in srgb, #a78bfa 72%, transparent);

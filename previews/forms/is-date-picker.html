@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-date-picker · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -25,24 +26,24 @@
       <section class="section" id="intro">
         <h2>&lt;is-date-picker&gt;</h2>
         <p class="lede">Calendario inline (DateCalendar de <a href="https://mui.com/x/react-date-pickers/" target="_blank" rel="noopener">MUI X</a>). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un <code>is-dropdown</code>.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-date-picker id="dp" value="2026-07-30" locale="es"></is-date-picker>
-        </div>
+        </is-demo>
         <p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p>
       </section>
 
       <section class="section" id="range">
         <h2>Rango</h2>
         <p class="lede">Tras elegir el inicio, el calendario pinta el rango tentativo hasta el día bajo el cursor o el foco, y el extremo móvil se marca con un anillo.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-date-picker mode="range" min="2026-01-01" max="2026-12-31" locale="es"></is-date-picker>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="views">
         <h2>Vistas</h2>
         <p class="lede"><code>view</code> fuerza la vista; <code>views</code> limita las permitidas. Un picker de solo mes/año fija valor al elegir mes.</p>
-        <div class="demo cluster" style="gap:1.5rem;align-items:flex-start">
+        <is-demo class="demo cluster" style="gap:1.5rem;align-items:flex-start">
           <div>
             <div class="demo-label">open-to="year"</div>
             <is-date-picker locale="es" open-to="year" value="2026-07-30"></is-date-picker>
@@ -51,13 +52,13 @@
             <div class="demo-label">views="month year"</div>
             <is-date-picker locale="es" views="month year" view="month" value="2026-07-01"></is-date-picker>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="week">
         <h2>Semana y rejilla</h2>
         <p class="lede"><code>first-day-of-week</code>, <code>show-outside-days</code>, <code>fixed-weeks</code> y <code>show-week-numbers</code>.</p>
-        <div class="demo cluster" style="gap:1.5rem;align-items:flex-start">
+        <is-demo class="demo cluster" style="gap:1.5rem;align-items:flex-start">
           <div>
             <div class="demo-label">domingo + outside + week numbers</div>
             <is-date-picker locale="en-US" first-day-of-week="0" show-outside-days fixed-weeks show-week-numbers value="2026-07-15"></is-date-picker>
@@ -66,12 +67,12 @@
             <div class="demo-label">fines de semana off</div>
             <is-date-picker locale="es" disabled-days="0 6" value="2026-07-15"></is-date-picker>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="disable">
         <h2>Deshabilitado</h2>
-        <div class="demo cluster" style="gap:1.5rem;align-items:flex-start">
+        <is-demo class="demo cluster" style="gap:1.5rem;align-items:flex-start">
           <div>
             <div class="demo-label">disable-past</div>
             <is-date-picker locale="es" disable-past></is-date-picker>
@@ -80,16 +81,16 @@
             <div class="demo-label">disabled-dates</div>
             <is-date-picker locale="es" value="2026-07-01" disabled-dates="2026-07-04 2026-07-05 2026-07-20"></is-date-picker>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="standalone">
         <h2>Mes y año sueltos</h2>
         <p class="lede"><code>is-month-calendar</code> e <code>is-year-calendar</code> también se usan solos.</p>
-        <div class="demo cluster" style="gap:1.5rem;align-items:flex-start">
+        <is-demo class="demo cluster" style="gap:1.5rem;align-items:flex-start">
           <is-month-calendar year="2026" value="2026-07" locale="es" style="width:16em"></is-month-calendar>
           <is-year-calendar value="2026" min="2010" max="2035" style="width:16em"></is-year-calendar>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

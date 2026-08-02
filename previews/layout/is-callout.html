@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-callout · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-callout de Insoft." />
@@ -40,10 +41,10 @@
           o slot <code class="code">icon</code>).
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">caso mínimo</span>
           <is-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</is-callout>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-callout&gt;</span>Esto es un callout estándar.<span class="tag">&lt;/is-callout&gt;</span></pre>
       </section>
@@ -150,9 +151,9 @@
           solo el mensaje.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-callout variant="neutral" icon="">Todas las horas se muestran en tu zona horaria local.</is-callout>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">icon</span>=<span class="val">""</span><span class="tag">&gt;</span>Texto plano.<span class="tag">&lt;/is-callout&gt;</span></pre>
       </section>
@@ -189,11 +190,11 @@
           El contenedor raíz es la <code class="code">::part(base)</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-callout variant="success" style="--callout-bg: #d3f9d8; --callout-border: #2f9e44;">
             CSS parts en uso: el fondo y el borde se redefinen vía custom properties.
           </is-callout>
-        </div>
+        </is-demo>
       </section>
 
       <!-- ===== 9. REFERENCIA ===== -->

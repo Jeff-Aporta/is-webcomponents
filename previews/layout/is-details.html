@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-details · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-details de Insoft." />
@@ -40,13 +41,13 @@
           iconos, animaciones y comportamiento de accordion opcional.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">caso mínimo</span>
           <is-details summary="¿Qué es Insoft?">
             Insoft es un ERP modular para empresas medianas que necesitan integrar
             contabilidad, inventario, facturación y CRM en una sola plataforma.
           </is-details>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">summary</span>=<span class="val">"¿Qué es Insoft?"</span><span class="tag">&gt;</span>
   Insoft es un ERP modular…
@@ -197,7 +198,7 @@
           <code class="code">summary</code>, <code class="code">name</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-details id="apiDetails" summary="Demo controlada">
             Esto lo abro y cierro desde los botones de abajo.
           </is-details>
@@ -206,7 +207,7 @@
             <is-button id="btnClose">hide()</is-button>
             <is-button id="btnToggle" appearance="outlined">toggle()</is-button>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">id</span>=<span class="val">"apiDetails"</span> <span class="attr">summary</span>=<span class="val">"Demo"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span>
 <span class="tag">&lt;script&gt;</span>
@@ -225,12 +226,12 @@
           <code class="code">is-after-hide</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-details id="evtDetails" summary="Pulsa y mira la consola">
             El evento <code class="code">is-after-show</code> se dispara tras la animación de apertura.
           </is-details>
           <div id="evtLog" class="callout" style="margin-top:.5em">Log:</div>
-        </div>
+        </is-demo>
 
         <pre class="code">document.getElementById('evtDetails').addEventListener('is-after-show', () =&gt; {
   console.log('abierto');

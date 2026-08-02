@@ -114,3 +114,17 @@
   background: var(--_accent);
   transform-origin: left center;
 }
+
+/* Spinner del toast loading (toaster.promise): el is-icon marcado con
+   data-loading gira hasta que la promesa resuelve. */
+::slotted(is-icon[data-loading]) {
+  animation: is-toast-spin 0.9s linear infinite;
+}
+
+@keyframes is-toast-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(is-icon[data-loading]) { animation: none; }
+}

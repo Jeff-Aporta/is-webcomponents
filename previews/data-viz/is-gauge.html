@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-gauge · IS Web Components</title>
   <meta name="description" content="Documentación y demos de is-gauge de Insoft." />
@@ -53,7 +54,7 @@
           custom min/max, unidad, formato y tamaño.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="gauge-grid">
             <div class="gauge-cell">
               <is-gauge id="g1" value="67" label="Conversión" unit="%"></is-gauge>
@@ -68,7 +69,7 @@
               <is-gauge value="15" label="Errores" unit="%" variant="danger"></is-gauge>
             </div>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-gauge</span> <span class="attr">value</span>=<span class="val">"67"</span> <span class="attr">label</span>=<span class="val">"Conversión"</span> <span class="attr">unit</span>=<span class="val">"%"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-gauge&gt;</span></pre>
       </section>
@@ -77,49 +78,49 @@
         <h2>Tamaños</h2>
         <p class="lede">small, medium, large.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="gauge-grid">
             <div class="gauge-cell"><is-gauge style="font-size:0.7em" value="42" label="0.7em"></is-gauge></div>
             <div class="gauge-cell"><is-gauge value="42" label="1em"></is-gauge></div>
             <div class="gauge-cell"><is-gauge style="font-size:1.35em" value="42" label="1.35em"></is-gauge></div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="half">
         <h2>Semicírculo</h2>
         <p class="lede">Con <code class="code">half</code> pinta solo medio arco.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="gauge-grid">
             <div class="gauge-cell"><is-gauge half value="68" label="Velocímetro"></is-gauge></div>
             <div class="gauge-cell"><is-gauge half value="42" label="Velocímetro" variant="warning"></is-gauge></div>
             <div class="gauge-cell"><is-gauge half value="88" label="Velocímetro" variant="success"></is-gauge></div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="format">
         <h2>Formato</h2>
         <p class="lede">Con <code class="code">format</code> controla los decimales.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="gauge-grid">
             <div class="gauge-cell"><is-gauge value="3.14159" label="π" format="0.00"></is-gauge></div>
             <div class="gauge-cell"><is-gauge value="12345" label="USD" format="0,0" unit="€"></is-gauge></div>
             <div class="gauge-cell"><is-gauge value="0.5" label="CTR" format="0.0%" unit=""></is-gauge></div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="interactive">
         <h2>Interactivo</h2>
         <p class="lede">Vinculado a un slider.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-gauge id="gInteractive" value="50" label="Dinámico"></is-gauge>
           <is-slider id="gSlider" min="0" max="100" value="50" label="Valor"></is-slider>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

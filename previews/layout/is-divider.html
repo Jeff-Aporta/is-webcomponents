@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-divider · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,31 +24,31 @@
       <section class="section" id="intro">
         <h2>&lt;is-divider&gt;</h2>
         <p class="lede">Separador horizontal o vertical. Opacidad default <code class="code">20</code>; color vía tokens del theme.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <p>Sección A</p>
           <is-divider></is-divider>
           <p>Sección B</p>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="examples">
         <h2>Vertical · opacidad · colores</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div style="display:flex;align-items:stretch;height:3rem;gap:0">
             <span style="padding:0 1rem;display:flex;align-items:center">Izq</span>
             <is-divider orientation="vertical"></is-divider>
             <span style="padding:0 1rem;display:flex;align-items:center">Der</span>
           </div>
-        </div>
-        <div class="demo">
+        </is-demo>
+        <is-demo class="demo">
           <div class="demo-row" style="flex-direction:column;gap:0;width:100%">
             <span class="demo-label">opacity 20 · 50 · 100</span>
             <is-divider opacity="20"></is-divider>
             <is-divider opacity="50"></is-divider>
             <is-divider opacity="100"></is-divider>
           </div>
-        </div>
-        <div class="demo">
+        </is-demo>
+        <is-demo class="demo">
           <div class="demo-row" style="flex-direction:column;gap:0.35rem;width:100%">
             <span class="demo-label">color theme</span>
             <is-divider color="text" opacity="80"></is-divider>
@@ -57,7 +58,7 @@
             <is-divider color="danger" opacity="80"></is-divider>
             <is-divider color="border" opacity="100"></is-divider>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-divider&gt;&lt;/is-divider&gt;
 &lt;is-divider opacity="80" color="brand"&gt;&lt;/is-divider&gt;
 &lt;is-divider orientation="vertical" color="accent"&gt;&lt;/is-divider&gt;</pre>

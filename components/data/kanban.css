@@ -25,6 +25,27 @@
   min-height: 400px;
 }
 
+/* orientation="row": stacks apilados en filas, cada lane fluye horizontal. */
+:host([orientation="row"]) .board {
+  flex-direction: column;
+  min-height: 0;
+  overflow-x: visible;
+}
+
+:host([orientation="row"]) ::slotted(is-kanban-column) {
+  flex: 0 0 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Feedback de drag & drop */
+::slotted(is-kanban-card.is-dragging) { opacity: 0.45; }
+
+.column.drop-target {
+  outline: 2px dashed var(--accent);
+  outline-offset: -2px;
+}
+
 /* ============ <is-kanban-column> ============ */
 .column {
   background: var(--bg);
@@ -72,6 +93,18 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+/* Columna dentro de un board orientation="row": las cards fluyen en fila. */
+:host([data-orientation="row"]) .column { max-height: none; }
+:host([data-orientation="row"]) .lane {
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-y: visible;
+}
+:host([data-orientation="row"]) .lane ::slotted(is-kanban-card),
+:host([data-orientation="row"]) ::slotted(is-kanban-card) {
+  flex: 0 0 260px;
 }
 
 .col-foot {

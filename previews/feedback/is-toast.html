@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-toast · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -25,7 +26,7 @@
       <section class="section" id="intro">
         <h2>&lt;is-toast&gt;</h2>
         <p class="lede">Contenedor fijo de notificaciones. Crea ítems con <code class="code">create()</code> o declara <code class="code">&lt;is-toast-item&gt;</code>.</p>
-        <div
+        <is-demo
           class="demo"
           data-code='&lt;is-toast id="toaster" placement="bottom-end"&gt;&lt;/is-toast&gt;
 
@@ -62,7 +63,7 @@
             <is-button variant="danger" id="btn-danger">danger</is-button>
             <is-button variant="neutral" id="btn-sticky">sticky (duration 0)</is-button>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">const toaster = document.getElementById('toaster');
 
 document.getElementById('btn-brand').addEventListener('click', () => {
@@ -89,7 +90,7 @@ document.getElementById('btn-sticky').addEventListener('click', () => {
           <code class="code">start|center|end</code>
           (logical; en LTR start=izquierda, end=derecha).
         </p>
-        <div
+        <is-demo
           class="demo"
           data-code='&lt;is-toast id="toaster" placement="bottom-end"&gt;&lt;/is-toast&gt;
 
@@ -119,7 +120,7 @@ document.getElementById('btn-sticky').addEventListener('click', () => {
             <is-button data-place="bottom-center">bottom-center</is-button>
             <is-button data-place="bottom-end">bottom-end</is-button>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">const toaster = document.getElementById('toaster');
 
 document.querySelectorAll('[data-place]').forEach((btn) => {
@@ -128,6 +129,35 @@ document.querySelectorAll('[data-place]').forEach((btn) => {
     toaster.placement = placement;
     toaster.create(placement, { variant: 'brand' });
   });
+});</pre>
+      </section>
+
+      <section class="section" id="promise">
+        <h2>Promise</h2>
+        <p class="lede">
+          <code class="code">toaster.promise(p, { loading, success, error })</code> muestra un
+          toast loading con spinner y lo actualiza en sitio al resolver o rechazar.
+          Cada callback acepta string, función o <code class="code">{ message, options }</code>.
+        </p>
+        <is-demo class="demo">
+          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
+            <is-button id="btn-promise-ok" variant="success">Simular éxito</is-button>
+            <is-button id="btn-promise-err" variant="danger">Simular error</is-button>
+            <is-button id="btn-promise-dynamic" variant="brand">Mensaje dinámico</is-button>
+          </div>
+        </is-demo>
+        <pre class="code" data-lang="javascript">// success/error como string
+toaster.promise(guardar(), {
+  loading: 'Guardando…',
+  success: 'Guardado',
+  error: 'No se pudo guardar',
+});
+
+// success como función que recibe data / error que recibe err
+toaster.promise(cargarFilas(), {
+  loading: 'Cargando filas…',
+  success: (data) => `${data.total} filas cargadas`,
+  error: (err) => `Falló: ${err.message}`,
 });</pre>
       </section>
 
@@ -148,12 +178,38 @@ document.querySelectorAll('[data-place]').forEach((btn) => {
       <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
         <a href="#placement">Placement</a>
+        <a href="#promise">Promise</a>
         <a href="#reference">Referencia</a>
       </is-scrollspy>
     </aside>
   </is-split-panel>
   <script type="module">
     const toaster = document.getElementById('toaster');
+
+    const wait = (ms, fail) => new Promise((res, rej) =>
+      setTimeout(() => (fail ? rej(new Error('timeout del servidor')) : res({ total: 42 })), ms));
+
+    document.getElementById('btn-promise-ok').addEventListener('click', () => {
+      toaster.promise(wait(1500), {
+        loading: 'Guardando…',
+        success: 'Guardado',
+        error: 'No se pudo guardar',
+      }).catch(() => {});
+    });
+    document.getElementById('btn-promise-err').addEventListener('click', () => {
+      toaster.promise(wait(1500, true), {
+        loading: 'Guardando…',
+        success: 'Guardado',
+        error: (err) => `Falló: ${err.message}`,
+      }).catch(() => {});
+    });
+    document.getElementById('btn-promise-dynamic').addEventListener('click', () => {
+      toaster.promise(wait(1800), {
+        loading: 'Cargando filas…',
+        success: (data) => `${data.total} filas cargadas`,
+        error: (err) => `Falló: ${err.message}`,
+      }).catch(() => {});
+    });
 
     document.getElementById('btn-brand').addEventListener('click', () => {
       toaster.create('Mensaje brand', { variant: 'brand' });

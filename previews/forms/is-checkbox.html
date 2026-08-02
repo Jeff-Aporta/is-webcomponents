@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-checkbox · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -36,14 +37,14 @@
           sin input oculto, con color por <code class="code">variant</code>, posición de etiqueta, iconos propios y
           estado de error.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <is-checkbox name="a" checked>Marcada</is-checkbox>
             <is-checkbox name="b">Sin marcar</is-checkbox>
             <is-checkbox name="c" indeterminate>Indeterminada</is-checkbox>
             <is-checkbox name="d" checked disabled>Deshabilitada</is-checkbox>
           </div>
-        </div>
+        </is-demo>
         <p class="lede">
           El estado indeterminado se limpia en el primer clic, igual que una casilla nativa.
           Al pasar el puntero o al enfocar aparece el halo circular alrededor del control.
@@ -56,7 +57,7 @@
           <code class="code">variant</code> equivale a la prop <code class="code">color</code> de MUI: redefine el
           acento del control marcado, del halo y del anillo de foco.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <is-checkbox checked>brand (default)</is-checkbox>
             <is-checkbox variant="neutral" checked>neutral</is-checkbox>
@@ -64,7 +65,7 @@
             <is-checkbox variant="warning" checked>warning</is-checkbox>
             <is-checkbox variant="danger" checked>danger</is-checkbox>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-checkbox variant="success" checked&gt;success&lt;/is-checkbox&gt;</pre>
       </section>
 
@@ -74,14 +75,14 @@
           <code class="code">label-placement</code> equivale a <code class="code">labelPlacement</code> del
           <code class="code">FormControlLabel</code> de MUI.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="placements">
             <is-checkbox checked>end (default)</is-checkbox>
             <is-checkbox label-placement="start" checked>start</is-checkbox>
             <is-checkbox label-placement="top" checked>top</is-checkbox>
             <is-checkbox label-placement="bottom" checked>bottom</is-checkbox>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-checkbox label-placement="start" checked&gt;start&lt;/is-checkbox&gt;
 &lt;is-checkbox label-placement="top" checked&gt;top&lt;/is-checkbox&gt;</pre>
       </section>
@@ -93,14 +94,14 @@
           y se apila con el <code class="code">display:flex</code> del contenedor. En columna, alinea
           <code class="code">align-items:flex-start</code> para que el halo no recorte.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-checkbox name="g1" value="gilad" checked>Gilad Gray</is-checkbox>
             <is-checkbox name="g2" value="jason" checked>Jason Killian</is-checkbox>
             <is-checkbox name="g3" value="antoine">Antoine Llorca</is-checkbox>
           </div>
-        </div>
-        <div class="demo" style="margin-top:12px">
+        </is-demo>
+        <is-demo class="demo" style="margin-top:12px">
           <div class="inline">
             <is-checkbox name="r1" value="lun" checked>Lun</is-checkbox>
             <is-checkbox name="r2" value="mar" checked>Mar</is-checkbox>
@@ -108,14 +109,14 @@
             <is-checkbox name="r4" value="jue">Jue</is-checkbox>
             <is-checkbox name="r5" value="vie" checked>Vie</is-checkbox>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;div style="display:flex;flex-direction:column;align-items:flex-start;gap:.7rem"&gt;
   &lt;is-checkbox name="g1" value="gilad" checked&gt;Gilad Gray&lt;/is-checkbox&gt;
   &lt;is-checkbox name="g2" value="jason" checked&gt;Jason Killian&lt;/is-checkbox&gt;
 &lt;/div&gt;</pre>
         <h3>Padre indeterminado</h3>
         <p class="lede">Patrón clásico: la casilla padre refleja el estado de los hijos.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-checkbox id="parentBox">Todos los permisos</is-checkbox>
             <div class="stack" style="padding-left:1.6rem">
@@ -124,7 +125,7 @@
               <is-checkbox class="childBox">Borrado</is-checkbox>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">const all = children.every(c =&gt; c.checked);
 parent.checked = all;
 parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
@@ -138,14 +139,14 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
           (Iconify). Al definir <code class="code">icon</code> el control pierde la caja y queda solo el glifo,
           como el ejemplo de iconos de MUI. Sin estos atributos el <em>look</em> por defecto es el check dibujado.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <is-checkbox icon="mdi:heart-outline" checked-icon="mdi:heart" variant="danger" checked>Favorito</is-checkbox>
             <is-checkbox icon="mdi:bookmark-outline" checked-icon="mdi:bookmark">Guardar</is-checkbox>
             <is-checkbox icon="mdi:star-outline" checked-icon="mdi:star" variant="warning" checked>Destacar</is-checkbox>
             <is-checkbox checked-icon="mdi:check-bold" indeterminate-icon="mdi:dots-horizontal" indeterminate>Con caja</is-checkbox>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-checkbox icon="mdi:heart-outline" checked-icon="mdi:heart" variant="danger" checked&gt;
   Favorito
 &lt;/is-checkbox&gt;</pre>
@@ -158,13 +159,13 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
           navegable con <code class="code">Tab</code>. <code class="code">disabled</code> saca el control del orden
           de tabulación y no aporta entrada al <code class="code">FormData</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <is-checkbox name="ro1" checked readonly>Solo lectura (marcada)</is-checkbox>
             <is-checkbox name="ro2" readonly>Solo lectura (sin marcar)</is-checkbox>
             <is-checkbox name="di1" checked disabled>Deshabilitada</is-checkbox>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-checkbox name="ro1" checked readonly&gt;Solo lectura&lt;/is-checkbox&gt;</pre>
       </section>
 
@@ -175,7 +176,7 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
           <code class="code">error</code> tiñe control y ayuda con el color de peligro y marca
           <code class="code">aria-invalid</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-checkbox hint="Puedes cambiarlo más tarde en Ajustes.">Recibir novedades</is-checkbox>
             <is-checkbox error hint="Debes aceptar los términos para continuar." required>Acepto los términos</is-checkbox>
@@ -184,7 +185,7 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
               <span slot="hint">El texto de ayuda también admite un <b>slot</b>.</span>
             </is-checkbox>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-checkbox error hint="Debes aceptar los términos para continuar." required&gt;
   Acepto los términos
 &lt;/is-checkbox&gt;</pre>
@@ -196,7 +197,7 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
           Sin marcar no aporta entrada al <code class="code">FormData</code>. Con
           <code class="code">required</code> reporta <code class="code">valueMissing</code> y bloquea el envío.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <form id="demoForm">
             <div class="stack">
               <is-checkbox name="terminos" value="si" required>Acepto los términos (obligatorio)</is-checkbox>
@@ -208,7 +209,7 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
               </div>
             </div>
           </form>
-        </div>
+        </is-demo>
         <div class="log" id="formLog" aria-live="polite" style="margin-top:12px"><div class="row hint">Envía el formulario para ver el FormData.</div></div>
         <pre class="code">&lt;is-checkbox name="terminos" value="si" required&gt;
   Acepto los términos
@@ -221,13 +222,13 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
           Sin atributo <code class="code">size</code>: el control mide <code class="code">1.15em</code> y hereda el
           <code class="code">font-size</code> del contenedor.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="inline">
             <span style="font-size:.8rem"><is-checkbox checked>0.8rem</is-checkbox></span>
             <span style="font-size:1rem"><is-checkbox checked>1rem</is-checkbox></span>
             <span style="font-size:1.35rem"><is-checkbox checked>1.35rem</is-checkbox></span>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;span style="font-size:1.35rem"&gt;&lt;is-checkbox checked&gt;Grande&lt;/is-checkbox&gt;&lt;/span&gt;</pre>
       </section>
 

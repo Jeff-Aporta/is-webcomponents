@@ -84,6 +84,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #navSlot;
     #tabsWrap;
     #scrollStart;
+    #scrollRo = null;
     #scrollEnd;
     #upgradeProps = ['active', 'placement', 'activation', 'without-scroll-controls'];
 
@@ -114,6 +115,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (!this.hasAttribute('activation')) this.setAttribute('activation', 'auto');
       this.#syncPanels();
       this.#syncScrollUI();
+    }
+
+    disconnectedCallback() {
+      this.#mounted = false;
+      this.#scrollRo?.disconnect();
+      this.#scrollRo = null;
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
@@ -268,8 +275,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
         }
       };
       check();
-      const ro = new ResizeObserver(check);
-      ro.observe(this.#tabsWrap);
+      // Un solo observer por instancia; se libera en disconnectedCallback.
+      this.#scrollRo?.disconnect();
+      this.#scrollRo = new ResizeObserver(check);
+      this.#scrollRo.observe(this.#tabsWrap);
     }
 
     #scrollTabs(direction) {

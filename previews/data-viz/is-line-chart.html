@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-line-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,13 +24,13 @@
       <section class="section" id="intro">
         <h2>&lt;is-line-chart&gt;</h2>
         <p class="lede">Tendencias en el tiempo.</p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-line-chart>
             <script type="application/json">
               {"data":{"labels":["Ene","Feb","Mar","Abr","May","Jun"],"datasets":[{"label":"Visitas","data":[4200,4800,5100,4900,5500,6200]}]}}
             </script>
           </is-line-chart>
-        </div>
+        </is-demo>
       </section>
     </is-main>
     <aside class="sidebar" slot="end"><h1>is-line-chart</h1><is-scrollspy target="is-main"><a href="#intro">Introducción</a></is-scrollspy></aside>

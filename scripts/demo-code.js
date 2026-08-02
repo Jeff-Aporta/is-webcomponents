@@ -129,15 +129,20 @@
     const tags = collectTags(demo);
     const cssTags = tags.filter((t) => COMPONENTS_WITH_CSS.has(t));
 
+    // dist/cdn folderizado: cada componente vive en <categoria>/<tag>.min.js.
+    const catOf = (t) => {
+      const entry = (window.__IS_MANIFEST__ || []).find((c) => c.tag === `is-${t}` || c.tag === t);
+      return entry?.category || 'helpers';
+    };
     const lines = [];
     lines.push('<link rel="stylesheet" href="' + CDN_BASE + '/is-base.min.css">');
     lines.push('<link rel="stylesheet" href="' + CDN_BASE + '/palettes.min.css">');
     for (const t of cssTags) {
-      lines.push(`<link rel="stylesheet" href="${CDN_BASE}/${t}.min.css">`);
+      lines.push(`<link rel="stylesheet" href="${CDN_BASE}/${catOf(t)}/${t}.min.css">`);
     }
     // Los módulos ya son diferidos: no hace falta `defer` ni ponerlos al final.
     for (const t of tags) {
-      lines.push(`<script type="module" src="${CDN_BASE}/${t}.min.js"><\/script>`);
+      lines.push(`<script type="module" src="${CDN_BASE}/${catOf(t)}/${t}.min.js"><\/script>`);
     }
     if (lines.length) lines.push('');
     lines.push(inner);
@@ -215,7 +220,9 @@
 
   const boot = async () => {
     try { await ensureChrome(); } catch { /* chrome degradado, ok */ }
-    document.querySelectorAll('.demo').forEach(enhance);
+    document.querySelectorAll('.demo, is-demo').forEach(enhance);
+    // <is-demo> conectados después de este boot se auto-registran aquí.
+    window.__isDemoEnhance = enhance;
   };
 
   if (document.readyState === 'loading') {

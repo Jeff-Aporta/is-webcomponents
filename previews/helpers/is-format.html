@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-format · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/helpers/format.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-format">
+      <section class="section" id="intro">
+        <h2>&lt;is-format&gt;</h2>
+        <p class="lede">
+          Web Component genérico de formateo con <code class="code">Intl</code>. Un solo
+          elemento cubre fechas, números, bytes y tiempo relativo. Los nombres históricos
+          (<code class="code">&lt;is-format-date&gt;</code>, <code class="code">&lt;is-format-number&gt;</code>,
+          <code class="code">&lt;is-format-bytes&gt;</code>, <code class="code">&lt;is-relative-time&gt;</code>)
+          siguen funcionando como alias con <code class="code">type</code> prefijado.
+        </p>
+        <is-demo class="demo">
+          <span class="demo-label">los 4 tipos en una línea</span>
+          <p style="margin:0;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+            <is-format type="date" value="2026-08-01"></is-format>
+            <is-format type="number" value="1234.5" format="currency" currency="EUR"></is-format>
+            <is-format type="bytes" value="2048" display="long"></is-format>
+            <is-format type="relative" date="2026-08-01T00:00:00Z"></is-format>
+          </p>
+        </is-demo>
+      </section>
+
+      <section class="section" id="type-date">
+        <h2><code>type="date"</code></h2>
+        <is-demo class="demo">
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">ISO datetime</code>
+              <is-format class="format-grid__value" type="date" value="2026-07-30T17:30:00"></is-format>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">solo día</code>
+              <is-format class="format-grid__value" type="date" value="2026-07-30" year="numeric" month="short" day="numeric"></is-format>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">timestamp ms</code>
+              <is-format class="format-grid__value" type="date" value="1753896600000" year="numeric" month="short" day="numeric"></is-format>
+            </div>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="type-number">
+        <h2><code>type="number"</code></h2>
+        <is-demo class="demo">
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">decimal</code>
+              <is-format class="format-grid__value" type="number" value="1234.5"></is-format>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">currency EUR</code>
+              <is-format class="format-grid__value" type="number" value="99.99" format="currency" currency="EUR"></is-format>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">percent</code>
+              <is-format class="format-grid__value" type="number" value="0.42" format="percent"></is-format>
+            </div>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="type-bytes">
+        <h2><code>type="bytes"</code></h2>
+        <is-demo class="demo">
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">512 B</code>
+              <is-format class="format-grid__value" type="bytes" value="512"></is-format>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">2 MB short</code>
+              <is-format class="format-grid__value" type="bytes" value="2097152"></is-format>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">1.5 GB long</code>
+              <is-format class="format-grid__value" type="bytes" value="1610612736" display="long"></is-format>
+            </div>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="type-relative">
+        <h2><code>type="relative"</code></h2>
+        <is-demo class="demo">
+          <div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">ayer</code>
+              <is-format class="format-grid__value" type="relative" date="2026-07-31T12:00:00"></is-format>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">en 1 hora</code>
+              <is-format class="format-grid__value" type="relative" date="2026-08-01T13:00:00"></is-format>
+            </div>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>Referencia de atributos</h2>
+        <is-demo class="demo">
+          <table class="is-table">
+            <thead>
+              <tr><th>Atributo</th><th>Aplica a</th><th>Descripción</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>type</code></td><td>todos</td><td><code>date | number | bytes | relative</code> (obligatorio en <code>&lt;is-format&gt;</code>)</td></tr>
+              <tr><td><code>value</code></td><td>todos</td><td>el dato a formatear (string | number)</td></tr>
+              <tr><td><code>date</code></td><td>relative</td><td>ISO o timestamp; en relative también vale <code>value</code></td></tr>
+              <tr><td><code>locale</code></td><td>todos</td><td>BCP 47; cae al <code>lang</code> del documento</td></tr>
+              <tr><td><code>format</code></td><td>number</td><td><code>decimal | currency | percent | unit</code></td></tr>
+              <tr><td><code>currency</code></td><td>number</td><td>ISO 4217 cuando <code>format="currency"</code></td></tr>
+              <tr><td><code>unit</code></td><td>bytes</td><td><code>byte | kilobyte | … | petabyte</code> de entrada</td></tr>
+              <tr><td><code>display</code></td><td>bytes</td><td><code>short | long</code></td></tr>
+              <tr><td><code>style</code></td><td>relative</td><td><code>long | short | narrow</code> (default long)</td></tr>
+              <tr><td><code>sync</code></td><td>relative</td><td>boolean: re-renderiza cada 30 s</td></tr>
+              <tr><td><code>weekday era year month day hour minute second hour-format</code></td><td>date</td><td>opciones de <code>Intl.DateTimeFormat</code></td></tr>
+            </tbody>
+          </table>
+        </is-demo>
+      </section>
+    </is-main>
+
+    <aside slot="end" class="toc">
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#type-date">type="date"</a>
+        <a href="#type-number">type="number"</a>
+        <a href="#type-bytes">type="bytes"</a>
+        <a href="#type-relative">type="relative"</a>
+        <a href="#api">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

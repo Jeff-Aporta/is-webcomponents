@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-state-diagram · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -34,7 +35,7 @@
           JSON, mismo visor a pantalla completa y la misma animación tortuga,
           que aquí recorre las transiciones en orden.
         </p>
-        <div class="demo" style="height:28rem">
+        <is-demo class="demo" style="height:28rem">
           <is-state-diagram>
             <script type="application/json">
               {
@@ -68,7 +69,7 @@
               }
             </script>
           </is-state-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="tipos">
@@ -79,7 +80,7 @@
           <code>normal</code> (rectángulo redondeado, por defecto) y
           <code>choice</code> (rombo de decisión).
         </p>
-        <div class="demo" style="height:14rem">
+        <is-demo class="demo" style="height:14rem">
           <is-state-diagram>
             <script type="application/json">
               {
@@ -102,7 +103,7 @@
               }
             </script>
           </is-state-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="ciclos">
@@ -113,7 +114,7 @@
           transición de un estado a sí mismo también se dibuja sin romper el
           layout.
         </p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-state-diagram>
             <script type="application/json">
               {
@@ -136,7 +137,7 @@
               }
             </script>
           </is-state-diagram>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

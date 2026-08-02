@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-format-date · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,15 +24,15 @@
       <section class="section" id="intro">
         <h2>&lt;is-format-date&gt;</h2>
         <p class="lede">Formatea fechas con <code class="code">Intl.DateTimeFormat</code>. Cualquier locale BCP&nbsp;47 vía <code class="code">locale</code> (o <code class="code">lang</code> del documento).</p>
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">lang del documento</span>
           <p style="margin:0"><is-format-date date="2026-07-30T17:30:00"></is-format-date></p>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="inputs">
         <h2>Entradas de <code>date</code></h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row">
               <code class="format-grid__tag">ISO datetime</code>
@@ -46,13 +47,13 @@
               <is-format-date class="format-grid__value" date="1753896600000" year="numeric" month="short" day="numeric"></is-format-date>
             </div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="locales">
         <h2>Locales (Intl nativo)</h2>
         <p class="lede">Se filtran con <code class="code">Intl.DateTimeFormat.supportedLocalesOf()</code> y se etiquetan con <code class="code">Intl.DisplayNames</code>. Cualquier BCP&nbsp;47 soportado por el motor funciona en <code class="code">locale</code>.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <p class="demo-caption" id="localeCaption">Cargando locales…</p>
           <div class="demo-locale-grid" id="localeGrid"></div>
           <label class="demo-caption" style="display:flex;align-items:center;gap:.5rem;margin-top:1rem">
@@ -62,7 +63,7 @@
             <datalist id="localeHints"></datalist>
             <span id="localeProbeOut"></span>
           </label>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">const asked = ['es','en','fr','de','ja','zh-CN','ar','pt-BR'];
 const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
 // → p.ej. ["es","en","fr","de","ja","zh-CN","ar","pt-BR"]
@@ -72,7 +73,7 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
 
       <section class="section" id="parts">
         <h2>Partes de fecha</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row">
               <code class="format-grid__tag">weekday long</code>
@@ -95,12 +96,12 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
               <is-format-date class="format-grid__value" date="2026-07-30" year="2-digit" month="numeric" day="numeric"></is-format-date>
             </div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="time">
         <h2>Hora · hour-format</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row">
               <code class="format-grid__tag">24h</code>
@@ -115,14 +116,14 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
               <is-format-date class="format-grid__value" date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="auto"></is-format-date>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="24"&gt;&lt;/is-format-date&gt;
 &lt;is-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="12"&gt;&lt;/is-format-date&gt;</pre>
       </section>
 
       <section class="section" id="timezone">
         <h2>Zona horaria</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row">
               <code class="format-grid__tag">UTC · short</code>
@@ -140,7 +141,7 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
                 hour="numeric" minute="numeric" hour-format="24"></is-format-date>
             </div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

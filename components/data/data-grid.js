@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { escapeHtml } from '../_shared/dom-utils.js';
 import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from '../_shared/grid-types.js';
 import {
   aggregateRows,
@@ -2983,12 +2984,6 @@ import {
     if (content instanceof Node) host.appendChild(content);
     else if (typeof content === 'object' && content.html != null) host.innerHTML = String(content.html);
     else host.textContent = String(content);
-  }
-
-  function escapeHtml(value) {
-    return String(value ?? '').replace(/[&<>"']/g, (c) => (
-      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-    ));
   }
 
   function cssEscape(value) {

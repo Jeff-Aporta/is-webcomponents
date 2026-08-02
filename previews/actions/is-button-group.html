@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-button-group · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-button-group de Insoft." />
@@ -54,7 +55,7 @@
           cuál está activo. Sirve para controles segmentados, toolbars y split buttons.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <div class="field">
               <span class="cap">appearance="segmented" · select="single" · <code class="code">hue</code> por botón</span>
@@ -75,7 +76,7 @@
             </div>
             <p class="lede" id="introLog">vista: <code class="code">lista</code></p>
           </div>
-        </div>
+        </is-demo>
 
         <div class="callout">
           <strong>Dale siempre un <code class="code">label</code>.</strong>
@@ -97,7 +98,7 @@
           <code class="code">separated</code> deja los botones sueltos con separación.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <div class="field">
               <span class="cap">joined</span>
@@ -124,7 +125,7 @@
               </is-button-group>
             </div>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code">&lt;is-button-group appearance="segmented" select="single"&gt;…&lt;/is-button-group&gt;</pre>
       </section>
@@ -136,7 +137,7 @@
           se reordenan a los extremos de arriba y abajo.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="bar" style="align-items: flex-start;">
             <div class="field">
               <span class="cap">joined</span>
@@ -155,7 +156,7 @@
               </is-button-group>
             </div>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code">&lt;is-button-group orientation="vertical" label="Opciones"&gt;
   &lt;is-button appearance="outlined"&gt;Arriba&lt;/is-button&gt;
@@ -174,7 +175,7 @@
           <code class="code">is-change</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <div class="field">
               <span class="cap">single</span>
@@ -209,7 +210,7 @@
             </div>
             <p class="lede" id="selLog">Sin cambios todavía.</p>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code">group.addEventListener('is-change', (e) =&gt; {
   e.detail.value;   // 'mes'  ·  ['bold', 'italic'] en multiple
@@ -224,7 +225,7 @@
           botón. <code class="code">stretch</code> reparte el ancho disponible en partes iguales.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack" style="align-self: stretch;">
             <div class="field">
               <span class="cap">pill</span>
@@ -251,7 +252,7 @@
               </is-button-group>
             </div>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code">&lt;is-button-group pill stretch appearance="segmented" select="single"&gt;…&lt;/is-button-group&gt;</pre>
       </section>
@@ -263,7 +264,7 @@
           (Con <code class="code">is-dropdown</code>: usa <code class="code">with-caret</code> en el trigger.)
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="bar">
             <is-button-group label="Guardar">
               <is-button appearance="filled" variant="brand">Guardar</is-button>
@@ -279,7 +280,7 @@
               </is-button>
             </is-button-group>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="toolbar">
@@ -289,7 +290,7 @@
           <code class="code">select</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="bar">
             <is-button-group label="Historial">
               <is-button appearance="outlined" aria-label="Deshacer">
@@ -324,14 +325,14 @@
               </is-button>
             </is-button-group>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="native">
         <h2>Botones nativos</h2>
         <p class="lede">También funciona con <code class="code">&lt;button&gt;</code> nativos.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="bar">
             <is-button-group label="Alineación">
               <button type="button" class="native-demo">Izquierda</button>
@@ -339,7 +340,7 @@
               <button type="button" class="native-demo">Derecha</button>
             </is-button-group>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="keyboard">
@@ -361,7 +362,7 @@
 
       <section class="section" id="api">
         <h2>API live</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-button-group id="apiGroup" label="Demo" select="single" value="B">
               <is-button appearance="outlined">A</is-button>
@@ -375,7 +376,7 @@
               <is-button id="apiValue" appearance="outlined">value = 'C'</is-button>
             </div>
           </div>
-        </div>
+        </is-demo>
         <div class="log" id="apiLog"><div class="row"><span class="hint">Acciones de API aparecerán aquí.</span></div></div>
       </section>
 

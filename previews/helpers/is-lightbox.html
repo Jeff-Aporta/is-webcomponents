@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-lightbox · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -77,7 +78,7 @@
           para añadir tus propios controles sin tocar el componente.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <button type="button" id="open1" class="demo-btn">Abrir con imagen SVG</button>
           <is-lightbox id="lb1">
             <svg viewBox="0 0 320 200" width="640" height="400" aria-label="Plano de un piso">
@@ -88,7 +89,7 @@
               <text x="160" y="180" text-anchor="middle" font-size="14" fill="#e6e8eb">Plano</text>
             </svg>
           </is-lightbox>
-        </div>
+        </is-demo>
 
         <pre class="code">&lt;button onclick="lb.show()"&gt;Abrir&lt;/button&gt;
 &lt;is-lightbox id="lb"&gt;
@@ -102,7 +103,7 @@
           Cada tarjeta es contenido que el visor recibe como slot. Distintos
           tipos (svg, html, video) comparten la misma API.
         </p>
-        <div class="gallery demo">
+        <is-demo class="gallery demo">
           <figure>
             <div class="lb-target" data-tone="brand" data-lb-target="svg-1">SVG · 640×400</div>
             <figcaption>Vector dentro del lightbox.</figcaption>
@@ -115,7 +116,7 @@
             <div class="lb-target" data-tone="warning" data-lb-target="html-1">HTML card</div>
             <figcaption>HTML arbitrario.</figcaption>
           </figure>
-        </div>
+        </is-demo>
 
         <is-lightbox id="lb-gallery">
           <template data-tpl="svg-1">
@@ -155,7 +156,7 @@
           elementos aparecen en la cabecera y los botones por defecto que ya no
           aportan (zoom-in/out/reset y share) se ocultan automáticamente.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <button type="button" id="open-tb" class="demo-btn">Abrir visor con toolbar custom</button>
           <is-lightbox id="lb-tb">
             <div slot="toolbar" style="display:flex;align-items:center;gap:.35rem">
@@ -174,7 +175,7 @@
               <circle cx="300" cy="200" r="120" fill="#38bdf8"/>
             </svg>
           </is-lightbox>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-lightbox&gt;
   &lt;div slot="toolbar"&gt;
     &lt;button&gt;Rotar&lt;/button&gt;
@@ -191,13 +192,13 @@
           sin más. El zoom + pan se aplica sobre el envoltorio, no sobre el
           medio, así que el video sigue siendo operable.
         </p>
-        <div class="demo video-card">
+        <is-demo class="demo video-card">
           <button type="button" id="open-vid" class="demo-btn">Ver video en pantalla completa</button>
           <is-lightbox id="lb-vid">
             <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
               controls playsinline style="max-width:90vw;max-height:80vh"></video>
           </is-lightbox>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-textarea · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -34,9 +35,9 @@
           appearances, error, contador y <code class="code">autosize</code> con
           <code class="code">min-rows</code> / <code class="code">max-rows</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-textarea id="demo" label="Descripción" hint="Máximo 200 caracteres" maxlength="200" show-count rows="4" placeholder="Cuéntanos…" name="descripcion"></is-textarea>
-        </div>
+        </is-demo>
         <p class="lede" id="log">0 caracteres</p>
       </section>
 
@@ -47,13 +48,13 @@
           <code class="code">outlined</code> (default) · <code class="code">filled</code> ·
           <code class="code">underlined</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-textarea label="outlined (default)" rows="2" placeholder="Caja con borde completo"></is-textarea>
             <is-textarea appearance="filled" label="filled" rows="2" placeholder="Superficie + línea inferior"></is-textarea>
             <is-textarea appearance="underlined" label="underlined" rows="2" placeholder="Solo línea inferior"></is-textarea>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-textarea appearance="filled" label="filled" rows="2"&gt;&lt;/is-textarea&gt;</pre>
       </section>
 
@@ -67,7 +68,7 @@
           el mínimo es el valor de <code class="code">rows</code>.
           Con autosize el <em>resize</em> manual se desactiva: pelearía con la altura calculada.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-textarea autosize min-rows="2" label="min-rows 2 · sin techo" placeholder="Escribe varias líneas y mira cómo crece…"></is-textarea>
             <is-textarea autosize min-rows="3" max-rows="6" label="min-rows 3 · max-rows 6"
@@ -75,7 +76,7 @@
               value="Uno&#10;Dos&#10;Tres&#10;Cuatro"></is-textarea>
             <is-textarea resize="auto" min-rows="1" max-rows="4" label='resize="auto" (alias de autosize)' placeholder="Empieza en una línea"></is-textarea>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-textarea autosize min-rows="3" max-rows="6" label="Comentario"&gt;&lt;/is-textarea&gt;
 
 &lt;!-- equivalente --&gt;
@@ -89,13 +90,13 @@
           <code class="code">vertical</code> (default) · <code class="code">both</code> ·
           <code class="code">auto</code> (autosize).
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-textarea label="none" resize="none" rows="3" value="El usuario no puede redimensionar."></is-textarea>
             <is-textarea label="vertical (default)" rows="3" placeholder="Arrastra el borde inferior"></is-textarea>
             <is-textarea label="both" resize="both" rows="3" placeholder="Arrastra la esquina"></is-textarea>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-textarea resize="none" rows="3"&gt;&lt;/is-textarea&gt;
 &lt;is-textarea resize="both" rows="3"&gt;&lt;/is-textarea&gt;</pre>
       </section>
@@ -106,12 +107,12 @@
           <code class="code">show-count</code> pinta <code class="code">n/maxlength</code> a la derecha de la
           fila del hint; sin <code class="code">maxlength</code>, solo <code class="code">n</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-textarea label="Reseña" maxlength="120" show-count rows="3" hint="Cuenta tu experiencia" value="Muy buena atención."></is-textarea>
             <is-textarea label="Sin límite" show-count rows="2" placeholder="Escribe algo…"></is-textarea>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-textarea label="Reseña" maxlength="120" show-count rows="3"&gt;&lt;/is-textarea&gt;</pre>
       </section>
 
@@ -124,7 +125,7 @@
           la primera interacción; si no diste <code class="code">error-text</code>, se muestra el mensaje del
           navegador. El estado se expone como <code class="code">:state(invalid)</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-textarea label="Error forzado" error error-text="El comentario contiene términos no permitidos"
               rows="2" value="Texto rechazado por el backend"></is-textarea>
@@ -135,7 +136,7 @@
           <div class="actions">
             <button type="button" id="btnReport">Validar</button>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-textarea error error-text="El comentario contiene términos no permitidos"&gt;&lt;/is-textarea&gt;
 
 textarea.reportValidity();   // marca el campo como tocado y pinta el error</pre>
@@ -147,12 +148,12 @@ textarea.reportValidity();   // marca el campo como tocado y pinta el error</pre
           Mismo token que <code class="code">is-input</code>: <code class="code">--is-field-width</code>
           (heredable) y <code class="code">full-width</code> para ocupar todo el ancho disponible.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div style="display:grid; gap:1.25rem; --is-field-width:18rem;">
             <is-textarea label="--is-field-width: 18rem" rows="2" placeholder="Heredado del contenedor"></is-textarea>
             <is-textarea label="full-width" full-width rows="2" placeholder="Ignora el token"></is-textarea>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;div style="--is-field-width: 18rem"&gt;
   &lt;is-textarea label="Estrecho" rows="2"&gt;&lt;/is-textarea&gt;
   &lt;is-textarea label="Ancho completo" full-width rows="2"&gt;&lt;/is-textarea&gt;
@@ -166,13 +167,13 @@ textarea.reportValidity();   // marca el campo como tocado y pinta el error</pre
           El label se alinea con la primera línea del textarea y
           <code class="code">--is-field-label-width</code> fija su columna.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div style="display:grid; gap:0.75rem; --is-field-label-width:7rem; max-width:34rem;">
             <is-textarea label-placement="start" label="Asunto" full-width rows="1"></is-textarea>
             <is-textarea label-placement="start" label="Mensaje" full-width autosize min-rows="3" max-rows="8"
               hint="Crece con el texto" show-count maxlength="500"></is-textarea>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;div style="--is-field-label-width: 7rem"&gt;
   &lt;is-textarea label-placement="start" label="Mensaje" full-width autosize min-rows="3"&gt;&lt;/is-textarea&gt;
 &lt;/div&gt;</pre>
@@ -180,18 +181,18 @@ textarea.reportValidity();   // marca el campo como tocado y pinta el error</pre
 
       <section class="section" id="states">
         <h2>Estados</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-textarea label="Solo lectura" readonly rows="2" value="Contenido fijo"></is-textarea>
             <is-textarea label="Deshabilitado" disabled rows="2" value="Sin acceso"></is-textarea>
             <is-textarea appearance="filled" label="filled · readonly" readonly rows="2" value="Contenido fijo"></is-textarea>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="form">
         <h2>Dentro de un &lt;form&gt;</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <form id="f" style="display:grid; gap:0.75rem; max-width:30rem;">
             <is-textarea name="comentario" label="Comentario" required autosize min-rows="3" max-rows="8"
               maxlength="300" show-count error-text="El comentario es obligatorio"></is-textarea>
@@ -200,7 +201,7 @@ textarea.reportValidity();   // marca el campo como tocado y pinta el error</pre
               <button type="reset">Reset</button>
             </div>
           </form>
-        </div>
+        </is-demo>
         <p class="lede" id="out">FormData: —</p>
       </section>
 

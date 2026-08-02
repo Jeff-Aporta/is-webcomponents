@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-popover · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -163,7 +164,7 @@
           <code class="code">&lt;is-popup&gt;</code> interno — el wrapper sólo
           aporta ancla declarativa, ciclo de vida y accesibilidad.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="pop1">Show popover</is-button>
           <is-popover for="pop1">
             <div class="stack">
@@ -171,7 +172,7 @@
               <is-button variant="brand" data-popover="close">Take Action</is-button>
             </div>
           </is-popover>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-button id="pop1"&gt;Show popover&lt;/is-button&gt;
 &lt;is-popover for="pop1"&gt;
   …contenido…
@@ -185,7 +186,7 @@
           Los 12 placements disponibles: <code>top</code>/<code>bottom</code>/<code>left</code>/<code>right</code> ± <code>start</code>/<code>end</code>.
           La flecha apunta siempre al ancla y se reposiciona al cambiar el contenido.
         </p>
-        <div class="demo grid">
+        <is-demo class="demo grid">
           <is-button id="p-top">Top</is-button>
           <is-popover for="p-top" placement="top">I'm on the top</is-popover>
           <is-button id="p-bottom">Bottom</is-button>
@@ -194,7 +195,7 @@
           <is-popover for="p-left" placement="left">I'm on the left</is-popover>
           <is-button id="p-right">Right</is-button>
           <is-popover for="p-right" placement="right">I'm on the right</is-popover>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="flip">
@@ -325,7 +326,7 @@
           controlarlo por código, lanza <code>show()</code> / <code>hide()</code>
           o establece <code>open</code> programáticamente.
         </p>
-        <div class="demo grid">
+        <is-demo class="demo grid">
           <button id="t-manual" class="controls-popover-target">Abrir / cerrar programáticamente</button>
           <is-popover id="po-manual" for="t-manual">
             <p style="margin:0 0 0.5em">Pulsa el ancla o el botón externo.</p>
@@ -336,7 +337,7 @@
           <is-popover for="t-default" placement="bottom-end">
             <p style="margin:0">Click en el ancla para alternar.</p>
           </is-popover>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

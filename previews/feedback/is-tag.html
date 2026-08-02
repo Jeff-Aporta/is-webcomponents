@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-tag · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,23 +24,28 @@
       <section class="section" id="intro">
         <h2>&lt;is-tag&gt;</h2>
         <p class="lede">Etiqueta interactiva con variantes y botón de quitar opcional. Escala con <code class="code">font-size</code> del contexto.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
             <is-tag>General</is-tag>
             <is-tag variant="brand">Insoft</is-tag>
+            <is-tag variant="neutral">Neutral</is-tag>
+            <is-tag variant="info">Info</is-tag>
+            <is-tag variant="success">Success</is-tag>
+            <is-tag variant="warning">Warning</is-tag>
+            <is-tag variant="danger">Danger</is-tag>
             <is-tag with-remove id="rmTag">Removible</is-tag>
           </div>
-        </div>
+        </is-demo>
       </section>
       <section class="section" id="examples">
         <h2>Escala por contexto</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row" style="align-items:center;gap:.5rem;flex-wrap:wrap">
             <span style="font-size:.75rem"><is-tag>0.75rem</is-tag></span>
             <span style="font-size:1rem"><is-tag>1rem</is-tag></span>
             <span style="font-size:1.25rem"><is-tag pill>1.25rem pill</is-tag></span>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;span style="font-size:1.25rem"&gt;
   &lt;is-tag pill&gt;Grande&lt;/is-tag&gt;
 &lt;/span&gt;</pre>
@@ -50,7 +56,7 @@
         <table class="ref">
           <thead><tr><th>Atributo</th><th>Default</th></tr></thead>
           <tbody>
-            <tr><td><code>variant</code></td><td>neutral</td></tr>
+            <tr><td><code>variant</code></td><td>brand · neutral · info · success · warning · danger (default brand)</td></tr>
             <tr><td><code>appearance</code></td><td>filled-outlined</td></tr>
             <tr><td><code>with-remove</code></td><td>false</td></tr>
             <tr><td><code>pill</code></td><td>false</td></tr>

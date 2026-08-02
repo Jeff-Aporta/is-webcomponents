@@ -1,22 +1,35 @@
 /**
  * Scrollbars themizados dentro de Shadow DOM.
  * Inyectado por adoptCss en cada is-*. Tokens: --is-scrollbar-* (is-base / paleta).
+ *
+ * El look replica el estilo del sidebar del video-playlist: thumb sutil
+ * sobre track transparente, hover con tinte de acento. Se aplica a :host
+ * y a todos sus descendientes para que cualquier overflow interno herede
+ * el mismo color. Si las vars no están definidas en el árbol (p. ej. el
+ * componente se monta fuera de is-base.css), los fallbacks de :host
+ * garantizan que el scrollbar siga siendo visible.
  */
 :host {
+  --is-scrollbar-size-fallback: 0.5rem;
+  --is-scrollbar-thumb-fallback: color-mix(in srgb, #59636e 65%, transparent);
+  --is-scrollbar-thumb-hover-fallback: color-mix(in srgb, #e03131 45%, #59636e);
+
   scrollbar-width: thin;
-  scrollbar-color: var(--is-scrollbar-thumb) var(--is-scrollbar-track);
+  scrollbar-color: var(--is-scrollbar-thumb, var(--is-scrollbar-thumb-fallback))
+                   var(--is-scrollbar-track, transparent);
 }
 
 :host,
 :host * {
   scrollbar-width: thin;
-  scrollbar-color: var(--is-scrollbar-thumb) var(--is-scrollbar-track);
+  scrollbar-color: var(--is-scrollbar-thumb, var(--is-scrollbar-thumb-fallback))
+                   var(--is-scrollbar-track, transparent);
 }
 
 :host::-webkit-scrollbar,
 :host *::-webkit-scrollbar {
-  width: var(--is-scrollbar-size, 0.5rem);
-  height: var(--is-scrollbar-size, 0.5rem);
+  width: var(--is-scrollbar-size, var(--is-scrollbar-size-fallback));
+  height: var(--is-scrollbar-size, var(--is-scrollbar-size-fallback));
 }
 
 :host::-webkit-scrollbar-track,
@@ -27,7 +40,7 @@
 
 :host::-webkit-scrollbar-thumb,
 :host *::-webkit-scrollbar-thumb {
-  background: var(--is-scrollbar-thumb);
+  background: var(--is-scrollbar-thumb, var(--is-scrollbar-thumb-fallback));
   border-radius: var(--is-scrollbar-radius, 999px);
   border: 2px solid transparent;
   background-clip: padding-box;
@@ -35,7 +48,7 @@
 
 :host::-webkit-scrollbar-thumb:hover,
 :host *::-webkit-scrollbar-thumb:hover {
-  background: var(--is-scrollbar-thumb-hover);
+  background: var(--is-scrollbar-thumb-hover, var(--is-scrollbar-thumb-hover-fallback));
   border: 2px solid transparent;
   background-clip: padding-box;
 }

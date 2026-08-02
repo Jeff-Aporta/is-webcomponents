@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-kanban · IS Web Components</title>
   <meta name="description" content="Documentación y demos de is-kanban / is-kanban-column / is-kanban-card de Insoft." />
@@ -37,7 +38,7 @@
           cards con cover, heading, meta, tag y footer.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-kanban id="kb1">
             <is-kanban-column title="Pending" accent="dodgerblue">
               <is-kanban-card heading="Diseñar landing" meta="Asignado a Ana" tag="Design" tag-variant="brand">
@@ -71,7 +72,7 @@
             </is-kanban-column>
           </is-kanban>
           <p id="kLog">Click sobre una card: <code class="code">—</code></p>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-kanban&gt;</span>
   <span class="tag">&lt;is-kanban-column</span> <span class="attr">title</span>=<span class="val">"Pending"</span> <span class="attr">accent</span>=<span class="val">"dodgerblue"</span><span class="tag">&gt;</span>
@@ -84,7 +85,7 @@
         <h2>Con cover</h2>
         <p class="lede">Atributo <code class="code">cover</code> muestra una imagen de cabecera.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-kanban>
             <is-kanban-column title="Features" accent="dodgerblue">
               <is-kanban-card heading="Versión 2.0" tag="Release" tag-variant="brand" cover="https://picsum.photos/id/1015/600/300">
@@ -95,7 +96,7 @@
               </is-kanban-card>
             </is-kanban-column>
           </is-kanban>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

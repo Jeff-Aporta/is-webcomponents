@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-card · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-card de Insoft." />
@@ -38,10 +39,10 @@
           Cinco apariencias y dos orientaciones. JavaScript nativo, Shadow DOM, sin frameworks.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">caso mínimo</span>
           <is-card>Hola mundo</is-card>
-        </div>
+        </is-demo>
 
 
         <pre class="code"><span class="tag">&lt;is-card&gt;</span>Hola mundo<span class="tag">&lt;/is-card&gt;</span></pre>
@@ -198,7 +199,7 @@
         </table>
 
         <h4>Demo en vivo</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">cambia propiedades</span>
           <is-card id="apiCard" appearance="outlined">
             <strong id="apiLabel">Hola</strong>
@@ -215,7 +216,7 @@
           <div class="log" id="apiLog" aria-live="polite" style="margin-top: 12px;">
             <div class="row hint">El log aparece al cambiar appearance u orientation.</div>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="kw">const</span> c = document.<span class="attr">querySelector</span>(<span class="str">'is-card'</span>);
 c.<span class="attr">appearance</span> = <span class="str">'filled'</span>;

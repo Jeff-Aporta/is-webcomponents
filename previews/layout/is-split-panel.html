@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-split-panel · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-split-panel de Insoft." />
@@ -273,7 +274,7 @@
         </table>
 
         <h4>Demo en vivo</h4>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="split-stage" style="height: 180px;">
             <is-split-panel id="apiSplit" style="height: 100%;">
               <div slot="start" class="panel-demo"><h4>Start</h4><p>Pos: <span id="apiPos">50</span>%</p></div>
@@ -288,7 +289,7 @@
             <is-button id="apiVertical" variant="neutral" appearance="outlined">toggle orientation</is-button>
             <is-button id="apiDisabled" variant="neutral" appearance="outlined">toggle disabled</is-button>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="kw">const</span> sp = document.<span class="attr">getElementById</span>(<span class="str">'apiSplit'</span>);
 sp.<span class="attr">position</span> += <span class="val">10</span>;             <span class="com">// asignar valor</span>

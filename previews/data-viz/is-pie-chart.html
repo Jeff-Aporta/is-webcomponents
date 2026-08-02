@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-pie-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,13 +24,13 @@
       <section class="section" id="intro">
         <h2>&lt;is-pie-chart&gt;</h2>
         <p class="lede">Composición proporcional.</p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-pie-chart>
             <script type="application/json">
               {"data":{"labels":["Alquiler","Comida","Transporte","Ahorro"],"datasets":[{"label":"Presupuesto","data":[35,25,15,25]}]}}
             </script>
           </is-pie-chart>
-        </div>
+        </is-demo>
       </section>
     </is-main>
     <aside class="sidebar" slot="end"><h1>is-pie-chart</h1><is-scrollspy target="is-main"><a href="#intro">Introducción</a></is-scrollspy></aside>

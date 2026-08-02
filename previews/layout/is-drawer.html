@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-drawer · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-drawer de Insoft." />
@@ -37,9 +38,9 @@
           Ideal para menús, filtros y contenido secundario.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openDefault">Abrir drawer (end)</is-button>
-        </div>
+        </is-demo>
 
         <is-drawer id="drwDefault" label="Drawer estándar">
           <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>
@@ -90,9 +91,9 @@
         <h2>Tamaño</h2>
         <p class="lede">Ajusta <code class="code">--size</code> en el host. Se aplica al ancho o alto según el placement.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openWide">Drawer ancho (50%)</is-button>
-        </div>
+        </is-demo>
 
         <is-drawer id="drwWide" label="50%" style="--size: 50%">
           <p>Este drawer ocupa siempre el 50% del viewport.</p>
@@ -105,9 +106,9 @@
         <h2>Sin header</h2>
         <p class="lede"><code class="code">without-header</code> oculta el header y el botón de cerrar.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openNoHeader">Abrir sin header</is-button>
-        </div>
+        </is-demo>
 
         <is-drawer id="drwNoHeader" without-header>
           <p>¡Mira mamá, sin header!</p>
@@ -123,9 +124,9 @@
         <h2>Light dismiss</h2>
         <p class="lede"><code class="code">light-dismiss</code> cierra al hacer click fuera del drawer.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openLD">Abrir (click fuera cierra)</is-button>
-        </div>
+        </is-demo>
 
         <is-drawer id="drwLD" label="Light dismiss" light-dismiss>
           <p>Haz click fuera del drawer para cerrarlo.</p>
@@ -138,9 +139,9 @@
         <h2>Drawer de navegación</h2>
         <p class="lede">Caso típico: menú lateral persistente.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openNav">Menú</is-button>
-        </div>
+        </is-demo>
 
         <is-drawer id="drwNav" placement="start" label="Navegación" style="--size: 280px">
           <nav style="display:flex;flex-direction:column;gap:.5em">

@@ -1,0 +1,36 @@
+/* is-signature */
+:host {
+  display: inline-block;
+  font: inherit;
+  --_w: 320px;
+  --_h: 140px;
+}
+.root {
+  position: relative;
+  width: var(--_w);
+  height: var(--_h);
+  border: 1px dashed var(--is-border);
+  border-radius: var(--is-radius);
+  background:
+    repeating-linear-gradient(0deg,
+      color-mix(in srgb, var(--is-text) 5%, transparent) 0 1px,
+      transparent 1px 24px),
+    color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
+  touch-action: none;
+  overflow: hidden;
+}
+.canvas {
+  display: block;
+  cursor: crosshair;
+}
+.hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--is-text-dim);
+  font-size: .85rem;
+  letter-spacing: .12em;
+  pointer-events: none;
+  text-transform: uppercase;
+}

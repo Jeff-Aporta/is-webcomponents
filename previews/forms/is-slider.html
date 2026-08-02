@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-slider · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -35,16 +36,16 @@
           <a href="https://mui.com/material-ui/react-slider/" target="_blank" rel="noreferrer">Slider de MUI</a>:
           rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido.
         </p>
-        <div class="demo" style="max-width:28rem;">
+        <is-demo class="demo" style="max-width:28rem;">
           <is-slider id="demo" label="Volumen" hint="Arrastra o usa las flechas" value="40" value-label="auto" name="volumen"></is-slider>
-        </div>
+        </is-demo>
         <p class="lede" id="log">value: <code class="code">40</code></p>
       </section>
 
       <section class="section" id="continuous">
         <h2>Continuo</h2>
         <p class="lede">Sin <code class="code">marks</code>: cualquier valor del rango, redondeado al <code class="code">step</code>.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <div class="row">
               <is-icon name="tabler:volume-2" aria-hidden="true"></is-icon>
@@ -53,7 +54,7 @@
             </div>
             <is-slider label="Deshabilitado" value="30" disabled></is-slider>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-slider label="Volumen" value="30"&gt;&lt;/is-slider&gt;
 &lt;is-slider value="30" disabled&gt;&lt;/is-slider&gt;</pre>
       </section>
@@ -61,12 +62,12 @@
       <section class="section" id="sizes">
         <h2>Tamaños</h2>
         <p class="lede">El tamaño va en <code class="code">em</code>: baja el <code class="code">font-size</code> y pista, thumb y etiquetas se reducen a la vez.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-slider style="font-size:0.8em" label="0.8em" value="70" value-label="auto"></is-slider>
             <is-slider label="medium (default)" value="50" value-label="auto"></is-slider>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-slider style="font-size:0.8em" value="70" value-label="auto"&gt;&lt;/is-slider&gt;
 &lt;is-slider value="50" value-label="auto"&gt;&lt;/is-slider&gt;</pre>
       </section>
@@ -77,12 +78,12 @@
           <code class="code">marks</code> sin valor dibuja un punto por step.
           <code class="code">shift-step</code> define el salto de <code class="code">PageUp/PageDown</code> y <code class="code">Shift + flechas</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-slider label="Temperatura" min="10" max="110" step="10" shift-step="30" value="30" marks value-label="auto" format="{v}°C"></is-slider>
             <is-slider min="10" max="110" step="10" value="30" marks disabled></is-slider>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-slider
   label="Temperatura"
   min="10" max="110" step="10" shift-step="30"
@@ -97,7 +98,7 @@
           <code class="code">.marks = [{ value, label }]</code>. Con <code class="code">step="null"</code>
           los valores quedan restringidos a los marks.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-slider label="Marks con etiqueta" step="10" value="20"
               marks="0:0°C, 20:20°C, 37:37°C, 100:100°C" value-label="auto"></is-slider>
@@ -106,7 +107,7 @@
             <is-slider label="Etiqueta siempre visible" step="10" value="80"
               marks="0:0°C, 20:20°C, 37:37°C, 100:100°C" value-label="on"></is-slider>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-slider step="null" value="20"
   marks="0:0°C, 20:20°C, 37:37°C, 100:100°C"
   value-label="auto"&gt;&lt;/is-slider&gt;</pre>
@@ -119,14 +120,14 @@
           <code class="code">disable-swap</code> evita que se crucen y <code class="code">min-distance</code>
           impone una separación mínima.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-slider id="rangeDemo" label="Temperatura (rango)" value="20,37" value-label="auto" format="{v}°C"></is-slider>
             <is-slider label="min-distance 10 · disable-swap" value="20,37" min-distance="10" disable-swap value-label="auto"></is-slider>
             <is-slider label="Tres thumbs" value="10,40,80" value-label="auto"></is-slider>
           </div>
           <p class="lede" id="rangeLog">rango: <code class="code">20 – 37</code></p>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-slider value="20,37" value-label="auto" format="{v}°C"&gt;&lt;/is-slider&gt;
 &lt;is-slider value="20,37" min-distance="10" disable-swap&gt;&lt;/is-slider&gt;</pre>
       </section>
@@ -134,13 +135,13 @@
       <section class="section" id="with-input">
         <h2>Slider con input</h2>
         <p class="lede">Slider e <code class="code">is-input</code> sincronizados en ambos sentidos.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="row" style="max-width:28rem;">
             <is-icon name="tabler:volume-2" aria-hidden="true"></is-icon>
             <is-slider id="linkedSlider" label="Volumen" value="30" value-label="auto"></is-slider>
             <is-input id="linkedInput" type="number" min="0" max="100" step="1" value="30" style="width:5.5rem;"></is-input>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">slider.addEventListener('is-input', (e) =&gt; { input.value = e.detail.value; });
 input.addEventListener('is-input', (e) =&gt; { slider.value = e.detail.value; });</pre>
       </section>
@@ -148,7 +149,7 @@ input.addEventListener('is-input', (e) =&gt; { slider.value = e.detail.value; })
       <section class="section" id="color">
         <h2>Color</h2>
         <p class="lede"><code class="code">variant</code> cambia el color de pista, thumb y burbuja.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-slider label="brand (default)" value="30" value-label="auto"></is-slider>
             <is-slider variant="neutral" label="neutral" value="45" value-label="auto"></is-slider>
@@ -156,7 +157,7 @@ input.addEventListener('is-input', (e) =&gt; { slider.value = e.detail.value; })
             <is-slider variant="warning" label="warning" value="75" value-label="auto"></is-slider>
             <is-slider variant="danger" label="danger" value="90" value-label="auto"></is-slider>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-slider variant="success" value="60"&gt;&lt;/is-slider&gt;</pre>
       </section>
 
@@ -166,7 +167,7 @@ input.addEventListener('is-input', (e) =&gt; { slider.value = e.detail.value; })
           <code class="code">orientation="vertical"</code>. La longitud se controla con
           <code class="code">--is-slider-length</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="verticals">
             <is-slider orientation="vertical" value="30" value-label="auto"></is-slider>
             <is-slider orientation="vertical" value="30" disabled></is-slider>
@@ -174,7 +175,7 @@ input.addEventListener('is-input', (e) =&gt; { slider.value = e.detail.value; })
               marks="0:0°C, 20:20°C, 37:37°C, 100:100°C" value-label="auto"></is-slider>
             <is-slider orientation="vertical" value="20,37" value-label="auto"></is-slider>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-slider orientation="vertical" value="20,37" value-label="auto"&gt;&lt;/is-slider&gt;</pre>
       </section>
 
@@ -184,7 +185,7 @@ input.addEventListener('is-input', (e) =&gt; { slider.value = e.detail.value; })
           <code class="code">track="none"</code> oculta el relleno; <code class="code">track="inverted"</code>
           rellena el tramo complementario.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="stack">
             <is-slider label="normal" value="30" marks="0:0°C, 20:20°C, 37:37°C, 100:100°C"></is-slider>
             <is-slider label="none" track="none" value="30" marks="0:0°C, 20:20°C, 37:37°C, 100:100°C"></is-slider>
@@ -192,7 +193,7 @@ input.addEventListener('is-input', (e) =&gt; { slider.value = e.detail.value; })
             <is-slider label="inverted" track="inverted" value="30" marks="0:0°C, 20:20°C, 37:37°C, 100:100°C"></is-slider>
             <is-slider label="inverted · rango" track="inverted" value="20,37" marks="0:0°C, 20:20°C, 37:37°C, 100:100°C"></is-slider>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-slider track="inverted" value="20,37"&gt;&lt;/is-slider&gt;</pre>
       </section>
 
@@ -202,10 +203,10 @@ input.addEventListener('is-input', (e) =&gt; { slider.value = e.detail.value; })
           La propiedad <code class="code">scale</code> traduce el valor interno al valor mostrado.
           Aquí <em>x</em> representa 2<sup>x</sup>: cada paso duplica el almacenamiento.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <p id="scaleLabel" class="lede">Almacenamiento: <code class="code">1 MB</code></p>
           <is-slider id="scaleDemo" min="5" max="30" step="1" value="10" value-label="auto" style="max-width:28rem;"></is-slider>
-        </div>
+        </is-demo>
         <pre class="code">const slider = document.querySelector('is-slider');
 slider.scale = (x) =&gt; 2 ** x;
 slider.valueLabelFormat = (bytes) =&gt; format(bytes); // 1 MB, 2 GB…</pre>

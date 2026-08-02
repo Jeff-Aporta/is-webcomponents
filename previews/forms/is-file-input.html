@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-file-input · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,7 +24,7 @@
       <section class="section" id="intro">
         <h2>&lt;is-file-input&gt;</h2>
         <p class="lede">Dropzone con input nativo oculto, lista de archivos y estados <code class="code">blank</code> / <code class="code">dragging</code>.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-file-input
             id="fi"
             label="Adjuntos"
@@ -32,14 +33,14 @@
             multiple
             name="attachments"
           ></is-file-input>
-        </div>
+        </is-demo>
         <p class="lede" id="log">Archivos: 0</p>
       </section>
       <section class="section" id="examples">
         <h2>Single + required</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-file-input label="Avatar" accept="image/*" required hint="Obligatorio"></is-file-input>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-file-input
   label="Adjuntos"
   accept="image/*,.pdf"

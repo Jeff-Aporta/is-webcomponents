@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-progress-bar · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -35,11 +36,11 @@
         <h2>Progress Bar</h2>
         <p class="lede"><code class="code">&lt;is-progress-bar&gt;</code></p>
         <p class="lede">Barra de progreso determinada (<code class="code">value</code> 0–100) o indeterminada.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="pb-demo">
             <is-progress-bar value="65" label="Subiendo archivo"></is-progress-bar>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="interactive">
@@ -48,7 +49,7 @@
           Cada clic avanza el progreso; Reset vuelve a 0. El <code class="code">value</code>
           y la etiqueta se actualizan en vivo.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="pb-demo">
             <div class="pb-meta">
               <span id="pbStatus">Listo para empezar</span>
@@ -70,7 +71,7 @@
               </is-button>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">let value = 0;
 const bar = document.querySelector('#pbLive');
 
@@ -88,14 +89,14 @@ document.querySelector('#pbReset').addEventListener('click', () => {
 
       <section class="section" id="states">
         <h2>Estados</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="pb-demo">
             <is-progress-bar value="30" label="30%"></is-progress-bar>
             <is-progress-bar value="100" label="Completado"
               style="--indicator-color: var(--is-color-success-500)"></is-progress-bar>
             <is-progress-bar indeterminate label="Procesando"></is-progress-bar>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-progress-bar value="65" label="Carga"&gt;&lt;/is-progress-bar&gt;
 &lt;is-progress-bar indeterminate label="Procesando"&gt;&lt;/is-progress-bar&gt;</pre>
       </section>

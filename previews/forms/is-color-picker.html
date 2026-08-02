@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-color-picker · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,16 +24,16 @@
       <section class="section" id="intro">
         <h2>&lt;is-color-picker&gt;</h2>
         <p class="lede">Trigger con muestra + hex. El panel (<code>input type="color"</code>, campo hex y paleta) vive en un <code>&lt;dialog&gt;</code> en el top layer.</p>
-        <div class="demo" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <is-demo class="demo" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
           <is-color-picker id="cp" label="Color de marca" hint="Formato #rrggbb" name="brand" value="#1971c2" style="max-width:14rem"></is-color-picker>
           <span id="chip" style="width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)"></span>
-        </div>
+        </is-demo>
         <p class="lede" id="log">value: #1971c2</p>
       </section>
 
       <section class="section" id="examples">
         <h2>Paleta propia y estados</h2>
-        <div class="demo" style="display:flex;gap:1rem;flex-wrap:wrap">
+        <is-demo class="demo" style="display:flex;gap:1rem;flex-wrap:wrap">
           <is-color-picker
             label="Paleta corta"
             swatches="#e03131,#f59f00,#2f9e44,#1971c2,#6741d9,#212529"
@@ -40,7 +41,7 @@
             style="min-width:13rem"
           ></is-color-picker>
           <is-color-picker label="Deshabilitado" value="#c2255c" disabled style="min-width:13rem"></is-color-picker>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-color-picker
   label="Color de marca"
   name="brand"
@@ -51,7 +52,7 @@
 
       <section class="section" id="form">
         <h2>Dentro de un formulario</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <form id="demo-form" style="display:flex;flex-direction:column;gap:0.75rem;max-width:18rem">
             <is-color-picker label="Fondo" name="bg" value="#212529"></is-color-picker>
             <is-color-picker label="Texto" name="fg" value="#f8f9fa"></is-color-picker>
@@ -60,7 +61,7 @@
               <button type="reset">Reset</button>
             </div>
           </form>
-        </div>
+        </is-demo>
         <p class="lede" id="log-form">FormData: —</p>
       </section>
 

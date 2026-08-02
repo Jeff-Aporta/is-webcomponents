@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-relative-time · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,19 +24,19 @@
       <section class="section" id="intro">
         <h2>&lt;is-relative-time&gt;</h2>
         <p class="lede">Fechas relativas con <code class="code">Intl.RelativeTimeFormat</code>.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <p>Actualizado <is-relative-time date="2026-07-30T10:00:00" sync></is-relative-time></p>
-        </div>
+        </is-demo>
       </section>
       <section class="section" id="examples">
         <h2>Formatos</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <ul>
             <li><is-relative-time date="2026-07-29T12:00:00" format="long"></is-relative-time></li>
             <li><is-relative-time date="2026-07-31T12:00:00" format="short"></is-relative-time></li>
             <li><is-relative-time date="2026-08-05T12:00:00" format="narrow"></is-relative-time></li>
           </ul>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-relative-time date="2026-07-30T10:00:00" sync&gt;&lt;/is-relative-time&gt;</pre>
       </section>
       <section class="section" id="reference">

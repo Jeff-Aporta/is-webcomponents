@@ -9,64 +9,7 @@
   <link rel="stylesheet" href="styles/palettes.css">
   <link rel="stylesheet" href="styles/shell.css">
   <link rel="icon" href="https://api.iconify.design/mdi/widgets-outline.svg?color=%231e90ff&width=64&height=64" type="image/svg+xml">
-  <script type="module" src="components/actions/button.js"></script>
-  <script type="module" src="components/actions/button-group.js"></script>
-  <script type="module" src="components/actions/copy-button.js"></script>
-  <script type="module" src="components/actions/check-icon-button.js"></script>
-  <script type="module" src="components/actions/dropdown.js"></script>
-  <script type="module" src="components/actions/dropdown-item.js"></script>
-  <script type="module" src="components/media/icon.js"></script>
-  <script type="module" src="components/media/avatar.js"></script>
-  <script type="module" src="components/feedback/spinner.js"></script>
-  <script type="module" src="components/feedback/badge.js"></script>
-  <script type="module" src="components/feedback/tag.js"></script>
-  <script type="module" src="components/feedback/skeleton.js"></script>
-  <script type="module" src="components/feedback/progress-bar.js"></script>
-  <script type="module" src="components/feedback/progress-ring.js"></script>
-  <script type="module" src="components/feedback/theme-toggle.js"></script>
-  <script type="module" src="components/feedback/toast.js"></script>
-  <script type="module" src="components/feedback/toast-item.js"></script>
-  <script type="module" src="components/feedback/tooltip.js"></script>
-  <script type="module" src="components/layout/split-panel.js"></script>
-  <script type="module" src="components/layout/card.js"></script>
-  <script type="module" src="components/layout/divider.js"></script>
-  <script type="module" src="components/helpers/popup.js"></script>
-  <script type="module" src="components/helpers/popover.js"></script>
-  <script type="module" src="components/helpers/relative-time.js"></script>
-  <script type="module" src="components/helpers/format-date.js"></script>
-  <script type="module" src="components/helpers/format-number.js"></script>
-  <script type="module" src="components/helpers/format-bytes.js"></script>
-  <script type="module" src="components/helpers/intersection-observer.js"></script>
-  <script type="module" src="components/helpers/mutation-observer.js"></script>
-  <script type="module" src="components/helpers/resize-observer.js"></script>
-  <script type="module" src="components/forms/option.js"></script>
-  <script type="module" src="components/forms/combobox.js"></script>
-  <script type="module" src="components/forms/checkbox.js"></script>
-  <script type="module" src="components/forms/switch.js"></script>
-  <script type="module" src="components/forms/radio.js"></script>
-  <script type="module" src="components/forms/radio-group.js"></script>
-  <script type="module" src="components/forms/input.js"></script>
-  <script type="module" src="components/forms/textarea.js"></script>
-  <script type="module" src="components/forms/slider.js"></script>
-  <script type="module" src="components/forms/rating.js"></script>
-  <script type="module" src="components/forms/select.js"></script>
-  <script type="module" src="components/forms/color-picker.js"></script>
-  <script type="module" src="components/forms/file-input.js"></script>
-  <script type="module" src="components/forms/date-input.js"></script>
-  <script type="module" src="components/forms/date-picker.js"></script>
-  <script type="module" src="components/data/data-grid.js"></script>
-  <script type="module" src="components/media/video.js"></script>
-  <script type="module" src="components/media/video-playlist.js"></script>
-  <script type="module" src="components/charts/chart.js"></script>
-  <script type="module" src="components/charts/bar-chart.js"></script>
-  <script type="module" src="components/charts/line-chart.js"></script>
-  <script type="module" src="components/charts/pie-chart.js"></script>
-  <script type="module" src="components/charts/doughnut-chart.js"></script>
-  <script type="module" src="components/charts/radar-chart.js"></script>
-  <script type="module" src="components/charts/polar-area-chart.js"></script>
-  <script type="module" src="components/charts/scatter-chart.js"></script>
-  <script type="module" src="components/charts/bubble-chart.js"></script>
-  <script type="module" src="components/charts/sparkline.js"></script>
+  <script type="module" src="dist/cdn/all.min.js"></script>
 </head>
 <body>
   <header class="shell-bar">
@@ -160,7 +103,8 @@
     const catalog = [HOME, ...components];
 
     // --- build nav (Home + agrupado por categoría) ---
-    const navSkip = new Set(['is-option', 'is-radio', 'is-toast-item', 'is-dropdown-item', 'is-cdn-snippet']);
+    // Sin filtro: el nav lista el catálogo completo del manifest.
+    const navSkip = new Set();
     const categoryMeta = {
       actions: { id: 'actions', label: 'Acciones' },
       media: { id: 'media', label: 'Media' },
@@ -171,6 +115,7 @@
       data: { id: 'data', label: 'Datos' },
       'data-viz': { id: 'data-viz', label: 'Gráficos' },
       diagrams: { id: 'diagrams', label: 'Diagramas' },
+      overlays: { id: 'overlays', label: 'Overlays' },
       helpers: { id: 'helpers', label: 'Helpers' },
     };
     const categoryOrder = Object.keys(categoryMeta);

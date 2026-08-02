@@ -73,7 +73,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const value = this.getAttribute('value');
       const helper = this.getAttribute('helper');
       const trend = this.getAttribute('trend');
-      const variant = this.getAttribute('variant') || 'neutral';
+      const variant = this.getAttribute('variant') || 'brand';
       this.#root.dataset.variant = variant;
       const direction = this.#detectTrendDirection(trend);
       this.#root.dataset.trend = direction;

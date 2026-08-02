@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-copy-button · IS Web Components</title>
   <meta name="description" content="Documentación y demos del componente is-copy-button de Insoft." />
@@ -57,11 +58,11 @@
           Copia texto al portapapeles con feedback de éxito/error.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <span class="demo-label">caso mínimo</span>
           <!-- Hueco entre el chip y el botón: el tooltip de feedback sale arriba -->
           <is-copy-button value="https://insoft.com.co" style="margin-top: 2.75rem;"></is-copy-button>
-        </div>
+        </is-demo>
 
         <div class="callout">
           <strong>Requiere contexto seguro.</strong>
@@ -78,7 +79,7 @@
           Si hay <code class="code">value</code> y <code class="code">from</code>, gana <code class="code">from</code>.
         </p>
 
-        <div class="demo stack">
+        <is-demo class="demo stack">
           <div class="cluster">
             <span id="my-phone">+57 300 123 4567</span>
             <is-copy-button from="my-phone"></is-copy-button>
@@ -91,7 +92,7 @@
             <a id="my-link" href="https://insoft.com.co">Sitio Insoft</a>
             <is-copy-button from="my-link[href]"></is-copy-button>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;span</span> <span class="attr">id</span>=<span class="val">"my-phone"</span><span class="tag">&gt;</span>+57 300 123 4567<span class="tag">&lt;/span&gt;</span>
 <span class="tag">&lt;is-copy-button</span> <span class="attr">from</span>=<span class="val">"my-phone"</span><span class="tag">&gt;&lt;/is-copy-button&gt;</span>
@@ -102,71 +103,71 @@
 
       <section class="section" id="labels">
         <h2>Labels custom</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-copy-button
             value="Labels custom"
             copy-label="Clic para copiar"
             success-label="¡Listo!"
             error-label="Tu navegador no lo soporta"
           ></is-copy-button>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="icons">
         <h2>Iconos custom</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-copy-button value="Iconos custom">
             <is-icon slot="copy-icon" icon="mdi:clipboard-outline"></is-icon>
             <is-icon slot="success-icon" icon="mdi:thumb-up"></is-icon>
             <is-icon slot="error-icon" icon="mdi:close-circle"></is-icon>
           </is-copy-button>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="trigger">
         <h2>Trigger custom</h2>
         <p class="lede">Slot default: mete un <code class="code">is-button</code> u otro control.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-copy-button value="Desde un botón custom">
             <is-button appearance="outlined" style="font-size:.8125rem">
               <is-icon slot="start" icon="mdi:content-copy"></is-icon>
               Copiar al portapapeles
             </is-button>
           </is-copy-button>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="disabled">
         <h2>Disabled</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-copy-button value="No se puede copiar" disabled></is-copy-button>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="errors">
         <h2>Manejo de errores</h2>
         <p class="lede">Sin <code class="code">value</code> ni <code class="code">from</code> válido → <code class="code">is-error</code>.</p>
-        <div class="demo cluster">
+        <is-demo class="demo cluster">
           <is-copy-button id="errBtn"></is-copy-button>
           <span class="card-meta" id="errLog">Haz clic para forzar error.</span>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="duration">
         <h2>Feedback duration</h2>
-        <div class="demo cluster">
+        <is-demo class="demo cluster">
           <is-copy-button value="Rápido" feedback-duration="250" copy-label="250ms"></is-copy-button>
           <is-copy-button value="Lento" feedback-duration="3000" copy-label="3s"></is-copy-button>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="tooltip-mode">
         <h2>Tooltip mode</h2>
-        <div class="demo cluster">
+        <is-demo class="demo cluster">
           <is-copy-button value="full" tooltip="full" copy-label="full"></is-copy-button>
           <is-copy-button value="copy" tooltip="copy" copy-label="copy (solo feedback)"></is-copy-button>
           <is-copy-button value="none" tooltip="none" copy-label="none"></is-copy-button>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="placement">
@@ -177,7 +178,7 @@
           en la dirección pedida.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="placements">
             <is-copy-button value="top" tooltip-placement="top" copy-label="top"></is-copy-button>
             <is-copy-button value="top-start" tooltip-placement="top-start" copy-label="top-start"></is-copy-button>
@@ -192,16 +193,16 @@
             <is-copy-button value="left-start" tooltip-placement="left-start" copy-label="left-start"></is-copy-button>
             <is-copy-button value="left-end" tooltip-placement="left-end" copy-label="left-end"></is-copy-button>
           </div>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-copy-button</span> <span class="attr">value</span>=<span class="val">"…"</span> <span class="attr">tooltip-placement</span>=<span class="val">"bottom-start"</span><span class="tag">&gt;&lt;/is-copy-button&gt;</span></pre>
       </section>
 
       <section class="section" id="api">
         <h2>API live</h2>
-        <div class="demo cluster">
+        <is-demo class="demo cluster">
           <is-copy-button id="apiCopy" value="hola-is-copy"></is-copy-button>
-        </div>
+        </is-demo>
         <div class="log" id="apiLog"><div class="row"><span class="hint">Eventos is-copy / is-error aparecerán aquí.</span></div></div>
       </section>
 

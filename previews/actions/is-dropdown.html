@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-dropdown · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -34,7 +35,7 @@
           (top layer) para no quedar debajo de otras secciones. Items:
           <code class="code">is-dropdown-item</code>, <code class="code">is-divider</code> e iconos.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-dropdown id="dd">
             <is-button slot="trigger" with-caret>Options</is-button>
             <is-dropdown-item value="edit">
@@ -52,7 +53,7 @@
             </is-dropdown-item>
           </is-dropdown>
           <p id="log" class="lede">selección: —</p>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-dropdown&gt;
   &lt;is-button slot="trigger" with-caret&gt;Options&lt;/is-button&gt;
   &lt;is-dropdown-item value="edit"&gt;Edit&lt;/is-dropdown-item&gt;
@@ -63,7 +64,7 @@
 
       <section class="section" id="checkbox">
         <h2>Checkable + details</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-dropdown>
             <is-button slot="trigger" with-caret>View</is-button>
             <is-dropdown-item type="checkbox" checked value="canvas">Show canvas</is-dropdown-item>
@@ -74,12 +75,12 @@
               <span slot="details">⌘,</span>
             </is-dropdown-item>
           </is-dropdown>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="submenu">
         <h2>Submenu</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-dropdown>
             <is-button slot="trigger" with-caret>File</is-button>
             <is-dropdown-item value="new">New</is-dropdown-item>
@@ -92,7 +93,7 @@
               <is-dropdown-item slot="submenu" value="csv">CSV</is-dropdown-item>
             </is-dropdown-item>
           </is-dropdown>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-spinner · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -56,24 +57,24 @@
       <section class="section" id="intro">
         <h2>&lt;is-spinner&gt;</h2>
         <p class="lede">Indicador de carga animado. Sin atributos; personalizable vía CSS vars.</p>
-        <div class="demo"><is-spinner></is-spinner></div>
+        <is-demo class="demo"><is-spinner></is-spinner></is-demo>
       </section>
       <section class="section" id="examples">
         <h2>Escala y colores</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-row" style="align-items:center;gap:1.5rem">
             <is-spinner style="font-size:1rem"></is-spinner>
             <is-spinner style="font-size:2rem;--indicator-color:var(--is-color-success-500)"></is-spinner>
             <is-spinner style="font-size:2.5rem;--track-width:4px"></is-spinner>
           </div>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-spinner&gt;&lt;/is-spinner&gt;
 &lt;is-spinner style="font-size:2rem;--indicator-color:#40c057"&gt;&lt;/is-spinner&gt;</pre>
       </section>
       <section class="section" id="speed">
         <h2>Velocidad</h2>
         <p class="lede">Controla <code class="code">--speed</code> (duración de un giro). Más % = más rápido.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="speed-demo">
             <div class="speed-demo__row">
               <is-spinner id="speedSpinner" style="font-size:2.5rem;--track-width:4px"></is-spinner>
@@ -87,7 +88,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-spinner style="--speed:1.05s"&gt;&lt;/is-spinner&gt;</pre>
       </section>
       <section class="section" id="reference">

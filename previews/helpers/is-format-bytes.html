@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-format-bytes · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,15 +24,15 @@
       <section class="section" id="intro">
         <h2>&lt;is-format-bytes&gt;</h2>
         <p class="lede">Tamaños de archivo legibles. <code class="code">value</code> se interpreta según <code class="code">unit</code> (default byte).</p>
-        <div class="demo">
+        <is-demo class="demo">
           <p>Demo: <is-format-bytes value="1536000"></is-format-bytes></p>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="units">
         <h2>Unidades de entrada (<code>unit</code>)</h2>
         <p class="lede">El mismo tamaño conceptual con distinta unidad de entrada.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row" data-code="value=&quot;1024&quot; unit=&quot;byte&quot;">
               <code class="format-grid__tag">byte 1024</code>
@@ -58,14 +59,14 @@
               <is-format-bytes class="format-grid__value" value="1" unit="petabyte"></is-format-bytes>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-format-bytes value="2.5" unit="megabyte"&gt;&lt;/is-format-bytes&gt;
 &lt;is-format-bytes value="1" unit="gigabyte"&gt;&lt;/is-format-bytes&gt;</pre>
       </section>
 
       <section class="section" id="display">
         <h2>Display short / long</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row" data-code="value=&quot;512&quot; display=&quot;short&quot;">
               <code class="format-grid__tag">short · 512 B</code>
@@ -92,14 +93,14 @@
               <is-format-bytes class="format-grid__value" value="2.5" unit="megabyte" display="long"></is-format-bytes>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-format-bytes value="1073741824" display="short"&gt;&lt;/is-format-bytes&gt;
 &lt;is-format-bytes value="1073741824" display="long"&gt;&lt;/is-format-bytes&gt;</pre>
       </section>
 
       <section class="section" id="locale">
         <h2>Locale</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row" data-code="locale=&quot;es&quot; value=&quot;1536000&quot;">
               <code class="format-grid__tag">es</code>
@@ -118,14 +119,14 @@
               <is-format-bytes class="format-grid__value" locale="fr" value="1048576" unit="byte" display="long"></is-format-bytes>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-format-bytes locale="es" value="1536000"&gt;&lt;/is-format-bytes&gt;
 &lt;is-format-bytes locale="en" value="1536000" display="long"&gt;&lt;/is-format-bytes&gt;</pre>
       </section>
 
       <section class="section" id="edge">
         <h2>Casos límite</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row" data-code="value=&quot;0&quot;">
               <code class="format-grid__tag">0</code>
@@ -144,7 +145,7 @@
               <is-format-bytes class="format-grid__value">«<span></span>» (vacío)</is-format-bytes>
             </div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

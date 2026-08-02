@@ -3,44 +3,38 @@
 // para evitar que el lexer HTML cierre el `<script>` de este módulo.
 
 const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
+
+// dist/cdn folderizado por categoria: <categoria>/<tag>.min.js
+import manifest from '../manifest.js';
+const catOf = (name) => manifest.find((c) => c.tag === `is-${name}`)?.category || 'helpers';
+const cdnJs = (name) => `${CDN}/${catOf(name)}/${name}.min.js`;
 const open = String.fromCharCode(60);
 const slash = String.fromCharCode(47);
 const close = String.fromCharCode(62);
 
+// Sin <link> de CSS: cada .min.js carga su .min.css hermano en su Shadow DOM.
 const buildJsCssSnippet = () => [
-  `${open}link rel="stylesheet" href="${CDN}/is-base.min.css"${close}`,
+  `${open}!-- Carga solo los componentes que necesites --${close}`,
+  `${open}script type="module" src="${cdnJs('button')}"${close}${open}${slash}script${close}`,
+  `${open}script type="module" src="${cdnJs('badge')}"${close}${open}${slash}script${close}`,
+  `${open}script type="module" src="${cdnJs('rating')}"${close}${open}${slash}script${close}`,
+  `${open}script type="module" src="${cdnJs('switch')}"${close}${open}${slash}script${close}`,
+  `${open}script type="module" src="${cdnJs('sparkline')}"${close}${open}${slash}script${close}`,
   '',
-  `${open}!-- Solo carga los componentes que necesites --${close}`,
-  `${open}script type="module" src="${CDN}/button.min.js"${close}${open}${slash}script${close}`,
-  `${open}script type="module" src="${CDN}/card.min.js"${close}${open}${slash}script${close}`,
-  `${open}script type="module" src="${CDN}/chart.min.js"${close}${open}${slash}script${close}`,
-  `${open}script type="module" src="${CDN}/data-grid.min.js"${close}${open}${slash}script${close}`,
-  `${open}script type="module" src="${CDN}/bar-chart.min.js"${close}${open}${slash}script${close}`,
-  '',
-  `${open}!-- Cada .min.js carga su .min.css hermano dentro de su Shadow DOM. --${close}`,
-  '',
+  `${open}!-- ...y úsalos como HTML nativo --${close}`,
   `${open}is-button variant="brand"${close}Explorar${open}${slash}is-button${close}`,
-  `${open}is-data-grid columns='[{"field":"id","headerName":"ID"}]' rows='[{"id":1}]'${close}${open}${slash}is-data-grid${close}`,
+  `${open}is-badge variant="success"${close}+12%${open}${slash}is-badge${close}`,
+  `${open}is-rating value="4" readonly${close}${open}${slash}is-rating${close}`,
+  `${open}is-switch checked${close}${open}${slash}is-switch${close}`,
+  `${open}is-sparkline values="4,6,5,8,7,11,13"${close}${open}${slash}is-sparkline${close}`,
 ].join('\n');
 
 const buildBundleSnippet = () => [
-  `${open}link rel="stylesheet" href="${CDN}/is-base.min.css"${close}`,
+  `${open}!-- Todos los componentes en un solo archivo --${close}`,
+  `${open}script type="module" src="${CDN}/all.min.js"${close}${open}${slash}script${close}`,
   '',
-  `${open}!-- Import map para resolver "is-*" al CDN de jsDelivr --${close}`,
-  `${open}script type="importmap"${close}`,
-  `{`,
-  `  "imports": {`,
-  `    "@is-webcomponents/": "${CDN}/"`,
-  `  }`,
-  `}`,
-  `${open}${slash}script${close}`,
-  '',
-  `${open}script type="module"${close}`,
-  `  import '@is-webcomponents/button.min.js';`,
-  `  import '@is-webcomponents/card.min.js';`,
-  `  import '@is-webcomponents/data-grid.min.js';`,
-  `  import '@is-webcomponents/chart.min.js';`,
-  `${open}${slash}script${close}`,
+  `${open}!-- O una categoría completa (actions, forms, charts, ...) --${close}`,
+  `${open}script type="module" src="${CDN}/actions/category.actions.min.js"${close}${open}${slash}script${close}`,
   '',
   `${open}is-button variant="brand"${close}Hola mundo${open}${slash}is-button${close}`,
 ].join('\n');
@@ -71,10 +65,10 @@ const chartTile = (type, json) => `        ${open}div class="tile"${close}
 
 const buildDemoHtml = (variant) => {
   const imp = `${open}script type="importmap"${close}\n{\n  "imports": {\n    "@is-webcomponents/": "${CDN}/"\n  }\n}\n${open}${slash}script${close}`;
-  const mod = `${open}script type="module"${close}\n  ${modules.map((m) => `import '@is-webcomponents/${m}.min.js';`).join('\n  ')}\n${open}${slash}script${close}`;
+  const mod = `${open}script type="module"${close}\n  ${modules.map((m) => `import '@is-webcomponents/${catOf(m)}/${m}.min.js';`).join('\n  ')}\n${open}${slash}script${close}`;
   const moduleImports = (variant === 'bundle')
     ? `${imp}\n\n${mod}`
-    : modules.map((m) => `  ${open}script type="module" src="${CDN}/${m}.min.js"${close}${open}${slash}script${close}`).join('\n');
+    : modules.map((m) => `  ${open}script type="module" src="${cdnJs(m)}"${close}${open}${slash}script${close}`).join('\n');
 
   return `<!DOCTYPE html>
 <html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-main · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -44,11 +45,11 @@
           <li>Cambio de componente (iframe <code class="code">navigate</code>) → siempre top.</li>
           <li>F5 / back-forward → restore si el TTL sigue vigente.</li>
         </ul>
-        <div class="demo cluster" style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        <is-demo class="demo cluster" style="display:flex;gap:0.5rem;flex-wrap:wrap">
           <is-button id="btnTop" appearance="outlined">scrollToTop()</is-button>
           <is-button id="btnClear" appearance="outlined">clearRememberedScroll()</is-button>
           <is-button id="btnSave" appearance="filled">saveScroll()</is-button>
-        </div>
+        </is-demo>
         <p class="lede" id="scrollLog">Scroll…</p>
       </section>
 

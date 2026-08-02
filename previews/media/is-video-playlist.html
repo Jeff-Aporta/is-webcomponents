@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-video-playlist · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -34,7 +35,7 @@
           automáticamente en los slots <code class="code">tools-left</code>
           y <code class="code">tools-right</code> del reproductor.
         </p>
-        <div class="demo demo--with-code">
+        <is-demo class="demo demo--with-code">
           <is-video-playlist id="pl" autoplay-next placement="bottom">
             <is-video
               title="Big Buck Bunny"
@@ -58,7 +59,7 @@
               src="../assets/playlist/03-elephants-dream.mp4"
             ></is-video>
           </is-video-playlist>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-video-playlist autoplay-next placement="bottom"&gt;
   &lt;is-video title="Big Buck Bunny" channel="Blender" poster="…" src="01.mp4"&gt;&lt;/is-video&gt;
   &lt;is-video title="Sintel" poster="…" src="02.mp4"&gt;&lt;/is-video&gt;
@@ -74,7 +75,7 @@
           <code class="code">right</code> |
           <code class="code">bottom</code> (default).
         </p>
-        <div class="demo" style="height:28rem">
+        <is-demo class="demo" style="height:28rem">
           <div class="cluster" style="margin-bottom:0.75rem;flex-shrink:0">
             <is-button id="placeLeft" appearance="outlined">left</is-button>
             <is-button id="placeRight" appearance="outlined">right</is-button>
@@ -96,7 +97,7 @@
               src="../assets/playlist/02-sintel.mp4"
             ></is-video>
           </is-video-playlist>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-video-playlist placement="right"&gt;…&lt;/is-video-playlist&gt;</pre>
       </section>
 
@@ -112,7 +113,7 @@
           desde fuera (o usa el atributo <code class="code">no-default-tools</code>
           para desactivarlos).
         </p>
-        <div class="demo demo--with-code">
+        <is-demo class="demo demo--with-code">
           <is-video-playlist id="plTools" placement="bottom">
             <button slot="tools-left" class="vp-tool vp-custom" aria-label="Aleatorio">
               <is-icon icon="mdi:shuffle"></is-icon>
@@ -141,7 +142,7 @@
               src="../assets/playlist/02-sintel.mp4"
             ></is-video>
           </is-video-playlist>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-video-playlist no-default-tools&gt;
   &lt;button slot="tools-left"&gt;&lt;is-icon icon="mdi:shuffle"&gt;&lt;/is-icon&gt;&lt;/button&gt;
   &lt;button slot="tools-right"&gt;&lt;is-icon icon="mdi:fullscreen"&gt;&lt;/is-icon&gt;&lt;/button&gt;
@@ -157,7 +158,7 @@
           forzar el canal de toda la playlist con el atributo
           <code class="code">channel</code>.
         </p>
-        <div class="demo demo--with-code">
+        <is-demo class="demo demo--with-code">
           <is-video-playlist id="plChannel" placement="bottom" channel="Insoft TV">
             <is-video
               title="Big Buck Bunny"
@@ -174,7 +175,7 @@
               src="../assets/playlist/02-sintel.mp4"
             ></is-video>
           </is-video-playlist>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="config">
@@ -184,7 +185,7 @@
           <code class="code">config</code> para colgar un botón / menú opcional.
           Si no se usa, esa zona queda vacía.
         </p>
-        <div class="demo demo--with-code">
+        <is-demo class="demo demo--with-code">
           <is-video-playlist id="plConfig" placement="bottom">
             <is-button slot="config" appearance="text" aria-label="Ajustes">
               <is-icon icon="mdi:cog"></is-icon>
@@ -204,13 +205,13 @@
               src="../assets/playlist/02-sintel.mp4"
             ></is-video>
           </is-video-playlist>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="events">
         <h2>Eventos</h2>
         <p class="lede" id="eventLog">Sin cambios aún.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-video-playlist id="eventPl" placement="right" style="max-height:22rem">
             <is-video
               title="Alpha"
@@ -227,7 +228,7 @@
               src="../assets/playlist/02-sintel.mp4"
             ></is-video>
           </is-video-playlist>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

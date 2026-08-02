@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-bubble-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,13 +24,13 @@
       <section class="section" id="intro">
         <h2>&lt;is-bubble-chart&gt;</h2>
         <p class="lede">Tercera dimensión por tamaño.</p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-bubble-chart>
             <script type="application/json">
               {"data":{"datasets":[{"label":"Canales","data":[{"x":0.4,"y":8.5,"r":10},{"x":1.8,"y":6.9,"r":13},{"x":2.8,"y":5.2,"r":20}]}]}}
             </script>
           </is-bubble-chart>
-        </div>
+        </is-demo>
       </section>
     </is-main>
     <aside class="sidebar" slot="end"><h1>is-bubble-chart</h1><is-scrollspy target="is-main"><a href="#intro">Introducción</a></is-scrollspy></aside>

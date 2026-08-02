@@ -244,13 +244,17 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const cutoff = rootRect.top + rootRect.height * topPct;
 
       let best = null;
+      let first = null;
       for (const t of this.#triggerEntries.values()) {
         const top = t.el.getBoundingClientRect().top;
+        if (!first || top < first.el.getBoundingClientRect().top) first = t;
         if (top <= cutoff) {
           if (!best || top > best.el.getBoundingClientRect().top) best = t;
         }
       }
-      this.#setActive(best ? best.el.id : null);
+      // Al cargar (scroll arriba) puede que ningún trigger haya cruzado el
+      // umbral todavía: marca el primero para que siempre haya un activo.
+      this.#setActive(best ? best.el.id : (first ? first.el.id : null));
     }
 
     #setActive(id) {

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-theme-toggle · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -76,10 +77,10 @@
           Emite <code class="code">theme-toggle</code> con <code class="code">detail.theme</code> y
           <code class="code">detail.container</code>.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-theme-toggle dark></is-theme-toggle>
           <span class="demo-label" style="margin-left:.75rem">afecta al documento (html)</span>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="scoped">
@@ -88,7 +89,7 @@
           Cada caja es un <code class="code">.container-theme</code> independiente.
           El toggle usa <code class="code">closest()</code> y solo cambia esa caja.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="theme-boxes">
             <div class="container-theme theme-dark" data-theme="dark" data-palette="insoft">
               <div class="container-theme__head">
@@ -107,7 +108,7 @@
               <span class="container-theme__chip">chip de control</span>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;div class="container-theme theme-dark" data-theme="dark"&gt;
   &lt;is-theme-toggle dark&gt;&lt;/is-theme-toggle&gt;
   …

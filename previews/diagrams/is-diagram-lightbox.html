@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-diagram-lightbox · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -54,7 +55,7 @@
           de código JSON y el enlace compartible con el payload en <code class="code">?d=</code>.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <div class="demo-bar">
             <span class="pill" aria-hidden="true">Demo</span>
             <is-select id="preset" label="Preset" value="tk1437191">
@@ -67,7 +68,7 @@
             </is-button>
           </div>
           <is-diagram-lightbox id="lb" kind="sequence"></is-diagram-lightbox>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

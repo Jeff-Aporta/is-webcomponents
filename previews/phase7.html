@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../scripts/preview-boot.js"></script>
+  <script type="module" src="../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fase 7 — Compuestos · IS Web Components</title>
   <meta name="description" content="Composiciones reales integrando múltiples componentes IS: dialogs con forms, cards con acciones, drawers con tabs, selects múltiples y listas con avatares." />
@@ -61,7 +62,7 @@
         <h2>7.1 — Dialog + form</h2>
         <p class="lede">Un mini-CRM: crear contacto con nombre, email, rol, suscripción a newsletter y notas.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openNewContact">
             <is-icon slot="start" icon="mdi:account-plus"></is-icon>
             Nuevo contacto
@@ -88,7 +89,7 @@
             <strong>Contacto guardado.</strong>
             <div id="contactSavedDetails"></div>
           </is-callout>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-dialog</span> <span class="attr">id</span>=<span class="val">"dlg"</span> <span class="attr">label</span>=<span class="val">"Nuevo contacto"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;form</span> <span class="attr">slot</span>=<span class="val">"body"</span><span class="tag">&gt;</span>
@@ -107,7 +108,7 @@
         <h2>7.2 — Card + header-actions</h2>
         <p class="lede">Card con badges, dropdown de más acciones y tabs de detalle dentro.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-card header="Pedido #4290" style="max-width:640px">
             <div slot="header-actions" style="display:flex;gap:0.5rem;align-items:center">
               <is-badge variant="success">Pagado</is-badge>
@@ -157,7 +158,7 @@
               </is-tab-panel>
             </is-tab-group>
           </is-card>
-        </div>
+        </is-demo>
       </section>
 
       <!-- 7.3 Drawer + tab + split-panel -->
@@ -165,7 +166,7 @@
         <h2>7.3 — Drawer + tab + split-panel</h2>
         <p class="lede">Sidebar persistente a la izquierda + drawer deslizante a la derecha con tabs.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-button id="openDrawer">
             <is-icon slot="start" icon="mdi:menu-open"></is-icon>
             Abrir inspector
@@ -218,7 +219,7 @@
             </is-tab-group>
             <is-button slot="footer" data-drawer-close appearance="plain">Cerrar</is-button>
           </is-drawer>
-        </div>
+        </is-demo>
       </section>
 
       <!-- 7.4 Select múltiple -->
@@ -226,7 +227,7 @@
         <h2>7.4 — Select múltiple (tag + popup + checkbox)</h2>
         <p class="lede">Tags seleccionados + popover para agregar/quitar. Patrón típico de invitaciones.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-card header="Asignar responsables" style="max-width:520px">
             <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center">
               <is-tag id="tag1" removable>Jane Doe</is-tag>
@@ -249,7 +250,7 @@
               <is-button slot="footer" variant="brand" data-dialog-close id="saveAssignees">Aplicar</is-button>
             </is-dialog>
           </is-card>
-        </div>
+        </is-demo>
       </section>
 
       <!-- 7.5 Table/list patterns -->
@@ -257,7 +258,7 @@
         <h2>7.5 — List patterns con avatar, badge, button, dropdown</h2>
         <p class="lede">Una lista de equipo combinando avatar + badge + button + dropdown.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-card style="max-width:640px">
             <ul class="list-custom" id="teamList">
               <li class="list-row">
@@ -310,7 +311,7 @@
               </li>
             </ul>
           </is-card>
-        </div>
+        </is-demo>
       </section>
 
     </is-main>

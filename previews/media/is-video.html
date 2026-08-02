@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-video · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -27,7 +28,7 @@
           scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture
           y pantalla completa. Los controles se ocultan solos mientras reproduce.
         </p>
-        <div class="demo">
+        <is-demo class="demo">
           <is-video
             id="v1"
             controls
@@ -35,12 +36,12 @@
             src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
             style="max-width:36rem"
           ></is-video>
-        </div>
+        </is-demo>
         <p class="lede" id="log">eventos: —</p>
       </section>
       <section class="section" id="examples">
         <h2>Sin controles / muted</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <is-video
             muted
             loop
@@ -49,7 +50,7 @@
             src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
             style="max-width:20rem"
           ></is-video>
-        </div>
+        </is-demo>
         <pre class="code">&lt;is-video
   controls
   playsinline

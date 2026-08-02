@@ -113,7 +113,9 @@
   display: grid;
   place-items: center;
   transform-origin: center center;
-  will-change: transform;
+  /* Sin will-change: la capa promovida se rasteriza a escala 1 y el zoom
+     amplía ese raster (SVG borroso hasta el siguiente repaint). Dejar que
+     el navegador re-rasterice tras cada transform mantiene el SVG nítido. */
 }
 
 .lb-host > ::slotted(*) {

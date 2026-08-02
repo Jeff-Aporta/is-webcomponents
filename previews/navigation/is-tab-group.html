@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-tab-group · IS Web Components</title>
   <meta name="description" content="Documentación y demos de is-tab-group / is-tab / is-tab-panel de Insoft." />
@@ -38,7 +39,7 @@
           automático y soporte para tabs cerrables.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-tab-group active="general">
             <is-tab slot="nav" panel="general">General</is-tab>
             <is-tab slot="nav" panel="custom">Custom</is-tab>
@@ -50,7 +51,7 @@
             <is-tab-panel name="advanced">Panel Avanzado: opciones experimentales.</is-tab-panel>
             <is-tab-panel name="disabled">No accesible.</is-tab-panel>
           </is-tab-group>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-tab-group</span> <span class="attr">active</span>=<span class="val">"general"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;is-tab</span> <span class="attr">slot</span>=<span class="val">"nav"</span> <span class="attr">panel</span>=<span class="val">"general"</span><span class="tag">&gt;</span>General<span class="tag">&lt;/is-tab&gt;</span>
@@ -118,7 +119,7 @@
         <h2>Tabs con icono</h2>
         <p class="lede">Usa los slots <code class="code">start</code> y <code class="code">end</code> para iconos.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-tab-group active="home">
             <is-tab slot="nav" panel="home">
               <is-icon slot="start" icon="mdi:home" aria-hidden="true"></is-icon>
@@ -136,7 +137,7 @@
             <is-tab-panel name="users">Listado de usuarios.</is-tab-panel>
             <is-tab-panel name="settings">Preferencias de la app.</is-tab-panel>
           </is-tab-group>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="activation">
@@ -146,7 +147,7 @@
           el panel hasta pulsar Space/Enter.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-tab-group active="x1" activation="manual">
             <is-tab slot="nav" panel="x1">Uno</is-tab>
             <is-tab slot="nav" panel="x2">Dos</is-tab>
@@ -155,7 +156,7 @@
             <is-tab-panel name="x2">Panel Dos.</is-tab-panel>
             <is-tab-panel name="x3">Panel Tres.</is-tab-panel>
           </is-tab-group>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-tab-group</span> <span class="attr">activation</span>=<span class="val">"manual"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-tab-group&gt;</span></pre>
       </section>
@@ -164,7 +165,7 @@
         <h2>Tabs cerrables</h2>
         <p class="lede">Con el atributo <code class="code">closable</code>, el tab muestra una X. El evento <code class="code">is-tab-close</code> burbujea.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-tab-group id="closable" active="t1">
             <is-tab slot="nav" panel="t1">General</is-tab>
             <is-tab slot="nav" panel="t2" closable>Cerrable</is-tab>
@@ -174,7 +175,7 @@
             <is-tab-panel name="t3">Avanzado.</is-tab-panel>
           </is-tab-group>
           <is-button id="restoreTab" disabled>Restaurar tab</is-button>
-        </div>
+        </is-demo>
 
         <pre class="code">group.addEventListener('is-tab-close', (e) =&gt; {
   const t = e.detail.tab;

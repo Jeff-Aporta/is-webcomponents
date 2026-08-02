@@ -79,7 +79,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     connectedCallback() {
       this.#mounted = true;
       this.#upgradeProperties();
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'neutral');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
       if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'filled-outlined');
 
       // ¿El usuario puso un <is-icon slot="icon"> manualmente?

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-gantt · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -36,7 +37,7 @@
           visor a pantalla completa y la misma animación tortuga, que aquí
           recorre las flechas de dependencia en orden.
         </p>
-        <div class="demo" style="height:24rem">
+        <is-demo class="demo" style="height:24rem">
           <is-gantt>
             <script type="application/json">
               {
@@ -57,7 +58,7 @@
               }
             </script>
           </is-gantt>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="hitos">
@@ -67,7 +68,7 @@
           <code>progress</code> (0-100) pinta una barra interna más oscura
           sobre la fracción completada.
         </p>
-        <div class="demo" style="height:14rem">
+        <is-demo class="demo" style="height:14rem">
           <is-gantt>
             <script type="application/json">
               {
@@ -81,7 +82,7 @@
               }
             </script>
           </is-gantt>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="api">

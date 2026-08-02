@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-format-number · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,14 +24,14 @@
       <section class="section" id="intro">
         <h2>&lt;is-format-number&gt;</h2>
         <p class="lede">Números con <code class="code">Intl.NumberFormat</code>. Locale = <code class="code">lang</code> del documento.</p>
-        <div class="demo">
+        <is-demo class="demo">
           <p>Precio: <is-format-number value="1234567.89" type="currency" currency="COP"></is-format-number></p>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="types">
         <h2>Tipos (<code>type</code>)</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row">
               <code class="format-grid__tag">decimal · 1234,5</code>
@@ -53,14 +54,14 @@
               <is-format-number class="format-grid__value" value="49.99" type="currency" currency="EUR"></is-format-number>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-format-number value="0.875" type="percent"&gt;&lt;/is-format-number&gt;
 &lt;is-format-number value="99.9" type="currency" currency="USD"&gt;&lt;/is-format-number&gt;</pre>
       </section>
 
       <section class="section" id="digits">
         <h2>Dígitos fraccionarios</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row">
               <code class="format-grid__tag">min 2 · 1234,5</code>
@@ -79,14 +80,14 @@
               <is-format-number class="format-grid__value" value="99.9" type="currency" currency="USD" maximum-fraction-digits="0"></is-format-number>
             </div>
           </div>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-format-number value="1234.5" minimum-fraction-digits="2"&gt;&lt;/is-format-number&gt;
 &lt;is-format-number value="1234.56" maximum-fraction-digits="0"&gt;&lt;/is-format-number&gt;</pre>
       </section>
 
       <section class="section" id="edge">
         <h2>Casos límite</h2>
-        <div class="demo">
+        <is-demo class="demo">
           <div class="format-grid format-grid--cards">
             <div class="format-grid__row">
               <code class="format-grid__tag">0</code>
@@ -105,7 +106,7 @@
               <is-format-number class="format-grid__value">«<span></span>»</is-format-number>
             </div>
           </div>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

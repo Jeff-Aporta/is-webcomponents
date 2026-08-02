@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-radar-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -31,7 +32,7 @@
           Compara varias variables a la vez sobre una rejilla radial. Ideal para perfiles
           (habilidades, atributos de producto, métricas de rendimiento).
         </p>
-        <div class="demo demo--chart">
+        <is-demo class="demo demo--chart">
           <is-radar-chart label="Employee Skills">
             <script type="application/json">
               {
@@ -57,7 +58,7 @@
               }
             </script>
           </is-radar-chart>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="json">
@@ -67,7 +68,7 @@
           Cada valor de <code class="code">data</code> mapea a una etiqueta del eje radial
           (formato Chart.js).
         </p>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-radar-chart label="Feature Comparison">
             <script type="application/json">
               {
@@ -78,7 +79,7 @@
               }
             </script>
           </is-radar-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-radar-chart label="Feature Comparison"&gt;
   &lt;script type="application/json"&gt;
     {
@@ -94,9 +95,9 @@
       <section class="section" id="js">
         <h2>Datos con JavaScript</h2>
         <p class="lede">Asigna <code class="code">config</code>; el chart se re-renderiza solo.</p>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-radar-chart id="radarJs" label="Feature Comparison"></is-radar-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">const chart = document.querySelector('#radarJs');
 chart.config = {
   data: {
@@ -109,9 +110,9 @@ chart.config = {
       <section class="section" id="multi">
         <h2>Múltiples datasets</h2>
         <p class="lede">Superpone perfiles para compararlos directamente.</p>
-        <div class="demo demo--chart">
+        <is-demo class="demo demo--chart">
           <is-radar-chart id="radarMulti" label="Product Comparison"></is-radar-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="javascript">chart.config = {
   data: {
     labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support', 'Value'],
@@ -125,7 +126,7 @@ chart.config = {
 
       <section class="section" id="options">
         <h2>Leyenda y features</h2>
-        <div class="demo demo--chart demo--chart-sm">
+        <is-demo class="demo demo--chart demo--chart-sm">
           <is-radar-chart label="Clases" legend-position="end">
             <script type="application/json">
               {
@@ -139,7 +140,7 @@ chart.config = {
               }
             </script>
           </is-radar-chart>
-        </div>
+        </is-demo>
         <pre class="code" data-lang="html">&lt;is-radar-chart legend-position="end"&gt;…&lt;/is-radar-chart&gt;
 &lt;is-radar-chart without-legend without-animation&gt;…&lt;/is-radar-chart&gt;</pre>
       </section>

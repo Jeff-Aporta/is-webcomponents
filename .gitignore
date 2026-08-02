@@ -27,3 +27,11 @@ assets/icons/*
 !assets/icons/mdi.json
 !assets/icons/tabler.json
 !assets/icons/manifest.json
+
+# Iconos copiados al bundle por scripts/build.mjs (308k archivos, regenerables).
+# OJO: la regla `assets/icons/*` de arriba está anclada a la raíz del repo y
+# NO cubre esta ruta, por eso se declara aparte.
+dist/cdn/assets/
+
+# Scratch local (fuentes vendorizadas, tarballs de terceros).
+tmp/

@@ -17,30 +17,6 @@
   border-radius: calc(var(--is-radius, 0.625em));
   box-sizing: border-box;
 
-  &[appearance="outlined"],
-  &:not([appearance]) {
-    background: var(--_bg);
-    border: 1px solid var(--_border);
-    --_header-bg-hover: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
-  }
-  &[appearance="filled"] {
-    background: var(--is-bg-elev, #f1f3f5);
-    border: 0;
-  }
-  &[appearance="filled-outlined"] {
-    background: var(--is-bg-elev, #f1f3f5);
-    border: 1px solid var(--_border);
-  }
-  &[appearance="plain"] {
-    background: transparent;
-    border: 0;
-  }
-
-  &[disabled] {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
   .root {
     border-radius: inherit;
     overflow: hidden;
@@ -131,5 +107,34 @@
   }
 
   /* Estado disabled del botón host → cursor y aria */
-  &[disabled] .summary-btn { cursor: not-allowed; }
 }
+
+/* Estados del host a top-level: `&[attr]` anidado en :host compila a
+   `:host[attr]`, que nunca matchea un shadow host. Usar :host([attr]). */
+:host([appearance="outlined"]), :host(:not([appearance])) {
+    background: var(--_bg);
+    border: 1px solid var(--_border);
+    --_header-bg-hover: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
+  }
+
+:host([appearance="filled"]) {
+    background: var(--is-bg-elev, #f1f3f5);
+    border: 0;
+  }
+
+:host([appearance="filled-outlined"]) {
+    background: var(--is-bg-elev, #f1f3f5);
+    border: 1px solid var(--_border);
+  }
+
+:host([appearance="plain"]) {
+    background: transparent;
+    border: 0;
+  }
+
+:host([disabled]) {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+:host([disabled]) .summary-btn { cursor: not-allowed; }

@@ -11,6 +11,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *
  * Atributos <is-kanban>
  *   columns        number — nº columnas visibles al estilo "compact".
+ *   orientation    column | row — layout de los stacks (default column:
+ *                  stacks lado a lado; row: stacks apilados en filas).
  *
  * Atributos <is-kanban-column>
  *   title          string
@@ -35,8 +37,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *
  * Eventos
  *   is-kanban-card-click  detail: { card, column }
+ *   is-kanban-move        detail: { card, from, to } — card soltada en otra
+ *                         columna (o reordenada en la misma).
  */
 (() => {
+  // Card en vuelo durante un drag (una sola por documento).
+  let dragCard = null;
   const BOARD_TEMPLATE = document.createElement('template');
   BOARD_TEMPLATE.innerHTML = /* html */ `
     <div class="board" part="base">
@@ -77,14 +83,33 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const BOARD_OBSERVED = ['columns'];
+  const BOARD_OBSERVED = ['columns', 'orientation'];
   const COLUMN_OBSERVED = ['title', 'accent', 'badge'];
   const CARD_OBSERVED = ['heading', 'meta', 'tag', 'tag-variant', 'cover', 'without-shadow'];
 
   class IsKanban extends HTMLElement {
     static get observedAttributes() { return BOARD_OBSERVED; }
+    #mo = null;
     connectedCallback() {
       if (!this.hasAttribute('role')) this.setAttribute('role', 'list');
+      this.#syncOrientation();
+      this.#mo = new MutationObserver(() => this.#syncOrientation());
+      this.#mo.observe(this, { childList: true });
+    }
+    disconnectedCallback() {
+      this.#mo?.disconnect();
+      this.#mo = null;
+    }
+    attributeChangedCallback(name) {
+      if (name === 'orientation') this.#syncOrientation();
+    }
+    /** Propaga la orientación a las columnas (su lane fluye horizontal en row). */
+    #syncOrientation() {
+      const row = this.getAttribute('orientation') === 'row';
+      for (const col of this.querySelectorAll(':scope > is-kanban-column')) {
+        if (row) col.setAttribute('data-orientation', 'row');
+        else col.removeAttribute('data-orientation');
+      }
     }
   }
   if (!customElements.get('is-kanban')) customElements.define('is-kanban', IsKanban);
@@ -110,12 +135,50 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#mounted = true;
       this.setAttribute('role', 'listitem');
       this.#sync();
+      this.#bindDrop();
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
       this.#sync();
     }
+
+    /** Zona de drop: la lane acepta cards arrastradas desde cualquier columna. */
+    #bindDrop() {
+      const lane = this.shadowRoot.querySelector('.lane');
+      lane.addEventListener('dragover', (e) => {
+        if (!dragCard) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        this.#root.classList.add('drop-target');
+      });
+      lane.addEventListener('dragleave', () => this.#root.classList.remove('drop-target'));
+      lane.addEventListener('drop', (e) => {
+        if (!dragCard) return;
+        e.preventDefault();
+        this.#root.classList.remove('drop-target');
+        const from = dragCard.parentElement;
+        // Insertar antes de la card bajo el cursor; si no hay, al final.
+        const cards = [...this.querySelectorAll(':scope > is-kanban-card')].filter((c) => c !== dragCard);
+        const horizontal = this.getAttribute('data-orientation') === 'row';
+        const after = cards.find((c) => {
+          const r = c.getBoundingClientRect();
+          return horizontal ? e.clientX < r.left + r.width / 2 : e.clientY < r.top + r.height / 2;
+        });
+        if (after) this.insertBefore(dragCard, after);
+        else this.appendChild(dragCard);
+        this.#sync();
+        if (from && from !== this && typeof from.refreshBadge === 'function') from.refreshBadge();
+        dragCard.dispatchEvent(new CustomEvent('is-kanban-move', {
+          detail: { card: dragCard, from, to: this },
+          bubbles: true,
+          composed: true,
+        }));
+      });
+    }
+
+    /** Recalcula el contador del badge (p. ej. tras perder una card). */
+    refreshBadge() { this.#sync(); }
 
     #sync() {
       const title = this.getAttribute('title') || '';
@@ -165,6 +228,18 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#mounted = true;
       this.setAttribute('role', 'article');
       this.#sync();
+      // Transferible entre stacks vía HTML5 drag & drop.
+      this.setAttribute('draggable', 'true');
+      this.addEventListener('dragstart', (e) => {
+        dragCard = this;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.getAttribute('heading') || 'card');
+        this.classList.add('is-dragging');
+      });
+      this.addEventListener('dragend', () => {
+        dragCard = null;
+        this.classList.remove('is-dragging');
+      });
       this.#root.addEventListener('click', (e) => {
         const column = this.parentElement;
         this.dispatchEvent(new CustomEvent('is-kanban-card-click', {

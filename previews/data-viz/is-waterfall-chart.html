@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-waterfall-chart · IS Web Components</title>
   <link rel="stylesheet" href="../../styles/is-base.css" />
@@ -23,7 +24,7 @@
       <section class="section" id="intro">
         <h2>&lt;is-waterfall-chart&gt;</h2>
         <p class="lede">Cascada para explicar cómo un saldo inicial llega a un saldo final.</p>
-        <div class="demo" style="height:16rem">
+        <is-demo class="demo" style="height:16rem">
           <is-waterfall-chart>
             <script type="application/json">
               {
@@ -34,7 +35,7 @@
               }
             </script>
           </is-waterfall-chart>
-        </div>
+        </is-demo>
       </section>
     </is-main>
     <aside class="sidebar" slot="end">

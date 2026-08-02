@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-carousel · IS Web Components</title>
   <meta name="description" content="Documentación y demos de is-carousel / is-carousel-item de Insoft." />
@@ -54,7 +55,7 @@
           indicadores, scroll-snap y soporte para swipe en touch.
         </p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-carousel id="c1" loop>
             <is-carousel-item><div class="slide s1">Slide 1</div></is-carousel-item>
             <is-carousel-item><div class="slide s2">Slide 2</div></is-carousel-item>
@@ -63,7 +64,7 @@
             <is-carousel-item><div class="slide s5">Slide 5</div></is-carousel-item>
           </is-carousel>
           <p id="c1Log" class="lede">Slide: <code class="code">0</code></p>
-        </div>
+        </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-carousel</span> <span class="attr">loop</span><span class="tag">&gt;</span>
   <span class="tag">&lt;is-carousel-item&gt;</span>Slide 1<span class="tag">&lt;/is-carousel-item&gt;</span>
@@ -76,21 +77,21 @@
         <h2>Autoplay</h2>
         <p class="lede">Con <code class="code">autoplay="2000"</code> avanza cada 2 segundos. Se pausa al hover.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-carousel autoplay="2000" loop>
             <is-carousel-item><div class="slide s1">Auto 1</div></is-carousel-item>
             <is-carousel-item><div class="slide s2">Auto 2</div></is-carousel-item>
             <is-carousel-item><div class="slide s3">Auto 3</div></is-carousel-item>
             <is-carousel-item><div class="slide s4">Auto 4</div></is-carousel-item>
           </is-carousel>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="per-page">
         <h2>Múltiples slides por página</h2>
         <p class="lede">Con <code class="code">slides-per-page="3"</code>.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-carousel slides-per-page="3" loop>
             <is-carousel-item><div class="slide s1">A</div></is-carousel-item>
             <is-carousel-item><div class="slide s2">B</div></is-carousel-item>
@@ -99,46 +100,46 @@
             <is-carousel-item><div class="slide s5">E</div></is-carousel-item>
             <is-carousel-item><div class="slide s1">F</div></is-carousel-item>
           </is-carousel>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="vertical">
         <h2>Vertical</h2>
         <p class="lede">Con <code class="code">vertical</code>.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-carousel vertical style="max-width: 320px;">
             <is-carousel-item><div class="slide s1">Top</div></is-carousel-item>
             <is-carousel-item><div class="slide s2">Middle</div></is-carousel-item>
             <is-carousel-item><div class="slide s3">Bottom</div></is-carousel-item>
           </is-carousel>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="ratio">
         <h2>Aspect ratio personalizado</h2>
         <p class="lede">Con <code class="code">aspect-ratio="4/3"</code> o cualquier valor CSS.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-carousel aspect-ratio="4/3">
             <is-carousel-item><div class="slide s1">4:3 #1</div></is-carousel-item>
             <is-carousel-item><div class="slide s2">4:3 #2</div></is-carousel-item>
             <is-carousel-item><div class="slide s3">4:3 #3</div></is-carousel-item>
           </is-carousel>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="plain">
         <h2>Sin indicadores ni controles</h2>
         <p class="lede">Con <code class="code">without-indicators without-controls</code> solo swipe.</p>
 
-        <div class="demo">
+        <is-demo class="demo">
           <is-carousel without-indicators without-controls style="max-width: 320px;">
             <is-carousel-item><div class="slide s1">A</div></is-carousel-item>
             <is-carousel-item><div class="slide s2">B</div></is-carousel-item>
             <is-carousel-item><div class="slide s3">C</div></is-carousel-item>
           </is-carousel>
-        </div>
+        </is-demo>
       </section>
 
       <section class="section" id="reference">

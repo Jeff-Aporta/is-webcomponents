@@ -1,0 +1,100 @@
+/* is-speed-dial */
+:host {
+  display: inline-block;
+  position: relative;
+  --is-radius-fab: 999px;
+}
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--distance, .65rem);
+  position: relative;
+}
+
+.trigger {
+  --r: var(--is-radius-fab);
+  width: 3rem;
+  height: 3rem;
+  border: 0;
+  border-radius: var(--r);
+  background: var(--is-accent);
+  color: var(--is-on-accent, #fff);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--is-accent) 70%, transparent),
+    0 8px 22px color-mix(in srgb, var(--is-accent) 35%, transparent);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  font: inherit;
+}
+.trigger:hover { transform: translateY(-1px); }
+.trigger:focus-visible { outline: 2px solid var(--is-focus); outline-offset: 3px; }
+.trigger .icon-wrap {
+  display: grid; place-items: center;
+  transition: transform 220ms ease;
+}
+:host([open]) .trigger .icon-wrap { transform: rotate(45deg); }
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  position: relative;
+  align-items: center;
+  pointer-events: none;
+}
+.actions ::slotted(is-speed-dial-action) {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 200ms ease, transform 200ms ease;
+  pointer-events: none;
+}
+:host([open]) .actions ::slotted(is-speed-dial-action) {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+:host([open]) .actions ::slotted(is-speed-dial-action) {
+  transition-delay: calc(var(--i, 0) * 35ms);
+}
+
+/* Arreglo de la dirección: para "left/right" el actions contenedor cambia
+   layout. Mantener simple: las acciones se apilan arriba del trigger por
+   default y abajo cuando direction=down. Para left/right se reordenan. */
+.root[data-direction="up"] { flex-direction: column-reverse; }
+.root[data-direction="down"] { flex-direction: column; }
+.root[data-direction="left"] { flex-direction: row-reverse; }
+.root[data-direction="right"] { flex-direction: row; }
+
+/* is-speed-dial-action */
+:host { display: inline-flex; }
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .3rem .5rem .3rem .65rem;
+  background: var(--is-bg-elev);
+  color: var(--is-text);
+  border: 1px solid var(--is-border);
+  border-radius: 999px;
+  text-decoration: none;
+  font: inherit;
+  font-size: .82rem;
+  white-space: nowrap;
+  box-shadow: 0 6px 14px rgba(0,0,0,.18);
+}
+.action .ico {
+  display: inline-grid; place-items: center;
+  width: 1.85rem; height: 1.85rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--is-accent) 14%, transparent);
+  color: var(--is-accent);
+  font-size: 1rem;
+}
+.action:hover { background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-elev)); }
+.action.is-disabled { opacity: .5; pointer-events: none; }
+.action[data-variant="neutral"] .ico { background: color-mix(in srgb, var(--is-text) 10%, transparent); color: var(--is-text); }
+.action[data-variant="success"] .ico { background: color-mix(in srgb, var(--is-success, #16a34a) 18%, transparent); color: var(--is-success, #16a34a); }
+.action[data-variant="warning"] .ico { background: color-mix(in srgb, var(--is-warning, #d97706) 18%, transparent); color: var(--is-warning, #d97706); }
+.action[data-variant="danger"] .ico { background: color-mix(in srgb, var(--is-danger, #dc2626) 18%, transparent); color: var(--is-danger, #dc2626); }

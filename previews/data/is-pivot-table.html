@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-pivot-table · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/data/pivot-table.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+  <style>
+    pre.log {
+      font-family: ui-monospace, monospace; font-size: .8rem;
+      background: var(--is-bg-elev); border: 1px solid var(--is-border);
+      border-radius: var(--is-radius); padding: .55rem .75rem;
+      max-height: 8rem; overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-pivot-table">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-pivot-table&gt;</h2>
+        <p class="lede">Tabla pivot: agrupa por filas y columnas, agrega una medida. Soporta <code>sum</code>, <code>avg</code>, <code>count</code>, <code>min</code> y <code>max</code>.</p>
+      </section>
+
+      <section class="section" id="sum">
+        <h2>Suma de ventas</h2>
+        <is-demo class="demo">
+          <is-pivot-table rows="region" cols="trimestre" measure="ventas" agg="sum">
+            <script type="application/json">
+              [
+                { "region": "Norte", "trimestre": "Q1", "ventas": 320 },
+                { "region": "Norte", "trimestre": "Q2", "ventas": 410 },
+                { "region": "Norte", "trimestre": "Q3", "ventas": 380 },
+                { "region": "Norte", "trimestre": "Q4", "ventas": 520 },
+                { "region": "Sur",   "trimestre": "Q1", "ventas": 220 },
+                { "region": "Sur",   "trimestre": "Q2", "ventas": 280 },
+                { "region": "Sur",   "trimestre": "Q3", "ventas": 350 },
+                { "region": "Sur",   "trimestre": "Q4", "ventas": 410 },
+                { "region": "Este",  "trimestre": "Q1", "ventas": 180 },
+                { "region": "Este",  "trimestre": "Q2", "ventas": 240 },
+                { "region": "Este",  "trimestre": "Q3", "ventas": 300 },
+                { "region": "Este",  "trimestre": "Q4", "ventas": 360 },
+                { "region": "Oeste", "trimestre": "Q1", "ventas": 140 },
+                { "region": "Oeste", "trimestre": "Q2", "ventas": 190 },
+                { "region": "Oeste", "trimestre": "Q3", "ventas": 230 },
+                { "region": "Oeste", "trimestre": "Q4", "ventas": 280 }
+              ]
+            </script>
+          </is-pivot-table>
+        </is-demo>
+      </section>
+
+      <section class="section" id="avg">
+        <h2>Promedio de tickets</h2>
+        <is-demo class="demo">
+          <is-pivot-table rows="canal" cols="mes" measure="ticket" agg="avg" decimals="0">
+            <script type="application/json">
+              [
+                { "canal": "Web",     "mes": "Ene", "ticket": 420 },
+                { "canal": "Web",     "mes": "Feb", "ticket": 480 },
+                { "canal": "Web",     "mes": "Mar", "ticket": 510 },
+                { "canal": "Móvil",   "mes": "Ene", "ticket": 320 },
+                { "canal": "Móvil",   "mes": "Feb", "ticket": 360 },
+                { "canal": "Móvil",   "mes": "Mar", "ticket": 410 },
+                { "canal": "Mostrador","mes": "Ene", "ticket": 580 },
+                { "canal": "Mostrador","mes": "Feb", "ticket": 600 },
+                { "canal": "Mostrador","mes": "Mar", "ticket": 640 }
+              ]
+            </script>
+          </is-pivot-table>
+        </is-demo>
+      </section>
+
+      <section class="section" id="count">
+        <h2>Cuenta (sin medida)</h2>
+        <p>Si no pasás <code class="code">measure</code>, cuenta filas por combinación.</p>
+        <is-demo class="demo">
+          <is-pivot-table rows="estado" cols="prioridad" agg="count">
+            <script type="application/json">
+              [
+                { "estado": "Nuevo",    "prioridad": "Alta" },
+                { "estado": "Nuevo",    "prioridad": "Alta" },
+                { "estado": "En curso", "prioridad": "Alta" },
+                { "estado": "En curso", "prioridad": "Media" },
+                { "estado": "En curso", "prioridad": "Baja" },
+                { "estado": "Cerrado",  "prioridad": "Media" },
+                { "estado": "Cerrado",  "prioridad": "Baja" }
+              ]
+            </script>
+          </is-pivot-table>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">// Atributos
+// rows, cols            nombre de campo (requeridos)
+// measure               nombre de campo a agregar (opcional)
+// agg                   sum | avg | count | min | max   (default sum)
+// format                locale para Intl.NumberFormat (default 'es-CO')
+// decimals              dígitos (default 0; máximo 2)
+
+// Datos: cualquier objeto plano serializable en &lt;script type="application/json"&gt;
+// o vía propiedad: chart.dataset = [...]
+
+// Evento
+table.addEventListener('is-cell-click', e =&gt; {
+  console.log(e.detail.row, '·', e.detail.col, '=', e.detail.value);
+});</pre>
+      </section>
+
+      <section class="section" id="log">
+        <h2>Bitácora</h2>
+        <pre class="log" id="log"></pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-pivot-table</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#sum">Suma</a>
+        <a href="#avg">Promedio</a>
+        <a href="#count">Cuenta</a>
+        <a href="#api">API</a>
+        <a href="#log">Bitácora</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const log = document.getElementById('log');
+    document.querySelectorAll('is-pivot-table').forEach((p) => {
+      p.addEventListener('is-cell-click', (e) => log.textContent = `${e.detail.row} · ${e.detail.col} = ${e.detail.value}\n` + log.textContent);
+    });
+  </script>
+</body>
+</html>

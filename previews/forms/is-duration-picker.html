@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-duration-picker · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/forms/duration-picker.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+  <style>
+    pre.log {
+      font-family: ui-monospace, monospace; font-size: .8rem;
+      background: var(--is-bg-elev); border: 1px solid var(--is-border);
+      border-radius: var(--is-radius); padding: .55rem .75rem;
+      max-height: 6rem; overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-duration-picker">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-duration-picker&gt;</h2>
+        <p class="lede">Duración HH:MM:SS. Tres columnas con botones ±, inputs numéricos y saltos con <kbd class="ic">:</kbd> o <kbd class="ic">Tab</kbd>.</p>
+      </section>
+
+      <section class="section" id="basico">
+        <h2>Básico</h2>
+        <is-demo class="demo">
+          <is-duration-picker id="dur" value="3725"></is-duration-picker>
+          <p class="kbd-hint" style="color:var(--is-text-soft); font-size:.78rem; margin-top:.5rem">
+            <code>value="3725"</code> = 1h 02m 05s
+          </p>
+        </is-demo>
+      </section>
+
+      <section class="section" id="limites">
+        <h2>Con límites</h2>
+        <is-demo class="demo">
+          <is-duration-picker min="60" max="5400" step="5" value="600"></is-duration-picker>
+          <p class="kbd-hint" style="color:var(--is-text-soft); font-size:.78rem">De 1 minuto a 1:30:00, paso de 5 segundos.</p>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">const d = document.querySelector('is-duration-picker');
+d.value;        // segundos totales
+d.text;        // "01:02:05" o "02:05" si hours=0
+d.hours; d.minutes; d.seconds;
+d.tick(30);    // suma 30 segundos respetando límites
+d.setSeconds(3600);
+d.set(1, 30, 0);
+
+d.addEventListener('is-change', e =&gt; console.log(e.detail.value, e.detail.text));
+
+// Atributos
+// value, min, max  límites en segundos
+// step             incremento del botón (default 1)</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-duration-picker</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#basico">Básico</a>
+        <a href="#limites">Límites</a>
+        <a href="#api">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const log = document.getElementById('log');
+    document.querySelectorAll('is-duration-picker').forEach((d) => {
+      d.addEventListener('is-change', (e) => console.log('duration', e.detail.value, e.detail.text));
+    });
+  </script>
+</body>
+</html>
