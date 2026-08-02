@@ -32,12 +32,12 @@
         </p>
 
         <is-demo class="demo">
-          <is-button id="btnDelete" variant="danger">
+          <is-button id="btnDelete" color="danger">
             <is-icon slot="start" icon="mdi:trash-can"></is-icon>
             Eliminar cuenta
           </is-button>
           <is-confirm-modal for="btnDelete" heading="Eliminar cuenta" message="Se borrarán todos tus datos. Esta acción no se puede deshacer.">
-            <is-button slot="confirm" variant="danger">Sí, eliminar</is-button>
+            <is-button slot="confirm" color="danger">Sí, eliminar</is-button>
             <is-button slot="cancel">Cancelar</is-button>
           </is-confirm-modal>
           <p id="cmLog">Última acción: <code class="code">—</code></p>
@@ -45,7 +45,7 @@
 
         <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">id</span>=<span class="val">"btnDelete"</span><span class="tag">&gt;</span>Eliminar cuenta<span class="tag">&lt;/is-button&gt;</span>
 <span class="tag">&lt;is-confirm-modal</span> <span class="attr">for</span>=<span class="val">"btnDelete"</span> <span class="attr">heading</span>=<span class="val">"Eliminar cuenta"</span> <span class="attr">message</span>=<span class="val">"¿Seguro?"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"confirm"</span> <span class="attr">variant</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>Sí, eliminar<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"confirm"</span> <span class="attr">color</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>Sí, eliminar<span class="tag">&lt;/is-button&gt;</span>
   <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"cancel"</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
 <span class="tag">&lt;/is-confirm-modal&gt;</span></pre>
       </section>
@@ -55,7 +55,7 @@
         <p class="lede">El contenido del slot <code class="code">message</code> reemplaza el atributo.</p>
 
         <is-demo class="demo">
-          <is-button id="cmMega" variant="brand">Publicar cambios</is-button>
+          <is-button id="cmMega" color="brand">Publicar cambios</is-button>
           <is-confirm-modal for="cmMega" heading="Publicar a producción">
             <div slot="message">
               <strong>Vas a publicar 12 cambios.</strong>
@@ -64,7 +64,7 @@
               </p>
             </div>
             <is-button slot="cancel">Revisar de nuevo</is-button>
-            <is-button slot="confirm" variant="brand">Publicar</is-button>
+            <is-button slot="confirm" color="brand">Publicar</is-button>
           </is-confirm-modal>
         </is-demo>
       </section>

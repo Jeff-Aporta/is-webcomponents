@@ -137,14 +137,14 @@
 
 /* ---- appearance ------------------------------------------------------ */
 
-:host([appearance="filled"]) .base {
+:host([variant="filled"]) .base {
   background: var(--is-control-bg-hover, #e9ecef);
   border-color: transparent;
   border-bottom-color: var(--_border);
   border-radius: var(--is-input-border-radius) var(--is-input-border-radius) 0 0;
 }
 
-:host([appearance="underlined"]) .base {
+:host([variant="underlined"]) .base {
   background: transparent;
   border-color: transparent;
   border-bottom-color: var(--_border);

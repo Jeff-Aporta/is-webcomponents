@@ -39,90 +39,90 @@
 /* ---- appearance: joined (default) ------------------------------------- */
 /* Bordes fusionados: el grupo se lee como una sola pieza. */
 
-:host([appearance='joined']) .button-group {
+:host([variant='joined']) .button-group {
   box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
 }
 
-:host([appearance='joined'][orientation='horizontal']) {
+:host([variant='joined'][orientation='horizontal']) {
   --_button-horizontal-indent: calc(var(--is-button-border-width) * -1);
   --_button-horizontal-indent-outlined: calc(var(--is-button-border-width) * -1);
 }
 
-:host([appearance='joined'][orientation='horizontal']) ::slotted(:first-child) {
+:host([variant='joined'][orientation='horizontal']) ::slotted(:first-child) {
   --_button-horizontal-indent: 0;
   --_button-horizontal-indent-outlined: 0;
 }
 
-:host([appearance='joined'][orientation='horizontal']) ::slotted(:first-child:not(:last-child)) {
+:host([variant='joined'][orientation='horizontal']) ::slotted(:first-child:not(:last-child)) {
   --_button-start-end-radius: 0;
   --_button-end-end-radius: 0;
 }
 
-:host([appearance='joined'][orientation='horizontal']) ::slotted(:last-child:not(:first-child)) {
+:host([variant='joined'][orientation='horizontal']) ::slotted(:last-child:not(:first-child)) {
   --_button-start-start-radius: 0;
   --_button-end-start-radius: 0;
 }
 
-:host([appearance='joined'][orientation='horizontal']) ::slotted(button:not(:first-child)),
-:host([appearance='joined'][orientation='horizontal']) ::slotted(.is-filled:not(:first-child)) {
+:host([variant='joined'][orientation='horizontal']) ::slotted(button:not(:first-child)),
+:host([variant='joined'][orientation='horizontal']) ::slotted(.is-filled:not(:first-child)) {
   margin-inline-start: calc(var(--is-button-border-width) * -1);
 }
 
-:host([appearance='joined'][orientation='horizontal']) ::slotted(button:first-child:not(:last-child)) {
+:host([variant='joined'][orientation='horizontal']) ::slotted(button:first-child:not(:last-child)) {
   border-start-end-radius: 0 !important;
   border-end-end-radius: 0 !important;
 }
 
-:host([appearance='joined'][orientation='horizontal']) ::slotted(button:last-child:not(:first-child)) {
+:host([variant='joined'][orientation='horizontal']) ::slotted(button:last-child:not(:first-child)) {
   border-start-start-radius: 0 !important;
   border-end-start-radius: 0 !important;
 }
 
-:host([appearance='joined'][orientation='vertical']) {
+:host([variant='joined'][orientation='vertical']) {
   --_button-vertical-indent: calc(var(--is-button-border-width) * -1);
   --_button-vertical-indent-outlined: calc(var(--is-button-border-width) * -1);
 }
 
-:host([appearance='joined'][orientation='vertical']) ::slotted(:first-child) {
+:host([variant='joined'][orientation='vertical']) ::slotted(:first-child) {
   --_button-vertical-indent: 0;
   --_button-vertical-indent-outlined: 0;
 }
 
-:host([appearance='joined'][orientation='vertical']) ::slotted(:first-child:not(:last-child)) {
+:host([variant='joined'][orientation='vertical']) ::slotted(:first-child:not(:last-child)) {
   --_button-end-start-radius: 0;
   --_button-end-end-radius: 0;
 }
 
-:host([appearance='joined'][orientation='vertical']) ::slotted(:last-child:not(:first-child)) {
+:host([variant='joined'][orientation='vertical']) ::slotted(:last-child:not(:first-child)) {
   --_button-start-start-radius: 0;
   --_button-start-end-radius: 0;
 }
 
-:host([appearance='joined'][orientation='vertical']) ::slotted(button:not(:first-child)),
-:host([appearance='joined'][orientation='vertical']) ::slotted(.is-filled:not(:first-child)) {
+:host([variant='joined'][orientation='vertical']) ::slotted(button:not(:first-child)),
+:host([variant='joined'][orientation='vertical']) ::slotted(.is-filled:not(:first-child)) {
   margin-block-start: calc(var(--is-button-border-width) * -1);
 }
 
-:host([appearance='joined'][orientation='vertical']) ::slotted(button:first-child:not(:last-child)) {
+:host([variant='joined'][orientation='vertical']) ::slotted(button:first-child:not(:last-child)) {
   border-end-start-radius: 0 !important;
   border-end-end-radius: 0 !important;
 }
 
-:host([appearance='joined'][orientation='vertical']) ::slotted(button:last-child:not(:first-child)) {
+:host([variant='joined'][orientation='vertical']) ::slotted(button:last-child:not(:first-child)) {
   border-start-start-radius: 0 !important;
   border-start-end-radius: 0 !important;
 }
 
 /* Intermedios sin radio */
-:host([appearance='joined']) ::slotted(:not(:first-child):not(:last-child)) {
+:host([variant='joined']) ::slotted(:not(:first-child):not(:last-child)) {
   --_button-start-start-radius: 0;
   --_button-start-end-radius: 0;
   --_button-end-start-radius: 0;
   --_button-end-end-radius: 0;
 }
 
-:host([appearance='joined']) ::slotted(button:not(:first-child):not(:last-child)),
-:host([appearance='joined']) ::slotted(.is-filled:not(:first-child):not(:last-child)) {
+:host([variant='joined']) ::slotted(button:not(:first-child):not(:last-child)),
+:host([variant='joined']) ::slotted(.is-filled:not(:first-child):not(:last-child)) {
   border-radius: 0 !important;
 }
 
@@ -131,13 +131,13 @@
 
 /* La pista crece lo que mide su padding para que la pastilla interior conserve
  * el radio natural del botón. */
-:host([appearance='segmented']) {
+:host([variant='segmented']) {
   --is-button-group-radius: calc(var(--is-button-border-radius, 6px) + var(--is-button-group-pad));
 }
 
 /* --is-bg-soft queda por debajo de --is-bg-elev en claro y en oscuro, así la
  * pista se lee hundida en ambos temas sin depender de la elevación. */
-:host([appearance='segmented']) .button-group {
+:host([variant='segmented']) .button-group {
   gap: 0.15em;
   padding: var(--is-button-group-pad);
   background: var(--is-bg-soft, #f6f8fa);
@@ -145,7 +145,7 @@
   box-shadow: inset 0 1px 2px rgb(0 0 0 / 12%);
 }
 
-:host([appearance='segmented']) ::slotted(*) {
+:host([variant='segmented']) ::slotted(*) {
   --is-control-bg: transparent;
   --is-control-bg-hover: color-mix(in srgb, var(--is-text, #f0f3f6) 8%, transparent);
   --is-control-bg-active: color-mix(in srgb, var(--is-text, #f0f3f6) 14%, transparent);
@@ -153,7 +153,7 @@
   --is-control-text: var(--is-text-soft, var(--is-text, inherit));
 }
 
-:host([appearance='segmented']) ::slotted([selected]) {
+:host([variant='segmented']) ::slotted([selected]) {
   --_sel: var(--is-button-selected-color, var(--is-button-group-accent));
   --is-control-bg: color-mix(in srgb, var(--_sel) 18%, var(--is-bg-elev, #fff));
   --is-control-bg-hover: color-mix(in srgb, var(--_sel) 26%, var(--is-bg-elev, #fff));
@@ -167,14 +167,14 @@
 /* ---- appearance: separated ------------------------------------------- */
 /* Botones independientes con separación: toolbars y acciones sueltas. */
 
-:host([appearance='separated']) .button-group {
+:host([variant='separated']) .button-group {
   gap: var(--is-button-group-gap);
 }
 
 /* ---- selección (select="single|multiple") ----------------------------- */
 
-:host([appearance='joined']) ::slotted([selected]),
-:host([appearance='separated']) ::slotted([selected]) {
+:host([variant='joined']) ::slotted([selected]),
+:host([variant='separated']) ::slotted([selected]) {
   --_sel: var(--is-button-selected-color, var(--is-button-group-accent));
   --is-control-bg: color-mix(in srgb, var(--_sel) 16%, transparent);
   --is-control-bg-hover: color-mix(in srgb, var(--_sel) 24%, transparent);
@@ -191,7 +191,7 @@
 }
 
 :host([pill]) ::slotted(*) { --is-button-border-radius: 999px; }
-:host([pill][appearance='segmented']) ::slotted([selected]) { border-radius: 999px; }
+:host([pill][variant='segmented']) ::slotted([selected]) { border-radius: 999px; }
 
 :host([stretch]) { display: flex; width: 100%; }
 :host([stretch]) .button-group { flex-wrap: nowrap; width: 100%; }

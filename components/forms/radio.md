@@ -14,7 +14,7 @@ preview: ../../previews/forms/is-radio.html
 
 Paridad funcional con el
 Radio Group de MUI:
-color por variant, posición de etiqueta, estado de error, solo lectura y
+color por color, posición de etiqueta, estado de error, solo lectura y
 navegación por teclado según el patrón ARIA radiogroup.
 El grupo es el elemento form-associated: publica el valor, valida y gobierna el teclado.
 Los is-radio son las opciones y solo avisan al grupo cuando se eligen.
@@ -56,7 +56,7 @@ import './radio.js';
 | `value` | string/según contrato | Fuente define default/restricción. |
 | `checked` | boolean | Fuente define default/restricción. |
 | `disabled` | boolean | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `label-placement` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
@@ -66,7 +66,7 @@ import './radio.js';
 | `value` | lectura/escritura | Declarada por clase. |
 | `checked` | lectura/escritura | Declarada por clase. |
 | `disabled` | lectura/escritura | Declarada por clase. |
-| `variant` | lectura/escritura | Declarada por clase. |
+| `color` | lectura/escritura | Declarada por clase. |
 | `labelPlacement` | lectura/escritura | Declarada por clase. |
 | `group` | solo lectura | Declarada por clase. |
 
@@ -158,9 +158,9 @@ Documentación de cabecera preservada desde fuente:
 > publica <is-radio-group>, que es quien participa en el <form>.
 > Atributos
 >   value, checked, disabled
->   variant          brand (default) | neutral | success | warning | danger
+>   color          brand (default) | neutral | success | warning | danger
 >   label-placement  end (default) | start | top | bottom
->   Sin variant / label-placement propios se hereda el del grupo.
+>   Sin color / label-placement propios se hereda el del grupo.
 > Slots: default (etiqueta), description (texto secundario)
 > Parts: base, control, dot, text, label, description
 > Custom states: placement-* readonly error (heredados del grupo)
@@ -180,9 +180,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 ## Ejemplo avanzado
 
 ```html
-<is-radio-group variant="success" row>
+<is-radio-group color="success" row>
 <is-radio value="c">Hereda success</is-radio>
-<is-radio value="d" variant="danger">Se sale del grupo</is-radio>
+<is-radio value="d" color="danger">Se sale del grupo</is-radio>
 </is-radio-group>
 ```
 
@@ -192,7 +192,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

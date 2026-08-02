@@ -184,12 +184,23 @@ dial.addEventListener('is-toggle', e =&gt; console.log('open=', e.detail.open));
 
 // Acciones: cada &lt;is-speed-dial-action&gt; emite is-select en el padre.
 // Si tiene href, no se cierra el dial al elegir.
-&lt;is-speed-dial-action icon="…" label="…" variant="brand|neutral|success|warning|danger" href="…"&gt;Texto&lt;/is-speed-dial-action&gt;</pre>
+&lt;is-speed-dial-action icon="…" label="…" color="brand|neutral|success|warning|danger" href="…"&gt;Texto&lt;/is-speed-dial-action&gt;</pre>
       </section>
 
       <section class="section" id="log">
-        <h2>Bitácora</h2>
-        <pre class="log" id="log"></pre>
+        <h2>Bitácora de eventos</h2>
+        <p class="lede">
+          Cada interacción con los diales de arriba aparece aquí. Sirve para ver
+          qué evento emite el componente y con qué detalle.
+        </p>
+        <table class="ref" id="logTable">
+          <thead>
+            <tr><th>Hora</th><th>Dial</th><th>Evento</th><th>Detalle</th></tr>
+          </thead>
+          <tbody>
+            <tr class="log-empty"><td colspan="4">Abre un dial o elige una acción para ver los eventos.</td></tr>
+          </tbody>
+        </table>
       </section>
 
     </is-main>
@@ -206,14 +217,32 @@ dial.addEventListener('is-toggle', e =&gt; console.log('open=', e.detail.open));
     </aside>
   </is-split-panel>
   <script type="module">
-    const log = document.getElementById('log');
-    function append(line) {
-      log.textContent = line + '\n' + log.textContent;
-      log.scrollTop = 0;
+    const logBody = document.querySelector('#logTable tbody');
+    // Los diales que arrancan con `open` emiten is-toggle al montarse: eso no
+    // es interaccion del usuario y solo llenaba la bitacora de lineas
+    // identicas ("toggle: open=false" repetido), asi que se ignora.
+    let userInteracted = false;
+    document.addEventListener('pointerdown', () => { userInteracted = true; }, true);
+
+    const MAX_ROWS = 12;
+    function append(dial, evento, detalle) {
+      if (!userInteracted) return;
+      logBody.querySelector('.log-empty')?.remove();
+      const tr = document.createElement('tr');
+      const hora = new Date().toLocaleTimeString('es', { hour12: false });
+      for (const value of [hora, dial, evento, detalle]) {
+        const td = document.createElement('td');
+        td.textContent = value;
+        tr.appendChild(td);
+      }
+      logBody.prepend(tr);
+      while (logBody.rows.length > MAX_ROWS) logBody.deleteRow(-1);
     }
-    document.querySelectorAll('is-speed-dial').forEach((d) => {
-      d.addEventListener('is-select', (e) => append(`select: ${e.detail.action.getAttribute('label')}`));
-      d.addEventListener('is-toggle', (e) => append(`toggle: open=${e.detail.open}`));
+
+    document.querySelectorAll('is-speed-dial').forEach((d, i) => {
+      const nombre = d.id || d.getAttribute('data-layout') || d.getAttribute('direction') || ('dial ' + (i + 1));
+      d.addEventListener('is-select', (e) => append(nombre, 'is-select', e.detail.action.getAttribute('label') || '-'));
+      d.addEventListener('is-toggle', (e) => append(nombre, 'is-toggle', e.detail.open ? 'abierto' : 'cerrado'));
     });
   </script>
 </body>

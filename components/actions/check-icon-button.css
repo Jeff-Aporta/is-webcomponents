@@ -65,16 +65,16 @@
 }
 
 /* Variante embebida en controles oscuros (video, etc.) */
-:host([appearance="plain"]) {
+:host([variant="plain"]) {
   width: 1.5em;
   border-radius: 0.25em;
   color: inherit;
 }
 
-:host([appearance="plain"]) .btn:hover {
+:host([variant="plain"]) .btn:hover {
   background: color-mix(in srgb, currentColor 15%, transparent);
 }
 
-:host([appearance="plain"]) .btn:active {
+:host([variant="plain"]) .btn:active {
   background: color-mix(in srgb, currentColor 22%, transparent);
 }

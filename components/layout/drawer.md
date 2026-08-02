@@ -23,7 +23,7 @@ Estructura, superficies, overlays y navegación por regiones de contenido.
 
 ## Cuándo no usarlo
 
-No crear size variants; escalar mediante font-size contextual y em.
+No crear size colors; escalar mediante font-size contextual y em.
 
 ## Importación
 
@@ -190,7 +190,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

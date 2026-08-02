@@ -23,7 +23,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   heading        string
  *   meta           string — bajo el heading.
  *   tag            string — texto de la badge lateral.
- *   tag-variant    brand | neutral | success | warning | danger
+ *   tag-color    brand | neutral | success | warning | danger
  *   cover          string — URL de imagen de cabecera.
  *   without-shadow boolean
  *
@@ -85,7 +85,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const BOARD_OBSERVED = ['columns', 'orientation'];
   const COLUMN_OBSERVED = ['title', 'accent', 'badge'];
-  const CARD_OBSERVED = ['heading', 'meta', 'tag', 'tag-variant', 'cover', 'without-shadow'];
+  const CARD_OBSERVED = ['heading', 'meta', 'tag', 'tag-color', 'cover', 'without-shadow'];
 
   class IsKanban extends HTMLElement {
     static get observedAttributes() { return BOARD_OBSERVED; }
@@ -259,13 +259,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const heading = this.getAttribute('heading') || '';
       const meta = this.getAttribute('meta') || '';
       const tag = this.getAttribute('tag') || '';
-      const tv = this.getAttribute('tag-variant') || 'neutral';
+      const tv = this.getAttribute('tag-color') || 'neutral';
       const cover = this.getAttribute('cover') || '';
       this.#heading.textContent = heading;
       this.#meta.textContent = meta;
       if (tag) {
         this.#tag.textContent = tag;
-        this.#tag.dataset.variant = tv;
+        this.#tag.dataset.color = tv;
         this.#tag.hidden = false;
       } else {
         this.#tag.hidden = true;

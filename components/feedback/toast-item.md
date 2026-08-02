@@ -44,7 +44,7 @@ import './toast-item.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `duration` | string/según contrato | Fuente define default/restricción. |
 | `open` | boolean | Fuente define default/restricción. |
 
@@ -52,7 +52,7 @@ import './toast-item.js';
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| `variant` | lectura/escritura | Declarada por clase. |
+| `color` | lectura/escritura | Declarada por clase. |
 | `duration` | lectura/escritura | Declarada por clase. |
 | `open` | lectura/escritura | Declarada por clase. |
 
@@ -132,7 +132,7 @@ Documentación de cabecera preservada desde fuente:
 > <is-toast-item> — Web Component (vanilla).
 > Ítem individual de toast con countdown y cierre.
 > Atributos
->   variant   brand | success | warning | danger | neutral (default brand)
+>   color   brand | success | warning | danger | neutral (default brand)
 >   duration  number ms (default 5000; 0 = hasta dismiss). Reflect.
 >   open      boolean — visible
 > Slots: default, icon | start
@@ -163,7 +163,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`,
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

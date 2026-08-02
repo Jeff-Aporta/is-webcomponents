@@ -36,7 +36,7 @@ import './popconfirm.js';
 ```html
 <is-button id="btnDelete">Borrar</is-button>
 <is-popconfirm for="btnDelete" message="¿Seguro?">
-<is-button slot="confirm" variant="danger">Sí, borrar</is-button>
+<is-button slot="confirm" color="danger">Sí, borrar</is-button>
 <is-button slot="cancel">Cancelar</is-button>
 </is-popconfirm>
 ```
@@ -130,7 +130,7 @@ Documentación de cabecera preservada desde fuente:
 > Cuadro de confirmación emergente anclado a un disparador. Sin modal de fondo.
 >   <is-button id="trigger">Borrar</is-button>
 >   <is-popconfirm for="trigger" message="¿Seguro?">
->     <is-button slot="confirm" variant="danger">Sí</is-button>
+>     <is-button slot="confirm" color="danger">Sí</is-button>
 >     <is-button slot="cancel">No</is-button>
 >   </is-popconfirm>
 > Atributos
@@ -164,7 +164,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 ```html
 <is-button id="btnDelete">Borrar</is-button>
 <is-popconfirm for="btnDelete" message="¿Seguro?">
-<is-button slot="confirm" variant="danger">Sí, borrar</is-button>
+<is-button slot="confirm" color="danger">Sí, borrar</is-button>
 <is-button slot="cancel">Cancelar</is-button>
 </is-popconfirm>
 ```
@@ -175,7 +175,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

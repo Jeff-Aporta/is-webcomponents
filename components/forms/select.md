@@ -14,7 +14,7 @@ preview: ../../previews/forms/is-select.html
 
 Select form-associated con paridad funcional con el
 Select de MUI:
-variants, error, selección múltiple con chips o checkmarks, agrupación, opciones ricas y typeahead.
+colors, error, selección múltiple con chips o checkmarks, agrupación, opciones ricas y typeahead.
 El listbox vive en un <dialog> del top layer, así que nunca lo recorta
 el overflow de un ancestro.
 
@@ -61,7 +61,7 @@ import './select.js';
 | `required` | boolean | Fuente define default/restricción. |
 | `clearable` | boolean | Fuente define default/restricción. |
 | `open` | boolean | Fuente define default/restricción. |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
 | `checkmarks` | boolean | Fuente define default/restricción. |
 | `selection-display` | string/según contrato | Fuente define default/restricción. |
 | `limit-tags` | string/según contrato | Fuente define default/restricción. |
@@ -91,7 +91,7 @@ import './select.js';
 | `maxVisible` | lectura/escritura | Declarada por clase. |
 | `limitTags` | lectura/escritura | Declarada por clase. |
 | `selectionDisplay` | lectura/escritura | Declarada por clase. |
-| `appearance` | lectura/escritura | Declarada por clase. |
+| `variant` | lectura/escritura | Declarada por clase. |
 | `placeholder` | lectura/escritura | Declarada por clase. |
 | `name` | lectura/escritura | Declarada por clase. |
 | `form` | solo lectura | Declarada por clase. |
@@ -194,7 +194,7 @@ Documentación de cabecera preservada desde fuente:
 > <is-select> — Select form-associated con listbox en <dialog modal> (top layer),
 > así el desplegable nunca se pierde por overflow/clipping de ancestros.
 > Atributos: name, value, multiple, placeholder, label, hint, disabled, required,
->            clearable, open, appearance, checkmarks, selection-display, limit-tags,
+>            clearable, open, variant, checkmarks, selection-display, limit-tags,
 >            error, error-text, full-width, auto-width, max-visible
 > Slots: default (<is-option>), label, hint, start
 > Parts: base, trigger, listbox, group, group-label, option, check, option-start,
@@ -220,8 +220,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 ## Ejemplo avanzado
 
 ```html
-<is-select appearance="filled" label="filled">…</is-select>
-<is-select appearance="underlined" label="underlined">…</is-select>
+<is-select variant="filled" label="filled">…</is-select>
+<is-select variant="underlined" label="underlined">…</is-select>
 ```
 
 ## Errores comunes
@@ -230,7 +230,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

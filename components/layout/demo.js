@@ -7,8 +7,8 @@
  * elementos <is-demo>.
  *
  *   <is-demo heading="Apariencias">
- *     <is-button appearance="filled">Filled</is-button>
- *     <is-button appearance="outlined">Outlined</is-button>
+ *     <is-button variant="filled">Filled</is-button>
+ *     <is-button variant="outlined">Outlined</is-button>
  *   </is-demo>
  *
  * Atributos

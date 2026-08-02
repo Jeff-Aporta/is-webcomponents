@@ -20,7 +20,7 @@ import { registerDiagramKind } from './diagram-kinds.js';
  * `after:` se rutean con A* sobre la rejilla de costos, igual que las
  * aristas de flowchart.
  *
- * Atributos: variant (inline | viewer), without-viewer
+ * Atributos: color (inline | viewer), without-viewer
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
  * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
  */
@@ -36,7 +36,7 @@ function svgEl(tag, attrs = {}) {
 }
 
 class IsGantt extends HTMLElement {
-  static get observedAttributes() { return ['variant']; }
+  static get observedAttributes() { return ['color']; }
 
   #wrap; #svg; #tooltipEl;
   #payload = null;
@@ -99,7 +99,7 @@ class IsGantt extends HTMLElement {
     this.#queueRender();
   }
 
-  get isViewer() { return this.getAttribute('variant') === 'viewer'; }
+  get isViewer() { return this.getAttribute('color') === 'viewer'; }
   get payload() { return this.#payload; }
   set payload(v) { this.#payload = v; this.#hiddenGroups = new Set(); this.#queueRender(); }
   get spec() { return this.#spec; }

@@ -8,7 +8,7 @@ import './date-range-picker.js';
  *
  * Atributos: start-label, end-label, hint, name, value, min, max, required,
  *            disabled, readonly, clearable, locale, calendars, shortcuts,
- *            variant, action-bar, placement, close-on-select
+ *            color, action-bar, placement, close-on-select
  * Events: is-change, is-show, is-hide
  * Methods: show(), hide()
  */

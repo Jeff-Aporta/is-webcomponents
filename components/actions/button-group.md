@@ -34,10 +34,10 @@ import './button-group.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button-group label="Vista" appearance="segmented" select="single" value="lista">
-<is-button appearance="plain" value="lista" hue="210">Lista</is-button>
-<is-button appearance="plain" value="tabla" hue="160">Tabla</is-button>
-<is-button appearance="plain" value="tarjetas" hue="35">Tarjetas</is-button>
+<is-button-group label="Vista" variant="segmented" select="single" value="lista">
+<is-button variant="plain" value="lista" hue="210">Lista</is-button>
+<is-button variant="plain" value="tabla" hue="160">Tabla</is-button>
+<is-button variant="plain" value="tarjetas" hue="35">Tarjetas</is-button>
 </is-button-group>
 ```
 
@@ -51,7 +51,7 @@ import './button-group.js';
 | --- | --- | --- |
 | `label` | string/según contrato | Fuente define default/restricción. |
 | `orientation` | string/según contrato | Fuente define default/restricción. |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
 | `select` | string/según contrato | Fuente define default/restricción. |
 | `value` | string/según contrato | Fuente define default/restricción. |
 | `pill` | boolean | Fuente define default/restricción. |
@@ -65,7 +65,7 @@ import './button-group.js';
 | --- | --- | --- |
 | `label` | lectura/escritura | Declarada por clase. |
 | `orientation` | lectura/escritura | Declarada por clase. |
-| `appearance` | lectura/escritura | Declarada por clase. |
+| `variant` | lectura/escritura | Declarada por clase. |
 | `select` | lectura/escritura | Declarada por clase. |
 | `value` | lectura/escritura | Declarada por clase. |
 | `values` | lectura/escritura | Declarada por clase. |
@@ -151,7 +151,7 @@ Documentación de cabecera preservada desde fuente:
 > Atributos
 >   label         string   a11y, anunciado por AT; no se muestra
 >   orientation   horizontal | vertical            (default horizontal, reflected)
->   appearance    joined | segmented | separated   (default joined, reflected)
+>   variant    joined | segmented | separated   (default joined, reflected)
 >   select        none | single | multiple         (default none)
 >   value         valor(es) seleccionados; en `multiple` separados por coma
 >   pill          boolean  extremos redondeados en todo el grupo
@@ -181,7 +181,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 ## Ejemplo avanzado
 
 ```html
-<is-button-group appearance="segmented" select="single">…</is-button-group>
+<is-button-group variant="segmented" select="single">…</is-button-group>
 ```
 
 ## Errores comunes
@@ -190,7 +190,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

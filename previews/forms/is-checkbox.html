@@ -54,13 +54,13 @@
         <is-demo class="demo">
           <div class="inline">
             <is-checkbox checked>brand (default)</is-checkbox>
-            <is-checkbox variant="neutral" checked>neutral</is-checkbox>
-            <is-checkbox variant="success" checked>success</is-checkbox>
-            <is-checkbox variant="warning" checked>warning</is-checkbox>
-            <is-checkbox variant="danger" checked>danger</is-checkbox>
+            <is-checkbox color="neutral" checked>neutral</is-checkbox>
+            <is-checkbox color="success" checked>success</is-checkbox>
+            <is-checkbox color="warning" checked>warning</is-checkbox>
+            <is-checkbox color="danger" checked>danger</is-checkbox>
           </div>
         </is-demo>
-        <pre class="code">&lt;is-checkbox variant="success" checked&gt;success&lt;/is-checkbox&gt;</pre>
+        <pre class="code">&lt;is-checkbox color="success" checked&gt;success&lt;/is-checkbox&gt;</pre>
       </section>
 
       <section class="section" id="label-placement">
@@ -135,13 +135,13 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
         </p>
         <is-demo class="demo">
           <div class="inline">
-            <is-checkbox icon="mdi:heart-outline" checked-icon="mdi:heart" variant="danger" checked>Favorito</is-checkbox>
+            <is-checkbox icon="mdi:heart-outline" checked-icon="mdi:heart" color="danger" checked>Favorito</is-checkbox>
             <is-checkbox icon="mdi:bookmark-outline" checked-icon="mdi:bookmark">Guardar</is-checkbox>
-            <is-checkbox icon="mdi:star-outline" checked-icon="mdi:star" variant="warning" checked>Destacar</is-checkbox>
+            <is-checkbox icon="mdi:star-outline" checked-icon="mdi:star" color="warning" checked>Destacar</is-checkbox>
             <is-checkbox checked-icon="mdi:check-bold" indeterminate-icon="mdi:dots-horizontal" indeterminate>Con caja</is-checkbox>
           </div>
         </is-demo>
-        <pre class="code">&lt;is-checkbox icon="mdi:heart-outline" checked-icon="mdi:heart" variant="danger" checked&gt;
+        <pre class="code">&lt;is-checkbox icon="mdi:heart-outline" checked-icon="mdi:heart" color="danger" checked&gt;
   Favorito
 &lt;/is-checkbox&gt;</pre>
       </section>
@@ -198,8 +198,8 @@ parent.indeterminate = !all &amp;&amp; children.some(c =&gt; c.checked);</pre>
               <is-checkbox name="boletin" value="semanal">Recibir boletín</is-checkbox>
               <is-checkbox name="archivado" value="si" checked readonly hint="Fijado por la política de la empresa.">Archivar copia</is-checkbox>
               <div class="inline" style="gap:.5rem">
-                <is-button variant="brand" id="btnSend">Enviar</is-button>
-                <is-button appearance="outlined" id="btnReset">Reset</is-button>
+                <is-button color="brand" id="btnSend">Enviar</is-button>
+                <is-button variant="outlined" id="btnReset">Reset</is-button>
               </div>
             </div>
           </form>

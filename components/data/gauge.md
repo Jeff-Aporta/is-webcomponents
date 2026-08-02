@@ -12,7 +12,7 @@ preview: ../../previews/data-viz/is-gauge.html
 
 ## Propósito
 
-Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,
+Medidor circular SVG de porcentaje. Soporta colores, semicírculo,
 custom min/max, unidad, formato y tamaño.
 
 Este módulo registra `<is-gauge>`.
@@ -51,7 +51,7 @@ import './gauge.js';
 | `label` | string/según contrato | Fuente define default/restricción. |
 | `unit` | string/según contrato | Fuente define default/restricción. |
 | `thickness` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `half` | boolean | Fuente define default/restricción. |
 | `format` | string/según contrato | Fuente define default/restricción. |
 | `show-value` | boolean | Fuente define default/restricción. |
@@ -128,7 +128,7 @@ Documentación de cabecera preservada desde fuente:
 >   label       string
 >   unit        string  (e.g. "%")
 >   thickness   number  (px)
->   variant     brand | success | warning | danger (default 'brand')
+>   color     brand | success | warning | danger (default 'brand')
 >   half        boolean — semicírculo.
 >   format      string  — Intl.NumberFormat format string. e.g. "0.0".
 >   show-value  boolean (default true)
@@ -157,7 +157,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

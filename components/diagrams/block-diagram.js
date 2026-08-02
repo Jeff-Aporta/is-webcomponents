@@ -21,7 +21,7 @@ import { registerDiagramKind } from './diagram-kinds.js';
  * A diferencia del flujo, aquí los bloques se ubican en una rejilla explícita
  * (columnas fijas + `span`), no en capas node-link.
  *
- * Atributos: variant (inline | viewer), without-viewer
+ * Atributos: color (inline | viewer), without-viewer
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
  * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
  */
@@ -37,7 +37,7 @@ function svgEl(tag, attrs = {}) {
 }
 
 class IsBlockDiagram extends HTMLElement {
-  static get observedAttributes() { return ['variant']; }
+  static get observedAttributes() { return ['color']; }
 
   #wrap; #svg; #tooltipEl;
   #payload = null;
@@ -101,7 +101,7 @@ class IsBlockDiagram extends HTMLElement {
     this.#queueRender();
   }
 
-  get isViewer() { return this.getAttribute('variant') === 'viewer'; }
+  get isViewer() { return this.getAttribute('color') === 'viewer'; }
   get payload() { return this.#payload; }
   set payload(v) { this.#payload = v; this.#hiddenGroups = new Set(); this.#queueRender(); }
   get spec() { return this.#spec; }

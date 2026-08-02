@@ -52,16 +52,16 @@
           <div class="stack">
             <div class="field">
               <span class="cap">appearance="segmented" · select="single" · <code class="code">hue</code> por botón</span>
-              <is-button-group label="Vista" appearance="segmented" select="single" value="lista">
-                <is-button appearance="plain" value="lista" hue="210">
+              <is-button-group label="Vista" variant="segmented" select="single" value="lista">
+                <is-button variant="plain" value="lista" hue="210">
                   <is-icon slot="start" icon="mdi:format-list-bulleted"></is-icon>
                   Lista
                 </is-button>
-                <is-button appearance="plain" value="tabla" hue="160">
+                <is-button variant="plain" value="tabla" hue="160">
                   <is-icon slot="start" icon="mdi:table"></is-icon>
                   Tabla
                 </is-button>
-                <is-button appearance="plain" value="tarjetas" hue="35">
+                <is-button variant="plain" value="tarjetas" hue="35">
                   <is-icon slot="start" icon="mdi:view-grid-outline"></is-icon>
                   Tarjetas
                 </is-button>
@@ -76,10 +76,10 @@
           No se muestra en pantalla, pero los lectores de pantalla lo anuncian.
         </div>
 
-        <pre class="code">&lt;is-button-group label="Vista" appearance="segmented" select="single" value="lista"&gt;
-  &lt;is-button appearance="plain" value="lista" hue="210"&gt;Lista&lt;/is-button&gt;
-  &lt;is-button appearance="plain" value="tabla" hue="160"&gt;Tabla&lt;/is-button&gt;
-  &lt;is-button appearance="plain" value="tarjetas" hue="35"&gt;Tarjetas&lt;/is-button&gt;
+        <pre class="code">&lt;is-button-group label="Vista" variant="segmented" select="single" value="lista"&gt;
+  &lt;is-button variant="plain" value="lista" hue="210"&gt;Lista&lt;/is-button&gt;
+  &lt;is-button variant="plain" value="tabla" hue="160"&gt;Tabla&lt;/is-button&gt;
+  &lt;is-button variant="plain" value="tarjetas" hue="35"&gt;Tarjetas&lt;/is-button&gt;
 &lt;/is-button-group&gt;</pre>
       </section>
 
@@ -96,31 +96,31 @@
             <div class="field">
               <span class="cap">joined</span>
               <is-button-group label="Alineación" select="single" value="Centro">
-                <is-button appearance="outlined">Izquierda</is-button>
-                <is-button appearance="outlined">Centro</is-button>
-                <is-button appearance="outlined">Derecha</is-button>
+                <is-button variant="outlined">Izquierda</is-button>
+                <is-button variant="outlined">Centro</is-button>
+                <is-button variant="outlined">Derecha</is-button>
               </is-button-group>
             </div>
             <div class="field">
               <span class="cap">segmented</span>
-              <is-button-group label="Alineación" appearance="segmented" select="single" value="Centro">
-                <is-button appearance="plain">Izquierda</is-button>
-                <is-button appearance="plain">Centro</is-button>
-                <is-button appearance="plain">Derecha</is-button>
+              <is-button-group label="Alineación" variant="segmented" select="single" value="Centro">
+                <is-button variant="plain">Izquierda</is-button>
+                <is-button variant="plain">Centro</is-button>
+                <is-button variant="plain">Derecha</is-button>
               </is-button-group>
             </div>
             <div class="field">
               <span class="cap">separated</span>
-              <is-button-group label="Alineación" appearance="separated" select="single" value="Centro">
-                <is-button appearance="outlined">Izquierda</is-button>
-                <is-button appearance="outlined">Centro</is-button>
-                <is-button appearance="outlined">Derecha</is-button>
+              <is-button-group label="Alineación" variant="separated" select="single" value="Centro">
+                <is-button variant="outlined">Izquierda</is-button>
+                <is-button variant="outlined">Centro</is-button>
+                <is-button variant="outlined">Derecha</is-button>
               </is-button-group>
             </div>
           </div>
         </is-demo>
 
-        <pre class="code">&lt;is-button-group appearance="segmented" select="single"&gt;…&lt;/is-button-group&gt;</pre>
+        <pre class="code">&lt;is-button-group variant="segmented" select="single"&gt;…&lt;/is-button-group&gt;</pre>
       </section>
 
       <section class="section" id="orientation">
@@ -135,24 +135,24 @@
             <div class="field">
               <span class="cap">joined</span>
               <is-button-group orientation="vertical" label="Opciones" select="single" value="Medio">
-                <is-button appearance="outlined">Arriba</is-button>
-                <is-button appearance="outlined">Medio</is-button>
-                <is-button appearance="outlined">Abajo</is-button>
+                <is-button variant="outlined">Arriba</is-button>
+                <is-button variant="outlined">Medio</is-button>
+                <is-button variant="outlined">Abajo</is-button>
               </is-button-group>
             </div>
             <div class="field">
               <span class="cap">segmented</span>
-              <is-button-group orientation="vertical" appearance="segmented" label="Opciones" select="single" value="Medio">
-                <is-button appearance="plain">Arriba</is-button>
-                <is-button appearance="plain">Medio</is-button>
-                <is-button appearance="plain">Abajo</is-button>
+              <is-button-group orientation="vertical" variant="segmented" label="Opciones" select="single" value="Medio">
+                <is-button variant="plain">Arriba</is-button>
+                <is-button variant="plain">Medio</is-button>
+                <is-button variant="plain">Abajo</is-button>
               </is-button-group>
             </div>
           </div>
         </is-demo>
 
         <pre class="code">&lt;is-button-group orientation="vertical" label="Opciones"&gt;
-  &lt;is-button appearance="outlined"&gt;Arriba&lt;/is-button&gt;
+  &lt;is-button variant="outlined"&gt;Arriba&lt;/is-button&gt;
   …
 &lt;/is-button-group&gt;</pre>
       </section>
@@ -172,23 +172,23 @@
           <div class="stack">
             <div class="field">
               <span class="cap">single</span>
-              <is-button-group id="selSingle" label="Periodo" appearance="segmented" select="single" value="mes">
-                <is-button appearance="plain" value="dia">Día</is-button>
-                <is-button appearance="plain" value="semana">Semana</is-button>
-                <is-button appearance="plain" value="mes">Mes</is-button>
-                <is-button appearance="plain" value="anio">Año</is-button>
+              <is-button-group id="selSingle" label="Periodo" variant="segmented" select="single" value="mes">
+                <is-button variant="plain" value="dia">Día</is-button>
+                <is-button variant="plain" value="semana">Semana</is-button>
+                <is-button variant="plain" value="mes">Mes</is-button>
+                <is-button variant="plain" value="anio">Año</is-button>
               </is-button-group>
             </div>
             <div class="field">
               <span class="cap">multiple</span>
               <is-button-group id="selMulti" label="Formato" select="multiple" value="bold">
-                <is-button appearance="outlined" value="bold" aria-label="Negrita">
+                <is-button variant="outlined" value="bold" aria-label="Negrita">
                   <is-icon icon="mdi:format-bold" label="Negrita"></is-icon>
                 </is-button>
-                <is-button appearance="outlined" value="italic" aria-label="Cursiva">
+                <is-button variant="outlined" value="italic" aria-label="Cursiva">
                   <is-icon icon="mdi:format-italic" label="Cursiva"></is-icon>
                 </is-button>
-                <is-button appearance="outlined" value="underline" aria-label="Subrayado">
+                <is-button variant="outlined" value="underline" aria-label="Subrayado">
                   <is-icon icon="mdi:format-underline" label="Subrayado"></is-icon>
                 </is-button>
               </is-button-group>
@@ -196,9 +196,9 @@
             <div class="field">
               <span class="cap">single + allow-empty</span>
               <is-button-group id="selEmpty" label="Prioridad" select="single" allow-empty>
-                <is-button appearance="outlined" value="baja">Baja</is-button>
-                <is-button appearance="outlined" value="media">Media</is-button>
-                <is-button appearance="outlined" value="alta">Alta</is-button>
+                <is-button variant="outlined" value="baja">Baja</is-button>
+                <is-button variant="outlined" value="media">Media</is-button>
+                <is-button variant="outlined" value="alta">Alta</is-button>
               </is-button-group>
             </div>
             <p class="lede" id="selLog">Sin cambios todavía.</p>
@@ -223,31 +223,31 @@
             <div class="field">
               <span class="cap">pill</span>
               <is-button-group label="Alineación" pill select="single" value="Centro">
-                <is-button appearance="outlined">Izquierda</is-button>
-                <is-button appearance="outlined">Centro</is-button>
-                <is-button appearance="outlined">Derecha</is-button>
+                <is-button variant="outlined">Izquierda</is-button>
+                <is-button variant="outlined">Centro</is-button>
+                <is-button variant="outlined">Derecha</is-button>
               </is-button-group>
             </div>
             <div class="field">
               <span class="cap">pill + segmented</span>
-              <is-button-group label="Alineación" pill appearance="segmented" select="single" value="Centro">
-                <is-button appearance="plain">Izquierda</is-button>
-                <is-button appearance="plain">Centro</is-button>
-                <is-button appearance="plain">Derecha</is-button>
+              <is-button-group label="Alineación" pill variant="segmented" select="single" value="Centro">
+                <is-button variant="plain">Izquierda</is-button>
+                <is-button variant="plain">Centro</is-button>
+                <is-button variant="plain">Derecha</is-button>
               </is-button-group>
             </div>
             <div class="field" style="justify-items: stretch; width: 100%;">
               <span class="cap">stretch + segmented</span>
-              <is-button-group label="Plan" stretch appearance="segmented" select="single" value="pro">
-                <is-button appearance="plain" value="free">Free</is-button>
-                <is-button appearance="plain" value="pro">Pro</is-button>
-                <is-button appearance="plain" value="empresa">Empresa</is-button>
+              <is-button-group label="Plan" stretch variant="segmented" select="single" value="pro">
+                <is-button variant="plain" value="free">Free</is-button>
+                <is-button variant="plain" value="pro">Pro</is-button>
+                <is-button variant="plain" value="empresa">Empresa</is-button>
               </is-button-group>
             </div>
           </div>
         </is-demo>
 
-        <pre class="code">&lt;is-button-group pill stretch appearance="segmented" select="single"&gt;…&lt;/is-button-group&gt;</pre>
+        <pre class="code">&lt;is-button-group pill stretch variant="segmented" select="single"&gt;…&lt;/is-button-group&gt;</pre>
       </section>
 
       <section class="section" id="split">
@@ -260,15 +260,15 @@
         <is-demo class="demo">
           <div class="bar">
             <is-button-group label="Guardar">
-              <is-button appearance="filled" variant="brand">Guardar</is-button>
-              <is-button appearance="filled" variant="brand" aria-label="Más opciones de guardado">
+              <is-button variant="filled" color="brand">Guardar</is-button>
+              <is-button variant="filled" color="brand" aria-label="Más opciones de guardado">
                 <is-icon icon="mdi:chevron-down" label="Más opciones de guardado"></is-icon>
               </is-button>
             </is-button-group>
 
-            <is-button-group label="Exportar" appearance="joined">
-              <is-button appearance="outlined">Exportar</is-button>
-              <is-button appearance="outlined" aria-label="Formatos de exportación">
+            <is-button-group label="Exportar" variant="joined">
+              <is-button variant="outlined">Exportar</is-button>
+              <is-button variant="outlined" aria-label="Formatos de exportación">
                 <is-icon icon="mdi:chevron-down" label="Formatos de exportación"></is-icon>
               </is-button>
             </is-button-group>
@@ -286,34 +286,34 @@
         <is-demo class="demo">
           <div class="bar">
             <is-button-group label="Historial">
-              <is-button appearance="outlined" aria-label="Deshacer">
+              <is-button variant="outlined" aria-label="Deshacer">
                 <is-icon icon="mdi:undo" label="Deshacer"></is-icon>
               </is-button>
-              <is-button appearance="outlined" aria-label="Rehacer">
+              <is-button variant="outlined" aria-label="Rehacer">
                 <is-icon icon="mdi:redo" label="Rehacer"></is-icon>
               </is-button>
             </is-button-group>
 
             <is-button-group label="Formato" select="multiple">
-              <is-button appearance="outlined" value="bold" aria-label="Negrita">
+              <is-button variant="outlined" value="bold" aria-label="Negrita">
                 <is-icon icon="mdi:format-bold" label="Negrita"></is-icon>
               </is-button>
-              <is-button appearance="outlined" value="italic" aria-label="Cursiva">
+              <is-button variant="outlined" value="italic" aria-label="Cursiva">
                 <is-icon icon="mdi:format-italic" label="Cursiva"></is-icon>
               </is-button>
-              <is-button appearance="outlined" value="underline" aria-label="Subrayado">
+              <is-button variant="outlined" value="underline" aria-label="Subrayado">
                 <is-icon icon="mdi:format-underline" label="Subrayado"></is-icon>
               </is-button>
             </is-button-group>
 
             <is-button-group label="Alineación" select="single" value="left">
-              <is-button appearance="outlined" value="left" aria-label="Izquierda">
+              <is-button variant="outlined" value="left" aria-label="Izquierda">
                 <is-icon icon="mdi:format-align-left" label="Izquierda"></is-icon>
               </is-button>
-              <is-button appearance="outlined" value="center" aria-label="Centro">
+              <is-button variant="outlined" value="center" aria-label="Centro">
                 <is-icon icon="mdi:format-align-center" label="Centro"></is-icon>
               </is-button>
-              <is-button appearance="outlined" value="right" aria-label="Derecha">
+              <is-button variant="outlined" value="right" aria-label="Derecha">
                 <is-icon icon="mdi:format-align-right" label="Derecha"></is-icon>
               </is-button>
             </is-button-group>
@@ -358,15 +358,15 @@
         <is-demo class="demo">
           <div class="stack">
             <is-button-group id="apiGroup" label="Demo" select="single" value="B">
-              <is-button appearance="outlined">A</is-button>
-              <is-button appearance="outlined">B</is-button>
-              <is-button appearance="outlined">C</is-button>
+              <is-button variant="outlined">A</is-button>
+              <is-button variant="outlined">B</is-button>
+              <is-button variant="outlined">C</is-button>
             </is-button-group>
             <div class="bar">
-              <is-button id="apiOrient" appearance="outlined">Toggle orientation</is-button>
-              <is-button id="apiAppear" appearance="outlined">Ciclar appearance</is-button>
-              <is-button id="apiPill" appearance="outlined">Toggle pill</is-button>
-              <is-button id="apiValue" appearance="outlined">value = 'C'</is-button>
+              <is-button id="apiOrient" variant="outlined">Toggle orientation</is-button>
+              <is-button id="apiAppear" variant="outlined">Ciclar appearance</is-button>
+              <is-button id="apiPill" variant="outlined">Toggle pill</is-button>
+              <is-button id="apiValue" variant="outlined">value = 'C'</is-button>
             </div>
           </div>
         </is-demo>

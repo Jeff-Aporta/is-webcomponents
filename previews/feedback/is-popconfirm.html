@@ -31,12 +31,12 @@
         </p>
 
         <is-demo class="demo">
-          <is-button id="btnDelete" variant="danger">
+          <is-button id="btnDelete" color="danger">
             <is-icon slot="start" icon="mdi:trash-can"></is-icon>
             Borrar elemento
           </is-button>
           <is-popconfirm for="btnDelete" message="¿Seguro que quieres borrarlo? Esta acción no se puede deshacer." placement="bottom-end">
-            <is-button slot="confirm" variant="danger">Sí, borrar</is-button>
+            <is-button slot="confirm" color="danger">Sí, borrar</is-button>
             <is-button slot="cancel">Cancelar</is-button>
           </is-popconfirm>
           <p id="pcLog">Última acción: <code class="code">—</code></p>
@@ -44,7 +44,7 @@
 
         <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">id</span>=<span class="val">"btnDelete"</span><span class="tag">&gt;</span>Borrar<span class="tag">&lt;/is-button&gt;</span>
 <span class="tag">&lt;is-popconfirm</span> <span class="attr">for</span>=<span class="val">"btnDelete"</span> <span class="attr">message</span>=<span class="val">"¿Seguro?"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"confirm"</span> <span class="attr">variant</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>Sí, borrar<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"confirm"</span> <span class="attr">color</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>Sí, borrar<span class="tag">&lt;/is-button&gt;</span>
   <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"cancel"</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
 <span class="tag">&lt;/is-popconfirm&gt;</span></pre>
       </section>
@@ -96,7 +96,7 @@
               </p>
             </div>
             <is-button slot="cancel">Cancelar</is-button>
-            <is-button slot="confirm" variant="danger">Reiniciar</is-button>
+            <is-button slot="confirm" color="danger">Reiniciar</is-button>
           </is-popconfirm>
         </is-demo>
       </section>

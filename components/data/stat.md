@@ -58,7 +58,7 @@ icon="mdi:cash-multiple"
 | `trend` | string/según contrato | Fuente define default/restricción. |
 | `trend-direction` | string/según contrato | Fuente define default/restricción. |
 | `icon` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
 
@@ -140,7 +140,7 @@ Documentación de cabecera preservada desde fuente:
 >   trend       string (e.g. "+12.5%" o "-3.2%")
 >   trend-direction up | down | flat   (auto-detect si trend empieza con + o -)
 >   icon        string (iconify id)
->   variant     brand | neutral | success | warning | danger (default 'brand')
+>   color     brand | neutral | success | warning | danger (default 'brand')
 > Slots
 >   label       override del label
 >   value       override del valor
@@ -178,7 +178,7 @@ icon="mdi:cash-multiple"
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

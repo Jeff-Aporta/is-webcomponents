@@ -17,7 +17,7 @@ import { attachFormInternals, setCustomState, setFormValue } from '../_shared/fo
  *   cancel-on-blur  por defecto blur guarda; este flag hace que blur cancele
  *   maxlength       (solo mode=text)
  *   rows, max-rows  (solo mode=textarea)
- *   appearance      ... ver CSS
+ *   variant      ... ver CSS
  *
  * Slots
  *   display   contenido personalizado en lugar del value plano (útil para HTML
@@ -38,7 +38,7 @@ import { attachFormInternals, setCustomState, setFormValue } from '../_shared/fo
   const OBSERVED = [
     'value', 'placeholder', 'name', 'mode',
     'disabled', 'readonly', 'required', 'cancel-on-blur',
-    'maxlength', 'rows', 'max-rows', 'appearance',
+    'maxlength', 'rows', 'max-rows', 'variant',
   ];
 
   class IsInlineEdit extends HTMLElement {

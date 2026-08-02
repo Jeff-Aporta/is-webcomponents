@@ -10,7 +10,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  * Atributos
  *   icon        string  — iconify id del icono principal.
  *   position    bottom-end | bottom-start | top-end | top-start | inline (default 'bottom-end')
- *   variant     brand | neutral | custom-color (default 'brand')
+ *   color     brand | neutral | custom-color (default 'brand')
  *   href        string — si se define, renderiza <a>.
  *   pulse       boolean — animación de pulso para llamar la atención.
  *   extended    boolean — ancho extendido con label.
@@ -37,8 +37,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </button>
   `;
 
-  const OBSERVED = ['icon', 'position', 'variant', 'href', 'pulse', 'extended', 'without-shadow', 'label'];
-  const VALID_VARIANT = ['brand', 'neutral', 'danger', 'success', 'warning'];
+  const OBSERVED = ['icon', 'position', 'color', 'href', 'pulse', 'extended', 'without-shadow', 'label'];
+  const VALID_COLOR = ['brand', 'neutral', 'danger', 'success', 'warning'];
   const VALID_POSITION = ['bottom-end', 'bottom-start', 'top-end', 'top-start', 'inline'];
 
   class IsFab extends HTMLElement {
@@ -85,19 +85,19 @@ import { adoptCss } from '../_shared/adopt-css.js';
       else if (VALID_POSITION.includes(v)) this.setAttribute('position', v);
     }
 
-    get variant() {
-      const v = this.getAttribute('variant');
-      return VALID_VARIANT.includes(v) ? v : 'brand';
+    get color() {
+      const v = this.getAttribute('color');
+      return VALID_COLOR.includes(v) ? v : 'brand';
     }
-    set variant(v) {
-      if (v == null || v === '') this.removeAttribute('variant');
-      else if (VALID_VARIANT.includes(v)) this.setAttribute('variant', v);
+    set color(v) {
+      if (v == null || v === '') this.removeAttribute('color');
+      else if (VALID_COLOR.includes(v)) this.setAttribute('color', v);
     }
 
     #sync() {
       const variant = this.variant;
       const position = this.position;
-      this.#root.dataset.variant = variant;
+      this.#root.dataset.color = variant;
       this.dataset.position = position;
       this.#root.classList.toggle('pulse', this.hasAttribute('pulse'));
       this.#root.classList.toggle('extended', this.hasAttribute('extended'));
@@ -114,6 +114,17 @@ import { adoptCss } from '../_shared/adopt-css.js';
       // aria-label
       const label = this.getAttribute('label') || this.textContent.trim();
       if (label) this.#root.setAttribute('aria-label', label);
+
+      // Con `extended` hay que PINTAR el texto: el slot por defecto solo
+      // muestra contenido slotted, asi que `<is-fab extended label="X">` sin
+      // hijos salia con la pildora vacia. El atributo pasa a ser el fallback
+      // del slot (si el usuario slotea contenido, ese gana).
+      const slot = this.#root.querySelector('.label slot');
+      if (slot) {
+        const slotted = slot.assignedNodes({ flatten: true })
+          .some((n) => (n.textContent || '').trim());
+        slot.textContent = slotted ? '' : (this.getAttribute('label') || '');
+      }
     }
   }
 

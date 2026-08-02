@@ -7,7 +7,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *
  *   <is-button id="trigger">Borrar</is-button>
  *   <is-popconfirm for="trigger" message="¿Seguro?">
- *     <is-button slot="confirm" variant="danger">Sí</is-button>
+ *     <is-button slot="confirm" color="danger">Sí</is-button>
  *     <is-button slot="cancel">No</is-button>
  *   </is-popconfirm>
  *

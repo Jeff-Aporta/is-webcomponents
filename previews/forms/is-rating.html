@@ -86,13 +86,13 @@
         </p>
         <is-demo class="demo">
           <div class="stack">
-            <is-rating label="Corazones" icon="tabler:heart-filled" empty-icon="tabler:heart" variant="danger" value="3"></is-rating>
+            <is-rating label="Corazones" icon="tabler:heart-filled" empty-icon="tabler:heart" color="danger" value="3"></is-rating>
             <is-rating label="Pulgares" icon="tabler:thumb-up-filled" empty-icon="tabler:thumb-up" max="3" value="2"></is-rating>
             <is-rating label="Rayos (mismo icono en hueco)" icon="tabler:bolt-filled" value="2"></is-rating>
             <is-rating label="Círculos · precision 0.5" icon="tabler:circle-filled" empty-icon="tabler:circle" precision="0.5" value="3.5"></is-rating>
           </div>
         </is-demo>
-        <pre class="code">&lt;is-rating icon="tabler:heart-filled" empty-icon="tabler:heart" variant="danger" value="3"&gt;&lt;/is-rating&gt;</pre>
+        <pre class="code">&lt;is-rating icon="tabler:heart-filled" empty-icon="tabler:heart" color="danger" value="3"&gt;&lt;/is-rating&gt;</pre>
       </section>
 
       <section class="section" id="highlight">
@@ -154,14 +154,14 @@ rating.addEventListener('is-hover', (e) =&gt; {
         <is-demo class="demo">
           <div class="stack">
             <is-rating label="brand (default)" value="3"></is-rating>
-            <is-rating variant="neutral" label="neutral" value="3"></is-rating>
-            <is-rating variant="success" label="success" value="3"></is-rating>
-            <is-rating variant="warning" label="warning" value="3"></is-rating>
-            <is-rating variant="danger" label="danger" value="3"></is-rating>
+            <is-rating color="neutral" label="neutral" value="3"></is-rating>
+            <is-rating color="success" label="success" value="3"></is-rating>
+            <is-rating color="warning" label="warning" value="3"></is-rating>
+            <is-rating color="danger" label="danger" value="3"></is-rating>
             <is-rating label="Token propio" value="3" style="--is-rating-color:#845ef7;"></is-rating>
           </div>
         </is-demo>
-        <pre class="code">&lt;is-rating variant="success" value="3"&gt;&lt;/is-rating&gt;
+        <pre class="code">&lt;is-rating color="success" value="3"&gt;&lt;/is-rating&gt;
 &lt;is-rating style="--is-rating-color:#845ef7" value="3"&gt;&lt;/is-rating&gt;</pre>
       </section>
 
@@ -177,7 +177,7 @@ rating.addEventListener('is-hover', (e) =&gt; {
               <is-rating readonly value="3.7" label="Media de 128 opiniones"></is-rating>
             </div>
             <is-rating readonly value="4.28" label="4,28 · sin precision"></is-rating>
-            <is-rating readonly value="2.1" icon="tabler:heart-filled" empty-icon="tabler:heart" variant="danger" label="Fracción con icono propio"></is-rating>
+            <is-rating readonly value="2.1" icon="tabler:heart-filled" empty-icon="tabler:heart" color="danger" label="Fracción con icono propio"></is-rating>
           </div>
         </is-demo>
         <pre class="code">&lt;is-rating readonly value="3.7"&gt;&lt;/is-rating&gt;</pre>

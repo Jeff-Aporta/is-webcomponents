@@ -114,10 +114,10 @@
   .hint[hidden] { display: none !important; }
 }
 
-:host([variant="neutral"]) { --is-switch-accent: var(--is-control-border, #59636e); }
-:host([variant="success"]) { --is-switch-accent: var(--is-color-success-500, #40c057); }
-:host([variant="warning"]) { --is-switch-accent: var(--is-color-warning-500, #f59f00); }
-:host([variant="danger"]) { --is-switch-accent: var(--is-color-danger-500, #fa5252); }
+:host([color="neutral"]) { --is-switch-accent: var(--is-control-border, #59636e); }
+:host([color="success"]) { --is-switch-accent: var(--is-color-success-500, #40c057); }
+:host([color="warning"]) { --is-switch-accent: var(--is-color-warning-500, #f59f00); }
+:host([color="danger"]) { --is-switch-accent: var(--is-color-danger-500, #fa5252); }
 
 :host([error]) {
   --is-switch-accent: var(--is-color-danger-500, #fa5252);

@@ -18,7 +18,7 @@ import { apply, isComplete } from './masks-tokens.js';
  *   value           Texto crudo (interno y público).
  *   name            form-associated
  *   placeholder, autocomplete, maxlength, disabled, readonly, required
- *   appearance      outlined (default) | filled | underlined
+ *   variant      outlined (default) | filled | underlined
  *   invalid         se setea automáticamente al perder focus si required+empty
  *
  * Slots
@@ -33,7 +33,7 @@ import { apply, isComplete } from './masks-tokens.js';
   const OBSERVED = [
     'pattern', 'value', 'name', 'placeholder', 'autocomplete',
     'maxlength', 'disabled', 'readonly', 'required',
-    'appearance', 'invalid',
+    'variant', 'invalid',
   ];
 
   class IsMaskedInput extends HTMLElement {

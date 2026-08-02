@@ -13,8 +13,8 @@ preview: ../../previews/layout/is-callout.html
 ## Propósito
 
 Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y
-errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,
-con icono automático según la variante (sobrescribible vía icon
+errores que el usuario no debe pasar por alto. Cinco colores y cinco apariencias,
+con icono automático según la colore (sobrescribible vía icon
 o slot icon).
 
 Este módulo registra `<is-callout>`.
@@ -25,7 +25,7 @@ Estructura, superficies, overlays y navegación por regiones de contenido.
 
 ## Cuándo no usarlo
 
-No crear size variants; escalar mediante font-size contextual y em.
+No crear size colors; escalar mediante font-size contextual y em.
 
 ## Importación
 
@@ -47,16 +47,16 @@ import './callout.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `variant` | string/según contrato | Fuente define default/restricción. |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
 | `icon` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
+| `color` | lectura/escritura | Declarada por clase. |
 | `variant` | lectura/escritura | Declarada por clase. |
-| `appearance` | lectura/escritura | Declarada por clase. |
 | `icon` | lectura/escritura | Declarada por clase. |
 
 ### Slots
@@ -138,19 +138,19 @@ Documentación de cabecera preservada desde fuente:
 > y errores que el usuario no debe pasar por alto.
 > Modelo equivalente a wa-callout (Web Awesome) / v-alert.
 > Atributos
->   variant     brand | neutral | success | warning | danger
+>   color     brand | neutral | success | warning | danger
 >               (default 'brand', reflected)
->   appearance  accent | filled | outlined | filled-outlined | plain
+>   variant  accent | filled | outlined | filled-outlined | plain
 >               (default 'filled-outlined', reflected)
 >   icon        nombre Iconify para mostrar a la izquierda (ej. "mdi:bell").
->               Si no se da, se elige uno por variante.
+>               Si no se da, se elige uno por colore.
 > Slots
 >   (default)  mensaje principal
 >   icon       icono propio (gana sobre el atributo icon)
 > CSS Parts:  ::part(icon)  ::part(message)
 > CSS custom properties
 >   --spacing        espacio alrededor del callout (default var(--is-space-l, 1rem))
->   --callout-bg     fondo computado por variant/appearance
+>   --callout-bg     fondo computado por color/variant
 >   --callout-border color del borde
 >   --callout-text   color del texto
 >   --callout-accent color del icono
@@ -169,8 +169,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-callout variant="success">…</is-callout>
-<is-callout variant="danger">…</is-callout>
+<is-callout color="success">…</is-callout>
+<is-callout color="danger">…</is-callout>
 ```
 
 ## Errores comunes
@@ -179,7 +179,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

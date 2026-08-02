@@ -18,6 +18,20 @@
     .cluster { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
     .stack { display: flex; flex-direction: column; gap: 0.75rem; }
     /* Hueco generoso: los tooltips de los 12 placements se despliegan sin taparse */
+    .placement-cell {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    /* El nombre visible evita la "pared de botones grises": sin el, las 12
+       celdas son identicas y hay que pasar el raton para saber cual es cual. */
+    .placement-cell__name {
+      font-family: var(--is-mono, ui-monospace, Consolas, monospace);
+      font-size: 0.68rem;
+      color: var(--is-text-soft);
+    }
+
     .placements {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
@@ -171,7 +185,7 @@
         <p class="lede">Slot default: mete un <code class="code">is-button</code> u otro control.</p>
         <is-demo class="demo">
           <is-copy-button value="Desde un botón custom">
-            <is-button appearance="outlined" style="font-size:.8125rem">
+            <is-button variant="outlined" style="font-size:.8125rem">
               <is-icon slot="start" icon="mdi:content-copy"></is-icon>
               Copiar al portapapeles
             </is-button>
@@ -222,18 +236,54 @@
 
         <is-demo class="demo">
           <div class="placements">
-            <is-copy-button value="top" tooltip-placement="top" copy-label="top"></is-copy-button>
-            <is-copy-button value="top-start" tooltip-placement="top-start" copy-label="top-start"></is-copy-button>
-            <is-copy-button value="top-end" tooltip-placement="top-end" copy-label="top-end"></is-copy-button>
-            <is-copy-button value="right" tooltip-placement="right" copy-label="right"></is-copy-button>
-            <is-copy-button value="right-start" tooltip-placement="right-start" copy-label="right-start"></is-copy-button>
-            <is-copy-button value="right-end" tooltip-placement="right-end" copy-label="right-end"></is-copy-button>
-            <is-copy-button value="bottom" tooltip-placement="bottom" copy-label="bottom"></is-copy-button>
-            <is-copy-button value="bottom-start" tooltip-placement="bottom-start" copy-label="bottom-start"></is-copy-button>
-            <is-copy-button value="bottom-end" tooltip-placement="bottom-end" copy-label="bottom-end"></is-copy-button>
-            <is-copy-button value="left" tooltip-placement="left" copy-label="left"></is-copy-button>
-            <is-copy-button value="left-start" tooltip-placement="left-start" copy-label="left-start"></is-copy-button>
-            <is-copy-button value="left-end" tooltip-placement="left-end" copy-label="left-end"></is-copy-button>
+            <span class="placement-cell">
+              <is-copy-button value="top" tooltip-placement="top" copy-label="top"></is-copy-button>
+              <small class="placement-cell__name">top</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="top-start" tooltip-placement="top-start" copy-label="top-start"></is-copy-button>
+              <small class="placement-cell__name">top-start</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="top-end" tooltip-placement="top-end" copy-label="top-end"></is-copy-button>
+              <small class="placement-cell__name">top-end</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="right" tooltip-placement="right" copy-label="right"></is-copy-button>
+              <small class="placement-cell__name">right</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="right-start" tooltip-placement="right-start" copy-label="right-start"></is-copy-button>
+              <small class="placement-cell__name">right-start</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="right-end" tooltip-placement="right-end" copy-label="right-end"></is-copy-button>
+              <small class="placement-cell__name">right-end</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="bottom" tooltip-placement="bottom" copy-label="bottom"></is-copy-button>
+              <small class="placement-cell__name">bottom</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="bottom-start" tooltip-placement="bottom-start" copy-label="bottom-start"></is-copy-button>
+              <small class="placement-cell__name">bottom-start</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="bottom-end" tooltip-placement="bottom-end" copy-label="bottom-end"></is-copy-button>
+              <small class="placement-cell__name">bottom-end</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="left" tooltip-placement="left" copy-label="left"></is-copy-button>
+              <small class="placement-cell__name">left</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="left-start" tooltip-placement="left-start" copy-label="left-start"></is-copy-button>
+              <small class="placement-cell__name">left-start</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="left-end" tooltip-placement="left-end" copy-label="left-end"></is-copy-button>
+              <small class="placement-cell__name">left-end</small>
+            </span>
           </div>
         </is-demo>
 

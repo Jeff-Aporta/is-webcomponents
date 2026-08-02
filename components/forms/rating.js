@@ -8,7 +8,7 @@ import '../media/icon.js';
  * <is-rating> — Valoración form-associated (vanilla + Shadow DOM).
  *
  * Atributos
- *   name, label, variant (brand|neutral|success|warning|danger)
+ *   name, label, color (brand|neutral|success|warning|danger)
  *   value        0..max (default 0)
  *   max          número de iconos (default 5)
  *   precision    granularidad del valor: 1 (default) | 0.5 | 0.25 | 0.1
@@ -60,13 +60,13 @@ import '../media/icon.js';
 
   const OBSERVED = [
     'name', 'value', 'max', 'precision', 'allow-half', 'icon', 'empty-icon',
-    'highlight-selected-only', 'variant', 'label-format', 'show-label',
+    'highlight-selected-only', 'color', 'label-format', 'show-label',
     'clearable', 'disabled', 'readonly', 'required', 'label',
   ];
 
   const PROPS = [
     'name', 'value', 'max', 'precision', 'allowHalf', 'icon', 'emptyIcon',
-    'highlightSelectedOnly', 'variant', 'labels', 'labelFormat', 'getLabelText',
+    'highlightSelectedOnly', 'color', 'labels', 'labelFormat', 'getLabelText',
     'showLabel', 'clearable', 'disabled', 'readonly', 'required', 'label',
   ];
 
@@ -200,11 +200,11 @@ import '../media/icon.js';
     get highlightSelectedOnly() { return this.hasAttribute('highlight-selected-only'); }
     set highlightSelectedOnly(v) { this.toggleAttribute('highlight-selected-only', !!v); }
 
-    get variant() {
-      const v = this.getAttribute('variant');
+    get color() {
+      const v = this.getAttribute('color');
       return VARIANTS.includes(v) ? v : 'brand';
     }
-    set variant(v) { this.setAttribute('variant', VARIANTS.includes(v) ? v : 'brand'); }
+    set color(v) { this.setAttribute('color', VARIANTS.includes(v) ? v : 'brand'); }
 
     /** Textos por valor entero: índice 0 = valor 1. */
     get labels() { return this.#labels ? this.#labels.slice() : null; }

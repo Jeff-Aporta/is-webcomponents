@@ -51,30 +51,30 @@
         </p>
 
         <div class="card-grid">
-          <is-card appearance="outlined">
+          <is-card variant="outlined">
             <strong>outlined</strong>
             <p class="card-meta">Borde 1px, fondo transparente.</p>
           </is-card>
-          <is-card appearance="filled">
+          <is-card variant="filled">
             <strong>filled</strong>
             <p class="card-meta">Fondo elevado, sin borde.</p>
           </is-card>
-          <is-card appearance="filled-outlined">
+          <is-card variant="filled-outlined">
             <strong>filled-outlined</strong>
             <p class="card-meta">Fondo + borde.</p>
           </is-card>
-          <is-card appearance="plain">
+          <is-card variant="plain">
             <strong>plain</strong>
             <p class="card-meta">Sin fondo ni borde, solo espaciado.</p>
           </is-card>
-          <is-card appearance="accent">
+          <is-card variant="accent">
             <strong>accent</strong>
             <p class="card-meta">Borde lateral de color de marca.</p>
           </is-card>
         </div>
 
-        <pre class="code"><span class="tag">&lt;is-card</span> <span class="attr">appearance</span>=<span class="val">"accent"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/is-card&gt;</span>
-<span class="tag">&lt;is-card</span> <span class="attr">appearance</span>=<span class="val">"filled-outlined"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/is-card&gt;</span></pre>
+        <pre class="code"><span class="tag">&lt;is-card</span> <span class="attr">variant</span>=<span class="val">"accent"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/is-card&gt;</span>
+<span class="tag">&lt;is-card</span> <span class="attr">variant</span>=<span class="val">"filled-outlined"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/is-card&gt;</span></pre>
       </section>
 
       <!-- ===== 3. HEADER + FOOTER + MEDIA ===== -->
@@ -94,8 +94,8 @@
             <div slot="header"><strong>Notificación importante</strong></div>
             <p>Hemos detectado actividad inusual en tu cuenta. Revisa los detalles y confirma si fuiste tú.</p>
             <div slot="footer" class="card-row-actions">
-              <is-button variant="neutral" appearance="plain">Más tarde</is-button>
-              <is-button variant="brand">Revisar</is-button>
+              <is-button color="neutral" variant="plain">Más tarde</is-button>
+              <is-button color="brand">Revisar</is-button>
             </div>
           </is-card>
         </div>
@@ -106,7 +106,7 @@
   Contenido del body.
   <span class="tag">&lt;div</span> <span class="attr">slot</span>=<span class="val">"footer"</span><span class="tag">&gt;</span>
     <span class="tag">&lt;is-button&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
-    <span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Aceptar<span class="tag">&lt;/is-button&gt;</span>
+    <span class="tag">&lt;is-button</span> <span class="attr">color</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Aceptar<span class="tag">&lt;/is-button&gt;</span>
   <span class="tag">&lt;/div&gt;</span>
 <span class="tag">&lt;/is-card&gt;</span></pre>
       </section>
@@ -129,8 +129,8 @@
               <p class="card-meta">Te han mencionado en <code>#general</code> hace 3 min.</p>
             </div>
             <div slot="actions" class="card-row-actions">
-              <is-button variant="neutral" appearance="outlined">Ignorar</is-button>
-              <is-button variant="brand">Ver</is-button>
+              <is-button color="neutral" variant="outlined">Ignorar</is-button>
+              <is-button color="brand">Ver</is-button>
             </div>
           </is-card>
         </div>
@@ -154,14 +154,14 @@
           <is-card style="max-width: 420px; width: 100%;">
             <div slot="header"><strong>Proyecto Insoft</strong></div>
             <div slot="header-actions">
-              <is-button variant="neutral" appearance="plain" pill title="Más opciones">
+              <is-button color="neutral" variant="plain" pill title="Más opciones">
                 <is-icon icon="mdi:dots-horizontal"></is-icon>
               </is-button>
             </div>
             <p>Repositorio privado con 3 issues abiertos y 12 PRs en revisión.</p>
             <div slot="footer" class="card-meta">Actualizado hace 2 horas</div>
             <div slot="footer-actions">
-              <is-button variant="brand" appearance="outlined">Ver repo</is-button>
+              <is-button color="brand" variant="outlined">Ver repo</is-button>
             </div>
           </is-card>
         </div>
@@ -195,17 +195,17 @@
         <h4>Demo en vivo</h4>
         <is-demo class="demo">
           <span class="demo-label">cambia propiedades</span>
-          <is-card id="apiCard" appearance="outlined">
+          <is-card id="apiCard" variant="outlined">
             <strong id="apiLabel">Hola</strong>
             <p class="card-meta">Cambia appearance / orientation desde los botones.</p>
           </is-card>
           <div class="demo-row" style="margin-top: 12px; flex-wrap: wrap;">
-            <is-button id="apiOutlined"  variant="neutral" appearance="outlined">outlined</is-button>
-            <is-button id="apiFilled"    variant="neutral" appearance="outlined">filled</is-button>
-            <is-button id="apiFilledOut"  variant="neutral" appearance="outlined">filled-outlined</is-button>
-            <is-button id="apiAccent"     variant="neutral" appearance="outlined">accent</is-button>
-            <is-button id="apiPlain"      variant="neutral" appearance="outlined">plain</is-button>
-            <is-button id="apiOrient"     variant="brand" appearance="outlined">toggle orientation</is-button>
+            <is-button id="apiOutlined"  color="neutral" variant="outlined">outlined</is-button>
+            <is-button id="apiFilled"    color="neutral" variant="outlined">filled</is-button>
+            <is-button id="apiFilledOut"  color="neutral" variant="outlined">filled-outlined</is-button>
+            <is-button id="apiAccent"     color="neutral" variant="outlined">accent</is-button>
+            <is-button id="apiPlain"      color="neutral" variant="outlined">plain</is-button>
+            <is-button id="apiOrient"     color="brand" variant="outlined">toggle orientation</is-button>
           </div>
           <div class="log" id="apiLog" aria-live="polite" style="margin-top: 12px;">
             <div class="row hint">El log aparece al cambiar appearance u orientation.</div>
@@ -213,7 +213,7 @@
         </is-demo>
 
         <pre class="code"><span class="kw">const</span> c = document.<span class="attr">querySelector</span>(<span class="str">'is-card'</span>);
-c.<span class="attr">appearance</span> = <span class="str">'filled'</span>;
+c.<span class="attr">variant</span> = <span class="str">'filled'</span>;
 c.<span class="attr">orientation</span> = <span class="str">'horizontal'</span>;
 c.<span class="attr">addEventListener</span>(<span class="str">'slotchange'</span>, e =&gt; <span class="kw">this</span>.log(e));</pre>
       </section>

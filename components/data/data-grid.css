@@ -411,8 +411,8 @@
   z-index: 5;
 
   &[hidden] { display: none; }
-  &[data-variant="progress"] { align-items: start; background: none; }
-  &[data-variant="skeleton"] { align-items: stretch; background: var(--is-grid-bg); }
+  &[data-color="progress"] { align-items: start; background: none; }
+  &[data-color="skeleton"] { align-items: stretch; background: var(--is-grid-bg); }
 }
 
 .empty { color: var(--is-text-dim, #7a8390); padding: 1.5em; }

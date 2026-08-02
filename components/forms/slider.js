@@ -7,7 +7,7 @@ import {
  * <is-slider> — Control de rango form-associated (vanilla + Shadow DOM).
  *
  * Atributos
- *   name, label, hint, variant (brand|neutral|success|warning|danger)
+ *   name, label, hint, color (brand|neutral|success|warning|danger)
  *   value          number | "20,37" (rango con dos o más thumbs)
  *   min (0), max (100), step (1)  — step="null" restringe a los marks
  *   shift-step     salto con Shift+flechas y PageUp/PageDown (default step × 10)

@@ -18,7 +18,7 @@ import { registerDiagramKind } from './diagram-kinds.js';
  * eje central; `vertical` los apila a la derecha de un eje a la izquierda.
  * No hay flechas que rutear (sin turtle): la animación no aplica aquí.
  *
- * Atributos: variant (inline | viewer), without-viewer
+ * Atributos: color (inline | viewer), without-viewer
  * Propiedades: payload, spec, layout, hiddenGroups
  * Eventos: is-render, is-open-viewer, is-toggle-group
  */
@@ -34,7 +34,7 @@ function svgEl(tag, attrs = {}) {
 }
 
 class IsTimeline extends HTMLElement {
-  static get observedAttributes() { return ['variant']; }
+  static get observedAttributes() { return ['color']; }
 
   #wrap; #svg; #tooltipEl;
   #payload = null;
@@ -107,7 +107,7 @@ class IsTimeline extends HTMLElement {
     this.#queueRender();
   }
 
-  get isViewer() { return this.getAttribute('variant') === 'viewer'; }
+  get isViewer() { return this.getAttribute('color') === 'viewer'; }
   get payload() { return this.#payload; }
   set payload(v) { this.#payload = v; this.#hiddenGroups = new Set(); this.#queueRender(); }
   get spec() { return this.#spec; }

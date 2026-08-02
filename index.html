@@ -15,7 +15,7 @@
   <header class="shell-bar">
     <div class="brand-wrap" id="brandWrap">
       <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="Insoft — elegir paleta" title="Elegir paleta">
-        <span id="brandLead">in</span><span class="brand__accent" id="brandAccent">Soft</span>
+        <span id="brandLead">in</span><span class="brand__accent" id="brandAccent">S</span><span id="brandTail">oft</span>
       </button>
       <ul class="brand-menu" id="brandMenu" role="listbox" hidden aria-label="Paleta de marca">
         <li role="option" tabindex="-1" data-palette="insoft" aria-selected="true">
@@ -36,7 +36,7 @@
       </ul>
     </div>
 
-    <is-button class="shell-icon-btn" id="fullscreenBtn" variant="neutral" appearance="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
+    <is-button class="shell-icon-btn" id="fullscreenBtn" color="neutral" variant="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
       <is-icon slot="start" icon="mdi:open-in-new"></is-icon>
     </is-button>
 
@@ -61,13 +61,16 @@
     const brandWrap = document.getElementById('brandWrap');
     const brandLead = document.getElementById('brandLead');
     const brandAccent = document.getElementById('brandAccent');
+    const brandTail = document.getElementById('brandTail');
     const params = new URLSearchParams(location.search);
     const themes = new Set(['light', 'dark']);
     const palettes = new Set(['insoft', 'contapyme', 'agrowin']);
     const brands = {
-      insoft:    { lead: 'ins',  accent: 'oft',  label: 'Insoft',    leadColor: '#000',     accentColor: '#d71920' },
-      contapyme: { lead: 'conta', accent: 'pyme', label: 'ContaPyme', leadColor: '#000',    accentColor: '#fff'    },
-      agrowin:   { lead: 'agro', accent: 'win',  label: 'AgroWin',   leadColor: '#000',    accentColor: '#fff'    }
+      // El logo de Insoft lleva la S en mayuscula y en rojo: in + S + oft.
+      // Por eso el brand se compone de tres segmentos y no de dos.
+      insoft:    { lead: 'in',    accent: 'S',    tail: 'oft', label: 'Insoft',    leadColor: '#000', accentColor: '#d71920' },
+      contapyme: { lead: 'conta', accent: 'pyme', tail: '',    label: 'ContaPyme', leadColor: '#000', accentColor: '#fff'    },
+      agrowin:   { lead: 'agro',  accent: 'win',  tail: '',    label: 'AgroWin',   leadColor: '#000', accentColor: '#fff'    }
     };
 
     const setMenuOpen = (open) => {
@@ -228,6 +231,8 @@
       }
       const brandData = brands[palette];
       brandLead.textContent = brandData.lead;
+      brandTail.textContent = brandData.tail || '';
+      brandTail.style.color = brandData.leadColor;
       brandAccent.textContent = brandData.accent;
       brandLead.style.color = brandData.leadColor;
       brandAccent.style.color = brandData.accentColor;

@@ -7,7 +7,7 @@ import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-
  * is-date-time-input e is-date-range-input.
  *
  * El panel vive en un <dialog> modal (top layer) para no perderse por overflow,
- * y se coloca junto al campo con computePosition. En `variant="mobile"` se
+ * y se coloca junto al campo con computePosition. En `color="mobile"` se
  * centra en pantalla con barra de acciones, como los pickers móviles de MUI.
  */
 
@@ -18,7 +18,7 @@ const TRIGGER_ICONS = {
 
 const OBSERVED = [
   'label', 'hint', 'name', 'value', 'min', 'max', 'required', 'disabled',
-  'readonly', 'locale', 'ampm', 'hour24', 'seconds', 'clearable', 'variant',
+  'readonly', 'locale', 'ampm', 'hour24', 'seconds', 'clearable', 'color',
   'placement', 'action-bar', 'views', 'open-to', 'calendars', 'shortcuts',
   'panel', 'close-on-select', 'invalid', 'start-label', 'end-label',
 ];
@@ -100,7 +100,7 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'action-bar' || name === 'variant') this.#syncActions();
+      if (name === 'action-bar' || name === 'color') this.#syncActions();
       this.#syncFields();
       if (this.#open) {
         this.#syncPanels();
@@ -115,8 +115,8 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
 
     get open() { return this.#open; }
 
-    get variant() { return this.getAttribute('variant') === 'mobile' ? 'mobile' : 'desktop'; }
-    set variant(v) { this.setAttribute('variant', v); }
+    get color() { return this.getAttribute('color') === 'mobile' ? 'mobile' : 'desktop'; }
+    set color(v) { this.setAttribute('color', v); }
 
     /** Barra de acciones: obligatoria en móvil, opcional en escritorio. */
     get actionBar() { return this.variant === 'mobile' || this.hasAttribute('action-bar'); }
@@ -267,7 +267,7 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
     #syncActions() {
       const on = this.actionBar;
       this.#actions.hidden = !on;
-      this.#panel.dataset.variant = this.variant;
+      this.#panel.dataset.color = this.variant;
       this.#actions.querySelector('[data-act="now"]').textContent = kind === 'time' ? 'Ahora' : 'Hoy';
     }
 

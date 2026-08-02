@@ -59,7 +59,7 @@ import './chart.js';
 | `without-tooltip` | string/según contrato | Fuente define default/restricción. |
 | `x-label` | string/según contrato | Fuente define default/restricción. |
 | `y-label` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
 
@@ -197,7 +197,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

@@ -7,7 +7,7 @@
  *   registerDiagramKind('flow', 'is-flow-diagram');
  *
  * El componente registrado debe aceptar la propiedad `payload` y el atributo
- * `variant="viewer"`.
+ * `color="viewer"`.
  */
 
 const REGISTRY = new Map();

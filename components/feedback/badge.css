@@ -40,35 +40,35 @@
   border-radius: 999px;
 }
 
-:host([variant="brand"]) {
+:host([color="brand"]) {
   --_bg: var(--is-brand-soft, rgb(224 49 49 / 18%));
   --_border: var(--is-accent, #e03131);
   --_text: var(--is-brand-text, #ff8787);
   --pulse-color: var(--is-accent, #e03131);
 }
 
-:host([variant="neutral"]) {
+:host([color="neutral"]) {
   --_bg: var(--is-control-bg, #21262d);
   --_border: var(--is-control-border, #59636e);
   --_text: var(--is-text, #e6e8eb);
   --pulse-color: var(--is-text-dim, #7a8390);
 }
 
-:host([variant="success"]) {
+:host([color="success"]) {
   --_bg: var(--is-success-soft, rgb(64 192 87 / 18%));
   --_border: var(--is-color-success-500, #40c057);
   --_text: var(--is-success-text, #69db7c);
   --pulse-color: var(--is-color-success-500, #40c057);
 }
 
-:host([variant="warning"]) {
+:host([color="warning"]) {
   --_bg: var(--is-warning-soft, rgb(245 159 0 / 18%));
   --_border: var(--is-color-warning-500, #f59f00);
   --_text: var(--is-warning-text, #fcc419);
   --pulse-color: var(--is-color-warning-500, #f59f00);
 }
 
-:host([variant="danger"]) {
+:host([color="danger"]) {
   --_bg: var(--is-danger-soft, rgb(250 82 82 / 18%));
   --_border: var(--is-color-danger-500, #fa5252);
   --_text: var(--is-danger-text, #ff8787);
@@ -78,7 +78,7 @@
 /* Apariencias — contrastadas entre sí (dark y light) */
 
 /* accent: fondo soft + barra lateral marcada */
-:host([appearance="accent"]) .badge {
+:host([variant="accent"]) .badge {
   background: var(--_bg);
   border-color: transparent;
   border-left: 0.28em solid var(--_border);
@@ -87,21 +87,21 @@
 }
 
 /* filled: sólido de marca */
-:host([appearance="filled"]) .badge {
+:host([variant="filled"]) .badge {
   background: var(--_border);
   border-color: var(--_border);
   color: var(--_on);
 }
 
 /* outlined: solo borde, sin relleno */
-:host([appearance="outlined"]) .badge {
+:host([variant="outlined"]) .badge {
   background: transparent;
   border-color: var(--_border);
   color: var(--_text);
 }
 
 /* filled-outlined: soft + borde completo */
-:host([appearance="filled-outlined"]) .badge {
+:host([variant="filled-outlined"]) .badge {
   background: var(--_bg);
   border-color: var(--_border);
   color: var(--_text);

@@ -13,7 +13,7 @@ import {
  *
  * Atributos
  *   name, value (default "on"), hint
- *   variant          brand (default) | neutral | success | warning | danger
+ *   color          brand (default) | neutral | success | warning | danger
  *   label-placement  end (default) | start | top | bottom
  *   icon             nombre de <is-icon> dentro del thumb apagado
  *   checked-icon     nombre de <is-icon> dentro del thumb encendido
@@ -49,13 +49,13 @@ import {
 
   const OBSERVED = [
     'name', 'value', 'checked', 'disabled', 'readonly', 'required',
-    'error', 'hint', 'variant', 'label-placement',
+    'error', 'hint', 'color', 'label-placement',
     'icon', 'checked-icon', 'on-label', 'off-label',
   ];
 
   const PROPS = [
     'name', 'value', 'checked', 'disabled', 'readonly', 'required',
-    'error', 'hint', 'variant', 'labelPlacement',
+    'error', 'hint', 'color', 'labelPlacement',
     'icon', 'checkedIcon', 'onLabel', 'offLabel',
   ];
 
@@ -154,11 +154,11 @@ import {
     get hint() { return this.getAttribute('hint') ?? ''; }
     set hint(v) { v == null ? this.removeAttribute('hint') : this.setAttribute('hint', String(v)); }
 
-    get variant() {
-      const v = this.getAttribute('variant');
+    get color() {
+      const v = this.getAttribute('color');
       return VARIANTS.includes(v) ? v : 'brand';
     }
-    set variant(v) { this.setAttribute('variant', VARIANTS.includes(v) ? v : 'brand'); }
+    set color(v) { this.setAttribute('color', VARIANTS.includes(v) ? v : 'brand'); }
 
     get labelPlacement() {
       const v = this.getAttribute('label-placement');

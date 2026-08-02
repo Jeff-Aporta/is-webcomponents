@@ -30,6 +30,20 @@
       background: var(--is-bg, #0f1117);
       overflow: hidden;
     }
+    /* Los demos se organizan con flex: alineados por linea base, con hueco
+       uniforme y envolviendo en pantallas estrechas. */
+    .fab-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 1.5rem;
+    }
+    .fab-row__item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -56,26 +70,50 @@
       </section>
 
       <section class="section" id="sizes">
-        <h2>Tamaños</h2>
-        <p class="lede">small, medium (default), large.</p>
+        <h2>Escala</h2>
+        <p class="lede">
+          No hay atributo <code class="code">size</code>: el componente se mide entero en
+          <code class="code">em</code>, así que su tamaño sale del
+          <code class="code">font-size</code> del contexto. Para hacerlo más grande o más
+          pequeño se cambia el font-size, y todo (icono, padding, radio) escala con él.
+        </p>
 
-        <is-demo class="demo">
-          <is-fab icon="mdi:bell" style="font-size:0.75em" position="inline" label="Notificación"></is-fab>
-          <is-fab icon="mdi:bell" position="inline" label="Notificación"></is-fab>
-          <is-fab icon="mdi:bell" style="font-size:1.3em" position="inline" label="Notificación"></is-fab>
+        <is-demo class="demo" heading="El mismo FAB con tres font-size">
+          <div class="fab-row">
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:0.75em" position="inline" label="Notificación"></is-fab>
+              <code class="code">0.75em</code>
+            </span>
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:1em" position="inline" label="Notificación"></is-fab>
+              <code class="code">1em</code>
+            </span>
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:1.25em" position="inline" label="Notificación"></is-fab>
+              <code class="code">1.25em</code>
+            </span>
+          </div>
         </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-fab icon="mdi:bell" style="font-size: 0.75em"&gt;&lt;/is-fab&gt;
+&lt;is-fab icon="mdi:bell" style="font-size: 1.25em"&gt;&lt;/is-fab&gt;</pre>
       </section>
 
       <section class="section" id="variants">
-        <h2>Variantes</h2>
-        <p class="lede">brand, neutral, danger, success, warning.</p>
+        <h2>Color</h2>
+        <p class="lede">
+          <code class="code">color</code> define el color semántico:
+          brand, neutral, danger, success, warning. Es una dimensión distinta de
+          <code class="code">variant</code>, que gobierna la presentación
+          (filled, outlined, plain…).
+        </p>
 
         <is-demo class="demo">
-          <is-fab icon="mdi:plus" variant="brand" position="inline" label="brand"></is-fab>
-          <is-fab icon="mdi:pencil" variant="neutral" position="inline" label="neutral"></is-fab>
-          <is-fab icon="mdi:trash-can" variant="danger" position="inline" label="danger"></is-fab>
-          <is-fab icon="mdi:check" variant="success" position="inline" label="success"></is-fab>
-          <is-fab icon="mdi:alert" variant="warning" position="inline" label="warning"></is-fab>
+          <is-fab icon="mdi:plus" color="brand" position="inline" label="brand"></is-fab>
+          <is-fab icon="mdi:pencil" color="neutral" position="inline" label="neutral"></is-fab>
+          <is-fab icon="mdi:trash-can" color="danger" position="inline" label="danger"></is-fab>
+          <is-fab icon="mdi:check" color="success" position="inline" label="success"></is-fab>
+          <is-fab icon="mdi:alert" color="warning" position="inline" label="warning"></is-fab>
         </is-demo>
       </section>
 
@@ -85,8 +123,8 @@
 
         <is-demo class="demo">
           <is-fab icon="mdi:plus" extended label="Nuevo proyecto" position="inline"></is-fab>
-          <is-fab icon="mdi:share" variant="neutral" extended label="Compartir" position="inline"></is-fab>
-          <is-fab icon="mdi:download" variant="success" extended label="Descargar" position="inline"></is-fab>
+          <is-fab icon="mdi:share" color="neutral" extended label="Compartir" position="inline"></is-fab>
+          <is-fab icon="mdi:download" color="success" extended label="Descargar" position="inline"></is-fab>
         </is-demo>
       </section>
 
@@ -99,7 +137,7 @@
             <is-fab icon="mdi:plus" position="top-start" label="top-start"></is-fab>
             <is-fab icon="mdi:pencil" position="top-end" label="top-end"></is-fab>
             <is-fab icon="mdi:share" position="bottom-start" label="bottom-start"></is-fab>
-            <is-fab icon="mdi:check" variant="success" position="bottom-end" label="bottom-end"></is-fab>
+            <is-fab icon="mdi:check" color="success" position="bottom-end" label="bottom-end"></is-fab>
           </div>
         </is-demo>
       </section>
@@ -109,8 +147,8 @@
         <p class="lede">Con <code class="code">pulse</code> el FAB anima un anillo de atención cada 2s.</p>
 
         <is-demo class="demo">
-          <is-fab icon="mdi:bell" pulse variant="warning" position="inline" label="Notificaciones"></is-fab>
-          <is-fab icon="mdi:message" pulse variant="brand" position="inline" label="Mensajes"></is-fab>
+          <is-fab icon="mdi:bell" pulse color="warning" position="inline" label="Notificaciones"></is-fab>
+          <is-fab icon="mdi:message" pulse color="brand" position="inline" label="Mensajes"></is-fab>
         </is-demo>
       </section>
 
@@ -146,8 +184,8 @@
       <h1>is-fab</h1>
       <is-scrollspy target="is-main">
         <a href="#intro">Introducción</a>
-        <a href="#sizes">Tamaños</a>
-        <a href="#variants">Variantes</a>
+        <a href="#sizes">Escala</a>
+        <a href="#variants">Color</a>
         <a href="#extended">Extendido</a>
         <a href="#positions">Posiciones</a>
         <a href="#pulse">Pulso</a>

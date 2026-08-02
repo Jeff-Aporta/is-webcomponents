@@ -15,10 +15,10 @@ import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
  *   </is-treemap>
  *
  * Mismo esqueleto que <is-flowchart> / <is-mindmap>: shadow DOM, slot JSON +
- * MutationObserver, tema por atributo `data-theme`, `variant` (inline | viewer),
+ * MutationObserver, tema por atributo `data-theme`, `color` (inline | viewer),
  * lightbox propio.
  *
- * Atributos: variant (inline | viewer), without-viewer
+ * Atributos: color (inline | viewer), without-viewer
  * Propiedades: payload, spec, layout
  * Eventos: is-render, is-open-viewer
  */
@@ -38,7 +38,7 @@ function fmtValue(v) {
 }
 
 class IsTreemap extends HTMLElement {
-  static get observedAttributes() { return ['variant']; }
+  static get observedAttributes() { return ['color']; }
 
   #wrap; #svg; #tooltipEl;
   #payload = null;
@@ -109,7 +109,7 @@ class IsTreemap extends HTMLElement {
     this.#queueRender();
   }
 
-  get isViewer() { return this.getAttribute('variant') === 'viewer'; }
+  get isViewer() { return this.getAttribute('color') === 'viewer'; }
   get payload() { return this.#payload; }
   set payload(v) { this.#payload = v; this.#queueRender(); }
   get spec() { return this.#spec; }

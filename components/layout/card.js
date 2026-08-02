@@ -7,7 +7,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  * Usa Shadow DOM con CSS propio, sin frameworks.
  *
  * Atributos
- *   appearance    accent | filled | outlined | filled-outlined | plain
+ *   variant    accent | filled | outlined | filled-outlined | plain
  *                 (default 'outlined', reflected)
  *   orientation   horizontal | vertical
  *                 (default 'vertical', reflected)
@@ -60,9 +60,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['appearance', 'orientation'];
+  const OBSERVED = ['variant', 'orientation'];
 
-  const VALID_APPEARANCE = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+  const VALID_VARIANT = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
   const VALID_ORIENTATION = ['horizontal', 'vertical'];
 
   class IsCard extends HTMLElement {
@@ -88,7 +88,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this._upgradeProperties();
       // reflejar defaults para que :host([orientation]/[appearance]) siempre matcheen
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'vertical');
-      if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'outlined');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'outlined');
       for (const slot of this._slots) slot.addEventListener('slotchange', this._onSlotChange);
       this._syncEmpty();
     }
@@ -103,8 +103,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
       // y el render se hace 100% por CSS → no hace falta sincronizar nada.
       // Mantenemos el callback solo para que el atributo se refleje y se
       // dispare correctamente cuando se asigna por JS.
-      if (name === 'appearance' && newVal && !VALID_APPEARANCE.includes(newVal)) {
-        this.setAttribute('appearance', 'outlined');
+      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
+        this.setAttribute('variant', 'outlined');
       }
       if (name === 'orientation' && newVal && !VALID_ORIENTATION.includes(newVal)) {
         this.setAttribute('orientation', 'vertical');
@@ -113,13 +113,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     // ---- public properties ----
 
-    get appearance() {
-      const v = this.getAttribute('appearance');
-      return VALID_APPEARANCE.includes(v) ? v : 'outlined';
+    get variant() {
+      const v = this.getAttribute('variant');
+      return VALID_VARIANT.includes(v) ? v : 'outlined';
     }
-    set appearance(v) {
-      if (v == null || v === '') this.removeAttribute('appearance');
-      else if (VALID_APPEARANCE.includes(v)) this.setAttribute('appearance', v);
+    set variant(v) {
+      if (v == null || v === '') this.removeAttribute('variant');
+      else if (VALID_VARIANT.includes(v)) this.setAttribute('variant', v);
     }
 
     get orientation() {

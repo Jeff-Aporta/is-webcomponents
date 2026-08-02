@@ -16,7 +16,7 @@ preview: ../../previews/forms/is-textarea.html
 TextField
 en modo multiline y el crecimiento automático de
 TextareaAutosize:
-appearances, error, contador y autosize con
+variants, error, contador y autosize con
 min-rows / max-rows.
 
 Este módulo registra `<is-textarea>`.
@@ -38,7 +38,7 @@ import './textarea.js';
 ## Ejemplo mínimo
 
 ```html
-<is-textarea appearance="filled" label="filled" rows="2"></is-textarea>
+<is-textarea variant="filled" label="filled" rows="2"></is-textarea>
 ```
 
 ## API
@@ -82,7 +82,7 @@ import './textarea.js';
 | `autosize` | lectura/escritura | Declarada por clase. |
 | `minRows` | lectura/escritura | Declarada por clase. |
 | `maxRows` | lectura/escritura | Declarada por clase. |
-| `appearance` | lectura/escritura | Declarada por clase. |
+| `variant` | lectura/escritura | Declarada por clase. |
 | `labelPlacement` | lectura/escritura | Declarada por clase. |
 | `error` | lectura/escritura | Declarada por clase. |
 | `errorText` | lectura/escritura | Declarada por clase. |
@@ -195,7 +195,7 @@ Documentación de cabecera preservada desde fuente:
 >   resize          none | vertical | both | auto   (default vertical; auto = autosize)
 >   min-rows        filas mínimas con autosize (default: rows)
 >   max-rows        filas máximas con autosize; a partir de ahí hace scroll
->   appearance      outlined (default) | filled | underlined
+>   variant      outlined (default) | filled | underlined
 >   label-placement top (default) | start
 >   error-text      mensaje mostrado en lugar del hint cuando hay error
 >   disabled, required, readonly, autosize, error, show-count, full-width  (boolean)
@@ -230,7 +230,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

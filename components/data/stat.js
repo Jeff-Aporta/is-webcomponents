@@ -15,7 +15,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   trend       string (e.g. "+12.5%" o "-3.2%")
  *   trend-direction up | down | flat   (auto-detect si trend empieza con + o -)
  *   icon        string (iconify id)
- *   variant     brand | neutral | success | warning | danger (default 'neutral')
+ *   color     brand | neutral | success | warning | danger (default 'neutral')
  *
  * Slots
  *   label       override del label
@@ -43,7 +43,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['label', 'value', 'helper', 'trend', 'trend-direction', 'icon', 'variant'];
+  const OBSERVED = ['label', 'value', 'helper', 'trend', 'trend-direction', 'icon', 'color'];
 
   class IsStat extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -73,8 +73,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const value = this.getAttribute('value');
       const helper = this.getAttribute('helper');
       const trend = this.getAttribute('trend');
-      const variant = this.getAttribute('variant') || 'brand';
-      this.#root.dataset.variant = variant;
+      const variant = this.getAttribute('color') || 'brand';
+      this.#root.dataset.color = variant;
       const direction = this.#detectTrendDirection(trend);
       this.#root.dataset.trend = direction;
       // Auto-fill slots si están vacíos

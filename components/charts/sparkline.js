@@ -6,7 +6,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 (() => {
   class IsSparkline extends HTMLElement {
     static get observedAttributes() {
-      return ['values', 'data', 'type', 'label', 'appearance', 'curve', 'trend'];
+      return ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend'];
     }
 
     #svg;
@@ -67,7 +67,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
       const fill = cs.getPropertyValue('--fill-color-1').trim() || 'rgba(51,154,240,.35)';
       const lineWidth = Number(cs.getPropertyValue('--line-width').trim()) || 1.5;
       const type = this.getAttribute('type') === 'bar' ? 'bar' : 'line';
-      const appearance = this.getAttribute('appearance') || 'solid';
+      const appearance = this.getAttribute('variant') || 'solid';
       const curve = this.getAttribute('curve') || 'linear';
 
       // El sparkline usa el rango propio de la serie: forzar el 0 aplanaría

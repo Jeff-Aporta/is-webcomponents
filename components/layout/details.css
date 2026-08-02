@@ -110,23 +110,23 @@
 
 /* Estados del host a top-level: `&[attr]` anidado en :host compila a
    `:host[attr]`, que nunca matchea un shadow host. Usar :host([attr]). */
-:host([appearance="outlined"]), :host(:not([appearance])) {
+:host([variant="outlined"]), :host(:not([variant])) {
     background: var(--_bg);
     border: 1px solid var(--_border);
     --_header-bg-hover: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
   }
 
-:host([appearance="filled"]) {
+:host([variant="filled"]) {
     background: var(--is-bg-elev, #f1f3f5);
     border: 0;
   }
 
-:host([appearance="filled-outlined"]) {
+:host([variant="filled-outlined"]) {
     background: var(--is-bg-elev, #f1f3f5);
     border: 1px solid var(--_border);
   }
 
-:host([appearance="plain"]) {
+:host([variant="plain"]) {
     background: transparent;
     border: 0;
   }

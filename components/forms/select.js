@@ -15,7 +15,7 @@ import {
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.
  *
  * Atributos: name, value, multiple, placeholder, label, hint, disabled, required,
- *            clearable, open, appearance, checkmarks, selection-display, limit-tags,
+ *            clearable, open, variant, checkmarks, selection-display, limit-tags,
  *            error, error-text, full-width, auto-width, max-visible
  * Slots: default (<is-option>), label, hint, start
  * Parts: base, trigger, listbox, group, group-label, option, check, option-start,
@@ -57,14 +57,14 @@ import {
   const OBSERVED = [
     'name', 'value', 'multiple', 'placeholder', 'label', 'hint',
     'disabled', 'required', 'clearable', 'open',
-    'appearance', 'checkmarks', 'selection-display', 'limit-tags',
+    'variant', 'checkmarks', 'selection-display', 'limit-tags',
     'error', 'error-text', 'full-width', 'auto-width', 'max-visible',
   ];
 
   const PROPS = [
     'name', 'value', 'values', 'multiple', 'placeholder', 'label', 'hint',
     'disabled', 'required', 'clearable', 'open',
-    'appearance', 'checkmarks', 'selectionDisplay', 'limitTags',
+    'variant', 'checkmarks', 'selectionDisplay', 'limitTags',
     'error', 'errorText', 'fullWidth', 'autoWidth', 'maxVisible',
   ];
 
@@ -262,13 +262,13 @@ import {
       SELECTION_DISPLAY.includes(raw) ? this.setAttribute('selection-display', raw) : this.removeAttribute('selection-display');
     }
 
-    get appearance() {
-      const raw = (this.getAttribute('appearance') || '').toLowerCase();
+    get variant() {
+      const raw = (this.getAttribute('variant') || '').toLowerCase();
       return APPEARANCE.includes(raw) ? raw : 'outlined';
     }
-    set appearance(v) {
+    set variant(v) {
       const raw = String(v ?? '').toLowerCase();
-      APPEARANCE.includes(raw) ? this.setAttribute('appearance', raw) : this.removeAttribute('appearance');
+      APPEARANCE.includes(raw) ? this.setAttribute('variant', raw) : this.removeAttribute('variant');
     }
 
     get placeholder() { return this.getAttribute('placeholder') ?? ''; }

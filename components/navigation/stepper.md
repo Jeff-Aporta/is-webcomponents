@@ -14,7 +14,7 @@ preview: ../../previews/navigation/is-stepper.html
 ## Propósito
 
 Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.
-Soporta orientación horizontal y vertical, variantes visualmente
+Soporta orientación horizontal y vertical, colores visualmente
 distintas, iconos por slot, descripción y manejo de errores.
 
 Este módulo registra `<is-stepper>`, `<is-stepper-step>`.
@@ -54,7 +54,7 @@ import './stepper.js';
 | `active` | string/según contrato | Fuente define default/restricción. |
 | `orientation` | string/según contrato | Fuente define default/restricción. |
 | `without-line` | boolean | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `label` | string/según contrato | Fuente define default/restricción. |
 | `description` | string/según contrato | Fuente define default/restricción. |
 | `icon` | string/según contrato | Fuente define default/restricción. |
@@ -145,7 +145,7 @@ Documentación de cabecera preservada desde fuente:
 >   active       number  — paso activo (0-indexed).
 >   orientation  horizontal | vertical    (default horizontal)
 >   without-line boolean  — oculta la línea conectora.
->   variant      default | simple | numbered | glass (default 'default')
+>   color      default | simple | numbered | glass (default 'default')
 > Atributos <is-stepper-step>
 >   label       string
 >   description string
@@ -193,7 +193,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

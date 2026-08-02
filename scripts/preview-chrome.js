@@ -12,6 +12,7 @@
  */
 import '../components/feedback/theme-toggle.js';
 import '../components/actions/button.js';
+import '../components/actions/button-group.js';
 import '../components/media/icon.js';
 import '../components/feedback/cdn-snippet.js';
 import components from '../manifest.js';
@@ -145,19 +146,20 @@ function mount() {
         <option value="agrowin">AgroWin</option>
       </select>
     </label>
-    <is-theme-toggle id="previewTheme"></is-theme-toggle>
-    <is-button
-      id="previewSave"
-      class="preview-chrome__save"
-      variant="neutral"
-      appearance="plain"
-      pill
-      type="button"
-      aria-label="Guardar enlace con tema y paleta"
-      title="Guardar en la URL y copiar al portapapeles"
-    >
-      <is-icon slot="start" icon="mdi:content-save-outline"></is-icon>
-    </is-button>
+    <is-button-group class="preview-chrome__actions" pill aria-label="Acciones de la vista">
+      <is-theme-toggle id="previewTheme"></is-theme-toggle>
+      <is-button
+        id="previewSave"
+        class="preview-chrome__save"
+        color="neutral"
+        variant="plain"
+        type="button"
+        aria-label="Guardar enlace con tema y paleta"
+        title="Guardar en la URL y copiar al portapapeles"
+      >
+        <is-icon slot="start" icon="mdi:content-save-outline"></is-icon>
+      </is-button>
+    </is-button-group>
   `;
 
   const main = document.querySelector('is-main.main, main.main');

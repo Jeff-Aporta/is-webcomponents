@@ -46,7 +46,7 @@ import './sequence-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
 
@@ -120,11 +120,11 @@ Documentación de cabecera preservada desde fuente:
 >   </is-sequence-diagram>
 > También acepta `{ "preset": "tk1437191" }`.
 > Atributos
->   variant  inline (default) | viewer — viewer activa hover, leyenda clickeable
+>   color  inline (default) | viewer — viewer activa hover, leyenda clickeable
 >            y auto-animación de la tortuga.
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: is-turtle-state (detail: {playing, idx, total, replay}),
->          is-open-viewer (click en variante inline),
+>          is-open-viewer (click en colore inline),
 >          is-toggle-group (detail: {id})
 
 ## Dependencias y componentes relacionados
@@ -158,7 +158,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

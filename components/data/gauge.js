@@ -14,7 +14,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   label       string
  *   unit        string  (e.g. "%")
  *   thickness   number  (px)
- *   variant     brand | success | warning | danger (default 'brand')
+ *   color     brand | success | warning | danger (default 'brand')
  *   half        boolean — semicírculo.
  *   format      string  — Intl.NumberFormat format string. e.g. "0.0".
  *   show-value  boolean (default true)
@@ -37,7 +37,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'variant', 'half', 'format', 'show-value'];
+  const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'color', 'half', 'format', 'show-value'];
 
   class IsGauge extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -76,7 +76,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const max = this.#num(this.getAttribute('max') || 100);
       const label = this.getAttribute('label') || '';
       const unit = this.getAttribute('unit') || '';
-      const variant = this.getAttribute('variant') || 'brand';
+      const variant = this.getAttribute('color') || 'brand';
       const half = this.hasAttribute('half');
       const format = this.getAttribute('format');
       const showValue = this.hasAttribute('show-value') || !this.hasAttribute('show-value');
@@ -110,7 +110,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         this.#track.style.removeProperty('stroke-width');
       }
 
-      this.#svg.dataset.variant = variant;
+      this.#svg.dataset.color = variant;
 
       // Value y label
       if (showValue) {

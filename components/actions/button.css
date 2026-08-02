@@ -118,21 +118,21 @@
   }
 }
 
-:host([variant="brand"]) {
+:host([color="brand"]) {
   --_bg: var(--is-color-brand-600, #228be6);
   --_bg-hover: var(--is-color-brand-700, #1971c2);
   --_bg-active: var(--is-color-brand-800, #1864ab);
   --_border: var(--is-color-brand-600, #228be6);
   --_text: var(--is-on-brand, #fff);
 }
-:host([variant="brand"][appearance="outlined"]) {
+:host([color="brand"][variant="outlined"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-brand-soft, var(--is-color-brand-50, #e7f5ff));
   --_bg-active: var(--is-brand-soft-active, var(--is-color-brand-100, #d0ebff));
   --_border: var(--is-color-brand-500, #339af0);
   --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
 }
-:host([variant="brand"][appearance="plain"]) {
+:host([color="brand"][variant="plain"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-brand-soft, var(--is-color-brand-50, #e7f5ff));
   --_bg-active: var(--is-brand-soft-active, var(--is-color-brand-100, #d0ebff));
@@ -140,21 +140,21 @@
   --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
 }
 
-:host([variant="success"]) {
+:host([color="success"]) {
   --_bg: var(--is-color-success-600);
   --_bg-hover: var(--is-color-success-700);
   --_bg-active: var(--is-color-success-700);
   --_border: var(--is-color-success-600);
   --_text: var(--is-on-brand, #fff);
 }
-:host([variant="success"][appearance="outlined"]) {
+:host([color="success"][variant="outlined"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-success-soft, var(--is-color-success-50));
   --_bg-active: var(--is-success-soft-active, var(--is-color-success-100));
   --_border: var(--is-color-success-500);
   --_text: var(--is-success-text, var(--is-color-success-700));
 }
-:host([variant="success"][appearance="plain"]) {
+:host([color="success"][variant="plain"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-success-soft, var(--is-color-success-50));
   --_bg-active: var(--is-success-soft-active, var(--is-color-success-100));
@@ -162,21 +162,21 @@
   --_text: var(--is-success-text, var(--is-color-success-700));
 }
 
-:host([variant="warning"]) {
+:host([color="warning"]) {
   --_bg: var(--is-color-warning-600);
   --_bg-hover: var(--is-color-warning-700);
   --_bg-active: var(--is-color-warning-700);
   --_border: var(--is-color-warning-600);
   --_text: var(--is-on-brand, #fff);
 }
-:host([variant="warning"][appearance="outlined"]) {
+:host([color="warning"][variant="outlined"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-warning-soft, var(--is-color-warning-50));
   --_bg-active: var(--is-warning-soft-active, var(--is-color-warning-100));
   --_border: var(--is-color-warning-500);
   --_text: var(--is-warning-text, var(--is-color-warning-700));
 }
-:host([variant="warning"][appearance="plain"]) {
+:host([color="warning"][variant="plain"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-warning-soft, var(--is-color-warning-50));
   --_bg-active: var(--is-warning-soft-active, var(--is-color-warning-100));
@@ -184,21 +184,21 @@
   --_text: var(--is-warning-text, var(--is-color-warning-700));
 }
 
-:host([variant="danger"]) {
+:host([color="danger"]) {
   --_bg: var(--is-color-danger-600);
   --_bg-hover: var(--is-color-danger-700);
   --_bg-active: var(--is-color-danger-700);
   --_border: var(--is-color-danger-600);
   --_text: var(--is-on-brand, #fff);
 }
-:host([variant="danger"][appearance="outlined"]) {
+:host([color="danger"][variant="outlined"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-danger-soft, var(--is-color-danger-50));
   --_bg-active: var(--is-danger-soft-active, var(--is-color-danger-100));
   --_border: var(--is-color-danger-500);
   --_text: var(--is-danger-text, var(--is-color-danger-700));
 }
-:host([variant="danger"][appearance="plain"]) {
+:host([color="danger"][variant="plain"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-danger-soft, var(--is-color-danger-50));
   --_bg-active: var(--is-danger-soft-active, var(--is-color-danger-100));
@@ -206,14 +206,14 @@
   --_text: var(--is-danger-text, var(--is-color-danger-700));
 }
 
-:host([variant="neutral"][appearance="outlined"]) {
+:host([color="neutral"][variant="outlined"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-control-bg-hover, #e9ecef);
   --_bg-active: var(--is-control-bg-active, #dee2e6);
   --_border: var(--is-control-border, #adb5bd);
   --_text: var(--is-control-text, #212529);
 }
-:host([variant="neutral"][appearance="plain"]) {
+:host([color="neutral"][variant="plain"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-control-bg-hover, #e9ecef);
   --_bg-active: var(--is-control-bg-active, #dee2e6);
@@ -222,7 +222,7 @@
 }
 
 :host([pill]) { --is-button-border-radius: 999px; }
-:host([appearance="outlined"]) {
+:host([variant="outlined"]) {
   margin-inline-start: var(--_button-horizontal-indent-outlined, var(--_button-horizontal-indent, 0px));
   margin-block-start: var(--_button-vertical-indent-outlined, var(--_button-vertical-indent, 0px));
 }

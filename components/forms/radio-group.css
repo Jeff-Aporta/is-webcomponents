@@ -47,11 +47,11 @@
 
 /* ---- variant: se hereda a los <is-radio> por custom property ---------- */
 
-:host([variant="brand"]) { --is-radio-accent: var(--is-accent, var(--is-color-brand-500, #339af0)); }
-:host([variant="neutral"]) { --is-radio-accent: var(--is-control-border, #59636e); }
-:host([variant="success"]) { --is-radio-accent: var(--is-color-success-500, #40c057); }
-:host([variant="warning"]) { --is-radio-accent: var(--is-color-warning-500, #f59f00); }
-:host([variant="danger"]) { --is-radio-accent: var(--is-color-danger-500, #fa5252); }
+:host([color="brand"]) { --is-radio-accent: var(--is-accent, var(--is-color-brand-500, #339af0)); }
+:host([color="neutral"]) { --is-radio-accent: var(--is-control-border, #59636e); }
+:host([color="success"]) { --is-radio-accent: var(--is-color-success-500, #40c057); }
+:host([color="warning"]) { --is-radio-accent: var(--is-color-warning-500, #f59f00); }
+:host([color="danger"]) { --is-radio-accent: var(--is-color-danger-500, #fa5252); }
 
 /* ---- error ------------------------------------------------------------ */
 

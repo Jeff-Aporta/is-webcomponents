@@ -9,12 +9,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
  * Modelo equivalente a wa-callout (Web Awesome) / v-alert.
  *
  * Atributos
- *   variant     brand | neutral | success | warning | danger
+ *   color     brand | neutral | success | warning | danger
  *               (default 'neutral', reflected)
- *   appearance  accent | filled | outlined | filled-outlined | plain
+ *   variant  accent | filled | outlined | filled-outlined | plain
  *               (default 'filled-outlined', reflected)
  *   icon        nombre Iconify para mostrar a la izquierda (ej. "mdi:bell").
- *               Si no se da, se elige uno por variante.
+ *               Si no se da, se elige uno por colore.
  *
  * Slots
  *   (default)  mensaje principal
@@ -24,7 +24,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *
  * CSS custom properties
  *   --spacing        espacio alrededor del callout (default var(--is-space-l, 1rem))
- *   --callout-bg     fondo computado por variant/appearance
+ *   --callout-bg     fondo computado por color/variant
  *   --callout-border color del borde
  *   --callout-text   color del texto
  *   --callout-accent color del icono
@@ -47,10 +47,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['variant', 'appearance', 'icon'];
+  const OBSERVED = ['color', 'variant', 'icon'];
 
-  const VALID_VARIANT = ['brand', 'neutral', 'success', 'warning', 'danger'];
-  const VALID_APPEARANCE = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+  const VALID_COLOR = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const VALID_VARIANT = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
 
   const ICON_BY_VARIANT = {
     brand: 'mdi:information-outline',
@@ -79,8 +79,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
     connectedCallback() {
       this.#mounted = true;
       this.#upgradeProperties();
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
-      if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'filled-outlined');
+      if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
 
       // ¿El usuario puso un <is-icon slot="icon"> manualmente?
       const slotted = this.querySelector(':scope > [slot="icon"]');
@@ -101,12 +101,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
-        this.setAttribute('variant', 'neutral');
+      if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
+        this.setAttribute('color', 'neutral');
         return;
       }
-      if (name === 'appearance' && newVal && !VALID_APPEARANCE.includes(newVal)) {
-        this.setAttribute('appearance', 'filled-outlined');
+      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
+        this.setAttribute('variant', 'filled-outlined');
         return;
       }
       if (name === 'icon') this.#syncDefaultIcon();
@@ -114,22 +114,22 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     // ---- properties ----
 
+    get color() {
+      const v = this.getAttribute('color');
+      return VALID_COLOR.includes(v) ? v : 'neutral';
+    }
+    set color(v) {
+      if (v == null || v === '') this.removeAttribute('color');
+      else if (VALID_COLOR.includes(v)) this.setAttribute('color', v);
+    }
+
     get variant() {
       const v = this.getAttribute('variant');
-      return VALID_VARIANT.includes(v) ? v : 'neutral';
+      return VALID_VARIANT.includes(v) ? v : 'filled-outlined';
     }
     set variant(v) {
       if (v == null || v === '') this.removeAttribute('variant');
       else if (VALID_VARIANT.includes(v)) this.setAttribute('variant', v);
-    }
-
-    get appearance() {
-      const v = this.getAttribute('appearance');
-      return VALID_APPEARANCE.includes(v) ? v : 'filled-outlined';
-    }
-    set appearance(v) {
-      if (v == null || v === '') this.removeAttribute('appearance');
-      else if (VALID_APPEARANCE.includes(v)) this.setAttribute('appearance', v);
     }
 
     get icon() { return this.getAttribute('icon') || ''; }

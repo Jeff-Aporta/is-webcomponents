@@ -24,7 +24,7 @@ Estructura, superficies, overlays y navegación por regiones de contenido.
 
 ## Cuándo no usarlo
 
-No crear size variants; escalar mediante font-size contextual y em.
+No crear size colors; escalar mediante font-size contextual y em.
 
 ## Importación
 
@@ -46,14 +46,14 @@ import './card.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
 | `orientation` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| `appearance` | lectura/escritura | Declarada por clase. |
+| `variant` | lectura/escritura | Declarada por clase. |
 | `orientation` | lectura/escritura | Declarada por clase. |
 
 ### Slots
@@ -120,7 +120,7 @@ Documentación de cabecera preservada desde fuente:
 > Define el custom element `is-card` automáticamente al importarse.
 > Usa Shadow DOM con CSS propio, sin frameworks.
 > Atributos
->   appearance    accent | filled | outlined | filled-outlined | plain
+>   variant    accent | filled | outlined | filled-outlined | plain
 >                 (default 'outlined', reflected)
 >   orientation   horizontal | vertical
 >                 (default 'vertical', reflected)
@@ -152,8 +152,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-card appearance="accent">...</is-card>
-<is-card appearance="filled-outlined">...</is-card>
+<is-card variant="accent">...</is-card>
+<is-card variant="filled-outlined">...</is-card>
 ```
 
 ## Errores comunes
@@ -162,7 +162,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

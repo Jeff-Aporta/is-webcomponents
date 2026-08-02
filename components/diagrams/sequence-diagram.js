@@ -29,12 +29,12 @@ import { registerDiagramKind } from './diagram-kinds.js';
  * También acepta `{ "preset": "tk1437191" }`.
  *
  * Atributos
- *   variant  inline (default) | viewer — viewer activa hover, leyenda clickeable
+ *   color  inline (default) | viewer — viewer activa hover, leyenda clickeable
  *            y auto-animación de la tortuga.
  *
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
  * Eventos: is-turtle-state (detail: {playing, idx, total, replay}),
- *          is-open-viewer (click en variante inline),
+ *          is-open-viewer (click en colore inline),
  *          is-toggle-group (detail: {id})
  */
 
@@ -62,7 +62,7 @@ function foreignHtml(x, y, w, h, className, html, style) {
 }
 
 class IsSequenceDiagram extends HTMLElement {
-  static get observedAttributes() { return ['variant']; }
+  static get observedAttributes() { return ['color']; }
 
   #wrap; #svg; #tooltipEl;
   #payload = null;
@@ -131,7 +131,7 @@ class IsSequenceDiagram extends HTMLElement {
     this.#queueRender();
   }
 
-  get isViewer() { return this.getAttribute('variant') === 'viewer'; }
+  get isViewer() { return this.getAttribute('color') === 'viewer'; }
 
   get payload() { return this.#payload; }
   set payload(v) {

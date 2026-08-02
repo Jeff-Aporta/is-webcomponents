@@ -15,7 +15,7 @@ import {
  * Atributos
  *   name, value, label, hint
  *   orientation      vertical (default) | horizontal   ·   row = alias booleano de horizontal
- *   variant          brand (default) | neutral | success | warning | danger
+ *   color          brand (default) | neutral | success | warning | danger
  *   label-placement  end (default) | start | top | bottom   (se aplica a los hijos)
  *   error-text       mensaje de error; sustituye al hint y activa el estado de error
  *   disabled, required, readonly, error   (boolean)
@@ -39,12 +39,12 @@ import {
 
   const OBSERVED = [
     'name', 'value', 'disabled', 'required', 'readonly', 'label', 'hint',
-    'orientation', 'row', 'variant', 'label-placement', 'error', 'error-text',
+    'orientation', 'row', 'color', 'label-placement', 'error', 'error-text',
   ];
 
   const PROPS = [
     'name', 'value', 'disabled', 'required', 'readonly', 'label', 'hint',
-    'orientation', 'row', 'variant', 'labelPlacement', 'error', 'errorText',
+    'orientation', 'row', 'color', 'labelPlacement', 'error', 'errorText',
   ];
 
   const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
@@ -151,13 +151,13 @@ import {
     get row() { return this.orientation === 'horizontal'; }
     set row(v) { this.toggleAttribute('row', !!v); }
 
-    get variant() {
-      const v = this.getAttribute('variant');
+    get color() {
+      const v = this.getAttribute('color');
       return VARIANTS.includes(v) ? v : 'brand';
     }
-    set variant(v) {
-      if (VARIANTS.includes(v)) this.setAttribute('variant', v);
-      else this.removeAttribute('variant');
+    set color(v) {
+      if (VARIANTS.includes(v)) this.setAttribute('color', v);
+      else this.removeAttribute('color');
     }
 
     get labelPlacement() {

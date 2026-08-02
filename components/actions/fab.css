@@ -48,15 +48,15 @@
 }
 
 
-.fab[data-variant="brand"] { background: var(--is-brand, dodgerblue); color: var(--is-brand-fg, #fff); }
-.fab[data-variant="neutral"] {
+.fab[data-color="brand"] { background: var(--is-brand, dodgerblue); color: var(--is-brand-fg, #fff); }
+.fab[data-color="neutral"] {
   background: var(--is-bg-2, #2a2f3a);
   color: var(--is-text, #e8eaf1);
   border: 1px solid var(--is-border, #2a2f3a);
 }
-.fab[data-variant="danger"] { background: var(--is-danger, #f64e60); color: #fff; }
-.fab[data-variant="success"] { background: var(--is-success, #0bb783); color: #fff; }
-.fab[data-variant="warning"] { background: var(--is-warning, #ffa800); color: #fff; }
+.fab[data-color="danger"] { background: var(--is-danger, #f64e60); color: #fff; }
+.fab[data-color="success"] { background: var(--is-success, #0bb783); color: #fff; }
+.fab[data-color="warning"] { background: var(--is-warning, #ffa800); color: #fff; }
 
 .fab.extended {
   width: auto;

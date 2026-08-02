@@ -124,7 +124,7 @@ Documentación de cabecera preservada desde fuente:
 >   checked-icon    Iconify id cuando checked (ej. mdi:pause)
 >   label           aria-label unchecked
 >   checked-label   aria-label checked (fallback: label)
->   appearance      "plain" → compacto y hereda color (chrome oscura: vídeo)
+>   variant      "plain" → compacto y hereda color (chrome oscura: vídeo)
 >   disabled        boolean
 > Events (bubbles, composed)
 >   is-change  { checked: boolean }  — tras cada toggle
@@ -144,7 +144,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-check-icon-button appearance="plain" icon="mdi:volume-high" checked-icon="mdi:volume-off"
+<is-check-icon-button variant="plain" icon="mdi:volume-high" checked-icon="mdi:volume-off"
 label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
 ```
 
@@ -154,7 +154,7 @@ label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

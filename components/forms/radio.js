@@ -7,9 +7,9 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
  *
  * Atributos
  *   value, checked, disabled
- *   variant          brand (default) | neutral | success | warning | danger
+ *   color          brand (default) | neutral | success | warning | danger
  *   label-placement  end (default) | start | top | bottom
- *   Sin variant / label-placement propios se hereda el del grupo.
+ *   Sin color / label-placement propios se hereda el del grupo.
  *
  * Slots: default (etiqueta), description (texto secundario)
  * Parts: base, control, dot, text, label, description
@@ -31,8 +31,8 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
     </div>
   `;
 
-  const OBSERVED = ['value', 'checked', 'disabled', 'variant', 'label-placement'];
-  const PROPS = ['value', 'checked', 'disabled', 'variant', 'labelPlacement'];
+  const OBSERVED = ['value', 'checked', 'disabled', 'color', 'label-placement'];
+  const PROPS = ['value', 'checked', 'disabled', 'color', 'labelPlacement'];
   const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
   const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
 
@@ -90,13 +90,13 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
 
     /** '' = hereda el del grupo. */
-    get variant() {
-      const v = this.getAttribute('variant');
+    get color() {
+      const v = this.getAttribute('color');
       return VARIANTS.includes(v) ? v : '';
     }
-    set variant(v) {
-      if (VARIANTS.includes(v)) this.setAttribute('variant', v);
-      else this.removeAttribute('variant');
+    set color(v) {
+      if (VARIANTS.includes(v)) this.setAttribute('color', v);
+      else this.removeAttribute('color');
     }
 
     /** '' = hereda el del grupo. */
@@ -113,7 +113,7 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
 
     /**
      * Recalcula lo que hereda del grupo. Lo llama el grupo.
-     * El variant no pasa por aquí: viaja como custom property heredada.
+     * El color no pasa por aquí: viaja como custom property heredada.
      */
     syncFromGroup() {
       const group = this.group;

@@ -4,7 +4,7 @@
  * Aplica el patrón canónico de "upgrade" para custom elements:
  *
  *   class MyEl extends HTMLElement {
- *     #upgradeProps = ['open', 'variant', 'disabled'];
+ *     #upgradeProps = ['open', 'color', 'disabled'];
  *
  *     connectedCallback() {
  *       upgradeProperties(this, this.#upgradeProps);

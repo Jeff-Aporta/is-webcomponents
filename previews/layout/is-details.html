@@ -55,13 +55,13 @@
         </p>
 
         <div class="demo-stack">
-          <is-details appearance="outlined" summary="outlined">Borde 1px, fondo transparente.</is-details>
-          <is-details appearance="filled" summary="filled">Fondo elevado, sin borde.</is-details>
-          <is-details appearance="filled-outlined" summary="filled-outlined">Fondo + borde.</is-details>
-          <is-details appearance="plain" summary="plain">Sin fondo ni borde, solo espaciado.</is-details>
+          <is-details variant="outlined" summary="outlined">Borde 1px, fondo transparente.</is-details>
+          <is-details variant="filled" summary="filled">Fondo elevado, sin borde.</is-details>
+          <is-details variant="filled-outlined" summary="filled-outlined">Fondo + borde.</is-details>
+          <is-details variant="plain" summary="plain">Sin fondo ni borde, solo espaciado.</is-details>
         </div>
 
-        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">appearance</span>=<span class="val">"filled"</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span></pre>
+        <pre class="code"><span class="tag">&lt;is-details</span> <span class="attr">variant</span>=<span class="val">"filled"</span> <span class="attr">summary</span>=<span class="val">"…"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-details&gt;</span></pre>
       </section>
 
       <!-- ===== 3. POSICIÓN DEL ICONO ===== -->
@@ -121,7 +121,7 @@
           <is-details>
             <div slot="summary">
               <strong>Pedido #A-10293</strong>
-              <is-badge variant="success" appearance="filled" style="margin-left:.5em">Enviado</is-badge>
+              <is-badge color="success" variant="filled" style="margin-left:.5em">Enviado</is-badge>
             </div>
             Cliente: Distribuidora del Norte · Total: $1.245,00 · 3 ítems.
           </is-details>
@@ -130,7 +130,7 @@
         <pre class="code"><span class="tag">&lt;is-details&gt;</span>
   <span class="tag">&lt;div</span> <span class="attr">slot</span>=<span class="val">"summary"</span><span class="tag">&gt;</span>
     <span class="tag">&lt;strong&gt;</span>Pedido #A-10293<span class="tag">&lt;/strong&gt;</span>
-    <span class="tag">&lt;is-badge</span> <span class="attr">variant</span>=<span class="val">"success"</span><span class="tag">&gt;</span>Enviado<span class="tag">&lt;/is-badge&gt;</span>
+    <span class="tag">&lt;is-badge</span> <span class="attr">color</span>=<span class="val">"success"</span><span class="tag">&gt;</span>Enviado<span class="tag">&lt;/is-badge&gt;</span>
   <span class="tag">&lt;/div&gt;</span>
   Cliente: …
 <span class="tag">&lt;/is-details&gt;</span></pre>
@@ -197,7 +197,7 @@
           <div class="card-row-actions" style="margin-top:.5em">
             <is-button id="btnOpen">show()</is-button>
             <is-button id="btnClose">hide()</is-button>
-            <is-button id="btnToggle" appearance="outlined">toggle()</is-button>
+            <is-button id="btnToggle" variant="outlined">toggle()</is-button>
           </div>
         </is-demo>
 

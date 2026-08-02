@@ -1,5 +1,5 @@
 /**
- * intent.js — Intenciones semánticas (atributo `variant`) compartidas.
+ * intent.js — Intenciones semánticas (atributo `color`) compartidas.
  *
  * Un "intent" describe EL SIGNIFICADO del color que aplica el componente,
  * no su apariencia. Ejemplos: success (verde), warning (amarillo), danger
@@ -35,7 +35,7 @@ export function normalizeIntent(value, fallback = DEFAULT_INTENT) {
  * Setter helper para atributos reflected: acepta cualquier valor y guarda
  * sólo si está en la enum. Uso típico en componentes con intent:
  *
- *   set variant(v) { setEnumAttr(this, 'variant', normalizeIntent(v)); }
+ *   set color(v) { setEnumAttr(this, 'color', normalizeIntent(v)); }
  */
 export function setEnumAttr(el, attr, normalized) {
   if (normalized == null || normalized === '') el.removeAttribute(attr);

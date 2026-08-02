@@ -1,5 +1,5 @@
 /**
- * tone.js — Niveles de relleno (atributo `appearance`) compartidos.
+ * tone.js — Niveles de relleno (atributo `variant`) compartidos.
  *
  * Un "tone" describe EL GRADO DE PESO VISUAL: outlined (sin relleno, sólo
  * borde), filled (relleno sólido), plain (texto plano), accent (borde +
@@ -33,7 +33,7 @@ export function normalizeTone(value, fallback = DEFAULT_TONE) {
  * Setter helper para atributos reflected: acepta cualquier valor y guarda
  * sólo si está en la enum. Espejo de `setEnumAttr` en intent.js.
  *
- *   set appearance(v) { setEnumToneAttr(this, 'appearance', normalizeTone(v)); }
+ *   set color(v) { setEnumToneAttr(this, 'color', normalizeTone(v)); }
  */
 export function setEnumToneAttr(el, attr, normalized) {
   if (normalized == null || normalized === '') el.removeAttribute(attr);

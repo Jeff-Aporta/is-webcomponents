@@ -136,7 +136,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - Shadow DOM usa [`_shared/adopt-css.js`](_shared/adopt-css.js).
 - Eventos conservan detail/bubbles/composed/cancelable.
 - Forms reutilizan [`_shared/form-associated.js`](_shared/form-associated.js).
-- Escala usa font-size contextual y em; no size variants.
+- Escala usa font-size contextual y em; no size colors.
 
 ## Reusar antes de crear
 
@@ -166,6 +166,8 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - Verificar higiene con `node scripts/audit-components.mjs` (también corre como test).
 - En los previews, cargar SIEMPRE `dist/cdn/all.min.js` (un solo archivo cacheado) en vez de módulos sueltos de `components/`.
 - Un componente que importa a otro debe REFERENCIARLO en el bundle, nunca inlinearlo: el inlineado pierde su `import.meta.url` y con él su CSS.
+- `color` y `variant` son DIMENSIONES DISTINTAS: `color` es el color semantico (brand, neutral, info, success, warning, danger) y `variant` la presentacion (filled, outlined, plain, soft, ghost...). Nunca meter color en `variant`.
+- Sin atributo `size`: todo se mide en `em` y la escala sale del `font-size` del contexto. Los demos deben ensenarlo con `style="font-size: …em"`.
 - Configuracion declarativa de componentes: `data-*` como `data-theme`/`data-palette` (p. ej. `data-wrapper`, `data-layout`, `data-arc`), no atributos sueltos ad-hoc.
 - El host de `is-icon` es una caja cuadrada de 1em con `line-height: 1`. Sin tamaño explícito la línea lo estira hasta el line-height heredado y el SVG queda descolgado dentro.
 - Leer consumidores; corregir raíz común.
@@ -193,7 +195,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - No servir un icono como `<img src>` cuando debe heredar color: el SVG queda "congelado" en su color original. Inyectarlo inline.
 - No crear MD por child multi-tag ni presentar marks/specs/shared como elementos.
 - No duplicar stdlib/platform/shared ni añadir tooling innecesario.
-- No crear size variants, borrar archivos o crear commits automáticos.
+- No crear size colors, borrar archivos o crear commits automáticos.
 
 ## Errores aprendidos y prevención
 
@@ -211,7 +213,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 12. Extractor aceptó separadores/rangos como tokens CSS: exigir identificador completo y no terminar en guion.
 13. `hasAttribute` no prueba tipo booleano: marcar boolean solo con setter toggle o contrato explícito.
 14. Listeners globales en constructor fugaron en 11 componentes: `tests/component-audit.test.mjs` (via `scripts/audit-components.mjs`) lo detecta.
-15. `&[attr]` dentro de `:host` no matchea el host: variantes de tag/callout/card/details no aplicaban; el audit y el patrón `:host([attr])` lo previenen.
+15. `&[attr]` dentro de `:host` no matchea el host: colores de tag/callout/card/details no aplicaban; el audit y el patrón `:host([attr])` lo previenen.
 16. Bundles de categoría con esbuild `bundle:true` colapsaban `import.meta.url` y cada componente buscaba un CSS inexistente: los bundles (`category.*.min.js`, `all.min.js`) solo re-importan los `.min.js` individuales (`bundle:false`).
 17. Componentes con preview pero sin entrada en manifest (is-format, is-observer, is-scrollspy, is-cdn-snippet) quedaban fuera del nav y de los tests: registrar SIEMPRE en manifest.
 18. El callout CDN inyectado por docs-chrome duplicaba a `<is-cdn-snippet>`: un solo dueño del bloque CDN.
@@ -225,6 +227,10 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 27. Un abanico radial no basta con no colisionar: tambien debe estar CONTENIDO. Limitar solo el radio base dejaba que los anillos (`base + n*(item+gap)`) se salieran del area. Los anillos se recortan al wrapper y, si no caben todas, se pasa a un grid dentro del wrapper (`data-packed`), contenido por construccion.
 28. Al posicionar un contenedor midiendo su PROPIO rect, el delta converge a 0 en la segunda pasada (te mides contra lo que acabas de mover). Medir siempre contra un origen estable.
 29. `document.querySelector(selector)` para resolver un "wrapper" devuelve el primero del documento, no el que contiene al elemento: usar `closest(selector)` primero.
+30. `animation: … both` deja aplicada una matriz identidad al terminar; la seccion se convierte en containing block y CUALQUIER overlay `position: fixed` dentro aparece desplazado (is-context-menu salia a 48/238px del clic). Usar `backwards`, y ademas los overlays se auto-corrigen midiendo su origen real.
+31. `#refreshLinks` del scrollspy limpiaba la marca activa pero `#activeId` seguia igual, asi que `#setActive` salia temprano y no repintaba: al cargar no habia item resaltado hasta hacer scroll.
+32. Un atributo que solo alimenta `aria-label` no pinta texto: `<is-fab extended label="X">` salia con la pildora vacia. El atributo debe ser el fallback del slot.
+33. `highlight-pre.js` solo recorre el documento: los `<pre>` dentro de un shadow root no se colorean ni heredan el CSS del tema de CodeMirror. Hay que llamar al pintor a mano y clonar las hojas dentro del shadow.
 26. Los bundles POR COMPONENTE inlineaban los componentes que importaban (21 de ellos duplicaban `icon.js`). El componente inlineado heredaba el `import.meta.url` del anfitrión, así que `adoptCss` le cargaba el CSS equivocado: `is-icon` acababa con `actions/button.min.css`, su host dejaba de ser cuadrado (15×23.3) y el icono se veía descentrado en TODOS los triggers. El build marca los imports entre componentes como externos y `tests/cdn-folders.test.mjs` verifica cada uno.
 
 ## Reglas obligatorias para LLM

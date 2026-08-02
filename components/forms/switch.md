@@ -15,7 +15,7 @@ preview: ../../previews/forms/is-switch.html
 Interruptor form-associated con paridad funcional con el
 Switch de MUI:
 mismo contrato de formulario que is-checkbox, con carril y perilla deslizante,
-color por variant, iconos en la perilla y rótulos dentro del carril.
+color por color, iconos en la perilla y rótulos dentro del carril.
 
 Este módulo registra `<is-switch>`.
 
@@ -36,7 +36,7 @@ import './switch.js';
 ## Ejemplo mínimo
 
 ```html
-<is-switch variant="success" checked>success</is-switch>
+<is-switch color="success" checked>success</is-switch>
 ```
 
 ## API
@@ -55,7 +55,7 @@ import './switch.js';
 | `required` | boolean | Fuente define default/restricción. |
 | `error` | boolean | Fuente define default/restricción. |
 | `hint` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `label-placement` | string/según contrato | Fuente define default/restricción. |
 | `icon` | string/según contrato | Fuente define default/restricción. |
 | `checked-icon` | string/según contrato | Fuente define default/restricción. |
@@ -74,7 +74,7 @@ import './switch.js';
 | `value` | lectura/escritura | Declarada por clase. |
 | `name` | lectura/escritura | Declarada por clase. |
 | `hint` | lectura/escritura | Declarada por clase. |
-| `variant` | lectura/escritura | Declarada por clase. |
+| `color` | lectura/escritura | Declarada por clase. |
 | `labelPlacement` | lectura/escritura | Declarada por clase. |
 | `icon` | lectura/escritura | Declarada por clase. |
 | `checkedIcon` | lectura/escritura | Declarada por clase. |
@@ -172,7 +172,7 @@ Documentación de cabecera preservada desde fuente:
 > <is-switch> — Interruptor form-associated (track + thumb).
 > Atributos
 >   name, value (default "on"), hint
->   variant          brand (default) | neutral | success | warning | danger
+>   color          brand (default) | neutral | success | warning | danger
 >   label-placement  end (default) | start | top | bottom
 >   icon             nombre de <is-icon> dentro del thumb apagado
 >   checked-icon     nombre de <is-icon> dentro del thumb encendido
@@ -201,7 +201,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 
 ```html
 <is-switch icon="mdi:weather-night" checked-icon="mdi:white-balance-sunny"
-variant="warning" checked>Tema claro</is-switch>
+color="warning" checked>Tema claro</is-switch>
 ```
 
 ## Errores comunes
@@ -210,7 +210,7 @@ variant="warning" checked>Tema claro</is-switch>
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

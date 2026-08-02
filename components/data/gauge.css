@@ -41,9 +41,9 @@ svg[data-half="true"] { height: calc(var(--gauge-size, 7.5em) / 2); }
   transition: stroke-dashoffset 0.4s ease-out;
 }
 
-svg[data-variant="success"] .fill { stroke: var(--success); }
-svg[data-variant="warning"] .fill { stroke: var(--warning); }
-svg[data-variant="danger"] .fill { stroke: var(--danger); }
+svg[data-color="success"] .fill { stroke: var(--success); }
+svg[data-color="warning"] .fill { stroke: var(--warning); }
+svg[data-color="danger"] .fill { stroke: var(--danger); }
 
 .content {
   position: absolute;

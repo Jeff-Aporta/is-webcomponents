@@ -119,7 +119,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-diagram-lightbox> — variante del lightbox para diagramas.
+> <is-diagram-lightbox> — colore del lightbox para diagramas.
 > Es un <is-lightbox> con la barra específica de la animación tortuga
 > (<< ▶/⏸ ■ >>), el anillo de cuenta regresiva del auto-replay, el botón
 > de código JSON y el botón de compartir enlace. El resto del visor
@@ -172,7 +172,7 @@ console.log('Compartir:', e.detail.url);
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

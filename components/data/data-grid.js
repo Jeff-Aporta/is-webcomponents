@@ -54,7 +54,7 @@ import {
  * page-size-options, pagination-mode, row-count, sorting-mode, sorting-order,
  * filter-mode, selection-mode, checkbox-selection, cell-selection, editable,
  * edit-mode, show-toolbar, quick-filter, header-filters, hide-footer,
- * hide-footer-selected-count, virtualize, overscan, loading, loading-variant,
+ * hide-footer-selected-count, virtualize, overscan, loading, loading-color,
  * list-view, tree-data, row-reorder, detail-height, tab-navigation, clipboard,
  * undo-redo, aggregation-position, disable-column-menu, disable-column-filter,
  * disable-column-sort, disable-column-resize, disable-column-reorder,
@@ -1676,7 +1676,7 @@ import {
       if (this.loading) {
         const variant = LOADING_VARIANTS[this.getAttribute('loading-variant')] || 'spinner';
         this.#overlay.hidden = false;
-        this.#overlay.dataset.variant = variant;
+        this.#overlay.dataset.color = variant;
         this.#overlay.innerHTML = variant === 'skeleton'
           ? `<div class="skeleton">${'<span></span>'.repeat(10)}</div>`
           : variant === 'progress'
@@ -1687,7 +1687,7 @@ import {
       if (this.#nodes.length === 0) {
         const filtered = this.#activeFilters().length > 0 || this.#quickValue !== '';
         this.#overlay.hidden = false;
-        this.#overlay.dataset.variant = 'empty';
+        this.#overlay.dataset.color = 'empty';
         this.#overlay.innerHTML = `<div class="empty">${escapeHtml(filtered ? this.#text.noResults : this.#text.noRows)}</div>`;
         return;
       }

@@ -34,8 +34,8 @@ import './button.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button variant="success">Aprobado</is-button>
-<is-button variant="danger" appearance="outlined">Eliminar</is-button>
+<is-button color="success">Aprobado</is-button>
+<is-button color="danger" variant="outlined">Eliminar</is-button>
 ```
 
 ## API
@@ -46,8 +46,8 @@ import './button.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `variant` | string/según contrato | Fuente define default/restricción. |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
 | `hue` | string/según contrato | Fuente define default/restricción. |
 | `disabled` | boolean | Fuente define default/restricción. |
 | `loading` | boolean | Fuente define default/restricción. |
@@ -208,8 +208,8 @@ Documentación de cabecera preservada desde fuente:
 > Usa Shadow DOM con CSS propio, es form-associated (participa en <form>),
 > y expone parts + custom states para personalización desde fuera.
 > Atributos
->  variant      brand | neutral | success | warning | danger   (default: brand)
->  appearance   filled | outlined | plain                     (default: filled)
+>  color      brand | neutral | success | warning | danger   (default: brand)
+>  variant   filled | outlined | plain                     (default: filled)
 >  hue          number (0-360)  color propio para el highlight cuando está
 >                             [selected] dentro de <is-button-group>. Si no
 >                             se define, el grupo usa su --is-accent.
@@ -279,7 +279,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ```html
 <div style="font-size: 1.25rem">
-<is-button variant="brand">Grande</is-button>
+<is-button color="brand">Grande</is-button>
 </div>
 ```
 
@@ -289,7 +289,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

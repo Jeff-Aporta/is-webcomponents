@@ -46,7 +46,7 @@ import './treemap.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
 
@@ -115,9 +115,9 @@ Documentación de cabecera preservada desde fuente:
 >     </script>
 >   </is-treemap>
 > Mismo esqueleto que <is-flowchart> / <is-mindmap>: shadow DOM, slot JSON +
-> MutationObserver, tema por atributo `data-theme`, `variant` (inline | viewer),
+> MutationObserver, tema por atributo `data-theme`, `color` (inline | viewer),
 > lightbox propio.
-> Atributos: variant (inline | viewer), without-viewer
+> Atributos: color (inline | viewer), without-viewer
 > Propiedades: payload, spec, layout
 > Eventos: is-render, is-open-viewer
 
@@ -148,7 +148,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

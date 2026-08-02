@@ -10,7 +10,7 @@ import '../media/icon.js';
  * Atributos
  *   type            text | email | password | number | search | tel | url | date  (default text)
  *   name, value, placeholder, label, hint, autocomplete
- *   appearance      outlined (default) | filled | underlined
+ *   variant      outlined (default) | filled | underlined
  *   label-placement top (default) | start
  *   error-text      mensaje mostrado en lugar del hint cuando hay error
  *   prefix, suffix  adornos de texto corto ("$", "kg") sin usar slot
@@ -71,7 +71,7 @@ import '../media/icon.js';
     'type', 'name', 'value', 'placeholder', 'label', 'hint',
     'disabled', 'required', 'readonly', 'clearable', 'passwordToggle',
     'min', 'max', 'step', 'maxlength', 'autocomplete',
-    'appearance', 'labelPlacement', 'error', 'errorText', 'showCount',
+    'variant', 'labelPlacement', 'error', 'errorText', 'showCount',
     'fullWidth', 'prefixText', 'suffixText'
   ];
 
@@ -200,13 +200,13 @@ import '../media/icon.js';
     }
     set type(v) { this.setAttribute('type', String(v)); }
 
-    get appearance() {
-      const a = (this.getAttribute('appearance') || '').toLowerCase();
+    get variant() {
+      const a = (this.getAttribute('variant') || '').toLowerCase();
       return APPEARANCES.includes(a) ? a : 'outlined';
     }
-    set appearance(v) {
-      if (v == null || v === '') this.removeAttribute('appearance');
-      else if (APPEARANCES.includes(String(v))) this.setAttribute('appearance', String(v));
+    set variant(v) {
+      if (v == null || v === '') this.removeAttribute('variant');
+      else if (APPEARANCES.includes(String(v))) this.setAttribute('variant', String(v));
     }
 
     get labelPlacement() {

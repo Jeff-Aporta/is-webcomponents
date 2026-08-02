@@ -51,7 +51,7 @@ import './check-icon-button.js';
  *   is-select  detail: { action }   — cuando se elige una acción
  *
  * Cada <is-speed-dial-action> acepta:
- *   icon, label, variant (brand|neutral|success|warning|danger), href, disabled
+ *   icon, label, color (brand|neutral|success|warning|danger), href, disabled
  *   El clic dispara is-select y, si no está disabled ni tiene href, cierra el dial.
  */
 (() => {
@@ -481,7 +481,7 @@ import './check-icon-button.js';
 
   // Acción individual — patrón primario: <button> extendido.
   class IsSpeedDialAction extends HTMLElement {
-    static get observedAttributes() { return ['icon', 'label', 'variant', 'href', 'disabled']; }
+    static get observedAttributes() { return ['icon', 'label', 'color', 'href', 'disabled']; }
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
@@ -499,8 +499,8 @@ import './check-icon-button.js';
       if (href) link.setAttribute('href', href);
       const label = this.getAttribute('label');
       if (label) link.setAttribute('aria-label', label);
-      const variant = this.getAttribute('variant') || 'brand';
-      link.dataset.variant = variant;
+      const variant = this.getAttribute('color') || 'brand';
+      link.dataset.color = variant;
       link.tabIndex = this.hasAttribute('disabled') ? -1 : 0;
       // Por defecto se cierra el dial al elegir; si tiene href, no intercepta.
       if (href) link.addEventListener('click', (e) => e.stopPropagation());
@@ -512,7 +512,7 @@ import './check-icon-button.js';
       if (!link) return;
       if (name === 'href') link.setAttribute('href', newVal || '#');
       if (name === 'label') link.setAttribute('aria-label', newVal || '');
-      if (name === 'variant') link.dataset.variant = newVal || 'brand';
+      if (name === 'color') link.dataset.color = newVal || 'brand';
       if (name === 'disabled') {
         link.classList.toggle('is-disabled', !!newVal);
         link.tabIndex = newVal ? -1 : 0;

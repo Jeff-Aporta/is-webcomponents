@@ -59,27 +59,27 @@
             <is-radio-group row value="a" label="brand (default)">
               <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
             </is-radio-group>
-            <is-radio-group row variant="neutral" value="a" label="neutral">
+            <is-radio-group row color="neutral" value="a" label="neutral">
               <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
             </is-radio-group>
-            <is-radio-group row variant="success" value="a" label="success">
+            <is-radio-group row color="success" value="a" label="success">
               <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
             </is-radio-group>
-            <is-radio-group row variant="warning" value="a" label="warning">
+            <is-radio-group row color="warning" value="a" label="warning">
               <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
             </is-radio-group>
-            <is-radio-group row variant="danger" value="a" label="danger">
+            <is-radio-group row color="danger" value="a" label="danger">
               <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
             </is-radio-group>
-            <is-radio-group row variant="success" value="c" label="El radio manda sobre el grupo">
+            <is-radio-group row color="success" value="c" label="El radio manda sobre el grupo">
               <is-radio value="c">Hereda success</is-radio>
-              <is-radio value="d" variant="danger">variant="danger"</is-radio>
+              <is-radio value="d" color="danger">variant="danger"</is-radio>
             </is-radio-group>
           </div>
         </is-demo>
-        <pre class="code">&lt;is-radio-group variant="success" row&gt;
+        <pre class="code">&lt;is-radio-group color="success" row&gt;
   &lt;is-radio value="c"&gt;Hereda success&lt;/is-radio&gt;
-  &lt;is-radio value="d" variant="danger"&gt;Se sale del grupo&lt;/is-radio&gt;
+  &lt;is-radio value="d" color="danger"&gt;Se sale del grupo&lt;/is-radio&gt;
 &lt;/is-radio-group&gt;</pre>
       </section>
 
@@ -185,7 +185,7 @@
           </div>
         </is-demo>
         <div class="demo-row" style="gap:.5rem;margin-top:12px">
-          <is-button appearance="outlined" id="btnError">Alternar error</is-button>
+          <is-button variant="outlined" id="btnError">Alternar error</is-button>
         </div>
         <pre class="code">&lt;is-radio-group error error-text="Debes elegir una opción"&gt;…&lt;/is-radio-group&gt;
 grupo.errorText = '';   // limpia mensaje y estado</pre>
@@ -237,8 +237,8 @@ grupo.errorText = '';   // limpia mensaje y estado</pre>
                 <is-radio value="efectivo">Efectivo</is-radio>
               </is-radio-group>
               <div class="demo-row" style="gap:.5rem">
-                <is-button variant="brand" id="btnSend">Enviar</is-button>
-                <is-button appearance="outlined" id="btnReset">Reset</is-button>
+                <is-button color="brand" id="btnSend">Enviar</is-button>
+                <is-button variant="outlined" id="btnReset">Reset</is-button>
               </div>
             </div>
           </form>

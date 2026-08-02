@@ -14,7 +14,7 @@ preview: ../../previews/forms/is-radio.html
 
 Paridad funcional con el
 Radio Group de MUI:
-color por variant, posición de etiqueta, estado de error, solo lectura y
+color por color, posición de etiqueta, estado de error, solo lectura y
 navegación por teclado según el patrón ARIA radiogroup.
 El grupo es el elemento form-associated: publica el valor, valida y gobierna el teclado.
 Los is-radio son las opciones y solo avisan al grupo cuando se eligen.
@@ -62,7 +62,7 @@ import './radio-group.js';
 | `hint` | string/según contrato | Fuente define default/restricción. |
 | `orientation` | string/según contrato | Fuente define default/restricción. |
 | `row` | boolean | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `label-placement` | string/según contrato | Fuente define default/restricción. |
 | `error` | boolean | Fuente define default/restricción. |
 | `error-text` | string/según contrato | Fuente define default/restricción. |
@@ -83,7 +83,7 @@ import './radio-group.js';
 | `hint` | lectura/escritura | Declarada por clase. |
 | `orientation` | lectura/escritura | Declarada por clase. |
 | `row` | lectura/escritura | Declarada por clase. |
-| `variant` | lectura/escritura | Declarada por clase. |
+| `color` | lectura/escritura | Declarada por clase. |
 | `labelPlacement` | lectura/escritura | Declarada por clase. |
 | `radios` | solo lectura | Declarada por clase. |
 | `form` | solo lectura | Declarada por clase. |
@@ -166,7 +166,7 @@ Documentación de cabecera preservada desde fuente:
 > Atributos
 >   name, value, label, hint
 >   orientation      vertical (default) | horizontal   ·   row = alias booleano de horizontal
->   variant          brand (default) | neutral | success | warning | danger
+>   color          brand (default) | neutral | success | warning | danger
 >   label-placement  end (default) | start | top | bottom   (se aplica a los hijos)
 >   error-text       mensaje de error; sustituye al hint y activa el estado de error
 >   disabled, required, readonly, error   (boolean)
@@ -190,9 +190,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-radio-group variant="success" row>
+<is-radio-group color="success" row>
 <is-radio value="c">Hereda success</is-radio>
-<is-radio value="d" variant="danger">Se sale del grupo</is-radio>
+<is-radio value="d" color="danger">Se sale del grupo</is-radio>
 </is-radio-group>
 ```
 
@@ -202,7 +202,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

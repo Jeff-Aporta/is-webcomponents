@@ -5,7 +5,7 @@ import { expandSequencePayloadForJson } from './sequence-spec.js';
 import '../media/icon.js';
 
 /**
- * <is-diagram-lightbox> — variante del lightbox para diagramas.
+ * <is-diagram-lightbox> — colore del lightbox para diagramas.
  *
  * Es un <is-lightbox> con la barra específica de la animación tortuga
  * (<< ▶/⏸ ■ >>), el anillo de cuenta regresiva del auto-replay, el botón
@@ -233,7 +233,7 @@ class IsDiagramLightbox extends IsLightbox {
       return;
     }
     const el = document.createElement(tag);
-    el.setAttribute('variant', 'viewer');
+    el.setAttribute('color', 'viewer');
     el.payload = this.#basePayload;
     el.hiddenGroups = this.#hiddenGroups;
     el.addEventListener('is-turtle-state', (e) => this.#onTurtleState(e.detail));

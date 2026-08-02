@@ -59,9 +59,9 @@
 }
 
 
-.stat[data-variant="success"] .icon { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
-.stat[data-variant="danger"] .icon { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
-.stat[data-variant="warning"] .icon { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
+.stat[data-color="success"] .icon { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
+.stat[data-color="danger"] .icon { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
+.stat[data-color="warning"] .icon { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
 
 .value {
   font-size: 1.75em;

@@ -9,7 +9,7 @@ import '../media/icon.js';
  * menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría
  * recortado y le abriría scroll horizontal.
  *
- * Attrs: value, type (normal|checkbox), checked, disabled, variant (default|danger)
+ * Attrs: value, type (normal|checkbox), checked, disabled, color (default|danger)
  * Slots: default (label), icon, details, submenu
  * Methods: openSubmenu(), closeSubmenu()
  * Parts: checkmark, icon, label, details, submenu, submenu-icon
@@ -36,7 +36,7 @@ import '../media/icon.js';
 
   const SUPPORTS_POPOVER = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
 
-  const OBSERVED = ['value', 'type', 'checked', 'disabled', 'variant', 'submenu-open'];
+  const OBSERVED = ['value', 'type', 'checked', 'disabled', 'color', 'submenu-open'];
 
   class IsDropdownItem extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -96,11 +96,11 @@ import '../media/icon.js';
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
 
-    get variant() {
-      return this.getAttribute('variant') === 'danger' ? 'danger' : 'default';
+    get color() {
+      return this.getAttribute('color') === 'danger' ? 'danger' : 'default';
     }
-    set variant(v) {
-      this.setAttribute('variant', v === 'danger' ? 'danger' : 'default');
+    set color(v) {
+      this.setAttribute('color', v === 'danger' ? 'danger' : 'default');
     }
 
     get submenuOpen() { return this.hasAttribute('submenu-open'); }

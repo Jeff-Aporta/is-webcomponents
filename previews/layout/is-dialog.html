@@ -39,8 +39,8 @@
         <is-dialog id="dlgStandard" label="Diálogo estándar">
           <p>Esto es un diálogo estándar. Puedes poner cualquier contenido aquí.</p>
           <div slot="footer">
-            <is-button data-dialog="close" appearance="outlined">Cancelar</is-button>
-            <is-button data-dialog="close" variant="brand">Aceptar</is-button>
+            <is-button data-dialog="close" variant="outlined">Cancelar</is-button>
+            <is-button data-dialog="close" color="brand">Aceptar</is-button>
           </div>
         </is-dialog>
 
@@ -66,7 +66,7 @@
         <is-dialog id="dlgNoHeader" without-header>
           <p>¡Mira mamá, sin header! A veces solo necesitas un diálogo limpio y simple.</p>
           <div slot="footer">
-            <is-button data-dialog="close" appearance="outlined">Cerrar</is-button>
+            <is-button data-dialog="close" variant="outlined">Cerrar</is-button>
           </div>
         </is-dialog>
 
@@ -87,7 +87,7 @@
         <is-dialog id="dlgWide" label="Diálogo ancho" style="--width: 800px">
           <p>Este diálogo es más ancho que el predeterminado, útil cuando necesitas más espacio para el contenido.</p>
           <div slot="footer">
-            <is-button data-dialog="close" variant="brand">Entendido</is-button>
+            <is-button data-dialog="close" color="brand">Entendido</is-button>
           </div>
         </is-dialog>
 
@@ -107,13 +107,13 @@
 
         <is-dialog id="dlgActions" label="Con header-actions">
           <div slot="header-actions">
-            <is-button appearance="plain" aria-label="Maximizar">
+            <is-button variant="plain" aria-label="Maximizar">
               <is-icon slot="start" icon="mdi:arrow-top-right-bottom-left" aria-hidden="true"></is-icon>
             </is-button>
           </div>
           <p>Añade acciones custom al header.</p>
           <div slot="footer">
-            <is-button data-dialog="close" variant="brand">OK</is-button>
+            <is-button data-dialog="close" color="brand">OK</is-button>
           </div>
         </is-dialog>
 
@@ -157,7 +157,7 @@
         <is-dialog id="dlgPrevent" label="¿Salir sin guardar?">
           <p>Este diálogo solo se cierra con el botón "Guardar y salir". Si cierras con Escape o el botón X, el diálogo pulsa brevemente.</p>
           <div slot="footer">
-            <is-button id="btnForceClose" variant="brand">Guardar y salir</is-button>
+            <is-button id="btnForceClose" color="brand">Guardar y salir</is-button>
           </div>
         </is-dialog>
 
@@ -189,8 +189,8 @@
             </label>
           </form>
           <div slot="footer">
-            <is-button id="btnFormCancel" data-dialog="close" appearance="outlined">Cancelar</is-button>
-            <is-button id="btnFormSave" variant="brand">Guardar</is-button>
+            <is-button id="btnFormCancel" data-dialog="close" variant="outlined">Cancelar</is-button>
+            <is-button id="btnFormSave" color="brand">Guardar</is-button>
           </div>
         </is-dialog>
 
@@ -200,7 +200,7 @@
   <span class="tag">&lt;/form&gt;</span>
   <span class="tag">&lt;div</span> <span class="attr">slot</span>=<span class="val">"footer"</span><span class="tag">&gt;</span>
     <span class="tag">&lt;is-button</span> <span class="attr">data-dialog</span>=<span class="val">"close"</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
-    <span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Guardar<span class="tag">&lt;/is-button&gt;</span>
+    <span class="tag">&lt;is-button</span> <span class="attr">color</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Guardar<span class="tag">&lt;/is-button&gt;</span>
   <span class="tag">&lt;/div&gt;</span>
 <span class="tag">&lt;/is-dialog&gt;</span></pre>
       </section>

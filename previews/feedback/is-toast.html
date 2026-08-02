@@ -25,11 +25,11 @@
           class="demo"
           data-code='&lt;is-toast id="toaster" placement="bottom-end"&gt;&lt;/is-toast&gt;
 
-&lt;is-button variant="brand" id="btn-brand"&gt;brand&lt;/is-button&gt;
-&lt;is-button variant="success" id="btn-success"&gt;success&lt;/is-button&gt;
-&lt;is-button variant="warning" id="btn-warning"&gt;warning&lt;/is-button&gt;
-&lt;is-button variant="danger" id="btn-danger"&gt;danger&lt;/is-button&gt;
-&lt;is-button variant="neutral" id="btn-sticky"&gt;sticky (duration 0)&lt;/is-button&gt;
+&lt;is-button color="brand" id="btn-brand"&gt;brand&lt;/is-button&gt;
+&lt;is-button color="success" id="btn-success"&gt;success&lt;/is-button&gt;
+&lt;is-button color="warning" id="btn-warning"&gt;warning&lt;/is-button&gt;
+&lt;is-button color="danger" id="btn-danger"&gt;danger&lt;/is-button&gt;
+&lt;is-button color="neutral" id="btn-sticky"&gt;sticky (duration 0)&lt;/is-button&gt;
 
 &lt;script type="module"&gt;
   const toaster = document.getElementById("toaster");
@@ -52,11 +52,11 @@
 &lt;/script&gt;'
         >
           <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
-            <is-button variant="brand" id="btn-brand">brand</is-button>
-            <is-button variant="success" id="btn-success">success</is-button>
-            <is-button variant="warning" id="btn-warning">warning</is-button>
-            <is-button variant="danger" id="btn-danger">danger</is-button>
-            <is-button variant="neutral" id="btn-sticky">sticky (duration 0)</is-button>
+            <is-button color="brand" id="btn-brand">brand</is-button>
+            <is-button color="success" id="btn-success">success</is-button>
+            <is-button color="warning" id="btn-warning">warning</is-button>
+            <is-button color="danger" id="btn-danger">danger</is-button>
+            <is-button color="neutral" id="btn-sticky">sticky (duration 0)</is-button>
           </div>
         </is-demo>
         <pre class="code" data-lang="javascript">const toaster = document.getElementById('toaster');
@@ -136,9 +136,9 @@ document.querySelectorAll('[data-place]').forEach((btn) => {
         </p>
         <is-demo class="demo">
           <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
-            <is-button id="btn-promise-ok" variant="success">Simular éxito</is-button>
-            <is-button id="btn-promise-err" variant="danger">Simular error</is-button>
-            <is-button id="btn-promise-dynamic" variant="brand">Mensaje dinámico</is-button>
+            <is-button id="btn-promise-ok" color="success">Simular éxito</is-button>
+            <is-button id="btn-promise-err" color="danger">Simular error</is-button>
+            <is-button id="btn-promise-dynamic" color="brand">Mensaje dinámico</is-button>
           </div>
         </is-demo>
         <pre class="code" data-lang="javascript">// success/error como string

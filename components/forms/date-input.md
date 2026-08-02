@@ -104,7 +104,7 @@ Documentación de cabecera preservada desde fuente:
 > Compone <is-date-field> (edición por secciones) e <is-date-picker> (el
 > calendario) dentro de un <dialog> del top layer.
 > Atributos: label, hint, name, value (yyyy-mm-dd), min, max, required,
->            disabled, readonly, clearable, locale, variant (desktop|mobile),
+>            disabled, readonly, clearable, locale, color (desktop|mobile),
 >            action-bar, placement, close-on-select, views, open-to,
 >            first-day-of-week, show-outside-days, fixed-weeks,
 >            show-week-numbers, disable-past, disable-future, disabled-dates,
@@ -136,7 +136,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

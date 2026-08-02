@@ -105,7 +105,7 @@ Documentación de cabecera preservada desde fuente:
 > de escritorio de MUI), lista simple o reloj analógico.
 > Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required,
 >            disabled, readonly, clearable, locale, ampm, hour24, seconds,
->            panel (sections|list|clock), minutes-step, step, variant,
+>            panel (sections|list|clock), minutes-step, step, color,
 >            action-bar, placement, close-on-select
 > Events: is-change, is-show, is-hide
 > Methods: show(), hide()
@@ -135,7 +135,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

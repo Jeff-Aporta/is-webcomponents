@@ -12,7 +12,7 @@ preview: ../../previews/feedback/is-tag.html
 
 ## Propósito
 
-Etiqueta interactiva con variantes y botón de quitar opcional. Escala con font-size del contexto.
+Etiqueta interactiva con colores y botón de quitar opcional. Escala con font-size del contexto.
 
 Este módulo registra `<is-tag>`.
 
@@ -46,8 +46,8 @@ import './tag.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `variant` | string/según contrato | Fuente define default/restricción. |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
 | `pill` | boolean | Fuente define default/restricción. |
 | `with-remove` | boolean | Fuente define default/restricción. |
 | `remove-label` | string/según contrato | Fuente define default/restricción. |
@@ -127,11 +127,11 @@ No declara integración form-associated propia en este módulo.
 Documentación de cabecera preservada desde fuente:
 
 > <is-tag> — Web Component (vanilla).
-> Similar a is-badge; default appearance filled-outlined, variant brand.
+> Similar a is-badge; default variant filled-outlined, color brand.
 > Escala con font-size del contexto (métricas en em).
 > Atributos
->   variant       brand | neutral | info | success | warning | danger (default brand)
->   appearance    accent | filled | outlined | filled-outlined (default filled-outlined)
+>   color       brand | neutral | info | success | warning | danger (default brand)
+>   variant    accent | filled | outlined | filled-outlined (default filled-outlined)
 >   pill          boolean
 >   with-remove   boolean — muestra botón de quitar
 >   remove-label  string — aria-label del botón (default Quitar)
@@ -163,7 +163,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

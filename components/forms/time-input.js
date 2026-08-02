@@ -11,7 +11,7 @@ import './digital-clock.js';
  *
  * Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required,
  *            disabled, readonly, clearable, locale, ampm, hour24, seconds,
- *            panel (sections|list|clock), minutes-step, step, variant,
+ *            panel (sections|list|clock), minutes-step, step, color,
  *            action-bar, placement, close-on-select
  * Events: is-change, is-show, is-hide
  * Methods: show(), hide()

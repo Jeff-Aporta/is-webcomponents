@@ -13,7 +13,7 @@ preview: ../../previews/actions/is-fab.html
 ## Propósito
 
 Floating Action Button: botón circular principal que se posiciona de
-forma fija en la ventana. Soporta variantes, tamaños, etiquetas
+forma fija en la ventana. Soporta colores, tamaños, etiquetas
 extendidas, pulso de atención y posicionamiento en cualquier esquina.
 
 Este módulo registra `<is-fab>`.
@@ -48,7 +48,7 @@ import './fab.js';
 | --- | --- | --- |
 | `icon` | string/según contrato | Fuente define default/restricción. |
 | `position` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `href` | string/según contrato | Fuente define default/restricción. |
 | `pulse` | boolean | Fuente define default/restricción. |
 | `extended` | boolean | Fuente define default/restricción. |
@@ -60,7 +60,7 @@ import './fab.js';
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `position` | lectura/escritura | Declarada por clase. |
-| `variant` | lectura/escritura | Declarada por clase. |
+| `color` | lectura/escritura | Declarada por clase. |
 
 ### Slots
 
@@ -121,7 +121,7 @@ Documentación de cabecera preservada desde fuente:
 > Atributos
 >   icon        string  — iconify id del icono principal.
 >   position    bottom-end | bottom-start | top-end | top-start | inline (default 'bottom-end')
->   variant     brand | neutral | custom-color (default 'brand')
+>   color     brand | neutral | custom-color (default 'brand')
 >   href        string — si se define, renderiza <a>.
 >   pulse       boolean — animación de pulso para llamar la atención.
 >   extended    boolean — ancho extendido con label.
@@ -155,7 +155,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

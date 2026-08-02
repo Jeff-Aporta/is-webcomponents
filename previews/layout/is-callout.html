@@ -51,15 +51,15 @@
         </p>
 
         <div class="demo-stack">
-          <is-callout variant="brand">Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras.</is-callout>
-          <is-callout variant="neutral">Los horarios se muestran en tu zona horaria local.</is-callout>
-          <is-callout variant="success">Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad.</is-callout>
-          <is-callout variant="warning">Tu sesión está a punto de expirar. Guarda tu trabajo.</is-callout>
-          <is-callout variant="danger">Esta acción no se puede deshacer. Eliminará el proyecto para todos.</is-callout>
+          <is-callout color="brand">Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras.</is-callout>
+          <is-callout color="neutral">Los horarios se muestran en tu zona horaria local.</is-callout>
+          <is-callout color="success">Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad.</is-callout>
+          <is-callout color="warning">Tu sesión está a punto de expirar. Guarda tu trabajo.</is-callout>
+          <is-callout color="danger">Esta acción no se puede deshacer. Eliminará el proyecto para todos.</is-callout>
         </div>
 
-        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">variant</span>=<span class="val">"success"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span>
-<span class="tag">&lt;is-callout</span> <span class="attr">variant</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span></pre>
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">color</span>=<span class="val">"success"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span>
+<span class="tag">&lt;is-callout</span> <span class="attr">color</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span></pre>
       </section>
 
       <!-- ===== 3. APARIENCIAS ===== -->
@@ -71,14 +71,14 @@
         </p>
 
         <div class="demo-stack">
-          <is-callout variant="brand" appearance="accent">Esta variante <strong>accent</strong> capta la atención de inmediato.</is-callout>
-          <is-callout variant="brand" appearance="filled-outlined">Fondo + borde, el más habitual.</is-callout>
-          <is-callout variant="brand" appearance="filled">Solo fondo, sin borde.</is-callout>
-          <is-callout variant="brand" appearance="outlined">Solo borde, fondo transparente.</is-callout>
-          <is-callout variant="brand" appearance="plain">Sin fondo ni borde, solo texto e icono.</is-callout>
+          <is-callout color="brand" variant="accent">Esta variante <strong>accent</strong> capta la atención de inmediato.</is-callout>
+          <is-callout color="brand" variant="filled-outlined">Fondo + borde, el más habitual.</is-callout>
+          <is-callout color="brand" variant="filled">Solo fondo, sin borde.</is-callout>
+          <is-callout color="brand" variant="outlined">Solo borde, fondo transparente.</is-callout>
+          <is-callout color="brand" variant="plain">Sin fondo ni borde, solo texto e icono.</is-callout>
         </div>
 
-        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">appearance</span>=<span class="val">"accent"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span></pre>
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">variant</span>=<span class="val">"accent"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span></pre>
       </section>
 
       <!-- ===== 4. TAMAÑOS ===== -->
@@ -109,17 +109,17 @@
         </p>
 
         <div class="demo-stack">
-          <is-callout variant="warning">
+          <is-callout color="warning">
             <is-icon slot="icon" icon="mdi:timer-sand" aria-hidden="true"></is-icon>
             Tiempo limitado: queda 1 día para enviar la solicitud.
           </is-callout>
 
-          <is-callout variant="success">
+          <is-callout color="success">
             <is-icon slot="icon" icon="mdi:rocket-launch" aria-hidden="true"></is-icon>
             Lanzamiento completado. Métricas disponibles.
           </is-callout>
 
-          <is-callout variant="danger">
+          <is-callout color="danger">
             <is-icon slot="icon" icon="mdi:shield-alert" aria-hidden="true"></is-icon>
             Bloqueo de seguridad: demasiados intentos.
           </is-callout>
@@ -130,7 +130,7 @@
           </is-callout>
         </div>
 
-        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">variant</span>=<span class="val">"warning"</span><span class="tag">&gt;</span>
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">color</span>=<span class="val">"warning"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;is-icon</span> <span class="attr">slot</span>=<span class="val">"icon"</span> <span class="attr">icon</span>=<span class="val">"mdi:timer-sand"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-icon&gt;</span>
   Tiempo limitado.
 <span class="tag">&lt;/is-callout&gt;</span></pre>
@@ -145,7 +145,7 @@
         </p>
 
         <is-demo class="demo">
-          <is-callout variant="neutral" icon="">Todas las horas se muestran en tu zona horaria local.</is-callout>
+          <is-callout color="neutral" icon="">Todas las horas se muestran en tu zona horaria local.</is-callout>
         </is-demo>
 
         <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">icon</span>=<span class="val">""</span><span class="tag">&gt;</span>Texto plano.<span class="tag">&lt;/is-callout&gt;</span></pre>
@@ -160,18 +160,18 @@
         </p>
 
         <div class="demo-stack">
-          <is-callout variant="brand">
+          <is-callout color="brand">
             <strong>Una nueva versión está disponible</strong>
             <p>Incluye el módulo de reportes y soporte para multi-empresa.</p>
-            <is-button appearance="outlined" variant="brand">Más tarde</is-button>
-            <is-button appearance="filled" variant="brand" style="margin-left:.5em">Actualizar</is-button>
+            <is-button variant="outlined" color="brand">Más tarde</is-button>
+            <is-button variant="filled" color="brand" style="margin-left:.5em">Actualizar</is-button>
           </is-callout>
         </div>
 
-        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">variant</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">color</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;strong&gt;</span>Una nueva versión está disponible<span class="tag">&lt;/strong&gt;</span>
-  <span class="tag">&lt;is-button</span> <span class="attr">appearance</span>=<span class="val">"outlined"</span><span class="tag">&gt;</span>Más tarde<span class="tag">&lt;/is-button&gt;</span>
-  <span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Actualizar<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"outlined"</span><span class="tag">&gt;</span>Más tarde<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">color</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Actualizar<span class="tag">&lt;/is-button&gt;</span>
 <span class="tag">&lt;/is-callout&gt;</span></pre>
       </section>
 
@@ -184,7 +184,7 @@
         </p>
 
         <is-demo class="demo">
-          <is-callout variant="success" style="--callout-bg: #d3f9d8; --callout-border: #2f9e44;">
+          <is-callout color="success" style="--callout-bg: #d3f9d8; --callout-border: #2f9e44;">
             CSS parts en uso: el fondo y el borde se redefinen vía custom properties.
           </is-callout>
         </is-demo>

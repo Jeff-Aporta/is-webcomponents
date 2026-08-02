@@ -49,7 +49,7 @@ import './sparkline.js';
 | `data` | string/según contrato | Fuente define default/restricción. |
 | `type` | string/según contrato | Fuente define default/restricción. |
 | `label` | string/según contrato | Fuente define default/restricción. |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
 | `curve` | string/según contrato | Fuente define default/restricción. |
 | `trend` | string/según contrato | Fuente define default/restricción. |
 
@@ -121,9 +121,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-sparkline appearance="solid" data="…"></is-sparkline>
-<is-sparkline appearance="gradient" data="…"></is-sparkline>
-<is-sparkline appearance="line" data="…"></is-sparkline>
+<is-sparkline variant="solid" data="…"></is-sparkline>
+<is-sparkline variant="gradient" data="…"></is-sparkline>
+<is-sparkline variant="line" data="…"></is-sparkline>
 ```
 
 ## Errores comunes
@@ -132,7 +132,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

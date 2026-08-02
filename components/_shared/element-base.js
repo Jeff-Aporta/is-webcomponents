@@ -23,7 +23,7 @@
  *
  *   class IsFoo extends ElementBase {
  *     static TEMPLATE = TEMPLATE;
- *     static get observedAttributes() { return ['variant', 'size']; }
+ *     static get observedAttributes() { return ['color', 'size']; }
  *
  *     constructor() {
  *       super();
@@ -31,11 +31,11 @@
  *       this.#something = this.shadowRoot.querySelector('.something');
  *     }
  *
- *     onConnected() { this.#syncVariant(); }
- *     onAttributeChanged(name, _old, _new) { if (name === 'variant') this.#syncVariant(); }
+ *     onConnected() { this.#syncColor(); }
+ *     onAttributeChanged(name, _old, _new) { if (name === 'color') this.#syncColor(); }
  *
- *     get variant() { return this.getAttribute('variant') ?? 'brand'; }
- *     set variant(v) { v ? this.setAttribute('variant', v) : this.removeAttribute('variant'); }
+ *     get color() { return this.getAttribute('color') ?? 'brand'; }
+ *     set color(v) { v ? this.setAttribute('color', v) : this.removeAttribute('color'); }
  *   }
  *
  * Notas:

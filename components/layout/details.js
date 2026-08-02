@@ -12,7 +12,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   name             string  — grupo accordion: si dos <is-details> comparten
  *                             `name`, abrir uno cierra el resto
  *   disabled         boolean
- *   appearance       filled | outlined | filled-outlined | plain
+ *   variant       filled | outlined | filled-outlined | plain
  *                    (default 'outlined', reflected)
  *   icon-placement   start | end
  *                    (default 'end', reflected)
@@ -63,9 +63,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const OBSERVED = ['open', 'summary', 'name', 'disabled', 'appearance', 'icon-placement'];
+  const OBSERVED = ['open', 'summary', 'name', 'disabled', 'variant', 'icon-placement'];
 
-  const VALID_APPEARANCE = ['filled', 'outlined', 'filled-outlined', 'plain'];
+  const VALID_VARIANT = ['filled', 'outlined', 'filled-outlined', 'plain'];
   const VALID_ICON_PLACEMENT = ['start', 'end'];
 
   class IsDetails extends HTMLElement {
@@ -76,7 +76,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #content;
     #root;
     #defaultIcon;
-    #upgradeProps = ['open', 'summary', 'name', 'disabled', 'appearance', 'icon-placement'];
+    #upgradeProps = ['open', 'summary', 'name', 'disabled', 'variant', 'icon-placement'];
 
     constructor() {
       super();
@@ -97,7 +97,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     connectedCallback() {
       this.#mounted = true;
       this.#upgradeProperties();
-      if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'outlined');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'outlined');
       if (!this.hasAttribute('icon-placement')) this.setAttribute('icon-placement', 'end');
 
       // Si no hay slot summary y hay atributo, reflejarlo en un nodo propio
@@ -122,8 +122,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'appearance' && newVal && !VALID_APPEARANCE.includes(newVal)) {
-        this.setAttribute('appearance', 'outlined');
+      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
+        this.setAttribute('variant', 'outlined');
         return;
       }
       if (name === 'icon-placement' && newVal && !VALID_ICON_PLACEMENT.includes(newVal)) {
@@ -165,13 +165,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
 
-    get appearance() {
-      const v = this.getAttribute('appearance');
-      return VALID_APPEARANCE.includes(v) ? v : 'outlined';
+    get variant() {
+      const v = this.getAttribute('variant');
+      return VALID_VARIANT.includes(v) ? v : 'outlined';
     }
-    set appearance(v) {
-      if (v == null || v === '') this.removeAttribute('appearance');
-      else if (VALID_APPEARANCE.includes(v)) this.setAttribute('appearance', v);
+    set variant(v) {
+      if (v == null || v === '') this.removeAttribute('variant');
+      else if (VALID_VARIANT.includes(v)) this.setAttribute('variant', v);
     }
 
     get iconPlacement() {

@@ -82,13 +82,13 @@
   }
 
   /* Móvil: centrado y con fondo atenuado, como los pickers móviles de MUI. */
-  .panel[data-variant="mobile"] {
+  .panel[data-color="mobile"] {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
 
-  .popup:has(.panel[data-variant="mobile"])::backdrop {
+  .popup:has(.panel[data-color="mobile"])::backdrop {
     background: rgb(0 0 0 / 45%);
   }
 

@@ -9,7 +9,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  * Atributos
  *   label         string   a11y, anunciado por AT; no se muestra
  *   orientation   horizontal | vertical            (default horizontal, reflected)
- *   appearance    joined | segmented | separated   (default joined, reflected)
+ *   variant    joined | segmented | separated   (default joined, reflected)
  *   select        none | single | multiple         (default none)
  *   value         valor(es) seleccionados; en `multiple` separados por coma
  *   pill          boolean  extremos redondeados en todo el grupo
@@ -38,12 +38,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
   `;
 
   const OBSERVED = [
-    'label', 'orientation', 'appearance', 'select', 'value',
+    'label', 'orientation', 'variant', 'select', 'value',
     'pill', 'stretch', 'allow-empty', 'disabled',
   ];
 
   const PROPS = [
-    'label', 'orientation', 'appearance', 'select', 'value', 'values',
+    'label', 'orientation', 'variant', 'select', 'value', 'values',
     'pill', 'stretch', 'allowEmpty', 'disabled',
   ];
 
@@ -73,7 +73,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#mounted = true;
       this.#upgradeProps();
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
-      if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'joined');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'joined');
       this.#selected = this.#readSelection();
       this.#syncA11y();
       this.#syncSelection();
@@ -100,12 +100,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.setAttribute('orientation', v === 'vertical' ? 'vertical' : 'horizontal');
     }
 
-    get appearance() {
-      const v = this.getAttribute('appearance');
+    get variant() {
+      const v = this.getAttribute('variant');
       return APPEARANCES.includes(v) ? v : 'joined';
     }
-    set appearance(v) {
-      this.setAttribute('appearance', APPEARANCES.includes(v) ? v : 'joined');
+    set variant(v) {
+      this.setAttribute('variant', APPEARANCES.includes(v) ? v : 'joined');
     }
 
     get select() {

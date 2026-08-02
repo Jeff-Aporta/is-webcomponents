@@ -189,6 +189,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
         threshold: this.#readThreshold(),
       });
       triggers.forEach((t) => this.#observer.observe(t));
+      // Marca inicial sin esperar al primer scroll ni al primer callback del
+      // observer (que puede tardar un frame o llegar con el layout a medias).
+      requestAnimationFrame(() => { if (this.#mounted) this.#pickActive(); });
 
       // Si el target gana/pierde triggers dinámicamente, refresca.
       this.#mutation = new MutationObserver(() => {
@@ -258,7 +261,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     #setActive(id) {
-      if (id === this.#activeId) return;
+      if (id === this.#activeId) { this.#paintActive(); return; }
       const prev = this.#activeId;
       const prevLink = prev ? this.#linkFor(prev) : null;
       if (prevLink) {
@@ -302,7 +305,22 @@ import { adoptCss } from '../_shared/adopt-css.js';
         a.classList.remove('is-scrollspy-active');
         a.removeAttribute('aria-current');
       });
+      // Repintar el activo: este metodo corre tambien en `slotchange`, que
+      // llega DESPUES del primer callback del observer. Sin esto se borraba
+      // la marca inicial y `#setActive` no la reponia (sale temprano porque
+      // el id ya es el activo), asi que al cargar no habia item resaltado
+      // hasta que el usuario hacia scroll.
+      this.#paintActive();
     };
+
+    /** Aplica la marca al enlace del id activo (idempotente). */
+    #paintActive() {
+      if (!this.#activeId) return;
+      const link = this.#linkFor(this.#activeId);
+      if (!link) return;
+      link.classList.add('is-scrollspy-active');
+      link.setAttribute('aria-current', 'location');
+    }
 
     #onClick = (e) => {
       const a = e.target.closest('a[href^="#"]');

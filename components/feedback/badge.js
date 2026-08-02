@@ -3,11 +3,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
 /**
  * <is-badge> — Web Component (vanilla).
  *
- * Etiqueta compacta con variantes semánticas.
+ * Etiqueta compacta con colores semánticas.
  *
  * Atributos
- *   variant      brand | neutral | success | warning | danger (default brand)
- *   appearance   accent | filled | outlined | filled-outlined (default accent)
+ *   color      brand | neutral | success | warning | danger (default brand)
+ *   variant   accent | filled | outlined | filled-outlined (default accent)
  *   pill         boolean
  *   attention    none | pulse | bounce (default none)
  *
@@ -24,9 +24,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </span>
   `;
 
-  const OBSERVED = ['variant', 'appearance', 'pill', 'attention'];
-  const VALID_VARIANT = ['brand', 'neutral', 'success', 'warning', 'danger'];
-  const VALID_APPEARANCE = ['accent', 'filled', 'outlined', 'filled-outlined'];
+  const OBSERVED = ['color', 'variant', 'pill', 'attention'];
+  const VALID_COLOR = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const VALID_VARIANT = ['accent', 'filled', 'outlined', 'filled-outlined'];
   const VALID_ATTENTION = ['none', 'pulse', 'bounce'];
 
   class IsBadge extends HTMLElement {
@@ -40,18 +40,18 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     connectedCallback() {
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
-      if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'accent');
+      if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'accent');
       if (!this.hasAttribute('attention')) this.setAttribute('attention', 'none');
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (oldVal === newVal) return;
-      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
-        this.setAttribute('variant', 'brand');
+      if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
+        this.setAttribute('color', 'brand');
       }
-      if (name === 'appearance' && newVal && !VALID_APPEARANCE.includes(newVal)) {
-        this.setAttribute('appearance', 'accent');
+      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
+        this.setAttribute('variant', 'accent');
       }
       if (name === 'attention' && newVal && !VALID_ATTENTION.includes(newVal)) {
         this.setAttribute('attention', 'none');

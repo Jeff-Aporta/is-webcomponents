@@ -9,8 +9,8 @@ import '../media/icon.js';
  * y expone parts + custom states para personalización desde fuera.
  *
  * Atributos
- *  variant      brand | neutral | success | warning | danger   (default: brand)
- *  appearance   filled | outlined | plain                     (default: filled)
+ *  color      brand | neutral | success | warning | danger   (default: brand)
+ *  variant   filled | outlined | plain                     (default: filled)
  *  hue          number (0-360)  color propio para el highlight cuando está
  *                             [selected] dentro de <is-button-group>. Si no
  *                             se define, el grupo usa su --is-accent.
@@ -97,7 +97,7 @@ import '../media/icon.js';
   // --- 2. Custom element ----------------------------------------------
 
   const OBSERVED = [
-    "variant", "appearance", "hue",
+    "color", "variant", "hue",
     "disabled", "loading", "pill", "with-caret",
     "href", "target", "rel", "download",
     "type", "title", "name", "value",
@@ -151,7 +151,7 @@ import '../media/icon.js';
     connectedCallback() {
       this.#mounted = true;
       this.#upgradeProperties();
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
+      if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       this.#syncTag();       // <button> o <a> según href
       this.#syncAttrs();     // propaga atributos al inner
       this.#syncDisabled();

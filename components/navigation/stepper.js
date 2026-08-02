@@ -15,7 +15,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   active       number  — paso activo (0-indexed).
  *   orientation  horizontal | vertical    (default horizontal)
  *   without-line boolean  — oculta la línea conectora.
- *   variant      default | simple | numbered | glass (default 'default')
+ *   color      default | simple | numbered | glass (default 'default')
  *
  * Atributos <is-stepper-step>
  *   label       string
@@ -49,7 +49,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const TG_OBSERVED = ['active', 'orientation', 'without-line', 'variant'];
+  const TG_OBSERVED = ['active', 'orientation', 'without-line', 'color'];
 
   class IsStepper extends HTMLElement {
     static get observedAttributes() { return TG_OBSERVED; }
@@ -104,10 +104,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #sync() {
       const steps = this.#steps();
       const orientation = this.getAttribute('orientation') || 'horizontal';
-      const variant = this.getAttribute('variant') || 'default';
+      const variant = this.getAttribute('color') || 'default';
       const base = this.shadowRoot.querySelector('.stepper');
       base.dataset.orientation = orientation;
-      base.dataset.variant = variant;
+      base.dataset.color = variant;
       const active = this.active;
       steps.forEach((s, i) => {
         const st = i < active ? 'done' : i === active ? 'active' : 'pending';

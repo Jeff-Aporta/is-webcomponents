@@ -39,7 +39,7 @@ import './dropdown.js';
 <is-button slot="trigger" with-caret>Options</is-button>
 <is-dropdown-item value="edit">Edit</is-dropdown-item>
 <is-divider></is-divider>
-<is-dropdown-item value="delete" variant="danger">Delete</is-dropdown-item>
+<is-dropdown-item value="delete" color="danger">Delete</is-dropdown-item>
 </is-dropdown>
 ```
 
@@ -155,7 +155,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 <is-button slot="trigger" with-caret>Options</is-button>
 <is-dropdown-item value="edit">Edit</is-dropdown-item>
 <is-divider></is-divider>
-<is-dropdown-item value="delete" variant="danger">Delete</is-dropdown-item>
+<is-dropdown-item value="delete" color="danger">Delete</is-dropdown-item>
 </is-dropdown>
 ```
 
@@ -165,7 +165,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

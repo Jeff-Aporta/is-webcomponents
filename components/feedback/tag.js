@@ -4,12 +4,12 @@ import '../media/icon.js';
 /**
  * <is-tag> — Web Component (vanilla).
  *
- * Similar a is-badge; default appearance filled-outlined, variant neutral.
+ * Similar a is-badge; default variant filled-outlined, color neutral.
  * Escala con font-size del contexto (métricas en em).
  *
  * Atributos
- *   variant       brand | neutral | info | success | warning | danger (default brand)
- *   appearance    accent | filled | outlined | filled-outlined (default filled-outlined)
+ *   color       brand | neutral | info | success | warning | danger (default brand)
+ *   variant    accent | filled | outlined | filled-outlined (default filled-outlined)
  *   pill          boolean
  *   with-remove   boolean — muestra botón de quitar
  *   remove-label  string — aria-label del botón (default Quitar)
@@ -31,9 +31,9 @@ import '../media/icon.js';
     </span>
   `;
 
-  const OBSERVED = ['variant', 'appearance', 'pill', 'with-remove', 'remove-label'];
-  const VALID_VARIANT = ['brand', 'neutral', 'info', 'success', 'warning', 'danger'];
-  const VALID_APPEARANCE = ['accent', 'filled', 'outlined', 'filled-outlined'];
+  const OBSERVED = ['color', 'variant', 'pill', 'with-remove', 'remove-label'];
+  const VALID_COLOR = ['brand', 'neutral', 'info', 'success', 'warning', 'danger'];
+  const VALID_VARIANT = ['accent', 'filled', 'outlined', 'filled-outlined'];
 
   class IsTag extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -52,18 +52,18 @@ import '../media/icon.js';
 
     connectedCallback() {
       this.#mounted = true;
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
-      if (!this.hasAttribute('appearance')) this.setAttribute('appearance', 'filled-outlined');
+      if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
+      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
       this.#syncRemove();
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
-        this.setAttribute('variant', 'neutral');
+      if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
+        this.setAttribute('color', 'neutral');
       }
-      if (name === 'appearance' && newVal && !VALID_APPEARANCE.includes(newVal)) {
-        this.setAttribute('appearance', 'filled-outlined');
+      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
+        this.setAttribute('variant', 'filled-outlined');
       }
       if (name === 'with-remove' || name === 'remove-label') this.#syncRemove();
     }

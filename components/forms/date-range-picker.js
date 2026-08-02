@@ -254,8 +254,8 @@ import './date-picker.js';
 
       this.#presets.replaceChildren(...keys.map((key) => {
         const btn = document.createElement('is-button');
-        btn.setAttribute('appearance', 'outlined');
-        btn.setAttribute('variant', key === 'reset' ? 'neutral' : 'brand');
+        btn.setAttribute('variant', 'outlined');
+        btn.setAttribute('color', key === 'reset' ? 'neutral' : 'brand');
         btn.setAttribute('pill', '');
         btn.dataset.preset = key;
         btn.textContent = dict[key];
@@ -274,7 +274,7 @@ import './date-picker.js';
         const range = presetRange(btn.dataset.preset);
         const on = !!range && range.join('/') === current;
         btn.toggleAttribute('data-active', on);
-        btn.setAttribute('appearance', on ? 'filled' : 'outlined');
+        btn.setAttribute('variant', on ? 'filled' : 'outlined');
       }
     }
 

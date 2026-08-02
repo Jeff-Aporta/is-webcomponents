@@ -12,7 +12,7 @@ import {
  *   resize          none | vertical | both | auto   (default vertical; auto = autosize)
  *   min-rows        filas mínimas con autosize (default: rows)
  *   max-rows        filas máximas con autosize; a partir de ahí hace scroll
- *   appearance      outlined (default) | filled | underlined
+ *   variant      outlined (default) | filled | underlined
  *   label-placement top (default) | start
  *   error-text      mensaje mostrado en lugar del hint cuando hay error
  *   disabled, required, readonly, autosize, error, show-count, full-width  (boolean)
@@ -53,7 +53,7 @@ import {
   const PROPS = [
     'name', 'value', 'placeholder', 'label', 'hint',
     'disabled', 'required', 'readonly', 'rows', 'maxlength', 'resize',
-    'autosize', 'minRows', 'maxRows', 'appearance', 'labelPlacement',
+    'autosize', 'minRows', 'maxRows', 'variant', 'labelPlacement',
     'error', 'errorText', 'showCount', 'fullWidth'
   ];
 
@@ -196,13 +196,13 @@ import {
     get maxRows() { return Number(this.getAttribute('max-rows')) || 0; }
     set maxRows(v) { v == null ? this.removeAttribute('max-rows') : this.setAttribute('max-rows', String(v)); }
 
-    get appearance() {
-      const a = (this.getAttribute('appearance') || '').toLowerCase();
+    get variant() {
+      const a = (this.getAttribute('variant') || '').toLowerCase();
       return APPEARANCES.includes(a) ? a : 'outlined';
     }
-    set appearance(v) {
-      if (v == null || v === '') this.removeAttribute('appearance');
-      else if (APPEARANCES.includes(String(v))) this.setAttribute('appearance', String(v));
+    set variant(v) {
+      if (v == null || v === '') this.removeAttribute('variant');
+      else if (APPEARANCES.includes(String(v))) this.setAttribute('variant', String(v));
     }
 
     get labelPlacement() {

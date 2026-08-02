@@ -84,6 +84,7 @@ import '../media/icon.js';
 
     #mounted = false;
     #urls = { single: '', category: '', all: '' };
+    #onHighlightReady = () => this.#render();
     #deps = [];
 
     constructor() {
@@ -99,6 +100,16 @@ import '../media/icon.js';
       this.#render();
       // El slot deps puede llegar después del connected (parser HTML).
       this.shadowRoot.addEventListener('slotchange', () => this.#render());
+      // highlight-pre.js va con defer: puede no estar listo en el primer
+      // render. Se reintenta al cargar la pagina y al cambiar de tema.
+      window.addEventListener('load', this.#onHighlightReady);
+      document.addEventListener('is-theme-change', this.#onHighlightReady);
+    }
+
+    disconnectedCallback() {
+      this.#mounted = false;
+      window.removeEventListener('load', this.#onHighlightReady);
+      document.removeEventListener('is-theme-change', this.#onHighlightReady);
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
@@ -203,6 +214,41 @@ import '../media/icon.js';
 
       this.#parseDeps();
       this.#renderDeps();
+      // Tras pintar el texto: si CodeMirror ya cargo, colorear.
+      this.#highlight();
+    }
+
+
+    /**
+     * Resalta los <pre> del shadow con CodeMirror, igual que el resto de la
+     * pagina. highlight-pre.js solo recorre el documento, asi que aqui hay
+     * que llamarlo a mano Y meter el CSS del tema dentro del shadow: ninguna
+     * de las dos cosas cruza la frontera del shadow DOM por si sola.
+     */
+    #highlight() {
+      const paint = window.__isHighlightCode;
+      if (typeof paint !== 'function') return;
+      this.#adoptCodeMirrorCss();
+      for (const pre of this.shadowRoot.querySelectorAll('.cdn__pre')) {
+        if (!pre.textContent.trim()) continue;
+        pre.classList.add('code');
+        pre.dataset.cmMode = 'htmlmixed';
+        paint(pre);
+      }
+    }
+
+    /** Clona en el shadow las hojas de CodeMirror que ya usa el documento. */
+    #adoptCodeMirrorCss() {
+      const hrefs = [...document.querySelectorAll('link[rel="stylesheet"]')]
+        .map((l) => l.href)
+        .filter((h) => /codemirror/i.test(h));
+      for (const href of hrefs) {
+        if (this.shadowRoot.querySelector(`link[href="${href}"]`)) continue;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        this.shadowRoot.prepend(link);
+      }
     }
 
     #onCopy = async (e) => {

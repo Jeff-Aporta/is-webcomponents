@@ -96,6 +96,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
       const margin = 8;
       const rect = panel.getBoundingClientRect();
+      // `position: fixed` se resuelve contra el viewport SALVO que un ancestro
+      // cree containing block (transform, filter, contain, will-change...).
+      // Con left/top en 0 el panel deberia estar en el origen del viewport: lo
+      // que se desvie es justo el offset del containing block, y se compensa.
+      const originX = rect.left;
+      const originY = rect.top;
       const vw = document.documentElement.clientWidth;
       const vh = document.documentElement.clientHeight;
 
@@ -107,8 +113,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (top + rect.height + margin > vh) top = y - rect.height;
       if (top < margin) top = Math.max(margin, vh - rect.height - margin);
 
-      panel.style.left = `${Math.round(left)}px`;
-      panel.style.top = `${Math.round(top)}px`;
+      panel.style.left = `${Math.round(left - originX)}px`;
+      panel.style.top = `${Math.round(top - originY)}px`;
       panel.style.visibility = '';
 
       this.setAttribute('open', '');

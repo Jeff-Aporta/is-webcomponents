@@ -9,7 +9,7 @@ import './date-picker.js';
  * calendario) dentro de un <dialog> del top layer.
  *
  * Atributos: label, hint, name, value (yyyy-mm-dd), min, max, required,
- *            disabled, readonly, clearable, locale, variant (desktop|mobile),
+ *            disabled, readonly, clearable, locale, color (desktop|mobile),
  *            action-bar, placement, close-on-select, views, open-to,
  *            first-day-of-week, show-outside-days, fixed-weeks,
  *            show-week-numbers, disable-past, disable-future, disabled-dates,

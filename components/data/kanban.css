@@ -164,10 +164,10 @@
   color: var(--muted);
 }
 
-.tag[data-variant="brand"] { background: color-mix(in srgb, var(--brand) 25%, transparent); color: var(--brand); }
-.tag[data-variant="success"] { background: color-mix(in srgb, var(--success) 25%, transparent); color: var(--success); }
-.tag[data-variant="warning"] { background: color-mix(in srgb, var(--warning) 25%, transparent); color: var(--warning); }
-.tag[data-variant="danger"] { background: color-mix(in srgb, var(--danger) 25%, transparent); color: var(--danger); }
+.tag[data-color="brand"] { background: color-mix(in srgb, var(--brand) 25%, transparent); color: var(--brand); }
+.tag[data-color="success"] { background: color-mix(in srgb, var(--success) 25%, transparent); color: var(--success); }
+.tag[data-color="warning"] { background: color-mix(in srgb, var(--warning) 25%, transparent); color: var(--warning); }
+.tag[data-color="danger"] { background: color-mix(in srgb, var(--danger) 25%, transparent); color: var(--danger); }
 
 .meta {
   font-size: 0.8rem;

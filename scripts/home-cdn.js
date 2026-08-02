@@ -22,8 +22,8 @@ const buildJsCssSnippet = () => [
   `${open}script type="module" src="${cdnJs('sparkline')}"${close}${open}${slash}script${close}`,
   '',
   `${open}!-- ...y úsalos como HTML nativo --${close}`,
-  `${open}is-button variant="brand"${close}Explorar${open}${slash}is-button${close}`,
-  `${open}is-badge variant="success"${close}+12%${open}${slash}is-badge${close}`,
+  `${open}is-button color="brand"${close}Explorar${open}${slash}is-button${close}`,
+  `${open}is-badge color="success"${close}+12%${open}${slash}is-badge${close}`,
   `${open}is-rating value="4" readonly${close}${open}${slash}is-rating${close}`,
   `${open}is-switch checked${close}${open}${slash}is-switch${close}`,
   `${open}is-sparkline values="4,6,5,8,7,11,13"${close}${open}${slash}is-sparkline${close}`,
@@ -36,7 +36,7 @@ const buildBundleSnippet = () => [
   `${open}!-- O una categoría completa (actions, forms, charts, ...) --${close}`,
   `${open}script type="module" src="${CDN}/actions/category.actions.min.js"${close}${open}${slash}script${close}`,
   '',
-  `${open}is-button variant="brand"${close}Hola mundo${open}${slash}is-button${close}`,
+  `${open}is-button color="brand"${close}Hola mundo${open}${slash}is-button${close}`,
 ].join('\n');
 
 // ── html autocontenido para descargar ─────────────────────────────
@@ -162,12 +162,12 @@ const buildDemoHtml = (variant) => {
     <section>
       <h2>Acciones</h2>
       <div class="row">
-        <is-button variant="brand" appearance="filled">Primario</is-button>
-        <is-button variant="neutral" appearance="outlined">Secundario</is-button>
-        <is-button variant="danger" appearance="plain">Peligro</is-button>
-        <is-tag variant="brand">Insoft</is-tag>
-        <is-tag variant="success">Success</is-tag>
-        <is-badge variant="danger">new</is-badge>
+        <is-button color="brand" variant="filled">Primario</is-button>
+        <is-button color="neutral" variant="outlined">Secundario</is-button>
+        <is-button color="danger" variant="plain">Peligro</is-button>
+        <is-tag color="brand">Insoft</is-tag>
+        <is-tag color="success">Success</is-tag>
+        <is-badge color="danger">new</is-badge>
         <is-avatar initials="JE" label="Jeff"></is-avatar>
       </div>
     </section>

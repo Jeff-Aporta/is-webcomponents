@@ -196,7 +196,7 @@ if (!customElements.get('is-observer')) customElements.define('is-observer', Obs
 if (typeof window !== 'undefined') window.IsObserver = ObserverElement;
 
 /**
- * Variante con `type` prefijado al construir. Usada por los wrappers
+ * Colore con `type` prefijado al construir. Usada por los wrappers
  * históricos (intersection-observer, mutation-observer, resize-observer).
  */
 export function createObserverElement(defaultType) {

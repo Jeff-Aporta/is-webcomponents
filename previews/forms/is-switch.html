@@ -51,13 +51,13 @@
         <is-demo class="demo">
           <div class="inline">
             <is-switch checked>brand (default)</is-switch>
-            <is-switch variant="neutral" checked>neutral</is-switch>
-            <is-switch variant="success" checked>success</is-switch>
-            <is-switch variant="warning" checked>warning</is-switch>
-            <is-switch variant="danger" checked>danger</is-switch>
+            <is-switch color="neutral" checked>neutral</is-switch>
+            <is-switch color="success" checked>success</is-switch>
+            <is-switch color="warning" checked>warning</is-switch>
+            <is-switch color="danger" checked>danger</is-switch>
           </div>
         </is-demo>
-        <pre class="code">&lt;is-switch variant="success" checked&gt;success&lt;/is-switch&gt;</pre>
+        <pre class="code">&lt;is-switch color="success" checked&gt;success&lt;/is-switch&gt;</pre>
       </section>
 
       <section class="section" id="label-placement">
@@ -99,13 +99,13 @@
         </p>
         <is-demo class="demo">
           <div class="inline">
-            <is-switch icon="mdi:weather-night" checked-icon="mdi:white-balance-sunny" variant="warning" checked>Tema claro</is-switch>
-            <is-switch icon="mdi:close" checked-icon="mdi:check" variant="success">Sincronizar</is-switch>
+            <is-switch icon="mdi:weather-night" checked-icon="mdi:white-balance-sunny" color="warning" checked>Tema claro</is-switch>
+            <is-switch icon="mdi:close" checked-icon="mdi:check" color="success">Sincronizar</is-switch>
             <is-switch checked-icon="mdi:lock" checked>Bloquear pantalla</is-switch>
           </div>
         </is-demo>
         <pre class="code">&lt;is-switch icon="mdi:weather-night" checked-icon="mdi:white-balance-sunny"
-  variant="warning" checked&gt;Tema claro&lt;/is-switch&gt;</pre>
+  color="warning" checked&gt;Tema claro&lt;/is-switch&gt;</pre>
       </section>
 
       <section class="section" id="track-labels">
@@ -117,7 +117,7 @@
         <is-demo class="demo">
           <div class="inline">
             <is-switch on-label="ON" off-label="OFF" checked>Encendido</is-switch>
-            <is-switch on-label="SÍ" off-label="NO" variant="success">Confirmación</is-switch>
+            <is-switch on-label="SÍ" off-label="NO" color="success">Confirmación</is-switch>
             <is-switch on-label="24h" off-label="12h" checked>Formato de hora</is-switch>
           </div>
         </is-demo>
@@ -176,8 +176,8 @@
               <is-switch name="boletin" value="semanal" checked>Boletín semanal</is-switch>
               <is-switch name="auditoria" value="si" checked readonly hint="Fijado por la política de la empresa.">Registro de auditoría</is-switch>
               <div class="inline" style="gap:.5rem">
-                <is-button variant="brand" id="btnSend">Enviar</is-button>
-                <is-button appearance="outlined" id="btnReset">Reset</is-button>
+                <is-button color="brand" id="btnSend">Enviar</is-button>
+                <is-button variant="outlined" id="btnReset">Reset</is-button>
               </div>
             </div>
           </form>

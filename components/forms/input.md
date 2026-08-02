@@ -14,7 +14,7 @@ preview: ../../previews/forms/is-input.html
 
 Campo de texto form-associated con paridad funcional con el
 TextField de MUI:
-tres appearances, estado de error ligado a la validación nativa, adornos, contador de
+tres variants, estado de error ligado a la validación nativa, adornos, contador de
 caracteres y ancho controlable. Participa en <form> vía
 ElementInternals.
 
@@ -38,8 +38,8 @@ import './input.js';
 
 ```html
 <is-input label="outlined (default)"></is-input>
-<is-input appearance="filled" label="filled"></is-input>
-<is-input appearance="underlined" label="underlined"></is-input>
+<is-input variant="filled" label="filled"></is-input>
+<is-input variant="underlined" label="underlined"></is-input>
 ```
 
 ## API
@@ -79,7 +79,7 @@ import './input.js';
 | `value` | lectura/escritura | Declarada por clase. |
 | `defaultValue` | solo lectura | Declarada por clase. |
 | `type` | lectura/escritura | Declarada por clase. |
-| `appearance` | lectura/escritura | Declarada por clase. |
+| `variant` | lectura/escritura | Declarada por clase. |
 | `labelPlacement` | lectura/escritura | Declarada por clase. |
 | `name` | lectura/escritura | Declarada por clase. |
 | `disabled` | lectura/escritura | Declarada por clase. |
@@ -210,7 +210,7 @@ Documentación de cabecera preservada desde fuente:
 > Atributos
 >   type            text | email | password | number | search | tel | url | date  (default text)
 >   name, value, placeholder, label, hint, autocomplete
->   appearance      outlined (default) | filled | underlined
+>   variant      outlined (default) | filled | underlined
 >   label-placement top (default) | start
 >   error-text      mensaje mostrado en lugar del hint cuando hay error
 >   prefix, suffix  adornos de texto corto ("$", "kg") sin usar slot
@@ -250,7 +250,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

@@ -78,7 +78,7 @@ import './data-grid.js';
 | `virtualize` | string/según contrato | Fuente define default/restricción. |
 | `overscan` | string/según contrato | Fuente define default/restricción. |
 | `loading` | boolean | Fuente define default/restricción. |
-| `loading-variant` | string/según contrato | Fuente define default/restricción. |
+| `loading-color` | string/según contrato | Fuente define default/restricción. |
 | `list-view` | boolean | Fuente define default/restricción. |
 | `tree-data` | boolean | Fuente define default/restricción. |
 | `row-reorder` | string/según contrato | Fuente define default/restricción. |
@@ -309,7 +309,7 @@ Documentación de cabecera preservada desde fuente:
 > page-size-options, pagination-mode, row-count, sorting-mode, sorting-order,
 > filter-mode, selection-mode, checkbox-selection, cell-selection, editable,
 > edit-mode, show-toolbar, quick-filter, header-filters, hide-footer,
-> hide-footer-selected-count, virtualize, overscan, loading, loading-variant,
+> hide-footer-selected-count, virtualize, overscan, loading, loading-color,
 > list-view, tree-data, row-reorder, detail-height, tab-navigation, clipboard,
 > undo-redo, aggregation-position, disable-column-menu, disable-column-filter,
 > disable-column-sort, disable-column-resize, disable-column-reorder,
@@ -350,7 +350,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

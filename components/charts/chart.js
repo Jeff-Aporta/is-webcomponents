@@ -23,7 +23,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 const OBSERVED = [
   'type', 'label', 'legend-position', 'index-axis', 'min', 'max', 'grid',
   'stacked', 'without-animation', 'without-legend', 'without-tooltip',
-  'x-label', 'y-label', 'variant',
+  'x-label', 'y-label', 'color',
 ];
 
 const RADIAL_TYPES = new Set(['pie', 'doughnut', 'polarArea', 'radar']);
@@ -145,7 +145,7 @@ class IsChart extends HTMLElement {
   get payload() { return this.#config; }
   set payload(v) { this.config = v; }
 
-  get isViewer() { return this.getAttribute('variant') === 'viewer'; }
+  get isViewer() { return this.getAttribute('color') === 'viewer'; }
   get turtle() { return this.#turtle; }
 
   get config() { return this.#config; }
@@ -430,7 +430,7 @@ class IsChart extends HTMLElement {
     });
   }
 
-  /** Clic en variante inline: abre el visor a pantalla completa. */
+  /** Clic en colore inline: abre el visor a pantalla completa. */
   #onHostClick = () => {
     if (this.isViewer || this.hasAttribute('without-viewer')) return;
     const ev = new CustomEvent('is-open-viewer', {

@@ -15,7 +15,7 @@ preview: ../../previews/forms/is-checkbox.html
 Casilla form-associated con paridad funcional con el
 Checkbox de MUI:
 entra en FormData y en la validación nativa del <form>
-sin input oculto, con color por variant, posición de etiqueta, iconos propios y
+sin input oculto, con color por color, posición de etiqueta, iconos propios y
 estado de error.
 
 Este módulo registra `<is-checkbox>`.
@@ -37,7 +37,7 @@ import './checkbox.js';
 ## Ejemplo mínimo
 
 ```html
-<is-checkbox variant="success" checked>success</is-checkbox>
+<is-checkbox color="success" checked>success</is-checkbox>
 ```
 
 ## API
@@ -57,7 +57,7 @@ import './checkbox.js';
 | `indeterminate` | boolean | Fuente define default/restricción. |
 | `error` | boolean | Fuente define default/restricción. |
 | `hint` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `label-placement` | string/según contrato | Fuente define default/restricción. |
 | `icon` | string/según contrato | Fuente define default/restricción. |
 | `checked-icon` | string/según contrato | Fuente define default/restricción. |
@@ -76,7 +76,7 @@ import './checkbox.js';
 | `value` | lectura/escritura | Declarada por clase. |
 | `name` | lectura/escritura | Declarada por clase. |
 | `hint` | lectura/escritura | Declarada por clase. |
-| `variant` | lectura/escritura | Declarada por clase. |
+| `color` | lectura/escritura | Declarada por clase. |
 | `labelPlacement` | lectura/escritura | Declarada por clase. |
 | `icon` | lectura/escritura | Declarada por clase. |
 | `checkedIcon` | lectura/escritura | Declarada por clase. |
@@ -173,7 +173,7 @@ Documentación de cabecera preservada desde fuente:
 > <is-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
 > Atributos
 >   name, value (default "on"), hint
->   variant             brand (default) | neutral | success | warning | danger
+>   color             brand (default) | neutral | success | warning | danger
 >   label-placement     end (default) | start | top | bottom
 >   icon                nombre de <is-icon> para el estado sin marcar
 >   checked-icon        nombre de <is-icon> para el estado marcado (default mdi:check)
@@ -210,7 +210,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

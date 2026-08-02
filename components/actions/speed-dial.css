@@ -99,10 +99,10 @@
 }
 .action:hover { background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-elev)); }
 .action.is-disabled { opacity: .5; pointer-events: none; }
-.action[data-variant="neutral"] .ico { background: color-mix(in srgb, var(--is-text) 10%, transparent); color: var(--is-text); }
-.action[data-variant="success"] .ico { background: color-mix(in srgb, var(--is-success, #16a34a) 18%, transparent); color: var(--is-success, #16a34a); }
-.action[data-variant="warning"] .ico { background: color-mix(in srgb, var(--is-warning, #d97706) 18%, transparent); color: var(--is-warning, #d97706); }
-.action[data-variant="danger"] .ico { background: color-mix(in srgb, var(--is-danger, #dc2626) 18%, transparent); color: var(--is-danger, #dc2626); }
+.action[data-color="neutral"] .ico { background: color-mix(in srgb, var(--is-text) 10%, transparent); color: var(--is-text); }
+.action[data-color="success"] .ico { background: color-mix(in srgb, var(--is-success, #16a34a) 18%, transparent); color: var(--is-success, #16a34a); }
+.action[data-color="warning"] .ico { background: color-mix(in srgb, var(--is-warning, #d97706) 18%, transparent); color: var(--is-warning, #d97706); }
+.action[data-color="danger"] .ico { background: color-mix(in srgb, var(--is-danger, #dc2626) 18%, transparent); color: var(--is-danger, #dc2626); }
 
 /* ── direction="radial" ────────────────────────────────────────────────
    El JS calcula --sd-x / --sd-y por accion (coordenadas polares respecto

@@ -12,7 +12,7 @@ import '../media/icon.js';
  *   checked-icon    Iconify id cuando checked (ej. mdi:pause)
  *   label           aria-label unchecked
  *   checked-label   aria-label checked (fallback: label)
- *   appearance      "plain" → compacto y hereda color (chrome oscura: vídeo)
+ *   variant      "plain" → compacto y hereda color (chrome oscura: vídeo)
  *   disabled        boolean
  *
  * Events (bubbles, composed)

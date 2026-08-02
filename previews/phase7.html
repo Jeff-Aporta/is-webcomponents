@@ -56,11 +56,11 @@
               <is-switch name="newsletter" checked>Suscribir al newsletter</is-switch>
             </form>
 
-            <is-button slot="footer" appearance="plain" data-dialog-close>Cancelar</is-button>
-            <is-button slot="footer" variant="brand" id="submitContact">Crear contacto</is-button>
+            <is-button slot="footer" variant="plain" data-dialog-close>Cancelar</is-button>
+            <is-button slot="footer" color="brand" id="submitContact">Crear contacto</is-button>
           </is-dialog>
 
-          <is-callout id="contactSaved" variant="success" hidden style="margin-top:1rem">
+          <is-callout id="contactSaved" color="success" hidden style="margin-top:1rem">
             <strong>Contacto guardado.</strong>
             <div id="contactSavedDetails"></div>
           </is-callout>
@@ -74,7 +74,7 @@
     <span class="tag">&lt;/is-select&gt;</span>
   <span class="tag">&lt;/form&gt;</span>
   <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"footer"</span> <span class="attr">data-dialog-close</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
-  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"footer"</span> <span class="attr">variant</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Crear<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"footer"</span> <span class="attr">color</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Crear<span class="tag">&lt;/is-button&gt;</span>
 <span class="tag">&lt;/is-dialog&gt;</span></pre>
       </section>
 
@@ -86,14 +86,14 @@
         <is-demo class="demo">
           <is-card header="Pedido #4290" style="max-width:640px">
             <div slot="header-actions" style="display:flex;gap:0.5rem;align-items:center">
-              <is-badge variant="success">Pagado</is-badge>
+              <is-badge color="success">Pagado</is-badge>
               <is-dropdown id="ddOrder">
-                <is-button slot="trigger" appearance="plain" caret>
+                <is-button slot="trigger" variant="plain" caret>
                   <is-icon icon="mdi:dots-vertical"></is-icon>
                 </is-button>
                 <is-dropdown-item>Reenviar factura</is-dropdown-item>
                 <is-dropdown-item>Marcar pendiente</is-dropdown-item>
-                <is-dropdown-item variant="danger">Cancelar pedido</is-dropdown-item>
+                <is-dropdown-item color="danger">Cancelar pedido</is-dropdown-item>
               </is-dropdown>
             </div>
 
@@ -192,7 +192,7 @@
                 <is-switch>Compartir</is-switch>
               </is-tab-panel>
             </is-tab-group>
-            <is-button slot="footer" data-drawer-close appearance="plain">Cerrar</is-button>
+            <is-button slot="footer" data-drawer-close variant="plain">Cerrar</is-button>
           </is-drawer>
         </is-demo>
       </section>
@@ -207,7 +207,7 @@
             <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center">
               <is-tag id="tag1" removable>Jane Doe</is-tag>
               <is-tag id="tag2" removable>Mike Ross</is-tag>
-              <is-button id="addAssignee" appearance="plain">
+              <is-button id="addAssignee" variant="plain">
                 <is-icon slot="start" icon="mdi:plus"></is-icon>
                 Añadir
               </is-button>
@@ -221,8 +221,8 @@
                 <is-checkbox name="u4">Carlos Pérez</is-checkbox>
                 <is-checkbox name="u5">Sara Núñez</is-checkbox>
               </div>
-              <is-button slot="footer" data-dialog-close appearance="plain">Cancelar</is-button>
-              <is-button slot="footer" variant="brand" data-dialog-close id="saveAssignees">Aplicar</is-button>
+              <is-button slot="footer" data-dialog-close variant="plain">Cancelar</is-button>
+              <is-button slot="footer" color="brand" data-dialog-close id="saveAssignees">Aplicar</is-button>
             </is-dialog>
           </is-card>
         </is-demo>
@@ -242,14 +242,14 @@
                   <strong>Jane Doe</strong>
                   <span class="muted">jane@empresa.com</span>
                 </div>
-                <is-badge variant="success">Admin</is-badge>
+                <is-badge color="success">Admin</is-badge>
                 <is-dropdown>
-                  <is-button slot="trigger" appearance="plain">
+                  <is-button slot="trigger" variant="plain">
                     <is-icon icon="mdi:dots-vertical"></is-icon>
                   </is-button>
                   <is-dropdown-item>Ver perfil</is-dropdown-item>
                   <is-dropdown-item>Enviar mensaje</is-dropdown-item>
-                  <is-dropdown-item variant="danger">Quitar</is-dropdown-item>
+                  <is-dropdown-item color="danger">Quitar</is-dropdown-item>
                 </is-dropdown>
               </li>
               <li class="list-row">
@@ -258,14 +258,14 @@
                   <strong>Mike Ross</strong>
                   <span class="muted">mike@empresa.com</span>
                 </div>
-                <is-badge variant="warning">Editor</is-badge>
+                <is-badge color="warning">Editor</is-badge>
                 <is-dropdown>
-                  <is-button slot="trigger" appearance="plain">
+                  <is-button slot="trigger" variant="plain">
                     <is-icon icon="mdi:dots-vertical"></is-icon>
                   </is-button>
                   <is-dropdown-item>Ver perfil</is-dropdown-item>
                   <is-dropdown-item>Enviar mensaje</is-dropdown-item>
-                  <is-dropdown-item variant="danger">Quitar</is-dropdown-item>
+                  <is-dropdown-item color="danger">Quitar</is-dropdown-item>
                 </is-dropdown>
               </li>
               <li class="list-row">
@@ -276,12 +276,12 @@
                 </div>
                 <is-badge>Viewer</is-badge>
                 <is-dropdown>
-                  <is-button slot="trigger" appearance="plain">
+                  <is-button slot="trigger" variant="plain">
                     <is-icon icon="mdi:dots-vertical"></is-icon>
                   </is-button>
                   <is-dropdown-item>Ver perfil</is-dropdown-item>
                   <is-dropdown-item>Enviar mensaje</is-dropdown-item>
-                  <is-dropdown-item variant="danger">Quitar</is-dropdown-item>
+                  <is-dropdown-item color="danger">Quitar</is-dropdown-item>
                 </is-dropdown>
               </li>
             </ul>

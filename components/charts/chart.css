@@ -260,7 +260,7 @@
 
 /* ── Variante viewer: el chart llena el escenario del visor ── */
 
-:host([variant="viewer"]) {
+:host([color="viewer"]) {
   width: 100%;
   height: 100%;
 }
@@ -268,4 +268,4 @@
 .wrap.is-viewer { cursor: default; }
 
 /* Inline: el clic abre el visor, igual que en los diagramas. */
-:host(:not([variant="viewer"]):not([without-viewer])) .wrap { cursor: zoom-in; }
+:host(:not([color="viewer"]):not([without-viewer])) .wrap { cursor: zoom-in; }

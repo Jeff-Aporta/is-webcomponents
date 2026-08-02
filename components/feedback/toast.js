@@ -13,8 +13,8 @@ import './toast-item.js';
  *
  * Métodos
  *   create(message, options?) → Promise<is-toast-item>
- *     options: { variant, icon, duration, allowHtml } — sin size
- *     variant: brand | success | warning | danger | neutral
+ *     options: { color, icon, duration, allowHtml } — sin size
+ *     color: brand | success | warning | danger | neutral
  *     duration default 5000; 0 = hasta dismiss
  *
  * CSS Parts: ::part(stack)
@@ -35,7 +35,7 @@ import './toast-item.js';
     'top-start', 'top-center', 'top-end',
     'bottom-start', 'bottom-center', 'bottom-end'
   ];
-  const VALID_VARIANT = ['brand', 'success', 'warning', 'danger', 'neutral'];
+  const VALID_COLOR = ['brand', 'success', 'warning', 'danger', 'neutral'];
   const DEFAULT_ICONS = {
     brand: 'mdi:information',
     success: 'mdi:check-circle',
@@ -79,13 +79,13 @@ import './toast-item.js';
 
     /**
      * @param {string} message
-     * @param {{ variant?: string, icon?: string|boolean, duration?: number, allowHtml?: boolean }} [options]
+     * @param {{ color?: string, icon?: string|boolean, duration?: number, allowHtml?: boolean }} [options]
      * @returns {Promise<HTMLElement>}
      */
     async create(message, options = {}) {
       await customElements.whenDefined('is-toast-item');
       const item = document.createElement('is-toast-item');
-      const variant = VALID_VARIANT.includes(options.variant) ? options.variant : 'neutral';
+      const variant = VALID_COLOR.includes(options.variant) ? options.variant : 'neutral';
       item.variant = variant;
 
       const duration = options.duration != null ? Number(options.duration) : 5000;
@@ -160,10 +160,10 @@ import './toast-item.js';
       return { message: String(cb ?? fallback), options: {} };
     }
 
-    /** Actualiza un toast vivo: mensaje, variant, icono y relanza el timer. */
+    /** Actualiza un toast vivo: mensaje, color, icono y relanza el timer. */
     #update(item, message, options = {}) {
       if (!item?.isConnected) return;
-      const variant = VALID_VARIANT.includes(options.variant) ? options.variant : item.variant;
+      const variant = VALID_COLOR.includes(options.variant) ? options.variant : item.variant;
       item.variant = variant;
       // Reemplazar texto conservando el slot icon.
       for (const n of [...item.childNodes]) {

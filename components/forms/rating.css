@@ -12,10 +12,10 @@
 
 :host([hidden]) { display: none !important; }
 
-:host([variant="neutral"]) { --is-rating-color: var(--is-control-text, #f0f3f6); }
-:host([variant="success"]) { --is-rating-color: var(--is-color-success-500, #40c057); }
-:host([variant="warning"]) { --is-rating-color: var(--is-color-warning-500, #f59f00); }
-:host([variant="danger"]) { --is-rating-color: var(--is-color-danger-500, #fa5252); }
+:host([color="neutral"]) { --is-rating-color: var(--is-control-text, #f0f3f6); }
+:host([color="success"]) { --is-rating-color: var(--is-color-success-500, #40c057); }
+:host([color="warning"]) { --is-rating-color: var(--is-color-warning-500, #f59f00); }
+:host([color="danger"]) { --is-rating-color: var(--is-color-danger-500, #fa5252); }
 
 .form-control {
   display: flex;

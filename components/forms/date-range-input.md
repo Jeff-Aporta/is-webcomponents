@@ -104,7 +104,7 @@ Documentación de cabecera preservada desde fuente:
 > en el panel (MUI DateRangePicker). El valor es `inicio/fin`.
 > Atributos: start-label, end-label, hint, name, value, min, max, required,
 >            disabled, readonly, clearable, locale, calendars, shortcuts,
->            variant, action-bar, placement, close-on-select
+>            color, action-bar, placement, close-on-select
 > Events: is-change, is-show, is-hide
 > Methods: show(), hide()
 
@@ -132,7 +132,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

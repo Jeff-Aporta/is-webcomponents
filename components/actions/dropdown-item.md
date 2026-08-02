@@ -39,7 +39,7 @@ import './dropdown-item.js';
 <is-button slot="trigger" with-caret>Options</is-button>
 <is-dropdown-item value="edit">Edit</is-dropdown-item>
 <is-divider></is-divider>
-<is-dropdown-item value="delete" variant="danger">Delete</is-dropdown-item>
+<is-dropdown-item value="delete" color="danger">Delete</is-dropdown-item>
 </is-dropdown>
 ```
 
@@ -55,7 +55,7 @@ import './dropdown-item.js';
 | `type` | string/según contrato | Fuente define default/restricción. |
 | `checked` | boolean | Fuente define default/restricción. |
 | `disabled` | boolean | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `submenu-open` | boolean | Fuente define default/restricción. |
 
 #### Propiedades públicas
@@ -66,7 +66,7 @@ import './dropdown-item.js';
 | `type` | lectura/escritura | Declarada por clase. |
 | `checked` | lectura/escritura | Declarada por clase. |
 | `disabled` | lectura/escritura | Declarada por clase. |
-| `variant` | lectura/escritura | Declarada por clase. |
+| `color` | lectura/escritura | Declarada por clase. |
 | `submenuOpen` | lectura/escritura | Declarada por clase. |
 | `hasSubmenu` | solo lectura | Declarada por clase. |
 
@@ -137,7 +137,7 @@ Documentación de cabecera preservada desde fuente:
 > El submenú va en un popover (top layer) y se posiciona con computePosition: el
 > menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría
 > recortado y le abriría scroll horizontal.
-> Attrs: value, type (normal|checkbox), checked, disabled, variant (default|danger)
+> Attrs: value, type (normal|checkbox), checked, disabled, color (default|danger)
 > Slots: default (label), icon, details, submenu
 > Methods: openSubmenu(), closeSubmenu()
 > Parts: checkmark, icon, label, details, submenu, submenu-icon
@@ -161,7 +161,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 <is-button slot="trigger" with-caret>Options</is-button>
 <is-dropdown-item value="edit">Edit</is-dropdown-item>
 <is-divider></is-divider>
-<is-dropdown-item value="delete" variant="danger">Delete</is-dropdown-item>
+<is-dropdown-item value="delete" color="danger">Delete</is-dropdown-item>
 </is-dropdown>
 ```
 
@@ -171,7 +171,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

@@ -100,8 +100,8 @@ Documentación de cabecera preservada desde fuente:
 >              bottom-start | bottom-center | bottom-end  (default bottom-end)
 > Métodos
 >   create(message, options?) → Promise<is-toast-item>
->     options: { variant, icon, duration, allowHtml } — sin size
->     variant: brand | success | warning | danger | neutral
+>     options: { color, icon, duration, allowHtml } — sin size
+>     color: brand | success | warning | danger | neutral
 >     duration default 5000; 0 = hasta dismiss
 > CSS Parts: ::part(stack)
 > Escucha is-after-hide de los ítems y los elimina del DOM.
@@ -129,7 +129,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

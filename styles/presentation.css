@@ -242,7 +242,11 @@ body::-webkit-scrollbar-corner {
 .section {
   padding: 40px 0 12px;
   border-top: 1px solid color-mix(in srgb, var(--is-border) 70%, transparent);
-  animation: section-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* `backwards` y no `both`: con el fill hacia adelante Chrome deja aplicada
+     una matriz identidad al terminar, la seccion queda como containing block
+     y cualquier overlay `position: fixed` dentro (is-context-menu, is-popup…)
+     aparece desplazado por el offset de la seccion. */
+  animation: section-in 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 .section:first-of-type {
   border-top: 0;

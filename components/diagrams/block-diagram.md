@@ -47,7 +47,7 @@ import './block-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
 
@@ -120,7 +120,7 @@ Documentación de cabecera preservada desde fuente:
 >   </is-block-diagram>
 > A diferencia del flujo, aquí los bloques se ubican en una rejilla explícita
 > (columnas fijas + `span`), no en capas node-link.
-> Atributos: variant (inline | viewer), without-viewer
+> Atributos: color (inline | viewer), without-viewer
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
 
@@ -154,7 +154,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

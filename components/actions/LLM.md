@@ -52,7 +52,7 @@ Revisar imports y `_shared/` antes de implementar. Reusar stdlib, plataforma y m
 
 - No inventar API ni copiar contrato de componente parecido.
 - No crear abstracción si shared/native resuelve caso.
-- No crear size variants; usar font-size contextual y em.
+- No crear size colors; usar font-size contextual y em.
 - No duplicar MD por tag multi-tag.
 
 ## Errores conocidos y prevención

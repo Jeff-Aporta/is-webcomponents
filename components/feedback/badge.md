@@ -12,7 +12,7 @@ preview: ../../previews/feedback/is-badge.html
 
 ## Propósito
 
-Etiqueta compacta con variantes semánticas y apariencias.
+Etiqueta compacta con colores semánticas y apariencias.
 
 Este módulo registra `<is-badge>`.
 
@@ -33,7 +33,7 @@ import './badge.js';
 ## Ejemplo mínimo
 
 ```html
-<is-badge variant="success" appearance="filled">OK</is-badge>
+<is-badge color="success" variant="filled">OK</is-badge>
 <is-badge pill attention="pulse">Live</is-badge>
 ```
 
@@ -45,8 +45,8 @@ import './badge.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `variant` | string/según contrato | Fuente define default/restricción. |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
 | `pill` | boolean | Fuente define default/restricción. |
 | `attention` | string/según contrato | Fuente define default/restricción. |
 
@@ -122,10 +122,10 @@ No declara integración form-associated propia en este módulo.
 Documentación de cabecera preservada desde fuente:
 
 > <is-badge> — Web Component (vanilla).
-> Etiqueta compacta con variantes semánticas.
+> Etiqueta compacta con colores semánticas.
 > Atributos
->   variant      brand | neutral | success | warning | danger (default brand)
->   appearance   accent | filled | outlined | filled-outlined (default accent)
+>   color      brand | neutral | success | warning | danger (default brand)
+>   variant   accent | filled | outlined | filled-outlined (default accent)
 >   pill         boolean
 >   attention    none | pulse | bounce (default none)
 > Slots: default, start, end
@@ -143,7 +143,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-badge variant="success" appearance="filled">OK</is-badge>
+<is-badge color="success" variant="filled">OK</is-badge>
 <is-badge pill attention="pulse">Live</is-badge>
 ```
 
@@ -153,7 +153,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

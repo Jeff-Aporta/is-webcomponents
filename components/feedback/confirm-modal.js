@@ -8,7 +8,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *
  *   <is-button id="del">Borrar</is-button>
  *   <is-confirm-modal for="del" heading="Eliminar registro" message="¿Seguro?">
- *     <is-button slot="confirm" variant="danger">Sí, eliminar</is-button>
+ *     <is-button slot="confirm" color="danger">Sí, eliminar</is-button>
  *     <is-button slot="cancel">Cancelar</is-button>
  *   </is-confirm-modal>
  *

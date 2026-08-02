@@ -14,7 +14,7 @@ preview: ../../previews/forms/is-rating.html
 
 Valoración form-associated con paridad funcional con el
 Rating de MUI:
-precisión arbitraria, iconos propios, textos de hover, variantes de color y reset.
+precisión arbitraria, iconos propios, textos de hover, colores de color y reset.
 
 Este módulo registra `<is-rating>`.
 
@@ -54,7 +54,7 @@ import './rating.js';
 | `icon` | string/según contrato | Fuente define default/restricción. |
 | `empty-icon` | string/según contrato | Fuente define default/restricción. |
 | `highlight-selected-only` | boolean | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/según contrato | Fuente define default/restricción. |
 | `label-format` | string/según contrato | Fuente define default/restricción. |
 | `show-label` | boolean | Fuente define default/restricción. |
 | `clearable` | boolean | Fuente define default/restricción. |
@@ -74,7 +74,7 @@ import './rating.js';
 | `icon` | lectura/escritura | Declarada por clase. |
 | `emptyIcon` | lectura/escritura | Declarada por clase. |
 | `highlightSelectedOnly` | lectura/escritura | Declarada por clase. |
-| `variant` | lectura/escritura | Declarada por clase. |
+| `color` | lectura/escritura | Declarada por clase. |
 | `labels` | lectura/escritura | Declarada por clase. |
 | `labelFormat` | lectura/escritura | Declarada por clase. |
 | `getLabelText` | lectura/escritura | Declarada por clase. |
@@ -167,7 +167,7 @@ Documentación de cabecera preservada desde fuente:
 
 > <is-rating> — Valoración form-associated (vanilla + Shadow DOM).
 > Atributos
->   name, label, variant (brand|neutral|success|warning|danger)
+>   name, label, color (brand|neutral|success|warning|danger)
 >   value        0..max (default 0)
 >   max          número de iconos (default 5)
 >   precision    granularidad del valor: 1 (default) | 0.5 | 0.25 | 0.1
@@ -211,7 +211,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labell
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

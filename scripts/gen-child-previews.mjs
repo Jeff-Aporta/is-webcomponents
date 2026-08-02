@@ -31,21 +31,21 @@ const CHILDREN = {
     modules: ['actions/dropdown.js', 'actions/dropdown-item.js', 'actions/button.js'],
     lede: 'Item de un <code class="code">&lt;is-dropdown&gt;</code>. Aporta el estado (activo, deshabilitado), el slot de icono y el valor que viaja en el evento de selección.',
     demo: `<is-dropdown placement="bottom-start">
-  <is-button slot="trigger" variant="brand">Acciones</is-button>
+  <is-button slot="trigger" color="brand">Acciones</is-button>
   <is-dropdown-item value="edit"><is-icon slot="start" icon="mdi:pencil"></is-icon>Editar</is-dropdown-item>
   <is-dropdown-item value="dup"><is-icon slot="start" icon="mdi:content-copy"></is-icon>Duplicar</is-dropdown-item>
-  <is-dropdown-item value="del" variant="danger"><is-icon slot="start" icon="mdi:trash-can"></is-icon>Eliminar</is-dropdown-item>
+  <is-dropdown-item value="del" color="danger"><is-icon slot="start" icon="mdi:trash-can"></is-icon>Eliminar</is-dropdown-item>
   <is-dropdown-item value="off" disabled>No disponible</is-dropdown-item>
 </is-dropdown>`,
   },
   'is-toast-item': {
     modules: ['feedback/toast.js', 'actions/button.js'],
     lede: 'Ítem individual de notificación. Se crea normalmente con <code class="code">toaster.create()</code>, pero también se puede declarar suelto para controlar su ciclo de vida a mano.',
-    demo: `<is-toast-item variant="success" open duration="0">
+    demo: `<is-toast-item color="success" open duration="0">
   <is-icon slot="icon" icon="mdi:check-circle"></is-icon>
   Guardado correctamente
 </is-toast-item>
-<is-toast-item variant="danger" open duration="0">
+<is-toast-item color="danger" open duration="0">
   <is-icon slot="icon" icon="mdi:alert-circle"></is-icon>
   No se pudo guardar
 </is-toast-item>`,
@@ -80,7 +80,7 @@ const CHILDREN = {
   <is-tab slot="nav" panel="dos">Dos</is-tab>
   <is-tab-panel name="uno">
     <p>El panel es un contenedor normal: acepta cualquier contenido.</p>
-    <is-tag variant="brand">Contenido rico</is-tag>
+    <is-tag color="brand">Contenido rico</is-tag>
   </is-tab-panel>
   <is-tab-panel name="dos">Segundo panel.</is-tab-panel>
 </is-tab-group>`,

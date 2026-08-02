@@ -16,9 +16,9 @@ import { registerDiagramKind } from './diagram-kinds.js';
  *   </is-mindmap>
  *
  * Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
- * tema por atributo `data-theme`, `variant` (inline | viewer), lightbox propio.
+ * tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
  *
- * Atributos: variant (inline | viewer), without-viewer
+ * Atributos: color (inline | viewer), without-viewer
  * Propiedades: payload, spec, layout
  * Eventos: is-render, is-open-viewer
  */
@@ -34,7 +34,7 @@ function svgEl(tag, attrs = {}) {
 }
 
 class IsMindmap extends HTMLElement {
-  static get observedAttributes() { return ['variant']; }
+  static get observedAttributes() { return ['color']; }
 
   #wrap; #svg; #tooltipEl;
   #payload = null;
@@ -93,7 +93,7 @@ class IsMindmap extends HTMLElement {
     this.#queueRender();
   }
 
-  get isViewer() { return this.getAttribute('variant') === 'viewer'; }
+  get isViewer() { return this.getAttribute('color') === 'viewer'; }
   get payload() { return this.#payload; }
   set payload(v) { this.#payload = v; this.#queueRender(); }
   get spec() { return this.#spec; }

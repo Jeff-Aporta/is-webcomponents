@@ -7,7 +7,7 @@ import '../media/icon.js';
  * Ítem individual de toast con countdown y cierre.
  *
  * Atributos
- *   variant   brand | success | warning | danger | neutral (default neutral)
+ *   color   brand | success | warning | danger | neutral (default neutral)
  *   duration  number ms (default 5000; 0 = hasta dismiss). Reflect.
  *   open      boolean — visible
  *
@@ -37,8 +37,8 @@ import '../media/icon.js';
     </div>
   `;
 
-  const OBSERVED = ['variant', 'duration', 'open'];
-  const VALID_VARIANT = ['brand', 'success', 'warning', 'danger', 'neutral'];
+  const OBSERVED = ['color', 'duration', 'open'];
+  const VALID_COLOR = ['brand', 'success', 'warning', 'danger', 'neutral'];
   const DEFAULT_DURATION = 5000;
 
   class IsToastItem extends HTMLElement {
@@ -75,7 +75,7 @@ import '../media/icon.js';
 
     connectedCallback() {
       this.#mounted = true;
-      if (!this.hasAttribute('variant')) this.setAttribute('variant', 'brand');
+      if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('duration')) this.setAttribute('duration', String(DEFAULT_DURATION));
       if (this.hasAttribute('open')) this.show();
       else this.hidden = true;
@@ -88,8 +88,8 @@ import '../media/icon.js';
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
-        this.setAttribute('variant', 'neutral');
+      if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
+        this.setAttribute('color', 'neutral');
         return;
       }
       if (name === 'open') {
@@ -104,13 +104,13 @@ import '../media/icon.js';
       }
     }
 
-    get variant() {
-      const v = this.getAttribute('variant');
-      return VALID_VARIANT.includes(v) ? v : 'neutral';
+    get color() {
+      const v = this.getAttribute('color');
+      return VALID_COLOR.includes(v) ? v : 'neutral';
     }
-    set variant(v) {
-      if (v == null || v === '') this.removeAttribute('variant');
-      else this.setAttribute('variant', VALID_VARIANT.includes(v) ? v : 'neutral');
+    set color(v) {
+      if (v == null || v === '') this.removeAttribute('color');
+      else this.setAttribute('color', VALID_COLOR.includes(v) ? v : 'neutral');
     }
 
     get duration() {

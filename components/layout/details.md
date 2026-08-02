@@ -24,7 +24,7 @@ Estructura, superficies, overlays y navegación por regiones de contenido.
 
 ## Cuándo no usarlo
 
-No crear size variants; escalar mediante font-size contextual y em.
+No crear size colors; escalar mediante font-size contextual y em.
 
 ## Importación
 
@@ -52,7 +52,7 @@ Insoft es un ERP modular…
 | `summary` | string/según contrato | Fuente define default/restricción. |
 | `name` | string/según contrato | Fuente define default/restricción. |
 | `disabled` | boolean | Fuente define default/restricción. |
-| `appearance` | string/según contrato | Fuente define default/restricción. |
+| `variant` | string/según contrato | Fuente define default/restricción. |
 | `icon-placement` | string/según contrato | Fuente define default/restricción. |
 
 #### Propiedades públicas
@@ -63,7 +63,7 @@ Insoft es un ERP modular…
 | `summary` | lectura/escritura | Declarada por clase. |
 | `name` | lectura/escritura | Declarada por clase. |
 | `disabled` | lectura/escritura | Declarada por clase. |
-| `appearance` | lectura/escritura | Declarada por clase. |
+| `variant` | lectura/escritura | Declarada por clase. |
 | `iconPlacement` | lectura/escritura | Declarada por clase. |
 
 ### Slots
@@ -145,7 +145,7 @@ Documentación de cabecera preservada desde fuente:
 >   name             string  — grupo accordion: si dos <is-details> comparten
 >                             `name`, abrir uno cierra el resto
 >   disabled         boolean
->   appearance       filled | outlined | filled-outlined | plain
+>   variant       filled | outlined | filled-outlined | plain
 >                    (default 'outlined', reflected)
 >   icon-placement   start | end
 >                    (default 'end', reflected)
@@ -180,7 +180,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-expand
 ## Ejemplo avanzado
 
 ```html
-<is-details appearance="filled" summary="…">…</is-details>
+<is-details variant="filled" summary="…">…</is-details>
 ```
 
 ## Errores comunes
@@ -189,7 +189,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-expand
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 

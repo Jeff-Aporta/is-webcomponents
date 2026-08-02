@@ -59,7 +59,7 @@ import './kanban.js';
 | `heading` | string/según contrato | Fuente define default/restricción. |
 | `meta` | string/según contrato | Fuente define default/restricción. |
 | `tag` | string/según contrato | Fuente define default/restricción. |
-| `tag-variant` | string/según contrato | Fuente define default/restricción. |
+| `tag-color` | string/según contrato | Fuente define default/restricción. |
 | `cover` | string/según contrato | Fuente define default/restricción. |
 | `without-shadow` | boolean | Fuente define default/restricción. |
 
@@ -157,7 +157,7 @@ Documentación de cabecera preservada desde fuente:
 >   heading        string
 >   meta           string — bajo el heading.
 >   tag            string — texto de la badge lateral.
->   tag-variant    brand | neutral | success | warning | danger
+>   tag-color    brand | neutral | success | warning | danger
 >   cover          string — URL de imagen de cabecera.
 >   without-shadow boolean
 > Slots
@@ -196,7 +196,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size variant; usar font-size contextual y em.
+- Crear size color; usar font-size contextual y em.
 
 ## Reglas para LLM
 
