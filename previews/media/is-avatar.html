@@ -13,6 +13,46 @@
   <script src="../../scripts/demo-code.js" defer></script>
   <script src="../../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../../scripts/preview-chrome.js"></script>
+  <style>
+    /* Rejilla formas x contenido: se lee como tabla de referencia. */
+    .shape-grid {
+      display: grid;
+      grid-template-columns: auto repeat(3, minmax(0, max-content));
+      align-items: center;
+      gap: 0.9rem 1.6rem;
+      font-size: 2.5rem;
+    }
+    .shape-grid > code.code { font-size: 0.8rem; }
+    .shape-grid__head {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--is-text-soft);
+    }
+
+    /* El acento del "+N" va en la parte de iniciales, que si respeta la forma. */
+    .stack-more::part(initials) {
+      background: var(--is-accent);
+      color: var(--is-on-accent, #fff);
+    }
+
+    .fallback-grid { display: flex; flex-wrap: wrap; gap: 2rem; }
+    .fallback-case {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    .fallback-case figcaption {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.85rem;
+      line-height: 1.35;
+    }
+    .fallback-case small { color: var(--is-text-soft); }
+  </style>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
@@ -33,11 +73,27 @@
       <section class="section" id="examples">
         <h2>Formas</h2>
         <p class="lede"><code class="code">shape="circle"</code> · <code class="code">square"</code> · <code class="code">rounded"</code> — el border-radius se aplica al contenedor.</p>
-        <is-demo class="demo">
-          <div class="demo-row" style="align-items:center;gap:1rem;flex-wrap:wrap">
-            <span style="font-size:3rem"><is-avatar initials="CR" shape="circle" label="Círculo"></is-avatar></span>
-            <span style="font-size:3rem"><is-avatar initials="SQ" shape="square" label="Cuadrado"></is-avatar></span>
-            <span style="font-size:3rem"><is-avatar initials="RD" shape="rounded" label="Rounded"></is-avatar></span>
+        <is-demo class="demo" heading="Cada forma con los tres contenidos posibles">
+          <div class="shape-grid">
+            <span class="shape-grid__head"></span>
+            <span class="shape-grid__head">imagen</span>
+            <span class="shape-grid__head">iniciales</span>
+            <span class="shape-grid__head">icono</span>
+
+            <code class="code">circle</code>
+            <is-avatar shape="circle" image="https://i.pravatar.cc/120?u=21" label="Ana"></is-avatar>
+            <is-avatar shape="circle" initials="AN" label="Ana"></is-avatar>
+            <is-avatar shape="circle" label="Sin datos"></is-avatar>
+
+            <code class="code">square</code>
+            <is-avatar shape="square" image="https://i.pravatar.cc/120?u=22" label="Bea"></is-avatar>
+            <is-avatar shape="square" initials="BE" label="Bea"></is-avatar>
+            <is-avatar shape="square" label="Sin datos"></is-avatar>
+
+            <code class="code">rounded</code>
+            <is-avatar shape="rounded" image="https://i.pravatar.cc/120?u=23" label="Caro"></is-avatar>
+            <is-avatar shape="rounded" initials="CA" label="Caro"></is-avatar>
+            <is-avatar shape="rounded" label="Sin datos"></is-avatar>
           </div>
         </is-demo>
         <pre class="code">&lt;span style="font-size:3rem"&gt;
@@ -82,7 +138,10 @@
             <is-avatar image="https://i.pravatar.cc/80?u=10" label="Ana" shape="circle"></is-avatar>
             <is-avatar image="https://i.pravatar.cc/80?u=11" label="Bea" shape="circle" style="margin-left:-0.6em"></is-avatar>
             <is-avatar image="https://i.pravatar.cc/80?u=12" label="Carol" shape="circle" style="margin-left:-0.6em"></is-avatar>
-            <is-avatar initials="+5" label="5 más" shape="circle" style="margin-left:-0.6em;background:var(--is-accent);color:var(--is-accent-fg)"></is-avatar>
+            <!-- El acento va en ::part(initials), NO en el host: el host es
+                 cuadrado y pintarle el fondo dejaba un rectangulo asomando
+                 por detras del circulo. -->
+            <is-avatar class="stack-more" initials="+5" label="5 más" shape="circle" style="margin-left:-0.6em"></is-avatar>
           </div>
         </is-demo>
       </section>
@@ -147,10 +206,31 @@
       <section class="section" id="error">
         <h2>Imagen rota</h2>
         <p class="lede">Si <code class="code">image</code> falla y hay <code class="code">initials</code>, el avatar cae a las iniciales automáticamente y emite <code class="code">is-error</code>.</p>
-        <is-demo class="demo">
-          <div style="display:flex;align-items:center;gap:1rem;font-size:2.5rem">
-            <is-avatar image="https://invalid.example/x.jpg" initials="ER" label="Error fallback" id="errAv"></is-avatar>
-            <span id="errLog" style="font-size:0.9rem">Esperando error…</span>
+        <is-demo class="demo" heading="El mismo avatar con la imagen buena y con la rota">
+          <div class="fallback-grid">
+            <figure class="fallback-case">
+              <is-avatar image="https://i.pravatar.cc/120?u=31" initials="OK" label="Imagen correcta"></is-avatar>
+              <figcaption>
+                <b>URL válida</b>
+                <small>se muestra la imagen</small>
+              </figcaption>
+            </figure>
+
+            <figure class="fallback-case">
+              <is-avatar image="https://invalid.example/x.jpg" initials="ER" label="Error fallback" id="errAv"></is-avatar>
+              <figcaption>
+                <b>URL rota + initials</b>
+                <small id="errLog">cargando…</small>
+              </figcaption>
+            </figure>
+
+            <figure class="fallback-case">
+              <is-avatar image="https://invalid.example/y.jpg" label="Sin iniciales"></is-avatar>
+              <figcaption>
+                <b>URL rota, sin initials</b>
+                <small>cae al icono por defecto</small>
+              </figcaption>
+            </figure>
           </div>
         </is-demo>
         <script>

@@ -5,84 +5,66 @@
   <script src="../../scripts/preview-boot.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Explorador de iconos · IS Web Components</title>
-  <meta name="description" content="Explora las 232 familias de iconos Iconify servidas por el CDN de IS Web Components: buscador, playground de color y tamaño, snippets listos para copiar." />
+  <meta name="description" content="Explora las 231 familias de iconos servidas por el CDN de IS Web Components: buscador global de iconos, filtros por categoría, grid, paleta y licencia, y un personalizador que exporta SVG, CSS o PNG." />
 
   <link rel="stylesheet" href="../../styles/is-base.css" />
   <link rel="stylesheet" href="../../styles/presentation.css" />
   <script type="module" src="../../dist/cdn/all.min.js"></script>
   <style>
-    body { margin: 0; }
+    /* presentation.css deja html/body en `overflow:hidden` porque el shell de
+       docs scrollea dentro de `.main`. Esta página no usa ese shell, así que el
+       scroll lo tiene que aportar ella: columna de alto fijo + panel scrollable.
+       Sin esto la lista de iconos se corta y no hay forma de bajar. */
+    html, body { height: 100%; overflow: hidden; }
+    is-main { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+
     .xp {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px clamp(16px, 4vw, 40px) 64px;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: var(--is-scrollbar-thumb) transparent;
+      padding: 20px clamp(16px, 3vw, 32px) 96px;
     }
+    .xp-inner { max-width: 1180px; margin: 0 auto; }
+
     .xp-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
     .xp-head h1 { margin: 0 0 4px; font-size: 1.5rem; }
-    .xp-head .count { color: var(--is-text-soft); font-size: 0.85rem; }
-    .xp-search {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 16px 0 22px;
-      padding: 0.55rem 0.9rem;
-      border: 1px solid var(--is-border);
-      border-radius: 0.6rem;
-      background: var(--is-bg-elev);
-    }
-    .xp-search input {
-      flex: 1;
-      border: 0;
-      background: transparent;
-      color: var(--is-text);
-      font: inherit;
-      outline: none;
-    }
+    .xp-head .count { color: var(--is-text-soft); font-size: 0.8rem; }
 
-    /* — vista familias — */
-    .fam-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px;
-    }
-    .fam {
-      display: grid;
-      gap: 6px;
-      padding: 12px 14px;
-      border: 1px solid var(--is-border);
-      border-radius: 0.6rem;
-      background: var(--is-bg-elev);
-      color: inherit;
-      text-decoration: none;
-      transition: border-color 140ms ease, transform 140ms ease;
-    }
-    .fam:hover { border-color: var(--is-accent); transform: translateY(-1px); text-decoration: none; }
-    .fam b { font-size: 0.9rem; }
-    .fam small { color: var(--is-text-soft); }
-    .fam .sample { display: flex; gap: 8px; font-size: 1.15rem; color: var(--is-text-soft); min-height: 1.3em; }
-
-    /* — vista familia — */
-    .tools {
+    /* — buscador + filtros —
+       Los controles son <is-input>, <is-select> y <is-button-group>: no se
+       replican inputs nativos con estilos propios. */
+    .xp-bar {
       position: sticky;
       top: 0;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-      flex-wrap: wrap;
-      padding: 10px 0;
-      background: var(--is-bg);
-      border-bottom: 1px solid var(--is-border-soft);
-      margin-bottom: 14px;
-    }
-    .tools label { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--is-text-soft); }
-    .tools input[type="color"] { inline-size: 34px; block-size: 26px; border: 1px solid var(--is-border); border-radius: 6px; background: none; padding: 1px; cursor: pointer; }
-    .tools input[type="range"] { accent-color: var(--is-accent); }
-    .icon-grid {
+      z-index: 4;
+      padding: 12px 0 10px;
+      background: linear-gradient(var(--is-bg) 78%, transparent);
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
-      gap: 8px;
+      gap: 10px;
     }
+    .xp-bar__search { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .xp-bar__search is-input { flex: 1; min-width: 240px; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+    .filters is-select { min-width: 150px; }
+
+    /* — vista familias — */
+    .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .fam { display: block; color: inherit; text-decoration: none; }
+    .fam:hover { text-decoration: none; }
+    .fam is-card { transition: border-color 140ms ease, transform 140ms ease; }
+    .fam:hover is-card { border-color: var(--is-accent); transform: translateY(-1px); }
+    .fam b { font-size: 0.95rem; }
+    .fam small { color: var(--is-text-soft); font-size: 0.75rem; }
+    .fam .sample { display: flex; gap: 8px; font-size: 1.2rem; color: var(--is-text-soft); min-height: 1.3em; margin: 6px 0; }
+    .fam .meta { display: flex; gap: 4px; flex-wrap: wrap; }
+
+    /* — rejilla de iconos — */
+    .tools { display: flex; align-items: end; gap: 0.9rem; flex-wrap: wrap; }
+    .tools is-slider { min-width: 180px; }
+    .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
     .icon-cell {
       display: grid;
       justify-items: center;
@@ -104,77 +86,447 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-size: 0.62rem;
+      font-size: 0.7rem;
       color: var(--is-text-soft);
     }
+    .icon-cell .fam-tag { font-size: 0.7rem; color: var(--is-accent); }
     .more { margin: 18px auto; display: block; }
+    .empty { color: var(--is-text-soft); padding: 32px 0; text-align: center; }
+    .status { display: grid; gap: 8px; padding: 32px 0; justify-items: center; }
+    .status is-progress-bar { width: min(360px, 100%); }
 
-    /* panel selección */
-    .pick {
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      z-index: 9;
-      width: min(340px, calc(100vw - 32px));
-      padding: 14px 16px;
-      border: 1px solid var(--is-border);
-      border-radius: 0.7rem;
-      background: var(--is-bg-elev);
-      box-shadow: 0 14px 40px rgb(0 0 0 / 30%);
+    /* — contenido del drawer de personalización — */
+    .form__meta { display: grid; gap: 2px; margin-bottom: 10px; }
+    .form__idrow { display: flex; align-items: center; gap: 0.4rem; }
+    .form__idrow b { font-size: 1rem; word-break: break-all; }
+    .form__sub { font-size: 0.75rem; color: var(--is-text-soft); }
+    .preview {
       display: grid;
-      gap: 8px;
+      place-items: center;
+      min-height: 150px;
+      border: 1px solid var(--is-border);
+      border-radius: 0.5rem;
+      /* Tablero para comprobar visualmente el área completa del icono. */
+      background-color: var(--is-bg);
+      background-image:
+        linear-gradient(45deg, var(--is-border-soft) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--is-border-soft) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--is-border-soft) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--is-border-soft) 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+      overflow: auto;
+      padding: 12px;
+      margin-bottom: 12px;
     }
-    .pick[hidden] { display: none; }
-    .pick .big { font-size: 2.4rem; color: var(--xp-color, currentColor); justify-self: center; }
-    .pick pre {
+    .preview__box { outline: 1px dashed color-mix(in srgb, var(--is-accent) 55%, transparent); outline-offset: 2px; line-height: 0; }
+    .preview__box svg { display: block; }
+
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; margin-bottom: 10px; }
+    .row--grow is-input, .row--grow is-select { flex: 1; min-width: 130px; }
+    .checks { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+    .code {
       margin: 0;
-      padding: 8px 10px;
-      border-radius: 0.4rem;
+      padding: 10px 12px;
+      max-height: 240px;
+      overflow: auto;
+      border-radius: 0.45rem;
       background: var(--is-code-bg, #0f1318);
       color: var(--is-code-text, #d4d8de);
       font-family: var(--is-mono, ui-monospace, monospace);
-      font-size: 0.72rem;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-all;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      white-space: pre;
     }
-    .crumb { font-size: 0.8rem; margin-bottom: 4px; }
-    .crumb a { color: var(--is-accent); }
+    .code__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+    .code__head span { font-size: 0.75rem; color: var(--is-text-soft); }
   </style>
 </head>
 <body>
   <is-main>
-    <div class="xp" id="app">
-      <p style="color:var(--is-text-soft)">Cargando índice de iconos…</p>
+    <div class="xp" id="scroller">
+      <div class="xp-inner" id="app">
+        <div class="status"><is-spinner></is-spinner><span>Cargando índice de iconos…</span></div>
+      </div>
     </div>
   </is-main>
 
-  <div class="pick" id="pick" hidden>
-    <is-icon class="big" id="pickIcon" icon="mdi:home"></is-icon>
-    <b id="pickName" style="text-align:center;font-size:0.85rem"></b>
-    <pre id="pickSnippet"></pre>
-    <div style="display:flex;gap:8px;justify-content:end">
-      <is-button id="pickCopy" color="brand" variant="filled">Copiar HTML</is-button>
-      <is-button id="pickClose" color="neutral" variant="outlined">Cerrar</is-button>
+  <!-- Personalizador. Es un <is-drawer> real: aporta backdrop, foco atrapado,
+       cierre con Esc / light-dismiss, animación y slots de header/footer. Antes
+       era un <aside> a mano que reimplementaba todo eso a medias. -->
+  <is-drawer id="form" placement="end" label="Personalizar icono" light-dismiss>
+    <is-button slot="header-actions" id="fPrev" color="neutral" variant="ghost" title="Icono anterior" aria-label="Icono anterior">
+      <is-icon icon="mdi:chevron-left"></is-icon>
+    </is-button>
+    <is-button slot="header-actions" id="fNext" color="neutral" variant="ghost" title="Icono siguiente" aria-label="Icono siguiente">
+      <is-icon icon="mdi:chevron-right"></is-icon>
+    </is-button>
+    <is-button slot="header-actions" id="fMore" color="neutral" variant="ghost" title="Más opciones" aria-label="Más opciones" aria-expanded="true">
+      <is-icon icon="mdi:tune-variant"></is-icon>
+    </is-button>
+
+    <div class="form__meta">
+      <div class="form__idrow">
+        <b id="fId">—</b>
+        <is-copy-button id="fCopyId" copy-label="Copiar identificador" tooltip="Copiar identificador"></is-copy-button>
+      </div>
+      <span class="form__sub" id="fCollection">—</span>
+      <span class="form__sub" id="fSize">—</span>
+      <span class="form__sub" id="fAlt">—</span>
     </div>
-  </div>
+
+    <div class="preview"><span class="preview__box" id="fPreview"></span></div>
+
+    <div id="fOptions">
+      <div class="row row--grow">
+        <is-select id="fFormat" label="Formato de salida" value="svg">
+          <is-option value="svg">SVG</is-option>
+          <is-option value="css">CSS (background SVG)</is-option>
+          <is-option value="png">PNG (descarga)</is-option>
+        </is-select>
+      </div>
+
+      <div class="row">
+        <is-input id="fSizeVal" type="number" label="Tamaño" value="24" min="1" max="4096" step="1" style="--is-field-width:100px"></is-input>
+        <is-select id="fUnit" label="Unidad" value="auto" style="min-width:140px">
+          <is-option value="auto">Automática</is-option>
+          <is-option value="px">px</is-option>
+          <is-option value="em">em</is-option>
+          <is-option value="none">Sin unidad</is-option>
+        </is-select>
+      </div>
+
+      <div class="row row--grow">
+        <is-input id="fColor" label="Color" value="currentColor" clearable
+                  hint="hex, rgb(), var(--token) o currentColor"></is-input>
+        <is-color-picker id="fColorPick" label="Muestra" value="#4c9aff"></is-color-picker>
+      </div>
+
+      <div class="checks">
+        <is-checkbox id="fPretty">Formatear código</is-checkbox>
+        <is-checkbox id="fRect">Rectángulo transparente</is-checkbox>
+      </div>
+    </div>
+
+    <div class="code__head">
+      <span id="fCodeLabel">Código generado</span>
+      <is-copy-button id="fCopyCode" copy-label="Copiar" tooltip="Copiar código"></is-copy-button>
+    </div>
+    <pre class="code" id="fCode">—</pre>
+
+    <div slot="footer" style="display:flex;gap:6px;flex-wrap:wrap">
+      <is-button id="fDownload" color="brand" variant="filled">Descargar</is-button>
+      <is-copy-button id="fCopyUrl" copy-label="Copiar URL" success-label="URL copiada"></is-copy-button>
+      <is-button data-drawer="close" color="neutral" variant="outlined">Cerrar</is-button>
+    </div>
+  </is-drawer>
+
+  <is-toast id="toaster" placement="bottom-center"></is-toast>
 
   <script type="module">
     const app = document.getElementById('app');
+    const scroller = document.getElementById('scroller');
     const base = new URL('../../assets/icons/', location.href);
     const params = new URLSearchParams(location.search);
     const family = params.get('f');
     const PAGE = 240;
 
-    const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const jsonCache = new Map();
 
     async function loadJson(name) {
-      const r = await fetch(new URL(name, base));
-      if (!r.ok) throw new Error(name);
-      return r.json();
+      if (jsonCache.has(name)) return jsonCache.get(name);
+      const p = fetch(new URL(name, base)).then((r) => {
+        if (!r.ok) throw new Error(name);
+        return r.json();
+      });
+      jsonCache.set(name, p);
+      return p;
     }
 
-    /* ── Vista: todas las familias ─────────────────────────────── */
+    /* El feedback de "copiado" lo da <is-copy-button> por sí solo; el toaster
+       queda para lo que no nace de un botón de copia (descargas, errores). */
+    const toaster = document.getElementById('toaster');
+    const toast = (message, variant = 'brand') => toaster.create(message, { variant });
+
+    /* ══ Personalizador (drawer) ════════════════════════════════════════ */
+    const F = {
+      root: document.getElementById('form'),
+      id: document.getElementById('fId'),
+      collection: document.getElementById('fCollection'),
+      size: document.getElementById('fSize'),
+      alt: document.getElementById('fAlt'),
+      preview: document.getElementById('fPreview'),
+      options: document.getElementById('fOptions'),
+      format: document.getElementById('fFormat'),
+      sizeVal: document.getElementById('fSizeVal'),
+      unit: document.getElementById('fUnit'),
+      color: document.getElementById('fColor'),
+      colorPick: document.getElementById('fColorPick'),
+      pretty: document.getElementById('fPretty'),
+      rect: document.getElementById('fRect'),
+      code: document.getElementById('fCode'),
+      codeLabel: document.getElementById('fCodeLabel'),
+      copyId: document.getElementById('fCopyId'),
+      copyCode: document.getElementById('fCopyCode'),
+      copyUrl: document.getElementById('fCopyUrl'),
+    };
+
+    /** Estado del formulario. Se conserva al cambiar de icono (requisito). */
+    const state = { prefix: null, name: null, list: [], pos: -1, svg: null };
+
+    const svgCache = new Map();
+    async function loadSvg(prefix, name) {
+      const key = `${prefix}:${name}`;
+      if (svgCache.has(key)) return svgCache.get(key);
+      const p = fetch(new URL(`${prefix}/${name}.svg`, base))
+        .then((r) => (r.ok ? r.text() : Promise.reject(new Error(key))))
+        .then((txt) => {
+          const vb = txt.match(/viewBox="\s*([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s*"/);
+          const body = txt.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+          return { body, left: vb ? +vb[1] : 0, top: vb ? +vb[2] : 0, w: vb ? +vb[3] : 24, h: vb ? +vb[4] : 24 };
+        });
+      svgCache.set(key, p);
+      return p;
+    }
+
+    const isValidSize = (v) => Number.isFinite(v) && v > 0 && v <= 4096;
+    function isValidColor(v) {
+      const s = String(v).trim();
+      if (!s) return false;
+      if (s === 'currentColor' || s.startsWith('var(')) return true;
+      return CSS.supports('color', s);
+    }
+
+    /** Dimensiones de salida según tamaño + unidad + proporción original. */
+    function outDims() {
+      const n = parseFloat(F.sizeVal.value);
+      const ratio = state.svg ? state.svg.w / state.svg.h : 1;
+      if (F.unit.value === 'auto') {
+        // Convención Iconify: alto 1em, ancho proporcional.
+        return { w: `${+(ratio).toFixed(4)}em`, h: '1em' };
+      }
+      if (!isValidSize(n)) return null;
+      const u = F.unit.value === 'none' ? '' : F.unit.value;
+      return { w: `${+(n * ratio).toFixed(4)}${u}`, h: `${n}${u}` };
+    }
+
+    const prettyBody = (body, indent = '  ') =>
+      body.replace(/></g, '>\n<').split('\n').map((l) => indent + l.trim()).filter((l) => l.trim()).join('\n');
+
+    function buildSvg({ forRaster = false } = {}) {
+      if (!state.svg) return '';
+      const dims = outDims();
+      if (!dims) return '';
+      const { left, top, w, h } = state.svg;
+      const color = String(F.color.value).trim();
+      let body = state.svg.body;
+      // `currentColor` solo hereda dentro del DOM. Para un archivo suelto (PNG,
+      // data-URI de CSS) hay que materializarlo o el icono sale negro/vacío.
+      if (color && color !== 'currentColor') body = body.replaceAll('currentColor', color);
+      else if (forRaster) body = body.replaceAll('currentColor', '#000');
+
+      const rect = F.rect.checked
+        ? `<rect x="${left}" y="${top}" width="${w}" height="${h}" fill="transparent"/>`
+        : '';
+      const inner = rect + body;
+      const open = `<svg xmlns="http://www.w3.org/2000/svg" width="${forRaster ? w : dims.w}" height="${forRaster ? h : dims.h}" viewBox="${left} ${top} ${w} ${h}">`;
+      return F.pretty.checked && !forRaster ? `${open}\n${prettyBody(inner)}\n</svg>` : `${open}${inner}</svg>`;
+    }
+
+    function buildCss() {
+      const svg = buildSvg();
+      if (!svg) return '';
+      const dims = outDims();
+      const uri = `url("data:image/svg+xml,${encodeURIComponent(svg.replace(/\n\s*/g, ''))}")`;
+      return [
+        `.icon-${state.name.replace(/[^a-z0-9]+/gi, '-')} {`,
+        `  display: inline-block;`,
+        `  width: ${dims.w};`,
+        `  height: ${dims.h};`,
+        `  background-image: ${uri};`,
+        `  background-repeat: no-repeat;`,
+        `  background-size: 100% 100%;`,
+        `}`,
+      ].join('\n');
+    }
+
+    function currentCode() {
+      if (F.format.value === 'css') return buildCss();
+      if (F.format.value === 'png') {
+        const dims = outDims();
+        return dims
+          ? `/* PNG ${dims.w} × ${dims.h} — se genera al pulsar «Descargar».\n   Fuente rasterizada: */\n${buildSvg()}`
+          : '';
+      }
+      return buildSvg();
+    }
+
+    /** Marca los campos inválidos usando el estado `error` de <is-input>. */
+    function validate() {
+      const okSize = F.unit.value === 'auto' || isValidSize(parseFloat(F.sizeVal.value));
+      const okColor = isValidColor(F.color.value);
+      F.sizeVal.toggleAttribute('error', !okSize);
+      F.sizeVal.setAttribute('error-text', okSize ? '' : 'Entre 1 y 4096');
+      F.color.toggleAttribute('error', !okColor);
+      F.color.setAttribute('error-text', okColor ? '' : 'Color CSS no válido');
+      return okSize && okColor;
+    }
+
+    /** Único punto de verdad: recalcula vista previa + código a la vez. */
+    function sync() {
+      if (!state.svg) return;
+      if (!validate()) {
+        F.code.textContent = '/* Corrige los valores marcados para generar el código. */';
+        F.copyCode.value = '';
+        return;
+      }
+      F.preview.innerHTML = buildSvg();
+      const el = F.preview.querySelector('svg');
+      if (el && F.unit.value === 'auto') el.style.fontSize = `${parseFloat(F.sizeVal.value) || 24}px`;
+      const code = currentCode();
+      F.code.textContent = code;
+      F.codeLabel.textContent = F.format.value === 'css' ? 'CSS generado' : 'SVG generado';
+      // <is-copy-button> copia su propio `value`: no hace falta un handler.
+      F.copyCode.value = code;
+    }
+
+    async function showIcon(prefix, name, list, pos) {
+      state.prefix = prefix;
+      state.name = name;
+      if (list) { state.list = list; state.pos = pos ?? -1; }
+      F.root.open = true;
+      F.id.textContent = `${prefix}:${name}`;
+      F.copyId.value = `${prefix}:${name}`;
+      F.copyUrl.value = new URL(`${prefix}/${name}.svg`, base).href;
+      F.alt.textContent = `Alt sugerido: “${name.replace(/[-_]/g, ' ')}”`;
+      const meta = collectionsMeta[prefix];
+      F.collection.textContent = meta
+        ? `${meta.name} · ${meta.category}${meta.license ? ` · ${meta.license}` : ''}`
+        : prefix;
+      try {
+        state.svg = await loadSvg(prefix, name);
+        F.size.textContent = `Tamaño original: ${state.svg.w} × ${state.svg.h}`;
+      } catch {
+        state.svg = null;
+        F.size.textContent = 'No se pudo cargar el SVG';
+        F.code.textContent = '';
+        F.preview.innerHTML = '';
+        return;
+      }
+      document.getElementById('fPrev').disabled = state.pos <= 0;
+      document.getElementById('fNext').disabled = state.pos < 0 || state.pos >= state.list.length - 1;
+      sync();
+    }
+
+    function step(delta) {
+      const next = state.pos + delta;
+      if (next < 0 || next >= state.list.length) return;
+      const it = state.list[next];
+      showIcon(it.prefix, it.name, state.list, next);
+    }
+
+    for (const el of [F.format, F.unit, F.pretty, F.rect, F.sizeVal, F.color]) {
+      el.addEventListener('is-change', sync);
+      el.addEventListener('is-input', sync);
+    }
+    F.colorPick.addEventListener('is-input', (e) => { F.color.value = e.detail.value; sync(); });
+    document.getElementById('fPrev').addEventListener('click', () => step(-1));
+    document.getElementById('fNext').addEventListener('click', () => step(1));
+    document.getElementById('fMore').addEventListener('click', (e) => {
+      const open = F.options.hidden;
+      F.options.hidden = !open;
+      e.currentTarget.setAttribute('aria-expanded', String(open));
+    });
+    F.copyCode.addEventListener('click', () => { if (!validate()) toast('Corrige los valores inválidos', 'danger'); });
+
+    document.getElementById('fDownload').addEventListener('click', async () => {
+      if (!state.svg || !validate()) return toast('Corrige los valores inválidos', 'danger');
+      const fileBase = `${state.prefix}-${state.name}`;
+      if (F.format.value === 'png') return downloadPng(fileBase);
+      const isCss = F.format.value === 'css';
+      saveBlob(new Blob([currentCode()], { type: isCss ? 'text/css' : 'image/svg+xml' }),
+        `${fileBase}.${isCss ? 'css' : 'svg'}`);
+      toast('Descargado', 'success');
+    });
+
+    function saveBlob(blob, filename) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    }
+
+    async function downloadPng(fileBase) {
+      const n = F.unit.value === 'auto' ? 256 : parseFloat(F.sizeVal.value);
+      const ratio = state.svg.w / state.svg.h;
+      const h = Math.max(1, Math.round(n));
+      const w = Math.max(1, Math.round(n * ratio));
+      const url = URL.createObjectURL(new Blob([buildSvg({ forRaster: true })], { type: 'image/svg+xml' }));
+      const img = new Image();
+      await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; }).catch(() => {});
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      canvas.toBlob((blob) => {
+        if (!blob) return toast('No se pudo generar el PNG', 'danger');
+        saveBlob(blob, `${fileBase}-${w}x${h}.png`);
+        toast('PNG descargado', 'success');
+      }, 'image/png');
+    }
+
+    /* ══ Datos compartidos ══════════════════════════════════════════════ */
+    let collectionsMeta = {};
+    async function loadMeta() {
+      try { collectionsMeta = await loadJson('collections.json'); }
+      catch { collectionsMeta = {}; }
+    }
+
+    const uniqSorted = (vals) => [...new Set(vals.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+
+    function filterFamilies(families, f) {
+      return families.filter((fam) => {
+        const m = collectionsMeta[fam.prefix] || {};
+        if (f.q && !(`${fam.prefix} ${m.name || ''}`.toLowerCase().includes(f.q))) return false;
+        if (f.category && m.category !== f.category) return false;
+        if (f.author && m.author !== f.author) return false;
+        if (f.license && m.license !== f.license) return false;
+        if (f.grid && String(m.height ?? '') !== f.grid) return false;
+        if (f.palette === 'color' && !m.palette) return false;
+        if (f.palette === 'mono' && m.palette) return false;
+        return true;
+      });
+    }
+
+    function filtersMarkup() {
+      const metas = Object.values(collectionsMeta);
+      const sel = (id, label, vals, todos) => `
+        <is-select id="${id}" label="${label}" value="" clearable>
+          <is-option value="">${todos}</is-option>
+          ${vals.map((v) => `<is-option value="${esc(v)}">${esc(v)}</is-option>`).join('')}
+        </is-select>`;
+      const grids = uniqSorted(metas.map((m) => (m.height == null ? '' : String(m.height)))).sort((a, b) => a - b);
+      return `
+        <div class="filters">
+          ${sel('fltCategory', 'Categoría', uniqSorted(metas.map((m) => m.category)), 'Todas')}
+          ${sel('fltAuthor', 'Autor / tag', uniqSorted(metas.map((m) => m.author)), 'Todos')}
+          ${sel('fltGrid', 'Grid', grids, 'Cualquiera')}
+          <is-select id="fltPalette" label="Paleta" value="">
+            <is-option value="">Cualquiera</is-option>
+            <is-option value="mono">Monocromo</is-option>
+            <is-option value="color">Color</is-option>
+          </is-select>
+          ${sel('fltLicense', 'Licencia', uniqSorted(metas.map((m) => m.license)), 'Cualquiera')}
+          <is-button id="fltReset" color="neutral" variant="ghost">Limpiar</is-button>
+        </div>`;
+    }
+
+    const FILTER_IDS = ['fltCategory', 'fltAuthor', 'fltGrid', 'fltPalette', 'fltLicense'];
+
+    /* ══ Vista índice: familias + búsqueda global de iconos ════════════ */
     async function renderIndex() {
       const { families, total } = await loadJson('index.json');
       app.innerHTML = `
@@ -182,59 +534,223 @@
           <h1>Explorador de iconos</h1>
           <span class="count">${families.length} familias · ${total.toLocaleString('es')} iconos</span>
         </div>
-        <div class="xp-search"><is-icon icon="mdi:magnify"></is-icon>
-          <input id="q" type="search" placeholder="Buscar familia (mdi, tabler, lucide...)" autofocus></div>
-        <div class="fam-grid" id="grid"></div>`;
-      const grid = document.getElementById('grid');
+        <div class="xp-bar">
+          <div class="xp-bar__search">
+            <is-input id="q" type="search" clearable placeholder="Buscar por palabra clave (mdi, tabler, lucide...)">
+              <is-icon slot="start" icon="mdi:magnify"></is-icon>
+            </is-input>
+            <is-button-group id="scope" select="single" value="fam" label="Ámbito de búsqueda">
+              <is-button value="fam">Familias</is-button>
+              <is-button value="icon">Iconos</is-button>
+            </is-button-group>
+          </div>
+          ${filtersMarkup()}
+        </div>
+        <div id="results"></div>`;
+
       const q = document.getElementById('q');
-      const paint = () => {
-        const term = q.value.trim().toLowerCase();
-        const list = term ? families.filter((f) => f.prefix.includes(term)) : families;
-        grid.innerHTML = list.map((f) => `
-          <a class="fam" href="?f=${f.prefix}">
-            <b>${f.prefix}</b>
-            <small>${f.count.toLocaleString('es')} iconos</small>
-            <span class="sample" data-prefix="${f.prefix}"></span>
-          </a>`).join('');
-        // muestras perezosas: 3 iconos por familia visibles
-        const io = new IntersectionObserver((entries) => {
+      const results = document.getElementById('results');
+      const scopeGroup = document.getElementById('scope');
+      let scope = 'fam';
+
+      const readFilters = () => ({
+        q: String(q.value).trim().toLowerCase(),
+        category: document.getElementById('fltCategory').value,
+        author: document.getElementById('fltAuthor').value,
+        grid: document.getElementById('fltGrid').value,
+        palette: document.getElementById('fltPalette').value,
+        license: document.getElementById('fltLicense').value,
+      });
+
+      /* — familias — */
+      let io = null;
+      function paintFamilies() {
+        io?.disconnect();
+        const list = filterFamilies(families, readFilters());
+        if (!list.length) {
+          results.innerHTML = `<is-callout color="neutral" variant="outlined" icon="mdi:filter-off">Ninguna familia coincide con los filtros.</is-callout>`;
+          return;
+        }
+        results.innerHTML = `<div class="fam-grid">${list.map((f) => {
+          const m = collectionsMeta[f.prefix] || {};
+          return `
+            <a class="fam" href="?f=${encodeURIComponent(f.prefix)}">
+              <is-card variant="outlined">
+                <b>${esc(m.name || f.prefix)}</b>
+                <small>${esc(f.prefix)} · ${f.count.toLocaleString('es')} iconos</small>
+                <span class="sample" data-prefix="${esc(f.prefix)}"></span>
+                <span class="meta">
+                  ${m.category ? `<is-tag color="neutral" variant="outlined" pill>${esc(m.category)}</is-tag>` : ''}
+                  ${m.height ? `<is-tag color="neutral" variant="outlined" pill>${m.height}px</is-tag>` : ''}
+                  <is-tag color="${m.palette ? 'info' : 'neutral'}" variant="outlined" pill>${m.palette ? 'color' : 'mono'}</is-tag>
+                  ${m.license ? `<is-tag color="neutral" variant="outlined" pill>${esc(m.license)}</is-tag>` : ''}
+                </span>
+              </is-card>
+            </a>`;
+        }).join('')}</div>`;
+
+        io = new IntersectionObserver((entries) => {
           for (const e of entries) {
             if (!e.isIntersecting) continue;
             io.unobserve(e.target);
             const prefix = e.target.dataset.prefix;
             loadJson(`${prefix}.json`).then((d) => {
-              e.target.innerHTML = d.icons.slice(0, 4)
-                .map((n) => `<is-icon icon="${prefix}:${n}"></is-icon>`).join('');
+              for (const n of d.icons.slice(0, 4)) {
+                const ic = document.createElement('is-icon');
+                ic.setAttribute('icon', `${prefix}:${n}`);
+                e.target.appendChild(ic);
+              }
             }).catch(() => {});
           }
-        }, { rootMargin: '120px' });
-        grid.querySelectorAll('.sample').forEach((el) => io.observe(el));
-      };
-      q.addEventListener('input', paint);
+        }, { root: scroller, rootMargin: '160px' });
+        results.querySelectorAll('.sample').forEach((el) => io.observe(el));
+      }
+
+      /* — búsqueda global de iconos —
+         Los nombres viven en 231 JSON sueltos (~5,7 MB). Se cargan bajo demanda
+         la primera vez que se busca en modo «Iconos» y quedan en caché. */
+      let allIcons = null;
+      let loadingIcons = null;
+      async function ensureIcons(onProgress) {
+        if (allIcons) return allIcons;
+        if (loadingIcons) return loadingIcons;
+        loadingIcons = (async () => {
+          const out = [];
+          let done = 0;
+          const queue = families.slice();
+          const worker = async () => {
+            while (queue.length) {
+              const fam = queue.shift();
+              try {
+                const d = await loadJson(`${fam.prefix}.json`);
+                for (const n of d.icons) out.push({ prefix: fam.prefix, name: n });
+              } catch {}
+              onProgress?.(++done, families.length);
+            }
+          };
+          await Promise.all(Array.from({ length: 8 }, worker));
+          allIcons = out;
+          return out;
+        })();
+        return loadingIcons;
+      }
+
+      let searchToken = 0;
+      async function paintIcons() {
+        const f = readFilters();
+        const token = ++searchToken;
+        const allowed = new Set(filterFamilies(families, { ...f, q: '' }).map((x) => x.prefix));
+        if (!allIcons) {
+          results.innerHTML = `
+            <div class="status">
+              <is-progress-bar id="prog" value="0" label="Indexando iconos"></is-progress-bar>
+              <span class="count" id="progTxt">Indexando iconos… 0%</span>
+            </div>`;
+          await ensureIcons((done, total) => {
+            const pct = Math.round((done / total) * 100);
+            document.getElementById('prog')?.setAttribute('value', String(pct));
+            const t = document.getElementById('progTxt');
+            if (t) t.textContent = `Indexando iconos… ${pct}%`;
+          });
+          if (token !== searchToken) return;
+        }
+        const term = f.q;
+        const matches = [];
+        const LIMIT = 600;
+        for (const it of allIcons) {
+          if (!allowed.has(it.prefix)) continue;
+          if (term && !it.name.includes(term) && !`${it.prefix}:${it.name}`.includes(term)) continue;
+          matches.push(it);
+          if (matches.length >= LIMIT) break;
+        }
+        if (!matches.length) {
+          results.innerHTML = `<is-callout color="neutral" variant="outlined" icon="mdi:magnify-close">Ningún icono coincide${term ? ` con “${esc(term)}”` : ''}.</is-callout>`;
+          return;
+        }
+        results.innerHTML =
+          `<p class="count" style="margin:6px 0">${matches.length}${matches.length >= LIMIT ? '+' : ''} coincidencias</p>` +
+          `<div class="icon-grid" id="grid"></div>`;
+        const grid = document.getElementById('grid');
+        const frag = document.createDocumentFragment();
+        matches.forEach((it, i) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'icon-cell';
+          btn.dataset.pos = String(i);
+          const ic = document.createElement('is-icon');
+          ic.setAttribute('icon', `${it.prefix}:${it.name}`);
+          const nm = document.createElement('small');
+          nm.textContent = it.name;
+          const fam = document.createElement('small');
+          fam.className = 'fam-tag';
+          fam.textContent = it.prefix;
+          btn.append(ic, nm, fam);
+          frag.appendChild(btn);
+        });
+        grid.appendChild(frag);
+        grid.addEventListener('click', (e) => {
+          const cell = e.target.closest('.icon-cell');
+          if (!cell) return;
+          grid.querySelector('.icon-cell.sel')?.classList.remove('sel');
+          cell.classList.add('sel');
+          const pos = +cell.dataset.pos;
+          showIcon(matches[pos].prefix, matches[pos].name, matches, pos);
+        });
+      }
+
+      const paint = () => (scope === 'fam' ? paintFamilies() : paintIcons());
+      let debounce = 0;
+      q.addEventListener('is-input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(paint, scope === 'fam' ? 60 : 220);
+      });
+      for (const id of FILTER_IDS) document.getElementById(id).addEventListener('is-change', paint);
+      document.getElementById('fltReset').addEventListener('click', () => {
+        for (const id of FILTER_IDS) document.getElementById(id).value = '';
+        q.value = '';
+        paint();
+      });
+      scopeGroup.addEventListener('is-change', (e) => {
+        scope = e.detail.value || 'fam';
+        q.setAttribute('placeholder', scope === 'fam'
+          ? 'Buscar por palabra clave (mdi, tabler, lucide...)'
+          : 'Buscar icono en todas las familias (home, arrow-left...)');
+        paint();
+      });
+
       paint();
     }
 
-    /* ── Vista: una familia (full page compartible ?f=mdi) ─────── */
+    /* ══ Vista familia (?f=mdi) ════════════════════════════════════════ */
     async function renderFamily(prefix) {
       let data;
       try { data = await loadJson(`${prefix}.json`); }
       catch {
-        app.innerHTML = `<p>No existe la familia <code>${esc(prefix)}</code>. <a href="icon-explorer.html">Volver</a></p>`;
+        app.innerHTML = `<is-callout color="danger" variant="outlined" icon="mdi:alert">No existe la familia <code>${esc(prefix)}</code>. <a href="icon-explorer.html">Volver</a></is-callout>`;
         return;
       }
+      const meta = collectionsMeta[prefix] || {};
       document.title = `${prefix} · Explorador de iconos`;
       app.innerHTML = `
-        <p class="crumb"><a href="icon-explorer.html">← Todas las familias</a></p>
+        <is-breadcrumb style="margin-bottom:6px">
+          <is-breadcrumb-item href="icon-explorer.html">Todas las familias</is-breadcrumb-item>
+          <is-breadcrumb-item>${esc(meta.name || prefix)}</is-breadcrumb-item>
+        </is-breadcrumb>
         <div class="xp-head">
-          <h1>${prefix}</h1>
-          <span class="count">${data.icons.length.toLocaleString('es')} iconos</span>
+          <h1>${esc(meta.name || prefix)}</h1>
+          <span class="count">${esc(prefix)} · ${data.icons.length.toLocaleString('es')} iconos${meta.height ? ` · grid ${meta.height}px` : ''}${meta.license ? ` · ${esc(meta.license)}` : ''}</span>
         </div>
-        <div class="xp-search"><is-icon icon="mdi:magnify"></is-icon>
-          <input id="q" type="search" placeholder="Buscar en ${prefix}..." autofocus></div>
-        <div class="tools">
-          <label>Color <input type="color" id="tColor" value="#e8eaf1"></label>
-          <label><input type="checkbox" id="tInherit" checked> Heredar del tema</label>
-          <label>Tamaño <input type="range" id="tSize" min="16" max="64" value="26"> <span id="tSizeVal">26px</span></label>
+        <div class="xp-bar">
+          <div class="xp-bar__search">
+            <is-input id="q" type="search" clearable placeholder="Buscar en ${esc(prefix)}...">
+              <is-icon slot="start" icon="mdi:magnify"></is-icon>
+            </is-input>
+          </div>
+          <div class="tools">
+            <is-color-picker id="tColor" label="Color" value="#e8eaf1"></is-color-picker>
+            <is-checkbox id="tInherit" checked>Heredar del tema</is-checkbox>
+            <is-slider id="tSize" label="Tamaño" min="16" max="64" value="26" value-label with-tooltip format="{v}px"></is-slider>
+          </div>
         </div>
         <div class="icon-grid" id="grid"></div>
         <is-button class="more" id="more" color="neutral" variant="outlined">Mostrar más</is-button>`;
@@ -245,26 +761,18 @@
       const tColor = document.getElementById('tColor');
       const tInherit = document.getElementById('tInherit');
       const tSize = document.getElementById('tSize');
-      const tSizeVal = document.getElementById('tSizeVal');
       let filtered = data.icons;
       let shown = 0;
 
       const applyTools = () => {
         grid.style.setProperty('--xp-size', tSize.value + 'px');
-        tSizeVal.textContent = tSize.value + 'px';
-        const pick = document.getElementById('pick');
-        if (tInherit.checked) {
-          grid.style.removeProperty('--xp-color');
-          pick.style.removeProperty('--xp-color');
-        } else {
-          grid.style.setProperty('--xp-color', tColor.value);
-          pick.style.setProperty('--xp-color', tColor.value);
-        }
-        syncSnippet();
+        if (tInherit.checked) grid.style.removeProperty('--xp-color');
+        else grid.style.setProperty('--xp-color', tColor.value);
       };
-      tColor.addEventListener('input', () => { tInherit.checked = false; applyTools(); });
-      tInherit.addEventListener('change', applyTools);
-      tSize.addEventListener('input', applyTools);
+      tColor.addEventListener('is-input', () => { tInherit.checked = false; applyTools(); });
+      tInherit.addEventListener('is-change', applyTools);
+      tSize.addEventListener('is-input', applyTools);
+      tSize.addEventListener('is-change', applyTools);
 
       const appendPage = () => {
         const frag = document.createDocumentFragment();
@@ -273,7 +781,11 @@
           btn.type = 'button';
           btn.className = 'icon-cell';
           btn.dataset.name = name;
-          btn.innerHTML = `<is-icon icon="${prefix}:${name}"></is-icon><small>${name}</small>`;
+          const ic = document.createElement('is-icon');
+          ic.setAttribute('icon', `${prefix}:${name}`);
+          const nm = document.createElement('small');
+          nm.textContent = name;
+          btn.append(ic, nm);
           frag.appendChild(btn);
         }
         grid.appendChild(frag);
@@ -282,53 +794,28 @@
       };
       const repaint = () => { grid.innerHTML = ''; shown = 0; appendPage(); };
       more.addEventListener('click', appendPage);
-      q.addEventListener('input', () => {
-        const term = q.value.trim().toLowerCase();
+      q.addEventListener('is-input', () => {
+        const term = String(q.value).trim().toLowerCase();
         filtered = term ? data.icons.filter((n) => n.includes(term)) : data.icons;
         repaint();
       });
 
-      /* selección + snippet */
-      const pick = document.getElementById('pick');
-      const pickIcon = document.getElementById('pickIcon');
-      const pickName = document.getElementById('pickName');
-      const pickSnippet = document.getElementById('pickSnippet');
-      let current = null;
-      const snippetFor = (name) => {
-        const style = (!tInherit.checked)
-          ? ` style="color:${tColor.value};font-size:${tSize.value}px"`
-          : (tSize.value !== '26' ? ` style="font-size:${tSize.value}px"` : '');
-        return `<is-icon icon="${prefix}:${name}"${style}></is-icon>`;
-      };
-      const syncSnippet = () => {
-        if (!current) return;
-        pickSnippet.textContent = snippetFor(current);
-      };
       grid.addEventListener('click', (e) => {
         const cell = e.target.closest('.icon-cell');
         if (!cell) return;
         grid.querySelector('.icon-cell.sel')?.classList.remove('sel');
         cell.classList.add('sel');
-        current = cell.dataset.name;
-        pickIcon.setAttribute('icon', `${prefix}:${current}`);
-        pickName.textContent = `${prefix}:${current}`;
-        syncSnippet();
-        pick.hidden = false;
-      });
-      document.getElementById('pickClose').addEventListener('click', () => { pick.hidden = true; });
-      document.getElementById('pickCopy').addEventListener('click', async (e) => {
-        try { await navigator.clipboard.writeText(pickSnippet.textContent); } catch {}
-        const b = e.currentTarget;
-        b.textContent = '¡Copiado!';
-        setTimeout(() => { b.textContent = 'Copiar HTML'; }, 1200);
+        const name = cell.dataset.name;
+        showIcon(prefix, name, filtered.map((n) => ({ prefix, name: n })), filtered.indexOf(name));
       });
 
       applyTools();
       appendPage();
     }
 
+    await loadMeta();
     (family ? renderFamily(family) : renderIndex()).catch((err) => {
-      app.innerHTML = `<p>Error cargando el índice de iconos: ${esc(String(err))}</p>`;
+      app.innerHTML = `<is-callout color="danger" variant="outlined" icon="mdi:alert">Error cargando el índice de iconos: ${esc(String(err))}</is-callout>`;
     });
   </script>
 </body>

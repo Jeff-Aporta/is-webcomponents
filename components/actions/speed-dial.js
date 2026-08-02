@@ -111,6 +111,16 @@ import './check-icon-button.js';
       this.#onWinResize = () => { if (this.#isRadial && this.isOpen) this.#layoutRadial(); };
       window.addEventListener('resize', this.#onWinResize);
       window.addEventListener('scroll', this.#onWinResize, true);
+      // El primer layout corre antes de que iconos y fuentes fijen el tamano
+      // real de las acciones, asi que el abanico salia descolocado hasta que
+      // algo (un scroll) lo recalculaba. Se re-mide cuando el tamano cambia.
+      if ('ResizeObserver' in window) {
+        this.#ro = new ResizeObserver(() => this.#onWinResize());
+        this.#ro.observe(this);
+        for (const a of this.children) this.#ro.observe(a);
+      }
+      document.fonts?.ready?.then(() => this.#onWinResize()).catch(() => {});
+      window.addEventListener('load', this.#onWinResize);
     }
 
     disconnectedCallback() {
@@ -119,6 +129,9 @@ import './check-icon-button.js';
       document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
       window.removeEventListener('resize', this.#onWinResize);
       window.removeEventListener('scroll', this.#onWinResize, true);
+      window.removeEventListener('load', this.#onWinResize);
+      this.#ro?.disconnect();
+      this.#ro = null;
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
@@ -217,7 +230,13 @@ import './check-icon-button.js';
     }
 
     #numProp(name) {
-      const v = Number(this.#prop(name));
+      const raw = this.#prop(name);
+      // OJO: Number(null) es 0 y Number.isFinite(0) es true. Sin este guard,
+      // un data prop AUSENTE devolvia 0, que para `start-angle` es un angulo
+      // valido (derecha): el abanico nunca se orientaba al espacio libre y en
+      // una esquina se estrechaba hasta cabar un item por anillo.
+      if (raw == null || raw === '') return null;
+      const v = Number(raw);
       return Number.isFinite(v) ? v : null;
     }
 
@@ -334,6 +353,20 @@ import './check-icon-button.js';
       const cy = triggerRect.top + triggerRect.height / 2;
       const bounds = this.#boundaryRect();
 
+      // Marcar ANTES de medir: en radial las acciones son circulares (36x36)
+      // y sin data-radial se miden como pildora (55x39). Con ese tamano
+      // inflado el arco calculado no cabia y el abanico caia al reparto
+      // empaquetado; ademas era la causa de que "se arreglara" al hacer
+      // scroll, porque la segunda pasada ya medía el circulo.
+      for (const a of actions) {
+        a.setAttribute('data-radial', '');
+        const label = a.getAttribute('label') || a.textContent.trim();
+        if (label) {
+          if (!a.title) a.title = label;
+          if (!a.hasAttribute('aria-label')) a.setAttribute('aria-label', label);
+        }
+      }
+
       let itemSize = 0;
       for (const a of actions) {
         const r = a.getBoundingClientRect();
@@ -348,26 +381,36 @@ import './check-icon-button.js';
 
       const attrArc = this.#numProp('arc');
       const attrStart = this.#numProp('start-angle');
-      let arc = attrArc && attrArc > 0 ? clamp(attrArc, 10, 360) : this.#autoArc(cx, cy, bounds, minRadius);
-      const center = attrStart != null ? attrStart : this.#autoStartAngle(cx, cy, bounds);
-
-      let start = arc >= 360 ? center : center - arc / 2;
-      let maxR = this.#maxRadiusFor(cx, cy, bounds, start, arc, itemHalf);
-      let guard = 0;
-      while (maxR < minRadius && arc > 30 && guard < 12) {
-        arc = Math.max(30, arc * 0.75);
-        start = arc >= 360 ? center : center - arc / 2;
-        maxR = this.#maxRadiusFor(cx, cy, bounds, start, arc, itemHalf);
-        guard += 1;
-      }
-
       const attrRadius = this.#numProp('radius');
-      const wanted = attrRadius && attrRadius > 0 ? attrRadius : minRadius;
-      const baseRadius = Math.max(minRadius, Math.min(wanted, Math.max(maxR, minRadius)));
-
+      const center = attrStart != null ? attrStart : this.#autoStartAngle(cx, cy, bounds);
       const dir = this.#prop('sweep') === 'counter-clockwise' ? -1 : 1;
+      const wanted = attrRadius && attrRadius > 0 ? attrRadius : minRadius;
+      const baseRadius = Math.max(minRadius, wanted);
 
-      const capacityAt = (radius) => {
+      /**
+       * Arco que cabe A ESE RADIO. Cada anillo resuelve el suyo: un arco
+       * estrecho valido cerca del trigger puede no servir mas lejos, y un
+       * arco amplio imposible al principio si cabe al reorientarlo. Antes se
+       * calculaba UNO solo para todos los anillos y, en una esquina, el
+       * segundo anillo se descartaba y todo caia al reparto empaquetado.
+       */
+      const arcFor = (radius) => {
+        let a = attrArc && attrArc > 0
+          ? clamp(attrArc, 10, 360)
+          : this.#autoArc(cx, cy, bounds, radius);
+        let st = a >= 360 ? center : center - a / 2;
+        let guard = 0;
+        while (this.#maxRadiusFor(cx, cy, bounds, st, a, itemHalf) < radius
+               && a > 20 && guard < 16) {
+          a = Math.max(20, a * 0.8);
+          st = a >= 360 ? center : center - a / 2;
+          guard += 1;
+        }
+        const fits = this.#maxRadiusFor(cx, cy, bounds, st, a, itemHalf) >= radius;
+        return { arc: a, start: st, fits };
+      };
+
+      const capacityAt = (radius, arc) => {
         const minStep = 2 * Math.asin(clamp((itemHalf + gap / 2) / radius, 0, 1)) / DEG;
         if (!Number.isFinite(minStep) || minStep <= 0) return actions.length;
         return arc >= 360
@@ -375,23 +418,33 @@ import './check-icon-button.js';
           : Math.max(1, Math.floor(arc / minStep) + 1);
       };
 
-      // Anillos ACOTADOS: un anillo solo se usa si cabe ENTERO en el wrapper.
-      // Antes solo se limitaba el radio base y los anillos siguientes
-      // (base + n*(item+gap)) se salian del area.
+      // Anillos concentricos, cada uno con su propio arco y acotado al wrapper.
       const rings = [];
       let remaining = actions.length;
-      let ringIndex = 0;
-      while (remaining > 0 && ringIndex < 8) {
-        const radius = baseRadius + ringIndex * (itemSize + gap);
-        if (radius > maxR && ringIndex > 0) break;      // no cabe: se corta
-        const count = Math.min(remaining, capacityAt(radius));
-        rings.push({ radius, count });
+      let attempt = 0;
+      const step = itemSize + gap;
+      while (remaining > 0 && attempt < 24) {
+        const radius = baseRadius + attempt * step;
+        attempt += 1;
+        const { arc: ringArc, start: ringStart, fits } = arcFor(radius);
+        // Si ese radio no cabe se prueba el SIGUIENTE, no se abandona: un
+        // radio algo mayor puede admitir un arco mas ancho (mas espacio en la
+        // direccion libre). Antes se cortaba al primer fallo y los items
+        // sobrantes se apretaban en el ultimo anillo hasta solaparse.
+        if (!fits) continue;
+        const count = Math.min(remaining, capacityAt(radius, ringArc));
+        if (count <= 0) continue;
+        rings.push({ radius, count, arc: ringArc, start: ringStart });
         remaining -= count;
-        ringIndex += 1;
       }
 
-      // Si el area radial no da para todas, se abandona el abanico y se
-      // reparten con GRID dentro del wrapper: contenido por construccion.
+      // Si el area no da para mas anillos, los que sobran se reparten en el
+      // ULTIMO anillo valido apretando el paso angular. Antes se caia a un
+      // grid centrado en el wrapper, que alejaba las acciones del trigger y
+      // las sacaba de la forma de anillo: el abanico debe seguir siendo un
+      // abanico pegado al trigger aunque vaya justo de sitio.
+      // Tras recorrer todos los radios candidatos: si aun sobran, el wrapper
+      // es demasiado pequeno para un abanico y se reparte por layout.
       if (remaining > 0) {
         this.#pack(actions, 'grid');
         return;
@@ -399,13 +452,20 @@ import './check-icon-button.js';
       delete this.dataset.packed;
       this.style.removeProperty('--sd-pack-left');
 
+      // Diagnostico del reparto: "radio x nº de items (arco)" por anillo.
+      // Sirve para depurar el abanico sin instrumentar el componente.
+      this.dataset.rings = rings
+        .map((r) => `${Math.round(r.radius)}x${r.count}@${Math.round(r.arc)}`)
+        .join(',');
+
       let index = 0;
       rings.forEach((ring, i) => {
-        const slots = arc >= 360 ? ring.count : Math.max(ring.count - 1, 1);
-        const step = arc >= 360 ? 360 / ring.count : arc / slots;
+        const slots = ring.arc >= 360 ? ring.count : Math.max(ring.count - 1, 1);
+        const step = ring.arc >= 360 ? 360 / ring.count : ring.arc / slots;
+        // Anillos alternos desfasados medio paso: distribucion en panal.
         const offset = i % 2 ? step / 2 : 0;
         for (let k = 0; k < ring.count; k += 1) {
-          const angle = (start + offset + dir * step * k) * DEG;
+          const angle = (ring.start + offset + dir * step * k) * DEG;
           const x = Math.cos(angle) * ring.radius;
           const y = Math.sin(angle) * ring.radius;
           const el = actions[index++];
@@ -475,6 +535,7 @@ import './check-icon-button.js';
     #trigger;
     #onDocPointerDown;
     #onWinResize;
+    #ro = null;
   }
 
   if (!customElements.get('is-speed-dial')) customElements.define('is-speed-dial', IsSpeedDial);

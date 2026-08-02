@@ -265,6 +265,59 @@ async function headerDoc(scriptRel, tag) {
   return body;
 }
 
+
+/**
+ * Convierte el comentario de cabecera en prosa + TABLAS.
+ *
+ * El volcado crudo en un <pre> se leia como un dump y no como documentacion.
+ * Las secciones conocidas (Atributos, Slots, Eventos, Data props, API,
+ * Metodos) pasan a <table class="ref">; el resto queda como parrafo.
+ */
+const SECTIONS = /^(Atributos|Data props|Slots|Eventos|API|Metodos|Métodos|Custom states|CSS Parts)/i;
+
+function renderDoc(doc) {
+  const lines = doc.split(String.fromCharCode(10));
+  const intro = [];
+  const groups = [];
+  let current = null;
+
+  for (const raw of lines) {
+    const line = raw.replace(/\s+$/, '');
+    if (!line.trim()) { if (current) current.rows.push(null); continue; }
+    if (SECTIONS.test(line.trim()) && line.trim().length < 40) {
+      current = { title: line.trim(), rows: [] };
+      groups.push(current);
+      continue;
+    }
+    if (!current) { intro.push(line.trim()); continue; }
+    current.rows.push(line);
+  }
+
+  const tables = groups.map((g) => {
+    // Cada fila: "  nombre   resto..." -> dos columnas.
+    const rows = [];
+    for (const r of g.rows) {
+      if (r == null) continue;
+      const m = /^\s{2,}(\S+)\s{2,}(.*)$/.exec(r);
+      if (m) rows.push([m[1], m[2].trim()]);
+      else if (rows.length) rows[rows.length - 1][1] += ' ' + r.trim();
+    }
+    if (!rows.length) return '';
+    const body = rows
+      .map(([k, v]) => `            <tr><td><code>${esc(k)}</code></td><td>${esc(v)}</td></tr>`)
+      .join(String.fromCharCode(10));
+    return `        <h3>${esc(g.title)}</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Descripción</th></tr></thead>
+          <tbody>
+${body}
+          </tbody>
+        </table>`;
+  }).filter(Boolean).join(String.fromCharCode(10, 10));
+
+  return { intro: intro.join(' '), tables };
+}
+
 const manifestSrc = await readFile(join(root, 'manifest.js'), 'utf8');
 const { default: manifest } = await import(new URL('../manifest.js', import.meta.url));
 
@@ -289,6 +342,7 @@ for (const [tag, cfg] of Object.entries(CHILDREN)) {
     .join('\n');
 
   const doc = await headerDoc(entry.script, tag);
+  const { intro, tables } = renderDoc(doc);
   const styles = cfg.styles ? `\n  <style>\n    ${cfg.styles}\n  </style>` : '';
 
   const html = `<!DOCTYPE html>
@@ -335,11 +389,12 @@ ${cfg.demo.split('\n').map((l) => '          ' + l).join('\n')}
 
       <section class="section" id="reference">
         <h2>Referencia</h2>
+        <p class="lede">${esc(intro)}</p>
+${tables}
         <p class="lede">
           API declarada en el módulo fuente
           <code class="code">${entry.script.replace(/^\.\.\/\.\.\//, '')}</code>.
         </p>
-        <pre class="code" data-no-copy>${esc(doc)}</pre>
       </section>
 
     </is-main>

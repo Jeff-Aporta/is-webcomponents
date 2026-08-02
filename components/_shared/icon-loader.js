@@ -64,7 +64,7 @@ async function fetchIndex(prefix) {
   const promise = (async () => {
     for (const base of candidateBases()) {
       try {
-        const res = await fetch(base + LOCAL_INDEX_PATH(prefix), { cache: 'force-cache' });
+        const res = await fetch(base + LOCAL_INDEX_PATH(prefix), { cache: 'default' });
         if (!res.ok) continue;
         const data = await res.json();
         const set = new Set(data.icons || []);
@@ -153,7 +153,14 @@ export async function resolveIconRaw(prefix, name, signal) {
 
   for (const base of bases) {
     try {
-      const res = await fetch(base + LOCAL_SVG_PATH(prefix, name), { signal, cache: 'force-cache' });
+      // `cache: 'default'`, NO 'force-cache'. Con force-cache el navegador
+      // sirve la entrada cacheada sin revalidar NUNCA, aunque el archivo del
+      // servidor haya cambiado. Cuando se repararon los viewBox de 166k SVG,
+      // los navegadores que ya habian visitado el sitio siguieron pintando los
+      // SVG rotos (icono vacio) de forma permanente. El cache en memoria
+      // (`rawCache`) ya evita repetir requests dentro de una sesion; el HTTP
+      // cache normal + ETag cubre el resto sin congelar contenido obsoleto.
+      const res = await fetch(base + LOCAL_SVG_PATH(prefix, name), { signal, cache: 'default' });
       if (!res.ok) continue;
       const text = await res.text();
       if (text && text.includes('<svg')) {
@@ -177,7 +184,7 @@ export function clearRawCache() {
 export async function listIconFamilies() {
   for (const base of candidateBases()) {
     try {
-      const res = await fetch(base + 'index.json', { cache: 'force-cache' });
+      const res = await fetch(base + 'index.json', { cache: 'default' });
       if (!res.ok) continue;
       const data = await res.json();
       if (Array.isArray(data.families)) return data.families;

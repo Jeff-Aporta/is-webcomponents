@@ -20,7 +20,11 @@ const src = readFileSync(homePath, 'utf8');
 function extractBlock(prefix) {
   // Soporta selectores compuestos: ".foo, .bar { ... }" o ".foo:hover { ... }".
   // Toma la primera ocurrencia de "selector {" y cuenta llaves hasta cerrar.
-  const start = src.search(new RegExp(`\\${prefix}[^{]*\\{`));
+  // `(?![\w-])` evita que un prefijo corto capture un selector mas largo: sin
+  // el, buscar `.home` casaba con `.home-lab__title` y se extraia el bloque
+  // equivocado, asi que el test fallaba por una regla nueva y no por el fallo
+  // que vigila.
+  const start = src.search(new RegExp(`\\${prefix}(?![\\w-])[^{]*\\{`));
   if (start === -1) return null;
   let depth = 0;
   for (let i = start; i < src.length; i++) {

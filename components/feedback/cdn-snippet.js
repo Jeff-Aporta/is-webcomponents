@@ -225,9 +225,24 @@ import '../media/icon.js';
      * que llamarlo a mano Y meter el CSS del tema dentro del shadow: ninguna
      * de las dos cosas cruza la frontera del shadow DOM por si sola.
      */
-    #highlight() {
+    #highlight(intento = 0) {
       const paint = window.__isHighlightCode;
-      if (typeof paint !== 'function') return;
+      // Hay que esperar a las DOS cosas: el pintor Y el propio CodeMirror.
+      // El pintor puede existir antes que CodeMirror (van en scripts distintos
+      // con `defer`) y en ese caso paint() sale sin hacer nada, dejando el
+      // snippet sin color. Ademas este componente se auto-inyecta desde
+      // preview-chrome, a veces DESPUES del evento load, asi que escuchar
+      // solo a `load` tampoco bastaba.
+      // ...y al MODO: los modos de CodeMirror (htmlmixed, xml…) son scripts
+      // aparte del core. Con el modo sin cargar, runMode aplica el tema pero
+      // no genera tokens y el snippet sale monocromo.
+      const listo = typeof paint === 'function'
+        && typeof window.CodeMirror?.runMode === 'function'
+        && !!window.CodeMirror?.modes?.htmlmixed;
+      if (!listo) {
+        if (intento < 40) setTimeout(() => this.#highlight(intento + 1), 120);
+        return;
+      }
       this.#adoptCodeMirrorCss();
       for (const pre of this.shadowRoot.querySelectorAll('.cdn__pre')) {
         if (!pre.textContent.trim()) continue;

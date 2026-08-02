@@ -169,6 +169,9 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - `color` y `variant` son DIMENSIONES DISTINTAS: `color` es el color semantico (brand, neutral, info, success, warning, danger) y `variant` la presentacion (filled, outlined, plain, soft, ghost...). Nunca meter color en `variant`.
 - Sin atributo `size`: todo se mide en `em` y la escala sale del `font-size` del contexto. Los demos deben ensenarlo con `style="font-size: …em"`.
 - Configuracion declarativa de componentes: `data-*` como `data-theme`/`data-palette` (p. ej. `data-wrapper`, `data-layout`, `data-arc`), no atributos sueltos ad-hoc.
+- Texto con degradado (`background-clip: text`): SIEMPRE un color plano de fallback antes, y el degradado dentro de `@supports`. Y comprobar el contraste en los DOS temas, no solo en el que estas mirando.
+- Contraste: calcularlo (ratio WCAG) en vez de juzgarlo a ojo; el minimo para texto grande es 3:1 y conviene apuntar a 4.5:1.
+- Para QA visual, usar el navegador de verdad: captura de pantalla y medicion por CDP. Varias veces los numeros decian que algo estaba bien y la captura mostro lo contrario (y al reves).
 - El host de `is-icon` es una caja cuadrada de 1em con `line-height: 1`. Sin tamaño explícito la línea lo estira hasta el line-height heredado y el SVG queda descolgado dentro.
 - Leer consumidores; corregir raíz común.
 - Un MD por módulo JS/CSS; listar todos tags.
@@ -230,6 +233,13 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 30. `animation: … both` deja aplicada una matriz identidad al terminar; la seccion se convierte en containing block y CUALQUIER overlay `position: fixed` dentro aparece desplazado (is-context-menu salia a 48/238px del clic). Usar `backwards`, y ademas los overlays se auto-corrigen midiendo su origen real.
 31. `#refreshLinks` del scrollspy limpiaba la marca activa pero `#activeId` seguia igual, asi que `#setActive` salia temprano y no repintaba: al cargar no habia item resaltado hasta hacer scroll.
 32. Un atributo que solo alimenta `aria-label` no pinta texto: `<is-fab extended label="X">` salia con la pildora vacia. El atributo debe ser el fallback del slot.
+34. Un degradado calibrado para fondo oscuro se vuelve ILEGIBLE en light: `.home-title__accent` mezclaba sus paradas con `#fff`, o sea pastel sobre blanco. El tope de luminosidad debe ser ABSOLUTO (`min(l, 0.5)`), no un porcentaje (`calc(l * 0.78)`): las semillas parten de luminosidades muy distintas (insoft L .59, agrowin L .79) y un factor uniforme deja una paleta en 3.5:1 mientras hunde otra. Con el tope, el peor caso de las tres es 5.4:1.
+35. `min()` dentro de color relativo (`oklch(from …)`) invalida la declaracion ENTERA si el navegador no lo soporta, y en texto recortado eso significa invisible. Va siempre detras de un fallback plano y dentro de `@supports`.
+36. `Number(null)` es 0 y `Number.isFinite(0)` es true: un lector de props numericas devolvia 0 para atributos AUSENTES. Para `start-angle` 0 es un angulo valido, asi que el abanico nunca se orientaba al espacio libre. Comprobar null/'' ANTES de convertir.
+37. Medir un elemento para colocarlo con el mismo calculo que lo mueve da delta 0 en la segunda pasada. Medir siempre contra un origen que no se mueva.
+38. El host de un componente usado como trigger debe medir lo mismo que su boton visible: `is-check-icon-button` dejaba el host en 33.8x45 con el circulo en 45x45 y centros distintos, y el abanico salia asimetrico.
+39. Medir tamanos ANTES de aplicar la clase/atributo que los cambia da numeros de otra forma (pildora 55x39 en vez de circulo 36x36). Era la causa de que el layout "se arreglara solo" al hacer scroll: la segunda pasada ya medía bien.
+40. Iconos con paleta propia (banderas, logos, emoji) NO deben normalizarse a `currentColor`: los paths sin `fill` heredaban el color del host y el icono salia a medio pintar. Se detecta la paleta y se respeta el SVG.
 33. `highlight-pre.js` solo recorre el documento: los `<pre>` dentro de un shadow root no se colorean ni heredan el CSS del tema de CodeMirror. Hay que llamar al pintor a mano y clonar las hojas dentro del shadow.
 26. Los bundles POR COMPONENTE inlineaban los componentes que importaban (21 de ellos duplicaban `icon.js`). El componente inlineado heredaba el `import.meta.url` del anfitrión, así que `adoptCss` le cargaba el CSS equivocado: `is-icon` acababa con `actions/button.min.css`, su host dejaba de ser cuadrado (15×23.3) y el icono se veía descentrado en TODOS los triggers. El build marca los imports entre componentes como externos y `tests/cdn-folders.test.mjs` verifica cada uno.
 

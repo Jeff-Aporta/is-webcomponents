@@ -18,8 +18,15 @@
    a traves de su ::part(button). */
 .trigger {
   --r: var(--is-radius-fab);
+  /* El host DEBE medir lo mismo que su boton visible: is-check-icon-button
+     no se dimensiona solo y el host quedaba en 33.8x45 mientras el circulo
+     era 45x45, con los centros desalineados. El abanico se calcula desde el
+     centro del host, asi que esa diferencia hacia que los items de un lado
+     se vieran mas cerca del trigger que los del otro. */
   display: inline-grid;
   place-items: center;
+  width: 3rem;
+  height: 3rem;
   transition: transform 180ms ease;
 }
 .trigger::part(button) {

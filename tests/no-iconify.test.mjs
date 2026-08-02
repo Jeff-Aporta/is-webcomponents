@@ -25,7 +25,14 @@ const root = dirname(here);
 const SCAN_DIRS = ['components', 'scripts', 'previews', 'styles'];
 const SCAN_EXT = /\.(js|mjs|css|html)$/;
 // Herramienta offline: descarga los SVG desde la API para poblar assets/.
-const ALLOWED_API_FILES = new Set(['scripts/download-icons.mjs']);
+// Mismo caso que download-icons.mjs: herramientas offline de mantenimiento del
+// catalogo, se corren a mano y dejan el resultado en assets/. Nada de esto se
+// ejecuta en runtime ni entra al bundle.
+const ALLOWED_API_FILES = new Set([
+  'scripts/download-icons.mjs',
+  'scripts/fix-icon-viewbox.mjs',
+  'scripts/sync-icon-collections.mjs',
+]);
 
 const walk = (dir, out = []) => {
   for (const name of readdirSync(dir)) {

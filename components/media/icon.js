@@ -162,7 +162,10 @@ import { resolveIconRaw } from '../_shared/icon-loader.js';
     /** Trae un SVG por URL (para el atributo `src`). */
     async #fetchSvg(url, signal) {
       try {
-        const res = await fetch(url, { signal, cache: 'force-cache' });
+        // 'default', no 'force-cache': ver la nota en icon-loader.js. El
+        // cache HTTP normal ya evita el trafico; force-cache ademas impide
+        // que un SVG corregido llegue nunca al navegador.
+        const res = await fetch(url, { signal, cache: 'default' });
         if (!res.ok) return null;
         const text = await res.text();
         return text.includes('<svg') ? text : null;
@@ -172,18 +175,59 @@ import { resolveIconRaw } from '../_shared/icon-loader.js';
     }
 
     /**
+     * Colores que significan "este icono es monocromo y su negro es
+     * sustituible": el autor no eligio un color, es el negro por defecto.
+     */
+    static #NEUTRAL = new Set([
+      'currentcolor', '#000', '#000000', '#000f', '#000000ff',
+      'black', 'rgb(0,0,0)', 'rgb(0 0 0)',
+    ]);
+
+    /**
+     * ¿El SVG trae paleta propia? Los sets multicolor (banderas, logos, emoji:
+     * circle-flags, cif, logos, twemoji, openmoji, skill-icons…) pintan cada
+     * path con su color. Aplastarlos a `currentColor` los convierte en una
+     * silueta solida — el sintoma reportado: "CoreUI Flags se ven como bloques
+     * oscuros en la rejilla, pero al abrir el icono si se ve".
+     */
+    static #isMulticolor(svg) {
+      // Degradados, patrones e imagenes incrustadas: multicolor por definicion.
+      if (svg.querySelector('linearGradient, radialGradient, pattern, image, stop')) return true;
+      for (const el of svg.querySelectorAll('*')) {
+        for (const attr of ['fill', 'stroke']) {
+          const v = el.getAttribute(attr);
+          if (!v || v === 'none') continue;
+          if (!IsIcon.#NEUTRAL.has(v.trim().toLowerCase().replace(/\s+/g, ''))) return true;
+        }
+      }
+      return false;
+    }
+
+    /**
      * Normaliza el SVG inline para que `currentColor` funcione aunque el
      * icono venga con fill="black" o fill="#000".
+     *
+     * Solo se normaliza el color si el icono es monocromo. Si tiene paleta
+     * propia se respeta tal cual: `color`/`currentColor` no le aplican.
      */
     #normalizeInlineSvg() {
       const svg = this.#inline.querySelector('svg');
       if (!svg) return;
-      // viewBox siempre; ancho/alto flexible a 1em.
+      // viewBox siempre; ancho/alto flexible a 1em. El viewBox no se toca: cada
+      // coleccion tiene su grid nativo (24, 32, 512…) y reescribirlo deja el
+      // path dibujado fuera de la caja = icono vacio.
       svg.removeAttribute('width');
       svg.removeAttribute('height');
       svg.setAttribute('width', '1em');
       svg.setAttribute('height', '1em');
       svg.setAttribute('focusable', 'false');
+
+      if (IsIcon.#isMulticolor(svg)) {
+        this.#inline.classList.add('is-multicolor');
+        return;
+      }
+      this.#inline.classList.remove('is-multicolor');
+
       svg.style.fill = 'currentColor';
       // OJO: no forzar stroke a nivel de <svg> — los iconos de relleno no
       // traen stroke y anadirselo contornea cada path (se ven engrosados).

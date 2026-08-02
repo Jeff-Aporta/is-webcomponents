@@ -747,6 +747,29 @@
       color: transparent;
     }
 
+    /* Mismo problema que el acento del hero: los hues crudos se calibraron
+       para fondo oscuro. Sobre el blanco del tema light, agrowin cae a 1.9:1
+       (ilegible) y contapyme a 4.2:1. Fallback plano primero —si el color
+       relativo no se soporta, la declaracion entera se descarta y el texto
+       queda transparente— y tope ABSOLUTO de luminosidad dentro de @supports. */
+    [data-theme="light"] .home-lab__title em {
+      background: none;
+      color: var(--is-color-brand-700, #a61e1e);
+      -webkit-text-fill-color: currentColor;
+    }
+
+    @supports (color: oklch(from red min(l, 0.5) c h)) {
+      [data-theme="light"] .home-lab__title em {
+        background: linear-gradient(115deg,
+          oklch(from var(--hue-a) min(l, 0.50) c h),
+          oklch(from var(--hue-b) min(l, 0.48) c h) 45%,
+          oklch(from var(--hue-d) min(l, 0.46) c h));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
     .home-lab__lede {
       margin: 0;
       max-width: 40rem;
@@ -1337,6 +1360,40 @@
         0 1px 0 color-mix(in srgb, #fff 70%, transparent),
         0 2px 6px rgb(0 0 0 / 7%),
         0 16px 32px rgb(0 0 0 / 10%);
+    }
+
+    /* El degradado del acento está calibrado para fondo oscuro: su parada
+       central es `color-mix(--hue-d 78%, #fff)`, o sea un pastel, y --hue-d
+       nace ya aclarado (l * 1.02). Sobre el #fff del tema light eso es texto
+       casi invisible.
+
+       El tope es ABSOLUTO (`min(l, …)`), no un porcentaje: las semillas de las
+       paletas parten de luminosidades muy distintas (insoft #e03131 → L .59;
+       agrowin yellowgreen → L .79), así que un `calc(l * 0.78)` uniforme deja
+       agrowin en 3.5:1 mientras hunde insoft. Con el tope, el peor caso de las
+       tres paletas es 5.4:1 sobre blanco. Matiz y croma de marca se conservan. */
+    [data-theme="light"] .home-title__accent {
+      /* Fallback SIN color relativo ni min(): si el navegador no soporta
+         alguna de las dos cosas, la declaracion de abajo se descarta entera y
+         volveriamos al degradado claro (texto invisible). Este color plano es
+         el peor caso aceptable, no un adorno. */
+      background: none;
+      color: var(--is-color-brand-700, #a61e1e);
+      -webkit-text-fill-color: currentColor;
+    }
+
+    @supports (color: oklch(from red min(l, 0.5) c h)) {
+      [data-theme="light"] .home-title__accent {
+        background: linear-gradient(115deg,
+          oklch(from var(--hue-a) min(l, 0.50) c h) 0%,
+          oklch(from var(--hue-b) min(l, 0.48) c h) 26%,
+          oklch(from var(--hue-d) min(l, 0.46) c h) 52%,
+          oklch(from var(--hue-c) min(l, 0.48) c h) 76%,
+          oklch(from var(--hue-a) min(l, 0.50) c h) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
     }
 
     [data-theme="light"] is-main.home-main::before {

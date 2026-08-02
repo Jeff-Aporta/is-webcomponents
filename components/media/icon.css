@@ -38,6 +38,15 @@
       width: 1em;
       height: 1em;
       & > svg { width: 1em; height: 1em; display: block; fill: currentColor; }
+      /* Iconos con paleta propia (banderas, logos, emoji). El JS marca la
+         clase. Sin esto, los paths que NO declaran fill heredarian el
+         currentColor del host y el icono saldria a medio pintar; el default
+         del SVG (negro) es el que el autor asumio. */
+      &.is-multicolor {
+        color: initial;
+        fill: initial;
+        & > svg { fill: initial; }
+      }
       &[hidden] { display: none !important; }
     }
   }

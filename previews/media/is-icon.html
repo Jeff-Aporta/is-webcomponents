@@ -13,6 +13,18 @@
   <script src="../../scripts/demo-code.js" defer></script>
   <script src="../../scripts/docs-chrome.js" defer></script>
   <script type="module" src="../../scripts/preview-chrome.js"></script>
+  <style>
+    .xp-embed {
+      border: 1px solid var(--is-border);
+      border-radius: 0.6rem;
+      overflow: hidden;
+      background: var(--is-bg);
+      /* Alto fijo: el explorador scrollea internamente (su .xp), así que un
+         alto en auto lo colapsaría a 0. */
+      height: min(72vh, 720px);
+    }
+    .xp-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
+  </style>
 </head>
 <body>
   <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
@@ -23,12 +35,6 @@
           API única de iconos del kit. Usa <code class="code">icon="grupo:nombre"</code> (ids Iconify)
           o <code class="code">src</code> para un SVG/imagen. Escala con <code class="code">font-size</code>.
           Iconify se carga solo como dependencia interna.
-        </p>
-        <p>
-          <a href="icon-explorer.html" target="_blank" rel="noopener">
-            <is-icon icon="mdi:magnify"></is-icon>
-            Abrir el explorador de iconos — 232 familias con buscador, playground de color/tamaño y snippets
-          </a>
         </p>
         <is-demo class="demo">
           <div class="demo-row" style="font-size:1.5rem; gap:1rem; align-items:center;">
@@ -60,6 +66,28 @@
           </tbody>
         </table>
       </section>
+
+      <!-- El explorador NO se duplica aquí: se embebe la única fuente
+           (icon-explorer.html) en un iframe y se le propaga theme+palette por
+           ?s=. Copiar su markup seria mantener dos veces el mismo buscador. -->
+      <section class="section" id="explorer">
+        <h2>Explorador de iconos</h2>
+        <p class="lede">
+          Las <b id="xpFamilies">231</b> familias servidas por el CDN, con buscador global,
+          filtros por categoría, grid, paleta y licencia, y un personalizador que exporta
+          SVG, CSS o PNG. Es la misma página que <code class="code">icon-explorer.html</code>,
+          embebida aquí.
+        </p>
+        <div class="xp-embed">
+          <iframe id="xpFrame" title="Explorador de iconos" loading="lazy"></iframe>
+        </div>
+        <p>
+          <is-button id="xpOpen" color="neutral" variant="outlined" href="icon-explorer.html" target="_blank" rel="noopener">
+            <is-icon icon="mdi:open-in-new"></is-icon>
+            Abrir en una pestaña
+          </is-button>
+        </p>
+      </section>
     </is-main>
     <aside class="sidebar" slot="end">
       <h1>is-icon</h1>
@@ -67,10 +95,63 @@
         <a href="#intro">Introducción</a>
         <a href="#examples">Ejemplos</a>
         <a href="#reference">Referencia</a>
+        <a href="#explorer">Explorador</a>
       </is-scrollspy>
     </aside>
   </is-split-panel>
   <script>
-    </script>
+    /* El iframe hereda theme+palette del contenedor por ?s= (lo decodifica
+       preview-boot.js antes del primer paint, así que no hay flash de tema
+       equivocado). `embed:1` marca <html data-embed="1"> dentro. */
+    (() => {
+      const frame = document.getElementById('xpFrame');
+      if (!frame) return;
+
+      const b64url = (obj) => {
+        const bytes = new TextEncoder().encode(JSON.stringify(obj));
+        let bin = '';
+        for (const b of bytes) bin += String.fromCharCode(b);
+        return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      };
+
+      const srcFor = () => {
+        const root = document.documentElement;
+        const s = b64url({
+          theme: root.dataset.theme || 'dark',
+          palette: root.dataset.palette || 'insoft',
+          embed: 1,
+        });
+        return `icon-explorer.html?s=${s}`;
+      };
+
+      frame.src = srcFor();
+
+      /* Recargar el iframe en cada cambio de tema pierde el estado del
+         explorador (búsqueda, scroll). Solo se rehace si el tema realmente
+         cambió respecto al que ya tiene cargado. */
+      let applied = document.documentElement.dataset.theme;
+      const onThemeChange = () => {
+        const now = document.documentElement.dataset.theme;
+        if (now === applied) return;
+        applied = now;
+        frame.src = srcFor();
+      };
+      document.addEventListener('is-theme-change', onThemeChange);
+      new MutationObserver(onThemeChange).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme', 'data-palette'],
+      });
+
+      /* El conteo real de familias, para no dejar un número quemado que
+         envejece cada vez que se descargan colecciones nuevas. */
+      fetch('../../assets/icons/index.json')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          const el = document.getElementById('xpFamilies');
+          if (d && el) el.textContent = d.families.length.toLocaleString('es');
+        })
+        .catch(() => {});
+    })();
+  </script>
 </body>
 </html>
