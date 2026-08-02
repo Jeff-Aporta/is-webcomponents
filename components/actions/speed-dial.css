@@ -12,8 +12,17 @@
   position: relative;
 }
 
+/* El trigger es un <is-check-icon-button>: hace el SWITCH entre el icono de
+   cerrado y el de abierto (antes se rotaba un solo icono 45deg, que ademas
+   amplificaba cualquier desalineacion). Aqui solo se le da el look de FAB
+   a traves de su ::part(button). */
 .trigger {
   --r: var(--is-radius-fab);
+  display: inline-grid;
+  place-items: center;
+  transition: transform 180ms ease;
+}
+.trigger::part(button) {
   width: 3rem;
   height: 3rem;
   border: 0;
@@ -23,18 +32,14 @@
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--is-accent) 70%, transparent),
     0 8px 22px color-mix(in srgb, var(--is-accent) 35%, transparent);
-  display: grid; place-items: center;
+  display: grid;
+  place-items: center;
   cursor: pointer;
-  transition: transform 180ms ease, box-shadow 180ms ease;
-  font: inherit;
+  padding: 0;
+  transition: background 180ms ease, box-shadow 180ms ease;
 }
 .trigger:hover { transform: translateY(-1px); }
 .trigger:focus-visible { outline: 2px solid var(--is-focus); outline-offset: 3px; }
-.trigger .icon-wrap {
-  display: grid; place-items: center;
-  transition: transform 220ms ease;
-}
-:host([open]) .trigger .icon-wrap { transform: rotate(45deg); }
 
 .actions {
   display: flex;
@@ -151,3 +156,46 @@
 }
 :host([data-radial]) .action .label { display: none; }
 :host([data-radial]) .action .ico { margin: 0; }
+
+/* ── data-packed: reparto por LAYOUT dentro del wrapper ────────────────
+   Cuando el area radial no da para todas las acciones (o se pide
+   data-layout="grid"/"flex"), se abandonan las coordenadas polares y el
+   reparto lo hace el layout nativo dentro de la caja del wrapper. Al no
+   haber posiciones absolutas calculadas, NINGUNA accion puede salirse. */
+:host([data-packed]) .actions {
+  position: absolute;
+  /* El JS publica la banda libre del wrapper (sin la huella del trigger).
+     El grid reparte DENTRO de esa caja, asi que nada puede desbordarla. */
+  inset: auto;
+  left: var(--sd-pack-left, 0px);
+  top: var(--sd-pack-top, 0px);
+  width: var(--sd-pack-w, auto);
+  height: var(--sd-pack-h, auto);
+  padding: 0.25rem;
+  place-content: center;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
+:host([data-packed="grid"]) .actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(2.75em, max-content));
+  justify-content: center;
+  align-content: center;
+}
+
+:host([data-packed="flex"]) .actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+}
+
+/* En modo empaquetado las acciones vuelven al flujo: sin --sd-x/--sd-y. */
+:host([data-packed]) .actions ::slotted(is-speed-dial-action) {
+  position: static;
+  transform: scale(0.6);
+}
+:host([data-packed][open]) .actions ::slotted(is-speed-dial-action) {
+  transform: scale(1);
+}

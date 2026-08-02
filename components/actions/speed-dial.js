@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import './check-icon-button.js';
 
 /**
  * <is-speed-dial> — FAB que despliega un abanico de acciones.
@@ -8,28 +9,39 @@ import { adoptCss } from '../_shared/adopt-css.js';
  * registrar otro elemento raíz solo para eso.
  *
  * Atributos
- *   icon          nombre iconify del FAB (default mdi:plus)
+ *   icon          icono con el dial CERRADO (default mdi:plus)
+ *   open-icon     icono con el dial ABIERTO (default mdi:close). El trigger
+ *                 reusa <is-check-icon-button>, que hace el switch entre los
+ *                 dos iconos en vez de rotar uno solo.
  *   label         aria-label del trigger
  *   direction     up (default) | down | left | right | radial
  *   open          boolean — controlado, refleja estado
  *   distance      espacio entre trigger y acciones (default .25rem)
  *
- * Solo con direction="radial" (abanico alrededor del trigger):
- *   start-angle   grados del primer item; 0 = derecha, -90 = arriba
- *                 (default: se elige segun el espacio libre alrededor)
- *   sweep         clockwise (default) | counter-clockwise
- *   arc           amplitud del abanico en grados (default 360; se recorta
- *                 automaticamente si el trigger esta pegado a un borde)
- *   radius        radio en px del primer anillo (default: calculado del
- *                 tamano del item)
- *   boundary      selector CSS del contenedor que acota el abanico. Si no
- *                 se da, se usa el ancestro con overflow/containing block y,
- *                 en ultimo caso, el viewport.
+ * Data props (mismo espiritu que data-theme / data-palette: configuracion
+ * declarativa y dinamica, sin API imperativa):
  *
- * Cuando el arco disponible no alcanza para todos los items con separacion
- * suficiente, se reparten en ANILLOS concentricos (distribucion en panal):
- * cada anillo aumenta el radio y cabe mas items, y los anillos alternos van
- * desfasados medio paso para que no se alineen radialmente.
+ *   data-layout    radial (default con direction="radial") | grid | flex
+ *                  Como se distribuyen las acciones. `grid` y `flex` reparten
+ *                  dentro del wrapper con layout nativo, sin coordenadas.
+ *   data-wrapper   selector CSS del area que ACOTA las acciones. Ninguna
+ *                  accion puede salirse de esta caja. Si no se da, se usa el
+ *                  ancestro que crea containing block y, si no, el viewport.
+ *   data-start-angle  grados del primer item; 0 = derecha, -90 = arriba.
+ *                  Default: se elige segun el espacio libre alrededor.
+ *   data-sweep     clockwise (default) | counter-clockwise
+ *   data-arc       amplitud del abanico en grados (default 360; se recorta
+ *                  solo si el trigger esta pegado a un borde)
+ *   data-radius    radio en px del primer anillo
+ *
+ * Los nombres sin prefijo (arc, sweep, boundary...) se siguen aceptando.
+ *
+ * Reparto: mientras quepan, las acciones se reparten en ANILLOS concentricos
+ * (panal) con los anillos alternos desfasados medio paso. Los anillos se
+ * recortan al wrapper: si un anillo no cabe entero, no se usa. Cuando ya no
+ * queda area radial para todas, el componente marca data-packed y las
+ * acciones pasan a un GRID dentro del wrapper, que por construccion no puede
+ * desbordarlo.
  *
  * Slots
  *   default    <is-speed-dial-action>…
@@ -44,8 +56,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
  */
 (() => {
   const OBSERVED = [
-    'icon', 'label', 'direction', 'open', 'distance',
+    'icon', 'open-icon', 'label', 'direction', 'open', 'distance',
     'start-angle', 'sweep', 'arc', 'radius', 'boundary',
+    'data-layout', 'data-wrapper', 'data-start-angle', 'data-sweep',
+    'data-arc', 'data-radius',
   ];
 
   const DIRECTIONS = ['up', 'down', 'left', 'right', 'radial'];
@@ -67,14 +81,19 @@ import { adoptCss } from '../_shared/adopt-css.js';
           <div part="actions" class="actions">
             <slot></slot>
           </div>
-          <button part="trigger" class="trigger" type="button" aria-expanded="false" aria-label="Abrir acciones">
-            <span class="icon-wrap"><slot name="icon"><is-icon icon="mdi:plus"></is-icon></slot></span>
-          </button>
+          <is-check-icon-button part="trigger" class="trigger"
+                                icon="mdi:plus" checked-icon="mdi:close"
+                                label="Abrir acciones" checked-label="Cerrar acciones">
+          </is-check-icon-button>
         </div>
       `;
       adoptCss(this.shadowRoot, import.meta.url);
       this.#trigger = this.shadowRoot.querySelector('.trigger');
-      this.#trigger.addEventListener('click', () => this.toggle());
+      // is-check-icon-button ya gestiona el estado visual y emite is-change.
+      this.#trigger.addEventListener('is-change', (e) => {
+        if (e.detail.checked === this.isOpen) return; // ya sincronizado
+        e.detail.checked ? this.open() : this.close();
+      });
       this.#onDocPointerDown = (e) => {
         if (!this.isOpen) return;
         if (e.composedPath().includes(this)) return;
@@ -108,7 +127,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         this.#syncDirection();
         if (!this.#isRadial) this.#clearRadial();
       }
-      if (name === 'icon') this.#syncIcon();
+      if (name === 'icon' || name === 'open-icon' || name === 'label') this.#syncIcon();
       if (this.#isRadial && this.isOpen) this.#layoutRadial();
       if (name === 'open') {
         if (this.hasAttribute('open')) this.open();
@@ -116,9 +135,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
       }
     }
 
-    get isOpen() { return this.#trigger.getAttribute('aria-expanded') === 'true'; }
+    get isOpen() { return this.hasAttribute('open'); }
 
     open() {
+      this.#trigger.checked = true;
       this.#trigger.setAttribute('aria-expanded', 'true');
       this.shadowRoot.querySelector('.root').hidden = false;
       this.setAttribute('open', '');
@@ -131,6 +151,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     close() {
+      this.#trigger.checked = false;
       this.#trigger.setAttribute('aria-expanded', 'false');
       this.shadowRoot.querySelector('.root').hidden = true;
       this.removeAttribute('open');
@@ -146,12 +167,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     #syncIcon() {
-      const icon = this.getAttribute('icon');
-      const slot = this.shadowRoot.querySelector('slot[name="icon"]');
-      if (slot && icon) {
-        // reescribir el default del slot con un is-icon nuevo
-        slot.innerHTML = `<is-icon icon="${icon}"></is-icon>`;
-      }
+      const icon = this.#prop('icon');
+      const openIcon = this.#prop('open-icon');
+      if (icon) this.#trigger.setAttribute('icon', icon);
+      if (openIcon) this.#trigger.setAttribute('checked-icon', openIcon);
+      const label = this.#prop('label');
+      if (label) this.#trigger.setAttribute('label', label);
     }
 
     #mountActions() {
@@ -187,13 +208,31 @@ import { adoptCss } from '../_shared/adopt-css.js';
        boundary, y si no caben todas en un anillo se abren anillos
        concentricos (panal). */
 
-    get #isRadial() { return this.getAttribute('direction') === 'radial'; }
+    /** Lee `data-<name>` y cae al atributo suelto por compatibilidad. */
+    #prop(name) {
+      const data = this.getAttribute(`data-${name}`);
+      if (data != null && data !== '') return data;
+      const plain = this.getAttribute(name);
+      return plain != null && plain !== '' ? plain : null;
+    }
+
+    #numProp(name) {
+      const v = Number(this.#prop(name));
+      return Number.isFinite(v) ? v : null;
+    }
+
+    get #isRadial() {
+      return this.#prop('layout') === 'radial' || this.getAttribute('direction') === 'radial';
+    }
 
     /** Caja que acota el abanico: [boundary] > ancestro contenedor > viewport. */
     #boundaryRect() {
-      const sel = this.getAttribute('boundary');
+      const sel = this.#prop('wrapper');
       if (sel) {
-        const el = document.querySelector(sel);
+        // closest() primero: con varios wrappers iguales en la pagina,
+        // document.querySelector devolvia SIEMPRE el primero y el dial se
+        // acotaba contra un area ajena.
+        const el = this.closest(sel) || document.querySelector(sel);
         if (el) return el.getBoundingClientRect();
       }
       for (let el = this.parentElement; el; el = el.parentElement) {
@@ -256,16 +295,45 @@ import { adoptCss } from '../_shared/adopt-css.js';
       return limit;
     }
 
+    /**
+     * Banda libre mas grande del wrapper una vez descontada la huella del
+     * trigger. El grid del modo empaquetado se coloca AHI, para no solapar
+     * el trigger y no salirse del area.
+     */
+    #packArea(bounds, triggerRect, gap) {
+      const t = {
+        left: triggerRect.left - gap,
+        right: triggerRect.right + gap,
+        top: triggerRect.top - gap,
+        bottom: triggerRect.bottom + gap,
+      };
+      const bands = [
+        { left: t.right, top: bounds.top, right: bounds.right, bottom: bounds.bottom },   // derecha
+        { left: bounds.left, top: bounds.top, right: t.left, bottom: bounds.bottom },     // izquierda
+        { left: bounds.left, top: t.bottom, right: bounds.right, bottom: bounds.bottom }, // abajo
+        { left: bounds.left, top: bounds.top, right: bounds.right, bottom: t.top },       // arriba
+      ].map((b) => ({ ...b, w: b.right - b.left, h: b.bottom - b.top }));
+      bands.sort((a, b) => (b.w * b.h) - (a.w * a.h));
+      const best = bands[0];
+      return (best && best.w > 0 && best.h > 0) ? best : null;
+    }
+
     #layoutRadial() {
       const actions = [...(this.shadowRoot.querySelector('slot')?.assignedElements?.() ?? [])];
       if (!actions.length) return;
+
+      // Modos de layout nativo: el reparto lo hace CSS dentro del wrapper.
+      const mode = this.#prop('layout');
+      if (mode === 'grid' || mode === 'flex') {
+        this.#pack(actions, mode);
+        return;
+      }
 
       const triggerRect = this.#trigger.getBoundingClientRect();
       const cx = triggerRect.left + triggerRect.width / 2;
       const cy = triggerRect.top + triggerRect.height / 2;
       const bounds = this.#boundaryRect();
 
-      // En radial los items son circulares (ver CSS): basta el lado mayor.
       let itemSize = 0;
       for (const a of actions) {
         const r = a.getBoundingClientRect();
@@ -276,21 +344,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const triggerHalf = Math.max(triggerRect.width, triggerRect.height) / 2;
       const gap = 12;
 
-      // Radio minimo para NO tocar el trigger. Es un piso duro: por debajo de
-      // esto siempre hay colision, asi que nunca se baja de aqui.
       const minRadius = triggerHalf + itemHalf + gap;
 
-      const attrArc = Number(this.getAttribute('arc'));
-      const attrStart = Number(this.getAttribute('start-angle'));
-      const hasArc = Number.isFinite(attrArc) && attrArc > 0;
-      const hasStart = Number.isFinite(attrStart);
+      const attrArc = this.#numProp('arc');
+      const attrStart = this.#numProp('start-angle');
+      let arc = attrArc && attrArc > 0 ? clamp(attrArc, 10, 360) : this.#autoArc(cx, cy, bounds, minRadius);
+      const center = attrStart != null ? attrStart : this.#autoStartAngle(cx, cy, bounds);
 
-      let arc = hasArc ? clamp(attrArc, 10, 360) : this.#autoArc(cx, cy, bounds, minRadius);
-      let center = hasStart ? attrStart : this.#autoStartAngle(cx, cy, bounds);
-
-      // El arco debe caber: si el radio minimo no entra en la direccion
-      // elegida, se estrecha el arco (y se reintenta) en vez de deformar las
-      // posiciones. Nunca se recolocan items sueltos contra el borde.
       let start = arc >= 360 ? center : center - arc / 2;
       let maxR = this.#maxRadiusFor(cx, cy, bounds, start, arc, itemHalf);
       let guard = 0;
@@ -301,15 +361,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
         guard += 1;
       }
 
-      const attrRadius = Number(this.getAttribute('radius'));
-      const wanted = Number.isFinite(attrRadius) && attrRadius > 0 ? attrRadius : minRadius;
-      // El radio nunca baja de minRadius aunque el boundary sea diminuto:
-      // preferimos desbordar un poco antes que solapar el trigger.
+      const attrRadius = this.#numProp('radius');
+      const wanted = attrRadius && attrRadius > 0 ? attrRadius : minRadius;
       const baseRadius = Math.max(minRadius, Math.min(wanted, Math.max(maxR, minRadius)));
 
-      const dir = this.getAttribute('sweep') === 'counter-clockwise' ? -1 : 1;
+      const dir = this.#prop('sweep') === 'counter-clockwise' ? -1 : 1;
 
-      // Capacidad de un anillo: cuantos items caben sin tocarse a ese radio.
       const capacityAt = (radius) => {
         const minStep = 2 * Math.asin(clamp((itemHalf + gap / 2) / radius, 0, 1)) / DEG;
         if (!Number.isFinite(minStep) || minStep <= 0) return actions.length;
@@ -318,25 +375,34 @@ import { adoptCss } from '../_shared/adopt-css.js';
           : Math.max(1, Math.floor(arc / minStep) + 1);
       };
 
-      // Reparto en anillos concentricos (panal) hasta colocarlos todos.
+      // Anillos ACOTADOS: un anillo solo se usa si cabe ENTERO en el wrapper.
+      // Antes solo se limitaba el radio base y los anillos siguientes
+      // (base + n*(item+gap)) se salian del area.
       const rings = [];
       let remaining = actions.length;
       let ringIndex = 0;
       while (remaining > 0 && ringIndex < 8) {
         const radius = baseRadius + ringIndex * (itemSize + gap);
+        if (radius > maxR && ringIndex > 0) break;      // no cabe: se corta
         const count = Math.min(remaining, capacityAt(radius));
         rings.push({ radius, count });
         remaining -= count;
         ringIndex += 1;
       }
-      // Si aun sobran (boundary imposible), el ultimo anillo los absorbe.
-      if (remaining > 0) rings[rings.length - 1].count += remaining;
+
+      // Si el area radial no da para todas, se abandona el abanico y se
+      // reparten con GRID dentro del wrapper: contenido por construccion.
+      if (remaining > 0) {
+        this.#pack(actions, 'grid');
+        return;
+      }
+      delete this.dataset.packed;
+      this.style.removeProperty('--sd-pack-left');
 
       let index = 0;
       rings.forEach((ring, i) => {
         const slots = arc >= 360 ? ring.count : Math.max(ring.count - 1, 1);
         const step = arc >= 360 ? 360 / ring.count : arc / slots;
-        // Anillos alternos desfasados medio paso: distribucion en panal.
         const offset = i % 2 ? step / 2 : 0;
         for (let k = 0; k < ring.count; k += 1) {
           const angle = (start + offset + dir * step * k) * DEG;
@@ -344,7 +410,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
           const y = Math.sin(angle) * ring.radius;
           const el = actions[index++];
           if (!el) return;
-          // Modo radial: circular + etiqueta como tooltip (no cabe al lado).
           el.setAttribute('data-radial', '');
           const label = el.getAttribute('label') || el.textContent.trim();
           if (label) {
@@ -358,6 +423,45 @@ import { adoptCss } from '../_shared/adopt-css.js';
       });
     }
 
+    /**
+     * Reparto por layout nativo dentro del wrapper. Se calcula la caja libre
+     * (banda del wrapper sin la huella del trigger) y se le pasa a CSS; el
+     * grid/flex distribuye dentro, asi que ninguna accion puede desbordar.
+     */
+    #pack(actions, mode) {
+      this.#clearPolar(actions);
+      this.dataset.packed = mode;
+
+      const bounds = this.#boundaryRect();
+      const triggerRect = this.#trigger.getBoundingClientRect();
+      // Origen ESTABLE: .root, que no se mueve. Medir contra .actions daba un
+      // delta de 0 en la segunda pasada (es el elemento que este mismo
+      // calculo reposiciona) y la caja se quedaba pegada al trigger.
+      const box = this.shadowRoot.querySelector('.root').getBoundingClientRect();
+      const area = this.#packArea(bounds, triggerRect, 12);
+      if (!area) { this.style.removeProperty('--sd-pack-left'); return; }
+
+      this.style.setProperty('--sd-pack-left', `${Math.round(area.left - box.left)}px`);
+      this.style.setProperty('--sd-pack-top', `${Math.round(area.top - box.top)}px`);
+      this.style.setProperty('--sd-pack-w', `${Math.round(area.w)}px`);
+      this.style.setProperty('--sd-pack-h', `${Math.round(area.h)}px`);
+    }
+
+    /** Quita coordenadas polares (al pasar a un layout nativo). */
+    #clearPolar(actions) {
+      actions.forEach((a, i) => {
+        a.style.removeProperty('--sd-x');
+        a.style.removeProperty('--sd-y');
+        a.style.setProperty('--i', String(i));
+        a.setAttribute('data-radial', '');
+        const label = a.getAttribute('label') || a.textContent.trim();
+        if (label) {
+          if (!a.title) a.title = label;
+          if (!a.hasAttribute('aria-label')) a.setAttribute('aria-label', label);
+        }
+      });
+    }
+
     /** Limpia las coordenadas polares al salir de radial. */
     #clearRadial() {
       for (const a of this.shadowRoot.querySelector('slot')?.assignedElements?.() ?? []) {
@@ -365,6 +469,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         a.style.removeProperty('--sd-y');
         a.removeAttribute('data-radial');
       }
+      delete this.dataset.packed;
     }
 
     #trigger;

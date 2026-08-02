@@ -104,7 +104,7 @@
         <is-demo class="demo" heading="360° completo, sentido horario">
           <div class="radial-stage">
             <is-speed-dial direction="radial" icon="mdi:plus" label="Crear" open
-                           boundary=".radial-stage">
+                           data-wrapper=".radial-stage">
               <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
               <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
               <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
@@ -118,8 +118,8 @@
         <is-demo class="demo" heading="Arco de 180° antihorario con ángulo inicial fijo">
           <div class="radial-stage">
             <is-speed-dial direction="radial" icon="mdi:cog" label="Ajustes" open
-                           arc="180" start-angle="-90" sweep="counter-clockwise"
-                           boundary=".radial-stage">
+                           data-arc="180" data-start-angle="-90" data-sweep="counter-clockwise"
+                           data-wrapper=".radial-stage">
               <is-speed-dial-action icon="mdi:brush" label="Tema"></is-speed-dial-action>
               <is-speed-dial-action icon="mdi:translate" label="Idioma"></is-speed-dial-action>
               <is-speed-dial-action icon="mdi:bell" label="Avisos"></is-speed-dial-action>
@@ -131,7 +131,7 @@
         <is-demo class="demo" heading="Panal: 14 acciones no caben en un anillo">
           <div class="radial-stage radial-stage--tall">
             <is-speed-dial direction="radial" icon="mdi:apps" label="Todo" open
-                           boundary=".radial-stage--tall">
+                           data-wrapper=".radial-stage--tall">
               <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
               <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
               <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
@@ -157,7 +157,7 @@
         <is-demo class="demo" heading="Contra la esquina: arco y ángulo automáticos">
           <div class="radial-stage radial-stage--corner">
             <is-speed-dial direction="radial" icon="mdi:plus" label="Crear" open
-                           boundary=".radial-stage--corner">
+                           data-wrapper=".radial-stage--corner">
               <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
               <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
               <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
@@ -166,8 +166,8 @@
           </div>
         </is-demo>
 
-        <pre class="code" data-lang="html">&lt;is-speed-dial direction="radial" arc="180" start-angle="-90"
-               sweep="counter-clockwise" boundary=".mi-lienzo"&gt;
+        <pre class="code" data-lang="html">&lt;is-speed-dial direction="radial" data-arc="180" data-start-angle="-90"
+               data-sweep="counter-clockwise" data-wrapper=".mi-lienzo"&gt;
   &lt;is-speed-dial-action icon="mdi:brush" label="Tema"&gt;&lt;/is-speed-dial-action&gt;
 &lt;/is-speed-dial&gt;</pre>
       </section>
