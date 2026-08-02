@@ -6,7 +6,11 @@
 //
 //   1. El degradado esta calibrado para fondo oscuro y en el tema light queda
 //      pastel sobre blanco (el titulo del home era ilegible).
-//   2. Se usa sintaxis que el navegador puede no soportar —color relativo
+//   2. El elemento hereda una `text-shadow`. Con el relleno del glifo en
+//      transparente, la sombra NO queda tapada por el texto: se ve a traves y
+//      lo despinta. El titulo del home heredaba una sombra blanca al 70% y las
+//      letras salian palidas, con el degradado visible solo en el borde.
+//   3. Se usa sintaxis que el navegador puede no soportar —color relativo
 //      `oklch(from …)` o `min()` dentro de el—. Si no la soporta, la
 //      declaracion entera se descarta y el texto queda transparente.
 //
@@ -84,7 +88,26 @@ for (const file of files) {
       );
     }
 
-    // 3. Contraparte para el tema light (los degradados se calibran en dark).
+    // 3. Sombra heredada. `text-shadow` se pinta DEBAJO del texto, pero un
+    //    glifo con relleno transparente no la tapa: la sombra se ve a traves y
+    //    aclara la letra. Todo selector que recorte texto debe cancelarla.
+    // Se busca en el cuerpo del propio bloque recortado o en cualquier otro
+    // bloque cuyo selector mencione la misma clase (el fallback plano y la
+    // variante light suelen vivir en bloques aparte).
+    const cancelaSombra = /text-shadow:\s*none/.test(body)
+      || clipped.some(([, selOtro, bodyOtro]) => selOtro.includes(`.${cls}`)
+        && /text-shadow:\s*none/.test(bodyOtro))
+      || [...src.matchAll(/([^{}]+)\{([^{}]*)\}/g)].some(
+        ([, selOtro, bodyOtro]) => selOtro.includes(`.${cls}`)
+          && /text-shadow:\s*none/.test(bodyOtro));
+    if (!cancelaSombra) {
+      failures.push(
+        `${rel}: .${cls} recorta texto pero no declara \`text-shadow: none\` — `
+        + 'una sombra heredada se ve a traves del glifo transparente y lo despinta',
+      );
+    }
+
+    // 4. Contraparte para el tema light (los degradados se calibran en dark).
     const tieneLight = new RegExp(`\\[data-theme="light"\\][^{}]*\\.${cls}\\b`).test(src)
       || /prefers-color-scheme:\s*light/.test(src);
     if (!tieneLight) {
@@ -102,5 +125,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`gradient-text.test.mjs: PASS — ${files.length} archivos revisados, texto con degradado con fallback, @supports y variante light`);
+console.log(`gradient-text.test.mjs: PASS — ${files.length} archivos revisados, texto con degradado con fallback, @supports, sin sombra heredada y variante light`);
 process.exit(0);

@@ -239,6 +239,12 @@
     .home-title__accent {
       position: relative;
       display: inline-block;
+      /* `background-clip: text` solo pinta dentro de la caja del elemento. Con
+         el line-height ajustado del titulo, los descendentes (la "p" de
+         "rapido") caen por debajo y se quedan SIN degradado. Se agranda la
+         caja pintada y se compensa con margin para no mover el layout. */
+      padding-block: 0.14em 0.24em;
+      margin-block: -0.14em -0.24em;
       background: linear-gradient(115deg,
         var(--hue-a) 0%,
         var(--hue-b) 26%,
@@ -249,6 +255,12 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
       color: transparent;
+      /* El texto con relleno transparente NO tapa su propia text-shadow: la
+         sombra se ve A TRAVES del glifo. `.home-title` hereda en light una
+         sombra blanca al 70%, que cubria las letras y las dejaba palidas e
+         ilegibles (y comia el degradado del descendente de la "p"). Cualquier
+         elemento con background-clip:text debe cancelar la sombra heredada. */
+      text-shadow: none;
       /* Sin animar background-position ni filter aquí: Chrome pierde el
          background-clip:text al componer esa combinación. El movimiento
          lo aporta el glint de ::after (transform, sí compositable). */
@@ -745,6 +757,9 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
       color: transparent;
+      /* Mismo motivo que .home-title__accent: con relleno transparente la
+         text-shadow heredada se ve a traves del glifo y lo despinta. */
+      text-shadow: none;
     }
 
     /* Mismo problema que el acento del hero: los hues crudos se calibraron
@@ -1371,7 +1386,7 @@
        paletas parten de luminosidades muy distintas (insoft #e03131 → L .59;
        agrowin yellowgreen → L .79), así que un `calc(l * 0.78)` uniforme deja
        agrowin en 3.5:1 mientras hunde insoft. Con el tope, el peor caso de las
-       tres paletas es 5.4:1 sobre blanco. Matiz y croma de marca se conservan. */
+       tres paletas es 8.0:1 sobre blanco. Matiz y croma de marca se conservan. */
     [data-theme="light"] .home-title__accent {
       /* Fallback SIN color relativo ni min(): si el navegador no soporta
          alguna de las dos cosas, la declaracion de abajo se descarta entera y
@@ -1385,11 +1400,11 @@
     @supports (color: oklch(from red min(l, 0.5) c h)) {
       [data-theme="light"] .home-title__accent {
         background: linear-gradient(115deg,
-          oklch(from var(--hue-a) min(l, 0.50) c h) 0%,
-          oklch(from var(--hue-b) min(l, 0.48) c h) 26%,
-          oklch(from var(--hue-d) min(l, 0.46) c h) 52%,
-          oklch(from var(--hue-c) min(l, 0.48) c h) 76%,
-          oklch(from var(--hue-a) min(l, 0.50) c h) 100%);
+          oklch(from var(--hue-a) min(l, 0.42) c h) 0%,
+          oklch(from var(--hue-b) min(l, 0.40) c h) 26%,
+          oklch(from var(--hue-d) min(l, 0.38) c h) 52%,
+          oklch(from var(--hue-c) min(l, 0.40) c h) 76%,
+          oklch(from var(--hue-a) min(l, 0.42) c h) 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
