@@ -11,7 +11,7 @@
 // Uso:  node tests/cdn-folders.test.mjs
 
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -85,6 +85,43 @@ for (const cat of categories) {
     `falta dist/cdn/${cat}/scrollbars.css — adoptCss lo busca junto al módulo`);
 }
 
+
+// Los bundles por componente NO deben inlinear otros componentes: esbuild
+// duplicaria la clase y el `import.meta.url` del componente inlineado
+// apuntaria al archivo anfitrion, asi que adoptCss cargaria el CSS
+// equivocado (is-icon acabo cargando actions/button.min.css y perdio su
+// tamano). Cada import entre componentes debe quedar como referencia.
+const compRoot = join(root, 'components');
+const walkSrc = (dir, out = []) => {
+  for (const name of readdirSync(dir)) {
+    const full = join(dir, name);
+    if (statSync(full).isDirectory()) { if (name !== '_shared') walkSrc(full, out); }
+    else if (name.endsWith('.js') && name !== 'index.js') out.push(full);
+  }
+  return out;
+};
+const catByTag = new Map(manifest.map((c) => [c.tag.replace(/^is-/, ''), c.category]));
+let crossImportsChecked = 0;
+for (const src of walkSrc(compRoot)) {
+  const tag = basename(src).replace(/\.js$/, '');
+  const cat = catByTag.get(tag);
+  if (!cat) continue;
+  const outFile = join(dist, cat, `${tag}.min.js`);
+  if (!existsSync(outFile)) continue;
+  const code = readFileSync(src, 'utf8');
+  const built = readFileSync(outFile, 'utf8');
+  const imports = [...code.matchAll(/from\s+['"]\.\.\/([a-z-]+)\/([a-z0-9-]+)\.js['"]|import\s+['"]\.\.\/([a-z-]+)\/([a-z0-9-]+)\.js['"]/g)];
+  for (const m of imports) {
+    const depTag = m[2] || m[4];
+    if (!depTag || !catByTag.has(depTag) || depTag === tag) continue;
+    const depCat = catByTag.get(depTag);
+    crossImportsChecked += 1;
+    if (!built.includes(`../${depCat}/${depTag}.min.js`)) {
+      failures.push(`${cat}/${tag}.min.js: inlinea ${depTag} en vez de importarlo (rompe adoptCss del componente inlineado)`);
+    }
+  }
+}
+
 // all.min.js referencia rutas folderizadas.
 const all = readFileSync(join(dist, 'all.min.js'), 'utf8');
 check(/import"\.\/[a-z-]+\/[a-z0-9-]+\.min\.js"/.test(all),
@@ -98,5 +135,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`cdn-folders.test.mjs: PASS — dist/cdn folderizado en ${categories.length} categorías, sin artefactos planos`);
+console.log(`cdn-folders.test.mjs: PASS — dist/cdn folderizado en ${categories.length} categorías, sin artefactos planos, ${crossImportsChecked} imports entre componentes verificados`);
 process.exit(0);

@@ -3,7 +3,7 @@
 // Ademas genera bundles por categoria (categoria.min.js) y all.min.js para
 // poder cargar varios componentes con un solo <script type="module" src="..."></script>.
 import { access, readdir, mkdir, stat, rm, writeFile } from 'node:fs/promises';
-import { join, dirname, basename, relative } from 'node:path';
+import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
@@ -22,7 +22,7 @@ for (const entry of await readdir(dist, { withFileTypes: true })) {
   await rm(join(dist, entry.name), { recursive: true, force: true });
 }
 
-const bundleJs = (entry, outfile) =>
+const bundleJs = (entry, outfile, plugins = []) =>
   build({
     entryPoints: [entry],
     outfile,
@@ -31,6 +31,7 @@ const bundleJs = (entry, outfile) =>
     format: 'esm',
     target: 'es2020',
     legalComments: 'none',
+    plugins,
   });
 
 // bundle:false — los .min.js de cada tag ya están compilados y minificados;
@@ -97,6 +98,28 @@ const folderFor = (file) => {
   return relative(compRoot, file).split(/[\\/]/)[0];
 };
 
+// Los componentes que importan OTROS componentes (p. ej. casi todos importan
+// media/icon.js) no deben inlinearlos: esbuild duplicaria la clase y, peor,
+// `import.meta.url` del componente inlineado apuntaria al ARCHIVO ANFITRION,
+// asi que adoptCss pedia el CSS equivocado (is-icon acababa cargando
+// actions/button.min.css y perdia su tamano). Se marcan como externos y se
+// reescriben al hermano folderizado, que ya existe en dist.
+const externalComponents = {
+  name: 'external-components',
+  setup(pluginBuild) {
+    pluginBuild.onResolve({ filter: /\.js$/ }, (args) => {
+      if (args.kind === 'entry-point') return null;
+      const abs = resolve(args.resolveDir, args.path);
+      if (!abs.startsWith(compRoot)) return null;
+      // Los helpers de _shared no registran custom elements: se inlinean.
+      if (abs.includes(`${sep}_shared${sep}`)) return null;
+      const tag = basename(abs).replace(/\.js$/, '');
+      if (!tagToComponent.has(tag)) return null;
+      return { path: `../${folderFor(abs)}/${tag}.min.js`, external: true };
+    });
+  },
+};
+
 const scrollbarsIn = join(compRoot, '_shared', 'scrollbars.css');
 const emittedFolders = new Set();
 
@@ -115,7 +138,7 @@ for (const inFile of entries) {
     await bundleCss(scrollbarsIn, join(outDir, 'scrollbars.css'));
   }
 
-  await bundleJs(inFile, outJs);
+  await bundleJs(inFile, outJs, [externalComponents]);
 
   const hasCss = await access(cssIn).then(() => true, () => false);
   if (hasCss) await bundleCss(cssIn, outCss);

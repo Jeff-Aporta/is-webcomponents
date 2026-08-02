@@ -165,6 +165,8 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - Las bases de iconos se derivan de `import.meta.url`, no de `location.pathname`: asi el bundle publicado encuentra sus assets sin importar la profundidad de la pagina que lo embebe.
 - Verificar higiene con `node scripts/audit-components.mjs` (también corre como test).
 - En los previews, cargar SIEMPRE `dist/cdn/all.min.js` (un solo archivo cacheado) en vez de módulos sueltos de `components/`.
+- Un componente que importa a otro debe REFERENCIARLO en el bundle, nunca inlinearlo: el inlineado pierde su `import.meta.url` y con él su CSS.
+- El host de `is-icon` es una caja cuadrada de 1em con `line-height: 1`. Sin tamaño explícito la línea lo estira hasta el line-height heredado y el SVG queda descolgado dentro.
 - Leer consumidores; corregir raíz común.
 - Un MD por módulo JS/CSS; listar todos tags.
 - Localizar segmento `components/`; no asumir cantidad de `../`.
@@ -219,6 +221,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 23. El favicon y algunos demos pegaban a `api.iconify.design` en runtime: ahora usan `assets/favicon.svg` y los assets propios.
 24. El build hacía `rm -rf dist/cdn` y recopiaba los ~317k iconos en CADA corrida. Eso disparaba el watcher de Live Server y la página recargaba en bucle (el fetch de index.html aparecía cancelado en DevTools). Ahora la limpieza preserva `dist/cdn/assets/` y la copia es incremental; además `.vscode/settings.json` excluye esas rutas del watcher.
 25. Cada preview cargaba entre 6 y 15 módulos sueltos de `components/`. Ahora todas cargan el único `dist/cdn/all.min.js`, que el navegador cachea entre páginas: cambiar de demo ya no pide archivos nuevos.
+26. Los bundles POR COMPONENTE inlineaban los componentes que importaban (21 de ellos duplicaban `icon.js`). El componente inlineado heredaba el `import.meta.url` del anfitrión, así que `adoptCss` le cargaba el CSS equivocado: `is-icon` acababa con `actions/button.min.css`, su host dejaba de ser cuadrado (15×23.3) y el icono se veía descentrado en TODOS los triggers. El build marca los imports entre componentes como externos y `tests/cdn-folders.test.mjs` verifica cada uno.
 
 ## Reglas obligatorias para LLM
 

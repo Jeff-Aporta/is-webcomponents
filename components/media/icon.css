@@ -1,23 +1,37 @@
 :host {
+  /* Caja CUADRADA y explicita de 1em. Sin width/height propios, el host es
+     una caja inline que la linea estira hasta el line-height heredado (medido:
+     15x23.3 dentro de un trigger), y el SVG de 1em queda descolgado hacia
+     arriba dentro de ella: el icono se ve descentrado en cualquier contenedor
+     que lo centre (FAB, speed-dial, botones). Con una rotacion encima —el
+     `rotate(45deg)` del trigger— el desfase se amplifica. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
   font-size: 1em;
+  /* line-height: 1 y no 0: con 0 el half-leading es negativo y vuelve a
+     desalinear el contenido respecto al centro de la caja. */
+  line-height: 1;
   color: inherit;
   vertical-align: middle;
-  line-height: 0;
+  flex: none;
 
   .wrap {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
 
     .inline {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
-      line-height: 0;
+      line-height: 1;
       color: inherit;
       fill: currentColor;
       /* sin stroke: los iconos de relleno se contornean y ennegrecen */
@@ -26,18 +40,9 @@
       & > svg { width: 1em; height: 1em; display: block; fill: currentColor; }
       &[hidden] { display: none !important; }
     }
-
   }
 }
 
 :host([hidden]) {
   display: none !important;
-}
-
-/* Reserva el hueco mientras resuelve o si el icono no existe: evita saltos de
-   layout y cajas rotas (no hay <img> ni web component externo detrás). */
-:host([data-loading]) .wrap,
-:host([data-missing]) .wrap {
-  width: 1em;
-  height: 1em;
 }
