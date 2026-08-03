@@ -38,6 +38,16 @@ jobs:
       # Pages admite 20.000 archivos por deployment y assets/icons trae ~317k
       # SVGs. Se publica solo el código; icon-loader.js ya cae en cascada a
       # GitHub Pages / jsDelivr para los iconos.
+      # El build hace rm -rf de dist/cdn, así que versions.json se regenera
+      # ANTES de publicar: si no, el bundle sale sin el mapeo y la URL queda
+      # en 404 hasta el siguiente push. Aquí trae el histórico hasta el deploy
+      # anterior; el paso posterior añade el de este run.
+      - name: Sembrar versions.json (histórico previo)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/sync-cf-versions.mjs
+
       - name: Preparar carpeta de publicación (sin assets/icons)
         run: |
           mkdir -p .cf-publish
@@ -54,6 +64,8 @@ jobs:
             --branch main \
             --commit-hash "$GITHUB_SHA"
 
+      # Segunda pasada: añade el deployment recién creado, que se commitea al
+      # repo y viaja al bundle publicado en el push siguiente.
       - name: Refrescar versions.json
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
