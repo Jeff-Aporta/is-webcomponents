@@ -5,6 +5,7 @@ CDN artifacts (folderizados por categoria)
   <categoria>/<name>.min.css               — estilos del componente (junto al .min.js)
   <categoria>/category.<categoria>.min.js  — todos los componentes de esa categoria
   all.min.js                               — todos los componentes en un archivo
+  sizes.json                               — {ruta: bytes} de todo el .min.js/.min.css publicado
   assets/icons/                            — SVGs Iconify + <prefix>.json + index.json
   Los tags conservan el prefijo is-* (p.ej. actions/button.min.js → <is-button>).
 

@@ -247,6 +247,25 @@ await bundleVirtual(allOut, allVirtual, allOut);
 const allStat = await stat(allOut);
 console.log(`  ${'all.min'.padEnd(18)} js ${String(allStat.size).padStart(6)}  (${allPaths.length} comps)`);
 
+// ── sizes.json ───────────────────────────────────────────────────
+// Mapa {ruta relativa → bytes} de todo el JS/CSS publicado. El front
+// (demo-code.js, is-cdn-snippet) lo consulta UNA vez por el CDN para
+// sumar el peso de un snippet: pedir un HEAD por archivo era lento y
+// jsDelivr no siempre devuelve Content-Length.
+const sizes = {};
+const walkSizes = async (dir, prefix = '') => {
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith('.') || entry.name === 'assets') continue;
+    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) { await walkSizes(join(dir, entry.name), rel); continue; }
+    if (!/\.min\.(js|css)$/i.test(entry.name)) continue;
+    sizes[rel] = (await stat(join(dir, entry.name))).size;
+  }
+};
+await walkSizes(dist);
+await writeFile(join(dist, 'sizes.json'), `${JSON.stringify(sizes, null, 0)}\n`);
+console.log(`  ${'sizes.json'.padEnd(18)}    ${String(Object.keys(sizes).length).padStart(6)} archivos medidos`);
+
 await writeFile(
   join(dist, 'README.txt'),
   [
@@ -257,6 +276,7 @@ await writeFile(
     '  <categoria>/<name>.min.css               — estilos del componente (junto al .min.js)',
     '  <categoria>/category.<categoria>.min.js  — todos los componentes de esa categoria',
     '  all.min.js                               — todos los componentes en un archivo',
+    '  sizes.json                               — {ruta: bytes} de todo el .min.js/.min.css publicado',
     '  assets/icons/                            — SVGs Iconify + <prefix>.json + index.json',
     '  Los tags conservan el prefijo is-* (p.ej. actions/button.min.js → <is-button>).',
     '',

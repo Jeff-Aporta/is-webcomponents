@@ -1,0 +1,14 @@
+{
+  "project": "is-webcomponents",
+  "latest": "https://is-webcomponents.pages.dev",
+  "generated": "2026-08-03T21:47:02.387Z",
+  "versions": [
+    {
+      "id": "32209432",
+      "url": "https://32209432.is-webcomponents.pages.dev",
+      "commit": "ee7402d76823b6005983db4a200199440b78b484",
+      "branch": "main",
+      "created": "2026-08-03T21:44:55.141464Z"
+    }
+  ]
+}
