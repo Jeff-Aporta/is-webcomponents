@@ -253,6 +253,16 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 33. `highlight-pre.js` solo recorre el documento: los `<pre>` dentro de un shadow root no se colorean ni heredan el CSS del tema de CodeMirror. Hay que llamar al pintor a mano y clonar las hojas dentro del shadow.
 26. Los bundles POR COMPONENTE inlineaban los componentes que importaban (21 de ellos duplicaban `icon.js`). El componente inlineado heredaba el `import.meta.url` del anfitrión, así que `adoptCss` le cargaba el CSS equivocado: `is-icon` acababa con `actions/button.min.css`, su host dejaba de ser cuadrado (15×23.3) y el icono se veía descentrado en TODOS los triggers. El build marca los imports entre componentes como externos y `tests/cdn-folders.test.mjs` verifica cada uno.
 
+46. El visor a pantalla completa es OPT-IN via `open-on-click`. Antes era opt-out (`without-viewer`), asi que 11 componentes secuestraban el clic del usuario sin que nadie lo pidiera. Un componente por defecto NO abre nada. Si no hay `open-on-click` tampoco se emite `is-open-viewer` (prometeria una apertura que no ocurre) ni se pinta `cursor: zoom-in` (insinua un clic muerto). Lo vigila `tests/viewer-opt-in.test.mjs`.
+
+47. Hit-test de hover por PROXIMIDAD A UN PUNTO deja zonas muertas en marks grandes. Cada hit se registraba como centroide + radio (`marks-radial.js`: radio = medio grosor del anillo), asi que el borde de un sector ancho de doughnut quedaba fuera del alcance aun estando claramente dentro de la figura. Primero manda la geometria real (`e.target.closest('.mark')`, sin retargeting porque el listener vive en el mismo shadow root); la proximidad queda de respaldo, que para line/scatter SI es el modelo correcto. Verificado: en un punto a 344px del centroide, el modelo viejo daba `marcaActiva: false` y el nuevo `true`.
+
+48. El `viewBox` del chart va 1:1 con los pixeles, asi que el SVG NO escala: al crecer se re-maqueta. Los tamanos de texto son `em` sobre un font-size que no cambia, de modo que en el visor a pantalla completa las etiquetas quedaban diminutas frente a un grafico 4x mas grande. Se ata el font-size base del SVG a su propia geometria con exponente < 1 (crecer lineal lo dispara). La leyenda es HTML fuera del SVG: hay que escalarla aparte, y el inline pisa `--chart-legend-size`, asi que hay que reaplicar ese 0.75.
+
+49. Un fallback de var no puede imponer tema. `.lb` usaba `var(--lb-bg, #0d1117)` y NADIE definia `--lb-bg`: el fallback oscuro ganaba siempre y el visor salia negro tambien en tema claro. Los defaults de las vars de un componente deben caer a los tokens del tema (`--is-bg`, `--is-text`, `--is-border`), no a un color literal. Mismo error en el degradado de la barra: iba de `--lb-bg` a transparente, que sobre lienzo claro es blanco sobre blanco.
+
+50. `padding` no encoge a un hijo `position: absolute; inset: 0`: su bloque contenedor es la caja de PADDING del ancestro posicionado, asi que el inset cubre tambien el padding. Para dar aire al escenario del visor hay que mover el `inset` (`3.4rem 0 1rem 0`), no anadir padding.
+
 ## Reglas obligatorias para LLM
 
 - Consultar MD específico; API ausente no se inventa.

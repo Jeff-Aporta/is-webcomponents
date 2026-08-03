@@ -24,6 +24,13 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - Shadows complejas (multi-layer) y halos: definirlas como **CSS vars en `.home`** (`.home { --shadow-lift: ... }`) y override en `[data-theme="light"] .home`. Custom props cascadean, specificity gana.
 - Auroras, orbes, halos con `opacity` explícito en light mode (en dark se ven al 100% por gradient, en light quedan como manchas).
 
+### Texto con degradado recortado (`background-clip: text`)
+- Ese texto **no tiene color propio**: lo pinta el degradado, y `-webkit-text-fill-color: transparent` lo deja invisible si el degradado falla. Todo selector así necesita override `[data-theme="light"]`.
+- Los `--hue-a..e` se derivan de `--is-accent` con la **misma luminosidad en ambos temas**, y varias paradas se mezclan hacia `#fff`. Sobre el blanco del tema light eso es texto ilegible.
+- El tope de luminosidad debe ser **absoluto** (`min(l, 0.42)`), no un porcentaje (`calc(l * 0.78)`): las semillas parten de luminosidades muy distintas (insoft `#e03131` → L .59; agrowin `yellowgreen` → L .79), así que un multiplicador uniforme deja una paleta en 3.5:1 mientras hunde otra. Con tope absoluto el peor caso de las tres paletas es 7.6:1.
+- **El fallback va fuera de `@supports`, no detrás en orden de declaración.** `min()` dentro de `oklch(from …)` es reciente; si no se soporta, la declaración se descarta **entera** y el texto vuelve a quedar transparente. El fallback plano debe devolver `-webkit-text-fill-color: currentColor`.
+- Vigilado por `tests/home-invariants.test.mjs`.
+
 ### JS en previews
 - Inyectar UI repetitiva con JS (`document.createElement` + `setAttribute`), no escribirla 30 veces en HTML.
 - Custom elements: `createElement('is-icon')` + `setAttribute('icon', 'mdi:...')`. `innerHTML` con custom tags no garantiza upgrade.

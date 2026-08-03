@@ -1386,7 +1386,9 @@
        paletas parten de luminosidades muy distintas (insoft #e03131 → L .59;
        agrowin yellowgreen → L .79), así que un `calc(l * 0.78)` uniforme deja
        agrowin en 3.5:1 mientras hunde insoft. Con el tope, el peor caso de las
-       tres paletas es 8.0:1 sobre blanco. Matiz y croma de marca se conservan. */
+       tres paletas es 7.62:1 sobre blanco (contapyme, parada --hue-c); el
+       fallback plano baja a 4.15:1 (agrowin), que sigue por encima del 3:1 de
+       AA para texto grande. Matiz y croma de marca se conservan. */
     [data-theme="light"] .home-title__accent {
       /* Fallback SIN color relativo ni min(): si el navegador no soporta
          alguna de las dos cosas, la declaracion de abajo se descarta entera y
@@ -1581,7 +1583,7 @@
             <div class="tile tile--chart-bar">
               <p class="tile__eyebrow">Por categoría</p>
               <p class="tile__title">Ingresos del mes</p>
-              <is-bar-chart without-legend>
+              <is-bar-chart open-on-click without-legend>
                 <script type="application/json">
                   {
                     "data": {
@@ -1598,7 +1600,7 @@
             <div class="tile tile--chart-donut">
               <p class="tile__eyebrow">Mix de cartera</p>
               <p class="tile__title">Activos vs Pasivos</p>
-              <is-doughnut-chart without-legend>
+              <is-doughnut-chart open-on-click without-legend>
                 <script type="application/json">
                   {
                     "data": {
@@ -1623,7 +1625,7 @@
             <div class="tile tile--chart-line">
               <p class="tile__eyebrow">MRR · 6 meses</p>
               <p class="tile__title">Tendencia de crecimiento</p>
-              <is-line-chart without-legend>
+              <is-line-chart open-on-click without-legend>
                 <script type="application/json">
                   {
                     "data": {
@@ -1646,7 +1648,7 @@
             <div class="tile tile--chart-polar">
               <p class="tile__eyebrow">Adquisición</p>
               <p class="tile__title">Canales del mes</p>
-              <is-polar-area-chart without-legend>
+              <is-polar-area-chart open-on-click without-legend>
                 <script type="application/json">
                   {
                     "data": {
@@ -1825,7 +1827,7 @@
           <article class="collage-card collage-card--l">
             <h3 class="collage-card__title">Mix de cartera</h3>
             <div class="collage-card__plot">
-              <is-doughnut-chart without-legend>
+              <is-doughnut-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Activos","Pasivos","Patrimonio"], "datasets": [
                     { "data": [62, 23, 15], "backgroundColor": ["#339af0","#fa5252","#40c057"] } ] } }
@@ -1838,7 +1840,7 @@
           <article class="collage-card collage-card--tall">
             <h3 class="collage-card__title">Ventas por sede</h3>
             <div class="collage-card__plot">
-              <is-bar-chart index-axis="y" without-legend>
+              <is-bar-chart open-on-click index-axis="y" without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Bogotá","Medellín","Cali","Barranquilla","Bucaramanga","Pereira"],
                     "datasets": [{ "label": "Clientes", "data": [1240, 890, 610, 430, 280, 195] }] } }
@@ -1851,7 +1853,7 @@
           <article class="collage-card collage-card--m">
             <h3 class="collage-card__title">Tendencia</h3>
             <div class="collage-card__plot">
-              <is-line-chart without-legend>
+              <is-line-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"], "datasets": [
                     { "label": "2025", "data": [30, 42, 38, 55, 48, 62], "tension": 0.4, "fill": true } ] } }
@@ -1864,7 +1866,7 @@
           <article class="collage-card collage-card--m">
             <h3 class="collage-card__title">Composición</h3>
             <div class="collage-card__plot">
-              <is-pie-chart without-legend>
+              <is-pie-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Contado","Crédito 30","Crédito 60","Anticipos"], "datasets": [
                     { "data": [44, 28, 18, 10] } ] } }
@@ -1877,7 +1879,7 @@
           <article class="collage-card collage-card--m">
             <h3 class="collage-card__title">Radar</h3>
             <div class="collage-card__plot">
-              <is-radar-chart without-legend>
+              <is-radar-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Velocidad","Calidad","Soporte","Precio","UX"], "datasets": [
                     { "label": "Q3", "data": [85, 92, 70, 88, 95],
@@ -1895,7 +1897,7 @@
           <article class="collage-card collage-card--l">
             <h3 class="collage-card__title">SLA semanal</h3>
             <div class="collage-card__plot">
-              <is-polar-area-chart without-legend>
+              <is-polar-area-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["L","M","X","J","V","S","D"], "datasets": [
                     { "data": [98, 95, 92, 99, 96, 88, 75] } ] } }
@@ -1908,7 +1910,7 @@
           <article class="collage-card collage-card--s">
             <h3 class="collage-card__title">Tráfico vs ventas</h3>
             <div class="collage-card__plot">
-              <is-scatter-chart without-legend>
+              <is-scatter-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "datasets": [
                     { "label": "Web", "data": [
@@ -1923,7 +1925,7 @@
           <article class="collage-card collage-card--s">
             <h3 class="collage-card__title">Hora pico</h3>
             <div class="collage-card__plot">
-              <is-bubble-chart without-legend>
+              <is-bubble-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "datasets": [
                     { "label": "Visitas", "data": [
@@ -1939,7 +1941,7 @@
           <article class="collage-card collage-card--xl">
             <h3 class="collage-card__title">Flujo de operación</h3>
             <div class="collage-card__plot">
-              <is-flowchart>
+              <is-flowchart open-on-click>
                 <script type="application/json">
                   { "flowchart": { "direction": "LR", "nodes": [
                     { "id":"lead", "label":"Lead", "shape":"stadium" },
@@ -1961,7 +1963,7 @@
           <article class="collage-card collage-card--m">
             <h3 class="collage-card__title">Distribución geográfica</h3>
             <div class="collage-card__plot">
-              <is-radar-chart without-legend>
+              <is-radar-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Norte","Sur","Oriente","Occidente","Centro"], "datasets": [
                     { "label": "Cobertura", "data": [78, 65, 82, 71, 90],
@@ -1976,7 +1978,7 @@
           <article class="collage-card collage-card--xl">
             <h3 class="collage-card__title">Cronograma</h3>
             <div class="collage-card__plot">
-              <is-timeline>
+              <is-timeline open-on-click>
                 <script type="application/json">
                   { "timeline": { "orientation": "horizontal", "events": [
                     { "id":"kickoff", "label":"Kick-off", "date":"2025-08-04" },
@@ -2053,7 +2055,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Bar · una serie</h3>
             <div class="lab-card__plot">
-              <is-bar-chart without-legend>
+              <is-bar-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"],
                     "datasets": [{ "label": "Ventas", "data": [4200000, 5100000, 3800000, 6400000, 5900000, 7200000] }] } }
@@ -2065,7 +2067,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Bar · 3 series agrupadas</h3>
             <div class="lab-card__plot">
-              <is-bar-chart without-legend>
+              <is-bar-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Q1","Q2","Q3","Q4"], "datasets": [
                     { "label": "Ingresos", "data": [32, 45, 38, 52] },
@@ -2079,7 +2081,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Bar · apilada</h3>
             <div class="lab-card__plot">
-              <is-bar-chart stacked without-legend>
+              <is-bar-chart open-on-click stacked without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Ene","Feb","Mar","Abr"], "datasets": [
                     { "label": "Contado", "data": [18, 22, 20, 27] },
@@ -2093,7 +2095,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Bar · horizontal</h3>
             <div class="lab-card__plot">
-              <is-bar-chart index-axis="y" without-legend>
+              <is-bar-chart open-on-click index-axis="y" without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Bogotá","Medellín","Cali","Barranquilla","Bucaramanga"],
                     "datasets": [{ "label": "Clientes", "data": [1240, 890, 610, 430, 280] }] } }
@@ -2105,7 +2107,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Line · 2 series, curva</h3>
             <div class="lab-card__plot">
-              <is-line-chart without-legend>
+              <is-line-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"], "datasets": [
                     { "label": "2025", "data": [30, 42, 38, 55, 48, 62], "tension": 0.4 },
@@ -2118,7 +2120,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Line · área rellena</h3>
             <div class="lab-card__plot">
-              <is-line-chart without-legend>
+              <is-line-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["L","M","X","J","V","S","D"], "datasets": [
                     { "label": "Visitas", "data": [120, 190, 170, 240, 280, 210, 150], "fill": true, "tension": 0.4 } ] } }
@@ -2130,7 +2132,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Pie</h3>
             <div class="lab-card__plot">
-              <is-pie-chart without-legend>
+              <is-pie-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Contado","Crédito 30","Crédito 60","Crédito 90"],
                     "datasets": [{ "label": "Cartera", "data": [45, 25, 18, 12] }] } }
@@ -2142,7 +2144,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Doughnut</h3>
             <div class="lab-card__plot">
-              <is-doughnut-chart without-legend>
+              <is-doughnut-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Inventario","Cartera","Bancos","Activo fijo"],
                     "datasets": [{ "label": "Activos", "data": [3200, 2100, 1450, 5300] }] } }
@@ -2154,7 +2156,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Polar area</h3>
             <div class="lab-card__plot">
-              <is-polar-area-chart without-legend>
+              <is-polar-area-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Norte","Sur","Este","Oeste","Centro"],
                     "datasets": [{ "label": "Cobertura", "data": [11, 16, 7, 14, 9] }] } }
@@ -2166,7 +2168,7 @@
           <article class="lab-card lab-card__plot--tall">
             <h3 class="lab-card__title">Radar · 2 series</h3>
             <div class="lab-card__plot">
-              <is-radar-chart without-legend>
+              <is-radar-chart open-on-click without-legend>
                 <script type="application/json">
                   { "data": { "labels": ["Liquidez","Rentabilidad","Endeudamiento","Eficiencia","Crecimiento"],
                     "datasets": [
@@ -2180,7 +2182,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Scatter</h3>
             <div class="lab-card__plot">
-              <is-scatter-chart x-label="Antigüedad (días)" y-label="Saldo" without-legend>
+              <is-scatter-chart open-on-click x-label="Antigüedad (días)" y-label="Saldo" without-legend>
                 <script type="application/json">
                   { "data": { "datasets": [
                     { "label": "Facturas", "data": [
@@ -2194,7 +2196,7 @@
           <article class="lab-card">
             <h3 class="lab-card__title">Bubble</h3>
             <div class="lab-card__plot">
-              <is-bubble-chart x-label="Margen %" y-label="Volumen" without-legend>
+              <is-bubble-chart open-on-click x-label="Margen %" y-label="Volumen" without-legend>
                 <script type="application/json">
                   { "data": { "datasets": [
                     { "label": "Productos", "data": [

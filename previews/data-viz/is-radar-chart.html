@@ -29,7 +29,7 @@
           (habilidades, atributos de producto, métricas de rendimiento).
         </p>
         <is-demo class="demo demo--chart">
-          <is-radar-chart label="Employee Skills">
+          <is-radar-chart open-on-click label="Employee Skills">
             <script type="application/json">
               {
                 "data": {
@@ -65,7 +65,7 @@
           (formato Chart.js).
         </p>
         <is-demo class="demo demo--chart demo--chart-sm">
-          <is-radar-chart label="Feature Comparison">
+          <is-radar-chart open-on-click label="Feature Comparison">
             <script type="application/json">
               {
                 "data": {
@@ -92,7 +92,7 @@
         <h2>Datos con JavaScript</h2>
         <p class="lede">Asigna <code class="code">config</code>; el chart se re-renderiza solo.</p>
         <is-demo class="demo demo--chart demo--chart-sm">
-          <is-radar-chart id="radarJs" label="Feature Comparison"></is-radar-chart>
+          <is-radar-chart open-on-click id="radarJs" label="Feature Comparison"></is-radar-chart>
         </is-demo>
         <pre class="code" data-lang="javascript">const chart = document.querySelector('#radarJs');
 chart.config = {
@@ -107,7 +107,7 @@ chart.config = {
         <h2>Múltiples datasets</h2>
         <p class="lede">Superpone perfiles para compararlos directamente.</p>
         <is-demo class="demo demo--chart">
-          <is-radar-chart id="radarMulti" label="Product Comparison"></is-radar-chart>
+          <is-radar-chart open-on-click id="radarMulti" label="Product Comparison"></is-radar-chart>
         </is-demo>
         <pre class="code" data-lang="javascript">chart.config = {
   data: {
@@ -123,7 +123,7 @@ chart.config = {
       <section class="section" id="options">
         <h2>Leyenda y features</h2>
         <is-demo class="demo demo--chart demo--chart-sm">
-          <is-radar-chart label="Clases" legend-position="end">
+          <is-radar-chart open-on-click label="Clases" legend-position="end">
             <script type="application/json">
               {
                 "data": {

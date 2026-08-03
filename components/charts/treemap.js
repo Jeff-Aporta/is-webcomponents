@@ -18,7 +18,7 @@ import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
  * MutationObserver, tema por atributo `data-theme`, `color` (inline | viewer),
  * lightbox propio.
  *
- * Atributos: color (inline | viewer), without-viewer
+ * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout
  * Eventos: is-render, is-open-viewer
  */
@@ -251,11 +251,14 @@ class IsTreemap extends HTMLElement {
   /* ── interacción ── */
 
   #onClick = () => {
+    // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
+    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
     });
     this.dispatchEvent(ev);
-    if (!ev.defaultPrevented && !this.hasAttribute('without-viewer')) this.#openOwnViewer();
+    if (!ev.defaultPrevented) this.#openOwnViewer();
   };
 
   async #openOwnViewer() {

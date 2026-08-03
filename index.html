@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IS Web Components</title>
-  <meta name="description" content="Galería de Web Components de Insoft.">
+  <meta name="description" content="Galería de Web Components de InSoft.">
   <link rel="stylesheet" href="styles/is-base.css">
   <link rel="stylesheet" href="styles/palettes.css">
   <link rel="stylesheet" href="styles/shell.css">
@@ -14,13 +14,13 @@
 <body>
   <header class="shell-bar">
     <div class="brand-wrap" id="brandWrap">
-      <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="Insoft — elegir paleta" title="Elegir paleta">
-        <span id="brandLead">in</span><span class="brand__accent" id="brandAccent">S</span><span id="brandTail">oft</span>
+      <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="InSoft — elegir paleta" title="Elegir paleta">
+        <span id="brandLead">in</span><span class="brand__accent" id="brandAccent">Soft</span><span id="brandTail"></span>
       </button>
       <ul class="brand-menu" id="brandMenu" role="listbox" hidden aria-label="Paleta de marca">
         <li role="option" tabindex="-1" data-palette="insoft" aria-selected="true">
           <span class="brand-menu__swatch" aria-hidden="true"></span>
-          <span class="brand-menu__label">Insoft</span>
+          <span class="brand-menu__label">InSoft</span>
           <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
         </li>
         <li role="option" tabindex="-1" data-palette="contapyme" aria-selected="false">
@@ -68,7 +68,7 @@
     const brands = {
       // El logo de Insoft lleva la S en mayuscula y en rojo: in + S + oft.
       // Por eso el brand se compone de tres segmentos y no de dos.
-      insoft:    { lead: 'in',    accent: 'S',    tail: 'oft', label: 'Insoft',    leadColor: '#000', accentColor: '#d71920' },
+      insoft:    { lead: 'in',    accent: 'Soft', tail: '',    label: 'InSoft',    leadColor: '#000', accentColor: '#d71920' },
       contapyme: { lead: 'conta', accent: 'pyme', tail: '',    label: 'ContaPyme', leadColor: '#000', accentColor: '#fff'    },
       agrowin:   { lead: 'agro',  accent: 'win',  tail: '',    label: 'AgroWin',   leadColor: '#000', accentColor: '#fff'    }
     };

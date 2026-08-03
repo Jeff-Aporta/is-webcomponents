@@ -29,7 +29,7 @@
           Ideal para correlaciones, clusters y outliers.
         </p>
         <is-demo class="demo demo--chart">
-          <is-scatter-chart label="Measurements" x-label="Height (cm)" y-label="Weight (kg)">
+          <is-scatter-chart open-on-click label="Measurements" x-label="Height (cm)" y-label="Weight (kg)">
             <script type="application/json">
               {
                 "data": {
@@ -53,7 +53,7 @@
       <section class="section" id="json">
         <h2>Datos con JSON</h2>
         <is-demo class="demo demo--chart demo--chart-sm">
-          <is-scatter-chart label="Students" x-label="Hours studied" y-label="Score">
+          <is-scatter-chart open-on-click label="Students" x-label="Hours studied" y-label="Score">
             <script type="application/json">
               {
                 "data": {
@@ -80,7 +80,7 @@
       <section class="section" id="js">
         <h2>Datos con JavaScript</h2>
         <is-demo class="demo demo--chart demo--chart-sm">
-          <is-scatter-chart id="scatterJs" label="Students" x-label="Hours" y-label="Score"></is-scatter-chart>
+          <is-scatter-chart open-on-click id="scatterJs" label="Students" x-label="Hours" y-label="Score"></is-scatter-chart>
         </is-demo>
         <pre class="code" data-lang="javascript">const chart = document.querySelector('#scatterJs');
 chart.config = {
@@ -101,7 +101,7 @@ chart.config = {
         <h2>Múltiples datasets</h2>
         <p class="lede">Compara grupos; cada dataset recibe su color de la serie fija.</p>
         <is-demo class="demo demo--chart">
-          <is-scatter-chart id="scatterMulti" label="Study methods" x-label="Hours" y-label="Score"></is-scatter-chart>
+          <is-scatter-chart open-on-click id="scatterMulti" label="Study methods" x-label="Hours" y-label="Score"></is-scatter-chart>
         </is-demo>
         <pre class="code" data-lang="javascript">datasets: [
   { label: 'Tutored', data: [{ x: 3, y: 78 }, …] },
@@ -112,7 +112,7 @@ chart.config = {
       <section class="section" id="options">
         <h2>Grid y ejes</h2>
         <is-demo class="demo demo--chart demo--chart-sm">
-          <is-scatter-chart grid="y" x-label="Temp (°F)" y-label="Sales" label="Ice cream">
+          <is-scatter-chart open-on-click grid="y" x-label="Temp (°F)" y-label="Sales" label="Ice cream">
             <script type="application/json">
               {
                 "data": {

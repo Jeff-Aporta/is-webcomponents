@@ -280,6 +280,20 @@ class IsChart extends HTMLElement {
     const width = Math.max(rect.width, 1);
     const height = Math.max(rect.height, 1);
     this.#svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+    // El viewBox va 1:1 con los pixeles, asi que el SVG NO escala: al crecer,
+    // el chart se re-maqueta en vez de ampliarse. Los tamanos de texto son em
+    // sobre el font-size del host, que no cambia, de modo que en el visor a
+    // pantalla completa las etiquetas quedaban diminutas frente a un grafico
+    // 4x mas grande. Se ata el font-size base del SVG a su propia geometria
+    // para que el texto sea proporcional al tamano de presentacion.
+    // Exponente < 1 para amortiguar: crecer lineal dispara el texto en el visor.
+    const basis = Math.min(width, height);
+    const fontPx = Math.max(11, Math.min(26, 13 * (basis / 220) ** 0.55));
+    this.#svg.style.fontSize = `${fontPx.toFixed(2)}px`;
+    // La leyenda es HTML fuera del SVG: sin esto se queda diminuta en el visor.
+    // Se aplica el mismo 0.75 de `--chart-legend-size`, que este inline pisa.
+    this.#legendEl.style.fontSize = `${(fontPx * 0.75).toFixed(2)}px`;
     while (this.#svg.firstChild) this.#svg.removeChild(this.#svg.firstChild);
     this.#hits = [];
     this.#activeHit = null;
@@ -432,7 +446,7 @@ class IsChart extends HTMLElement {
 
   /** Clic en colore inline: abre el visor a pantalla completa. */
   #onHostClick = () => {
-    if (this.isViewer || this.hasAttribute('without-viewer')) return;
+    if (this.isViewer || !this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.#config },
     });
@@ -637,11 +651,26 @@ class IsChart extends HTMLElement {
     const px = (e.clientX - rect.left) * (vb.width / rect.width);
     const py = (e.clientY - rect.top) * (vb.height / rect.height);
 
+    // 1. Geometria real: si el puntero esta sobre una mark, esa mark gana.
+    //    El modelo de proximidad de abajo registra cada hit como un PUNTO con
+    //    radio, lo que deja zonas muertas en marks grandes: un sector ancho de
+    //    doughnut se extiende mucho mas alla de su centroide, asi que el borde
+    //    del sector quedaba fuera del radio y no hacia hover aun estando
+    //    claramente dentro de la figura. Lo mismo con barras altas.
+    //    El listener vive en el mismo shadow root que las marks, asi que
+    //    `e.target` no sufre retargeting y apunta a la mark real.
     let best = null;
-    let bestDist = Infinity;
-    for (const h of this.#hits) {
-      const d = Math.hypot(h.x - px, h.y - py);
-      if (d < bestDist && d <= (h.radius || 24)) { bestDist = d; best = h; }
+    const markEl = e.target instanceof Element ? e.target.closest('.mark') : null;
+    if (markEl) best = this.#hits.find((h) => h.el === markEl) || null;
+
+    // 2. Proximidad como respaldo. Para line/scatter SI es el modelo correcto:
+    //    el cursor casi nunca esta encima del punto, se busca el mas cercano.
+    if (!best) {
+      let bestDist = Infinity;
+      for (const h of this.#hits) {
+        const d = Math.hypot(h.x - px, h.y - py);
+        if (d < bestDist && d <= (h.radius || 24)) { bestDist = d; best = h; }
+      }
     }
     if (!best) return this.#clearHover();
     if (best !== this.#activeHit) this.#applyHover(best);

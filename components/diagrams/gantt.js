@@ -20,7 +20,7 @@ import { registerDiagramKind } from './diagram-kinds.js';
  * `after:` se rutean con A* sobre la rejilla de costos, igual que las
  * aristas de flowchart.
  *
- * Atributos: color (inline | viewer), without-viewer
+ * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
  * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
  */
@@ -357,11 +357,14 @@ class IsGantt extends HTMLElement {
       }
       return;
     }
+    // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
+    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
     });
     this.dispatchEvent(ev);
-    if (!ev.defaultPrevented && !this.hasAttribute('without-viewer')) this.#openOwnViewer();
+    if (!ev.defaultPrevented) this.#openOwnViewer();
   };
 
   async #openOwnViewer() {

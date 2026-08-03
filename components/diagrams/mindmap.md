@@ -114,7 +114,7 @@ Documentación de cabecera preservada desde fuente:
 >   </is-mindmap>
 > Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
 > tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
-> Atributos: color (inline | viewer), without-viewer
+> Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout
 > Eventos: is-render, is-open-viewer
 

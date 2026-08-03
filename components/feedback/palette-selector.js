@@ -65,11 +65,14 @@ import '../media/icon.js';
 
 (() => {
   // 3 paletas por defecto. El `lead`/`accent` permiten que el trigger por
-  // defecto represente la marca como "in" + "soft" en dos colores. Como
+  // defecto represente la marca como "in" + "Soft" en dos colores. Como
   // ESTOS CSS ya están enlazados en el <head>, no hace falta inyectar
   // <link> extra: solo se respeta data-palette="X" en <html>.
   const DEFAULT_PALETTES = [
-    { value: 'insoft',    label: 'Insoft',    accent: '#e03131', lead: 'in',  accentLabel: 'soft',  leadColor: '#111', accentColor: '#e03131', bg: '#fff', fg: '#111' },
+    // El logo lleva la S en MAYUSCULA y en el color de marca: in + Soft.
+    // Ver el mismo criterio en index.html; aqui estaba en minuscula y el
+    // wordmark salia como "insoft".
+    { value: 'insoft',    label: 'InSoft',    accent: '#e03131', lead: 'in',  accentLabel: 'Soft',  leadColor: '#111', accentColor: '#e03131', bg: '#fff', fg: '#111' },
     { value: 'contapyme', label: 'ContaPyme', accent: 'dodgerblue', lead: 'conta', accentLabel: 'pyme', leadColor: '#111', accentColor: 'dodgerblue', bg: '#fff', fg: '#111' },
     { value: 'agrowin',   label: 'AgroWin',   accent: 'yellowgreen', lead: 'agro', accentLabel: 'win',  leadColor: '#111', accentColor: 'yellowgreen', bg: '#fff', fg: '#111' },
   ];

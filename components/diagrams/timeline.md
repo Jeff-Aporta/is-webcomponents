@@ -117,7 +117,7 @@ Documentación de cabecera preservada desde fuente:
 > `orientation: horizontal` (default) alterna los eventos arriba/abajo de un
 > eje central; `vertical` los apila a la derecha de un eje a la izquierda.
 > No hay flechas que rutear (sin turtle): la animación no aplica aquí.
-> Atributos: color (inline | viewer), without-viewer
+> Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, hiddenGroups
 > Eventos: is-render, is-open-viewer, is-toggle-group
 

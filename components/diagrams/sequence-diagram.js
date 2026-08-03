@@ -478,13 +478,16 @@ class IsSequenceDiagram extends HTMLElement {
       }
       return;
     }
-    // Preview inline: entrar al visor con 1 clic / 1 tap.
+    // Preview inline: entrar al visor con 1 clic / 1 tap. Es opt-in: sin
+    // `open-on-click` el clic no hace nada y tampoco se anuncia
+    // `is-open-viewer`, que prometeria una apertura que no ocurre.
+    if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
     });
     this.dispatchEvent(ev);
     // Si nadie lo intercepta (preventDefault), abre el visor por su cuenta.
-    if (!ev.defaultPrevented && !this.hasAttribute('without-viewer')) this.#openOwnViewer();
+    if (!ev.defaultPrevented) this.#openOwnViewer();
   };
 
   /** Lightbox propio, cargado bajo demanda para no crear un ciclo de imports. */

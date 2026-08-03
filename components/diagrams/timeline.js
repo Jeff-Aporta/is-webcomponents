@@ -18,7 +18,7 @@ import { registerDiagramKind } from './diagram-kinds.js';
  * eje central; `vertical` los apila a la derecha de un eje a la izquierda.
  * No hay flechas que rutear (sin turtle): la animación no aplica aquí.
  *
- * Atributos: color (inline | viewer), without-viewer
+ * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, hiddenGroups
  * Eventos: is-render, is-open-viewer, is-toggle-group
  */
@@ -324,11 +324,14 @@ class IsTimeline extends HTMLElement {
       }
       return;
     }
+    // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
+    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
     });
     this.dispatchEvent(ev);
-    if (!ev.defaultPrevented && !this.hasAttribute('without-viewer')) this.#openOwnViewer();
+    if (!ev.defaultPrevented) this.#openOwnViewer();
   };
 
   async #openOwnViewer() {

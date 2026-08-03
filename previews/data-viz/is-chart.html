@@ -73,7 +73,7 @@
           cambiar de tema: pruébalo con el selector de paleta del encabezado.
         </p>
         <is-demo class="demo" style="height:17rem">
-          <is-chart type="bar" label="Ingresos vs gastos" x-label="Mes" y-label="Millones COP">
+          <is-chart open-on-click type="bar" label="Ingresos vs gastos" x-label="Mes" y-label="Millones COP">
             <script type="application/json">
               {
                 "data": {
@@ -397,7 +397,7 @@
 
         <h3>Config por JavaScript</h3>
         <is-demo class="demo" style="height:14rem">
-          <is-chart id="jsChart" type="line" without-legend></is-chart>
+          <is-chart open-on-click id="jsChart" type="line" without-legend></is-chart>
         </is-demo>
         <pre class="code">const el = document.querySelector('#jsChart');
 el.config = {

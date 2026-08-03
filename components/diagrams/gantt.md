@@ -120,7 +120,7 @@ Documentación de cabecera preservada desde fuente:
 > Una fila por tarea (orden de declaración, sin empaquetar). Las flechas
 > `after:` se rutean con A* sobre la rejilla de costos, igual que las
 > aristas de flowchart.
-> Atributos: color (inline | viewer), without-viewer
+> Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
 

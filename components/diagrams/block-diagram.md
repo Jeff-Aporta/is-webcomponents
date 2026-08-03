@@ -120,7 +120,7 @@ Documentación de cabecera preservada desde fuente:
 >   </is-block-diagram>
 > A diferencia del flujo, aquí los bloques se ubican en una rejilla explícita
 > (columnas fijas + `span`), no en capas node-link.
-> Atributos: color (inline | viewer), without-viewer
+> Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
 

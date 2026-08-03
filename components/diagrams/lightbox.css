@@ -1,3 +1,14 @@
+/* El visor se pinta sobre los tokens del tema. Antes los fallbacks estaban
+   fijos en oscuro (#0d1117 / #e6e8eb) y NADIE definia --lb-bg, asi que el
+   presentador salia oscuro tambien en tema claro. Las vars siguen siendo el
+   punto de personalizacion; lo que cambia es a que caen por defecto. */
+:host {
+  --lb-bg: var(--is-bg, #0d1117);
+  --lb-fg: var(--is-text, #e6e8eb);
+  --lb-border: var(--is-border, #1d2229);
+  --lb-backdrop: rgb(0 0 0 / 60%);
+}
+
 :host {
   display: contents;
 }
@@ -14,15 +25,15 @@
   height: 100dvh;
   max-width: none;
   max-height: none;
-  background: var(--lb-bg, #0d1117);
-  color: var(--lb-fg, #e6e8eb);
+  background: var(--lb-bg);
+  color: var(--lb-fg);
   font-family: var(--is-font-family, system-ui, sans-serif);
   overflow: hidden;
   box-shadow: none;
 }
 
 .lb::backdrop {
-  background: var(--lb-backdrop, rgb(0 0 0 / 60%));
+  background: var(--lb-backdrop);
 }
 
 .lb-bar {
@@ -34,11 +45,15 @@
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.6rem 0.85rem;
+  /* El degradado anterior iba de --lb-bg a transparente: sobre un lienzo
+     claro quedaba blanco sobre blanco y la barra desaparecia. Se usa una
+     superficie propia (--is-bg-soft) para que se lea como cromo del visor y
+     no como parte del contenido, en los dos temas. */
   background: var(--lb-toolbar-bg,
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--lb-bg, #0d1117) 100%, transparent) 0%,
-      color-mix(in srgb, var(--lb-bg, #0d1117) 70%, transparent) 100%));
-  border-bottom: 1px solid var(--lb-border, #1d2229);
+    color-mix(in srgb, var(--is-bg-soft, var(--lb-bg)) 92%, transparent));
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--lb-border);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
 }
 
 .lb-bar__group {
@@ -65,8 +80,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 2.4rem;
+  height: 2.4rem;
   padding: 0;
   border: 1px solid transparent;
   border-radius: var(--is-radius, 0.5em);
@@ -77,8 +92,8 @@
 }
 
 .lb-btn:hover {
-  background: color-mix(in srgb, var(--lb-fg, #e6e8eb) 8%, transparent);
-  border-color: color-mix(in srgb, var(--lb-border, #1d2229) 100%, transparent);
+  background: color-mix(in srgb, var(--lb-fg) 12%, transparent);
+  border-color: var(--lb-border);
 }
 
 .lb-btn:focus-visible {
@@ -91,13 +106,17 @@
 }
 
 .lb-btn is-icon {
-  --is-icon-size: 1.15rem;
+  --is-icon-size: 1.3rem;
   pointer-events: none;
 }
 
 .lb-stage {
   position: absolute;
-  inset: 3.4rem 0 0 0;
+  /* Aire abajo: el contenido llegaba a ras del borde y `overflow: hidden` le
+     cortaba la ultima linea (la leyenda del chart perdia los descendentes).
+     No sirve `padding` aqui: el hijo absoluto se posiciona contra la caja de
+     padding, asi que el inset es lo unico que encoge el escenario. */
+  inset: 3.4rem 0 1rem 0;
   overflow: hidden;
   cursor: grab;
   touch-action: none;
@@ -128,8 +147,8 @@
 .lb-code {
   position: absolute;
   inset: 3.4rem 0 0 0;
-  background: color-mix(in srgb, var(--lb-bg, #0d1117) 96%, transparent);
-  border-top: 1px solid var(--lb-border, #1d2229);
+  background: color-mix(in srgb, var(--lb-bg) 96%, transparent);
+  border-top: 1px solid var(--lb-border);
   padding: 1rem 1.25rem;
   z-index: 4;
   display: grid;
@@ -147,8 +166,8 @@
   left: 50%;
   transform: translateX(-50%);
   padding: 0.55rem 0.95rem;
-  background: color-mix(in srgb, var(--lb-fg, #e6e8eb) 12%, var(--lb-bg, #0d1117));
-  border: 1px solid var(--lb-border, #1d2229);
+  background: color-mix(in srgb, var(--lb-fg) 12%, var(--lb-bg));
+  border: 1px solid var(--lb-border);
   border-radius: var(--is-radius, 0.5em);
   font-size: 0.85em;
   z-index: 5;

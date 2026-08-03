@@ -122,7 +122,7 @@ Documentación de cabecera preservada desde fuente:
 >       { "flowchart": { "direction": "TB", "nodes": [...], "edges": [...] } }
 >     </script>
 >   </is-flowchart>
-> Atributos: color (inline | viewer), without-viewer
+> Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
 

@@ -183,3 +183,54 @@ test('reset prefers-reduced-motion desactiva transforms de cards', () => {
     'reduced-motion debe poner transform: none !important en cards',
   );
 });
+
+// ─── Texto con degradado recortado y modo light ────────────────────
+//
+// `background-clip: text` + `-webkit-text-fill-color: transparent` deja el
+// texto SIN color propio: lo pinta el degradado. Los hues (--hue-a..e) se
+// derivan de --is-accent con la MISMA luminosidad en ambos temas, y varias
+// paradas se mezclan hacia #fff. Sobre el fondo blanco del tema light eso es
+// texto ilegible — el sintoma reportado: "en modo light esto no se lee".
+//
+// Regla: todo selector con relleno transparente necesita un override
+// [data-theme="light"] que oscurezca sus paradas.
+
+test('todo texto con background-clip:text tiene override en modo light', () => {
+  // Selectores que declaran relleno transparente (el degradado los pinta).
+  const conDegradado = [...src.matchAll(/^\s*([.#][\w-]+(?:\s+\w+)?)\s*\{[^}]*-webkit-text-fill-color:\s*transparent/gms)]
+    .map((m) => m[1].trim())
+    // Dentro de @supports ya son el override, no el caso base.
+    .filter((sel, i, arr) => arr.indexOf(sel) === i);
+
+  assert.ok(conDegradado.length > 0, 'se esperaba al menos un texto con degradado recortado');
+
+  for (const sel of conDegradado) {
+    const base = sel.split(/\s+/)[0];
+    const tieneOverride = new RegExp(
+      '\\[data-theme="light"\\][^{]*\\' + base + '(?![\\w-])',
+    ).test(src);
+    assert.ok(
+      tieneOverride,
+      `${sel} usa background-clip:text sin override [data-theme="light"]: ` +
+        'en fondo blanco queda ilegible',
+    );
+  }
+});
+
+test('el override light del titular no depende solo de min() en color relativo', () => {
+  // `min()` dentro de `oklch(from …)` es reciente. Si no se soporta, la
+  // declaracion se descarta ENTERA y el texto vuelve a quedar invisible.
+  // Por eso el color plano va fuera y la version buena dentro de @supports.
+  assert.match(
+    src,
+    /@supports \(color: oklch\(from red min\(/,
+    'el degradado light debe ir dentro de @supports que pruebe min() en color relativo',
+  );
+  const fallback = extractBlock('[data-theme="light"] .home-title__accent');
+  assert.ok(fallback, 'debe existir el bloque de fallback del titular en light');
+  assert.match(
+    fallback,
+    /-webkit-text-fill-color:\s*currentColor/,
+    'el fallback debe devolver el relleno del texto a currentColor, no dejarlo transparente',
+  );
+});
