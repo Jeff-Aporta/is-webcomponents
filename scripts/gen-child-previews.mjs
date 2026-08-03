@@ -353,7 +353,7 @@ for (const [tag, cfg] of Object.entries(CHILDREN)) {
   <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${tag} · IS Web Components</title>
-  <meta name="description" content="Documentación y demos de ${tag} de Insoft." />
+  <meta name="description" content="Documentación y demos de ${tag} de InSoft." />
 
   <link rel="stylesheet" href="../../styles/is-base.css" />
   <link rel="stylesheet" href="../../styles/palettes.css" />

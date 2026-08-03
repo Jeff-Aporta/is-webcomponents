@@ -10,7 +10,7 @@
 
 ## 1. ¿Qué es este repo?
 
-Galería de Web Components vanilla de Insoft (`is-*`). Todo escrito a mano con
+Galería de Web Components vanilla de InSoft (`is-*`). Todo escrito a mano con
 Custom Elements + Shadow DOM, sin frameworks, empaquetado con esbuild.
 
 - Demo publicada: <https://jeff-aporta.github.io/is-webcomponents/>

@@ -35,8 +35,8 @@ import './details.js';
 ## Ejemplo mínimo
 
 ```html
-<is-details summary="¿Qué es Insoft?">
-Insoft es un ERP modular…
+<is-details summary="¿Qué es InSoft?">
+InSoft es un ERP modular…
 </is-details>
 ```
 

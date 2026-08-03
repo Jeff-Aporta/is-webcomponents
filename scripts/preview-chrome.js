@@ -141,7 +141,7 @@ function mount() {
     <label class="preview-chrome__palette">
       <span class="preview-chrome__label">Paleta</span>
       <select id="previewPalette" aria-label="Paleta de marca">
-        <option value="insoft">Insoft</option>
+        <option value="insoft">InSoft</option>
         <option value="contapyme">ContaPyme</option>
         <option value="agrowin">AgroWin</option>
       </select>

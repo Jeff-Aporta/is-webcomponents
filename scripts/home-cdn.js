@@ -150,7 +150,7 @@ const buildDemoHtml = (variant) => {
         <label class="row" style="gap:0.35rem">
           <span>Paleta</span>
           <select id="palette" style="background:transparent;color:inherit;border:1px solid var(--is-border);border-radius:0.4rem;padding:0.25rem 0.5rem">
-            <option value="insoft">Insoft</option>
+            <option value="insoft">InSoft</option>
             <option value="contapyme">ContaPyme</option>
             <option value="agrowin">AgroWin</option>
           </select>
@@ -165,7 +165,7 @@ const buildDemoHtml = (variant) => {
         <is-button color="brand" variant="filled">Primario</is-button>
         <is-button color="neutral" variant="outlined">Secundario</is-button>
         <is-button color="danger" variant="plain">Peligro</is-button>
-        <is-tag color="brand">Insoft</is-tag>
+        <is-tag color="brand">InSoft</is-tag>
         <is-tag color="success">Success</is-tag>
         <is-badge color="danger">new</is-badge>
         <is-avatar initials="JE" label="Jeff"></is-avatar>

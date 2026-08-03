@@ -12,7 +12,7 @@ preview: ../../previews/actions/is-button.html
 
 ## Propósito
 
-Componente Insoft accesible y personalizable, escrito con JavaScript nativo,
+Componente InSoft accesible y personalizable, escrito con JavaScript nativo,
 Shadow DOM y sin frameworks.
 
 Este módulo registra `<is-button>`.

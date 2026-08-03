@@ -1,6 +1,6 @@
 # IS Web Components
 
-Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de Insoft (`is-*`).
+Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de InSoft (`is-*`).
 
 ## Demo (GitHub Pages)
 
@@ -35,4 +35,4 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 
 ## Licencia
 
-Uso interno Insoft / Jeff-Aporta salvo indicación contraria.
+Uso interno InSoft / Jeff-Aporta salvo indicación contraria.

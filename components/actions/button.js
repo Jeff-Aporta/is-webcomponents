@@ -10,7 +10,7 @@ import '../media/icon.js';
  *
  * Atributos
  *  color      brand | neutral | success | warning | danger   (default: brand)
- *  variant   filled | outlined | plain                     (default: filled)
+ *  variant   filled | outlined | plain | ghost             (default: filled)
  *  hue          number (0-360)  color propio para el highlight cuando está
  *                             [selected] dentro de <is-button-group>. Si no
  *                             se define, el grupo usa su --is-accent.

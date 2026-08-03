@@ -6,7 +6,7 @@
   <script type="module" src="../../dist/cdn/all.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>is-button · IS Web Components</title>
-  <meta name="description" content="Documentación y playground del componente is-button de Insoft." />
+  <meta name="description" content="Documentación y playground del componente is-button de InSoft." />
 
   <link rel="stylesheet" href="../../styles/is-base.css" />
   <link rel="stylesheet" href="../../styles/palettes.css" />
@@ -29,7 +29,7 @@
       <section class="section" id="intro">
         <h2>&lt;is-button&gt;</h2>
         <p class="lede">
-          Componente Insoft accesible y personalizable, escrito con JavaScript nativo,
+          Componente InSoft accesible y personalizable, escrito con JavaScript nativo,
           Shadow DOM y sin frameworks.
         </p>
 
@@ -97,7 +97,7 @@
       <!-- ===== 3. APPEARANCES (extra) ===== -->
       <section class="section" id="appearances">
         <h2>Apariencias (vista detallada)</h2>
-        <p class="lede">Tres niveles de énfasis visual. Úsalos para jerarquizar acciones.</p>
+        <p class="lede">Cuatro niveles de énfasis visual. Úsalos para jerarquizar acciones.</p>
 
         <h4>filled — acción principal</h4>
         <is-demo class="demo">
@@ -129,6 +129,21 @@
             <is-button color="warning" variant="plain">Atención</is-button>
             <is-button color="danger"  variant="plain">Eliminar</is-button>
             <is-button color="neutral" variant="plain">Secundario</is-button>
+          </div>
+        </is-demo>
+
+        <h4>ghost — outlined en reposo, filled al pasar el mouse</h4>
+        <p class="lede">
+          Pasa el mouse por encima: el borde se rellena. Util cuando la accion
+          debe ser discreta hasta que el usuario la apunta.
+        </p>
+        <is-demo class="demo">
+          <div class="demo-row">
+            <is-button color="brand" variant="ghost">Primario</is-button>
+            <is-button color="success" variant="ghost">Confirmar</is-button>
+            <is-button color="warning" variant="ghost">Atención</is-button>
+            <is-button color="danger"  variant="ghost">Eliminar</is-button>
+            <is-button color="neutral" variant="ghost">Secundario</is-button>
           </div>
         </is-demo>
       </section>

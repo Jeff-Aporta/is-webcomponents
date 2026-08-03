@@ -13,7 +13,7 @@ preview: ../../previews/layout/is-split-panel.html
 ## Propósito
 
 Dos paneles adyacentes separados por un divisor arrastrable.
-Componente Insoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.
+Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.
 
 Este módulo registra `<is-split-panel>`.
 
