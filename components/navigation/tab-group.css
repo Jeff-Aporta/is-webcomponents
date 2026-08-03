@@ -69,92 +69,99 @@
   min-height: 0;
 }
 
-/* <is-tab> */
-is-tab {
+/* <is-tab>
+ * Esta hoja la adopta cada shadow root por separado (adopt-css.js), así que
+ * las reglas del tab viven en el shadow del PROPIO <is-tab>: ahí el host no
+ * se alcanza con un descendiente `is-tab ...`, solo con `:host(is-tab)`.
+ * Desde el shadow de <is-tab-group> tampoco valdría: los tabs van slotted. */
+:host(is-tab) {
   display: inline-block;
   cursor: pointer;
   user-select: none;
   position: relative;
-}
-is-tab button.tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  padding: 0.55em 0.9em;
-  background: transparent;
-  border: 0;
-  font: inherit;
-  color: var(--is-text-muted, #6c757d);
-  cursor: inherit;
-  border-radius: calc(var(--is-radius, 0.25em));
-  transition: color 120ms ease, background 120ms ease;
-  position: relative;
-}
-is-tab:hover:not([disabled]) button.tab { color: var(--is-text, inherit); background: var(--is-bg-elev, transparent); }
-is-tab[disabled] { cursor: not-allowed; opacity: 0.5; }
 
-is-tab[data-active] button.tab {
-  color: var(--is-text, inherit);
+  & .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.55em 0.9em;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    color: var(--is-text-muted, #6c757d);
+    cursor: inherit;
+    border-radius: calc(var(--is-radius, 0.25em));
+    transition: color 120ms ease, background 120ms ease;
+    position: relative;
+  }
+
+  /* El indicador es el <span class="indicator"> del template, no un ::after
+     sobre el host: el host queda fuera del alcance del selector aquí. */
+  & .indicator {
+    display: none;
+    position: absolute;
+    background: var(--indicator-color);
+    border-radius: 2px;
+  }
+
+  & .tab-start,
+  & .tab-end {
+    display: inline-flex;
+    align-items: center;
+
+    &:empty { display: none; }
+  }
+
+  & .tab-close {
+    width: 1.2em;
+    height: 1.2em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+    transition: opacity 120ms ease, background 120ms ease;
+
+    &:hover { opacity: 1; background: var(--is-bg-elev, rgba(255, 255, 255, 0.1)); }
+    &[hidden] { display: none; }
+  }
 }
 
-:host([placement="top"]) is-tab[data-active]::after,
-:host([placement="bottom"]) is-tab[data-active]::after {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  height: 2px;
-  background: var(--indicator-color);
-  border-radius: 2px;
-}
-:host([placement="top"])    is-tab[data-active]::after { bottom: calc(var(--track-width) * -1); }
-:host([placement="bottom"]) is-tab[data-active]::after { top:    calc(var(--track-width) * -1); }
-:host([placement="start"])  is-tab[data-active]::after,
-:host([placement="end"])    is-tab[data-active]::after {
-  content: '';
-  position: absolute;
-  inset-block: 0;
-  width: 2px;
-  background: var(--indicator-color);
-  border-radius: 2px;
-}
-:host([placement="start"]) is-tab[data-active]::after { right: calc(var(--track-width) * -1); }
-:host([placement="end"])   is-tab[data-active]::after { left:  calc(var(--track-width) * -1); }
+:host(is-tab:hover:not([disabled])) .tab { color: var(--is-text, inherit); background: var(--is-bg-elev, transparent); }
+:host(is-tab[disabled]) { cursor: not-allowed; opacity: 0.5; }
 
-is-tab .tab-start,
-is-tab .tab-end { display: inline-flex; align-items: center; }
-is-tab .tab-start:empty,
-is-tab .tab-end:empty { display: none; }
-
-is-tab .tab-close {
-  width: 1.2em;
-  height: 1.2em;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 999px;
-  cursor: pointer;
-  color: inherit;
-  opacity: 0.6;
-  transition: opacity 120ms ease, background 120ms ease;
+:host(is-tab[data-active]) {
+  & .tab { color: var(--is-text, inherit); }
+  & .indicator { display: block; }
 }
-is-tab .tab-close:hover { opacity: 1; background: var(--is-bg-elev, rgba(255,255,255,0.1)); }
-is-tab .tab-close[hidden] { display: none; }
+
+/* El placement lo sella el grupo como data-placement: :host-context() no es
+   universal y el shadow del tab no ve el atributo del padre de otro modo. */
+:host(is-tab[data-placement="top"]),
+:host(is-tab[data-placement="bottom"]) {
+  & .indicator { inset-inline: 0; height: 2px; }
+}
+:host(is-tab[data-placement="top"])    .indicator { bottom: calc(var(--track-width) * -1); }
+:host(is-tab[data-placement="bottom"]) .indicator { top:    calc(var(--track-width) * -1); }
+
+/* En vertical el button se ve stretched, y el indicador va al costado. */
+:host(is-tab[data-placement="start"]),
+:host(is-tab[data-placement="end"]) {
+  & .tab { width: 100%; justify-content: flex-start; }
+  & .indicator { inset-block: 0; width: 2px; }
+}
+:host(is-tab[data-placement="start"]) .indicator { right: calc(var(--track-width) * -1); }
+:host(is-tab[data-placement="end"])   .indicator { left:  calc(var(--track-width) * -1); }
 
 /* <is-tab-panel> */
-is-tab-panel {
+:host(is-tab-panel) {
   display: block;
-}
-is-tab-panel[hidden] { display: none; }
-is-tab-panel .panel {
-  padding: 0.5em 0;
-}
 
-/* <is-tab> en vertical: el button se ve stretched */
-:host([placement="start"]) is-tab button.tab,
-:host([placement="end"])   is-tab button.tab {
-  width: 100%;
-  justify-content: flex-start;
+  & .panel { padding: 0.5em 0; }
 }
+:host(is-tab-panel[hidden]) { display: none; }

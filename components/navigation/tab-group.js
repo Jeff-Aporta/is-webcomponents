@@ -127,6 +127,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'placement') {
         if (newVal && !VALID_PLACEMENT.includes(newVal)) this.setAttribute('placement', 'top');
+        else this.#syncPanels();
       }
       if (name === 'activation') {
         if (newVal && !VALID_ACTIVATION.includes(newVal)) this.setAttribute('activation', 'auto');
@@ -190,6 +191,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const activeName = this.active;
       for (const t of tabs) {
         const on = t.getAttribute('panel') === activeName;
+        // El shadow del <is-tab> no puede leer el placement del grupo
+        // (:host-context no es universal): se lo sellamos como atributo.
+        t.setAttribute('data-placement', this.placement);
         t.toggleAttribute('active', on);
         if (on) t.setAttribute('aria-selected', 'true');
         else t.removeAttribute('aria-selected');
