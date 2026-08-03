@@ -155,13 +155,13 @@
        cierre con Esc / light-dismiss, animación y slots de header/footer. Antes
        era un <aside> a mano que reimplementaba todo eso a medias. -->
   <is-drawer id="form" placement="end" label="Personalizar icono" light-dismiss>
-    <is-button slot="header-actions" id="fPrev" color="neutral" variant="ghost" title="Icono anterior" aria-label="Icono anterior">
+    <is-button slot="header-actions" id="fPrev" color="neutral" variant="plain" title="Icono anterior" aria-label="Icono anterior">
       <is-icon icon="mdi:chevron-left"></is-icon>
     </is-button>
-    <is-button slot="header-actions" id="fNext" color="neutral" variant="ghost" title="Icono siguiente" aria-label="Icono siguiente">
+    <is-button slot="header-actions" id="fNext" color="neutral" variant="plain" title="Icono siguiente" aria-label="Icono siguiente">
       <is-icon icon="mdi:chevron-right"></is-icon>
     </is-button>
-    <is-button slot="header-actions" id="fMore" color="neutral" variant="ghost" title="Más opciones" aria-label="Más opciones" aria-expanded="true">
+    <is-button slot="header-actions" id="fMore" color="neutral" variant="plain" title="Más opciones" aria-label="Más opciones" aria-expanded="true">
       <is-icon icon="mdi:tune-variant"></is-icon>
     </is-button>
 
@@ -520,7 +520,7 @@
             <is-option value="color">Color</is-option>
           </is-select>
           ${sel('fltLicense', 'Licencia', uniqSorted(metas.map((m) => m.license)), 'Cualquiera')}
-          <is-button id="fltReset" color="neutral" variant="ghost">Limpiar</is-button>
+          <is-button id="fltReset" color="neutral" variant="plain">Limpiar</is-button>
         </div>`;
     }
 

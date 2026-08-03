@@ -8,6 +8,17 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - `previews/*.html` = demos. Cada preview es self-contained: importa componentes por `<script type="module src="../components/...">`.
 - Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"insoft|..."}>`. `scripts/preview-boot.js` lo decodifica y setea `data-theme` / `data-palette` en `<html>`. **`prefers-color-scheme` NO se usa** — el tema es explícito.
 - Build: esbuild → `dist/cdn/`. Dev: `node scripts/serve.mjs`. Sin TS, sin framework, sin test runner por defecto.
+- **La marca es `InSoft`** (S mayúscula: el logo la pinta en el color de marca, `in` + `Soft`). El identificador de paleta `insoft` va en minúsculas y **no se toca**: es API (`data-palette`, `value`, claves de objeto). Igual el dominio `insoft.com.co`.
+
+---
+
+## Atributos de enum: valores inventados NO fallan
+
+`<is-button variant="ghost">` cuando el componente solo aceptaba `filled | outlined | plain` **no lanza error, no avisa en consola y no se ve en el DOM**: el atributo no casa con ninguna regla CSS y el elemento se pinta con los valores por defecto. Se coló en 4 sitios sin que nada lo detectara.
+
+- Antes de usar un valor de enum, **verificarlo en el componente**: `const VALID_<ATTR>` en el `.js`, o la línea de JSDoc `*  variant   filled | outlined | plain`.
+- No inventar nombres por analogía con otros design systems (`text`, `ghost`, `info`, `subtle`). Lo que existe está declarado.
+- `tests/attr-enums.test.mjs` recorre las 147 previews y compara cada atributo de enum contra la fuente de verdad del componente. Encontró además `<is-callout color="info">` (callout no tiene `info`) y `<is-button variant="text">`.
 
 ---
 
@@ -67,7 +78,13 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 
 5. **`<is-icon>` inyectado como innerHTML** → no se upgradeaba el shadow DOM, salía el tag vacío o con fallback roto. Fix: `document.createElement('is-icon')` + `setAttribute('icon', 'mdi:...')` y append. Upgrade garantizado porque el script del componente ya cargó.
 
-6. **Cards sin icono de demo** → el usuario no podía navegar al demo del componente desde la card. Fix: JS inyecta un `<button class="card-demo"><is-icon icon="mdi:open-in-new"></button>` en cada `.tile/.collage-card/.lab-card` que tenga un `is-*` de la whitelist. Click → `postMessage('is-select', tag)`.
+6. **`variant="ghost"` inventado** → se usó en 4 sitios del explorador cuando `is-button` solo aceptaba `filled | outlined | plain`. Ningún síntoma: los botones se pintaban con el default. Hoy `ghost` **sí existe** (reposo = outlined, hover = filled) y necesita `--_text-hover` / `--_border-hover`, porque al pasar a filled tienen que cambiar también el texto y el borde, no solo el fondo. No confundir con `plain`, que no tiene borde en ningún estado. Fix del error: verificar el enum antes de usarlo + `tests/attr-enums.test.mjs`.
+
+7. **Dos grafías de la marca conviviendo** → `index.html` componía el wordmark con `accent: 'Soft'` (correcto) mientras `is-palette-selector` usaba `accentLabel: 'soft'`. La misma página mostraba «inSoft» arriba e «insoft» en el selector de paleta. Fix: unificar a `InSoft` en texto visible (83 ocurrencias), **sin** tocar el identificador `insoft`.
+
+8. **Heredoc de bash comiéndose el escapado de una regex** → escribir un test con `cat >> file << 'EOF'` convirtió `\\[` en `\[` y `\${base}` dejó de interpolar, así que la regex del test comparaba contra el literal `${base}` y fallaba por un motivo falso. Fix: escribir archivos con la herramienta de edición, no con heredoc, cuando el contenido lleva backslashes o `${}`.
+
+9. **Cards sin icono de demo** → el usuario no podía navegar al demo del componente desde la card. Fix: JS inyecta un `<button class="card-demo"><is-icon icon="mdi:open-in-new"></button>` en cada `.tile/.collage-card/.lab-card` que tenga un `is-*` de la whitelist. Click → `postMessage('is-select', tag)`.
 
 ---
 
@@ -165,6 +182,14 @@ mantenerlo aparte.
 - Existe `.card-demo` CSS + script que inyecta el botón.
 - `:hover` de `.tile` y `.lab-card` incluye `rotateY/X` (tilt 3D).
 - `:hover` de `.collage-card` setea `--tilt-y` y `--tilt-x`.
+
+### Detectores de inconsistencia (los que avisan solos)
+- `tests/attr-enums.test.mjs` — atributos de enum en previews vs. lo que el componente acepta. **Este es el que caza los errores silenciosos**: valores que no rompen nada visible pero tampoco hacen nada.
+- `tests/brand-casing.test.mjs` — la marca se escribe `InSoft`; comprueba también que el wordmark compuesto lleve `'Soft'` en las dos implementaciones (`index.html` y `is-palette-selector`) y que el identificador `insoft` siga en minúsculas.
+- `tests/icon-viewbox.test.mjs` — viewBox de los SVG contra `viewbox.snapshot.json`.
+- `tests/icon-render.test.mjs` — sin `force-cache`, multicolor preservado, viewBox intacto.
+- `tests/icon-explorer.test.mjs` — scroll propio, búsqueda global, filtros, formulario, uso de `is-*` y embed en `is-icon.html`.
+- `tests/home-invariants.test.mjs` — incluye los invariantes de texto con degradado recortado en modo light.
 
 ### Tests de iconos / explorador
 - `tests/icon-viewbox.test.mjs` — muestrea SVGs de cada colección y exige que el alto del `viewBox` coincida con el grid declarado en `collections.json`. Es el guardián del bug "la familia X no muestra iconos". También exige que `collections.json` cubra todas las familias de `index.json`.
