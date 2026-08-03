@@ -1,7 +1,7 @@
 :host {
   display: block;
   position: relative;
-  --ctrl-bg: var(--is-bg-2, #181b22);
+  --ctrl-bg: var(--is-bg-elev, #1c2128);
   --ctrl-fg: var(--is-text, #e8eaf1);
   --ctrl-border: var(--is-border, #2a2f3a);
   --indicator-active: var(--is-brand, dodgerblue);
@@ -15,7 +15,7 @@
   aspect-ratio: var(--aspect-ratio, 16/9);
   overflow: hidden;
   border-radius: 0.75rem;
-  background: var(--is-bg-2, #181b22);
+  background: var(--is-bg-elev, #1c2128);
   border: 1px solid var(--ctrl-border);
 }
 

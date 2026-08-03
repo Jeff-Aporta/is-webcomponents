@@ -232,7 +232,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       ctx.rect(0, 0, W, H);
       ctx.rect(r.x + r.width, r.y, -r.width, r.height);
       ctx.fill('evenodd');
-      ctx.strokeStyle = 'var(--is-accent)';
+      ctx.strokeStyle = getComputedStyle(this).getPropertyValue('--is-accent').trim() || '#339af0';
       ctx.lineWidth = 1;
       ctx.strokeRect(r.x + 0.5, r.y + 0.5, r.width - 1, r.height - 1);
       ctx.restore();

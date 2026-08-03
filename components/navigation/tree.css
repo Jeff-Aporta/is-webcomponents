@@ -76,7 +76,7 @@ is-tree-item::part(item) {
 }
 
 .expand-toggle:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--is-control-bg-hover, rgba(255, 255, 255, 0.08));
 }
 
 .checkbox {

@@ -2,7 +2,7 @@
   display: inline-block;
   --cell-size: 2.5em;
   --gap: 0.5em;
-  --bg: var(--is-bg-2, #181b22);
+  --bg: var(--is-bg-elev, #1c2128);
   --fg: var(--is-text, #e8eaf1);
   --border: var(--is-border, #2a2f3a);
   --brand: var(--is-brand, dodgerblue);
