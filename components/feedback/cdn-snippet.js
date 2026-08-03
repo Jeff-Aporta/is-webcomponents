@@ -32,6 +32,16 @@ import '../media/icon.js';
         </p>
       </header>
       <ol class="cdn__list">
+        <li class="cdn__row" data-kind="common">
+          <div class="cdn__row-head">
+            <span class="cdn__label">Común · base + paletas (una vez por página)</span>
+            <button type="button" class="cdn__copy" data-copy="common" aria-label="Copiar enlaces comunes">
+              <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
+              Copiar
+            </button>
+          </div>
+          <pre class="cdn__pre" data-slot="common"></pre>
+        </li>
         <li class="cdn__row" data-kind="single">
           <div class="cdn__row-head">
             <span class="cdn__label">Individual · <code data-slot="fileTag"></code></span>
@@ -176,6 +186,8 @@ import '../media/icon.js';
       const category = this.getAttribute('category');
       const fileTag = (tag || '').replace(/^is-/, '');
       this.#urls = {
+        common:       `${base}/is-base.min.css`,
+        commonPalette: `${base}/palettes.min.css`,
         single:   (tag && category) ? `${base}/${category}/${fileTag}.min.js` : '',
         category: (tag && category) ? `${base}/${category}/category.${category}.min.js` : '',
         all:      `${base}/all.min.js`,
@@ -193,6 +205,7 @@ import '../media/icon.js';
       const titleEl = root.querySelector('.cdn__title');
       const fileTagEl = root.querySelector('[data-slot="fileTag"]');
       const catLabelEl = root.querySelector('[data-slot="category"]');
+      const commonPre = root.querySelector('[data-slot="common"]');
       const singlePre = root.querySelector('[data-slot="single"]');
       const catPre = root.querySelector('[data-slot="category-pre"]');
       const allPre = root.querySelector('[data-slot="all"]');
@@ -203,10 +216,16 @@ import '../media/icon.js';
       if (fileTagEl) fileTagEl.textContent = (tag && category) ? `${category}/${tag.replace(/^is-/, '')}.min.js` : '—';
       if (catLabelEl) catLabelEl.textContent = category ? `${category}/category.${category}.min.js` : '—';
 
-      const mk = (url) => url ? `<script type="module" src="${escapeHtml(url)}"><\/script>` : '—';
-      if (singlePre) singlePre.innerHTML = escapeHtml(mk(this.#urls.single));
-      if (catPre) catPre.innerHTML = escapeHtml(mk(this.#urls.category));
-      if (allPre) allPre.innerHTML = escapeHtml(mk(this.#urls.all));
+      const mkCss = (url) => url ? `<link rel="stylesheet" href="${escapeHtml(url)}">` : '';
+      const mkJs = (url) => url ? `<script type="module" src="${escapeHtml(url)}"><\/script>` : '—';
+
+      // Sólo se enlazan los CSS globales: el .min.css de cada componente lo
+      // carga adoptCss() en su shadow leyendo la ruta hermana del .min.js.
+      const commonSnippet = [mkCss(this.#urls.common), mkCss(this.#urls.commonPalette)].join('\n');
+      if (commonPre) commonPre.innerHTML = escapeHtml(commonSnippet);
+      if (singlePre) singlePre.innerHTML = escapeHtml(mkJs(this.#urls.single));
+      if (catPre) catPre.innerHTML = escapeHtml(mkJs(this.#urls.category));
+      if (allPre) allPre.innerHTML = escapeHtml(mkJs(this.#urls.all));
 
       // Si no hay tag, ocultamos la fila individual para no mostrar placeholder inútil.
       const singleRow = root.querySelector('[data-kind="single"]');
@@ -271,9 +290,16 @@ import '../media/icon.js';
       if (!btn) return;
       e.preventDefault();
       const kind = btn.dataset.copy;
-      const text = kind === 'dep'
-        ? (btn.dataset.copyValue || '')
-        : (this.#urls[kind] ? `<script type="module" src="${this.#urls[kind]}"><\/script>` : '');
+      const asCss = (u) => (u ? `<link rel="stylesheet" href="${u}">` : '');
+      const asJs = (u) => (u ? `<script type="module" src="${u}"><\/script>` : '');
+      let text = '';
+      if (kind === 'dep') {
+        text = btn.dataset.copyValue || '';
+      } else if (kind === 'common') {
+        text = [asCss(this.#urls.common), asCss(this.#urls.commonPalette)].filter(Boolean).join('\n');
+      } else {
+        text = asJs(this.#urls[kind]);
+      }
       if (!text) return;
       await copyText(text);
       const original = btn.innerHTML;

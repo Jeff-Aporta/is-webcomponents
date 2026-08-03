@@ -127,6 +127,15 @@ function mountCdnSnippet() {
   snippet.setAttribute('category', matches[0].category || '');
   snippet.setAttribute('title', `CDN · ${matches[0].title || matches[0].tag}`);
   host.appendChild(snippet);
+
+  // Enlace al LLM.md del repo, visible en la página (fuera del shadow DOM de
+  // <is-cdn-snippet>) para que agentes/personas que caen en el preview lo
+  // encuentren sin tener que buscarlo.
+  const llmLink = document.createElement('p');
+  llmLink.className = 'preview-chrome__llm-link';
+  const llmHref = new URL('../LLM.md', location.href).href;
+  llmLink.innerHTML = `<a href="${llmHref}">Ver LLM.md</a>`;
+  host.appendChild(llmLink);
 }
 
 function mount() {

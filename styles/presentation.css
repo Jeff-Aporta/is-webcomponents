@@ -451,11 +451,23 @@ is-demo[contain],
 
 .demo-code-dd .demo-code-btn { position: static; top: auto; right: auto; }
 
+/* is-dropdown::part(menu) trae max-width:20rem + overflow:auto pensado para
+   menús cortos: aquí abre paso al ancho real del panel de código y le quita
+   su propio scroll, así el único scroll horizontal que queda es el del
+   <pre> (demo-code-pop__pre). Sin esto había dos scrollbars horizontales
+   anidados: el del ::part(menu) y el del <pre>. */
+.demo-code-dd::part(menu) {
+  max-width: min(48rem, calc(100vw - 3rem));
+  overflow: visible;
+  padding: 0;
+}
+
 .demo-code-pop {
+  position: relative;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: min(32rem, calc(100vw - 3rem));
+  width: min(48rem, calc(100vw - 3rem));
   max-height: min(70vh, 26rem);
   margin: 0;
   padding: 0;
@@ -467,19 +479,73 @@ is-demo[contain],
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 3rem 0.5rem 0.75rem;
   border-bottom: 1px solid var(--is-border-soft);
   background: var(--is-bg-soft);
 }
-.demo-code-pop__title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--is-text-dim);
+.demo-code-pop__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-inline-end: auto;
 }
-.demo-code-pop__copy { font-size: 0.9rem; }
+/* Switch de nivel de minimalidad: component | category | all, con <is-tab-group>. */
+.demo-code-pop__level {
+  --track-width: 2px;
+  font-size: 0.7rem;
+
+  &::part(nav) { padding: 0; }
+  &::part(tabs) { gap: 0.4rem; }
+  /* Sin <is-tab-panel>: el body vacío solo aportaría un hueco. */
+  &::part(body) { display: none; }
+
+  & is-tab {
+    &::part(base) {
+      padding: 0.2rem 0.4rem;
+      gap: 0.3em;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: lowercase;
+      color: var(--is-text-dim);
+    }
+    &:hover::part(base),
+    &[aria-selected="true"]::part(base) { color: var(--is-text); }
+  }
+}
+
+/* Cuántos <script> emite cada nivel. Va en el slot `end` del <is-tab>. */
+.demo-code-pop__count {
+  min-width: 1.35em;
+  padding: 0 0.3em;
+  border-radius: 999px;
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--is-text-dim);
+  background: var(--is-bg-elev);
+
+  &:empty { display: none; }
+}
+is-tab[aria-selected="true"] .demo-code-pop__count {
+  color: var(--is-bg);
+  background: var(--is-brand, var(--is-accent));
+}
+.demo-code-pop__size {
+  font-size: 0.7rem;
+  color: var(--is-text-dim);
+  white-space: nowrap;
+}
+.demo-code-pop__copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  z-index: 1;
+  font-size: 0.9rem;
+}
 .demo-code-pop__pre {
   margin: 0 !important;
   border: 0 !important;
@@ -489,7 +555,14 @@ is-demo[contain],
   flex: 0 1 auto;
   min-height: 4rem;
   max-height: min(60vh, 22rem);
+  /* Colchón por si la barra crece a dos líneas (switch + tamaño) y el botón
+     de copiar (absolute, anclado al popup) queda más bajo de lo normal. */
+  padding-top: 0.5rem !important;
   overflow: auto;
+  overflow-x: auto;
+  white-space: pre;
+  width: 100%;
+  max-width: none;
 }
 
 .demo-label {

@@ -38,6 +38,7 @@
     ensureComponent('is-icon', './icon.js'),
     ensureComponent('is-dropdown', '../actions/dropdown.js'),
     ensureComponent('is-copy-button', '../actions/copy-button.js'),
+    ensureComponent('is-tab-group', '../navigation/tab-group.js'),
   ]);
 
   /** CDN base — el snippet debe usar URLs públicas para que sea portable. */
@@ -64,6 +65,50 @@
     'tooltip', 'treemap', 'video', 'video-playlist', 'waterfall-chart',
     'year-calendar',
   ]);
+
+  /** Tamaño humano-legible: 812 → "812 B", 12800 → "12.5 KB". */
+  const humanSize = (bytes) => {
+    if (bytes < 1024) return `${bytes} B`;
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  };
+
+  /** sizes.json lo emite el build: {ruta relativa a dist/cdn → bytes}. Se pide
+   *  UNA vez (promesa cacheada) en vez de un HEAD por archivo, que era lento y
+   *  jsDelivr no siempre responde con Content-Length. */
+  let sizesPromise = null;
+  const loadSizes = () => {
+    sizesPromise ??= fetch(`${CDN_BASE}/sizes.json`)
+      .then((r) => (r.ok ? r.json() : {}))
+      .catch(() => ({}));
+    return sizesPromise;
+  };
+
+  /** Suma el peso REAL de lo que descarga el snippet. `all.min.js` y los
+   *  `category.*.min.js` son sólo listas de imports (~250 B), así que sumar la
+   *  url literal daría el resultado al revés: "all" saldría como el más
+   *  liviano. Aquí se expanden a los archivos que acaban bajando. */
+  const totalSize = async (urls) => {
+    const sizes = await loadSizes();
+    const keys = Object.keys(sizes);
+    if (!keys.length) return null;
+
+    const paths = new Set();
+    const isComponentJs = (k) => /^[^/]+\/[^/]+\.min\.js$/.test(k) && !/\/category\./.test(k);
+    for (const url of urls) {
+      const path = url.startsWith(CDN_BASE) ? url.slice(CDN_BASE.length + 1) : url;
+      paths.add(path);
+      if (path === 'all.min.js') {
+        for (const k of keys) if (isComponentJs(k)) paths.add(k);
+      } else {
+        const cat = path.match(/^([^/]+)\/category\.[^/]+\.min\.js$/)?.[1];
+        if (cat) for (const k of keys) if (isComponentJs(k) && k.startsWith(`${cat}/`)) paths.add(k);
+      }
+    }
+
+    const known = [...paths].map((p) => sizes[p]).filter((s) => typeof s === 'number');
+    if (!known.length) return null;
+    return known.reduce((a, b) => a + b, 0);
+  };
 
   /** Devuelve un Set con los nombres cortos (sin prefijo `is-`) de los
    *  componentes <is-*> que aparecen dentro del demo. */
@@ -119,8 +164,31 @@
     return out.join('\n');
   };
 
-  /** Fragmento mínimo: dependencias del CDN arriba, markup del ejemplo debajo. */
-  const buildSnippet = async (demo) => {
+  /** Niveles de minimalidad del snippet, del más al menos granular. */
+  const LEVELS = ['component', 'category', 'all'];
+  const DEFAULT_LEVEL = 'all';
+
+  /** Cuántos <script> emite cada nivel para los tags de un demo. Es lo único
+   *  que los diferencia ahora que el CSS no se enlaza: sirve de badge en los
+   *  tabs para que se vea el trade-off (menos archivos ↔ más peso). */
+  const levelScriptCount = (tags, level) => {
+    if (level === 'all') return 1;
+    if (level === 'category') return new Set(tags.map(catOf)).size;
+    return tags.length;
+  };
+
+  // dist/cdn folderizado: cada componente vive en <categoria>/<tag>.min.js.
+  const catOf = (t) => {
+    const entry = (window.__IS_MANIFEST__ || []).find((c) => c.tag === `is-${t}` || c.tag === t);
+    return entry?.category || 'helpers';
+  };
+
+  /** Fragmento mínimo: dependencias del CDN arriba, markup del ejemplo debajo.
+   *  `level` controla cuánto se agrupan los `<script>`/`<link>` de los
+   *  componentes detectados: "component" (uno por tag, default), "category"
+   *  (un bundle por categoría única) o "all" (el bundle global). Devuelve
+   *  también `urls`: las direcciones usadas, para poder sumar su peso. */
+  const buildSnippet = async (demo, level = DEFAULT_LEVEL) => {
     const raw = demo.getAttribute('data-code');
     const inner = raw != null && raw !== ''
       ? raw.trim()
@@ -129,30 +197,43 @@
     const tags = collectTags(demo);
     const cssTags = tags.filter((t) => COMPONENTS_WITH_CSS.has(t));
 
-    // dist/cdn folderizado: cada componente vive en <categoria>/<tag>.min.js.
-    const catOf = (t) => {
-      const entry = (window.__IS_MANIFEST__ || []).find((c) => c.tag === `is-${t}` || c.tag === t);
-      return entry?.category || 'helpers';
-    };
     const lines = [];
-    lines.push('<link rel="stylesheet" href="' + CDN_BASE + '/is-base.min.css">');
-    lines.push('<link rel="stylesheet" href="' + CDN_BASE + '/palettes.min.css">');
-    for (const t of cssTags) {
-      lines.push(`<link rel="stylesheet" href="${CDN_BASE}/${catOf(t)}/${t}.min.css">`);
+    const urls = [];
+    const pushCss = (href) => { lines.push(`<link rel="stylesheet" href="${href}">`); urls.push(href); };
+    const pushJs = (src) => { lines.push(`<script type="module" src="${src}"><\/script>`); urls.push(src); };
+
+    pushCss(`${CDN_BASE}/is-base.min.css`);
+    // Sólo hay un palettes.min.css con las 3 paletas juntas (no hay archivo
+    // por paleta), así que siempre se referencia entero.
+    pushCss(`${CDN_BASE}/palettes.min.css`);
+
+    // El .min.css de cada componente NO se enlaza: adoptCss() lo carga solo
+    // en el shadow leyendo la ruta hermana del .min.js. Igual pesa, así que
+    // entra en el cálculo aunque no aparezca en el snippet.
+    for (const t of cssTags) urls.push(`${CDN_BASE}/${catOf(t)}/${t}.min.css`);
+
+    if (level === 'all') {
+      pushJs(`${CDN_BASE}/all.min.js`);
+    } else if (level === 'category') {
+      const cats = [...new Set(tags.map(catOf))].sort();
+      for (const c of cats) pushJs(`${CDN_BASE}/${c}/category.${c}.min.js`);
+    } else {
+      // Los módulos ya son diferidos: no hace falta `defer` ni ponerlos al final.
+      for (const t of tags) pushJs(`${CDN_BASE}/${catOf(t)}/${t}.min.js`);
     }
-    // Los módulos ya son diferidos: no hace falta `defer` ni ponerlos al final.
-    for (const t of tags) {
-      lines.push(`<script type="module" src="${CDN_BASE}/${catOf(t)}/${t}.min.js"><\/script>`);
-    }
+
     if (lines.length) lines.push('');
     lines.push(inner);
 
-    return lines.join('\n');
+    return { snippet: lines.join('\n'), urls };
   };
 
   const highlight = (pre) => {
     if (!pre.getAttribute('data-lang')) pre.setAttribute('data-lang', 'html');
     delete pre.dataset.cm;
+    // paintOne() prioriza dataset.cmSource sobre textContent: si queda el del
+    // render anterior, al cambiar de nivel se repinta el snippet viejo.
+    delete pre.dataset.cmSource;
     if (typeof window.__isHighlightCode === 'function') {
       window.__isHighlightCode(pre);
       return;
@@ -190,7 +271,13 @@
     pop.className = 'demo-code-pop';
     pop.innerHTML = `
       <div class="demo-code-pop__bar">
-        <span class="demo-code-pop__title">Código del ejemplo</span>
+        <div class="demo-code-pop__meta">
+          <is-tab-group class="demo-code-pop__level" active="${DEFAULT_LEVEL}" activation="manual"
+                         without-scroll-controls aria-label="Nivel de agrupado">
+            ${LEVELS.map((id) => `<is-tab slot="nav" panel="${id}">${id}<span slot="end" class="demo-code-pop__count" data-level="${id}"></span></is-tab>`).join('')}
+          </is-tab-group>
+          <span class="demo-code-pop__size" aria-live="polite"></span>
+        </div>
         <is-copy-button class="demo-code-pop__copy" copy-label="Copiar" success-label="Copiado"
                         tooltip-placement="left"></is-copy-button>
       </div>
@@ -199,17 +286,36 @@
 
     const pre = pop.querySelector('pre');
     const copyBtn = pop.querySelector('is-copy-button');
+    const sizeEl = pop.querySelector('.demo-code-pop__size');
+    const levelTabs = pop.querySelector('.demo-code-pop__level');
+    let level = DEFAULT_LEVEL;
 
     const renderSnippet = async () => {
-      const snippet = await buildSnippet(demo);
+      const tags = collectTags(demo);
+      for (const el of pop.querySelectorAll('.demo-code-pop__count')) {
+        const n = levelScriptCount(tags, el.dataset.level);
+        el.textContent = n;
+        el.title = `${n} ${n === 1 ? 'script' : 'scripts'}`;
+      }
+      const { snippet, urls } = await buildSnippet(demo, level);
       copyBtn.setAttribute('value', snippet);
-      if (pre.dataset.filled === '1' && pre.dataset.src === snippet) return;
-      pre.textContent = snippet;
-      pre.dataset.src = snippet;
-      delete pre.dataset.cm;
-      highlight(pre);
-      pre.dataset.filled = '1';
+      if (!(pre.dataset.filled === '1' && pre.dataset.src === snippet)) {
+        pre.textContent = snippet;
+        pre.dataset.src = snippet;
+        delete pre.dataset.cm;
+        highlight(pre);
+        pre.dataset.filled = '1';
+      }
+      sizeEl.textContent = 'calculando peso…';
+      const bytes = await totalSize(urls);
+      sizeEl.textContent = bytes == null ? '' : `≈ ${humanSize(bytes)}`;
     };
+
+    levelTabs.addEventListener('is-tab-show', (e) => {
+      if (e.detail.name === level) return;
+      level = e.detail.name;
+      renderSnippet().catch(console.error);
+    });
 
     // El snippet se calcula al abrir: el demo puede haber cambiado por JS.
     dd.addEventListener('is-show', () => { renderSnippet().catch(console.error); });
