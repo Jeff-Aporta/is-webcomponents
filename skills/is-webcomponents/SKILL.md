@@ -14,8 +14,19 @@ description: >-
 
 ```bash
 npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
-# espejo CDN (pin al mismo commit que el kit):
-npx skills add https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-webcomponents
+```
+
+La skill y los MD LLM viven en **fuente** (`skills/`, `components/**/*.md`), no en `dist/cdn`.
+
+### Prompt para el LLM
+
+```
+Instala en este entorno la skill is-webcomponents del repo Jeff-Aporta/is-webcomponents.
+Ejecuta exactamente: npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
+La skill vive en skills/is-webcomponents/ del repo (fuente), no en dist/.
+Tras instalarla, úsala siempre que construyas o edites UI con el kit is-* (CDN all.min.js / is-base / palettes):
+reutiliza los tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
+Consulta components/LLM.md y el MD del módulo antes de inventar API.
 ```
 
 Fuente de verdad: [components/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)  

@@ -164,10 +164,6 @@ function llmDocs(entry) {
     label: 'Skill agentes',
     url: `${LLM_BASE}/skills/is-webcomponents/SKILL.md`,
   });
-  docs.push({
-    label: 'Skill CDN',
-    url: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-webcomponents/SKILL.md',
-  });
   return docs;
 }
 

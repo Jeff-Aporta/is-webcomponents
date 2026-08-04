@@ -94,9 +94,22 @@ import '../media/icon.js';
             </button>
           </div>
           <pre class="cdn__pre" data-slot="skill"></pre>
-          <p class="cdn__dep-note" data-slot="skill-note">
-            Instala la skill <code>is-webcomponents</code> para Cursor / Claude Code / Copilot.
-            Obliga a reusar tags <code>is-*</code> del kit en vez de reinventarlos.
+          <p class="cdn__dep-note">
+            Vive en fuente <code>skills/is-webcomponents/</code> (no en <code>dist/</code>).
+            Docs LLM del kit: <code>components/**/LLM.md</code> y MD de módulo.
+          </p>
+        </li>
+        <li class="cdn__row" data-kind="skill-prompt">
+          <div class="cdn__row-head">
+            <span class="cdn__label">Prompt LLM · instalar skill</span>
+            <button type="button" class="cdn__copy" data-copy="skill-prompt" aria-label="Copiar prompt para que el LLM instale la skill">
+              <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
+              Copiar
+            </button>
+          </div>
+          <pre class="cdn__pre" data-slot="skill-prompt"></pre>
+          <p class="cdn__dep-note">
+            Pégalo al agente (Cursor / Claude / Copilot) para que instale la skill en su sistema.
           </p>
         </li>
       </ol>
@@ -113,12 +126,20 @@ import '../media/icon.js';
     static get observedAttributes() { return OBSERVED; }
 
     #mounted = false;
-    #urls = { single: '', category: '', all: '', skill: '', skillCdn: '' };
+    #urls = { single: '', category: '', all: '', skill: '', skillPrompt: '' };
     #onHighlightReady = () => this.#render();
     #deps = [];
     #docs = [];
     #resolvedBase = '';
     #skillCmd = 'npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents';
+    #skillPrompt = [
+      'Instala en este entorno la skill is-webcomponents del repo Jeff-Aporta/is-webcomponents.',
+      'Ejecuta exactamente: npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents',
+      'La skill vive en skills/is-webcomponents/ del repo (fuente), no en dist/.',
+      'Tras instalarla, úsala siempre que construyas o edites UI con el kit is-* (CDN all.min.js / is-base / palettes):',
+      'reutiliza los tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.',
+      'Consulta components/LLM.md y el MD del módulo antes de inventar API.',
+    ].join('\n');
 
     constructor() {
       super();
@@ -271,8 +292,6 @@ import '../media/icon.js';
       const tag = this.getAttribute('tag');
       const category = this.getAttribute('category');
       const fileTag = (tag || '').replace(/^is-/, '');
-      // Skill publicada en dist/cdn/skills/ (mismo pin SHA que el resto del CDN).
-      const skillDir = `${base}/skills/is-webcomponents`;
       this.#urls = {
         common: `${base}/is-base.min.css`,
         commonPalette: `${base}/palettes.min.css`,
@@ -280,7 +299,7 @@ import '../media/icon.js';
         category: (tag && category) ? `${base}/${category}/category.${category}.min.js` : '',
         all: `${base}/all.min.js`,
         skill: this.#skillCmd,
-        skillCdn: skillDir,
+        skillPrompt: this.#skillPrompt,
       };
     }
 
@@ -300,6 +319,7 @@ import '../media/icon.js';
       const catPre = root.querySelector('[data-slot="category-pre"]');
       const allPre = root.querySelector('[data-slot="all"]');
       const skillPre = root.querySelector('[data-slot="skill"]');
+      const skillPromptPre = root.querySelector('[data-slot="skill-prompt"]');
 
       const title = this.getAttribute('title');
       if (titleEl && title) titleEl.textContent = title;
@@ -317,13 +337,8 @@ import '../media/icon.js';
       if (singlePre) singlePre.innerHTML = escapeHtml(mkJs(this.#urls.single));
       if (catPre) catPre.innerHTML = escapeHtml(mkJs(this.#urls.category));
       if (allPre) allPre.innerHTML = escapeHtml(mkJs(this.#urls.all));
-      if (skillPre) {
-        skillPre.innerHTML = escapeHtml([
-          this.#urls.skill,
-          '# espejo CDN (mismo commit que el kit)',
-          `npx skills add ${this.#urls.skillCdn}`,
-        ].join('\n'));
-      }
+      if (skillPre) skillPre.innerHTML = escapeHtml(this.#urls.skill);
+      if (skillPromptPre) skillPromptPre.innerHTML = escapeHtml(this.#urls.skillPrompt);
 
       // Si no hay tag, ocultamos la fila individual para no mostrar placeholder inútil.
       const singleRow = root.querySelector('[data-kind="single"]');
@@ -405,6 +420,8 @@ import '../media/icon.js';
         text = btn.dataset.copyValue || '';
       } else if (kind === 'skill') {
         text = this.#urls.skill || this.#skillCmd;
+      } else if (kind === 'skill-prompt') {
+        text = this.#urls.skillPrompt || this.#skillPrompt;
       } else if (kind === 'common') {
         text = [asCss(this.#urls.common), asCss(this.#urls.commonPalette)].filter(Boolean).join('\n');
       } else {
