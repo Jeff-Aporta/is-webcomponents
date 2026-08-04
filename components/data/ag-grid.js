@@ -302,6 +302,7 @@ export class IsAgGrid extends ElementBase {
     super();
     this.initShadow();
     adoptCss(this.shadowRoot, import.meta.url);
+    ensureFloatingStyles();
     this.#cacheRefs();
     this.#bindStaticEvents();
   }
@@ -367,9 +368,18 @@ export class IsAgGrid extends ElementBase {
     // Viewport click delegation (sort, action, edit)
     this.#viewport.addEventListener('click', (e) => this.#onViewportClick(e));
 
-    // Group panel
+    // Group panel (chips + expand/collapse). El ungroup vive aquí: el chip
+    // está fuera de #viewport, así que #onViewportClick nunca lo ve.
     this.#groupPanel.addEventListener('click', (e) => {
-      const btn = e.target.closest('button');
+      const ungroup = e.target.closest('[data-act="ungroup"]');
+      if (ungroup) {
+        e.preventDefault();
+        e.stopPropagation();
+        const colId = ungroup.dataset.colId;
+        if (colId) this.#api.removeRowGroupCol(colId);
+        return;
+      }
+      const btn = e.target.closest('button[data-action]');
       if (!btn) return;
       if (btn.dataset.action === 'expand-all') this.#api.expandAllGroups();
       if (btn.dataset.action === 'collapse-all') this.#api.collapseAllGroups();
@@ -1261,13 +1271,6 @@ export class IsAgGrid extends ElementBase {
       return;
     }
 
-    // Group chip ungroup
-    const chipX = e.target.closest('[data-act="ungroup"]');
-    if (chipX) {
-      this.#api.removeRowGroupCol(chipX.dataset.colId);
-      return;
-    }
-
     // Row selection + cell click + edit + action
     const row = e.target.closest('.mim-dg__row[data-row-kind="leaf"]');
     if (row) {
@@ -1386,17 +1389,32 @@ export class IsAgGrid extends ElementBase {
 
   /* ── Helpers ──────────────────────────────────────────────────────────── */
 
+  /** Resuelve longitudes CSS (`40`, `40px`, `2.5rem`, `1.5em`) a px. */
+  #cssLengthPx(prop, fallback) {
+    const raw = getComputedStyle(this).getPropertyValue(prop).trim();
+    if (!raw) return fallback;
+    const n = parseFloat(raw);
+    if (!Number.isFinite(n) || n <= 0) return fallback;
+    if (raw.endsWith('rem')) {
+      const rootFs = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      return n * rootFs;
+    }
+    if (raw.endsWith('em')) {
+      const fs = parseFloat(getComputedStyle(this).fontSize) || 16;
+      return n * fs;
+    }
+    return n; // px o unitless → px
+  }
+
   #rowHeight() {
-    const v = getComputedStyle(this).getPropertyValue('--is-grid-row-h');
-    const parsed = parseFloat(v);
-    if (Number.isFinite(parsed) && parsed > 0) return parsed;
-    return DENSITY_ROW_HEIGHT[this.#density] ?? DENSITY_ROW_HEIGHT[Density.NORMAL];
+    return this.#cssLengthPx(
+      '--is-grid-row-h',
+      DENSITY_ROW_HEIGHT[this.#density] ?? DENSITY_ROW_HEIGHT[Density.NORMAL],
+    );
   }
 
   #headerHeight() {
-    const v = getComputedStyle(this).getPropertyValue('--is-grid-header-h');
-    const parsed = parseFloat(v);
-    return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_HEADER_HEIGHT;
+    return this.#cssLengthPx('--is-grid-header-h', DEFAULT_HEADER_HEIGHT);
   }
 
   /* ── Public API ───────────────────────────────────────────────────────── */
@@ -1605,6 +1623,136 @@ function uniqueValuesSafe(rows, col) {
   const set = new Set();
   for (const n of rows) set.add(cellText(col, n));
   return [...set].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+}
+
+/** Menú/filtro se montan en document.body (fuera del shadow) — CSS global único. */
+const FLOATING_STYLE_ID = 'is-ag-grid-floating-styles';
+const FLOATING_CSS = /* css */ `
+.mim-dg__menu,
+.mim-dg__filter {
+  position: fixed;
+  z-index: 10050;
+  min-width: 12.5rem;
+  max-width: min(22rem, calc(100vw - 1rem));
+  max-height: min(70vh, 28rem);
+  overflow: auto;
+  margin: 0;
+  padding: 0.3rem;
+  border: 1px solid var(--is-border, #2a3140);
+  border-radius: var(--is-radius, 10px);
+  background: var(--is-bg-elev, #12151a);
+  color: var(--is-text, #e6edf3);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 45%), 0 0 0 1px color-mix(in srgb, var(--is-accent, #1e90ff) 12%, transparent);
+  font: 0.82rem/1.35 var(--is-font-sans, system-ui, sans-serif);
+}
+.mim-dg__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  padding: 0.4rem 0.55rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.mim-dg__menu-item:hover,
+.mim-dg__menu-item:focus-visible {
+  background: color-mix(in srgb, var(--is-accent, #1e90ff) 16%, transparent);
+  color: var(--is-accent, #1e90ff);
+  outline: none;
+}
+.mim-dg__menu-item is-icon { flex: 0 0 auto; }
+.mim-dg__menu-sep {
+  height: 1px;
+  margin: 0.3rem 0.35rem;
+  background: var(--is-border-soft, #3a4252);
+}
+.mim-dg__filter {
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.mim-dg__filter-field,
+.mim-dg__filter select,
+.mim-dg__filter input {
+  width: 100%;
+  font: inherit;
+  color: var(--is-text, #e6edf3);
+  background: var(--is-bg-soft, #0e1116);
+  border: 1px solid var(--is-border, #2a3140);
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+}
+.mim-dg__filter-actions,
+.mim-dg__filter-actions-row {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.mim-dg__filter-btn,
+.mim-dg__filter-link {
+  font: inherit;
+  font-size: 0.78rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid var(--is-border, #2a3140);
+  background: transparent;
+  color: inherit;
+  padding: 0.3rem 0.65rem;
+}
+.mim-dg__filter-btn:hover,
+.mim-dg__filter-link:hover {
+  background: color-mix(in srgb, var(--is-accent, #1e90ff) 14%, transparent);
+  color: var(--is-accent, #1e90ff);
+}
+.mim-dg__filter-btn[data-act="apply"] {
+  background: color-mix(in srgb, var(--is-accent, #1e90ff) 22%, transparent);
+  border-color: color-mix(in srgb, var(--is-accent, #1e90ff) 45%, var(--is-border, #2a3140));
+  color: var(--is-accent, #1e90ff);
+  font-weight: 700;
+}
+.mim-dg__filter-set {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 12rem;
+  overflow: auto;
+  border: 1px solid var(--is-border-soft, #3a4252);
+  border-radius: 6px;
+  padding: 0.25rem;
+}
+.mim-dg__filter-set-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.35rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  width: 100%;
+}
+.mim-dg__filter-set-item:hover {
+  background: color-mix(in srgb, var(--is-accent, #1e90ff) 12%, transparent);
+}
+`;
+
+function ensureFloatingStyles() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById(FLOATING_STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = FLOATING_STYLE_ID;
+  style.textContent = FLOATING_CSS;
+  document.head.appendChild(style);
 }
 
 if (!customElements.get('is-ag-grid')) {

@@ -315,9 +315,10 @@ Tokens CSS en el host:
     document.getElementById('btnSelAll').addEventListener('click', () => g.api.selectAll());
     document.getElementById('btnCSV').addEventListener('click', () => g.api.exportCSV('catalogo.csv'));
     document.getElementById('btnPage2').addEventListener('click', () => g.api.goToPage(2));
-    document.getElementById('btnCompact').addEventListener('click', () => g.api.setDensity('compact'));
-    document.getElementById('btnNormal').addEventListener('click', () => g.api.setDensity('normal'));
-    document.getElementById('btnComfy').addEventListener('click', () => g.api.setDensity('comfortable'));
+    const gDensity = document.getElementById('grid-density');
+    document.getElementById('btnCompact').addEventListener('click', () => gDensity.api.setDensity('compact'));
+    document.getElementById('btnNormal').addEventListener('click', () => gDensity.api.setDensity('normal'));
+    document.getElementById('btnComfy').addEventListener('click', () => gDensity.api.setDensity('comfortable'));
   </script>
 </body>
 </html>
