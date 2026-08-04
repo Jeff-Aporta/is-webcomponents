@@ -20,20 +20,6 @@
   column-gap: 0;
   row-gap: 0;
 
-  &[orientation="vertical"] {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 1fr var(--_divider-width) 1fr;
-    grid-auto-flow: row;
-    .divider {
-      cursor: row-resize;
-      &::before {
-        inset-inline: 0;
-        inset-block: calc((var(--_divider-hit-area) - var(--_divider-width)) * -0.5);
-      }
-    }
-    &[data-dragging] { cursor: row-resize; }
-  }
-
   .panel {
     display: flex;
     flex-direction: column;
@@ -82,15 +68,38 @@
     }
   }
 
-  &[data-dragging] {
-    cursor: col-resize;
-    user-select: none;
-    -webkit-user-select: none;
-    .divider { background: var(--is-accent, var(--is-color-brand-500, #e03131)); }
-  }
+}
 
-  &[disabled] .divider {
-    cursor: not-allowed;
-    pointer-events: none;
+/* Los estados del host van al nivel superior y con la forma funcional: anidados
+   como `&[attr]` dentro de `:host {}` el nesting los compila a `:host[attr]`,
+   que no matchea nunca, y la orientación vertical, el arrastre y el disabled
+   quedaban sin estilo. Lo vigila tests/shadow-css-scope.test.mjs. */
+:host([orientation="vertical"]) {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr var(--_divider-width) 1fr;
+  grid-auto-flow: row;
+
+  .divider {
+    cursor: row-resize;
+
+    &::before {
+      inset-inline: 0;
+      inset-block: calc((var(--_divider-hit-area) - var(--_divider-width)) * -0.5);
+    }
   }
+}
+
+:host([orientation="vertical"][data-dragging]) { cursor: row-resize; }
+
+:host([data-dragging]) {
+  cursor: col-resize;
+  user-select: none;
+  -webkit-user-select: none;
+
+  .divider { background: var(--is-accent, var(--is-color-brand-500, #e03131)); }
+}
+
+:host([disabled]) .divider {
+  cursor: not-allowed;
+  pointer-events: none;
 }

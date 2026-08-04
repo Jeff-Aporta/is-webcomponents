@@ -19,15 +19,20 @@
   gap: 1px;
 }
 
-is-tree-item {
+/* Esta hoja la adoptan los shadow de <is-tree> Y <is-tree-item>. Un selector
+   `is-tree-item …` no matchea en ninguno de los dos: desde el padre los items
+   entran slotted (el light DOM no lo alcanza un descendiente) y desde su propio
+   shadow el host queda fuera del árbol. Hay que nombrarlo con :host().
+   Lo vigila tests/shadow-css-scope.test.mjs. */
+:host(is-tree-item) {
   display: block;
 }
 
-is-tree-item:focus {
+:host(is-tree-item:focus) {
   outline: none;
 }
 
-is-tree-item::part(item) {
+:host(is-tree-item) .row {
   cursor: pointer;
   user-select: none;
 }
