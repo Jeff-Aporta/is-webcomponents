@@ -35,6 +35,8 @@
   white-space: normal;
 }
 
-:host([lines]:not([lines="1"])) {
-  max-height: calc(var(--mx-lns, 1) * 1.3em);
-}
+/* `max-height` con un factor hardcoded (1.3) recorta la última línea cuando el
+   `line-height` heredado es > 1.3 (típico 1.4–1.6), y entra en conflicto con
+   `-webkit-line-clamp`, que ya trunca por líneas reales. `-webkit-line-clamp`
+   hace el trabajo solo; mantener el host con altura libre garantiza que el
+   elipsis caiga exactamente al final de la N-ésima línea visible. */

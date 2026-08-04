@@ -214,6 +214,52 @@
   --_text: var(--is-danger-text, var(--is-color-danger-700));
 }
 
+/* info: dato neutral que conviene notar, sin implicar exito ni fallo (p.ej. "Nueva version disponible"). */
+:host([color="info"]) {
+  --_bg: var(--is-color-info-600);
+  --_bg-hover: var(--is-color-info-700);
+  --_bg-active: var(--is-color-info-700);
+  --_border: var(--is-color-info-600);
+  --_text: var(--is-on-brand, #fff);
+}
+:host([color="info"][variant="outlined"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--is-info-soft, var(--is-color-info-50));
+  --_bg-active: var(--is-info-soft-active, var(--is-color-info-100));
+  --_border: var(--is-color-info-500);
+  --_text: var(--is-info-text, var(--is-color-info-700));
+}
+:host([color="info"][variant="plain"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--is-info-soft, var(--is-color-info-50));
+  --_bg-active: var(--is-info-soft-active, var(--is-color-info-100));
+  --_border: transparent;
+  --_text: var(--is-info-text, var(--is-color-info-700));
+}
+
+/* error: estado de fallo ("Error al guardar"), distinto de danger (accion destructiva como "Eliminar"). */
+:host([color="error"]) {
+  --_bg: var(--is-color-error-600);
+  --_bg-hover: var(--is-color-error-700);
+  --_bg-active: var(--is-color-error-700);
+  --_border: var(--is-color-error-600);
+  --_text: var(--is-on-brand, #fff);
+}
+:host([color="error"][variant="outlined"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--is-error-soft, var(--is-color-error-50));
+  --_bg-active: var(--is-error-soft-active, var(--is-color-error-100));
+  --_border: var(--is-color-error-500);
+  --_text: var(--is-error-text, var(--is-color-error-700));
+}
+:host([color="error"][variant="plain"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--is-error-soft, var(--is-color-error-50));
+  --_bg-active: var(--is-error-soft-active, var(--is-color-error-100));
+  --_border: transparent;
+  --_text: var(--is-error-text, var(--is-color-error-700));
+}
+
 :host([color="neutral"][variant="outlined"]) {
   --_bg: transparent;
   --_bg-hover: var(--is-control-bg-hover, #e9ecef);
@@ -268,6 +314,24 @@
   --_bg-hover: var(--is-color-danger-600);
   --_bg-active: var(--is-color-danger-700);
   --_border-hover: var(--is-color-danger-600);
+  --_text-hover: var(--is-on-brand, #fff);
+}
+:host([color="info"][variant="ghost"]) {
+  --_bg: transparent;
+  --_border: var(--is-color-info-500);
+  --_text: var(--is-info-text, var(--is-color-info-700));
+  --_bg-hover: var(--is-color-info-600);
+  --_bg-active: var(--is-color-info-700);
+  --_border-hover: var(--is-color-info-600);
+  --_text-hover: var(--is-on-brand, #fff);
+}
+:host([color="error"][variant="ghost"]) {
+  --_bg: transparent;
+  --_border: var(--is-color-error-500);
+  --_text: var(--is-error-text, var(--is-color-error-700));
+  --_bg-hover: var(--is-color-error-600);
+  --_bg-active: var(--is-color-error-700);
+  --_border-hover: var(--is-color-error-600);
   --_text-hover: var(--is-on-brand, #fff);
 }
 :host([color="neutral"][variant="ghost"]) {
@@ -329,6 +393,20 @@
   --_border: color-mix(in srgb, var(--is-color-danger-500) 35%, transparent);
   --_text: var(--is-danger-text, var(--is-color-danger-700));
 }
+:host([color="info"][variant="soft"]) {
+  --_bg: var(--is-info-soft, var(--is-color-info-50));
+  --_bg-hover: var(--is-info-soft-active, var(--is-color-info-100));
+  --_bg-active: var(--is-info-soft-active, var(--is-color-info-100));
+  --_border: color-mix(in srgb, var(--is-color-info-500) 35%, transparent);
+  --_text: var(--is-info-text, var(--is-color-info-700));
+}
+:host([color="error"][variant="soft"]) {
+  --_bg: var(--is-error-soft, var(--is-color-error-50));
+  --_bg-hover: var(--is-error-soft-active, var(--is-color-error-100));
+  --_bg-active: var(--is-error-soft-active, var(--is-color-error-100));
+  --_border: color-mix(in srgb, var(--is-color-error-500) 35%, transparent);
+  --_text: var(--is-error-text, var(--is-color-error-700));
+}
 
 /* ── text: acción terciaria. Sin caja: solo la etiqueta, subrayada al hover.
    `plain` sí tiñe el fondo; `text` nunca lo hace. ─────────────────────── */
@@ -358,6 +436,14 @@
 :host([color="danger"][variant="text"]) {
   --_text: var(--is-danger-text, var(--is-color-danger-700));
   --_text-hover: var(--is-color-danger-600);
+}
+:host([color="info"][variant="text"]) {
+  --_text: var(--is-info-text, var(--is-color-info-700));
+  --_text-hover: var(--is-color-info-600);
+}
+:host([color="error"][variant="text"]) {
+  --_text: var(--is-error-text, var(--is-color-error-700));
+  --_text-hover: var(--is-color-error-600);
 }
 
 /* ── shape: ortogonal a color y variant ─────────────────────────────────── */

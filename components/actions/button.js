@@ -9,7 +9,7 @@ import '../media/icon.js';
  * y expone parts + custom states para personalización desde fuera.
  *
  * Atributos
- *  color      brand | neutral | success | warning | danger   (default: brand)
+ *  color      brand | neutral | success | warning | danger | info | error   (default: brand)
  *  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
  *  shape        round | rect | pill                          (default: round)
  *                             `round` = radio del tema, `rect` = esquinas vivas,

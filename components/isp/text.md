@@ -96,8 +96,11 @@ No emite eventos propios.
 ## Comportamiento
 
 Con `lines` el host pasa a `display: -webkit-box` con `-webkit-box-orient:
-vertical`, y a partir de dos líneas se limita también `max-height` a
-`calc(var(--mx-lns) * 1.3em)`, igual que ISP.
+vertical` y `-webkit-line-clamp: var(--mx-lns)`, que recorta exactamente a N
+líneas con elipsis independientemente del `line-height` heredado. Antes se
+limitaba también `max-height` a `calc(var(--mx-lns) * 1.3em)` (copia literal de
+ISP), pero con `line-height > 1.3` ese tope se cumplía antes que el clamp y
+cortaba la última línea visible: por eso se eliminó.
 
 No hay atributo `size`: la escala sale del `font-size` heredado.
 

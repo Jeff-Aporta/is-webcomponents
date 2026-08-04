@@ -210,7 +210,7 @@ Documentación de cabecera preservada desde fuente:
 > Usa Shadow DOM con CSS propio, es form-associated (participa en <form>),
 > y expone parts + custom states para personalización desde fuera.
 > Atributos
->  color      brand | neutral | success | warning | danger   (default: brand)
+>  color      brand | neutral | success | warning | danger | info | error   (default: brand)
 >  variant   filled | outlined | plain                     (default: filled)
 >  hue          number (0-360)  color propio para el highlight cuando está
 >                             [selected] dentro de <is-button-group>. Si no
