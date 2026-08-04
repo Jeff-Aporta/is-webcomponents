@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="../../styles/is-base.css" />
   <link rel="stylesheet" href="../../styles/palettes.css" />
   <link rel="stylesheet" href="../../styles/presentation.css" />
-  <script src="../../scripts/highlight-pre.js" defer></script>
-  <script src="../../scripts/demo-code.js" defer></script>
-  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../scripts/demo-code.js"></script>
+  <script type="module" src="../../scripts/docs-chrome.js"></script>
   <script type="module" src="../../scripts/preview-chrome.js"></script>
   <style>
     .grid-tall { --is-grid-height: 30rem; }
@@ -404,6 +404,8 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
   </is-split-panel>
 
   <script type="module">
+    import { paint } from '../../components/_shared/highlight-code.js';
+
     /* ── Datos de ejemplo ─────────────────────────────────────────────── */
     const CITIES = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga', 'Pereira'];
     const NAMES = ['Ana', 'Luis', 'María', 'Carlos', 'Sofía', 'Diego', 'Valentina', 'Andrés', 'Camila', 'Julián', 'Laura', 'Pedro', 'Elena', 'Mateo', 'Lucía', 'Tomás'];
@@ -516,9 +518,7 @@ grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
           '</' + 'is-data-grid>',
         ].join('\n');
         introCode.textContent = code;
-        if (typeof window.__isHighlightCode === 'function') {
-          window.__isHighlightCode(introCode);
-        }
+        paint(introCode);
       }
     }
     for (const type of ['is-sort', 'is-filter', 'is-select', 'is-pagination', 'is-row-update', 'is-column-pin', 'is-export']) {

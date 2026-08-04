@@ -7,8 +7,8 @@
  *
  * Además inyecta automáticamente un `<is-cdn-snippet>` al final de la página
  * del componente, leyendo tag/categoría desde el nombre del archivo y el
- * manifest expuesto por `window.__IS_MANIFEST__`. Los snippets ya no viven
- * en el sidebar — la nav solo lista los componentes.
+ * `manifest.js` importado aquí. Los snippets ya no viven en el sidebar — la
+ * nav solo lista los componentes.
  */
 import '../components/feedback/theme-toggle.js';
 import '../components/actions/button.js';
@@ -17,9 +17,6 @@ import '../components/media/icon.js';
 import '../components/actions/copy-button.js';
 import '../components/feedback/cdn-snippet.js';
 import components from '../manifest.js';
-// Expone el manifest a `window.__IS_MANIFEST__` para que `demo-code.js`
-// pueda agrupar los `<script>` por categoría en el snippet "Ver código".
-window.__IS_MANIFEST__ = components;
 
 const THEMES = new Set(['light', 'dark']);
 const PALETTES = new Set(['insoft', 'contapyme', 'agrowin']);
@@ -147,6 +144,14 @@ function mountCdnSnippet() {
  * de la categoría: no son lo mismo. Los tags de `data-viz` viven repartidos
  * entre `components/charts/` y `components/data-viz/`, así que componer
  * `components/<categoria>/LLM.md` daba rutas inexistentes.
+ *
+ * El "índice global" apunta a `components/LLM.md`, NO al `LLM.md` de la raíz:
+ * son documentos distintos con audiencias distintas. El de la raíz son
+ * convenciones internas del repo (cómo se construye, qué bugs ya se
+ * cometieron) — nada de eso sirve para CONSUMIR un componente. `components/
+ * LLM.md` es el catálogo real: tabla de categorías con sus LLM.md y el
+ * inventario completo de tags. Confundirlos manda a un LLM consumidor a leer
+ * notas de desarrollo del repo en vez de la documentación de la API.
  */
 const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
 
@@ -154,7 +159,7 @@ function llmDocs(entry) {
   const folder = (entry.script || '').replace(/\/[^/]+\.js$/, '').replace(/^\.\.\/\.\.\//, '');
   const docs = [];
   if (folder) docs.push({ label: `Categoría ${entry.category || ''}`.trim(), url: `${LLM_BASE}/${folder}/LLM.md` });
-  docs.push({ label: 'Índice global', url: `${LLM_BASE}/LLM.md` });
+  docs.push({ label: 'Índice global', url: `${LLM_BASE}/components/LLM.md` });
   return docs;
 }
 

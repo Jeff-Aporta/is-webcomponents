@@ -28,8 +28,11 @@
     connectedCallback() {
       this.classList.add('demo');
       this.#syncHeading();
-      // Si demo-code.js ya corrió, se auto-registra; si no, él nos recogerá.
-      if (typeof window.__isDemoEnhance === 'function') window.__isDemoEnhance(this);
+      // Un componente no puede importar de `scripts/`, así que el aviso va por
+      // evento: `demo-code.js` escucha `is-demo-connected` en `document` y
+      // añade el botón "Ver código" a los <is-demo> conectados tarde. Si
+      // demo-code.js aún no cargó, su barrido inicial nos recogerá igual.
+      this.dispatchEvent(new CustomEvent('is-demo-connected', { bubbles: true, composed: true }));
     }
 
     static get observedAttributes() { return ['heading']; }

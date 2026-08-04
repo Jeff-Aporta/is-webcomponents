@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-function-form · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-function-form de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../scripts/demo-code.js"></script>
+  <script type="module" src="../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-function-form">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-function-form&gt;</h2>
+        <p class="lede">
+          Formulario de atributos de una "función" del editor enriquecido: un
+          control por atributo según su <code class="code">tdatributo</code>, y al
+          enviar emite una copia de la función con los valores capturados.
+        </p>
+
+        <is-demo class="demo">
+          <is-function-form id="ffDemo">
+            <script type="application/json">
+              {
+                "ifuncion": 1,
+                "icategoria": 1,
+                "label": "Saludo",
+                "tdfuncion": "entidad",
+                "valorpordefecto": "",
+                "atributos": [
+                  { "iatributo": "nombre", "tdatributo": "string", "label": "Nombre", "requerido": true, "descripcion": "Nombre a saludar", "valor": "" },
+                  { "iatributo": "formal", "tdatributo": "opcion", "label": "Tono", "valor": "informal", "opciones": [
+                    { "opcion": "formal", "label": "Formal" },
+                    { "opcion": "informal", "label": "Informal" }
+                  ] }
+                ]
+              }
+            </script>
+          </is-function-form>
+          <p id="ffLog">Último evento: <code class="code">—</code></p>
+        </is-demo>
+
+        <pre class="code">&lt;is-function-form&gt;
+  &lt;script type="application/json"&gt;
+    { "ifuncion": 1, "label": "Saludo", "atributos": [ ... ] }
+  &lt;/script&gt;
+&lt;/is-function-form&gt;</pre>
+      </section>
+
+      <section class="section" id="edicion">
+        <h2>Edición y borrado</h2>
+        <p class="lede">
+          Con <code class="code">edicion</code> el botón pasa de "Agregar" a
+          "Guardar". Con <code class="code">deletable</code> aparece un botón
+          "Eliminar" que emite <code class="code">is-function-delete</code>.
+        </p>
+
+        <is-demo class="demo">
+          <is-function-form id="ffEdit" edicion deletable>
+            <script type="application/json">
+              {
+                "ifuncion": 2,
+                "label": "Total factura",
+                "tdfuncion": "script",
+                "script": "return `<b>total</b>`;",
+                "atributos": [
+                  { "iatributo": "moneda", "tdatributo": "opcion", "label": "Moneda", "requerido": true, "valor": "COP", "opciones": [
+                    { "opcion": "COP", "label": "Pesos" },
+                    { "opcion": "USD", "label": "Dólares" }
+                  ] }
+                ]
+              }
+            </script>
+          </is-function-form>
+        </is-demo>
+
+        <pre class="code">&lt;is-function-form edicion deletable&gt;&lt;/is-function-form&gt;</pre>
+      </section>
+
+      <script>
+        for (const [name, id] of [['is-function-submit', 'ffLog'], ['is-function-cancel', 'ffLog'], ['is-function-delete', 'ffLog']]) {
+          document.addEventListener(name, (e) => {
+            const log = document.getElementById(id);
+            if (log) log.innerHTML = `Último evento: <code class="code">${name}</code>`;
+          });
+        }
+      </script>
+
+    </is-main>
+  </is-split-panel>
+
+</body>
+</html>

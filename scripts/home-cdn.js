@@ -6,6 +6,7 @@ const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/
 
 // dist/cdn folderizado por categoria: <categoria>/<tag>.min.js
 import manifest from '../manifest.js';
+import { ensureCodeMirror, paint } from '../components/_shared/highlight-code.js';
 const catOf = (name) => manifest.find((c) => c.tag === `is-${name}`)?.category || 'helpers';
 const cdnJs = (name) => `${CDN}/${catOf(name)}/${name}.min.js`;
 const open = String.fromCharCode(60);
@@ -296,19 +297,13 @@ const preB = document.getElementById('cdnBundle');
 if (preJs) preJs.textContent = jsCssSnippet;
 if (preB) preB.textContent = bundleSnippet;
 
-// Resaltado por CodeMirror (puede llegar tarde desde jsDelivr).
-const highlightCdn = () => {
-  if (typeof window.__isHighlightCode !== 'function') return false;
-  window.__isHighlightCode(preJs);
-  window.__isHighlightCode(preB);
-  return true;
-};
-if (!highlightCdn()) {
-  let tries = 0;
-  const iv = setInterval(() => {
-    if (highlightCdn() || ++tries > 60) clearInterval(iv);
-  }, 100);
-}
+// Resaltado por CodeMirror. `ensureCodeMirror()` resuelve cuando el core, el
+// addon runMode y los modos ya bajaron de jsDelivr: se acabó el sondeo por
+// setInterval esperando a que aparezca un global.
+ensureCodeMirror().then(() => {
+  if (preJs) paint(preJs);
+  if (preB) paint(preB);
+}).catch(console.error);
 
 // Tabs.
 const tabs = document.querySelectorAll('.home-cdn__tab');

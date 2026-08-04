@@ -11,47 +11,30 @@
  * reposiciona al hacer scroll; copiar usa <is-copy-button>.
  *
  * Override opcional: data-code="..." | data-no-code
- * Depende de highlight-pre.js (window.__isHighlightCode) e is-icon.
+ *
+ * Es un módulo ES: importa lo que necesita (manifest, cdn-ref, el pintor y los
+ * componentes del chrome) en vez de leerlo de `window.__*`.
  */
-(() => {
-  const iconModuleUrl = (() => {
-    const self = [...document.scripts].find((s) => s.src.includes('demo-code.js'));
-    if (self) return new URL('../components/media/icon.js', self.src).href;
-    return new URL('../components/media/icon.js', location.href).href;
-  })();
+import '../components/media/icon.js';
+import '../components/actions/dropdown.js';
+import '../components/actions/copy-button.js';
+import '../components/navigation/tab-group.js';
+import './highlight-pre.js';
+import { ensureCodeMirror, paint } from '../components/_shared/highlight-code.js';
+import { resolveRef, jsdelivrBase } from '../components/_shared/cdn-ref.js';
+import manifest from '../manifest.js';
 
-  /** Carga un módulo de componente si la página no lo trae ya. */
-  const ensureComponent = (tag, relPath) => {
-    if (customElements.get(tag)) return customElements.whenDefined(tag);
-    const url = new URL(relPath, iconModuleUrl).href;
-    if (![...document.querySelectorAll('script[type="module"]')].some((s) => s.src === url)) {
-      const el = document.createElement('script');
-      el.type = 'module';
-      el.src = url;
-      document.head.appendChild(el);
-    }
-    return customElements.whenDefined(tag);
-  };
-
-  /** El chrome del panel usa is-icon, is-dropdown e is-copy-button. */
-  const ensureChrome = () => Promise.all([
-    ensureComponent('is-icon', './icon.js'),
-    ensureComponent('is-dropdown', '../actions/dropdown.js'),
-    ensureComponent('is-copy-button', '../actions/copy-button.js'),
-    ensureComponent('is-tab-group', '../navigation/tab-group.js'),
-  ]);
-
+{
   /** CDN base — el snippet debe usar URLs públicas para que sea portable. */
   /** Base de arranque. El snippet se emite con el commit resuelto (ver
    *  `cdnBase()`): `@main` cambiaría bajo los pies de quien lo pegó. */
-  const CDN_BASE = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
+  const CDN_BASE = jsdelivrBase('main');
 
-  /** Base congelada al último commit. `cdn-ref.js` la expone en window porque
-   *  este archivo es un IIFE clásico y no puede importar. */
+  /** Base congelada al último commit. */
   const cdnBase = async () => {
     try {
-      const ref = await window.__IS_CDN_REF__?.resolveRef?.();
-      if (ref) return `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@${ref}/dist/cdn`;
+      const ref = await resolveRef();
+      if (ref) return jsdelivrBase(ref);
     } catch { /* sin red: se queda en main */ }
     return CDN_BASE;
   };
@@ -197,7 +180,7 @@
 
   // dist/cdn folderizado: cada componente vive en <categoria>/<tag>.min.js.
   const catOf = (t) => {
-    const entry = (window.__IS_MANIFEST__ || []).find((c) => c.tag === `is-${t}` || c.tag === t);
+    const entry = manifest.find((c) => c.tag === `is-${t}` || c.tag === t);
     return entry?.category || 'helpers';
   };
 
@@ -253,17 +236,9 @@
     // paintOne() prioriza dataset.cmSource sobre textContent: si queda el del
     // render anterior, al cambiar de nivel se repinta el snippet viejo.
     delete pre.dataset.cmSource;
-    if (typeof window.__isHighlightCode === 'function') {
-      window.__isHighlightCode(pre);
-      return;
-    }
-    if (typeof CodeMirror?.runMode === 'function') {
-      const text = pre.textContent;
-      pre.textContent = '';
-      CodeMirror.runMode(text, 'htmlmixed', pre);
-      pre.classList.add('cm-s-material-darker');
-      pre.dataset.cm = '1';
-    }
+    // Si el panel se abre antes de que CodeMirror termine de bajar, pintamos
+    // en cuanto esté: `paint()` sale sin hacer nada si aún no cargó.
+    ensureCodeMirror().then(() => paint(pre)).catch(console.error);
   };
 
   const enhance = (demo) => {
@@ -343,16 +318,23 @@
     demo.append(dd);
   };
 
-  const boot = async () => {
-    try { await ensureChrome(); } catch { /* chrome degradado, ok */ }
+  // <is-demo> es un componente y no puede importar de `scripts/`, así que el
+  // acople va por evento: al conectarse emite `is-demo-connected` (bubbles +
+  // composed) y aquí lo recogemos. Se registra YA, antes del barrido inicial,
+  // para no perder los que se conecten mientras tanto; `enhance()` es
+  // idempotente (`data-code-ready`), así que un doble paso no molesta.
+  document.addEventListener('is-demo-connected', (e) => {
+    const el = e.target;
+    if (el instanceof Element) enhance(el);
+  });
+
+  const boot = () => {
     document.querySelectorAll('.demo, is-demo').forEach(enhance);
-    // <is-demo> conectados después de este boot se auto-registran aquí.
-    window.__isDemoEnhance = enhance;
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { boot().catch(console.error); });
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
   } else {
-    boot().catch(console.error);
+    boot();
   }
-})();
+}

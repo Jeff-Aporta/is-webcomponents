@@ -29,8 +29,11 @@ const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
  * @returns {keyof typeof FilterType|null}
  */
 function defaultFilterFor(def) {
-  if (def.type === ColumnType.NUMBER) return FilterType.NUMBER;
-  if (def.type === ColumnType.DATE) return FilterType.DATE;
+  // Paridad ISP: bool → filtro de conjunto, dateTime → filtro de fecha,
+  // currency comparte el filtro numérico.
+  if (def.type === ColumnType.BOOLEAN) return FilterType.SET;
+  if (def.type === ColumnType.NUMBER || def.type === 'currency') return FilterType.NUMBER;
+  if (def.type === ColumnType.DATE || def.type === 'dateTime') return FilterType.DATE;
   return FilterType.TEXT;
 }
 
@@ -47,6 +50,16 @@ function filterTypeOf(def) {
 }
 
 /**
+ * @param {string} [type]
+ * @returns {'left'|'center'|'right'}
+ */
+function defaultAlignFor(type) {
+  if (type === ColumnType.NUMBER || type === 'currency') return 'right';
+  if (type === ColumnType.BOOLEAN) return 'center';
+  return 'left';
+}
+
+/**
  * Convierte ColumnDef[] en ColumnState[] con todos los defaults aplicados.
  * @param {import('./types.js').ColumnDef[]} defs
  * @param {number} [defaultColWidth]
@@ -56,7 +69,8 @@ export function resolveColumns(defs, defaultColWidth = DEFAULT_COL_WIDTH) {
   return (defs ?? []).map((def, i) => ({
     colId: def.colId ?? def.field ?? `col-${i}`,
     field: def.field,
-    headerName: def.headerName ?? def.field,
+    // `header` es el alias corto que usan los previews y `caption` el de ISP.
+    headerName: def.headerName ?? def.header ?? def.caption ?? def.field,
     type: def.type ?? ColumnType.TEXT,
     width: def.width ?? defaultColWidth,
     minWidth: def.minWidth ?? DEFAULT_MIN_WIDTH,
@@ -67,7 +81,9 @@ export function resolveColumns(defs, defaultColWidth = DEFAULT_COL_WIDTH) {
     filterType: def.filter === false ? null : filterTypeOf(def),
     pinned: def.pinned ?? null,
     hide: def.hide === true,
-    align: def.align ?? (def.type === ColumnType.NUMBER ? 'right' : 'left'),
+    // Alineación por defecto según ISP: números/moneda a la derecha,
+    // booleanos centrados, el resto a la izquierda.
+    align: def.align ?? defaultAlignFor(def.type),
     enableRowGroup: def.enableRowGroup !== false,
     aggFunc: def.aggFunc ?? null,
     checkboxSelection: def.checkboxSelection === true,

@@ -101,9 +101,9 @@
     .log .type-attr { color: #ffe066; }
     .log .type-text { color: #74c0fc; }
   </style>
-  <script src="../../scripts/highlight-pre.js" defer></script>
-  <script src="../../scripts/demo-code.js" defer></script>
-  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../scripts/demo-code.js"></script>
+  <script type="module" src="../../scripts/docs-chrome.js"></script>
   <script type="module" src="../../scripts/preview-chrome.js"></script>
 </head>
 <body>
@@ -216,7 +216,9 @@
     </aside>
   </is-split-panel>
 
-  <script>
+  <script type="module">
+    import { paint } from '../../components/_shared/highlight-code.js';
+
     const target = document.getElementById('moTarget');
     const htmlPre = document.getElementById('moHtml');
     const stamp = document.getElementById('moStamp');
@@ -246,7 +248,7 @@
       htmlPre.textContent = src;
       delete htmlPre.dataset.cm;
       delete htmlPre.dataset.filled;
-      if (typeof window.__isHighlightCode === 'function') window.__isHighlightCode(htmlPre);
+      paint(htmlPre);
       stamp.textContent = new Date().toLocaleTimeString();
     };
 

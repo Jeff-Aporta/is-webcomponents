@@ -36,8 +36,3 @@ export const jsdelivrBase = (ref = 'main') => `https://cdn.jsdelivr.net/gh/${GH_
 
 /** Base ya congelada al último commit. */
 export const resolvedBase = async () => jsdelivrBase(await resolveRef());
-
-// demo-code.js es un IIFE clásico (no módulo) y no puede importar: lee esto.
-if (typeof window !== 'undefined') {
-  window.__IS_CDN_REF__ = { resolveRef, jsdelivrBase, resolvedBase, GH_REPO };
-}

@@ -7,6 +7,8 @@ export default [
   { tag: 'is-confirm-delete', title: 'Confirm Delete', category: 'isp', script: '../../components/isp/confirm-delete.js', style: '../../components/isp/confirm-delete.css', page: 'isp/is-confirm-delete.html' },
   { tag: 'is-flex-layout', title: 'Flex Layout', category: 'isp', script: '../../components/isp/flex-layout.js', style: '../../components/isp/flex-layout.css', page: 'isp/is-flex-layout.html' },
   { tag: 'is-form', title: 'Form', category: 'isp', script: '../../components/isp/form.js', style: '../../components/isp/form.css', page: 'isp/is-form.html' },
+  { tag: 'is-function-form', title: 'Function Form', category: 'isp', script: '../../components/isp/function-form.js', style: '../../components/isp/function-form.css', page: 'isp/is-function-form.html' },
+  { tag: 'is-modal-verificacion', title: 'Modal Verificación', category: 'isp', script: '../../components/isp/modal-verificacion.js', style: '../../components/isp/modal-verificacion.css', page: 'isp/is-modal-verificacion.html' },
   { tag: 'is-grid-layout', title: 'Grid Layout', category: 'isp', script: '../../components/isp/grid-layout.js', style: '../../components/isp/grid-layout.css', page: 'isp/is-grid-layout.html' },
   { tag: 'is-heading', title: 'Heading', category: 'isp', script: '../../components/isp/heading.js', style: '../../components/isp/heading.css', page: 'isp/is-heading.html' },
   { tag: 'is-loading-overlay', title: 'Loading Overlay', category: 'isp', script: '../../components/isp/loading-overlay.js', style: '../../components/isp/loading-overlay.css', page: 'isp/is-loading-overlay.html' },

@@ -115,6 +115,10 @@ import {
   getCellValue,
   formatCellValue,
   cellText,
+  toColumnDefs,
+  groupHeaderRows,
+  createServerSideDatasource,
+  createFakeLista,
 } from './datagrid-core/index.js';
 
 const TEMPLATE = document.createElement('template');
@@ -161,9 +165,24 @@ TEMPLATE.innerHTML = /* html */ `
       </div>
     </div>
 
-    <div class="mim-dg__viewport" part="viewport" role="grid" tabindex="0">
-      <div class="mim-dg__header-row" part="header"></div>
-      <div class="mim-dg__body" part="body"></div>
+    <div class="mim-dg__main">
+      <div class="mim-dg__viewport" part="viewport" role="grid" tabindex="0">
+        <div class="mim-dg__group-header" part="group-header"></div>
+        <div class="mim-dg__header-row" part="header"></div>
+        <div class="mim-dg__body" part="body"></div>
+      </div>
+
+      <aside class="mim-dg__sidebar" part="sidebar" hidden>
+        <div class="mim-dg__panel" part="tool-panel" hidden></div>
+        <div class="mim-dg__sidebar-tabs" role="tablist" aria-orientation="vertical">
+          <button class="mim-dg__sidebar-tab" type="button" role="tab" data-panel="columns" aria-selected="false" title="Columnas">
+            <is-icon icon="mdi:view-column-outline"></is-icon><span>Columnas</span>
+          </button>
+          <button class="mim-dg__sidebar-tab" type="button" role="tab" data-panel="filters" aria-selected="false" title="Filtro">
+            <is-icon icon="mdi:filter-outline"></is-icon><span>Filtro</span>
+          </button>
+        </div>
+      </aside>
     </div>
 
     <footer class="mim-dg__footer" part="footer">

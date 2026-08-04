@@ -1,6 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml, copyText } from '../_shared/dom-utils.js';
 import { resolveRef, jsdelivrBase } from '../_shared/cdn-ref.js';
+import { CODEMIRROR_READY, isReady as cmReady, paint } from '../_shared/highlight-code.js';
 import '../media/icon.js';
 
 /**
@@ -17,7 +18,7 @@ import '../media/icon.js';
  *
  * Pensado para inyectarse al final de cada preview; el script de chrome
  * (`preview-chrome.js`) lo crea automáticamente leyendo tag+category del
- * `window.__IS_MANIFEST__` y el nombre del archivo actual.
+ * `manifest.js` y el nombre del archivo actual.
  */
 (() => {
   const CDN_BASE_DEFAULT = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
@@ -125,15 +126,14 @@ import '../media/icon.js';
       }).catch(() => { /* sin red: se queda en main */ });
       // El slot deps puede llegar después del connected (parser HTML).
       this.shadowRoot.addEventListener('slotchange', () => this.#render());
-      // highlight-pre.js va con defer: puede no estar listo en el primer
-      // render. Se reintenta al cargar la pagina y al cambiar de tema.
-      window.addEventListener('load', this.#onHighlightReady);
+      // Al cambiar de tema hay que repintar: el shadow no lo alcanza
+      // `reapplyTheme()`, que solo recorre el documento. (El caso "CodeMirror
+      // todavia no cargo" lo cubre `#highlight()` con `is-codemirror-ready`.)
       document.addEventListener('is-theme-change', this.#onHighlightReady);
     }
 
     disconnectedCallback() {
       this.#mounted = false;
-      window.removeEventListener('load', this.#onHighlightReady);
       document.removeEventListener('is-theme-change', this.#onHighlightReady);
     }
 
@@ -315,26 +315,27 @@ import '../media/icon.js';
 
     /**
      * Resalta los <pre> del shadow con CodeMirror, igual que el resto de la
-     * pagina. highlight-pre.js solo recorre el documento, asi que aqui hay
-     * que llamarlo a mano Y meter el CSS del tema dentro del shadow: ninguna
-     * de las dos cosas cruza la frontera del shadow DOM por si sola.
+     * pagina. El pintor solo recorre el documento, asi que aqui hay que
+     * llamarlo a mano Y meter el CSS del tema dentro del shadow: ninguna de
+     * las dos cosas cruza la frontera del shadow DOM por si sola.
+     *
+     * El pintor entra por import estatico desde `_shared/` (no desde
+     * `scripts/`: esto es un componente y esbuild lo inlinearia en el bundle
+     * del CDN). Antes esto sondeaba hasta 40 veces esperando a que
+     * `window.__isHighlightCode`, CodeMirror y su modo `htmlmixed`
+     * aparecieran; ahora no hay sondeo: si CodeMirror aun no cargo, se
+     * espera UNA vez al evento `is-codemirror-ready` que emite el
+     * highlighter del docs. Si la pagina no carga CodeMirror (consumo por
+     * CDN puro), el snippet se queda en texto plano, como antes.
      */
-    #highlight(intento = 0) {
-      const paint = window.__isHighlightCode;
-      // Hay que esperar a las DOS cosas: el pintor Y el propio CodeMirror.
-      // El pintor puede existir antes que CodeMirror (van en scripts distintos
-      // con `defer`) y en ese caso paint() sale sin hacer nada, dejando el
-      // snippet sin color. Ademas este componente se auto-inyecta desde
-      // preview-chrome, a veces DESPUES del evento load, asi que escuchar
-      // solo a `load` tampoco bastaba.
-      // ...y al MODO: los modos de CodeMirror (htmlmixed, xml…) son scripts
-      // aparte del core. Con el modo sin cargar, runMode aplica el tema pero
-      // no genera tokens y el snippet sale monocromo.
-      const listo = typeof paint === 'function'
-        && typeof window.CodeMirror?.runMode === 'function'
-        && !!window.CodeMirror?.modes?.htmlmixed;
-      if (!listo) {
-        if (intento < 40) setTimeout(() => this.#highlight(intento + 1), 120);
+    #highlight() {
+      if (!cmReady()) {
+        if (this.#waitingCm) return;
+        this.#waitingCm = true;
+        document.addEventListener(CODEMIRROR_READY, () => {
+          this.#waitingCm = false;
+          this.#highlight();
+        }, { once: true });
         return;
       }
       this.#adoptCodeMirrorCss();
@@ -342,9 +343,14 @@ import '../media/icon.js';
         if (!pre.textContent.trim()) continue;
         pre.classList.add('code');
         pre.dataset.cmMode = 'htmlmixed';
+        delete pre.dataset.cm;
+        delete pre.dataset.cmSource;
         paint(pre);
       }
     }
+
+    /** Evita registrar N listeners de `is-codemirror-ready` por render. */
+    #waitingCm = false;
 
     /** Clona en el shadow las hojas de CodeMirror que ya usa el documento. */
     #adoptCodeMirrorCss() {

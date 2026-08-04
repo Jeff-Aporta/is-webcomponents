@@ -11,13 +11,16 @@
 | `actions` | [actions/LLM.md](actions/LLM.md) | Acciones, selección de comandos y menús interactivos. |
 | `charts` | [charts/LLM.md](charts/LLM.md) | Series, distribuciones, relaciones o jerarquías de datos. |
 | `data` | [data/LLM.md](data/LLM.md) | Presentación, comparación, movimiento u organización de datos estructurados. |
+| `data-viz` | [data-viz/LLM.md](data-viz/LLM.md) | Mapas y matrices de intensidad. La mayoría de gráficas vive en `charts/`, no aquí — seguir el `script` del manifest, no el nombre de la categoría. |
 | `diagrams` | [diagrams/LLM.md](diagrams/LLM.md) | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. |
 | `feedback` | [feedback/LLM.md](feedback/LLM.md) | Estado, progreso, confirmación, carga o resultado de operaciones. |
 | `forms` | [forms/LLM.md](forms/LLM.md) | Captura, selección y validación de valores compatibles con formularios. |
 | `helpers` | [helpers/LLM.md](helpers/LLM.md) | Formato, observación y posicionamiento reutilizable sobre APIs nativas. |
+| `isp` | [isp/LLM.md](isp/LLM.md) | Layout y formularios portados de ISP-SvelteComponents (ContaPyme). |
 | `layout` | [layout/LLM.md](layout/LLM.md) | Estructura, superficies, overlays y navegación por regiones de contenido. |
 | `media` | [media/LLM.md](media/LLM.md) | Iconos, identidad visual y reproducción de video. |
 | `navigation` | [navigation/LLM.md](navigation/LLM.md) | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. |
+| `overlays` | [overlays/LLM.md](overlays/LLM.md) | Paleta de comandos, visor de documentos y ventanas flotantes. |
 
 ## Inventario de módulos y tags
 
@@ -109,6 +112,17 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `helpers/mutation-observer.md` | `<is-mutation-observer>` | [helpers/LLM.md](helpers/LLM.md) |
 | `helpers/resize-observer.md` | `<is-resize-observer>` | [helpers/LLM.md](helpers/LLM.md) |
 | `helpers/popup.md` | `<is-popup>` | [helpers/LLM.md](helpers/LLM.md) |
+| `isp/accordion-group.md` | `<is-accordion-group>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/block-layout.md` | `<is-block-layout>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/confirm-delete.md` | `<is-confirm-delete>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/flex-layout.md` | `<is-flex-layout>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/form.md` | `<is-form>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/function-form.md` | `<is-function-form>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/modal-verificacion.md` | `<is-modal-verificacion>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/grid-layout.md` | `<is-grid-layout>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/heading.md` | `<is-heading>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/loading-overlay.md` | `<is-loading-overlay>` | [isp/LLM.md](isp/LLM.md) |
+| `isp/text.md` | `<is-text>` | [isp/LLM.md](isp/LLM.md) |
 | `layout/split-panel.md` | `<is-split-panel>` | [layout/LLM.md](layout/LLM.md) |
 | `layout/main.md` | `<is-main>` | [layout/LLM.md](layout/LLM.md) |
 | `layout/card.md` | `<is-card>` | [layout/LLM.md](layout/LLM.md) |

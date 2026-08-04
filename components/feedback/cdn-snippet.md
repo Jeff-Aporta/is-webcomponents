@@ -115,7 +115,7 @@ Documentación de cabecera preservada desde fuente:
 > Cada fila tiene su <pre> con el snippet y un botón "Copiar".
 > Pensado para inyectarse al final de cada preview; el script de chrome
 > (`preview-chrome.js`) lo crea automáticamente leyendo tag+category del
-> `window.__IS_MANIFEST__` y el nombre del archivo actual.
+> `manifest.js` y el nombre del archivo actual.
 
 ## Dependencias y componentes relacionados
 

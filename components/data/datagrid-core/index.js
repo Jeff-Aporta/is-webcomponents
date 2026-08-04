@@ -71,3 +71,22 @@ export { rowsToCsv } from './csv-export.js';
 
 // Store observable
 export { createGridModel } from './grid-model.js';
+
+// Grupos de columnas (TGridColumn de ISP → defs planas + árbol de cabeceras)
+export {
+  toColumnDefs,
+  groupDepth,
+  groupHeaderRows,
+  ispFilterFor,
+} from './column-groups.js';
+
+// Modelo de filas por servidor (paridad ISP: IServerSideDatasource)
+export {
+  buildJSONFiltro,
+  convertFilterModelToSQL,
+  singleFilterToClause,
+  sqlLiteral,
+  createServerSideDatasource,
+  createFakeLista,
+  createFakeListaFromUrl,
+} from './server-datasource.js';

@@ -37,6 +37,12 @@
   color: var(--is-accent);
 }
 .btn:focus-visible { outline: 2px solid var(--is-focus); outline-offset: 1px; }
+/* Botón de modo fuente activo: mismo "apagado" que `.ql-active` en ISP. */
+.btn.active {
+  background: color-mix(in srgb, var(--is-accent) 18%, transparent);
+  color: var(--is-accent);
+  & svg { opacity: .5; }
+}
 .sep {
   display: inline-block;
   width: 1px;
@@ -75,6 +81,38 @@
   border-radius: 4px;
 }
 .content ul, .content ol { padding-left: 1.4rem; margin: 0 0 .65rem; }
+
+/* Tokens inline (chips no editables) insertados por otros componentes.
+   Se marcan con [data-token] para no acoplar el editor a un tag concreto. */
+.content [data-token] {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: baseline;
+  background: var(--is-rte-token-bg, var(--is-accent));
+  color: var(--is-rte-token-color, var(--is-bg));
+  border-radius: var(--is-rte-token-radius, 6px);
+  font-weight: 500;
+  font-size: .8em;
+  padding: .18em .38em;
+  cursor: pointer;
+  user-select: none;
+  &:hover { outline: 2px solid color-mix(in srgb, var(--is-accent) 45%, transparent); }
+}
+
+/* Modo código fuente: el textarea sustituye al área WYSIWYG. */
+.source {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .82rem;
+  line-height: 1.55;
+  min-height: var(--is-rte-content-min-h, 12rem);
+  padding: .85rem 1rem;
+  border: 0;
+  outline: 0;
+  resize: vertical;
+  background: transparent;
+  color: var(--is-text);
+}
+.source[hidden] { display: none; }
 .content:empty + .placeholder, .placeholder:not([hidden]) {
   pointer-events: none;
 }

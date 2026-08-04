@@ -23,7 +23,14 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
-const highlight = await readFile(join(root, 'scripts', 'highlight-pre.js'), 'utf8');
+// La logica del highlighter vive en components/_shared/highlight-code.js
+// (para que <is-cdn-snippet> pueda importarla sin depender de scripts/);
+// scripts/highlight-pre.js es solo el arranque en las paginas del docs.
+// El contrato se verifica sobre los dos juntos.
+const highlight = [
+  await readFile(join(root, 'components', '_shared', 'highlight-code.js'), 'utf8'),
+  await readFile(join(root, 'scripts', 'highlight-pre.js'), 'utf8'),
+].join(String.fromCharCode(10));
 const themeToggle = await readFile(join(root, 'components', 'feedback', 'theme-toggle.js'), 'utf8');
 
 const failures = [];
@@ -69,10 +76,14 @@ check(/MutationObserver[\s\S]*?attributeFilter:\s*\[[\s\S]*?['"]data-theme['"]/.
 check(/Object\.values\(THEMES\)[\s\S]*?classList\.remove/m.test(highlight),
   'highlight-pre.js: paintOne() debe limpiar cualquier CM theme previo antes de aplicar el nuevo');
 
-// ─── highlight-pre.js: expone API reactiva en window ─────────────────────────
+// ─── highlight-pre.js: expone la API como exports ESM (sin puentes window) ───
 
-check(/window\.__isReapplyCodeTheme\s*=\s*reapplyTheme/.test(highlight),
-  'highlight-pre.js: debe exponer window.__isReapplyCodeTheme = reapplyTheme');
+check(/export\s+const\s+reapplyTheme/.test(highlight),
+  'highlight-code.js: debe exportar reapplyTheme');
+check(/export\s*\{[^}]*reapplyTheme/.test(highlight),
+  'highlight-pre.js: debe re-exportar reapplyTheme');
+check(!/window\.__is/.test(highlight),
+  'highlight-pre.js/highlight-code.js: no deben quedar puentes window.__is*');
 
 // ─── highlight-pre.js: las CSS de ambos themes se cargan ─────────────────────
 

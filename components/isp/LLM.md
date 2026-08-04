@@ -20,6 +20,12 @@ inferir API desde nombre.
 | `<is-grid-layout>` | [grid-layout.md](grid-layout.md) | Rejilla declarativa por `cells` |
 | `<is-text>` | [text.md](text.md) | Texto con color semántico y line-clamp |
 | `<is-heading>` | [heading.md](heading.md) | Títulos h1..h6 tintados por la paleta |
+| `<is-accordion-group>` | [accordion-group.md](accordion-group.md) | Acordeón declarativo |
+| `<is-confirm-delete>` | [confirm-delete.md](confirm-delete.md) | Confirmación destructiva "escribe para confirmar" |
+| `<is-form>` | [form.md](form.md) | Formulario con header/content/footer |
+| `<is-function-form>` | [function-form.md](function-form.md) | Atributos de una función del editor enriquecido |
+| `<is-modal-verificacion>` | [modal-verificacion.md](modal-verificacion.md) | Verificación asíncrona de un registro |
+| `<is-loading-overlay>` | [loading-overlay.md](loading-overlay.md) | Overlay de carga sobre un contenedor |
 
 ## Composición y relaciones
 

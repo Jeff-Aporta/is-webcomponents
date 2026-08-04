@@ -10,8 +10,6 @@
  * que jsDelivr cachea de forma inmutable: eso es el "fijar una versión". No
  * hace falta un JSON de mapeo — a diferencia de Cloudflare Pages, donde el id
  * del deployment lo asignaba Cloudflare y no se derivaba del commit.
- *
- * `window.__IS_CDN_SOURCES__` queda expuesto para el chrome de los demos.
  */
 const GH_REPO = 'Jeff-Aporta/is-webcomponents';
 const JSDELIVR = (ref = 'main') => `https://cdn.jsdelivr.net/gh/${GH_REPO}@${ref}/dist/cdn`;
@@ -41,7 +39,3 @@ export { resolveRef, resolvedBase };
 export const listSources = () => ([
   { id: 'main', label: 'jsDelivr · main', base: JSDELIVR('main') },
 ]);
-
-if (typeof window !== 'undefined') {
-  window.__IS_CDN_SOURCES__ = { baseFor, docsBase, resolveRef, resolvedBase, listSources, JSDELIVR, RAW };
-}

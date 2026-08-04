@@ -7,55 +7,41 @@
  * duplica ningún callout CDN.
  *
  * Opt-out: data-no-copy en un <pre>.
+ *
+ * Es un módulo ES: el componente que necesita se importa de forma estática,
+ * sin inyectar `<script>` ni buscarse a sí mismo en `document.scripts`.
  */
-(() => {
-  const selfSrc = [...document.scripts].find((s) => s.src.includes('docs-chrome.js'))?.src
-    || location.href;
+import '../components/actions/copy-button.js';
 
-  const ensureComponent = (tag, relPath) => {
-    if (customElements.get(tag)) return customElements.whenDefined(tag);
-    const url = new URL(relPath, selfSrc).href;
-    if (![...document.querySelectorAll('script[type="module"]')].some((s) => s.src === url)) {
-      const el = document.createElement('script');
-      el.type = 'module';
-      el.src = url;
-      document.head.appendChild(el);
-    }
-    return customElements.whenDefined(tag);
-  };
+/** Barra con botón de copiar sobre cada snippet. */
+const addCopy = (pre) => {
+  if (pre.dataset.copyReady || pre.hasAttribute('data-no-copy')) return;
+  // El panel del demo trae su propia barra de copiar.
+  if (pre.closest('.demo-code-pop')) return;
+  pre.dataset.copyReady = '1';
 
-  /** Barra con botón de copiar sobre cada snippet. */
-  const addCopy = (pre) => {
-    if (pre.dataset.copyReady || pre.hasAttribute('data-no-copy')) return;
-    // El panel del demo trae su propia barra de copiar.
-    if (pre.closest('.demo-code-pop')) return;
-    pre.dataset.copyReady = '1';
+  const wrap = document.createElement('div');
+  wrap.className = 'code-block';
+  pre.replaceWith(wrap);
 
-    const wrap = document.createElement('div');
-    wrap.className = 'code-block';
-    pre.replaceWith(wrap);
+  const btn = document.createElement('is-copy-button');
+  btn.className = 'code-block__copy';
+  btn.setAttribute('value', pre.textContent);
+  btn.setAttribute('copy-label', 'Copiar');
+  btn.setAttribute('success-label', 'Copiado');
+  btn.setAttribute('tooltip-placement', 'left');
 
-    const btn = document.createElement('is-copy-button');
-    btn.className = 'code-block__copy';
-    btn.setAttribute('value', pre.textContent);
-    btn.setAttribute('copy-label', 'Copiar');
-    btn.setAttribute('success-label', 'Copiado');
-    btn.setAttribute('tooltip-placement', 'left');
+  wrap.append(pre, btn);
+};
 
-    wrap.append(pre, btn);
-  };
+const boot = () => {
+  // El bloque CDN lo pinta <is-cdn-snippet> (auto-inyectado por
+  // preview-chrome.js). Aquí solo queda el botón de copiar de los <pre>.
+  document.querySelectorAll('pre.code').forEach(addCopy);
+};
 
-  const boot = async () => {
-    ensureComponent('is-copy-button', '../components/actions/copy-button.js').catch(() => {});
-
-    // El bloque CDN lo pinta <is-cdn-snippet> (auto-inyectado por
-    // preview-chrome.js). Aquí solo queda el botón de copiar de los <pre>.
-    document.querySelectorAll('pre.code').forEach(addCopy);
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { boot().catch(console.error); });
-  } else {
-    boot().catch(console.error);
-  }
-})();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot, { once: true });
+} else {
+  boot();
+}
