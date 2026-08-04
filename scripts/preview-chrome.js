@@ -49,13 +49,13 @@ const applyPalette = (palette) => {
 const persist = () => {
   if (embedded) return;
   localStorage.setItem('is-theme', root.dataset.theme || 'dark');
-  localStorage.setItem('is-palette', root.dataset.palette || 'insoft');
+  localStorage.setItem('is-palette', root.dataset.palette || 'contapyme');
 };
 
 /** Escribe theme/palette en ?s= y devuelve la URL absoluta resultante. */
 const writeShareUrl = () => {
   const theme = root.dataset.theme || 'dark';
-  const palette = root.dataset.palette || 'insoft';
+  const palette = root.dataset.palette || 'contapyme';
   const encoded = b64urlEncode(JSON.stringify({ theme, palette }));
   const next = new URL(location.href);
   next.searchParams.set('s', encoded);
@@ -179,8 +179,8 @@ function mount() {
     <label class="preview-chrome__palette">
       <span class="preview-chrome__label">Paleta</span>
       <select id="previewPalette" aria-label="Paleta de marca">
-        <option value="insoft">InSoft</option>
         <option value="contapyme">ContaPyme</option>
+        <option value="insoft">InSoft</option>
         <option value="agrowin">AgroWin</option>
       </select>
     </label>
@@ -212,7 +212,7 @@ function mount() {
   }
 
   applyTheme(root.dataset.theme || 'dark');
-  applyPalette(root.dataset.palette || 'insoft');
+  applyPalette(root.dataset.palette || 'contapyme');
 
   document.getElementById('previewTheme')?.addEventListener('theme-toggle', (e) => {
     const theme = e.detail?.theme || (root.dataset.theme === 'dark' ? 'light' : 'dark');

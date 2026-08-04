@@ -19,7 +19,7 @@ const CATEGORICAL = {
 };
 
 export function resolvePaletteKey(attr) {
-  return CATEGORICAL[attr] ? attr : 'insoft';
+  return CATEGORICAL[attr] ? attr : 'contapyme';
 }
 
 export function resolveMode(isLight) {

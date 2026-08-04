@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
@@ -51,11 +51,14 @@
       <section class="section" id="variants">
         <h2>Variantes</h2>
         <p class="lede">
-          El atributo <code class="code">variant</code> define el color semántico.
-          Default: <code class="code">neutral</code>.
+          El atributo <code class="code">color</code> define el color semántico.
+          Default: <code class="code">brand</code>. <code class="code">info</code> y
+          <code class="code">error</code> existen aparte a propósito:
+          <code class="code">danger</code> es la acción destructiva («Eliminar») y
+          <code class="code">error</code> el estado de fallo («Error al guardar»).
         </p>
 
-        <h3>Matriz variant × appearance</h3>
+        <h3>Matriz color × appearance</h3>
         <is-demo class="demo">
           <div class="matrix">
             <div></div>
@@ -87,6 +90,16 @@
             <div class="demo-cell"><is-button color="danger">Danger</is-button></div>
             <div class="demo-cell"><is-button color="danger" variant="outlined">Danger</is-button></div>
             <div class="demo-cell"><is-button color="danger" variant="plain">Danger</is-button></div>
+
+            <div class="row-label">info</div>
+            <div class="demo-cell"><is-button color="info">Info</is-button></div>
+            <div class="demo-cell"><is-button color="info" variant="outlined">Info</is-button></div>
+            <div class="demo-cell"><is-button color="info" variant="plain">Info</is-button></div>
+
+            <div class="row-label">error</div>
+            <div class="demo-cell"><is-button color="error">Error</is-button></div>
+            <div class="demo-cell"><is-button color="error" variant="outlined">Error</is-button></div>
+            <div class="demo-cell"><is-button color="error" variant="plain">Error</is-button></div>
           </div>
         </is-demo>
 
@@ -106,6 +119,8 @@
             <is-button color="success" variant="filled">Confirmar</is-button>
             <is-button color="warning" variant="filled">Atención</is-button>
             <is-button color="danger"  variant="filled">Eliminar</is-button>
+            <is-button color="info"    variant="filled">Detalles</is-button>
+            <is-button color="error"   variant="filled">Reintentar</is-button>
             <is-button color="neutral" variant="filled">Secundario</is-button>
           </div>
         </is-demo>
@@ -117,6 +132,8 @@
             <is-button color="success" variant="outlined">Confirmar</is-button>
             <is-button color="warning" variant="outlined">Atención</is-button>
             <is-button color="danger"  variant="outlined">Eliminar</is-button>
+            <is-button color="info"    variant="outlined">Detalles</is-button>
+            <is-button color="error"   variant="outlined">Reintentar</is-button>
             <is-button color="neutral" variant="outlined">Secundario</is-button>
           </div>
         </is-demo>
@@ -128,6 +145,8 @@
             <is-button color="success" variant="plain">Confirmar</is-button>
             <is-button color="warning" variant="plain">Atención</is-button>
             <is-button color="danger"  variant="plain">Eliminar</is-button>
+            <is-button color="info"    variant="plain">Detalles</is-button>
+            <is-button color="error"   variant="plain">Reintentar</is-button>
             <is-button color="neutral" variant="plain">Secundario</is-button>
           </div>
         </is-demo>
@@ -143,6 +162,8 @@
             <is-button color="success" variant="ghost">Confirmar</is-button>
             <is-button color="warning" variant="ghost">Atención</is-button>
             <is-button color="danger"  variant="ghost">Eliminar</is-button>
+            <is-button color="info"    variant="ghost">Detalles</is-button>
+            <is-button color="error"   variant="ghost">Reintentar</is-button>
             <is-button color="neutral" variant="ghost">Secundario</is-button>
           </div>
         </is-demo>
@@ -531,7 +552,7 @@ is-button:state(icon-button) {
         </is-demo>
 
         <pre class="code">is-button:state(loading)::part(spinner) svg {
-  stroke: var(--is-color-danger-500);
+  stroke: var(--is-color-danger);
   stroke-width: 3;
 }</pre>
       </section>
@@ -545,11 +566,15 @@ is-button:state(icon-button) {
         </p>
 
         <h4>Tokens de color (paleta)</h4>
-        <pre class="code">--is-color-brand-50,    --is-color-brand-100,   ...   --is-color-brand-950
---is-color-neutral-0,   --is-color-neutral-50,   ...   --is-color-neutral-950
---is-color-success-{50,100,300,500,600,700}
---is-color-warning-{50,300,500,600,700}
---is-color-danger-{50,300,500,600,700}</pre>
+        <pre class="code">--is-color-brand      --is-color-neutral    --is-color-success
+--is-color-warning    --is-color-danger     --is-color-info      --is-color-error
+
+<span class="c">/* cada familia acepta cinco modificadores relativos, sin escala numérica */</span>
+--is-color-brand-paler   <span class="c">/* pastel de fondo */</span>
+--is-color-brand-pale    <span class="c">/* pastel activo */</span>
+--is-color-brand-strong  <span class="c">/* relleno */</span>
+--is-color-brand-stronger<span class="c">/* hover del relleno */</span>
+--is-color-brand-strongest<span class="c">/* active del relleno */</span></pre>
 
         <h4>Tokens del botón</h4>
         <pre class="code">--is-button-font-family
@@ -568,19 +593,19 @@ is-button:state(icon-button) {
 
           <style>
             #themed1 {
-              --is-color-brand-600: #ae3ec9;
-              --is-color-brand-700: #862e9c;
-              --is-color-brand-800: #5f1f70;
+              --is-color-brand-strong: #ae3ec9;
+              --is-color-brand-stronger: #862e9c;
+              --is-color-brand-strongest: #5f1f70;
               --is-button-border-radius: 0;
             }
             #themed2 {
-              --is-color-success-600: #0ca678;
-              --is-color-success-700: #087f5b;
+              --is-color-success-strong: #0ca678;
+              --is-color-success-stronger: #087f5b;
               --is-button-border-radius: 18px;
             }
             #themed3 {
-              --is-color-warning-600: #d9480f;
-              --is-color-warning-700: #a03406;
+              --is-color-warning-strong: #d9480f;
+              --is-color-warning-stronger: #a03406;
               --is-button-border-width: 2px;
             }
           </style>

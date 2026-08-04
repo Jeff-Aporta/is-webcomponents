@@ -39,7 +39,7 @@ c:\ContaPyme\Personal\apps\AppWebcomponents\
 │   └── <category>/is-<name>.html   # demo por componente (un nivel más adentro)
 ├── styles/
 │   ├── is-base.css             # tokens + temas
-│   ├── palettes.css            # insoft / contapyme / agrowin
+│   ├── palettes.css            # contapyme (default) / insoft / agrowin
 │   ├── presentation.css        # chrome de los previews
 │   └── shell.css               # barra lateral, iframe split-panel
 ├── assets/
@@ -91,8 +91,14 @@ node scripts/download-icons.mjs --only=mdi --only=tabler   # re-entrar varias ve
 node scripts/download-icons.mjs --no-skip                  # fuerza redescarga
 npm run icons:download                                     # todas las 231 colecciones
 
+# escanear un proyecto consumidor y bajar solo los iconos usados
+# (cascada: CDN propio del kit → api.iconify.design)
+node scripts/download-iconify.mjs --projectRoot=../mi-app --outputDir=assets/icons
+npm run icons:from-project -- --projectRoot=. --outputDir=assets/icons
+
 # verificaciones
-node scripts/verify-theme-contract.cjs     # falla con "missing insoft palette" hasta arreglar estilos
+node tests/theme-contract.test.mjs         # 2 temas + 3 paletas + tokens --is-*
+node tests/palette-and-snippet-contract.test.mjs  # default contapyme + canvas + snippets
 node scripts/verify-page.py                # requiere servidor corriendo en :8765 + playwright instalado
 ```
 
@@ -136,12 +142,18 @@ que reescribe los paths en bloque.
 
 ### 4.3 Tema y paleta
 
-- `data-theme="light|dark"` en `<html>`.
-- `data-palette="insoft|contapyme|agrowin"` en `<html>`.
-- Tokens: `--is-bg`, `--is-text`, `--is-border`, `--is-color-brand-500`, etc.
+- `data-theme="light|dark"` en `<html>` (+ clase `.theme-dark` / `.theme-light`).
+- `data-palette="contapyme|insoft|agrowin"` en `<html>` (**default = `contapyme`**).
+- Tokens: `--is-bg`, `--is-text`, `--is-border`, `--is-color-brand`, etc.
   El prefijo `--is-*` es el canónico. **No uses `--pg-*`** (legacy).
-- API de tamaño en componentes: `size="sm|md|lg"` o por CSS — **nunca mezcles
-  `size=...` con `pgSize=...`**. Si encuentras `pgSize` es deuda, elimínalo.
+- `is-base.css` / `palettes.css` = **solo variables**. No pintan el canvas.
+  `color-scheme` solo en `.theme-dark` / `.theme-light`, nunca en `:root`.
+- Snippets de demo (`demo-code.js`): la raíz del markup lleva `data-theme` +
+  `data-palette` + `.theme-*` del preview, y se actualiza al cambiarlos.
+- API de tamaño en componentes: escala por `font-size` / `em` — **nunca**
+  `size=` ni `pgSize=`. Si encuentras `pgSize` es deuda, elimínalo.
+- Guardián: `tests/palette-and-snippet-contract.test.mjs` +
+  `tests/theme-contract.test.mjs`.
 
 ### 4.4 Estilo de iconos
 
@@ -211,6 +223,18 @@ El script es idempotente: si la colección ya está completa (matchea el total
 de la API), la salta. Si solo faltan algunos iconos, los baja sueltos.
 
 ## 6. Errores a NO repetir (bitácora de mierdas que ya nos pasaron)
+
+### 6.0 Paleta / canvas / snippets (2026-08)
+
+- **Default `insoft`:** incorrecto. Producto real = ContaPyme → default
+  `contapyme` en CSS, HTML, fallbacks JS y `DEFAULT_PALETTES[0]`.
+- **`color-scheme: dark` en `:root`:** el CDN oscurecía apps claras. Solo
+  `.theme-dark` / `.theme-light`.
+- **`html,body { background }` en base/palettes:** prohibido. Canvas = app.
+- **Snippet sin `data-theme`/`data-palette`:** el ejemplo no hereda contexto
+  al pegarlo. Usar `withSnippetContext` en `demo-code.js`, no wrappers a mano.
+- Correr `node tests/palette-and-snippet-contract.test.mjs` si tocás estilos
+  de tema/paleta o `demo-code.js`.
 
 ### 6.1 PowerShell interpreta `<` y `>` como redirecciones
 
@@ -542,6 +566,7 @@ un runner sencillo los pueda enumerar.
 | `tests/preview-paths.test.mjs` | Los `<script src>` y `<link href>` de cada preview resuelven a archivos reales |
 | `tests/icon-references.test.mjs` | Cada `icon="X:Y"` en previews/componentes existe en `assets/icons/X.json` (o se acepta caer a CDN) |
 | `tests/theme-contract.test.mjs` | Reemplazo del antiguo `verify-theme-contract.cjs` |
+| `tests/palette-and-snippet-contract.test.mjs` | Default `contapyme`; sin `color-scheme` en `:root`; canvas libre; snippets con tema/paleta reactivos |
 | `tests/cdn-icons.test.mjs` | Servidor arriba → cada preview carga `<is-icon>` sin caer al fallback `<iconify-icon>` |
 
 ### 7.3 Cómo correrlos
@@ -552,6 +577,7 @@ node tests/manifest-paths.test.mjs
 node tests/preview-paths.test.mjs
 node tests/icon-references.test.mjs
 node tests/theme-contract.test.mjs
+node tests/palette-and-snippet-contract.test.mjs
 
 # con servidor (levanta en otro terminal: node scripts/serve.mjs 8391)
 node tests/cdn-icons.test.mjs

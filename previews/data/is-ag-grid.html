@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
@@ -107,8 +107,8 @@
       </section>
 
       <section class="section" id="density">
-        <h2>Density + toolbar</h2>
-        <p class="lede">Botones en la toolbar: <kbd>compact</kbd> · <kbd>normal</kbd> · <kbd>comfortable</kbd>. Quick filter global. Export CSV. Sin paginación (orden + filtros libres).</p>
+        <h2>Density + columnas + persistencia</h2>
+        <p class="lede">Toolbar: densidad, <strong>Columnas</strong> (checks show/hide), CSV y <strong>Reiniciar</strong> (borra personalización). Sidebar derecha: mismo panel de columnas/filtros. Con <code>remember-state</code> + <code>storage-key</code> se guarda en <code>localStorage['is-webcomponents']['is-ag-grid'][key]</code>: orden, visibilidad, anchos, pin, sort y filtros.</p>
         <is-demo class="demo">
           <is-ag-grid id="grid-density" selectable
                       page-size-options="10,20,50"
@@ -141,6 +141,7 @@
             <button id="btnCompact">Compact</button>
             <button id="btnNormal">Normal</button>
             <button id="btnComfy">Comfortable</button>
+            <button id="btnResetState">Reiniciar persistencia</button>
           </div>
         </is-demo>
       </section>
@@ -223,6 +224,8 @@ g.api.setDensity('compact');
 g.api.exportCSV('grid.csv');
 g.api.serializeState();             // JSON { columns, sortModel, filterModel, ... }
 g.api.loadState(json);
+g.api.resetPersistedState();        // borra localStorage[storage-key] y restaura defs
+g.api.openColumnsPanel();
 g.api.refresh();
 
 g.addEventListener('is-cell-click',      e =&gt; /* { row, column, value } */);
@@ -236,8 +239,10 @@ g.addEventListener('is-page-change',     e =&gt; /* { page, pageSize } */);
 g.addEventListener('is-column-reorder',  e =&gt; /* { colId, toIndex } */);
 g.addEventListener('is-column-resize',   e =&gt; /* { colId, width } */);
 g.addEventListener('is-column-pin',      e =&gt; /* { colId, side } */);
-g.addEventListener('is-column-hide',     e =&gt; /* { colId } */);
+g.addEventListener('is-column-hide',     e =&gt; /* { colId, hide } */);
 g.addEventListener('is-state-loaded',    e =&gt; /* GridState */);
+g.addEventListener('is-state-saved',     e =&gt; /* { json, key } */);
+g.addEventListener('is-state-reset',     e =&gt; /* { key } */);
 
 Atributos:
   rows, columns                script JSON o atributo
@@ -249,7 +254,8 @@ Atributos:
   density                      compact | normal | comfortable
   quick-filter                 texto
   group-by                     CSV de colIds iniciales
-  remember-state, storage-key
+  remember-state               boolean — persiste en localStorage.is-webcomponents
+  storage-key                  keyid bajo is-webcomponents.is-ag-grid
   toolbar                      true | false
 
 Tipos de columna:
@@ -319,6 +325,7 @@ Tokens CSS en el host:
     document.getElementById('btnCompact').addEventListener('click', () => gDensity.api.setDensity('compact'));
     document.getElementById('btnNormal').addEventListener('click', () => gDensity.api.setDensity('normal'));
     document.getElementById('btnComfy').addEventListener('click', () => gDensity.api.setDensity('comfortable'));
+    document.getElementById('btnResetState').addEventListener('click', () => gDensity.api.resetPersistedState());
   </script>
 </body>
 </html>

@@ -72,7 +72,7 @@ const buildDemoHtml = (variant) => {
     : modules.map((m) => `  ${open}script type="module" src="${cdnJs(m)}"${close}${open}${slash}script${close}`).join('\n');
 
   return `<!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -151,8 +151,8 @@ const buildDemoHtml = (variant) => {
         <label class="row" style="gap:0.35rem">
           <span>Paleta</span>
           <select id="palette" style="background:transparent;color:inherit;border:1px solid var(--is-border);border-radius:0.4rem;padding:0.25rem 0.5rem">
-            <option value="insoft">InSoft</option>
             <option value="contapyme">ContaPyme</option>
+            <option value="insoft">InSoft</option>
             <option value="agrowin">AgroWin</option>
           </select>
         </label>
@@ -262,7 +262,7 @@ ${moduleImports}
       root.dataset.palette = palette.value;
       tag.textContent = 'Paleta activa: ' + palette.value;
     });
-    tag.textContent = 'Paleta activa: ' + (root.dataset.palette || 'insoft');
+    tag.textContent = 'Paleta activa: ' + (root.dataset.palette || 'contapyme');
 
     document.getElementById('openDiag').addEventListener('click', () => {
       const lb = document.getElementById('dlb');

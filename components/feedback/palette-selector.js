@@ -5,7 +5,7 @@ import '../media/icon.js';
  * <is-palette-selector> — Web Component (vanilla).
  *
  * Selector visual de paletas de marca. Por defecto expone las 3 paletas
- * que viven en `styles/palettes.css` (insoft, contapyme, agrowin) pero
+ * que viven en `styles/palettes.css` (contapyme, insoft, agrowin) pero
  * el consumidor puede pasar un array JSON propio en el atributo
  * `palettes` para exponer SU marca / sus paletas / su CSS.
  *
@@ -18,7 +18,7 @@ import '../media/icon.js';
  *   palettes      JSON string con array de { value, label, accent, css?,
  *                                              lead?, leadColor?,
  *                                              accentColor?, bg?, fg? }.
- *                 Default = DEFAULT_PALETTES (insoft, contapyme, agrowin).
+ *                 Default = DEFAULT_PALETTES (contapyme, insoft, agrowin).
  *   value         string — la paleta activa. Reflect → data-palette en <html>.
  *   storage-key   string — clave de localStorage (default 'is-palette')
  *   aria-label    string — etiqueta del botón trigger (default "Elegir paleta")
@@ -58,22 +58,20 @@ import '../media/icon.js';
  *
  * API JS del consumer
  *   el.palettes = [...]      // setter que escribe el atributo JSON
- *   el.value    = 'insoft'   // activa paleta y notifica
+ *   el.value    = 'contapyme' // activa paleta y notifica
  *   el.open() / close() / toggle()
  *   el.addEventListener('is-palette-change', e => e.detail)
  */
 
 (() => {
-  // 3 paletas por defecto. El `lead`/`accent` permiten que el trigger por
-  // defecto represente la marca como "in" + "Soft" en dos colores. Como
-  // ESTOS CSS ya están enlazados en el <head>, no hace falta inyectar
-  // <link> extra: solo se respeta data-palette="X" en <html>.
+  // 3 paletas por defecto. Primera = default del kit (ContaPyme). El
+  // `lead`/`accent` permiten que el trigger represente la marca en dos
+  // colores. Como ESTOS CSS ya están enlazados en el <head>, no hace
+  // falta inyectar <link> extra: solo se respeta data-palette="X" en <html>.
   const DEFAULT_PALETTES = [
-    // El logo lleva la S en MAYUSCULA y en el color de marca: in + Soft.
-    // Ver el mismo criterio en index.html; aqui estaba en minuscula y el
-    // wordmark salia como "insoft".
-    { value: 'insoft',    label: 'InSoft',    accent: '#e03131', lead: 'in',  accentLabel: 'Soft',  leadColor: '#111', accentColor: '#e03131', bg: '#fff', fg: '#111' },
     { value: 'contapyme', label: 'ContaPyme', accent: 'dodgerblue', lead: 'conta', accentLabel: 'pyme', leadColor: '#111', accentColor: 'dodgerblue', bg: '#fff', fg: '#111' },
+    // El logo InSoft lleva la S en MAYUSCULA y en el color de marca: in + Soft.
+    { value: 'insoft',    label: 'InSoft',    accent: '#e03131', lead: 'in',  accentLabel: 'Soft',  leadColor: '#111', accentColor: '#e03131', bg: '#fff', fg: '#111' },
     { value: 'agrowin',   label: 'AgroWin',   accent: 'yellowgreen', lead: 'agro', accentLabel: 'win',  leadColor: '#111', accentColor: 'yellowgreen', bg: '#fff', fg: '#111' },
   ];
 

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-btn-ref · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-btn-ref de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../scripts/demo-code.js"></script>
+  <script type="module" src="../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-btn-ref">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-btn-ref&gt;</h2>
+        <p class="lede">
+          Campo de texto con selector modal (port de ISP <code class="code">BtnRef</code>).
+          Escribe la clave o abre el filtro para elegir un registro del catálogo.
+        </p>
+
+        <is-demo class="demo">
+          <is-btn-ref id="btnRefDemo" label="Aplicación" required style="width: 22rem;"></is-btn-ref>
+          <p id="btnRefLog">Seleccionado: <code class="code">—</code></p>
+        </is-demo>
+
+        <pre class="code">&lt;is-btn-ref id="ref" label="Aplicación" required style="width: 22rem;"&gt;&lt;/is-btn-ref&gt;
+&lt;script type="module"&gt;
+  const el = document.getElementById('ref');
+  el.controller = {
+    entrie: 'Aplicación',
+    primaryKeys: ['app'],
+    ColumnsBtnRef: ['app'],
+    columns: [{ field: 'app', header: 'Aplicación' }],
+    async Lista() {
+      return { datos: [{ app: 'ContaPyme' }, { app: 'AgroWin' }] };
+    },
+  };
+&lt;/script&gt;</pre>
+      </section>
+
+      <script>
+        const APPS = [
+          'ContaPyme', 'AgroWin', 'Microsoft Word', 'Microsoft Excel',
+          'Visual Studio Code', 'Notepad', 'File Explorer', 'Paint',
+        ];
+        const el = document.getElementById('btnRefDemo');
+        const log = document.getElementById('btnRefLog');
+        if (el) {
+          el.controller = {
+            entrie: 'Aplicación',
+            primaryKeys: ['app'],
+            ColumnsBtnRef: ['app'],
+            columns: [{ field: 'app', header: 'Aplicación', sortable: true, filter: true }],
+            async Lista(filtro) {
+              const sql = String(filtro?.filtro?.sql || '');
+              const m = /'([^']*)'/.exec(sql);
+              if (m) {
+                const hit = APPS.find((a) => a === m[1]);
+                return { datos: hit ? [{ app: hit }] : [] };
+              }
+              return { datos: APPS.map((app) => ({ app })) };
+            },
+          };
+          el.addEventListener('is-selected-record', (e) => {
+            if (log) {
+              log.innerHTML = 'Seleccionado: <code class="code">' +
+                (e.detail.label || e.detail.value) + '</code>';
+            }
+          });
+        }
+      </script>
+
+    </is-main>
+  </is-split-panel>
+
+</body>
+</html>

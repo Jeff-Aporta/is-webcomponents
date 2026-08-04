@@ -126,6 +126,51 @@ import manifest from '../manifest.js';
     return [...tags].sort();
   };
 
+  /** Tema / paleta activos en el preview (html). */
+  const currentTheme = () => (
+    document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'
+  );
+  const currentPalette = () => (
+    document.documentElement.dataset.palette || 'contapyme'
+  );
+
+  /** Sella data-theme + data-palette + .theme-* en un nodo raíz del snippet
+   *  para que, al pegarlo, el ejemplo herede el contexto sin pintar toda la
+   *  página (el canvas lo decide la app). */
+  const stampContext = (el, theme, palette) => {
+    el.setAttribute('data-theme', theme);
+    el.setAttribute('data-palette', palette);
+    el.classList.remove('theme-dark', 'theme-light');
+    el.classList.add(theme === 'light' ? 'theme-light' : 'theme-dark');
+  };
+
+  /** Inyecta el contexto actual en la(s) raíz(ces) del markup serializado. */
+  const withSnippetContext = (html) => {
+    const theme = currentTheme();
+    const palette = currentPalette();
+    const tpl = document.createElement('template');
+    tpl.innerHTML = html.trim();
+    const elements = [...tpl.content.children];
+    if (elements.length === 1) {
+      stampContext(elements[0], theme, palette);
+    } else if (elements.length > 1) {
+      const wrap = document.createElement('div');
+      stampContext(wrap, theme, palette);
+      for (const el of elements) wrap.appendChild(el);
+      tpl.content.replaceChildren(wrap);
+    } else {
+      const wrap = document.createElement('div');
+      stampContext(wrap, theme, palette);
+      wrap.append(...tpl.content.childNodes);
+      tpl.content.replaceChildren(wrap);
+    }
+    return pretty(dropEmptyAttrValues(
+      [...tpl.content.childNodes]
+        .map((n) => (n.nodeType === 1 ? n.outerHTML : n.textContent))
+        .join('\n'),
+    ));
+  };
+
   /** HTML pretty del demo sin el chrome del propio botón. */
   const serializeDemoHtml = (demo) => {
     const parts = [];
@@ -138,7 +183,7 @@ import manifest from '../manifest.js';
         if (t) parts.push(t);
       }
     }
-    return pretty(dropEmptyAttrValues(parts.join('\n')));
+    return withSnippetContext(pretty(dropEmptyAttrValues(parts.join('\n'))));
   };
 
   /** `outerHTML` serializa los booleanos como `pill=""`. En HTML eso es lo
@@ -192,7 +237,7 @@ import manifest from '../manifest.js';
   const buildSnippet = async (demo, level = DEFAULT_LEVEL) => {
     const raw = demo.getAttribute('data-code');
     const inner = raw != null && raw !== ''
-      ? raw.trim()
+      ? withSnippetContext(raw.trim())
       : serializeDemoHtml(demo);
 
     const CDN = await cdnBase();
@@ -283,6 +328,7 @@ import manifest from '../manifest.js';
     const sizeEl = pop.querySelector('.demo-code-pop__size');
     const levelTabs = pop.querySelector('.demo-code-pop__level');
     let level = DEFAULT_LEVEL;
+    let panelOpen = false;
 
     const renderSnippet = async () => {
       const tags = collectTags(demo);
@@ -305,14 +351,36 @@ import manifest from '../manifest.js';
       sizeEl.textContent = bytes == null ? '' : `≈ ${humanSize(bytes)}`;
     };
 
+    /** Tema/paleta del preview cambiaron → invalidar cache y, si el panel
+     *  está abierto, regenerar el snippet con los attrs actuales. */
+    const onContextChange = () => {
+      delete pre.dataset.filled;
+      delete pre.dataset.src;
+      if (panelOpen) renderSnippet().catch(console.error);
+    };
+
     levelTabs.addEventListener('is-tab-show', (e) => {
       if (e.detail.name === level) return;
       level = e.detail.name;
+      delete pre.dataset.filled;
+      delete pre.dataset.src;
       renderSnippet().catch(console.error);
     });
 
     // El snippet se calcula al abrir: el demo puede haber cambiado por JS.
-    dd.addEventListener('is-show', () => { renderSnippet().catch(console.error); });
+    dd.addEventListener('is-show', () => {
+      panelOpen = true;
+      renderSnippet().catch(console.error);
+    });
+    dd.addEventListener('is-hide', () => { panelOpen = false; });
+
+    document.addEventListener('is-theme-change', onContextChange);
+    document.addEventListener('is-palette-change', onContextChange);
+    const ctxObs = new MutationObserver(onContextChange);
+    ctxObs.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme', 'data-palette', 'class'],
+    });
 
     dd.append(btn, pop);
     demo.append(dd);

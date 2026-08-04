@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IS Web Components</title>
-  <meta name="description" content="Galería de Web Components de InSoft.">
+  <meta name="description" content="Galería de Web Components ContaPyme / InSoft.">
   <link rel="stylesheet" href="styles/is-base.css">
   <link rel="stylesheet" href="styles/palettes.css">
   <link rel="stylesheet" href="styles/shell.css">
@@ -14,18 +14,18 @@
 <body>
   <header class="shell-bar">
     <div class="brand-wrap" id="brandWrap">
-      <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="InSoft — elegir paleta" title="Elegir paleta">
-        <span id="brandLead">in</span><span class="brand__accent" id="brandAccent">Soft</span><span id="brandTail"></span>
+      <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="ContaPyme — elegir paleta" title="Elegir paleta">
+        <span id="brandLead">conta</span><span class="brand__accent" id="brandAccent">pyme</span><span id="brandTail"></span>
       </button>
       <ul class="brand-menu" id="brandMenu" role="listbox" hidden aria-label="Paleta de marca">
-        <li role="option" tabindex="-1" data-palette="insoft" aria-selected="true">
-          <span class="brand-menu__swatch" aria-hidden="true"></span>
-          <span class="brand-menu__label">InSoft</span>
-          <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
-        </li>
-        <li role="option" tabindex="-1" data-palette="contapyme" aria-selected="false">
+        <li role="option" tabindex="-1" data-palette="contapyme" aria-selected="true">
           <span class="brand-menu__swatch" aria-hidden="true"></span>
           <span class="brand-menu__label">ContaPyme</span>
+          <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
+        </li>
+        <li role="option" tabindex="-1" data-palette="insoft" aria-selected="false">
+          <span class="brand-menu__swatch" aria-hidden="true"></span>
+          <span class="brand-menu__label">InSoft</span>
           <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
         </li>
         <li role="option" tabindex="-1" data-palette="agrowin" aria-selected="false">
@@ -64,12 +64,11 @@
     const brandTail = document.getElementById('brandTail');
     const params = new URLSearchParams(location.search);
     const themes = new Set(['light', 'dark']);
-    const palettes = new Set(['insoft', 'contapyme', 'agrowin']);
+    const palettes = new Set(['contapyme', 'insoft', 'agrowin']);
     const brands = {
-      // El logo de InSoft lleva la S en mayuscula y en rojo: in + S + oft.
-      // Por eso el brand se compone de tres segmentos y no de dos.
-      insoft:    { lead: 'in',    accent: 'Soft', tail: '',    label: 'InSoft',    leadColor: '#000', accentColor: '#d71920' },
       contapyme: { lead: 'conta', accent: 'pyme', tail: '',    label: 'ContaPyme', leadColor: '#000', accentColor: '#fff'    },
+      // El logo de InSoft lleva la S en mayuscula y en rojo: in + Soft.
+      insoft:    { lead: 'in',    accent: 'Soft', tail: '',    label: 'InSoft',    leadColor: '#000', accentColor: '#d71920' },
       agrowin:   { lead: 'agro',  accent: 'win',  tail: '',    label: 'AgroWin',   leadColor: '#000', accentColor: '#fff'    }
     };
 
@@ -212,7 +211,7 @@
       : (themes.has(localStorage.getItem('is-theme')) ? localStorage.getItem('is-theme') : 'dark');
     let palette = palettes.has(stateFromUrl?.palette)
       ? stateFromUrl.palette
-      : (palettes.has(localStorage.getItem('is-palette')) ? localStorage.getItem('is-palette') : 'insoft');
+      : (palettes.has(localStorage.getItem('is-palette')) ? localStorage.getItem('is-palette') : 'contapyme');
     let component = catalog.find(item => item.tag === (stateFromUrl && stateFromUrl.component)) ?? HOME;
 
     function encodeState(obj) {
@@ -338,7 +337,7 @@
       const opt = e.target.closest('[data-palette]');
       if (!opt) return;
       palette = opt.dataset.palette;
-      if (!palettes.has(palette)) palette = 'insoft';
+      if (!palettes.has(palette)) palette = 'contapyme';
       setMenuOpen(false);
       renderContext();
     });

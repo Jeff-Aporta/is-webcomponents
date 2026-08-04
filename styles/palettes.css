@@ -1,4 +1,4 @@
-/* palettes.css — Paletas de marca (InSoft, ContaPyme, AgroWin).
+/* palettes.css — Paletas de marca (ContaPyme, InSoft, AgroWin).
  *
  * SEPARADO de is-base.css para que pueda cargarse opcionalmente: si solo
  * quieres el tema dark/light base (sin marca), basta con is-base.min.css.
@@ -12,27 +12,128 @@
  *     que se tintan suavemente con el color de marca (mínimo 3% para que
  *     se note en dark, ≤10% en light).
  *
- * Default palette = insoft. Para cambiarla:
+ * Default palette = contapyme. Al cargar esta hoja, :root ya recibe ContaPyme
+ * (no hace falta data-palette). Para cambiarla:
  *
- *   <html data-palette="contapyme">      o
+ *   <html data-palette="insoft">         o
  *   <div data-palette="agrowin">         (scoped)
  */
 
-/* ─── INSOFT (default) ──────────────────────────────────────────── */
+/* ─── CONTAPYME (default — azul corporativo) ───────────────────────
+ *
+ * Los valores de marca NO son inventados: se extrajeron de los fallbacks
+ * `var(--is-primary, …)` de ISP-SvelteComponents, que es el producto real.
+ * ISP no publica ninguna hoja global ni `:root`, así que su única fuente de
+ * verdad son esos fallbacks embebidos en los .svelte:
+ *
+ *   #1a6eb0  → primary principal (21 usos)  → --is-accent / --is-color-brand
+ *   #00598a  → primary oscuro (hover/press) → --is-color-brand-stronger
+ *   #00bcff  → primary brillante, usado SOLO donde el fondo es oscuro
+ *              → lo conservamos como --is-brand-text en dark.
+ *
+ * ISP es light-only: `.theme-light[data-palette="contapyme"]` es la copia
+ * fiel; el bloque dark es una extensión propia de esta librería.
+ *
+ * :root aplica ContaPyme sin data-palette. insoft/agrowin (más abajo)
+ * pisan estas variables cuando el atributo está presente.
+ */
+
+:root,
+[data-palette="contapyme"] {
+  --is-color-info-paler: #e7f5ff;
+  --is-color-info-pale: #d0ebff;
+  --is-color-info: #228be6;
+  --is-color-info-strong: #1c7ed6;
+  --is-color-info-stronger: #1864ab;
+  --is-color-info-strongest: #145591;
+
+  /* Rampa derivada de #1a6eb0: paler/pale son los pasteles para brand-soft en
+     light, strong es el hover intermedio y stronger aterriza exactamente en
+     #00598a (el tono que ISP usa en :hover/:active de botones primarios). */
+  --is-color-brand-paler: #e9f2f9;
+  --is-color-brand-pale: #c7e0f0;
+  --is-color-brand: #1a6eb0;
+  --is-color-brand-strong: #12639f;
+  --is-color-brand-stronger: #00598a;
+  --is-color-brand-strongest: #00456d;
+  --is-accent: #1a6eb0;
+  --is-accent-bg: rgb(26 110 176 / 12%);
+  --is-brand-soft: rgb(26 110 176 / 18%);
+  --is-brand-soft-active: rgb(26 110 176 / 28%);
+  /* dark: ISP usa #00bcff cuando el texto de marca va sobre fondo oscuro */
+  --is-brand-text: #00bcff;
+  --is-focus: #1a6eb0;
+  --is-logo-bg: #1a6eb0;
+  --is-logo-fg: #fff;
+  --is-logo-accent: #fff;
+
+  /* Radios: ISP usa 0.5rem en cards/botones y 0.25rem en ítems de menú.
+     Se expresan en em porque en esta librería la geometría escala con
+     el font-size del componente (regla del proyecto: nada de px). */
+  --is-radius: 0.5em;
+  --is-radius-sm: 0.25em;
+}
+
+/* surfaces / bg: azul desaturado 75% sobre la marca real — c * 0.25 */
+.theme-dark:not([data-palette]),
+.theme-dark[data-palette="contapyme"] {
+  --is-contapyme-surface: oklch(from #1a6eb0 l calc(c * 0.25) h);
+  --is-bg: color-mix(in srgb, var(--is-contapyme-surface) 5%, #0a0e14);
+  --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 6%, #121820);
+  --is-bg-elev: color-mix(in srgb, var(--is-contapyme-surface) 7%, #18202a);
+  --is-border: color-mix(in srgb, var(--is-contapyme-surface) 10%, #273040);
+  --is-border-soft: color-mix(in srgb, var(--is-contapyme-surface) 8%, #1c2430);
+  --is-code-bg: color-mix(in srgb, var(--is-contapyme-surface) 4.5%, #0d1218);
+  --is-control-bg: color-mix(in srgb, var(--is-contapyme-surface) 5.5%, #1c2430);
+  --is-control-bg-hover: color-mix(in srgb, var(--is-contapyme-surface) 7%, #283242);
+  --is-control-bg-active: color-mix(in srgb, var(--is-contapyme-surface) 8%, #344054);
+  --is-control-border: color-mix(in srgb, var(--is-contapyme-surface) 12%, #59636e);
+  --is-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, var(--is-contapyme-surface) 14%, rgb(0 0 0 / 25%));
+}
+
+/* light = copia fiel de ISP. ISP pinta page-bg y cards en #fff planos (sin
+   tinte de marca) y usa bordes neutros #ccc / rgb(229 231 235); por eso aquí
+   el tinte azul baja casi a cero respecto a la versión anterior. */
+.theme-light:not([data-palette]),
+.theme-light[data-palette="contapyme"] {
+  --is-contapyme-surface: oklch(from #1a6eb0 l calc(c * 0.25) h);
+  --is-bg: #fff;                                   /* ISP: page bg #fff */
+  --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 4%, #f6f8fa);
+  --is-bg-elev: #fff;                              /* ISP: card/surface #fff */
+  --is-border: #ccc;                               /* ISP: borde base #ccc */
+  --is-border-soft: rgb(229 231 235);              /* ISP: surface-alt/divisor */
+  --is-code-bg: color-mix(in srgb, var(--is-contapyme-surface) 3%, #f6f8fa);
+  --is-control-bg: color-mix(in srgb, var(--is-contapyme-surface) 3%, #f1f3f5);
+  --is-control-bg-hover: color-mix(in srgb, var(--is-contapyme-surface) 5%, #e9ecef);
+  --is-control-bg-active: color-mix(in srgb, var(--is-contapyme-surface) 7%, #dee2e6);
+  --is-control-border: #80808050;                  /* ISP: borde de control */
+  --is-text: #222;                                 /* ISP: texto principal */
+  --is-text-soft: #334155;
+  --is-text-dim: #64748b;
+  --is-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--is-contapyme-surface) 8%, rgb(0 0 0 / 6%));
+
+  /* Estados de campo: ISP los declara con estos grises exactos en claro.
+     El resto de paletas hereda los neutros de is-base.css. */
+  --is-b-required: #888;                           /* ISP: fallback #888 */
+  --is-b-readonly: #8884;                          /* ISP: fallback #8884 */
+  --is-bg-readonly: #f9f9f9;                       /* ISP: fallback #f9f9f9 */
+}
+
+/* ─── INSOFT (rojo) ──────────────────────────────────────────────── */
 
 [data-palette="insoft"] {
-  --is-color-info-50: #e7f5ff;
-  --is-color-info-100: #d0ebff;
-  --is-color-info-500: #228be6;
-  --is-color-info-600: #1c7ed6;
-  --is-color-info-700: #1864ab;
-  --is-color-info-800: #145591;
-  --is-color-brand-50: #fff1f1;
-  --is-color-brand-100: #ffd9d9;
-  --is-color-brand-500: #e03131;
-  --is-color-brand-600: #c92a2a;
-  --is-color-brand-700: #a61e1e;
-  --is-color-brand-800: #7f1717;
+  --is-color-info-paler: #e7f5ff;
+  --is-color-info-pale: #d0ebff;
+  --is-color-info: #228be6;
+  --is-color-info-strong: #1c7ed6;
+  --is-color-info-stronger: #1864ab;
+  --is-color-info-strongest: #145591;
+  --is-color-brand-paler: #fff1f1;
+  --is-color-brand-pale: #ffd9d9;
+  --is-color-brand: #e03131;
+  --is-color-brand-strong: #c92a2a;
+  --is-color-brand-stronger: #a61e1e;
+  --is-color-brand-strongest: #7f1717;
   --is-accent: #e03131;
   --is-accent-bg: rgb(224 49 49 / 12%);
   --is-brand-soft: rgb(224 49 49 / 18%);
@@ -72,115 +173,21 @@
   --is-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 6%);
 }
 
-/* ─── CONTAPYME (azul corporativo) ─────────────────────────────────
- *
- * Los valores de marca NO son inventados: se extrajeron de los fallbacks
- * `var(--is-primary, …)` de ISP-SvelteComponents, que es el producto real.
- * ISP no publica ninguna hoja global ni `:root`, así que su única fuente de
- * verdad son esos fallbacks embebidos en los .svelte:
- *
- *   #1a6eb0  → primary principal (21 usos)  → --is-accent / brand-500
- *   #00598a  → primary oscuro (hover/press) → brand-700
- *   #00bcff  → primary brillante, usado SOLO donde el fondo es oscuro
- *              → lo conservamos como --is-brand-text en dark.
- *
- * ISP es light-only: `.theme-light[data-palette="contapyme"]` es la copia
- * fiel; el bloque dark es una extensión propia de esta librería.
- */
-
-[data-palette="contapyme"] {
-  --is-color-info-50: #e7f5ff;
-  --is-color-info-100: #d0ebff;
-  --is-color-info-500: #228be6;
-  --is-color-info-600: #1c7ed6;
-  --is-color-info-700: #1864ab;
-  --is-color-info-800: #145591;
-
-  /* Rampa derivada de #1a6eb0: 50/100 son pasteles para brand-soft en light,
-     600 es el hover intermedio y 700 aterriza exactamente en #00598a (el
-     tono oscuro que ISP usa en :hover/:active de botones primarios). */
-  --is-color-brand-50: #e9f2f9;
-  --is-color-brand-100: #c7e0f0;
-  --is-color-brand-500: #1a6eb0;
-  --is-color-brand-600: #12639f;
-  --is-color-brand-700: #00598a;
-  --is-color-brand-800: #00456d;
-  --is-accent: #1a6eb0;
-  --is-accent-bg: rgb(26 110 176 / 12%);
-  --is-brand-soft: rgb(26 110 176 / 18%);
-  --is-brand-soft-active: rgb(26 110 176 / 28%);
-  /* dark: ISP usa #00bcff cuando el texto de marca va sobre fondo oscuro */
-  --is-brand-text: #00bcff;
-  --is-focus: #1a6eb0;
-  --is-logo-bg: #1a6eb0;
-  --is-logo-fg: #fff;
-  --is-logo-accent: #fff;
-
-  /* Radios: ISP usa 0.5rem en cards/botones y 0.25rem en ítems de menú.
-     Se expresan en em porque en esta librería la geometría escala con
-     el font-size del componente (regla del proyecto: nada de px). */
-  --is-radius: 0.5em;
-  --is-radius-sm: 0.25em;
-}
-
-/* surfaces / bg: azul desaturado 75% sobre la marca real — c * 0.25 */
-.theme-dark[data-palette="contapyme"] {
-  --is-contapyme-surface: oklch(from #1a6eb0 l calc(c * 0.25) h);
-  --is-bg: color-mix(in srgb, var(--is-contapyme-surface) 5%, #0a0e14);
-  --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 6%, #121820);
-  --is-bg-elev: color-mix(in srgb, var(--is-contapyme-surface) 7%, #18202a);
-  --is-border: color-mix(in srgb, var(--is-contapyme-surface) 10%, #273040);
-  --is-border-soft: color-mix(in srgb, var(--is-contapyme-surface) 8%, #1c2430);
-  --is-code-bg: color-mix(in srgb, var(--is-contapyme-surface) 4.5%, #0d1218);
-  --is-control-bg: color-mix(in srgb, var(--is-contapyme-surface) 5.5%, #1c2430);
-  --is-control-bg-hover: color-mix(in srgb, var(--is-contapyme-surface) 7%, #283242);
-  --is-control-bg-active: color-mix(in srgb, var(--is-contapyme-surface) 8%, #344054);
-  --is-control-border: color-mix(in srgb, var(--is-contapyme-surface) 12%, #59636e);
-  --is-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, var(--is-contapyme-surface) 14%, rgb(0 0 0 / 25%));
-}
-
-/* light = copia fiel de ISP. ISP pinta page-bg y cards en #fff planos (sin
-   tinte de marca) y usa bordes neutros #ccc / rgb(229 231 235); por eso aquí
-   el tinte azul baja casi a cero respecto a la versión anterior. */
-.theme-light[data-palette="contapyme"] {
-  --is-contapyme-surface: oklch(from #1a6eb0 l calc(c * 0.25) h);
-  --is-bg: #fff;                                   /* ISP: page bg #fff */
-  --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 4%, #f6f8fa);
-  --is-bg-elev: #fff;                              /* ISP: card/surface #fff */
-  --is-border: #ccc;                               /* ISP: borde base #ccc */
-  --is-border-soft: rgb(229 231 235);              /* ISP: surface-alt/divisor */
-  --is-code-bg: color-mix(in srgb, var(--is-contapyme-surface) 3%, #f6f8fa);
-  --is-control-bg: color-mix(in srgb, var(--is-contapyme-surface) 3%, #f1f3f5);
-  --is-control-bg-hover: color-mix(in srgb, var(--is-contapyme-surface) 5%, #e9ecef);
-  --is-control-bg-active: color-mix(in srgb, var(--is-contapyme-surface) 7%, #dee2e6);
-  --is-control-border: #80808050;                  /* ISP: borde de control */
-  --is-text: #222;                                 /* ISP: texto principal */
-  --is-text-soft: #334155;
-  --is-text-dim: #64748b;
-  --is-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--is-contapyme-surface) 8%, rgb(0 0 0 / 6%));
-
-  /* Estados de campo: ISP los declara con estos grises exactos en claro.
-     El resto de paletas hereda los neutros de is-base.css. */
-  --is-b-required: #888;                           /* ISP: fallback #888 */
-  --is-b-readonly: #8884;                          /* ISP: fallback #8884 */
-  --is-bg-readonly: #f9f9f9;                       /* ISP: fallback #f9f9f9 */
-}
-
 /* ─── AGROWIN (verde) ──────────────────────────────────────────── */
 
 [data-palette="agrowin"] {
-  --is-color-info-50: #e7f5ff;
-  --is-color-info-100: #d0ebff;
-  --is-color-info-500: #228be6;
-  --is-color-info-600: #1c7ed6;
-  --is-color-info-700: #1864ab;
-  --is-color-info-800: #145591;
-  --is-color-brand-50: #f4fae9;
-  --is-color-brand-100: #e4f2c8;
-  --is-color-brand-500: yellowgreen;
-  --is-color-brand-600: #78a629;
-  --is-color-brand-700: #628820;
-  --is-color-brand-800: #4e6c1c;
+  --is-color-info-paler: #e7f5ff;
+  --is-color-info-pale: #d0ebff;
+  --is-color-info: #228be6;
+  --is-color-info-strong: #1c7ed6;
+  --is-color-info-stronger: #1864ab;
+  --is-color-info-strongest: #145591;
+  --is-color-brand-paler: #f4fae9;
+  --is-color-brand-pale: #e4f2c8;
+  --is-color-brand: yellowgreen;
+  --is-color-brand-strong: #78a629;
+  --is-color-brand-stronger: #628820;
+  --is-color-brand-strongest: #4e6c1c;
   --is-accent: yellowgreen;
   --is-accent-bg: rgb(154 205 50 / 14%);
   --is-brand-soft: rgb(154 205 50 / 20%);
@@ -223,7 +230,7 @@
 
 /* ─── Light: brand-text + brand-soft usando los pastel de cada paleta ── */
 .theme-light {
-  --is-brand-text: var(--is-color-brand-700);
-  --is-brand-soft: var(--is-color-brand-50);
-  --is-brand-soft-active: var(--is-color-brand-100);
+  --is-brand-text: var(--is-color-brand-stronger);
+  --is-brand-soft: var(--is-color-brand-paler);
+  --is-brand-soft-active: var(--is-color-brand-pale);
 }

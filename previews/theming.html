@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
 <head>
   <meta charset="UTF-8" />
   <script src="../scripts/preview-boot.js"></script>
@@ -193,24 +193,24 @@
           <strong>pareja</strong>:
         </p>
         <pre class="code">/* marca: sirve a dark y light por igual */
-[data-palette="insoft"] {
-  --is-color-brand-500: #e03131;
-  --is-accent: #e03131;
-  --is-accent-bg: rgb(224 49 49 / 12%);
-  --is-brand-soft: rgb(224 49 49 / 18%);
-  --is-focus: #ff6b6b;
+[data-palette="contapyme"] {
+  --is-color-brand: #1a6eb0;
+  --is-accent: #1a6eb0;
+  --is-accent-bg: rgb(26 110 176 / 12%);
+  --is-brand-soft: rgb(26 110 176 / 18%);
+  --is-focus: #1a6eb0;
 }
 
 /* superficies: dependen de la PAREJA (tema, paleta) */
-.theme-dark[data-palette="insoft"]  { --is-bg: #0b0d10; --is-border: #2a3038; }
-.theme-light[data-palette="insoft"] { --is-bg: #fff;    --is-border: #d0d7de; }</pre>
+.theme-dark[data-palette="contapyme"]  { --is-bg: #0a0e14; --is-border: #273040; }
+.theme-light[data-palette="contapyme"] { --is-bg: #fff;    --is-border: #ccc; }</pre>
 
         <p class="lede">
           Y así se activa. Lo habitual es en <code>&lt;html&gt;</code>, pero
           funciona en cualquier ancestro: por eso los dos paneles de más abajo
           pueden mostrar temas distintos en la misma página.
         </p>
-        <pre class="code">&lt;html class="theme-dark" data-theme="dark" data-palette="insoft"&gt;
+        <pre class="code">&lt;html class="theme-dark" data-theme="dark" data-palette="contapyme"&gt;
 
 &lt;!-- o acotado a un trozo del DOM --&gt;
 &lt;div class="theme-light" data-theme="light" data-palette="mi-marca"&gt; … &lt;/div&gt;</pre>
@@ -223,7 +223,7 @@
           <tbody>
             <tr>
               <td>Marca</td>
-              <td><code>--is-color-brand-50…800</code>, <code>--is-accent</code>, <code>--is-accent-bg</code>, <code>--is-on-brand</code></td>
+              <td><code>--is-color-brand</code> (+ <code>-paler</code>, <code>-pale</code>, <code>-strong</code>, <code>-stronger</code>, <code>-strongest</code>), <code>--is-accent</code>, <code>--is-accent-bg</code>, <code>--is-on-brand</code></td>
               <td><code>[data-palette="…"]</code></td>
             </tr>
             <tr>
@@ -309,11 +309,11 @@
         </p>
 
         <div class="tw-panels">
-          <is-demo class="demo tw-panel theme-dark" data-theme="dark" data-palette="insoft" data-no-code>
+          <is-demo class="demo tw-panel theme-dark" data-theme="dark" data-palette="contapyme" data-no-code>
             <p class="tw-panel__head"><span>Tema oscuro</span><span id="darkBgLabel"></span></p>
             <div class="tw-panel__body" data-panel-body></div>
           </is-demo>
-          <is-demo class="demo tw-panel theme-light" data-theme="light" data-palette="insoft" data-no-code>
+          <is-demo class="demo tw-panel theme-light" data-theme="light" data-palette="contapyme" data-no-code>
             <p class="tw-panel__head"><span>Tema claro</span><span id="lightBgLabel"></span></p>
             <div class="tw-panel__body" data-panel-body></div>
           </is-demo>
@@ -342,9 +342,9 @@
         <table class="ref">
           <thead><tr><th>Token</th><th>Cómo se calcula</th></tr></thead>
           <tbody>
-            <tr><td><code>--is-color-brand-500</code></td><td>la semilla tal cual</td></tr>
-            <tr><td><code>--is-color-brand-50 / 100</code></td><td>OKLCH con L 0.97 / 0.92 y croma al 18 % / 40 % (pasteles para <em>soft</em> en claro)</td></tr>
-            <tr><td><code>--is-color-brand-600 / 700 / 800</code></td><td>L × 0.88 / 0.75 / 0.60, croma × 1 / 0.92 / 0.80</td></tr>
+            <tr><td><code>--is-color-brand</code></td><td>la semilla tal cual</td></tr>
+            <tr><td><code>--is-color-brand-paler / 100</code></td><td>OKLCH con L 0.97 / 0.92 y croma al 18 % / 40 % (pasteles para <em>soft</em> en claro)</td></tr>
+            <tr><td><code>--is-color-brand-strong / 700 / 800</code></td><td>L × 0.88 / 0.75 / 0.60, croma × 1 / 0.92 / 0.80</td></tr>
             <tr><td><code>--is-accent-bg</code></td><td>semilla al 12 % de alfa</td></tr>
             <tr><td><code>--is-brand-soft</code> / <code>-active</code></td><td>dark: 18 % / 28 % de alfa · light: brand-50 / brand-100</td></tr>
             <tr><td><code>--is-brand-text</code></td><td>dark: semilla subida a L ≥ 0.78 · light: brand-700</td></tr>
@@ -522,12 +522,12 @@
       };
 
       const marca = {
-        '--is-color-brand-50': brand[50],
-        '--is-color-brand-100': brand[100],
-        '--is-color-brand-500': brand[500],
-        '--is-color-brand-600': brand[600],
-        '--is-color-brand-700': brand[700],
-        '--is-color-brand-800': brand[800],
+        '--is-color-brand-paler': brand[50],
+        '--is-color-brand-pale': brand[100],
+        '--is-color-brand': brand[500],
+        '--is-color-brand-strong': brand[600],
+        '--is-color-brand-stronger': brand[700],
+        '--is-color-brand-strongest': brand[800],
         '--is-accent': brand[500],
         '--is-accent-bg': alpha(brand[500], 12),
         '--is-on-brand': b.l > 0.72 ? '#111111' : '#ffffff',

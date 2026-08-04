@@ -34,7 +34,7 @@ check(styles.includes('.theme-dark'), 'missing .theme-dark');
 for (const p of ['insoft', 'contapyme', 'agrowin']) {
   check(styles.includes(`[data-palette="${p}"]`), `missing ${p} palette`);
 }
-check(html.includes('data-palette="insoft"'), 'missing root palette on <html>');
+check(html.includes('data-palette="contapyme"'), 'missing root palette contapyme on <html>');
 
 check(!/<(?:svg|symbol|use)\b/i.test(html), 'index.html contiene <svg>/<use>/<symbol> inline');
 check(!/<(?:svg|symbol|use)\b/i.test(component), 'components/actions/button.js contiene <svg>/<use>/<symbol> inline');
@@ -56,11 +56,13 @@ for (const t of FIELD_TOKENS) {
 
 // 9. La paleta contapyme debe usar la marca real de ISP (#1a6eb0 / #00598a)
 //    y NO dodgerblue #1e90ff, que era el valor placeholder anterior.
-const cp = palettes.slice(palettes.indexOf('[data-palette="contapyme"]'), palettes.indexOf('[data-palette="agrowin"]'));
+//    ContaPyme es la primera paleta del archivo (default); cortamos hasta insoft.
+const cp = palettes.slice(palettes.indexOf('[data-palette="contapyme"]'), palettes.indexOf('[data-palette="insoft"]'));
 check(!/dodgerblue|#1e90ff/i.test(cp), 'paleta contapyme aun usa dodgerblue/#1e90ff');
 check(/#1a6eb0/i.test(cp), 'paleta contapyme no usa el primary real #1a6eb0');
 check(/#00598a/i.test(cp), 'paleta contapyme no usa el primary oscuro real #00598a');
 check(/#00bcff/i.test(cp), 'paleta contapyme no conserva #00bcff como brand-text dark');
+check(/:root,\s*\[data-palette="contapyme"\]/.test(palettes), 'contapyme debe aplicarse en :root como default');
 
 check(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`${html}\n${component}`), 'size API legacy encontrada');
 

@@ -40,7 +40,7 @@
   }
   if (!palette) {
     const ls = localStorage.getItem('is-palette');
-    palette = PALETTES.has(ls) ? ls : (root.dataset.palette || 'insoft');
+    palette = PALETTES.has(ls) ? ls : (root.dataset.palette || 'contapyme');
   }
 
   root.classList.toggle('theme-light', theme === 'light');

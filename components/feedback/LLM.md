@@ -51,6 +51,8 @@ Revisar imports y `_shared/` antes de implementar. Reusar stdlib, plataforma y m
 - Leer callers antes de tocar helper compartido.
 - Preservar accesibilidad, validación y fallbacks.
 - Ejecutar `node scripts/docs-consistency.selfcheck.mjs`.
+- Tema/paleta: default `contapyme`; snippets de demo sellan `data-theme` +
+  `data-palette` vía `scripts/demo-code.js` (no reinventar). Ver root `LLM.md`.
 
 ## Qué no hacer
 
@@ -58,12 +60,18 @@ Revisar imports y `_shared/` antes de implementar. Reusar stdlib, plataforma y m
 - No crear abstracción si shared/native resuelve caso.
 - No crear size colors; usar font-size contextual y em.
 - No duplicar MD por tag multi-tag.
+- No poner `color-scheme` en `:root` ni `background` de página en
+  `is-base`/`palettes`. No volver el default de paleta a `insoft`.
 
 ## Errores conocidos y prevención
 
-Duplicar overlays/position o emitir señales redundantes; reutilizar popup/toast.
+Duplicar overlays/position o emitir señales redundantes; reutilizar floating/toast.
 
 Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
+
+Snippets CDN (`is-cdn-snippet`) ≠ snippets de demo (`demo-code.js`). El primero
+lista URLs; el segundo serializa el ejemplo y **debe** incluir tema/paleta
+activos. Guardián: `tests/palette-and-snippet-contract.test.mjs`.
 
 ## Módulos internos
 

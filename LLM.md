@@ -6,9 +6,10 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 
 - Web Components vanilla (`is-*`), shadow DOM, tokens `--is-*`.
 - `previews/*.html` = demos. Cada preview es self-contained: importa componentes por `<script type="module src="../components/...">`.
-- Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"insoft|..."}>`. `scripts/preview-boot.js` lo decodifica y setea `data-theme` / `data-palette` en `<html>`. **`prefers-color-scheme` NO se usa** — el tema es explícito.
+- Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"contapyme|insoft|agrowin"}>`. `scripts/preview-boot.js` lo decodifica y setea `data-theme` / `data-palette` en `<html>`. **`prefers-color-scheme` NO se usa** — el tema es explícito.
 - Build: esbuild → `dist/cdn/`. Dev: `node scripts/serve.mjs`. Sin TS, sin framework, sin test runner por defecto.
-- **La marca es `InSoft`** (S mayúscula: el logo la pinta en el color de marca, `in` + `Soft`). El identificador de paleta `insoft` va en minúsculas y **no se toca**: es API (`data-palette`, `value`, claves de objeto). Igual el dominio `insoft.com.co`.
+- **Paleta default del kit = `contapyme`** (azul ISP `#1a6eb0`). `insoft` y `agrowin` siguen disponibles; no son el default.
+- **La marca tipográfica es `InSoft`** (S mayúscula: el logo la pinta en el color de marca, `in` + `Soft`). El identificador de paleta `insoft` va en minúsculas y **no se toca**: es API (`data-palette`, `value`, claves de objeto). Igual el dominio `insoft.com.co`.
 
 ---
 
@@ -35,6 +36,30 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - Shadows complejas (multi-layer) y halos: definirlas como **CSS vars en `.home`** (`.home { --shadow-lift: ... }`) y override en `[data-theme="light"] .home`. Custom props cascadean, specificity gana.
 - Auroras, orbes, halos con `opacity` explícito en light mode (en dark se ven al 100% por gradient, en light quedan como manchas).
 
+### Paleta default + canvas de la app (CDN)
+- **Default = `contapyme`.** En `styles/palettes.css` va primero y se aplica a `:root, [data-palette="contapyme"]`. Fallbacks JS (`preview-boot`, `preview-chrome`, `chart-palette`, `palette-selector` primera entrada, `index.html`) → `'contapyme'`.
+- Bootstrap consumidor:
+  ```html
+  <html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+  <link rel="stylesheet" href="…/is-base.min.css">
+  <link rel="stylesheet" href="…/palettes.min.css">
+  ```
+- `is-base.css` / `palettes.css` **solo declaran tokens**. No pintan `html`/`body`. El canvas (`background`) lo define la app (`presentation.css` / `shell.css` son chrome de la galería, no van en el snippet CDN).
+- `color-scheme` **solo** en `.theme-dark` / `.theme-light`, **nunca** en `:root` a secas. Si vuelve a `:root`, cargar el CDN oscurece apps claras sin que lo pidan.
+- Guardián: `tests/palette-and-snippet-contract.test.mjs`.
+
+### Snippets de demo (`scripts/demo-code.js`)
+- El markup pegable debe llevar en su raíz `data-theme`, `data-palette` y clase `.theme-dark|.theme-light` del preview actual:
+  ```html
+  <div class="matrix theme-dark" data-theme="dark" data-palette="contapyme">
+    <div></div>
+    …
+  </div>
+  ```
+- Eso lo hace `withSnippetContext` / `stampContext`. **No reimplementar** a mano en cada preview.
+- Reactivo: al cambiar tema/paleta (`is-theme-change`, `is-palette-change`, MutationObserver en `<html>`) se invalida el cache; si el panel está abierto, se regenera.
+- El snippet CDN es fragmento mínimo (`<link>` + `<script>` + markup), **no** un HTML completo con `body { background }`.
+
 ### Texto con degradado recortado (`background-clip: text`)
 - Ese texto **no tiene color propio**: lo pinta el degradado, y `-webkit-text-fill-color: transparent` lo deja invisible si el degradado falla. Todo selector así necesita override `[data-theme="light"]`.
 - Los `--hue-a..e` se derivan de `--is-accent` con la **misma luminosidad en ambos temas**, y varias paradas se mezclan hacia `#fff`. Sobre el blanco del tema light eso es texto ilegible.
@@ -52,6 +77,12 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - JS escribe `--px/--py/--pz/--pry/--prx` (custom props), nunca `style.transform` inline. Inline mata el `:hover`.
 - Transform compuesto en CSS: `translate3d(var(--px), var(--py), calc(var(--pz) + var(--lift))) rotateY(...) rotateX(...)`.
 
+### Persistencia de WC (`_shared/prefs.js`)
+- Un solo JSON: `localStorage['is-webcomponents'][tag][storage-key]`.
+- Opt-in del consumidor (`remember-state` / `remember-scroll` + `storage-key`).
+- Snapshot de grid → `replaceComponentPrefs`. Patch layout → `setComponentPrefs`. Reset → `removeComponentPrefs`.
+- Docs: `components/data/ag-grid.md`. Test: `tests/prefs-contract.test.mjs`.
+
 ---
 
 ## DON'T
@@ -61,8 +92,14 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - **No hardcodear `rgb(0 0 0 / X%)` en shadows sin override light.** En dark queda bien, en light es una mancha negra. Bajar a 9-13% en light.
 - **No usar `innerHTML` para custom elements** que no estén ya upgraded. Riesgo de que el elemento quede como HTMLElement sin shadow DOM.
 - **No usar `prefers-color-scheme`** como selector de tema. El tema es por `data-theme` en `<html>`. Si el OS cambia, el preview no se entera — y eso es lo que se quiere (la preview es determinista por URL).
+- **No poner `color-scheme` en `:root` de `is-base.css`.** Solo en `.theme-dark` / `.theme-light`. En `:root` oscurece el canvas del browser al pegar el CDN en una app clara.
+- **No pintar `html`/`body { background }` en `is-base.css` ni `palettes.css`.** El canvas es de la app. El chrome de la galería (`presentation.css`, `shell.css`) sí puede; el snippet CDN no los incluye.
+- **No dejar el default de paleta en `insoft`.** Default = `contapyme`. No revertir fallbacks JS/HTML/CSS a `'insoft'` “porque historicamente era así”.
+- **No emitir snippets de demo sin `data-theme` + `data-palette` (+ `.theme-*`) en la raíz del markup.** Sin eso el ejemplo no hereda el contexto al pegarlo; no inventar otro wrapper — usar `withSnippetContext`.
 - **No meter `style.transform` inline** en elementos con `:hover` 3D. El inline gana al `:hover` y el tilt desaparece.
 - **No olvidarse del reset responsive/reduced-motion.** Si el 3D se queda en móvil o con reduced-motion, la página se rompe visualmente.
+- **No `localStorage.setItem(keyPlana)`** para estado de WC con `storage-key`. Tampoco `sessionStorage` canónico ni root `is-components` (solo migración). Un solo store: `prefs.js` → `is-webcomponents[tag][key]`.
+- **No dejar UI de columnas “en el HTML del shadow” sin cablear** (sidebar `hidden` sin handlers): bug real de `is-ag-grid`.
 
 ---
 
@@ -85,6 +122,14 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 8. **Heredoc de bash comiéndose el escapado de una regex** → escribir un test con `cat >> file << 'EOF'` convirtió `\\[` en `\[` y `\${base}` dejó de interpolar, así que la regex del test comparaba contra el literal `${base}` y fallaba por un motivo falso. Fix: escribir archivos con la herramienta de edición, no con heredoc, cuando el contenido lleva backslashes o `${}`.
 
 9. **Cards sin icono de demo** → el usuario no podía navegar al demo del componente desde la card. Fix: JS inyecta un `<button class="card-demo"><is-icon icon="mdi:open-in-new"></button>` en cada `.tile/.collage-card/.lab-card` que tenga un `is-*` de la whitelist. Click → `postMessage('is-select', tag)`.
+
+10. **Persistencia de WC fragmentada** → keys planas / `sessionStorage` / root `is-components` / sidebar de columnas en template sin cablear. Fix: un solo `localStorage['is-webcomponents'][tag][storage-key]` vía `_shared/prefs.js`; `is-ag-grid` con panel de checks + `resetPersistedState`. Guardián: `tests/prefs-contract.test.mjs`. Docs: `components/data/ag-grid.md`.
+
+11. **Paleta default = insoft** → el kit vivía en rojo InSoft; ContaPyme/ISP es el producto real. Quien pegaba el CDN sin `data-palette` (o con fallbacks JS en `'insoft'`) veía marca incorrecta. Fix: default `contapyme` en CSS (`:root`), HTML, fallbacks y `DEFAULT_PALETTES[0]`. Guardián: `tests/palette-and-snippet-contract.test.mjs`.
+
+12. **`color-scheme: dark` en `:root`** → cargar `is-base.min.css` hacía que el browser pintara el canvas oscuro aunque la app fuera clara. El kit no debe decidir el fondo de página. Fix: `color-scheme` solo en `.theme-dark` / `.theme-light`; sin `html,body { background }` en base/palettes.
+
+13. **Snippets de demo sin tema/paleta** → el markup copiado (`<div class="matrix">…`) no llevaba `data-theme`/`data-palette`; al pegarlo en otra app no heredaba el contexto del preview. Fix: `withSnippetContext` en `demo-code.js` sella la raíz y se actualiza al cambiar tema/paleta.
 
 ---
 
@@ -167,6 +212,7 @@ mantenerlo aparte.
 - Síntoma de que falta el modo: `runMode` corre sin lanzar, pero produce **0 tokens** (`conTema > 0`, `conTokens === 0`).
 - Síntoma de que falta el core: `ReferenceError: CodeMirror is not defined` dentro de `paint()`.
 - Los `<is-cdn-snippet>` **auto-inyectados** se crean *después* del evento `load`, así que un reintento enganchado a `load` nunca dispara. Hace falta un reintento acotado que espere a que existan pintor + core + modo.
+- El **contenido** del snippet de demo (markup) no es responsabilidad de CodeMirror: lo sella `demo-code.js` con tema/paleta. Ver sección «Snippets de demo» arriba.
 
 ---
 
@@ -185,7 +231,9 @@ mantenerlo aparte.
 
 ### Detectores de inconsistencia (los que avisan solos)
 - `tests/attr-enums.test.mjs` — atributos de enum en previews vs. lo que el componente acepta. **Este es el que caza los errores silenciosos**: valores que no rompen nada visible pero tampoco hacen nada.
+- `tests/prefs-contract.test.mjs` — raíz `is-webcomponents`, API de `prefs.js`, consumidores (`is-ag-grid` / `is-main` / `is-split-panel`) no escriben keys planas ni `sessionStorage` canónico; sidebar de columnas cableado.
 - `tests/brand-casing.test.mjs` — la marca se escribe `InSoft`; comprueba también que el wordmark compuesto lleve `'Soft'` en las dos implementaciones (`index.html` y `is-palette-selector`) y que el identificador `insoft` siga en minúsculas.
+- `tests/palette-and-snippet-contract.test.mjs` — default `contapyme`; sin `color-scheme` en `:root`; sin `html/body{background}` en base/palettes; `demo-code.js` sella y reacciona a tema/paleta.
 - `tests/icon-viewbox.test.mjs` — viewBox de los SVG contra `viewbox.snapshot.json`.
 - `tests/icon-render.test.mjs` — sin `force-cache`, multicolor preservado, viewBox intacto.
 - `tests/icon-explorer.test.mjs` — scroll propio, búsqueda global, filtros, formulario, uso de `is-*` y embed en `is-icon.html`.

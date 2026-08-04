@@ -8,6 +8,7 @@
 //   - manifest-paths.test.mjs
 //   - preview-paths.test.mjs
 //   - theme-contract.test.mjs
+//   - palette-and-snippet-contract.test.mjs
 //
 // Tests que SI requieren servidor (PORT=8391 con node scripts/serve.mjs):
 //   - cdn-icons.test.mjs
