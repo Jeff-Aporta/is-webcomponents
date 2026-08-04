@@ -143,6 +143,9 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `navigation/carousel.md` | `<is-carousel>`, `<is-carousel-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
 | `navigation/tree.md` | `<is-tree>`, `<is-tree-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
 | `navigation/stepper.md` | `<is-stepper>`, `<is-stepper-step>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
+| `overlays/command-palette.md` | `<is-command-palette>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/LLM.md) |
+| `overlays/pdf-viewer.md` | `<is-pdf-viewer>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/LLM.md) |
+| `overlays/window.md` | `<is-window>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/LLM.md) |
 
 ## Convenciones globales
 
