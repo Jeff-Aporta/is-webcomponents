@@ -156,7 +156,7 @@
           Panel flotante con contenido interactivo. Ancla con <code class="code">for</code>.
           Cierra con Escape, click fuera o <code class="code">data-popover="close"</code>.
           El posicionamiento (flip, shift, auto-size, arrow) lo hace un
-          <code class="code">&lt;is-popup&gt;</code> interno — el wrapper sólo
+          <code class="code">&lt;is-floating&gt;</code> interno — el wrapper sólo
           aporta ancla declarativa, ciclo de vida y accesibilidad.
         </p>
         <is-demo class="demo">
@@ -351,10 +351,9 @@
           </tbody>
         </table>
         <p class="empty-note">
-          <code>&lt;is-popup&gt;</code> existe como alias deprecado de
-          <code>&lt;is-popover&gt;</code>. Toda la API vive en popover; popup
-          no expone ciclo de vida (mostrar/ocultar), sólo el building block
-          de posicionamiento (que internamente usa popover).
+          El tag <code>&lt;is-popup&gt;</code> fue eliminado. Usa siempre
+          <code>&lt;is-popover&gt;</code>. El posicionamiento interno usa
+          <code>&lt;is-floating&gt;</code> (no es API pública).
         </p>
       </section>
     </is-main>

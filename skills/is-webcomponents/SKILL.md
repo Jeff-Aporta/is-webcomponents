@@ -47,17 +47,18 @@ Si no hay tag exacto → buscar el más cercano en el kit. Solo entonces un prim
 
 ## Bootstrap CDN (apps consumidoras)
 
-Pin por **commit SHA** (nunca `@main` en producción). En el proyecto, respetar el SHA ya fijado en `index.html`.
+Por defecto pin por **commit SHA**. Excepción: apps que declaran seguimiento continuo
+(p. ej. `jagudeloe/frontend-webcomponents`) pueden usar `@main`.
 
 ```html
 <html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
   <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<SHA>/dist/cdn/is-base.min.css">
+    href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/is-base.min.css">
   <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<SHA>/dist/cdn/palettes.min.css">
+    href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/palettes.min.css">
   <script type="module"
-    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<SHA>/dist/cdn/all.min.js"></script>
+    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/all.min.js"></script>
 </head>
 <body>
   <!-- shell de la app -->
@@ -78,46 +79,11 @@ Pin por **commit SHA** (nunca `@main` en producción). En el proyecto, respetar 
 | Dominio | `tk-*` / propio | Traducir payload → `is-*` |
 | Shell | `*-app`, `*-nav`, `*-view` | Orquestación, routing, datos |
 
-Los wrappers de dominio:
+## Prohibido / eliminado
 
-- Componen `is-*` en el shadow/light DOM.
-- No reinventan tabla (`is-data-grid`), tag (`is-tag`), callout (`is-callout`), chart (`is-chart`), tree (`is-tree`), dialog (`is-dialog`), etc.
-- Usan tokens `--is-*` y escala en `em` / `font-size` contextual (sin atributo `size`).
-- Iconos **siempre** `<is-icon name="mdi:…">` — nunca Iconify CDN ni `<img>` para iconos monocromos.
-
-## Protocolo antes de escribir UI
-
-```
-¿Qué necesitas?
-1. ¿Existe is-*?     → usarlo (ver reference.md)
-2. ¿Existe helper?   → is-format-*, is-popover, observers
-3. ¿Existe ISP?      → is-form, is-flex-layout, is-confirm-delete…
-4. Solo entonces     → wrapper de dominio que DELEGA al kit
-5. Nunca             → Button/Dialog/Table caseros, MUI, Iconify, Chart.js suelto
-```
-
-`color` y `variant` son dimensiones distintas: `color` = semántica (brand, neutral, info, success, warning, danger); `variant` = presentación (filled, outlined, plain, soft…). Nunca meter color en `variant`.
-
-## Árbol rápido (consumidor)
-
-```
-Acción          → is-button / is-button-group / is-fab / is-dropdown / is-copy-button
-Formulario      → is-input / is-textarea / is-select / is-combobox / is-checkbox /
-                  is-switch / is-radio-group / is-slider / is-date-* / is-file-input
-Feedback        → is-toast / is-spinner / is-skeleton / is-progress-* / is-badge /
-                  is-tag / is-tooltip / is-popconfirm / is-theme-toggle
-Layout          → is-main / is-card / is-callout / is-details / is-dialog /
-                  is-drawer / is-divider / is-split-panel / is-scrollspy
-Datos           → is-data-grid / is-stat / is-transfer / is-gauge / is-kanban
-Charts          → is-chart o tipados (is-bar-chart, is-line-chart, …)
-Diagramas       → is-flowchart / is-sequence-diagram / is-gantt / is-timeline / …
-Navegación      → is-tab-group / is-tree / is-stepper / is-breadcrumb / is-carousel
-Media           → is-icon / is-avatar / is-video
-ISP ContaPyme   → is-form / is-flex-layout / is-grid-layout / is-heading / is-text /
-                  is-confirm-delete / is-loading-overlay / is-modal-verificacion
-```
-
-Desambiguaciones: [reference.md](reference.md).
+- **`is-popup`**: eliminado. No existe alias ni registro. Para paneles anclados usa **`<is-popover>`**. Tooltips: **`<is-tooltip>`**.
+- **`is-floating`**: building block **interno** (no API de producto). No usarlo en apps.
+- No hay componentes deprecados en el catálogo público: si el MD dice `status: internal`, no es API.
 
 ## Lectura de docs (ruta obligatoria)
 
@@ -133,7 +99,7 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/c
 - Escala: `style="font-size: …em"` / CSS del wrapper; sin `size` en el kit.
 - Iconos: `<is-icon name="familia:icono">` (p. ej. `mdi:check`).
 - Forms: form-associated del kit; no wrappers `<input>` nativos si hay `is-input`.
-- Overlays posicionados: el kit ya gestiona popup/position; no reinventar floating UI.
+- Overlays posicionados: `<is-popover>` / `<is-tooltip>` / position compartido; no reinventar floating UI ni usar `is-popup`.
 - Charts/diagramas: payloads declarativos documentados en el MD del módulo.
 - Listeners en `document`/`window`: solo en `connectedCallback`, quitar en `disconnectedCallback`.
 - Estados por atributo del host en CSS propio: `:host([attr])` top-level (nunca `&[attr]` dentro de `:host { }`).
@@ -142,7 +108,7 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/c
 
 - Reimplementar botón, modal, tabla, toast, tag, skeleton, spinner, tree, tabs, stepper, chart.
 - Traer MUI / React / Iconify / Chart.js directo cuando el kit cubre el caso.
-- Hardcodear `@main` en CDN de apps estables.
+- Usar o documentar `is-popup` (eliminado).
 - Meter CSS de componente del kit en el `<head>` (solo tema + paletas).
 - Inventar props/`data-*` no documentados.
 - Usar `size` colors o APIs ad-hoc fuera del contrato MD.
@@ -155,7 +121,7 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/c
 - [ ] Iconos vía `is-icon`.
 - [ ] Tema/paleta con tokens `--is-*`.
 - [ ] Wrappers de dominio solo traducen datos → kit.
-- [ ] SHA CDN alineado con el del proyecto.
+- [ ] CDN: SHA fijado **o** `@main` si el proyecto (como tks) sigue tip.
 
 ## Fundar una app nueva
 

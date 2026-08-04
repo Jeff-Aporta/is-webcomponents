@@ -20,7 +20,6 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-intersection-observer>` | [intersection-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/intersection-observer.md) | Observador de intersección |
 | `<is-mutation-observer>` | [mutation-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/mutation-observer.md) | Observador de mutación |
 | `<is-resize-observer>` | [resize-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/resize-observer.md) | Resize Observer |
-| `<is-popup>` | [popup.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/popup.md) | Popup |
 
 ## Composición y relaciones
 
@@ -64,7 +63,6 @@ Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 
 ## Módulos internos
 
-- `is-popup` — [popup.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/popup.md)
 
 ## Navegación
 

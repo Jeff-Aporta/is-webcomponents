@@ -111,7 +111,6 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `helpers/intersection-observer.md` | `<is-intersection-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
 | `helpers/mutation-observer.md` | `<is-mutation-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
 | `helpers/resize-observer.md` | `<is-resize-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
-| `helpers/popup.md` | `<is-popup>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
 | `isp/accordion-group.md` | `<is-accordion-group>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
 | `isp/block-layout.md` | `<is-block-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
 | `isp/confirm-delete.md` | `<is-confirm-delete>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
@@ -143,9 +142,6 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `navigation/carousel.md` | `<is-carousel>`, `<is-carousel-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
 | `navigation/tree.md` | `<is-tree>`, `<is-tree-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
 | `navigation/stepper.md` | `<is-stepper>`, `<is-stepper-step>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
-| `overlays/command-palette.md` | `<is-command-palette>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/LLM.md) |
-| `overlays/pdf-viewer.md` | `<is-pdf-viewer>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/LLM.md) |
-| `overlays/window.md` | `<is-window>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/LLM.md) |
 
 ## Convenciones globales
 
@@ -159,7 +155,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 
 - CSS: [`_shared/adopt-css.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/adopt-css.js), [`_shared/scrollbars.css`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/scrollbars.css).
 - Forms/fecha: [`_shared/form-associated.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/form-associated.js), [`_shared/date-field-core.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/date-field-core.js), [`_shared/date-utils.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/date-utils.js), [`_shared/picker-element.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/picker-element.js).
-- Overlays: [`_shared/position.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/position.js), [`helpers/popup.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/popup.md).
+- Overlays: [`_shared/position.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/position.js). Paneles: `<is-popover>` (nunca `is-popup`).
 - Charts: [`_shared/svg-chart-engine.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/svg-chart-engine.js), [`_shared/chart-palette.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/chart-palette.js), marks.
 - Diagramas: specs/layout/turtle/edit/kind registry existentes.
 - Grid: [`_shared/grid-data.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/grid-data.js), [`_shared/grid-types.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/grid-types.js), [`_shared/grid-ui.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/grid-ui.js).

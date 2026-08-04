@@ -1,18 +1,16 @@
 import { adoptCss } from '../_shared/adopt-css.js';
-import './popup.js';
+import './floating.js';
 
 /**
  * <is-popover> — panel flotante con contenido interactivo, anclado vía `for`.
  *
- * Es el wrapper de alto nivel sobre `<is-popup>` (el building block de
+ * Es el wrapper de alto nivel sobre `<is-floating>` (el building block de
  * posicionamiento). Popover añade: anchor declarativo por id, ciclo de
  * vida (mostrar / ocultar), accesibilidad del ancla (aria-haspopup +
  * aria-expanded), `data-popover="close"` en hijos para cerrar y la marca
  * de "panel activo global" para que sólo haya un popover visible a la vez.
  *
- * Como ya no hay diferencia funcional entre un panel flotante y un popover,
- * `is-popup` se mantiene como alias deprecado de `is-popover` (mismo tag
- * lógico, misma API expuesta). Usa siempre `is-popover`.
+ * API publica: solo `<is-popover>`. El tag `is-popup` ya no existe ni como alias.
  *
  * Attrs: for, open, placement, distance, skidding, without-arrow,
  *        strategy, flip, shift, arrow, auto-size, boundary,
@@ -34,7 +32,7 @@ import './popup.js';
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-popup
+    <is-floating
       part="popup"
       class="popup"
       exportparts="popup:popup__popup, arrow:popup__arrow, hover-bridge:popup__hover-bridge"
@@ -48,10 +46,10 @@ import './popup.js';
       <div part="dialog" class="dialog" role="dialog" hidden>
         <div part="body" class="body"><slot></slot></div>
       </div>
-    </is-popup>
+    </is-floating>
   `;
 
-  // Atributos que se delegan literalmente al `<is-popup>` interno. Cualquiera
+  // Atributos que se delegan literalmente al `<is-floating>` interno. Cualquiera
   // que el building block entienda y que `is-popover` no reinterpretó.
   const POPUP_DELEGATED = [
     'placement', 'distance', 'skidding', 'without-arrow', 'strategy',
@@ -75,7 +73,7 @@ import './popup.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#popup = shadow.querySelector('is-popup');
+      this.#popup = shadow.querySelector('is-floating');
       this.#dialog = shadow.querySelector('.dialog');
 
       this.#dialog.addEventListener('click', (e) => {
@@ -293,13 +291,5 @@ import './popup.js';
   }
   if (typeof window !== 'undefined') window.IsPopover = IsPopover;
 
-  // Alias deprecado: `is-popup` resuelve al mismo tag lógico. Esto evita
-  // romper páginas o componentes externos que aún importan el nombre viejo.
-  if (!customElements.get('is-popup')) {
-    customElements.define('is-popup', IsPopover);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsPopup = IsPopover;
-    console.info('[is-popup] está deprecado; usa <is-popover>.');
-  }
+
 })();

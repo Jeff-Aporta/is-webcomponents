@@ -146,7 +146,7 @@ Documentación de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../helpers/popup.js`](../helpers/popup.js)
+- [`../helpers/floating.js`](../helpers/floating.js)
 
 Tags del módulo: `<is-tooltip>`.
 

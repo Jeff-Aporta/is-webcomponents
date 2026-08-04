@@ -14,7 +14,7 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `diagrams` | Flujos, estados, ER, gantt, timeline… |
 | `feedback` | Estado, progreso, toast, tag, skeleton |
 | `forms` | Captura y validación |
-| `helpers` | Formato, observers, popover/popup |
+| `helpers` | Formato, observers, popover |
 | `isp` | Layout/forms portados de ISP-SvelteComponents |
 | `layout` | Regiones, superficies, overlays de layout |
 | `media` | Iconos, avatar, video |
@@ -133,7 +133,6 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `helpers/intersection-observer.md` | `<is-intersection-observer>` |
 | `helpers/mutation-observer.md` | `<is-mutation-observer>` |
 | `helpers/resize-observer.md` | `<is-resize-observer>` |
-| `helpers/popup.md` | `<is-popup>` |
 
 ### isp
 | Doc | Tags |

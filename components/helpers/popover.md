@@ -14,9 +14,7 @@ preview: ../../previews/helpers/is-popover.html
 
 Panel flotante con contenido interactivo. Ancla con for.
 Cierra con Escape, click fuera o data-popover="close".
-El posicionamiento (flip, shift, auto-size, arrow) lo hace un
-<is-popup> interno — el wrapper sólo
-aporta ancla declarativa, ciclo de vida y accesibilidad.
+El posicionamiento (flip, shift, auto-size, arrow) lo hace un `<is-floating>` interno — el wrapper aporta ancla declarativa, ciclo de vida y accesibilidad.
 
 Este módulo registra `<is-popover>`.
 
@@ -142,14 +140,13 @@ No declara integración form-associated propia en este módulo.
 Documentación de cabecera preservada desde fuente:
 
 > <is-popover> — panel flotante con contenido interactivo, anclado vía `for`.
-> Es el wrapper de alto nivel sobre `<is-popup>` (el building block de
+> Es el wrapper de alto nivel sobre `<is-floating>` (el building block de
 > posicionamiento). Popover añade: anchor declarativo por id, ciclo de
 > vida (mostrar / ocultar), accesibilidad del ancla (aria-haspopup +
 > aria-expanded), `data-popover="close"` en hijos para cerrar y la marca
 > de "panel activo global" para que sólo haya un popover visible a la vez.
 > Como ya no hay diferencia funcional entre un panel flotante y un popover,
-> `is-popup` se mantiene como alias deprecado de `is-popover` (mismo tag
-> lógico, misma API expuesta). Usa siempre `is-popover`.
+> API pública: solo `<is-popover>`. El building block interno es `<is-floating>` (no usar en apps).
 > Attrs: for, open, placement, distance, skidding, without-arrow,
 >        strategy, flip, shift, arrow, auto-size, boundary,
 >        flip-fallback-placements, flip-fallback-strategy,
@@ -167,7 +164,7 @@ Documentación de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`./popup.js`](./popup.js)
+- [`./floating.js`](./floating.js) (interno)
 
 Tags del módulo: `<is-popover>`.
 

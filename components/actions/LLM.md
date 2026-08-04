@@ -27,7 +27,7 @@ Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mis
 ## Reusar antes de crear
 
 - `../media/icon.js`
-- `../helpers/popup.js`
+- `../helpers/floating.js`
 - `../_shared/adopt-css.js`
 - `../_shared/position.js`
 

@@ -67,7 +67,6 @@ const CATALOG = {
   'is-dock':              'layout/dock',
   'is-dock-item':         'layout/dock',
   // helpers
-  'is-popup':             'helpers/popup',
   'is-popover':           'helpers/popover',
   'is-relative-time':     'helpers/relative-time',
   'is-format-date':       'helpers/format-date',

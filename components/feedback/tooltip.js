@@ -1,5 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
-import '../helpers/popup.js';
+import '../helpers/floating.js';
 
 /**
  * <is-tooltip> — tip contextual anclado vía `for`.
@@ -20,7 +20,7 @@ import '../helpers/popup.js';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-popup
+    <is-floating
       part="base"
       class="popup"
       exportparts="popup:base__popup, arrow:base__arrow"
@@ -35,7 +35,7 @@ import '../helpers/popup.js';
       <div part="tooltip base" class="tooltip" role="tooltip">
         <div part="body" class="body"><slot></slot></div>
       </div>
-    </is-popup>
+    </is-floating>
   `;
 
   const OBSERVED = [
@@ -58,7 +58,7 @@ import '../helpers/popup.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#popup = shadow.querySelector('is-popup');
+      this.#popup = shadow.querySelector('is-floating');
     }
 
     connectedCallback() {

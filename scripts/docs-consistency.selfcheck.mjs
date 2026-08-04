@@ -8,10 +8,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const componentsRoot = path.join(root, 'components');
 
 const extraEntries = [{
-  tag: 'is-popup',
+  tag: 'is-floating',
   category: 'helpers',
-  script: '../components/helpers/popup.js',
-  style: '../components/helpers/popup.css',
+  script: '../components/helpers/floating.js',
+  style: '../components/helpers/floating.css',
   internal: true,
 }];
 
@@ -167,7 +167,7 @@ for (const item of modules) {
 assert.deepEqual(
   await actualComponentDocs(),
   expectedDocs,
-  'component docs differ from manifest scripts + is-popup',
+  'component docs differ from manifest scripts + is-floating',
 );
 
 const markdownFiles = [];

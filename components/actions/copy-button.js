@@ -20,7 +20,7 @@ import '../feedback/tooltip.js';
  *   error-label         tooltip si falla
  *   feedback-duration   ms de feedback (default 1000)
  *   tooltip             full | copy | none  (default full)
- *   tooltip-placement   cualquier placement de is-popup: top | top-start |
+ *   tooltip-placement   cualquier placement de is-popover: top | top-start |
  *                       top-end | bottom* | left* | right*  (default top)
  *   disabled            boolean
  *
