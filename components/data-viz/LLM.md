@@ -5,7 +5,7 @@
 Visualizaciones que no son gráficas cartesianas: mapas y matrices de intensidad.
 
 La categoría lógica `data-viz` del manifest se reparte en DOS carpetas: la
-mayoría de las gráficas vive en [`../charts/`](../charts/LLM.md) y aquí quedan
+mayoría de las gráficas vive en [`../charts/`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) y aquí quedan
 las que no son gráficas de series. Al buscar la documentación de un tag hay que
 seguir su `script` en `manifest.js`, no el nombre de la categoría.
 
@@ -17,8 +17,8 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-heatmap>` | [heatmap.js](heatmap.js) | Matriz de intensidad |
-| `<is-maps>`, `<is-map-marker>` | [maps.js](maps.js) | Mapa con marcadores |
+| `<is-heatmap>` | [heatmap.js](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data-viz/heatmap.js) | Matriz de intensidad |
+| `<is-maps>`, `<is-map-marker>` | [maps.js](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data-viz/maps.js) | Mapa con marcadores |
 
 ## Errores conocidos y prevención
 
@@ -34,5 +34,5 @@ solo documento.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
-- [Gráficas de la misma categoría](../charts/LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)
+- [Gráficas de la misma categoría](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md)

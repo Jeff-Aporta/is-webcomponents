@@ -12,15 +12,15 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-popover>` | [popover.md](popover.md) | Popover |
-| `<is-relative-time>` | [relative-time.md](relative-time.md) | Tiempo relativo |
-| `<is-format-date>` | [format-date.md](format-date.md) | Formato de fecha |
-| `<is-format-number>` | [format-number.md](format-number.md) | Formato de número |
-| `<is-format-bytes>` | [format-bytes.md](format-bytes.md) | Formato de bytes |
-| `<is-intersection-observer>` | [intersection-observer.md](intersection-observer.md) | Observador de intersección |
-| `<is-mutation-observer>` | [mutation-observer.md](mutation-observer.md) | Observador de mutación |
-| `<is-resize-observer>` | [resize-observer.md](resize-observer.md) | Resize Observer |
-| `<is-popup>` | [popup.md](popup.md) | Popup |
+| `<is-popover>` | [popover.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/popover.md) | Popover |
+| `<is-relative-time>` | [relative-time.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/relative-time.md) | Tiempo relativo |
+| `<is-format-date>` | [format-date.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/format-date.md) | Formato de fecha |
+| `<is-format-number>` | [format-number.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/format-number.md) | Formato de número |
+| `<is-format-bytes>` | [format-bytes.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/format-bytes.md) | Formato de bytes |
+| `<is-intersection-observer>` | [intersection-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/intersection-observer.md) | Observador de intersección |
+| `<is-mutation-observer>` | [mutation-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/mutation-observer.md) | Observador de mutación |
+| `<is-resize-observer>` | [resize-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/resize-observer.md) | Resize Observer |
+| `<is-popup>` | [popup.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/popup.md) | Popup |
 
 ## Composición y relaciones
 
@@ -64,8 +64,8 @@ Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 
 ## Módulos internos
 
-- `is-popup` — [popup.md](popup.md)
+- `is-popup` — [popup.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/popup.md)
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

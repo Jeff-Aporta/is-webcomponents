@@ -12,15 +12,15 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-split-panel>` | [split-panel.md](split-panel.md) | Panel dividido |
-| `<is-main>` | [main.md](main.md) | Main |
-| `<is-card>` | [card.md](card.md) | Card |
-| `<is-callout>` | [callout.md](callout.md) | Callout |
-| `<is-details>` | [details.md](details.md) | Details |
-| `<is-dialog>` | [dialog.md](dialog.md) | Dialog |
-| `<is-drawer>` | [drawer.md](drawer.md) | Drawer |
-| `<is-divider>` | [divider.md](divider.md) | Divider |
-| `<is-scrollspy>` | [scrollspy.md](scrollspy.md) | Scrollspy |
+| `<is-split-panel>` | [split-panel.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/split-panel.md) | Panel dividido |
+| `<is-main>` | [main.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/main.md) | Main |
+| `<is-card>` | [card.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/card.md) | Card |
+| `<is-callout>` | [callout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/callout.md) | Callout |
+| `<is-details>` | [details.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/details.md) | Details |
+| `<is-dialog>` | [dialog.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/dialog.md) | Dialog |
+| `<is-drawer>` | [drawer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/drawer.md) | Drawer |
+| `<is-divider>` | [divider.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/divider.md) | Divider |
+| `<is-scrollspy>` | [scrollspy.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/scrollspy.md) | Scrollspy |
 
 ## Composición y relaciones
 
@@ -67,4 +67,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

@@ -9,16 +9,16 @@ comandos, visor de documentos y ventanas flotantes.
 
 Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inferir API desde nombre.
 
-Para diálogos y cajones ir a [`../layout/`](../layout/LLM.md) (`<is-dialog>`,
+Para diálogos y cajones ir a [`../layout/`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) (`<is-dialog>`,
 `<is-drawer>`): aquí solo están los overlays con comportamiento propio.
 
 ## Componentes
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-command-palette>` | [command-palette.js](command-palette.js) | Paleta de comandos |
-| `<is-pdf-viewer>` | [pdf-viewer.js](pdf-viewer.js) | Visor de PDF |
-| `<is-window>` | [window.js](window.js) | Ventana flotante |
+| `<is-command-palette>` | [command-palette.js](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/command-palette.js) | Paleta de comandos |
+| `<is-pdf-viewer>` | [pdf-viewer.js](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/pdf-viewer.js) | Visor de PDF |
+| `<is-window>` | [window.js](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/window.js) | Ventana flotante |
 
 ## Errores conocidos y prevención
 
@@ -37,4 +37,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

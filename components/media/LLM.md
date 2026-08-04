@@ -12,10 +12,10 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-icon>` | [icon.md](icon.md) | Icon |
-| `<is-avatar>` | [avatar.md](avatar.md) | Avatar |
-| `<is-video>` | [video.md](video.md) | Video |
-| `<is-video-playlist>` | [video-playlist.md](video-playlist.md) | Video Playlist |
+| `<is-icon>` | [icon.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/icon.md) | Icon |
+| `<is-avatar>` | [avatar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/avatar.md) | Avatar |
+| `<is-video>` | [video.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/video.md) | Video |
+| `<is-video-playlist>` | [video-playlist.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/video-playlist.md) | Video Playlist |
 
 ## Composición y relaciones
 
@@ -62,4 +62,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

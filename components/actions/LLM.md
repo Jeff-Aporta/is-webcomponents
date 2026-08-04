@@ -12,13 +12,13 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-button>` | [button.md](button.md) | Button |
-| `<is-button-group>` | [button-group.md](button-group.md) | Button Group |
-| `<is-copy-button>` | [copy-button.md](copy-button.md) | Copy Button |
-| `<is-check-icon-button>` | [check-icon-button.md](check-icon-button.md) | Check Icon Button |
-| `<is-dropdown>` | [dropdown.md](dropdown.md) | Dropdown |
-| `<is-dropdown-item>` | [dropdown-item.md](dropdown-item.md) | Dropdown Item |
-| `<is-fab>` | [fab.md](fab.md) | Floating Action Button |
+| `<is-button>` | [button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/button.md) | Button |
+| `<is-button-group>` | [button-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/button-group.md) | Button Group |
+| `<is-copy-button>` | [copy-button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/copy-button.md) | Copy Button |
+| `<is-check-icon-button>` | [check-icon-button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/check-icon-button.md) | Check Icon Button |
+| `<is-dropdown>` | [dropdown.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/dropdown.md) | Dropdown |
+| `<is-dropdown-item>` | [dropdown-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/dropdown-item.md) | Dropdown Item |
+| `<is-fab>` | [fab.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/fab.md) | Floating Action Button |
 
 ## Composición y relaciones
 
@@ -67,4 +67,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

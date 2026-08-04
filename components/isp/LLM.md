@@ -15,17 +15,17 @@ inferir API desde nombre.
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-block-layout>` | [block-layout.md](block-layout.md) | Bloque que mide su propio ancho y publica el breakpoint |
-| `<is-flex-layout>` | [flex-layout.md](flex-layout.md) | Contenedor flex declarativo |
-| `<is-grid-layout>` | [grid-layout.md](grid-layout.md) | Rejilla declarativa por `cells` |
-| `<is-text>` | [text.md](text.md) | Texto con color semántico y line-clamp |
-| `<is-heading>` | [heading.md](heading.md) | Títulos h1..h6 tintados por la paleta |
-| `<is-accordion-group>` | [accordion-group.md](accordion-group.md) | Acordeón declarativo |
-| `<is-confirm-delete>` | [confirm-delete.md](confirm-delete.md) | Confirmación destructiva "escribe para confirmar" |
-| `<is-form>` | [form.md](form.md) | Formulario con header/content/footer |
-| `<is-function-form>` | [function-form.md](function-form.md) | Atributos de una función del editor enriquecido |
-| `<is-modal-verificacion>` | [modal-verificacion.md](modal-verificacion.md) | Verificación asíncrona de un registro |
-| `<is-loading-overlay>` | [loading-overlay.md](loading-overlay.md) | Overlay de carga sobre un contenedor |
+| `<is-block-layout>` | [block-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/block-layout.md) | Bloque que mide su propio ancho y publica el breakpoint |
+| `<is-flex-layout>` | [flex-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/flex-layout.md) | Contenedor flex declarativo |
+| `<is-grid-layout>` | [grid-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/grid-layout.md) | Rejilla declarativa por `cells` |
+| `<is-text>` | [text.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/text.md) | Texto con color semántico y line-clamp |
+| `<is-heading>` | [heading.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/heading.md) | Títulos h1..h6 tintados por la paleta |
+| `<is-accordion-group>` | [accordion-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/accordion-group.md) | Acordeón declarativo |
+| `<is-confirm-delete>` | [confirm-delete.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/confirm-delete.md) | Confirmación destructiva "escribe para confirmar" |
+| `<is-form>` | [form.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/form.md) | Formulario con header/content/footer |
+| `<is-function-form>` | [function-form.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/function-form.md) | Atributos de una función del editor enriquecido |
+| `<is-modal-verificacion>` | [modal-verificacion.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/modal-verificacion.md) | Verificación asíncrona de un registro |
+| `<is-loading-overlay>` | [loading-overlay.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/loading-overlay.md) | Overlay de carga sobre un contenedor |
 
 ## Composición y relaciones
 
@@ -36,7 +36,7 @@ escriben `--clientw` / `--lerpw` y emiten `is-breakpoint`.
 
 Los slot props de Svelte (`sizew`, `boolszw`, `lerpw`) NO existen en Web
 Components: su equivalente exacto está documentado en
-[block-layout.md](block-layout.md).
+[block-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/block-layout.md).
 
 ## Reusar antes de crear
 
@@ -86,4 +86,4 @@ Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

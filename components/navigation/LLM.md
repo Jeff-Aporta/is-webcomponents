@@ -12,13 +12,13 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-breadcrumb>` | [breadcrumb.md](breadcrumb.md) | Breadcrumb |
-| `<is-breadcrumb-item>` | [breadcrumb-item.md](breadcrumb-item.md) | Breadcrumb Item |
-| `<is-tab-group>`, `<is-tab>`, `<is-tab-panel>` | [tab-group.md](tab-group.md) | Tab Group |
-| `<is-scroller>` | [scroller.md](scroller.md) | Scroller |
-| `<is-carousel>`, `<is-carousel-item>` | [carousel.md](carousel.md) | Carousel |
-| `<is-tree>`, `<is-tree-item>` | [tree.md](tree.md) | Tree |
-| `<is-stepper>`, `<is-stepper-step>` | [stepper.md](stepper.md) | Stepper |
+| `<is-breadcrumb>` | [breadcrumb.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/breadcrumb.md) | Breadcrumb |
+| `<is-breadcrumb-item>` | [breadcrumb-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/breadcrumb-item.md) | Breadcrumb Item |
+| `<is-tab-group>`, `<is-tab>`, `<is-tab-panel>` | [tab-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/tab-group.md) | Tab Group |
+| `<is-scroller>` | [scroller.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/scroller.md) | Scroller |
+| `<is-carousel>`, `<is-carousel-item>` | [carousel.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/carousel.md) | Carousel |
+| `<is-tree>`, `<is-tree-item>` | [tree.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/tree.md) | Tree |
+| `<is-stepper>`, `<is-stepper-step>` | [stepper.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/stepper.md) | Stepper |
 
 ## Composición y relaciones
 
@@ -65,4 +65,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

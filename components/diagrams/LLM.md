@@ -12,17 +12,17 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-flowchart>` | [flowchart.md](flowchart.md) | Diagrama de flujo |
-| `<is-sequence-diagram>` | [sequence-diagram.md](sequence-diagram.md) | Diagrama de secuencia |
-| `<is-lightbox>` | [lightbox.md](lightbox.md) | Lightbox |
-| `<is-diagram-lightbox>` | [diagram-lightbox.md](diagram-lightbox.md) | Visor de diagramas |
-| `<is-class-diagram>` | [class-diagram.md](class-diagram.md) | Diagrama de clases |
-| `<is-state-diagram>` | [state-diagram.md](state-diagram.md) | Diagrama de estados |
-| `<is-er-diagram>` | [er-diagram.md](er-diagram.md) | Diagrama entidad-relación |
-| `<is-block-diagram>` | [block-diagram.md](block-diagram.md) | Diagrama de bloques |
-| `<is-mindmap>` | [mindmap.md](mindmap.md) | Mapa mental |
-| `<is-gantt>` | [gantt.md](gantt.md) | Diagrama de Gantt |
-| `<is-timeline>` | [timeline.md](timeline.md) | Línea de tiempo |
+| `<is-flowchart>` | [flowchart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/flowchart.md) | Diagrama de flujo |
+| `<is-sequence-diagram>` | [sequence-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/sequence-diagram.md) | Diagrama de secuencia |
+| `<is-lightbox>` | [lightbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/lightbox.md) | Lightbox |
+| `<is-diagram-lightbox>` | [diagram-lightbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/diagram-lightbox.md) | Visor de diagramas |
+| `<is-class-diagram>` | [class-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/class-diagram.md) | Diagrama de clases |
+| `<is-state-diagram>` | [state-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/state-diagram.md) | Diagrama de estados |
+| `<is-er-diagram>` | [er-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/er-diagram.md) | Diagrama entidad-relación |
+| `<is-block-diagram>` | [block-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/block-diagram.md) | Diagrama de bloques |
+| `<is-mindmap>` | [mindmap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/mindmap.md) | Mapa mental |
+| `<is-gantt>` | [gantt.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/gantt.md) | Diagrama de Gantt |
+| `<is-timeline>` | [timeline.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/timeline.md) | Línea de tiempo |
 
 ## Composición y relaciones
 
@@ -79,4 +79,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

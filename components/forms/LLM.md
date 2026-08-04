@@ -12,33 +12,33 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-combobox>` | [combobox.md](combobox.md) | Combobox |
-| `<is-option>` | [option.md](option.md) | Option |
-| `<is-checkbox>` | [checkbox.md](checkbox.md) | Checkbox |
-| `<is-switch>` | [switch.md](switch.md) | Switch |
-| `<is-radio-group>` | [radio-group.md](radio-group.md) | Radio Group |
-| `<is-radio>` | [radio.md](radio.md) | Radio |
-| `<is-input>` | [input.md](input.md) | Input |
-| `<is-textarea>` | [textarea.md](textarea.md) | Textarea |
-| `<is-slider>` | [slider.md](slider.md) | Slider |
-| `<is-rating>` | [rating.md](rating.md) | Rating |
-| `<is-select>` | [select.md](select.md) | Select |
-| `<is-color-picker>` | [color-picker.md](color-picker.md) | Color Picker |
-| `<is-file-input>` | [file-input.md](file-input.md) | File Input |
-| `<is-date-picker>` | [date-picker.md](date-picker.md) | Date Picker |
-| `<is-month-calendar>` | [month-calendar.md](month-calendar.md) | Month Calendar |
-| `<is-year-calendar>` | [year-calendar.md](year-calendar.md) | Year Calendar |
-| `<is-date-range-picker>` | [date-range-picker.md](date-range-picker.md) | Date Range Picker |
-| `<is-time-clock>` | [time-clock.md](time-clock.md) | Time Clock |
-| `<is-digital-clock>` | [digital-clock.md](digital-clock.md) | Digital Clock |
-| `<is-date-field>` | [date-field.md](date-field.md) | Date Field |
-| `<is-time-field>` | [time-field.md](time-field.md) | Time Field |
-| `<is-date-time-field>` | [date-time-field.md](date-time-field.md) | Date Time Field |
-| `<is-date-input>` | [date-input.md](date-input.md) | Date Input |
-| `<is-time-input>` | [time-input.md](time-input.md) | Time Input |
-| `<is-date-time-input>` | [date-time-input.md](date-time-input.md) | Date Time Input |
-| `<is-date-range-input>` | [date-range-input.md](date-range-input.md) | Date Range Input |
-| `<is-pin-input>` | [pin-input.md](pin-input.md) | Pin Input |
+| `<is-combobox>` | [combobox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/combobox.md) | Combobox |
+| `<is-option>` | [option.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/option.md) | Option |
+| `<is-checkbox>` | [checkbox.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/checkbox.md) | Checkbox |
+| `<is-switch>` | [switch.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/switch.md) | Switch |
+| `<is-radio-group>` | [radio-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/radio-group.md) | Radio Group |
+| `<is-radio>` | [radio.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/radio.md) | Radio |
+| `<is-input>` | [input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/input.md) | Input |
+| `<is-textarea>` | [textarea.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/textarea.md) | Textarea |
+| `<is-slider>` | [slider.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/slider.md) | Slider |
+| `<is-rating>` | [rating.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/rating.md) | Rating |
+| `<is-select>` | [select.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/select.md) | Select |
+| `<is-color-picker>` | [color-picker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/color-picker.md) | Color Picker |
+| `<is-file-input>` | [file-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/file-input.md) | File Input |
+| `<is-date-picker>` | [date-picker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/date-picker.md) | Date Picker |
+| `<is-month-calendar>` | [month-calendar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/month-calendar.md) | Month Calendar |
+| `<is-year-calendar>` | [year-calendar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/year-calendar.md) | Year Calendar |
+| `<is-date-range-picker>` | [date-range-picker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/date-range-picker.md) | Date Range Picker |
+| `<is-time-clock>` | [time-clock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/time-clock.md) | Time Clock |
+| `<is-digital-clock>` | [digital-clock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/digital-clock.md) | Digital Clock |
+| `<is-date-field>` | [date-field.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/date-field.md) | Date Field |
+| `<is-time-field>` | [time-field.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/time-field.md) | Time Field |
+| `<is-date-time-field>` | [date-time-field.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/date-time-field.md) | Date Time Field |
+| `<is-date-input>` | [date-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/date-input.md) | Date Input |
+| `<is-time-input>` | [time-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/time-input.md) | Time Input |
+| `<is-date-time-input>` | [date-time-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/date-time-input.md) | Date Time Input |
+| `<is-date-range-input>` | [date-range-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/date-range-input.md) | Date Range Input |
+| `<is-pin-input>` | [pin-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/pin-input.md) | Pin Input |
 
 ## Composición y relaciones
 
@@ -89,4 +89,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

@@ -12,11 +12,11 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-data-grid>` | [data-grid.md](data-grid.md) | Data Grid |
-| `<is-stat>` | [stat.md](stat.md) | Stat KPI |
-| `<is-transfer>`, `<is-transfer-item>` | [transfer.md](transfer.md) | Transfer |
-| `<is-gauge>` | [gauge.md](gauge.md) | Gauge |
-| `<is-kanban>`, `<is-kanban-column>`, `<is-kanban-card>` | [kanban.md](kanban.md) | Kanban |
+| `<is-data-grid>` | [data-grid.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/data-grid.md) | Data Grid |
+| `<is-stat>` | [stat.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/stat.md) | Stat KPI |
+| `<is-transfer>`, `<is-transfer-item>` | [transfer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/transfer.md) | Transfer |
+| `<is-gauge>` | [gauge.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/gauge.md) | Gauge |
+| `<is-kanban>`, `<is-kanban-column>`, `<is-kanban-card>` | [kanban.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/kanban.md) | Kanban |
 
 ## Composición y relaciones
 
@@ -65,4 +65,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

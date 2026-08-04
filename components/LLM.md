@@ -8,19 +8,19 @@
 
 | Carpeta | Índice | Propósito |
 | --- | --- | --- |
-| `actions` | [actions/LLM.md](actions/LLM.md) | Acciones, selección de comandos y menús interactivos. |
-| `charts` | [charts/LLM.md](charts/LLM.md) | Series, distribuciones, relaciones o jerarquías de datos. |
-| `data` | [data/LLM.md](data/LLM.md) | Presentación, comparación, movimiento u organización de datos estructurados. |
-| `data-viz` | [data-viz/LLM.md](data-viz/LLM.md) | Mapas y matrices de intensidad. La mayoría de gráficas vive en `charts/`, no aquí — seguir el `script` del manifest, no el nombre de la categoría. |
-| `diagrams` | [diagrams/LLM.md](diagrams/LLM.md) | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. |
-| `feedback` | [feedback/LLM.md](feedback/LLM.md) | Estado, progreso, confirmación, carga o resultado de operaciones. |
-| `forms` | [forms/LLM.md](forms/LLM.md) | Captura, selección y validación de valores compatibles con formularios. |
-| `helpers` | [helpers/LLM.md](helpers/LLM.md) | Formato, observación y posicionamiento reutilizable sobre APIs nativas. |
-| `isp` | [isp/LLM.md](isp/LLM.md) | Layout y formularios portados de ISP-SvelteComponents (ContaPyme). |
-| `layout` | [layout/LLM.md](layout/LLM.md) | Estructura, superficies, overlays y navegación por regiones de contenido. |
-| `media` | [media/LLM.md](media/LLM.md) | Iconos, identidad visual y reproducción de video. |
-| `navigation` | [navigation/LLM.md](navigation/LLM.md) | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. |
-| `overlays` | [overlays/LLM.md](overlays/LLM.md) | Paleta de comandos, visor de documentos y ventanas flotantes. |
+| `actions` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/LLM.md) | Acciones, selección de comandos y menús interactivos. |
+| `charts` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) | Series, distribuciones, relaciones o jerarquías de datos. |
+| `data` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/LLM.md) | Presentación, comparación, movimiento u organización de datos estructurados. |
+| `data-viz` | [data-viz/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data-viz/LLM.md) | Mapas y matrices de intensidad. La mayoría de gráficas vive en `charts/`, no aquí — seguir el `script` del manifest, no el nombre de la categoría. |
+| `diagrams` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. |
+| `feedback` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) | Estado, progreso, confirmación, carga o resultado de operaciones. |
+| `forms` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) | Captura, selección y validación de valores compatibles con formularios. |
+| `helpers` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) | Formato, observación y posicionamiento reutilizable sobre APIs nativas. |
+| `isp` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) | Layout y formularios portados de ISP-SvelteComponents (ContaPyme). |
+| `layout` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) | Estructura, superficies, overlays y navegación por regiones de contenido. |
+| `media` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/LLM.md) | Iconos, identidad visual y reproducción de video. |
+| `navigation` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. |
+| `overlays` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/overlays/LLM.md) | Paleta de comandos, visor de documentos y ventanas flotantes. |
 
 ## Inventario de módulos y tags
 
@@ -28,139 +28,139 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 
 | Documento | Tags | Categoría |
 | --- | --- | --- |
-| `actions/button.md` | `<is-button>` | [actions/LLM.md](actions/LLM.md) |
-| `actions/button-group.md` | `<is-button-group>` | [actions/LLM.md](actions/LLM.md) |
-| `actions/copy-button.md` | `<is-copy-button>` | [actions/LLM.md](actions/LLM.md) |
-| `actions/check-icon-button.md` | `<is-check-icon-button>` | [actions/LLM.md](actions/LLM.md) |
-| `actions/dropdown.md` | `<is-dropdown>` | [actions/LLM.md](actions/LLM.md) |
-| `actions/dropdown-item.md` | `<is-dropdown-item>` | [actions/LLM.md](actions/LLM.md) |
-| `actions/fab.md` | `<is-fab>` | [actions/LLM.md](actions/LLM.md) |
-| `charts/chart.md` | `<is-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/bar-chart.md` | `<is-bar-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/line-chart.md` | `<is-line-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/pie-chart.md` | `<is-pie-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/doughnut-chart.md` | `<is-doughnut-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/radar-chart.md` | `<is-radar-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/polar-area-chart.md` | `<is-polar-area-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/scatter-chart.md` | `<is-scatter-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/bubble-chart.md` | `<is-bubble-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/sparkline.md` | `<is-sparkline>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/waterfall-chart.md` | `<is-waterfall-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/funnel-chart.md` | `<is-funnel-chart>` | [charts/LLM.md](charts/LLM.md) |
-| `charts/treemap.md` | `<is-treemap>` | [charts/LLM.md](charts/LLM.md) |
-| `data/data-grid.md` | `<is-data-grid>` | [data/LLM.md](data/LLM.md) |
-| `data/stat.md` | `<is-stat>` | [data/LLM.md](data/LLM.md) |
-| `data/transfer.md` | `<is-transfer>`, `<is-transfer-item>` | [data/LLM.md](data/LLM.md) |
-| `data/gauge.md` | `<is-gauge>` | [data/LLM.md](data/LLM.md) |
-| `data/kanban.md` | `<is-kanban>`, `<is-kanban-column>`, `<is-kanban-card>` | [data/LLM.md](data/LLM.md) |
-| `diagrams/flowchart.md` | `<is-flowchart>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/sequence-diagram.md` | `<is-sequence-diagram>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/lightbox.md` | `<is-lightbox>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/diagram-lightbox.md` | `<is-diagram-lightbox>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/class-diagram.md` | `<is-class-diagram>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/state-diagram.md` | `<is-state-diagram>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/er-diagram.md` | `<is-er-diagram>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/block-diagram.md` | `<is-block-diagram>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/mindmap.md` | `<is-mindmap>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/gantt.md` | `<is-gantt>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `diagrams/timeline.md` | `<is-timeline>` | [diagrams/LLM.md](diagrams/LLM.md) |
-| `feedback/spinner.md` | `<is-spinner>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/badge.md` | `<is-badge>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/tag.md` | `<is-tag>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/skeleton.md` | `<is-skeleton>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/progress-bar.md` | `<is-progress-bar>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/progress-ring.md` | `<is-progress-ring>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/theme-toggle.md` | `<is-theme-toggle>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/toast.md` | `<is-toast>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/toast-item.md` | `<is-toast-item>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/tooltip.md` | `<is-tooltip>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/cdn-snippet.md` | `<is-cdn-snippet>` | [feedback/LLM.md](feedback/LLM.md) |
-| `feedback/popconfirm.md` | `<is-popconfirm>` | [feedback/LLM.md](feedback/LLM.md) |
-| `forms/combobox.md` | `<is-combobox>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/option.md` | `<is-option>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/checkbox.md` | `<is-checkbox>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/switch.md` | `<is-switch>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/radio-group.md` | `<is-radio-group>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/radio.md` | `<is-radio>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/input.md` | `<is-input>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/textarea.md` | `<is-textarea>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/slider.md` | `<is-slider>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/rating.md` | `<is-rating>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/select.md` | `<is-select>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/color-picker.md` | `<is-color-picker>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/file-input.md` | `<is-file-input>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/date-picker.md` | `<is-date-picker>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/month-calendar.md` | `<is-month-calendar>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/year-calendar.md` | `<is-year-calendar>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/date-range-picker.md` | `<is-date-range-picker>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/time-clock.md` | `<is-time-clock>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/digital-clock.md` | `<is-digital-clock>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/date-field.md` | `<is-date-field>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/time-field.md` | `<is-time-field>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/date-time-field.md` | `<is-date-time-field>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/date-input.md` | `<is-date-input>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/time-input.md` | `<is-time-input>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/date-time-input.md` | `<is-date-time-input>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/date-range-input.md` | `<is-date-range-input>` | [forms/LLM.md](forms/LLM.md) |
-| `forms/pin-input.md` | `<is-pin-input>` | [forms/LLM.md](forms/LLM.md) |
-| `helpers/popover.md` | `<is-popover>` | [helpers/LLM.md](helpers/LLM.md) |
-| `helpers/relative-time.md` | `<is-relative-time>` | [helpers/LLM.md](helpers/LLM.md) |
-| `helpers/format-date.md` | `<is-format-date>` | [helpers/LLM.md](helpers/LLM.md) |
-| `helpers/format-number.md` | `<is-format-number>` | [helpers/LLM.md](helpers/LLM.md) |
-| `helpers/format-bytes.md` | `<is-format-bytes>` | [helpers/LLM.md](helpers/LLM.md) |
-| `helpers/intersection-observer.md` | `<is-intersection-observer>` | [helpers/LLM.md](helpers/LLM.md) |
-| `helpers/mutation-observer.md` | `<is-mutation-observer>` | [helpers/LLM.md](helpers/LLM.md) |
-| `helpers/resize-observer.md` | `<is-resize-observer>` | [helpers/LLM.md](helpers/LLM.md) |
-| `helpers/popup.md` | `<is-popup>` | [helpers/LLM.md](helpers/LLM.md) |
-| `isp/accordion-group.md` | `<is-accordion-group>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/block-layout.md` | `<is-block-layout>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/confirm-delete.md` | `<is-confirm-delete>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/flex-layout.md` | `<is-flex-layout>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/form.md` | `<is-form>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/function-form.md` | `<is-function-form>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/modal-verificacion.md` | `<is-modal-verificacion>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/grid-layout.md` | `<is-grid-layout>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/heading.md` | `<is-heading>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/loading-overlay.md` | `<is-loading-overlay>` | [isp/LLM.md](isp/LLM.md) |
-| `isp/text.md` | `<is-text>` | [isp/LLM.md](isp/LLM.md) |
-| `layout/split-panel.md` | `<is-split-panel>` | [layout/LLM.md](layout/LLM.md) |
-| `layout/main.md` | `<is-main>` | [layout/LLM.md](layout/LLM.md) |
-| `layout/card.md` | `<is-card>` | [layout/LLM.md](layout/LLM.md) |
-| `layout/callout.md` | `<is-callout>` | [layout/LLM.md](layout/LLM.md) |
-| `layout/details.md` | `<is-details>` | [layout/LLM.md](layout/LLM.md) |
-| `layout/dialog.md` | `<is-dialog>` | [layout/LLM.md](layout/LLM.md) |
-| `layout/drawer.md` | `<is-drawer>` | [layout/LLM.md](layout/LLM.md) |
-| `layout/divider.md` | `<is-divider>` | [layout/LLM.md](layout/LLM.md) |
-| `layout/scrollspy.md` | `<is-scrollspy>` | [layout/LLM.md](layout/LLM.md) |
-| `media/icon.md` | `<is-icon>` | [media/LLM.md](media/LLM.md) |
-| `media/avatar.md` | `<is-avatar>` | [media/LLM.md](media/LLM.md) |
-| `media/video.md` | `<is-video>` | [media/LLM.md](media/LLM.md) |
-| `media/video-playlist.md` | `<is-video-playlist>` | [media/LLM.md](media/LLM.md) |
-| `navigation/breadcrumb.md` | `<is-breadcrumb>` | [navigation/LLM.md](navigation/LLM.md) |
-| `navigation/breadcrumb-item.md` | `<is-breadcrumb-item>` | [navigation/LLM.md](navigation/LLM.md) |
-| `navigation/tab-group.md` | `<is-tab-group>`, `<is-tab>`, `<is-tab-panel>` | [navigation/LLM.md](navigation/LLM.md) |
-| `navigation/scroller.md` | `<is-scroller>` | [navigation/LLM.md](navigation/LLM.md) |
-| `navigation/carousel.md` | `<is-carousel>`, `<is-carousel-item>` | [navigation/LLM.md](navigation/LLM.md) |
-| `navigation/tree.md` | `<is-tree>`, `<is-tree-item>` | [navigation/LLM.md](navigation/LLM.md) |
-| `navigation/stepper.md` | `<is-stepper>`, `<is-stepper-step>` | [navigation/LLM.md](navigation/LLM.md) |
+| `actions/button.md` | `<is-button>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/LLM.md) |
+| `actions/button-group.md` | `<is-button-group>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/LLM.md) |
+| `actions/copy-button.md` | `<is-copy-button>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/LLM.md) |
+| `actions/check-icon-button.md` | `<is-check-icon-button>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/LLM.md) |
+| `actions/dropdown.md` | `<is-dropdown>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/LLM.md) |
+| `actions/dropdown-item.md` | `<is-dropdown-item>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/LLM.md) |
+| `actions/fab.md` | `<is-fab>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/actions/LLM.md) |
+| `charts/chart.md` | `<is-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/bar-chart.md` | `<is-bar-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/line-chart.md` | `<is-line-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/pie-chart.md` | `<is-pie-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/doughnut-chart.md` | `<is-doughnut-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/radar-chart.md` | `<is-radar-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/polar-area-chart.md` | `<is-polar-area-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/scatter-chart.md` | `<is-scatter-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/bubble-chart.md` | `<is-bubble-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/sparkline.md` | `<is-sparkline>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/waterfall-chart.md` | `<is-waterfall-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/funnel-chart.md` | `<is-funnel-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `charts/treemap.md` | `<is-treemap>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/LLM.md) |
+| `data/data-grid.md` | `<is-data-grid>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/LLM.md) |
+| `data/stat.md` | `<is-stat>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/LLM.md) |
+| `data/transfer.md` | `<is-transfer>`, `<is-transfer-item>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/LLM.md) |
+| `data/gauge.md` | `<is-gauge>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/LLM.md) |
+| `data/kanban.md` | `<is-kanban>`, `<is-kanban-column>`, `<is-kanban-card>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/data/LLM.md) |
+| `diagrams/flowchart.md` | `<is-flowchart>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/sequence-diagram.md` | `<is-sequence-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/lightbox.md` | `<is-lightbox>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/diagram-lightbox.md` | `<is-diagram-lightbox>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/class-diagram.md` | `<is-class-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/state-diagram.md` | `<is-state-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/er-diagram.md` | `<is-er-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/block-diagram.md` | `<is-block-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/mindmap.md` | `<is-mindmap>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/gantt.md` | `<is-gantt>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `diagrams/timeline.md` | `<is-timeline>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/diagrams/LLM.md) |
+| `feedback/spinner.md` | `<is-spinner>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/badge.md` | `<is-badge>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/tag.md` | `<is-tag>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/skeleton.md` | `<is-skeleton>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/progress-bar.md` | `<is-progress-bar>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/progress-ring.md` | `<is-progress-ring>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/theme-toggle.md` | `<is-theme-toggle>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/toast.md` | `<is-toast>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/toast-item.md` | `<is-toast-item>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/tooltip.md` | `<is-tooltip>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/cdn-snippet.md` | `<is-cdn-snippet>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `feedback/popconfirm.md` | `<is-popconfirm>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/LLM.md) |
+| `forms/combobox.md` | `<is-combobox>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/option.md` | `<is-option>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/checkbox.md` | `<is-checkbox>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/switch.md` | `<is-switch>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/radio-group.md` | `<is-radio-group>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/radio.md` | `<is-radio>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/input.md` | `<is-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/textarea.md` | `<is-textarea>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/slider.md` | `<is-slider>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/rating.md` | `<is-rating>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/select.md` | `<is-select>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/color-picker.md` | `<is-color-picker>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/file-input.md` | `<is-file-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/date-picker.md` | `<is-date-picker>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/month-calendar.md` | `<is-month-calendar>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/year-calendar.md` | `<is-year-calendar>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/date-range-picker.md` | `<is-date-range-picker>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/time-clock.md` | `<is-time-clock>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/digital-clock.md` | `<is-digital-clock>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/date-field.md` | `<is-date-field>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/time-field.md` | `<is-time-field>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/date-time-field.md` | `<is-date-time-field>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/date-input.md` | `<is-date-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/time-input.md` | `<is-time-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/date-time-input.md` | `<is-date-time-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/date-range-input.md` | `<is-date-range-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `forms/pin-input.md` | `<is-pin-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/forms/LLM.md) |
+| `helpers/popover.md` | `<is-popover>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `helpers/relative-time.md` | `<is-relative-time>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `helpers/format-date.md` | `<is-format-date>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `helpers/format-number.md` | `<is-format-number>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `helpers/format-bytes.md` | `<is-format-bytes>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `helpers/intersection-observer.md` | `<is-intersection-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `helpers/mutation-observer.md` | `<is-mutation-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `helpers/resize-observer.md` | `<is-resize-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `helpers/popup.md` | `<is-popup>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/LLM.md) |
+| `isp/accordion-group.md` | `<is-accordion-group>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/block-layout.md` | `<is-block-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/confirm-delete.md` | `<is-confirm-delete>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/flex-layout.md` | `<is-flex-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/form.md` | `<is-form>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/function-form.md` | `<is-function-form>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/modal-verificacion.md` | `<is-modal-verificacion>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/grid-layout.md` | `<is-grid-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/heading.md` | `<is-heading>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/loading-overlay.md` | `<is-loading-overlay>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `isp/text.md` | `<is-text>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/isp/LLM.md) |
+| `layout/split-panel.md` | `<is-split-panel>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `layout/main.md` | `<is-main>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `layout/card.md` | `<is-card>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `layout/callout.md` | `<is-callout>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `layout/details.md` | `<is-details>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `layout/dialog.md` | `<is-dialog>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `layout/drawer.md` | `<is-drawer>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `layout/divider.md` | `<is-divider>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `layout/scrollspy.md` | `<is-scrollspy>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/layout/LLM.md) |
+| `media/icon.md` | `<is-icon>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/LLM.md) |
+| `media/avatar.md` | `<is-avatar>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/LLM.md) |
+| `media/video.md` | `<is-video>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/LLM.md) |
+| `media/video-playlist.md` | `<is-video-playlist>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/media/LLM.md) |
+| `navigation/breadcrumb.md` | `<is-breadcrumb>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
+| `navigation/breadcrumb-item.md` | `<is-breadcrumb-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
+| `navigation/tab-group.md` | `<is-tab-group>`, `<is-tab>`, `<is-tab-panel>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
+| `navigation/scroller.md` | `<is-scroller>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
+| `navigation/carousel.md` | `<is-carousel>`, `<is-carousel-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
+| `navigation/tree.md` | `<is-tree>`, `<is-tree-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
+| `navigation/stepper.md` | `<is-stepper>`, `<is-stepper-step>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/navigation/LLM.md) |
 
 ## Convenciones globales
 
 - Tags públicos usan `is-*`; módulos ES registran al importarse, a veces mediante factories/herencia.
-- Shadow DOM usa [`_shared/adopt-css.js`](_shared/adopt-css.js).
+- Shadow DOM usa [`_shared/adopt-css.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/adopt-css.js).
 - Eventos conservan detail/bubbles/composed/cancelable.
-- Forms reutilizan [`_shared/form-associated.js`](_shared/form-associated.js).
+- Forms reutilizan [`_shared/form-associated.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/form-associated.js).
 - Escala usa font-size contextual y em; no size colors.
 
 ## Reusar antes de crear
 
-- CSS: [`_shared/adopt-css.js`](_shared/adopt-css.js), [`_shared/scrollbars.css`](_shared/scrollbars.css).
-- Forms/fecha: [`_shared/form-associated.js`](_shared/form-associated.js), [`_shared/date-field-core.js`](_shared/date-field-core.js), [`_shared/date-utils.js`](_shared/date-utils.js), [`_shared/picker-element.js`](_shared/picker-element.js).
-- Overlays: [`_shared/position.js`](_shared/position.js), [`helpers/popup.md`](helpers/popup.md).
-- Charts: [`_shared/svg-chart-engine.js`](_shared/svg-chart-engine.js), [`_shared/chart-palette.js`](_shared/chart-palette.js), marks.
+- CSS: [`_shared/adopt-css.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/adopt-css.js), [`_shared/scrollbars.css`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/scrollbars.css).
+- Forms/fecha: [`_shared/form-associated.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/form-associated.js), [`_shared/date-field-core.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/date-field-core.js), [`_shared/date-utils.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/date-utils.js), [`_shared/picker-element.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/picker-element.js).
+- Overlays: [`_shared/position.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/position.js), [`helpers/popup.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/popup.md).
+- Charts: [`_shared/svg-chart-engine.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/svg-chart-engine.js), [`_shared/chart-palette.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/chart-palette.js), marks.
 - Diagramas: specs/layout/turtle/edit/kind registry existentes.
-- Grid: [`_shared/grid-data.js`](_shared/grid-data.js), [`_shared/grid-types.js`](_shared/grid-types.js), [`_shared/grid-ui.js`](_shared/grid-ui.js).
-- Iconos: [`_shared/icon-loader.js`](_shared/icon-loader.js) — resuelve el SVG desde `assets/icons/` / `dist/cdn/assets/icons/`. Preferencias: [`_shared/prefs.js`](_shared/prefs.js).
+- Grid: [`_shared/grid-data.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/grid-data.js), [`_shared/grid-types.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/grid-types.js), [`_shared/grid-ui.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/grid-ui.js).
+- Iconos: [`_shared/icon-loader.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/icon-loader.js) — resuelve el SVG desde `assets/icons/` / `dist/cdn/assets/icons/`. Preferencias: [`_shared/prefs.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/prefs.js).
 
 ## Qué hacer
 
@@ -169,7 +169,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - Todo `MutationObserver`/`ResizeObserver`/`IntersectionObserver` se guarda en un campo y se `disconnect()` en `disconnectedCallback`; una sola instancia por elemento, no una por render.
 - Estados por atributo del host SIEMPRE con `:host([attr])` a top-level del CSS del componente.
 - CSS anidado (nesting nativo) es el estilo preferido para descendientes dentro de `:host { }` y dentro de reglas; la única excepción es la de arriba.
-- Escapar HTML con `escapeHtml` y copiar al portapapeles con `copyText` — ambos en [`_shared/dom-utils.js`](_shared/dom-utils.js).
+- Escapar HTML con `escapeHtml` y copiar al portapapeles con `copyText` — ambos en [`_shared/dom-utils.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/_shared/dom-utils.js).
 - Registrar cada componente nuevo en `manifest.js` (con `page` si tiene preview) — el nav, el CDN snippet y los tests derivan de ahí.
 - En previews, las cajas de demo son `<is-demo class="demo">` (componente `layout/demo.js`); la clase `demo` en el markup evita FOUC antes de que el componente se defina.
 - El bloque "Consumo por CDN" lo pinta SOLO `<is-cdn-snippet>` (auto-inyectado por `preview-chrome.js`); nunca duplicar un callout CDN a mano ni desde otros scripts.

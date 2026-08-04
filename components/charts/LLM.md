@@ -12,19 +12,19 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-chart>` | [chart.md](chart.md) | Chart |
-| `<is-bar-chart>` | [bar-chart.md](bar-chart.md) | Bar Chart |
-| `<is-line-chart>` | [line-chart.md](line-chart.md) | Line Chart |
-| `<is-pie-chart>` | [pie-chart.md](pie-chart.md) | Pie Chart |
-| `<is-doughnut-chart>` | [doughnut-chart.md](doughnut-chart.md) | Doughnut Chart |
-| `<is-radar-chart>` | [radar-chart.md](radar-chart.md) | Radar Chart |
-| `<is-polar-area-chart>` | [polar-area-chart.md](polar-area-chart.md) | Polar Area Chart |
-| `<is-scatter-chart>` | [scatter-chart.md](scatter-chart.md) | Scatter Chart |
-| `<is-bubble-chart>` | [bubble-chart.md](bubble-chart.md) | Bubble Chart |
-| `<is-sparkline>` | [sparkline.md](sparkline.md) | Sparkline |
-| `<is-waterfall-chart>` | [waterfall-chart.md](waterfall-chart.md) | Waterfall Chart |
-| `<is-funnel-chart>` | [funnel-chart.md](funnel-chart.md) | Funnel Chart |
-| `<is-treemap>` | [treemap.md](treemap.md) | Treemap |
+| `<is-chart>` | [chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/chart.md) | Chart |
+| `<is-bar-chart>` | [bar-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/bar-chart.md) | Bar Chart |
+| `<is-line-chart>` | [line-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/line-chart.md) | Line Chart |
+| `<is-pie-chart>` | [pie-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/pie-chart.md) | Pie Chart |
+| `<is-doughnut-chart>` | [doughnut-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/doughnut-chart.md) | Doughnut Chart |
+| `<is-radar-chart>` | [radar-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/radar-chart.md) | Radar Chart |
+| `<is-polar-area-chart>` | [polar-area-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/polar-area-chart.md) | Polar Area Chart |
+| `<is-scatter-chart>` | [scatter-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/scatter-chart.md) | Scatter Chart |
+| `<is-bubble-chart>` | [bubble-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/bubble-chart.md) | Bubble Chart |
+| `<is-sparkline>` | [sparkline.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/sparkline.md) | Sparkline |
+| `<is-waterfall-chart>` | [waterfall-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/waterfall-chart.md) | Waterfall Chart |
+| `<is-funnel-chart>` | [funnel-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/funnel-chart.md) | Funnel Chart |
+| `<is-treemap>` | [treemap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/charts/treemap.md) | Treemap |
 
 ## Composición y relaciones
 
@@ -79,4 +79,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)

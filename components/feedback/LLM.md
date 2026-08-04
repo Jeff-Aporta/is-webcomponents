@@ -12,18 +12,18 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-spinner>` | [spinner.md](spinner.md) | Spinner |
-| `<is-badge>` | [badge.md](badge.md) | Badge |
-| `<is-tag>` | [tag.md](tag.md) | Tag |
-| `<is-skeleton>` | [skeleton.md](skeleton.md) | Skeleton |
-| `<is-progress-bar>` | [progress-bar.md](progress-bar.md) | Progress Bar |
-| `<is-progress-ring>` | [progress-ring.md](progress-ring.md) | Progress Ring |
-| `<is-theme-toggle>` | [theme-toggle.md](theme-toggle.md) | Theme Toggle |
-| `<is-toast>` | [toast.md](toast.md) | Toast |
-| `<is-toast-item>` | [toast-item.md](toast-item.md) | Toast Item |
-| `<is-tooltip>` | [tooltip.md](tooltip.md) | Tooltip |
-| `<is-cdn-snippet>` | [cdn-snippet.md](cdn-snippet.md) | CDN Snippet |
-| `<is-popconfirm>` | [popconfirm.md](popconfirm.md) | Popconfirm |
+| `<is-spinner>` | [spinner.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/spinner.md) | Spinner |
+| `<is-badge>` | [badge.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/badge.md) | Badge |
+| `<is-tag>` | [tag.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/tag.md) | Tag |
+| `<is-skeleton>` | [skeleton.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/skeleton.md) | Skeleton |
+| `<is-progress-bar>` | [progress-bar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/progress-bar.md) | Progress Bar |
+| `<is-progress-ring>` | [progress-ring.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/progress-ring.md) | Progress Ring |
+| `<is-theme-toggle>` | [theme-toggle.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/theme-toggle.md) | Theme Toggle |
+| `<is-toast>` | [toast.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/toast.md) | Toast |
+| `<is-toast-item>` | [toast-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/toast-item.md) | Toast Item |
+| `<is-tooltip>` | [tooltip.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/tooltip.md) | Tooltip |
+| `<is-cdn-snippet>` | [cdn-snippet.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/cdn-snippet.md) | CDN Snippet |
+| `<is-popconfirm>` | [popconfirm.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/feedback/popconfirm.md) | Popconfirm |
 
 ## Composición y relaciones
 
@@ -71,4 +71,4 @@ No expone módulos internos documentales en esta categoría.
 
 ## Navegación
 
-- [Índice global](../LLM.md)
+- [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)
