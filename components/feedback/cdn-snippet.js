@@ -85,6 +85,20 @@ import '../media/icon.js';
           </div>
           <pre class="cdn__pre" data-slot="all"></pre>
         </li>
+        <li class="cdn__row" data-kind="skill">
+          <div class="cdn__row-head">
+            <span class="cdn__label">Skill agentes · <code>npx skills add</code></span>
+            <button type="button" class="cdn__copy" data-copy="skill" aria-label="Copiar comando de instalación de la skill">
+              <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
+              Copiar
+            </button>
+          </div>
+          <pre class="cdn__pre" data-slot="skill"></pre>
+          <p class="cdn__dep-note" data-slot="skill-note">
+            Instala la skill <code>is-webcomponents</code> para Cursor / Claude Code / Copilot.
+            Obliga a reusar tags <code>is-*</code> del kit en vez de reinventarlos.
+          </p>
+        </li>
       </ol>
       <section class="cdn__docs" data-slot="docs" hidden>
         <h4 class="cdn__docs-title">Documentación para LLM</h4>
@@ -99,11 +113,12 @@ import '../media/icon.js';
     static get observedAttributes() { return OBSERVED; }
 
     #mounted = false;
-    #urls = { single: '', category: '', all: '' };
+    #urls = { single: '', category: '', all: '', skill: '', skillCdn: '' };
     #onHighlightReady = () => this.#render();
     #deps = [];
     #docs = [];
     #resolvedBase = '';
+    #skillCmd = 'npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents';
 
     constructor() {
       super();
@@ -256,12 +271,16 @@ import '../media/icon.js';
       const tag = this.getAttribute('tag');
       const category = this.getAttribute('category');
       const fileTag = (tag || '').replace(/^is-/, '');
+      // Skill publicada en dist/cdn/skills/ (mismo pin SHA que el resto del CDN).
+      const skillDir = `${base}/skills/is-webcomponents`;
       this.#urls = {
-        common:       `${base}/is-base.min.css`,
+        common: `${base}/is-base.min.css`,
         commonPalette: `${base}/palettes.min.css`,
-        single:   (tag && category) ? `${base}/${category}/${fileTag}.min.js` : '',
+        single: (tag && category) ? `${base}/${category}/${fileTag}.min.js` : '',
         category: (tag && category) ? `${base}/${category}/category.${category}.min.js` : '',
-        all:      `${base}/all.min.js`,
+        all: `${base}/all.min.js`,
+        skill: this.#skillCmd,
+        skillCdn: skillDir,
       };
     }
 
@@ -280,6 +299,7 @@ import '../media/icon.js';
       const singlePre = root.querySelector('[data-slot="single"]');
       const catPre = root.querySelector('[data-slot="category-pre"]');
       const allPre = root.querySelector('[data-slot="all"]');
+      const skillPre = root.querySelector('[data-slot="skill"]');
 
       const title = this.getAttribute('title');
       if (titleEl && title) titleEl.textContent = title;
@@ -297,6 +317,13 @@ import '../media/icon.js';
       if (singlePre) singlePre.innerHTML = escapeHtml(mkJs(this.#urls.single));
       if (catPre) catPre.innerHTML = escapeHtml(mkJs(this.#urls.category));
       if (allPre) allPre.innerHTML = escapeHtml(mkJs(this.#urls.all));
+      if (skillPre) {
+        skillPre.innerHTML = escapeHtml([
+          this.#urls.skill,
+          '# espejo CDN (mismo commit que el kit)',
+          `npx skills add ${this.#urls.skillCdn}`,
+        ].join('\n'));
+      }
 
       // Si no hay tag, ocultamos la fila individual para no mostrar placeholder inútil.
       const singleRow = root.querySelector('[data-kind="single"]');
@@ -376,6 +403,8 @@ import '../media/icon.js';
       let text = '';
       if (kind === 'dep' || kind === 'doc') {
         text = btn.dataset.copyValue || '';
+      } else if (kind === 'skill') {
+        text = this.#urls.skill || this.#skillCmd;
       } else if (kind === 'common') {
         text = [asCss(this.#urls.common), asCss(this.#urls.commonPalette)].filter(Boolean).join('\n');
       } else {

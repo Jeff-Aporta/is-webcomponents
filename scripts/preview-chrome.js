@@ -160,6 +160,14 @@ function llmDocs(entry) {
   const docs = [];
   if (folder) docs.push({ label: `Categoría ${entry.category || ''}`.trim(), url: `${LLM_BASE}/${folder}/LLM.md` });
   docs.push({ label: 'Índice global', url: `${LLM_BASE}/components/LLM.md` });
+  docs.push({
+    label: 'Skill agentes',
+    url: `${LLM_BASE}/skills/is-webcomponents/SKILL.md`,
+  });
+  docs.push({
+    label: 'Skill CDN',
+    url: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-webcomponents/SKILL.md',
+  });
   return docs;
 }
 

@@ -32,6 +32,20 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 | `previews/` | Docs + demos por componente |
 | `styles/` | Tokens (`is-base.css`) y shell |
 | `manifest.js` | Índice de la galería |
+| `skills/is-webcomponents/` | Skill para agentes IDE (Cursor, Claude Code, …) |
+| `dist/cdn/skills/` | Espejo CDN de la skill (mismo pin que el kit) |
+
+## Skill para agentes IDE
+
+Obliga a reusar los tags `is-*` del kit al fundar o extender apps consumidoras.
+
+```bash
+npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
+# o desde el CDN (mismo commit que el kit):
+npx skills add https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-webcomponents
+```
+
+También aparece en cada panel `<is-cdn-snippet>` de los previews.
 
 ## Licencia
 

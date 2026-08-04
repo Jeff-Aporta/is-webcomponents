@@ -277,6 +277,7 @@ await writeFile(
     '  <categoria>/category.<categoria>.min.js  — todos los componentes de esa categoria',
     '  all.min.js                               — todos los componentes en un archivo',
     '  sizes.json                               — {ruta: bytes} de todo el .min.js/.min.css publicado',
+    '  skills/is-webcomponents/                 — skill para agentes IDE (npx skills add …)',
     '  assets/icons/                            — SVGs Iconify + <prefix>.json + index.json',
     '  Los tags conservan el prefijo is-* (p.ej. actions/button.min.js → <is-button>).',
     '',
@@ -287,8 +288,29 @@ await writeFile(
     '  <script type="module" src=".../actions/category.actions.min.js"></script>',
     '  <script type="module" src=".../all.min.js"></script>',
     '',
+    'Skill agentes IDE:',
+    '  npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents',
+    '  npx skills add https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-webcomponents',
+    '',
   ].join('\n'),
 );
+
+// ── Skills para agentes IDE ──────────────────────────────────────
+// Fuente: skills/ en la raíz del repo (descubrible por `npx skills add`).
+// Espejo en dist/cdn/skills/ para instalar desde el mismo pin CDN del kit.
+{
+  const skillsSrc = join(root, 'skills');
+  const skillsOut = join(dist, 'skills');
+  try {
+    await access(skillsSrc);
+    const { cp } = await import('node:fs/promises');
+    await rm(skillsOut, { recursive: true, force: true });
+    await cp(skillsSrc, skillsOut, { recursive: true });
+    console.log('  skills/               copiado a dist/cdn/skills/');
+  } catch {
+    // sin carpeta skills/: omitir
+  }
+}
 
 // ── Iconos locales ───────────────────────────────────────────────
 // Si existen assets/icons/{prefix}/{name}.svg (generados por
