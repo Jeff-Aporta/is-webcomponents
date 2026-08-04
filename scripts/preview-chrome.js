@@ -14,6 +14,7 @@ import '../components/feedback/theme-toggle.js';
 import '../components/actions/button.js';
 import '../components/actions/button-group.js';
 import '../components/media/icon.js';
+import '../components/actions/copy-button.js';
 import '../components/feedback/cdn-snippet.js';
 import components from '../manifest.js';
 // Expone el manifest a `window.__IS_MANIFEST__` para que `demo-code.js`
@@ -128,14 +129,70 @@ function mountCdnSnippet() {
   snippet.setAttribute('title', `CDN · ${matches[0].title || matches[0].tag}`);
   host.appendChild(snippet);
 
-  // Enlace al LLM.md del repo, visible en la página (fuera del shadow DOM de
-  // <is-cdn-snippet>) para que agentes/personas que caen en el preview lo
-  // encuentren sin tener que buscarlo.
-  const llmLink = document.createElement('p');
-  llmLink.className = 'preview-chrome__llm-link';
-  const llmHref = new URL('../LLM.md', location.href).href;
-  llmLink.innerHTML = `<a href="${llmHref}">Ver LLM.md</a>`;
-  host.appendChild(llmLink);
+  host.appendChild(buildLlmLinks(matches[0]));
+}
+
+/**
+ * Bloque de enlaces a los LLM.md, justo debajo del snippet de CDN y fuera del
+ * shadow de <is-cdn-snippet>. Cada fila trae la URL a la vista, un botón para
+ * copiarla y el enlace para abrirla.
+ *
+ * Los enlaces van al CDN (`/llm/**`) y no al .md del repo por una razón
+ * concreta: ahí el build fuerza `Content-Type: text/plain` con `_headers`, así
+ * que el navegador MUESTRA el texto al entrar. Servidos desde GitHub Pages
+ * salen como `text/markdown` y el navegador los descarga. En ambos casos un
+ * fetch lee el texto, pero se pidió que al entrar se viera.
+ *
+ * Antes esto apuntaba a `../LLM.md`, o sea `previews/LLM.md`, que no existe:
+ * el enlace daba 404 en blanco.
+ *
+ * La ruta de la categoría se deriva del `script` del manifest, NO del nombre de
+ * la categoría: son cosas distintas. Los tags de la categoría `data-viz` viven
+ * repartidos entre `components/charts/` y `components/data-viz/`, así que
+ * componer `components/<categoria>/LLM.md` daba una ruta inexistente.
+ */
+const LLM_BASE = 'https://is-webcomponents.pages.dev/llm';
+
+function buildLlmLinks(entry) {
+  const wrap = document.createElement('section');
+  wrap.className = 'preview-chrome__llm';
+
+  const folder = (entry.script || '').replace(/\/[^/]+\.js$/, '').replace(/^\.\.\/\.\.\//, '');
+  const rows = [
+    ['Categoría', `${entry.category || ''}`, folder ? `${LLM_BASE}/${folder}/LLM.md` : ''],
+    ['Todos', 'índice global', `${LLM_BASE}/LLM.md`],
+  ];
+
+  const head = document.createElement('h3');
+  head.className = 'preview-chrome__llm-title';
+  head.textContent = 'Documentación para LLM';
+  wrap.appendChild(head);
+
+  for (const [label, detail, rel] of rows) {
+    if (!rel) continue;
+    const href = rel;
+    const row = document.createElement('div');
+    row.className = 'preview-chrome__llm-row';
+    row.innerHTML = `
+      <a class="preview-chrome__llm-btn" href="${href}" target="_blank" rel="noopener">
+        <is-icon icon="mdi:file-document-outline" aria-hidden="true"></is-icon>
+        <span class="preview-chrome__llm-label">LLM · ${label}</span>
+        <span class="preview-chrome__llm-detail">${detail}</span>
+      </a>
+      <code class="preview-chrome__llm-url">${href}</code>
+    `;
+    // is-copy-button ya resuelve el portapapeles y el feedback de "Copiado":
+    // no hay que reimplementarlo aquí.
+    const copy = document.createElement('is-copy-button');
+    copy.className = 'preview-chrome__llm-copy';
+    copy.setAttribute('value', href);
+    copy.setAttribute('copy-label', 'Copiar enlace');
+    copy.setAttribute('success-label', 'Copiado');
+    row.appendChild(copy);
+    wrap.appendChild(row);
+  }
+
+  return wrap;
 }
 
 function mount() {

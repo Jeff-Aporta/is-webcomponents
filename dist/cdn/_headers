@@ -1,0 +1,5 @@
+# Los .md se sirven como texto plano: así el navegador los MUESTRA al
+# entrar en vez de descargarlos, y un fetch sigue leyendo el texto.
+/llm/*
+  Content-Type: text/plain; charset=utf-8
+  Access-Control-Allow-Origin: *

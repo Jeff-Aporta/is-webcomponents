@@ -32,6 +32,9 @@ if (!existsSync(dist)) {
 const ROOT_ALLOWED = new Set([
   'all.min.js', 'is-base.min.css', 'palettes.min.css', 'README.txt', 'assets',
   'sizes.json', 'versions.json',
+  // `_headers` es configuración de Cloudflare Pages (fuerza text/plain en
+  // /llm/*) y `llm/` son los .md publicados: ninguno es un componente.
+  '_headers', 'llm',
 ]);
 
 const rootEntries = readdirSync(dist);
@@ -39,7 +42,8 @@ const categories = [];
 for (const name of rootEntries) {
   const full = join(dist, name);
   if (statSync(full).isDirectory()) {
-    if (name !== 'assets') categories.push(name);
+    // `assets/` y `llm/` no son categorías de componentes.
+    if (name !== 'assets' && name !== 'llm') categories.push(name);
     continue;
   }
   check(ROOT_ALLOWED.has(name),
