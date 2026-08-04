@@ -55,24 +55,31 @@ if (/components\/\$\{[^}]*categor/i.test(chrome)) {
   failures.push('preview-chrome.js compone la ruta del LLM.md desde la categoría; debe derivarla del `script` del manifest');
 }
 
-// 4) El build tiene que publicar los .md en dist/cdn/llm y forzarles el
-//    text/plain: sin el `_headers` el navegador los descarga en vez de
-//    mostrarlos, que es justo lo que se quería evitar.
-const distLlm = join(root, 'dist', 'cdn', 'llm');
-if (existsSync(join(root, 'dist', 'cdn'))) {
-  for (const rel of checked) {
-    if (!existsSync(join(distLlm, rel))) failures.push(`falta dist/cdn/llm/${rel} — corre \`node scripts/build.mjs\``);
-  }
-  if (!existsSync(join(distLlm, 'LLM.md'))) failures.push('falta dist/cdn/llm/LLM.md');
-  const headersFile = join(root, 'dist', 'cdn', '_headers');
-  if (!existsSync(headersFile)) {
-    failures.push('falta dist/cdn/_headers — sin él Cloudflare no sirve los .md como texto plano');
-  } else {
-    const h = readFileSync(headersFile, 'utf8');
-    if (!/\/llm\/\*/.test(h) || !/text\/plain/.test(h)) {
-      failures.push('dist/cdn/_headers no fuerza text/plain en /llm/*');
-    }
-  }
+// 4) Los .md se exponen desde el FUENTE, sin copia en dist: nada de duplicar.
+if (existsSync(join(root, 'dist', 'cdn', 'llm'))) {
+  failures.push('dist/cdn/llm/ duplica los .md del repo; se exponen desde el fuente');
+}
+
+// 5) La base debe ser raw.githubusercontent: es la única que devuelve
+//    `text/plain`, o sea la única con la que el navegador MUESTRA el texto al
+//    entrar. jsDelivr y GitHub Pages lo mandan como `text/markdown` y el
+//    navegador lo descarga. (jsDelivr sí es la base del CÓDIGO, no de los .md.)
+const base = chrome.match(/const LLM_BASE = '([^']+)'/)?.[1] || '';
+if (!base.startsWith('https://raw.githubusercontent.com/')) {
+  failures.push(`LLM_BASE es "${base}"; debe ser raw.githubusercontent para que responda text/plain`);
+}
+if (/pages\.dev/.test(chrome)) {
+  failures.push('preview-chrome.js aún apunta a Cloudflare Pages; el proyecto se desvinculó');
+}
+
+// 6) Los enlaces se entregan al <is-cdn-snippet> como `config`, no se pintan
+//    sueltos en la página: cada snippet decide si los muestra.
+if (!/setAttribute\('config'/.test(chrome)) {
+  failures.push('preview-chrome.js no pasa los enlaces al <is-cdn-snippet> por `config`');
+}
+const snippet = readFileSync(join(root, 'components', 'feedback', 'cdn-snippet.js'), 'utf8');
+if (!/#renderDocs/.test(snippet) || !/cdn__docs/.test(snippet)) {
+  failures.push('cdn-snippet.js no construye la sección de documentación');
 }
 
 if (failures.length) {

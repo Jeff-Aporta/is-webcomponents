@@ -127,72 +127,35 @@ function mountCdnSnippet() {
   snippet.setAttribute('tag', matches[0].tag);
   snippet.setAttribute('category', matches[0].category || '');
   snippet.setAttribute('title', `CDN · ${matches[0].title || matches[0].tag}`);
+  // Los enlaces a la documentación viajan como `config` del propio snippet:
+  // es él quien decide si los pinta. Son opcionales, no obligatorios.
+  snippet.setAttribute('config', JSON.stringify({ docs: llmDocs(matches[0]) }));
   host.appendChild(snippet);
-
-  host.appendChild(buildLlmLinks(matches[0]));
 }
 
 /**
- * Bloque de enlaces a los LLM.md, justo debajo del snippet de CDN y fuera del
- * shadow de <is-cdn-snippet>. Cada fila trae la URL a la vista, un botón para
- * copiarla y el enlace para abrirla.
- *
- * Los enlaces van al CDN (`/llm/**`) y no al .md del repo por una razón
- * concreta: ahí el build fuerza `Content-Type: text/plain` con `_headers`, así
- * que el navegador MUESTRA el texto al entrar. Servidos desde GitHub Pages
- * salen como `text/markdown` y el navegador los descarga. En ambos casos un
- * fetch lee el texto, pero se pidió que al entrar se viera.
+ * Enlaces a los LLM.md del REPO tal cual, sin copia en dist. Se usa
+ * raw.githubusercontent porque es la única de las tres rutas que responde
+ * `text/plain`, así que el navegador MUESTRA el texto al entrar; jsDelivr y
+ * GitHub Pages lo mandan como `text/markdown` y lo descargan. Verificado con
+ * curl sobre las tres. Para un fetch cualquiera de ellas sirve.
  *
  * Antes esto apuntaba a `../LLM.md`, o sea `previews/LLM.md`, que no existe:
  * el enlace daba 404 en blanco.
  *
- * La ruta de la categoría se deriva del `script` del manifest, NO del nombre de
- * la categoría: son cosas distintas. Los tags de la categoría `data-viz` viven
- * repartidos entre `components/charts/` y `components/data-viz/`, así que
- * componer `components/<categoria>/LLM.md` daba una ruta inexistente.
+ * La ruta de la categoría se deriva del `script` del manifest, NO del nombre
+ * de la categoría: no son lo mismo. Los tags de `data-viz` viven repartidos
+ * entre `components/charts/` y `components/data-viz/`, así que componer
+ * `components/<categoria>/LLM.md` daba rutas inexistentes.
  */
-const LLM_BASE = 'https://is-webcomponents.pages.dev/llm';
+const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
 
-function buildLlmLinks(entry) {
-  const wrap = document.createElement('section');
-  wrap.className = 'preview-chrome__llm';
-
+function llmDocs(entry) {
   const folder = (entry.script || '').replace(/\/[^/]+\.js$/, '').replace(/^\.\.\/\.\.\//, '');
-  const rows = [
-    ['Categoría', `${entry.category || ''}`, folder ? `${LLM_BASE}/${folder}/LLM.md` : ''],
-    ['Todos', 'índice global', `${LLM_BASE}/LLM.md`],
-  ];
-
-  const head = document.createElement('h3');
-  head.className = 'preview-chrome__llm-title';
-  head.textContent = 'Documentación para LLM';
-  wrap.appendChild(head);
-
-  for (const [label, detail, rel] of rows) {
-    if (!rel) continue;
-    const href = rel;
-    const row = document.createElement('div');
-    row.className = 'preview-chrome__llm-row';
-    row.innerHTML = `
-      <a class="preview-chrome__llm-btn" href="${href}" target="_blank" rel="noopener">
-        <is-icon icon="mdi:file-document-outline" aria-hidden="true"></is-icon>
-        <span class="preview-chrome__llm-label">LLM · ${label}</span>
-        <span class="preview-chrome__llm-detail">${detail}</span>
-      </a>
-      <code class="preview-chrome__llm-url">${href}</code>
-    `;
-    // is-copy-button ya resuelve el portapapeles y el feedback de "Copiado":
-    // no hay que reimplementarlo aquí.
-    const copy = document.createElement('is-copy-button');
-    copy.className = 'preview-chrome__llm-copy';
-    copy.setAttribute('value', href);
-    copy.setAttribute('copy-label', 'Copiar enlace');
-    copy.setAttribute('success-label', 'Copiado');
-    row.appendChild(copy);
-    wrap.appendChild(row);
-  }
-
-  return wrap;
+  const docs = [];
+  if (folder) docs.push({ label: `Categoría ${entry.category || ''}`.trim(), url: `${LLM_BASE}/${folder}/LLM.md` });
+  docs.push({ label: 'Índice global', url: `${LLM_BASE}/LLM.md` });
+  return docs;
 }
 
 function mount() {

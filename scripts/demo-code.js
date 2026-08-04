@@ -42,7 +42,19 @@
   ]);
 
   /** CDN base — el snippet debe usar URLs públicas para que sea portable. */
+  /** Base de arranque. El snippet se emite con el commit resuelto (ver
+   *  `cdnBase()`): `@main` cambiaría bajo los pies de quien lo pegó. */
   const CDN_BASE = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
+
+  /** Base congelada al último commit. `cdn-ref.js` la expone en window porque
+   *  este archivo es un IIFE clásico y no puede importar. */
+  const cdnBase = async () => {
+    try {
+      const ref = await window.__IS_CDN_REF__?.resolveRef?.();
+      if (ref) return `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@${ref}/dist/cdn`;
+    } catch { /* sin red: se queda en main */ }
+    return CDN_BASE;
+  };
 
   /** Componentes que sí exponen CSS propio (los demás sólo JS). */
   const COMPONENTS_WITH_CSS = new Set([
@@ -77,7 +89,8 @@
    *  jsDelivr no siempre responde con Content-Length. */
   let sizesPromise = null;
   const loadSizes = () => {
-    sizesPromise ??= fetch(`${CDN_BASE}/sizes.json`)
+    sizesPromise ??= cdnBase()
+      .then((base) => fetch(`${base}/sizes.json`))
       .then((r) => (r.ok ? r.json() : {}))
       .catch(() => ({}));
     return sizesPromise;
@@ -95,7 +108,7 @@
     const paths = new Set();
     const isComponentJs = (k) => /^[^/]+\/[^/]+\.min\.js$/.test(k) && !/\/category\./.test(k);
     for (const url of urls) {
-      const path = url.startsWith(CDN_BASE) ? url.slice(CDN_BASE.length + 1) : url;
+      const path = url.replace(/^https:\/\/cdn\.jsdelivr\.net\/gh\/[^@]+@[^/]+\/dist\/cdn\//, '');
       paths.add(path);
       if (path === 'all.min.js') {
         for (const k of keys) if (isComponentJs(k)) paths.add(k);
@@ -142,8 +155,13 @@
         if (t) parts.push(t);
       }
     }
-    return pretty(parts.join('\n'));
+    return pretty(dropEmptyAttrValues(parts.join('\n')));
   };
+
+  /** `outerHTML` serializa los booleanos como `pill=""`. En HTML eso es lo
+   *  mismo que `pill` a secas, que es como se escriben a mano y como se leen
+   *  mejor en el snippet. Solo se quita el `=""`: un valor real no se toca. */
+  const dropEmptyAttrValues = (html) => html.replace(/(\s[a-zA-Z][\w-]*)=""/g, '$1');
 
   const pretty = (html) => {
     const flat = html
@@ -194,6 +212,7 @@
       ? raw.trim()
       : serializeDemoHtml(demo);
 
+    const CDN = await cdnBase();
     const tags = collectTags(demo);
     const cssTags = tags.filter((t) => COMPONENTS_WITH_CSS.has(t));
 
@@ -202,24 +221,24 @@
     const pushCss = (href) => { lines.push(`<link rel="stylesheet" href="${href}">`); urls.push(href); };
     const pushJs = (src) => { lines.push(`<script type="module" src="${src}"><\/script>`); urls.push(src); };
 
-    pushCss(`${CDN_BASE}/is-base.min.css`);
+    pushCss(`${CDN}/is-base.min.css`);
     // Sólo hay un palettes.min.css con las 3 paletas juntas (no hay archivo
     // por paleta), así que siempre se referencia entero.
-    pushCss(`${CDN_BASE}/palettes.min.css`);
+    pushCss(`${CDN}/palettes.min.css`);
 
     // El .min.css de cada componente NO se enlaza: adoptCss() lo carga solo
     // en el shadow leyendo la ruta hermana del .min.js. Igual pesa, así que
     // entra en el cálculo aunque no aparezca en el snippet.
-    for (const t of cssTags) urls.push(`${CDN_BASE}/${catOf(t)}/${t}.min.css`);
+    for (const t of cssTags) urls.push(`${CDN}/${catOf(t)}/${t}.min.css`);
 
     if (level === 'all') {
-      pushJs(`${CDN_BASE}/all.min.js`);
+      pushJs(`${CDN}/all.min.js`);
     } else if (level === 'category') {
       const cats = [...new Set(tags.map(catOf))].sort();
-      for (const c of cats) pushJs(`${CDN_BASE}/${c}/category.${c}.min.js`);
+      for (const c of cats) pushJs(`${CDN}/${c}/category.${c}.min.js`);
     } else {
       // Los módulos ya son diferidos: no hace falta `defer` ni ponerlos al final.
-      for (const t of tags) pushJs(`${CDN_BASE}/${catOf(t)}/${t}.min.js`);
+      for (const t of tags) pushJs(`${CDN}/${catOf(t)}/${t}.min.js`);
     }
 
     if (lines.length) lines.push('');

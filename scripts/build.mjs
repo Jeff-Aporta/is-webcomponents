@@ -247,44 +247,6 @@ await bundleVirtual(allOut, allVirtual, allOut);
 const allStat = await stat(allOut);
 console.log(`  ${'all.min'.padEnd(18)} js ${String(allStat.size).padStart(6)}  (${allPaths.length} comps)`);
 
-// ── Documentación para LLM ───────────────────────────────────────
-// Los LLM.md se copian al bundle para que tengan una URL estable y, sobre
-// todo, para poder forzarles el Content-Type con `_headers`: GitHub Pages los
-// sirve como `text/markdown`, que el navegador DESCARGA en vez de mostrar.
-// Servidos como `text/plain` se ven al entrar y siguen valiendo para un fetch.
-const llmOut = join(dist, 'llm');
-const llmDocs = [];
-const collectLlm = async (dir, rel = '') => {
-  for (const entry of await readdir(dir, { withFileTypes: true })) {
-    if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
-    const full = join(dir, entry.name);
-    const relPath = rel ? `${rel}/${entry.name}` : entry.name;
-    if (entry.isDirectory()) { await collectLlm(full, relPath); continue; }
-    if (entry.name === 'LLM.md') llmDocs.push({ src: full, rel: relPath });
-  }
-};
-await collectLlm(join(root, 'components'), 'components');
-llmDocs.push({ src: join(root, 'LLM.md'), rel: 'LLM.md' });
-
-const { copyFile: copyOne } = await import('node:fs/promises');
-for (const doc of llmDocs) {
-  const out = join(llmOut, doc.rel);
-  await mkdir(dirname(out), { recursive: true });
-  await copyOne(doc.src, out);
-}
-await writeFile(
-  join(dist, '_headers'),
-  [
-    '# Los .md se sirven como texto plano: así el navegador los MUESTRA al',
-    '# entrar en vez de descargarlos, y un fetch sigue leyendo el texto.',
-    '/llm/*',
-    '  Content-Type: text/plain; charset=utf-8',
-    '  Access-Control-Allow-Origin: *',
-    '',
-  ].join('\n'),
-);
-console.log(`  ${'llm/'.padEnd(18)}    ${String(llmDocs.length).padStart(6)} LLM.md publicados como texto plano`);
-
 // ── sizes.json ───────────────────────────────────────────────────
 // Mapa {ruta relativa → bytes} de todo el JS/CSS publicado. El front
 // (demo-code.js, is-cdn-snippet) lo consulta UNA vez por el CDN para

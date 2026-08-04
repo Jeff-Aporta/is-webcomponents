@@ -1,61 +1,47 @@
 /**
  * cdn-sources.js — de dónde salen las URLs de los snippets.
  *
- * Hay tres orígenes posibles y NO son intercambiables a ciegas:
+ * Todo se sirve por jsDelivr sobre el repo, que ya publica cualquier ruta del
+ * árbol sin build ni despliegue aparte:
  *
- *   cf-latest  https://is-webcomponents.pages.dev            — siempre el último build
- *   cf-pinned  https://<id8>.is-webcomponents.pages.dev      — deployment inmutable
- *   jsdelivr   https://cdn.jsdelivr.net/gh/…@<ref>/dist/cdn  — por rama o commit
+ *   https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<ref>/dist/cdn
  *
- * El id de un deployment de Pages lo asigna Cloudflare y no se deriva del
- * commit, así que la lista de versiones fijas se lee de `versions.json`
- * (lo genera scripts/sync-cf-versions.mjs desde la API tras cada deploy) y
- * ya viene verificada: los deployments que no responden no se listan.
+ * `ref` puede ser una rama (`main`, siempre lo último) o un commit completo,
+ * que jsDelivr cachea de forma inmutable: eso es el "fijar una versión". No
+ * hace falta un JSON de mapeo — a diferencia de Cloudflare Pages, donde el id
+ * del deployment lo asignaba Cloudflare y no se derivaba del commit.
  *
  * `window.__IS_CDN_SOURCES__` queda expuesto para el chrome de los demos.
  */
 const GH_REPO = 'Jeff-Aporta/is-webcomponents';
-const CF_PROJECT = 'is-webcomponents';
-const CF_LATEST = `https://${CF_PROJECT}.pages.dev`;
-const JSDELIVR = (ref) => `https://cdn.jsdelivr.net/gh/${GH_REPO}@${ref}/dist/cdn`;
+const JSDELIVR = (ref = 'main') => `https://cdn.jsdelivr.net/gh/${GH_REPO}@${ref}/dist/cdn`;
+/** Los .md se leen del fuente, sin copia en dist. raw.githubusercontent es la
+ *  única ruta que los devuelve como `text/plain` (jsDelivr y GitHub Pages los
+ *  mandan como `text/markdown` y el navegador los descarga). */
+const RAW = (ref = 'main') => `https://raw.githubusercontent.com/${GH_REPO}/${ref}`;
 
-/** versions.json se sirve junto al resto del bundle: se pide una vez. */
-let versionsPromise = null;
-export const loadVersions = () => {
-  versionsPromise ??= fetch(`${CF_LATEST}/versions.json`)
-    .then((r) => (r.ok ? r.json() : null))
-    .catch(() => null);
-  return versionsPromise;
-};
+export const baseFor = (ref) => JSDELIVR(ref);
+export const docsBase = (ref) => RAW(ref);
 
-/** Base de URLs para un origen dado. `ref` es el id8 (cf) o el commit/rama
- *  (jsdelivr); se ignora en los orígenes que no lo usan. */
-export const baseFor = (source, ref) => {
-  if (source === 'cf-pinned' && ref) return `https://${ref}.${CF_PROJECT}.pages.dev`;
-  if (source === 'jsdelivr') return JSDELIVR(ref || 'main');
-  return CF_LATEST;
-};
+/**
+ * Resuelve `main` al SHA del último commit para que los snippets salgan
+ * CONGELADOS: `@main` cambia bajo los pies de quien pegó el snippet, `@<sha>`
+ * no, y jsDelivr cachea un commit de forma inmutable.
+ *
+ * Se pide una vez por pestaña (promesa cacheada + sessionStorage) porque la
+ * API pública de GitHub va a 60 peticiones/hora por IP. Si falla —sin red, o
+ * cuota agotada— se cae a `main`, que sigue funcionando: preferimos un
+ * snippet vivo a uno roto.
+ */
+import { resolveRef, resolvedBase } from '../components/_shared/cdn-ref.js';
 
-/** Opciones que se pueden ofrecer en la UI, ya filtradas por disponibilidad.
- *  Sin versions.json sólo quedan los orígenes que no dependen de él. */
-export const listSources = async () => {
-  const data = await loadVersions();
-  const out = [
-    { id: 'cf-latest', label: 'Cloudflare · último', base: CF_LATEST },
-  ];
-  for (const v of data?.versions || []) {
-    out.push({
-      id: `cf-pinned:${v.id}`,
-      label: `Cloudflare · ${v.id}`,
-      base: baseFor('cf-pinned', v.id),
-      commit: v.commit,
-      created: v.created,
-    });
-  }
-  out.push({ id: 'jsdelivr', label: 'jsDelivr · main', base: JSDELIVR('main') });
-  return out;
-};
+export { resolveRef, resolvedBase };
+
+/** Orígenes ofrecibles en la UI. `ref` vacío = rama por defecto. */
+export const listSources = () => ([
+  { id: 'main', label: 'jsDelivr · main', base: JSDELIVR('main') },
+]);
 
 if (typeof window !== 'undefined') {
-  window.__IS_CDN_SOURCES__ = { loadVersions, baseFor, listSources, CF_LATEST, JSDELIVR };
+  window.__IS_CDN_SOURCES__ = { baseFor, docsBase, resolveRef, resolvedBase, listSources, JSDELIVR, RAW };
 }

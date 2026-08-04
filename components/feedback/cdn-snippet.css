@@ -166,3 +166,66 @@
   line-height: 1.45;
   color: var(--cdn-text-dim);
 }
+
+/* Documentación para LLM. Va dentro del panel y no suelta en la página para
+   que cada snippet decida si la muestra: es opcional, la activa `config`. */
+.cdn__docs {
+  margin-top: 1em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--cdn-border, var(--is-border-soft));
+
+  &[hidden] { display: none; }
+
+  & .cdn__docs-title {
+    margin: 0 0 0.6em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cdn-text-dim, var(--is-text-dim));
+  }
+
+  & .cdn__docs-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  & .cdn__docs-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4em 0.7em;
+
+    & + .cdn__docs-row { margin-top: 0.5em; }
+  }
+
+  & .cdn__docs-label {
+    flex: 0 0 auto;
+    min-width: 9.5em;
+    font-size: 0.78rem;
+    font-weight: 650;
+    color: var(--is-text-soft);
+  }
+
+  /* El enlace ES la URL, pintado con el color de marca. */
+  & .cdn__docs-url {
+    flex: 1 1 16em;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 0.25em 0.5em;
+    border-radius: var(--is-radius-sm);
+    background: var(--is-code-bg);
+    color: var(--is-accent);
+    font-family: var(--is-mono);
+    font-size: 0.72rem;
+    white-space: nowrap;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--is-brand-text);
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
+  }
+}

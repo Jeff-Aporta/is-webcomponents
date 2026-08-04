@@ -268,11 +268,11 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 
 51. Las dos familias de CSS muerto (`&[attr]` bajo `:host {}` y `mi-tag .algo` en una hoja adoptada por `mi-tag`) no las detecta el navegador: la hoja carga, no hay error en consola y el componente sale sin estilar. Por eso ya se colaron varias veces. Las vigila `tests/shadow-css-scope.test.mjs`, que deriva los tags de cada módulo de sus `customElements.define` y falla citando `archivo:línea`. Si aparece, se corrige la regla — no se relaja el test.
 
-52. Cloudflare Pages admite 20.000 archivos por deployment y `dist/cdn/assets/icons` trae ~317k SVGs: el deploy falla entero. Se publica solo el código y `icon-loader.js` resuelve los iconos por su cascada (GitHub Pages, jsDelivr). No intentar subir los iconos.
+52. El CDN es jsDelivr sobre el repo (`cdn.jsdelivr.net/gh/<user>/<repo>@<ref>/dist/cdn`): publica cualquier ruta del árbol sin build ni despliegue aparte. Se probó Cloudflare Pages y se descartó: exigía un workflow, un proyecto que mantener, y su límite de 20.000 archivos por deployment chocaba con los ~317k SVGs de `assets/icons`.
 
-53. El id de un deployment de Cloudflare Pages lo asigna Cloudflare y NO se deriva del commit, así que una versión fija no se puede construir a mano: hay que guardar el mapeo commit → URL (`dist/cdn/versions.json`, lo genera `scripts/sync-cf-versions.mjs` desde la API y verifica cada URL con un HEAD antes de listarla).
+53. Los snippets se emiten con el commit RESUELTO (`@<sha>`), no con `@main`: una rama cambia bajo los pies de quien pegó el snippet, y jsDelivr cachea un commit de forma inmutable. El SHA se pide en runtime a la API de GitHub (`components/_shared/cdn-ref.js`) y NUNCA se quema en el código: hardcodearlo lo deja obsoleto al commit siguiente. Como la API pública va a 60 peticiones/hora por IP, se cachea por pestaña y se cae a `main` si falla.
 
-54. `npm run build` hace `rm -rf` de `dist/cdn`: cualquier archivo que deba viajar en el bundle publicado tiene que regenerarse DESPUÉS del build y ANTES del deploy. `versions.json` se publicaba en 404 por escribirse solo después de subir la carpeta.
+54. Los `.md` NO se copian a `dist`: se exponen desde el fuente. Y de las tres rutas posibles solo `raw.githubusercontent.com` los devuelve como `text/plain`, que es lo único que el navegador MUESTRA al entrar; jsDelivr y GitHub Pages los mandan como `text/markdown` y el navegador los descarga. Verificado con curl sobre las tres.
 
 55. Los `<link>` del CSS de un componente NO van en los snippets: `adoptCss()` ya carga el `.min.css` hermano dentro del shadow leyendo `import.meta.url`. En un snippet solo van los CSS globales de tema y paletas (`is-base.min.css`, `palettes.min.css`).
 

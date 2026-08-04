@@ -103,7 +103,10 @@
 
     // --- home + catalog (home no está en manifest) ---
     const HOME = { tag: 'home', title: 'Home', page: 'home.html' };
-    const catalog = [HOME, ...components];
+    // Igual que Inicio, no es un componente del catálogo sino una página
+    // suelta en previews/ raíz: el taller para armarse una paleta propia.
+    const THEMING = { tag: 'theming', title: 'Personalización', page: 'theming.html' };
+    const catalog = [HOME, THEMING, ...components];
 
     // --- build nav (Home + agrupado por categoría) ---
     // Sin filtro: el nav lista el catálogo completo del manifest.
@@ -141,6 +144,20 @@
       title.textContent = 'Inicio';
       btn.append(title);
       btn.addEventListener('click', () => selectComponent(HOME.tag));
+      shellNav.appendChild(btn);
+    }
+
+    {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'shell-nav__item shell-nav__item--home';
+      btn.dataset.tag = THEMING.tag;
+      btn.setAttribute('aria-label', 'Personalización — theming');
+      const title = document.createElement('span');
+      title.className = 'shell-nav__title';
+      title.textContent = THEMING.title;
+      btn.append(title);
+      btn.addEventListener('click', () => selectComponent(THEMING.tag));
       shellNav.appendChild(btn);
     }
 

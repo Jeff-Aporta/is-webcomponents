@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml, copyText } from '../_shared/dom-utils.js';
+import { resolveRef, jsdelivrBase } from '../_shared/cdn-ref.js';
 import '../media/icon.js';
 
 /**
@@ -84,10 +85,14 @@ import '../media/icon.js';
           <pre class="cdn__pre" data-slot="all"></pre>
         </li>
       </ol>
+      <section class="cdn__docs" data-slot="docs" hidden>
+        <h4 class="cdn__docs-title">Documentación para LLM</h4>
+        <ul class="cdn__docs-list"></ul>
+      </section>
     </section>
   `;
 
-  const OBSERVED = ['tag', 'category', 'base', 'title', 'dependencies'];
+  const OBSERVED = ['tag', 'category', 'base', 'title', 'dependencies', 'config'];
 
   class IsCdnSnippet extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -96,6 +101,8 @@ import '../media/icon.js';
     #urls = { single: '', category: '', all: '' };
     #onHighlightReady = () => this.#render();
     #deps = [];
+    #docs = [];
+    #resolvedBase = '';
 
     constructor() {
       super();
@@ -108,6 +115,14 @@ import '../media/icon.js';
     connectedCallback() {
       this.#mounted = true;
       this.#render();
+      // El snippet debe salir congelado en un commit: `@main` cambia bajo los
+      // pies de quien lo pegó. El SHA se pide en runtime (nunca se quema) y
+      // al llegar se repinta; mientras tanto se ve la base en `main`.
+      resolveRef().then((ref) => {
+        if (!this.#mounted || this.hasAttribute('base')) return;
+        this.#resolvedBase = jsdelivrBase(ref);
+        this.#render();
+      }).catch(() => { /* sin red: se queda en main */ });
       // El slot deps puede llegar después del connected (parser HTML).
       this.shadowRoot.addEventListener('slotchange', () => this.#render());
       // highlight-pre.js va con defer: puede no estar listo en el primer
@@ -125,6 +140,62 @@ import '../media/icon.js';
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
       this.#render();
+    }
+
+    /**
+     * `config`: JSON con las personalizaciones del panel. Es OPCIONAL — sin
+     * él el componente se comporta como siempre. Acepta el atributo o un
+     * <script type="application/json" slot="config"> hijo, igual que `deps`,
+     * porque un JSON largo dentro de un atributo es incómodo de escribir.
+     *
+     *   { "title": "…",
+     *     "docs": [ { "label": "Categoría actions", "url": "https://…" } ] }
+     *
+     * `docs` son los enlaces a la documentación para LLM. Van aquí dentro y no
+     * sueltos en la página para que cada snippet decida si los muestra.
+     */
+    #parseConfig() {
+      let raw = this.getAttribute('config');
+      if (!raw) {
+        const script = this.querySelector('script[type="application/json"][slot="config"]');
+        raw = script?.textContent || '';
+      }
+      this.#docs = [];
+      if (!raw.trim()) return null;
+      try {
+        const cfg = JSON.parse(raw) || {};
+        if (Array.isArray(cfg.docs)) {
+          this.#docs = cfg.docs
+            .filter((d) => d && d.url)
+            .map((d) => ({ label: String(d.label || 'Documentación'), url: String(d.url) }));
+        }
+        return cfg;
+      } catch {
+        return null;
+      }
+    }
+
+    #renderDocs() {
+      const section = this.shadowRoot.querySelector('[data-slot="docs"]');
+      const list = section?.querySelector('.cdn__docs-list');
+      if (!section || !list) return;
+      section.hidden = this.#docs.length === 0;
+      list.textContent = '';
+      for (const doc of this.#docs) {
+        const li = document.createElement('li');
+        li.className = 'cdn__docs-row';
+        // El enlace ES la URL: sin botón aparte, y con el color de marca.
+        li.innerHTML = `
+          <span class="cdn__docs-label">${escapeHtml(doc.label)}</span>
+          <a class="cdn__docs-url" href="${escapeHtml(doc.url)}" target="_blank" rel="noopener">${escapeHtml(doc.url)}</a>
+          <button type="button" class="cdn__copy" data-copy="doc" aria-label="Copiar enlace de ${escapeHtml(doc.label)}">
+            <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
+            Copiar
+          </button>
+        `;
+        li.querySelector('[data-copy="doc"]').dataset.copyValue = doc.url;
+        list.appendChild(li);
+      }
     }
 
     /** Deps: atributo `dependencies` (JSON) o slot deps con script JSON. */
@@ -181,7 +252,7 @@ import '../media/icon.js';
     }
 
     #buildUrls() {
-      const base = this.getAttribute('base') || CDN_BASE_DEFAULT;
+      const base = this.getAttribute('base') || this.#resolvedBase || CDN_BASE_DEFAULT;
       const tag = this.getAttribute('tag');
       const category = this.getAttribute('category');
       const fileTag = (tag || '').replace(/^is-/, '');
@@ -230,6 +301,10 @@ import '../media/icon.js';
       // Si no hay tag, ocultamos la fila individual para no mostrar placeholder inútil.
       const singleRow = root.querySelector('[data-kind="single"]');
       if (singleRow) singleRow.hidden = !tag;
+
+      const cfg = this.#parseConfig();
+      if (cfg?.title && titleEl) titleEl.textContent = cfg.title;
+      this.#renderDocs();
 
       this.#parseDeps();
       this.#renderDeps();
@@ -293,7 +368,7 @@ import '../media/icon.js';
       const asCss = (u) => (u ? `<link rel="stylesheet" href="${u}">` : '');
       const asJs = (u) => (u ? `<script type="module" src="${u}"><\/script>` : '');
       let text = '';
-      if (kind === 'dep') {
+      if (kind === 'dep' || kind === 'doc') {
         text = btn.dataset.copyValue || '';
       } else if (kind === 'common') {
         text = [asCss(this.#urls.common), asCss(this.#urls.commonPalette)].filter(Boolean).join('\n');
