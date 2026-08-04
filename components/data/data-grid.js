@@ -53,7 +53,7 @@ import {
  * Attrs: density, row-height, header-height, auto-height, pagination, page-size,
  * page-size-options, pagination-mode, row-count, sorting-mode, sorting-order,
  * filter-mode, selection-mode, checkbox-selection, cell-selection, editable,
- * edit-mode, show-toolbar, quick-filter, header-filters, hide-footer,
+ * edit-mode, show-toolbar, toolbar-tools, quick-filter, header-filters, hide-footer,
  * hide-footer-selected-count, virtualize, overscan, loading, loading-color,
  * list-view, tree-data, row-reorder, detail-height, tab-navigation, clipboard,
  * undo-redo, aggregation-position, disable-column-menu, disable-column-filter,
@@ -198,7 +198,7 @@ import {
     'checkbox-selection', 'cell-selection', 'disable-row-selection-on-click',
     'disable-column-menu', 'disable-column-filter', 'disable-column-sort',
     'disable-column-resize', 'disable-column-reorder', 'disable-multiple-sorting',
-    'edit-mode', 'editable', 'show-toolbar', 'quick-filter', 'header-filters',
+    'edit-mode', 'editable', 'show-toolbar', 'toolbar-tools', 'quick-filter', 'header-filters',
     'hide-footer', 'hide-footer-selected-count', 'virtualize', 'overscan',
     'loading', 'loading-variant', 'list-view', 'tree-data', 'row-reorder',
     'detail-height', 'tab-navigation', 'clipboard', 'undo-redo',
@@ -618,6 +618,16 @@ import {
     get filterable() { return this.hasAttribute('filterable'); }
     set filterable(v) { this.toggleAttribute('filterable', !!v); }
 
+    /**
+     * Botones Columnas / Filtros / Densidad / Exportar de la toolbar.
+     * `toolbar-tools="false"` los oculta (la búsqueda sigue gobernada por `quick-filter`).
+     */
+    get toolbarTools() { return this.getAttribute('toolbar-tools') !== 'false'; }
+    set toolbarTools(v) {
+      if (v) this.removeAttribute('toolbar-tools');
+      else this.setAttribute('toolbar-tools', 'false');
+    }
+
     get selectable() { return this.hasAttribute('selectable'); }
     set selectable(v) { this.toggleAttribute('selectable', !!v); }
 
@@ -1008,15 +1018,19 @@ import {
       this.#base.toggleAttribute('data-cell-selection', this.cellSelection);
 
       const showToolbar = this.hasAttribute('show-toolbar') || this.filterable;
-      this.#toolbar.hidden = !showToolbar;
-      this.#toolbar.querySelector('.tool-search').hidden = !this.hasAttribute('quick-filter') && !this.filterable;
-      this.#quick.placeholder = this.#text.quickFilter;
+      const showSearch = this.hasAttribute('quick-filter') || this.filterable;
+      const showTools = this.toolbarTools;
+      this.#toolbar.querySelector('.tool-search').hidden = !showSearch;
       for (const [tool, label] of [['columns', 'columns'], ['filters', 'filters'], ['density', 'density'], ['export', 'export']]) {
         const btn = this.#toolbar.querySelector(`[data-tool="${tool}"]`);
         btn.querySelector('.tool-text').textContent = this.#text[label];
         btn.title = this.#text[label];
-        btn.hidden = tool === 'filters' && this.hasAttribute('disable-column-filter');
+        const hideTool = !showTools || (tool === 'filters' && this.hasAttribute('disable-column-filter'));
+        btn.hidden = hideTool;
       }
+      // Si no hay búsqueda ni tools, la barra no aporta nada: ocultarla.
+      this.#toolbar.hidden = !showToolbar || (!showSearch && !showTools);
+      this.#quick.placeholder = this.#text.quickFilter;
       this.#footer.hidden = this.hasAttribute('hide-footer');
       this.#filterHead.hidden = !this.hasAttribute('header-filters');
       this.#pageSizeSelect.setAttribute('aria-label', this.#text.rowsPerPage);

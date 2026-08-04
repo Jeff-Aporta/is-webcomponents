@@ -71,6 +71,7 @@ import './data-grid.js';
 | `edit-mode` | string/según contrato | Fuente define default/restricción. |
 | `editable` | string/según contrato | Fuente define default/restricción. |
 | `show-toolbar` | string/según contrato | Fuente define default/restricción. |
+| `toolbar-tools` | boolean (`false` oculta Columnas/Filtros/Densidad/Exportar) | Default visible cuando hay toolbar. |
 | `quick-filter` | string/según contrato | Fuente define default/restricción. |
 | `header-filters` | string/según contrato | Fuente define default/restricción. |
 | `hide-footer` | string/según contrato | Fuente define default/restricción. |
@@ -308,7 +309,7 @@ Documentación de cabecera preservada desde fuente:
 > Attrs: density, row-height, header-height, auto-height, pagination, page-size,
 > page-size-options, pagination-mode, row-count, sorting-mode, sorting-order,
 > filter-mode, selection-mode, checkbox-selection, cell-selection, editable,
-> edit-mode, show-toolbar, quick-filter, header-filters, hide-footer,
+> edit-mode, show-toolbar, toolbar-tools, quick-filter, header-filters, hide-footer,
 > hide-footer-selected-count, virtualize, overscan, loading, loading-color,
 > list-view, tree-data, row-reorder, detail-height, tab-navigation, clipboard,
 > undo-redo, aggregation-position, disable-column-menu, disable-column-filter,
