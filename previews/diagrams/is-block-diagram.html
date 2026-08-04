@@ -31,12 +31,13 @@
           de costos que el resto de los diagramas, así que rodean las cajas en vez
           de atravesarlas.
         </p>
-        <is-demo class="demo" style="height:22rem">
+        <is-demo class="demo" style="height:24rem">
           <is-block-diagram open-on-click>
             <script type="application/json">
               {
                 "blockDiagram": {
                   "title": "Arquitectura de la plataforma",
+                  "subtitle": "Tres capas: presentación, integración y persistencia",
                   "columns": 3,
                   "groups": [
                     { "id": "g1", "name": "Frontend", "hue": 239 },
@@ -71,16 +72,16 @@
           <code>span</code> hace que un bloque ocupe N columnas (por defecto 1) y
           <code>shape</code> admite <code>rect</code> (por defecto) o <code>round</code>.
         </p>
-        <is-demo class="demo" style="height:12rem">
+        <is-demo class="demo" style="height:13rem">
           <is-block-diagram open-on-click>
             <script type="application/json">
               {
                 "blockDiagram": {
                   "columns": 4,
                   "blocks": [
-                    { "id": "a", "label": "1 col" },
-                    { "id": "b", "label": "1 col", "shape": "round" },
-                    { "id": "c", "label": "2 columnas", "span": 2 }
+                    { "id": "a", "label": "1 col", "icon": "mdi:cube-outline" },
+                    { "id": "b", "label": "1 col", "shape": "round", "icon": "mdi:circle-outline" },
+                    { "id": "c", "label": "2 columnas", "span": 2, "icon": "mdi:rectangle-outline" }
                   ]
                 }
               }

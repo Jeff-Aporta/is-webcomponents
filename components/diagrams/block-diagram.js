@@ -178,6 +178,27 @@ class IsBlockDiagram extends HTMLElement {
       ? 'width:100%;height:100%;max-width:none;display:block;margin:0 auto'
       : `width:100%;max-width:${W}px;height:auto;display:block;margin:0 auto`;
     this.#svg.innerHTML = '';
+
+    // Definiciones: sombras reutilizables para bloques y aristas.
+    const defs = svgEl('defs');
+    defs.innerHTML = /* html */ `
+      <filter id="bd-block-shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgb(0 0 0 / 0.28)" />
+      </filter>
+      <filter id="bd-block-shadow-active" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgb(0 0 0 / 0.34)" />
+      </filter>
+      <linearGradient id="bd-block-fill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgb(255 255 255 / 0.06)" />
+        <stop offset="100%" stop-color="rgb(0 0 0 / 0.10)" />
+      </linearGradient>
+      <linearGradient id="bd-block-fill-light" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgb(255 255 255 / 0.85)" />
+        <stop offset="100%" stop-color="rgb(248 250 255 / 0.85)" />
+      </linearGradient>
+    `;
+    this.#svg.appendChild(defs);
+
     this.#blockNodes.clear();
     this.#edgeNodes.clear();
     this.#hoverId = null;
@@ -185,7 +206,8 @@ class IsBlockDiagram extends HTMLElement {
     if (layout.title) {
       const t = svgEl('text', {
         x: W / 2, y: layout.titleY, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '13', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '14', 'font-weight': '700', 'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+        'letter-spacing': '-0.01em',
       });
       t.textContent = layout.title;
       this.#svg.appendChild(t);
@@ -193,7 +215,8 @@ class IsBlockDiagram extends HTMLElement {
     if (layout.subtitle) {
       const t = svgEl('text', {
         x: W / 2, y: layout.subtitleY, 'text-anchor': 'middle', fill: theme.muted,
-        'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '11.5', 'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+        'font-weight': '500',
       });
       t.textContent = layout.subtitle;
       this.#svg.appendChild(t);
@@ -228,7 +251,7 @@ class IsBlockDiagram extends HTMLElement {
   #buildLegend(layout, theme) {
     const g = svgEl('g', { class: 'block-legend' });
     layout.groups.forEach((grp, gi) => {
-      const ly = 18 + gi * 16;
+      const ly = 22 + gi * 20;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
       const item = svgEl('g', { class: 'block-legend__item', opacity: off ? 0.4 : 1 });
@@ -236,16 +259,23 @@ class IsBlockDiagram extends HTMLElement {
         item.style.cursor = 'pointer';
         item.dataset.groupId = grp.id;
         item.appendChild(svgEl('rect', {
-          x: layout.legendX - 2, y: ly - 8, width: grp.name.length * 6 + 26, height: 16, rx: 4, fill: 'transparent',
+          x: layout.legendX - 6, y: ly - 11, width: grp.name.length * 6.5 + 32, height: 20, rx: 6, fill: 'transparent',
         }));
       }
+      // Dot con halo suave para que destaque sobre el gradiente del wrap.
+      const halo = svgEl('circle', {
+        cx: layout.legendX + 6, cy: ly, r: 7, fill: color, opacity: 0.18,
+      });
+      item.appendChild(halo);
       item.appendChild(off
-        ? svgEl('circle', { cx: layout.legendX + 5, cy: ly, r: 4.5, fill: 'none', stroke: color, 'stroke-width': 1.4 })
-        : svgEl('circle', { cx: layout.legendX + 5, cy: ly, r: 4.5, fill: color }));
+        ? svgEl('circle', { cx: layout.legendX + 6, cy: ly, r: 4.5, fill: 'none', stroke: color, 'stroke-width': 1.6 })
+        : svgEl('circle', { cx: layout.legendX + 6, cy: ly, r: 4.5, fill: color }));
       const label = svgEl('text', {
-        x: layout.legendX + 16, y: ly + 3.5, fill: theme.muted,
-        'font-size': '10', 'font-family': 'Tahoma,Arial,sans-serif',
+        x: layout.legendX + 18, y: ly + 3.8, fill: theme.text,
+        'font-size': '11', 'font-weight': '600',
+        'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
         'text-decoration': off ? 'line-through' : null,
+        opacity: 0.82,
       });
       label.textContent = grp.name;
       item.appendChild(label);
@@ -255,35 +285,55 @@ class IsBlockDiagram extends HTMLElement {
   }
 
   #buildEdges(layout, theme) {
+    const dark = this.#wrap.dataset.theme === 'dark';
+    const haloColor = dark ? 'rgb(0 0 0 / 0.45)' : 'rgb(15 23 42 / 0.18)';
     for (const e of layout.edges) {
       const color = theme.accent;
       const g = svgEl('g', { class: 'block-edge' });
       g.dataset.edgeId = e.id;
 
+      // Halo/sombra bajo la línea para separarla del fondo del wrap.
+      const halo = svgEl('path', {
+        d: e.path, fill: 'none', stroke: haloColor, 'stroke-width': 3.2,
+        'stroke-linejoin': 'round', 'stroke-linecap': 'round',
+        opacity: 0.55,
+      });
       const path = svgEl('path', {
-        d: e.path, fill: 'none', stroke: color, 'stroke-width': 1.3,
+        d: e.path, fill: 'none', stroke: color, 'stroke-width': 1.6,
         'stroke-linejoin': 'round', 'stroke-linecap': 'round',
         class: 'block-edge__path',
       });
+      g.appendChild(halo);
       g.appendChild(path);
 
-      g.appendChild(svgEl('polygon', {
-        points: '0,0 -8,-4 -8,4',
+      const head = svgEl('polygon', {
+        points: '0,0 -9,-4.5 -9,4.5',
         fill: color,
         transform: `translate(${e.arrowTipX},${e.arrowTipY}) rotate(${e.arrowAngle})`,
         class: 'block-edge__head',
-      }));
+      });
+      g.appendChild(head);
 
       if (e.label) {
-        const pad = 4;
-        const w = e.label.length * 5.6 + pad * 2;
+        const pad = 6;
+        const w = e.label.length * 6 + pad * 2;
+        const chipH = 18;
+        const chipY = e.labelY - chipH / 2;
+        // Halo del chip para que la etiqueta flote sobre la arista.
         g.appendChild(svgEl('rect', {
-          x: e.labelX - w / 2, y: e.labelY - 8, width: w, height: 16, rx: 4,
-          fill: theme.chipFill, class: 'block-edge__chip',
+          x: e.labelX - w / 2, y: chipY, width: w, height: chipH, rx: chipH / 2,
+          fill: haloColor, opacity: 0.6,
+        }));
+        g.appendChild(svgEl('rect', {
+          x: e.labelX - w / 2, y: chipY, width: w, height: chipH, rx: chipH / 2,
+          fill: theme.chipFill, stroke: color, 'stroke-width': 0.8, 'stroke-opacity': 0.4,
+          class: 'block-edge__chip',
         }));
         const t = svgEl('text', {
-          x: e.labelX, y: e.labelY + 3.5, 'text-anchor': 'middle', fill: theme.muted,
-          'font-size': '10', 'font-family': 'Consolas,Menlo,monospace',
+          x: e.labelX, y: e.labelY + 3.8, 'text-anchor': 'middle', fill: theme.text,
+          'font-size': '10.5', 'font-weight': '600',
+          'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+          'letter-spacing': '0.01em',
         });
         t.textContent = e.label;
         g.appendChild(t);
@@ -295,27 +345,46 @@ class IsBlockDiagram extends HTMLElement {
   }
 
   #buildBlocks(layout, theme) {
+    const dark = this.#wrap.dataset.theme === 'dark';
+    const fillId = dark ? 'bd-block-fill' : 'bd-block-fill-light';
     for (const b of layout.blocks) {
       const color = (b.hue != null && tkHueToHex(b.hue)) || theme.accent;
       const g = svgEl('g', { class: 'block-node' });
       g.dataset.blockId = b.id;
+      g.style.color = color; // permite usar currentColor en filter drop-shadow
       if (this.isViewer) g.style.cursor = 'pointer';
 
+      // Sombra base + fill + tinte de color muy sutil + borde + glow interior.
+      const shadow = svgEl('path', {
+        d: blockShapePath(b.shape, b.x, b.y, b.w, b.h),
+        fill: 'rgb(0 0 0 / 0.18)', stroke: 'none',
+        transform: `translate(0, 1.5)`,
+        filter: 'url(#bd-block-shadow)',
+      });
       const box = svgEl('path', {
         d: blockShapePath(b.shape, b.x, b.y, b.w, b.h),
-        fill: theme.chipFill, stroke: color, 'stroke-width': 1.3,
+        fill: `url(#${fillId})`, stroke: color, 'stroke-width': 1.6,
         'stroke-linejoin': 'round', class: 'block-node__box',
       });
+      g.appendChild(shadow);
       g.appendChild(box);
 
       const hasIcon = !!b.icon;
-      const padX = hasIcon ? 26 : 10;
+      const iconSize = 22;
+      const padX = hasIcon ? iconSize + 18 : 16;
       const textLeft = b.x + padX;
-      const textRight = b.x + b.w - 10;
+      const textRight = b.x + b.w - 14;
+      const iconY = b.y + b.h / 2 - iconSize / 2;
 
       if (hasIcon) {
+        // Halo del icono para que destaque sobre el fill del bloque.
+        const iconBg = svgEl('rect', {
+          x: b.x + 12, y: iconY - 2, width: iconSize + 6, height: iconSize + 4,
+          rx: 6, fill: color, opacity: 0.14,
+        });
+        g.appendChild(iconBg);
         g.appendChild(svgIconGroup(b.icon, {
-          x: b.x + 8, y: b.y + b.h / 2 - 8, size: 16, hue: b.hue,
+          x: b.x + 15, y: iconY, size: iconSize, hue: b.hue,
         }));
       }
 
@@ -328,18 +397,20 @@ class IsBlockDiagram extends HTMLElement {
         div.className = 'block-node-label';
         Object.assign(div.style, {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          width: '100%', height: '100%', fontSize: '11px', fontWeight: '600',
-          fontFamily: 'Tahoma,Arial,sans-serif', color: theme.text,
-          lineHeight: '1.2', textAlign: 'center',
+          width: '100%', height: '100%', fontSize: '12px', fontWeight: '600',
+          fontFamily: 'Inter,ui-sans-serif,system-ui,sans-serif', color: theme.text,
+          lineHeight: '1.25', textAlign: 'center',
+          letterSpacing: '-0.005em',
         });
         div.innerHTML = inlineMdWeb(b.label);
         fo.appendChild(div);
         g.appendChild(fo);
       } else {
         const t = svgEl('text', {
-          x: (textLeft + textRight) / 2, y: b.y + b.h / 2 + 4, 'text-anchor': 'middle',
-          fill: theme.text, 'font-size': '11', 'font-weight': '600',
-          'font-family': 'Tahoma,Arial,sans-serif',
+          x: (textLeft + textRight) / 2, y: b.y + b.h / 2 + 4.5, 'text-anchor': 'middle',
+          fill: theme.text, 'font-size': '12', 'font-weight': '600',
+          'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+          'letter-spacing': '-0.005em',
         });
         t.textContent = b.label;
         g.appendChild(t);
@@ -412,7 +483,7 @@ class IsBlockDiagram extends HTMLElement {
       const active = blockId === id;
       node.g.classList.toggle('is-active', active);
       node.g.classList.toggle('is-dim', !!id && !active);
-      node.box.setAttribute('stroke-width', active ? 2.1 : 1.3);
+      node.box.setAttribute('stroke-width', active ? 2.4 : 1.6);
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);

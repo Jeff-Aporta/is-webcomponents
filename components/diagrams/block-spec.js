@@ -14,7 +14,7 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
  */
 
 const GAP = 24;
-const ROW_H = 64;
+const ROW_H = 72;
 const MIN_UNIT_W = 96;
 const MAX_UNIT_W = 200;
 const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
@@ -131,9 +131,9 @@ export function computeBlockLayout(spec) {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
-  const titleY = title ? 22 : 14;
-  const subtitleY = title ? 40 : 24;
-  const headerH = hasHeader ? (subtitle ? 56 : 32) : 0;
+  const titleY = title ? 24 : 14;
+  const subtitleY = title ? 42 : 24;
+  const headerH = hasHeader ? (subtitle ? 60 : 38) : 0;
 
   // Ancho de columna uniforme: el máximo requerido por cualquier bloque, repartido
   // entre las columnas que ocupa (descontando el hueco entre ellas).
@@ -276,11 +276,13 @@ function arrowTip(p, side) {
   return { x: p.x, y: p.y, angle };
 }
 
-/** Contorno SVG de un bloque: rectángulo recto o con esquinas redondeadas. */
+/** Contorno SVG de un bloque: rectángulo con esquinas redondeadas, o "round" con radios mayores. */
 export function blockShapePath(shape, x, y, w, h) {
   if (shape === 'round') {
-    const r = 10;
+    const r = Math.min(28, h / 2);
     return `M${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h - r} Q${x + w},${y + h} ${x + w - r},${y + h} H${x + r} Q${x},${y + h} ${x},${y + h - r} V${y + r} Q${x},${y} ${x + r},${y} Z`;
   }
-  return `M${x},${y} H${x + w} V${y + h} H${x} Z`;
+  // Rect moderno: rx 10 para sensación de "tarjeta" sin parecer pill.
+  const r = 10;
+  return `M${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h - r} Q${x + w},${y + h} ${x + w - r},${y + h} H${x + r} Q${x},${y + h} ${x},${y + h - r} V${y + r} Q${x},${y} ${x + r},${y} Z`;
 }
