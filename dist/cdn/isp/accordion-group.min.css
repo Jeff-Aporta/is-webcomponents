@@ -1,0 +1,1 @@
+:host{display:block;inline-size:100%;box-sizing:border-box;font-family:var(--is-sans, inherit);color:var(--is-text, inherit);.accordion{display:flex;flex-direction:column;gap:var(--is-accordion-gap, .3em);overflow:hidden}::slotted(is-details){margin:0}}

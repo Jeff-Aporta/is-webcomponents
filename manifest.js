@@ -1,4 +1,16 @@
 export default [
+  // isp — primitivas portadas de ISP-SvelteComponents (la librería Svelte de
+  // ContaPyme). El orden del nav no sale de aquí sino de `categoryMeta` en
+  // index.html, donde `isp` es la primera clave.
+  { tag: 'is-accordion-group', title: 'Accordion Group', category: 'isp', script: '../../components/isp/accordion-group.js', style: '../../components/isp/accordion-group.css', page: 'isp/is-accordion-group.html' },
+  { tag: 'is-block-layout', title: 'Block Layout', category: 'isp', script: '../../components/isp/block-layout.js', style: '../../components/isp/block-layout.css', page: 'isp/is-block-layout.html' },
+  { tag: 'is-confirm-delete', title: 'Confirm Delete', category: 'isp', script: '../../components/isp/confirm-delete.js', style: '../../components/isp/confirm-delete.css', page: 'isp/is-confirm-delete.html' },
+  { tag: 'is-flex-layout', title: 'Flex Layout', category: 'isp', script: '../../components/isp/flex-layout.js', style: '../../components/isp/flex-layout.css', page: 'isp/is-flex-layout.html' },
+  { tag: 'is-form', title: 'Form', category: 'isp', script: '../../components/isp/form.js', style: '../../components/isp/form.css', page: 'isp/is-form.html' },
+  { tag: 'is-grid-layout', title: 'Grid Layout', category: 'isp', script: '../../components/isp/grid-layout.js', style: '../../components/isp/grid-layout.css', page: 'isp/is-grid-layout.html' },
+  { tag: 'is-heading', title: 'Heading', category: 'isp', script: '../../components/isp/heading.js', style: '../../components/isp/heading.css', page: 'isp/is-heading.html' },
+  { tag: 'is-loading-overlay', title: 'Loading Overlay', category: 'isp', script: '../../components/isp/loading-overlay.js', style: '../../components/isp/loading-overlay.css', page: 'isp/is-loading-overlay.html' },
+  { tag: 'is-text', title: 'Text', category: 'isp', script: '../../components/isp/text.js', style: '../../components/isp/text.css', page: 'isp/is-text.html' },
   { tag: 'is-button', title: 'Button', category: 'actions', script: '../../components/actions/button.js', style: '../../components/actions/button.css', page: 'actions/is-button.html' },
   { tag: 'is-button-group', title: 'Button Group', category: 'actions', script: '../../components/actions/button-group.js', style: '../../components/actions/button-group.css', page: 'actions/is-button-group.html' },
   { tag: 'is-copy-button', title: 'Copy Button', category: 'actions', script: '../../components/actions/copy-button.js', style: '../../components/actions/copy-button.css', page: 'actions/is-copy-button.html' },

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-confirm-delete · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-confirm-delete de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-confirm-delete">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-confirm-delete&gt;</h2>
+        <p class="lede">
+          Confirmación destructiva "escribe para confirmar": el botón Eliminar
+          sigue bloqueado hasta que el usuario re-escribe la clave del registro.
+          En la demo, el NIT es <code class="code">900123456</code>.
+        </p>
+
+        <is-demo class="demo">
+          <is-button id="cdBtn" color="danger">
+            <is-icon slot="start" icon="mdi:trash-can"></is-icon>
+            Eliminar tercero
+          </is-button>
+          <is-confirm-delete
+            id="cdDemo"
+            for="cdBtn"
+            entity="tercero"
+            pk-label="NIT"
+            confirm-value="900123456"
+            maxlength="15"></is-confirm-delete>
+          <p id="cdLog">Última acción: <code class="code">—</code></p>
+        </is-demo>
+
+        <pre class="code">&lt;is-button id="del" color="danger"&gt;Eliminar&lt;/is-button&gt;
+&lt;is-confirm-delete for="del" entity="tercero"
+  pk-label="NIT" confirm-value="900123456"&gt;&lt;/is-confirm-delete&gt;</pre>
+      </section>
+
+      <section class="section" id="sensible">
+        <h2>Comparación sensible a mayúsculas</h2>
+        <p class="lede">
+          Por defecto se compara sin distinguir mayúsculas. Con
+          <code class="code">case-sensitive</code> la coincidencia debe ser exacta
+          (<code class="code">PLT-Alfa</code>).
+        </p>
+
+        <is-demo class="demo">
+          <is-button id="cdBtn2" color="danger" variant="outlined">Eliminar plantilla</is-button>
+          <is-confirm-delete
+            for="cdBtn2"
+            case-sensitive
+            entity="plantilla"
+            pk-label="código"
+            confirm-value="PLT-Alfa"
+            message="Esta plantilla se usa en 12 documentos. No hay vuelta atrás."></is-confirm-delete>
+        </is-demo>
+
+        <pre class="code">&lt;is-confirm-delete case-sensitive confirm-value="PLT-Alfa"&gt;&lt;/is-confirm-delete&gt;</pre>
+      </section>
+
+      <section class="section" id="cuando">
+        <h2>Cuándo NO usarlo</h2>
+        <p class="lede">
+          Para confirmaciones ordinarias siguen estando
+          <code class="code">&lt;is-confirm-modal&gt;</code> y
+          <code class="code">&lt;is-popconfirm&gt;</code>. La fricción de re-escribir la clave
+          solo se justifica si el dato no se puede recuperar.
+        </p>
+      </section>
+
+      <script>
+        document.addEventListener('is-confirm-delete', (e) => {
+          const log = document.getElementById('cdLog');
+          if (log) log.innerHTML = 'Última acción: <code class="code">confirmado</code>';
+          e.target.hide();
+        });
+        document.addEventListener('is-cancel-delete', () => {
+          const log = document.getElementById('cdLog');
+          if (log) log.innerHTML = 'Última acción: <code class="code">cancelado</code>';
+        });
+      </script>
+
+    </is-main>
+  </is-split-panel>
+
+</body>
+</html>

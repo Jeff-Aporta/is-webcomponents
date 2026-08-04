@@ -1,0 +1,22 @@
+/* Los estados del host van en `:host([attr])` a nivel superior: `&[attr]`
+   anidado dentro de `:host {}` compila a `:host[attr]` y no matchea nunca. */
+:host {
+  display: block;
+  inline-size: 100%;
+  box-sizing: border-box;
+  font-family: var(--is-sans, inherit);
+  color: var(--is-text, inherit);
+
+  .accordion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--is-accordion-gap, 0.3em);
+    overflow: hidden;
+  }
+
+  /* El disclosure lo pinta <is-details>; aquí solo se ajusta su ritmo
+     vertical dentro del grupo. */
+  ::slotted(is-details) {
+    margin: 0;
+  }
+}

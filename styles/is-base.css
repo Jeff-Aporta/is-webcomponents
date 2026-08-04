@@ -104,6 +104,35 @@
   --is-scrollbar-thumb-hover: color-mix(in srgb, var(--is-accent, #e03131) 40%, var(--is-control-border));
 }
 
+/* --- Estados de campos de formulario -------------------------------
+ *
+ * Tokens que ISP-SvelteComponents da por sentados y que esta librería no
+ * tenía. Se definen aquí como neutros para las 3 paletas; palettes.css
+ * solo los pisa donde la marca lo exige (ContaPyme claro = copia de ISP).
+ *
+ *   --is-b-required   borde del campo obligatorio (gris marcado, NO rojo:
+ *                     "obligatorio" no es "error"; ISP usa #888 / #e5e7eb).
+ *   --is-b-optional   borde del campo opcional. Verde suave #80c080: es el
+ *                     código de color de ISP para "puedes dejarlo vacío".
+ *   --is-b-readonly   borde del campo de solo lectura — traslúcido para que
+ *                     se lea como desactivado (ISP: #8884 / #aaa / #bbb).
+ *   --is-bg-readonly  fondo del campo de solo lectura (ISP: #f9f9f9).
+ */
+:root,
+.theme-dark {
+  --is-b-required: #8a939e;
+  --is-b-optional: #80c080;
+  --is-b-readonly: #ffffff2e;
+  --is-bg-readonly: #1a1f26;
+}
+
+.theme-light {
+  --is-b-required: #888;
+  --is-b-optional: #80c080;
+  --is-b-readonly: #8884;
+  --is-bg-readonly: #f9f9f9;
+}
+
 /* Light: brand-text + brand-soft pasteles (sin palettes.css quedan como
    los tokens neutros de fallback definidos en :root/.theme-dark). */
 .theme-light {

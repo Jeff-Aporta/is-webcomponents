@@ -64,7 +64,16 @@ No expone.
 
 ### Métodos y propiedades públicas
 
-No expone.
+| Método | Uso |
+| --- | --- |
+| `create(message, options?)` | Crea y muestra un `<is-toast-item>`. |
+| `promise(p, callbacks?)` | Reusa un solo toast para loading / success / error. |
+| `IsToast.host()` | Estático: `<is-toast>` singleton del documento (lo crea si falta). |
+| `IsToast.error(msg, duration?)` | Estático. Paridad con `toastError` de ISP. |
+| `IsToast.success(msg, duration?)` | Estático. Paridad con `toastSuccess`. |
+| `IsToast.loading(msg)` | Estático. Paridad con `toastLoading`. |
+| `IsToast.remove(item)` | Estático. Paridad con `toastRemove`. |
+| `IsToast.promise(p, callbacks?)` | Estático. Paridad con `toastPromise`. |
 
 Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 

@@ -1,0 +1,40 @@
+/* <is-text> — texto en línea con color semántico y line-clamp.
+   Índice de --vars:
+     --text-clr : color tipográfico resuelto (solo cuando hay `color`).
+     --mx-lns   : número máximo de líneas del clamp (lo escribe el JS). */
+
+:host {
+  display: inline;
+  color: var(--text-clr, inherit);
+  font: inherit;
+  min-width: 0;
+  max-width: 100%;
+}
+
+:host([hidden]) { display: none; }
+
+/* Colores semánticos: siempre caen a tokens del tema, nunca a un literal. */
+:host([color="brand"]) { --text-clr: var(--is-brand-text, var(--is-accent, var(--is-text))); }
+:host([color="neutral"]) { --text-clr: var(--is-text-soft, var(--is-text)); }
+:host([color="info"]) { --text-clr: var(--is-info-text, var(--is-color-info-500, var(--is-text))); }
+:host([color="success"]) { --text-clr: var(--is-success-text, var(--is-color-success-500, var(--is-text))); }
+:host([color="warning"]) { --text-clr: var(--is-warning-text, var(--is-color-warning-500, var(--is-text))); }
+:host([color="danger"]) { --text-clr: var(--is-danger-text, var(--is-color-danger-500, var(--is-text))); }
+
+/* Clamp tipográfico. Necesita display:-webkit-box en el propio host. */
+:host([lines]) {
+  display: -webkit-box;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: var(--mx-lns, 1);
+  -webkit-line-clamp: var(--mx-lns, 1);
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+  white-space: normal;
+}
+
+:host([lines]:not([lines="1"])) {
+  max-height: calc(var(--mx-lns, 1) * 1.3em);
+}

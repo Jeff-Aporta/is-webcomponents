@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-block-layout · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-block-layout">
+      <section class="section" id="intro">
+        <h2>&lt;is-block-layout&gt;</h2>
+        <p class="lede">Caja de bloque que mide su propio ancho y publica el breakpoint como
+          <code class="code">data-sizew</code>, banderas <code class="code">data-szw-*</code> y las custom properties
+          <code class="code">--clientw</code> / <code class="code">--lerpw</code>. Port del <code class="code">BlockLayout.svelte</code> de ISP.</p>
+        <is-demo class="demo">
+          <is-block-layout id="bl-intro" style="border:1px solid var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px">
+            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>
+            <p>sizew actual: <strong id="bl-out">—</strong></p>
+          </is-block-layout>
+        </is-demo>
+      </section>
+
+      <section class="section" id="examples">
+        <h2>Breakpoint como atributo y como variable</h2>
+        <p>El atributo <code class="code">data-sizew</code> se puede estilar desde el light DOM, y
+          <code class="code">--lerpw</code> se puede interpolar con <code class="code">calc()</code>.</p>
+        <is-demo class="demo">
+          <is-block-layout class="bl-demo" style="border:1px dashed var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px">
+            <p class="bl-title">Título que crece con el ancho del contenedor</p>
+          </is-block-layout>
+        </is-demo>
+        <pre class="code">&lt;is-block-layout&gt;…&lt;/is-block-layout&gt;
+
+/* light DOM */
+is-block-layout[data-szw-lg] .bl-title { font-weight: 700; }
+.bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); }</pre>
+        <h2>Inline y scroll</h2>
+        <is-demo class="demo">
+          <is-block-layout inline style="border:1px solid var(--is-border);padding:0.5rem 1rem">inline</is-block-layout>
+          <is-block-layout inline style="border:1px solid var(--is-border);padding:0.5rem 1rem">otro inline</is-block-layout>
+        </is-demo>
+        <is-demo class="demo">
+          <is-block-layout cscroll style="border:1px solid var(--is-border);padding:1rem;max-height:6rem;width:100%">
+            <p>Con <code class="code">cscroll</code> la caja hace scroll con el scrollbar del tema.</p>
+            <p>Línea 2</p><p>Línea 3</p><p>Línea 4</p><p>Línea 5</p><p>Línea 6</p>
+          </is-block-layout>
+        </is-demo>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo / var / evento</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td><code>inline</code></td><td>boolean → <code>display:inline-block</code></td></tr>
+            <tr><td><code>cscroll</code></td><td>boolean → <code>overflow:auto</code></td></tr>
+            <tr><td><code>data-sizew</code></td><td>reflejado: xs · sm · md · lg · xl</td></tr>
+            <tr><td><code>data-szw-xs…xl</code></td><td>reflejados; presentes si el breakpoint es &lt;= al actual (el <code>boolszw</code> de ISP)</td></tr>
+            <tr><td><code>--clientw</code></td><td>ancho en px sin unidad</td></tr>
+            <tr><td><code>--lerpw</code></td><td><code>lerpw('sm','xl')</code> — progreso 0→1 sin recortar</td></tr>
+            <tr><td><code>is-breakpoint</code></td><td>detail <code>{ width, sizew, boolszw, lerpw(b0,b1) }</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-block-layout</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#examples">Ejemplos</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <style>
+    .bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); margin: 0; }
+    is-block-layout[data-szw-lg] .bl-title { font-weight: 700; }
+  </style>
+  <script>
+    document.addEventListener('is-breakpoint', (e) => {
+      if (e.target.id !== 'bl-intro') return;
+      const out = document.getElementById('bl-out');
+      if (out) out.textContent = `${e.detail.sizew} (${e.detail.width}px)`;
+    });
+  </script>
+</body>
+</html>

@@ -292,6 +292,79 @@
   --_text-hover: var(--is-bg, #fff);
 }
 
+/* ── soft: relleno tenue del color + borde apenas insinuado ──────────────
+   A diferencia de `plain` (sin fondo en reposo), `soft` ya nace teñido. */
+:host([variant="soft"]) {
+  --_bg: var(--is-control-bg, #f1f3f5);
+  --_bg-hover: var(--is-control-bg-hover, #e9ecef);
+  --_bg-active: var(--is-control-bg-active, #dee2e6);
+  --_border: transparent;
+  --_text: var(--is-control-text, #212529);
+}
+:host([color="brand"][variant="soft"]) {
+  --_bg: var(--is-brand-soft, var(--is-color-brand-50, #e7f5ff));
+  --_bg-hover: var(--is-brand-soft-active, var(--is-color-brand-100, #d0ebff));
+  --_bg-active: var(--is-brand-soft-active, var(--is-color-brand-100, #d0ebff));
+  --_border: color-mix(in srgb, var(--is-color-brand-500, #339af0) 35%, transparent);
+  --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
+}
+:host([color="success"][variant="soft"]) {
+  --_bg: var(--is-success-soft, var(--is-color-success-50));
+  --_bg-hover: var(--is-success-soft-active, var(--is-color-success-100));
+  --_bg-active: var(--is-success-soft-active, var(--is-color-success-100));
+  --_border: color-mix(in srgb, var(--is-color-success-500) 35%, transparent);
+  --_text: var(--is-success-text, var(--is-color-success-700));
+}
+:host([color="warning"][variant="soft"]) {
+  --_bg: var(--is-warning-soft, var(--is-color-warning-50));
+  --_bg-hover: var(--is-warning-soft-active, var(--is-color-warning-100));
+  --_bg-active: var(--is-warning-soft-active, var(--is-color-warning-100));
+  --_border: color-mix(in srgb, var(--is-color-warning-500) 35%, transparent);
+  --_text: var(--is-warning-text, var(--is-color-warning-700));
+}
+:host([color="danger"][variant="soft"]) {
+  --_bg: var(--is-danger-soft, var(--is-color-danger-50));
+  --_bg-hover: var(--is-danger-soft-active, var(--is-color-danger-100));
+  --_bg-active: var(--is-danger-soft-active, var(--is-color-danger-100));
+  --_border: color-mix(in srgb, var(--is-color-danger-500) 35%, transparent);
+  --_text: var(--is-danger-text, var(--is-color-danger-700));
+}
+
+/* ── text: acción terciaria. Sin caja: solo la etiqueta, subrayada al hover.
+   `plain` sí tiñe el fondo; `text` nunca lo hace. ─────────────────────── */
+:host([variant="text"]) {
+  --_hpad: 0.35em;
+  --_bg: transparent;
+  --_bg-hover: transparent;
+  --_bg-active: transparent;
+  --_border: transparent;
+  --_border-hover: transparent;
+  --_text: var(--is-control-text, #212529);
+  --_text-hover: var(--is-control-text, #212529);
+}
+:host([variant="text"]) .btn:hover { text-decoration: underline; }
+:host([color="brand"][variant="text"]) {
+  --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
+  --_text-hover: var(--is-color-brand-600, #228be6);
+}
+:host([color="success"][variant="text"]) {
+  --_text: var(--is-success-text, var(--is-color-success-700));
+  --_text-hover: var(--is-color-success-600);
+}
+:host([color="warning"][variant="text"]) {
+  --_text: var(--is-warning-text, var(--is-color-warning-700));
+  --_text-hover: var(--is-color-warning-600);
+}
+:host([color="danger"][variant="text"]) {
+  --_text: var(--is-danger-text, var(--is-color-danger-700));
+  --_text-hover: var(--is-color-danger-600);
+}
+
+/* ── shape: ortogonal a color y variant ─────────────────────────────────── */
+:host([shape="round"]) { --is-button-border-radius: var(--is-radius-sm, 6px); }
+:host([shape="rect"]) { --is-button-border-radius: 0; }
+:host([shape="pill"]) { --is-button-border-radius: 999px; }
+
 :host([pill]) { --is-button-border-radius: 999px; }
 :host([variant="outlined"]),
 :host([variant="ghost"]) {

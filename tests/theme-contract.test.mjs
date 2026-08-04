@@ -42,6 +42,26 @@ check(!/<(?:svg|symbol|use)\b/i.test(component), 'components/actions/button.js c
 check(!/--pg-/.test(styles), 'tokens legacy --pg- encontrados');
 check(styles.includes('--is-bg:'), 'missing --is-bg: token');
 
+// 8. Tokens de estado de campo: deben existir en AMBOS temas de is-base.css
+//    (los componentes los consumen sin fallback literal, asi que si una
+//    paleta futura los olvida el campo se queda sin borde).
+const FIELD_TOKENS = ['--is-b-required', '--is-b-optional', '--is-b-readonly', '--is-bg-readonly'];
+// Bloque dark = ':root,\n.theme-dark {…}'  /  bloque light = '.theme-light {…}'
+const darkBlock = isBase.slice(isBase.indexOf(':root'));
+const lightBlocks = isBase.split('.theme-light').slice(1).join('\n');
+for (const t of FIELD_TOKENS) {
+  check(darkBlock.includes(`${t}:`), `is-base.css: falta ${t} en tema dark`);
+  check(lightBlocks.includes(`${t}:`), `is-base.css: falta ${t} en tema light`);
+}
+
+// 9. La paleta contapyme debe usar la marca real de ISP (#1a6eb0 / #00598a)
+//    y NO dodgerblue #1e90ff, que era el valor placeholder anterior.
+const cp = palettes.slice(palettes.indexOf('[data-palette="contapyme"]'), palettes.indexOf('[data-palette="agrowin"]'));
+check(!/dodgerblue|#1e90ff/i.test(cp), 'paleta contapyme aun usa dodgerblue/#1e90ff');
+check(/#1a6eb0/i.test(cp), 'paleta contapyme no usa el primary real #1a6eb0');
+check(/#00598a/i.test(cp), 'paleta contapyme no usa el primary oscuro real #00598a');
+check(/#00bcff/i.test(cp), 'paleta contapyme no conserva #00bcff como brand-text dark');
+
 check(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`${html}\n${component}`), 'size API legacy encontrada');
 
 check(!/\b(?:height|padding(?:-inline)?|gap):\s*\d+(?:\.\d+)?px/.test(component), 'componente usa px en geometry (deberia ser em)');

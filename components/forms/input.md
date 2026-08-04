@@ -71,6 +71,8 @@ import './input.js';
 | `show-count` | boolean | Fuente define default/restricción. |
 | `prefix` | string/según contrato | Fuente define default/restricción. |
 | `suffix` | string/según contrato | Fuente define default/restricción. |
+| `label-placement` | `top` / `start` / `float` | Default `top`. `float` = etiqueta flotante estilo ISP. |
+| `data-typing-delay` | número (ms) | Debounce de `is-typing-end`. Default 600. |
 
 #### Propiedades públicas
 
@@ -80,7 +82,8 @@ import './input.js';
 | `defaultValue` | solo lectura | Declarada por clase. |
 | `type` | lectura/escritura | Declarada por clase. |
 | `variant` | lectura/escritura | Declarada por clase. |
-| `labelPlacement` | lectura/escritura | Declarada por clase. |
+| `labelPlacement` | lectura/escritura | Declarada por clase. Acepta `float`. |
+| `typingDelay` | lectura/escritura | Refleja `data-typing-delay` (ms). |
 | `name` | lectura/escritura | Declarada por clase. |
 | `disabled` | lectura/escritura | Declarada por clase. |
 | `required` | lectura/escritura | Declarada por clase. |
@@ -123,6 +126,7 @@ import './input.js';
 | `change` | no | sí | sí | no |
 | `is-input` | sí | sí | sí | no |
 | `is-change` | sí | sí | sí | no |
+| `is-typing-end` | `{ value }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 

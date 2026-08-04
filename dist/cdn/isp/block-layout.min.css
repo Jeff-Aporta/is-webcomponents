@@ -1,0 +1,1 @@
+:host{display:block;box-sizing:border-box;min-width:0;max-width:100%}:host([hidden]){display:none}:host([inline]){display:inline-block;max-width:none}:host([cscroll]){overflow:auto}

@@ -47,7 +47,8 @@ import './button.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `color` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
+| `variant` | `filled` / `outlined` / `plain` / `ghost` / `soft` / `text` | Default `filled`. Ortogonal a `color`. |
+| `shape` | `round` / `rect` / `pill` | Default `round`. Ortogonal a `color` y `variant`. |
 | `hue` | string/según contrato | Fuente define default/restricción. |
 | `disabled` | boolean | Fuente define default/restricción. |
 | `loading` | boolean | Fuente define default/restricción. |
@@ -73,6 +74,7 @@ import './button.js';
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `hue` | lectura/escritura | Declarada por clase. |
+| `shape` | lectura/escritura | Refleja el atributo `shape`. |
 | `validity` | solo lectura | Declarada por clase. |
 | `validationMessage` | solo lectura | Declarada por clase. |
 | `willValidate` | solo lectura | Declarada por clase. |

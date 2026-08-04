@@ -1,0 +1,67 @@
+/* Shadow DOM: los estados del host van SIEMPRE en `:host([attr])` a nivel
+   superior; `&[attr]` anidado dentro de `:host {}` compila a `:host[attr]` y
+   nunca matchea. */
+:host {
+  display: block;
+  block-size: 100%;
+  inline-size: 100%;
+  box-sizing: border-box;
+  font-family: var(--is-sans, inherit);
+  color: var(--is-text, inherit);
+  /* El breakpoint es el ancho PROPIO del formulario, no el de la ventana. */
+  container-type: inline-size;
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    inline-size: 100%;
+    box-sizing: border-box;
+  }
+
+  .header {
+    padding-inline: 0.5em;
+  }
+
+  .content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-block-size: 0;
+    overflow: auto;
+    background-color: inherit;
+    padding-inline: 0.25em;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+    margin-block-start: 0.5em;
+    padding: 0.5em;
+
+    .buttons {
+      display: flex;
+      flex-direction: row-reverse;
+      gap: 0.5em;
+      margin-inline-start: auto;
+    }
+  }
+}
+
+/* Bajo 600px el pie se apila: los botones a ancho completo, Aceptar arriba. */
+@container (max-width: 600px) {
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+
+    .buttons {
+      flex-direction: column;
+      margin-inline-start: 0;
+    }
+  }
+}
+
+:host([mode="view"]) .buttons { flex-direction: row; }

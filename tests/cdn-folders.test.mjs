@@ -2,6 +2,7 @@
 //
 // dist/cdn está folderizado por categoría. Verifica que:
 //   - La raíz solo contiene all.min.js, is-base.min.css, palettes.min.css,
+//     sizes.json, versions.json,
 //     README.txt, assets/ y las carpetas de categoría (nada plano).
 //   - Cada componente del manifest existe en <categoria>/<tag>.min.js.
 //   - Cada carpeta con componentes trae su scrollbars.css (lo pide adoptCss).
@@ -26,7 +27,12 @@ if (!existsSync(dist)) {
   process.exit(0);
 }
 
-const ROOT_ALLOWED = new Set(['all.min.js', 'is-base.min.css', 'palettes.min.css', 'README.txt', 'assets']);
+// sizes.json y versions.json son metadatos del bundle, no componentes: viven
+// en la raíz a propósito porque describen TODO el árbol publicado.
+const ROOT_ALLOWED = new Set([
+  'all.min.js', 'is-base.min.css', 'palettes.min.css', 'README.txt', 'assets',
+  'sizes.json', 'versions.json',
+]);
 
 const rootEntries = readdirSync(dist);
 const categories = [];

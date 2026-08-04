@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-text · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-text">
+      <section class="section" id="intro">
+        <h2>&lt;is-text&gt;</h2>
+        <p class="lede">Texto en línea con color semántico y recorte por líneas.
+          Port del <code class="code">Text.svelte</code> de ISP.</p>
+        <is-demo class="demo">
+          <is-text>Texto normal, hereda el color del contexto.</is-text>
+        </is-demo>
+      </section>
+
+      <section class="section" id="examples">
+        <h2>Colores semánticos</h2>
+        <is-demo class="demo">
+          <div class="demo-row" style="flex-direction:column;gap:0.35rem;align-items:flex-start">
+            <is-text color="brand">brand</is-text>
+            <is-text color="neutral">neutral</is-text>
+            <is-text color="info">info</is-text>
+            <is-text color="success">success</is-text>
+            <is-text color="warning">warning</is-text>
+            <is-text color="danger">danger</is-text>
+          </div>
+        </is-demo>
+        <h2>Line clamp</h2>
+        <is-demo class="demo">
+          <div style="max-width:22rem;display:flex;flex-direction:column;gap:0.75rem">
+            <is-text lines="1">Una sola línea: este párrafo se corta con puntos suspensivos en cuanto no cabe en el ancho disponible del contenedor.</is-text>
+            <is-text lines="2">Dos líneas: este párrafo se recorta al llegar a la segunda línea, y el resto del contenido desaparece con la elipsis al final.</is-text>
+            <is-text lines="3">Tres líneas: el mismo párrafo, ahora con más aire. El clamp usa <code>--mx-lns</code>, que escribe el JS a partir del atributo <code>lines</code>.</is-text>
+          </div>
+        </is-demo>
+        <h2>Escala por font-size</h2>
+        <is-demo class="demo">
+          <div style="font-size: 1.4em">
+            <is-text color="brand">Escala desde el contexto, sin atributo size.</is-text>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-text color="success"&gt;Aprobado&lt;/is-text&gt;
+&lt;is-text lines="2"&gt;Texto largo recortado a dos líneas…&lt;/is-text&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo / var</th><th>Valores</th></tr></thead>
+          <tbody>
+            <tr><td><code>color</code></td><td>brand · neutral · info · success · warning · danger (sin default: hereda)</td></tr>
+            <tr><td><code>lines</code></td><td>entero &gt;= 1; ausente o 0 = sin clamp</td></tr>
+            <tr><td><code>--text-clr</code></td><td>override directo del color</td></tr>
+            <tr><td><code>--mx-lns</code></td><td>número de líneas del clamp (lo escribe el JS)</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-text</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#examples">Ejemplos</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

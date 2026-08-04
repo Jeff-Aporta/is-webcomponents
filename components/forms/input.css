@@ -184,6 +184,93 @@
 :host([label-placement="start"]) .base { grid-column: 2; grid-row: 1; }
 :host([label-placement="start"]) .support { grid-column: 2; grid-row: 2; }
 
+/* ---- label flotante (paridad con ISP form/_LabelInput.svelte) ----------
+   Opt-in con label-placement="float". La etiqueta descansa dentro del campo
+   y "traslada" hacia arriba al enfocar o cuando ya hay valor. Los colores de
+   borde salen de los tokens de tema --is-b-* (nunca literales). */
+
+:host([label-placement="float"]) {
+  --_border: var(--is-b-optional, var(--is-control-border, #adb5bd));
+
+  .form-control { position: relative; }
+
+  .base {
+    align-items: flex-end;
+    min-height: 3.2em;
+    background: transparent;
+    border-color: transparent;
+    border-bottom-color: var(--_border);
+    border-radius: 0;
+    padding-inline: 0.35em 0.35em;
+    padding-inline-start: 0.75em;
+  }
+
+  .input { padding-block: 0.95em 0.5em; }
+
+  /* La etiqueta sale del flujo: `.base` pasa a ocupar la primera fila. */
+  .label {
+    position: absolute;
+    inset-block-start: 1.05em;
+    inset-inline-start: 0.9em;
+    max-inline-size: calc(100% - 1.8em);
+    margin: 0;
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 1;
+    cursor: text;
+    transform-origin: left top;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition:
+      transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+      font-size 300ms cubic-bezier(0.4, 0, 0.2, 1),
+      color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .support { margin-block-start: 0.15em; }
+}
+
+/* Campo obligatorio / de solo lectura: mismo contrato de color que ISP. */
+:host([label-placement="float"][required]) {
+  --_border: var(--is-b-required, var(--is-control-border, #adb5bd));
+}
+:host([label-placement="float"][readonly]) {
+  --_border: var(--is-b-readonly, var(--is-control-border, #adb5bd));
+}
+:host([label-placement="float"][readonly]) .base {
+  background: var(--is-bg-readonly, var(--is-control-bg, #f1f3f5));
+  border-style: solid;
+}
+:host([label-placement="float"][disabled]) {
+  --_border: var(--is-b-readonly, var(--is-control-border, #adb5bd));
+}
+
+/* `:state()` en reglas separadas: si el navegador no lo soporta, invalidaría
+   toda la lista de selectores y la etiqueta nunca subiría. */
+:host([label-placement="float"]:focus-within) .label {
+  transform: translateY(-0.95em);
+  font-size: 0.75em;
+}
+:host([label-placement="float"]:state(focused)) .label {
+  transform: translateY(-0.95em);
+  font-size: 0.75em;
+}
+:host([label-placement="float"]:not(:state(blank))) .label {
+  transform: translateY(-0.95em);
+  font-size: 0.75em;
+}
+
+:host([label-placement="float"][required]:state(focused)) .label {
+  color: color-mix(in srgb, var(--is-b-required, var(--is-control-border, #adb5bd)) 40%, var(--is-text, currentColor));
+}
+:host([label-placement="float"]:not([required]):state(focused)) .label {
+  color: color-mix(in srgb, var(--is-b-optional, var(--is-control-border, #adb5bd)) 40%, var(--is-text, currentColor));
+}
+:host([label-placement="float"][readonly]) .label {
+  color: color-mix(in srgb, var(--is-b-readonly, var(--is-control-border, #adb5bd)) 40%, var(--is-text, currentColor));
+}
+
 :host([disabled]) {
   opacity: 0.55;
   pointer-events: none;

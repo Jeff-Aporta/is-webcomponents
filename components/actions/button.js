@@ -10,7 +10,10 @@ import '../media/icon.js';
  *
  * Atributos
  *  color      brand | neutral | success | warning | danger   (default: brand)
- *  variant   filled | outlined | plain | ghost             (default: filled)
+ *  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
+ *  shape        round | rect | pill                          (default: round)
+ *                             `round` = radio del tema, `rect` = esquinas vivas,
+ *                             `pill` = cápsula (equivalente al booleano `pill`).
  *  hue          number (0-360)  color propio para el highlight cuando está
  *                             [selected] dentro de <is-button-group>. Si no
  *                             se define, el grupo usa su --is-accent.
@@ -96,8 +99,10 @@ import '../media/icon.js';
 
   // --- 2. Custom element ----------------------------------------------
 
+  const VALID_SHAPE = ["round", "rect", "pill"];
+
   const OBSERVED = [
-    "color", "variant", "hue",
+    "color", "variant", "shape", "hue",
     "disabled", "loading", "pill", "with-caret",
     "href", "target", "rel", "download",
     "type", "title", "name", "value",
@@ -174,6 +179,9 @@ import '../media/icon.js';
         this.#updateLoadingState();
       } else if (name === "hue") {
         this.#syncHue();
+      } else if (name === "shape") {
+        // Red de seguridad: un valor fuera de la enum vuelve al default.
+        if (newVal && !VALID_SHAPE.includes(newVal)) this.setAttribute("shape", "round");
       } else {
         this.#syncAttrs();
       }
@@ -219,6 +227,16 @@ import '../media/icon.js';
     set hue(v) {
       if (v == null || v === "") this.removeAttribute("hue");
       else this.setAttribute("hue", String(v));
+    }
+
+    /** Forma del contorno. Ortogonal a `color` y a `variant`. */
+    get shape() {
+      const v = this.getAttribute("shape");
+      return VALID_SHAPE.includes(v) ? v : "round";
+    }
+    set shape(v) {
+      if (v == null || v === "") this.removeAttribute("shape");
+      else if (VALID_SHAPE.includes(String(v))) this.setAttribute("shape", String(v));
     }
 
     setFocus(options) { this.#btn.focus(options); }

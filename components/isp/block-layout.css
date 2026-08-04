@@ -1,0 +1,23 @@
+/* <is-block-layout> — caja de bloque que mide su propio ancho.
+   Índice de --vars publicadas por el JS (solo lectura desde CSS):
+     --clientw : ancho del host en px, sin unidad.
+     --lerpw   : progreso 0→1 entre los breakpoints sm y xl. */
+
+:host {
+  display: block;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+}
+
+:host([hidden]) { display: none; }
+
+/* ISP: `inline` cambiaba el display del div contenedor. */
+:host([inline]) {
+  display: inline-block;
+  max-width: none;
+}
+
+/* ISP: `cscroll` (o un style con overflow auto/scroll) añadía `custom-scrollbar`.
+   Aquí el scrollbar ya viene temizado por _shared/scrollbars.css. */
+:host([cscroll]) { overflow: auto; }

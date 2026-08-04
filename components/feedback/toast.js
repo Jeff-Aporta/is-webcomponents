@@ -17,6 +17,14 @@ import './toast-item.js';
  *     color: brand | success | warning | danger | neutral
  *     duration default 5000; 0 = hasta dismiss
  *
+ * Estáticos (paridad con ISP `overlays/Toaster.svelte`)
+ *   IsToast.host()                    → el <is-toast> singleton del documento
+ *   IsToast.error(msg, duration?)     → toast danger   (default 5000 ms)
+ *   IsToast.success(msg, duration?)   → toast success  (default 3000 ms)
+ *   IsToast.loading(msg)              → toast persistente con spinner
+ *   IsToast.remove(item)              → quita un toast devuelto por los anteriores
+ *   IsToast.promise(p, callbacks)     → atajo de host().promise(...)
+ *
  * CSS Parts: ::part(stack)
  *
  * Escucha is-after-hide de los ítems y los elimina del DOM.
@@ -179,6 +187,43 @@ import './toast-item.js';
       item.duration = Number.isFinite(duration) ? Math.max(0, duration) : 5000;
       item.restartTimer?.();
     }
+
+    // ---- API imperativa (paridad con overlays/Toaster.svelte de ISP) -----
+    // ISP expone funciones sueltas (toastError/Success/Loading/Promise/Remove).
+    // Aquí viven como estáticas para no ensuciar el scope global: resuelven
+    // (o crean) un único <is-toast> en el documento.
+
+    /** Toaster singleton del documento; lo crea si aún no existe. */
+    static host() {
+      let el = document.querySelector('is-toast[data-default-toaster]');
+      if (!el) {
+        el = document.querySelector('is-toast');
+        if (!el) {
+          el = document.createElement('is-toast');
+          el.setAttribute('data-default-toaster', '');
+          document.body.appendChild(el);
+        }
+      }
+      return el;
+    }
+
+    static error(message, duration = 5000) {
+      return IsToast.host().create(message, { variant: 'danger', duration });
+    }
+
+    static success(message, duration = 3000) {
+      return IsToast.host().create(message, { variant: 'success', duration });
+    }
+
+    /** Sin duración: se cierra con IsToast.remove(item). */
+    static loading(message) {
+      return IsToast.host().create(message, { variant: 'neutral', icon: 'mdi:loading', duration: 0 });
+    }
+
+    static remove(item) { item?.remove?.(); }
+
+    /** @see IsToast.prototype.promise */
+    static promise(p, callbacks = {}) { return IsToast.host().promise(p, callbacks); }
 
     #onItemHide = (e) => {
       const item = e.target;

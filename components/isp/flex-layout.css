@@ -1,0 +1,62 @@
+/* <is-flex-layout> — contenedor flex declarativo (port de ISP FlexLayout).
+   Índice de --vars (las escribe el JS desde los atributos homónimos):
+     --gap, --width, --height, --min-width, --min-height, --max-width, --max-height */
+
+:host {
+  display: flex;
+  box-sizing: border-box;
+  position: relative;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+  gap: var(--gap);
+  width: var(--width, auto);
+  height: var(--height, auto);
+  min-width: var(--min-width, 0);
+  min-height: var(--min-height, auto);
+  max-width: var(--max-width, 100%);
+  max-height: var(--max-height, none);
+}
+
+:host([hidden]) { display: none; }
+
+/* Gap por defecto según el ancho propio — misma escalera que ISP.
+   Si el consumidor pasa `gap`, el JS escribe --gap inline y gana sobre esto. */
+:host { --gap: 0.5rem; }
+:host([data-sizew="xs"]) { --gap: 0.2rem; }
+:host([data-sizew="sm"]) { --gap: 0.35rem; }
+
+:host([inline]) {
+  display: inline-flex;
+  max-width: var(--max-width, none);
+}
+
+:host([direction="column"]) { flex-direction: column; }
+:host([wrap]) { flex-wrap: wrap; }
+:host([grow]) { flex: 1 1 auto; }
+
+/* justify-content — los alias cortos de ISP se expanden aquí. */
+:host([justify="start"]) { justify-content: flex-start; }
+:host([justify="flex-start"]) { justify-content: flex-start; }
+:host([justify="end"]) { justify-content: flex-end; }
+:host([justify="flex-end"]) { justify-content: flex-end; }
+:host([justify="center"]) { justify-content: center; }
+:host([justify="left"]) { justify-content: left; }
+:host([justify="right"]) { justify-content: right; }
+:host([justify="between"]) { justify-content: space-between; }
+:host([justify="around"]) { justify-content: space-around; }
+:host([justify="evenly"]) { justify-content: space-evenly; }
+
+/* align-items — `items` es el alias histórico; `align` tiene prioridad
+   porque sus reglas van después con la misma especificidad. */
+:host([items="start"]) { align-items: flex-start; }
+:host([items="end"]) { align-items: flex-end; }
+:host([items="center"]) { align-items: center; }
+:host([items="stretch"]) { align-items: stretch; }
+:host([items="baseline"]) { align-items: baseline; }
+
+:host([align="start"]) { align-items: flex-start; }
+:host([align="end"]) { align-items: flex-end; }
+:host([align="center"]) { align-items: center; }
+:host([align="stretch"]) { align-items: stretch; }
+:host([align="baseline"]) { align-items: baseline; }

@@ -1,0 +1,55 @@
+/* <is-grid-layout> — contenedor grid declarativo (port de ISP GridLayout).
+   Índice de --vars (las escribe el JS):
+     --gap   : gap resuelto (o el default responsive de abajo).
+     --cells : track list ya expandida desde `cells` + `cells-fit`. */
+
+:host {
+  --gap: 0.5rem;
+  display: grid;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  gap: var(--gap);
+  grid-template-columns: var(--cells, none);
+}
+
+:host([hidden]) { display: none; }
+
+/* Misma escalera de gap por defecto que ISP. */
+:host([data-sizew="xs"]) { --gap: 0.2rem; }
+:host([data-sizew="sm"]) { --gap: 0.35rem; }
+
+:host([inline]) {
+  display: inline-grid;
+  max-width: none;
+}
+
+/* direction="row": las celdas definen FILAS y el flujo va por columnas. */
+:host([direction="row"]) {
+  grid-template-columns: none;
+  grid-template-rows: var(--cells, none);
+  grid-auto-flow: column;
+}
+
+:host([cscroll]) { overflow: auto; }
+
+:host([justify="start"]) { justify-content: start; }
+:host([justify="end"]) { justify-content: end; }
+:host([justify="center"]) { justify-content: center; }
+:host([justify="left"]) { justify-content: left; }
+:host([justify="right"]) { justify-content: right; }
+:host([justify="stretch"]) { justify-content: stretch; }
+:host([justify="normal"]) { justify-content: normal; }
+:host([justify="between"]) { justify-content: space-between; }
+:host([justify="around"]) { justify-content: space-around; }
+:host([justify="evenly"]) { justify-content: space-evenly; }
+:host([justify="space-between"]) { justify-content: space-between; }
+:host([justify="space-around"]) { justify-content: space-around; }
+:host([justify="space-evenly"]) { justify-content: space-evenly; }
+
+:host([items="start"]) { align-items: start; }
+:host([items="end"]) { align-items: end; }
+:host([items="center"]) { align-items: center; }
+:host([items="stretch"]) { align-items: stretch; }
+:host([items="baseline"]) { align-items: baseline; }
+:host([items="normal"]) { align-items: normal; }

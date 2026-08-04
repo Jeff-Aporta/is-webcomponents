@@ -185,7 +185,10 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 ## Qué no hacer
 
 - No inventar API ni detectar elementos solo por literal customElements.define.
-- No usar `&[attr]` anidado dentro de `:host { }`: compila a `:host[attr]`, que NUNCA matchea un shadow host (bug real encontrado en tag, callout, card y details). Siempre `:host([attr])` top-level.
+- No usar `&[attr]` anidado dentro de `:host { }`: compila a `:host[attr]`, que NUNCA matchea un shadow host (bug real encontrado en tag, callout, card, details y split-panel). Siempre `:host([attr])` top-level. Ojo: `&[attr]` dentro de una regla HIJA (`.label { &[hidden] {} }`) sí es correcto — ahí `&` es `.label`, no el host.
+- No escribir `mi-tag .algo` en el CSS de un módulo que registra `mi-tag`: es CSS muerto. `adopt-css.js` adopta la hoja en CADA shadow root por separado, así que desde el shadow del propio elemento el host queda fuera del árbol, y desde el shadow del padre los hijos entran slotted (un descendiente no alcanza el light DOM). Usar `:host(mi-tag) .algo` o `::slotted(mi-tag)`. Dejó sin estilo TODOS los `<is-tab>` y las filas de `<is-tree-item>`.
+- No estilar `otro-tag::part(x)` desde el shadow de un padre cuando `otro-tag` llega slotted: `::part` solo cruza hacia elementos del mismo árbol, no hacia el light DOM proyectado. Estilar la clase interna desde el shadow del propio elemento.
+- No confiar en `dataset.cmSource` (u otra caché de origen) tras reescribir el contenido de un `<pre>`: `paintOne()` prioriza la caché sobre `textContent` y repinta el texto viejo. Borrar la caché al cambiar el contenido.
 - No agregar listeners de `document`/`window` en el constructor con arrow inline: no se pueden remover y fugan al desconectar el elemento (bug encontrado en 11 componentes).
 - No forzar `stroke: currentColor` a nivel de `<svg>` en iconos: los iconos de relleno se contornean y se ven engrosados/ennegrecidos (bug de is-icon). Solo pisar `stroke` en elementos que ya lo traen.
 - No usar `will-change: transform` en superficies con zoom por `scale()`: el navegador rasteriza la capa a escala 1 y el contenido SVG se ve borroso (bug de is-lightbox).
@@ -262,6 +265,20 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 49. Un fallback de var no puede imponer tema. `.lb` usaba `var(--lb-bg, #0d1117)` y NADIE definia `--lb-bg`: el fallback oscuro ganaba siempre y el visor salia negro tambien en tema claro. Los defaults de las vars de un componente deben caer a los tokens del tema (`--is-bg`, `--is-text`, `--is-border`), no a un color literal. Mismo error en el degradado de la barra: iba de `--lb-bg` a transparente, que sobre lienzo claro es blanco sobre blanco.
 
 50. `padding` no encoge a un hijo `position: absolute; inset: 0`: su bloque contenedor es la caja de PADDING del ancestro posicionado, asi que el inset cubre tambien el padding. Para dar aire al escenario del visor hay que mover el `inset` (`3.4rem 0 1rem 0`), no anadir padding.
+
+51. Las dos familias de CSS muerto (`&[attr]` bajo `:host {}` y `mi-tag .algo` en una hoja adoptada por `mi-tag`) no las detecta el navegador: la hoja carga, no hay error en consola y el componente sale sin estilar. Por eso ya se colaron varias veces. Las vigila `tests/shadow-css-scope.test.mjs`, que deriva los tags de cada módulo de sus `customElements.define` y falla citando `archivo:línea`. Si aparece, se corrige la regla — no se relaja el test.
+
+52. Cloudflare Pages admite 20.000 archivos por deployment y `dist/cdn/assets/icons` trae ~317k SVGs: el deploy falla entero. Se publica solo el código y `icon-loader.js` resuelve los iconos por su cascada (GitHub Pages, jsDelivr). No intentar subir los iconos.
+
+53. El id de un deployment de Cloudflare Pages lo asigna Cloudflare y NO se deriva del commit, así que una versión fija no se puede construir a mano: hay que guardar el mapeo commit → URL (`dist/cdn/versions.json`, lo genera `scripts/sync-cf-versions.mjs` desde la API y verifica cada URL con un HEAD antes de listarla).
+
+54. `npm run build` hace `rm -rf` de `dist/cdn`: cualquier archivo que deba viajar en el bundle publicado tiene que regenerarse DESPUÉS del build y ANTES del deploy. `versions.json` se publicaba en 404 por escribirse solo después de subir la carpeta.
+
+55. Los `<link>` del CSS de un componente NO van en los snippets: `adoptCss()` ya carga el `.min.css` hermano dentro del shadow leyendo `import.meta.url`. En un snippet solo van los CSS globales de tema y paletas (`is-base.min.css`, `palettes.min.css`).
+
+56. `all.min.js` y los `category.*.min.js` son solo listas de `import` (~250 B): sumar su tamaño literal para estimar el peso de un snippet da el ranking invertido, con "all" como el más liviano. Hay que expandirlos a los archivos que realmente se descargan.
+
+57. ISP-SvelteComponents no define tokens en ningún lado: no tiene `app.css` ni `:root`, y los valores reales de la marca ContaPyme solo existen como *fallbacks* dentro de los `var()` de cada `.svelte`. Tampoco declara tipografía (la hereda del anfitrión) ni tiene tema oscuro. Al portar, la fuente de verdad son esos fallbacks, no un archivo de tema.
 
 ## Reglas obligatorias para LLM
 

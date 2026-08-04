@@ -109,6 +109,9 @@
     // Sin filtro: el nav lista el catálogo completo del manifest.
     const navSkip = new Set();
     const categoryMeta = {
+      // El orden de estas claves ES el orden del nav (categoryOrder las lee
+      // con Object.keys), así que isp va primero a propósito.
+      isp: { id: 'isp', label: 'ISP-SvelteComponents' },
       actions: { id: 'actions', label: 'Acciones' },
       media: { id: 'media', label: 'Media' },
       feedback: { id: 'feedback', label: 'Feedback' },

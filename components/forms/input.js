@@ -11,7 +11,13 @@ import '../media/icon.js';
  *   type            text | email | password | number | search | tel | url | date  (default text)
  *   name, value, placeholder, label, hint, autocomplete
  *   variant      outlined (default) | filled | underlined
- *   label-placement top (default) | start
+ *   label-placement top (default) | start | float
+ *                   `float` = etiqueta flotante (paridad con ISP `form/Input.svelte`):
+ *                   la etiqueta descansa sobre el campo y sube al enfocar o al
+ *                   tener valor. Colorea el borde con --is-b-required /
+ *                   --is-b-optional / --is-b-readonly / --is-bg-readonly.
+ *   data-typing-delay  número (ms, default 600) — debounce del evento
+ *                   `is-typing-end`. `0` lo emite en el siguiente tick.
  *   error-text      mensaje mostrado en lugar del hint cuando hay error
  *   prefix, suffix  adornos de texto corto ("$", "kg") sin usar slot
  *   min, max, step, maxlength     (pasan al input nativo interno)
@@ -22,7 +28,8 @@ import '../media/icon.js';
  * Parts: form-control, label, base, start, prefix, input, clear, toggle, suffix, end,
  *        support, hint, error-text, count
  * Custom states: blank, disabled, readonly, focused, invalid, password-visible
- * Eventos: is-input, is-change (bubbles + composed) y los nativos input/change
+ * Eventos: is-input, is-change, is-typing-end (bubbles + composed) y los
+ *          nativos input/change
  * Tokens: --is-field-width, --is-field-label-width, --is-input-*
  */
 
@@ -58,7 +65,10 @@ import '../media/icon.js';
 
   const TYPES = ['text', 'email', 'password', 'number', 'search', 'tel', 'url', 'date'];
   const APPEARANCES = ['outlined', 'filled', 'underlined'];
-  const PLACEMENTS = ['top', 'start'];
+  const PLACEMENTS = ['top', 'start', 'float'];
+
+  /** Debounce por defecto del evento `is-typing-end` (ms) — mismo valor que ISP. */
+  const DEFAULT_TYPING_DELAY = 600;
 
   const OBSERVED = [
     'type', 'name', 'value', 'placeholder', 'label', 'hint',
@@ -72,7 +82,7 @@ import '../media/icon.js';
     'disabled', 'required', 'readonly', 'clearable', 'passwordToggle',
     'min', 'max', 'step', 'maxlength', 'autocomplete',
     'variant', 'labelPlacement', 'error', 'errorText', 'showCount',
-    'fullWidth', 'prefixText', 'suffixText'
+    'fullWidth', 'prefixText', 'suffixText', 'typingDelay'
   ];
 
   const NATIVE_ATTRS = ['placeholder', 'min', 'max', 'step', 'maxlength', 'autocomplete', 'name'];
@@ -114,6 +124,7 @@ import '../media/icon.js';
     #passwordVisible = false;
     #hasHint = false;
     #touched = false;
+    #typingTimer = null;
 
     constructor() {
       super();
@@ -159,6 +170,14 @@ import '../media/icon.js';
       this.#syncNative();
       this.#syncDisabled();
       this.#update();
+    }
+
+    disconnectedCallback() {
+      // El debounce de `is-typing-end` no debe sobrevivir al desmontaje.
+      if (this.#typingTimer != null) {
+        clearTimeout(this.#typingTimer);
+        this.#typingTimer = null;
+      }
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
@@ -216,6 +235,21 @@ import '../media/icon.js';
     set labelPlacement(v) {
       if (v == null || v === '') this.removeAttribute('label-placement');
       else if (PLACEMENTS.includes(String(v))) this.setAttribute('label-placement', String(v));
+    }
+
+    /**
+     * Debounce (ms) del evento `is-typing-end`. Config declarativa por `data-*`
+     * según la convención del repo: `data-typing-delay="300"`.
+     */
+    get typingDelay() {
+      const raw = this.dataset.typingDelay;
+      if (raw == null || raw === '') return DEFAULT_TYPING_DELAY;
+      const n = Number(raw);
+      return Number.isFinite(n) && n >= 0 ? n : DEFAULT_TYPING_DELAY;
+    }
+    set typingDelay(v) {
+      if (v == null || v === '') delete this.dataset.typingDelay;
+      else this.dataset.typingDelay = String(v);
     }
 
     get name() { return this.getAttribute('name') ?? ''; }
@@ -449,7 +483,17 @@ import '../media/icon.js';
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.#emit('is-input', { value: this.#value });
+      this.#scheduleTypingEnd();
     };
+
+    /** Debounce equivalente al `onTypingEnd` de ISP: un solo timer por elemento. */
+    #scheduleTypingEnd() {
+      if (this.#typingTimer != null) clearTimeout(this.#typingTimer);
+      this.#typingTimer = setTimeout(() => {
+        this.#typingTimer = null;
+        this.#emit('is-typing-end', { value: this.#value });
+      }, this.typingDelay);
+    }
 
     #onChange = () => {
       this.#value = this.#input.value;
@@ -479,6 +523,7 @@ import '../media/icon.js';
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
       this.#emit('is-input', { value: '' });
       this.#emit('is-change', { value: '' });
+      this.#scheduleTypingEnd();
     };
 
     #onTogglePassword = (e) => {
