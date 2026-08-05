@@ -61,6 +61,17 @@ export interface PreviewSection {
   title: string;
   /** Si true, title se inserta como HTML (p. ej. con <code>). Default: texto. */
   titleHtml?: boolean;
+  /**
+   * No pintar el <h2> del chrome: el markup de la sección ya trae su propio
+   * encabezado. `title` sigue siendo obligatorio porque es la etiqueta del TOC.
+   */
+  hideTitle?: boolean;
+  /** Elemento contenedor. Default 'section'. */
+  as?: 'section' | 'aside';
+  /** Clases del contenedor, además de `section`. */
+  className?: string;
+  ariaLabel?: string;
+  ariaLabelledby?: string;
   lede?: string;
   blocks: PreviewBlock[];
 }
@@ -84,6 +95,19 @@ export interface PreviewDefinition {
   styles?: string;
   /** Clave remember-scroll de is-main */
   storageKey?: string;
+  /**
+   * Clases extra para el `is-main` del chrome. Una página completa (el home)
+   * necesita marcar su propio scroller: su CSS y su behavior lo seleccionan.
+   */
+  mainClass?: string;
+  /**
+   * Clase del contenedor que envuelve TODAS las secciones. Es donde una página
+   * declara sus custom properties: sin este nodo, un `var(--propia)` queda
+   * vacío y la declaración que lo usa se descarta sin avisar.
+   */
+  wrapperClass?: string;
+  /** HTML fijo antes del wrapper (p. ej. la barra de progreso de lectura). */
+  prelude?: string;
   /**
    * Si true, el registry carga `behaviors/<tag>.js` con export mount/unmount.
    * No poner lógica en el JSON.

@@ -95,19 +95,29 @@ export function renderBlock(block) {
   }
 }
 
+/** Contenedores permitidos para una sección: nunca un tag arbitrario del JSON. */
+const CONTENEDORES = new Set(['section', 'aside']);
+
 /**
  * @param {PreviewSection} section
  * @returns {HTMLElement}
  */
 export function renderSection(section) {
-  const el = document.createElement('section');
-  el.className = 'section';
+  const tag = CONTENEDORES.has(section.as ?? '') ? section.as : 'section';
+  const el = document.createElement(tag);
+  el.className = section.className ? `section ${section.className}` : 'section';
   el.id = section.id;
+  if (section.ariaLabel) el.setAttribute('aria-label', section.ariaLabel);
+  if (section.ariaLabelledby) el.setAttribute('aria-labelledby', section.ariaLabelledby);
 
-  const h2 = document.createElement('h2');
-  if (section.titleHtml) h2.innerHTML = section.title;
-  else h2.textContent = section.title;
-  el.append(h2);
+  // `hideTitle` es para las secciones cuyo markup ya trae su encabezado: pintar
+  // el <h2> del chrome encima duplicaría el título de la página.
+  if (!section.hideTitle) {
+    const h2 = document.createElement('h2');
+    if (section.titleHtml) h2.innerHTML = section.title;
+    else h2.textContent = section.title;
+    el.append(h2);
+  }
 
   if (section.lede) {
     const p = document.createElement('p');
@@ -131,9 +141,29 @@ export function renderDefinition(def, targets) {
   main.replaceChildren();
   aside.replaceChildren();
 
-  for (const section of def.sections) {
-    main.append(renderSection(section));
+  // Las clases del preview anterior se retiran antes de poner las nuevas: el
+  // `is-main` lo reusa el chrome entre previews, así que una clase de página
+  // completa se quedaría pegada al siguiente componente.
+  const previas = main.dataset.previewMainClass;
+  if (previas) main.classList.remove(...previas.split(' '));
+  delete main.dataset.previewMainClass;
+  const clases = (def.mainClass ?? '').split(/\s+/).filter(Boolean);
+  if (clases.length) {
+    main.classList.add(...clases);
+    main.dataset.previewMainClass = clases.join(' ');
   }
+
+  const destino = def.wrapperClass ? document.createElement('div') : main;
+  if (destino !== main) destino.className = def.wrapperClass;
+
+  // El prelude va DENTRO del wrapper: es donde se declaran las custom
+  // properties de la página, y fuera de ahí un `var(--propia)` queda vacío.
+  if (def.prelude) destino.append(fragmentFromHtml(def.prelude));
+
+  for (const section of def.sections) {
+    destino.append(renderSection(section));
+  }
+  if (destino !== main) main.append(destino);
 
   const h1 = document.createElement('h1');
   h1.textContent = def.tag;
