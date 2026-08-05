@@ -234,6 +234,7 @@ export async function mount(ctx) {
       const out = document.getElementById('cssOut');
       const rampEl = document.getElementById('ramp');
       const tagName = document.getElementById('tagName');
+      const fileName = document.getElementById('fileName');
       const applyRoot = document.getElementById('applyRoot');
       const labels = { dark: document.getElementById('darkBgLabel'), light: document.getElementById('lightBgLabel') };
   
@@ -272,6 +273,9 @@ export async function mount(ctx) {
         labels.dark.textContent = t.dark['--is-bg'];
         labels.light.textContent = t.light['--is-bg'];
         tagName.textContent = name;
+      // El nombre del archivo es el que se descarga más abajo: se mantienen
+      // sincronizados para que la barra no prometa otro archivo.
+      if (fileName) fileName.textContent = `${name}.css`;
   
         rampEl.replaceChildren(...Object.entries(t.brand).map(([step, hex]) => {
           const d = document.createElement('div');
