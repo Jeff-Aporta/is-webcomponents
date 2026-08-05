@@ -1,0 +1,158 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-scroller",
+  "category": "navigation",
+  "title": "<is-scroller>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-scroller de InSoft.",
+  "storageKey": "docs-is-scroller",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-scroller>",
+      "lede": "Wrapper que añade scroll horizontal (o vertical) con botones prev/next\r\n          automáticos cuando el contenido del slot desborda. Ideal para\r\n          listas de pills, carruseles de chips, drawers inline, etc.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scroller id=\"sc1\" style=\"max-width: 480px;\">\r\n            <is-button>Pills 1</is-button>\r\n            <is-button>Pills 2</is-button>\r\n            <is-button>Pills 3</is-button>\r\n            <is-button>Pills 4</is-button>\r\n            <is-button>Pills 5</is-button>\r\n            <is-button>Pills 6</is-button>\r\n            <is-button>Pills 7</is-button>\r\n            <is-button>Pills 8</is-button>\r\n            <is-button>Pills 9</is-button>\r\n            <is-button>Pills 10</is-button>\r\n            <is-button>Pills 11</is-button>\r\n            <is-button>Pills 12</is-button>\r\n          </is-scroller>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-scroller></span>\r\n  <span class=\"tag\"><is-button></span>Pills 1<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"><is-button></span>Pills 2<span class=\"tag\"></is-button></span>\r\n  …\r\n<span class=\"tag\"></is-scroller></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "cards",
+      "title": "Con cards",
+      "lede": "Funciona con cualquier hijo: cards, avatares, breadcrumbs, etc.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scroller orientation=\"horizontal\" style=\"max-width: 640px;\">\r\n            <is-card style=\"min-width:240px\" header=\"Inbox\">\r\n              <p>3 mensajes sin leer.</p>\r\n            </is-card>\r\n            <is-card style=\"min-width:240px\" header=\"Calendar\">\r\n              <p>2 reuniones hoy.</p>\r\n            </is-card>\r\n            <is-card style=\"min-width:240px\" header=\"Tasks\">\r\n              <p>5 tareas pendientes.</p>\r\n            </is-card>\r\n            <is-card style=\"min-width:240px\" header=\"Notes\">\r\n              <p>1 nota actualizada.</p>\r\n            </is-card>\r\n            <is-card style=\"min-width:240px\" header=\"Files\">\r\n              <p>12 archivos recientes.</p>\r\n            </is-card>\r\n          </is-scroller>"
+        }
+      ]
+    },
+    {
+      "id": "vertical",
+      "title": "Vertical",
+      "lede": "Con <code class=\"code\">orientation=\"vertical\"</code> el scroll es en columna.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scroller orientation=\"vertical\" style=\"height: 200px; max-width: 480px;\">\r\n            <p>Elemento 1</p>\r\n            <p>Elemento 2</p>\r\n            <p>Elemento 3</p>\r\n            <p>Elemento 4</p>\r\n            <p>Elemento 5</p>\r\n            <p>Elemento 6</p>\r\n            <p>Elemento 7</p>\r\n            <p>Elemento 8</p>\r\n            <p>Elemento 9</p>\r\n            <p>Elemento 10</p>\r\n          </is-scroller>"
+        }
+      ]
+    },
+    {
+      "id": "both",
+      "title": "Bidimensional",
+      "lede": "Con <code class=\"code\">orientation=\"both\"</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scroller orientation=\"both\" style=\"height: 180px;\">\r\n            <div style=\"min-width:600px;display:grid;grid-template-columns:repeat(6,1fr);gap:0.5rem\">\r\n              <is-button>1</is-button><is-button>2</is-button><is-button>3</is-button>\r\n              <is-button>4</is-button><is-button>5</is-button><is-button>6</is-button>\r\n              <is-button>7</is-button><is-button>8</is-button><is-button>9</is-button>\r\n              <is-button>10</is-button><is-button>11</is-button><is-button>12</is-button>\r\n            </div>\r\n          </is-scroller>"
+        }
+      ]
+    },
+    {
+      "id": "plain",
+      "title": "Sin botones",
+      "lede": "Con <code class=\"code\">without-scroll-buttons</code> solo se queda el scrollbar nativo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scroller without-scroll-buttons style=\"max-width: 480px;\">\r\n            <is-button>1</is-button>\r\n            <is-button>2</is-button>\r\n            <is-button>3</is-button>\r\n            <is-button>4</is-button>\r\n            <is-button>5</is-button>\r\n            <is-button>6</is-button>\r\n            <is-button>7</is-button>\r\n            <is-button>8</is-button>\r\n            <is-button>9</is-button>\r\n            <is-button>10</is-button>\r\n          </is-scroller>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-scroller&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>orientation</code>",
+              "horizontal | vertical | both",
+              "horizontal",
+              "Dirección del scroll."
+            ],
+            [
+              "<code>without-scroll-buttons</code>",
+              "boolean",
+              "false",
+              "Oculta los botones prev/next."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "(default)",
+              "Contenido a scrollear."
+            ],
+            [
+              "scroll-button-start",
+              "Override del icono del botón prev."
+            ],
+            [
+              "scroll-button-end",
+              "Override del icono del botón next."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-scroll-start</code>",
+              "Click en botón prev."
+            ],
+            [
+              "<code>is-scroll-end</code>",
+              "Click en botón next."
+            ],
+            [
+              "<code>is-scroll-overflow</code>",
+              "Cambia el estado de overflow. <code>detail.overflowing</code>."
+            ],
+            [
+              "<code>is-scroll-position</code>",
+              "Al scrollear. <code>detail.scrollLeft, scrollTop</code>."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

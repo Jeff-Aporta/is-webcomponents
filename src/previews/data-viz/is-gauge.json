@@ -1,0 +1,148 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-gauge",
+  "category": "data-viz",
+  "title": "<is-gauge>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-gauge de InSoft.",
+  "styles": ".gauge-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\r\n      gap: 1rem;\r\n      align-items: center;\r\n    }\r\n    .gauge-cell {\r\n      display: flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n      padding: 1rem;\r\n      background: var(--is-bg-2, #181b22);\r\n      border: 1px solid var(--is-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
+  "storageKey": "docs-is-gauge",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-gauge>",
+      "lede": "Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,\r\n          custom min/max, unidad, formato y tamaño.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"42\" label=\"CPU\" unit=\"%\" color=\"warning\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"92\" label=\"RAM\" unit=\"%\" color=\"success\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"15\" label=\"Errores\" unit=\"%\" color=\"danger\"></is-gauge>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-gauge</span> <span class=\"attr\">value</span>=<span class=\"val\">\"67\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Conversión\"</span> <span class=\"attr\">unit</span>=<span class=\"val\">\"%\"</span><span class=\"tag\">></span><span class=\"tag\"></is-gauge></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Tamaños",
+      "lede": "small, medium, large.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><is-gauge style=\"font-size:0.7em\" value=\"42\" label=\"0.7em\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge value=\"42\" label=\"1em\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge style=\"font-size:1.35em\" value=\"42\" label=\"1.35em\"></is-gauge></div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "half",
+      "title": "Semicírculo",
+      "lede": "Con <code class=\"code\">half</code> pinta solo medio arco.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><is-gauge half value=\"68\" label=\"Velocímetro\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge half value=\"42\" label=\"Velocímetro\" color=\"warning\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge half value=\"88\" label=\"Velocímetro\" color=\"success\"></is-gauge></div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "format",
+      "title": "Formato",
+      "lede": "Con <code class=\"code\">format</code> controla los decimales.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><is-gauge value=\"3.14159\" label=\"π\" format=\"0.00\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge value=\"12345\" label=\"USD\" format=\"0,0\" unit=\"€\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge value=\"0.5\" label=\"CTR\" format=\"0.0%\" unit=\"\"></is-gauge></div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "interactive",
+      "title": "Interactivo",
+      "lede": "Vinculado a un slider.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-gauge id=\"gInteractive\" value=\"50\" label=\"Dinámico\"></is-gauge>\r\n          <is-slider id=\"gSlider\" min=\"0\" max=\"100\" value=\"50\" label=\"Valor\"></is-slider>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-gauge&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "number",
+              "0",
+              "Valor actual."
+            ],
+            [
+              "<code>min</code>",
+              "number",
+              "0",
+              "Mínimo."
+            ],
+            [
+              "<code>max</code>",
+              "number",
+              "100",
+              "Máximo."
+            ],
+            [
+              "<code>label</code>",
+              "string",
+              "—",
+              "Etiqueta."
+            ],
+            [
+              "<code>unit</code>",
+              "string",
+              "—",
+              "Unidad (e.g. \"%\")."
+            ],
+            [
+              "<code>format</code>",
+              "string",
+              "0",
+              "Intl format."
+            ],
+            [
+              "<code>thickness</code>",
+              "number",
+              "8",
+              "Ancho del trazo."
+            ],
+            [
+              "<code>variant</code>",
+              "brand | success | warning | danger",
+              "brand",
+              "Color."
+            ],
+            [
+              "<code>half</code>",
+              "boolean",
+              "false",
+              "Semicírculo."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

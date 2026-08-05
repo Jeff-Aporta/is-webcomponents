@@ -1,0 +1,358 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-callout",
+  "category": "layout",
+  "title": "<is-callout>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-callout de InSoft.",
+  "storageKey": "docs-is-callout",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-callout>",
+      "lede": "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y\r\n          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,\r\n          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>\r\n          o slot <code class=\"code\">icon</code>).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</is-callout>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-callout></span>Esto es un callout estándar.<span class=\"tag\"></is-callout></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "variants",
+      "title": "Variantes",
+      "lede": "El atributo <code class=\"code\">variant</code> elige el tono del callout. Cada\r\n          variante trae un icono por defecto.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">"
+        },
+        {
+          "kind": "callout",
+          "html": "Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras."
+        },
+        {
+          "kind": "callout",
+          "html": "Los horarios se muestran en tu zona horaria local."
+        },
+        {
+          "kind": "callout",
+          "html": "Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad."
+        },
+        {
+          "kind": "callout",
+          "html": "Tu sesión está a punto de expirar. Guarda tu trabajo."
+        },
+        {
+          "kind": "callout",
+          "html": "Esta acción no se puede deshacer. Eliminará el proyecto para todos."
+        },
+        {
+          "kind": "html",
+          "html": "</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">color</span>=<span class=\"val\">\"success\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-callout></span>\r\n<span class=\"tag\"><is-callout</span> <span class=\"attr\">color</span>=<span class=\"val\">\"danger\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-callout></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "appearances",
+      "title": "Apariencias",
+      "lede": "El atributo <code class=\"code\">appearance</code> controla el tratamiento visual.\r\n          Default: <code class=\"code\">filled-outlined</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">"
+        },
+        {
+          "kind": "callout",
+          "html": "Esta variante <strong>accent</strong> capta la atención de inmediato."
+        },
+        {
+          "kind": "callout",
+          "html": "Fondo + borde, el más habitual."
+        },
+        {
+          "kind": "callout",
+          "html": "Solo fondo, sin borde."
+        },
+        {
+          "kind": "callout",
+          "html": "Solo borde, fondo transparente."
+        },
+        {
+          "kind": "callout",
+          "html": "Sin fondo ni borde, solo texto e icono."
+        },
+        {
+          "kind": "html",
+          "html": "</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"accent\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-callout></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Tamaños",
+      "lede": "El atributo <code class=\"code\">size</code> ajusta padding, icono y tipografía.\r\n          Default: <code class=\"code\">m</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">"
+        },
+        {
+          "kind": "callout",
+          "html": "0.8em · callout mínimo."
+        },
+        {
+          "kind": "callout",
+          "html": "0.9em · un poco más de énfasis."
+        },
+        {
+          "kind": "callout",
+          "html": "1em · hereda el tamaño del contexto."
+        },
+        {
+          "kind": "callout",
+          "html": "1.15em · más énfasis."
+        },
+        {
+          "kind": "callout",
+          "html": "1.3em · énfasis máximo."
+        },
+        {
+          "kind": "html",
+          "html": "</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">size</span>=<span class=\"val\">\"l\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-callout></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "icon",
+      "title": "Icono personalizado",
+      "lede": "Pasa un <code class=\"code\">is-icon</code> por el slot <code class=\"code\">icon</code>\r\n          para reemplazar el icono por defecto.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">"
+        },
+        {
+          "kind": "callout",
+          "html": "<is-icon slot=\"icon\" icon=\"mdi:timer-sand\" aria-hidden=\"true\"></is-icon>\r\n            Tiempo limitado: queda 1 día para enviar la solicitud."
+        },
+        {
+          "kind": "callout",
+          "html": "<is-icon slot=\"icon\" icon=\"mdi:rocket-launch\" aria-hidden=\"true\"></is-icon>\r\n            Lanzamiento completado. Métricas disponibles."
+        },
+        {
+          "kind": "callout",
+          "html": "<is-icon slot=\"icon\" icon=\"mdi:shield-alert\" aria-hidden=\"true\"></is-icon>\r\n            Bloqueo de seguridad: demasiados intentos."
+        },
+        {
+          "kind": "callout",
+          "html": "<is-icon slot=\"icon\" icon=\"mdi:bullhorn\" aria-hidden=\"true\"></is-icon>\r\n            Anuncio global: nueva versión disponible."
+        },
+        {
+          "kind": "html",
+          "html": "</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">color</span>=<span class=\"val\">\"warning\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"icon\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:timer-sand\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  Tiempo limitado.\r\n<span class=\"tag\"></is-callout></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "no-icon",
+      "title": "Sin icono",
+      "lede": "Pasa <code class=\"code\">icon=\"\"</code> para ocultar el icono por defecto y dejar\r\n          solo el mensaje.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-callout color=\"neutral\" icon=\"\">Todas las horas se muestran en tu zona horaria local.</is-callout>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"\"</span><span class=\"tag\">></span>Texto plano.<span class=\"tag\"></is-callout></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "actions",
+      "title": "Con acciones",
+      "lede": "Combina <code class=\"code\">is-callout</code> con <code class=\"code\">is-button</code>\r\n          para CTAs dentro del mensaje.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>Una nueva versión está disponible</strong>\r\n            <p>Incluye el módulo de reportes y soporte para multi-empresa.</p>\r\n            <is-button variant=\"outlined\" color=\"brand\">Más tarde</is-button>\r\n            <is-button variant=\"filled\" color=\"brand\" style=\"margin-left:.5em\">Actualizar</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><strong></span>Una nueva versión está disponible<span class=\"tag\"></strong></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"outlined\"</span><span class=\"tag\">></span>Más tarde<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Actualizar<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></is-callout></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "parts",
+      "title": "CSS Parts",
+      "lede": "Solo dos partes expuestas: <code class=\"code\">icon</code> y <code class=\"code\">message</code>.\r\n          El contenedor raíz es la <code class=\"code\">::part(base)</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-callout color=\"success\" style=\"--callout-bg: #d3f9d8; --callout-border: #2f9e44;\">\r\n            CSS parts en uso: el fondo y el borde se redefinen vía custom properties.\r\n          </is-callout>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos / propiedades</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "brand · neutral · success · warning · danger",
+              "neutral",
+              "Tono. Reflected."
+            ],
+            [
+              "<code>appearance</code>",
+              "accent · filled · outlined · filled-outlined · plain",
+              "filled-outlined",
+              "Tratamiento visual. Reflected."
+            ],
+            [
+              "<code>icon</code>",
+              "string",
+              "(según variant)",
+              "Iconify id para el icono por defecto. Vacío = sin icono."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Mensaje principal."
+            ],
+            [
+              "<code>icon</code>",
+              "Icono propio (is-icon o img)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(base)</code>",
+              "Contenedor raíz."
+            ],
+            [
+              "<code>::part(icon)</code>",
+              "Wrapper del icono."
+            ],
+            [
+              "<code>::part(message)</code>",
+              "Wrapper del mensaje."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS custom properties</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Variable",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>--spacing</code>",
+              "<code>var(--is-space-l, 1rem)</code>",
+              "Padding/gap interno."
+            ],
+            [
+              "<code>--callout-bg</code>",
+              "var de variant",
+              "Fondo computado."
+            ],
+            [
+              "<code>--callout-border</code>",
+              "var de variant",
+              "Color del borde."
+            ],
+            [
+              "<code>--callout-text</code>",
+              "var de variant",
+              "Color del texto."
+            ],
+            [
+              "<code>--callout-accent</code>",
+              "var de variant",
+              "Color del icono."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

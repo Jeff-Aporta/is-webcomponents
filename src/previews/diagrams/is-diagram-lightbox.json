@@ -1,0 +1,68 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-diagram-lightbox",
+  "category": "diagrams",
+  "title": "<is-diagram-lightbox>",
+  "titleHtml": true,
+  "styles": ".demo { display: flex; flex-direction: column; gap: 0.65rem; }\r\n    .demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\r\n    .demo-bar is-select { min-width: 12rem; }\r\n    .pill {\r\n      display: inline-flex;\r\n      align-items: center;\r\n      gap: 0.35rem;\r\n      padding: 0.25rem 0.65rem;\r\n      border-radius: 999px;\r\n      background: color-mix(in srgb, var(--is-accent) 14%, transparent);\r\n      border: 1px solid color-mix(in srgb, var(--is-accent) 30%, transparent);\r\n      color: var(--is-accent);\r\n      font-size: 0.72rem;\r\n      font-weight: 700;\r\n      letter-spacing: 0.04em;\r\n      text-transform: uppercase;\r\n    }",
+  "storageKey": "docs-is-diagram-lightbox",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-diagram-lightbox>",
+      "lede": "Visor a pantalla completa pensado para diagramas: hereda del\r\n          <code class=\"code\">&lt;is-lightbox&gt;</code> genérico el zoom anclado al\r\n          cursor, el pan y el dialog top-layer, y le suma la barra de la animación\r\n          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel\r\n          de código JSON y el enlace compartible con el payload en <code class=\"code\">?d=</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-bar\">\r\n            <span class=\"pill\" aria-hidden=\"true\">Demo</span>\r\n            <is-select id=\"preset\" label=\"Preset\" value=\"tk1437191\">\r\n              <is-option value=\"tk1437191\" label=\"Facturación electrónica\"></is-option>\r\n              <is-option value=\"tk1431662\" label=\"Onboarding de cliente\"></is-option>\r\n            </is-select>\r\n            <is-button id=\"openViewer\" color=\"brand\" variant=\"filled\">\r\n              Abrir el visor\r\n              <is-icon slot=\"end\" icon=\"mdi:arrow-right\"></is-icon>\r\n            </is-button>\r\n          </div>\r\n          <is-diagram-lightbox id=\"lb\" kind=\"sequence\"></is-diagram-lightbox>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "lede": "Configura el diagrama con <code class=\"code\">payload</code> (objeto JS) o con\r\n          un <code class=\"code\">&lt;script type=\"application/json\"&gt;</code> hijo, y abre\r\n          con <code class=\"code\">open = true</code> o el método <code class=\"code\">show()</code>.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code class=\"code\">kind</code>",
+              "<code class=\"code\">\"sequence\"</code> por defecto. Hoy sólo diagrama de secuencia; la barra se adapta a la API turtle del nodo."
+            ],
+            [
+              "<code class=\"code\">payload</code>",
+              "Objeto con la configuración del diagrama (<code class=\"code\">preset</code>, <code class=\"code\">sequence</code>, etc.)."
+            ],
+            [
+              "<code class=\"code\">open</code> · <code class=\"code\">show()</code> · <code class=\"code\">hide()</code>",
+              "Visibilidad del dialog."
+            ],
+            [
+              "Hereda de <code class=\"code\">&lt;is-lightbox&gt;</code>",
+              "zoom, pan, slot <code class=\"code\">toolbar</code>, eventos <code class=\"code\">is-open</code>, <code class=\"code\">is-close</code>, <code class=\"code\">is-reposition</code>, <code class=\"code\">is-share</code>."
+            ],
+            [
+              "<code class=\"code\">is-turtle-state</code>",
+              "detail: <code class=\"code\">{ playing, idx, total, replay }</code>"
+            ],
+            [
+              "<code class=\"code\">is-toggle-group</code>",
+              "detail: <code class=\"code\">{ id }</code> — clic en una leyenda de grupo del diagrama."
+            ]
+          ]
+        },
+        {
+          "kind": "code",
+          "code": "<is-diagram-lightbox id=\"lb\" kind=\"sequence\"></is-diagram-lightbox>\r\n\r\n<script type=\"module\">\r\n  const lb = document.getElementById('lb');\r\n  lb.payload = { preset: 'tk1437191' };\r\n  lb.open = true;\r\n\r\n  // O abrirlo con un click:\r\n  lb.addEventListener('is-share', (e) => {\r\n    console.log('Compartir:', e.detail.url);\r\n  });\r\n</script>",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

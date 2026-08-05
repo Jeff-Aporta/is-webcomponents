@@ -1,0 +1,297 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-drawer",
+  "category": "layout",
+  "title": "<is-drawer>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-drawer de InSoft.",
+  "storageKey": "docs-is-drawer",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-drawer>",
+      "lede": "Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).\r\n          Ideal para menús, filtros y contenido secundario.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openDefault\">Abrir drawer (end)</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-drawer id=\"drwDefault\" label=\"Drawer estándar\">\r\n          <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-drawer=\"close\" variant=\"outlined\">Cancelar</is-button>\r\n            <is-button data-drawer=\"close\" color=\"brand\">Aceptar</is-button>\r\n          </div>\r\n        </is-drawer>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Drawer estándar\"</span><span class=\"tag\">></span>\r\n  Contenido.\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">data-drawer</span>=<span class=\"val\">\"close\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-drawer></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "placements",
+      "title": "Placements",
+      "lede": "El atributo <code class=\"code\">placement</code> elige desde qué borde se desliza.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <is-button id=\"openEnd\">end (default)</is-button>\r\n          <is-button id=\"openStart\">start</is-button>\r\n          <is-button id=\"openTop\">top</is-button>\r\n          <is-button id=\"openBottom\">bottom</is-button>\r\n        </div>\r\n\r\n        <is-drawer id=\"drwEnd\" label=\"End\" placement=\"end\">\r\n          <p>Este drawer se desliza desde la derecha (default).</p>\r\n        </is-drawer>\r\n        <is-drawer id=\"drwStart\" label=\"Start\" placement=\"start\">\r\n          <p>Este drawer se desliza desde la izquierda.</p>\r\n        </is-drawer>\r\n        <is-drawer id=\"drwTop\" label=\"Top\" placement=\"top\">\r\n          <p>Este drawer se desliza desde arriba.</p>\r\n        </is-drawer>\r\n        <is-drawer id=\"drwBottom\" label=\"Bottom\" placement=\"bottom\">\r\n          <p>Este drawer se desliza desde abajo.</p>\r\n        </is-drawer>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">placement</span>=<span class=\"val\">\"start\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>\r\n<span class=\"tag\"><is-drawer</span> <span class=\"attr\">placement</span>=<span class=\"val\">\"top\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>\r\n<span class=\"tag\"><is-drawer</span> <span class=\"attr\">placement</span>=<span class=\"val\">\"bottom\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "size",
+      "title": "Tamaño",
+      "lede": "Ajusta <code class=\"code\">--size</code> en el host. Se aplica al ancho o alto según el placement.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openWide\">Drawer ancho (50%)</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-drawer id=\"drwWide\" label=\"50%\" style=\"--size: 50%\">\r\n          <p>Este drawer ocupa siempre el 50% del viewport.</p>\r\n        </is-drawer>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">style</span>=<span class=\"val\">\"--size: 50%\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "no-header",
+      "title": "Sin header",
+      "lede": "<code class=\"code\">without-header</code> oculta el header y el botón de cerrar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openNoHeader\">Abrir sin header</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-drawer id=\"drwNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header!</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-drawer=\"close\" color=\"brand\">Cerrar</is-button>\r\n          </div>\r\n        </is-drawer>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">without-header</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "light-dismiss",
+      "title": "Light dismiss",
+      "lede": "<code class=\"code\">light-dismiss</code> cierra al hacer click fuera del drawer.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openLD\">Abrir (click fuera cierra)</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-drawer id=\"drwLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del drawer para cerrarlo.</p>\r\n        </is-drawer>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">light-dismiss</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "nav-example",
+      "title": "Drawer de navegación",
+      "lede": "Caso típico: menú lateral persistente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openNav\">Menú</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" style=\"--size: 280px\">\r\n          <nav style=\"display:flex;flex-direction:column;gap:.5em\">\r\n            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Productos</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>\r\n          </nav>\r\n        </is-drawer>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">placement</span>=<span class=\"val\">\"start\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Menú\"</span> <span class=\"attr\">style</span>=<span class=\"val\">\"--size: 280px\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><nav></span>…<span class=\"tag\"></nav></span>\r\n<span class=\"tag\"></is-drawer></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>open</code>",
+              "boolean",
+              "false",
+              "Estado visible. Reflected."
+            ],
+            [
+              "<code>label</code>",
+              "string",
+              "—",
+              "Título del header (a11y)."
+            ],
+            [
+              "<code>placement</code>",
+              "start | end | top | bottom",
+              "end",
+              "Borde desde el que se desliza."
+            ],
+            [
+              "<code>without-header</code>",
+              "boolean",
+              "false",
+              "Oculta el header y el botón de cerrar."
+            ],
+            [
+              "<code>light-dismiss</code>",
+              "boolean",
+              "false",
+              "Cierra al click fuera."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Body principal."
+            ],
+            [
+              "<code>label</code>",
+              "Título propio."
+            ],
+            [
+              "<code>header-actions</code>",
+              "Acciones adicionales en el header."
+            ],
+            [
+              "<code>footer</code>",
+              "Pie del drawer."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Métodos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Método",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>show() / hide() / toggle()</code>",
+              "API imperativa."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Cancelable",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-show</code>",
+              "no",
+              "Antes de abrir."
+            ],
+            [
+              "<code>is-after-show</code>",
+              "no",
+              "Tras la animación de apertura."
+            ],
+            [
+              "<code>is-hide</code>",
+              "sí",
+              "Antes de cerrar. <code>detail.source</code> indica quién lo pidió."
+            ],
+            [
+              "<code>is-after-hide</code>",
+              "no",
+              "Tras la animación de cierre."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS custom properties</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Variable",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>--size</code>",
+              "<code>380px</code>",
+              "Tamaño (ancho o alto según placement)."
+            ],
+            [
+              "<code>--spacing</code>",
+              "<code>var(--is-space-l, 1rem)</code>",
+              "Padding interno."
+            ],
+            [
+              "<code>--backdrop-color</code>",
+              "<code>rgba(0,0,0,0.45)</code>",
+              "Color del fondo."
+            ],
+            [
+              "<code>--show-duration</code>",
+              "220ms",
+              "Duración apertura."
+            ],
+            [
+              "<code>--hide-duration</code>",
+              "180ms",
+              "Duración cierre."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-confirm-delete",
+  "category": "isp",
+  "title": "<is-confirm-delete>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-confirm-delete de InSoft.",
+  "storageKey": "docs-is-confirm-delete",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-confirm-delete>",
+      "lede": "Confirmación destructiva \"escribe para confirmar\": el botón Eliminar\r\n          sigue bloqueado hasta que el usuario re-escribe la clave del registro.\r\n          En la demo, el NIT es <code class=\"code\">900123456</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"cdBtn\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Eliminar tercero\r\n          </is-button>\r\n          <is-confirm-delete\r\n            id=\"cdDemo\"\r\n            for=\"cdBtn\"\r\n            entity=\"tercero\"\r\n            pk-label=\"NIT\"\r\n            confirm-value=\"900123456\"\r\n            maxlength=\"15\"></is-confirm-delete>\r\n          <p id=\"cdLog\">Última acción: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-button id=\"del\" color=\"danger\">Eliminar</is-button>\r\n<is-confirm-delete for=\"del\" entity=\"tercero\"\r\n  pk-label=\"NIT\" confirm-value=\"900123456\"></is-confirm-delete>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "sensible",
+      "title": "Comparación sensible a mayúsculas",
+      "lede": "Por defecto se compara sin distinguir mayúsculas. Con\r\n          <code class=\"code\">case-sensitive</code> la coincidencia debe ser exacta\r\n          (<code class=\"code\">PLT-Alfa</code>).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"cdBtn2\" color=\"danger\" variant=\"outlined\">Eliminar plantilla</is-button>\r\n          <is-confirm-delete\r\n            for=\"cdBtn2\"\r\n            case-sensitive\r\n            entity=\"plantilla\"\r\n            pk-label=\"código\"\r\n            confirm-value=\"PLT-Alfa\"\r\n            message=\"Esta plantilla se usa en 12 documentos. No hay vuelta atrás.\"></is-confirm-delete>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-confirm-delete case-sensitive confirm-value=\"PLT-Alfa\"></is-confirm-delete>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "cuando",
+      "title": "Cuándo NO usarlo",
+      "lede": "Para confirmaciones ordinarias siguen estando\r\n          <code class=\"code\">&lt;is-confirm-modal&gt;</code> y\r\n          <code class=\"code\">&lt;is-popconfirm&gt;</code>. La fricción de re-escribir la clave\r\n          solo se justifica si el dato no se puede recuperar.",
+      "blocks": []
+    }
+  ]
+}

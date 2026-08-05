@@ -63,28 +63,18 @@ function walkHtml(dir, out = []) {
 }
 
 const previewRoot = join(root, 'src', 'previews');
-for (const file of walkHtml(previewRoot)) {
-  const rel = relative(previewRoot, file).replace(/\\/g, '/');
-  const depth = rel.split('/').length; // 1 = home.html, 2 = cat/page.html
-  const body = readFileSync(file, 'utf8');
-  const scriptsDepth = depth >= 2 ? '../../../scripts/' : '../../scripts/';
-  const distDepth = depth >= 2 ? '../../../dist/' : '../../dist/';
-  if (body.includes('src="../../scripts/') && depth >= 2) {
-    failures.push(`${rel}: scripts/ debe ser ${scriptsDepth} (preview bajo categoría)`);
-  }
-  if (body.includes('src="../scripts/') && depth === 1) {
-    failures.push(`${rel}: scripts/ debe ser ${distDepth.replace('dist', 'scripts')}`);
-  }
-  if (/src=["']\.\.\/\.\.\/dist\//.test(body) && depth >= 2) {
-    failures.push(`${rel}: dist/ debe ser ${distDepth} (no ../../dist desde categoría)`);
-  }
-  if (/src=["']\.\.\/dist\//.test(body) && depth === 1) {
-    failures.push(`${rel}: dist/ debe ser ../../dist/ desde src/previews/`);
-  }
-  // styles siguen en src/ → ../../styles desde categoría, ../styles desde home
-  if (depth >= 2 && /href=["']\.\.\/\.\.\/\.\.\/styles\//.test(body)) {
-    failures.push(`${rel}: styles/ no debe subir a raíz (usa ../../styles/ → src/styles)`);
-  }
+const shell = join(previewRoot, '_shell.html');
+if (!existsSync(shell)) failures.push('falta src/previews/_shell.html (único HTML permitido)');
+const shellBody = readFileSync(shell, 'utf8');
+// _shell vive en src/previews/ (depth 1) → ../../scripts y ../../dist
+if (!/src=["']\.\.\/\.\.\/scripts\//.test(shellBody)) {
+  failures.push('_shell.html: scripts debe ser ../../scripts/');
+}
+if (!/src=["']\.\.\/\.\.\/dist\//.test(shellBody)) {
+  failures.push('_shell.html: dist debe ser ../../dist/');
+}
+if (!/href=["']\.\.\/styles\//.test(shellBody)) {
+  failures.push('_shell.html: styles debe ser ../styles/ (src/styles)');
 }
 
 if (failures.length) {

@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-funnel-chart",
+  "category": "data-viz",
+  "title": "<is-funnel-chart>",
+  "titleHtml": true,
+  "storageKey": "docs-is-funnel-chart",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-funnel-chart>",
+      "lede": "Embudo para seguir la conversión entre etapas de un proceso.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-funnel-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Visitas\", \"Registros\", \"Cotizaciones\", \"Cierres\"],\r\n                  \"datasets\": [{ \"label\": \"Conversión\", \"data\": [4200, 1800, 640, 210] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-funnel-chart>"
+        }
+      ]
+    }
+  ]
+}

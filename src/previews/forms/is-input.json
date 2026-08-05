@@ -1,0 +1,351 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-input",
+  "category": "forms",
+  "title": "<is-input>",
+  "titleHtml": true,
+  "styles": ".stack { display: grid; gap: 1.25rem; max-width: 26rem; }\r\n    .stack--wide { max-width: 34rem; }\r\n    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }",
+  "storageKey": "docs-is-input",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-input>",
+      "lede": "Campo de texto form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField de MUI</a>:\r\n          tres <em>appearances</em>, estado de error ligado a la validación nativa, adornos, contador de\r\n          caracteres y ancho controlable. Participa en <code class=\"code\">&lt;form&gt;</code> vía\r\n          <code class=\"code\">ElementInternals</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></is-input>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\">value: <code class=\"code\">\"\"</code></p>"
+        }
+      ]
+    },
+    {
+      "id": "appearance",
+      "title": "Appearance",
+      "lede": "<code class=\"code\">appearance</code> equivale a las <em>variants</em> de MUI:\r\n          <code class=\"code\">outlined</code> (default) · <code class=\"code\">filled</code> ·\r\n          <code class=\"code\">underlined</code> (el <code class=\"code\">standard</code> de MUI).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-input label=\"outlined (default)\" placeholder=\"Caja con borde completo\"></is-input>\r\n            <is-input variant=\"filled\" label=\"filled\" placeholder=\"Superficie + línea inferior\"></is-input>\r\n            <is-input variant=\"underlined\" label=\"underlined\" placeholder=\"Solo línea inferior\"></is-input>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-input label=\"outlined (default)\"></is-input>\r\n<is-input variant=\"filled\" label=\"filled\"></is-input>\r\n<is-input variant=\"underlined\" label=\"underlined\"></is-input>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "types",
+      "title": "Tipos",
+      "lede": "<code class=\"code\">type</code> pasa al input nativo interno junto con\r\n          <code class=\"code\">min</code>, <code class=\"code\">max</code>, <code class=\"code\">step</code>,\r\n          <code class=\"code\">maxlength</code> y <code class=\"code\">autocomplete</code>.\r\n          En <code class=\"code\">type=\"search\"</code> se oculta la <em>x</em> nativa del navegador:\r\n          la limpieza la hace <code class=\"code\">clearable</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-input type=\"email\" label=\"Email\" placeholder=\"tu@empresa.com\" required hint=\"Obligatorio\"></is-input>\r\n            <is-input type=\"password\" label=\"Contraseña\" password-toggle placeholder=\"••••••••\"></is-input>\r\n            <is-input type=\"number\" label=\"Cantidad\" value=\"10\" min=\"0\" max=\"100\" step=\"5\"></is-input>\r\n            <is-input type=\"search\" label=\"Buscar\" clearable placeholder=\"Filtrar…\"></is-input>\r\n            <is-input type=\"tel\" label=\"Teléfono\" placeholder=\"+57 300 000 0000\" autocomplete=\"tel\"></is-input>\r\n            <is-input type=\"url\" label=\"Sitio web\" placeholder=\"https://…\"></is-input>\r\n            <is-input type=\"date\" label=\"Fecha\"></is-input>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-input type=\"password\" label=\"Contraseña\" password-toggle></is-input>\r\n<is-input type=\"number\" label=\"Cantidad\" min=\"0\" max=\"100\" step=\"5\"></is-input>\r\n<is-input type=\"search\" label=\"Buscar\" clearable></is-input>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "adornments",
+      "title": "Adornos",
+      "lede": "Para texto corto (<code class=\"code\">$</code>, <code class=\"code\">kg</code>, <code class=\"code\">%</code>)\r\n          basta con <code class=\"code\">prefix</code> y <code class=\"code\">suffix</code>: se pintan atenuados y no\r\n          reciben eventos. Para iconos o botones, los slots <code class=\"code\">start</code> y\r\n          <code class=\"code\">end</code>. Se pueden combinar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-input label=\"Importe\" type=\"number\" value=\"1200\" prefix=\"$\" suffix=\"COP\"></is-input>\r\n            <is-input label=\"Peso\" type=\"number\" value=\"72\" suffix=\"kg\"></is-input>\r\n            <is-input label=\"Con iconos\" placeholder=\"Buscar…\">\r\n              <is-icon slot=\"start\" icon=\"mdi:magnify\"></is-icon>\r\n              <is-icon slot=\"end\" icon=\"mdi:filter-variant\"></is-icon>\r\n            </is-input>\r\n            <is-input label=\"Slot + prefix\" prefix=\"https://\" placeholder=\"empresa.com\">\r\n              <is-icon slot=\"start\" icon=\"mdi:web\"></is-icon>\r\n            </is-input>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-input label=\"Importe\" type=\"number\" prefix=\"$\" suffix=\"COP\"></is-input>\r\n\r\n<is-input label=\"Con iconos\">\r\n  <is-icon slot=\"start\" icon=\"mdi:magnify\"></is-icon>\r\n  <is-icon slot=\"end\" icon=\"mdi:filter-variant\"></is-icon>\r\n</is-input>",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          En JS las propiedades se llaman <code class=\"code\">prefixText</code> y\r\n          <code class=\"code\">suffixText</code>: <code class=\"code\">prefix</code> ya existe en\r\n          <code class=\"code\">Element</code> (prefijo de espacio de nombres XML) y no conviene pisarla.\r\n        </p>"
+        }
+      ]
+    },
+    {
+      "id": "validation",
+      "title": "Error y validación",
+      "lede": "<code class=\"code\">error</code> fuerza el estado visual de peligro y\r\n          <code class=\"code\">error-text</code> sustituye al <code class=\"code\">hint</code>.\r\n          Sin forzarlo, el campo entra solo en error cuando la validación nativa falla\r\n          <em>después</em> de la primera interacción (blur, <code class=\"code\">change</code> o\r\n          <code class=\"code\">reportValidity()</code>); si no diste <code class=\"code\">error-text</code>,\r\n          se muestra el mensaje de validación del navegador. El estado se expone como\r\n          <code class=\"code\">:state(invalid)</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-input label=\"Error forzado\" value=\"valor@malo\" error error-text=\"Ese correo no existe en el sistema\"></is-input>\r\n            <is-input label=\"Error sin error-text\" value=\"12\" error hint=\"El hint se pinta en rojo\"></is-input>\r\n            <is-input id=\"autoErr\" type=\"email\" label=\"Correo (sale del campo para validar)\" required\r\n              hint=\"Se valida al perder el foco\" error-text=\"Escribe un correo válido\"></is-input>\r\n            <is-input id=\"reportErr\" label=\"Obligatorio\" required hint=\"Pulsa «Validar»\"></is-input>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n            <button type=\"button\" id=\"btnToggleErr\">Alternar error</button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-input error error-text=\"Ese correo no existe en el sistema\"></is-input>\r\n\r\n// error derivado de la validación nativa\r\ninput.reportValidity();          // marca el campo como tocado y pinta el error\r\ninput.error = true;              // o fuérzalo desde fuera",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "counter",
+      "title": "Contador de caracteres",
+      "lede": "<code class=\"code\">show-count</code> añade el contador a la derecha de la fila del hint.\r\n          Con <code class=\"code\">maxlength</code> muestra <code class=\"code\">n/max</code>; sin él, solo\r\n          <code class=\"code\">n</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\" value=\"Facturación electrónica\"></is-input>\r\n            <is-input label=\"Sin límite\" show-count placeholder=\"Escribe algo…\"></is-input>\r\n            <is-input label=\"Solo contador\" maxlength=\"10\" show-count></is-input>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\"></is-input>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "width",
+      "title": "Ancho",
+      "lede": "El ancho se controla con el token <code class=\"code\">--is-field-width</code> (heredable: puedes\r\n          ponerlo en el contenedor y afecta a todos los campos de dentro).\r\n          <code class=\"code\">full-width</code> lo ignora y ocupa el 100% disponible, como el\r\n          <code class=\"code\">fullWidth</code> de MUI.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:grid; gap:1.25rem; --is-field-width:14rem;\">\r\n            <is-input label=\"--is-field-width: 14rem\" placeholder=\"Heredado del contenedor\"></is-input>\r\n            <is-input label=\"Mismo contenedor, full-width\" full-width placeholder=\"Ignora el token\"></is-input>\r\n            <is-input label=\"Override local\" style=\"--is-field-width:8rem;\" type=\"number\" value=\"42\"></is-input>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<div style=\"--is-field-width: 14rem\">\r\n  <is-input label=\"Estrecho\"></is-input>\r\n  <is-input label=\"Ancho completo\" full-width></is-input>\r\n</div>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "label-placement",
+      "title": "Label a la izquierda",
+      "lede": "<code class=\"code\">label-placement=\"start\"</code> pasa el layout a rejilla de dos columnas para\r\n          formularios horizontales. <code class=\"code\">--is-field-label-width</code> fija la columna del label\r\n          para que varios campos queden alineados.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:grid; gap:0.75rem; --is-field-label-width:7rem; max-width:34rem;\">\r\n            <is-input label-placement=\"start\" label=\"Nombre\" full-width placeholder=\"Jane Doe\"></is-input>\r\n            <is-input label-placement=\"start\" label=\"Correo\" type=\"email\" full-width placeholder=\"jane@empresa.com\" hint=\"Se usa para la factura\"></is-input>\r\n            <is-input label-placement=\"start\" label=\"NIT\" full-width prefix=\"CO\" show-count maxlength=\"12\"></is-input>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<div style=\"--is-field-label-width: 7rem\">\r\n  <is-input label-placement=\"start\" label=\"Nombre\" full-width></is-input>\r\n  <is-input label-placement=\"start\" label=\"Correo\" full-width></is-input>\r\n</div>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "states",
+      "title": "Estados",
+      "lede": "<code class=\"code\">readonly</code> vacía el fondo y pasa el borde a discontinuo;\r\n          <code class=\"code\">disabled</code> además atenúa y bloquea la interacción.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-input label=\"Solo lectura\" value=\"No editable\" readonly></is-input>\r\n            <is-input label=\"Deshabilitado\" value=\"Sin acceso\" disabled></is-input>\r\n            <is-input variant=\"filled\" label=\"filled · readonly\" value=\"No editable\" readonly></is-input>\r\n            <is-input variant=\"underlined\" label=\"underlined · disabled\" value=\"Sin acceso\" disabled></is-input>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "title": "Dentro de un <form>",
+      "lede": "El valor entra en <code class=\"code\">FormData</code> con la clave de <code class=\"code\">name</code>.\r\n          <code class=\"code\">reset</code> restaura el atributo <code class=\"code\">value</code> y limpia el\r\n          estado de error.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<form id=\"f\" style=\"display:grid; gap:0.75rem; max-width:26rem;\">\r\n            <is-input name=\"usuario\" label=\"Usuario\" required clearable maxlength=\"20\" show-count></is-input>\r\n            <is-input name=\"correo\" type=\"email\" label=\"Correo\" required error-text=\"Correo no válido\"></is-input>\r\n            <is-input name=\"cargo\" label=\"Cargo\" value=\"Contador\"></is-input>\r\n            <div class=\"actions\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"out\">FormData: —</p>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>type</code>",
+              "<code>text</code> (default) · email · password · number · search · tel · url · date"
+            ],
+            [
+              "<code>appearance</code>",
+              "<code>outlined</code> (default) · <code>filled</code> · <code>underlined</code>"
+            ],
+            [
+              "<code>label-placement</code>",
+              "<code>top</code> (default) · <code>start</code>"
+            ],
+            [
+              "<code>name</code> <code>value</code> <code>placeholder</code> <code>autocomplete</code>",
+              "string"
+            ],
+            [
+              "<code>label</code> <code>hint</code>",
+              "texto o slots homónimos"
+            ],
+            [
+              "<code>error-text</code>",
+              "mensaje que sustituye al <code>hint</code> cuando hay error"
+            ],
+            [
+              "<code>prefix</code> <code>suffix</code>",
+              "adorno de texto corto, atenuado y no interactivo"
+            ],
+            [
+              "<code>min</code> <code>max</code> <code>step</code> <code>maxlength</code>",
+              "pasan al input nativo interno"
+            ],
+            [
+              "<code>disabled</code> <code>required</code> <code>readonly</code>",
+              "boolean"
+            ],
+            [
+              "<code>clearable</code> <code>password-toggle</code>",
+              "boolean · botón de limpiar y ojo de contraseña"
+            ],
+            [
+              "<code>error</code>",
+              "boolean · fuerza el estado visual de peligro"
+            ],
+            [
+              "<code>show-count</code>",
+              "boolean · contador <code>n/maxlength</code> (o <code>n</code>)"
+            ],
+            [
+              "<code>full-width</code>",
+              "boolean · 100% del ancho disponible, ignora <code>--is-field-width</code>"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y métodos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>value</code> <code>defaultValue</code>",
+              "valor actual · valor del atributo <code>value</code> (el del reset)"
+            ],
+            [
+              "<code>type</code> <code>appearance</code> <code>labelPlacement</code>",
+              "sanitizan valores no válidos al default"
+            ],
+            [
+              "<code>prefixText</code> <code>suffixText</code>",
+              "reflejan <code>prefix</code> / <code>suffix</code> (<code>Element.prefix</code> ya existe)"
+            ],
+            [
+              "<code>error</code> <code>errorText</code> <code>showCount</code> <code>fullWidth</code>",
+              "reflejan sus atributos"
+            ],
+            [
+              "<code>clearable</code> <code>passwordToggle</code> <code>disabled</code> <code>required</code> <code>readonly</code>",
+              "boolean"
+            ],
+            [
+              "<code>input</code>",
+              "el <code>&lt;input&gt;</code> nativo interno, para casos avanzados"
+            ],
+            [
+              "<code>validity</code> <code>validationMessage</code> <code>willValidate</code>",
+              "espejo de <code>ElementInternals</code>"
+            ],
+            [
+              "<code>focus()</code> <code>blur()</code> <code>select()</code> <code>setSelectionRange()</code>",
+              "delegan en el input interno"
+            ],
+            [
+              "<code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code>",
+              "<code>reportValidity()</code> además marca el campo como tocado"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots, parts y estados</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "slots",
+              "<code>label</code> <code>hint</code> <code>start</code> <code>end</code>"
+            ],
+            [
+              "parts",
+              "<code>form-control</code> <code>label</code> <code>base</code> <code>start</code> <code>prefix</code> <code>input</code> <code>clear</code> <code>toggle</code> <code>suffix</code> <code>end</code> <code>support</code> <code>hint</code> <code>error-text</code> <code>count</code>"
+            ],
+            [
+              "states",
+              "<code>blank</code> <code>disabled</code> <code>readonly</code> <code>focused</code> <code>invalid</code> <code>password-visible</code>"
+            ],
+            [
+              "events",
+              "<code>is-input</code> <code>is-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code>"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Tokens</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Token",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>--is-field-width</code>",
+              "ancho del control (default <code>auto</code>); heredable desde el contenedor"
+            ],
+            [
+              "<code>--is-field-label-width</code>",
+              "columna del label con <code>label-placement=\"start\"</code>"
+            ],
+            [
+              "<code>--is-input-bg</code> <code>--is-input-border</code> <code>--is-input-text</code>",
+              "caen en <code>--is-control-*</code>"
+            ],
+            [
+              "<code>--is-input-border-radius</code> <code>--is-input-focus</code>",
+              "caen en <code>--is-radius-sm</code> / <code>--is-focus</code>"
+            ],
+            [
+              "<code>--is-input-danger</code> <code>--is-input-danger-text</code>",
+              "borde y texto del estado de error"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

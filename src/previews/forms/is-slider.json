@@ -1,0 +1,313 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-slider",
+  "category": "forms",
+  "title": "<is-slider>",
+  "titleHtml": true,
+  "styles": ".stack { display: grid; gap: 1.5rem; max-width: 28rem; }\r\n    .row { display: flex; align-items: center; gap: 1rem; }\r\n    .row is-slider { flex: 1; }\r\n    .verticals { display: flex; gap: 3rem; align-items: flex-end; }",
+  "storageKey": "docs-is-slider",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-slider>",
+      "lede": "Control de rango form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-slider/\" target=\"_blank\" rel=\"noreferrer\">Slider de MUI</a>:\r\n          rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-slider id=\"demo\" label=\"Volumen\" hint=\"Arrastra o usa las flechas\" value=\"40\" value-label=\"auto\" name=\"volumen\"></is-slider>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\">value: <code class=\"code\">40</code></p>"
+        }
+      ]
+    },
+    {
+      "id": "continuous",
+      "title": "Continuo",
+      "lede": "Sin <code class=\"code\">marks</code>: cualquier valor del rango, redondeado al <code class=\"code\">step</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <div class=\"row\">\r\n              <is-icon name=\"tabler:volume-2\" aria-hidden=\"true\"></is-icon>\r\n              <is-slider label=\"Volumen\" value=\"30\"></is-slider>\r\n              <is-icon name=\"tabler:volume\" aria-hidden=\"true\"></is-icon>\r\n            </div>\r\n            <is-slider label=\"Deshabilitado\" value=\"30\" disabled></is-slider>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-slider label=\"Volumen\" value=\"30\"></is-slider>\r\n<is-slider value=\"30\" disabled></is-slider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Tamaños",
+      "lede": "El tamaño va en <code class=\"code\">em</code>: baja el <code class=\"code\">font-size</code> y pista, thumb y etiquetas se reducen a la vez.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-slider style=\"font-size:0.8em\" label=\"0.8em\" value=\"70\" value-label=\"auto\"></is-slider>\r\n            <is-slider label=\"medium (default)\" value=\"50\" value-label=\"auto\"></is-slider>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-slider style=\"font-size:0.8em\" value=\"70\" value-label=\"auto\"></is-slider>\r\n<is-slider value=\"50\" value-label=\"auto\"></is-slider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "discrete",
+      "title": "Discreto",
+      "lede": "<code class=\"code\">marks</code> sin valor dibuja un punto por step.\r\n          <code class=\"code\">shift-step</code> define el salto de <code class=\"code\">PageUp/PageDown</code> y <code class=\"code\">Shift + flechas</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-slider label=\"Temperatura\" min=\"10\" max=\"110\" step=\"10\" shift-step=\"30\" value=\"30\" marks value-label=\"auto\" format=\"{v}°C\"></is-slider>\r\n            <is-slider min=\"10\" max=\"110\" step=\"10\" value=\"30\" marks disabled></is-slider>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-slider\r\n  label=\"Temperatura\"\r\n  min=\"10\" max=\"110\" step=\"10\" shift-step=\"30\"\r\n  value=\"30\" marks value-label=\"auto\" format=\"{v}°C\"\r\n></is-slider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "marks",
+      "title": "Marks personalizados",
+      "lede": "<code class=\"code\">marks=\"valor:etiqueta, …\"</code> para etiquetas propias, o la propiedad\r\n          <code class=\"code\">.marks = [{ value, label }]</code>. Con <code class=\"code\">step=\"null\"</code>\r\n          los valores quedan restringidos a los marks.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-slider label=\"Marks con etiqueta\" step=\"10\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></is-slider>\r\n            <is-slider label=\"Valores restringidos (step null)\" step=\"null\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></is-slider>\r\n            <is-slider label=\"Etiqueta siempre visible\" step=\"10\" value=\"80\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"on\"></is-slider>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-slider step=\"null\" value=\"20\"\r\n  marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"\r\n  value-label=\"auto\"></is-slider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "range",
+      "title": "Rango",
+      "lede": "Dos o más valores separados por coma crean un thumb por valor.\r\n          <code class=\"code\">disable-swap</code> evita que se crucen y <code class=\"code\">min-distance</code>\r\n          impone una separación mínima.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-slider id=\"rangeDemo\" label=\"Temperatura (rango)\" value=\"20,37\" value-label=\"auto\" format=\"{v}°C\"></is-slider>\r\n            <is-slider label=\"min-distance 10 · disable-swap\" value=\"20,37\" min-distance=\"10\" disable-swap value-label=\"auto\"></is-slider>\r\n            <is-slider label=\"Tres thumbs\" value=\"10,40,80\" value-label=\"auto\"></is-slider>\r\n          </div>\r\n          <p class=\"lede\" id=\"rangeLog\">rango: <code class=\"code\">20 – 37</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-slider value=\"20,37\" value-label=\"auto\" format=\"{v}°C\"></is-slider>\r\n<is-slider value=\"20,37\" min-distance=\"10\" disable-swap></is-slider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "with-input",
+      "title": "Slider con input",
+      "lede": "Slider e <code class=\"code\">is-input</code> sincronizados en ambos sentidos.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"row\" style=\"max-width:28rem;\">\r\n            <is-icon name=\"tabler:volume-2\" aria-hidden=\"true\"></is-icon>\r\n            <is-slider id=\"linkedSlider\" label=\"Volumen\" value=\"30\" value-label=\"auto\"></is-slider>\r\n            <is-input id=\"linkedInput\" type=\"number\" min=\"0\" max=\"100\" step=\"1\" value=\"30\" style=\"width:5.5rem;\"></is-input>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "slider.addEventListener('is-input', (e) => { input.value = e.detail.value; });\r\ninput.addEventListener('is-input', (e) => { slider.value = e.detail.value; });",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "color",
+      "title": "Color",
+      "lede": "<code class=\"code\">variant</code> cambia el color de pista, thumb y burbuja.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-slider label=\"brand (default)\" value=\"30\" value-label=\"auto\"></is-slider>\r\n            <is-slider color=\"neutral\" label=\"neutral\" value=\"45\" value-label=\"auto\"></is-slider>\r\n            <is-slider color=\"success\" label=\"success\" value=\"60\" value-label=\"auto\"></is-slider>\r\n            <is-slider color=\"warning\" label=\"warning\" value=\"75\" value-label=\"auto\"></is-slider>\r\n            <is-slider color=\"danger\" label=\"danger\" value=\"90\" value-label=\"auto\"></is-slider>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-slider color=\"success\" value=\"60\"></is-slider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "vertical",
+      "title": "Vertical",
+      "lede": "<code class=\"code\">orientation=\"vertical\"</code>. La longitud se controla con\r\n          <code class=\"code\">--is-slider-length</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"verticals\">\r\n            <is-slider orientation=\"vertical\" value=\"30\" value-label=\"auto\"></is-slider>\r\n            <is-slider orientation=\"vertical\" value=\"30\" disabled></is-slider>\r\n            <is-slider orientation=\"vertical\" step=\"10\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></is-slider>\r\n            <is-slider orientation=\"vertical\" value=\"20,37\" value-label=\"auto\"></is-slider>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-slider orientation=\"vertical\" value=\"20,37\" value-label=\"auto\"></is-slider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "track",
+      "title": "Track",
+      "lede": "<code class=\"code\">track=\"none\"</code> oculta el relleno; <code class=\"code\">track=\"inverted\"</code>\r\n          rellena el tramo complementario.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-slider label=\"normal\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></is-slider>\r\n            <is-slider label=\"none\" track=\"none\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></is-slider>\r\n            <is-slider label=\"none · rango\" track=\"none\" value=\"20,37\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></is-slider>\r\n            <is-slider label=\"inverted\" track=\"inverted\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></is-slider>\r\n            <is-slider label=\"inverted · rango\" track=\"inverted\" value=\"20,37\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></is-slider>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-slider track=\"inverted\" value=\"20,37\"></is-slider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "scale",
+      "title": "Escala no lineal",
+      "lede": "La propiedad <code class=\"code\">scale</code> traduce el valor interno al valor mostrado.\r\n          Aquí <em>x</em> representa 2<sup>x</sup>: cada paso duplica el almacenamiento.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<p id=\"scaleLabel\" class=\"lede\">Almacenamiento: <code class=\"code\">1 MB</code></p>\r\n          <is-slider id=\"scaleDemo\" min=\"5\" max=\"30\" step=\"1\" value=\"10\" value-label=\"auto\" style=\"max-width:28rem;\"></is-slider>"
+        },
+        {
+          "kind": "code",
+          "code": "const slider = document.querySelector('is-slider');\r\nslider.scale = (x) => 2 ** x;\r\nslider.valueLabelFormat = (bytes) => format(bytes); // 1 MB, 2 GB…",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "title": "Teclado",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Tecla",
+            "Acción"
+          ],
+          "rows": [
+            [
+              "<code>←</code> <code>↓</code>",
+              "−1 step (o mark anterior si <code>step=\"null\"</code>)"
+            ],
+            [
+              "<code>→</code> <code>↑</code>",
+              "+1 step (o mark siguiente)"
+            ],
+            [
+              "<code>Shift</code> + flechas",
+              "± <code>shift-step</code>"
+            ],
+            [
+              "<code>PageUp</code> <code>PageDown</code>",
+              "± <code>shift-step</code> (default step × 10)"
+            ],
+            [
+              "<code>Home</code> <code>End</code>",
+              "mínimo / máximo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>name</code>",
+              "clave en FormData (rango → una entrada por thumb)"
+            ],
+            [
+              "<code>value</code>",
+              "<code>40</code> o <code>\"20,37\"</code> para rango"
+            ],
+            [
+              "<code>min</code> <code>max</code> <code>step</code>",
+              "0 · 100 · 1; <code>step=\"null\"</code> restringe a los marks"
+            ],
+            [
+              "<code>shift-step</code>",
+              "salto de Shift + flechas y PageUp/PageDown (default step × 10)"
+            ],
+            [
+              "<code>marks</code>",
+              "boolean · <code>\"0:0°C, 20:20°C\"</code> · propiedad <code>[{ value, label }]</code>"
+            ],
+            [
+              "<code>orientation</code>",
+              "<code>horizontal</code> (default) · <code>vertical</code>"
+            ],
+            [
+              "<code>track</code>",
+              "<code>normal</code> (default) · <code>none</code> · <code>inverted</code>"
+            ],
+            [
+              "<code>value-label</code>",
+              "<code>off</code> (default) · <code>auto</code> · <code>on</code>"
+            ],
+            [
+              "<code>min-distance</code> <code>disable-swap</code>",
+              "separación mínima y bloqueo de cruce en rangos"
+            ],
+            [
+              "<code>format</code>",
+              "plantilla de la burbuja, ej. <code>\"{v}°C\"</code>"
+            ],
+            [
+              "<code>variant</code>",
+              "<code>brand</code> · <code>neutral</code> · <code>success</code> · <code>warning</code> · <code>danger</code>"
+            ],
+            [
+              "<code>label</code> <code>hint</code>",
+              "texto o slots homónimos"
+            ],
+            [
+              "<code>disabled</code> <code>readonly</code> <code>required</code> <code>range</code>",
+              "boolean"
+            ],
+            [
+              "propiedades JS",
+              "<code>value</code> <code>values</code> <code>marks</code> <code>scale</code> <code>valueLabelFormat</code> <code>getAriaValueText</code>"
+            ],
+            [
+              "parts",
+              "<code>form-control</code> <code>label</code> <code>base</code> <code>rail</code> <code>track</code> <code>mark</code> <code>mark-label</code> <code>thumb</code> <code>value-label</code> <code>hint</code>"
+            ],
+            [
+              "states",
+              "<code>disabled</code> <code>readonly</code> <code>dragging</code> <code>focused</code>"
+            ],
+            [
+              "events",
+              "<code>is-input</code> (durante) · <code>is-change</code> (al soltar)"
+            ],
+            [
+              "métodos",
+              "<code>stepUp(i)</code> <code>stepDown(i)</code> <code>focus()</code> <code>checkValidity()</code>"
+            ],
+            [
+              "tokens",
+              "<code>--is-slider-track-size</code> <code>--is-slider-thumb-size</code> <code>--is-slider-length</code> <code>--is-slider-rail</code> <code>--is-slider-fill</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

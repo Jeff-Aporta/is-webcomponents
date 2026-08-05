@@ -1,0 +1,27 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-catalogo-gen",
+  "category": "isp",
+  "title": "<is-catalogo-gen>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-catalogo-gen de InSoft.",
+  "storageKey": "docs-is-catalogo-gen",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-catalogo-gen>",
+      "lede": "Catálogo CRUD genérico (port de ISP <code class=\"code\">CatalogoGen</code>):\r\n          toolbar, grilla y acciones Crear / Modificar / Verificar / Eliminar…\r\n          según lo que exponga el <code class=\"code\">controller</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></is-catalogo-gen>\r\n          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "const cat = document.querySelector('is-catalogo-gen');\r\ncat.controller = {\r\n  entrie: 'Aplicación',\r\n  primaryKeys: ['app'],\r\n  columns: [\r\n    { field: 'app', header: 'Aplicación' },\r\n    { field: 'bactiva', header: 'Activa' },\r\n  ],\r\n  async Lista() { return { datos: [/* … */] }; },\r\n  async actCrear(o) { return o; },\r\n  async actModificar(o) { return o; },\r\n  async actEliminar(o) { return o; },\r\n  async actVerificar() {\r\n    return { mensajes: [{ itdmensaje: 'info', mensaje: 'OK' }] };\r\n  },\r\n};",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

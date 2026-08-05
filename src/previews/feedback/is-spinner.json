@@ -1,0 +1,85 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-spinner",
+  "category": "feedback",
+  "title": "<is-spinner>",
+  "titleHtml": true,
+  "styles": ".speed-demo {\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 1rem;\r\n      max-width: 28rem;\r\n    }\r\n    .speed-demo__row {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 1.25rem;\r\n    }\r\n    .speed-demo__control {\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 0.35rem;\r\n      flex: 1;\r\n      min-width: 0;\r\n    }\r\n    .speed-demo__meta {\r\n      display: flex;\r\n      justify-content: space-between;\r\n      font-size: 0.8rem;\r\n      color: var(--is-text-dim);\r\n      font-variant-numeric: tabular-nums;\r\n    }\r\n    .speed-demo__meta strong { color: var(--is-text-soft); }\r\n    .speed-demo input[type=\"range\"] {\r\n      width: 100%;\r\n      accent-color: var(--is-accent, var(--is-color-brand));\r\n      cursor: pointer;\r\n    }",
+  "storageKey": "docs-is-spinner",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-spinner>",
+      "lede": "Indicador de carga animado. Sin atributos; personalizable vía CSS vars.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-spinner></is-spinner>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Escala y colores",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1.5rem\">\r\n            <is-spinner style=\"font-size:1rem\"></is-spinner>\r\n            <is-spinner style=\"font-size:2rem;--indicator-color:var(--is-color-success)\"></is-spinner>\r\n            <is-spinner style=\"font-size:2.5rem;--track-width:4px\"></is-spinner>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-spinner></is-spinner>\r\n<is-spinner style=\"font-size:2rem;--indicator-color:#40c057\"></is-spinner>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "speed",
+      "title": "Velocidad",
+      "lede": "Controla <code class=\"code\">--speed</code> (duración de un giro). Más % = más rápido.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"speed-demo\">\r\n            <div class=\"speed-demo__row\">\r\n              <is-spinner id=\"speedSpinner\" style=\"font-size:2.5rem;--track-width:4px\"></is-spinner>\r\n              <div class=\"speed-demo__control\">\r\n                <div class=\"speed-demo__meta\">\r\n                  <span>Velocidad</span>\r\n                  <strong><span id=\"speedPct\">40</span>% · <span id=\"speedSec\">1.05</span>s</strong>\r\n                </div>\r\n                <input id=\"speedRange\" type=\"range\" min=\"5\" max=\"100\" value=\"40\" step=\"1\"\r\n                  aria-label=\"Velocidad del spinner\" />\r\n              </div>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-spinner style=\"--speed:1.05s\"></is-spinner>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Part: <code class=\"code\">::part(spinner)</code>. role=status.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Variable CSS",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>--track-width</code>",
+              "0.15em"
+            ],
+            [
+              "<code>--track-color</code>",
+              "borde control"
+            ],
+            [
+              "<code>--indicator-color</code>",
+              "brand-500"
+            ],
+            [
+              "<code>--speed</code>",
+              "0.75s"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

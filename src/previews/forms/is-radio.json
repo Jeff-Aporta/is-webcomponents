@@ -1,0 +1,331 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-radio",
+  "category": "forms",
+  "title": "<is-radio> + <is-radio-group>",
+  "titleHtml": true,
+  "styles": ".stack { display: grid; gap: 1.5rem; max-width: 32rem; }\r\n    .spread { display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-start; }",
+  "storageKey": "docs-is-radio",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-radio> + <is-radio-group>",
+      "lede": "Paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-radio-button/\" target=\"_blank\" rel=\"noreferrer\">Radio Group de MUI</a>:\r\n          color por <code class=\"code\">variant</code>, posición de etiqueta, estado de error, solo lectura y\r\n          navegación por teclado según el patrón ARIA <em>radiogroup</em>.\r\n          El grupo es el elemento <em>form-associated</em>: publica el valor, valida y gobierna el teclado.\r\n          Los <code class=\"code\">is-radio</code> son las opciones y solo avisan al grupo cuando se eligen.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-radio-group id=\"plan\" name=\"plan\" value=\"pro\" label=\"Plan\" hint=\"Flechas para navegar, Espacio para elegir\">\r\n            <is-radio value=\"free\">Gratis</is-radio>\r\n            <is-radio value=\"pro\">Profesional</is-radio>\r\n            <is-radio value=\"empresa\">Empresa</is-radio>\r\n            <is-radio value=\"legacy\" disabled>Heredado (no disponible)</is-radio>\r\n          </is-radio-group>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"log\" id=\"rgLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Elige una opción para ver el evento.</div></div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radio-group name=\"plan\" value=\"pro\" label=\"Plan\">\r\n  <is-radio value=\"free\">Gratis</is-radio>\r\n  <is-radio value=\"pro\">Profesional</is-radio>\r\n  <is-radio value=\"legacy\" disabled>Heredado</is-radio>\r\n</is-radio-group>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "color",
+      "title": "Color",
+      "lede": "<code class=\"code\">variant</code> (equivalente a <code class=\"code\">color</code> en MUI) se pone en el grupo y\r\n          lo heredan todos los radios. Un <code class=\"code\">is-radio</code> con <code class=\"code\">variant</code>\r\n          propio sobrescribe al del grupo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-radio-group row value=\"a\" label=\"brand (default)\">\r\n              <is-radio value=\"a\">Uno</is-radio><is-radio value=\"b\">Dos</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group row color=\"neutral\" value=\"a\" label=\"neutral\">\r\n              <is-radio value=\"a\">Uno</is-radio><is-radio value=\"b\">Dos</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group row color=\"success\" value=\"a\" label=\"success\">\r\n              <is-radio value=\"a\">Uno</is-radio><is-radio value=\"b\">Dos</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group row color=\"warning\" value=\"a\" label=\"warning\">\r\n              <is-radio value=\"a\">Uno</is-radio><is-radio value=\"b\">Dos</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group row color=\"danger\" value=\"a\" label=\"danger\">\r\n              <is-radio value=\"a\">Uno</is-radio><is-radio value=\"b\">Dos</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group row color=\"success\" value=\"c\" label=\"El radio manda sobre el grupo\">\r\n              <is-radio value=\"c\">Hereda success</is-radio>\r\n              <is-radio value=\"d\" color=\"danger\">variant=\"danger\"</is-radio>\r\n            </is-radio-group>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radio-group color=\"success\" row>\r\n  <is-radio value=\"c\">Hereda success</is-radio>\r\n  <is-radio value=\"d\" color=\"danger\">Se sale del grupo</is-radio>\r\n</is-radio-group>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "placement",
+      "title": "Posición de la etiqueta",
+      "lede": "<code class=\"code\">label-placement</code> (<code class=\"code\">labelPlacement</code> de\r\n          <em>FormControlLabel</em>): <code class=\"code\">end</code> (default), <code class=\"code\">start</code>,\r\n          <code class=\"code\">top</code> y <code class=\"code\">bottom</code>. Se puede fijar en el grupo para todos\r\n          los hijos o en cada radio.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"spread\">\r\n            <is-radio-group label-placement=\"top\" row value=\"t\" label=\"top\">\r\n              <is-radio value=\"t\">Top</is-radio><is-radio value=\"t2\">Otro</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group label-placement=\"start\" value=\"s\" label=\"start\">\r\n              <is-radio value=\"s\">Start</is-radio><is-radio value=\"s2\">Otro</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group label-placement=\"bottom\" row value=\"b\" label=\"bottom\">\r\n              <is-radio value=\"b\">Bottom</is-radio><is-radio value=\"b2\">Otro</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group label-placement=\"end\" value=\"e\" label=\"end (default)\">\r\n              <is-radio value=\"e\">End</is-radio><is-radio value=\"e2\">Otro</is-radio>\r\n            </is-radio-group>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radio-group label-placement=\"top\" row>…</is-radio-group>\r\n<is-radio value=\"x\" label-placement=\"start\">Solo este</is-radio>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "description",
+      "title": "Contenido rico",
+      "lede": "El slot <code class=\"code\">description</code> añade texto secundario bajo la etiqueta, con el color\r\n          atenuado del tema. No entra en el <code class=\"code\">value</code> implícito.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-radio-group name=\"soporte\" value=\"std\" label=\"Nivel de soporte\">\r\n            <is-radio value=\"std\">\r\n              Estándar\r\n              <span slot=\"description\">Respuesta en 48 h laborables. Incluido en todos los planes.</span>\r\n            </is-radio>\r\n            <is-radio value=\"prio\">\r\n              Prioritario\r\n              <span slot=\"description\">Respuesta en 4 h y canal directo con ingeniería.</span>\r\n            </is-radio>\r\n            <is-radio value=\"ded\" disabled>\r\n              Dedicado\r\n              <span slot=\"description\">Solo para contratos anuales.</span>\r\n            </is-radio>\r\n          </is-radio-group>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radio value=\"prio\">\r\n  Prioritario\r\n  <span slot=\"description\">Respuesta en 4 h</span>\r\n</is-radio>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "orientation",
+      "title": "Orientación",
+      "lede": "<code class=\"code\">orientation=\"vertical\"</code> es el default.\r\n          <code class=\"code\">row</code> es el alias booleano de <code class=\"code\">orientation=\"horizontal\"</code>\r\n          (el nombre que usa MUI); si pones ambos, gana <code class=\"code\">orientation</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-radio-group name=\"envio\" value=\"normal\" row label=\"row\">\r\n              <is-radio value=\"normal\">Normal</is-radio>\r\n              <is-radio value=\"express\">Express</is-radio>\r\n              <is-radio value=\"recoger\">Recoger en tienda</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group name=\"envio2\" value=\"normal\" orientation=\"horizontal\" label='orientation=\"horizontal\"'>\r\n              <is-radio value=\"normal\">Normal</is-radio>\r\n              <is-radio value=\"express\">Express</is-radio>\r\n            </is-radio-group>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radio-group row>…</is-radio-group>\r\n<is-radio-group orientation=\"horizontal\">…</is-radio-group>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "error",
+      "title": "Error",
+      "lede": "<code class=\"code\">error</code> tiñe de peligro la etiqueta, el hint y los controles.\r\n          <code class=\"code\">error-text</code> escribe el mensaje (el <em>FormHelperText</em> con error de MUI),\r\n          sustituye al <code class=\"code\">hint</code> y activa el estado de error por sí solo.\r\n          Es presentacional: no altera <code class=\"code\">checkValidity()</code>, solo marca\r\n          <code class=\"code\">aria-invalid</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-radio-group id=\"errDemo\" name=\"acepta\" label=\"Condiciones\" hint=\"Elige una opción\"\r\n              error-text=\"Debes elegir una opción para continuar\">\r\n              <is-radio value=\"si\">Acepto</is-radio>\r\n              <is-radio value=\"no\">No acepto</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group error value=\"a\" row label=\"Solo el booleano\" hint=\"El hint también se tiñe\">\r\n              <is-radio value=\"a\">Uno</is-radio><is-radio value=\"b\">Dos</is-radio>\r\n            </is-radio-group>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-row\" style=\"gap:.5rem;margin-top:12px\">\r\n          <is-button variant=\"outlined\" id=\"btnError\">Alternar error</is-button>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radio-group error error-text=\"Debes elegir una opción\">…</is-radio-group>\r\ngrupo.errorText = '';   // limpia mensaje y estado",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "readonly",
+      "title": "Solo lectura y deshabilitado",
+      "lede": "<code class=\"code\">readonly</code> bloquea el cambio pero mantiene el valor en el\r\n          <code class=\"code\">FormData</code> y el foco navegable: las flechas mueven el foco sin cambiar la\r\n          selección. <code class=\"code\">disabled</code> saca el grupo del formulario y del orden de tabulación.\r\n          Los dos se propagan a todos los radios sin tocarlos uno a uno.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-radio-group name=\"tema\" value=\"auto\" readonly row label=\"readonly\" hint=\"Prueba a moverte con las flechas\">\r\n              <is-radio value=\"claro\">Claro</is-radio>\r\n              <is-radio value=\"oscuro\">Oscuro</is-radio>\r\n              <is-radio value=\"auto\">Automático</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group name=\"tema2\" value=\"auto\" disabled row label=\"disabled\">\r\n              <is-radio value=\"claro\">Claro</is-radio>\r\n              <is-radio value=\"oscuro\">Oscuro</is-radio>\r\n              <is-radio value=\"auto\">Automático</is-radio>\r\n            </is-radio-group>\r\n            <is-radio-group value=\"a\" row label=\"Radio suelto deshabilitado\">\r\n              <is-radio value=\"a\">Disponible</is-radio>\r\n              <is-radio value=\"b\" disabled>No disponible</is-radio>\r\n              <is-radio value=\"c\">Disponible</is-radio>\r\n            </is-radio-group>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radio-group readonly value=\"auto\">…</is-radio-group>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "title": "En un formulario",
+      "lede": "El grupo publica una entrada <code class=\"code\">name=value</code> y, con\r\n          <code class=\"code\">required</code>, bloquea el envío mientras no haya selección.\r\n          <code class=\"code\">reset()</code> vuelve al <code class=\"code\">value</code> inicial.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<form id=\"demoForm\">\r\n            <div class=\"demo-row\" style=\"flex-direction:column;align-items:flex-start;gap:.9rem\">\r\n              <is-radio-group name=\"pago\" required label=\"Forma de pago\" hint=\"Obligatorio\">\r\n                <is-radio value=\"tarjeta\">Tarjeta</is-radio>\r\n                <is-radio value=\"transferencia\">Transferencia</is-radio>\r\n                <is-radio value=\"efectivo\">Efectivo</is-radio>\r\n              </is-radio-group>\r\n              <div class=\"demo-row\" style=\"gap:.5rem\">\r\n                <is-button color=\"brand\" id=\"btnSend\">Enviar</is-button>\r\n                <is-button variant=\"outlined\" id=\"btnReset\">Reset</is-button>\r\n              </div>\r\n            </div>\r\n          </form>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"log\" id=\"formLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Envía sin elegir nada para ver la validación.</div></div>"
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "title": "Teclado",
+      "lede": "Patrón ARIA <em>radiogroup</em>: el grupo entero ocupa una sola parada de tabulación\r\n          (<em>roving tabindex</em>). Solo el radio seleccionado —o el primero habilitado si no hay\r\n          selección— tiene <code class=\"code\">tabindex=\"0\"</code>.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Tecla",
+            "Acción"
+          ],
+          "rows": [
+            [
+              "<code>Tab</code>",
+              "entra y sale del grupo (una sola parada)"
+            ],
+            [
+              "<code>↓</code> <code>→</code>",
+              "siguiente radio habilitado, con vuelta al primero"
+            ],
+            [
+              "<code>↑</code> <code>←</code>",
+              "anterior radio habilitado, con vuelta al último"
+            ],
+            [
+              "<code>Inicio</code>",
+              "primer radio habilitado"
+            ],
+            [
+              "<code>Fin</code>",
+              "último radio habilitado"
+            ],
+            [
+              "<code>Espacio</code>",
+              "selecciona el radio enfocado"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Las flechas mueven foco y selección a la vez, saltando los deshabilitados. Con\r\n          <code class=\"code\">readonly</code> mueven solo el foco.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-radio-group value=\"b\" label=\"Prueba el teclado\" hint=\"Los pares están deshabilitados\">\r\n            <is-radio value=\"a\" disabled>Uno (disabled)</is-radio>\r\n            <is-radio value=\"b\">Dos</is-radio>\r\n            <is-radio value=\"c\" disabled>Tres (disabled)</is-radio>\r\n            <is-radio value=\"d\">Cuatro</is-radio>\r\n            <is-radio value=\"e\">Cinco</is-radio>\r\n          </is-radio-group>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Los tokens <code class=\"code\">--is-radio-*</code> se heredan: ponlos en el grupo (o en cualquier\r\n          ancestro) para tematizar todas sus opciones de golpe. Un <code class=\"code\">is-radio</code> suelto\r\n          (sin grupo) se marca solo, útil para maquetas; el valor de formulario siempre lo publica el grupo, así\r\n          nunca hay dos radios marcados con el mismo <code class=\"code\">name</code>.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>is-radio-group",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>name</code> <code>value</code>",
+              "clave y valor en FormData; el grupo es el dueño del valor"
+            ],
+            [
+              "<code>label</code> <code>hint</code>",
+              "texto o slots homónimos"
+            ],
+            [
+              "<code>orientation</code>",
+              "<code>vertical</code> (default) · <code>horizontal</code>"
+            ],
+            [
+              "<code>row</code>",
+              "boolean, alias de <code>orientation=\"horizontal\"</code>; pierde ante <code>orientation</code> explícita"
+            ],
+            [
+              "<code>variant</code>",
+              "<code>brand</code> (default) · <code>neutral</code> · <code>success</code> · <code>warning</code> · <code>danger</code>; lo heredan los radios"
+            ],
+            [
+              "<code>label-placement</code>",
+              "<code>end</code> (default) · <code>start</code> · <code>top</code> · <code>bottom</code>; lo heredan los radios"
+            ],
+            [
+              "<code>error</code>",
+              "boolean · etiqueta, hint y controles en color de peligro + <code>aria-invalid</code>"
+            ],
+            [
+              "<code>error-text</code>",
+              "mensaje; sustituye al hint e implica <code>error</code>"
+            ],
+            [
+              "<code>readonly</code>",
+              "boolean · bloquea el cambio, mantiene valor y foco"
+            ],
+            [
+              "<code>disabled</code> <code>required</code>",
+              "boolean"
+            ],
+            [
+              "propiedades JS",
+              "<code>value</code> <code>name</code> <code>orientation</code> <code>row</code> <code>variant</code> <code>labelPlacement</code> <code>error</code> <code>errorText</code> <code>readonly</code> <code>disabled</code> <code>required</code> <code>label</code> <code>hint</code> <code>radios</code> <code>form</code> <code>validity</code>"
+            ],
+            [
+              "métodos",
+              "<code>focus()</code> <code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity(msg)</code>"
+            ],
+            [
+              "slots",
+              "default (<code>is-radio</code>) · <code>label</code> · <code>hint</code> · <code>error-text</code>"
+            ],
+            [
+              "parts",
+              "<code>form-control</code> <code>label</code> <code>base</code> <code>hint</code> <code>error-text</code>"
+            ],
+            [
+              "states",
+              "<code>disabled</code> <code>readonly</code> <code>error</code> <code>blank</code>"
+            ],
+            [
+              "evento",
+              "<code>is-change</code> · detail <code>{ value }</code>"
+            ]
+          ]
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>is-radio",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "si falta, usa el texto de la etiqueta (sin la <code>description</code>)"
+            ],
+            [
+              "<code>checked</code>",
+              "boolean · lo escribe el grupo"
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean · el teclado del grupo lo salta"
+            ],
+            [
+              "<code>variant</code>",
+              "sobrescribe el del grupo; sin atributo, hereda"
+            ],
+            [
+              "<code>label-placement</code>",
+              "sobrescribe el del grupo; sin atributo, hereda"
+            ],
+            [
+              "propiedades JS",
+              "<code>value</code> <code>checked</code> <code>disabled</code> <code>variant</code> <code>labelPlacement</code> <code>group</code>"
+            ],
+            [
+              "métodos",
+              "<code>syncFromGroup()</code> — lo llama el grupo al repartir herencia"
+            ],
+            [
+              "slots",
+              "default (etiqueta) · <code>description</code>"
+            ],
+            [
+              "parts",
+              "<code>base</code> <code>control</code> <code>dot</code> <code>text</code> <code>label</code> <code>description</code>"
+            ],
+            [
+              "states",
+              "<code>placement-start|top|bottom</code> · <code>readonly</code> · <code>error</code> (heredados del grupo)"
+            ],
+            [
+              "evento",
+              "<code>is-radio-select</code> · detail <code>{ value }</code> · lo consume el grupo"
+            ],
+            [
+              "tokens",
+              "<code>--is-radio-size</code> <code>--is-radio-bg</code> <code>--is-radio-bg-hover</code> <code>--is-radio-border</code> <code>--is-radio-accent</code> <code>--is-radio-dot</code> <code>--is-radio-focus</code> <code>--is-radio-halo-size</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

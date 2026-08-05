@@ -1,0 +1,62 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-inline-edit",
+  "category": "forms",
+  "title": "<is-inline-edit>",
+  "titleHtml": true,
+  "styles": ".ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }\r\n    .ie-row > span.label { font-size: .82rem; color: var(--is-text-soft); width: 7rem; flex: 0 0 auto; }\r\n    .ie-row p { margin: 0; font-size: .82rem; color: var(--is-text-dim); }",
+  "storageKey": "docs-is-inline-edit",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-inline-edit>",
+      "lede": "Texto plano que se vuelve editable al clic. Enter guarda y sale. Esc cancela y revierte. Blur guarda por defecto; usá <code class=\"code\">cancel-on-blur</code> para invertirlo.",
+      "blocks": []
+    },
+    {
+      "id": "texto",
+      "title": "Texto",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"ie-row\">\r\n            <span class=\"label\">Nombre</span>\r\n            <is-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></is-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Email</span>\r\n            <is-inline-edit id=\"ie2\" value=\"caro@empresa.co\"></is-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Vacío</span>\r\n            <is-inline-edit placeholder=\"Clic para escribir\"></is-inline-edit>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "textarea",
+      "title": "Multilínea",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-inline-edit mode=\"textarea\" rows=\"3\" value=\"Acá podés tipear varias líneas. Enter adentro inserta un salto de línea; afuera del área Enter sigue guardando.\" style=\"--is-inline-edit-min-h: 4.5rem; width: 100%;\"></is-inline-edit>"
+        }
+      ]
+    },
+    {
+      "id": "contenido",
+      "title": "Slot display (HTML personalizado)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Si el slot <code class=\"code\">display</code> tiene contenido, ése se muestra en lectura; al editar vuelve al editor interno.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-inline-edit value=\"InSoft\" style=\"font-size:1.15rem; font-weight:600;\">\r\n            <span slot=\"display\"><is-icon icon=\"mdi:office-building\" style=\"vertical-align:middle\"></is-icon> InSoft S.A.</span>\r\n          </is-inline-edit>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API JS",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const ie = document.querySelector('is-inline-edit');\r\nie.value              // string actual\r\nie.editing            // boolean\r\nie.edit()             // entra en modo edición (programáticamente)\r\nie.save()             // guarda y sale\r\nie.cancel()           // revierte y sale\r\nie.addEventListener('is-save',   e => console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));\r\nie.addEventListener('is-cancel', e => ...);\r\nie.addEventListener('is-edit',   () => ...);\r\n\r\n// form-associated\r\n// <form><is-inline-edit name=\"label\"></is-inline-edit></form>\r\nnew FormData(form).get('label')  // = ie.value",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

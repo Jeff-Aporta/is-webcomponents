@@ -1,0 +1,89 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-progress-bar",
+  "category": "feedback",
+  "title": "Progress Bar",
+  "titleHtml": false,
+  "styles": ".pb-demo { max-width: 28rem; display: flex; flex-direction: column; gap: 0.85rem; }\r\n    .pb-meta {\r\n      display: flex; justify-content: space-between; align-items: baseline;\r\n      font-size: 0.9rem; color: var(--is-text-soft);\r\n    }\r\n    .pb-meta strong { color: var(--is-text); font-variant-numeric: tabular-nums; }\r\n    .pb-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }",
+  "storageKey": "docs-is-progress-bar",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Progress Bar",
+      "lede": "<code class=\"code\">&lt;is-progress-bar&gt;</code>",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">Barra de progreso determinada (<code class=\"code\">value</code> 0–100) o indeterminada.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"pb-demo\">\r\n            <is-progress-bar value=\"65\" label=\"Subiendo archivo\"></is-progress-bar>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "interactive",
+      "title": "Contador interactivo",
+      "lede": "Cada clic avanza el progreso; Reset vuelve a 0. El <code class=\"code\">value</code>\r\n          y la etiqueta se actualizan en vivo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"pb-demo\">\r\n            <div class=\"pb-meta\">\r\n              <span id=\"pbStatus\">Listo para empezar</span>\r\n              <strong><span id=\"pbPct\">0</span>%</strong>\r\n            </div>\r\n            <is-progress-bar id=\"pbLive\" value=\"0\" label=\"Progreso 0%\"></is-progress-bar>\r\n            <div class=\"pb-actions\">\r\n              <is-button id=\"pbPlus\" color=\"brand\">\r\n                <is-icon slot=\"start\" icon=\"mdi:plus\"></is-icon>\r\n                +10\r\n              </is-button>\r\n              <is-button id=\"pbMinus\" variant=\"outlined\">\r\n                <is-icon slot=\"start\" icon=\"mdi:minus\"></is-icon>\r\n                −10\r\n              </is-button>\r\n              <is-button id=\"pbReset\" variant=\"plain\">\r\n                <is-icon slot=\"start\" icon=\"mdi:restart\"></is-icon>\r\n                Reset\r\n              </is-button>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "let value = 0;\r\nconst bar = document.querySelector('#pbLive');\r\n\r\ndocument.querySelector('#pbPlus').addEventListener('click', () => {\r\n  value = Math.min(100, value + 10);\r\n  bar.value = value;\r\n  bar.label = `Progreso ${value}%`;\r\n});\r\n\r\ndocument.querySelector('#pbReset').addEventListener('click', () => {\r\n  value = 0;\r\n  bar.value = 0;\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "states",
+      "title": "Estados",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"pb-demo\">\r\n            <is-progress-bar value=\"30\" label=\"30%\"></is-progress-bar>\r\n            <is-progress-bar value=\"100\" label=\"Completado\"\r\n              style=\"--indicator-color: var(--is-color-success)\"></is-progress-bar>\r\n            <is-progress-bar indeterminate label=\"Procesando\"></is-progress-bar>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-progress-bar value=\"65\" label=\"Carga\"></is-progress-bar>\r\n<is-progress-bar indeterminate label=\"Procesando\"></is-progress-bar>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "0–100 (propiedad reflectada)"
+            ],
+            [
+              "<code>label</code>",
+              "aria-label / valuetext"
+            ],
+            [
+              "<code>indeterminate</code>",
+              "Animación continua"
+            ],
+            [
+              "<code>--indicator-color</code>",
+              "Color del fill"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

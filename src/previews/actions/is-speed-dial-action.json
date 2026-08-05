@@ -1,0 +1,39 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-speed-dial-action",
+  "category": "actions",
+  "title": "<is-speed-dial-action>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-speed-dial-action de InSoft.",
+  "styles": ".sd-stage { position:relative; transform:translateZ(0); height:320px;\r\n      border:1px dashed var(--is-border); border-radius:.6rem; }",
+  "storageKey": "docs-is-speed-dial-action",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-speed-dial-action>",
+      "lede": "Cada acción que despliega un <code class=\"code\">&lt;is-speed-dial&gt;</code>, con su icono y su etiqueta.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"sd-stage\">\r\n            <is-speed-dial direction=\"up\" open>\r\n              <is-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></is-speed-dial-action>\r\n            </is-speed-dial>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<div class=\"sd-stage\">\r\n  <is-speed-dial direction=\"up\" open>\r\n    <is-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></is-speed-dial-action>\r\n    <is-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></is-speed-dial-action>\r\n    <is-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></is-speed-dial-action>\r\n  </is-speed-dial>\r\n</div>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-speed-dial&gt; — FAB que despliega un abanico de acciones. Cada acción es un &lt;is-speed-dial-action&gt; hijo con icon + label. El dial hereda del FAB de la marca (radius, shadow, accent) pero evita tener que registrar otro elemento raíz solo para eso. Atributos icon          icono con el dial CERRADO (default mdi:plus) open-icon     icono con el dial ABIERTO (default mdi:close). El trigger reusa &lt;is-check-icon-button&gt;, que hace el switch entre los dos iconos en vez de rotar uno solo. label         aria-label del trigger direction     up (default) | down | left | right | radial open          boolean — controlado, refleja estado distance      espacio entre trigger y acciones (default .25rem) Data props (mismo espiritu que data-theme / data-palette: configuracion declarativa y dinamica, sin API imperativa): data-layout    radial (default con direction=\"radial\") | grid | flex Como se distribuyen las acciones. `grid` y `flex` reparten dentro del wrapper con layout nativo, sin coordenadas. data-wrapper   selector CSS del area que ACOTA las acciones. Ninguna accion puede salirse de esta caja. Si no se da, se usa el ancestro que crea containing block y, si no, el viewport. data-start-angle  grados del primer item; 0 = derecha, -90 = arriba. Default: se elige segun el espacio libre alrededor. data-sweep     clockwise (default) | counter-clockwise data-arc       amplitud del abanico en grados (default 360; se recorta solo si el trigger esta pegado a un borde) data-radius    radio en px del primer anillo Los nombres sin prefijo (arc, sweep, boundary...) se siguen aceptando. Reparto: mientras quepan, las acciones se reparten en ANILLOS concentricos (panal) con los anillos alternos desfasados medio paso. Los anillos se recortan al wrapper: si un anillo no cabe entero, no se usa. Cuando ya no queda area radial para todas, el componente marca data-packed y las acciones pasan a un GRID dentro del wrapper, que por construccion no puede desbordarlo. Slots default    &lt;is-speed-dial-action&gt;… Eventos is-toggle  detail: { open } is-select  detail: { action }   — cuando se elige una acción Cada &lt;is-speed-dial-action&gt; acepta: icon, label, color (brand|neutral|success|warning|danger), href, disabled El clic dispara is-select y, si no está disabled ni tiene href, cierra el dial.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/actions/speed-dial.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

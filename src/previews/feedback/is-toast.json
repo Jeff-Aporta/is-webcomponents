@@ -1,0 +1,86 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-toast",
+  "category": "feedback",
+  "title": "<is-toast>",
+  "titleHtml": true,
+  "storageKey": "docs-is-toast",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-toast>",
+      "lede": "Contenedor fijo de notificaciones. Crea ítems con <code class=\"code\">create()</code> o declara <code class=\"code\">&lt;is-toast-item&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-button color=\"brand\" id=\"btn-brand\">brand</is-button>\r\n            <is-button color=\"success\" id=\"btn-success\">success</is-button>\r\n            <is-button color=\"warning\" id=\"btn-warning\">warning</is-button>\r\n            <is-button color=\"danger\" id=\"btn-danger\">danger</is-button>\r\n            <is-button color=\"neutral\" id=\"btn-sticky\">sticky (duration 0)</is-button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "const toaster = document.getElementById('toaster');\r\n\r\ndocument.getElementById('btn-brand').addEventListener('click', () => {\r\n  toaster.create('Mensaje brand', { variant: 'brand' });\r\n});\r\ndocument.getElementById('btn-success').addEventListener('click', () => {\r\n  toaster.create('Operación correcta', { variant: 'success' });\r\n});\r\ndocument.getElementById('btn-warning').addEventListener('click', () => {\r\n  toaster.create('Revisa los datos', { variant: 'warning' });\r\n});\r\ndocument.getElementById('btn-danger').addEventListener('click', () => {\r\n  toaster.create('Error al guardar', { variant: 'danger' });\r\n});\r\ndocument.getElementById('btn-sticky').addEventListener('click', () => {\r\n  toaster.create('Quédate hasta cerrar', { variant: 'neutral', duration: 0 });\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "placement",
+      "title": "Placement",
+      "lede": "Seis anclas: <code class=\"code\">top|bottom</code> ×\r\n          <code class=\"code\">start|center|end</code>\r\n          (logical; en LTR start=izquierda, end=derecha).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-button data-place=\"top-start\">top-start</is-button>\r\n            <is-button data-place=\"top-center\">top-center</is-button>\r\n            <is-button data-place=\"top-end\">top-end</is-button>\r\n            <is-button data-place=\"bottom-start\">bottom-start</is-button>\r\n            <is-button data-place=\"bottom-center\">bottom-center</is-button>\r\n            <is-button data-place=\"bottom-end\">bottom-end</is-button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "const toaster = document.getElementById('toaster');\r\n\r\ndocument.querySelectorAll('[data-place]').forEach((btn) => {\r\n  btn.addEventListener('click', () => {\r\n    const placement = btn.dataset.place; // top-start | top-center | …\r\n    toaster.placement = placement;\r\n    toaster.create(placement, { variant: 'brand' });\r\n  });\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "promise",
+      "title": "Promise",
+      "lede": "<code class=\"code\">toaster.promise(p, { loading, success, error })</code> muestra un\r\n          toast loading con spinner y lo actualiza en sitio al resolver o rechazar.\r\n          Cada callback acepta string, función o <code class=\"code\">{ message, options }</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-button id=\"btn-promise-ok\" color=\"success\">Simular éxito</is-button>\r\n            <is-button id=\"btn-promise-err\" color=\"danger\">Simular error</is-button>\r\n            <is-button id=\"btn-promise-dynamic\" color=\"brand\">Mensaje dinámico</is-button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "// success/error como string\r\ntoaster.promise(guardar(), {\r\n  loading: 'Guardando…',\r\n  success: 'Guardado',\r\n  error: 'No se pudo guardar',\r\n});\r\n\r\n// success como función que recibe data / error que recibe err\r\ntoaster.promise(cargarFilas(), {\r\n  loading: 'Cargando filas…',\r\n  success: (data) => `${data.total} filas cargadas`,\r\n  error: (err) => `Falló: ${err.message}`,\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>placement</code>",
+              "top-start · top-center · top-end · bottom-start · bottom-center · bottom-end (default bottom-end)"
+            ],
+            [
+              "<code>create(msg, opts)</code>",
+              "variant, icon, duration, allowHtml → Promise&lt;is-toast-item&gt;"
+            ],
+            [
+              "<code>is-toast-item</code>",
+              "variant, duration, open · show()/hide() · is-after-show/hide"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

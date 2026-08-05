@@ -1,0 +1,59 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-qrcode",
+  "category": "media",
+  "title": "<is-qrcode>",
+  "titleHtml": true,
+  "styles": ".qr-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
+  "storageKey": "docs-is-qrcode",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-qrcode>",
+      "lede": "QR en SVG. Carga bajo demanda la lib <code>qrcode-generator</code> (MIT, esm.sh) — sin esa red no funciona.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"qr-row\">\r\n            <is-qrcode id=\"qr1\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></is-qrcode>\r\n            <is-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></is-qrcode>\r\n            <is-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></is-qrcode>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "estilo",
+      "title": "Personalizar",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"qr-row\">\r\n            <is-qrcode value=\"https://insoft.co\" fg=\"var(--is-accent)\" bg=\"var(--is-bg-soft)\" cell=\"8\"></is-qrcode>\r\n            <is-qrcode value=\"https://contapyme.co\" fg=\"var(--is-success, #16a34a)\" cell=\"8\"></is-qrcode>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "export",
+      "title": "Exportar a PNG",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const qr = document.querySelector('is-qrcode');\r\nconst dataURL = await qr.dataURL('image/png');\r\n// descargar, pegar en input[type=file], etc.",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "// Atributos\r\n// value        texto a codificar (requerido)\r\n// level        L | M | Q | H   (default L)\r\n// cell         tamaño en píxeles de cada módulo (default 4)\r\n// margin       módulos de zona de silencio (default 2)\r\n// fg, bg       colores\r\n\r\n// API JS\r\nqr.svg;        // nodo SVG\r\nqr.dataURL('image/png').then(url => /* … */);\r\n\r\n// Dependencias\r\n// Carga qrcode-generator@1.4.4 desde esm.sh. Si tu build no tiene\r\n// red, vendelo o usa otro loader.",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

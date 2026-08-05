@@ -1,53 +1,75 @@
-# Previews controlados — `is-preview-component` + `ISComponentPreview`
+# Previews controlados — JSON homogéneo + `is-preview-component`
 
 ## Objetivo
 
-Homogeneizar la documentación/demo de cada `is-*`: mismo chrome, misma tipología
-de bloques, sin HTML gordo por componente. El **comportamiento** no se expresa
-como string/`eval`: vive en métodos reales de una clase controladora.
+Un solo chrome (`<is-preview-component>`). **Cero HTML por componente.**
+Toda la documentación/demo vive en JSON con interface compartida
+(`PreviewDefinition`, `$schema: "is-preview/v1"`).
 
 ## Piezas
 
 | Pieza | Rol |
 | --- | --- |
-| `src/previews/_kit/types.d.ts` | Tipos: `PreviewDefinition`, `PreviewSection`, `PreviewBlock`, … |
-| `src/previews/_kit/ISComponentPreview.js` | Clase base: `definition` + `mount`/`unmount` + `this.on()` |
-| `src/previews/_kit/render.js` | Pinta sections/blocks → DOM |
-| `src/components/layout/preview-component.js` | `<is-preview-component>` shell (split + TOC) |
-| `src/previews/<cat>/<tag>.preview.js` | Controlador concreto (datos + mount) |
-| `src/previews/registry.js` | `tag → import()` de controladores |
-| `src/previews/_shell.html` | Pantalla completa / deep-link `?tag=` |
-| HTML legado `*.html` | Shell mínimo si migrado; iframe completo si no |
+| `src/previews/_kit/types.d.ts` | Interface canónica |
+| `src/previews/<cat>/<tag>.json` | Datos del preview (sections/blocks) |
+| `src/previews/behaviors/<tag>.js` | `mount`/`unmount` opcionales (sin eval) |
+| `src/previews/catalog.js` | AUTO: `tag → { json, behavior? }` |
+| `src/previews/registry.js` | `loadPreview(tag)` → `JsonPreview` |
+| `src/components/layout/preview-component.js` | Shell split + TOC |
+| `src/previews/_shell.html` | **Único** HTML: fullscreen `?tag=` |
 
-## Qué va en string (OK)
+## Schema (`is-preview/v1`)
 
-- Markup estático de demos (`block.kind === 'demo'`, HTML)
-- Snippets de código (`kind: 'code'`)
-- CSS local del preview (`definition.styles`)
-- Tablas / callouts / ledes
+```json
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-button",
+  "category": "actions",
+  "title": "<is-button>",
+  "titleHtml": true,
+  "description": "…",
+  "styles": "/* CSS local */",
+  "storageKey": "docs-is-button",
+  "hasBehavior": false,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "…",
+      "lede": "…",
+      "blocks": [
+        { "kind": "demo", "html": "<is-button>Hola</is-button>" },
+        { "kind": "callout", "html": "…" },
+        { "kind": "code", "code": "…", "lang": "html" },
+        { "kind": "table", "columns": ["A"], "rows": [["b"]] },
+        { "kind": "html", "html": "<h3>…</h3>" },
+        { "kind": "lede", "html": "…" }
+      ]
+    }
+  ]
+}
+```
 
-## Qué NO va en string
+`kind` cerrados: `demo | callout | code | html | table | lede`.
 
-- Listeners (`is-change`, clicks de API live)
-- Lógica de `whenDefined`, logs, toggles de props
-- Todo eso: `mount(ctx)` con `this.on(el, type, handler)` (AbortController)
+## Qué va en JSON vs behavior
 
-## Migrar un preview
+- **JSON:** markup de demos, snippets, CSS local, tablas, textos.
+- **Behavior:** listeners, `whenDefined`, API live. Export `mount(ctx)` / `unmount(ctx)`.
+- **NUNCA** lógica en string/`eval` dentro del JSON.
 
-1. Crear `src/previews/<cat>/is-foo.preview.js` extendiendo `ISComponentPreview`.
-2. Registrar en `registry.js` → `LOADERS`.
-3. Sustituir el HTML por shell mínimo (ver `is-button-group.html`).
-4. Probar: galería (host in-app) + iframe/fullscreen (`_shell.html?tag=`).
-5. `node tests/preview-controller.test.mjs`
+## Migración / regenerar catalog
 
-## Shell de la galería
+```bash
+node scripts/migrate-previews-to-json.mjs   # solo si reaparecen HTML
+# catalog.js se regenera ahí; si solo añades un JSON a mano, añade la entrada en catalog.js
+```
 
-`index.html` usa `<is-preview-component>` si `hasControlledPreview(tag)`; si no,
-iframe al HTML legado. No borrar HTML no migrados.
+## Galería
 
-## DO / DON'T
+`index.html` monta siempre `loadPreview(tag)` in-app. Fullscreen → `_shell.html?tag=`.
 
-- DO: un `.preview.js` por tag migrado; HTML ≤ shell.
-- DO: tipar bloques con `kind` discriminado.
-- DON'T: `eval`, `new Function`, ni `onclick="..."` generados desde strings de lógica.
-- DON'T: reinventar el chrome (split/TOC/demo) fuera de `is-preview-component`.
+## Tests
+
+- `tests/preview-json-contract.test.mjs` — todos los JSON + catalog ↔ manifest
+- `tests/preview-controller.test.mjs` — kit + un solo HTML
+- `tests/preview-paths.test.mjs` — refs de `_shell.html`

@@ -1,0 +1,72 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-combobox",
+  "category": "forms",
+  "title": "<is-combobox>",
+  "titleHtml": true,
+  "storageKey": "docs-is-combobox",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-combobox>",
+      "lede": "Input + listbox filtrable con teclado y opciones <code>is-option</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"med\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"barr\">Barranquilla</is-option>\r\n            <is-option value=\"buc\">Bucaramanga</is-option>\r\n          </is-combobox>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Con valor inicial",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-combobox label=\"País\" value=\"co\" required style=\"max-width:20rem\">\r\n            <option value=\"co\">Colombia</option>\r\n            <option value=\"mx\">México</option>\r\n            <option value=\"es\">España</option>\r\n          </is-combobox>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-combobox label=\"Ciudad\" clearable>\r\n  <is-option value=\"bog\">Bogotá</is-option>\r\n  <is-option value=\"med\">Medellín</is-option>\r\n</is-combobox>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Eventos: <code>is-change</code>, <code>is-input</code>, <code>is-show</code>, <code>is-hide</code>. Teclado: ↑↓ Enter Esc.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>label</code> / <code>hint</code>",
+              "—"
+            ],
+            [
+              "<code>name</code> / <code>value</code>",
+              "—"
+            ],
+            [
+              "<code>placeholder</code>",
+              "—"
+            ],
+            [
+              "<code>disabled</code> / <code>required</code>",
+              "false"
+            ],
+            [
+              "<code>open</code> / <code>clearable</code>",
+              "false"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

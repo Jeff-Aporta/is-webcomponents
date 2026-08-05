@@ -1,0 +1,55 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-loading-overlay",
+  "category": "isp",
+  "title": "<is-loading-overlay>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-loading-overlay de InSoft.",
+  "storageKey": "docs-is-loading-overlay",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-loading-overlay>",
+      "lede": "Capa de bloqueo a pantalla completa con spinner y mensaje. No se cierra\r\n          con Escape ni con clic fuera: solo el código que la abrió la cierra.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"loBtn\" color=\"brand\">Simular guardado (2 s)</is-button>\r\n          <is-loading-overlay id=\"loDemo\" message=\"Guardando…\" scroll-lock></is-loading-overlay>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-loading-overlay open message=\"Guardando…\" scroll-lock></is-loading-overlay>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "indicador",
+      "title": "Indicador propio",
+      "lede": "El slot por defecto reemplaza al <code class=\"code\">&lt;is-spinner&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"loBtn2\" color=\"neutral\" variant=\"outlined\">Ver con icono</is-button>\r\n          <is-loading-overlay id=\"loDemo2\" message=\"Consolidando periodo…\">\r\n            <is-icon icon=\"mdi:database-sync\"></is-icon>\r\n          </is-loading-overlay>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-loading-overlay message=\"Consolidando…\">\r\n  <is-icon icon=\"mdi:database-sync\"></is-icon>\r\n</is-loading-overlay>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Abrir y cerrar desde código",
+      "lede": "Cierra siempre en un <code class=\"code\">finally</code>: si la promesa falla y nadie\r\n          la cierra, la aplicación queda bloqueada.",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const ov = document.querySelector('is-loading-overlay');\r\nov.show();\r\ntry { await guardar(); } finally { ov.hide(); }",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

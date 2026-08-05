@@ -1,0 +1,242 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-breadcrumb",
+  "category": "navigation",
+  "title": "<is-breadcrumb>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-breadcrumb e is-breadcrumb-item de InSoft.",
+  "storageKey": "docs-is-breadcrumb",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-breadcrumb>",
+      "lede": "Migas de pan accesibles con marcado <code class=\"code\">&lt;nav&gt;</code>,\r\n          ARIA roles y separador automático entre items.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-breadcrumb label=\"Catálogo\">\r\n            <is-breadcrumb-item href=\"/\">Catálogo</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/ropa\">Ropa</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/ropa/mujer\">Mujer</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\">Camisetas</is-breadcrumb-item>\r\n          </is-breadcrumb>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-breadcrumb</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Catálogo\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"/\"</span><span class=\"tag\">></span>Catálogo<span class=\"tag\"></is-breadcrumb-item></span>\r\n  <span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"/ropa\"</span><span class=\"tag\">></span>Ropa<span class=\"tag\"></is-breadcrumb-item></span>\r\n  <span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"/ropa/mujer\"</span><span class=\"tag\">></span>Mujer<span class=\"tag\"></is-breadcrumb-item></span>\r\n  <span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"\"</span><span class=\"tag\">></span>Camisetas<span class=\"tag\"></is-breadcrumb-item></span>\r\n<span class=\"tag\"></is-breadcrumb></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "spa",
+      "title": "SPAs — eventos de click",
+      "lede": "Sin <code class=\"code\">href</code>, los items se renderizan como texto sin enlace. Conecta tú los handlers.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-breadcrumb id=\"bcSpa\" label=\"Navegación SPA\">\r\n            <is-breadcrumb-item>Inicio</is-breadcrumb-item>\r\n            <is-breadcrumb-item>Productos</is-breadcrumb-item>\r\n            <is-breadcrumb-item>Detalle</is-breadcrumb-item>\r\n          </is-breadcrumb>\r\n          <p id=\"bcLog\">Última navegación: ninguna</p>"
+        },
+        {
+          "kind": "code",
+          "code": "bc.addEventListener('click', (e) => {\r\n  const item = e.target.closest('is-breadcrumb-item');\r\n  if (item) console.log('item click', item.textContent.trim());\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "title": "Iconos en items",
+      "lede": "Usa el atributo <code class=\"code\">icon</code> o el slot <code class=\"code\">start</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <is-breadcrumb label=\"Inicio\">\r\n            <is-breadcrumb-item href=\"/\" icon=\"mdi:home\">Inicio</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/articulos\" icon=\"mdi:newspaper-variant\">Artículos</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\" icon=\"mdi:airplane\">Viajes</is-breadcrumb-item>\r\n          </is-breadcrumb>\r\n\r\n          <is-breadcrumb label=\"App\">\r\n            <is-breadcrumb-item href=\"/dashboard\">\r\n              <is-icon slot=\"start\" icon=\"mdi:view-dashboard\" aria-hidden=\"true\"></is-icon>\r\n              Dashboard\r\n            </is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/users\">\r\n              <is-icon slot=\"start\" icon=\"mdi:account-group\" aria-hidden=\"true\"></is-icon>\r\n              Usuarios\r\n            </is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\">\r\n              <is-icon slot=\"start\" icon=\"mdi:account\" aria-hidden=\"true\"></is-icon>\r\n              Perfil\r\n            </is-breadcrumb-item>\r\n          </is-breadcrumb>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:home\"</span><span class=\"tag\">></span>Inicio<span class=\"tag\"></is-breadcrumb-item></span>\r\n<span class=\"tag\"><is-breadcrumb-item</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"start\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:home\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  Inicio\r\n<span class=\"tag\"></is-breadcrumb-item></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "separator",
+      "title": "Separador custom",
+      "lede": "Cambia el slot <code class=\"code\">separator</code> de cada item — o sólo el último que se ignora.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-breadcrumb label=\"Slash\">\r\n            <is-breadcrumb-item href=\"/home\">\r\n              <span slot=\"separator\">/</span>\r\n              Inicio\r\n            </is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/docs\">\r\n              <span slot=\"separator\">/</span>\r\n              Docs\r\n            </is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\">\r\n              <span slot=\"separator\">/</span>\r\n              Guía\r\n            </is-breadcrumb-item>\r\n          </is-breadcrumb>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"/home\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"separator\"</span><span class=\"tag\">></span>/<span class=\"tag\"></span></span>\r\n  Inicio\r\n<span class=\"tag\"></is-breadcrumb-item></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa — <code class=\"code\">&lt;is-breadcrumb&gt;</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>label</code>",
+              "string",
+              "\"Ruta\"",
+              "aria-label del nav."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Breadcrumb-items."
+            ],
+            [
+              "<code>separator</code>",
+              "Icono o texto entre items. Cada item también acepta su propio separator via slot."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(breadcrumb)</code>",
+              "El wrapper &lt;nav&gt;."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h2>Referencia completa — <code class=\"code\">&lt;is-breadcrumb-item&gt;</code></h2>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>href</code>",
+              "string",
+              "—",
+              "Si está, renderiza <code>&lt;a&gt;</code>. <code>href=\"\"</code> = current page."
+            ],
+            [
+              "<code>target</code>",
+              "string",
+              "—",
+              "Pasado al <code>&lt;a&gt;</code>."
+            ],
+            [
+              "<code>rel</code>",
+              "string",
+              "—",
+              "Pasado al <code>&lt;a&gt;</code>."
+            ],
+            [
+              "<code>icon</code>",
+              "string",
+              "—",
+              "Iconify id por defecto (sin slot start)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Texto del item."
+            ],
+            [
+              "<code>start</code>",
+              "Icono al inicio."
+            ],
+            [
+              "<code>end</code>",
+              "Icono al final."
+            ],
+            [
+              "<code>separator</code>",
+              "Override del separador de este item."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(label)</code>",
+              "Etiqueta (texto o enlace)."
+            ],
+            [
+              "<code>::part(separator)</code>",
+              "Separador."
+            ],
+            [
+              "<code>::part(start)</code>",
+              "Wrapper del icono al inicio."
+            ],
+            [
+              "<code>::part(end)</code>",
+              "Wrapper del icono al final."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

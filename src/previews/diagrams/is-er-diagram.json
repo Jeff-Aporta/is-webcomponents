@@ -1,0 +1,147 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-er-diagram",
+  "category": "diagrams",
+  "title": "<is-er-diagram>",
+  "titleHtml": true,
+  "storageKey": "docs-is-er-diagram",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-er-diagram>",
+      "lede": "Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus\r\n          atributos y las relaciones entre ellas; el componente ubica las cajas,\r\n          rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Comparte motor con <code>&lt;is-flowchart&gt;</code>: mismo esquema JSON de\r\n          grupos/leyenda, mismo visor a pantalla completa y la misma animación tortuga.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-er-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"erDiagram\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"direction\": \"LR\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Facturación\", \"hue\": 199 },\r\n                    { \"id\": \"g2\", \"name\": \"Terceros\", \"hue\": 239 }\r\n                  ],\r\n                  \"entities\": [\r\n                    { \"id\": \"FACTURA\", \"name\": \"FACTURA\", \"group\": \"g1\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"cliente_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"fecha\", \"type\": \"date\" },\r\n                        { \"name\": \"total\", \"type\": \"decimal\" }\r\n                      ] },\r\n                    { \"id\": \"ITEM\", \"name\": \"ITEM_FACTURA\", \"group\": \"g1\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"factura_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"producto_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"cantidad\", \"type\": \"decimal\" }\r\n                      ] },\r\n                    { \"id\": \"CLIENTE\", \"name\": \"CLIENTE\", \"group\": \"g2\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\r\n                      ] },\r\n                    { \"id\": \"PRODUCTO\", \"name\": \"PRODUCTO\", \"group\": \"g2\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"nombre\", \"type\": \"varchar\" },\r\n                        { \"name\": \"precio\", \"type\": \"decimal\" }\r\n                      ] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"FACTURA\", \"to\": \"CLIENTE\", \"label\": \"pertenece a\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },\r\n                    { \"from\": \"FACTURA\", \"to\": \"ITEM\", \"label\": \"contiene\", \"fromCard\": \"one\", \"toCard\": \"many\", \"identifying\": true },\r\n                    { \"from\": \"ITEM\", \"to\": \"PRODUCTO\", \"label\": \"referencia\", \"fromCard\": \"zeroOrOne\", \"toCard\": \"zeroOrMany\", \"identifying\": false }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-er-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "cardinalidad",
+      "title": "Cardinalidad",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Cada extremo de una relación admite <code>one</code>, <code>many</code>,\r\n          <code>zeroOrOne</code> y <code>zeroOrMany</code>, dibujados como pata de\r\n          gallo / marca de uno / círculo de opcionalidad, igual que la notación\r\n          crow's foot clásica. <code>identifying: false</code> dibuja la línea punteada.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-er-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"erDiagram\": {\r\n                  \"direction\": \"LR\",\r\n                  \"entities\": [\r\n                    { \"id\": \"A\", \"name\": \"A\", \"attributes\": [{ \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" }] },\r\n                    { \"id\": \"B\", \"name\": \"B\", \"attributes\": [{ \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" }] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"A\", \"to\": \"B\", \"label\": \"1 a N\", \"fromCard\": \"one\", \"toCard\": \"many\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-er-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "<code>inline</code> · <code>viewer</code>",
+              "inline abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación."
+            ],
+            [
+              "<code>open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Esquema del JSON</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>direction</code>",
+              "<code>TB</code> · <code>BT</code> · <code>LR</code> (default) · <code>RL</code>."
+            ],
+            [
+              "<code>entities[].id</code>",
+              "Identificador que referencian las relaciones."
+            ],
+            [
+              "<code>entities[].attributes[].key</code>",
+              "<code>PK</code> · <code>FK</code>; se pinta como badge junto al nombre."
+            ],
+            [
+              "<code>entities[].group</code>",
+              "Id del grupo; tiñe el encabezado de la caja."
+            ],
+            [
+              "<code>relations[].fromCard</code> · <code>toCard</code>",
+              "<code>one</code> · <code>many</code> · <code>zeroOrOne</code> · <code>zeroOrMany</code>."
+            ],
+            [
+              "<code>relations[].identifying</code>",
+              "<code>true</code> (default, línea sólida) · <code>false</code> (línea punteada)."
+            ],
+            [
+              "<code>groups[].hue</code>",
+              "Tono HSL 0–360."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>payload</code>",
+              "Configuración JSON; alternativa al script hijo."
+            ],
+            [
+              "<code>layout</code>",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code>turtle</code>",
+              "API de la animación: play / pause / stop / next / prev."
+            ],
+            [
+              "<code>hiddenGroups</code>",
+              "Set de grupos ocultos; al cambiar, el diagrama se re-diseña sin esas entidades."
+            ],
+            [
+              "<code>is-render</code>",
+              "Evento: el SVG terminó de construirse."
+            ],
+            [
+              "<code>is-turtle-state</code>",
+              "Evento: estado de la animación."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

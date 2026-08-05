@@ -1,0 +1,49 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-org-chart",
+  "category": "diagrams",
+  "title": "<is-org-chart>",
+  "titleHtml": true,
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "storageKey": "docs-is-org-chart",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-org-chart>",
+      "lede": "Organigrama jerárquico a partir de un árbol JSON. Cada nodo tiene foto, nombre y cargo; los hijos se pliegan con el botón redondo.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "InSoft S.A.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-org-chart id=\"org\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"id\": \"ceo\",      \"title\": \"CEO\",                \"name\": \"Carolina Méndez\",  \"parent\": null },\r\n                { \"id\": \"cto\",      \"title\": \"CTO\",                \"name\": \"Pedro Castaño\",    \"parent\": \"ceo\" },\r\n                { \"id\": \"coo\",      \"title\": \"COO\",                \"name\": \"Sofía Vélez\",      \"parent\": \"ceo\" },\r\n                { \"id\": \"cfo\",      \"title\": \"CFO\",                \"name\": \"Jorge Arias\",      \"parent\": \"ceo\" },\r\n                { \"id\": \"eng-fe\",   \"title\": \"Eng. Frontend\",      \"name\": \"Valentina López\",  \"parent\": \"cto\" },\r\n                { \"id\": \"eng-be\",   \"title\": \"Eng. Backend\",       \"name\": \"Camilo Pérez\",     \"parent\": \"cto\" },\r\n                { \"id\": \"eng-ops\",  \"title\": \"DevOps\",             \"name\": \"Lina Mora\",        \"parent\": \"cto\" },\r\n                { \"id\": \"ops-1\",    \"title\": \"Operaciones\",        \"name\": \"Tomás Reyes\",      \"parent\": \"coo\" },\r\n                { \"id\": \"ops-2\",    \"title\": \"Operaciones LATAM\",  \"name\": \"Andrea Gil\",       \"parent\": \"coo\" },\r\n                { \"id\": \"fin-1\",    \"title\": \"Contabilidad\",       \"name\": \"Mario Quintero\",   \"parent\": \"cfo\" },\r\n                { \"id\": \"fin-2\",    \"title\": \"Tesorería\",          \"name\": \"Paula Restrepo\",   \"parent\": \"cfo\" }\r\n              ]\r\n            </script>\r\n          </is-org-chart>"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\">— clicks —</pre>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "// Datos\r\n// [\r\n//   { id, title, name, parent, photo? },\r\n//   ...\r\n// ]\r\n\r\nconst org = document.querySelector('is-org-chart');\r\norg.collapse(id); // o .expand(id) / .toggle(id)\r\n\r\norg.addEventListener('is-select', e => console.log(e.detail.id, e.detail.node));\r\norg.addEventListener('is-toggle', e => console.log('toggle', e.detail.id, 'collapsed=', e.detail.collapsed));\r\n\r\n// Atributos\r\n// direction    down (default) | up | right\r\n// node-width   default 200\r\n// node-height  default 78\r\n// gap          default 28",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

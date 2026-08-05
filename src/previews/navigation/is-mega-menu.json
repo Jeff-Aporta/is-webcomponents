@@ -1,0 +1,49 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-mega-menu",
+  "category": "navigation",
+  "title": "<is-mega-menu>",
+  "titleHtml": true,
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "storageKey": "docs-is-mega-menu",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-mega-menu>",
+      "lede": "Mega-menú con varias columnas y un bloque destacado opcional. Útil para e-commerce, portales masivos o headers corporativos.",
+      "blocks": []
+    },
+    {
+      "id": "basic",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<header style=\"display:flex; align-items:center; gap:.5rem; padding:1rem 0;\">\r\n            <strong style=\"font-size:1rem\">InSoft</strong>\r\n            <is-mega-menu label=\"Catálogo\" placement=\"bottom-start\" hover>\r\n              <div slot=\"column\" title=\"Muebles\">\r\n                <a href=\"/sillas\">Sillas</a>\r\n                <a href=\"/mesas\">Mesas</a>\r\n                <a href=\"/escritorios\">Escritorios</a>\r\n                <a href=\"/estanterias\">Estanterías</a>\r\n              </div>\r\n              <div slot=\"column\" title=\"Iluminación\">\r\n                <a href=\"/lamparas\">Lámparas</a>\r\n                <a href=\"/techo\">Plafón de techo</a>\r\n                <a href=\"/exterior\">Exterior</a>\r\n                <a href=\"/tiras\">Tiras LED</a>\r\n              </div>\r\n              <div slot=\"column\" title=\"Cocina\">\r\n                <a href=\"/mesones\">Mesones</a>\r\n                <a href=\"/griferia\">Grifería</a>\r\n                <a href=\"/electrodomesticos\">Electrodomésticos</a>\r\n              </div>\r\n              <div slot=\"feature\">\r\n                <strong style=\"font-size:1.05rem\">Envío gratis</strong>\r\n                <p style=\"margin:0; color:var(--is-text-soft); font-size:.82rem\">En pedidos mayores a $300.000 antes del 30 de septiembre.</p>\r\n                <a href=\"/promo\" style=\"margin-top:auto; padding:.55rem .85rem; background:var(--is-accent); color:var(--is-on-accent,#fff); border-radius:999px; text-decoration:none; font-size:.82rem; align-self:flex-start\">Ver promoción</a>\r\n              </div>\r\n            </is-mega-menu>\r\n            <is-mega-menu label=\"Soporte\" placement=\"bottom-start\">\r\n              <div slot=\"column\" title=\"Canales\">\r\n                <a href=\"/chat\">Chat en vivo</a>\r\n                <a href=\"/covid\">Reporte de fallas</a>\r\n                <a href=\"/ticket\">Tickets</a>\r\n              </div>\r\n              <div slot=\"column\" title=\"Recursos\">\r\n                <a href=\"/docs\">Documentación</a>\r\n                <a href=\"/faq\">Preguntas frecuentes</a>\r\n              </div>\r\n            </is-mega-menu>\r\n          </header>\r\n          <p class=\"kbd-hint\" style=\"color:var(--is-text-soft); font-size:.78rem\">El primer mega-menú abre al pasar el cursor (<code>hover</code>); el segundo, al clic.</p>"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\">— clicks —</pre>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "// Atributos\r\n// label        texto del trigger\r\n// icon         icono del trigger\r\n// placement    bottom-start | bottom | bottom-end | ...\r\n// width        ancho del panel (default min(60rem, 92vw))\r\n// hover        boolean — abre al hover, no al clic\r\n//\r\n// Slots\r\n// default      columnas (slot=\"column\" con atributo title)\r\n// slot=\"feature\"  bloque destacado (imagen/CTA extra)\r\n//\r\n// Eventos\r\nmenu.addEventListener('is-select', e => console.log(e.detail.href));",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

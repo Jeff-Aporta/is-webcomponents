@@ -1,0 +1,91 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-date-field",
+  "category": "forms",
+  "title": "<is-date-field>",
+  "titleHtml": true,
+  "storageKey": "docs-is-date-field",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-date-field>",
+      "lede": "Campo editable por secciones (DateField de MUI X). Cada sección es un spinbutton: flechas, dígitos, izquierda/derecha, Retroceso. El orden lo decide el locale.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-field id=\"df\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></is-date-field>\r\n          <is-date-field label=\"Date\" value=\"2026-07-30\" locale=\"en-US\" clearable></is-date-field>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--is-mono);font-size:.85em\"></p>"
+        }
+      ]
+    },
+    {
+      "id": "time",
+      "title": "<is-time-field>",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-time-field label=\"Hora 24 h\" value=\"14:05\" hour24 locale=\"es\"></is-time-field>\r\n          <is-time-field label=\"Time\" value=\"14:05\" ampm locale=\"en-US\"></is-time-field>\r\n          <is-time-field label=\"Con segundos\" value=\"14:05:30\" hour24 seconds locale=\"es\"></is-time-field>"
+        }
+      ]
+    },
+    {
+      "id": "datetime",
+      "title": "<is-date-time-field>",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-time-field id=\"dtf\" label=\"Fecha y hora\" value=\"2026-07-30T09:30\" locale=\"es\" clearable></is-date-time-field>"
+        }
+      ]
+    },
+    {
+      "id": "validation",
+      "title": "Validación",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-field label=\"Requerido\" required locale=\"es\"></is-date-field>\r\n          <is-date-field label=\"Min 2026-08-01\" value=\"2026-07-15\" min=\"2026-08-01\" locale=\"es\"></is-date-field>\r\n          <is-date-field label=\"Solo lectura\" value=\"2026-07-30\" readonly locale=\"es\"></is-date-field>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Eventos: <code>is-change</code>, <code>is-input</code>. Slots: <code>start</code>, <code>end</code>. Form-associated.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "fecha · HH:mm[:ss] · yyyy-mm-ddTHH:mm"
+            ],
+            [
+              "<code>label</code> / <code>hint</code>",
+              "—"
+            ],
+            [
+              "<code>min</code> / <code>max</code> / <code>required</code>",
+              "—"
+            ],
+            [
+              "<code>ampm</code> / <code>hour24</code> / <code>seconds</code>",
+              "según locale · fuerza 24 h · off"
+            ],
+            [
+              "<code>clearable</code> / <code>disabled</code> / <code>readonly</code>",
+              "off"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

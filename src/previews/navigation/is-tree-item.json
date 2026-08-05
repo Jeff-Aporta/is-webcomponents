@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-tree-item",
+  "category": "navigation",
+  "title": "<is-tree-item>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-tree-item de InSoft.",
+  "storageKey": "docs-is-tree-item",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-tree-item>",
+      "lede": "Nodo de un <code class=\"code\">&lt;is-tree&gt;</code>. Anidando items se construye la jerarquía; <code class=\"code\">expanded</code> controla el pliegue.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tree>\r\n            <is-tree-item expanded><is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>Contabilidad\r\n              <is-tree-item><is-icon slot=\"start\" icon=\"mdi:file-document\"></is-icon>Balance</is-tree-item>\r\n              <is-tree-item><is-icon slot=\"start\" icon=\"mdi:file-document\"></is-icon>Estado de resultados</is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item><is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>Inventario</is-tree-item>\r\n          </is-tree>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-tree>\r\n  <is-tree-item expanded><is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>Contabilidad\r\n    <is-tree-item><is-icon slot=\"start\" icon=\"mdi:file-document\"></is-icon>Balance</is-tree-item>\r\n    <is-tree-item><is-icon slot=\"start\" icon=\"mdi:file-document\"></is-icon>Estado de resultados</is-tree-item>\r\n  </is-tree-item>\r\n  <is-tree-item><is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>Inventario</is-tree-item>\r\n</is-tree>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-tree&gt; + &lt;is-tree-item&gt; — Web Components (vanilla, zero dependencies). Árbol jerárquico con expansión, selección, checkboxes, navegación por teclado (Arrow, Home, End, Enter, Space) e iconos por slot. &lt;is-tree selection=\"leaf\"&gt; &lt;is-tree-item expanded&gt; &lt;is-icon slot=\"icon\" icon=\"mdi:folder\"&gt;&lt;/is-icon&gt; Documentos &lt;is-tree-item&gt; … &lt;/is-tree-item&gt; &lt;is-tree-item&gt; … &lt;/is-tree-item&gt; &lt;/is-tree-item&gt; &lt;/is-tree&gt; Atributos &lt;is-tree&gt; selection  none | single | leaf | multiple (default 'single') expanded   boolean — todos los nodos empiezan expandidos. Atributos &lt;is-tree-item&gt; expanded         boolean selected         boolean disabled         boolean has-children     boolean (si lo declaras, se ignoran los hijos declarados) lazy             boolean — carga hijos bajo demanda. Slots &lt;is-tree-item&gt; (default)   label. icon        icono a la izquierda. expand-icon override del caret. checkbox    override del checkbox. Eventos is-tree-select    detail: { item, selected, selectedItems } is-tree-expand    detail: { item, expanded } is-tree-toggle    detail: { item, expanded } CSS Parts is-tree: ::part(base) ::part(items) is-tree-item: ::part(item) ::part(item-content) ::part(item-children) ::part(checkbox) ::part(expand-toggle)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/tree.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

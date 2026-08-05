@@ -1,0 +1,112 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-confirm-modal",
+  "category": "feedback",
+  "title": "<is-confirm-modal>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-confirm-modal de InSoft.",
+  "storageKey": "docs-is-confirm-modal",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-confirm-modal>",
+      "lede": "Confirmación en modal centrado con backdrop. Para decisiones que\r\n          merecen foco total. Si prefieres confirmar en línea sin tapar la\r\n          pantalla, usa <code class=\"code\">&lt;is-popconfirm&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"btnDelete\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Eliminar cuenta\r\n          </is-button>\r\n          <is-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"Se borrarán todos tus datos. Esta acción no se puede deshacer.\">\r\n            <is-button slot=\"confirm\" color=\"danger\">Sí, eliminar</is-button>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n          </is-confirm-modal>\r\n          <p id=\"cmLog\">Última acción: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">id</span>=<span class=\"val\">\"btnDelete\"</span><span class=\"tag\">></span>Eliminar cuenta<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"><is-confirm-modal</span> <span class=\"attr\">for</span>=<span class=\"val\">\"btnDelete\"</span> <span class=\"attr\">heading</span>=<span class=\"val\">\"Eliminar cuenta\"</span> <span class=\"attr\">message</span>=<span class=\"val\">\"¿Seguro?\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"confirm\"</span> <span class=\"attr\">color</span>=<span class=\"val\">\"danger\"</span><span class=\"tag\">></span>Sí, eliminar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"cancel\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></is-confirm-modal></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "title": "Slot message",
+      "lede": "El contenido del slot <code class=\"code\">message</code> reemplaza el atributo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"cmMega\" color=\"brand\">Publicar cambios</is-button>\r\n          <is-confirm-modal for=\"cmMega\" heading=\"Publicar a producción\">\r\n            <div slot=\"message\">\r\n              <strong>Vas a publicar 12 cambios.</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Los usuarios verán la nueva versión de inmediato.\r\n              </p>\r\n            </div>\r\n            <is-button slot=\"cancel\">Revisar de nuevo</is-button>\r\n            <is-button slot=\"confirm\" color=\"brand\">Publicar</is-button>\r\n          </is-confirm-modal>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-confirm-modal&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>for</code>",
+              "string",
+              "—",
+              "id del trigger que abre el modal."
+            ],
+            [
+              "<code>heading</code>",
+              "string",
+              "—",
+              "Título del modal."
+            ],
+            [
+              "<code>message</code>",
+              "string",
+              "—",
+              "Texto del mensaje."
+            ],
+            [
+              "<code>open</code>",
+              "boolean",
+              "false",
+              "Estado controlado."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-confirm-show</code>",
+              "Modal visible."
+            ],
+            [
+              "<code>is-confirm-hide</code>",
+              "Modal se cierra."
+            ],
+            [
+              "<code>is-confirm-confirm</code>",
+              "Click en confirmar."
+            ],
+            [
+              "<code>is-confirm-cancel</code>",
+              "Click en cancelar, backdrop o Escape."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

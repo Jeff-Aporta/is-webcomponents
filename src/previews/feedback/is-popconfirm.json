@@ -1,0 +1,129 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-popconfirm",
+  "category": "feedback",
+  "title": "<is-popconfirm>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-popconfirm de InSoft.",
+  "storageKey": "docs-is-popconfirm",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-popconfirm>",
+      "lede": "Cuadro de confirmación rápido anclado a un botón. Sin modal, sin tapar\r\n          la pantalla. Perfecto para \"¿Seguro que quieres borrar?\" en línea.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"btnDelete\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Borrar elemento\r\n          </is-button>\r\n          <is-popconfirm for=\"btnDelete\" message=\"¿Seguro que quieres borrarlo? Esta acción no se puede deshacer.\" placement=\"bottom-end\">\r\n            <is-button slot=\"confirm\" color=\"danger\">Sí, borrar</is-button>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n          </is-popconfirm>\r\n          <p id=\"pcLog\">Última acción: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">id</span>=<span class=\"val\">\"btnDelete\"</span><span class=\"tag\">></span>Borrar<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"><is-popconfirm</span> <span class=\"attr\">for</span>=<span class=\"val\">\"btnDelete\"</span> <span class=\"attr\">message</span>=<span class=\"val\">\"¿Seguro?\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"confirm\"</span> <span class=\"attr\">color</span>=<span class=\"val\">\"danger\"</span><span class=\"tag\">></span>Sí, borrar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"cancel\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></is-popconfirm></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "placements",
+      "title": "Posiciones",
+      "lede": "top, top-start, top-end, bottom, bottom-start, bottom-end, start, end.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;gap:0.5rem;flex-wrap:wrap\">\r\n            <is-button id=\"pc1\">top</is-button>\r\n            <is-popconfirm for=\"pc1\" message=\"Top popconfirm\" placement=\"top\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc2\">top-start</is-button>\r\n            <is-popconfirm for=\"pc2\" placement=\"top-start\" message=\"Top start\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc3\">top-end</is-button>\r\n            <is-popconfirm for=\"pc3\" placement=\"top-end\" message=\"Top end\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc4\">bottom</is-button>\r\n            <is-popconfirm for=\"pc4\" placement=\"bottom\" message=\"Bottom\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc5\">bottom-start</is-button>\r\n            <is-popconfirm for=\"pc5\" placement=\"bottom-start\" message=\"Bottom start\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc6\">bottom-end</is-button>\r\n            <is-popconfirm for=\"pc6\" placement=\"bottom-end\" message=\"Bottom end\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc7\">start</is-button>\r\n            <is-popconfirm for=\"pc7\" placement=\"start\" message=\"Start\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc8\">end</is-button>\r\n            <is-popconfirm for=\"pc8\" placement=\"end\" message=\"End\"></is-popconfirm>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "title": "Slot message",
+      "lede": "El contenido del slot <code class=\"code\">message</code> reemplaza el atributo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"pcMega\">Power action</is-button>\r\n          <is-popconfirm for=\"pcMega\" placement=\"bottom\" hide-arrow>\r\n            <div slot=\"message\">\r\n              <strong>¿Reiniciar el servidor?</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Esto detendrá todos los servicios activos.\r\n              </p>\r\n            </div>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n            <is-button slot=\"confirm\" color=\"danger\">Reiniciar</is-button>\r\n          </is-popconfirm>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-popconfirm&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>for</code>",
+              "string",
+              "—",
+              "id del trigger."
+            ],
+            [
+              "<code>message</code>",
+              "string",
+              "—",
+              "Texto del mensaje."
+            ],
+            [
+              "<code>placement</code>",
+              "top | bottom | start | end | top-start | top-end | bottom-start | bottom-end",
+              "top",
+              "Posición."
+            ],
+            [
+              "<code>hide-arrow</code>",
+              "boolean",
+              "false",
+              "Oculta la flecha."
+            ],
+            [
+              "<code>open</code>",
+              "boolean",
+              "false",
+              "Estado controlado."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-popconfirm-show</code>",
+              "Popconfirm visible."
+            ],
+            [
+              "<code>is-popconfirm-hide</code>",
+              "Popconfirm se cierra."
+            ],
+            [
+              "<code>is-popconfirm-confirm</code>",
+              "Click en confirmar."
+            ],
+            [
+              "<code>is-popconfirm-cancel</code>",
+              "Click en cancelar."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

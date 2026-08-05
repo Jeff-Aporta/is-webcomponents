@@ -1,0 +1,108 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-tooltip",
+  "category": "feedback",
+  "title": "<is-tooltip>",
+  "titleHtml": true,
+  "styles": ".grid { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }",
+  "storageKey": "docs-is-tooltip",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-tooltip>",
+      "lede": "Tip breve anclado con <code class=\"code\">for</code>. Depende de <code class=\"code\">is-popover</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"tip-target\">Hover Me</is-button>\r\n          <is-tooltip for=\"tip-target\">This is a tooltip</is-tooltip>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-button id=\"tip-target\">Hover Me</is-button>\r\n<is-tooltip for=\"tip-target\">This is a tooltip</is-tooltip>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "placement",
+      "title": "Placement",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"t-top\">top</is-button>\r\n          <is-tooltip for=\"t-top\" placement=\"top\">top</is-tooltip>\r\n          <is-button id=\"t-right\">right</is-button>\r\n          <is-tooltip for=\"t-right\" placement=\"right\">right</is-tooltip>\r\n          <is-button id=\"t-bottom\">bottom</is-button>\r\n          <is-tooltip for=\"t-bottom\" placement=\"bottom\">bottom</is-tooltip>\r\n          <is-button id=\"t-left\">left</is-button>\r\n          <is-tooltip for=\"t-left\" placement=\"left\">left</is-tooltip>"
+        }
+      ]
+    },
+    {
+      "id": "trigger",
+      "title": "Trigger click / manual",
+      "lede": "Clic fuera o <code class=\"code\">Escape</code> cierra el tip.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"t-click\">Click to Toggle</is-button>\r\n          <is-tooltip for=\"t-click\" trigger=\"click\">Click nuevamente o fuera para cerrar</is-tooltip>\r\n          <is-button id=\"t-manual-btn\">Toggle Manually</is-button>\r\n          <is-tooltip id=\"t-manual\" for=\"t-manual-btn\" trigger=\"manual\">Manual tooltip</is-tooltip>"
+        }
+      ]
+    },
+    {
+      "id": "html",
+      "title": "Contenido HTML largo",
+      "lede": "El slot acepta markup. Útil para tips densos; preferir\r\n          <code class=\"code\">trigger=\"click\"</code> si hay enlaces o texto seleccionable.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"t-html\" color=\"brand\">Auditoría · tip largo</is-button>\r\n          <is-tooltip\r\n            for=\"t-html\"\r\n            trigger=\"click\"\r\n            placement=\"bottom-start\"\r\n            style=\"--max-width: 22rem\"\r\n          >\r\n            <p><strong>Resumen de cumplimiento</strong></p>\r\n            <p>\r\n              Este tip muestra contenido enriquecido para revisar wrapping,\r\n              contraste y dismiss al clic fuera.\r\n            </p>\r\n            <ul>\r\n              <li>Tokens <code>--is-*</code> y tipografía del tema</li>\r\n              <li>Máximo ancho vía <code>--max-width</code></li>\r\n              <li>Enlace de ejemplo:\r\n                <a href=\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tooltip_role\" target=\"_blank\" rel=\"noopener\">ARIA tooltip</a>\r\n              </li>\r\n            </ul>\r\n            <p>Última revisión: sprint actual · owner: Design System</p>\r\n          </is-tooltip>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-tooltip for=\"t-html\" trigger=\"click\" style=\"--max-width:22rem\">\r\n  <p><strong>Resumen</strong></p>\r\n  <ul><li>…</li></ul>\r\n</is-tooltip>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>for</code>",
+              "id del target"
+            ],
+            [
+              "<code>trigger</code>",
+              "hover focus | click | manual — click/manual: fuera + Escape cierra"
+            ],
+            [
+              "<code>--max-width</code>",
+              "ancho del tip (default 16rem)"
+            ],
+            [
+              "slot",
+              "texto o HTML (p, ul, a, code…)"
+            ],
+            [
+              "<code>placement</code> <code>distance</code> <code>skidding</code>",
+              "posicionamiento"
+            ],
+            [
+              "<code>show()</code> <code>hide()</code>",
+              "métodos"
+            ],
+            [
+              "events",
+              "is-show, is-after-show, is-hide, is-after-hide"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

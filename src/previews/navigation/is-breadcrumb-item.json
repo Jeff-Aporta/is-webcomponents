@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-breadcrumb-item",
+  "category": "navigation",
+  "title": "<is-breadcrumb-item>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-breadcrumb-item de InSoft.",
+  "storageKey": "docs-is-breadcrumb-item",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-breadcrumb-item>",
+      "lede": "Cada eslabón de un <code class=\"code\">&lt;is-breadcrumb&gt;</code>. Puede ser enlace (<code class=\"code\">href</code>) o texto plano cuando es la página actual.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-breadcrumb>\r\n            <is-breadcrumb-item href=\"#\"><is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>Inicio</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"#\">Contabilidad</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"#\">Comprobantes</is-breadcrumb-item>\r\n            <is-breadcrumb-item>Detalle</is-breadcrumb-item>\r\n          </is-breadcrumb>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-breadcrumb>\r\n  <is-breadcrumb-item href=\"#\"><is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>Inicio</is-breadcrumb-item>\r\n  <is-breadcrumb-item href=\"#\">Contabilidad</is-breadcrumb-item>\r\n  <is-breadcrumb-item href=\"#\">Comprobantes</is-breadcrumb-item>\r\n  <is-breadcrumb-item>Detalle</is-breadcrumb-item>\r\n</is-breadcrumb>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-breadcrumb-item&gt; — un paso individual dentro de un &lt;is-breadcrumb&gt;. Si tiene `href` (incluido `href=\"\"`), el item se renderiza como &lt;a href&gt;. Con `href=\"\"` se marca como current page (aria-current=\"page\", CSS [current]). Si no tiene href, se renderiza como &lt;span&gt; (SPAs: el desarrollador maneja eventos). Atributos href    string  — opcional: el item se vuelve enlace. \"\" = current page. target  string  — opcional. rel     string  — opcional. icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start. Slots (default)  texto del item. start      icono propio al inicio (gana sobre icon). end        icono propio al final. separator  override del separador (chevron-right por default). CSS Parts: ::part(label) ::part(separator) ::part(start) ::part(end)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/breadcrumb-item.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

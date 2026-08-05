@@ -1,0 +1,39 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-command-palette",
+  "category": "overlays",
+  "title": "<is-command-palette>",
+  "titleHtml": true,
+  "styles": ".hero-cmd {\r\n      position: relative;\r\n      min-height: 22rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      display: grid; place-items: center;\r\n      text-align: center;\r\n      padding: 1rem;\r\n    }\r\n    .hero-cmd h3 { margin: 0; font-size: 1.4rem; }\r\n    .hero-cmd kbd {\r\n      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\r\n      font-size: .85rem;\r\n      padding: .15rem .5rem;\r\n      border-radius: 6px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg-elev);\r\n    }\r\n    .trigger-btn {\r\n      margin-top: .85rem;\r\n      font: inherit;\r\n      padding: .55rem 1rem;\r\n      border-radius: 999px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg-elev);\r\n      color: inherit;\r\n      cursor: pointer;\r\n    }\r\n    .trigger-btn:hover { border-color: var(--is-accent); color: var(--is-accent); }",
+  "storageKey": "docs-is-command-palette",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-command-palette>",
+      "lede": "Paleta modal al estilo <kbd>⌘K</kbd> / <kbd>Ctrl</kbd>+<kbd>K</kbd>. Búsqueda difusa sobre una lista de comandos configurada vía JSON.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Probalo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"hero-cmd\">\r\n            <div>\r\n              <h3>Buscá un comando</h3>\r\n              <p style=\"color:var(--is-text-soft)\">Apretá <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd>, o:</p>\r\n              <button class=\"trigger-btn\" id=\"openBtn\">Abrir paleta</button>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const cm = document.querySelector('is-command-palette');\r\ncm.open();\r\ncm.close();\r\ncm.toggle();\r\n\r\ncm.addEventListener('is-select', e => console.log(e.detail.command.title));\r\ncm.addEventListener('is-open',   () => ...);\r\ncm.addEventListener('is-close',  () => ...);\r\n\r\n// Atributos\r\n// hotkey        \"mod+k\" (default), \"ctrl+k\", \"cmd+k\", \"mod+/\", \"\" (desactivado)\r\n// placeholder   texto del input\r\n// max-results   tope de resultados (default 12)\r\n// empty-text    texto cuando no hay resultados\r\n\r\n// Comandos vía <script type=\"application/json\">:\r\n// { id, title, group, icon, hint, keywords?, disabled?, run? (función, pero\r\n//    serializable solo con JSON.stringify — usa is-select para acciones reales)\r\n// }\r\n\r\n// Footer vía <div slot=\"footer\">…</div>",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

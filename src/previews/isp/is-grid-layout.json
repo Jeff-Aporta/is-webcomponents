@@ -1,0 +1,99 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-grid-layout",
+  "category": "isp",
+  "title": "<is-grid-layout>",
+  "titleHtml": true,
+  "storageKey": "docs-is-grid-layout",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-grid-layout>",
+      "lede": "Grid declarativo. Port del <code class=\"code\">GridLayout.svelte</code> de ISP:\r\n          <code class=\"code\">cells</code> acepta un número o una track list CSS cruda.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-grid-layout cells=\"3\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <is-card>1</is-card><is-card>2</is-card><is-card>3</is-card>\r\n            <is-card>4</is-card><is-card>5</is-card><is-card>6</is-card>\r\n          </is-grid-layout>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "cells-fit · track list · direction",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Con <code class=\"code\">cells-fit</code> las celdas son <code class=\"code\">max-content</code> en vez de <code class=\"code\">minmax(0, 1fr)</code>.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-grid-layout cells=\"3\" cells-fit gap=\"0.5rem\" justify=\"start\" style=\"width:100%\">\r\n            <is-tag>corto</is-tag><is-tag>un poco más largo</is-tag><is-tag>x</is-tag>\r\n          </is-grid-layout>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-grid-layout cells=\"12rem 1fr\" gap=\"0.75rem\" items=\"center\" style=\"width:100%\">\r\n            <is-text color=\"neutral\">Etiqueta</is-text>\r\n            <is-input placeholder=\"valor\"></is-input>\r\n            <is-text color=\"neutral\">Otra</is-text>\r\n            <is-input placeholder=\"valor\"></is-input>\r\n          </is-grid-layout>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-grid-layout direction=\"row\" cells=\"2\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <is-card>fila 1 · col 1</is-card>\r\n            <is-card>fila 2 · col 1</is-card>\r\n            <is-card>fila 1 · col 2</is-card>\r\n            <is-card>fila 2 · col 2</is-card>\r\n          </is-grid-layout>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-grid-layout cells=\"3\" gap=\"0.5rem\">…</is-grid-layout>\r\n<is-grid-layout cells=\"12rem 1fr\" items=\"center\">…</is-grid-layout>\r\n<is-grid-layout direction=\"row\" cells=\"2\">…</is-grid-layout>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Valores / default"
+          ],
+          "rows": [
+            [
+              "<code>cells</code>",
+              "número → <code>repeat(n, minmax(0,1fr))</code> · o track list CSS cruda"
+            ],
+            [
+              "<code>cells-fit</code>",
+              "boolean → <code>repeat(n, max-content)</code>"
+            ],
+            [
+              "<code>direction</code>",
+              "column (default, alimenta columnas) · row (filas + auto-flow columna)"
+            ],
+            [
+              "<code>gap</code>",
+              "valor CSS · default responsive 0.2 / 0.35 / 0.5rem"
+            ],
+            [
+              "<code>justify</code>",
+              "start · center · end · stretch · between · around · evenly · …"
+            ],
+            [
+              "<code>items</code>",
+              "start · center · end · stretch · baseline · normal"
+            ],
+            [
+              "<code>inline</code>",
+              "boolean → <code>display: inline-grid</code>"
+            ],
+            [
+              "<code>cscroll</code>",
+              "boolean → <code>overflow: auto</code>"
+            ],
+            [
+              "<code>data-sizew</code> · <code>--lerpw</code>",
+              "igual que <code>&lt;is-block-layout&gt;</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

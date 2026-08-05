@@ -1,0 +1,117 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-treemap",
+  "category": "data-viz",
+  "title": "<is-treemap>",
+  "titleHtml": true,
+  "storageKey": "docs-is-treemap",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-treemap>",
+      "lede": "Treemap anidado en SVG, con el algoritmo squarified (Bruls/Huizing/\r\n          van Wijk): rectángulos con aspect-ratio cercano a 1, sin huecos ni\r\n          solapes.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Declaras nodos con <code>value</code> y un <code>parent</code>\r\n          opcional; el componente arma la jerarquía y tesela cada nivel dentro\r\n          del rect de su padre.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-treemap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"treemap\": {\r\n                  \"title\": \"Estructura del activo\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"inv\", \"label\": \"Inventario\", \"value\": 3200, \"hue\": 239 },\r\n                    { \"id\": \"inv-a\", \"parent\": \"inv\", \"label\": \"Materia prima\", \"value\": 1800 },\r\n                    { \"id\": \"inv-b\", \"parent\": \"inv\", \"label\": \"Producto terminado\", \"value\": 900 },\r\n                    { \"id\": \"inv-c\", \"parent\": \"inv\", \"label\": \"En proceso\", \"value\": 500 },\r\n                    { \"id\": \"cxc\", \"label\": \"Cartera\", \"value\": 2100, \"hue\": 199 },\r\n                    { \"id\": \"cxc-a\", \"parent\": \"cxc\", \"label\": \"Corriente\", \"value\": 1500 },\r\n                    { \"id\": \"cxc-b\", \"parent\": \"cxc\", \"label\": \"Vencida\", \"value\": 600 },\r\n                    { \"id\": \"caja\", \"label\": \"Caja y bancos\", \"value\": 1400, \"hue\": 38 },\r\n                    { \"id\": \"otros\", \"label\": \"Otros activos\", \"value\": 700, \"hue\": 280 }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-treemap>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "<code>inline</code> · <code>viewer</code>",
+              "inline abre el visor al hacer clic; viewer activa hover y tooltips."
+            ],
+            [
+              "<code>open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Esquema del JSON</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>nodes[].id</code>",
+              "Identificador único."
+            ],
+            [
+              "<code>nodes[].parent</code>",
+              "Id del nodo padre; sin él, el nodo es un nivel raíz."
+            ],
+            [
+              "<code>nodes[].label</code>",
+              "Texto del rótulo (se oculta si el rect es muy chico)."
+            ],
+            [
+              "<code>nodes[].value</code>",
+              "Peso del rectángulo entre sus hermanos."
+            ],
+            [
+              "<code>nodes[].hue</code>",
+              "Tono HSL 0–360; si no se fija, hereda el de su rama de nivel raíz."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>payload</code>",
+              "Configuración JSON; alternativa al script hijo."
+            ],
+            [
+              "<code>layout</code>",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code>is-render</code>",
+              "Evento: el SVG terminó de construirse."
+            ],
+            [
+              "<code>is-open-viewer</code>",
+              "Evento: se solicitó abrir el visor a pantalla completa."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

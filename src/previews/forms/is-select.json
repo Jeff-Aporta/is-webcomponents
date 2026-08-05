@@ -1,0 +1,386 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-select",
+  "category": "forms",
+  "title": "<is-select>",
+  "titleHtml": true,
+  "styles": ".stack { display: grid; gap: 1.25rem; max-width: 22rem; }\r\n    .grid { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }\r\n    .grid is-select { min-width: 15rem; }",
+  "storageKey": "docs-is-select",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-select>",
+      "lede": "Select form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-select/\" target=\"_blank\" rel=\"noreferrer\">Select de MUI</a>:\r\n          variants, error, selección múltiple con chips o checkmarks, agrupación, opciones ricas y typeahead.\r\n          El listbox vive en un <code class=\"code\">&lt;dialog&gt;</code> del top layer, así que nunca lo recorta\r\n          el <code class=\"code\">overflow</code> de un ancestro.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-select id=\"sel\" label=\"Ciudad\" hint=\"Una sola opción\" placeholder=\"Elige una ciudad…\" name=\"city\" clearable style=\"max-width:20rem\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"med\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"barr\">Barranquilla</is-option>\r\n            <is-option value=\"buc\" disabled>Bucaramanga (no disponible)</is-option>\r\n            <is-option value=\"cta\">Cartagena</is-option>\r\n          </is-select>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log-single\">value: —</p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select label=\"Ciudad\" name=\"city\" placeholder=\"Elige una ciudad…\" clearable>\r\n  <is-option value=\"bog\">Bogotá</is-option>\r\n  <is-option value=\"med\">Medellín</is-option>\r\n</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "appearance",
+      "title": "Appearance",
+      "lede": "<code class=\"code\">appearance</code> equivale a las <em>variants</em> de MUI:\r\n          <code class=\"code\">outlined</code> (default), <code class=\"code\">filled</code> y\r\n          <code class=\"code\">underlined</code> (el <em>standard</em> de MUI).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-select label=\"outlined (default)\" value=\"a\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n              <is-option value=\"b\">Opción B</is-option>\r\n            </is-select>\r\n            <is-select variant=\"filled\" label=\"filled\" value=\"a\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n              <is-option value=\"b\">Opción B</is-option>\r\n            </is-select>\r\n            <is-select variant=\"underlined\" label=\"underlined\" value=\"a\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n              <is-option value=\"b\">Opción B</is-option>\r\n            </is-select>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select variant=\"filled\" label=\"filled\">…</is-select>\r\n<is-select variant=\"underlined\" label=\"underlined\">…</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "labels",
+      "title": "Label, hint y error",
+      "lede": "<code class=\"code\">label</code>, <code class=\"code\">hint</code> y <code class=\"code\">placeholder</code>\r\n          aceptan texto o los slots homónimos. Con <code class=\"code\">error</code> el borde y la etiqueta pasan a\r\n          color de peligro y <code class=\"code\">error-text</code> sustituye al <code class=\"code\">hint</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-select label=\"Con hint\" hint=\"Texto de ayuda\" placeholder=\"Sin selección…\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n              <is-option value=\"b\">Opción B</is-option>\r\n            </is-select>\r\n            <is-select label=\"Con error\" hint=\"Este hint queda oculto\" error error-text=\"Selecciona un valor válido\" placeholder=\"Sin selección…\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n              <is-option value=\"b\">Opción B</is-option>\r\n            </is-select>\r\n            <is-select variant=\"filled\" label=\"Error + filled\" error error-text=\"Campo obligatorio\" placeholder=\"Sin selección…\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n              <is-option value=\"b\">Opción B</is-option>\r\n            </is-select>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select label=\"Con error\" error error-text=\"Selecciona un valor válido\">\r\n  <is-option value=\"a\">Opción A</is-option>\r\n</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "width",
+      "title": "Ancho",
+      "lede": "<code class=\"code\">full-width</code> estira el control al 100 % del contenedor.\r\n          <code class=\"code\">auto-width</code> hace que el listbox se ajuste a su contenido en lugar de al ancho\r\n          del trigger (el <code class=\"code\">autoWidth</code> de MUI); se mantiene dentro del viewport.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;gap:1rem;max-width:32rem\">\r\n            <is-select label=\"normal\" placeholder=\"Ancho por defecto…\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n              <is-option value=\"b\">Opción B</is-option>\r\n            </is-select>\r\n            <is-select full-width label=\"full-width\" placeholder=\"Ocupa el resto…\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n              <is-option value=\"b\">Opción B</is-option>\r\n            </is-select>\r\n          </div>\r\n          <div style=\"max-width:11rem;margin-top:1rem\">\r\n            <is-select auto-width label=\"auto-width\" placeholder=\"Estrecho…\">\r\n              <is-option value=\"a\">Contenido bastante más ancho que el trigger</is-option>\r\n              <is-option value=\"b\">Corto</is-option>\r\n              <is-option value=\"c\">Otra opción de longitud considerable</is-option>\r\n            </is-select>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select full-width label=\"full-width\">…</is-select>\r\n<is-select auto-width label=\"auto-width\">…</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "max-visible",
+      "title": "Alto del listbox",
+      "lede": "<code class=\"code\">max-visible</code> fija el alto máximo del listbox en número de opciones antes de\r\n          hacer scroll. Admite decimales (<code class=\"code\">4.5</code>) para dejar media fila a la vista y\r\n          sugerir que hay más.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-select max-visible=\"4.5\" label=\"max-visible 4.5\" placeholder=\"20 opciones…\" style=\"max-width:18rem\">\r\n            <is-option value=\"1\">Opción 01</is-option>\r\n            <is-option value=\"2\">Opción 02</is-option>\r\n            <is-option value=\"3\">Opción 03</is-option>\r\n            <is-option value=\"4\">Opción 04</is-option>\r\n            <is-option value=\"5\">Opción 05</is-option>\r\n            <is-option value=\"6\">Opción 06</is-option>\r\n            <is-option value=\"7\">Opción 07</is-option>\r\n            <is-option value=\"8\">Opción 08</is-option>\r\n            <is-option value=\"9\">Opción 09</is-option>\r\n            <is-option value=\"10\">Opción 10</is-option>\r\n            <is-option value=\"11\">Opción 11</is-option>\r\n            <is-option value=\"12\">Opción 12</is-option>\r\n          </is-select>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select max-visible=\"4.5\">…</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "multiple",
+      "title": "Selección múltiple",
+      "lede": "Con <code class=\"code\">multiple</code>, <code class=\"code\">value</code> es una lista separada por comas\r\n          y en un <code class=\"code\">&lt;form&gt;</code> se envía una entrada de FormData por valor.\r\n          <code class=\"code\">selection-display</code> decide cómo se pinta la selección en el trigger:\r\n          <code class=\"code\">tags</code> (default), <code class=\"code\">text</code> o <code class=\"code\">count</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\" style=\"max-width:24rem\">\r\n            <is-select id=\"multi\" label=\"tags (default)\" hint=\"Chips con botón de quitar\" placeholder=\"Selecciona…\" name=\"stack\" multiple clearable value=\"js,css\">\r\n              <is-option value=\"js\">JavaScript</is-option>\r\n              <is-option value=\"ts\">TypeScript</is-option>\r\n              <is-option value=\"css\">CSS</is-option>\r\n              <is-option value=\"html\">HTML</is-option>\r\n              <is-option value=\"svelte\">Svelte</is-option>\r\n              <is-option value=\"wc\">Web Components</is-option>\r\n            </is-select>\r\n            <is-select label=\"text\" selection-display=\"text\" placeholder=\"Selecciona…\" multiple value=\"js,css,html\">\r\n              <is-option value=\"js\">JavaScript</is-option>\r\n              <is-option value=\"ts\">TypeScript</is-option>\r\n              <is-option value=\"css\">CSS</is-option>\r\n              <is-option value=\"html\">HTML</is-option>\r\n            </is-select>\r\n            <is-select label=\"count\" selection-display=\"count\" placeholder=\"Selecciona…\" multiple value=\"js,css,html\">\r\n              <is-option value=\"js\">JavaScript</is-option>\r\n              <is-option value=\"ts\">TypeScript</is-option>\r\n              <is-option value=\"css\">CSS</is-option>\r\n              <is-option value=\"html\">HTML</is-option>\r\n            </is-select>\r\n            <is-select label=\"limit-tags 2\" limit-tags=\"2\" placeholder=\"Selecciona…\" multiple value=\"js,ts,css,html\">\r\n              <is-option value=\"js\">JavaScript</is-option>\r\n              <is-option value=\"ts\">TypeScript</is-option>\r\n              <is-option value=\"css\">CSS</is-option>\r\n              <is-option value=\"html\">HTML</is-option>\r\n            </is-select>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log-multi\">values: —</p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select multiple label=\"Tecnologías\" value=\"js,css\">…</is-select>\r\n<is-select multiple selection-display=\"count\">…</is-select>\r\n<is-select multiple limit-tags=\"2\">…</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "checkmarks",
+      "title": "Checkmarks",
+      "lede": "<code class=\"code\">checkmarks</code> dibuja una casilla a la izquierda de cada opción del listbox, marcada\r\n          cuando la opción está seleccionada. Solo aplica en <code class=\"code\">multiple</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-select label=\"Personas\" checkmarks multiple selection-display=\"text\" placeholder=\"Selecciona…\" value=\"oliver,april\" style=\"max-width:22rem\">\r\n            <is-option value=\"oliver\">Oliver Hansen</is-option>\r\n            <is-option value=\"van\">Van Henry</is-option>\r\n            <is-option value=\"april\">April Tucker</is-option>\r\n            <is-option value=\"ralph\">Ralph Hubbard</is-option>\r\n            <is-option value=\"omar\">Omar Alexander</is-option>\r\n            <is-option value=\"carlos\">Carlos Abbott</is-option>\r\n          </is-select>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select multiple checkmarks selection-display=\"text\">\r\n  <is-option value=\"oliver\">Oliver Hansen</is-option>\r\n</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "groups",
+      "title": "Agrupación",
+      "lede": "El atributo <code class=\"code\">group</code> de <code class=\"code\">is-option</code> agrupa las opciones bajo\r\n          una cabecera no seleccionable (<code class=\"code\">role=\"group\"</code> +\r\n          <code class=\"code\">aria-labelledby</code>). Las opciones se reordenan por grupo respetando el orden de\r\n          aparición; las que no tienen <code class=\"code\">group</code> quedan arriba.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-select label=\"Categoría\" placeholder=\"Elige una…\" style=\"max-width:20rem\">\r\n            <is-option value=\"todas\">Todas</is-option>\r\n            <is-option value=\"op1\" group=\"Categoría 1\">Opción 1</is-option>\r\n            <is-option value=\"op2\" group=\"Categoría 1\">Opción 2</is-option>\r\n            <is-option value=\"op3\" group=\"Categoría 2\">Opción 3</is-option>\r\n            <is-option value=\"op4\" group=\"Categoría 2\">Opción 4</is-option>\r\n          </is-select>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select label=\"Categoría\">\r\n  <is-option value=\"todas\">Todas</is-option>\r\n  <is-option value=\"op1\" group=\"Categoría 1\">Opción 1</is-option>\r\n  <is-option value=\"op3\" group=\"Categoría 2\">Opción 3</is-option>\r\n</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "rich",
+      "title": "Opciones ricas",
+      "lede": "<code class=\"code\">is-option</code> acepta un slot <code class=\"code\">start</code> (icono o avatar) y un slot\r\n          <code class=\"code\">description</code> (texto secundario). El texto del slot por defecto sigue siendo la\r\n          etiqueta: lo de los slots con nombre no cuenta como tal.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-select label=\"Destino\" placeholder=\"Elige un destino…\" max-visible=\"4\" style=\"max-width:24rem\">\r\n            <is-option value=\"drive\">\r\n              <is-icon slot=\"start\" icon=\"mdi:google-drive\"></is-icon>\r\n              Google Drive\r\n              <span slot=\"description\">Sincroniza con tu cuenta corporativa</span>\r\n            </is-option>\r\n            <is-option value=\"s3\">\r\n              <is-icon slot=\"start\" icon=\"mdi:aws\"></is-icon>\r\n              Amazon S3\r\n              <span slot=\"description\">Bucket privado, cifrado en reposo</span>\r\n            </is-option>\r\n            <is-option value=\"ftp\" disabled>\r\n              <is-icon slot=\"start\" icon=\"mdi:server-network\"></is-icon>\r\n              FTP\r\n              <span slot=\"description\">Deshabilitado por política de seguridad</span>\r\n            </is-option>\r\n            <is-option value=\"local\">\r\n              <is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>\r\n              Carpeta local\r\n              <span slot=\"description\">Solo en este equipo</span>\r\n            </is-option>\r\n          </is-select>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-option value=\"drive\">\r\n  <is-icon slot=\"start\" icon=\"mdi:google-drive\"></is-icon>\r\n  Google Drive\r\n  <span slot=\"description\">Sincroniza con tu cuenta corporativa</span>\r\n</is-option>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "title": "Dentro de un formulario",
+      "lede": "Form-associated: participa en <code class=\"code\">FormData</code>, en el reset y en la validación nativa\r\n          (<code class=\"code\">required</code> → <code class=\"code\">valueMissing</code>).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<form id=\"demo-form\" style=\"display:flex;flex-direction:column;gap:0.75rem;max-width:22rem\">\r\n            <is-select label=\"País\" name=\"country\" required placeholder=\"Obligatorio…\">\r\n              <is-option value=\"co\">Colombia</is-option>\r\n              <is-option value=\"mx\">México</is-option>\r\n              <is-option value=\"es\">España</is-option>\r\n            </is-select>\r\n            <is-select label=\"Etiquetas\" name=\"tags\" multiple placeholder=\"Opcional…\">\r\n              <is-option value=\"urgente\">Urgente</is-option>\r\n              <is-option value=\"revisar\">Revisar</is-option>\r\n              <is-option value=\"archivado\">Archivado</is-option>\r\n            </is-select>\r\n            <div style=\"display:flex;gap:0.5rem\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log-form\">FormData: —</p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-select label=\"Etiquetas\" name=\"tags\" multiple>\r\n  <is-option value=\"urgente\">Urgente</is-option>\r\n</is-select>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "states",
+      "title": "Estados",
+      "lede": "<code class=\"code\">disabled</code>, <code class=\"code\">clearable</code> y el slot\r\n          <code class=\"code\">start</code> del propio select para un adorno fijo en el trigger.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"grid\">\r\n            <is-select label=\"Deshabilitado\" disabled value=\"a\">\r\n              <is-option value=\"a\">Opción A</is-option>\r\n            </is-select>\r\n            <is-select label=\"Con slot start\" placeholder=\"Buscar…\">\r\n              <is-icon slot=\"start\" icon=\"mdi:magnify\"></is-icon>\r\n              <is-option value=\"1\">Uno</is-option>\r\n              <is-option value=\"2\">Dos</is-option>\r\n            </is-select>\r\n            <is-select label=\"Clearable\" clearable value=\"1\">\r\n              <is-option value=\"1\">Uno</is-option>\r\n              <is-option value=\"2\">Dos</is-option>\r\n            </is-select>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "title": "Teclado",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Tecla",
+            "Acción"
+          ],
+          "rows": [
+            [
+              "<code>↓</code> <code>↑</code>",
+              "cerrado: abre · abierto: mueve el foco de opción"
+            ],
+            [
+              "<code>Alt</code> + <code>↓</code>",
+              "abre el listbox sin mover la selección"
+            ],
+            [
+              "<code>Alt</code> + <code>↑</code>",
+              "cierra y devuelve el foco al trigger"
+            ],
+            [
+              "<code>Home</code> <code>End</code>",
+              "primera / última opción habilitada"
+            ],
+            [
+              "<code>Enter</code>",
+              "cerrado: abre · abierto: selecciona (en <code>multiple</code> alterna sin cerrar)"
+            ],
+            [
+              "<code>Espacio</code>",
+              "igual que <code>Enter</code>; si hay búsqueda en curso, se añade al término"
+            ],
+            [
+              "<code>Esc</code>",
+              "cierra sin cambiar la selección"
+            ],
+            [
+              "<code>Tab</code>",
+              "cierra confirmando lo ya seleccionado"
+            ],
+            [
+              "letras",
+              "typeahead: salta a la primera opción que empieza así (buffer de 500 ms)"
+            ],
+            [
+              "misma letra repetida",
+              "cicla entre las opciones que empiezan por ella"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia — is-select",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>name</code>",
+              "clave en FormData; en <code>multiple</code>, una entrada por valor"
+            ],
+            [
+              "<code>value</code>",
+              "valor único, o lista separada por comas en <code>multiple</code>"
+            ],
+            [
+              "<code>multiple</code>",
+              "boolean — selección múltiple"
+            ],
+            [
+              "<code>selection-display</code>",
+              "<code>tags</code> (default) · <code>text</code> · <code>count</code>"
+            ],
+            [
+              "<code>limit-tags</code>",
+              "nº de chips visibles en modo <code>tags</code>; el resto se resume en <code>+N</code>"
+            ],
+            [
+              "<code>checkmarks</code>",
+              "boolean — casilla por opción en el listbox (solo <code>multiple</code>)"
+            ],
+            [
+              "<code>appearance</code>",
+              "<code>outlined</code> (default) · <code>filled</code> · <code>underlined</code>"
+            ],
+            [
+              "<code>error</code> <code>error-text</code>",
+              "estado de peligro; <code>error-text</code> sustituye al <code>hint</code>"
+            ],
+            [
+              "<code>full-width</code>",
+              "boolean — <code>width: 100%</code>"
+            ],
+            [
+              "<code>auto-width</code>",
+              "boolean — listbox al ancho del contenido, no del trigger"
+            ],
+            [
+              "<code>max-visible</code>",
+              "alto máximo del listbox en nº de opciones (admite decimales)"
+            ],
+            [
+              "<code>placeholder</code> <code>label</code> <code>hint</code>",
+              "texto o slots <code>label</code> / <code>hint</code>"
+            ],
+            [
+              "<code>disabled</code> <code>required</code> <code>clearable</code> <code>open</code>",
+              "boolean"
+            ],
+            [
+              "propiedades JS",
+              "<code>value</code> <code>values</code> (string[]) <code>selectedOptions</code> <code>selectionDisplay</code> <code>appearance</code> <code>errorText</code> <code>limitTags</code> <code>maxVisible</code> <code>form</code> <code>validity</code> <code>validationMessage</code>"
+            ],
+            [
+              "métodos",
+              "<code>show()</code> <code>hide()</code> <code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity(msg)</code>"
+            ],
+            [
+              "slots",
+              "default (<code>is-option</code>) · <code>label</code> · <code>hint</code> · <code>start</code>"
+            ],
+            [
+              "parts",
+              "<code>label</code> <code>base</code> <code>trigger</code> <code>clear</code> <code>hint</code> <code>error-text</code> <code>dialog</code> <code>listbox</code> <code>group</code> <code>group-label</code> <code>option</code> <code>check</code> <code>option-start</code> <code>option-description</code> <code>tag</code>"
+            ],
+            [
+              "custom states",
+              "<code>:state(open)</code> <code>:state(blank)</code> <code>:state(disabled)</code> <code>:state(error)</code>"
+            ],
+            [
+              "eventos",
+              "<code>is-change</code> { value, values } · <code>is-show</code> · <code>is-hide</code>"
+            ],
+            [
+              "tokens",
+              "<code>--is-select-border-radius</code> <code>--is-select-border</code> <code>--is-select-bg</code> <code>--is-select-text</code> <code>--is-select-focus</code> <code>--is-select-danger</code> <code>--is-select-danger-text</code>"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h2>Referencia — is-option</h2>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "valor enviado; si falta, la etiqueta del slot por defecto"
+            ],
+            [
+              "<code>group</code>",
+              "cabecera bajo la que agrupar la opción en el listbox"
+            ],
+            [
+              "<code>disabled</code> <code>selected</code>",
+              "boolean — <code>selected</code> lo sincroniza el select"
+            ],
+            [
+              "propiedades JS",
+              "<code>value</code> <code>label</code> <code>description</code> <code>group</code> <code>disabled</code> <code>selected</code>"
+            ],
+            [
+              "slots",
+              "default (etiqueta) · <code>start</code> (icono/avatar) · <code>description</code> (texto secundario)"
+            ],
+            [
+              "parts",
+              "<code>base</code> <code>start</code> <code>label</code> <code>description</code>"
+            ],
+            [
+              "notas",
+              "lo compartido con <code>is-combobox</code>; ahí el texto de <code>description</code> aún cuenta como etiqueta"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

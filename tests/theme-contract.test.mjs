@@ -83,7 +83,7 @@ async function walk(dir) {
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) out.push(...await walk(p));
-    else if (e.isFile() && e.name.endsWith('.html')) out.push(p);
+    else if (e.isFile() && (e.name.endsWith('.html') || e.name.endsWith('.json'))) out.push(p);
   }
   return out;
 }

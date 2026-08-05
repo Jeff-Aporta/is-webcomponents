@@ -1,0 +1,62 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-scrollspy",
+  "category": "layout",
+  "title": "<is-scrollspy>",
+  "titleHtml": true,
+  "styles": ".spy-card {\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background: var(--is-bg-elev);\r\n      padding: .85rem 1rem;\r\n      margin: .5rem 0;\r\n    }\r\n    .spy-card h4 { margin: 0 0 .35rem; font-size: .9rem; }\r\n    .spy-target-wrap {\r\n      max-height: 18rem;\r\n      overflow: auto;\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      padding: .5rem .75rem;\r\n    }\r\n    .spy-target-wrap > * { margin: .5rem 0; }\r\n    .spy-nav {\r\n      display: flex; flex-direction: column; gap: .25rem;\r\n    }\r\n    .spy-nav a { padding: .25rem .5rem; border-radius: 6px; }\r\n    .spy-nav a[aria-current=\"location\"],\r\n    .spy-nav a.is-scrollspy-active {\r\n      background: color-mix(in srgb, var(--is-accent) 18%, transparent);\r\n      color: var(--is-accent);\r\n    }",
+  "storageKey": "docs-is-scrollspy",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-scrollspy>",
+      "lede": "Observa la intersección de las secciones de un contenedor scrollable y\r\n          va marcando el enlace correspondiente. Pensado para la navegación\r\n          lateral de los previews de docs, pero sirve para cualquier nav largo.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<is-demo class=\"demo\">\r\n          <is-main id=\"spyIntro\" style=\"max-height: 16rem; overflow: auto; padding: .5rem .75rem; border: 1px solid var(--is-border); border-radius: var(--is-radius);\">\r\n            <section id=\"spyA\"><h4>Sección A</h4><p>Desplaza este panel para ver el comportamiento.</p>"
+        }
+      ]
+    },
+    {
+      "id": "spyB",
+      "title": "spyB",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h4>Sección B</h4><p>El enlace gana <code>aria-current=\"location\"</code> al entrar al viewport.</p>"
+        }
+      ]
+    },
+    {
+      "id": "spyC",
+      "title": "spyC",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h4>Sección C</h4><p>El IO observa con la <code>root-margin</code> por defecto.</p>"
+        }
+      ]
+    },
+    {
+      "id": "spyD",
+      "title": "spyD",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h4>Sección D</h4><p>El último enlace visible gana; los demás se liberan.</p>"
+        }
+      ]
+    },
+    {
+      "id": "spyE",
+      "title": "spyE",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h4>Sección E</h4><p>Fin del contenido observable.</p>"
+        }
+      ]
+    }
+  ]
+}

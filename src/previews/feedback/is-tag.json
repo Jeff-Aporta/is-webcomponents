@@ -1,0 +1,72 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-tag",
+  "category": "feedback",
+  "title": "<is-tag>",
+  "titleHtml": true,
+  "storageKey": "docs-is-tag",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-tag>",
+      "lede": "Etiqueta interactiva con variantes y botón de quitar opcional. Escala con <code class=\"code\">font-size</code> del contexto.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-tag>General</is-tag>\r\n            <is-tag color=\"brand\">InSoft</is-tag>\r\n            <is-tag color=\"neutral\">Neutral</is-tag>\r\n            <is-tag color=\"info\">Info</is-tag>\r\n            <is-tag color=\"success\">Success</is-tag>\r\n            <is-tag color=\"warning\">Warning</is-tag>\r\n            <is-tag color=\"danger\">Danger</is-tag>\r\n            <is-tag with-remove id=\"rmTag\">Removible</is-tag>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Escala por contexto",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:.5rem;flex-wrap:wrap\">\r\n            <span style=\"font-size:.75rem\"><is-tag>0.75rem</is-tag></span>\r\n            <span style=\"font-size:1rem\"><is-tag>1rem</is-tag></span>\r\n            <span style=\"font-size:1.25rem\"><is-tag pill>1.25rem pill</is-tag></span>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span style=\"font-size:1.25rem\">\r\n  <is-tag pill>Grande</is-tag>\r\n</span>",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"log\" id=\"tagLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Quita el tag removible para ver el evento.</div></div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Evento <code class=\"code\">is-remove</code> al pulsar quitar. Sin atributo <code class=\"code\">size</code> — usa <code class=\"code\">font-size</code>.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "brand · neutral · info · success · warning · danger (default brand)"
+            ],
+            [
+              "<code>appearance</code>",
+              "filled-outlined"
+            ],
+            [
+              "<code>with-remove</code>",
+              "false"
+            ],
+            [
+              "<code>pill</code>",
+              "false"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

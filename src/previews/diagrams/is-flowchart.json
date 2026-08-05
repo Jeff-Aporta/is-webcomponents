@@ -1,0 +1,187 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-flowchart",
+  "category": "diagrams",
+  "title": "<is-flowchart>",
+  "titleHtml": true,
+  "storageKey": "docs-is-flowchart",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-flowchart>",
+      "lede": "Diagrama de flujo en SVG, sin Mermaid. Tú declaras nodos y aristas; el\r\n          componente decide las capas, reduce los cruces y rutea las flechas\r\n          rodeando las cajas.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Comparte motor con <code>&lt;is-sequence-diagram&gt;</code>: mismo esquema\r\n          JSON, mismo visor a pantalla completa y la misma animación tortuga, que\r\n          aquí recorre las aristas en orden.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-flowchart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"subtitle\": \"de la venta al acuse de la DIAN\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },\r\n                    { \"id\": \"g-dian\", \"name\": \"DIAN\", \"hue\": 199 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"nodes\": [\r\n                    { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"b\", \"label\": \"Registrar venta\", \"group\": \"g-emision\",\r\n                      \"desc\": \"Se arma el documento con el tercero y los ítems facturados.\" },\r\n                    { \"id\": \"c\", \"label\": \"¿Datos completos?\", \"shape\": \"diamond\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"d\", \"label\": \"Corregir datos\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"e\", \"label\": \"Generar XML y firmar\", \"group\": \"g-dian\",\r\n                      \"desc\": \"Se construye el **XML UBL** y se aplica la firma digital del emisor.\" },\r\n                    { \"id\": \"f\", \"label\": \"Enviar a la DIAN\", \"group\": \"g-dian\" },\r\n                    { \"id\": \"g\", \"label\": \"Almacenar CUFE\", \"shape\": \"cylinder\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"h\", \"label\": \"Fin\", \"shape\": \"stadium\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"a\", \"to\": \"b\" },\r\n                    { \"from\": \"b\", \"to\": \"c\" },\r\n                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },\r\n                    { \"from\": \"d\", \"to\": \"b\", \"kind\": \"dashed\" },\r\n                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" },\r\n                    { \"from\": \"e\", \"to\": \"f\" },\r\n                    { \"from\": \"f\", \"to\": \"g\" },\r\n                    { \"from\": \"g\", \"to\": \"h\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-flowchart>"
+        }
+      ]
+    },
+    {
+      "id": "direccion",
+      "title": "Dirección",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          <code>direction</code> acepta <code>TB</code> (por defecto), <code>BT</code>,\r\n          <code>LR</code> y <code>RL</code>. <code>TD</code> se acepta como alias de\r\n          <code>TB</code>, igual que en Mermaid.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-flowchart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"direction\": \"LR\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"p\", \"label\": \"Pedido\", \"shape\": \"stadium\" },\r\n                    { \"id\": \"q\", \"label\": \"Alistamiento\" },\r\n                    { \"id\": \"r\", \"label\": \"Despacho\" },\r\n                    { \"id\": \"s\", \"label\": \"Entregado\", \"shape\": \"stadium\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"p\", \"to\": \"q\" },\r\n                    { \"from\": \"q\", \"to\": \"r\" },\r\n                    { \"from\": \"r\", \"to\": \"s\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-flowchart>"
+        }
+      ]
+    },
+    {
+      "id": "formas",
+      "title": "Formas",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Nueve formas, equivalentes a las de Mermaid: <code>rect</code> (por defecto),\r\n          <code>round</code>, <code>stadium</code>, <code>circle</code>,\r\n          <code>diamond</code>, <code>hexagon</code>, <code>parallelogram</code>,\r\n          <code>cylinder</code> y <code>subroutine</code>.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-flowchart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"direction\": \"LR\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"n1\", \"label\": \"rect\" },\r\n                    { \"id\": \"n2\", \"label\": \"round\", \"shape\": \"round\" },\r\n                    { \"id\": \"n3\", \"label\": \"stadium\", \"shape\": \"stadium\" },\r\n                    { \"id\": \"n4\", \"label\": \"diamond\", \"shape\": \"diamond\" },\r\n                    { \"id\": \"n5\", \"label\": \"hexagon\", \"shape\": \"hexagon\" },\r\n                    { \"id\": \"n6\", \"label\": \"parallelogram\", \"shape\": \"parallelogram\" },\r\n                    { \"id\": \"n7\", \"label\": \"cylinder\", \"shape\": \"cylinder\" },\r\n                    { \"id\": \"n8\", \"label\": \"subroutine\", \"shape\": \"subroutine\" },\r\n                    { \"id\": \"n9\", \"label\": \"circle\", \"shape\": \"circle\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"n1\", \"to\": \"n2\" }, { \"from\": \"n2\", \"to\": \"n3\" },\r\n                    { \"from\": \"n3\", \"to\": \"n4\" }, { \"from\": \"n4\", \"to\": \"n5\" },\r\n                    { \"from\": \"n5\", \"to\": \"n6\" }, { \"from\": \"n6\", \"to\": \"n7\" },\r\n                    { \"from\": \"n7\", \"to\": \"n8\" }, { \"from\": \"n8\", \"to\": \"n9\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-flowchart>"
+        }
+      ]
+    },
+    {
+      "id": "ciclos",
+      "title": "Ciclos y aristas de retorno",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          El motor detecta las aristas que vuelven atrás y las rutea por un lado, en\r\n          vez de colgarse intentando ordenar un grafo cíclico. Los reprocesos y los\r\n          reintentos se declaran sin ceremonia.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-flowchart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"direction\": \"TB\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"r1\", \"label\": \"Recibir soporte\", \"shape\": \"stadium\" },\r\n                    { \"id\": \"r2\", \"label\": \"Clasificar\" },\r\n                    { \"id\": \"r3\", \"label\": \"¿Aprobado?\", \"shape\": \"diamond\" },\r\n                    { \"id\": \"r4\", \"label\": \"Devolver al área\" },\r\n                    { \"id\": \"r5\", \"label\": \"Contabilizar\" },\r\n                    { \"id\": \"r6\", \"label\": \"Archivo\", \"shape\": \"cylinder\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"r1\", \"to\": \"r2\" },\r\n                    { \"from\": \"r2\", \"to\": \"r3\" },\r\n                    { \"from\": \"r3\", \"to\": \"r4\", \"label\": \"no\" },\r\n                    { \"from\": \"r4\", \"to\": \"r2\", \"kind\": \"dashed\", \"label\": \"reproceso\" },\r\n                    { \"from\": \"r3\", \"to\": \"r5\", \"label\": \"sí\" },\r\n                    { \"from\": \"r5\", \"to\": \"r6\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-flowchart>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "<code>inline</code> · <code>viewer</code>",
+              "inline abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación."
+            ],
+            [
+              "<code>open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Esquema del JSON</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>direction</code>",
+              "<code>TB</code> · <code>BT</code> · <code>LR</code> · <code>RL</code>."
+            ],
+            [
+              "<code>nodes[].id</code>",
+              "Identificador que referencian las aristas."
+            ],
+            [
+              "<code>nodes[].label</code>",
+              "Texto de la caja. Admite markdown inline e <code>{{iconify}}</code>."
+            ],
+            [
+              "<code>nodes[].shape</code>",
+              "Una de las nueve formas; cualquier otro valor cae a <code>rect</code>."
+            ],
+            [
+              "<code>nodes[].group</code>",
+              "Id del grupo; define el color del nodo."
+            ],
+            [
+              "<code>nodes[].desc</code>",
+              "Descripción extendida para el tooltip del visor."
+            ],
+            [
+              "<code>edges[].from</code> · <code>to</code>",
+              "Ids de nodo. Una arista a un id inexistente se descarta."
+            ],
+            [
+              "<code>edges[].label</code>",
+              "Rótulo sobre la flecha."
+            ],
+            [
+              "<code>edges[].kind</code>",
+              "<code>solid</code> (default) · <code>dashed</code> · <code>thick</code>."
+            ],
+            [
+              "<code>groups[].hue</code>",
+              "Tono HSL 0–360."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>payload</code>",
+              "Configuración JSON; alternativa al script hijo."
+            ],
+            [
+              "<code>layout</code>",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code>turtle</code>",
+              "API de la animación: play / pause / stop / next / prev."
+            ],
+            [
+              "<code>hiddenGroups</code>",
+              "Set de grupos ocultos; al cambiar, el diagrama se re-diseña sin esos nodos."
+            ],
+            [
+              "<code>is-render</code>",
+              "Evento: el SVG terminó de construirse."
+            ],
+            [
+              "<code>is-turtle-state</code>",
+              "Evento: estado de la animación."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

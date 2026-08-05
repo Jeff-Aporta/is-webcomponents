@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-kanban-column",
+  "category": "data",
+  "title": "<is-kanban-column>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-kanban-column de InSoft.",
+  "storageKey": "docs-is-kanban-column",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-kanban-column>",
+      "lede": "Columna de un tablero <code class=\"code\">&lt;is-kanban&gt;</code>: título, acento de color y contador de tarjetas.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-kanban>\r\n            <is-kanban-column title=\"Pendiente\" accent=\"#f59f00\">\r\n              <is-kanban-card heading=\"Conciliar banco\"></is-kanban-card>\r\n            </is-kanban-column>\r\n            <is-kanban-column title=\"En curso\" accent=\"#228be6\">\r\n              <is-kanban-card heading=\"Cierre de mes\"></is-kanban-card>\r\n            </is-kanban-column>\r\n            <is-kanban-column title=\"Listo\" accent=\"#40c057\"></is-kanban-column>\r\n          </is-kanban>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-kanban>\r\n  <is-kanban-column title=\"Pendiente\" accent=\"#f59f00\">\r\n    <is-kanban-card heading=\"Conciliar banco\"></is-kanban-card>\r\n  </is-kanban-column>\r\n  <is-kanban-column title=\"En curso\" accent=\"#228be6\">\r\n    <is-kanban-card heading=\"Cierre de mes\"></is-kanban-card>\r\n  </is-kanban-column>\r\n  <is-kanban-column title=\"Listo\" accent=\"#40c057\"></is-kanban-column>\r\n</is-kanban>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-kanban&gt; + &lt;is-kanban-column&gt; + &lt;is-kanban-card&gt; — Tablero (vanilla, zero dependencies). &lt;is-kanban&gt; &lt;is-kanban-column title=\"Pendiente\"&gt; &lt;is-kanban-card heading=\"Tarea 1\"&gt;Descripción&lt;/is-kanban-card&gt; &lt;/is-kanban-column&gt; &lt;/is-kanban&gt; Atributos &lt;is-kanban&gt; columns        number — nº columnas visibles al estilo \"compact\". orientation    column | row — layout de los stacks (default column: stacks lado a lado; row: stacks apilados en filas). Atributos &lt;is-kanban-column&gt; title          string accent         string (color, e.g. dodgerblue, #0bb783) badge          string — opcional en el header. Atributos &lt;is-kanban-card&gt; heading        string meta           string — bajo el heading. tag            string — texto de la badge lateral. tag-color    brand | neutral | success | warning | danger cover          string — URL de imagen de cabecera. without-shadow boolean Slots &lt;is-kanban-column&gt; (default)       cards. header-actions  elementos en la cabecera. &lt;is-kanban-card&gt; (default)        descripción. footer           pie de la card. Eventos is-kanban-card-click  detail: { card, column } is-kanban-move        detail: { card, from, to } — card soltada en otra columna (o reordenada en la misma).",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/data/kanban.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

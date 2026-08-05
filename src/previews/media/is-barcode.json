@@ -1,0 +1,75 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-barcode",
+  "category": "media",
+  "title": "<is-barcode>",
+  "titleHtml": true,
+  "styles": ".bc-row { padding: 1rem 0; border-bottom: 1px dashed var(--is-border); }\r\n    .bc-row:last-child { border-bottom: 0; }\r\n\r\n    .bc-check { display: grid; gap: 14px; }\r\n    .bc-case {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 1.25rem;\r\n      flex-wrap: wrap;\r\n      padding: 0.9rem 0;\r\n      border-bottom: 1px dashed var(--is-border);\r\n    }\r\n    .bc-case:last-child { border-bottom: 0; }\r\n    /* Escala tipografica de esta seccion: DOS pasos declarados sobre el cuerpo\r\n       (1rem = 15px de presentation.css) → 0.75rem para etiquetas, 1.25rem para\r\n       el titulo. Ratio ~1.33 entre pasos.\r\n       El texto normal NO declara font-size: un 0.95rem sobre un cuerpo de 1rem\r\n       no es jerarquia, es un duplicado que aplana la escala. */\r\n    .bc-case dl {\r\n      margin: 0;\r\n      display: grid;\r\n      grid-template-columns: auto 1fr;\r\n      gap: 2px 0.75rem;\r\n      align-content: center;\r\n    }\r\n    .bc-case dt { color: var(--is-text-soft); font-size: 0.75rem; align-self: center; }\r\n    .bc-case dd { margin: 0; }\r\n    .bc-out { font-family: var(--is-mono, ui-monospace, monospace); letter-spacing: 0.04em; color: var(--is-accent); }\r\n\r\n    .bc-verify {\r\n      margin-top: 1.1rem;\r\n      padding: 1rem 1.1rem;\r\n      border: 1px solid var(--is-border);\r\n      border-radius: 0.6rem;\r\n      background: var(--is-bg-elev);\r\n    }\r\n    .bc-verify h3 { margin: 0 0 0.35rem; font-size: 1.25rem; }\r\n    .bc-verify ol { margin: 0.5rem 0 0.9rem; padding-left: 1.15rem; display: grid; gap: 3px; }\r\n    .bc-verify__actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }\r\n    .bc-msg { font-size: 0.75rem; color: var(--is-accent); }",
+  "storageKey": "docs-is-barcode",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-barcode>",
+      "lede": "Genera códigos de barras en SVG puro. Soporta <code>EAN-13</code> (productos) y <code>Code 128</code> (alfanumérico). QR queda como siguiente paso vía lib externa.",
+      "blocks": []
+    },
+    {
+      "id": "ean",
+      "title": "EAN-13 (productos)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Pasás 12 dígitos y el componente calcula el 13º (dígito verificador) con el\r\n          algoritmo GS1: se suman los dígitos en posición impar ×1 y los de posición par ×3,\r\n          y el verificador es lo que falta para llegar a la siguiente decena.\r\n          <b>Lo que un lector devuelve son los 13 dígitos</b>, no los 12 que escribiste.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"bc-check\">\r\n            <div class=\"bc-case\">\r\n              <is-barcode type=\"ean13\" value=\"770123456789\" height=\"70\"></is-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">770123456789</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">7701234567897</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>770 · Colombia</dd>\r\n              </dl>\r\n            </div>\r\n\r\n            <div class=\"bc-case\">\r\n              <is-barcode type=\"ean13\" value=\"750103131130\" height=\"70\"></is-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">750103131130</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">7501031311309</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>750 · México</dd>\r\n              </dl>\r\n            </div>\r\n\r\n            <div class=\"bc-case\">\r\n              <is-barcode type=\"ean13\" value=\"400638133393\" height=\"70\"></is-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">400638133393</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">4006381333931</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>400 · Alemania</dd>\r\n              </dl>\r\n            </div>\r\n          </div>",
+          "heading": "Qué lee un escáner en cada código"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"bc-verify\">"
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Compruébalo con un decodificador gratuito</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<p>\r\n            No hace falta un lector físico: el decodificador web de\r\n            <a href=\"https://zxing.org/w/decode.jspx\" target=\"_blank\" rel=\"noopener\">ZXing</a>\r\n            (gratuito, sin registro) acepta una imagen y devuelve el contenido leído.\r\n          </p>\r\n          <ol>\r\n            <li>Descargá el PNG de un código con el botón de abajo (o tomá un pantallazo del código).</li>\r\n            <li>Abrí <code class=\"code\">zxing.org/w/decode.jspx</code> y subilo en <i>Choose File → Submit</i>.</li>\r\n            <li>ZXing responde <code class=\"code\">Format: EAN_13</code> y <code class=\"code\">Parsed Result</code>\r\n              con los 13 dígitos: tienen que ser exactamente los de la columna\r\n              <i>«Un lector devuelve»</i>.</li>\r\n          </ol>\r\n          <div class=\"bc-verify__actions\">\r\n            <is-button id=\"bcPng\" color=\"brand\" variant=\"filled\">Descargar PNG del primer código</is-button>\r\n            <is-button id=\"bcCopy\" color=\"neutral\" variant=\"outlined\">Copiar valor esperado</is-button>\r\n            <span id=\"bcMsg\" class=\"bc-msg\" role=\"status\"></span>\r\n          </div>\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "c128",
+      "title": "Code 128 (general)",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"bc-row\"><is-barcode type=\"code128\" value=\"INSOFT-2026-001\"></is-barcode></div>\r\n          <div class=\"bc-row\"><is-barcode type=\"code128\" value=\"LOTE-7782-A\"></is-barcode></div>\r\n          <div class=\"bc-row\"><is-barcode type=\"code128\" value=\"CEDULA 1234567890\"></is-barcode></div>"
+        }
+      ]
+    },
+    {
+      "id": "style",
+      "title": "Personalización",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"bc-row\"><is-barcode type=\"ean13\" value=\"770123456789\" height=\"80\"></is-barcode></div>\r\n          <div class=\"bc-row\"><is-barcode type=\"code128\" value=\"DEMO-INSOFT\" fg=\"var(--is-accent)\" show-text></is-barcode></div>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "// Atributos\r\n// value        texto a codificar (requerido)\r\n// type         ean13 | code128 (default code128)\r\n// height       alto en píxeles (default 60)\r\n// fg           color de barras\r\n// bg           fondo (default transparent)\r\n// show-text    imprime el texto debajo\r\n// quiet        zonas de silencio EAN13 en módulos (default 9)\r\n\r\n// API JS\r\n// Acceso al SVG: bar.shadowRoot.querySelector('svg')",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

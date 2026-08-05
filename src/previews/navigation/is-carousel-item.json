@@ -1,0 +1,39 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-carousel-item",
+  "category": "navigation",
+  "title": "<is-carousel-item>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-carousel-item de InSoft.",
+  "styles": ".slide { display:grid; place-items:center; height:180px; border-radius:.6rem;\r\n      background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-elev)); font-weight:600; }",
+  "storageKey": "docs-is-carousel-item",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-carousel-item>",
+      "lede": "Cada diapositiva de un <code class=\"code\">&lt;is-carousel&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-carousel style=\"max-width:520px\">\r\n            <is-carousel-item><div class=\"slide\">Diapositiva 1</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide\">Diapositiva 2</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide\">Diapositiva 3</div></is-carousel-item>\r\n          </is-carousel>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-carousel style=\"max-width:520px\">\r\n  <is-carousel-item><div class=\"slide\">Diapositiva 1</div></is-carousel-item>\r\n  <is-carousel-item><div class=\"slide\">Diapositiva 2</div></is-carousel-item>\r\n  <is-carousel-item><div class=\"slide\">Diapositiva 3</div></is-carousel-item>\r\n</is-carousel>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-carousel&gt; + &lt;is-carousel-item&gt; — Web Components (vanilla, zero dependencies). Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next, indicadores y soporte para swipe en touch. &lt;is-carousel autoplay loop&gt; &lt;is-carousel-item&gt;…&lt;/is-carousel-item&gt; &lt;is-carousel-item&gt;…&lt;/is-carousel-item&gt; &lt;is-carousel-item&gt;…&lt;/is-carousel-item&gt; &lt;/is-carousel&gt; Atributos &lt;is-carousel&gt; active             number (0-indexed) loop               boolean                  (default false) autoplay           number (ms)              (default 0 — desactivado) without-controls   boolean                  (oculta prev/next) without-indicators boolean                  (oculta indicators) vertical           boolean                  (slides verticales) slides-per-page    number                   (default 1) aspect-ratio       string                   (CSS, e.g. \"16/9\") Atributos &lt;is-carousel-item&gt; label              string (accesibilidad) disabled           boolean Slots &lt;is-carousel&gt; (default)    items. prev-icon    override del icono prev. next-icon    override del icono next. &lt;is-carousel-item&gt; (default)   contenido del slide. Eventos is-carousel-change detail: { from, to, item } is-carousel-pause  detail: { reason: 'user' | 'auto' | 'visibility' } is-carousel-play   detail: {} is-carousel-slide-end (cuando termina swipe) CSS Parts is-carousel: ::part(base) ::part(viewport) ::part(track) ::part(indicators) ::part(controls) is-carousel-item: ::part(base)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/carousel.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

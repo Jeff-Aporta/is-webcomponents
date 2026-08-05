@@ -1,0 +1,73 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-mutation-observer",
+  "category": "helpers",
+  "title": "<is-mutation-observer>",
+  "titleHtml": true,
+  "styles": ".mo-grid {\r\n      display: grid;\r\n      grid-template-columns: 1fr 1fr;\r\n      gap: 1rem;\r\n      align-items: stretch;\r\n    }\r\n    @media (max-width: 900px) {\r\n      .mo-grid { grid-template-columns: 1fr; }\r\n    }\r\n    .mo-panel {\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background: var(--is-bg);\r\n      padding: 0.85rem;\r\n      min-height: 0;\r\n    }\r\n    .mo-panel__title {\r\n      display: flex;\r\n      align-items: center;\r\n      justify-content: space-between;\r\n      gap: 0.5rem;\r\n      font-size: 0.72rem;\r\n      font-weight: 600;\r\n      letter-spacing: 0.05em;\r\n      text-transform: uppercase;\r\n      color: var(--is-text-dim);\r\n      margin-bottom: 0.65rem;\r\n    }\r\n    .mo-target {\r\n      padding: 1rem;\r\n      background: var(--is-control-bg);\r\n      border-radius: var(--is-radius-sm);\r\n      border: 1px solid var(--is-border-soft);\r\n      color: var(--is-text);\r\n      min-height: 3rem;\r\n      line-height: 1.5;\r\n    }\r\n    .mo-target [data-chip] {\r\n      display: inline-block;\r\n      margin-left: 0.35em;\r\n      padding: 0.1em 0.45em;\r\n      border-radius: 999px;\r\n      background: var(--is-brand-soft);\r\n      color: var(--is-brand-text);\r\n      font-size: 0.8em;\r\n    }\r\n    .mo-actions {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      gap: 0.5rem;\r\n      margin-top: 0.75rem;\r\n    }\r\n    .mo-hint {\r\n      margin-top: 0.75rem;\r\n      font-size: 0.85rem;\r\n      color: var(--is-text-soft);\r\n      line-height: 1.45;\r\n    }\r\n    .mo-hint code { font-size: 0.9em; }\r\n    .mo-live {\r\n      margin: 0 !important;\r\n      max-height: 220px;\r\n      overflow: auto;\r\n      font-size: 0.78rem !important;\r\n    }\r\n    .mo-uses {\r\n      display: grid;\r\n      gap: 0.65rem;\r\n      margin: 0 0 1rem;\r\n      padding: 0;\r\n      list-style: none;\r\n    }\r\n    .mo-uses li {\r\n      display: grid;\r\n      grid-template-columns: 1.5rem 1fr;\r\n      gap: 0.55rem;\r\n      align-items: start;\r\n      color: var(--is-text-soft);\r\n      font-size: 0.92rem;\r\n      line-height: 1.45;\r\n    }\r\n    .mo-uses is-icon {\r\n      width: 1.15em;\r\n      height: 1.15em;\r\n      color: var(--is-accent);\r\n      margin-top: 0.15em;\r\n    }\r\n    .log .type-child { color: #69db7c; }\r\n    .log .type-attr { color: #ffe066; }\r\n    .log .type-text { color: #74c0fc; }",
+  "storageKey": "docs-is-mutation-observer",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-mutation-observer>",
+      "lede": "Responde a: <strong>¿cambió el HTML de este nodo?</strong>\r\n          Cuando alguien añade/quita hijos, cambia un atributo o el texto, emite\r\n          <code class=\"code\">is-mutate</code> con el detalle de qué pasó.",
+      "blocks": [
+        {
+          "kind": "callout",
+          "html": "<strong>No es Intersection Observer.</strong>\r\n          Aquel mira <em>visibilidad</em> (¿está en pantalla?). Este mira\r\n          <em>estructura</em> (¿se modificó el DOM?). Útil para reaccionar a\r\n          cambios de terceros, sincronizar UI, o depurar qué muta un widget."
+        },
+        {
+          "kind": "html",
+          "html": "<ul class=\"mo-uses\">\r\n          <li>\r\n            <is-icon icon=\"mdi:file-tree-outline\" aria-hidden=\"true\"></is-icon>\r\n            <span><strong>child-list</strong> — entra o sale un nodo hijo (<code class=\"code\">appendChild</code>, <code class=\"code\">remove</code>…).</span>\r\n          </li>\r\n          <li>\r\n            <is-icon icon=\"mdi:tag-outline\" aria-hidden=\"true\"></is-icon>\r\n            <span><strong>attr</strong> — cambia un atributo filtrado (aquí solo <code class=\"code\">data-x</code>).</span>\r\n          </li>\r\n          <li>\r\n            <is-icon icon=\"mdi:format-text\" aria-hidden=\"true\"></is-icon>\r\n            <span><strong>character-data</strong> — cambia el texto de un nodo (opcional; no activo en este demo).</span>\r\n          </li>\r\n        </ul>"
+        }
+      ]
+    },
+    {
+      "id": "demo",
+      "title": "Pruébalo: HTML vivo",
+      "lede": "A la izquierda el nodo observado; a la derecha su <strong>HTML actual</strong>.\r\n          Cada botón provoca una mutación concreta — mírala reflejada en el código y en el log.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div id=\"moTarget\">Contenido editable</div>\r\n</is-mutation-observer>'>\r\n          <span class=\"demo-label\">child-list + attr=&quot;data-x&quot;</span>\r\n\r\n          <div class=\"mo-grid\">\r\n            <div class=\"mo-panel\">\r\n              <div class=\"mo-panel__title\">Nodo observado</div>\r\n              <is-mutation-observer id=\"mo\" child-list attr=\"data-x\">\r\n                <div id=\"moTarget\" class=\"mo-target\">Contenido editable</div>\r\n              </is-mutation-observer>\r\n              <div class=\"mo-actions demo-row\">\r\n                <is-button id=\"moAdd\" color=\"brand\" variant=\"outlined\" type=\"button\">\r\n                  <is-icon slot=\"start\" icon=\"mdi:plus\"></is-icon>\r\n                  Añadir hijo\r\n                </is-button>\r\n                <is-button id=\"moAttr\" color=\"neutral\" variant=\"outlined\" type=\"button\">\r\n                  <is-icon slot=\"start\" icon=\"mdi:tag-plus-outline\"></is-icon>\r\n                  Cambiar data-x\r\n                </is-button>\r\n                <is-button id=\"moReset\" color=\"neutral\" variant=\"plain\" type=\"button\">\r\n                  Reset\r\n                </is-button>\r\n              </div>\r\n              <p class=\"mo-hint\" id=\"moExplain\">\r\n                Pulsa un botón: verás <em>qué línea de HTML</em> cambia a la derecha.\r\n              </p>\r\n            </div>\r\n\r\n            <div class=\"mo-panel\">\r\n              <div class=\"mo-panel__title\">\r\n                <span>HTML de #moTarget</span>\r\n                <span id=\"moStamp\" style=\"font-weight:500;text-transform:none;letter-spacing:0\">en vivo</span>\r\n              </div>\r\n              <pre class=\"code mo-live\" id=\"moHtml\"></pre>\r\n            </div>\r\n          </div>\r\n\r\n          <div class=\"log\" id=\"moLog\" aria-live=\"polite\" style=\"margin-top:12px\">\r\n            <div class=\"row hint\">Las mutaciones aparecen aquí con tipo y detalle.</div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / evento",
+            "Qué hace"
+          ],
+          "rows": [
+            [
+              "<code>child-list</code>",
+              "Observa altas/bajas de hijos (y, con subtree, nietos)."
+            ],
+            [
+              "<code>attr</code>",
+              "Lista de atributos a vigilar (espacio-separados). Activa el filtro."
+            ],
+            [
+              "<code>character-data</code>",
+              "Observa cambios de texto."
+            ],
+            [
+              "<code>disabled</code>",
+              "Apaga el observer."
+            ],
+            [
+              "<code>is-mutate</code>",
+              "Evento. <code>detail.records</code> = array de <code>MutationRecord</code>."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

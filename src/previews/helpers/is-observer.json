@@ -1,0 +1,77 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-observer",
+  "category": "helpers",
+  "title": "<is-observer>",
+  "titleHtml": true,
+  "storageKey": "docs-is-observer",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-observer>",
+      "lede": "Web Component genérico que envuelve\r\n          <code class=\"code\">IntersectionObserver</code>,\r\n          <code class=\"code\">MutationObserver</code> y\r\n          <code class=\"code\">ResizeObserver</code>. Los nombres históricos\r\n          (<code class=\"code\">&lt;is-intersection-observer&gt;</code>,\r\n          <code class=\"code\">&lt;is-mutation-observer&gt;</code>,\r\n          <code class=\"code\">&lt;is-resize-observer&gt;</code>) siguen\r\n          funcionando como alias con <code class=\"code\">type</code> prefijado.",
+      "blocks": [
+        {
+          "kind": "callout",
+          "html": "El host siempre usa <code class=\"code\">display: contents</code>, así\r\n          no afecta al flujo. Los hijos directos son los observados\r\n          (intersection / resize) o el subárbol a vigilar (mutation)."
+        }
+      ]
+    },
+    {
+      "id": "intersection",
+      "title": "<code>type=\"intersection\"</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Igual que el antiguo <code class=\"code\">&lt;is-intersection-observer&gt;</code>.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-observer id=\"io\" type=\"intersection\" intersect-class=\"visible\" style=\"display:block\">\r\n            <div style=\"height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem\">\r\n              Caja 1 (aparece al entrar)\r\n            </div>\r\n            <div style=\"height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem\">\r\n              Caja 2 (aparece al entrar)\r\n            </div>\r\n            <div style=\"height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem\">\r\n              Caja 3 (aparece al entrar)\r\n            </div>\r\n          </is-observer>"
+        }
+      ]
+    },
+    {
+      "id": "mutation",
+      "title": "<code>type=\"mutation\"</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Igual que el antiguo <code class=\"code\">&lt;is-mutation-observer&gt;</code>.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-observer id=\"mo\" type=\"mutation\" attr=\"data-tag\" child-list></is-observer>\r\n          <button class=\"is-button\" id=\"add\">Añadir atributo data-tag</button>\r\n          <pre class=\"code\"><code id=\"mo-log\">[…aún sin mutaciones…]</code></pre>"
+        }
+      ]
+    },
+    {
+      "id": "resize",
+      "title": "<code>type=\"resize\"</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Igual que el antiguo <code class=\"code\">&lt;is-resize-observer&gt;</code>.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-observer id=\"ro\" type=\"resize\">\r\n            <div style=\"padding: 1rem; background: var(--is-bg-elev); border-radius: 8px\">\r\n              Arrastra el borde para redimensionar el contenedor.\r\n            </div>\r\n          </is-observer>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<table class=\"is-table\">\r\n            <thead>\r\n              <tr><th>Atributo</th><th>Aplica a</th><th>Descripción</th></tr>\r\n            </thead>\r\n            <tbody>\r\n              <tr><td><code>type</code></td><td>todos</td><td><code>intersection | mutation | resize</code></td></tr>\r\n              <tr><td><code>disabled</code></td><td>todos</td><td>boolean — desconecta el observer</td></tr>\r\n              <tr><td><code>intersect-class</code></td><td>intersection</td><td>clase a togglear en cada hijo</td></tr>\r\n              <tr><td><code>once</code></td><td>intersection</td><td>boolean — des-observa tras la primera</td></tr>\r\n              <tr><td><code>root</code></td><td>intersection</td><td>selector CSS del root (default viewport)</td></tr>\r\n              <tr><td><code>root-margin</code></td><td>intersection</td><td>ej. <code>\"10px 20px\"</code></td></tr>\r\n              <tr><td><code>threshold</code></td><td>intersection</td><td>número 0–1</td></tr>\r\n              <tr><td><code>attr</code></td><td>mutation</td><td>filtro de atributos a vigilar</td></tr>\r\n              <tr><td><code>child-list</code></td><td>mutation</td><td>boolean (default true)</td></tr>\r\n              <tr><td><code>character-data</code></td><td>mutation</td><td>boolean</td></tr>\r\n            </tbody>\r\n          </table>"
+        }
+      ]
+    }
+  ]
+}

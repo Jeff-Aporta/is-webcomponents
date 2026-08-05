@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-time-input",
+  "category": "forms",
+  "title": "<is-time-input>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-time-input de InSoft.",
+  "storageKey": "docs-is-time-input",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-time-input>",
+      "lede": "Entrada de hora con selector desplegable.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-time-input label=\"Hora\" value=\"09:15\" style=\"max-width:280px\"></is-time-input>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-time-input label=\"Hora\" value=\"09:15\" style=\"max-width:280px\"></is-time-input>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-time-input&gt; — Campo de hora con panel (MUI TimePicker). `panel` elige la superficie: columnas digitales (por defecto, como el picker de escritorio de MUI), lista simple o reloj analógico. Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required, disabled, readonly, clearable, locale, ampm, hour24, seconds, panel (sections|list|clock), minutes-step, step, color, action-bar, placement, close-on-select Events: is-change, is-show, is-hide Methods: show(), hide()",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/time-input.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-resize-observer",
+  "category": "helpers",
+  "title": "<is-resize-observer>",
+  "titleHtml": true,
+  "storageKey": "docs-is-resize-observer",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-resize-observer>",
+      "lede": "Observa hijos directos y emite <code class=\"code\">is-resize</code> con entries.\r\n          Alias de <code class=\"code\">&lt;is-observer type=\"resize\"&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">// arrastra la esquina</span>\r\n          <is-resize-observer id=\"ro\">\r\n            <div id=\"roBox\" style=\"resize:both;overflow:auto;min-width:120px;min-height:80px;max-width:100%;padding:1rem;background:var(--is-control-bg);border-radius:8px;border:1px dashed var(--is-control-border)\">\r\n              Arrastra la esquina para redimensionar\r\n            </div>\r\n          </is-resize-observer>\r\n          <div class=\"log\" id=\"roLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Dimensiones al redimensionar.</div></div>"
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "title": "<code>disabled</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:.75rem\">\r\n            <is-button id=\"roToggle\" color=\"neutral\" variant=\"outlined\">Desactivar observer</is-button>\r\n          </div>\r\n          <is-resize-observer id=\"ro2\">\r\n            <div style=\"resize:both;overflow:auto;min-width:100px;min-height:60px;padding:.75rem;border:1px solid var(--is-border);border-radius:8px\">\r\n              Panel secundario\r\n            </div>\r\n          </is-resize-observer>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-resize-observer disabled>…</is-resize-observer>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "alias",
+      "title": "Equivalente unificado",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "<is-observer type=\"resize\">\r\n  <div style=\"resize:both;overflow:auto\">…</div>\r\n</is-observer>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>disabled</code>",
+              "Desactiva observer"
+            ],
+            [
+              "<code>is-resize</code>",
+              "detail: { entries }"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

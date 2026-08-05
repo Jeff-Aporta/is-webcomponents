@@ -1,0 +1,43 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-spreadsheet",
+  "category": "data",
+  "title": "<is-spreadsheet>",
+  "titleHtml": true,
+  "styles": "pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 12rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }\r\n    .kbd-hint {\r\n      font-size: .78rem; color: var(--is-text-soft);\r\n    }\r\n    .kbd-hint kbd {\r\n      font-family: ui-monospace, monospace; font-size: .72rem;\r\n      padding: 1px 5px;\r\n      border-radius: 4px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg-elev);\r\n    }",
+  "storageKey": "docs-is-spreadsheet",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-spreadsheet>",
+      "lede": "Hoja de cálculo con edición por celda, fórmulas <code class=\"ic\">=SUM(A1:A5)</code> y navegación con flechas + Tab.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"kbd-hint\">Click para editar · <kbd>Enter</kbd> bajar · <kbd>Tab</kbd> derecha · <kbd>Esc</kbd> cancelar · <kbd>Flechas</kbd> mover.</p>"
+        }
+      ]
+    },
+    {
+      "id": "basico",
+      "title": "Hoja de ejemplo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-spreadsheet rows=\"8\" cols=\"6\"\r\n            value=\"[[10,20,30,40,'','=SUM(A1:D1)'],[11,21,31,41,'','=SUM(A2:D2)'],[12,22,32,42,'','=SUM(A3:D3)'],[13,23,33,43,'','=SUM(A4:D4)'],['','','','','','=AVERAGE(F1:F4)'],[15,25,35,45,'','=MIN(A5:D5)'],[16,26,36,46,'','=MAX(A1:A4)']]\">\r\n          </is-spreadsheet>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API / fórmulas",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const s = document.querySelector('is-spreadsheet');\r\ns.value;          // string JSON con la matriz\r\ns.addEventListener('is-change', e => {\r\n  console.log(`[${e.detail.row},${e.detail.col}] raw=${e.detail.raw} value=${e.detail.value}`);\r\n});\r\n\r\n// Fórmulas soportadas (en cualquier mayúscula o minúscula)\r\n//   =SUM(rango)        suma\r\n//   =AVERAGE(rango)    promedio\r\n//   =MIN(rango)        mínimo\r\n//   =MAX(rango)        máximo\r\n//   =COUNT(rango)      cuenta números\r\n//   +, -, *, /         aritmética\r\n//   =A1*B1             referencia a celdas individuales\r\n//\r\n// Rangos válidos:\r\n//   A1               celda única\r\n//   A1:B5            rectángulo\r\n//   A1,B2,C3         lista\r\n\r\n// Atributos: rows, cols, value (JSON), read-only",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

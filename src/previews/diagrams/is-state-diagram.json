@@ -1,0 +1,169 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-state-diagram",
+  "category": "diagrams",
+  "title": "<is-state-diagram>",
+  "titleHtml": true,
+  "storageKey": "docs-is-state-diagram",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-state-diagram>",
+      "lede": "Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y\r\n          transiciones; el componente decide las capas, reduce los cruces y\r\n          rutea las flechas rodeando los estados.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Comparte motor con <code>&lt;is-flowchart&gt;</code>: mismo esquema\r\n          JSON, mismo visor a pantalla completa y la misma animación tortuga,\r\n          que aquí recorre las transiciones en orden.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-state-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"stateDiagram\": {\r\n                  \"title\": \"Ciclo de vida de la factura\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-flujo\", \"name\": \"Flujo\", \"hue\": 239 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"states\": [\r\n                    { \"id\": \"inicio\", \"kind\": \"start\", \"group\": \"g-flujo\" },\r\n                    { \"id\": \"borrador\", \"label\": \"Borrador\", \"group\": \"g-flujo\",\r\n                      \"desc\": \"Editable por el usuario; sin CUFE asignado.\" },\r\n                    { \"id\": \"decision\", \"label\": \"¿Datos válidos?\", \"kind\": \"choice\", \"group\": \"g-flujo\" },\r\n                    { \"id\": \"emitida\", \"label\": \"Emitida\", \"group\": \"g-cierre\",\r\n                      \"desc\": \"Enviada y aceptada por la **DIAN**.\" },\r\n                    { \"id\": \"anulada\", \"label\": \"Anulada\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"fin\", \"kind\": \"end\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"transitions\": [\r\n                    { \"from\": \"inicio\", \"to\": \"borrador\" },\r\n                    { \"from\": \"borrador\", \"to\": \"decision\", \"label\": \"validar\" },\r\n                    { \"from\": \"decision\", \"to\": \"borrador\", \"label\": \"no\" },\r\n                    { \"from\": \"decision\", \"to\": \"emitida\", \"label\": \"sí\" },\r\n                    { \"from\": \"emitida\", \"to\": \"anulada\", \"label\": \"anular\" },\r\n                    { \"from\": \"anulada\", \"to\": \"fin\" },\r\n                    { \"from\": \"emitida\", \"to\": \"fin\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-state-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "tipos",
+      "title": "Tipos de estado",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          <code>kind</code> acepta <code>start</code> (círculo negro relleno),\r\n          <code>end</code> (círculo relleno dentro de un anillo),\r\n          <code>normal</code> (rectángulo redondeado, por defecto) y\r\n          <code>choice</code> (rombo de decisión).\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-state-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"stateDiagram\": {\r\n                  \"direction\": \"LR\",\r\n                  \"states\": [\r\n                    { \"id\": \"a\", \"kind\": \"start\" },\r\n                    { \"id\": \"b\", \"label\": \"Procesando\" },\r\n                    { \"id\": \"c\", \"label\": \"¿Ok?\", \"kind\": \"choice\" },\r\n                    { \"id\": \"d\", \"label\": \"Rechazado\" },\r\n                    { \"id\": \"e\", \"kind\": \"end\" }\r\n                  ],\r\n                  \"transitions\": [\r\n                    { \"from\": \"a\", \"to\": \"b\" },\r\n                    { \"from\": \"b\", \"to\": \"c\" },\r\n                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },\r\n                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-state-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "ciclos",
+      "title": "Ciclos y auto-transiciones",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          El motor detecta las transiciones que vuelven atrás y las rutea por\r\n          un lado, en vez de colgarse intentando ordenar un grafo cíclico. Una\r\n          transición de un estado a sí mismo también se dibuja sin romper el\r\n          layout.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-state-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"stateDiagram\": {\r\n                  \"direction\": \"TB\",\r\n                  \"states\": [\r\n                    { \"id\": \"s1\", \"kind\": \"start\" },\r\n                    { \"id\": \"s2\", \"label\": \"Revisión\" },\r\n                    { \"id\": \"s3\", \"label\": \"Aprobación\" },\r\n                    { \"id\": \"s4\", \"kind\": \"end\" }\r\n                  ],\r\n                  \"transitions\": [\r\n                    { \"from\": \"s1\", \"to\": \"s2\" },\r\n                    { \"from\": \"s2\", \"to\": \"s3\", \"label\": \"enviar\" },\r\n                    { \"from\": \"s3\", \"to\": \"s2\", \"label\": \"rechazar\" },\r\n                    { \"from\": \"s2\", \"to\": \"s2\", \"label\": \"reintento\" },\r\n                    { \"from\": \"s3\", \"to\": \"s4\", \"label\": \"aprobar\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-state-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "<code>inline</code> · <code>viewer</code>",
+              "inline abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación."
+            ],
+            [
+              "<code>open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Esquema del JSON</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>direction</code>",
+              "<code>TB</code> · <code>BT</code> · <code>LR</code> · <code>RL</code>."
+            ],
+            [
+              "<code>states[].id</code>",
+              "Identificador que referencian las transiciones."
+            ],
+            [
+              "<code>states[].label</code>",
+              "Texto del estado. Admite markdown inline."
+            ],
+            [
+              "<code>states[].kind</code>",
+              "<code>normal</code> (default) · <code>start</code> · <code>end</code> · <code>choice</code>."
+            ],
+            [
+              "<code>states[].group</code>",
+              "Id del grupo; define el color del estado."
+            ],
+            [
+              "<code>states[].desc</code>",
+              "Descripción extendida para el tooltip del visor."
+            ],
+            [
+              "<code>transitions[].from</code> · <code>to</code>",
+              "Ids de estado. Una transición a un id inexistente se descarta."
+            ],
+            [
+              "<code>transitions[].label</code>",
+              "Rótulo sobre la flecha."
+            ],
+            [
+              "<code>groups[].hue</code>",
+              "Tono HSL 0–360."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>payload</code>",
+              "Configuración JSON; alternativa al script hijo."
+            ],
+            [
+              "<code>layout</code>",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code>turtle</code>",
+              "API de la animación: play / pause / stop / next / prev."
+            ],
+            [
+              "<code>hiddenGroups</code>",
+              "Set de grupos ocultos; al cambiar, el diagrama se re-diseña sin esos estados."
+            ],
+            [
+              "<code>is-render</code>",
+              "Evento: el SVG terminó de construirse."
+            ],
+            [
+              "<code>is-turtle-state</code>",
+              "Evento: estado de la animación."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

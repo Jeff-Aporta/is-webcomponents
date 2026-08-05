@@ -1,0 +1,63 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-context-menu",
+  "category": "actions",
+  "title": "<is-context-menu>",
+  "titleHtml": true,
+  "styles": ".canvas {\r\n      position: relative;\r\n      min-height: 14rem;\r\n      border: 2px dashed var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background:\r\n        repeating-linear-gradient(45deg,\r\n          color-mix(in srgb, var(--is-bg-elev) 60%, transparent) 0 8px,\r\n          transparent 8px 16px);\r\n      display: grid; place-items: center;\r\n      color: var(--is-text-soft);\r\n      font-size: .85rem;\r\n      cursor: context-menu;\r\n    }\r\n    .log {\r\n      font-family: ui-monospace, monospace;\r\n      font-size: .8rem;\r\n      background: var(--is-bg-elev);\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      padding: .55rem .75rem;\r\n      margin-top: .85rem;\r\n      max-height: 9rem;\r\n      overflow: auto;\r\n    }",
+  "storageKey": "docs-is-context-menu",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-context-menu>",
+      "lede": "Menú anclado al <strong>clic derecho</strong> sobre un elemento. Compatible con cualquier árbol DOM: target por selector.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"canvas\" id=\"canvas1\">Clic derecho aquí →</div>\r\n          <is-context-menu for=\"#canvas1\">\r\n            <button class=\"item\" data-value=\"open\">Abrir</button>\r\n            <button class=\"item\" data-value=\"open-tab\">Abrir en pestaña nueva</button>\r\n            <button class=\"item\" data-value=\"duplicate\">Duplicar</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"rename\">Renombrar…</button>\r\n            <button class=\"item\" data-value=\"properties\">Propiedades</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"delete\" disabled>Eliminar</button>\r\n          </is-context-menu>"
+        }
+      ]
+    },
+    {
+      "id": "lista",
+      "title": "Sobre varios ítems",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Aplica el mismo context-menu a cada fila del listado. El menú sabe qué fila disparó.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<ul style=\"list-style:none; padding:0; margin:0;\">\r\n            <li class=\"row\" data-id=\"row-1\" style=\"padding:.55rem .65rem; border-bottom:1px solid var(--is-border); display:flex; justify-content:space-between\"><span>Reporte mensual</span><small>2026-07</small></li>\r\n            <li class=\"row\" data-id=\"row-2\" style=\"padding:.55rem .65rem; border-bottom:1px solid var(--is-border); display:flex; justify-content:space-between\"><span>Inventario</span><small>2026-07</small></li>\r\n            <li class=\"row\" data-id=\"row-3\" style=\"padding:.55rem .65rem; display:flex; justify-content:space-between\"><span>Cartera vencida</span><small>2026-07</small></li>\r\n          </ul>\r\n          <is-context-menu for=\".row\">\r\n            <button class=\"item\" data-value=\"open\">Ver</button>\r\n            <button class=\"item\" data-value=\"download\">Descargar</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"archive\">Archivar</button>\r\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\r\n          </is-context-menu>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const menu = document.querySelector('is-context-menu');\r\nmenu.openAt(x, y);   // programa el menú en una posición\r\nmenu.close();\r\nmenu.isOpen;\r\n\r\nmenu.addEventListener('is-select', e => {\r\n  console.log('elegido:', e.detail.value);   // valor de data-value o texto\r\n  console.log('item:', e.detail.item);\r\n});\r\n\r\n// items via slot\r\n<is-context-menu for=\"#canvas\">\r\n  <button class=\"item\" data-value=\"open\">Abrir</button>\r\n  <button class=\"item\" data-value=\"delete\">Eliminar</button>\r\n</is-context-menu>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora de selección",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\"></pre>"
+        }
+      ]
+    }
+  ]
+}

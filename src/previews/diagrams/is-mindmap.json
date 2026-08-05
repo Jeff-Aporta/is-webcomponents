@@ -1,0 +1,135 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-mindmap",
+  "category": "diagrams",
+  "title": "<is-mindmap>",
+  "titleHtml": true,
+  "storageKey": "docs-is-mindmap",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-mindmap>",
+      "lede": "Mapa mental en SVG, sin Mermaid. Declaras ideas con un `parent`\r\n          opcional y el componente arma el árbol, reparte las ramas y las une\r\n          con curvas suaves coloreadas por rama.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Cada nodo hereda el tono de su ancestro de nivel 1, salvo que fije el\r\n          suyo propio, así cada rama se lee de un solo color de punta a punta.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-mindmap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"mindmap\": {\r\n                  \"title\": \"ContaPyme\",\r\n                  \"layout\": \"radial\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"root\", \"label\": \"ContaPyme\", \"icon\": \"mdi:star\", \"hue\": 210 },\r\n                    { \"id\": \"a\", \"parent\": \"root\", \"label\": \"Contabilidad\", \"hue\": 239 },\r\n                    { \"id\": \"a1\", \"parent\": \"a\", \"label\": \"Plan de cuentas\" },\r\n                    { \"id\": \"a2\", \"parent\": \"a\", \"label\": \"Comprobantes\" },\r\n                    { \"id\": \"a3\", \"parent\": \"a\", \"label\": \"Estados financieros\" },\r\n                    { \"id\": \"b\", \"parent\": \"root\", \"label\": \"Facturación\", \"hue\": 199 },\r\n                    { \"id\": \"b1\", \"parent\": \"b\", \"label\": \"Electrónica DIAN\" },\r\n                    { \"id\": \"b2\", \"parent\": \"b\", \"label\": \"Recurrente\" },\r\n                    { \"id\": \"c\", \"parent\": \"root\", \"label\": \"Inventario\", \"hue\": 38 },\r\n                    { \"id\": \"c1\", \"parent\": \"c\", \"label\": \"Bodegas\" },\r\n                    { \"id\": \"c2\", \"parent\": \"c\", \"label\": \"Kardex\" },\r\n                    { \"id\": \"d\", \"parent\": \"root\", \"label\": \"Nómina\", \"hue\": 280 },\r\n                    { \"id\": \"d1\", \"parent\": \"d\", \"label\": \"Liquidación\" },\r\n                    { \"id\": \"d2\", \"parent\": \"d\", \"label\": \"Seguridad social\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-mindmap>"
+        }
+      ]
+    },
+    {
+      "id": "layout-tree",
+      "title": "Layout tree",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          <code>layout: \"tree\"</code> reemplaza los anillos concéntricos por un\r\n          árbol horizontal (izquierda → derecha), útil cuando las ramas tienen\r\n          textos largos.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-mindmap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"mindmap\": {\r\n                  \"layout\": \"tree\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"root\", \"label\": \"Cierre de mes\", \"hue\": 210 },\r\n                    { \"id\": \"a\", \"parent\": \"root\", \"label\": \"Conciliaciones\", \"hue\": 239 },\r\n                    { \"id\": \"a1\", \"parent\": \"a\", \"label\": \"Bancos\" },\r\n                    { \"id\": \"a2\", \"parent\": \"a\", \"label\": \"Cartera\" },\r\n                    { \"id\": \"b\", \"parent\": \"root\", \"label\": \"Impuestos\", \"hue\": 38 },\r\n                    { \"id\": \"b1\", \"parent\": \"b\", \"label\": \"Retenciones\" },\r\n                    { \"id\": \"b2\", \"parent\": \"b\", \"label\": \"IVA\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-mindmap>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "<code>inline</code> · <code>viewer</code>",
+              "inline abre el visor al hacer clic; viewer activa hover y tooltips."
+            ],
+            [
+              "<code>open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Esquema del JSON</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>layout</code>",
+              "<code>radial</code> (default) · <code>tree</code>."
+            ],
+            [
+              "<code>nodes[].id</code>",
+              "Identificador único."
+            ],
+            [
+              "<code>nodes[].parent</code>",
+              "Id del nodo padre; sin él, el nodo es una raíz."
+            ],
+            [
+              "<code>nodes[].label</code>",
+              "Texto del nodo. Admite markdown inline e <code>{{iconify}}</code>."
+            ],
+            [
+              "<code>nodes[].hue</code>",
+              "Tono HSL 0–360; si no se fija, hereda el de su ancestro de nivel 1."
+            ],
+            [
+              "<code>nodes[].desc</code>",
+              "Descripción extendida para el tooltip del visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>payload</code>",
+              "Configuración JSON; alternativa al script hijo."
+            ],
+            [
+              "<code>layout</code>",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code>is-render</code>",
+              "Evento: el SVG terminó de construirse."
+            ],
+            [
+              "<code>is-open-viewer</code>",
+              "Evento: se solicitó abrir el visor a pantalla completa."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

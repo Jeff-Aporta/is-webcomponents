@@ -1,0 +1,129 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-radar-chart",
+  "category": "data-viz",
+  "title": "Radar Chart",
+  "titleHtml": false,
+  "styles": ".demo--chart { height: 22rem; display: flex; flex-direction: column; }\r\n    .demo--chart-sm { height: 18rem; }",
+  "storageKey": "docs-is-radar-chart",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Radar Chart",
+      "lede": "<code class=\"code\">&lt;is-radar-chart&gt;</code>",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Compara varias variables a la vez sobre una rejilla radial. Ideal para perfiles\r\n          (habilidades, atributos de producto, métricas de rendimiento).\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-radar-chart open-on-click label=\"Employee Skills\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Communication\", \"Technical\", \"Leadership\", \"Creativity\", \"Teamwork\", \"Problem Solving\"],\r\n                  \"datasets\": [\r\n                    {\r\n                      \"label\": \"Alice\",\r\n                      \"data\": [85, 92, 70, 88, 95, 78],\r\n                      \"fill\": true,\r\n                      \"backgroundColor\": \"color-mix(in srgb, crimson 38%, transparent)\",\r\n                      \"borderColor\": \"crimson\"\r\n                    },\r\n                    {\r\n                      \"label\": \"Bob\",\r\n                      \"data\": [72, 78, 90, 65, 80, 88],\r\n                      \"fill\": true,\r\n                      \"backgroundColor\": \"color-mix(in srgb, #339af0 38%, transparent)\",\r\n                      \"borderColor\": \"#339af0\"\r\n                    }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-radar-chart>"
+        }
+      ]
+    },
+    {
+      "id": "json",
+      "title": "Datos con JSON",
+      "lede": "Coloca un <code class=\"code\">&lt;script type=\"application/json\"&gt;</code> hijo.\r\n          Cada valor de <code class=\"code\">data</code> mapea a una etiqueta del eje radial\r\n          (formato Chart.js).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-radar-chart open-on-click label=\"Feature Comparison\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Speed\", \"Reliability\", \"Ease of Use\", \"Features\", \"Support\"],\r\n                  \"datasets\": [{ \"label\": \"Product A\", \"data\": [85, 90, 75, 80, 70], \"fill\": true }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-radar-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radar-chart label=\"Feature Comparison\">\r\n  <script type=\"application/json\">\r\n    {\r\n      \"data\": {\r\n        \"labels\": [\"Speed\", \"Reliability\", \"Ease of Use\", \"Features\", \"Support\"],\r\n        \"datasets\": [{ \"label\": \"Product A\", \"data\": [85, 90, 75, 80, 70], \"fill\": true }]\r\n      }\r\n    }\r\n  </script>\r\n</is-radar-chart>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "js",
+      "title": "Datos con JavaScript",
+      "lede": "Asigna <code class=\"code\">config</code>; el chart se re-renderiza solo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-radar-chart open-on-click id=\"radarJs\" label=\"Feature Comparison\"></is-radar-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "const chart = document.querySelector('#radarJs');\r\nchart.config = {\r\n  data: {\r\n    labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support'],\r\n    datasets: [{ label: 'Product A', data: [85, 90, 75, 80, 70], fill: true }],\r\n  },\r\n};",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "multi",
+      "title": "Múltiples datasets",
+      "lede": "Superpone perfiles para compararlos directamente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-radar-chart open-on-click id=\"radarMulti\" label=\"Product Comparison\"></is-radar-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "chart.config = {\r\n  data: {\r\n    labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support', 'Value'],\r\n    datasets: [\r\n      { label: 'Nimbus', data: [85, 90, 75, 80, 70, 88], fill: true },\r\n      { label: 'Atlas', data: [70, 80, 90, 85, 92, 75], fill: true },\r\n    ],\r\n  },\r\n};",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "title": "Leyenda y features",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-radar-chart open-on-click label=\"Clases\" legend-position=\"end\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Strength\", \"Agility\", \"Intelligence\", \"Wisdom\", \"Charisma\"],\r\n                  \"datasets\": [\r\n                    { \"label\": \"Warrior\", \"data\": [95, 70, 50, 60, 65], \"fill\": true },\r\n                    { \"label\": \"Mage\", \"data\": [40, 55, 95, 90, 70], \"fill\": true }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-radar-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radar-chart legend-position=\"end\">…</is-radar-chart>\r\n<is-radar-chart without-legend without-animation>…</is-radar-chart>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / prop",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>type</code>",
+              "Fijo <code>radar</code>"
+            ],
+            [
+              "<code>label</code> / <code>legend-position</code>",
+              "Título y leyenda"
+            ],
+            [
+              "<code>without-legend</code> / <code>without-tooltip</code> / <code>without-animation</code>",
+              "boolean"
+            ],
+            [
+              "<code>config</code>",
+              "Objeto Chart.js"
+            ],
+            [
+              "<code>--fill-color-*</code> / <code>--border-color-*</code>",
+              "Serie fija blue→orange"
+            ],
+            [
+              "<code>--point-radius</code> / <code>--line-border-width</code>",
+              "Puntos y trazo"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

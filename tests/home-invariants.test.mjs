@@ -13,8 +13,15 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const homePath = join(__dirname, '..', 'previews', 'home.html');
-const src = readFileSync(homePath, 'utf8');
+const homePath = join(__dirname, '..', 'src', 'previews', 'home.json');
+const homeBeh = join(__dirname, '..', 'src', 'previews', 'behaviors', 'home.js');
+const homeDef = JSON.parse(readFileSync(homePath, 'utf8'));
+/** Contenido buscable: styles + demos JSON + behavior (scripts migrados). */
+const src = [
+  homeDef.styles || '',
+  JSON.stringify(homeDef.sections),
+  readFileSync(homeBeh, 'utf8'),
+].join('\n');
 
 /** Extrae el primer bloque CSS cuyo selector empieza con `selectorPrefix`. */
 function extractBlock(prefix) {

@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-transfer-item",
+  "category": "data",
+  "title": "<is-transfer-item>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-transfer-item de InSoft.",
+  "storageKey": "docs-is-transfer-item",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-transfer-item>",
+      "lede": "Elemento movible entre las dos listas de un <code class=\"code\">&lt;is-transfer&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-transfer>\r\n            <is-transfer-item value=\"a\">Cuentas por cobrar</is-transfer-item>\r\n            <is-transfer-item value=\"b\" selected>Cuentas por pagar</is-transfer-item>\r\n            <is-transfer-item value=\"c\">Inventario</is-transfer-item>\r\n          </is-transfer>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-transfer>\r\n  <is-transfer-item value=\"a\">Cuentas por cobrar</is-transfer-item>\r\n  <is-transfer-item value=\"b\" selected>Cuentas por pagar</is-transfer-item>\r\n  <is-transfer-item value=\"c\">Inventario</is-transfer-item>\r\n</is-transfer>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-transfer&gt; — Doble lista de selección (vanilla, zero dependencies). Mueve elementos entre una lista de origen y una lista de destino. &lt;is-transfer id=\"t1\"&gt; &lt;is-transfer-item value=\"a\"&gt;Alpha&lt;/is-transfer-item&gt; &lt;is-transfer-item value=\"b\" selected&gt;Beta&lt;/is-transfer-item&gt; &lt;/is-transfer&gt; Atributos &lt;is-transfer&gt; source-title       string target-title       string searchable         boolean without-buttons    boolean  — sin botones prev/next without-headings   boolean max-target         number   — máximo de items en target. Atributos &lt;is-transfer-item&gt; value        string disabled     boolean Slots &lt;is-transfer-item&gt; (default)   label. Eventos is-transfer-change  detail: { item, source, target, values }",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/data/transfer.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

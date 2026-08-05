@@ -90,10 +90,10 @@ for (const file of componentFiles) {
 
 assert.ok(registry.size >= 10, `se esperaban enums de al menos 10 componentes, hay ${registry.size}`);
 
-// ── 2. Revisar las previews ──────────────────────────────────────────────
+// ── 2. Revisar las previews (JSON homogéneos + index) ────────────────────
 
 const previewFiles = [
-  ...(await walk(join(root, 'src', 'previews'), /\.html$/)),
+  ...(await walk(join(root, 'src', 'previews'), /\.json$/)),
   join(root, 'index.html'),
 ];
 

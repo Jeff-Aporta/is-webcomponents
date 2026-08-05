@@ -1,0 +1,273 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-switch",
+  "category": "forms",
+  "title": "<is-switch>",
+  "titleHtml": true,
+  "styles": ".stack { display: flex; flex-direction: column; align-items: flex-start; gap: 0.8rem; }\r\n    .inline { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; }\r\n    .placements { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2rem; }\r\n    .settings { display: flex; flex-direction: column; gap: 0.9rem; max-width: 26rem; }\r\n    .settings is-switch::part(base) { justify-content: space-between; }",
+  "storageKey": "docs-is-switch",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-switch>",
+      "lede": "Interruptor <em>form-associated</em> con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-switch/\" target=\"_blank\" rel=\"noreferrer\">Switch de MUI</a>:\r\n          mismo contrato de formulario que <code class=\"code\">is-checkbox</code>, con carril y perilla deslizante,\r\n          color por <code class=\"code\">variant</code>, iconos en la perilla y rótulos dentro del carril.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-switch name=\"notificaciones\" checked>Notificaciones</is-switch>\r\n            <is-switch name=\"beta\">Funciones beta</is-switch>\r\n            <is-switch name=\"bloqueado\" checked disabled>Bloqueado por política</is-switch>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"log\" id=\"swLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Cambia un interruptor para ver el evento.</div></div>"
+        }
+      ]
+    },
+    {
+      "id": "color",
+      "title": "Color",
+      "lede": "<code class=\"code\">variant</code> equivale a la prop <code class=\"code\">color</code> de MUI: redefine el\r\n          carril encendido, el halo de la perilla y el anillo de foco.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"inline\">\r\n            <is-switch checked>brand (default)</is-switch>\r\n            <is-switch color=\"neutral\" checked>neutral</is-switch>\r\n            <is-switch color=\"success\" checked>success</is-switch>\r\n            <is-switch color=\"warning\" checked>warning</is-switch>\r\n            <is-switch color=\"danger\" checked>danger</is-switch>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-switch color=\"success\" checked>success</is-switch>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "label-placement",
+      "title": "Posición de la etiqueta",
+      "lede": "<code class=\"code\">label-placement</code> equivale a <code class=\"code\">labelPlacement</code> del\r\n          <code class=\"code\">FormControlLabel</code> de MUI.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"placements\">\r\n            <is-switch checked>end (default)</is-switch>\r\n            <is-switch label-placement=\"start\" checked>start</is-switch>\r\n            <is-switch label-placement=\"top\" checked>top</is-switch>\r\n            <is-switch label-placement=\"bottom\" checked>bottom</is-switch>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Para un panel de ajustes con la etiqueta a la izquierda y el interruptor pegado al borde derecho,\r\n          combina <code class=\"code\">label-placement=\"start\"</code> con\r\n          <code class=\"code\">::part(base) { justify-content: space-between }</code>.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"settings\">\r\n            <is-switch label-placement=\"start\" checked>Modo compacto</is-switch>\r\n            <is-switch label-placement=\"start\">Sonidos de la interfaz</is-switch>\r\n            <is-switch label-placement=\"start\" checked>Guardado automático</is-switch>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": ".settings { display: flex; flex-direction: column; }\r\n.settings is-switch::part(base) { justify-content: space-between; }",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "title": "Iconos en la perilla",
+      "lede": "<code class=\"code\">icon</code> (apagado) y <code class=\"code\">checked-icon</code> (encendido) reciben\r\n          nombres de <code class=\"code\">is-icon</code>, como el ejemplo de <em>customized switches</em> de MUI.\r\n          Al usarlos el control crece para dar sitio al glifo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"inline\">\r\n            <is-switch icon=\"mdi:weather-night\" checked-icon=\"mdi:white-balance-sunny\" color=\"warning\" checked>Tema claro</is-switch>\r\n            <is-switch icon=\"mdi:close\" checked-icon=\"mdi:check\" color=\"success\">Sincronizar</is-switch>\r\n            <is-switch checked-icon=\"mdi:lock\" checked>Bloquear pantalla</is-switch>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-switch icon=\"mdi:weather-night\" checked-icon=\"mdi:white-balance-sunny\"\r\n  color=\"warning\" checked>Tema claro</is-switch>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "track-labels",
+      "title": "Rótulos en el carril",
+      "lede": "<code class=\"code\">on-label</code> y <code class=\"code\">off-label</code> pintan un texto corto dentro del\r\n          carril, en el hueco que deja la perilla. Pensados para dos o tres caracteres.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"inline\">\r\n            <is-switch on-label=\"ON\" off-label=\"OFF\" checked>Encendido</is-switch>\r\n            <is-switch on-label=\"SÍ\" off-label=\"NO\" color=\"success\">Confirmación</is-switch>\r\n            <is-switch on-label=\"24h\" off-label=\"12h\" checked>Formato de hora</is-switch>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-switch on-label=\"ON\" off-label=\"OFF\" checked>Encendido</is-switch>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "readonly",
+      "title": "Solo lectura y deshabilitado",
+      "lede": "<code class=\"code\">readonly</code> bloquea el cambio pero mantiene el valor en el formulario y el foco\r\n          navegable con <code class=\"code\">Tab</code>. <code class=\"code\">disabled</code> saca el control del orden\r\n          de tabulación y no aporta entrada al <code class=\"code\">FormData</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-switch name=\"ro1\" checked readonly>Solo lectura (encendido)</is-switch>\r\n            <is-switch name=\"ro2\" readonly>Solo lectura (apagado)</is-switch>\r\n            <is-switch name=\"di1\" checked disabled>Deshabilitado</is-switch>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-switch name=\"ro1\" checked readonly>Solo lectura</is-switch>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "error",
+      "title": "Error y texto de ayuda",
+      "lede": "<code class=\"code\">hint</code> pinta un texto bajo el control (atributo o slot homónimo).\r\n          <code class=\"code\">error</code> tiñe carril y ayuda con el color de peligro y marca\r\n          <code class=\"code\">aria-invalid</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-switch hint=\"Se aplica de inmediato, sin guardar.\" checked>Sincronización en la nube</is-switch>\r\n            <is-switch error hint=\"Actívalo para poder facturar electrónicamente.\" required>Firma electrónica</is-switch>\r\n            <is-switch error checked>\r\n              Modo mantenimiento\r\n              <span slot=\"hint\">El texto de ayuda también admite un <b>slot</b>.</span>\r\n            </is-switch>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-switch error hint=\"Actívalo para poder facturar electrónicamente.\" required>\r\n  Firma electrónica\r\n</is-switch>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "title": "Dentro de un formulario",
+      "lede": "Apagado no aporta entrada al <code class=\"code\">FormData</code>, igual que una casilla nativa. Con\r\n          <code class=\"code\">required</code> reporta <code class=\"code\">valueMissing</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<form id=\"demoForm\">\r\n            <div class=\"stack\">\r\n              <is-switch name=\"privacidad\" value=\"si\" required>Acepto la política de privacidad (obligatorio)</is-switch>\r\n              <is-switch name=\"boletin\" value=\"semanal\" checked>Boletín semanal</is-switch>\r\n              <is-switch name=\"auditoria\" value=\"si\" checked readonly hint=\"Fijado por la política de la empresa.\">Registro de auditoría</is-switch>\r\n              <div class=\"inline\" style=\"gap:.5rem\">\r\n                <is-button color=\"brand\" id=\"btnSend\">Enviar</is-button>\r\n                <is-button variant=\"outlined\" id=\"btnReset\">Reset</is-button>\r\n              </div>\r\n            </div>\r\n          </form>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"log\" id=\"formLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Envía el formulario para ver el FormData.</div></div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-switch name=\"boletin\" value=\"semanal\" checked>Boletín semanal</is-switch>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "scale",
+      "title": "Escala por contexto",
+      "lede": "Sin atributo <code class=\"code\">size</code>: carril y perilla se miden en <code class=\"code\">em</code> y\r\n          heredan el <code class=\"code\">font-size</code> del contenedor.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"inline\">\r\n            <span style=\"font-size:.8rem\"><is-switch checked>0.8rem</is-switch></span>\r\n            <span style=\"font-size:1rem\"><is-switch checked>1rem</is-switch></span>\r\n            <span style=\"font-size:1.35rem\"><is-switch checked>1.35rem</is-switch></span>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span style=\"font-size:1.35rem\"><is-switch checked>Grande</is-switch></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "title": "Teclado",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Tecla",
+            "Acción"
+          ],
+          "rows": [
+            [
+              "<code>Tab</code>",
+              "enfoca el interruptor (también con <code>readonly</code>; no con <code>disabled</code>)"
+            ],
+            [
+              "<code>Espacio</code> <code>Enter</code>",
+              "alterna encendido / apagado y emite <code>is-change</code>"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>name</code>",
+              "clave en FormData"
+            ],
+            [
+              "<code>value</code>",
+              "default <code>on</code>; solo se envía si está encendido"
+            ],
+            [
+              "<code>checked</code>",
+              "boolean, reflejado"
+            ],
+            [
+              "<code>disabled</code> <code>readonly</code> <code>required</code> <code>error</code>",
+              "boolean"
+            ],
+            [
+              "<code>variant</code>",
+              "<code>brand</code> (default) · <code>neutral</code> · <code>success</code> · <code>warning</code> · <code>danger</code>"
+            ],
+            [
+              "<code>label-placement</code>",
+              "<code>end</code> (default) · <code>start</code> · <code>top</code> · <code>bottom</code>"
+            ],
+            [
+              "<code>icon</code> <code>checked-icon</code>",
+              "iconos <code>is-icon</code> dentro de la perilla (apagado / encendido)"
+            ],
+            [
+              "<code>on-label</code> <code>off-label</code>",
+              "texto corto dentro del carril"
+            ],
+            [
+              "<code>hint</code>",
+              "texto de ayuda bajo el control; también slot <code>hint</code>"
+            ],
+            [
+              "propiedades JS",
+              "<code>checked</code> <code>value</code> <code>name</code> <code>variant</code> <code>labelPlacement</code> <code>icon</code> <code>checkedIcon</code> <code>onLabel</code> <code>offLabel</code> <code>hint</code> <code>error</code> <code>readonly</code> <code>disabled</code> <code>required</code>"
+            ],
+            [
+              "slots",
+              "default (etiqueta) · <code>hint</code>"
+            ],
+            [
+              "parts",
+              "<code>form-control</code> <code>base</code> <code>control</code> <code>track-label</code> <code>thumb</code> <code>mark</code> <code>label</code> <code>hint</code>"
+            ],
+            [
+              "states",
+              "<code>:state(checked)</code> <code>:state(disabled)</code> <code>:state(readonly)</code> <code>:state(error)</code>"
+            ],
+            [
+              "eventos",
+              "<code>is-change</code> · detail <code>{ checked, value }</code>"
+            ],
+            [
+              "métodos",
+              "<code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code>"
+            ],
+            [
+              "rol",
+              "<code>switch</code> · Espacio y Enter alternan"
+            ],
+            [
+              "tokens",
+              "<code>--is-switch-height</code> <code>--is-switch-width</code> <code>--is-switch-bg</code> <code>--is-switch-bg-hover</code> <code>--is-switch-border</code> <code>--is-switch-accent</code> <code>--is-switch-thumb</code> <code>--is-switch-icon</code> <code>--is-switch-icon-checked</code> <code>--is-switch-focus</code> <code>--is-switch-halo</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

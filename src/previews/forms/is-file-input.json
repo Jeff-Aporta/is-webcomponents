@@ -1,0 +1,76 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-file-input",
+  "category": "forms",
+  "title": "<is-file-input>",
+  "titleHtml": true,
+  "storageKey": "docs-is-file-input",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-file-input>",
+      "lede": "Dropzone con input nativo oculto, lista de archivos y estados <code class=\"code\">blank</code> / <code class=\"code\">dragging</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-file-input\r\n            id=\"fi\"\r\n            label=\"Adjuntos\"\r\n            hint=\"PDF o imágenes · máx. varios archivos\"\r\n            accept=\"image/*,.pdf\"\r\n            multiple\r\n            name=\"attachments\"\r\n          ></is-file-input>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\">Archivos: 0</p>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Single + required",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-file-input label=\"Avatar\" accept=\"image/*\" required hint=\"Obligatorio\"></is-file-input>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-file-input\r\n  label=\"Adjuntos\"\r\n  accept=\"image/*,.pdf\"\r\n  multiple\r\n  name=\"attachments\"\r\n></is-file-input>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>label</code> <code>hint</code>",
+              "texto o slots homónimos"
+            ],
+            [
+              "<code>name</code> <code>accept</code> <code>capture</code>",
+              "pasan al input nativo"
+            ],
+            [
+              "<code>multiple</code> <code>disabled</code> <code>required</code>",
+              "boolean"
+            ],
+            [
+              "<code>files</code>",
+              "File[] get/set"
+            ],
+            [
+              "events",
+              "input, change, is-change"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

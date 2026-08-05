@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-map-marker",
+  "category": "data-viz",
+  "title": "<is-map-marker>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-map-marker de InSoft.",
+  "storageKey": "docs-is-map-marker",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-map-marker>",
+      "lede": "Marcador posicionado por longitud y latitud dentro de un <code class=\"code\">&lt;is-maps&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\r\n            <is-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></is-map-marker>\r\n            <is-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></is-map-marker>\r\n            <is-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></is-map-marker>\r\n          </is-maps>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\r\n  <is-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></is-map-marker>\r\n  <is-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></is-map-marker>\r\n  <is-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></is-map-marker>\r\n</is-maps>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-maps&gt; — Visualizador geográfico. Modo nativo (default): lienzo SVG que mapea coordenadas (lat, lon) a un viewport interno mediante una proyección equirectangular. Permite marcadores, zoom y pan, todo sin dependencias externas. Modo tile: atributo `engine=\"tile\"` y un `&lt;script type=\"application/json\"&gt;` con `{ tileUrl, attribution, zoom, center }` para apuntar a un proveedor (OpenStreetMap, etc.) embebido vía iframe (no requiere libs en este bundle). Atributos viewbox       cuadro inicial: \"minLon,minLat,maxLon,maxLat\" (default mundo) zoom          zoom inicial 1..n para vista controlada por JS engine        svg | tile interactive   boolean — false desactiva pan/zoom (mostrar) Marcadores &lt;is-map-marker lat=\"4.6\" lon=\"-74.0\" label=\"Bogotá\"&gt; &lt;span slot=\"popup\"&gt;Capital de Colombia&lt;/span&gt; &lt;/is-map-marker&gt; Eventos is-viewport   detail: { minLon, minLat, maxLon, maxLat } is-marker-click  detail: { marker }",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/data-viz/maps.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

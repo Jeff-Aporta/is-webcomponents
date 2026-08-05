@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-radio-group",
+  "category": "forms",
+  "title": "<is-radio-group>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-radio-group de InSoft.",
+  "storageKey": "docs-is-radio-group",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-radio-group>",
+      "lede": "Agrupa varios <code class=\"code\">&lt;is-radio&gt;</code> bajo un mismo nombre y expone el valor seleccionado como un único control de formulario.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\r\n            <is-radio value=\"contado\">Contado</is-radio>\r\n            <is-radio value=\"credito\">Crédito</is-radio>\r\n            <is-radio value=\"mixto\">Mixto</is-radio>\r\n          </is-radio-group>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\r\n  <is-radio value=\"contado\">Contado</is-radio>\r\n  <is-radio value=\"credito\">Crédito</is-radio>\r\n  <is-radio value=\"mixto\">Mixto</is-radio>\r\n</is-radio-group>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-radio-group&gt; — Grupo form-associated de &lt;is-radio&gt;. El grupo es el dueño del valor: los radios solo avisan con `is-radio-select`. Atributos name, value, label, hint orientation      vertical (default) | horizontal   ·   row = alias booleano de horizontal color          brand (default) | neutral | success | warning | danger label-placement  end (default) | start | top | bottom   (se aplica a los hijos) error-text       mensaje de error; sustituye al hint y activa el estado de error disabled, required, readonly, error   (boolean) Slots: default (&lt;is-radio&gt;), label, hint, error-text Parts: form-control, label, base, hint, error-text Custom states: disabled, readonly, error, blank Events: is-change { value }",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/radio-group.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

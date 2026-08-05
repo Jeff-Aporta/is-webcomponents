@@ -1,0 +1,86 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-relative-time",
+  "category": "helpers",
+  "title": "<is-relative-time>",
+  "titleHtml": true,
+  "storageKey": "docs-is-relative-time",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-relative-time>",
+      "lede": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code>.\r\n          Alias de <code class=\"code\">&lt;is-format type=\"relative\"&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">// sync refresca cada ~30s</span>\r\n          <p style=\"margin:0\">Actualizado <is-relative-time id=\"live\" sync></is-relative-time></p>"
+        }
+      ]
+    },
+    {
+      "id": "formats",
+      "title": "Formatos",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">long</code>\r\n              <is-relative-time class=\"format-grid__value\" date=\"2026-07-29T12:00:00\" format=\"long\"></is-relative-time>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">short</code>\r\n              <is-relative-time class=\"format-grid__value\" date=\"2026-07-31T12:00:00\" format=\"short\"></is-relative-time>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">narrow</code>\r\n              <is-relative-time class=\"format-grid__value\" date=\"2026-08-05T12:00:00\" format=\"narrow\"></is-relative-time>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">numeric=always</code>\r\n              <is-relative-time class=\"format-grid__value\" date=\"2026-08-03T12:00:00\" numeric=\"always\"></is-relative-time>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-relative-time date=\"2026-07-30T10:00:00\" format=\"short\" sync></is-relative-time>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "alias",
+      "title": "Equivalente unificado",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<p style=\"margin:0\">\r\n            <is-format type=\"relative\" date=\"2026-07-30T10:00:00\" style=\"short\"></is-format>\r\n          </p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-format type=\"relative\" date=\"2026-07-30T10:00:00\" style=\"short\"></is-format>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>date</code>",
+              "ISO o timestamp"
+            ],
+            [
+              "<code>format</code>",
+              "long · short · narrow"
+            ],
+            [
+              "<code>numeric</code>",
+              "auto · always"
+            ],
+            [
+              "<code>locale</code>",
+              "lang del documento"
+            ],
+            [
+              "<code>sync</code>",
+              "actualiza periódicamente"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

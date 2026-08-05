@@ -1,0 +1,118 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-ui",
+  "category": "helpers",
+  "title": "IsUi <span class=\"lede\" style=\"display:inline;font-weight:400\">(módulo · no es un tag)</span>",
+  "titleHtml": true,
+  "description": "Utilidad IsUi: html, adoptCss y define para apps consumidoras del kit.",
+  "styles": ".ui-stage {\r\n      display: grid;\r\n      gap: 0.75rem;\r\n      padding: 1rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius-md, 8px);\r\n      background: color-mix(in srgb, var(--is-control-bg) 80%, transparent);\r\n    }\r\n    .ui-stage__meta {\r\n      font-size: 0.85em;\r\n      color: var(--is-text-muted, var(--is-text));\r\n      opacity: 0.85;\r\n    }\r\n    demo-card {\r\n      display: block;\r\n      padding: 0.85rem 1rem;\r\n      border-radius: 8px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg);\r\n      color: var(--is-text);\r\n    }\r\n    demo-card[data-tone=\"brand\"] {\r\n      border-color: color-mix(in srgb, var(--is-accent) 55%, var(--is-border));\r\n    }",
+  "storageKey": "docs-is-ui",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "IsUi <span class=\"lede\" style=\"display:inline;font-weight:400\">(módulo · no es un tag)</span>",
+      "titleHtml": true,
+      "lede": "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en\r\n          <code class=\"code\">globalThis.IsUi</code> (alias <code class=\"code\">Ui</code>).\r\n          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con\r\n          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">// Disponible tras all.min.js</span>\r\n          <div class=\"ui-stage\" id=\"introStage\">\r\n            <div class=\"ui-stage__meta\">Cargando IsUi…</div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "html",
+      "title": "<code>IsUi.html</code>",
+      "titleHtml": true,
+      "lede": "Plantilla etiquetada → <code class=\"code\">DocumentFragment</code>. Soporta valores, eventos y nodos hijos.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"ui-stage\" id=\"htmlStage\"></div>"
+        },
+        {
+          "kind": "code",
+          "code": "const { html } = IsUi;\r\nhost.append(html`\r\n  <is-button color=\"brand\" onclick=${() => IsUi.toast?.() || console.log('ok')}>\r\n    Guardar\r\n  </is-button>\r\n`);",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "define",
+      "title": "<code>IsUi.define</code> + <code>adoptCss</code>",
+      "titleHtml": true,
+      "lede": "Registra un custom element de dominio. El CSS va en archivo hermano\r\n          (aquí se usa <code class=\"code\">IsUi.css</code> solo para el demo en página).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">// demo-card registrado en esta página</span>\r\n          <div class=\"ui-stage\">\r\n            <demo-card data-tone=\"brand\">\r\n              <strong>app-*</strong> traduce datos → <code>is-*</code>\r\n            </demo-card>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "import { html, adoptCss, define } from '…/helpers/ui.min.js';\r\n\r\nclass AppPanel extends HTMLElement {\r\n  #root = this.attachShadow({ mode: 'open' });\r\n  connectedCallback() {\r\n    this.#root.append(html`<is-button color=\"brand\">Acción</is-button>`);\r\n    adoptCss(this.#root, import.meta.url); // → AppPanel.css hermano\r\n  }\r\n}\r\ndefine('app-panel', AppPanel);",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "cdn",
+      "title": "CDN",
+      "lede": "Tag del catálogo: <code class=\"code\">is-ui</code> (módulo). Artefacto:\r\n          <code class=\"code\">dist/cdn/helpers/ui.min.js</code>. También va dentro de\r\n          <code class=\"code\">all.min.js</code>.",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "<script type=\"module\"\r\n  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js\">\r\n</script>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia rápida",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Uso"
+          ],
+          "rows": [
+            [
+              "<code>html</code>",
+              "Plantilla → fragment"
+            ],
+            [
+              "<code>adoptCss</code>",
+              "CSS hermano en ShadowRoot (preferido)"
+            ],
+            [
+              "<code>css</code>",
+              "CSS constructable (prototipos)"
+            ],
+            [
+              "<code>define</code>",
+              "customElements.define idempotente"
+            ],
+            [
+              "<code>el</code> / <code>esc</code> / <code>raw</code>",
+              "createElement / escape / HTML crudo"
+            ],
+            [
+              "<code>crearComponente</code>",
+              "Fábrica shadow + props → render"
+            ],
+            [
+              "<code>jsonScript</code>",
+              "Config JSON para is-*"
+            ],
+            [
+              "<code>fecha</code> / <code>rec</code>",
+              "Fecha es-CO / coerce record"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

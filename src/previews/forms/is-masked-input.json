@@ -1,0 +1,91 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-masked-input",
+  "category": "forms",
+  "title": "<is-masked-input>",
+  "titleHtml": true,
+  "styles": ".mask-row { display: grid; grid-template-columns: 12rem 1fr; gap: 1rem; align-items: center; padding: .35rem 0; }\r\n    .mask-row label { font-size: .82rem; color: var(--is-text-soft); }",
+  "storageKey": "docs-is-masked-input",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-masked-input>",
+      "lede": "Campo de texto que aplica un patrón mientras el usuario tipea. Útil para tarjetas, fechas, teléfonos y todo formato con estructura fija.",
+      "blocks": []
+    },
+    {
+      "id": "tokens",
+      "title": "Tokens de patrón",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Char",
+            "Acepta",
+            "¿Requerido?",
+            "Nota"
+          ],
+          "rows": [
+            [
+              "<code>0</code>",
+              "0–9",
+              "sí",
+              "Dígito obligatorio."
+            ],
+            [
+              "<code>9</code>",
+              "0–9",
+              "no",
+              "Dígito opcional."
+            ],
+            [
+              "<code>A</code>",
+              "A–Z / a–z",
+              "sí",
+              "Forzado a mayúsculas (case fold)."
+            ],
+            [
+              "<code>a</code>",
+              "a–z",
+              "no",
+              "Minúscula."
+            ],
+            [
+              "<code>*</code>",
+              "A–Z / a–z / 0–9",
+              "no",
+              "Alfanumérico opcional."
+            ],
+            [
+              "cualquier otro",
+              "—",
+              "—",
+              "Literal: se imprime tal cual cuando hay datos."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ejemplos",
+      "title": "Patrones comunes",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"mask-row\"><label>Tarjeta</label>\r\n            <is-masked-input id=\"card\" pattern=\"0000 0000 0000 0000\" autocomplete=\"cc-number\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Vencimiento</label>\r\n            <is-masked-input pattern=\"00/00\" placeholder=\"MM/AA\" required></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Fecha</label>\r\n            <is-masked-input pattern=\"00/00/0000\" placeholder=\"DD/MM/AAAA\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Teléfono</label>\r\n            <is-masked-input pattern=\"(+00) 0000-0000\" placeholder=\"(+57) 3000-0000\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Hora</label>\r\n            <is-masked-input pattern=\"00:00\" placeholder=\"HH:MM\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Código postal</label>\r\n            <is-masked-input pattern=\"A0A 0A0\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Placa</label>\r\n            <is-masked-input pattern=\"AAA-0000\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Hex color</label>\r\n            <is-masked-input pattern=\"#000000\" placeholder=\"#000000\" value=\"1a2b\"></is-masked-input>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "valor",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const m = document.querySelector('is-masked-input');\r\nm.value           // texto formateado: \"1234 5678 9012 3456\"\r\nm.raw             // caracteres limpios: \"1234567890123456\"\r\nm.complete        // boolean: ¿rellenó todos los slots requeridos?\r\nm.formatted       // alias de value\r\n\r\nm.addEventListener('is-input',    e => /* cada keystroke */);\r\nm.addEventListener('is-complete', e => /* completó el patrón */);\r\n\r\n// API HTML: <input> invisible participa en formularios vía ElementInternals\r\n//   <form><is-masked-input name=\"card\" pattern=\"0000 0000 0000 0000\"></is-masked-input></form>\r\nformData.get('card');  // texto formateado (no raw; usar raw attr si se quiere limpio)",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

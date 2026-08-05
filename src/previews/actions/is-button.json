@@ -1,0 +1,743 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-button",
+  "category": "actions",
+  "title": "<is-button>",
+  "titleHtml": true,
+  "description": "Documentación y playground del componente is-button de InSoft.",
+  "styles": "#customSpinnerBtn::part(spinner) svg {\r\n            stroke: #ff6b6b;\r\n            stroke-width: 3;\r\n          }\r\n          #customSpinnerBtn::part(spinner) svg circle {\r\n            stroke-dasharray: 12 6;\r\n          }\n\n#themed1 {\r\n              --is-color-brand-strong: #ae3ec9;\r\n              --is-color-brand-stronger: #862e9c;\r\n              --is-color-brand-strongest: #5f1f70;\r\n              --is-button-border-radius: 0;\r\n            }\r\n            #themed2 {\r\n              --is-color-success-strong: #0ca678;\r\n              --is-color-success-stronger: #087f5b;\r\n              --is-button-border-radius: 18px;\r\n            }\r\n            #themed3 {\r\n              --is-color-warning-strong: #d9480f;\r\n              --is-color-warning-stronger: #a03406;\r\n              --is-button-border-width: 2px;\r\n            }",
+  "storageKey": "docs-is-button",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-button>",
+      "lede": "Componente InSoft accesible y personalizable, escrito con JavaScript nativo,\r\n          Shadow DOM y sin frameworks.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">// El caso más simple</span>\r\n          <div class=\"demo-row\">\r\n            <is-button>Hola mundo</is-button>\r\n            <is-button color=\"brand\">Guardar</is-button>\r\n            <is-button color=\"success\" variant=\"outlined\">\r\n              <is-icon slot=\"start\" icon=\"mdi:check\"></is-icon>\r\n              Aprobado\r\n            </is-button>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "variants",
+      "title": "Variantes",
+      "lede": "El atributo <code class=\"code\">color</code> define el color semántico.\r\n          Default: <code class=\"code\">brand</code>. <code class=\"code\">info</code> y\r\n          <code class=\"code\">error</code> existen aparte a propósito:\r\n          <code class=\"code\">danger</code> es la acción destructiva («Eliminar») y\r\n          <code class=\"code\">error</code> el estado de fallo («Error al guardar»).",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Matriz color × appearance</h3>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"matrix\">\r\n            <div></div>\r\n            <div class=\"cell-label\">filled</div>\r\n            <div class=\"cell-label\">outlined</div>\r\n            <div class=\"cell-label\">plain</div>\r\n\r\n            <div class=\"row-label\">brand</div>\r\n            <div class=\"demo-cell\"><is-button color=\"brand\">Brand</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"brand\" variant=\"outlined\">Brand</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"brand\" variant=\"plain\">Brand</is-button></div>\r\n\r\n            <div class=\"row-label\">neutral</div>\r\n            <div class=\"demo-cell\"><is-button color=\"neutral\">Neutral</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"neutral\" variant=\"outlined\">Neutral</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"neutral\" variant=\"plain\">Neutral</is-button></div>\r\n\r\n            <div class=\"row-label\">success</div>\r\n            <div class=\"demo-cell\"><is-button color=\"success\">Success</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"success\" variant=\"outlined\">Success</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"success\" variant=\"plain\">Success</is-button></div>\r\n\r\n            <div class=\"row-label\">warning</div>\r\n            <div class=\"demo-cell\"><is-button color=\"warning\">Warning</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"warning\" variant=\"outlined\">Warning</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"warning\" variant=\"plain\">Warning</is-button></div>\r\n\r\n            <div class=\"row-label\">danger</div>\r\n            <div class=\"demo-cell\"><is-button color=\"danger\">Danger</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"danger\" variant=\"outlined\">Danger</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"danger\" variant=\"plain\">Danger</is-button></div>\r\n\r\n            <div class=\"row-label\">info</div>\r\n            <div class=\"demo-cell\"><is-button color=\"info\">Info</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"info\" variant=\"outlined\">Info</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"info\" variant=\"plain\">Info</is-button></div>\r\n\r\n            <div class=\"row-label\">error</div>\r\n            <div class=\"demo-cell\"><is-button color=\"error\">Error</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"error\" variant=\"outlined\">Error</is-button></div>\r\n            <div class=\"demo-cell\"><is-button color=\"error\" variant=\"plain\">Error</is-button></div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"success\"</span><span class=\"tag\">></span>Aprobado<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"danger\"</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"outlined\"</span><span class=\"tag\">></span>Eliminar<span class=\"tag\"></is-button></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "appearances",
+      "title": "Apariencias (vista detallada)",
+      "lede": "Cuatro niveles de énfasis visual. Úsalos para jerarquizar acciones.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h4>filled — acción principal</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"brand\" variant=\"filled\">Primario</is-button>\r\n            <is-button color=\"success\" variant=\"filled\">Confirmar</is-button>\r\n            <is-button color=\"warning\" variant=\"filled\">Atención</is-button>\r\n            <is-button color=\"danger\"  variant=\"filled\">Eliminar</is-button>\r\n            <is-button color=\"info\"    variant=\"filled\">Detalles</is-button>\r\n            <is-button color=\"error\"   variant=\"filled\">Reintentar</is-button>\r\n            <is-button color=\"neutral\" variant=\"filled\">Secundario</is-button>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>outlined — acción secundaria</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"brand\" variant=\"outlined\">Primario</is-button>\r\n            <is-button color=\"success\" variant=\"outlined\">Confirmar</is-button>\r\n            <is-button color=\"warning\" variant=\"outlined\">Atención</is-button>\r\n            <is-button color=\"danger\"  variant=\"outlined\">Eliminar</is-button>\r\n            <is-button color=\"info\"    variant=\"outlined\">Detalles</is-button>\r\n            <is-button color=\"error\"   variant=\"outlined\">Reintentar</is-button>\r\n            <is-button color=\"neutral\" variant=\"outlined\">Secundario</is-button>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>plain — acción terciaria / contextual</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"brand\" variant=\"plain\">Primario</is-button>\r\n            <is-button color=\"success\" variant=\"plain\">Confirmar</is-button>\r\n            <is-button color=\"warning\" variant=\"plain\">Atención</is-button>\r\n            <is-button color=\"danger\"  variant=\"plain\">Eliminar</is-button>\r\n            <is-button color=\"info\"    variant=\"plain\">Detalles</is-button>\r\n            <is-button color=\"error\"   variant=\"plain\">Reintentar</is-button>\r\n            <is-button color=\"neutral\" variant=\"plain\">Secundario</is-button>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>ghost — outlined en reposo, filled al pasar el mouse</h4>\r\n        <p class=\"lede\">\r\n          Pasa el mouse por encima: el borde se rellena. Util cuando la accion\r\n          debe ser discreta hasta que el usuario la apunta.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"brand\" variant=\"ghost\">Primario</is-button>\r\n            <is-button color=\"success\" variant=\"ghost\">Confirmar</is-button>\r\n            <is-button color=\"warning\" variant=\"ghost\">Atención</is-button>\r\n            <is-button color=\"danger\"  variant=\"ghost\">Eliminar</is-button>\r\n            <is-button color=\"info\"    variant=\"ghost\">Detalles</is-button>\r\n            <is-button color=\"error\"   variant=\"ghost\">Reintentar</is-button>\r\n            <is-button color=\"neutral\" variant=\"ghost\">Secundario</is-button>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Escala por contexto",
+      "lede": "El componente usa unidades <code class=\"code\">em</code>. Cambia <code class=\"code\">font-size</code> en cualquier ancestro para escalarlo completo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"align-items: flex-end;\">\r\n            <span style=\"font-size: .8125rem\"><is-button>Compacto</is-button></span>\r\n            <span style=\"font-size: 1rem\"><is-button>Normal</is-button></span>\r\n            <span style=\"font-size: 1.25rem\"><is-button>Grande</is-button></span>\r\n\r\n            <span style=\"font-size: .8125rem\"><is-button color=\"brand\" variant=\"outlined\">Compacto</is-button></span>\r\n            <span style=\"font-size: 1rem\"><is-button color=\"brand\" variant=\"outlined\">Normal</is-button></span>\r\n            <span style=\"font-size: 1.25rem\"><is-button color=\"brand\" variant=\"outlined\">Grande</is-button></span>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><div</span> <span class=\"attr\">style</span>=<span class=\"val\">\"font-size: 1.25rem\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Grande<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></div></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "title": "Con iconos",
+      "lede": "Slots <code class=\"code\">start</code> y <code class=\"code\">end</code> para iconos.\r\n          Cuando el botón contiene un solo SVG sin texto, se vuelve \"icon-only\" automáticamente.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h4>Icono al inicio (start)</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"brand\">\r\n              <is-icon icon=\"mdi:content-save-outline\"></is-icon>\r\n              Guardar cambios\r\n            </is-button>\r\n            <is-button color=\"success\">\r\n              <is-icon icon=\"mdi:check\"></is-icon>\r\n              Aprobar\r\n            </is-button>\r\n            <is-button color=\"danger\" variant=\"outlined\">\r\n              <is-icon icon=\"mdi:trash-can-outline\"></is-icon>\r\n              Eliminar\r\n            </is-button>\r\n            <is-button color=\"neutral\" variant=\"plain\">\r\n              <is-icon icon=\"mdi:pencil-outline\"></is-icon>\r\n              Editar\r\n            </is-button>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Icono al final (end)</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"brand\" variant=\"outlined\">\r\n              Continuar\r\n              <is-icon icon=\"mdi:arrow-right\"></is-icon>\r\n            </is-button>\r\n            <is-button color=\"neutral\" variant=\"plain\">\r\n              Descargar reporte\r\n              <is-icon icon=\"mdi:download\"></is-icon>\r\n            </is-button>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Ambos lados</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"brand\">\r\n              <is-icon icon=\"mdi:bell-outline\"></is-icon>\r\n              Notificaciones\r\n              <is-icon icon=\"mdi:arrow-right\"></is-icon>\r\n            </is-button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><svg</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"start\"</span> <span class=\"attr\">viewBox</span>=<span class=\"val\">\"0 0 16 16\"</span><span class=\"tag\">></span>...<span class=\"tag\"></svg></span>\r\n  Guardar\r\n<span class=\"tag\"></is-button></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "icon-only",
+      "title": "Solo icono",
+      "lede": "Cuando el botón tiene un solo elemento hijo y nada de texto,\r\n          el custom element aplica automáticamente el state <code class=\"code\">:state(icon-button)</code>\r\n          y se vuelve cuadrado.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"neutral\" variant=\"outlined\" title=\"Ajustes\">\r\n              <is-icon icon=\"mdi:cog-outline\"></is-icon>\r\n            </is-button>\r\n            <is-button color=\"brand\">\r\n              <is-icon icon=\"mdi:plus\"></is-icon>\r\n            </is-button>\r\n            <is-button color=\"success\">\r\n              <is-icon icon=\"mdi:check\"></is-icon>\r\n            </is-button>\r\n            <is-button color=\"warning\">\r\n              <is-icon icon=\"mdi:bell-outline\"></is-icon>\r\n            </is-button>\r\n            <is-button color=\"danger\">\r\n              <is-icon icon=\"mdi:trash-can-outline\"></is-icon>\r\n            </is-button>\r\n            <is-button color=\"neutral\" variant=\"plain\">\r\n              <is-icon icon=\"mdi:magnify\"></is-icon>\r\n            </is-button>\r\n            <is-button color=\"neutral\" variant=\"plain\" pill title=\"Me gusta\">\r\n              <is-icon icon=\"mdi:heart-outline\"></is-icon>\r\n            </is-button>\r\n            <is-button color=\"neutral\" variant=\"plain\" pill title=\"Perfil\">\r\n              <is-icon icon=\"mdi:account\"></is-icon>\r\n            </is-button>\r\n          </div>\r\n\r\n          <div class=\"demo-row\" style=\"margin-top: 1em; align-items: flex-end;\">\r\n            <span style=\"font-size: .8125rem\"><is-button color=\"brand\" variant=\"outlined\">\r\n              <is-icon icon=\"mdi:pencil-outline\"></is-icon>\r\n            </is-button></span>\r\n            <span style=\"font-size: 1rem\"><is-button color=\"brand\" variant=\"outlined\">\r\n              <is-icon icon=\"mdi:pencil-outline\"></is-icon>\r\n            </is-button></span>\r\n            <span style=\"font-size: 1.25rem\"><is-button color=\"brand\" variant=\"outlined\">\r\n              <is-icon icon=\"mdi:pencil-outline\"></is-icon>\r\n            </is-button></span>\r\n          </div>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>Tip:</strong> usa siempre <code class=\"code\">title=\"...\"</code> en icon-only para accesibilidad (label del tooltip + nombre accesible)."
+        }
+      ]
+    },
+    {
+      "id": "pill",
+      "title": "Pill",
+      "lede": "<code class=\"code\">pill</code> aplica <code class=\"code\">border-radius: 999px</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button pill color=\"brand\">Pill brand</is-button>\r\n            <is-button pill color=\"success\" variant=\"outlined\">Pill outlined</is-button>\r\n            <is-button pill color=\"neutral\" variant=\"plain\">Pill plain</is-button>\r\n            <is-button pill color=\"brand\">\r\n              <is-icon icon=\"mdi:plus\"></is-icon>\r\n              Crear nuevo\r\n            </is-button>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "caret",
+      "title": "Con caret",
+      "lede": "Útil para menús desplegables o acciones que revelan algo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button with-caret color=\"brand\">Acciones</is-button>\r\n            <is-button with-caret color=\"neutral\" variant=\"outlined\">Filtros</is-button>\r\n            <is-button with-caret color=\"neutral\" variant=\"plain\">Ordenar por</is-button>\r\n            <span style=\"font-size: .8125rem\"><is-button with-caret color=\"success\">Aplicar</is-button></span>\r\n            <span style=\"font-size: 1.25rem\"><is-button with-caret>Más opciones</is-button></span>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "loading",
+      "title": "Loading",
+      "lede": "<code class=\"code\">loading</code> deshabilita la interacción, oculta label/iconos/caret\r\n          y muestra un spinner. Aplica <code class=\"code\">aria-busy=\"true\"</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button loading color=\"brand\">Guardando…</is-button>\r\n            <is-button loading color=\"success\" variant=\"outlined\">Enviando</is-button>\r\n            <is-button loading color=\"neutral\" variant=\"plain\">Cargando</is-button>\r\n            <is-button loading color=\"danger\">\r\n              <is-icon icon=\"mdi:trash-can-outline\"></is-icon>\r\n              Eliminando\r\n            </is-button>\r\n            <span style=\"font-size: 1.25rem\"><is-button loading color=\"brand\" pill>Procesando</is-button></span>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Demo interactivo</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"loadingDemo\" color=\"brand\">Iniciar carga</is-button>\r\n          <pre class=\"code\" style=\"margin: 12px 0 0;\">btn.<span class=\"attr\">toggleAttribute</span>(<span class=\"str\">'loading'</span>);\r\nbtn.<span class=\"attr\">toggleAttribute</span>(<span class=\"str\">'loading'</span>);  <span class=\"com\">// o false</span></pre>"
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "title": "Disabled",
+      "lede": "El botón se atenúa, no recibe eventos y se quita del tab order.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button disabled>Default</is-button>\r\n            <is-button disabled color=\"brand\">Brand</is-button>\r\n            <is-button disabled color=\"success\" variant=\"outlined\">Outlined</is-button>\r\n            <is-button disabled color=\"danger\" variant=\"plain\">Plain</is-button>\r\n            <is-button disabled with-caret>Con caret</is-button>\r\n            <is-button disabled>\r\n              <is-icon icon=\"mdi:content-save-outline\"></is-icon>\r\n              Con icono\r\n            </is-button>\r\n            <is-button disabled pill color=\"success\">Pill disabled</is-button>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "link",
+      "title": "Como enlace",
+      "lede": "Con <code class=\"code\">href</code> el botón se renderiza como <code class=\"code\">&lt;a&gt;</code>.\r\n          Conserva variant, appearance, pill y demás atributos.\r\n          y soporta <code class=\"code\">target</code>, <code class=\"code\">rel</code> y <code class=\"code\">download</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button href=\"https://www.youtube.com/@JeffAporta\" target=\"_blank\" rel=\"noopener\" color=\"brand\">\r\n              Jeff Aporta en YouTube\r\n              <is-icon icon=\"mdi:youtube\"></is-icon>\r\n            </is-button>\r\n            <is-button href=\"#intro\" variant=\"outlined\">Volver al inicio</is-button>\r\n            <is-button href=\"data:text/plain;charset=utf-8,Hola%20mundo\" download=\"hola.txt\" variant=\"plain\">\r\n              <is-icon icon=\"mdi:download\"></is-icon>\r\n              Descargar hola.txt\r\n            </is-button>\r\n            <span style=\"font-size: .8125rem\"><is-button href=\"https://github.com\" target=\"_blank\" rel=\"noopener\" pill>\r\n              <is-icon icon=\"mdi:link-variant\"></is-icon>\r\n            </is-button></span>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">href</span>=<span class=\"val\">\"https://www.youtube.com/@JeffAporta\"</span> <span class=\"attr\">target</span>=<span class=\"val\">\"_blank\"</span> <span class=\"attr\">rel</span>=<span class=\"val\">\"noopener\"</span><span class=\"tag\">></span>\r\n  Jeff Aporta en YouTube\r\n<span class=\"tag\"></is-button></span>",
+          "lang": "html"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>Nota:</strong> cuando hay <code class=\"code\">href</code>, el componente aplica el state <code class=\"code\">:state(link)</code> que puedes usar en CSS para overrides específicos."
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "title": "En formularios",
+      "lede": "El componente es <strong>form-associated</strong>:\r\n          <code class=\"code\">type=\"submit\"</code> envía el form, <code class=\"code\">type=\"reset\"</code> lo resetea,\r\n          <code class=\"code\">name</code>/<code class=\"code\">value</code> viajan con los datos,\r\n          y se asocia a un <code class=\"code\">&lt;form&gt;</code> con <code class=\"code\">form=\"id\"</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<form id=\"demoForm\" style=\"display: grid; gap: 12px; max-width: 480px;\">\r\n            <label style=\"display: grid; gap: 4px; font-size: 0.85rem;\">\r\n              <span>Email</span>\r\n              <input type=\"email\" name=\"email\" required\r\n                     style=\"padding: 8px 10px; border: 1px solid var(--pg-border); border-radius: 6px; background: var(--pg-bg); color: var(--pg-text); font: inherit;\" />\r\n            </label>\r\n            <label style=\"display: grid; gap: 4px; font-size: 0.85rem;\">\r\n              <span>Comentario</span>\r\n              <textarea name=\"comment\" rows=\"3\"\r\n                        style=\"padding: 8px 10px; border: 1px solid var(--pg-border); border-radius: 6px; background: var(--pg-bg); color: var(--pg-text); font: inherit; resize: vertical;\"></textarea>\r\n            </label>\r\n\r\n            <div class=\"demo-row\" style=\"margin-top: 8px;\">\r\n              <is-button type=\"submit\" color=\"brand\" name=\"action\" value=\"save\">Guardar</is-button>\r\n              <is-button type=\"submit\" color=\"success\" variant=\"outlined\" name=\"action\" value=\"publish\">Publicar</is-button>\r\n              <is-button type=\"reset\" variant=\"plain\">Limpiar</is-button>\r\n            </div>\r\n\r\n            <div id=\"formOut\" class=\"log\" aria-live=\"polite\"></div>\r\n          </form>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">type</span>=<span class=\"val\">\"submit\"</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span> <span class=\"attr\">name</span>=<span class=\"val\">\"action\"</span> <span class=\"attr\">value</span>=<span class=\"val\">\"save\"</span><span class=\"tag\">></span>Guardar<span class=\"tag\"></is-button></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "anatomy",
+      "title": "Anatomía",
+      "lede": "El shadow DOM expone CSS parts para que puedas estilizar piezas individuales sin re-implementar el componente.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"anatomy\">\r\n          <is-button id=\"anatomyBtn\" color=\"brand\" pill>\r\n            <is-icon icon=\"mdi:content-save-outline\"></is-icon>\r\n            Guardar cambios\r\n            <is-icon icon=\"mdi:arrow-right\"></is-icon>\r\n          </is-button>\r\n        </div>\r\n\r\n        <h4>Estructura interna del Shadow DOM</h4>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><button</span> <span class=\"attr\">part</span>=<span class=\"val\">\"button\"</span> <span class=\"attr\">class</span>=<span class=\"val\">\"btn\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"start\"</span>   <span class=\"attr\">class</span>=<span class=\"val\">\"btn__prefix\"</span><span class=\"tag\">></span><span class=\"tag\"><slot</span> <span class=\"attr\">name</span>=<span class=\"val\">\"start\"</span><span class=\"tag\">></slot></span></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"label\"</span>   <span class=\"attr\">class</span>=<span class=\"val\">\"btn__label\"</span><span class=\"tag\">></span><span class=\"tag\"><slot></slot></span></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"end\"</span>     <span class=\"attr\">class</span>=<span class=\"val\">\"btn__suffix\"</span><span class=\"tag\">></span><span class=\"tag\"><slot</span> <span class=\"attr\">name</span>=<span class=\"val\">\"end\"</span><span class=\"tag\">></slot></span></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"caret\"</span>   <span class=\"attr\">class</span>=<span class=\"val\">\"btn__caret\"</span><span class=\"tag\">></span>...<span class=\"tag\"></span></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"spinner\"</span> <span class=\"attr\">class</span>=<span class=\"val\">\"btn__spinner\"</span><span class=\"tag\">></span>...<span class=\"tag\"></span></span>\r\n<span class=\"tag\"></button></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "states",
+      "title": "Custom States",
+      "lede": "El componente expone cuatro <a href=\"https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_State_API\" target=\"_blank\" rel=\"noopener\">custom states</a>\r\n          para CSS condicional desde fuera del shadow.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>State",
+            "Selector",
+            "Cuándo se aplica"
+          ],
+          "rows": [
+            [
+              "disabled",
+              "<code>:state(disabled)</code>",
+              "Atributo <code>disabled</code> o <code>loading</code>, o form deshabilitado."
+            ],
+            [
+              "loading",
+              "<code>:state(loading)</code>",
+              "Atributo <code>loading</code>."
+            ],
+            [
+              "link",
+              "<code>:state(link)</code>",
+              "Atributo <code>href</code> presente (se renderiza como &lt;a&gt;)."
+            ],
+            [
+              "icon-button",
+              "<code>:state(icon-button)</code>",
+              "Un solo elemento hijo, sin texto."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Ejemplo de uso</h4>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"com\">/* afecta solo cuando está loading */</span>\r\nis-button:state(loading) {\r\n  --is-button-border-radius: 999px;\r\n}\r\n\r\n<span class=\"com\">/* afecta solo cuando es link */</span>\r\nis-button:state(link)::part(button) {\r\n  text-decoration: underline;\r\n}\r\n\r\n<span class=\"com\">/* afecta solo cuando es icon-only */</span>\r\nis-button:state(icon-button) {\r\n  --_hpad: 0;\r\n}",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "parts",
+      "title": "CSS Parts",
+      "lede": "Pseudo-elementos estilizables desde fuera del shadow DOM.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(button)</code>",
+              "El contenedor raíz (la etiqueta &lt;button&gt; o &lt;a&gt;)."
+            ],
+            [
+              "<code>::part(label)</code>",
+              "El span que envuelve el slot por defecto (el texto del botón)."
+            ],
+            [
+              "<code>::part(start)</code>",
+              "El wrapper del slot <code>start</code> (icono a la izquierda)."
+            ],
+            [
+              "<code>::part(end)</code>",
+              "El wrapper del slot <code>end</code> (icono a la derecha)."
+            ],
+            [
+              "<code>::part(caret)</code>",
+              "El ícono chevron cuando se usa <code>with-caret</code>."
+            ],
+            [
+              "<code>::part(spinner)</code>",
+              "El spinner del estado <code>loading</code>."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Override del spinner</h4>\r\n        <style>\r\n          #customSpinnerBtn::part(spinner) svg {\r\n            stroke: #ff6b6b;\r\n            stroke-width: 3;\r\n          }\r\n          #customSpinnerBtn::part(spinner) svg circle {\r\n            stroke-dasharray: 12 6;\r\n          }\r\n        </style>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"customSpinnerBtn\" loading color=\"danger\">Cargando con spinner custom</is-button>"
+        },
+        {
+          "kind": "code",
+          "code": "is-button:state(loading)::part(spinner) svg {\r\n  stroke: var(--is-color-danger);\r\n  stroke-width: 3;\r\n}",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "theming",
+      "title": "Theming (CSS custom properties)",
+      "lede": "Todas las decisiones de color y tamaño pasan por variables. Puedes reasignarlas\r\n          en <code class=\"code\">:root</code>, en un <code class=\"code\">is-button</code> concreto, o en un grupo.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h4>Tokens de color (paleta)</h4>"
+        },
+        {
+          "kind": "code",
+          "code": "--is-color-brand      --is-color-neutral    --is-color-success\r\n--is-color-warning    --is-color-danger     --is-color-info      --is-color-error\r\n\r\n<span class=\"c\">/* cada familia acepta cinco modificadores relativos, sin escala numérica */</span>\r\n--is-color-brand-paler   <span class=\"c\">/* pastel de fondo */</span>\r\n--is-color-brand-pale    <span class=\"c\">/* pastel activo */</span>\r\n--is-color-brand-strong  <span class=\"c\">/* relleno */</span>\r\n--is-color-brand-stronger<span class=\"c\">/* hover del relleno */</span>\r\n--is-color-brand-strongest<span class=\"c\">/* active del relleno */</span>",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Tokens del botón</h4>"
+        },
+        {
+          "kind": "code",
+          "code": "--is-button-font-family\r\n--is-button-font-weight\r\n--is-button-border-radius   <span class=\"com\">/* respeta pill si está presente */</span>\r\n--is-button-border-width\r\n--is-button-transition-duration",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Demo en vivo — cambia tokens a un botón individual</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"align-items: flex-end;\">\r\n            <is-button id=\"themed1\" color=\"brand\" pill>Themed 1</is-button>\r\n            <is-button id=\"themed2\" color=\"success\" pill>Themed 2</is-button>\r\n            <is-button id=\"themed3\" color=\"warning\" pill>Themed 3</is-button>\r\n          </div>\r\n\r\n          <style>\r\n            #themed1 {\r\n              --is-color-brand-strong: #ae3ec9;\r\n              --is-color-brand-stronger: #862e9c;\r\n              --is-color-brand-strongest: #5f1f70;\r\n              --is-button-border-radius: 0;\r\n            }\r\n            #themed2 {\r\n              --is-color-success-strong: #0ca678;\r\n              --is-color-success-stronger: #087f5b;\r\n              --is-button-border-radius: 18px;\r\n            }\r\n            #themed3 {\r\n              --is-color-warning-strong: #d9480f;\r\n              --is-color-warning-stronger: #a03406;\r\n              --is-button-border-width: 2px;\r\n            }\r\n          </style>"
+        }
+      ]
+    },
+    {
+      "id": "methods",
+      "title": "API JavaScript",
+      "lede": "Como cualquier custom element, accedes a la instancia con <code class=\"code\">document.querySelector('is-button')</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h4>Métodos</h4>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Método",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>click()</code>",
+              "Nativo. Dispara un click programático."
+            ],
+            [
+              "<code>focus(options?)</code>",
+              "Nativo. Foco en el botón."
+            ],
+            [
+              "<code>blur()</code>",
+              "Nativo. Quita el foco."
+            ],
+            [
+              "<code>setFocus(options?)</code>",
+              "Helper equivalente a <code>focus()</code> (misma signature)."
+            ],
+            [
+              "<code>checkValidity()</code>",
+              "Validez (form-associated)."
+            ],
+            [
+              "<code>reportValidity()</code>",
+              "Muestra mensaje de validación del form."
+            ],
+            [
+              "<code>setCustomValidity(msg)</code>",
+              "Marca error custom para validación del form."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Propiedades de validación (de ElementInternals)</h4>"
+        },
+        {
+          "kind": "code",
+          "code": "btn.validity            <span class=\"com\">// ValidityState</span>\r\nbtn.validationMessage    <span class=\"com\">// string</span>\r\nbtn.willValidate         <span class=\"com\">// boolean</span>",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Demo</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"apiBtn\" color=\"brand\">Hazme click</is-button>\r\n          <div class=\"demo-row\" style=\"margin-top: 12px;\">\r\n            <button id=\"apiFocus\" type=\"button\" class=\"theme-toggle\" style=\"position: static;\">focus()</button>\r\n            <button id=\"apiClick\" type=\"button\" class=\"theme-toggle\" style=\"position: static;\">click()</button>\r\n            <button id=\"apiLoad\"  type=\"button\" class=\"theme-toggle\" style=\"position: static;\">toggle loading</button>\r\n            <button id=\"apiDis\"   type=\"button\" class=\"theme-toggle\" style=\"position: static;\">toggle disabled</button>\r\n            <button id=\"apiError\" type=\"button\" class=\"theme-toggle\" style=\"position: static;\">setCustomValidity</button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"kw\">const</span> btn = document.<span class=\"attr\">querySelector</span>(<span class=\"str\">'#apiBtn'</span>);\r\nbtn.<span class=\"attr\">click</span>();\r\nbtn.<span class=\"attr\">setFocus</span>({ preventScroll: <span class=\"kw\">true</span> });\r\nbtn.<span class=\"attr\">toggleAttribute</span>(<span class=\"str\">'loading'</span>);\r\nbtn.<span class=\"attr\">setCustomValidity</span>(<span class=\"str\">'Revisa los campos'</span>);",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "events",
+      "title": "Eventos",
+      "lede": "Burbujean y son <code class=\"code\">composed: true</code>, así que puedes escucharlos\r\n          a nivel de document o de cualquier ancestro.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>click</code>",
+              "Click del usuario (o programático). No se dispara si <code>disabled</code> o <code>loading</code>."
+            ],
+            [
+              "<code>focus</code>",
+              "Recibe foco."
+            ],
+            [
+              "<code>blur</code>",
+              "Pierde foco."
+            ],
+            [
+              "<code>is-invalid</code>",
+              "Cuando falla la validación de formulario (no implementado en v0.1)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Demo en vivo</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-button id=\"evtBtn\" color=\"brand\">Probar eventos</is-button>\r\n            <is-button id=\"evtBtn2\" color=\"success\" variant=\"outlined\">Segundo botón</is-button>\r\n          </div>\r\n          <div id=\"evtLog\" class=\"log\" aria-live=\"polite\"></div>"
+        }
+      ]
+    },
+    {
+      "id": "playground",
+      "title": "Playground",
+      "lede": "Modifica las opciones y observa el resultado al instante.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"playground\">\r\n          <div class=\"stage\">\r\n            <is-button id=\"pgBtn\" color=\"brand\">Hola mundo</is-button>\r\n          </div>\r\n\r\n          <div class=\"controls\">\r\n            <h4>Configuración</h4>\r\n\r\n            <div class=\"ctl-row\">\r\n              <label for=\"pgVariant\">variant</label>\r\n              <select id=\"pgVariant\">\r\n                <option>brand</option>\r\n                <option>neutral</option>\r\n                <option>success</option>\r\n                <option>warning</option>\r\n                <option>danger</option>\r\n              </select>\r\n            </div>\r\n            <div class=\"ctl-row\">\r\n              <label for=\"pgAppearance\">appearance</label>\r\n              <select id=\"pgAppearance\">\r\n                <option>filled</option>\r\n                <option>outlined</option>\r\n                <option>plain</option>\r\n              </select>\r\n            </div>\r\n            <div class=\"ctl-row\">\r\n              <label for=\"pgText\">texto</label>\r\n              <input id=\"pgText\" type=\"text\" value=\"Hola mundo\" />\r\n            </div>\r\n            <div class=\"ctl-row\">\r\n              <label for=\"pgStart\">icono start</label>\r\n              <select id=\"pgStart\">\r\n                <option value=\"\">(ninguno)</option>\r\n                <option value=\"i-floppy\">floppy</option>\r\n                <option value=\"i-edit\">edit</option>\r\n                <option value=\"i-trash\">trash</option>\r\n                <option value=\"i-bell\">bell</option>\r\n                <option value=\"i-check\">check</option>\r\n                <option value=\"i-gear\">gear</option>\r\n                <option value=\"i-search\">search</option>\r\n              </select>\r\n            </div>\r\n            <div class=\"ctl-row\">\r\n              <label for=\"pgEnd\">icono end</label>\r\n              <select id=\"pgEnd\">\r\n                <option value=\"\">(ninguno)</option>\r\n                <option value=\"i-arrow-r\">arrow-right</option>\r\n                <option value=\"i-download\">download</option>\r\n                <option value=\"i-link\">link</option>\r\n              </select>\r\n            </div>\r\n            <div class=\"ctl-row\">\r\n              <label>flags</label>\r\n              <div class=\"checks\">\r\n                <label class=\"chip\"><input type=\"checkbox\" id=\"pgPill\" /> pill</label>\r\n                <label class=\"chip\"><input type=\"checkbox\" id=\"pgCaret\" /> caret</label>\r\n                <label class=\"chip\"><input type=\"checkbox\" id=\"pgLoading\" /> loading</label>\r\n                <label class=\"chip\"><input type=\"checkbox\" id=\"pgDisabled\" /> disabled</label>\r\n              </div>\r\n            </div>\r\n            <div class=\"ctl-row\">\r\n              <label for=\"pgHref\">href (opcional)</label>\r\n              <input id=\"pgHref\" type=\"text\" placeholder=\"https://...\" />\r\n            </div>\r\n          </div>\r\n        </div>\r\n\r\n        <h4>HTML generado</h4>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-button></span>Hola mundo<span class=\"tag\"></is-button></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos / propiedades</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "brand · neutral · success · warning · danger",
+              "neutral",
+              "Color semántico."
+            ],
+            [
+              "<code>appearance</code>",
+              "filled · outlined · plain",
+              "filled",
+              "Tratamiento visual."
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "—",
+              "Deshabilita interacción."
+            ],
+            [
+              "<code>loading</code>",
+              "boolean",
+              "—",
+              "Estado de carga: spinner + bloqueo."
+            ],
+            [
+              "<code>pill</code>",
+              "boolean",
+              "—",
+              "Border-radius completo."
+            ],
+            [
+              "<code>with-caret</code>",
+              "boolean",
+              "—",
+              "Muestra chevron al final."
+            ],
+            [
+              "<code>href</code>",
+              "string",
+              "—",
+              "Si está, renderiza como &lt;a&gt;."
+            ],
+            [
+              "<code>target</code>",
+              "string",
+              "—",
+              "Atributo target del enlace."
+            ],
+            [
+              "<code>rel</code>",
+              "string",
+              "—",
+              "Atributo rel del enlace."
+            ],
+            [
+              "<code>download</code>",
+              "string",
+              "—",
+              "Atributo download del enlace."
+            ],
+            [
+              "<code>type</code>",
+              "button · submit · reset",
+              "button",
+              "Tipo de botón en formularios."
+            ],
+            [
+              "<code>name</code>",
+              "string",
+              "—",
+              "Nombre para form data."
+            ],
+            [
+              "<code>value</code>",
+              "string",
+              "—",
+              "Valor para form data."
+            ],
+            [
+              "<code>title</code>",
+              "string",
+              "—",
+              "Tooltip / a11y name."
+            ],
+            [
+              "<code>form</code>",
+              "string",
+              "—",
+              "Id del form a asociarse (si está fuera de él)."
+            ],
+            [
+              "<code>formaction</code>",
+              "string",
+              "—",
+              "Override de action al submit."
+            ],
+            [
+              "<code>formenctype</code>",
+              "string",
+              "—",
+              "Override de enctype al submit."
+            ],
+            [
+              "<code>formmethod</code>",
+              "string",
+              "—",
+              "Override de method al submit."
+            ],
+            [
+              "<code>formnovalidate</code>",
+              "boolean",
+              "—",
+              "Desactiva validación al submit."
+            ],
+            [
+              "<code>formtarget</code>",
+              "string",
+              "—",
+              "Override de target al submit."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Etiqueta del botón. Si solo hay un elemento sin texto, se vuelve icon-only."
+            ],
+            [
+              "<code>start</code>",
+              "Contenido a la izquierda del label (típicamente un SVG)."
+            ],
+            [
+              "<code>end</code>",
+              "Contenido a la derecha del label (típicamente un SVG)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>button</code>",
+              "El contenedor interno (&lt;button&gt; o &lt;a&gt;)."
+            ],
+            [
+              "<code>label</code>",
+              "El span del texto del botón."
+            ],
+            [
+              "<code>start</code>",
+              "El wrapper del slot start."
+            ],
+            [
+              "<code>end</code>",
+              "El wrapper del slot end."
+            ],
+            [
+              "<code>caret</code>",
+              "El ícono chevron."
+            ],
+            [
+              "<code>spinner</code>",
+              "El spinner del estado loading."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Custom States</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>State",
+            "Cuándo"
+          ],
+          "rows": [
+            [
+              "<code>:state(disabled)</code>",
+              "Atributo <code>disabled</code>, <code>loading</code>, o form padre deshabilitado."
+            ],
+            [
+              "<code>:state(loading)</code>",
+              "Atributo <code>loading</code>."
+            ],
+            [
+              "<code>:state(link)</code>",
+              "Atributo <code>href</code> presente."
+            ],
+            [
+              "<code>:state(icon-button)</code>",
+              "Un solo elemento hijo sin texto."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-date-range-picker",
+  "category": "forms",
+  "title": "<is-date-range-picker>",
+  "titleHtml": true,
+  "storageKey": "docs-is-date-range-picker",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-date-range-picker>",
+      "lede": "Rango de fechas con varios meses a la vista y panel de atajos (DateRangeCalendar de MUI X). El hover en un mes pinta la banda tentativa en todos.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-range-picker\r\n            id=\"rp\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"\r\n          ></is-date-range-picker>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--is-mono);font-size:.85em\"></p>"
+        }
+      ]
+    },
+    {
+      "id": "calendars",
+      "title": "Número de calendarios",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-range-picker locale=\"es\" calendars=\"3\" value=\"2026-07-10/2026-08-05\"></is-date-range-picker>"
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "title": "Atajos propios",
+      "lede": "Slot <code>shortcut</code> con <code>data-range=\"inicio/fin\"</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-range-picker locale=\"es\" calendars=\"2\" shortcuts=\"none\">\r\n            <is-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-01/2026-07-15\">Primera quincena</is-button>\r\n            <is-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-16/2026-07-31\">Segunda quincena</is-button>\r\n            <is-button slot=\"shortcut\" variant=\"outlined\" color=\"neutral\" pill data-preset=\"reset\">Limpiar</is-button>\r\n          </is-date-range-picker>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Eventos: <code>is-change { start, end, source }</code>, <code>is-month-change</code>. Método: <code>clear()</code>.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "<code>inicio/fin</code>"
+            ],
+            [
+              "<code>calendars</code>",
+              "2 (1–3)"
+            ],
+            [
+              "<code>shortcuts</code>",
+              "— · this-week last-week last-7-days current-month next-month this-year reset · none"
+            ],
+            [
+              "<code>month</code>",
+              "mes del primer calendario"
+            ],
+            [
+              "resto",
+              "igual que <code>is-date-picker</code> (min, max, locale, disable-*, etc.)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

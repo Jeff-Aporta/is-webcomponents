@@ -1,0 +1,59 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-dock",
+  "category": "layout",
+  "title": "<is-dock>",
+  "titleHtml": true,
+  "styles": ".stage {\r\n      height: 28rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background:\r\n        radial-gradient(60rem 30rem at 50% 100%,\r\n          color-mix(in srgb, var(--is-accent) 14%, transparent),\r\n          transparent 60%);\r\n      position: relative;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
+  "storageKey": "docs-is-dock",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-dock>",
+      "lede": "Barra tipo macOS: los íconos se magnifican al acercar el cursor. Anclada abajo por defecto; podés moverla con el atributo <code class=\"code\">position</code>.",
+      "blocks": []
+    },
+    {
+      "id": "bottom",
+      "title": "Inferior",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stage\"></div>\r\n          <is-dock>\r\n            <is-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></is-dock-item>\r\n            <is-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></is-dock-item>\r\n            <is-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></is-dock-item>\r\n            <is-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></is-dock-item>\r\n            <is-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></is-dock-item>\r\n            <is-dock-item label=\"Música\"     icon=\"mdi:music\"></is-dock-item>\r\n            <is-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></is-dock-item>\r\n          </is-dock>"
+        }
+      ]
+    },
+    {
+      "id": "left",
+      "title": "Lateral izquierdo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stage\"></div>\r\n          <is-dock position=\"left\">\r\n            <is-dock-item label=\"VS Code\"  icon=\"mdi:code-braces\"></is-dock-item>\r\n            <is-dock-item label=\"Git\"      icon=\"mdi:source-branch\"></is-dock-item>\r\n            <is-dock-item label=\"Terminal\" icon=\"mdi:console\"></is-dock-item>\r\n            <is-dock-item label=\"Docker\"   icon=\"mdi:docker\"></is-dock-item>\r\n            <is-dock-item label=\"Browser\"  icon=\"mdi:web\"></is-dock-item>\r\n          </is-dock>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "// Cambia el ítem activo programáticamente\r\ndocument.querySelector('is-dock-item[label=\"Inicio\"]').setAttribute('active', '');\r\n\r\n// Escucha selección\r\ndock.addEventListener('is-select', e => console.log(e.detail.item.getAttribute('label')));\r\n\r\n// Atributos\r\n// position    bottom (default) | top | left | right\r\n// max-scale   factor máximo (default 1.6)\r\n// range       píxeles de alcance (default 110)\r\n\r\n<is-dock-item label=\"…\" icon=\"mdi:…\" href=\"…\" active />",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\"></pre>"
+        }
+      ]
+    }
+  ]
+}

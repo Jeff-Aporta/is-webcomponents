@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-month-calendar",
+  "category": "forms",
+  "title": "<is-month-calendar>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-month-calendar de InSoft.",
+  "storageKey": "docs-is-month-calendar",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-month-calendar>",
+      "lede": "Calendario de un mes, suelto. Es la pieza que <code class=\"code\">&lt;is-date-picker&gt;</code> usa por dentro, y sirve por sí sola para vistas de agenda.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-month-calendar value=\"2026-08-12\"></is-month-calendar>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-month-calendar value=\"2026-08-12\"></is-month-calendar>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-month-calendar&gt; — Rejilla de los 12 meses de un año (MUI MonthCalendar). Atributos: value (yyyy-mm), year, min, max (ISO), locale, columns, month-width (short|long), disabled, readonly Events: is-change  detail { value, year, month }",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/month-calendar.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

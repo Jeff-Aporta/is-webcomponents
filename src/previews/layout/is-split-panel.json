@@ -1,0 +1,369 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-split-panel",
+  "category": "layout",
+  "title": "<is-split-panel>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-split-panel de InSoft.",
+  "styles": ".panel-demo {\r\n      display: grid;\r\n      place-items: center;\r\n      height: 100%;\r\n      padding: 1em;\r\n      background: var(--is-bg-soft);\r\n      color: var(--is-text);\r\n      font: 0.95rem var(--is-sans);\r\n      border-radius: 6px;\r\n      overflow: hidden;\r\n    }\r\n    .panel-demo--alt { background: var(--is-bg-elev); }\r\n    .panel-demo h4 {\r\n      margin: 0 0 0.5em;\r\n      font-size: 0.95rem;\r\n      color: var(--is-text-soft);\r\n    }\r\n    .split-stage {\r\n      height: 220px;\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      overflow: hidden;\r\n      margin: 12px 0 24px;\r\n      box-shadow: var(--is-shadow);\r\n    }\r\n    .split-stage--tall { height: 360px; }\r\n    .split-stage--square { height: 320px; }\r\n    .reposition-log {\r\n      font-family: var(--is-mono);\r\n      font-size: 0.78rem;\r\n      color: var(--is-text-soft);\r\n      margin: 6px 0 18px;\r\n    }",
+  "storageKey": "docs-is-split-panel",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-split-panel>",
+      "lede": "Dos paneles adyacentes separados por un divisor arrastrable.\r\n          Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.",
+      "blocks": [
+        {
+          "kind": "callout",
+          "html": "<strong>Persistencia:</strong> con <code class=\"code\">storage-key=\"mi-panel\"</code> el tamaño se guarda en\r\n          <code class=\"code\">localStorage['is-webcomponents']</code> como JSON compartido por todos los WC:\r\n          <code class=\"code\">{ \"is-split-panel\": { \"mi-panel\": { \"positionInPixels\": 240 } } }</code>.\r\n          Sin <code class=\"code\">storage-key</code> no escribe nada."
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"split-stage\">\r\n          <is-split-panel id=\"introSplit\" storage-key=\"demo-intro\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Start</h4>\r\n              <p>Arrastra el divisor →</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>End</h4>\r\n              <p>← Arrastra el divisor</p>\r\n            </div>\r\n          </is-split-panel>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-split-panel></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"start\"</span><span class=\"tag\">></span>Start<span class=\"tag\"></div></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"end\"</span><span class=\"tag\">></span>End<span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-split-panel></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "horizontal",
+      "title": "Horizontal",
+      "lede": "Por defecto <code class=\"code\">orientation=\"horizontal\"</code>: el divisor se mueve en X.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"split-stage\">\r\n          <is-split-panel style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Panel A</h4>\r\n              <p>50% al cargar</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>Panel B</h4>\r\n              <p>50% al cargar</p>\r\n            </div>\r\n          </is-split-panel>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-split-panel</span> <span class=\"attr\">orientation</span>=<span class=\"val\">\"horizontal\"</span><span class=\"tag\">></span>\r\n  ...\r\n<span class=\"tag\"></is-split-panel></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "vertical",
+      "title": "Vertical",
+      "lede": "Con <code class=\"code\">orientation=\"vertical\"</code> el divisor se mueve en Y.\r\n          Ideal para listas en la parte superior y detalles abajo.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"split-stage split-stage--square\">\r\n          <is-split-panel orientation=\"vertical\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Top</h4>\r\n              <p>Lista</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>Bottom</h4>\r\n              <p>Detalle</p>\r\n            </div>\r\n          </is-split-panel>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-split-panel</span> <span class=\"attr\">orientation</span>=<span class=\"val\">\"vertical\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"start\"</span><span class=\"tag\">></span>Top<span class=\"tag\"></div></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"end\"</span><span class=\"tag\">></span>Bottom<span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-split-panel></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "primary-end",
+      "title": "Primary end",
+      "lede": "Con <code class=\"code\">primary=\"end\"</code> el panel final mantiene su tamaño cuando el host cambia de dimensión;\r\n          el inicial crece/se encoge. Por defecto (<code class=\"code\">primary=\"start\"</code>) es al revés.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"split-stage\">\r\n          <is-split-panel primary=\"end\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Crece/se encoge</h4>\r\n              <p>Resize the window</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>Mantiene tamaño</h4>\r\n              <p>200px aprox</p>\r\n            </div>\r\n          </is-split-panel>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-split-panel</span> <span class=\"attr\">primary</span>=<span class=\"val\">\"end\"</span> <span class=\"attr\">position-in-pixels</span>=<span class=\"val\">\"240\"</span><span class=\"tag\">></span>\r\n  ...\r\n<span class=\"tag\"></is-split-panel></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "snap",
+      "title": "Snap",
+      "lede": "<code class=\"code\">snap</code> define puntos de anclaje. Acepta px y %. El <code class=\"code\">snap-threshold</code> (default 12px) es la ventana de tolerancia.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"split-stage\">\r\n          <is-split-panel snap=\"25% 50% 75%\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Snap 25 / 50 / 75</h4>\r\n              <p>Intenta posicionarte cerca</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>End</h4>\r\n              <p>El divisor \"salta\"</p>\r\n            </div>\r\n          </is-split-panel>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-split-panel</span>\r\n  <span class=\"attr\">snap</span>=<span class=\"val\">\"25% 50% 75%\"</span>\r\n  <span class=\"attr\">snap-threshold</span>=<span class=\"val\">\"12\"</span><span class=\"tag\">></span>\r\n  ...\r\n<span class=\"tag\"></is-split-panel></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "title": "Disabled",
+      "lede": "<code class=\"code\">disabled</code> bloquea drag y teclado. El divisor deja de ser focoable.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"split-stage\">\r\n          <is-split-panel disabled style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Bloqueado</h4>\r\n              <p>Drag deshabilitado</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>Bloqueado</h4>\r\n              <p>Drag deshabilitado</p>\r\n            </div>\r\n          </is-split-panel>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-split-panel</span> <span class=\"attr\">disabled</span><span class=\"tag\">></span>\r\n  ...\r\n<span class=\"tag\"></is-split-panel></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "title": "Teclado",
+      "lede": "Foco en el divisor (Tab) y luego:\r\n          <code class=\"code\">←/→</code> mueve 1%, <code class=\"code\">Shift</code> ×10.\r\n          <code class=\"code\">Home</code>/<code class=\"code\">End</code> salta a los extremos.\r\n          <code class=\"code\">Enter</code> colapsa y restaura el panel primario.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"split-stage\">\r\n          <is-split-panel id=\"kbdSplit\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Foco aquí y prueba:</h4>\r\n              <p>← → Home End Enter</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>End</h4>\r\n              <p>id=\"kbdSplit\"</p>\r\n            </div>\r\n          </is-split-panel>\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "methods",
+      "title": "API JavaScript",
+      "lede": "Como cualquier custom element, accedes con <code class=\"code\">document.querySelector('is-split-panel')</code>.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Propiedad",
+            "Tipo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>position</code>",
+              "number (0-100)",
+              "Posición del divisor en % (atributo reflected)."
+            ],
+            [
+              "<code>positionInPixels</code>",
+              "number",
+              "Posición en píxeles. Útil para persistencia."
+            ],
+            [
+              "<code>orientation</code>",
+              "'horizontal' | 'vertical'",
+              "Eje del divisor."
+            ],
+            [
+              "<code>primary</code>",
+              "'start' | 'end' | null",
+              "Panel que mantiene tamaño al resize."
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "Bloquea drag + teclado."
+            ],
+            [
+              "<code>snap</code>",
+              "string",
+              "\"100px 50%\" — anclajes separados por espacio."
+            ],
+            [
+              "<code>snapThreshold</code>",
+              "number",
+              "Px de tolerancia para snap. Default 12."
+            ],
+            [
+              "<code>storageKey</code>",
+              "string",
+              "Id único; persiste tamaño en <code>localStorage['is-webcomponents']</code>."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Demo en vivo</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"split-stage\" style=\"height: 180px;\">\r\n            <is-split-panel id=\"apiSplit\" style=\"height: 100%;\">\r\n              <div slot=\"start\" class=\"panel-demo\"><h4>Start</h4><p>Pos: <span id=\"apiPos\">50</span>%</p></div>\r\n              <div slot=\"end\" class=\"panel-demo panel-demo--alt\"><h4>End</h4></div>\r\n            </is-split-panel>\r\n          </div>\r\n\r\n          <div class=\"demo-row\" style=\"margin-top: 12px;\">\r\n            <is-button id=\"apiPosBtn\" color=\"neutral\" variant=\"outlined\">position += 10</is-button>\r\n            <is-button id=\"apiEnd\" color=\"neutral\" variant=\"outlined\">primary=end</is-button>\r\n            <is-button id=\"apiStart\" color=\"neutral\" variant=\"outlined\">primary=start</is-button>\r\n            <is-button id=\"apiVertical\" color=\"neutral\" variant=\"outlined\">toggle orientation</is-button>\r\n            <is-button id=\"apiDisabled\" color=\"neutral\" variant=\"outlined\">toggle disabled</is-button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"kw\">const</span> sp = document.<span class=\"attr\">getElementById</span>(<span class=\"str\">'apiSplit'</span>);\r\nsp.<span class=\"attr\">position</span> += <span class=\"val\">10</span>;             <span class=\"com\">// asignar valor</span>\r\nsp.<span class=\"attr\">primary</span> = <span class=\"str\">'end'</span>;           <span class=\"com\">// o 'start'</span>\r\nsp.<span class=\"attr\">toggleAttribute</span>(<span class=\"str\">'disabled'</span>);\r\nsp.<span class=\"attr\">addEventListener</span>(<span class=\"str\">'reposition'</span>, e => <span class=\"kw\">this</span>.log(e.detail));",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos / propiedades</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>position</code>",
+              "number 0-100",
+              "50",
+              "% desde el borde del panel primario."
+            ],
+            [
+              "<code>position-in-pixels</code>",
+              "number",
+              "—",
+              "Posición en píxeles. Sobrevive a resize."
+            ],
+            [
+              "<code>orientation</code>",
+              "horizontal · vertical",
+              "horizontal",
+              "Eje del divisor."
+            ],
+            [
+              "<code>primary</code>",
+              "start · end",
+              "—",
+              "Panel que mantiene tamaño al resize."
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "—",
+              "Bloquea drag + teclado."
+            ],
+            [
+              "<code>snap</code>",
+              "string",
+              "—",
+              "Anclajes separados por espacio: \"100px 50%\"."
+            ],
+            [
+              "<code>snap-threshold</code>",
+              "number",
+              "12",
+              "Tolerancia del snap en píxeles."
+            ],
+            [
+              "<code>storage-key</code>",
+              "string",
+              "—",
+              "Id único. Persiste en <code>localStorage.is-webcomponents</code> (JSON por componente)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>start</code>",
+              "Contenido del panel inicial."
+            ],
+            [
+              "<code>end</code>",
+              "Contenido del panel final."
+            ],
+            [
+              "<code>divider</code>",
+              "Override del divisor (icono, handle)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(start)</code>",
+              "El panel inicial."
+            ],
+            [
+              "<code>::part(end)</code>",
+              "El panel final."
+            ],
+            [
+              "<code>::part(panel)</code>",
+              "Ambos paneles (selectores combinados)."
+            ],
+            [
+              "<code>::part(divider)</code>",
+              "El divisor arrastrable."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS custom properties</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Variable",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>--divider-width</code>",
+              "4px",
+              "Ancho visible del divisor."
+            ],
+            [
+              "<code>--divider-hit-area</code>",
+              "12px",
+              "Hit zone invisible más ancha para drag."
+            ],
+            [
+              "<code>--min</code>",
+              "0",
+              "Tamaño mínimo del panel primario."
+            ],
+            [
+              "<code>--max</code>",
+              "100%",
+              "Tamaño máximo del panel primario."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "detail",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>reposition</code>",
+              "number (0-100)",
+              "Disparado al cambiar la posición. Bubbles + composed."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

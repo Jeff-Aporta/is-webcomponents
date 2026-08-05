@@ -1,0 +1,147 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-video",
+  "category": "media",
+  "title": "<is-video>",
+  "titleHtml": true,
+  "storageKey": "docs-is-video",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-video>",
+      "lede": "Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y\r\n          scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture\r\n          y pantalla completa. Los controles se ocultan solos mientras reproduce.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></is-video>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\">eventos: —</p>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Sin controles / muted",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-video\r\n            muted\r\n            loop\r\n            playsinline\r\n            controls=\"false\"\r\n            src=\"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4\"\r\n            style=\"max-width:20rem\"\r\n          ></is-video>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-video\r\n  controls\r\n  playsinline\r\n  src=\"video.mp4\"\r\n></is-video>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "shortcuts",
+      "title": "Atajos de teclado",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Con el foco en el reproductor (es <code>tabindex=\"0\"</code> por defecto):</p>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Tecla",
+            "Acción"
+          ],
+          "rows": [
+            [
+              "<code>espacio</code> <code>k</code>",
+              "reproducir / pausar"
+            ],
+            [
+              "<code>←</code> <code>→</code>",
+              "± 5 segundos"
+            ],
+            [
+              "<code>j</code> <code>l</code>",
+              "± 10 segundos"
+            ],
+            [
+              "<code>↑</code> <code>↓</code>",
+              "± 5 % de volumen"
+            ],
+            [
+              "<code>m</code>",
+              "silenciar"
+            ],
+            [
+              "<code>f</code>",
+              "pantalla completa"
+            ],
+            [
+              "<code>0</code> … <code>9</code>",
+              "saltar al 0 %, 10 % … 90 %"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<p>Con el ratón: clic en la imagen alterna play, doble clic abre pantalla completa.</p>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>src</code> <code>poster</code>",
+              "media"
+            ],
+            [
+              "<code>controls</code>",
+              "default true; <code>\"false\"</code> deja solo el vídeo (sin chrome ni overlay)"
+            ],
+            [
+              "<code>muted</code> <code>loop</code> <code>autoplay</code> <code>playsinline</code>",
+              "boolean"
+            ],
+            [
+              "<code>play()</code> <code>pause()</code>",
+              "métodos"
+            ],
+            [
+              "<code>toggleFullscreen()</code> <code>togglePictureInPicture()</code>",
+              "métodos"
+            ],
+            [
+              "<code>media</code>",
+              "getter al <code>&lt;video&gt;</code> interno"
+            ],
+            [
+              "events",
+              "is-play, is-pause, is-ended (+ play/pause/ended)"
+            ],
+            [
+              "estado",
+              "<code>data-playing</code>, <code>data-idle</code> (chrome oculto), <code>data-no-controls</code>"
+            ],
+            [
+              "tokens",
+              "<code>--is-video-accent</code> (default <code>--is-accent</code>)"
+            ],
+            [
+              "parts",
+              "<code>base</code> <code>video</code> <code>big-play</code> <code>controls</code>\r\n                <code>progress</code> <code>seek</code> <code>play-button</code> <code>volume</code>\r\n                <code>mute-button</code> <code>volume-slider</code> <code>time</code>\r\n                <code>settings-button</code> <code>pip-button</code> <code>fullscreen-button</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -2,6 +2,28 @@
 
 Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 
+## Carta de leyes (léela primero)
+
+**Reusar antes de inventar.** Si el kit ya tiene `is-*`, `IsUi`, `_shared/*` o un preview controlado, úsalo. No rehacer la rueda.
+
+| Hacer | No hacer |
+| --- | --- |
+| Fuente bajo `src/` (`components`, `styles`, `previews`, `skills`, `assets`, `docs`) | Recrear esas carpetas en la raíz |
+| Consumir por CDN (`dist/cdn/`) + MD raw bajo `…/main/src/components/` | `npx skills add` / npm del kit (aún no hay paquete) |
+| Wrappers `app-*`/`tk-*` = datos → `is-*` + `.css` hermano + `IsUi.adoptCss` | CSS gigante en string dentro del `.ts`; reinventar button/dialog/table/toast/icon |
+| Preview: JSON `is-preview/v1` + `<is-preview-component>` (+ behavior opcional) | HTML por tag; lógica en `eval` / strings de listeners |
+
+| Utilería pública en `helpers/`: `manifest.page` + HTML + MD | Módulo público sin tab en Utilerías (`is-floating` es la excepción: internal) |
+| Enums/API solo del MD / `VALID_*` del `.js` | Inventar `variant="ghost"` / colores / eventos “porque se parece a otro DS” |
+| Tema: `data-theme` + `data-palette`; default paleta `contapyme` | `prefers-color-scheme`; `color-scheme` en `:root`; default `insoft` |
+| Paths preview categoría: `../../styles` · `../../../scripts\|dist` | Misma profundidad `../` para styles y dist (rompe a `src/dist`) |
+| Commitear `tests/*.test.mjs` | Meter `tests/` entero en gitignore (solo `*.tmp` / coverage / `.cache`) |
+| Refactor mecánico de tokens → commit atómico + `token-vocabulary` | Dejar el rename a medias en el working tree y rebasear encima |
+
+Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `attr-enums` · `token-vocabulary` · `button-events` · `palette-and-snippet-contract` · `llm-contract`.
+
+---
+
 ## Proyecto
 
 - Web Components vanilla (`is-*`), shadow DOM, tokens `--is-*`.
@@ -13,7 +35,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
   - Manifest `script`/`style`: `../../components/...` (relativo al preview de categoría → resuelve a `src/components/...`)
 - Docs LLM crudos (GitHub): base `…/main/src/` + `components/...` (p. ej. `…/main/src/components/LLM.md`). `LLM_BASE` en `preview-chrome.js` termina en `/src`.
 - **Utilerías (`helpers/`)**: cada módulo público (`ui`, `format`, `observer`, aliases, `popover`, …) tiene **tab en el nav** (`manifest.page`) + HTML en `src/previews/helpers/`. Guardián: `tests/helpers-homogeneity.test.mjs`. `is-floating` es interno (sin tab).
-- **Previews controlados (nuevo):** estructura tipada + `ISComponentPreview.mount()` con funciones reales. Shell: `<is-preview-component>`. Datos en `*.preview.js`; HTML del preview es mínimo. Markup de demos puede ser string HTML; **la lógica nunca**. Registry: `src/previews/registry.js`. Piloto: `is-button-group`. Guardián: `tests/preview-controller.test.mjs`.
+- **Previews:** un JSON por tag (`$schema: is-preview/v1`), chrome común `<is-preview-component>`, behaviors opcionales. Único HTML: `src/previews/_shell.html`. Guardián: `tests/preview-json-contract.test.mjs`.
 - Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"contapyme|insoft|agrowin"}>`. `scripts/preview-boot.js` lo decodifica y setea `data-theme` / `data-palette` en `<html>`. **`prefers-color-scheme` NO se usa** — el tema es explícito.
 - Build: esbuild → `dist/cdn/` desde `src/components` + `src/styles`. Dev: `node scripts/serve.mjs` (previews en `/src/previews/`). Sin TS, sin framework, sin test runner por defecto (`node --test tests/`).
 - **Paleta default del kit = `contapyme`** (azul ISP `#1a6eb0`). `insoft` y `agrowin` siguen disponibles; no son el default.
@@ -91,6 +113,39 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - Snapshot de grid → `replaceComponentPrefs`. Patch layout → `setComponentPrefs`. Reset → `removeComponentPrefs`.
 - Docs: `src/components/data/ag-grid.md`. Test: `tests/prefs-contract.test.mjs`.
 
+### Layout `src/` (post-move)
+- Build: `compRoot = src/components`, estilos en `src/styles`, iconos en `src/assets/icons`.
+- Previews categoría: styles/components `../../` · scripts/dist `../../../`.
+- Home/theming en `src/previews/`: styles `../` · scripts/dist `../../`.
+- Raw GitHub LLM: `LLM_BASE` termina en `/src` → URLs `…/main/src/components/…`.
+- Guardián: `tests/src-layout.test.mjs` + `tests/preview-paths.test.mjs`.
+
+### Utilerías (`helpers/`)
+- Nav label: **Utilerías**. Cada `.js` público tiene `manifest` + `page` + HTML + MD.
+- `is-ui` (módulo `IsUi`, no es CE) también tiene tab y presentador.
+- `is-floating` = internal → sin tab. Apps usan `<is-popover>` / `<is-tooltip>`.
+- Guardián: `tests/helpers-homogeneity.test.mjs`.
+
+### Previews controlados (`is-preview-component`)
+- Guía: `src/docs/preview-controller.md`.
+- Datos tipados: `src/previews/_kit/types.d.ts` (`PreviewDefinition` / bloques `kind`).
+- Clase: `ISComponentPreview` — `definition` + `mount`/`unmount` + `this.on()` (AbortController).
+- Shell CE: `<is-preview-component>` pinta split + TOC; propiedad `.preview = instancia`.
+- Por tag migrado: `src/previews/<cat>/<tag>.preview.js` + HTML shell mínimo + entrada en `registry.js`.
+- Galería: host in-app si `hasControlledPreview(tag)`; si no, iframe al HTML legado.
+- Fullscreen: `src/previews/_shell.html?tag=…`.
+- **String OK:** markup de demos, code samples, CSS local, tablas.
+- **String NO:** listeners, toggles de API, `whenDefined` — van en `mount()`.
+- Piloto: `is-button-group`. Guardián: `tests/preview-controller.test.mjs`.
+
+### Apps consumidoras (CDN)
+- Bootstrap: `is-base.min.css` + `palettes.min.css` + tag/category/`all.min.js`.
+- Docs: `components/LLM.md` → categoría → módulo (raw bajo `…/main/src/components/`).
+- Dominio: `app-*`/`tk-*` traducen payload → `is-*`. CSS hermano + `IsUi.adoptCss(shadow, import.meta.url)`.
+- Tras vaciar el shadow, volver a `adoptCss` (los `<link>` se borran).
+- Forms: `.value` del WC; submit via cableado del kit (`requestSubmit`), no confiar solo en Shadow `type=submit`.
+- Shells: grid CSS / `position-in-pixels`, no `is-split-panel` al 20% como aside fijo.
+
 ---
 
 ## DON'T
@@ -116,6 +171,12 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - **No asumir que `type="submit"` en `<is-button>` envía un `<form>` light-DOM.** El `<button>` real está en Shadow DOM; usar `requestSubmit` cableado en el kit o `onclick` que dispare submit del form.
 - **No usar `is-split-panel` con `%` alto como “sidebar fijo”** (p. ej. 20%): deja un hueco enorme. Shells de app: grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
 - **No instalar skills con `npx skills add` en el panel CDN.** Consumo = CDN + MD raw; el snippet ya no ofrece instalar skills por npm.
+- **No duplicar la rampa de color en el `:host` del componente.** Ese bloque de fallbacks (`--is-color-danger-600: #e03131` dentro de `button.css`) es lo que hace que un desajuste de vocabulario con `is-base.css` sea **invisible**: el componente resuelve contra su propia copia y el tema deja de alcanzarlo, sin error. Fallback sí, pero en el `var(--x, #hex)` del sitio de uso, no como bloque paralelo.
+- **No renombrar tokens sin pasar por `tests/token-vocabulary.test.mjs`.** Un rebase o un merge parcial deja mitad de los archivos en cada convención y **nada falla**.
+- **No documentar un evento que nadie emite.** `is-invalid` estuvo en la cabecera de `button.js`, en `button.md` y hasta en el vídeo del componente sin que existiera un solo `#emit("is-invalid")`. El consumidor pone su listener y no salta nunca.
+- **No reemplazar el nodo interno sin volver a cablear sus listeners.** `#syncTag()` cambia `<button>` por `<a>` al aparecer `href`; los listeners vivían en el nodo viejo y `#wired` seguía en `true`, así que no se reponían. Poner `href` en caliente dejaba el botón mudo.
+- **No enganchar la validación a `checkValidity()`.** `ElementInternals` dispara el evento `invalid` nativo tanto en la llamada explícita como al enviar el `<form>`; envolver solo los métodos deja el submit sin avisar. Escuchar `invalid`, no envolver.
+- **No dejar que el preview enseñe menos de lo que el componente acepta.** `button.css` tenía las reglas completas de `info` y `error` mientras la matriz del preview mostraba cinco colores. Nadie lo nota: lo que falta no da error.
 
 ---
 
@@ -156,6 +217,36 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 17. **Sidebar con `is-split-panel` al 20%** → nav estrecho + vacío enorme. Fix: layout grid fijo, no porcentaje de split como “aside”.
 
 18. **FormData vs `.value` en `is-input`** → leer el form nativo no siempre refleja el valor del WC; usar la propiedad `.value` del custom element (o el contrato documentado en el MD del módulo).
+
+19. **Refactor de tokens a medias tras un rebase — el error más caro de la lista** → se renombró la escala de color de numérica a relativa (`--is-color-danger-600` → `--is-color-danger-strong`, `-50` → `-paler`, `-700` → `-stronger`, `-800` → `-strongest`). El cambio tocaba 603 ocurrencias en 107 archivos y quedó **sin commitear**; un `pull --rebase` posterior más el move a `src/` lo dejaron aplicado solo en `is-base.css` y `palettes.css`, con 48 CSS de componente todavía en la convención vieja.
+    **No falló nada.** Ni el build, ni el navegador, ni una vista. Porque cada componente define su propia rampa en el `:host`: al no encontrar el token del tema resolvía contra su copia local y seguía pintando. El síntoma real era mudo — `color="danger"` se quedaba en el rojo viejo y **cambiar de paleta dejaba de afectar al componente**.
+    Fix: `tests/token-vocabulary.test.mjs`, que exige que todo `--is-color-*` consumido por un componente esté definido en la capa de tema, y que el tema no mezcle las dos convenciones. Detectó 35 tokens huérfanos en 48 archivos a la primera.
+    **Lección de proceso, no de CSS:** un refactor mecánico que abarca todo el repo se commitea antes de tocar otra cosa. Mientras vive solo en el working tree, cualquier rebase lo parte por la mitad y la mitad rota es indistinguible de la sana.
+
+20. **Evento documentado que nadie emitía** → `is-invalid` aparecía en la cabecera de `button.js`, en `button.md` y en el vídeo del componente, pero `#emit` solo se llamaba para `is-focus`, `is-blur` e `is-click`. Un evento prometido y ausente no rompe nada: el consumidor registra su listener y espera para siempre. Fix: escuchar el evento `invalid` nativo (cubre la llamada explícita **y** el submit del form, cosa que envolver `checkValidity()` no haría) y reemitir. Guardián: `tests/button-events.test.mjs`, que cruza los eventos documentados con los `#emit` reales.
+
+21. **Listeners perdidos al mutar el nodo interno** → `#syncTag()` sustituye el `<button>` por un `<a>` cuando aparece `href`. Los listeners de `focus`/`blur`/`click` estaban en el nodo reemplazado y `#wired` seguía en `true`, así que `#wireEvents()` no los reponía: asignar `href` en caliente dejaba de emitir `is-click` sin que nada lo delatara — el enlace navegaba igual. Fix: re-enganchar los tres tras el `replaceWith`, usando los campos `#bound*` (referencias estables, re-añadir nunca duplica).
+
+22. **El preview enseñaba cinco colores de siete** → `button.css` tenía las 18 reglas de `info` y `error` en todas las variantes, pero la matriz del preview y las filas de apariencia se habían quedado en `brand · neutral · success · warning · danger`. Lo que falta no da error, así que sobrevivió a varias revisiones. De paso el lede decía «el atributo `variant` define el color semántico, default `neutral`»: dos afirmaciones falsas (es `color`, y el default es `brand`).
+
+23. **`danger` y `error` con el mismo rojo** → los dos existían pero eran casi indistinguibles, lo que anulaba la razón de tenerlos separados. Hoy: `danger: crimson` (acción destructiva, «voy a borrar esto») y `error: red` (estado de fallo, «esto se rompió»). Los fallbacks de `button.css` hay que moverlos **a la vez**; si se queda el hex viejo, el mismo botón se ve de dos rojos distintos según si el consumidor carga `is-base.css` o no.
+
+24. **HTML gordo + lógica mezclada en previews** → 400+ líneas por tag, imposible homogeneizar. Fix: `ISComponentPreview` + `<is-preview-component>`; HTML = shell; comportamiento en `mount()`. Guardián: `tests/preview-controller.test.mjs`.
+
+25. **Utilería sin tab** → `IsUi` existía en CDN/MD pero no en el nav: nadie lo descubría desde la galería. Fix: `is-ui` en manifest + presentador; homogeneidad de helpers. Guardián: `tests/helpers-homogeneity.test.mjs`.
+
+26. **Lógica de preview como string** → tentación de meter handlers en JSON/`eval` “para serializar todo”. Rompe tipado, debug y seguridad. Fix: solo markup/CSS/código de muestra en strings; listeners = métodos reales con `this.on`.
+
+---
+
+## Errores aprendidos fuera de este repo (mismo tipo de trampa)
+
+Del vídeo `<is-button>` del kit de edición. No es código de la librería, pero el patrón es el mismo — **el artefacto sale bien y el contenido está mal**, así que ningún proceso falla:
+
+- **Consumir la CDN `@main` para renderizar material que documenta el repo.** El vídeo cargaba `is-base.min.css` desde jsDelivr y pintó `info` y `error` en gris: la versión publicada solo traía cinco colores. El MP4 salió correcto, con los botones mal. Para renderizar documentación del propio kit, leer el `dist/` local — reproducible y siempre igual al commit que se está a punto de publicar.
+- **Dos relojes para el mismo evento.** El mezclador de efectos calculaba sus tiempos con su propia fórmula (`dur*0.62/pasos`) mientras la animación usaba `data-delay` por elemento: la imagen revelaba una fila cada 0,20 s y el sonido daba un golpe cada 2,35 s. Fix: el generador vuelca los retardos reales a un JSON y el mezclador los consume. Una sola fuente de verdad.
+- **Guardas silenciosas.** El mapa de efectos apuntaba a un índice de escena; al quitar una escena, el `if (idx < len)` lo ignoraba sin decir nada y el golpe del cierre desaparecía. Una guarda que tapa un desajuste tiene que **avisar**, no continuar.
+- **Cifras exactas en material que envejece.** El guion decía «cinco colores»; al añadir `info` y `error` el vídeo quedó mintiendo y hubo que resintetizar voz. Enumerar sí, contar no.
 
 ---
 
@@ -244,34 +335,44 @@ mantenerlo aparte.
 
 ## Testing
 
-- `node --test tests/` — corre los invariantes (sin test runner externo, sin TS). Incluye layout `src/` (`src-layout`), paths de previews, enums, paleta, prefs, LLM links.
-- `tests/` **no está en gitignore completo**: se commitean los `*.test.mjs`. Solo se ignoran artefactos (`tests/*.tmp`, `tests/coverage/`, `tests/.cache/`).
-- Si en el futuro se agrega TS al proyecto, los `*.test.mjs` se migran a `*.test.ts` con `tsx --test`.
-- `tests/` **no está** en `.gitignore` → tracked. Si algún día se mueve a gitignore, respetarlo: los tests no se commitean.
+- `node --test tests/` o `node tests/run-all.mjs` — invariantes sin runner externo.
+- Extensión canónica: **`*.test.mjs`** (el kit es ESM vanilla). No hace falta `.test.ts` mientras no haya pipeline TS; si se añade, migrar con `tsx --test`.
+- `tests/` **no** está gitignoreado completo: se **commitean** los `*.test.mjs`. Solo se ignoran artefactos (`tests/*.tmp`, `tests/coverage/`, `tests/.cache/`). Si algún día `tests/` pasa a gitignore, respetarlo y no forzar commit.
 
-### Invariantes cubiertos
-- Grid containers (`.home-stage__grid`, `.home-lab__grid`) no tienen `transform: rotate*` en su bloque base.
-- Existe bloque `[data-theme="light"]` con overrides de shadow.
-- Existe `.card-demo` CSS + script que inyecta el botón.
-- `:hover` de `.tile` y `.lab-card` incluye `rotateY/X` (tilt 3D).
-- `:hover` de `.collage-card` setea `--tilt-y` y `--tilt-x`.
+### Carta de guardianes (avisan solos)
 
-### Detectores de inconsistencia (los que avisan solos)
-- `tests/attr-enums.test.mjs` — atributos de enum en previews vs. lo que el componente acepta. **Este es el que caza los errores silenciosos**: valores que no rompen nada visible pero tampoco hacen nada.
-- `tests/prefs-contract.test.mjs` — raíz `is-webcomponents`, API de `prefs.js`, consumidores (`is-ag-grid` / `is-main` / `is-split-panel`) no escriben keys planas ni `sessionStorage` canónico; sidebar de columnas cableado.
-- `tests/brand-casing.test.mjs` — la marca se escribe `InSoft`; comprueba también que el wordmark compuesto lleve `'Soft'` en las dos implementaciones (`index.html` y `is-palette-selector`) y que el identificador `insoft` siga en minúsculas.
-- `tests/palette-and-snippet-contract.test.mjs` — default `contapyme`; sin `color-scheme` en `:root`; sin `html/body{background}` en base/palettes; `demo-code.js` sella y reacciona a tema/paleta.
-- `tests/icon-viewbox.test.mjs` — viewBox de los SVG contra `viewbox.snapshot.json`.
-- `tests/icon-render.test.mjs` — sin `force-cache`, multicolor preservado, viewBox intacto.
-- `tests/icon-explorer.test.mjs` — scroll propio, búsqueda global, filtros, formulario, uso de `is-*` y embed en `is-icon.html`.
-- `tests/home-invariants.test.mjs` — incluye los invariantes de texto con degradado recortado en modo light.
-
-### Tests de iconos / explorador
-- `tests/icon-viewbox.test.mjs` — muestrea SVGs de cada colección y exige que el alto del `viewBox` coincida con el grid declarado en `collections.json`. Es el guardián del bug "la familia X no muestra iconos". También exige que `collections.json` cubra todas las familias de `index.json`.
-- `tests/icon-explorer.test.mjs` — congela los tres fallos del explorador: (1) scroll propio, (2) buscador con ámbito **Iconos** además de Familias + los cinco filtros, (3) formulario de personalización completo (formato, tamaño+unidad, color, opciones de código, validación, acciones).
+| Test | Caza |
+| --- | --- |
+| `llm-contract.test.mjs` | Secciones obligatorias de este LLM.md + que los guardianes citados existan en disco |
+| `src-layout.test.mjs` | Fuente en `src/`; sin carpetas raíz prohibidas; profundidad scripts/dist en previews |
+| `preview-paths.test.mjs` | `src`/`href` de previews resuelven a archivos reales |
+| `helpers-homogeneity.test.mjs` | Toda utilería pública = manifest.page + JSON + MD |
+| `preview-controller.test.mjs` | Kit JSON + shell único `_shell.html` |
+| `preview-json-contract.test.mjs` | Todos los JSON `is-preview/v1` + catalog ↔ manifest |
+| `preview-paths.test.mjs` | Refs de `_shell.html` resuelven |
+| `attr-enums.test.mjs` | Valores de enum en previews vs `VALID_*` del componente |
+| `token-vocabulary.test.mjs` | Tokens `--is-color-*` del tema vs componentes (refactor a medias) |
+| `button-events.test.mjs` | Eventos documentados = `#emit` reales; `#syncTag` re-cablea |
+| `palette-and-snippet-contract.test.mjs` | Default contapyme; canvas libre; snippets con contexto |
+| `prefs-contract.test.mjs` | Un solo store `is-webcomponents[tag][key]` |
+| `manifest-paths.test.mjs` / `llm-links.test.mjs` | Manifest y LLM raw coherentes |
 
 ### Cómo extender
-Si se agrega un nuevo tipo de card o un nuevo invariante:
-1. Card nueva con efecto 3D → agregar test que verifique el `rotateY/X` en su `:hover`.
-2. Nuevo shadow hardcodeado → agregar test que verifique que existe override en `[data-theme="light"]`.
-3. Nuevo componente demoable → agregar a la whitelist del JS de inyección y al test correspondiente.
+1. Nuevo error silencioso → test que falle si vuelve.
+2. Nuevo preview controlado → registry + shell + que `preview-controller` / paths sigan verdes.
+3. Nuevo token de color → pasar `token-vocabulary` antes de merge.
+4. Actualizar la **Carta de leyes** y esta tabla al aprender un fallo nuevo.
+4. Familia de color nueva → definirla **solo** en `is-base.css`/`palettes.css`; `token-vocabulary` la recoge sola, no hay lista que actualizar.
+5. Evento nuevo → documentarlo y emitirlo en el mismo commit; añadirlo a `EVENTOS` en `button-events.test.mjs`.
+
+### Qué clase de test merece la pena aquí
+El patrón que se repite en casi todos los errores de la lista de arriba: **el artefacto se genera bien y el contenido está mal**. Build verde, navegador contento, vista que pinta — y el tema no llega, o el evento no salta, o el preview enseña de menos.
+
+Por eso los tests que valen en este repo no comprueban que algo *funcione*, sino que **dos fuentes que deberían decir lo mismo no se hayan separado**:
+
+- lo que el componente acepta ↔ lo que la preview usa (`attr-enums`)
+- lo que la documentación promete ↔ lo que el código emite (`button-events`)
+- lo que el tema define ↔ lo que el componente consume (`token-vocabulary`)
+- dónde viven los archivos ↔ a dónde apuntan los paths (`src-layout`, `preview-paths`)
+
+Antes de escribir un test nuevo, la pregunta útil es: *¿qué par de cosas puede desincronizarse aquí sin que nada se rompa?* Si la respuesta es "ninguna", probablemente no hace falta el test.

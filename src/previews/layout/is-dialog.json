@@ -1,0 +1,364 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-dialog",
+  "category": "layout",
+  "title": "<is-dialog>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-dialog de InSoft.",
+  "storageKey": "docs-is-dialog",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-dialog>",
+      "lede": "Modal accesible que requiere la atención inmediata del usuario. Equivalente\r\n          a <code class=\"code\">&lt;dialog&gt;</code> nativo, con header, footer, animaciones,\r\n          light-dismiss y API declarativa <code class=\"code\">data-dialog=\"close\"</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openStandard\">Abrir diálogo</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-dialog id=\"dlgStandard\" label=\"Diálogo estándar\">\r\n          <p>Esto es un diálogo estándar. Puedes poner cualquier contenido aquí.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" variant=\"outlined\">Cancelar</is-button>\r\n            <is-button data-dialog=\"close\" color=\"brand\">Aceptar</is-button>\r\n          </div>\r\n        </is-dialog>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">onclick</span>=<span class=\"val\">\"document.getElementById('dlg').open = true\"</span><span class=\"tag\">></span>Abrir<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"><is-dialog</span> <span class=\"attr\">id</span>=<span class=\"val\">\"dlg\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Título\"</span><span class=\"tag\">></span>\r\n  Contenido.\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">data-dialog</span>=<span class=\"val\">\"close\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-dialog></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "no-header",
+      "title": "Sin header",
+      "lede": "<code class=\"code\">without-header</code> oculta el header y el botón de cerrar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openNoHeader\">Abrir sin header</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-dialog id=\"dlgNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header! A veces solo necesitas un diálogo limpio y simple.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" variant=\"outlined\">Cerrar</is-button>\r\n          </div>\r\n        </is-dialog>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">without-header</span><span class=\"tag\">></span>…<span class=\"tag\"></is-dialog></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "width",
+      "title": "Ancho",
+      "lede": "Define <code class=\"code\">--width</code> en el host para cambiar el ancho preferido.\r\n          Se reduce automáticamente en pantallas pequeñas.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openWide\">Diálogo ancho</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-dialog id=\"dlgWide\" label=\"Diálogo ancho\" style=\"--width: 800px\">\r\n          <p>Este diálogo es más ancho que el predeterminado, útil cuando necesitas más espacio para el contenido.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" color=\"brand\">Entendido</is-button>\r\n          </div>\r\n        </is-dialog>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">style</span>=<span class=\"val\">\"--width: 800px\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-dialog></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "header-actions",
+      "title": "Acciones en el header",
+      "lede": "El slot <code class=\"code\">header-actions</code> añade botones a la derecha del título\r\n          (el botón de cerrar va siempre al final).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openActions\">Abrir</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-dialog id=\"dlgActions\" label=\"Con header-actions\">\r\n          <div slot=\"header-actions\">\r\n            <is-button variant=\"plain\" aria-label=\"Maximizar\">\r\n              <is-icon slot=\"start\" icon=\"mdi:arrow-top-right-bottom-left\" aria-hidden=\"true\"></is-icon>\r\n            </is-button>\r\n          </div>\r\n          <p>Añade acciones custom al header.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" color=\"brand\">OK</is-button>\r\n          </div>\r\n        </is-dialog>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">label</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"header-actions\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button></span>…<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n  …\r\n<span class=\"tag\"></is-dialog></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "light-dismiss",
+      "title": "Light dismiss",
+      "lede": "<code class=\"code\">light-dismiss</code> cierra el diálogo al hacer click fuera.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openLD\">Abrir (click fuera cierra)</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-dialog id=\"dlgLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del diálogo para cerrarlo.</p>\r\n        </is-dialog>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">light-dismiss</span><span class=\"tag\">></span>…<span class=\"tag\"></is-dialog></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "prevent-close",
+      "title": "Prevenir el cierre",
+      "lede": "Cancela el evento <code class=\"code\">is-hide</code> con\r\n          <code class=\"code\">event.preventDefault()</code> para impedir el cierre. Si el usuario\r\n          intenta cerrar, el diálogo pulsa brevemente para llamar la atención.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openPrevent\">Diálogo protegido</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-dialog id=\"dlgPrevent\" label=\"¿Salir sin guardar?\">\r\n          <p>Este diálogo solo se cierra con el botón \"Guardar y salir\". Si cierras con Escape o el botón X, el diálogo pulsa brevemente.</p>\r\n          <div slot=\"footer\">\r\n            <is-button id=\"btnForceClose\" color=\"brand\">Guardar y salir</is-button>\r\n          </div>\r\n        </is-dialog>"
+        },
+        {
+          "kind": "code",
+          "code": "dialog.addEventListener('is-hide', (e) => {\r\n  if (e.detail.source !== closeButton) e.preventDefault();\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "title": "Diálogo con formulario",
+      "lede": "Un caso típico: edición de un registro en un diálogo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openForm\">Editar perfil</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<is-dialog id=\"dlgForm\" label=\"Editar perfil\" style=\"--width: 480px\">\r\n          <form id=\"profileForm\" style=\"display:grid;gap:.75em\">\r\n            <label>Nombre\r\n              <is-input name=\"name\" required value=\"Jeff Aporta\"></is-input>\r\n            </label>\r\n            <label>Email\r\n              <is-input name=\"email\" type=\"email\" required value=\"jeff@example.com\"></is-input>\r\n            </label>\r\n            <label>Bio\r\n              <is-input name=\"bio\" value=\"Ingeniero\"></is-input>\r\n            </label>\r\n          </form>\r\n          <div slot=\"footer\">\r\n            <is-button id=\"btnFormCancel\" data-dialog=\"close\" variant=\"outlined\">Cancelar</is-button>\r\n            <is-button id=\"btnFormSave\" color=\"brand\">Guardar</is-button>\r\n          </div>\r\n        </is-dialog>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Editar perfil\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><form></span>\r\n    <span class=\"tag\"><label></span>Nombre <span class=\"tag\"><is-input</span> <span class=\"attr\">name</span>=<span class=\"val\">\"name\"</span> <span class=\"attr\">required</span><span class=\"tag\">></span><span class=\"tag\"></is-input></span><span class=\"tag\"></label></span>\r\n  <span class=\"tag\"></form></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">data-dialog</span>=<span class=\"val\">\"close\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Guardar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-dialog></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos / propiedades</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>open</code>",
+              "boolean",
+              "false",
+              "Estado visible. Reflected."
+            ],
+            [
+              "<code>label</code>",
+              "string",
+              "—",
+              "Título del header (a11y)."
+            ],
+            [
+              "<code>without-header</code>",
+              "boolean",
+              "false",
+              "Oculta el header y el botón de cerrar."
+            ],
+            [
+              "<code>light-dismiss</code>",
+              "boolean",
+              "false",
+              "Cierra al click fuera."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Contenido del body."
+            ],
+            [
+              "<code>label</code>",
+              "Título propio (gana sobre el atributo)."
+            ],
+            [
+              "<code>header-actions</code>",
+              "Acciones adicionales en el header."
+            ],
+            [
+              "<code>footer</code>",
+              "Pie del diálogo."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Métodos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Método",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>show()</code>",
+              "Abre."
+            ],
+            [
+              "<code>hide()</code>",
+              "Cierra."
+            ],
+            [
+              "<code>toggle()</code>",
+              "Alterna."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Cancelable",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-show</code>",
+              "no",
+              "Antes de abrir."
+            ],
+            [
+              "<code>is-after-show</code>",
+              "no",
+              "Tras la animación de apertura."
+            ],
+            [
+              "<code>is-hide</code>",
+              "sí",
+              "Antes de cerrar. <code>detail.source</code> indica qué elemento lo pidió."
+            ],
+            [
+              "<code>is-after-hide</code>",
+              "no",
+              "Tras la animación de cierre."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(dialog)</code>",
+              "Contenedor del diálogo."
+            ],
+            [
+              "<code>::part(header)</code>",
+              "Header."
+            ],
+            [
+              "<code>::part(title)</code>",
+              "Título."
+            ],
+            [
+              "<code>::part(close-button)</code>",
+              "Botón de cerrar."
+            ],
+            [
+              "<code>::part(header-actions)</code>",
+              "Acciones del header."
+            ],
+            [
+              "<code>::part(body)</code>",
+              "Body."
+            ],
+            [
+              "<code>::part(footer)</code>",
+              "Footer."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS custom properties</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Variable",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>--width</code>",
+              "<code>500px</code>",
+              "Ancho preferido."
+            ],
+            [
+              "<code>--spacing</code>",
+              "<code>var(--is-space-l, 1rem)</code>",
+              "Padding interno."
+            ],
+            [
+              "<code>--backdrop-color</code>",
+              "<code>rgba(0,0,0,0.55)</code>",
+              "Color del fondo."
+            ],
+            [
+              "<code>--show-duration</code>",
+              "200ms",
+              "Duración apertura."
+            ],
+            [
+              "<code>--hide-duration</code>",
+              "160ms",
+              "Duración cierre."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

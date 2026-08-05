@@ -1,0 +1,363 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-details",
+  "category": "layout",
+  "title": "<is-details>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-details de InSoft.",
+  "storageKey": "docs-is-details",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-details>",
+      "lede": "Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente\r\n          accesible al <code class=\"code\">&lt;details&gt;</code> nativo, con apariencias,\r\n          iconos, animaciones y comportamiento de accordion opcional.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-details summary=\"¿Qué es InSoft?\">\r\n            InSoft es un ERP modular para empresas medianas que necesitan integrar\r\n            contabilidad, inventario, facturación y CRM en una sola plataforma.\r\n          </is-details>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"¿Qué es InSoft?\"</span><span class=\"tag\">></span>\r\n  InSoft es un ERP modular…\r\n<span class=\"tag\"></is-details></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "appearances",
+      "title": "Apariencias",
+      "lede": "El atributo <code class=\"code\">appearance</code> ajusta el fondo y borde.\r\n          Default: <code class=\"code\">outlined</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <is-details variant=\"outlined\" summary=\"outlined\">Borde 1px, fondo transparente.</is-details>\r\n          <is-details variant=\"filled\" summary=\"filled\">Fondo elevado, sin borde.</is-details>\r\n          <is-details variant=\"filled-outlined\" summary=\"filled-outlined\">Fondo + borde.</is-details>\r\n          <is-details variant=\"plain\" summary=\"plain\">Sin fondo ni borde, solo espaciado.</is-details>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"filled\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "icon-placement",
+      "title": "Posición del icono",
+      "lede": "<code class=\"code\">icon-placement</code>: <code class=\"code\">start</code> o\r\n          <code class=\"code\">end</code>. Default: <code class=\"code\">end</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <is-details icon-placement=\"end\" summary=\"icono al final (default)\">Contenido que se revela al hacer click.</is-details>\r\n          <is-details icon-placement=\"start\" summary=\"icono al inicio\">El chevron rota 180° al expandir y se ubica a la izquierda.</is-details>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">icon-placement</span>=<span class=\"val\">\"start\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "custom-icons",
+      "title": "Iconos custom",
+      "lede": "Slots <code class=\"code\">expand-icon</code> y <code class=\"code\">collapse-icon</code>\r\n          para reemplazar el chevron por defecto.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <is-details summary=\"Resumen con icono plus/minus\">\r\n            <is-icon slot=\"expand-icon\" icon=\"mdi:plus\" aria-hidden=\"true\"></is-icon>\r\n            <is-icon slot=\"collapse-icon\" icon=\"mdi:minus\" aria-hidden=\"true\"></is-icon>\r\n            Al expandirse se muestra un signo menos; al colapsarse, un más.\r\n          </is-details>\r\n\r\n          <is-details summary=\"Pregunta frecuente\" icon-placement=\"start\">\r\n            <is-icon slot=\"expand-icon\" icon=\"mdi:help-circle-outline\" aria-hidden=\"true\"></is-icon>\r\n            <is-icon slot=\"collapse-icon\" icon=\"mdi:help-circle\" aria-hidden=\"true\"></is-icon>\r\n            Cambia el icono según el estado.\r\n          </is-details>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"expand-icon\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:plus\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"collapse-icon\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:minus\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  Contenido…\r\n<span class=\"tag\"></is-details></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "rich-summary",
+      "title": "Summary rico (slot)",
+      "lede": "En lugar del atributo <code class=\"code\">summary</code>, usa el slot\r\n          <code class=\"code\">summary</code> para contenido rico (iconos, badges, etc.).",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <is-details>\r\n            <div slot=\"summary\">\r\n              <strong>Pedido #A-10293</strong>\r\n              <is-badge color=\"success\" variant=\"filled\" style=\"margin-left:.5em\">Enviado</is-badge>\r\n            </div>\r\n            Cliente: Distribuidora del Norte · Total: $1.245,00 · 3 ítems.\r\n          </is-details>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-details></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"summary\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><strong></span>Pedido #A-10293<span class=\"tag\"></strong></span>\r\n    <span class=\"tag\"><is-badge</span> <span class=\"attr\">color</span>=<span class=\"val\">\"success\"</span><span class=\"tag\">></span>Enviado<span class=\"tag\"></is-badge></span>\r\n  <span class=\"tag\"></div></span>\r\n  Cliente: …\r\n<span class=\"tag\"></is-details></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "accordion",
+      "title": "Accordion (varios <code>name</code>)",
+      "titleHtml": true,
+      "lede": "Cuando varios <code class=\"code\">is-details</code> comparten el atributo\r\n          <code class=\"code\">name</code>, abrir uno cierra los demás.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <is-details name=\"faq\" summary=\"¿Cómo cambio de plan?\">\r\n            Ve a Configuración → Plan y elige el nuevo plan. El cambio se aplica al final del ciclo.\r\n          </is-details>\r\n          <is-details name=\"faq\" summary=\"¿Puedo exportar mis datos?\">\r\n            Sí. En Configuración → Datos encontrarás exports en CSV, JSON y Excel.\r\n          </is-details>\r\n          <is-details name=\"faq\" summary=\"¿Cómo cancelo la cuenta?\">\r\n            Puedes cancelar desde Configuración → Plan → Cancelar. Mantienes acceso hasta el fin del ciclo.\r\n          </is-details>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">name</span>=<span class=\"val\">\"faq\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>\r\n<span class=\"tag\"><is-details</span> <span class=\"attr\">name</span>=<span class=\"val\">\"faq\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "states",
+      "title": "Estados",
+      "lede": "<code class=\"code\">open</code> para abrir por defecto; <code class=\"code\">disabled</code>\r\n          bloquea la interacción.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <is-details open summary=\"Empieza abierto por defecto\">\r\n            El atributo <code class=\"code\">open</code> lo deja expandido desde el primer render.\r\n          </is-details>\r\n          <is-details disabled summary=\"Bloqueado (no se puede expandir)\">\r\n            El atributo <code class=\"code\">disabled</code> desactiva el toggle.\r\n          </is-details>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">open</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>\r\n<span class=\"tag\"><is-details</span> <span class=\"attr\">disabled</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "methods",
+      "title": "API JavaScript",
+      "lede": "Métodos: <code class=\"code\">show()</code>, <code class=\"code\">hide()</code>,\r\n          <code class=\"code\">toggle()</code>. Propiedades: <code class=\"code\">open</code>,\r\n          <code class=\"code\">summary</code>, <code class=\"code\">name</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-details id=\"apiDetails\" summary=\"Demo controlada\">\r\n            Esto lo abro y cierro desde los botones de abajo.\r\n          </is-details>\r\n          <div class=\"card-row-actions\" style=\"margin-top:.5em\">\r\n            <is-button id=\"btnOpen\">show()</is-button>\r\n            <is-button id=\"btnClose\">hide()</is-button>\r\n            <is-button id=\"btnToggle\" variant=\"outlined\">toggle()</is-button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">id</span>=<span class=\"val\">\"apiDetails\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"Demo\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>\r\n<span class=\"tag\"><script></span>\r\n  document.getElementById('btnOpen').onclick  = () => document.getElementById('apiDetails').show();\r\n  document.getElementById('btnClose').onclick = () => document.getElementById('apiDetails').hide();\r\n  document.getElementById('btnToggle').onclick = () => document.getElementById('apiDetails').toggle();\r\n<span class=\"tag\"></script></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "events",
+      "title": "Eventos",
+      "lede": "Burbujean y son <code class=\"code\">composed: true</code>: <code class=\"code\">is-show</code>,\r\n          <code class=\"code\">is-after-show</code>, <code class=\"code\">is-hide</code>,\r\n          <code class=\"code\">is-after-hide</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-details id=\"evtDetails\" summary=\"Pulsa y mira la consola\">\r\n            El evento <code class=\"code\">is-after-show</code> se dispara tras la animación de apertura.\r\n          </is-details>\r\n          <div id=\"evtLog\" class=\"callout\" style=\"margin-top:.5em\">Log:</div>"
+        },
+        {
+          "kind": "code",
+          "code": "document.getElementById('evtDetails').addEventListener('is-after-show', () => {\r\n  console.log('abierto');\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos / propiedades</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>open</code>",
+              "boolean",
+              "false",
+              "Estado expandido. Reflected."
+            ],
+            [
+              "<code>summary</code>",
+              "string",
+              "—",
+              "Texto del summary si no se usa el slot."
+            ],
+            [
+              "<code>name</code>",
+              "string",
+              "—",
+              "Grupo accordion."
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "false",
+              "Bloquea la interacción."
+            ],
+            [
+              "<code>appearance</code>",
+              "filled · outlined · filled-outlined · plain",
+              "outlined",
+              "Tratamiento visual."
+            ],
+            [
+              "<code>icon-placement</code>",
+              "start · end",
+              "end",
+              "Lado del chevron."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Contenido principal."
+            ],
+            [
+              "<code>summary</code>",
+              "Summary propio (gana sobre el atributo)."
+            ],
+            [
+              "<code>expand-icon</code>",
+              "Icono de expandido."
+            ],
+            [
+              "<code>collapse-icon</code>",
+              "Icono de colapsado."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Métodos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Método",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>show()</code>",
+              "Abre (con animación)."
+            ],
+            [
+              "<code>hide()</code>",
+              "Cierra (con animación)."
+            ],
+            [
+              "<code>toggle()</code>",
+              "Alterna."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Cuándo",
+            "Cancelable"
+          ],
+          "rows": [
+            [
+              "<code>is-show</code>",
+              "Antes de abrir.",
+              "sí (solo desde click)"
+            ],
+            [
+              "<code>is-after-show</code>",
+              "Tras la animación de apertura.",
+              "no"
+            ],
+            [
+              "<code>is-hide</code>",
+              "Antes de cerrar.",
+              "sí (solo desde click)"
+            ],
+            [
+              "<code>is-after-hide</code>",
+              "Tras la animación de cierre.",
+              "no"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(base)</code>",
+              "Contenedor raíz."
+            ],
+            [
+              "<code>::part(header)</code>",
+              "Wrapper del botón summary."
+            ],
+            [
+              "<code>::part(summary)</code>",
+              "Botón summary."
+            ],
+            [
+              "<code>::part(icon)</code>",
+              "Wrapper del chevron."
+            ],
+            [
+              "<code>::part(content)</code>",
+              "Wrapper del contenido colapsable."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS custom properties</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Variable",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>--spacing</code>",
+              "<code>var(--is-space-m)</code>",
+              "Padding del header / contenido."
+            ],
+            [
+              "<code>--show-duration</code>",
+              "180ms",
+              "Duración de apertura."
+            ],
+            [
+              "<code>--hide-duration</code>",
+              "160ms",
+              "Duración de cierre."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

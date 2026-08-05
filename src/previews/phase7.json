@@ -1,0 +1,78 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "phase7",
+  "category": "",
+  "title": "Fase 7 — Composiciones",
+  "titleHtml": false,
+  "description": "Composiciones reales integrando múltiples componentes IS: dialogs con forms, cards con acciones, drawers con tabs, selects múltiples y listas con avatares.",
+  "styles": ".grid-2 {\r\n      display: grid;\r\n      grid-template-columns: 1fr 1fr;\r\n      gap: 0.5rem;\r\n    }\r\n    .muted {\r\n      color: var(--is-text-muted, #8a90a0);\r\n      font-size: 0.85em;\r\n    }\r\n    .list-custom {\r\n      list-style: none;\r\n      margin: 0;\r\n      padding: 0;\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 0.25rem;\r\n    }\r\n    .list-row {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 0.75rem;\r\n      padding: 0.5rem 0.75rem;\r\n      border-radius: 0.5rem;\r\n      transition: background 0.1s;\r\n    }\r\n    .list-row:hover {\r\n      background: rgba(255,255,255,0.04);\r\n    }\r\n    .list-meta {\r\n      flex: 1 1 auto;\r\n      display: flex;\r\n      flex-direction: column;\r\n    }",
+  "storageKey": "docs-phase7",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Fase 7 — Composiciones",
+      "lede": "Aquí se demuestra la integración real de los componentes: dialogs con\r\n          forms, cards con header-actions, drawers con tabs, selects múltiples y\r\n          listas con avatares. Cada demo es una composición viva, no un mockup.",
+      "blocks": []
+    },
+    {
+      "id": "dialog-form",
+      "title": "7.1 — Dialog + form",
+      "lede": "Un mini-CRM: crear contacto con nombre, email, rol, suscripción a newsletter y notas.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openNewContact\">\r\n            <is-icon slot=\"start\" icon=\"mdi:account-plus\"></is-icon>\r\n            Nuevo contacto\r\n          </is-button>\r\n\r\n          <is-dialog id=\"dlgNewContact\" label=\"Nuevo contacto\">\r\n            <form id=\"contactForm\" slot=\"body\" style=\"display:grid;gap:0.75rem;min-width:420px\">\r\n              <is-input name=\"nombre\" label=\"Nombre\" placeholder=\"Jane Doe\" required></is-input>\r\n              <is-input name=\"email\" type=\"email\" label=\"Email\" placeholder=\"jane@empresa.com\" required></is-input>\r\n              <is-select name=\"rol\" label=\"Rol\">\r\n                <is-option value=\"admin\">Administrador</is-option>\r\n                <is-option value=\"user\" selected>Usuario</is-option>\r\n                <is-option value=\"viewer\">Sólo lectura</is-option>\r\n              </is-select>\r\n              <is-textarea name=\"notas\" label=\"Notas\" rows=\"3\" placeholder=\"Información adicional\"></is-textarea>\r\n              <is-switch name=\"newsletter\" checked>Suscribir al newsletter</is-switch>\r\n            </form>\r\n\r\n            <is-button slot=\"footer\" variant=\"plain\" data-dialog-close>Cancelar</is-button>\r\n            <is-button slot=\"footer\" color=\"brand\" id=\"submitContact\">Crear contacto</is-button>\r\n          </is-dialog>\r\n\r\n          <is-callout id=\"contactSaved\" color=\"success\" hidden style=\"margin-top:1rem\">\r\n            <strong>Contacto guardado.</strong>\r\n            <div id=\"contactSavedDetails\"></div>\r\n          </is-callout>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">id</span>=<span class=\"val\">\"dlg\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Nuevo contacto\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><form</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"body\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-input</span> <span class=\"attr\">name</span>=<span class=\"val\">\"nombre\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Nombre\"</span> <span class=\"attr\">required</span><span class=\"tag\">></span><span class=\"tag\"></is-input></span>\r\n    <span class=\"tag\"><is-select</span> <span class=\"attr\">name</span>=<span class=\"val\">\"rol\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Rol\"</span><span class=\"tag\">></span>\r\n      <span class=\"tag\"><is-option</span> <span class=\"attr\">value</span>=<span class=\"val\">\"admin\"</span><span class=\"tag\">></span>Admin<span class=\"tag\"></is-option></span>\r\n    <span class=\"tag\"></is-select></span>\r\n  <span class=\"tag\"></form></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span> <span class=\"attr\">data-dialog-close</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Crear<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></is-dialog></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "card-actions",
+      "title": "7.2 — Card + header-actions",
+      "lede": "Card con badges, dropdown de más acciones y tabs de detalle dentro.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-card header=\"Pedido #4290\" style=\"max-width:640px\">\r\n            <div slot=\"header-actions\" style=\"display:flex;gap:0.5rem;align-items:center\">\r\n              <is-badge color=\"success\">Pagado</is-badge>\r\n              <is-dropdown id=\"ddOrder\">\r\n                <is-button slot=\"trigger\" variant=\"plain\" caret>\r\n                  <is-icon icon=\"mdi:dots-vertical\"></is-icon>\r\n                </is-button>\r\n                <is-dropdown-item>Reenviar factura</is-dropdown-item>\r\n                <is-dropdown-item>Marcar pendiente</is-dropdown-item>\r\n                <is-dropdown-item color=\"danger\">Cancelar pedido</is-dropdown-item>\r\n              </is-dropdown>\r\n            </div>\r\n\r\n            <div class=\"grid-2\">\r\n              <div>\r\n                <p class=\"muted\">Cliente</p>\r\n                <p>Jane Doe <is-tag>jane@empresa.com</is-tag></p>\r\n              </div>\r\n              <div>\r\n                <p class=\"muted\">Total</p>\r\n                <p><strong>€ 1.249,00</strong></p>\r\n              </div>\r\n            </div>\r\n\r\n            <is-tab-group style=\"margin-top:1rem\">\r\n              <is-tab slot=\"nav\" panel=\"resumen\">Resumen</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"envio\">Envío</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"historial\">Historial</is-tab>\r\n\r\n              <is-tab-panel name=\"resumen\">\r\n                <is-scroller>\r\n                  <is-tag size=\"sm\">SKU-001</is-tag>\r\n                  <is-tag size=\"sm\">SKU-002</is-tag>\r\n                  <is-tag size=\"sm\">SKU-003</is-tag>\r\n                  <is-tag size=\"sm\">SKU-004</is-tag>\r\n                  <is-tag size=\"sm\">SKU-005</is-tag>\r\n                  <is-tag size=\"sm\">SKU-006</is-tag>\r\n                </is-scroller>\r\n              </is-tab-panel>\r\n              <is-tab-panel name=\"envio\">\r\n                <p>Calle Mayor 12, 28013 Madrid</p>\r\n                <p>Estimado: 28 jul — 30 jul</p>\r\n              </is-tab-panel>\r\n              <is-tab-panel name=\"historial\">\r\n                <p>· 30 jul — Pago recibido</p>\r\n                <p>· 28 jul — Pedido creado</p>\r\n              </is-tab-panel>\r\n            </is-tab-group>\r\n          </is-card>"
+        }
+      ]
+    },
+    {
+      "id": "drawer-tabs",
+      "title": "7.3 — Drawer + tab + split-panel",
+      "lede": "Sidebar persistente a la izquierda + drawer deslizante a la derecha con tabs.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"openDrawer\">\r\n            <is-icon slot=\"start\" icon=\"mdi:menu-open\"></is-icon>\r\n            Abrir inspector\r\n          </is-button>\r\n\r\n          <is-split-panel id=\"fullSplit\" style=\"height: 320px; margin-top:1rem\">\r\n            <div slot=\"start\" style=\"padding:1rem;background:rgba(255,255,255,0.03);border-radius:0.5rem\">\r\n              <is-tree selection=\"leaf\" expanded>\r\n                <is-tree-item>\r\n                  <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n                  Documentos\r\n                  <is-tree-item>factura.pdf</is-tree-item>\r\n                  <is-tree-item>contrato.odt</is-tree-item>\r\n                </is-tree-item>\r\n                <is-tree-item>\r\n                  <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n                  Proyectos\r\n                  <is-tree-item>app.ts</is-tree-item>\r\n                  <is-tree-item>styles.css</is-tree-item>\r\n                </is-tree-item>\r\n              </is-tree>\r\n            </div>\r\n            <div slot=\"end\" style=\"padding:1rem\">\r\n              <p>Selecciona un archivo del árbol para inspeccionarlo.</p>\r\n            </div>\r\n          </is-split-panel>\r\n\r\n          <is-drawer id=\"inspector\" label=\"Inspector\" placement=\"end\" style=\"--size: 380px\">\r\n            <is-tab-group>\r\n              <is-tab slot=\"nav\" panel=\"props\">Propiedades</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"events\">Eventos</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"acl\">Permisos</is-tab>\r\n\r\n              <is-tab-panel name=\"props\">\r\n                <is-card header=\"propiedades.md\">\r\n                  <p>1 <strong>app.ts</strong> · 67 líneas</p>\r\n                  <p>Última edición: hoy 14:21</p>\r\n                </is-card>\r\n              </is-tab-panel>\r\n              <is-tab-panel name=\"events\">\r\n                <p>· onSelect</p>\r\n                <p>· onEdit</p>\r\n                <p>· onDelete</p>\r\n              </is-tab-panel>\r\n              <is-tab-panel name=\"acl\">\r\n                <is-switch checked>Lectura</is-switch>\r\n                <is-switch>Escritura</is-switch>\r\n                <is-switch>Compartir</is-switch>\r\n              </is-tab-panel>\r\n            </is-tab-group>\r\n            <is-button slot=\"footer\" data-drawer-close variant=\"plain\">Cerrar</is-button>\r\n          </is-drawer>"
+        }
+      ]
+    },
+    {
+      "id": "multi-select",
+      "title": "7.4 — Select múltiple (tag + popup + checkbox)",
+      "lede": "Tags seleccionados + popover para agregar/quitar. Patrón típico de invitaciones.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-card header=\"Asignar responsables\" style=\"max-width:520px\">\r\n            <div style=\"display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center\">\r\n              <is-tag id=\"tag1\" removable>Jane Doe</is-tag>\r\n              <is-tag id=\"tag2\" removable>Mike Ross</is-tag>\r\n              <is-button id=\"addAssignee\" variant=\"plain\">\r\n                <is-icon slot=\"start\" icon=\"mdi:plus\"></is-icon>\r\n                Añadir\r\n              </is-button>\r\n            </div>\r\n\r\n            <is-dialog id=\"assigneeDialog\" label=\"Seleccionar responsables\">\r\n              <div slot=\"body\" style=\"display:grid;gap:0.25rem;min-width:280px\">\r\n                <is-checkbox name=\"u1\" checked>Jane Doe</is-checkbox>\r\n                <is-checkbox name=\"u2\" checked>Mike Ross</is-checkbox>\r\n                <is-checkbox name=\"u3\">Ana López</is-checkbox>\r\n                <is-checkbox name=\"u4\">Carlos Pérez</is-checkbox>\r\n                <is-checkbox name=\"u5\">Sara Núñez</is-checkbox>\r\n              </div>\r\n              <is-button slot=\"footer\" data-dialog-close variant=\"plain\">Cancelar</is-button>\r\n              <is-button slot=\"footer\" color=\"brand\" data-dialog-close id=\"saveAssignees\">Aplicar</is-button>\r\n            </is-dialog>\r\n          </is-card>"
+        }
+      ]
+    },
+    {
+      "id": "list",
+      "title": "7.5 — List patterns con avatar, badge, button, dropdown",
+      "lede": "Una lista de equipo combinando avatar + badge + button + dropdown.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-card style=\"max-width:640px\">\r\n            <ul class=\"list-custom\" id=\"teamList\">\r\n              <li class=\"list-row\">\r\n                <is-avatar name=\"Jane Doe\" status=\"online\"></is-avatar>\r\n                <div class=\"list-meta\">\r\n                  <strong>Jane Doe</strong>\r\n                  <span class=\"muted\">jane@empresa.com</span>\r\n                </div>\r\n                <is-badge color=\"success\">Admin</is-badge>\r\n                <is-dropdown>\r\n                  <is-button slot=\"trigger\" variant=\"plain\">\r\n                    <is-icon icon=\"mdi:dots-vertical\"></is-icon>\r\n                  </is-button>\r\n                  <is-dropdown-item>Ver perfil</is-dropdown-item>\r\n                  <is-dropdown-item>Enviar mensaje</is-dropdown-item>\r\n                  <is-dropdown-item color=\"danger\">Quitar</is-dropdown-item>\r\n                </is-dropdown>\r\n              </li>\r\n              <li class=\"list-row\">\r\n                <is-avatar name=\"Mike Ross\" status=\"away\"></is-avatar>\r\n                <div class=\"list-meta\">\r\n                  <strong>Mike Ross</strong>\r\n                  <span class=\"muted\">mike@empresa.com</span>\r\n                </div>\r\n                <is-badge color=\"warning\">Editor</is-badge>\r\n                <is-dropdown>\r\n                  <is-button slot=\"trigger\" variant=\"plain\">\r\n                    <is-icon icon=\"mdi:dots-vertical\"></is-icon>\r\n                  </is-button>\r\n                  <is-dropdown-item>Ver perfil</is-dropdown-item>\r\n                  <is-dropdown-item>Enviar mensaje</is-dropdown-item>\r\n                  <is-dropdown-item color=\"danger\">Quitar</is-dropdown-item>\r\n                </is-dropdown>\r\n              </li>\r\n              <li class=\"list-row\">\r\n                <is-avatar name=\"Ana López\" status=\"offline\"></is-avatar>\r\n                <div class=\"list-meta\">\r\n                  <strong>Ana López</strong>\r\n                  <span class=\"muted\">ana@empresa.com</span>\r\n                </div>\r\n                <is-badge>Viewer</is-badge>\r\n                <is-dropdown>\r\n                  <is-button slot=\"trigger\" variant=\"plain\">\r\n                    <is-icon icon=\"mdi:dots-vertical\"></is-icon>\r\n                  </is-button>\r\n                  <is-dropdown-item>Ver perfil</is-dropdown-item>\r\n                  <is-dropdown-item>Enviar mensaje</is-dropdown-item>\r\n                  <is-dropdown-item color=\"danger\">Quitar</is-dropdown-item>\r\n                </is-dropdown>\r\n              </li>\r\n            </ul>\r\n          </is-card>"
+        }
+      ]
+    }
+  ]
+}

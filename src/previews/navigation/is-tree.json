@@ -1,0 +1,164 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-tree",
+  "category": "navigation",
+  "title": "<is-tree>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-tree / is-tree-item de InSoft.",
+  "storageKey": "docs-is-tree",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-tree>",
+      "lede": "Árbol jerárquico accesible: expansión, selección, navegación por teclado\r\n          (↑/↓/←/→/Home/End/Enter/Space), iconos por slot y selección\r\n          <code class=\"code\">single</code> | <code class=\"code\">leaf</code> | <code class=\"code\">multiple</code> | <code class=\"code\">none</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tree id=\"tree1\" selection=\"single\" expanded>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Documentos\r\n              <is-tree-item>\r\n                <is-icon slot=\"icon\" icon=\"mdi:file-document\"></is-icon>\r\n                facturas-2024.pdf\r\n              </is-tree-item>\r\n              <is-tree-item>\r\n                <is-icon slot=\"icon\" icon=\"mdi:file-document\"></is-icon>\r\n                contratos.odt\r\n              </is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Proyectos\r\n              <is-tree-item>\r\n                <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n                ContaPyme\r\n                <is-tree-item>\r\n                  <is-icon slot=\"icon\" icon=\"mdi:language-typescript\"></is-icon>\r\n                  app.ts\r\n                </is-tree-item>\r\n                <is-tree-item>\r\n                  <is-icon slot=\"icon\" icon=\"mdi:language-css3\"></is-icon>\r\n                  styles.css\r\n                </is-tree-item>\r\n              </is-tree-item>\r\n              <is-tree-item>\r\n                <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n                InSoft\r\n                <is-tree-item>\r\n                  <is-icon slot=\"icon\" icon=\"mdi:react\"></is-icon>\r\n                  index.jsx\r\n                </is-tree-item>\r\n              </is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:image\"></is-icon>\r\n              Capturas\r\n            </is-tree-item>\r\n          </is-tree>\r\n          <p id=\"tree1Log\" class=\"lede\">Seleccionado: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-tree</span> <span class=\"attr\">selection</span>=<span class=\"val\">\"single\"</span> <span class=\"attr\">expanded</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-tree-item></span>\r\n    <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"icon\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:folder\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n    Documentos\r\n    <span class=\"tag\"><is-tree-item></span>facturas-2024.pdf<span class=\"tag\"></is-tree-item></span>\r\n  <span class=\"tag\"></is-tree-item></span>\r\n<span class=\"tag\"></is-tree></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "multiple",
+      "title": "Selección múltiple",
+      "lede": "Con <code class=\"code\">selection=\"multiple\"</code> cada nodo tiene su checkbox.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tree id=\"tree2\" selection=\"multiple\">\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Backend\r\n              <is-tree-item>Python</is-tree-item>\r\n              <is-tree-item>Node.js</is-tree-item>\r\n              <is-tree-item>Go</is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Frontend\r\n              <is-tree-item>React</is-tree-item>\r\n              <is-tree-item>Vue</is-tree-item>\r\n              <is-tree-item>Svelte</is-tree-item>\r\n            </is-tree-item>\r\n          </is-tree>\r\n          <p id=\"tree2Log\" class=\"lede\">Seleccionados: <code class=\"code\">—</code></p>"
+        }
+      ]
+    },
+    {
+      "id": "leaf",
+      "title": "Selección solo-leaf",
+      "lede": "Con <code class=\"code\">selection=\"leaf\"</code> las carpetas no se pueden seleccionar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tree id=\"tree3\" selection=\"leaf\">\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder-account\"></is-icon>\r\n              Usuarios\r\n              <is-tree-item>admin</is-tree-item>\r\n              <is-tree-item>jperez</is-tree-item>\r\n              <is-tree-item>mlopez</is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder-account\"></is-icon>\r\n              Invitados\r\n              <is-tree-item>guest</is-tree-item>\r\n            </is-tree-item>\r\n          </is-tree>"
+        }
+      ]
+    },
+    {
+      "id": "none",
+      "title": "Sin selección",
+      "lede": "Con <code class=\"code\">selection=\"none\"</code> solo expande/colapsa.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tree id=\"tree4\" selection=\"none\">\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Sólo expansión\r\n              <is-tree-item>uno</is-tree-item>\r\n              <is-tree-item>dos</is-tree-item>\r\n            </is-tree-item>\r\n          </is-tree>"
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "title": "Disabled",
+      "lede": "El atributo <code class=\"code\">disabled</code> bloquea interacción.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tree selection=\"single\">\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Producción\r\n              <is-tree-item disabled>db-master</is-tree-item>\r\n              <is-tree-item disabled>db-replica</is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Staging\r\n              <is-tree-item>db-1</is-tree-item>\r\n            </is-tree-item>\r\n          </is-tree>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-tree&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>selection</code>",
+              "none | single | leaf | multiple",
+              "single",
+              "Modo de selección."
+            ],
+            [
+              "<code>expanded</code>",
+              "boolean",
+              "false",
+              "Inicia todos los nodos expandidos."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-tree-item&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>expanded</code>",
+              "boolean",
+              "false",
+              "El nodo está expandido."
+            ],
+            [
+              "<code>selected</code>",
+              "boolean",
+              "false",
+              "El nodo está seleccionado."
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "false",
+              "Bloquea interacción."
+            ],
+            [
+              "<code>has-children</code>",
+              "boolean",
+              "auto",
+              "Fuerza presencia de hijos."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-tree-select</code>",
+              "Selección. <code>detail: { item, selected, selectedItems }</code>."
+            ],
+            [
+              "<code>is-tree-toggle</code>",
+              "Expande/colapsa. <code>detail: { item, expanded }</code>."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

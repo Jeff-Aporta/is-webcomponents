@@ -1,0 +1,145 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-kanban",
+  "category": "data",
+  "title": "<is-kanban>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-kanban / is-kanban-column / is-kanban-card de InSoft.",
+  "storageKey": "docs-is-kanban",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-kanban>",
+      "lede": "Tablero kanban con columnas y tarjetas. Cada columna tiene un accent\r\n          color, badge automático con el conteo, slots de header-actions y\r\n          cards con cover, heading, meta, tag y footer.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-kanban id=\"kb1\">\r\n            <is-kanban-column title=\"Pending\" accent=\"dodgerblue\">\r\n              <is-kanban-card heading=\"Diseñar landing\" meta=\"Asignado a Ana\" tag=\"Design\" tag-color=\"brand\">\r\n                Maquetar la nueva landing con el sistema de paneles.\r\n              </is-kanban-card>\r\n              <is-kanban-card heading=\"Investigar SSO\" meta=\"Asignado a Diego\" tag=\"R&amp;D\" tag-color=\"warning\">\r\n                Contactar con Auth0 y Okta para comparar planes.\r\n              </is-kanban-card>\r\n              <is-kanban-card heading=\"Newsletter mensual\" meta=\"Pendiente de copy\" tag=\"Marketing\" tag-color=\"neutral\">\r\n                Preparar el email de finales de mes.\r\n              </is-kanban-card>\r\n            </is-kanban-column>\r\n            <is-kanban-column title=\"In progress\" accent=\"var(--is-warning, #ffa800)\">\r\n              <is-kanban-card heading=\"Implementar /api/v2\" meta=\"Backend ⋅ 70%\" tag=\"Backend\" tag-color=\"warning\">\r\n                <span slot=\"footer\">\r\n                  <is-icon icon=\"mdi:clock-outline\"></is-icon>\r\n                  <span>3 días</span>\r\n                </span>\r\n              </is-kanban-card>\r\n              <is-kanban-card heading=\"Bug: scrollspy\" meta=\"Frontend\" tag=\"Frontend\" tag-color=\"brand\">\r\n                El observer no se desconecta al cambiar de pestaña.\r\n              </is-kanban-card>\r\n            </is-kanban-column>\r\n            <is-kanban-column title=\"QA\" accent=\"var(--is-success, #0bb783)\">\r\n              <is-kanban-card heading=\"Refactor pagination\" meta=\"PR #429\" tag=\"Refactor\" tag-color=\"success\">\r\n                Sustituir el paginador custom por is-pagination.\r\n              </is-kanban-card>\r\n            </is-kanban-column>\r\n            <is-kanban-column title=\"Done\" accent=\"var(--is-success, #0bb783)\">\r\n              <is-kanban-card heading=\"Calendar widget\" tag=\"UI\" tag-color=\"success\">Componente terminado y desplegado.</is-kanban-card>\r\n            </is-kanban-column>\r\n          </is-kanban>\r\n          <p id=\"kLog\">Click sobre una card: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-kanban></span>\r\n  <span class=\"tag\"><is-kanban-column</span> <span class=\"attr\">title</span>=<span class=\"val\">\"Pending\"</span> <span class=\"attr\">accent</span>=<span class=\"val\">\"dodgerblue\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-kanban-card</span> <span class=\"attr\">heading</span>=<span class=\"val\">\"Diseñar landing\"</span> <span class=\"attr\">tag</span>=<span class=\"val\">\"Design\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-kanban-card></span>\r\n  <span class=\"tag\"></is-kanban-column></span>\r\n<span class=\"tag\"></is-kanban></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "cover",
+      "title": "Con cover",
+      "lede": "Atributo <code class=\"code\">cover</code> muestra una imagen de cabecera.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-kanban>\r\n            <is-kanban-column title=\"Features\" accent=\"dodgerblue\">\r\n              <is-kanban-card heading=\"Versión 2.0\" tag=\"Release\" tag-color=\"brand\" cover=\"https://picsum.photos/id/1015/600/300\">\r\n                Lanzamiento de la nueva versión con is-stepper.\r\n              </is-kanban-card>\r\n              <is-kanban-card heading=\"Componentes nuevos\" tag=\"Component\" tag-color=\"success\" cover=\"https://picsum.photos/id/1025/600/300\">\r\n                8 componentes añadidos en la fase 8.\r\n              </is-kanban-card>\r\n            </is-kanban-column>\r\n          </is-kanban>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-kanban-column&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>title</code>",
+              "string",
+              "—",
+              "Nombre de la columna."
+            ],
+            [
+              "<code>accent</code>",
+              "string",
+              "brand",
+              "Color de acento."
+            ],
+            [
+              "<code>badge</code>",
+              "string",
+              "—",
+              "Override del conteo."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-kanban-card&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>heading</code>",
+              "string",
+              "—",
+              "Título de la card."
+            ],
+            [
+              "<code>meta</code>",
+              "string",
+              "—",
+              "Subtítulo."
+            ],
+            [
+              "<code>tag</code>",
+              "string",
+              "—",
+              "Tag de la cabecera."
+            ],
+            [
+              "<code>tag-variant</code>",
+              "brand | neutral | success | warning | danger",
+              "neutral",
+              "Color del tag."
+            ],
+            [
+              "<code>cover</code>",
+              "string",
+              "—",
+              "URL de imagen."
+            ],
+            [
+              "<code>without-shadow</code>",
+              "boolean",
+              "false",
+              "Sin sombra."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-kanban-card-click</code>",
+              "Click. <code>detail: { card, column }</code>."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

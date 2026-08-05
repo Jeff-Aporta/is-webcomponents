@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-tab",
+  "category": "navigation",
+  "title": "<is-tab>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-tab de InSoft.",
+  "storageKey": "docs-is-tab",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-tab>",
+      "lede": "Pestaña de un <code class=\"code\">&lt;is-tab-group&gt;</code>. El atributo <code class=\"code\">panel</code> la enlaza con su <code class=\"code\">&lt;is-tab-panel&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tab-group>\r\n            <is-tab slot=\"nav\" panel=\"a\"><is-icon slot=\"start\" icon=\"mdi:chart-line\"></is-icon>Resumen</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"b\">Movimientos</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"c\" disabled>Cierre</is-tab>\r\n            <is-tab-panel name=\"a\">Panel de resumen.</is-tab-panel>\r\n            <is-tab-panel name=\"b\">Panel de movimientos.</is-tab-panel>\r\n            <is-tab-panel name=\"c\">Panel de cierre.</is-tab-panel>\r\n          </is-tab-group>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-tab-group>\r\n  <is-tab slot=\"nav\" panel=\"a\"><is-icon slot=\"start\" icon=\"mdi:chart-line\"></is-icon>Resumen</is-tab>\r\n  <is-tab slot=\"nav\" panel=\"b\">Movimientos</is-tab>\r\n  <is-tab slot=\"nav\" panel=\"c\" disabled>Cierre</is-tab>\r\n  <is-tab-panel name=\"a\">Panel de resumen.</is-tab-panel>\r\n  <is-tab-panel name=\"b\">Panel de movimientos.</is-tab-panel>\r\n  <is-tab-panel name=\"c\">Panel de cierre.</is-tab-panel>\r\n</is-tab-group>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-tab-group&gt;, &lt;is-tab&gt;, &lt;is-tab-panel&gt; — Web Components (vanilla, zero dependencies). Tres componentes cohabitantes: &lt;is-tab-group active=\"general\" placement=\"top\" activation=\"auto\"&gt; &lt;is-tab slot=\"nav\" panel=\"general\"&gt;General&lt;/is-tab&gt; &lt;is-tab slot=\"nav\" panel=\"custom\" disabled&gt;Custom&lt;/is-tab&gt; &lt;is-tab-panel name=\"general\"&gt;…&lt;/is-tab-panel&gt; &lt;is-tab-panel name=\"custom\"&gt;…&lt;/is-tab-panel&gt; &lt;/is-tab-group&gt; Atributos &lt;is-tab-group&gt; active        string   — nombre del panel activo. placement     top | bottom | start | end  (default 'top') activation    auto | manual (default 'auto') without-scroll-controls  boolean (default false) Atributos &lt;is-tab&gt; panel         string   — nombre del panel al que apunta (required). disabled      boolean closable      boolean  — muestra un botón de cerrar (slot close-button). Atributos &lt;is-tab-panel&gt; name          string   — id único dentro del tab-group (required). Slots &lt;is-tab-group&gt; nav        — tabs (se proyectan automáticamente). (default)  — paneles. &lt;is-tab&gt; (default)   label del tab. start       icono al inicio. end         icono al final. close-button  botón de cerrar (cuando closable). &lt;is-tab-panel&gt; (default)  contenido del panel. Eventos is-tab-show   detail: { name, panel, tab } — al activar un panel. is-tab-hide   detail: { name, panel, tab } — al ocultar un panel. is-tab-close  detail: { tab, name }  — cuando se hace click en el close-btn de un is-tab closable. CSS Parts is-tab-group: ::part(tab-group) ::part(nav) ::part(body) ::part(tabs) is-tab: ::part(base) ::part(active-indicator) is-tab-panel: ::part(base)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/tab-group.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-stepper",
+  "category": "navigation",
+  "title": "<is-stepper>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-stepper / is-stepper-step de InSoft.",
+  "styles": ".wizard-card {\r\n      margin-top: 1rem;\r\n      padding: 1.25rem;\r\n      background: var(--is-bg-2, #181b22);\r\n      border: 1px solid var(--is-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
+  "storageKey": "docs-is-stepper",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-stepper>",
+      "lede": "Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.\r\n          Soporta orientación horizontal y vertical, variantes visualmente\r\n          distintas, iconos por slot, descripción y manejo de errores.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-stepper id=\"stepper1\" active=\"1\">\r\n            <is-stepper-step label=\"Cuenta\" description=\"email.verificado@ejemplo.com\" icon=\"mdi:account\"></is-stepper-step>\r\n            <is-stepper-step label=\"Perfil\" description=\"Completa tus datos\" icon=\"mdi:card-account-details\"></is-stepper-step>\r\n            <is-stepper-step label=\"Confirmar\" description=\"Revisa y envía\" icon=\"mdi:check-circle\"></is-stepper-step>\r\n          </is-stepper>\r\n\r\n          <div style=\"display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end\">\r\n            <is-button id=\"prevBtn\" color=\"neutral\" variant=\"outlined\">Atrás</is-button>\r\n            <is-button id=\"nextBtn\" color=\"brand\">Siguiente</is-button>\r\n          </div>\r\n          <p id=\"stepLog\" class=\"lede\">Active: <code class=\"code\">1</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-stepper</span> <span class=\"attr\">active</span>=<span class=\"val\">\"1\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-stepper-step</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Cuenta\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:account\"</span><span class=\"tag\">></span><span class=\"tag\"></is-stepper-step></span>\r\n  <span class=\"tag\"><is-stepper-step</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Perfil\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:card-account-details\"</span><span class=\"tag\">></span><span class=\"tag\"></is-stepper-step></span>\r\n  <span class=\"tag\"><is-stepper-step</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Confirmar\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:check-circle\"</span><span class=\"tag\">></span><span class=\"tag\"></is-stepper-step></span>\r\n<span class=\"tag\"></is-stepper></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "vertical",
+      "title": "Vertical",
+      "lede": "Con <code class=\"code\">orientation=\"vertical\"</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-stepper id=\"stepper2\" orientation=\"vertical\" active=\"1\">\r\n            <is-stepper-step label=\"Datos personales\" description=\"Nombre, email, fecha de nacimiento\"></is-stepper-step>\r\n            <is-stepper-step label=\"Dirección\" description=\"Calle, ciudad, código postal\"></is-stepper-step>\r\n            <is-stepper-step label=\"Pago\" description=\"Método de pago preferido\"></is-stepper-step>\r\n            <is-stepper-step label=\"Revisar\" description=\"Confirma antes de enviar\"></is-stepper-step>\r\n          </is-stepper>"
+        }
+      ]
+    },
+    {
+      "id": "error",
+      "title": "Estados de error",
+      "lede": "Con <code class=\"code\">error</code> en el step correspondiente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-stepper active=\"2\">\r\n            <is-stepper-step label=\"Datos\"></is-stepper-step>\r\n            <is-stepper-step label=\"Validación\" error></is-stepper-step>\r\n            <is-stepper-step label=\"Pago\"></is-stepper-step>\r\n          </is-stepper>"
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "title": "Disabled",
+      "lede": "Pasos bloqueados con <code class=\"code\">disabled</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-stepper active=\"0\">\r\n            <is-stepper-step label=\"Pendiente\"></is-stepper-step>\r\n            <is-stepper-step label=\"Bloqueado\" disabled></is-stepper-step>\r\n            <is-stepper-step label=\"También bloqueado\" disabled></is-stepper-step>\r\n          </is-stepper>"
+        }
+      ]
+    },
+    {
+      "id": "numbered",
+      "title": "Variante numbered",
+      "lede": "Con <code class=\"code\">variant=\"numbered\"</code> la numeración es automática.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-stepper color=\"numbered\" active=\"1\">\r\n            <is-stepper-step label=\"Inicio\"></is-stepper-step>\r\n            <is-stepper-step label=\"Medio\"></is-stepper-step>\r\n            <is-stepper-step label=\"Fin\"></is-stepper-step>\r\n          </is-stepper>"
+        }
+      ]
+    },
+    {
+      "id": "wizard",
+      "title": "Ejemplo de wizard",
+      "lede": "Stepper + card con el contenido cambiando al hacer click en Siguiente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-stepper id=\"wizard\" active=\"0\">\r\n            <is-stepper-step label=\"Paso 1\"></is-stepper-step>\r\n            <is-stepper-step label=\"Paso 2\"></is-stepper-step>\r\n            <is-stepper-step label=\"Paso 3\"></is-stepper-step>\r\n          </is-stepper>\r\n\r\n          <div class=\"wizard-card\" id=\"wizardBody\">\r\n            <h4>Paso 1: Tu nombre</h4>\r\n            <p>Introduce tu nombre completo.</p>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-stepper&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>active</code>",
+              "number",
+              "0",
+              "Paso activo (0-indexed)."
+            ],
+            [
+              "<code>orientation</code>",
+              "horizontal | vertical",
+              "horizontal",
+              "Disposición."
+            ],
+            [
+              "<code>variant</code>",
+              "default | simple | numbered",
+              "default",
+              "Aspecto."
+            ],
+            [
+              "<code>without-line</code>",
+              "boolean",
+              "false",
+              "Oculta línea conectora."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-stepper-step&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>label</code>",
+              "string",
+              "—",
+              "Título del paso."
+            ],
+            [
+              "<code>description</code>",
+              "string",
+              "—",
+              "Texto secundario."
+            ],
+            [
+              "<code>icon</code>",
+              "string",
+              "—",
+              "Iconify id."
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "false",
+              "Bloquea el paso."
+            ],
+            [
+              "<code>error</code>",
+              "boolean",
+              "false",
+              "Marca error."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>API</h3>"
+        },
+        {
+          "kind": "code",
+          "code": "stepper.next();          // Siguiente paso\r\nstepper.prev();          // Paso anterior\r\nstepper.goTo(2);         // Salta a paso 2\r\nstepper.active = 1;      // Setter",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-stepper-change</code>",
+              "Cambia el paso. <code>detail: { from, to, step }</code>."
+            ],
+            [
+              "<code>is-stepper-complete</code>",
+              "Último paso completado."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

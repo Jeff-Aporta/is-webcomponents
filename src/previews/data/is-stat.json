@@ -1,0 +1,124 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-stat",
+  "category": "data",
+  "title": "<is-stat>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-stat (KPI Card) de InSoft.",
+  "styles": ".stats-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\r\n      gap: 0.75rem;\r\n    }",
+  "storageKey": "docs-is-stat",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-stat>",
+      "lede": "Tarjeta KPI para dashboards: label, número principal, helper text,\r\n          trend (subida/bajada) e icono. Detecta automáticamente la dirección\r\n          del trend según el signo del valor.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stats-grid\">\r\n            <is-stat label=\"Ingresos\" value=\"€ 1.249,00\" helper=\"vs mes anterior\" trend=\"+12.5%\" icon=\"mdi:cash-multiple\"></is-stat>\r\n            <is-stat label=\"Usuarios activos\" value=\"3.421\" helper=\"últimas 24h\" trend=\"+8.1%\" icon=\"mdi:account-group\" color=\"brand\"></is-stat>\r\n            <is-stat label=\"Tasa de conversión\" value=\"2.4%\" helper=\"vs objetivo\" trend=\"-0.3%\" icon=\"mdi:target\" color=\"danger\"></is-stat>\r\n            <is-stat label=\"Tickets abiertos\" value=\"47\" helper=\"12 críticos\" trend=\"flat\" icon=\"mdi:ticket-outline\" color=\"warning\"></is-stat>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-stat</span>\r\n  <span class=\"attr\">label</span>=<span class=\"val\">\"Ingresos\"</span>\r\n  <span class=\"attr\">value</span>=<span class=\"val\">\"€ 1.249,00\"</span>\r\n  <span class=\"attr\">helper</span>=<span class=\"val\">\"vs mes anterior\"</span>\r\n  <span class=\"attr\">trend</span>=<span class=\"val\">\"+12.5%\"</span>\r\n  <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:cash-multiple\"</span>\r\n<span class=\"tag\">></span><span class=\"tag\"></is-stat></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Tamaños",
+      "lede": "small, medium, large.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stats-grid\">\r\n            <is-stat style=\"font-size:0.85em\" label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></is-stat>\r\n            <is-stat label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></is-stat>\r\n            <is-stat style=\"font-size:1.25em\" label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></is-stat>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "variants",
+      "title": "Variantes",
+      "lede": "brand, neutral, success, warning, danger.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stats-grid\">\r\n            <is-stat color=\"brand\" label=\"Brand\" value=\"42\" icon=\"mdi:star\"></is-stat>\r\n            <is-stat color=\"neutral\" label=\"Neutral\" value=\"42\" icon=\"mdi:cog\"></is-stat>\r\n            <is-stat color=\"success\" label=\"Success\" value=\"98%\" trend=\"+1.2%\" icon=\"mdi:check\"></is-stat>\r\n            <is-stat color=\"warning\" label=\"Warning\" value=\"12\" trend=\"+4\" icon=\"mdi:alert\"></is-stat>\r\n            <is-stat color=\"danger\" label=\"Danger\" value=\"3\" trend=\"-1\" icon=\"mdi:close\"></is-stat>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "title": "Dashboard de ejemplo",
+      "lede": "Cuatro stats juntos para una sección de dashboard.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stats-grid\">\r\n            <is-stat label=\"MRR\" value=\"€ 48.230\" helper=\"Monthly recurring revenue\" trend=\"+12.5%\" icon=\"mdi:trending-up\" color=\"success\"></is-stat>\r\n            <is-stat label=\"Churn\" value=\"1.8%\" helper=\"Cancelaciones del mes\" trend=\"-0.4%\" icon=\"mdi:account-remove\" color=\"danger\"></is-stat>\r\n            <is-stat label=\"LTV\" value=\"€ 1.249\" helper=\"Promedio 12 meses\" trend=\"+5.2%\" icon=\"mdi:cash-multiple\" color=\"brand\"></is-stat>\r\n            <is-stat label=\"CAC\" value=\"€ 89\" helper=\"Coste de adquisición\" trend=\"flat\" icon=\"mdi:cart-outline\"></is-stat>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-stat&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>label</code>",
+              "string",
+              "—",
+              "Título del KPI."
+            ],
+            [
+              "<code>value</code>",
+              "string",
+              "—",
+              "Valor principal."
+            ],
+            [
+              "<code>helper</code>",
+              "string",
+              "—",
+              "Texto aclaratorio."
+            ],
+            [
+              "<code>trend</code>",
+              "string",
+              "—",
+              "Valor de cambio (e.g. \"+12.5%\")."
+            ],
+            [
+              "<code>trend-direction</code>",
+              "up | down | flat",
+              "auto",
+              "Dirección manual."
+            ],
+            [
+              "<code>icon</code>",
+              "string",
+              "—",
+              "Iconify id."
+            ],
+            [
+              "<code>variant</code>",
+              "brand | neutral | success | warning | danger",
+              "neutral",
+              "Color."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

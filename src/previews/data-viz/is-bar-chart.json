@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-bar-chart",
+  "category": "data-viz",
+  "title": "<is-bar-chart>",
+  "titleHtml": true,
+  "storageKey": "docs-is-bar-chart",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-bar-chart>",
+      "lede": "Barras para comparar cantidades entre categorías.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-bar-chart open-on-click stacked>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Excelente\", \"Bueno\", \"Regular\", \"Malo\"],\r\n                  \"datasets\": [{ \"label\": \"Respuestas\", \"data\": [45, 30, 18, 7] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-bar-chart>"
+        }
+      ]
+    }
+  ]
+}

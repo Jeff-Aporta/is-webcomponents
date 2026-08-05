@@ -1,0 +1,97 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-intersection-observer",
+  "category": "helpers",
+  "title": "<is-intersection-observer>",
+  "titleHtml": true,
+  "styles": ".io-scroller {\r\n      height: 280px;\r\n      overflow: auto;\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background: var(--is-bg);\r\n      padding: 1rem;\r\n      scroll-behavior: smooth;\r\n    }\r\n    .io-spacer {\r\n      height: 120px;\r\n      display: grid;\r\n      place-items: center;\r\n      color: var(--is-text-dim);\r\n      font-size: 0.8rem;\r\n      border: 1px dashed var(--is-border-soft);\r\n      border-radius: var(--is-radius-sm);\r\n      margin-bottom: 0.75rem;\r\n    }\r\n    .io-card {\r\n      display: flex;\r\n      align-items: center;\r\n      justify-content: space-between;\r\n      gap: 1rem;\r\n      padding: 1rem 1.1rem;\r\n      margin-bottom: 0.75rem;\r\n      border-radius: var(--is-radius);\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg-elev);\r\n      color: var(--is-text-soft);\r\n      opacity: 0.45;\r\n      transform: translateY(10px);\r\n      transition: opacity 280ms ease, transform 280ms ease, background 280ms ease, border-color 280ms ease, color 280ms ease;\r\n    }\r\n    .io-card.is-in {\r\n      opacity: 1;\r\n      transform: none;\r\n      background: color-mix(in srgb, var(--is-color-brand) 14%, var(--is-bg-elev));\r\n      border-color: color-mix(in srgb, var(--is-color-brand) 45%, var(--is-border));\r\n      color: var(--is-text);\r\n    }\r\n    .io-card.is-in .io-badge {\r\n      background: var(--is-brand-soft);\r\n      color: var(--is-brand-text);\r\n    }\r\n    .io-badge {\r\n      flex: 0 0 auto;\r\n      font-size: 0.7rem;\r\n      font-weight: 600;\r\n      letter-spacing: 0.04em;\r\n      text-transform: uppercase;\r\n      padding: 0.25em 0.55em;\r\n      border-radius: 999px;\r\n      background: var(--is-control-bg);\r\n      color: var(--is-text-dim);\r\n    }\r\n    .io-uses {\r\n      display: grid;\r\n      gap: 0.65rem;\r\n      margin: 0;\r\n      padding: 0;\r\n      list-style: none;\r\n    }\r\n    .io-uses li {\r\n      display: grid;\r\n      grid-template-columns: 1.5rem 1fr;\r\n      gap: 0.55rem;\r\n      align-items: start;\r\n      color: var(--is-text-soft);\r\n      font-size: 0.92rem;\r\n      line-height: 1.45;\r\n    }\r\n    .io-uses is-icon {\r\n      width: 1.15em;\r\n      height: 1.15em;\r\n      color: var(--is-accent);\r\n      margin-top: 0.15em;\r\n    }\r\n    .io-diagram {\r\n      display: grid;\r\n      grid-template-columns: 1fr auto 1fr;\r\n      gap: 0.75rem;\r\n      align-items: center;\r\n      margin: 1rem 0 0;\r\n    }\r\n    .io-diagram__pane {\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius-sm);\r\n      background: var(--is-bg);\r\n      padding: 0.75rem;\r\n      min-height: 7rem;\r\n      position: relative;\r\n    }\r\n    .io-diagram__pane strong {\r\n      display: block;\r\n      font-size: 0.72rem;\r\n      text-transform: uppercase;\r\n      letter-spacing: 0.05em;\r\n      color: var(--is-text-dim);\r\n      margin-bottom: 0.5rem;\r\n    }\r\n    .io-diagram__box {\r\n      height: 1.6rem;\r\n      border-radius: 4px;\r\n      margin-bottom: 0.35rem;\r\n      background: var(--is-control-bg);\r\n      border: 1px solid var(--is-border-soft);\r\n    }\r\n    .io-diagram__box.on {\r\n      background: color-mix(in srgb, var(--is-color-success) 35%, var(--is-control-bg));\r\n      border-color: var(--is-color-success);\r\n    }\r\n    .io-diagram__box.off { opacity: 0.35; }\r\n    .io-diagram__viewport {\r\n      outline: 2px dashed var(--is-accent);\r\n      outline-offset: -6px;\r\n      border-radius: inherit;\r\n    }\r\n    .io-diagram__arrow {\r\n      color: var(--is-text-dim);\r\n      font-size: 1.4rem;\r\n    }\r\n    @media (max-width: 720px) {\r\n      .io-diagram { grid-template-columns: 1fr; }\r\n      .io-diagram__arrow { transform: rotate(90deg); justify-self: center; }\r\n    }",
+  "storageKey": "docs-is-intersection-observer",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-intersection-observer>",
+      "lede": "Responde a una pregunta simple: <strong>¿este elemento está (parcialmente) visible\r\n          dentro de un contenedor?</strong> Si sí, aplica una clase y/o dispara el evento\r\n          <code class=\"code\">is-intersect</code>.",
+      "blocks": [
+        {
+          "kind": "callout",
+          "html": "<strong>En la vida real</strong> sirve para revelar animaciones al hacer scroll,\r\n          lazy-load de imágenes/secciones, pausar un video fuera de vista, o marcar el ítem\r\n          activo del índice lateral (como hace este mismo preview)."
+        },
+        {
+          "kind": "html",
+          "html": "<ul class=\"io-uses\">\r\n          <li>\r\n            <is-icon icon=\"mdi:eye-outline\" aria-hidden=\"true\"></is-icon>\r\n            <span><strong>No es un timer.</strong> El navegador avisa solo cuando el elemento entra o sale de la zona visible — más barato que escuchar <code class=\"code\">scroll</code>.</span>\r\n          </li>\r\n          <li>\r\n            <is-icon icon=\"mdi:vector-intersection\" aria-hidden=\"true\"></is-icon>\r\n            <span><strong>Intersección</strong> = overlap entre el hijo observado y el <em>root</em> (viewport o un panel con scroll).</span>\r\n          </li>\r\n          <li>\r\n            <is-icon icon=\"mdi:percent-outline\" aria-hidden=\"true\"></is-icon>\r\n            <span><strong>threshold</strong> (0–1) = cuánto del elemento debe verse. <code class=\"code\">0.5</code> = al menos la mitad.</span>\r\n          </li>\r\n        </ul>\r\n\r\n        <div class=\"io-diagram\" aria-hidden=\"true\">\r\n          <div class=\"io-diagram__pane\">\r\n            <strong>Página (contenido largo)</strong>\r\n            <div class=\"io-diagram__box off\"></div>\r\n            <div class=\"io-diagram__box on\"></div>\r\n            <div class=\"io-diagram__box on\"></div>\r\n            <div class=\"io-diagram__box off\"></div>\r\n          </div>\r\n          <div class=\"io-diagram__arrow\">→</div>\r\n          <div class=\"io-diagram__pane io-diagram__viewport\">\r\n            <strong>Root / viewport</strong>\r\n            <div class=\"io-diagram__box on\"></div>\r\n            <div class=\"io-diagram__box on\"></div>\r\n            <div style=\"font-size:0.75rem;color:var(--is-text-dim);margin-top:0.5rem\">Solo estos disparan “en vista”</div>\r\n          </div>\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "scroll",
+      "title": "Demo: scroll en un panel",
+      "lede": "Desplázate <em>dentro</em> del panel. Cada tarjeta arranca atenuada; al entrar\r\n          (≥&nbsp;40&nbsp;% visible) recibe la clase <code class=\"code\">is-in</code> y se ilumina.\r\n          El log muestra el evento.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-intersection-observer\r\n    root=\"#scroller\"\r\n    intersect-class=\"is-in\"\r\n    threshold=\"0.4\">\r\n    <article class=\"io-card\" data-label=\"A\">…</article>\r\n    <article class=\"io-card\" data-label=\"B\">…</article>\r\n  </is-intersection-observer>\r\n</div>'>\r\n          <span class=\"demo-label\">root = #scroller · threshold = 0.4</span>\r\n          <div id=\"scroller\" class=\"io-scroller\">\r\n            <div class=\"io-spacer\">↓ baja para revelar las tarjetas ↓</div>\r\n            <is-intersection-observer id=\"ioScroll\" root=\"#scroller\" intersect-class=\"is-in\" threshold=\"0.4\">\r\n              <article class=\"io-card\" data-label=\"A\">\r\n                <span>Tarjeta A — fade al entrar</span>\r\n                <span class=\"io-badge\" data-badge>fuera</span>\r\n              </article>\r\n              <article class=\"io-card\" data-label=\"B\">\r\n                <span>Tarjeta B</span>\r\n                <span class=\"io-badge\" data-badge>fuera</span>\r\n              </article>\r\n              <article class=\"io-card\" data-label=\"C\">\r\n                <span>Tarjeta C</span>\r\n                <span class=\"io-badge\" data-badge>fuera</span>\r\n              </article>\r\n              <article class=\"io-card\" data-label=\"D\">\r\n                <span>Tarjeta D</span>\r\n                <span class=\"io-badge\" data-badge>fuera</span>\r\n              </article>\r\n            </is-intersection-observer>\r\n            <div class=\"io-spacer\">fin del scroll</div>\r\n          </div>\r\n          <div class=\"log\" id=\"ioLog\" aria-live=\"polite\" style=\"margin-top:12px\">\r\n            <div class=\"row hint\">Los eventos <code class=\"code\">is-intersect</code> aparecen aquí al entrar/salir.</div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "once",
+      "title": "Demo: una sola vez (<code class=\"code\">once</code>)",
+      "titleHtml": true,
+      "lede": "Con <code class=\"code\">once</code>, tras la primera entrada deja de observar ese hijo.\r\n          Ideal para animaciones de “reveal” que no deben repetirse al subir/bajar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">once · threshold 0.25</span>\r\n          <div id=\"scrollerOnce\" class=\"io-scroller\" style=\"height:200px\">\r\n            <div class=\"io-spacer\">↓ scroll ↓</div>\r\n            <is-intersection-observer root=\"#scrollerOnce\" intersect-class=\"is-in\" threshold=\"0.25\" once>\r\n              <article class=\"io-card\" data-label=\"once-1\">\r\n                <span>Reveal permanente (no vuelve a “fuera”)</span>\r\n                <span class=\"io-badge\">esperando</span>\r\n              </article>\r\n              <article class=\"io-card\" data-label=\"once-2\">\r\n                <span>Otra animación one-shot</span>\r\n                <span class=\"io-badge\">esperando</span>\r\n              </article>\r\n            </is-intersection-observer>\r\n            <div class=\"io-spacer\">fin</div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-intersection-observer root=\"#scroller\" intersect-class=\"is-in\" threshold=\"0.4\" once>\r\n  <article class=\"io-card\">…</article>\r\n</is-intersection-observer>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / evento",
+            "Qué hace"
+          ],
+          "rows": [
+            [
+              "<code>root</code>",
+              "Selector del contenedor con scroll. Sin él → viewport de la página."
+            ],
+            [
+              "<code>root-margin</code>",
+              "Expande/encoge el área (ej. <code>0px 0px -20% 0px</code>)."
+            ],
+            [
+              "<code>threshold</code>",
+              "Fracción visible 0–1 para considerar “intersecta”."
+            ],
+            [
+              "<code>intersect-class</code>",
+              "Clase CSS que se pone/quita en el hijo."
+            ],
+            [
+              "<code>once</code>",
+              "Tras la 1ª entrada, deja de observar ese hijo."
+            ],
+            [
+              "<code>disabled</code>",
+              "Apaga el observer."
+            ],
+            [
+              "<code>is-intersect</code>",
+              "Evento. <code>detail.entry</code> es el <code>IntersectionObserverEntry</code>."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

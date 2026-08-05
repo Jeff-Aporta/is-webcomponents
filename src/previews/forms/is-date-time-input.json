@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-date-time-input",
+  "category": "forms",
+  "title": "<is-date-time-input>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-date-time-input de InSoft.",
+  "storageKey": "docs-is-date-time-input",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-date-time-input>",
+      "lede": "Entrada de fecha y hora con calendario y reloj en el mismo desplegable.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></is-date-time-input>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></is-date-time-input>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-date-time-input&gt; — Fecha y hora en un solo campo con calendario y reloj lado a lado (MUI DateTimePicker). El valor es `yyyy-mm-ddTHH:mm[:ss]`. Atributos: los de is-date-input más ampm, hour24, seconds, step Events: is-change, is-show, is-hide Methods: show(), hide()",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/date-time-input.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-time-field",
+  "category": "forms",
+  "title": "<is-time-field>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-time-field de InSoft.",
+  "storageKey": "docs-is-time-field",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-time-field>",
+      "lede": "Campo de hora con máscara y validación, asociable a formularios.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></is-time-field>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></is-time-field>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-time-field&gt; — Campo de hora editable por secciones (MUI TimeField). Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required, disabled, readonly, clearable, locale, ampm, hour24, seconds, invalid Slots: start, end Events: is-change, is-input",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/time-field.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,7 @@
 // tests/helpers-homogeneity.test.mjs
 //
-// Toda utilería pública en helpers/ debe tener tab (manifest.page) + HTML
-// presentador bajo src/previews/helpers/. Sin esto el nav queda incompleto
-// y se rompe la homogeneidad del catálogo.
+// Toda utilería pública en helpers/ debe tener tab (manifest.page) + JSON
+// presentador bajo src/previews/helpers/ (is-preview/v1).
 //
 // Uso: node tests/helpers-homogeneity.test.mjs
 
@@ -29,14 +28,14 @@ for (const file of helperJs) {
     continue;
   }
   if (!entry.page) {
-    failures.push(`${entry.tag}: sin page — necesita HTML presentador`);
+    failures.push(`${entry.tag}: sin page — necesita JSON presentador`);
     continue;
   }
-  if (!entry.page.startsWith('helpers/')) {
-    failures.push(`${entry.tag}: page="${entry.page}" debería vivir en helpers/`);
+  if (!entry.page.startsWith('helpers/') || !entry.page.endsWith('.json')) {
+    failures.push(`${entry.tag}: page="${entry.page}" debería ser helpers/*.json`);
   }
-  const html = join(root, 'src', 'previews', entry.page);
-  if (!existsSync(html)) {
+  const json = join(root, 'src', 'previews', entry.page);
+  if (!existsSync(json)) {
     failures.push(`${entry.tag}: falta preview ${entry.page}`);
   }
   const md = join(helpersDir, file.replace(/\.js$/, '.md'));
@@ -47,12 +46,11 @@ for (const file of helperJs) {
 
 const navHelpers = manifest.filter((m) => m.category === 'helpers' && m.page);
 for (const entry of navHelpers) {
-  const html = join(root, 'src', 'previews', entry.page);
-  if (!existsSync(html)) failures.push(`nav ${entry.tag}: HTML ausente ${entry.page}`);
+  const json = join(root, 'src', 'previews', entry.page);
+  if (!existsSync(json)) failures.push(`nav ${entry.tag}: JSON ausente ${entry.page}`);
 }
 
-// Presentadores huérfanos (HTML sin manifest) — aviso suave solo si no hay entry
-for (const name of readdirSync(previewsDir).filter((f) => f.endsWith('.html'))) {
+for (const name of readdirSync(previewsDir).filter((f) => f.endsWith('.json'))) {
   const page = `helpers/${name}`;
   if (!manifest.some((m) => m.page === page)) {
     failures.push(`preview huérfano ${page}: no está en manifest`);

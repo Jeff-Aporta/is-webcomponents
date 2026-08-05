@@ -1,0 +1,87 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-dropdown",
+  "category": "actions",
+  "title": "<is-dropdown>",
+  "titleHtml": true,
+  "styles": ".cluster { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }\r\n    #log { color: var(--is-text-soft); font-size: 0.9em; }",
+  "storageKey": "docs-is-dropdown",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-dropdown>",
+      "lede": "Menú anclado a un trigger. Panel en <code class=\"code\">&lt;dialog&gt;</code> modal\r\n          (top layer) para no quedar debajo de otras secciones. Items:\r\n          <code class=\"code\">is-dropdown-item</code>, <code class=\"code\">is-divider</code> e iconos.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-dropdown id=\"dd\">\r\n            <is-button slot=\"trigger\" with-caret>Options</is-button>\r\n            <is-dropdown-item value=\"edit\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:pencil\"></is-icon>\r\n              Edit\r\n            </is-dropdown-item>\r\n            <is-dropdown-item value=\"dup\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:content-copy\"></is-icon>\r\n              Duplicate\r\n            </is-dropdown-item>\r\n            <is-divider></is-divider>\r\n            <is-dropdown-item value=\"delete\" color=\"danger\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:delete\"></is-icon>\r\n              Delete\r\n            </is-dropdown-item>\r\n          </is-dropdown>\r\n          <p id=\"log\" class=\"lede\">selección: —</p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-dropdown>\r\n  <is-button slot=\"trigger\" with-caret>Options</is-button>\r\n  <is-dropdown-item value=\"edit\">Edit</is-dropdown-item>\r\n  <is-divider></is-divider>\r\n  <is-dropdown-item value=\"delete\" color=\"danger\">Delete</is-dropdown-item>\r\n</is-dropdown>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "checkbox",
+      "title": "Checkable + details",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-dropdown>\r\n            <is-button slot=\"trigger\" with-caret>View</is-button>\r\n            <is-dropdown-item type=\"checkbox\" checked value=\"canvas\">Show canvas</is-dropdown-item>\r\n            <is-dropdown-item type=\"checkbox\" value=\"grid\">Show grid</is-dropdown-item>\r\n            <is-divider></is-divider>\r\n            <is-dropdown-item value=\"prefs\">\r\n              Preferences…\r\n              <span slot=\"details\">⌘,</span>\r\n            </is-dropdown-item>\r\n          </is-dropdown>"
+        }
+      ]
+    },
+    {
+      "id": "submenu",
+      "title": "Submenu",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-dropdown>\r\n            <is-button slot=\"trigger\" with-caret>File</is-button>\r\n            <is-dropdown-item value=\"new\">New</is-dropdown-item>\r\n            <is-dropdown-item value=\"open\">Open</is-dropdown-item>\r\n            <is-divider></is-divider>\r\n            <is-dropdown-item>\r\n              Export\r\n              <is-dropdown-item slot=\"submenu\" value=\"pdf\">PDF</is-dropdown-item>\r\n              <is-dropdown-item slot=\"submenu\" value=\"docx\">Word</is-dropdown-item>\r\n              <is-dropdown-item slot=\"submenu\" value=\"csv\">CSV</is-dropdown-item>\r\n            </is-dropdown-item>\r\n          </is-dropdown>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "slots",
+              "<code>trigger</code> + default items"
+            ],
+            [
+              "panel",
+              "<code>&lt;dialog showModal&gt;</code> — top layer (no stacking bajo secciones)"
+            ],
+            [
+              "<code>placement</code>",
+              "default <code>bottom-start</code>"
+            ],
+            [
+              "<code>is-select</code>",
+              "detail.item — cancelable para no cerrar"
+            ],
+            [
+              "item attrs",
+              "value, type=checkbox, checked, disabled, variant=danger"
+            ],
+            [
+              "item slots",
+              "icon, details, submenu"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

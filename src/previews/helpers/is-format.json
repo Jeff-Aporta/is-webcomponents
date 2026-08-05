@@ -1,0 +1,75 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-format",
+  "category": "helpers",
+  "title": "<is-format>",
+  "titleHtml": true,
+  "storageKey": "docs-is-format",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-format>",
+      "lede": "Web Component genérico de formateo con <code class=\"code\">Intl</code>. Un solo\r\n          elemento cubre fechas, números, bytes y tiempo relativo. Los nombres históricos\r\n          (<code class=\"code\">&lt;is-format-date&gt;</code>, <code class=\"code\">&lt;is-format-number&gt;</code>,\r\n          <code class=\"code\">&lt;is-format-bytes&gt;</code>, <code class=\"code\">&lt;is-relative-time&gt;</code>)\r\n          siguen funcionando como alias con <code class=\"code\">type</code> prefijado.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">los 4 tipos en una línea</span>\r\n          <p style=\"margin:0;display:flex;gap:1rem;flex-wrap:wrap;align-items:center\">\r\n            <is-format type=\"date\" value=\"2026-08-01\"></is-format>\r\n            <is-format type=\"number\" value=\"1234.5\" format=\"currency\" currency=\"EUR\"></is-format>\r\n            <is-format type=\"bytes\" value=\"2048\" display=\"long\"></is-format>\r\n            <is-format type=\"relative\" date=\"2026-08-01T00:00:00Z\"></is-format>\r\n          </p>"
+        }
+      ]
+    },
+    {
+      "id": "type-date",
+      "title": "<code>type=\"date\"</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">ISO datetime</code>\r\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:00\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">solo día</code>\r\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">timestamp ms</code>\r\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"1753896600000\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "type-number",
+      "title": "<code>type=\"number\"</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">decimal</code>\r\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency EUR</code>\r\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"99.99\" format=\"currency\" currency=\"EUR\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">percent</code>\r\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" format=\"percent\"></is-format>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "type-bytes",
+      "title": "<code>type=\"bytes\"</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">512 B</code>\r\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"512\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">2 MB short</code>\r\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"2097152\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">1.5 GB long</code>\r\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"1610612736\" display=\"long\"></is-format>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "type-relative",
+      "title": "<code>type=\"relative\"</code>",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">ayer</code>\r\n              <is-format class=\"format-grid__value\" type=\"relative\" date=\"2026-07-31T12:00:00\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">en 1 hora</code>\r\n              <is-format class=\"format-grid__value\" type=\"relative\" date=\"2026-08-01T13:00:00\"></is-format>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia de atributos",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<table class=\"is-table\">\r\n            <thead>\r\n              <tr><th>Atributo</th><th>Aplica a</th><th>Descripción</th></tr>\r\n            </thead>\r\n            <tbody>\r\n              <tr><td><code>type</code></td><td>todos</td><td><code>date | number | bytes | relative</code> (obligatorio en <code>&lt;is-format&gt;</code>)</td></tr>\r\n              <tr><td><code>value</code></td><td>todos</td><td>el dato a formatear (string | number)</td></tr>\r\n              <tr><td><code>date</code></td><td>relative</td><td>ISO o timestamp; en relative también vale <code>value</code></td></tr>\r\n              <tr><td><code>locale</code></td><td>todos</td><td>BCP 47; cae al <code>lang</code> del documento</td></tr>\r\n              <tr><td><code>format</code></td><td>number</td><td><code>decimal | currency | percent | unit</code></td></tr>\r\n              <tr><td><code>currency</code></td><td>number</td><td>ISO 4217 cuando <code>format=\"currency\"</code></td></tr>\r\n              <tr><td><code>unit</code></td><td>bytes</td><td><code>byte | kilobyte | … | petabyte</code> de entrada</td></tr>\r\n              <tr><td><code>display</code></td><td>bytes</td><td><code>short | long</code></td></tr>\r\n              <tr><td><code>style</code></td><td>relative</td><td><code>long | short | narrow</code> (default long)</td></tr>\r\n              <tr><td><code>sync</code></td><td>relative</td><td>boolean: re-renderiza cada 30 s</td></tr>\r\n              <tr><td><code>weekday era year month day hour minute second hour-format</code></td><td>date</td><td>opciones de <code>Intl.DateTimeFormat</code></td></tr>\r\n            </tbody>\r\n          </table>"
+        }
+      ]
+    }
+  ]
+}

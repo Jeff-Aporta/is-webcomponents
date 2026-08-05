@@ -1,0 +1,37 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-pdf-viewer",
+  "category": "overlays",
+  "title": "<is-pdf-viewer>",
+  "titleHtml": true,
+  "storageKey": "docs-is-pdf-viewer",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-pdf-viewer>",
+      "lede": "Visor de PDF. Por defecto delega en el visor nativo del navegador (<code class=\"code\">&lt;iframe type=\"application/pdf\"&gt;</code>) — sin dependencias, sin peso adicional.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-pdf-viewer\r\n            src=\"https://raw.githubusercontent.com/mozilla/pdf.js/master/web/compressed.tracemonkey-pldi-03.pdf\"\r\n            download\r\n            print\r\n            height=\"70vh\">\r\n            <span slot=\"title\">Tracemonkey — PDF.js reference paper</span>\r\n            <a slot=\"toolbar\" href=\"https://raw.githubusercontent.com/mozilla/pdf.js/master/web/compressed.tracemonkey-pldi-03.pdf\" target=\"_blank\" rel=\"noopener\" style=\"font-size:.8rem; color:var(--is-text-soft);\">abrir en pestaña ↗</a>\r\n          </is-pdf-viewer>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const v = document.querySelector('is-pdf-viewer');\r\nv.src = '/files/manual.pdf';\r\nv.currentPage;  // número de página actual (iframe + #page=N)\r\n\r\n// Eventos\r\nv.addEventListener('is-load',  () => /* listo */);\r\nv.addEventListener('is-error', () => /* error de carga */);\r\n\r\n// Slots\r\n//   title       texto de la izquierda\r\n//   toolbar     contenido extra a la derecha\r\n\r\n// Atributos\r\n// src           URL del PDF (requerido)\r\n// engine        native (default) | pdfjs\r\n// height        alto del iframe\r\n// download      boolean — botón Descargar\r\n// print         boolean — botón Imprimir\r\n// page, zoom    sólo con engine=pdfjs (cuando integres pdfjs en tu build)",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

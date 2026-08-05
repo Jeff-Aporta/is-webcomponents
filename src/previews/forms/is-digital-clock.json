@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-digital-clock",
+  "category": "forms",
+  "title": "<is-digital-clock>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-digital-clock de InSoft.",
+  "storageKey": "docs-is-digital-clock",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-digital-clock>",
+      "lede": "Reloj digital: muestra la hora en formato numérico y admite selección por teclado.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-digital-clock value=\"14:30\"></is-digital-clock>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-digital-clock value=\"14:30\"></is-digital-clock>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-digital-clock&gt; — Selector de hora en lista (MUI DigitalClock) o en columnas de horas / minutos / segundos / AM-PM (MultiSectionDigitalClock). Atributos: value (HH:mm[:ss]), layout (list|sections), step (minutos en lista), minutes-step, seconds, ampm, hour24, min-time, max-time, skip-disabled, locale, disabled, readonly Events: is-change { value }",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/digital-clock.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

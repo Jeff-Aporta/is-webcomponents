@@ -1,0 +1,87 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-divider",
+  "category": "layout",
+  "title": "<is-divider>",
+  "titleHtml": true,
+  "storageKey": "docs-is-divider",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-divider>",
+      "lede": "Separador horizontal o vertical. Opacidad default <code class=\"code\">20</code>; color vía tokens del theme.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<p>Sección A</p>\r\n          <is-divider></is-divider>\r\n          <p>Sección B</p>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Vertical · opacidad · colores",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;align-items:stretch;height:3rem;gap:0\">\r\n            <span style=\"padding:0 1rem;display:flex;align-items:center\">Izq</span>\r\n            <is-divider orientation=\"vertical\"></is-divider>\r\n            <span style=\"padding:0 1rem;display:flex;align-items:center\">Der</span>\r\n          </div>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0;width:100%\">\r\n            <span class=\"demo-label\">opacity 20 · 50 · 100</span>\r\n            <is-divider opacity=\"20\"></is-divider>\r\n            <is-divider opacity=\"50\"></is-divider>\r\n            <is-divider opacity=\"100\"></is-divider>\r\n          </div>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0.35rem;width:100%\">\r\n            <span class=\"demo-label\">color theme</span>\r\n            <is-divider color=\"text\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"brand\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"success\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"warning\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"danger\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"border\" opacity=\"100\"></is-divider>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-divider></is-divider>\r\n<is-divider opacity=\"80\" color=\"brand\"></is-divider>\r\n<is-divider orientation=\"vertical\" color=\"accent\"></is-divider>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / var",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>orientation</code>",
+              "horizontal"
+            ],
+            [
+              "<code>opacity</code>",
+              "20 (0–100)"
+            ],
+            [
+              "<code>color</code>",
+              "text · text-soft · text-dim · border · control · brand · accent · success · warning · danger"
+            ],
+            [
+              "<code>--color</code>",
+              "override CSS (gana sobre attr color si se setea en el host)"
+            ],
+            [
+              "<code>--opacity</code>",
+              "0.2"
+            ],
+            [
+              "<code>--width</code>",
+              "1px"
+            ],
+            [
+              "<code>--spacing</code>",
+              "0.75em"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,301 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-rating",
+  "category": "forms",
+  "title": "<is-rating>",
+  "titleHtml": true,
+  "styles": ".stack { display: grid; gap: 1.25rem; width: fit-content; }\r\n    .row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }",
+  "storageKey": "docs-is-rating",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-rating>",
+      "lede": "Valoración form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-rating/\" target=\"_blank\" rel=\"noreferrer\">Rating de MUI</a>:\r\n          precisión arbitraria, iconos propios, textos de hover, variantes de color y reset.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-rating id=\"demo\" label=\"Satisfacción\" value=\"3\" name=\"rating\"></is-rating>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\">value: <code class=\"code\">3</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-rating label=\"Satisfacción\" value=\"3\" name=\"rating\"></is-rating>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "basics",
+      "title": "Básicos",
+      "lede": "<code class=\"code\">max</code> define cuántos iconos hay.\r\n          El tamaño no es un atributo: los iconos escalan con el\r\n          <code class=\"code\">font-size</code> del contexto (o con\r\n          <code class=\"code\">--is-rating-size</code>).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-rating label=\"Por defecto (max 5)\" value=\"2\"></is-rating>\r\n            <is-rating label=\"10 iconos\" max=\"10\" value=\"7\"></is-rating>\r\n            <is-rating label=\"Contexto grande\" value=\"3\" style=\"font-size:1.5rem;\"></is-rating>\r\n            <is-rating label=\"Deshabilitado\" value=\"2\" disabled></is-rating>\r\n            <is-rating label=\"Obligatorio\" required></is-rating>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-rating label=\"10 iconos\" max=\"10\" value=\"7\"></is-rating>\r\n<is-rating value=\"3\" style=\"font-size:1.5rem\"></is-rating>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "precision",
+      "title": "Precisión",
+      "lede": "<code class=\"code\">precision</code> fija la granularidad del valor: <code class=\"code\">1</code> (default),\r\n          <code class=\"code\">0.5</code>, <code class=\"code\">0.25</code> o <code class=\"code\">0.1</code>.\r\n          El icono se rellena con la fracción exacta, no por mitades.\r\n          <code class=\"code\">allow-half</code> sigue funcionando como alias de <code class=\"code\">precision=\"0.5\"</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-rating label=\"precision 1 (default)\" value=\"3\" show-label label-format=\"{v} / {max}\"></is-rating>\r\n            <is-rating label=\"precision 0.5\" precision=\"0.5\" value=\"3.5\" show-label label-format=\"{v} / {max}\"></is-rating>\r\n            <is-rating label=\"precision 0.25\" precision=\"0.25\" value=\"2.75\" show-label label-format=\"{v} / {max}\"></is-rating>\r\n            <is-rating label=\"precision 0.1\" precision=\"0.1\" value=\"4.3\" show-label label-format=\"{v} / {max}\"></is-rating>\r\n            <is-rating label=\"allow-half (compat)\" allow-half value=\"2.5\" show-label label-format=\"{v} / {max}\"></is-rating>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-rating precision=\"0.25\" value=\"2.75\"></is-rating>\r\n<is-rating allow-half value=\"2.5\"></is-rating>   <!-- = precision=\"0.5\" -->",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "title": "Iconos personalizados",
+      "lede": "<code class=\"code\">icon</code> y <code class=\"code\">empty-icon</code> aceptan cualquier nombre de\r\n          <code class=\"code\">is-icon</code> (Iconify, <code class=\"code\">grupo:nombre</code>).\r\n          Si solo se define <code class=\"code\">icon</code>, el hueco reutiliza ese mismo icono en gris.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-rating label=\"Corazones\" icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" value=\"3\"></is-rating>\r\n            <is-rating label=\"Pulgares\" icon=\"tabler:thumb-up-filled\" empty-icon=\"tabler:thumb-up\" max=\"3\" value=\"2\"></is-rating>\r\n            <is-rating label=\"Rayos (mismo icono en hueco)\" icon=\"tabler:bolt-filled\" value=\"2\"></is-rating>\r\n            <is-rating label=\"Círculos · precision 0.5\" icon=\"tabler:circle-filled\" empty-icon=\"tabler:circle\" precision=\"0.5\" value=\"3.5\"></is-rating>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-rating icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" value=\"3\"></is-rating>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "highlight",
+      "title": "Resaltar solo el seleccionado",
+      "lede": "Con <code class=\"code\">highlight-selected-only</code> el hover y la selección marcan únicamente\r\n          el icono del valor actual, no los anteriores (equivale al ejemplo <em>Radio group</em> de MUI).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-rating\r\n              id=\"faces\"\r\n              label=\"¿Cómo fue tu experiencia?\"\r\n              highlight-selected-only\r\n              max=\"5\"\r\n              value=\"2\"\r\n              show-label></is-rating>\r\n            <is-rating label=\"Normal (acumulativo)\" value=\"2\" show-label></is-rating>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-rating highlight-selected-only value=\"2\" show-label></is-rating>\r\n\r\nrating.labels = ['Muy malo', 'Malo', 'Normal', 'Bueno', 'Excelente'];",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "labels",
+      "title": "Textos de hover",
+      "lede": "<code class=\"code\">show-label</code> muestra junto a los iconos el texto del valor bajo el cursor\r\n          (o del valor actual si no hay hover). El texto sale, por orden de prioridad, de la propiedad\r\n          <code class=\"code\">getLabelText</code>, de la propiedad <code class=\"code\">labels</code>\r\n          (índice 0 = valor 1) o del atributo <code class=\"code\">label-format</code> con\r\n          <code class=\"code\">{v}</code> y <code class=\"code\">{max}</code>.\r\n          El mismo texto alimenta el <code class=\"code\">aria-label</code> de cada icono y el\r\n          <code class=\"code\">aria-valuetext</code> del control.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-rating id=\"labelled\" label=\"labels (array)\" value=\"4\" show-label></is-rating>\r\n            <is-rating label=\"label-format\" value=\"3\" show-label label-format=\"{v} de {max} estrellas\"></is-rating>\r\n            <is-rating id=\"fn\" label=\"getLabelText (función)\" precision=\"0.5\" value=\"3.5\" show-label></is-rating>\r\n          </div>\r\n          <p class=\"lede\" id=\"hoverLog\">hover: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "rating.labels = ['Pésimo', 'Malo', 'Normal', 'Bueno', 'Excelente'];\r\nrating.getLabelText = (v) => `${v} punto${v === 1 ? '' : 's'}`;\r\n\r\nrating.addEventListener('is-hover', (e) => {\r\n  console.log(e.detail.phantomValue, e.detail.label);\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "color",
+      "title": "Color",
+      "lede": "<code class=\"code\">variant</code> redefine <code class=\"code\">--is-rating-color</code>.\r\n          El hueco usa siempre <code class=\"code\">--is-rating-empty</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-rating label=\"brand (default)\" value=\"3\"></is-rating>\r\n            <is-rating color=\"neutral\" label=\"neutral\" value=\"3\"></is-rating>\r\n            <is-rating color=\"success\" label=\"success\" value=\"3\"></is-rating>\r\n            <is-rating color=\"warning\" label=\"warning\" value=\"3\"></is-rating>\r\n            <is-rating color=\"danger\" label=\"danger\" value=\"3\"></is-rating>\r\n            <is-rating label=\"Token propio\" value=\"3\" style=\"--is-rating-color:#845ef7;\"></is-rating>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-rating color=\"success\" value=\"3\"></is-rating>\r\n<is-rating style=\"--is-rating-color:#845ef7\" value=\"3\"></is-rating>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "readonly",
+      "title": "Solo lectura y fracciones",
+      "lede": "En <code class=\"code\">readonly</code> el valor no se ajusta a <code class=\"code\">precision</code>:\r\n          puede mostrar cualquier fracción, que es lo habitual para una media de valoraciones.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <div class=\"row\">\r\n              <is-rating readonly value=\"3.7\" label=\"Media de 128 opiniones\"></is-rating>\r\n            </div>\r\n            <is-rating readonly value=\"4.28\" label=\"4,28 · sin precision\"></is-rating>\r\n            <is-rating readonly value=\"2.1\" icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" label=\"Fracción con icono propio\"></is-rating>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-rating readonly value=\"3.7\"></is-rating>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "clearable",
+      "title": "Reset (clearable)",
+      "lede": "Con <code class=\"code\">clearable</code>, volver a pulsar el valor ya seleccionado lo pone a\r\n          <code class=\"code\">0</code> (solo si <code class=\"code\">value &gt;= 1</code>).\r\n          <code class=\"code\">Delete</code> y <code class=\"code\">Backspace</code> hacen lo mismo desde el teclado.\r\n          Sin el atributo, el segundo clic no hace nada.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\r\n            <is-rating id=\"clearDemo\" label=\"clearable\" clearable value=\"3\"></is-rating>\r\n            <is-rating label=\"Sin clearable\" value=\"3\"></is-rating>\r\n          </div>\r\n          <p class=\"lede\" id=\"clearLog\">value: <code class=\"code\">3</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-rating clearable value=\"3\"></is-rating>\r\n\r\nrating.clear();   // también por API",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "title": "Dentro de un <form>",
+      "lede": "El valor se envía bajo <code class=\"code\">name</code>; con <code class=\"code\">value = 0</code>\r\n          la entrada se omite y <code class=\"code\">required</code> bloquea el envío.\r\n          <code class=\"code\">form.reset()</code> vuelve al valor del atributo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<form id=\"f\" style=\"display:grid; gap:0.75rem; width:fit-content;\">\r\n            <is-rating name=\"calidad\" label=\"Calidad\" required></is-rating>\r\n            <is-rating name=\"precio\" label=\"Precio\" precision=\"0.5\" value=\"3.5\"></is-rating>\r\n            <div class=\"row\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reiniciar</button>\r\n            </div>\r\n          </form>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"out\">FormData: —</p>"
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "title": "Teclado",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Tecla",
+            "Acción"
+          ],
+          "rows": [
+            [
+              "<code>←</code> <code>↓</code>",
+              "− <code>precision</code>"
+            ],
+            [
+              "<code>→</code> <code>↑</code>",
+              "+ <code>precision</code>"
+            ],
+            [
+              "<code>Home</code>",
+              "0"
+            ],
+            [
+              "<code>End</code>",
+              "<code>max</code>"
+            ],
+            [
+              "<code>Delete</code> <code>Backspace</code>",
+              "0, solo con <code>clearable</code>"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>name</code>",
+              "clave en FormData (omitida si value = 0)"
+            ],
+            [
+              "<code>value</code>",
+              "0 … <code>max</code> (default 0)"
+            ],
+            [
+              "<code>max</code>",
+              "número de iconos (default 5)"
+            ],
+            [
+              "<code>precision</code>",
+              "granularidad: <code>1</code> (default) · <code>0.5</code> · <code>0.25</code> · <code>0.1</code>"
+            ],
+            [
+              "<code>allow-half</code>",
+              "alias histórico de <code>precision=\"0.5\"</code>"
+            ],
+            [
+              "<code>icon</code> <code>empty-icon</code>",
+              "nombres de <code>is-icon</code>; sin <code>empty-icon</code> se reutiliza <code>icon</code>"
+            ],
+            [
+              "<code>highlight-selected-only</code>",
+              "resalta solo el icono del valor, no los anteriores"
+            ],
+            [
+              "<code>variant</code>",
+              "<code>brand</code> (default) · <code>neutral</code> · <code>success</code> · <code>warning</code> · <code>danger</code>"
+            ],
+            [
+              "<code>label-format</code>",
+              "plantilla del texto, ej. <code>\"{v} de {max}\"</code>"
+            ],
+            [
+              "<code>show-label</code>",
+              "muestra el texto del hover/valor junto a los iconos"
+            ],
+            [
+              "<code>clearable</code>",
+              "reclicar el valor actual (o <code>Delete</code>) lo pone a 0"
+            ],
+            [
+              "<code>label</code>",
+              "texto o slot homónimo"
+            ],
+            [
+              "<code>disabled</code> <code>readonly</code> <code>required</code>",
+              "boolean; en <code>readonly</code> el valor admite cualquier fracción"
+            ],
+            [
+              "propiedades JS",
+              "<code>value</code> <code>labels</code> (índice 0 = valor 1) <code>getLabelText(v)</code> <code>precision</code> <code>icon</code> <code>emptyIcon</code> <code>variant</code>"
+            ],
+            [
+              "métodos",
+              "<code>clear()</code> <code>focus()</code> <code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code>"
+            ],
+            [
+              "parts",
+              "<code>form-control</code> <code>label</code> <code>base</code> <code>star</code> <code>icon-empty</code> <code>icon-filled</code> <code>hover-label</code>"
+            ],
+            [
+              "states",
+              "<code>blank</code> <code>disabled</code> <code>readonly</code>"
+            ],
+            [
+              "events",
+              "<code>is-change</code> · <code>is-hover</code> (<code>detail.phantomValue</code>, <code>detail.label</code>)"
+            ],
+            [
+              "tokens",
+              "<code>--is-rating-size</code> <code>--is-rating-gap</code> <code>--is-rating-color</code> <code>--is-rating-empty</code> <code>--is-rating-focus</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

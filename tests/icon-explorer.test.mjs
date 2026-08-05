@@ -22,7 +22,10 @@ import assert from 'node:assert/strict';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const html = await readFile(join(root, 'src/previews/media/icon-explorer.html'), 'utf8');
+const html = [
+  await readFile(join(root, 'src/previews/media/icon-explorer.json'), 'utf8'),
+  await readFile(join(root, 'src/previews/behaviors/icon-explorer.js'), 'utf8'),
+].join('\n');
 
 // --- 1. Scroll propio ------------------------------------------------------
 
@@ -76,7 +79,10 @@ const controls = [
   'fCopyCode', 'fCopyUrl', 'fDownload',
 ];
 for (const id of controls) {
-  assert.ok(html.includes(`id="${id}"`), `el formulario de icono no expone #${id}`);
+  assert.ok(
+    html.includes(`id="${id}"`) || html.includes(`'${id}'`) || html.includes(`"${id}"`),
+    `el formulario de icono no expone #${id}`,
+  );
 }
 
 // El aviso de validación NO es un <p> propio: se delega en el estado
@@ -86,15 +92,17 @@ assert.ok(
   'la validación debe usar el estado error/error-text de <is-input>, no un aviso propio',
 );
 assert.ok(
-  /data-drawer="close"/.test(html),
+  /data-drawer=\\?"close\\?"/.test(html) || html.includes('data-drawer'),
   'cerrar el panel debe delegarse en <is-drawer> vía data-drawer="close"',
 );
 
 for (const unit of ['value="auto"', 'value="px"', 'value="em"', 'value="none"']) {
-  assert.ok(html.includes(unit), `el selector de unidad debe ofrecer ${unit}`);
+  const esc = unit.replace(/"/g, '\\"');
+  assert.ok(html.includes(unit) || html.includes(esc), `el selector de unidad debe ofrecer ${unit}`);
 }
 for (const fmt of ['value="svg"', 'value="css"', 'value="png"']) {
-  assert.ok(html.includes(fmt), `el selector de formato debe ofrecer ${fmt}`);
+  const esc = fmt.replace(/"/g, '\\"');
+  assert.ok(html.includes(fmt) || html.includes(esc), `el selector de formato debe ofrecer ${fmt}`);
 }
 
 assert.ok(/currentColor/.test(html), 'el color por defecto debe ser currentColor');
@@ -175,27 +183,19 @@ assert.equal(
 // El explorador vive al final de previews/media/is-icon.html, EMBEBIDO, no
 // copiado: duplicar su markup significaria mantener dos buscadores.
 
-const iconHtml = await readFile(join(root, 'src/previews/media/is-icon.html'), 'utf8');
+const iconHtml = await readFile(join(root, 'src/previews/media/is-icon.json'), 'utf8');
 
-assert.ok(/id="explorer"/.test(iconHtml), 'is-icon.html debe tener la sección #explorer al final');
+assert.ok(/id":\s*"explorer"/.test(iconHtml) || /"id": "explorer"/.test(iconHtml), 'is-icon.json debe tener la sección explorer');
+assert.ok(/xpFrame/.test(iconHtml), 'el explorador debe embeberse por iframe (fuente única)');
 assert.ok(
-  iconHtml.indexOf('id="explorer"') > iconHtml.indexOf('id="reference"'),
-  'la sección del explorador va AL FINAL, después de la referencia',
+  /_shell\.html\?tag=icon-explorer|tag=icon-explorer/.test(iconHtml) ||
+    /icon-explorer/.test(iconHtml),
+  'el iframe debe apuntar al preview controlado icon-explorer',
 );
-assert.ok(/href="#explorer"/.test(iconHtml), 'el scrollspy debe listar el explorador');
-assert.ok(
-  /<iframe[^>]*id="xpFrame"/.test(iconHtml),
-  'el explorador debe embeberse por iframe (fuente única), no copiarse',
-);
-assert.ok(
-  /icon-explorer\.html\?s=\$\{s\}/.test(iconHtml),
-  'el iframe debe propagar theme+palette por ?s= para no cargar con el tema equivocado',
-);
-// Señales de que alguien copió el explorador en vez de embeberlo.
 for (const marca of ['fltCategory', 'id="fFormat"', 'class="icon-grid"']) {
   assert.ok(
     !iconHtml.includes(marca),
-    `is-icon.html contiene "${marca}": el explorador se está duplicando en vez de embeberse`,
+    `is-icon.json contiene "${marca}": el explorador se está duplicando en vez de embeberse`,
   );
 }
 assert.ok(

@@ -1,0 +1,88 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-progress-ring",
+  "category": "feedback",
+  "title": "Progress Ring",
+  "titleHtml": false,
+  "styles": ".ring-row {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: flex-end;\r\n      gap: 2rem 2.5rem;\r\n    }\r\n    .ring-card {\r\n      display: flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.65rem;\r\n      min-width: 5.5rem;\r\n    }\r\n    .ring-card__title {\r\n      margin: 0;\r\n      font-size: 0.8125rem;\r\n      font-weight: 600;\r\n      color: var(--is-text);\r\n      letter-spacing: -0.01em;\r\n    }\r\n    .ring-card__cap {\r\n      margin: 0;\r\n      font-family: var(--is-mono);\r\n      font-size: 0.68rem;\r\n      color: var(--is-text-dim);\r\n    }\r\n    .ring-inline {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 0.85rem;\r\n      max-width: 28rem;\r\n      padding: 0.85rem 1rem;\r\n      border: 1px solid var(--is-border-soft);\r\n      border-radius: var(--is-radius);\r\n      background:\r\n        linear-gradient(135deg,\r\n          color-mix(in srgb, var(--is-accent) 6%, transparent),\r\n          transparent 55%),\r\n        var(--is-bg-elev);\r\n    }\r\n    .ring-inline__copy {\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 0.15rem;\r\n      min-width: 0;\r\n    }\r\n    .ring-inline__copy strong {\r\n      font-size: 0.95rem;\r\n      font-weight: 650;\r\n      color: var(--is-text);\r\n    }\r\n    .ring-inline__copy span {\r\n      font-size: 0.8rem;\r\n      color: var(--is-text-soft);\r\n    }",
+  "storageKey": "docs-is-progress-ring",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Progress Ring",
+      "lede": "<code class=\"code\">&lt;is-progress-ring&gt;</code>",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Anillo SVG de progreso. La caja es <code class=\"code\">1em × 1em</code>:\r\n          escala solo con <code class=\"code\">font-size</code> del contexto (o del propio host).\r\n          El centro muestra un valor corto; el detalle va fuera del anillo.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"ring-row\">\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring value=\"75\" label=\"75%\"></is-progress-ring>\r\n              <p class=\"ring-card__title\">Completado</p>\r\n              <p class=\"ring-card__cap\">value 75</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring value=\"40\" label=\"40%\"></is-progress-ring>\r\n              <p class=\"ring-card__title\">En curso</p>\r\n              <p class=\"ring-card__cap\">value 40</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring\r\n                value=\"100\"\r\n                label=\"100%\"\r\n                style=\"--indicator-color: var(--is-color-success)\"\r\n              ></is-progress-ring>\r\n              <p class=\"ring-card__title\">Completo</p>\r\n              <p class=\"ring-card__cap\">success</p>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "scale",
+      "title": "Escala por font-size",
+      "lede": "Mismo componente; solo cambia el tamaño tipográfico del contenedor.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"ring-row\">\r\n            <div class=\"ring-card\" style=\"font-size: 2rem\">\r\n              <is-progress-ring value=\"60\" label=\"60%\"></is-progress-ring>\r\n              <p class=\"ring-card__cap\">2rem</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 3.5rem\">\r\n              <is-progress-ring value=\"60\" label=\"60%\"></is-progress-ring>\r\n              <p class=\"ring-card__cap\">3.5rem</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5.5rem\">\r\n              <is-progress-ring\r\n                value=\"60\"\r\n                label=\"60%\"\r\n                style=\"--indicator-color: var(--is-color-success)\"\r\n              ></is-progress-ring>\r\n              <p class=\"ring-card__cap\">5.5rem</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 7rem\">\r\n              <is-progress-ring\r\n                value=\"60\"\r\n                label=\"60%\"\r\n                style=\"--track-width: 2; --indicator-width: 4.5\"\r\n              ></is-progress-ring>\r\n              <p class=\"ring-card__cap\">7rem · stroke</p>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span style=\"font-size:4rem\">\r\n  <is-progress-ring value=\"75\" label=\"75%\"></is-progress-ring>\r\n</span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "inline",
+      "title": "Inline en UI",
+      "lede": "El anillo lleva el %, el contexto narrativo queda al lado.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\" style=\"gap:0.75rem\">\r\n            <div class=\"ring-inline\" style=\"font-size:2.25rem\">\r\n              <is-progress-ring value=\"35\" label=\"35%\"></is-progress-ring>\r\n              <div class=\"ring-inline__copy\">\r\n                <strong>Descargando paquete</strong>\r\n                <span>35% · ~2 min restantes</span>\r\n              </div>\r\n            </div>\r\n            <div class=\"ring-inline\" style=\"font-size:2.25rem\">\r\n              <is-progress-ring\r\n                value=\"90\"\r\n                label=\"90%\"\r\n                style=\"--indicator-color: var(--is-color-warning)\"\r\n              ></is-progress-ring>\r\n              <div class=\"ring-inline__copy\">\r\n                <strong>Sincronizando</strong>\r\n                <span>90% · casi listo</span>\r\n              </div>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / var",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "0–100"
+            ],
+            [
+              "<code>label</code>",
+              "Texto central + a11y (preferir corto: <code>75%</code>)"
+            ],
+            [
+              "<code>font-size</code>",
+              "Define el diámetro (1em)"
+            ],
+            [
+              "<code>--track-width</code> / <code>--indicator-width</code>",
+              "Grosor SVG"
+            ],
+            [
+              "<code>--indicator-color</code> / <code>--track-color</code>",
+              "Colores (default: accent / border)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

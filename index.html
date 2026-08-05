@@ -111,10 +111,10 @@
     };
 
     // --- home + catalog (home no está en manifest) ---
-    const HOME = { tag: 'home', title: 'Home', page: 'home.html' };
+    const HOME = { tag: 'home', title: 'Home', page: 'home.json' };
     // Igual que Inicio, no es un componente del catálogo sino una página
     // suelta en previews/ raíz: el taller para armarse una paleta propia.
-    const THEMING = { tag: 'theming', title: 'Personalización', page: 'theming.html' };
+    const THEMING = { tag: 'theming', title: 'Personalización', page: 'theming.json' };
     const catalog = [HOME, THEMING, ...components];
 
     // --- build nav (Home + agrupado por categoría) ---
@@ -237,7 +237,7 @@
       return b64urlEncode(JSON.stringify(obj));
     }
 
-    /** Preview URL: ?s= solo con valores iniciales de esa carga (no se reescribe al toglear). */
+    /** Preview URL legado (solo si faltara en catalog — no debería ocurrir). */
     function previewSrc(page) {
       return `src/previews/${page}?s=${encodeState({ embed: true, theme, palette })}`;
     }
@@ -248,9 +248,8 @@
 
     async function showPreview() {
       const tag = component.tag;
-      const useControlled = hasControlledPreview(tag);
 
-      if (useControlled) {
+      if (hasControlledPreview(tag)) {
         frame.hidden = true;
         frame.removeAttribute('src');
         previewHost.hidden = false;
@@ -258,10 +257,11 @@
         return;
       }
 
+      console.warn(`[gallery] sin JSON de preview para ${tag}`);
       previewHost.hidden = true;
       previewHost.preview = null;
       frame.hidden = false;
-      frame.src = previewSrc(component.page);
+      frame.removeAttribute('src');
     }
 
     function sendContext() {
@@ -402,9 +402,7 @@
       renderContext();
     });
     fullscreenBtn.addEventListener('click', () => {
-      const url = hasControlledPreview(component.tag)
-        ? controlledShellSrc(component.tag)
-        : `src/previews/${component.page}?s=${encodeState({ theme, palette })}`;
+      const url = controlledShellSrc(component.tag);
       window.open(url, '_blank', 'noopener');
     });
 

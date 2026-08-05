@@ -25,23 +25,16 @@ test('is-tag actualiza doc-block con la colore info', () => {
 
 test('is-tag.css define los tokens de color=info', () => {
   const css = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.css'), 'utf8');
-  // Buscar el bloque :host([color="info"]) { ... }
   const m = /:host\(\[\s*color\s*=\s*["']info["']\s*\]\)\s*\{([\s\S]*?)\}/m.exec(css);
   assert.ok(m, 'Debe existir el bloque :host([color="info"]) { ... }');
   const block = m[1];
-  // Comprobar que cada token usa --is-color-info-*
   assert.ok(/--is-color-info-100/.test(block), '--_bg debe usar --is-color-info-100');
   assert.ok(/--is-color-info-500/.test(block), '--_border debe usar --is-color-info-500');
   assert.ok(/--is-color-info-700/.test(block), '--_text debe usar --is-color-info-700');
 });
 
 test('is-tag.css NO anida selectores con atributos del host dentro de :host', () => {
-  // CSS Nesting dentro de :host { ... } rompe la cascada: el navegador
-  // aplana todas las reglas en una sola y deja de aplicar los selectores
-  // &[color="..."]. Hay que sacarlos a top-level como :host([color="..."]).
   const css = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.css'), 'utf8');
-  // Tomamos el primer bloque :host { ... } y miramos si dentro hay un &
-  // seguido de [color= o [variant= o [pill].
   const idx = css.indexOf(':host {');
   assert.ok(idx > -1, ':host { ... } existe en tag.css');
   const start = css.indexOf('{', idx);
@@ -58,14 +51,12 @@ test('is-tag.css NO anida selectores con atributos del host dentro de :host', ()
     !/&\s*\[\s*(?:color|variant|pill)/.test(block),
     'Dentro de :host { ... } NO debe haber &[color=...], &[variant=...] ni &[pill]. Sacarlos a top-level como :host([...]).',
   );
-  // Y a top-level deben existir las 6 colores
   for (const v of ['brand', 'neutral', 'info', 'success', 'warning', 'danger']) {
     assert.ok(
       new RegExp(`:host\\(\\[\\s*color\\s*=\\s*["']${v}["']\\s*\\]\\)`).test(css),
       `Debe existir :host([color="${v}"]) a top-level`,
     );
   }
-  // Y las variants
   for (const a of ['filled', 'outlined', 'accent']) {
     assert.ok(
       new RegExp(`:host\\(\\[\\s*variant\\s*=\\s*["']${a}["']\\s*\\]\\)`).test(css),
@@ -75,9 +66,6 @@ test('is-tag.css NO anida selectores con atributos del host dentro de :host', ()
 });
 
 test('callout.css NO anida selectores con atributos del host dentro de :host', () => {
-  // Mismo bug que tag.css tenía: callout.css también anidaba
-  // &[color=...] y &[variant=...] dentro de :host { ... }.
-  // Ya está migrado a top-level, este test protege contra regresiones.
   const css = readFileSync(join(root, 'src', 'components', 'layout', 'callout.css'), 'utf8');
   const idx = css.indexOf(':host {');
   assert.ok(idx > -1, ':host { ... } existe en callout.css');
@@ -95,14 +83,12 @@ test('callout.css NO anida selectores con atributos del host dentro de :host', (
     !/&\s*\[\s*(?:color|variant|data-no-icon)/.test(block),
     'callout.css NO debe tener &[color=...], &[variant=...] ni &[data-no-icon] dentro de :host { ... }',
   );
-  // Verificar que las 5 colores están a top-level
   for (const v of ['brand', 'neutral', 'success', 'warning', 'danger']) {
     assert.ok(
       new RegExp(`:host\\(\\[\\s*color\\s*=\\s*["']${v}["']\\s*\\]\\)`).test(css),
       `callout.css debe tener :host([color="${v}"]) a top-level`,
     );
   }
-  // Y las 5 variants a top-level
   for (const a of ['filled', 'outlined', 'filled-outlined', 'plain', 'accent']) {
     assert.ok(
       new RegExp(`:host\\(\\[\\s*variant\\s*=\\s*["']${a}["']\\s*\\]\\)`).test(css),
@@ -122,10 +108,7 @@ test('Las 3 paletas definen --is-color-info-500', () => {
 test('Las 3 paletas definen la escala completa info-50..800', () => {
   const css = readFileSync(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
   for (const pal of ['insoft', 'contapyme', 'agrowin']) {
-    const re = new RegExp(
-      `\\[data-palette=["']${pal}["']\\]([\\s\\S]*?)\\}`,
-      'm',
-    );
+    const re = new RegExp(`\\[data-palette=["']${pal}["']\\]([\\s\\S]*?)\\}`, 'm');
     const blockMatch = re.exec(css);
     assert.ok(blockMatch, `Bloque [data-palette="${pal}"] existe`);
     const block = blockMatch[1];
@@ -137,16 +120,16 @@ test('Las 3 paletas definen la escala completa info-50..800', () => {
 });
 
 test('preview de is-tag muestra la colore info', () => {
-  const html = readFileSync(join(root, 'src', 'previews', 'feedback', 'is-tag.html'), 'utf8');
+  const def = JSON.parse(
+    readFileSync(join(root, 'src', 'previews', 'feedback', 'is-tag.json'), 'utf8'),
+  );
+  const html = JSON.stringify(def.sections);
   assert.ok(
-    /<is-tag\s+color=["']info["']/.test(html),
+    html.includes('color=\\"info\\"') || html.includes("color=\\\"info\\\""),
     'El preview debe incluir al menos un <is-tag color="info">',
   );
-  // Y debe demostrar TODAS las colores para consistencia visual.
   for (const v of ['brand', 'neutral', 'info', 'success', 'warning', 'danger']) {
-    assert.ok(
-      new RegExp(`<is-tag[^>]*color=["']${v}["']`).test(html),
-      `Preview debe demostrar la colore ${v}`,
-    );
+    const needle = `color=\\"${v}\\"`;
+    assert.ok(html.includes(needle), `Preview debe demostrar la colore ${v}`);
   }
 });

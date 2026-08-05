@@ -1,0 +1,143 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-date-picker",
+  "category": "forms",
+  "title": "<is-date-picker>",
+  "titleHtml": true,
+  "storageKey": "docs-is-date-picker",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-date-picker>",
+      "lede": "Calendario inline (DateCalendar de <a href=\"https://mui.com/x/react-date-pickers/\" target=\"_blank\" rel=\"noopener\">MUI X</a>). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un <code>is-dropdown</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-picker id=\"dp\" value=\"2026-07-30\" locale=\"es\"></is-date-picker>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--is-mono);font-size:.85em\"></p>"
+        }
+      ]
+    },
+    {
+      "id": "range",
+      "title": "Rango",
+      "lede": "Tras elegir el inicio, el calendario pinta el rango tentativo hasta el día bajo el cursor o el foco, y el extremo móvil se marca con un anillo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-picker mode=\"range\" min=\"2026-01-01\" max=\"2026-12-31\" locale=\"es\"></is-date-picker>"
+        }
+      ]
+    },
+    {
+      "id": "views",
+      "title": "Vistas",
+      "lede": "<code>view</code> fuerza la vista; <code>views</code> limita las permitidas. Un picker de solo mes/año fija valor al elegir mes.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div>\r\n            <div class=\"demo-label\">open-to=\"year\"</div>\r\n            <is-date-picker locale=\"es\" open-to=\"year\" value=\"2026-07-30\"></is-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">views=\"month year\"</div>\r\n            <is-date-picker locale=\"es\" views=\"month year\" view=\"month\" value=\"2026-07-01\"></is-date-picker>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "week",
+      "title": "Semana y rejilla",
+      "lede": "<code>first-day-of-week</code>, <code>show-outside-days</code>, <code>fixed-weeks</code> y <code>show-week-numbers</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div>\r\n            <div class=\"demo-label\">domingo + outside + week numbers</div>\r\n            <is-date-picker locale=\"en-US\" first-day-of-week=\"0\" show-outside-days fixed-weeks show-week-numbers value=\"2026-07-15\"></is-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">fines de semana off</div>\r\n            <is-date-picker locale=\"es\" disabled-days=\"0 6\" value=\"2026-07-15\"></is-date-picker>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "disable",
+      "title": "Deshabilitado",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div>\r\n            <div class=\"demo-label\">disable-past</div>\r\n            <is-date-picker locale=\"es\" disable-past></is-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">disabled-dates</div>\r\n            <is-date-picker locale=\"es\" value=\"2026-07-01\" disabled-dates=\"2026-07-04 2026-07-05 2026-07-20\"></is-date-picker>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "standalone",
+      "title": "Mes y año sueltos",
+      "lede": "<code>is-month-calendar</code> e <code>is-year-calendar</code> también se usan solos.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-month-calendar year=\"2026\" value=\"2026-07\" locale=\"es\" style=\"width:16em\"></is-month-calendar>\r\n          <is-year-calendar value=\"2026\" min=\"2010\" max=\"2035\" style=\"width:16em\"></is-year-calendar>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Eventos: <code>is-change</code>, <code>is-view-change</code>, <code>is-month-change</code>, <code>is-day-hover</code>. Métodos: <code>navigate(n)</code>, <code>focusDate(iso)</code>, <code>clear()</code>.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "— · rango: <code>start/end</code>"
+            ],
+            [
+              "<code>mode</code>",
+              "single · range"
+            ],
+            [
+              "<code>view</code> / <code>views</code> / <code>open-to</code>",
+              "day · day month year · day"
+            ],
+            [
+              "<code>min</code> / <code>max</code>",
+              "—"
+            ],
+            [
+              "<code>locale</code> / <code>first-day-of-week</code>",
+              "document.lang · Intl"
+            ],
+            [
+              "<code>show-outside-days</code> / <code>fixed-weeks</code> / <code>show-week-numbers</code>",
+              "off"
+            ],
+            [
+              "<code>disable-past</code> / <code>disable-future</code>",
+              "off"
+            ],
+            [
+              "<code>disabled-dates</code> / <code>disabled-days</code>",
+              "—"
+            ],
+            [
+              "<code>nav</code>",
+              "both · prev · next · none"
+            ],
+            [
+              "<code>frameless</code>",
+              "off (para meter varios en una tarjeta)"
+            ],
+            [
+              "<code>preview-to</code>",
+              "— (rango tentativo impuesto desde fuera)"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">Parts: <code>base</code>, <code>nav</code>, <code>month-label</code>, <code>month-select</code>, <code>year-select</code>, <code>weekdays</code>, <code>grid</code>, <code>day</code>, <code>week-number</code>, <code>month-view</code>, <code>year-view</code>.</p>"
+        }
+      ]
+    }
+  ]
+}

@@ -134,7 +134,7 @@ const docsToScan = [
   join(root, 'src', 'components', 'data', 'LLM.md'),
   join(root, 'src', 'components', 'layout', 'LLM.md'),
   join(root, 'src', 'components', 'data', 'ag-grid.md'),
-  join(root, 'src', 'previews', 'data', 'is-ag-grid.html'),
+  join(root, 'src', 'previews', 'data', 'is-ag-grid.json'),
 ].filter(existsSync);
 
 for (const f of docsToScan) {

@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-doughnut-chart",
+  "category": "data-viz",
+  "title": "<is-doughnut-chart>",
+  "titleHtml": true,
+  "storageKey": "docs-is-doughnut-chart",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-doughnut-chart>",
+      "lede": "Proporciones con centro hueco.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-doughnut-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Dev\",\"Diseño\",\"QA\",\"Reuniones\"],\"datasets\":[{\"label\":\"Horas\",\"data\":[35,20,15,18]}]}}\r\n            </script>\r\n          </is-doughnut-chart>"
+        }
+      ]
+    }
+  ]
+}

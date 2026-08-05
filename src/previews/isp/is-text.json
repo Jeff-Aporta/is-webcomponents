@@ -1,0 +1,83 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-text",
+  "category": "isp",
+  "title": "<is-text>",
+  "titleHtml": true,
+  "storageKey": "docs-is-text",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-text>",
+      "lede": "Texto en línea con color semántico y recorte por líneas.\r\n          Port del <code class=\"code\">Text.svelte</code> de ISP.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-text>Texto normal, hereda el color del contexto.</is-text>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Colores semánticos",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0.35rem;align-items:flex-start\">\r\n            <is-text color=\"brand\">brand</is-text>\r\n            <is-text color=\"neutral\">neutral</is-text>\r\n            <is-text color=\"info\">info</is-text>\r\n            <is-text color=\"success\">success</is-text>\r\n            <is-text color=\"warning\">warning</is-text>\r\n            <is-text color=\"danger\">danger</is-text>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h2>Line clamp</h2>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div style=\"max-width:22rem;display:flex;flex-direction:column;gap:0.75rem\">\r\n            <is-text lines=\"1\">Una sola línea: este párrafo se corta con puntos suspensivos en cuanto no cabe en el ancho disponible del contenedor.</is-text>\r\n            <is-text lines=\"2\">Dos líneas: este párrafo se recorta al llegar a la segunda línea, y el resto del contenido desaparece con la elipsis al final.</is-text>\r\n            <is-text lines=\"3\">Tres líneas: el mismo párrafo, ahora con más aire. El clamp usa <code>--mx-lns</code>, que escribe el JS a partir del atributo <code>lines</code>.</is-text>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h2>Escala por font-size</h2>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div style=\"font-size: 1.4em\">\r\n            <is-text color=\"brand\">Escala desde el contexto, sin atributo size.</is-text>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-text color=\"success\">Aprobado</is-text>\r\n<is-text lines=\"2\">Texto largo recortado a dos líneas…</is-text>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / var",
+            "Valores"
+          ],
+          "rows": [
+            [
+              "<code>color</code>",
+              "brand · neutral · info · success · warning · danger (sin default: hereda)"
+            ],
+            [
+              "<code>lines</code>",
+              "entero &gt;= 1; ausente o 0 = sin clamp"
+            ],
+            [
+              "<code>--text-clr</code>",
+              "override directo del color"
+            ],
+            [
+              "<code>--mx-lns</code>",
+              "número de líneas del clamp (lo escribe el JS)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

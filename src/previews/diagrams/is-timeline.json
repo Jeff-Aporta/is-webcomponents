@@ -1,0 +1,131 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-timeline",
+  "category": "diagrams",
+  "title": "<is-timeline>",
+  "titleHtml": true,
+  "storageKey": "docs-is-timeline",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-timeline>",
+      "lede": "Línea de tiempo de hitos en SVG, sin Mermaid. Declaras eventos con\r\n          fecha; el componente los reparte a lo largo de un eje y separa los\r\n          que caen demasiado cerca en el tiempo para que no se encimen.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-timeline open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"timeline\": {\r\n                  \"title\": \"Hitos 2026\",\r\n                  \"orientation\": \"horizontal\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Producto\", \"hue\": 199 },\r\n                    { \"id\": \"g2\", \"name\": \"Cumplimiento\", \"hue\": 38 }\r\n                  ],\r\n                  \"events\": [\r\n                    { \"id\": \"e1\", \"date\": \"2026-01-15\", \"label\": \"Kickoff\", \"group\": \"g1\" },\r\n                    { \"id\": \"e2\", \"date\": \"2026-03-01\", \"label\": \"Lanzamiento beta\", \"group\": \"g1\", \"desc\": \"Primera versión abierta a un grupo piloto de contadores.\" },\r\n                    { \"id\": \"e3\", \"date\": \"2026-03-04\", \"label\": \"Hotfix\", \"group\": \"g1\" },\r\n                    { \"id\": \"e4\", \"date\": \"2026-06-01\", \"label\": \"Cierre fiscal\", \"group\": \"g2\" },\r\n                    { \"id\": \"e5\", \"date\": \"2026-09-15\", \"label\": \"Renovación DIAN\", \"group\": \"g2\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-timeline>"
+        }
+      ]
+    },
+    {
+      "id": "vertical",
+      "title": "Orientación vertical",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          <code>orientation: \"vertical\"</code> pone el eje a la izquierda y\r\n          apila los eventos a la derecha, en orden cronológico.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-timeline open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"timeline\": {\r\n                  \"orientation\": \"vertical\",\r\n                  \"events\": [\r\n                    { \"id\": \"v1\", \"date\": \"2026-01-05\", \"label\": \"Constitución\" },\r\n                    { \"id\": \"v2\", \"date\": \"2026-02-10\", \"label\": \"Primer cliente\" },\r\n                    { \"id\": \"v3\", \"date\": \"2026-05-20\", \"label\": \"Serie A\" },\r\n                    { \"id\": \"v4\", \"date\": \"2026-11-01\", \"label\": \"Expansión regional\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-timeline>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "<code>inline</code> · <code>viewer</code>",
+              "inline abre el visor al hacer clic; viewer activa hover, tooltips y leyenda clickeable."
+            ],
+            [
+              "<code>open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Esquema del JSON</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>orientation</code>",
+              "<code>horizontal</code> (default) · <code>vertical</code>."
+            ],
+            [
+              "<code>events[].date</code>",
+              "<code>YYYY-MM-DD</code> o con hora."
+            ],
+            [
+              "<code>events[].label</code>",
+              "Texto de la tarjeta. Admite markdown inline."
+            ],
+            [
+              "<code>events[].group</code>",
+              "Id del grupo; define el color del punto y la tarjeta."
+            ],
+            [
+              "<code>events[].desc</code>",
+              "Descripción extendida para el tooltip del visor."
+            ],
+            [
+              "<code>groups[].hue</code>",
+              "Tono HSL 0–360."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>payload</code>",
+              "Configuración JSON; alternativa al script hijo."
+            ],
+            [
+              "<code>layout</code>",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code>hiddenGroups</code>",
+              "Set de grupos ocultos."
+            ],
+            [
+              "<code>is-render</code>",
+              "Evento: el SVG terminó de construirse."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

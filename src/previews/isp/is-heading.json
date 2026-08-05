@@ -1,0 +1,91 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-heading",
+  "category": "isp",
+  "title": "<is-heading>",
+  "titleHtml": true,
+  "storageKey": "docs-is-heading",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-heading>",
+      "lede": "Un solo módulo para los seis niveles. Port de <code class=\"code\">H1…H6.svelte</code> de ISP:\r\n          el color va mezclando el acento de la paleta con el color de texto según baja el nivel\r\n          (15 · 30 · 45 · 65 · 80 · 90 %).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;flex-direction:column;gap:0.5rem\">\r\n            <is-heading level=\"1\">Nivel 1</is-heading>\r\n            <is-heading level=\"2\">Nivel 2</is-heading>\r\n            <is-heading level=\"3\">Nivel 3</is-heading>\r\n            <is-heading level=\"4\">Nivel 4</is-heading>\r\n            <is-heading level=\"5\">Nivel 5</is-heading>\r\n            <is-heading level=\"6\">Nivel 6</is-heading>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Colores semánticos",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;flex-direction:column;gap:0.35rem\">\r\n            <is-heading level=\"3\" color=\"brand\">brand</is-heading>\r\n            <is-heading level=\"3\" color=\"neutral\">neutral</is-heading>\r\n            <is-heading level=\"3\" color=\"info\">info</is-heading>\r\n            <is-heading level=\"3\" color=\"success\">success</is-heading>\r\n            <is-heading level=\"3\" color=\"warning\">warning</is-heading>\r\n            <is-heading level=\"3\" color=\"danger\">danger</is-heading>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h2>Escala por font-size</h2>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div style=\"font-size: 1.25em\">\r\n            <is-heading level=\"2\">Todo el nivel escala desde el contexto</is-heading>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h2>Override de tinte</h2>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-heading level=\"2\" style=\"--h-mix: 0%\">Sin mezcla (100 % acento)</is-heading>\r\n          <is-heading level=\"2\" style=\"--h-mix: 100%\">Mezcla total (color de texto)</is-heading>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-heading level=\"1\">Título</is-heading>\r\n<is-heading level=\"3\" color=\"success\">Sección aprobada</is-heading>\r\n<is-heading level=\"2\" style=\"--h-mix: 0%\">Solo acento</is-heading>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / var",
+            "Valores / default"
+          ],
+          "rows": [
+            [
+              "<code>level</code>",
+              "1…6 (default 1, reflejado) — construye el <code>&lt;hN&gt;</code> real en el shadow"
+            ],
+            [
+              "<code>color</code>",
+              "brand (default) · neutral · info · success · warning · danger"
+            ],
+            [
+              "<code>--h-clr</code>",
+              "color base; default <code>--is-accent</code>"
+            ],
+            [
+              "<code>--h-mix</code>",
+              "% de <code>--is-text</code> mezclado; default según nivel"
+            ],
+            [
+              "<code>--h-size</code>",
+              "tamaño en em del nivel"
+            ],
+            [
+              "<code>::part(heading)</code>",
+              "el elemento <code>&lt;hN&gt;</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

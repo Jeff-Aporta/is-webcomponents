@@ -1,0 +1,190 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-carousel",
+  "category": "navigation",
+  "title": "<is-carousel>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-carousel / is-carousel-item de InSoft.",
+  "styles": ".slide {\r\n      width: 100%;\r\n      height: 100%;\r\n      display: flex;\r\n      align-items: center;\r\n      justify-content: center;\r\n      font-size: 2rem;\r\n      color: white;\r\n      border-radius: 0.5rem;\r\n    }\r\n    .slide.s1 { background: linear-gradient(135deg, #3699ff, #1f5aa6); }\r\n    .slide.s2 { background: linear-gradient(135deg, #f64e60, #b5283a); }\r\n    .slide.s3 { background: linear-gradient(135deg, #0bb783, #086c4d); }\r\n    .slide.s4 { background: linear-gradient(135deg, #ffa800, #cc8400); }\r\n    .slide.s5 { background: linear-gradient(135deg, #8950fc, #5a30a8); }",
+  "storageKey": "docs-is-carousel",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-carousel>",
+      "lede": "Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,\r\n          indicadores, scroll-snap y soporte para swipe en touch.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-carousel id=\"c1\" loop>\r\n            <is-carousel-item><div class=\"slide s1\">Slide 1</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s2\">Slide 2</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s3\">Slide 3</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s4\">Slide 4</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s5\">Slide 5</div></is-carousel-item>\r\n          </is-carousel>\r\n          <p id=\"c1Log\" class=\"lede\">Slide: <code class=\"code\">0</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-carousel</span> <span class=\"attr\">loop</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-carousel-item></span>Slide 1<span class=\"tag\"></is-carousel-item></span>\r\n  <span class=\"tag\"><is-carousel-item></span>Slide 2<span class=\"tag\"></is-carousel-item></span>\r\n  …\r\n<span class=\"tag\"></is-carousel></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "autoplay",
+      "title": "Autoplay",
+      "lede": "Con <code class=\"code\">autoplay=\"2000\"</code> avanza cada 2 segundos. Se pausa al hover.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-carousel autoplay=\"2000\" loop>\r\n            <is-carousel-item><div class=\"slide s1\">Auto 1</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s2\">Auto 2</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s3\">Auto 3</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s4\">Auto 4</div></is-carousel-item>\r\n          </is-carousel>"
+        }
+      ]
+    },
+    {
+      "id": "per-page",
+      "title": "Múltiples slides por página",
+      "lede": "Con <code class=\"code\">slides-per-page=\"3\"</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-carousel slides-per-page=\"3\" loop>\r\n            <is-carousel-item><div class=\"slide s1\">A</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s2\">B</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s3\">C</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s4\">D</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s5\">E</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s1\">F</div></is-carousel-item>\r\n          </is-carousel>"
+        }
+      ]
+    },
+    {
+      "id": "vertical",
+      "title": "Vertical",
+      "lede": "Con <code class=\"code\">vertical</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-carousel vertical style=\"max-width: 320px;\">\r\n            <is-carousel-item><div class=\"slide s1\">Top</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s2\">Middle</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s3\">Bottom</div></is-carousel-item>\r\n          </is-carousel>"
+        }
+      ]
+    },
+    {
+      "id": "ratio",
+      "title": "Aspect ratio personalizado",
+      "lede": "Con <code class=\"code\">aspect-ratio=\"4/3\"</code> o cualquier valor CSS.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-carousel aspect-ratio=\"4/3\">\r\n            <is-carousel-item><div class=\"slide s1\">4:3 #1</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s2\">4:3 #2</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s3\">4:3 #3</div></is-carousel-item>\r\n          </is-carousel>"
+        }
+      ]
+    },
+    {
+      "id": "plain",
+      "title": "Sin indicadores ni controles",
+      "lede": "Con <code class=\"code\">without-indicators without-controls</code> solo swipe.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-carousel without-indicators without-controls style=\"max-width: 320px;\">\r\n            <is-carousel-item><div class=\"slide s1\">A</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s2\">B</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s3\">C</div></is-carousel-item>\r\n          </is-carousel>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-carousel&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>active</code>",
+              "number",
+              "0",
+              "Slide activo (0-indexed)."
+            ],
+            [
+              "<code>loop</code>",
+              "boolean",
+              "false",
+              "Vuelve al inicio al llegar al final."
+            ],
+            [
+              "<code>autoplay</code>",
+              "number (ms)",
+              "0",
+              "Avance automático (0 = desactivado)."
+            ],
+            [
+              "<code>vertical</code>",
+              "boolean",
+              "false",
+              "Orientación vertical."
+            ],
+            [
+              "<code>slides-per-page</code>",
+              "number",
+              "1",
+              "Slides visibles por vista."
+            ],
+            [
+              "<code>aspect-ratio</code>",
+              "string",
+              "16/9",
+              "CSS aspect-ratio del contenedor."
+            ],
+            [
+              "<code>without-controls</code>",
+              "boolean",
+              "false",
+              "Oculta prev/next."
+            ],
+            [
+              "<code>without-indicators</code>",
+              "boolean",
+              "false",
+              "Oculta los puntos."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>API</h3>"
+        },
+        {
+          "kind": "code",
+          "code": "carousel.next();        // Avanza\r\ncarousel.prev();        // Retrocede\r\ncarousel.pause();       // Pausa autoplay\r\ncarousel.play();        // Reanuda autoplay\r\ncarousel.active = 2;    // Salta a slide\r\ncarousel.getViewport(); // Devuelve el viewport del scroll",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-carousel-change</code>",
+              "Cambia el slide. <code>detail: { from, to, item }</code>."
+            ],
+            [
+              "<code>is-carousel-play</code>",
+              "Comienza autoplay."
+            ],
+            [
+              "<code>is-carousel-pause</code>",
+              "Pausa autoplay. <code>detail: { reason }</code>."
+            ],
+            [
+              "<code>is-carousel-slide-end</code>",
+              "Termina un swipe."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

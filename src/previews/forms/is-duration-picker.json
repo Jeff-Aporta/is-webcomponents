@@ -1,0 +1,49 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-duration-picker",
+  "category": "forms",
+  "title": "<is-duration-picker>",
+  "titleHtml": true,
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "storageKey": "docs-is-duration-picker",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-duration-picker>",
+      "lede": "Duración HH:MM:SS. Tres columnas con botones ±, inputs numéricos y saltos con <kbd class=\"ic\">:</kbd> o <kbd class=\"ic\">Tab</kbd>.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-duration-picker id=\"dur\" value=\"3725\"></is-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--is-text-soft); font-size:.78rem; margin-top:.5rem\">\r\n            <code>value=\"3725\"</code> = 1h 02m 05s\r\n          </p>"
+        }
+      ]
+    },
+    {
+      "id": "limites",
+      "title": "Con límites",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-duration-picker min=\"60\" max=\"5400\" step=\"5\" value=\"600\"></is-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--is-text-soft); font-size:.78rem\">De 1 minuto a 1:30:00, paso de 5 segundos.</p>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const d = document.querySelector('is-duration-picker');\r\nd.value;        // segundos totales\r\nd.text;        // \"01:02:05\" o \"02:05\" si hours=0\r\nd.hours; d.minutes; d.seconds;\r\nd.tick(30);    // suma 30 segundos respetando límites\r\nd.setSeconds(3600);\r\nd.set(1, 30, 0);\r\n\r\nd.addEventListener('is-change', e => console.log(e.detail.value, e.detail.text));\r\n\r\n// Atributos\r\n// value, min, max  límites en segundos\r\n// step             incremento del botón (default 1)",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

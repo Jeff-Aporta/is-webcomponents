@@ -1,0 +1,97 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-format-number",
+  "category": "helpers",
+  "title": "<is-format-number>",
+  "titleHtml": true,
+  "storageKey": "docs-is-format-number",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-format-number>",
+      "lede": "Números con <code class=\"code\">Intl.NumberFormat</code>. Locale = <code class=\"code\">lang</code> del documento.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<p>Precio: <is-format-number value=\"1234567.89\" type=\"currency\" currency=\"COP\"></is-format-number></p>"
+        }
+      ]
+    },
+    {
+      "id": "types",
+      "title": "Tipos (<code>type</code>)",
+      "titleHtml": true,
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">decimal · 1234,5</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"1234.5\" type=\"decimal\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">percent · 0,875</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"0.875\" type=\"percent\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency COP · 12.500</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"12500\" type=\"currency\" currency=\"COP\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency USD · 99,9</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"99.9\" type=\"currency\" currency=\"USD\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency EUR · 49,99</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"49.99\" type=\"currency\" currency=\"EUR\"></is-format-number>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-format-number value=\"0.875\" type=\"percent\"></is-format-number>\r\n<is-format-number value=\"99.9\" type=\"currency\" currency=\"USD\"></is-format-number>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "digits",
+      "title": "Dígitos fraccionarios",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">min 2 · 1234,5</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"1234.5\" minimum-fraction-digits=\"2\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">max 0 · 1234,56</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"1234.56\" maximum-fraction-digits=\"0\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">min 2 · max 4 · 1,2</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"1.2\" minimum-fraction-digits=\"2\" maximum-fraction-digits=\"4\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency + max 0 · 99,9</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"99.9\" type=\"currency\" currency=\"USD\" maximum-fraction-digits=\"0\"></is-format-number>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-format-number value=\"1234.5\" minimum-fraction-digits=\"2\"></is-format-number>\r\n<is-format-number value=\"1234.56\" maximum-fraction-digits=\"0\"></is-format-number>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "title": "Casos límite",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">0</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"0\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">negativo · -42,5</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"-42.5\" minimum-fraction-digits=\"1\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">grande · 1.000.000.000</code>\r\n              <is-format-number class=\"format-grid__value\" value=\"1000000000\"></is-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">sin value</code>\r\n              <is-format-number class=\"format-grid__value\">«<span></span>»</is-format-number>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "número"
+            ],
+            [
+              "<code>type</code>",
+              "decimal · currency · percent · unit"
+            ],
+            [
+              "<code>currency</code>",
+              "ISO 4217 (requerido útil con type=currency)"
+            ],
+            [
+              "<code>minimum-fraction-digits</code>",
+              "mínimo de decimales"
+            ],
+            [
+              "<code>maximum-fraction-digits</code>",
+              "máximo de decimales"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

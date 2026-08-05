@@ -1,0 +1,27 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-btn-ref",
+  "category": "isp",
+  "title": "<is-btn-ref>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-btn-ref de InSoft.",
+  "storageKey": "docs-is-btn-ref",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-btn-ref>",
+      "lede": "Campo de texto con selector modal (port de ISP <code class=\"code\">BtnRef</code>).\r\n          Escribe la clave o abre el filtro para elegir un registro del catálogo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-btn-ref id=\"btnRefDemo\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\r\n          <p id=\"btnRefLog\">Seleccionado: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-btn-ref id=\"ref\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\r\n<script type=\"module\">\r\n  const el = document.getElementById('ref');\r\n  el.controller = {\r\n    entrie: 'Aplicación',\r\n    primaryKeys: ['app'],\r\n    ColumnsBtnRef: ['app'],\r\n    columns: [{ field: 'app', header: 'Aplicación' }],\r\n    async Lista() {\r\n      return { datos: [{ app: 'ContaPyme' }, { app: 'AgroWin' }] };\r\n    },\r\n  };\r\n</script>",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

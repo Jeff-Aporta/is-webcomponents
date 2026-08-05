@@ -1,0 +1,49 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-dropzone",
+  "category": "forms",
+  "title": "<is-dropzone>",
+  "titleHtml": true,
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }\r\n    button.go {\r\n      font: inherit;\r\n      padding: .5rem 1rem;\r\n      background: var(--is-accent);\r\n      color: var(--is-on-accent, #fff);\r\n      border: 0; border-radius: 999px;\r\n      cursor: pointer;\r\n    }",
+  "storageKey": "docs-is-dropzone",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-dropzone>",
+      "lede": "Zona de arrastre con cola de archivos, preview de imagen, límite de tamaño y simulación de progreso chunked.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-dropzone id=\"dz\" accept=\"image/*\" max-files=\"6\" max-size=\"5242880\">\r\n          </is-dropzone>\r\n          <div style=\"display:flex; gap:.5rem; margin-top:.55rem; align-items:center\">\r\n            <button class=\"go\" id=\"uploadBtn\">Simular upload</button>\r\n            <small style=\"color:var(--is-text-soft); font-size:.78rem\">Arrastrá o seleccioná archivos; click \"Simular upload\" para ver el progreso.</small>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\">— eventos —</pre>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const dz = document.querySelector('is-dropzone');\r\ndz.files;                 // array de FileRecord\r\ndz.addFile(file);\r\ndz.removeFile(id);\r\ndz.upload();              // dispara is-upload-progress por chunk\r\ndz.addEventListener('is-files-change',   e => console.log(e.detail.files));\r\ndz.addEventListener('is-upload-start',   e => ...);\r\ndz.addEventListener('is-upload-progress',e => console.log(e.detail.progress));\r\ndz.addEventListener('is-upload-end',     e => ...);\r\ndz.addEventListener('is-error',          e => /* reason: max-size | accept | max-files */);\r\n\r\n// Atributos\r\n// accept, multiple, max-files, max-size (bytes), chunked",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

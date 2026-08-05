@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-year-calendar",
+  "category": "forms",
+  "title": "<is-year-calendar>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-year-calendar de InSoft.",
+  "storageKey": "docs-is-year-calendar",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-year-calendar>",
+      "lede": "Vista de los 12 meses de un año para saltar rápido de periodo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-year-calendar value=\"2026-08\"></is-year-calendar>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-year-calendar value=\"2026-08\"></is-year-calendar>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-year-calendar&gt; — Rejilla de años desplazable (MUI YearCalendar). Atributos: value (yyyy), min, max (ISO o yyyy), columns, disabled, readonly Events: is-change  detail { value, year }",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/year-calendar.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

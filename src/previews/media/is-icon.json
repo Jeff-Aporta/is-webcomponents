@@ -1,0 +1,80 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-icon",
+  "category": "media",
+  "title": "<is-icon>",
+  "titleHtml": true,
+  "styles": ".xp-embed {\r\n      border: 1px solid var(--is-border);\r\n      border-radius: 0.6rem;\r\n      overflow: hidden;\r\n      background: var(--is-bg);\r\n      /* Alto fijo: el explorador scrollea internamente (su .xp), así que un\r\n         alto en auto lo colapsaría a 0. */\r\n      height: min(72vh, 720px);\r\n    }\r\n    .xp-embed iframe { display: block; width: 100%; height: 100%; border: 0; }",
+  "storageKey": "docs-is-icon",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-icon>",
+      "lede": "API única de iconos del kit. Usa <code class=\"code\">icon=\"grupo:nombre\"</code> (ids Iconify)\r\n          o <code class=\"code\">src</code> para un SVG/imagen. Escala con <code class=\"code\">font-size</code>.\r\n          Iconify se carga solo como dependencia interna.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <is-icon icon=\"mdi:home\"></is-icon>\r\n            <is-icon icon=\"mdi:check-circle\" style=\"color:var(--is-accent)\"></is-icon>\r\n            <is-icon icon=\"mdi:star\" label=\"Favorito\"></is-icon>\r\n            <is-icon icon=\"mdi:cog-outline\"></is-icon>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Ejemplos",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <is-icon src=\"../../assets/icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--is-accent)\"></is-icon>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-icon icon=\"mdi:home\"></is-icon>\r\n<is-icon icon=\"mdi:check-circle\"></is-icon>\r\n<is-icon src=\"/logo.svg\" label=\"Logo\"></is-icon>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>icon</code>",
+              "—",
+              "Iconify id <code>grupo:nombre</code> (ej. <code>mdi:home</code>)."
+            ],
+            [
+              "<code>label</code>",
+              "—",
+              "aria-label; vacío → aria-hidden."
+            ],
+            [
+              "<code>src</code>",
+              "—",
+              "URL img/svg (gana sobre icon)."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "explorer",
+      "title": "Explorador de iconos",
+      "lede": "Las <b id=\"xpFamilies\">231</b> familias servidas por el CDN, con buscador global,\r\n          filtros por categoría, grid, paleta y licencia, y un personalizador que exporta\r\n          SVG, CSS o PNG. Es la misma página que <code class=\"code\">../_shell.html?tag=icon-explorer</code>,\r\n          embebida aquí.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"xp-embed\">\r\n          <iframe id=\"xpFrame\" title=\"Explorador de iconos\" loading=\"lazy\"></iframe>\r\n        </div>\r\n        <p>\r\n          <is-button id=\"xpOpen\" color=\"neutral\" variant=\"outlined\" href=\"../_shell.html?tag=icon-explorer\" target=\"_blank\" rel=\"noopener\">\r\n            <is-icon icon=\"mdi:open-in-new\"></is-icon>\r\n            Abrir en una pestaña\r\n          </is-button>\r\n        </p>"
+        }
+      ]
+    }
+  ],
+  "hasBehavior": true
+}

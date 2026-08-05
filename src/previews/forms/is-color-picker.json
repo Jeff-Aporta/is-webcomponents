@@ -1,0 +1,99 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-color-picker",
+  "category": "forms",
+  "title": "<is-color-picker>",
+  "titleHtml": true,
+  "storageKey": "docs-is-color-picker",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-color-picker>",
+      "lede": "Trigger con muestra + hex. El panel (<code>input type=\"color\"</code>, campo hex y paleta) vive en un <code>&lt;dialog&gt;</code> en el top layer.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-color-picker id=\"cp\" label=\"Color de marca\" hint=\"Formato #rrggbb\" name=\"brand\" value=\"#1971c2\" style=\"max-width:14rem\"></is-color-picker>\r\n          <span id=\"chip\" style=\"width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)\"></span>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"log\">value: #1971c2</p>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Paleta propia y estados",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-color-picker\r\n            label=\"Paleta corta\"\r\n            swatches=\"#e03131,#f59f00,#2f9e44,#1971c2,#6741d9,#212529\"\r\n            value=\"#2f9e44\"\r\n            style=\"min-width:13rem\"\r\n          ></is-color-picker>\r\n          <is-color-picker label=\"Deshabilitado\" value=\"#c2255c\" disabled style=\"min-width:13rem\"></is-color-picker>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-color-picker\r\n  label=\"Color de marca\"\r\n  name=\"brand\"\r\n  value=\"#1971c2\"\r\n  swatches=\"#e03131,#f59f00,#2f9e44\"\r\n></is-color-picker>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "title": "Dentro de un formulario",
+      "lede": "FormData: —",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<form id=\"demo-form\" style=\"display:flex;flex-direction:column;gap:0.75rem;max-width:18rem\">\r\n            <is-color-picker label=\"Fondo\" name=\"bg\" value=\"#212529\"></is-color-picker>\r\n            <is-color-picker label=\"Texto\" name=\"fg\" value=\"#f8f9fa\"></is-color-picker>\r\n            <div style=\"display:flex;gap:0.5rem\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>name</code>",
+              "entra en FormData con el hex"
+            ],
+            [
+              "<code>value</code>",
+              "hex normalizado a <code>#rrggbb</code> (default <code>#808080</code>)"
+            ],
+            [
+              "<code>swatches</code>",
+              "lista hex separada por comas; si falta usa la paleta por defecto"
+            ],
+            [
+              "<code>label</code> <code>hint</code>",
+              "texto o slots homónimos"
+            ],
+            [
+              "<code>disabled</code> <code>required</code>",
+              "boolean"
+            ],
+            [
+              "parts",
+              "<code>base</code> <code>trigger</code> <code>swatch</code> <code>panel</code> <code>input</code> <code>hex-input</code> <code>label</code> <code>hint</code>"
+            ],
+            [
+              "eventos",
+              "<code>is-input</code> { value } · <code>is-change</code> { value }"
+            ],
+            [
+              "métodos",
+              "<code>show()</code> <code>hide()</code> <code>checkValidity()</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

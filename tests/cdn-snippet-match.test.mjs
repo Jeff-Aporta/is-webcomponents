@@ -32,7 +32,7 @@ for (const cat of readdirSync(previewsRoot, { withFileTypes: true })) {
   if (!cat.isDirectory()) continue;
   const dir = join(previewsRoot, cat.name);
   for (const file of readdirSync(dir)) {
-    if (!/^is-[a-z0-9-]+\.html$/i.test(file)) continue;
+    if (!/^is-[a-z0-9-]+\.json$/i.test(file)) continue;
     previews.push({ cat: cat.name, file });
   }
 }
@@ -57,16 +57,16 @@ for (const { cat, file } of previews) {
 
 // Sanity: la lógica debe aceptar también un page sin prefijo de categoría,
 // porque algunos manifest antiguos o entries auxiliares pueden guardarlo así.
-const fakeManifest = [{ tag: 'is-foo', page: 'is-foo.html' }];
+const fakeManifest = [{ tag: 'is-foo', page: 'is-foo.json' }];
 assert.deepEqual(
-  matchByBasename(fakeManifest, 'is-foo.html').map((c) => c.tag),
+  matchByBasename(fakeManifest, 'is-foo.json').map((c) => c.tag),
   ['is-foo'],
   'match por basename debe funcionar también con page sin prefijo de categoría'
 );
 
 // Sanity: un componente que NO existe en el manifest no debe matchear.
 assert.deepEqual(
-  matchByBasename(fakeManifest, 'is-bar.html').map((c) => c.tag),
+  matchByBasename(fakeManifest, 'is-bar.json').map((c) => c.tag),
   [],
   'un componente ausente no debe matchear'
 );

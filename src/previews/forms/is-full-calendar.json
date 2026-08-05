@@ -1,0 +1,49 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-full-calendar",
+  "category": "forms",
+  "title": "<is-full-calendar>",
+  "titleHtml": true,
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }\r\n    .kbds {\r\n      display: flex; gap: 1rem; flex-wrap: wrap;\r\n      font-size: .78rem; color: var(--is-text-soft);\r\n    }\r\n    .kbds b { color: var(--is-text); }",
+  "storageKey": "docs-is-full-calendar",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-full-calendar>",
+      "lede": "Vista mes / semana / día con eventos por día y franjas horarias en week/day.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Mes actual",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-full-calendar id=\"cal\" first-day=\"1\" hours-start=\"8\" hours-end=\"20\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"events\": [\r\n                  { \"id\": \"e1\", \"title\": \"Sprint planning\",      \"date\": \"2026-08-03\", \"start\": \"09:00\", \"end\": \"10:30\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e2\", \"title\": \"Demo interna\",         \"date\": \"2026-08-03\", \"start\": \"15:00\", \"end\": \"16:00\", \"color\": \"var(--is-success, #16a34a)\" },\r\n                  { \"id\": \"e3\", \"title\": \"Cierre mensual\",       \"date\": \"2026-08-04\", \"start\": \"14:00\", \"end\": \"17:00\", \"color\": \"var(--is-danger, #dc2626)\" },\r\n                  { \"id\": \"e4\", \"title\": \"Standup\",              \"date\": \"2026-08-04\", \"start\": \"09:15\", \"end\": \"09:30\", \"color\": \"var(--is-warning, #d97706)\" },\r\n                  { \"id\": \"e5\", \"title\": \"1:1 con Sofía\",        \"date\": \"2026-08-05\", \"start\": \"11:00\", \"end\": \"11:30\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e6\", \"title\": \"Lanzamiento v8\",       \"date\": \"2026-08-12\", \"start\": \"10:00\", \"end\": \"12:00\", \"color\": \"var(--is-success, #16a34a)\" },\r\n                  { \"id\": \"e7\", \"title\": \"Sprint review\",        \"date\": \"2026-08-14\", \"start\": \"15:00\", \"end\": \"17:00\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e8\", \"title\": \"Onboarding (4 pasos)\",\"date\": \"2026-08-18\", \"start\": \"08:00\", \"end\": \"12:00\", \"color\": \"var(--is-warning, #d97706)\" },\r\n                  { \"id\": \"e9\", \"title\": \"Sprint retrospective\", \"date\": \"2026-08-21\", \"start\": \"16:00\", \"end\": \"17:30\", \"color\": \"var(--is-accent)\" }\r\n                ]\r\n              }\r\n            </script>\r\n          </is-full-calendar>"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\">— clicks —</pre>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const cal = document.querySelector('is-full-calendar');\r\ncal.prev(); cal.next(); cal.today();\r\ncal.setDate('2026-09-15');\r\ncal.setView('week');\r\ncal.addEventListener('is-day-click',  e => console.log(e.detail.date));\r\ncal.addEventListener('is-event-click',e => console.log(e.detail.event));\r\n\r\n// Atributos\r\n// view          month | week | day\r\n// date          ISO inicial (default hoy)\r\n// first-day     0=Dom, 1=Lun (default 1)\r\n// locale        (default 'es')\r\n// hours-start, hours-end  rango en week/day (default 7..20)\r\n\r\n// Datos\r\n// { events: [ { id, title, date:'YYYY-MM-DD', start:'HH:MM', end?, color? } ] }",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

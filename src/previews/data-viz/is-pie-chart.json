@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-pie-chart",
+  "category": "data-viz",
+  "title": "<is-pie-chart>",
+  "titleHtml": true,
+  "storageKey": "docs-is-pie-chart",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-pie-chart>",
+      "lede": "Composición proporcional.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-pie-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Alquiler\",\"Comida\",\"Transporte\",\"Ahorro\"],\"datasets\":[{\"label\":\"Presupuesto\",\"data\":[35,25,15,25]}]}}\r\n            </script>\r\n          </is-pie-chart>"
+        }
+      ]
+    }
+  ]
+}

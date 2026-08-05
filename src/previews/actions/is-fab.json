@@ -1,0 +1,169 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-fab",
+  "category": "actions",
+  "title": "<is-fab>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-fab (Floating Action Button) de InSoft.",
+  "styles": ".fab-stage {\r\n      /* `position: relative` NO contiene hijos `position: fixed` — solo lo\r\n         hacen transform/filter/contain/perspective. Sin esto el FAB del\r\n         ejemplo se ancla al viewport y se sale de la caja del demo. */\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      height: 360px;\r\n      border: 1px dashed var(--is-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n      background: var(--is-bg, #0f1117);\r\n      overflow: hidden;\r\n    }\r\n    /* Los demos se organizan con flex: alineados por linea base, con hueco\r\n       uniforme y envolviendo en pantallas estrechas. */\r\n    .fab-row {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: flex-end;\r\n      gap: 1.5rem;\r\n    }\r\n    .fab-row__item {\r\n      display: inline-flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n    }",
+  "storageKey": "docs-is-fab",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-fab>",
+      "lede": "Floating Action Button: botón circular principal que se posiciona de\r\n          forma fija en la ventana. Soporta variantes, tamaños, etiquetas\r\n          extendidas, pulso de atención y posicionamiento en cualquier esquina.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"fab-stage\">\r\n            <is-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></is-fab>\r\n          </div>\r\n          <p>Click: <span id=\"fbLog\">0</span></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-fab</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:plus\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Crear\"</span><span class=\"tag\">></span><span class=\"tag\"></is-fab></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Escala",
+      "lede": "No hay atributo <code class=\"code\">size</code>: el componente se mide entero en\r\n          <code class=\"code\">em</code>, así que su tamaño sale del\r\n          <code class=\"code\">font-size</code> del contexto. Para hacerlo más grande o más\r\n          pequeño se cambia el font-size, y todo (icono, padding, radio) escala con él.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"fab-row\">\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:0.75em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">0.75em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:1em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">1em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:1.25em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">1.25em</code>\r\n            </span>\r\n          </div>",
+          "heading": "El mismo FAB con tres font-size"
+        },
+        {
+          "kind": "code",
+          "code": "<is-fab icon=\"mdi:bell\" style=\"font-size: 0.75em\"></is-fab>\r\n<is-fab icon=\"mdi:bell\" style=\"font-size: 1.25em\"></is-fab>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "variants",
+      "title": "Color",
+      "lede": "<code class=\"code\">color</code> define el color semántico:\r\n          brand, neutral, danger, success, warning. Es una dimensión distinta de\r\n          <code class=\"code\">variant</code>, que gobierna la presentación\r\n          (filled, outlined, plain…).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></is-fab>\r\n          <is-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></is-fab>\r\n          <is-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></is-fab>\r\n          <is-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></is-fab>\r\n          <is-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></is-fab>"
+        }
+      ]
+    },
+    {
+      "id": "extended",
+      "title": "Extendido",
+      "lede": "Con <code class=\"code\">extended</code> el FAB tiene label al lado del icono.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-fab icon=\"mdi:plus\" extended label=\"Nuevo proyecto\" position=\"inline\"></is-fab>\r\n          <is-fab icon=\"mdi:share\" color=\"neutral\" extended label=\"Compartir\" position=\"inline\"></is-fab>\r\n          <is-fab icon=\"mdi:download\" color=\"success\" extended label=\"Descargar\" position=\"inline\"></is-fab>"
+        }
+      ]
+    },
+    {
+      "id": "positions",
+      "title": "Posiciones",
+      "lede": "bottom-end (default), bottom-start, top-end, top-start.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"fab-stage\">\r\n            <is-fab icon=\"mdi:plus\" position=\"top-start\" label=\"top-start\"></is-fab>\r\n            <is-fab icon=\"mdi:pencil\" position=\"top-end\" label=\"top-end\"></is-fab>\r\n            <is-fab icon=\"mdi:share\" position=\"bottom-start\" label=\"bottom-start\"></is-fab>\r\n            <is-fab icon=\"mdi:check\" color=\"success\" position=\"bottom-end\" label=\"bottom-end\"></is-fab>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "pulse",
+      "title": "Pulso",
+      "lede": "Con <code class=\"code\">pulse</code> el FAB anima un anillo de atención cada 2s.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-fab icon=\"mdi:bell\" pulse color=\"warning\" position=\"inline\" label=\"Notificaciones\"></is-fab>\r\n          <is-fab icon=\"mdi:message\" pulse color=\"brand\" position=\"inline\" label=\"Mensajes\"></is-fab>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-fab&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>icon</code>",
+              "string",
+              "mdi:plus",
+              "Iconify id."
+            ],
+            [
+              "<code>position</code>",
+              "bottom-end | bottom-start | top-end | top-start | inline",
+              "bottom-end",
+              "Posición fija."
+            ],
+            [
+              "<code>variant</code>",
+              "brand | neutral | danger | success | warning",
+              "brand",
+              "Color."
+            ],
+            [
+              "<code>extended</code>",
+              "boolean",
+              "false",
+              "Forma pill con label."
+            ],
+            [
+              "<code>pulse</code>",
+              "boolean",
+              "false",
+              "Pulso de atención."
+            ],
+            [
+              "<code>label</code>",
+              "string",
+              "—",
+              "aria-label."
+            ],
+            [
+              "<code>without-shadow</code>",
+              "boolean",
+              "false",
+              "Sin sombra."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-fab-click</code>",
+              "Click. <code>detail: { originalEvent }</code>."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

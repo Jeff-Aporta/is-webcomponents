@@ -1,0 +1,59 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-heatmap",
+  "category": "data-viz",
+  "title": "<is-heatmap>",
+  "titleHtml": true,
+  "styles": ".heat-wrap { height: 22rem; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
+  "storageKey": "docs-is-heatmap",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-heatmap>",
+      "lede": "Matriz coloreada por valor. Útil para visualizar correlaciones, frecuencias a lo largo de día × semana, o calor por hora × servidor.",
+      "blocks": []
+    },
+    {
+      "id": "actividad",
+      "title": "Actividad por hora y día",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-heatmap x-label=\"Hora\" y-label=\"Día\" color=\"brand\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"xLabels\": [\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\",\"18\",\"20\",\"22\"],\r\n                \"yLabels\": [\"Lun\",\"Mar\",\"Mié\",\"Jue\",\"Vie\",\"Sáb\",\"Dom\"],\r\n                \"data\": [\r\n                  [12, 8, 4, 6, 22, 48, 71, 80, 65, 42, 30, 22],\r\n                  [10, 6, 3, 5, 28, 52, 75, 82, 70, 50, 35, 25],\r\n                  [15, 9, 5, 7, 30, 55, 78, 86, 72, 48, 32, 24],\r\n                  [11, 7, 4, 6, 25, 49, 70, 79, 66, 44, 31, 20],\r\n                  [14, 8, 4, 7, 32, 58, 80, 88, 73, 47, 30, 21],\r\n                  [22, 16, 8, 5, 7, 11, 18, 16, 12, 10, 14, 18],\r\n                  [18, 12, 6, 4, 5, 9, 14, 13, 10, 9, 12, 16]\r\n                ]\r\n              }\r\n            </script>\r\n          </is-heatmap>"
+        }
+      ]
+    },
+    {
+      "id": "divergente",
+      "title": "Divergente",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-heatmap x-label=\"Mes\" y-label=\"Categoría\" color=\"red-blue\" show-values>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"xLabels\": [\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\r\n                \"yLabels\": [\"Ingresos\",\"Costos\",\"Utilidad\",\"Impuestos\",\"Nómina\",\"Inversión\"],\r\n                \"data\": [\r\n                  [ 22, 14, -8,  30,  41,  18],\r\n                  [-12,-10,  4, -14, -22, -16],\r\n                  [ 35, 28,-12,  44,  63,  34],\r\n                  [ -8,  6,  3,  -9,  -6,  -2],\r\n                  [-18,-22, -6, -25, -34, -19],\r\n                  [ 12, 18,  3,  22,  28,  14]\r\n                ]\r\n              }\r\n            </script>\r\n          </is-heatmap>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "// Datos vía JSON o config\r\nchart.config = {\r\n  xLabels: [...],\r\n  yLabels: [...],\r\n  data: [[v, v, ...], ...]\r\n};\r\n\r\n// o por puntos\r\nchart.config = { xLabels, yLabels, points: [{ x, y, v }, ...] };\r\n\r\nchart.addEventListener('is-cell-hover', e => {\r\n  console.log(`${e.detail.x} · ${e.detail.y} = ${e.detail.value}`);\r\n});\r\n\r\n// Atributos:\r\n// x-label, y-label     títulos de eje\r\n// color                brand | neutral | success | warning | danger | red-blue\r\n// cell-radius          esquina (default 2)\r\n// show-values          boolean, imprime el número dentro de cada celda\r\n// legend-position      top | bottom | start | end | none",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\"></pre>"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-toast-item",
+  "category": "feedback",
+  "title": "<is-toast-item>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-toast-item de InSoft.",
+  "storageKey": "docs-is-toast-item",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-toast-item>",
+      "lede": "Ítem individual de notificación. Se crea normalmente con <code class=\"code\">toaster.create()</code>, pero también se puede declarar suelto para controlar su ciclo de vida a mano.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-toast-item color=\"success\" open duration=\"0\">\r\n            <is-icon slot=\"icon\" icon=\"mdi:check-circle\"></is-icon>\r\n            Guardado correctamente\r\n          </is-toast-item>\r\n          <is-toast-item color=\"danger\" open duration=\"0\">\r\n            <is-icon slot=\"icon\" icon=\"mdi:alert-circle\"></is-icon>\r\n            No se pudo guardar\r\n          </is-toast-item>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-toast-item color=\"success\" open duration=\"0\">\r\n  <is-icon slot=\"icon\" icon=\"mdi:check-circle\"></is-icon>\r\n  Guardado correctamente\r\n</is-toast-item>\r\n<is-toast-item color=\"danger\" open duration=\"0\">\r\n  <is-icon slot=\"icon\" icon=\"mdi:alert-circle\"></is-icon>\r\n  No se pudo guardar\r\n</is-toast-item>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-toast-item&gt; — Web Component (vanilla). Ítem individual de toast con countdown y cierre. Atributos color   brand | success | warning | danger | neutral (default neutral) duration  number ms (default 5000; 0 = hasta dismiss). Reflect. open      boolean — visible Slots: default, icon | start Métodos: show(), hide() Eventos (bubbles, composed): is-after-show, is-after-hide CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(close-button) ::part(progress)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/feedback/toast-item.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

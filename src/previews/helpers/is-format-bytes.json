@@ -1,0 +1,114 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-format-bytes",
+  "category": "helpers",
+  "title": "<is-format-bytes>",
+  "titleHtml": true,
+  "storageKey": "docs-is-format-bytes",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-format-bytes>",
+      "lede": "Tamaños de archivo legibles. <code class=\"code\">value</code> se interpreta según <code class=\"code\">unit</code> (default byte).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<p>Demo: <is-format-bytes value=\"1536000\"></is-format-bytes></p>"
+        }
+      ]
+    },
+    {
+      "id": "units",
+      "title": "Unidades de entrada (<code>unit</code>)",
+      "titleHtml": true,
+      "lede": "El mismo tamaño conceptual con distinta unidad de entrada.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1024&quot; unit=&quot;byte&quot;\">\r\n              <code class=\"format-grid__tag\">byte 1024</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"1024\" unit=\"byte\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;kilobyte&quot;\">\r\n              <code class=\"format-grid__tag\">kilobyte 1</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"kilobyte\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot;\">\r\n              <code class=\"format-grid__tag\">megabyte 2.5</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;gigabyte&quot;\">\r\n              <code class=\"format-grid__tag\">gigabyte 1</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"gigabyte\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;terabyte&quot;\">\r\n              <code class=\"format-grid__tag\">terabyte 1</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"terabyte\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;petabyte&quot;\">\r\n              <code class=\"format-grid__tag\">petabyte 1</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"petabyte\"></is-format-bytes>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-format-bytes value=\"2.5\" unit=\"megabyte\"></is-format-bytes>\r\n<is-format-bytes value=\"1\" unit=\"gigabyte\"></is-format-bytes>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "display",
+      "title": "Display short / long",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;512&quot; display=&quot;short&quot;\">\r\n              <code class=\"format-grid__tag\">short · 512 B</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"512\" display=\"short\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;512&quot; display=&quot;long&quot;\">\r\n              <code class=\"format-grid__tag\">long · 512</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"512\" display=\"long\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1073741824&quot; display=&quot;short&quot;\">\r\n              <code class=\"format-grid__tag\">short · 1 GiB</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"1073741824\" display=\"short\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1073741824&quot; display=&quot;long&quot;\">\r\n              <code class=\"format-grid__tag\">long · 1 GiB</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"1073741824\" display=\"long\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot; display=&quot;short&quot;\">\r\n              <code class=\"format-grid__tag\">short · 2.5 MB in</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\" display=\"short\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot; display=&quot;long&quot;\">\r\n              <code class=\"format-grid__tag\">long · 2.5 MB in</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\" display=\"long\"></is-format-bytes>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-format-bytes value=\"1073741824\" display=\"short\"></is-format-bytes>\r\n<is-format-bytes value=\"1073741824\" display=\"long\"></is-format-bytes>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "locale",
+      "title": "Locale",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\" data-code=\"locale=&quot;es&quot; value=&quot;1536000&quot;\">\r\n              <code class=\"format-grid__tag\">es</code>\r\n              <is-format-bytes class=\"format-grid__value\" locale=\"es\" value=\"1536000\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"locale=&quot;en&quot; value=&quot;1536000&quot;\">\r\n              <code class=\"format-grid__tag\">en</code>\r\n              <is-format-bytes class=\"format-grid__value\" locale=\"en\" value=\"1536000\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"locale=&quot;de&quot; value=&quot;1536000&quot; display=&quot;long&quot;\">\r\n              <code class=\"format-grid__tag\">de · long</code>\r\n              <is-format-bytes class=\"format-grid__value\" locale=\"de\" value=\"1536000\" display=\"long\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"locale=&quot;fr&quot; value=&quot;1048576&quot; unit=&quot;byte&quot; display=&quot;long&quot;\">\r\n              <code class=\"format-grid__tag\">fr · long</code>\r\n              <is-format-bytes class=\"format-grid__value\" locale=\"fr\" value=\"1048576\" unit=\"byte\" display=\"long\"></is-format-bytes>\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-format-bytes locale=\"es\" value=\"1536000\"></is-format-bytes>\r\n<is-format-bytes locale=\"en\" value=\"1536000\" display=\"long\"></is-format-bytes>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "title": "Casos límite",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;0&quot;\">\r\n              <code class=\"format-grid__tag\">0</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"0\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot;\">\r\n              <code class=\"format-grid__tag\">1 byte</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"1\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;-2048&quot;\">\r\n              <code class=\"format-grid__tag\">negativo</code>\r\n              <is-format-bytes class=\"format-grid__value\" value=\"-2048\"></is-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"\">\r\n              <code class=\"format-grid__tag\">sin value</code>\r\n              <is-format-bytes class=\"format-grid__value\">«<span></span>» (vacío)</is-format-bytes>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "—",
+              "número (bytes o según <code>unit</code>)"
+            ],
+            [
+              "<code>unit</code>",
+              "byte",
+              "byte · kilobyte · megabyte · gigabyte · terabyte · petabyte"
+            ],
+            [
+              "<code>display</code>",
+              "short",
+              "short · long"
+            ],
+            [
+              "<code>locale</code>",
+              "lang del documento",
+              "BCP 47"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

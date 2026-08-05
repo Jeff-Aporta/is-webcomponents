@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-stepper-step",
+  "category": "navigation",
+  "title": "<is-stepper-step>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-stepper-step de InSoft.",
+  "storageKey": "docs-is-stepper-step",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-stepper-step>",
+      "lede": "Paso de un <code class=\"code\">&lt;is-stepper&gt;</code>, con su título, descripción y estado.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-stepper current=\"1\">\r\n            <is-stepper-step title=\"Datos\" description=\"Identificación\"></is-stepper-step>\r\n            <is-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></is-stepper-step>\r\n            <is-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></is-stepper-step>\r\n          </is-stepper>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-stepper current=\"1\">\r\n  <is-stepper-step title=\"Datos\" description=\"Identificación\"></is-stepper-step>\r\n  <is-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></is-stepper-step>\r\n  <is-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></is-stepper-step>\r\n</is-stepper>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-stepper&gt; + &lt;is-stepper-step&gt; — Web Components (vanilla, zero dependencies). Indicador de flujo por pasos. Ideal para wizards y formularios multipaso. &lt;is-stepper active=\"1\"&gt; &lt;is-stepper-step label=\"Cuenta\"&gt;…&lt;/is-stepper-step&gt; &lt;is-stepper-step label=\"Perfil\"&gt;…&lt;/is-stepper-step&gt; &lt;is-stepper-step label=\"Confirmar\"&gt;…&lt;/is-stepper-step&gt; &lt;/is-stepper&gt; Atributos &lt;is-stepper&gt; active       number  — paso activo (0-indexed). orientation  horizontal | vertical    (default horizontal) without-line boolean  — oculta la línea conectora. color      default | simple | numbered | glass (default 'default') Atributos &lt;is-stepper-step&gt; label       string description string icon        string (iconify id) disabled    boolean error       boolean Slots &lt;is-stepper&gt; (default)  steps. &lt;is-stepper-step&gt; (default)  contenido del paso (si el padre lo pinta dentro de un wizard). icon       override del icono del step. label      override del label. description override del description. Eventos is-stepper-change  detail: { from, to, step } is-stepper-complete detail: { step } — cuando active &gt;= total. CSS Parts is-stepper: ::part(base) ::part(steps) is-stepper-step: ::part(base) ::part(indicator) ::part(label) ::part(line)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/stepper.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

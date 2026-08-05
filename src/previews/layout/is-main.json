@@ -1,0 +1,86 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-main",
+  "category": "layout",
+  "title": "<is-main>",
+  "titleHtml": true,
+  "storageKey": "docs-is-main",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-main>",
+      "lede": "Contenedor scrollable equivalente a <code class=\"code\">&lt;main&gt;</code>.\r\n          La persistencia de scroll es <strong>opt-in estricta</strong>: requiere\r\n          <code class=\"code\">remember-scroll</code> y <code class=\"code\">storage-key</code>.",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "<is-main class=\"main\" remember-scroll storage-key=\"docs-mi-vista\">\r\n  …\r\n</is-main>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "remember",
+      "title": "Remember scroll",
+      "lede": "Guarda <code class=\"code\">top</code> + <code class=\"code\">savedAt</code> en\r\n          <code class=\"code\">localStorage → is-webcomponents.is-main[key]</code>.\r\n          Si pasan más de <code class=\"code\">scroll-ttl</code> ms (default 1h), se ignora.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<ul>\r\n          <li>Sin <code class=\"code\">remember-scroll</code> o sin <code class=\"code\">storage-key</code> → no hay LS.</li>\r\n          <li>Cambio de componente (iframe <code class=\"code\">navigate</code>) → siempre top.</li>\r\n          <li>F5 / back-forward → restore si el TTL sigue vigente.</li>\r\n        </ul>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"btnTop\" variant=\"outlined\">scrollToTop()</is-button>\r\n          <is-button id=\"btnClear\" variant=\"outlined\">clearRememberedScroll()</is-button>\r\n          <is-button id=\"btnSave\" variant=\"filled\">saveScroll()</is-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" id=\"scrollLog\">Scroll…</p>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Espaciador para probar scroll ↓",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>remember-scroll</code>",
+              "boolean — opt-in (default off)"
+            ],
+            [
+              "<code>storage-key</code>",
+              "id único; obligatorio si remember-scroll"
+            ],
+            [
+              "<code>scroll-ttl</code>",
+              "ms; default <code>3600000</code> (1h)"
+            ],
+            [
+              "<code>scrollToTop()</code>",
+              "sube al inicio"
+            ],
+            [
+              "<code>saveScroll()</code> <code>restoreScroll()</code>",
+              "API manual"
+            ],
+            [
+              "<code>clearRememberedScroll()</code>",
+              "invalida la entrada guardada"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<div style=\"height:120vh;border:1px dashed var(--is-border);border-radius:8px;padding:1rem;color:var(--is-text-soft)\">\r\n          Zona alta — scrollea y recarga (F5) para ver restore.\r\n        </div>"
+        }
+      ]
+    }
+  ]
+}

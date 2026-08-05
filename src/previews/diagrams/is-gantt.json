@@ -1,0 +1,151 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-gantt",
+  "category": "diagrams",
+  "title": "<is-gantt>",
+  "titleHtml": true,
+  "storageKey": "docs-is-gantt",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-gantt>",
+      "lede": "Diagrama de Gantt en SVG, sin Mermaid. Una fila por tarea, en el\r\n          orden que la declares; el componente calcula la escala de tiempo,\r\n          dibuja las barras y rutea las flechas de dependencia rodeando las\r\n          demás barras.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Comparte motor con <code>&lt;is-flowchart&gt;</code> y\r\n          <code>&lt;is-sequence-diagram&gt;</code>: mismo esquema JSON, mismo\r\n          visor a pantalla completa y la misma animación tortuga, que aquí\r\n          recorre las flechas de dependencia en orden.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-gantt open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"gantt\": {\r\n                  \"title\": \"Cierre contable\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Preparación\", \"hue\": 239 },\r\n                    { \"id\": \"g2\", \"name\": \"Revisión\", \"hue\": 199 }\r\n                  ],\r\n                  \"tasks\": [\r\n                    { \"id\": \"t1\", \"label\": \"Conciliar bancos\", \"start\": \"2026-01-05\", \"duration\": \"3d\", \"group\": \"g1\", \"progress\": 100 },\r\n                    { \"id\": \"t2\", \"label\": \"Depreciaciones\", \"start\": \"2026-01-08\", \"end\": \"2026-01-12\", \"group\": \"g1\", \"after\": [\"t1\"], \"progress\": 60 },\r\n                    { \"id\": \"t3\", \"label\": \"Provisiones\", \"start\": \"2026-01-08\", \"duration\": \"5d\", \"group\": \"g1\", \"after\": [\"t1\"] },\r\n                    { \"id\": \"t4\", \"label\": \"Revisión contador\", \"start\": \"2026-01-13\", \"duration\": \"4d\", \"group\": \"g2\", \"after\": [\"t2\", \"t3\"] },\r\n                    { \"id\": \"m1\", \"label\": \"Cierre\", \"start\": \"2026-01-20\", \"milestone\": true, \"after\": [\"t4\"] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-gantt>"
+        }
+      ]
+    },
+    {
+      "id": "hitos",
+      "title": "Hitos y progreso",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          <code>milestone: true</code> dibuja un rombo en vez de una barra.\r\n          <code>progress</code> (0-100) pinta una barra interna más oscura\r\n          sobre la fracción completada.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-gantt open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"gantt\": {\r\n                  \"tasks\": [\r\n                    { \"id\": \"a\", \"label\": \"Desarrollo\", \"start\": \"2026-02-01\", \"duration\": \"10d\", \"progress\": 80 },\r\n                    { \"id\": \"b\", \"label\": \"QA\", \"start\": \"2026-02-08\", \"duration\": \"5d\", \"after\": [\"a\"], \"progress\": 30 },\r\n                    { \"id\": \"m\", \"label\": \"Entrega\", \"start\": \"2026-02-16\", \"milestone\": true, \"after\": [\"b\"] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-gantt>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "<code>inline</code> · <code>viewer</code>",
+              "inline abre el visor al hacer clic; viewer activa hover, tooltips y leyenda clickeable."
+            ],
+            [
+              "<code>open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Esquema del JSON</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>tasks[].id</code>",
+              "Identificador; lo referencian <code>after</code>."
+            ],
+            [
+              "<code>tasks[].label</code>",
+              "Texto de la fila. Admite markdown inline."
+            ],
+            [
+              "<code>tasks[].start</code>",
+              "<code>YYYY-MM-DD</code> o con hora (<code>YYYY-MM-DDTHH:mm</code>)."
+            ],
+            [
+              "<code>tasks[].end</code> · <code>duration</code>",
+              "<code>end</code> gana si ambos están presentes. <code>duration</code>: <code>3d</code>, <code>2w</code>, <code>6h</code>, <code>1M</code>."
+            ],
+            [
+              "<code>tasks[].group</code>",
+              "Id del grupo; define el color de la barra."
+            ],
+            [
+              "<code>tasks[].progress</code>",
+              "0-100; barra interna de avance."
+            ],
+            [
+              "<code>tasks[].milestone</code>",
+              "Dibuja un rombo en vez de una barra."
+            ],
+            [
+              "<code>tasks[].after</code>",
+              "Ids de tareas predecesoras; dibuja flechas de dependencia. Ids inexistentes se descartan."
+            ],
+            [
+              "<code>groups[].hue</code>",
+              "Tono HSL 0–360."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>payload</code>",
+              "Configuración JSON; alternativa al script hijo."
+            ],
+            [
+              "<code>layout</code>",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code>turtle</code>",
+              "API de la animación sobre las flechas de dependencia."
+            ],
+            [
+              "<code>hiddenGroups</code>",
+              "Set de grupos ocultos."
+            ],
+            [
+              "<code>is-render</code>",
+              "Evento: el SVG terminó de construirse."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

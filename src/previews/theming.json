@@ -1,0 +1,209 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "theming",
+  "category": "",
+  "title": "Personalización",
+  "titleHtml": false,
+  "styles": "/* ═══════════════════════════════════════════════════════════════\r\n       Personalización — taller de temas.\r\n       Solo layout de la página: ni un color literal, todo sale de los\r\n       tokens --is-* para que la propia página respete la marca activa.\r\n       ═══════════════════════════════════════════════════════════════ */\r\n\r\n    .tw-seeds {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));\r\n      gap: 1rem;\r\n      align-items: start;\r\n\r\n      & .tw-seed-name { grid-column: 1 / -1; max-width: 22rem; }\r\n    }\r\n\r\n    .tw-actions {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: center;\r\n      gap: 0.75rem;\r\n      margin-top: 0.9rem;\r\n    }\r\n\r\n    /* ── Doble panel: dark y light a la vez ───────────────────────── */\r\n    .tw-panels {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));\r\n      gap: 1.15rem;\r\n\r\n      @media (max-width: 720px) {\r\n        grid-template-columns: minmax(0, 1fr);\r\n      }\r\n    }\r\n\r\n    /* El panel ES el ámbito del tema: lleva .theme-dark/.theme-light y\r\n       encima los tokens generados como propiedades inline. Todo lo que\r\n       cuelga dentro —incluidos los shadow roots de los is-*— los hereda. */\r\n    .tw-panel {\r\n      display: block;\r\n      padding: 1.1rem;\r\n      border-radius: var(--is-radius);\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg);\r\n      color: var(--is-text);\r\n      box-shadow: var(--is-shadow);\r\n      min-width: 0;\r\n\r\n      & .tw-panel__head {\r\n        display: flex;\r\n        align-items: center;\r\n        justify-content: space-between;\r\n        gap: 0.6rem;\r\n        margin: 0 0 0.9rem;\r\n        padding-bottom: 0.55rem;\r\n        border-bottom: 1px solid var(--is-border-soft);\r\n        font-size: 0.72rem;\r\n        font-weight: 700;\r\n        letter-spacing: 0.08em;\r\n        text-transform: uppercase;\r\n        color: var(--is-text-soft);\r\n      }\r\n\r\n      & .tw-panel__body {\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 0.95rem;\r\n      }\r\n\r\n      & .tw-row {\r\n        display: flex;\r\n        flex-wrap: wrap;\r\n        align-items: center;\r\n        gap: 0.55rem;\r\n      }\r\n\r\n      & .tw-grid2 {\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));\r\n        gap: 0.7rem;\r\n      }\r\n\r\n      & .tw-note {\r\n        margin: 0;\r\n        font-size: 0.8rem;\r\n        line-height: 1.5;\r\n        color: var(--is-text-soft);\r\n      }\r\n    }\r\n\r\n    /* Muestras de la rampa generada */\r\n    .tw-ramp {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));\r\n      gap: 0.4rem;\r\n      margin-top: 0.9rem;\r\n\r\n      & .tw-chip {\r\n        display: grid;\r\n        gap: 0.15rem;\r\n        padding: 0.5rem 0.4rem;\r\n        border-radius: var(--is-radius-sm);\r\n        border: 1px solid var(--is-border);\r\n        font-family: var(--is-mono);\r\n        font-size: 0.62rem;\r\n        text-align: center;\r\n\r\n        & b { font-size: 0.6rem; letter-spacing: 0.04em; opacity: 0.85; }\r\n        & span { font-size: 0.62rem; }\r\n      }\r\n    }\r\n\r\n    /* Salida generada: <pre> plano a propósito. El highlighter de\r\n       `pre.code` repinta con CodeMirror y no está pensado para texto que\r\n       cambia en cada `is-input` del picker. */\r\n    .tw-output {\r\n      margin: 0;\r\n      max-height: 26rem;\r\n      overflow: auto;\r\n      padding: 0.85rem 1rem;\r\n      border-radius: var(--is-radius);\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-code-bg);\r\n      color: var(--is-code-text);\r\n      font-family: var(--is-mono);\r\n      font-size: 0.76rem;\r\n      line-height: 1.55;\r\n      white-space: pre;\r\n      tab-size: 2;\r\n    }",
+  "storageKey": "docs-theming",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Personalización",
+      "lede": "Taller de temas: elige unos pocos colores semilla, míralos aplicados\r\n          en vivo sobre componentes reales —en <strong>oscuro y claro a la\r\n          vez</strong>— y llévate el CSS listo para pegar en tu proyecto junto a\r\n          <code>is-base.css</code>.",
+      "blocks": [
+        {
+          "kind": "callout",
+          "html": "No hace falta escribir 30 variables a mano: de la semilla de marca se\r\n          derivan la rampa completa, los <em>soft</em>, el <code>accent-bg</code>\r\n          y el foco con las mismas relaciones que ya usa <code>palettes.css</code>."
+        }
+      ]
+    },
+    {
+      "id": "sistema",
+      "title": "Cómo está montado el sistema",
+      "lede": "Tres capas, en este orden de carga:",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<ol class=\"lede\">\r\n          <li>\r\n            <code>is-base.css</code> — define los <strong>dos temas</strong>\r\n            (superficies, texto, controles, estados de campo, scrollbars) sin\r\n            ningún color de marca. Con solo este archivo ya tienes dark/light\r\n            gris neutro.\r\n          </li>\r\n          <li>\r\n            <code>palettes.css</code> — opcional. Aporta la\r\n            <strong>marca</strong> (<code>--is-color-brand-*</code>,\r\n            <code>--is-accent</code>, <code>--is-brand-*</code>,\r\n            <code>--is-focus</code>) y <strong>re-tinta las superficies</strong>\r\n            por pareja tema+paleta.\r\n          </li>\r\n          <li>\r\n            Tu paleta — exactamente la misma forma que <code>palettes.css</code>.\r\n            Es lo que genera esta página.\r\n          </li>\r\n        </ol>\r\n\r\n        <p class=\"lede\">\r\n          La selección combina <strong>dos cosas</strong>: la clase de tema y el\r\n          atributo de paleta. Las variables de marca cuelgan solo del atributo\r\n          (valen para los dos temas); las superficies cuelgan de la\r\n          <strong>pareja</strong>:\r\n        </p>"
+        },
+        {
+          "kind": "code",
+          "code": "/* marca: sirve a dark y light por igual */\r\n[data-palette=\"contapyme\"] {\r\n  --is-color-brand: #1a6eb0;\r\n  --is-accent: #1a6eb0;\r\n  --is-accent-bg: rgb(26 110 176 / 12%);\r\n  --is-brand-soft: rgb(26 110 176 / 18%);\r\n  --is-focus: #1a6eb0;\r\n}\r\n\r\n/* superficies: dependen de la PAREJA (tema, paleta) */\r\n.theme-dark[data-palette=\"contapyme\"]  { --is-bg: #0a0e14; --is-border: #273040; }\r\n.theme-light[data-palette=\"contapyme\"] { --is-bg: #fff;    --is-border: #ccc; }",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Y así se activa. Lo habitual es en <code>&lt;html&gt;</code>, pero\r\n          funciona en cualquier ancestro: por eso los dos paneles de más abajo\r\n          pueden mostrar temas distintos en la misma página.\r\n        </p>"
+        },
+        {
+          "kind": "code",
+          "code": "<html class=\"theme-dark\" data-theme=\"dark\" data-palette=\"contapyme\">\r\n\r\n<!-- o acotado a un trozo del DOM -->\r\n<div class=\"theme-light\" data-theme=\"light\" data-palette=\"mi-marca\"> … </div>",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Tokens que un consumidor <strong>sí</strong> debería redefinir:\r\n        </p>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Grupo",
+            "Tokens",
+            "Dónde va"
+          ],
+          "rows": [
+            [
+              "Marca",
+              "<code>--is-color-brand</code> (+ <code>-paler</code>, <code>-pale</code>, <code>-strong</code>, <code>-stronger</code>, <code>-strongest</code>), <code>--is-accent</code>, <code>--is-accent-bg</code>, <code>--is-on-brand</code>",
+              "<code>[data-palette=\"…\"]</code>"
+            ],
+            [
+              "Marca por tema",
+              "<code>--is-brand-soft</code>, <code>--is-brand-soft-active</code>, <code>--is-brand-text</code>, <code>--is-focus</code>",
+              "pareja tema+paleta"
+            ],
+            [
+              "Superficies",
+              "<code>--is-bg</code>, <code>--is-bg-soft</code>, <code>--is-bg-elev</code>, <code>--is-code-bg</code>",
+              "pareja tema+paleta"
+            ],
+            [
+              "Bordes y texto",
+              "<code>--is-border</code>, <code>--is-border-soft</code>, <code>--is-text</code>, <code>--is-text-soft</code>, <code>--is-text-dim</code>",
+              "pareja tema+paleta"
+            ],
+            [
+              "Controles",
+              "<code>--is-control-bg</code>, <code>--is-control-bg-hover</code>, <code>--is-control-bg-active</code>, <code>--is-control-border</code>, <code>--is-control-text</code>",
+              "pareja tema+paleta"
+            ],
+            [
+              "Campos",
+              "<code>--is-b-required</code>, <code>--is-b-optional</code>, <code>--is-b-readonly</code>, <code>--is-bg-readonly</code>",
+              "pareja tema+paleta"
+            ],
+            [
+              "Geometría",
+              "<code>--is-radius</code>, <code>--is-radius-sm</code>, <code>--is-shadow</code>",
+              "cualquiera de los dos"
+            ],
+            [
+              "Scrollbars",
+              "<code>--is-scrollbar-thumb</code>, <code>--is-scrollbar-thumb-hover</code>, <code>--is-scrollbar-track</code>",
+              "opcional"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Los semánticos (<code>--is-color-success-*</code>,\r\n          <code>--is-color-warning-*</code>, <code>--is-color-danger-*</code>) se\r\n          dejan como están salvo que tu marca los necesite: son señales de\r\n          estado, no decoración.\r\n        </p>"
+        }
+      ]
+    },
+    {
+      "id": "taller",
+      "title": "Tu paleta",
+      "lede": "Cinco semillas. Todo lo demás se deriva en OKLCH conservando el tono\r\n          de tu marca.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"tw-seeds\">\r\n            <is-input class=\"tw-seed-name\" id=\"palName\" label=\"Nombre de la paleta\" hint=\"Se usa como data-palette=&quot;…&quot;\" value=\"mi-marca\"></is-input>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"brand\"     label=\"Marca / acento\" hint=\"--is-accent y la rampa\" value=\"#7048e8\" swatches=\"#e03131,#1a6eb0,#9acd32,#7048e8,#0ca678,#f76707\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"darkBg\"    label=\"Fondo oscuro\"   hint=\"--is-bg en dark\"        value=\"#0b0d10\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"darkText\"  label=\"Texto oscuro\"   hint=\"--is-text en dark\"      value=\"#e6e8eb\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"lightBg\"   label=\"Fondo claro\"    hint=\"--is-bg en light\"       value=\"#ffffff\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"lightText\" label=\"Texto claro\"    hint=\"--is-text en light\"     value=\"#1f2328\"></is-color-picker>\r\n          </div>\r\n\r\n          <div class=\"tw-actions\">\r\n            <is-switch id=\"applyRoot\" hint=\"Repinta toda la galería, no solo los paneles\">Aplicar a toda la página</is-switch>\r\n            <is-button id=\"btnReset\" variant=\"outlined\">Restaurar valores</is-button>\r\n          </div>\r\n\r\n          <div class=\"tw-ramp\" id=\"ramp\"></div>",
+          "heading": "Semillas"
+        }
+      ]
+    },
+    {
+      "id": "preview",
+      "title": "Vista previa · oscuro y claro a la vez",
+      "lede": "Los mismos componentes, dos veces. El panel izquierdo lleva\r\n          <code>class=\"theme-dark\"</code> y el derecho\r\n          <code>class=\"theme-light\"</code>; encima de cada uno se escriben los\r\n          tokens generados como propiedades personalizadas del propio elemento.\r\n          Los <code>is-*</code> los leen por herencia dentro de su shadow root,\r\n          así que no hace falta tocar <code>&lt;html&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"tw-panels\">"
+        },
+        {
+          "kind": "demo",
+          "html": "<p class=\"tw-panel__head\"><span>Tema oscuro</span><span id=\"darkBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body></div>",
+          "noCode": true
+        },
+        {
+          "kind": "demo",
+          "html": "<p class=\"tw-panel__head\"><span>Tema claro</span><span id=\"lightBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body></div>",
+          "noCode": true
+        },
+        {
+          "kind": "html",
+          "html": "</div>"
+        }
+      ]
+    },
+    {
+      "id": "exportar",
+      "title": "Llévatelo",
+      "lede": "Archivo autocontenido: pégalo después de <code>is-base.css</code> (en\r\n          lugar de <code>palettes.css</code> o junto a él) y activa tu paleta con\r\n          <code>data-palette</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"tw-actions\">\r\n          \r\n          <is-copy-button id=\"copyCss\" from=\"cssOut\" copy-label=\"Copiar CSS\" success-label=\"¡Copiado!\" tooltip=\"Copiar la paleta generada\"></is-copy-button>\r\n          <is-button id=\"btnDownload\" variant=\"filled\">Descargar .css</is-button>\r\n          <is-tag pill id=\"tagName\">mi-marca</is-tag>\r\n        </div>\r\n        <pre class=\"tw-output\" id=\"cssOut\">/* … */</pre>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia de la derivación",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Token",
+            "Cómo se calcula"
+          ],
+          "rows": [
+            [
+              "<code>--is-color-brand</code>",
+              "la semilla tal cual"
+            ],
+            [
+              "<code>--is-color-brand-paler / 100</code>",
+              "OKLCH con L 0.97 / 0.92 y croma al 18 % / 40 % (pasteles para <em>soft</em> en claro)"
+            ],
+            [
+              "<code>--is-color-brand-strong / 700 / 800</code>",
+              "L × 0.88 / 0.75 / 0.60, croma × 1 / 0.92 / 0.80"
+            ],
+            [
+              "<code>--is-accent-bg</code>",
+              "semilla al 12 % de alfa"
+            ],
+            [
+              "<code>--is-brand-soft</code> / <code>-active</code>",
+              "dark: 18 % / 28 % de alfa · light: brand-50 / brand-100"
+            ],
+            [
+              "<code>--is-brand-text</code>",
+              "dark: semilla subida a L ≥ 0.78 · light: brand-700"
+            ],
+            [
+              "<code>--is-focus</code>",
+              "dark: L + 0.10 · light: la semilla"
+            ],
+            [
+              "<code>--is-on-brand</code>",
+              "<code>#fff</code> o <code>#111</code> según la L de la marca"
+            ],
+            [
+              "superficies",
+              "escalones de L sobre el fondo elegido, con un croma mínimo en el tono de la marca (mismo truco que <code>oklch(from … calc(c * 0.25) h)</code> de ContaPyme)"
+            ],
+            [
+              "<code>--is-text-soft</code> / <code>-dim</code>",
+              "texto mezclado hacia el fondo un 28 % / 45 %"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

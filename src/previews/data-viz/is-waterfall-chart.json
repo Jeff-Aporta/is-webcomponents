@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-waterfall-chart",
+  "category": "data-viz",
+  "title": "<is-waterfall-chart>",
+  "titleHtml": true,
+  "storageKey": "docs-is-waterfall-chart",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-waterfall-chart>",
+      "lede": "Cascada para explicar cómo un saldo inicial llega a un saldo final.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-waterfall-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Saldo inicial\", \"Ventas\", \"Costos\", \"Impuestos\", \"Saldo final\"],\r\n                  \"datasets\": [{ \"label\": \"Flujo\", \"data\": [1200, 850, -420, -180, null], \"totals\": [0, 4] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-waterfall-chart>"
+        }
+      ]
+    }
+  ]
+}

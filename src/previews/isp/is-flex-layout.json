@@ -1,0 +1,119 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-flex-layout",
+  "category": "isp",
+  "title": "<is-flex-layout>",
+  "titleHtml": true,
+  "storageKey": "docs-is-flex-layout",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-flex-layout>",
+      "lede": "Contenedor flex declarativo. Port del <code class=\"code\">FlexLayout.svelte</code> de ISP:\r\n          el gap por defecto se adapta al ancho propio (0.2 · 0.35 · 0.5rem).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-flex-layout gap=\"0.5rem\" align=\"center\">\r\n            <is-button>Uno</is-button>\r\n            <is-button variant=\"outlined\">Dos</is-button>\r\n            <is-button variant=\"plain\">Tres</is-button>\r\n          </is-flex-layout>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "direction · justify · align",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-flex-layout direction=\"column\" gap=\"0.5rem\" align=\"start\" style=\"width:100%\">\r\n            <is-tag>columna</is-tag>\r\n            <is-tag>en</is-tag>\r\n            <is-tag>fila vertical</is-tag>\r\n          </is-flex-layout>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-flex-layout justify=\"between\" align=\"center\" style=\"width:100%;border:1px dashed var(--is-border);padding:0.5rem\">\r\n            <span>start</span><span>middle</span><span>end</span>\r\n          </is-flex-layout>"
+        },
+        {
+          "kind": "html",
+          "html": "<h2>wrap · grow · min/max</h2>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-flex-layout wrap gap=\"0.35rem\" max-width=\"24rem\" style=\"border:1px dashed var(--is-border);padding:0.5rem\">\r\n            <is-tag>alfa</is-tag><is-tag>beta</is-tag><is-tag>gamma</is-tag>\r\n            <is-tag>delta</is-tag><is-tag>epsilon</is-tag><is-tag>zeta</is-tag>\r\n          </is-flex-layout>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-flex-layout grow gap=\"0.5rem\" style=\"width:100%\">\r\n            <is-card style=\"flex:1 1 0\">A</is-card>\r\n            <is-card style=\"flex:1 1 0\">B</is-card>\r\n          </is-flex-layout>"
+        },
+        {
+          "kind": "html",
+          "html": "<h2>Escala por font-size</h2>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-flex-layout gap=\"0.5rem\" align=\"center\" style=\"font-size: 1.2em\">\r\n            <is-button>1.2em</is-button>\r\n            <is-text>todo escala desde el contexto</is-text>\r\n          </is-flex-layout>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-flex-layout gap=\"0.5rem\" justify=\"between\" align=\"center\">…</is-flex-layout>\r\n<is-flex-layout direction=\"column\" wrap max-width=\"24rem\">…</is-flex-layout>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Valores / default"
+          ],
+          "rows": [
+            [
+              "<code>gap</code>",
+              "cualquier valor CSS · default responsive 0.2 / 0.35 / 0.5rem"
+            ],
+            [
+              "<code>direction</code>",
+              "row (default) · column"
+            ],
+            [
+              "<code>wrap</code>",
+              "boolean"
+            ],
+            [
+              "<code>justify</code>",
+              "start · center · end · between · around · evenly · left · right · flex-start · flex-end"
+            ],
+            [
+              "<code>align</code> / <code>items</code>",
+              "start · center · end · stretch · baseline"
+            ],
+            [
+              "<code>grow</code>",
+              "boolean → <code>flex: 1 1 auto</code>"
+            ],
+            [
+              "<code>inline</code>",
+              "boolean → <code>display: inline-flex</code>"
+            ],
+            [
+              "<code>width</code>, <code>height</code>",
+              "valor CSS → <code>--width</code>, <code>--height</code>"
+            ],
+            [
+              "<code>min-width</code>, <code>min-height</code>",
+              "valor CSS"
+            ],
+            [
+              "<code>max-width</code>, <code>max-height</code>",
+              "valor CSS"
+            ],
+            [
+              "<code>data-sizew</code> · <code>--lerpw</code>",
+              "igual que <code>&lt;is-block-layout&gt;</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

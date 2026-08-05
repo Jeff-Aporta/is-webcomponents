@@ -1,0 +1,177 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-class-diagram",
+  "category": "diagrams",
+  "title": "<is-class-diagram>",
+  "titleHtml": true,
+  "storageKey": "docs-is-class-diagram",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-class-diagram>",
+      "lede": "Diagrama de clases UML en SVG, sin Mermaid. Tú declaras clases y\r\n          relaciones; el componente decide las capas, dibuja los tres\r\n          compartimentos clásicos (nombre, atributos, métodos) y rutea las\r\n          relaciones rodeando las cajas.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Comparte motor con <code>&lt;is-flowchart&gt;</code>: mismo esquema\r\n          JSON, mismo visor a pantalla completa y la misma animación tortuga,\r\n          que aquí recorre las relaciones en orden.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-class-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"classDiagram\": {\r\n                  \"title\": \"Dominio de facturación\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-dominio\", \"name\": \"Dominio\", \"hue\": 239 },\r\n                    { \"id\": \"g-terceros\", \"name\": \"Terceros\", \"hue\": 199 }\r\n                  ],\r\n                  \"classes\": [\r\n                    { \"id\": \"Factura\", \"name\": \"Factura\", \"stereotype\": \"<<entity>>\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"+numero: string\", \"-total: number\", \"-fecha: date\", \"-cufe: string\"],\r\n                      \"methods\": [\"+anular(): void\", \"+totalizar(): number\"] },\r\n                    { \"id\": \"Item\", \"name\": \"ItemFactura\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"+cantidad: number\", \"-precio: number\"],\r\n                      \"methods\": [\"+subtotal(): number\"] },\r\n                    { \"id\": \"Pago\", \"name\": \"Pago\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"-valor: number\"],\r\n                      \"methods\": [\"+registrar(): void\"] },\r\n                    { \"id\": \"Cliente\", \"name\": \"Cliente\", \"stereotype\": \"<<entity>>\", \"group\": \"g-terceros\",\r\n                      \"attributes\": [\"+nit: string\", \"+razonSocial: string\"] },\r\n                    { \"id\": \"Tercero\", \"name\": \"Tercero\", \"group\": \"g-terceros\",\r\n                      \"attributes\": [\"#id: string\"] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"Factura\", \"to\": \"Item\", \"kind\": \"composition\", \"label\": \"1..*\" },\r\n                    { \"from\": \"Factura\", \"to\": \"Cliente\", \"kind\": \"association\", \"label\": \"1\" },\r\n                    { \"from\": \"Factura\", \"to\": \"Pago\", \"kind\": \"dependency\" },\r\n                    { \"from\": \"Cliente\", \"to\": \"Tercero\", \"kind\": \"inheritance\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-class-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "relaciones",
+      "title": "Tipos de relación",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          <code>kind</code> acepta <code>association</code> (línea con flecha\r\n          abierta), <code>inheritance</code> (triángulo hueco en el destino),\r\n          <code>composition</code> (diamante relleno en el origen),\r\n          <code>aggregation</code> (diamante hueco en el origen),\r\n          <code>dependency</code> (línea punteada) y <code>realization</code>\r\n          (punteada con triángulo hueco).\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-class-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"classDiagram\": {\r\n                  \"direction\": \"LR\",\r\n                  \"classes\": [\r\n                    { \"id\": \"A\", \"name\": \"A\" },\r\n                    { \"id\": \"B\", \"name\": \"B\" },\r\n                    { \"id\": \"C\", \"name\": \"C\" },\r\n                    { \"id\": \"D\", \"name\": \"D\" },\r\n                    { \"id\": \"E\", \"name\": \"E\" },\r\n                    { \"id\": \"F\", \"name\": \"F\" }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"A\", \"to\": \"B\", \"kind\": \"association\", \"label\": \"association\" },\r\n                    { \"from\": \"B\", \"to\": \"C\", \"kind\": \"inheritance\", \"label\": \"inheritance\" },\r\n                    { \"from\": \"C\", \"to\": \"D\", \"kind\": \"composition\", \"label\": \"composition\" },\r\n                    { \"from\": \"D\", \"to\": \"E\", \"kind\": \"aggregation\", \"label\": \"aggregation\" },\r\n                    { \"from\": \"E\", \"to\": \"F\", \"kind\": \"dependency\", \"label\": \"dependency\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-class-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "compartimentos",
+      "title": "Compartimentos",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          La caja crece con el número de atributos y métodos. Los\r\n          compartimentos vacíos (sin atributos, sin métodos) se omiten junto\r\n          con su línea divisoria.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-class-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"classDiagram\": {\r\n                  \"direction\": \"LR\",\r\n                  \"classes\": [\r\n                    { \"id\": \"Vacia\", \"name\": \"SoloNombre\" },\r\n                    { \"id\": \"ConAttr\", \"name\": \"ConAtributos\", \"attributes\": [\"+a: string\", \"+b: number\"] },\r\n                    { \"id\": \"Completa\", \"name\": \"Completa\", \"stereotype\": \"<<value>>\",\r\n                      \"attributes\": [\"+a: string\", \"+b: number\", \"-c: boolean\"],\r\n                      \"methods\": [\"+hacer(): void\"] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"Vacia\", \"to\": \"ConAttr\", \"kind\": \"association\" },\r\n                    { \"from\": \"ConAttr\", \"to\": \"Completa\", \"kind\": \"association\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-class-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "<code>inline</code> · <code>viewer</code>",
+              "inline abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación."
+            ],
+            [
+              "<code>open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Esquema del JSON</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>direction</code>",
+              "<code>TB</code> · <code>BT</code> · <code>LR</code> · <code>RL</code>."
+            ],
+            [
+              "<code>classes[].id</code>",
+              "Identificador que referencian las relaciones."
+            ],
+            [
+              "<code>classes[].name</code>",
+              "Nombre en el compartimento superior."
+            ],
+            [
+              "<code>classes[].stereotype</code>",
+              "Texto pequeño sobre el nombre, ej. <code>&lt;&lt;entity&gt;&gt;</code>."
+            ],
+            [
+              "<code>classes[].attributes</code>",
+              "Filas del compartimento de atributos."
+            ],
+            [
+              "<code>classes[].methods</code>",
+              "Filas del compartimento de métodos."
+            ],
+            [
+              "<code>classes[].group</code>",
+              "Id del grupo; define el color de la caja."
+            ],
+            [
+              "<code>relations[].from</code> · <code>to</code>",
+              "Ids de clase. Una relación a un id inexistente se descarta."
+            ],
+            [
+              "<code>relations[].kind</code>",
+              "<code>association</code> (default) · <code>inheritance</code> · <code>composition</code> · <code>aggregation</code> · <code>dependency</code> · <code>realization</code>."
+            ],
+            [
+              "<code>relations[].label</code>",
+              "Rótulo sobre la línea."
+            ],
+            [
+              "<code>groups[].hue</code>",
+              "Tono HSL 0–360."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades y eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>payload</code>",
+              "Configuración JSON; alternativa al script hijo."
+            ],
+            [
+              "<code>layout</code>",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code>turtle</code>",
+              "API de la animación: play / pause / stop / next / prev."
+            ],
+            [
+              "<code>hiddenGroups</code>",
+              "Set de grupos ocultos; al cambiar, el diagrama se re-diseña sin esas clases."
+            ],
+            [
+              "<code>is-render</code>",
+              "Evento: el SVG terminó de construirse."
+            ],
+            [
+              "<code>is-turtle-state</code>",
+              "Evento: estado de la animación."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

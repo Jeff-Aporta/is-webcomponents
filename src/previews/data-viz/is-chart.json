@@ -1,0 +1,241 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-chart",
+  "category": "data-viz",
+  "title": "Charts",
+  "titleHtml": false,
+  "styles": "/* Rejilla del overview: se acomoda al ancho real del panel, no al viewport. */\r\n    .chart-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));\r\n      gap: 1rem;\r\n      margin-top: 0.75rem;\r\n    }\r\n    .chart-card {\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background: var(--is-bg-elev);\r\n      padding: 0.875rem;\r\n      min-width: 0;\r\n    }\r\n    .chart-card h4 {\r\n      margin: 0 0 0.15rem;\r\n      font-size: 0.8125rem;\r\n      font-weight: 600;\r\n    }\r\n    .chart-card p {\r\n      margin: 0 0 0.6rem;\r\n      font-size: 0.75rem;\r\n      line-height: 1.45;\r\n      color: var(--is-text-dim);\r\n    }\r\n    .chart-card__plot { height: 15rem; }\r\n    .chart-card__plot.is-tall { height: 18rem; }\r\n    .spark-row {\r\n      display: flex;\r\n      align-items: center;\r\n      justify-content: space-between;\r\n      gap: 0.75rem;\r\n      padding: 0.45rem 0;\r\n      border-bottom: 1px solid var(--is-border-soft);\r\n      font-size: 0.8125rem;\r\n    }\r\n    .spark-row:last-child { border-bottom: 0; }\r\n    .spark-row b { font-variant-numeric: tabular-nums; }",
+  "storageKey": "docs-is-chart",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Charts",
+      "lede": "Motor de gráficos en SVG, sin dependencias externas. La configuración usa el\r\n          mismo esquema de Chart.js, así que un <code>config</code> existente funciona\r\n          sin cambios.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Cada tipo tiene su elemento (<code>&lt;is-bar-chart&gt;</code>,\r\n          <code>&lt;is-line-chart&gt;</code>…) y además está\r\n          <code>&lt;is-chart type=\"…\"&gt;</code>, que resuelve el tipo en tiempo de\r\n          ejecución. Los colores salen de la paleta de marca activa y se revalidan al\r\n          cambiar de tema: pruébalo con el selector de paleta del encabezado.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-chart open-on-click type=\"bar\" label=\"Ingresos vs gastos\" x-label=\"Mes\" y-label=\"Millones COP\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\", \"May\", \"Jun\"],\r\n                  \"datasets\": [\r\n                    { \"label\": \"Ingresos\", \"data\": [48, 56, 62, 58, 71, 68] },\r\n                    { \"label\": \"Gastos\", \"data\": [35, 38, 40, 42, 45, 43] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-chart>"
+        }
+      ]
+    },
+    {
+      "id": "comparacion",
+      "title": "Comparar cantidades",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Barras: lo correcto cuando el lector compara magnitudes entre categorías.</p>\r\n        <div class=\"chart-grid\">\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Una serie</h4>\r\n            <p><code>&lt;is-bar-chart&gt;</code></p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-bar-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\", \"May\", \"Jun\"],\r\n                    \"datasets\": [{ \"label\": \"Ventas\", \"data\": [4200000, 5100000, 3800000, 6400000, 5900000, 7200000] }] } }\r\n                </script>\r\n              </is-bar-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Agrupada</h4>\r\n            <p>Varias series comparten categoría.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-bar-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Q1\", \"Q2\", \"Q3\", \"Q4\"], \"datasets\": [\r\n                    { \"label\": \"Ingresos\", \"data\": [32, 45, 38, 52] },\r\n                    { \"label\": \"Costos\", \"data\": [22, 28, 25, 31] },\r\n                    { \"label\": \"Utilidad\", \"data\": [10, 17, 13, 21] } ] } }\r\n                </script>\r\n              </is-bar-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Apilada</h4>\r\n            <p>Atributo <code>stacked</code>: composición dentro del total.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-bar-chart stacked>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\"], \"datasets\": [\r\n                    { \"label\": \"Contado\", \"data\": [18, 22, 20, 27] },\r\n                    { \"label\": \"Crédito\", \"data\": [12, 15, 18, 14] },\r\n                    { \"label\": \"Anticipos\", \"data\": [5, 7, 6, 9] } ] } }\r\n                </script>\r\n              </is-bar-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Horizontal</h4>\r\n            <p><code>index-axis=\"y\"</code>: mejor con etiquetas largas.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-bar-chart index-axis=\"y\">\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Bogotá\", \"Medellín\", \"Cali\", \"Barranquilla\", \"Bucaramanga\"],\r\n                    \"datasets\": [{ \"label\": \"Clientes\", \"data\": [1240, 890, 610, 430, 280] }] } }\r\n                </script>\r\n              </is-bar-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Con negativos</h4>\r\n            <p>La línea base marca el cero.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-bar-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\", \"May\"],\r\n                    \"datasets\": [{ \"label\": \"Flujo neto\", \"data\": [12, -8, 15, -4, 22] }] } }\r\n                </script>\r\n              </is-bar-chart>\r\n            </div>\r\n          </article>\r\n\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "tendencia",
+      "title": "Mostrar tendencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Líneas: cuando importa la dirección del cambio en el tiempo.</p>\r\n        <div class=\"chart-grid\">\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Dos series, curva</h4>\r\n            <p><code>tension: 0.4</code> en el dataset.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-line-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\", \"May\", \"Jun\"], \"datasets\": [\r\n                    { \"label\": \"2025\", \"data\": [30, 42, 38, 55, 48, 62], \"tension\": 0.4 },\r\n                    { \"label\": \"2024\", \"data\": [25, 30, 34, 40, 39, 45], \"tension\": 0.4 } ] } }\r\n                </script>\r\n              </is-line-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Área</h4>\r\n            <p><code>fill: true</code> rellena bajo la línea.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-line-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"L\", \"M\", \"X\", \"J\", \"V\", \"S\", \"D\"], \"datasets\": [\r\n                    { \"label\": \"Visitas\", \"data\": [120, 190, 170, 240, 280, 210, 150], \"fill\": true, \"tension\": 0.4 } ] } }\r\n                </script>\r\n              </is-line-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Escalonada</h4>\r\n            <p><code>stepped: true</code>: valores que cambian de golpe.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-line-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"v1\", \"v2\", \"v3\", \"v4\", \"v5\", \"v6\"], \"datasets\": [\r\n                    { \"label\": \"Plan\", \"data\": [10, 10, 25, 25, 40, 40], \"stepped\": true } ] } }\r\n                </script>\r\n              </is-line-chart>\r\n            </div>\r\n          </article>\r\n\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "proporcion",
+      "title": "Mostrar proporción",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Partes de un total. Con más de seis rebanadas dejan de ser legibles y\r\n          conviene una barra horizontal.\r\n        </p>\r\n        <div class=\"chart-grid\">\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Pie</h4>\r\n            <p>El porcentaje se rotula dentro de cada rebanada.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-pie-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Contado\", \"Crédito 30\", \"Crédito 60\", \"Crédito 90\"],\r\n                    \"datasets\": [{ \"label\": \"Cartera\", \"data\": [45, 25, 18, 12] }] } }\r\n                </script>\r\n              </is-pie-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Doughnut</h4>\r\n            <p>El hueco muestra el total.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-doughnut-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Inventario\", \"Cartera\", \"Bancos\", \"Activo fijo\"],\r\n                    \"datasets\": [{ \"label\": \"Activos\", \"data\": [3200, 2100, 1450, 5300] }] } }\r\n                </script>\r\n              </is-doughnut-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Polar area</h4>\r\n            <p>Ángulo fijo, radio según el valor.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-polar-area-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Norte\", \"Sur\", \"Este\", \"Oeste\", \"Centro\"],\r\n                    \"datasets\": [{ \"label\": \"Cobertura\", \"data\": [11, 16, 7, 14, 9] }] } }\r\n                </script>\r\n              </is-polar-area-chart>\r\n            </div>\r\n          </article>\r\n\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "correlacion",
+      "title": "Correlación y multivariable",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"chart-grid\">\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Scatter</h4>\r\n            <p>Dos ejes numéricos, un punto por observación.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-scatter-chart x-label=\"Antigüedad (días)\" y-label=\"Saldo\">\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"datasets\": [\r\n                    { \"label\": \"Facturas\", \"data\": [\r\n                      {\"x\":5,\"y\":120},{\"x\":18,\"y\":340},{\"x\":32,\"y\":210},{\"x\":45,\"y\":560},\r\n                      {\"x\":60,\"y\":430},{\"x\":75,\"y\":720},{\"x\":88,\"y\":510},{\"x\":95,\"y\":880} ] } ] } }\r\n                </script>\r\n              </is-scatter-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Bubble</h4>\r\n            <p>El radio <code>r</code> agrega una tercera dimensión.</p>\r\n            <div class=\"chart-card__plot\">\r\n              <is-bubble-chart x-label=\"Margen %\" y-label=\"Volumen\">\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"datasets\": [\r\n                    { \"label\": \"Productos\", \"data\": [\r\n                      {\"x\":12,\"y\":40,\"r\":10},{\"x\":24,\"y\":75,\"r\":18},{\"x\":33,\"y\":55,\"r\":8},\r\n                      {\"x\":45,\"y\":90,\"r\":24},{\"x\":58,\"y\":62,\"r\":14} ] } ] } }\r\n                </script>\r\n              </is-bubble-chart>\r\n            </div>\r\n          </article>\r\n\r\n          <article class=\"chart-card\">\r\n            <h4>Radar</h4>\r\n            <p>Compara varias métricas entre dos conjuntos.</p>\r\n            <div class=\"chart-card__plot is-tall\">\r\n              <is-radar-chart>\r\n                <script type=\"application/json\">\r\n                  { \"data\": { \"labels\": [\"Liquidez\", \"Rentabilidad\", \"Endeudamiento\", \"Eficiencia\", \"Crecimiento\"],\r\n                    \"datasets\": [\r\n                      { \"label\": \"Empresa\", \"data\": [65, 78, 45, 82, 70] },\r\n                      { \"label\": \"Sector\", \"data\": [55, 62, 60, 58, 52] } ] } }\r\n                </script>\r\n              </is-radar-chart>\r\n            </div>\r\n          </article>\r\n\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "micro",
+      "title": "Micro-gráficos",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          <code>&lt;is-sparkline&gt;</code> va en línea con el texto, sin ejes ni\r\n          leyenda. El atributo <code>trend</code> usa los colores semánticos del sistema.\r\n        </p>\r\n        <div class=\"chart-card\" style=\"max-width:26rem\">\r\n          <div class=\"spark-row\">\r\n            <span>Ventas</span>\r\n            <is-sparkline trend=\"positive\" values=\"4,6,5,8,7,11,13\"></is-sparkline>\r\n            <b>+18%</b>\r\n          </div>\r\n          <div class=\"spark-row\">\r\n            <span>Cartera vencida</span>\r\n            <is-sparkline trend=\"negative\" values=\"12,11,13,9,8,6,5\"></is-sparkline>\r\n            <b>−22%</b>\r\n          </div>\r\n          <div class=\"spark-row\">\r\n            <span>Rotación</span>\r\n            <is-sparkline trend=\"neutral\" type=\"bar\" values=\"5,7,6,8,6,7,7\"></is-sparkline>\r\n            <b>=</b>\r\n          </div>\r\n          <div class=\"spark-row\">\r\n            <span>Margen</span>\r\n            <is-sparkline variant=\"gradient\" curve=\"natural\" values=\"3,5,4,7,6,9,12\"></is-sparkline>\r\n            <b>+31%</b>\r\n          </div>\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "config",
+      "title": "Configuración",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Los datos entran por un <code>&lt;script type=\"application/json\"&gt;</code> hijo\r\n          o por la propiedad <code>config</code>. El esquema es el de Chart.js:\r\n          <code>{ type, data: { labels, datasets }, options }</code>.\r\n        </p>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Atributos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>type</code>",
+              "bar · line · pie · doughnut · radar · polarArea · scatter · bubble",
+              "Solo en <code>&lt;is-chart&gt;</code>; los elementos tipados lo fijan."
+            ],
+            [
+              "<code>label</code>",
+              "texto",
+              "Título sobre el gráfico."
+            ],
+            [
+              "<code>x-label</code> · <code>y-label</code>",
+              "texto",
+              "Títulos de eje."
+            ],
+            [
+              "<code>index-axis</code>",
+              "<code>x</code> · <code>y</code>",
+              "<code>y</code> produce barras horizontales."
+            ],
+            [
+              "<code>stacked</code>",
+              "booleano",
+              "Apila las series."
+            ],
+            [
+              "<code>grid</code>",
+              "<code>auto</code> · <code>both</code> · <code>x</code> · <code>y</code> · <code>none</code>",
+              "Por defecto solo el eje de valor."
+            ],
+            [
+              "<code>min</code> · <code>max</code>",
+              "número",
+              "Fija el dominio del eje de valor."
+            ],
+            [
+              "<code>legend-position</code>",
+              "<code>top</code> · <code>bottom</code> · <code>start</code> · <code>end</code>",
+              "Ubicación de la leyenda."
+            ],
+            [
+              "<code>without-legend</code> · <code>without-tooltip</code> · <code>without-animation</code>",
+              "booleano",
+              "Desactivan cada parte."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades del dataset</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Aplica a",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>label</code>",
+              "todos",
+              "Nombre de la serie en leyenda y tooltip."
+            ],
+            [
+              "<code>backgroundColor</code> · <code>borderColor</code>",
+              "todos",
+              "Fuerzan el color; si faltan, se usa la paleta de marca."
+            ],
+            [
+              "<code>tension</code>",
+              "line",
+              "Mayor que 0 dibuja curva suave."
+            ],
+            [
+              "<code>stepped</code>",
+              "line",
+              "Línea escalonada."
+            ],
+            [
+              "<code>fill</code>",
+              "line",
+              "Rellena el área bajo la línea."
+            ],
+            [
+              "<code>borderRadius</code>",
+              "bar",
+              "Radio del extremo de la barra."
+            ],
+            [
+              "<code>borderWidth</code> · <code>pointRadius</code>",
+              "line · scatter",
+              "Grosor del trazo y tamaño del punto."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Opciones</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<p>\r\n          De <code>config.options</code> se leen\r\n          <code>scales.{x,y}.{min,max,stacked,beginAtZero,title.text}</code>,\r\n          <code>plugins.legend.{display,position}</code>,\r\n          <code>plugins.title.{display,text}</code>,\r\n          <code>plugins.tooltip.enabled</code>, <code>indexAxis</code> y\r\n          <code>cutout</code>. Cuando un atributo del elemento y una opción definen lo\r\n          mismo, gana el atributo.\r\n        </p>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Config por JavaScript</h3>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-chart open-on-click id=\"jsChart\" type=\"line\" without-legend></is-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "const el = document.querySelector('#jsChart');\r\nel.config = {\r\n  data: {\r\n    labels: ['Q1', 'Q2', 'Q3', 'Q4'],\r\n    datasets: [{ label: 'Ventas', data: [420, 580, 630, 710], tension: 0.4, fill: true }]\r\n  }\r\n};",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Propiedades del elemento</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>config</code>",
+              "Configuración completa; asignarla vuelve a dibujar."
+            ],
+            [
+              "<code>svg</code>",
+              "Nodo <code>&lt;svg&gt;</code> del gráfico (solo lectura)."
+            ],
+            [
+              "<code>chart</code>",
+              "Alias histórico de <code>svg</code>."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

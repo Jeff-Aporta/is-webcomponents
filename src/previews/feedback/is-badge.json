@@ -1,0 +1,68 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-badge",
+  "category": "feedback",
+  "title": "<is-badge>",
+  "titleHtml": true,
+  "storageKey": "docs-is-badge",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-badge>",
+      "lede": "Etiqueta compacta con variantes semánticas y apariencias.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\">\r\n            <is-badge>Nuevo</is-badge>\r\n            <is-badge color=\"success\">Activo</is-badge>\r\n            <is-badge color=\"warning\" attention=\"pulse\">Pendiente</is-badge>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Variantes y apariencias",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem\">\r\n            <is-badge color=\"brand\" variant=\"accent\">accent</is-badge>\r\n            <is-badge color=\"brand\" variant=\"filled\">filled</is-badge>\r\n            <is-badge color=\"brand\" variant=\"outlined\">outlined</is-badge>\r\n            <is-badge color=\"brand\" variant=\"filled-outlined\">filled-outlined</is-badge>\r\n            <is-badge color=\"danger\" pill attention=\"bounce\">pill bounce</is-badge>\r\n          </div>\r\n          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-badge color=\"neutral\" variant=\"filled\">neutral</is-badge>\r\n            <is-badge color=\"success\" variant=\"filled\">success</is-badge>\r\n            <is-badge color=\"warning\" variant=\"outlined\">warning</is-badge>\r\n            <is-badge color=\"danger\" variant=\"accent\">danger</is-badge>\r\n            <is-badge attention=\"pulse\">pulse</is-badge>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-badge color=\"success\" variant=\"filled\">OK</is-badge>\r\n<is-badge pill attention=\"pulse\">Live</is-badge>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "Slots: default, start, end.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "brand"
+            ],
+            [
+              "<code>appearance</code>",
+              "accent"
+            ],
+            [
+              "<code>pill</code>",
+              "false"
+            ],
+            [
+              "<code>attention</code>",
+              "none · pulse · bounce"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

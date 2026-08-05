@@ -1,0 +1,63 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-mention",
+  "category": "forms",
+  "title": "<is-mention>",
+  "titleHtml": true,
+  "styles": ".mention-wrap { padding: 1.25rem; border: 1px solid var(--is-border); border-radius: var(--is-radius); background: var(--is-bg-elev); }\r\n    .mention-wrap > is-mention { width: 100%; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
+  "storageKey": "docs-is-mention",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-mention>",
+      "lede": "Input con autocompletado al tipear <code class=\"code\">@</code> (usuario) o <code class=\"code\">#</code> (etiqueta). Popup se posiciona y se navega con flechas + Enter.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"mention-wrap\">\r\n            <label for=\"cmt\" style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)\">Comentario</label>\r\n            <is-mention id=\"cmt\" trigger=\"@#\" placeholder=\"Escribe @ o # para autocompletar…\">\r\n              <script type=\"application/json\">\r\n                {\r\n                  \"@\": [\"Ana Ramírez\", \"Pedro Castaño\", \"Sofía Velez\", \"Jorge Arias\", \"Lina Mora\", \"Camilo Pérez\", \"Valentina López\"],\r\n                  \"#\": [\"urgente\", \"bug\", \"idea\", \"blocked\", \"wip\", \"ready-to-ship\", \"tech-debt\"]\r\n                }\r\n              </script>\r\n            </is-mention>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "trigger",
+      "title": "Disparador personalizable",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Limitá los triggers con el atributo <code class=\"code\">trigger</code>.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"mention-wrap\">\r\n            <label style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)\">Solo usuarios</label>\r\n            <is-mention trigger=\"@\" placeholder=\"Tipeá @ para nombrar…\">\r\n              <script type=\"application/json\">\r\n                { \"@\": [\"Ana\", \"Pedro\", \"Sofía\", \"Jorge\", \"Lina\", \"Camilo\"] }\r\n              </script>\r\n            </is-mention>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const m = document.querySelector('is-mention');\r\nm.value;          // string con tokens ya insertos: \"uy @Ana esto es #urgente\"\r\nm.suggestions;    // { \"@\": [...], \"#\": [...] }\r\nm.addEventListener('is-select', e => {\r\n  console.log('elegiste:', e.detail.trigger, e.detail.item, e.detail.range);\r\n});\r\n\r\n// Sugerencias vía propiedad (alternativa al script)\r\nm.suggestions = { '@': persons, '#': tags };\r\n\r\n// Atributos:\r\n// trigger   caracteres que abren el popup (default \"@#\")\r\n// max-items tope del popup (default 8)",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\"></pre>"
+        }
+      ]
+    }
+  ]
+}

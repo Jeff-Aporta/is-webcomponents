@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-date-range-input",
+  "category": "forms",
+  "title": "<is-date-range-input>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-date-range-input de InSoft.",
+  "storageKey": "docs-is-date-range-input",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-date-range-input>",
+      "lede": "Entrada de rango de fechas: una sola caja para inicio y fin.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></is-date-range-input>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></is-date-range-input>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-date-range-input&gt; — Dos campos (inicio y fin) con el calendario de rango en el panel (MUI DateRangePicker). El valor es `inicio/fin`. Atributos: start-label, end-label, hint, name, value, min, max, required, disabled, readonly, clearable, locale, calendars, shortcuts, color, action-bar, placement, close-on-select Events: is-change, is-show, is-hide Methods: show(), hide()",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/date-range-input.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

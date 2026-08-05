@@ -1,0 +1,141 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-sparkline",
+  "category": "data-viz",
+  "title": "Sparkline",
+  "titleHtml": false,
+  "styles": ".spark-row { display: flex; flex-wrap: wrap; gap: 1.25rem 2rem; align-items: center; }\r\n    .spark-metric { display: inline-flex; align-items: baseline; gap: 0.5rem; font-size: 1rem; }\r\n    .spark-metric is-sparkline { width: 5.5em; height: 1.35em; }\r\n    .spark-big is-sparkline { width: 12em; height: 3em; }\r\n    .spark-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }\r\n    .spark-table th, .spark-table td {\r\n      padding: 0.55em 0.75em; border-bottom: 1px solid var(--is-border-soft); text-align: left;\r\n    }\r\n    .spark-table is-sparkline { width: 6em; height: 1.25em; }",
+  "storageKey": "docs-is-sparkline",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Sparkline",
+      "lede": "<code class=\"code\">&lt;is-sparkline&gt;</code>",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Tendencias compactas, del tamaño de una palabra. Encajan en texto o celdas de tabla\r\n          sin robar espacio a un chart completo.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<p class=\"spark-metric\" style=\"margin:0;font-size:1.05rem\">\r\n            Daily Wordle guesses\r\n            <is-sparkline data=\"12 15 11 14 9 10 8 7 9 6\" label=\"Wordle guesses trend\"></is-sparkline>\r\n            are trending down.\r\n          </p>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" style=\"margin-top:0.75rem\">Incluye siempre un <code class=\"code\">label</code> accesible (no se ve, lo lee el screen reader).</p>"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Datos",
+      "lede": "Números separados por espacio o coma (<code class=\"code\">data</code> o <code class=\"code\">values</code>). Mínimo 2.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"spark-row\">\r\n            <span class=\"spark-metric\">Ventas <is-sparkline data=\"3 5 4 8 6 9 7 10\" label=\"Ventas\"></is-sparkline></span>\r\n            <span class=\"spark-metric\">Barras <is-sparkline type=\"bar\" data=\"2 1 3 2 4 1 2\" label=\"Errores\"></is-sparkline></span>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-sparkline data=\"3 5 4 8 6 9 7 10\" label=\"Ventas\"></is-sparkline>\r\n<is-sparkline type=\"bar\" data=\"2 1 3 2 4 1 2\" label=\"Errores\"></is-sparkline>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "appearance",
+      "title": "Appearance",
+      "lede": "<code class=\"code\">solid</code> (default), <code class=\"code\">gradient</code> o <code class=\"code\">line</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"spark-row\">\r\n            <is-sparkline variant=\"solid\" data=\"4 6 5 9 7 11 8 12\" label=\"solid\"></is-sparkline>\r\n            <is-sparkline variant=\"gradient\" data=\"4 6 5 9 7 11 8 12\" label=\"gradient\"></is-sparkline>\r\n            <is-sparkline variant=\"line\" data=\"4 6 5 9 7 11 8 12\" label=\"line\"></is-sparkline>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-sparkline variant=\"solid\" data=\"…\"></is-sparkline>\r\n<is-sparkline variant=\"gradient\" data=\"…\"></is-sparkline>\r\n<is-sparkline variant=\"line\" data=\"…\"></is-sparkline>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "trend",
+      "title": "Trend",
+      "lede": "Color semántico: <code class=\"code\">positive</code> · <code class=\"code\">negative</code> · <code class=\"code\">neutral</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"spark-row\">\r\n            <span class=\"spark-metric\">Revenue +25%\r\n              <is-sparkline trend=\"positive\" data=\"4 5 6 7 8 9 10 12\" label=\"Revenue up\"></is-sparkline>\r\n            </span>\r\n            <span class=\"spark-metric\">Churn −15%\r\n              <is-sparkline trend=\"negative\" data=\"12 11 10 9 8 7 6 5\" label=\"Churn down\"></is-sparkline>\r\n            </span>\r\n            <span class=\"spark-metric\">Users stable\r\n              <is-sparkline trend=\"neutral\" data=\"8 9 8 9 8 9 8 9\" label=\"Users stable\"></is-sparkline>\r\n            </span>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "curve",
+      "title": "Curve",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"spark-row\">\r\n            <is-sparkline curve=\"linear\" data=\"2 8 3 9 4 7\" label=\"linear\"></is-sparkline>\r\n            <is-sparkline curve=\"natural\" data=\"2 8 3 9 4 7\" label=\"natural\"></is-sparkline>\r\n            <is-sparkline curve=\"step\" data=\"2 8 3 9 4 7\" label=\"step\"></is-sparkline>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-sparkline curve=\"linear|natural|step\" data=\"…\"></is-sparkline>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "tables",
+      "title": "En tablas",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<table class=\"spark-table\">\r\n            <thead><tr><th>Metric</th><th>Trend</th><th>Change</th></tr></thead>\r\n            <tbody>\r\n              <tr>\r\n                <td>Page Views</td>\r\n                <td><is-sparkline trend=\"positive\" data=\"10 12 11 15 18 20 22\" label=\"Page views\"></is-sparkline></td>\r\n                <td>+31%</td>\r\n              </tr>\r\n              <tr>\r\n                <td>Bounce Rate</td>\r\n                <td><is-sparkline trend=\"negative\" data=\"40 42 45 44 48 50 52\" label=\"Bounce rate\"></is-sparkline></td>\r\n                <td>+8%</td>\r\n              </tr>\r\n              <tr>\r\n                <td>Avg. Session</td>\r\n                <td><is-sparkline trend=\"neutral\" data=\"3.2 3.1 3.3 3.2 3.2 3.1 3.2\" label=\"Avg session\"></is-sparkline></td>\r\n                <td>0%</td>\r\n              </tr>\r\n            </tbody>\r\n          </table>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>data</code> / <code>values</code>",
+              "Números separados por espacio/coma"
+            ],
+            [
+              "<code>type</code>",
+              "line (default) · bar"
+            ],
+            [
+              "<code>appearance</code>",
+              "solid · gradient · line"
+            ],
+            [
+              "<code>curve</code>",
+              "linear · natural · step"
+            ],
+            [
+              "<code>trend</code>",
+              "positive · negative · neutral"
+            ],
+            [
+              "<code>label</code>",
+              "a11y (obligatorio en demos)"
+            ],
+            [
+              "<code>--fill-color-1</code> / <code>--line-color</code> / <code>--line-width</code>",
+              "CSS"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

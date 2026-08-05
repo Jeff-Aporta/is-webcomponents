@@ -1,0 +1,33 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-modal-verificacion",
+  "category": "isp",
+  "title": "<is-modal-verificacion>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-modal-verificacion de InSoft.",
+  "storageKey": "docs-is-modal-verificacion",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-modal-verificacion>",
+      "lede": "Al abrirse ejecuta <code class=\"code\">controller.actVerificar(record)</code>\r\n          y pinta los mensajes devueltos coloreados por severidad, con contadores\r\n          de infos, warnings y errores.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"mvBtn\" color=\"brand\">\r\n            <is-icon slot=\"start\" icon=\"mdi:check\"></is-icon>\r\n            Verificar tercero\r\n          </is-button>\r\n          <is-modal-verificacion id=\"mvDemo\" entity=\"tercero\"></is-modal-verificacion>"
+        },
+        {
+          "kind": "code",
+          "code": "const modal = document.querySelector('is-modal-verificacion');\r\nmodal.controller = {\r\n  entrie: 'tercero',\r\n  async actVerificar(record) {\r\n    return { mensajes: [\r\n      { itdmensaje: 'info', mensaje: 'NIT válido.' },\r\n      { itdmensaje: 'warning', mensaje: 'Sin correo registrado.' },\r\n    ] };\r\n  },\r\n};\r\nmodal.record = { nit: '900123456' };\r\nmodal.show();",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API rápida",
+      "lede": "Propiedades JS: <code class=\"code\">controller</code>, <code class=\"code\">record</code>,\r\n          <code class=\"code\">onError</code>. Métodos: <code class=\"code\">show()</code>,\r\n          <code class=\"code\">hide()</code>, <code class=\"code\">verify()</code>.",
+      "blocks": []
+    }
+  ]
+}

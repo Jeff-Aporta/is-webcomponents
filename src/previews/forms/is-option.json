@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-option",
+  "category": "forms",
+  "title": "<is-option>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-option de InSoft.",
+  "storageKey": "docs-is-option",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-option>",
+      "lede": "Opción de un <code class=\"code\">&lt;is-combobox&gt;</code> o <code class=\"code\">&lt;is-select&gt;</code>. El <code class=\"code\">value</code> es lo que expone el control; el contenido es lo que ve el usuario.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"mde\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"brr\" disabled>Barranquilla (sin cobertura)</is-option>\r\n          </is-combobox>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\r\n  <is-option value=\"bog\">Bogotá</is-option>\r\n  <is-option value=\"mde\">Medellín</is-option>\r\n  <is-option value=\"cal\">Cali</is-option>\r\n  <is-option value=\"brr\" disabled>Barranquilla (sin cobertura)</is-option>\r\n</is-combobox>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-option&gt; — Opción para is-combobox / is-select (listboxes). Atributos: value, disabled, selected, group Slots: default (etiqueta), start (icono/avatar), description (texto secundario) Parts: base, start, label, description",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/option.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

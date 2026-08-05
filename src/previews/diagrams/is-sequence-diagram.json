@@ -1,0 +1,240 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-sequence-diagram",
+  "category": "diagrams",
+  "title": "<is-sequence-diagram>",
+  "titleHtml": true,
+  "storageKey": "docs-is-sequence-diagram",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-sequence-diagram>",
+      "lede": "Diagrama de secuencia en SVG, sin Mermaid. La configuración es un JSON\r\n          con actores, mensajes y grupos; el layout (posiciones, ruteo ortogonal\r\n          de las flechas y colocación de etiquetas) se calcula solo.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Haz clic en el diagrama para abrir el visor a pantalla completa, con\r\n          controles de la animación tortuga, tooltips por paso y leyenda de\r\n          grupos que puedes encender y apagar.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              { \"preset\": \"tk1437191\" }\r\n            </script>\r\n          </is-sequence-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "json",
+      "title": "json",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Configuración por JSON</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Mismo esquema del proyecto original. <code class=\"code\">actors</code> define\r\n          las lifelines, <code class=\"code\">messages</code> los pasos y\r\n          <code class=\"code\">groups</code> el color por tono HSL (0–360).\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"sequence\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"subtitle\": \"emisión · validación DIAN · acuse\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },\r\n                    { \"id\": \"g-dian\", \"name\": \"Validación DIAN\", \"hue\": 199 },\r\n                    { \"id\": \"g-acuse\", \"name\": \"Acuse\", \"hue\": 38 }\r\n                  ],\r\n                  \"actors\": [\r\n                    { \"id\": \"E\", \"label\": \"{{iconify: {icon: \\\"mdi:store\\\", hue: 239}}} Empresa\", \"kind\": \"actor\" },\r\n                    { \"id\": \"C\", \"label\": \"{{iconify: {icon: \\\"mdi:file-document-outline\\\", hue: 199}}} ContaPyme\", \"kind\": \"participant\" },\r\n                    { \"id\": \"D\", \"label\": \"{{iconify: {icon: \\\"mdi:bank-outline\\\", hue: 38}}} DIAN\", \"kind\": \"participant\" }\r\n                  ],\r\n                  \"messages\": [\r\n                    { \"id\": \"s1\", \"group\": \"g-emision\", \"from\": \"E\", \"to\": \"C\", \"label\": \"Registra la venta\", \"step\": 1,\r\n                      \"log\": \"La empresa registra la venta\", \"desc\": \"El documento se arma con los datos del tercero y los ítems facturados.\" },\r\n                    { \"id\": \"s2\", \"group\": \"g-emision\", \"from\": \"C\", \"to\": \"C\", \"kind\": \"self\", \"label\": \"Genera XML · firma\", \"step\": 2,\r\n                      \"log\": \"Genera el XML y lo firma\", \"desc\": \"Se construye el **XML UBL** y se aplica la **firma digital** del emisor.\" },\r\n                    { \"id\": \"s3\", \"group\": \"g-dian\", \"from\": \"C\", \"to\": \"D\", \"label\": \"Envía documento\", \"step\": 3,\r\n                      \"log\": \"Envía el documento a la DIAN\" },\r\n                    { \"id\": \"s4\", \"group\": \"g-dian\", \"from\": \"D\", \"to\": \"C\", \"kind\": \"async\", \"label\": \"CUFE · estado\", \"step\": 4,\r\n                      \"log\": \"La DIAN responde con CUFE y estado\" },\r\n                    { \"id\": \"s5\", \"group\": \"g-acuse\", \"from\": \"C\", \"to\": \"E\", \"kind\": \"async\", \"label\": \"Factura validada\", \"step\": 5,\r\n                      \"log\": \"La factura queda validada\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-sequence-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "alt",
+      "title": "alt",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Ramas <code class=\"code\">alt</code></h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<p>\r\n          Con <code class=\"code\">alt.branches</code> el diagrama encierra los pasos\r\n          condicionales en una caja punteada y rotula cada rama.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"sequence\": {\r\n                  \"title\": \"Resolución del modelo por turno\",\r\n                  \"subtitle\": \"Clasificación operativa → MODELO en BD → respuesta final\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-clasif\", \"name\": \"Clasificación\", \"hue\": 215 },\r\n                    { \"id\": \"g-modelo\", \"name\": \"Resolución de modelo\", \"hue\": 210 },\r\n                    { \"id\": \"g-branch1\", \"name\": \"MODELO en fila\", \"hue\": 160 },\r\n                    { \"id\": \"g-branch2\", \"name\": \"Fallback\", \"hue\": 38 },\r\n                    { \"id\": \"g-epilogo\", \"name\": \"Registro\", \"hue\": 280 }\r\n                  ],\r\n                  \"actors\": [\r\n                    { \"id\": \"U\", \"label\": \"Usuario\", \"kind\": \"actor\", \"icon\": \"mdi:account\", \"hue\": 215 },\r\n                    { \"id\": \"P\", \"label\": \"PatyIA\", \"kind\": \"participant\", \"icon\": \"mdi:robot-outline\", \"hue\": 210 },\r\n                    { \"id\": \"O\", \"label\": \"OpenAI\", \"kind\": \"participant\", \"icon\": \"simple-icons:openai\", \"hue\": 160 }\r\n                  ],\r\n                  \"preamble\": [\r\n                    { \"id\": \"m1\", \"from\": \"U\", \"to\": \"P\", \"label\": \"Mensaje del usuario\", \"step\": 1, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m2\", \"from\": \"P\", \"to\": \"O\", \"label\": \"clasificar · PR_TIPO_CONSULTAS · gpt-4.1-nano\", \"step\": 2, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m3\", \"from\": \"O\", \"to\": \"P\", \"label\": \"tipo_consulta (JSON)\", \"kind\": \"async\", \"step\": 3, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m4\", \"from\": \"P\", \"to\": \"P\", \"label\": \"resolverPorTipo · MODELO en BD\", \"kind\": \"self\", \"step\": 4, \"group\": \"g-modelo\" }\r\n                  ],\r\n                  \"alt\": {\r\n                    \"branches\": [\r\n                      { \"condition\": \"MODELO en fila\",\r\n                        \"messages\": [{ \"id\": \"m5\", \"from\": \"P\", \"to\": \"O\", \"label\": \"responses.create(MODELO)\", \"step\": 5, \"group\": \"g-branch1\" }] },\r\n                      { \"condition\": \"fallback system-prompts\",\r\n                        \"messages\": [{ \"id\": \"m6\", \"from\": \"P\", \"to\": \"O\", \"label\": \"responses.create(modeloConversacion)\", \"step\": 6, \"group\": \"g-branch2\" }] }\r\n                    ]\r\n                  },\r\n                  \"epilogue\": [\r\n                    { \"id\": \"m7\", \"from\": \"O\", \"to\": \"P\", \"label\": \"respuesta\", \"kind\": \"async\", \"step\": 7, \"group\": \"g-epilogo\" },\r\n                    { \"id\": \"m8\", \"from\": \"P\", \"to\": \"P\", \"label\": \"log turno · modelo + tokens + costo\", \"kind\": \"self\", \"step\": 8, \"group\": \"g-epilogo\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-sequence-diagram>"
+        }
+      ]
+    },
+    {
+      "id": "viewer",
+      "title": "viewer",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Visor a pantalla completa</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<p>\r\n          El visor se abre solo al hacer clic. También puedes montarlo tú mismo\r\n          con <code class=\"code\">&lt;is-diagram-lightbox&gt;</code> y controlarlo por\r\n          propiedades.\r\n        </p>\r\n        <p>\r\n          <button type=\"button\" id=\"openViewer\" class=\"demo-btn\">Abrir el visor</button>\r\n        </p>\r\n        <is-diagram-lightbox id=\"lb\" kind=\"sequence\"></is-diagram-lightbox>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "api",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Referencia</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Atributos</h4>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Valores",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code class=\"code\">variant</code>",
+              "<code class=\"code\">inline</code> · <code class=\"code\">viewer</code>",
+              "inline (default) es estático y abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación."
+            ],
+            [
+              "<code class=\"code\">open-on-click</code>",
+              "booleano",
+              "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Propiedades</h4>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "Tipo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code class=\"code\">payload</code>",
+              "object",
+              "Configuración JSON. Alternativa al <code class=\"code\">&lt;script type=\"application/json\"&gt;</code>."
+            ],
+            [
+              "<code class=\"code\">spec</code>",
+              "object",
+              "Spec resuelta (solo lectura)."
+            ],
+            [
+              "<code class=\"code\">layout</code>",
+              "object",
+              "Geometría calculada (solo lectura)."
+            ],
+            [
+              "<code class=\"code\">turtle</code>",
+              "object",
+              "API de la animación: play / pause / stop / next / prev."
+            ],
+            [
+              "<code class=\"code\">hiddenGroups</code>",
+              "Set",
+              "Ids de grupos ocultos; al cambiar, el diagrama se re-diseña sin esas aristas."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Eventos</h4>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Nombre",
+            "detail",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code class=\"code\">is-turtle-state</code>",
+              "<code class=\"code\">{playing, idx, total, replay}</code>",
+              "Estado de la animación en cada avance."
+            ],
+            [
+              "<code class=\"code\">is-open-viewer</code>",
+              "<code class=\"code\">{payload}</code>",
+              "Clic en la variante inline. <code class=\"code\">preventDefault()</code> evita que abra su propio visor."
+            ],
+            [
+              "<code class=\"code\">is-toggle-group</code>",
+              "<code class=\"code\">{id}</code>",
+              "Clic en un grupo de la leyenda (solo en viewer)."
+            ],
+            [
+              "<code class=\"code\">is-render</code>",
+              "<code class=\"code\">{layout, svg}</code>",
+              "El SVG terminó de construirse."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Esquema del JSON</h4>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Campo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code class=\"code\">actors[].id / label</code>",
+              "Id referenciado por los mensajes y etiqueta. El label admite <code class=\"code\">{{iconify: {icon, hue}}}</code> al inicio, que se convierte en el avatar."
+            ],
+            [
+              "<code class=\"code\">actors[].kind</code>",
+              "<code class=\"code\">actor</code> o <code class=\"code\">participant</code>."
+            ],
+            [
+              "<code class=\"code\">messages[].from / to</code>",
+              "Ids de actor. Si coinciden, el paso se dibuja como self-loop."
+            ],
+            [
+              "<code class=\"code\">messages[].kind</code>",
+              "<code class=\"code\">sync</code> (default) · <code class=\"code\">async</code> (punteado) · <code class=\"code\">self</code>."
+            ],
+            [
+              "<code class=\"code\">messages[].label</code>",
+              "Título corto visible en el diagrama. Admite markdown inline e iconos."
+            ],
+            [
+              "<code class=\"code\">messages[].log</code>",
+              "Narración corta para el chip de la tortuga (≤70 caracteres visibles)."
+            ],
+            [
+              "<code class=\"code\">messages[].desc</code>",
+              "Descripción extendida para el tooltip. Si falta, usa <code class=\"code\">log</code>."
+            ],
+            [
+              "<code class=\"code\">messages[].group</code>",
+              "Id del grupo; define el color del paso."
+            ],
+            [
+              "<code class=\"code\">groups[].hue</code>",
+              "Tono HSL 0–360."
+            ],
+            [
+              "<code class=\"code\">alt.branches[]</code>",
+              "<code class=\"code\">{condition, messages[]}</code> — pasos condicionales dentro de una caja punteada."
+            ],
+            [
+              "<code class=\"code\">preset</code>",
+              "Spec predefinida: <code class=\"code\">tk1437191</code> o <code class=\"code\">tk1431662</code>. El <code class=\"code\">sequence</code> inline gana sobre el preset."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

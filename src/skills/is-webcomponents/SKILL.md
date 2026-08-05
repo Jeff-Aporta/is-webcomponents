@@ -126,6 +126,12 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/s
 - Asumir submit nativo de `<is-button type="submit">` en forms light-DOM sin el cableado del kit (`requestSubmit`).
 - Usar `is-split-panel` con porcentaje alto como sidebar fijo de app (preferir grid CSS).
 - Buscar fuentes del kit en la raíz del repo (`components/`, `styles/`): viven en **`src/`**.
+- Lógica de preview como string/`eval`: en el kit, `ISComponentPreview.mount()` + registry.
+- Ignorar `tests/` entero en git: los `*.test.mjs` se commitean (solo artefactos en gitignore).
+
+## Kit: carta de leyes
+
+Antes de cambiar el repo del kit, leer la raíz [`LLM.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/LLM.md) (Carta de leyes / DO / DON'T / errores). Guardianes: `node tests/llm-contract.test.mjs` y el resto de `tests/*.test.mjs`.
 
 ## Checklist pre-entrega
 

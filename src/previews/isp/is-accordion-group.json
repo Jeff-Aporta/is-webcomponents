@@ -1,0 +1,54 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-accordion-group",
+  "category": "isp",
+  "title": "<is-accordion-group>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-accordion-group de InSoft.",
+  "storageKey": "docs-is-accordion-group",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-accordion-group>",
+      "lede": "Coordina varios <code class=\"code\">&lt;is-details&gt;</code>: por defecto solo uno\r\n          queda abierto. No reimplementa el disclosure, solo lo orquesta.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-accordion-group id=\"agDemo\">\r\n            <is-details summary=\"Datos básicos\" open>Nombre, documento y régimen.</is-details>\r\n            <is-details summary=\"Contacto\">Teléfono, correo y dirección.</is-details>\r\n            <is-details summary=\"Contabilidad\">Cuentas por defecto y retenciones.</is-details>\r\n          </is-accordion-group>\r\n          <p id=\"agLog\">Abiertos: <code class=\"code\">1</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-accordion-group>\r\n  <is-details summary=\"Datos básicos\" open>…</is-details>\r\n  <is-details summary=\"Contacto\">…</is-details>\r\n</is-accordion-group>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "multiple",
+      "title": "Varios abiertos",
+      "lede": "Con <code class=\"code\">multiple</code> el grupo deja de cerrar los demás.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-accordion-group multiple>\r\n            <is-details summary=\"Primero\" open>Contenido uno.</is-details>\r\n            <is-details summary=\"Segundo\" open>Contenido dos.</is-details>\r\n            <is-details summary=\"Tercero\">Contenido tres.</is-details>\r\n          </is-accordion-group>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-accordion-group multiple>…</is-accordion-group>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "escala",
+      "title": "Escala por contexto",
+      "lede": "Sin atributo <code class=\"code\">size</code>: todo se mide en <code class=\"code\">em</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"font-size: 1.2em\">\r\n            <is-accordion-group>\r\n              <is-details summary=\"Grande\" open>Hereda el font-size del contenedor.</is-details>\r\n              <is-details summary=\"También grande\">Igual.</is-details>\r\n            </is-accordion-group>\r\n          </div>"
+        }
+      ]
+    }
+  ]
+}

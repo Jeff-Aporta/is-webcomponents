@@ -1,0 +1,192 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-popover",
+  "category": "helpers",
+  "title": "<is-popover>",
+  "titleHtml": true,
+  "styles": ".grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }\r\n\r\n    /* ── Diagramas flip / shift ──────────────────────────────────────── */\r\n    .stage {\r\n      position: relative;\r\n      min-height: 14rem;\r\n      padding: 2.5rem 1rem 1rem;\r\n      border-radius: var(--is-radius, 0.5em);\r\n      background:\r\n        repeating-linear-gradient(0deg,\r\n          color-mix(in oklab, var(--is-border, #2a3038) 35%, transparent) 0 1px,\r\n          transparent 1px 32px),\r\n        repeating-linear-gradient(90deg,\r\n          color-mix(in oklab, var(--is-border, #2a3038) 35%, transparent) 0 1px,\r\n          transparent 1px 32px),\r\n        var(--is-bg, #0d1117);\r\n      overflow: hidden;\r\n    }\r\n\r\n    .edge {\r\n      position: absolute; inset: 0;\r\n      border: 2px dashed var(--is-border, #2a3038);\r\n      border-radius: var(--is-radius, 0.5em);\r\n      pointer-events: none;\r\n    }\r\n    .edge.is-top    { border-color: #ff6b6b; }\r\n    .edge.is-bottom { border-color: #51cf66; }\r\n    .edge.is-left   { border-color: #339af0; }\r\n    .edge.is-right  { border-color: #fcc419; }\r\n\r\n    .anchor-mock {\r\n      position: absolute;\r\n      padding: 0.4em 0.7em;\r\n      border-radius: 0.4em;\r\n      background: var(--is-color-brand-500, #339af0);\r\n      color: #fff;\r\n      font-size: 0.85em;\r\n      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);\r\n      cursor: pointer;\r\n      user-select: none;\r\n    }\r\n\r\n    /* El \"ancla\" del caso flip/shift vive en el centro-arriba; los popovers\r\n       de cada demo se renderizan dentro del .stage. Usamos clones forzados. */\r\n    .demo-flip,\r\n    .demo-shift,\r\n    .demo-autosize,\r\n    .demo-trigger {\r\n      padding-block: 0.5rem;\r\n    }\r\n\r\n    .legend {\r\n      display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;\r\n      margin-top: 0.75rem;\r\n      font-size: 0.82em;\r\n      color: var(--is-text-soft, #9aa0a6);\r\n    }\r\n    .legend span { display: inline-flex; align-items: center; gap: 0.4em; }\r\n    .legend i {\r\n      width: 0.85em; height: 0.85em;\r\n      border-radius: 0.2em;\r\n      background: currentColor;\r\n      display: inline-block;\r\n    }\r\n\r\n    .demo-flip .stage .anchor-mock { left: 50%; top: 0.5rem; transform: translateX(-50%); }\r\n    .demo-shift .stage .anchor-mock { left: 50%; top: 0.5rem; transform: translateX(-50%); }\r\n\r\n    .controls {\r\n      display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center;\r\n      margin-top: 0.6rem;\r\n      font-size: 0.85em;\r\n    }\r\n    .controls label { display: inline-flex; align-items: center; gap: 0.3em; }\r\n\r\n    .row-3 {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));\r\n      gap: 0.75rem;\r\n    }\r\n\r\n    .empty-note {\r\n      font-size: 0.85em;\r\n      color: var(--is-text-soft, #9aa0a6);\r\n      margin: 0.4rem 0 0;\r\n    }\r\n\r\n    .controls-popover-target {\r\n      min-height: 2.4em;\r\n      padding: 0.4em 0.7em;\r\n      border: 1px solid var(--is-border, #2a3038);\r\n      border-radius: 0.45em;\r\n      background: var(--is-bg-elev, #1c2128);\r\n      color: var(--is-text, #e6e8eb);\r\n    }\r\n\r\n    .visual-popover {\r\n      position: absolute;\r\n      padding: 0.5em 0.8em;\r\n      border: 1px solid var(--is-border, #2a3038);\r\n      border-radius: 0.45em;\r\n      background: var(--is-bg-elev, #1c2128);\r\n      color: var(--is-text, #e6e8eb);\r\n      font-size: 0.85em;\r\n      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);\r\n      white-space: nowrap;\r\n      pointer-events: none;\r\n      transition: top 200ms ease, left 200ms ease, transform 200ms ease;\r\n    }\r\n    .visual-popover::after {\r\n      content: \"\";\r\n      position: absolute;\r\n      width: 0.5rem; height: 0.5rem;\r\n      background: var(--is-bg-elev, #1c2128);\r\n      border-right: 1px solid var(--is-border, #2a3038);\r\n      border-bottom: 1px solid var(--is-border, #2a3038);\r\n    }\r\n    .visual-popover[data-placement^=\"top\"]::after {\r\n      bottom: -0.25rem; left: 50%; transform: translateX(-50%) rotate(45deg);\r\n    }\r\n    .visual-popover[data-placement^=\"bottom\"]::after {\r\n      top: -0.25rem; left: 50%; transform: translateX(-50%) rotate(225deg);\r\n    }\r\n    .visual-popover[data-placement^=\"left\"]::after {\r\n      right: -0.25rem; top: 50%; transform: translateY(-50%) rotate(135deg);\r\n    }\r\n    .visual-popover[data-placement^=\"right\"]::after {\r\n      left: -0.25rem; top: 50%; transform: translateY(-50%) rotate(315deg);\r\n    }\r\n    .visual-popover[data-placement$=\"-start\"]::after { left: 1rem; transform: translateX(0) rotate(45deg); }\r\n    .visual-popover[data-placement$=\"-end\"]::after   { left: auto; right: 1rem; transform: translateX(0) rotate(45deg); }",
+  "storageKey": "docs-is-popover",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-popover>",
+      "lede": "Panel flotante con contenido interactivo. Ancla con <code class=\"code\">for</code>.\r\n          Cierra con Escape, click fuera o <code class=\"code\">data-popover=\"close\"</code>.\r\n          El posicionamiento (flip, shift, auto-size, arrow) lo hace un\r\n          <code class=\"code\">&lt;is-floating&gt;</code> interno — el wrapper sólo\r\n          aporta ancla declarativa, ciclo de vida y accesibilidad.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"pop1\">Show popover</is-button>\r\n          <is-popover for=\"pop1\">\r\n            <div class=\"stack\">\r\n              <p style=\"margin:0\">This popover contains interactive content.</p>\r\n              <is-button color=\"brand\" data-popover=\"close\">Take Action</is-button>\r\n            </div>\r\n          </is-popover>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-button id=\"pop1\">Show popover</is-button>\r\n<is-popover for=\"pop1\">\r\n  …contenido…\r\n  <is-button data-popover=\"close\">Dismiss</is-button>\r\n</is-popover>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "placement",
+      "title": "Placement",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"empty-note\">\r\n          Los 12 placements disponibles: <code>top</code>/<code>bottom</code>/<code>left</code>/<code>right</code> ± <code>start</code>/<code>end</code>.\r\n          La flecha apunta siempre al ancla y se reposiciona al cambiar el contenido.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-button id=\"p-top\">Top</is-button>\r\n          <is-popover for=\"p-top\" placement=\"top\">I'm on the top</is-popover>\r\n          <is-button id=\"p-bottom\">Bottom</is-button>\r\n          <is-popover for=\"p-bottom\" placement=\"bottom\">I'm on the bottom</is-popover>\r\n          <is-button id=\"p-left\">Left</is-button>\r\n          <is-popover for=\"p-left\" placement=\"left\">I'm on the left</is-popover>\r\n          <is-button id=\"p-right\">Right</is-button>\r\n          <is-popover for=\"p-right\" placement=\"right\">I'm on the right</is-popover>"
+        }
+      ]
+    },
+    {
+      "id": "flip",
+      "title": "flip",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"empty-note\">\r\n          <code>flip</code> invierte el lado del placement cuando el panel\r\n          se sale del viewport. Útil cuando el ancla está pegada a un borde.\r\n          Tienes dos demos: con el ancla en el <strong>top</strong> y la\r\n          página <strong>scrolleada</strong>, el popover flipea abajo; con\r\n          el ancla <strong>en el bottom</strong>, flipea arriba.\r\n        </p>\r\n        <div class=\"row-3 demo-flip\">\r\n          <div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3 class=\"demo__title\">Top → Bottom al hacer scroll</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"stage\" style=\"height: 11rem; overflow: hidden; padding-top: 0.4rem;\">\r\n              <p style=\"margin: 0; font-size: 0.78em; color: var(--is-text-soft, #9aa0a6);\">\r\n                ↑ Sin espacio arriba (recortado). Con <code>flip</code> el panel cae abajo.\r\n              </p>\r\n              <button class=\"anchor-mock\" id=\"anchor-flip-top\" style=\"position: absolute; left: 50%; top: 1.7rem; transform: translateX(-50%);\">\r\n                Top anchor\r\n              </button>\r\n              <is-popover for=\"anchor-flip-top\" placement=\"top\" flip>\r\n                <p style=\"margin:0\">Flip: estoy abajo porque arriba no cabía.</p>\r\n              </is-popover>\r\n            </div>\r\n          </div>\r\n\r\n          <div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3 class=\"demo__title\">Bottom → Top en borde inferior</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"stage\" style=\"height: 11rem; display:flex; align-items:flex-end; justify-content:center; padding-bottom: 0.5rem;\">\r\n              <button class=\"anchor-mock\" id=\"anchor-flip-bottom\">Bottom anchor</button>\r\n              <is-popover for=\"anchor-flip-bottom\" placement=\"bottom\" flip>\r\n                <p style=\"margin:0\">Si me ves arriba, <code>flip</code> funcionó.</p>\r\n              </is-popover>\r\n            </div>\r\n          </div>\r\n\r\n          <div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3 class=\"demo__title\">Sin flip (queda recortado)</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"stage\" style=\"height: 11rem; display:flex; align-items:flex-end; justify-content:center; padding-bottom: 0.5rem;\">\r\n              <button class=\"anchor-mock\" id=\"anchor-noflip\">Bottom anchor</button>\r\n              <is-popover for=\"anchor-noflip\" placement=\"bottom\">\r\n                <p style=\"margin:0\">No hay flip: me recorto.</p>\r\n              </is-popover>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <p class=\"empty-note\">\r\n          Configuración avanzada: <code>flip-fallback-placements</code> (orden\r\n          explícito), <code>flip-fallback-strategy</code> (<code>best-fit</code> |\r\n          <code>initial</code>) y <code>flip-padding</code> (mínimo al borde).\r\n        </p>"
+        }
+      ]
+    },
+    {
+      "id": "shift",
+      "title": "shift",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"empty-note\">\r\n          <code>shift</code> desliza el panel en el eje perpendicular a la\r\n          flecha para mantenerlo dentro del viewport. La flecha se desplaza\r\n          con él para seguir apuntando al ancla.\r\n        </p>\r\n        <div class=\"row-3 demo-shift\">\r\n          <div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3 class=\"demo__title\">Shift ON</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"stage\" style=\"height: 9rem; position: relative; padding-top: 2.4rem;\">\r\n              <button class=\"anchor-mock\" id=\"anchor-shift-on\" style=\"left: 8% !important;\">Izquierda</button>\r\n              <is-popover for=\"anchor-shift-on\" placement=\"bottom-start\" shift>\r\n                <p style=\"margin:0\">Me desplazo a la derecha para caber.</p>\r\n              </is-popover>\r\n            </div>\r\n          </div>\r\n\r\n          <div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3 class=\"demo__title\">Shift OFF (queda recortado)</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"stage\" style=\"height: 9rem; position: relative; padding-top: 2.4rem;\">\r\n              <button class=\"anchor-mock\" id=\"anchor-shift-off\" style=\"left: 8% !important;\">Izquierda</button>\r\n              <is-popover for=\"anchor-shift-off\" placement=\"bottom-start\">\r\n                <p style=\"margin:0\">Sin shift, me salgo por la izquierda.</p>\r\n              </is-popover>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <p class=\"empty-note\">\r\n          Ajusta el margen mínimo con <code>shift-padding</code>.\r\n        </p>"
+        }
+      ]
+    },
+    {
+      "id": "autosize",
+      "title": "auto-size",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"empty-note\">\r\n          <code>auto-size</code> recorta el popup al espacio disponible en\r\n          el viewport cuando el contenido es más grande que el área útil.\r\n        </p>\r\n        <div class=\"row-3 demo-autosize\">\r\n          <div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3 class=\"demo__title\">auto-size=\"both\"</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"stage\" style=\"height: 8rem; display:flex; align-items:flex-end; justify-content:center; padding-bottom: 0.5rem;\">\r\n              <button class=\"anchor-mock\" id=\"anchor-as-both\">Bottom</button>\r\n              <is-popover for=\"anchor-as-both\" placement=\"bottom\" auto-size=\"both\" style=\"--max-width: 60rem;\">\r\n                <div style=\"height: 30rem; width: 30rem; padding: 1rem;\">\r\n                  Contenido enorme (30×30rem). Con <code>auto-size=\"both\"</code>\r\n                  el panel se adapta al viewport y aparece scroll interno.\r\n                </div>\r\n              </is-popover>\r\n            </div>\r\n          </div>\r\n\r\n          <div>"
+        },
+        {
+          "kind": "html",
+          "html": "<h3 class=\"demo__title\">auto-size=\"vertical\"</h3>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"stage\" style=\"height: 8rem; display:flex; align-items:flex-end; justify-content:center; padding-bottom: 0.5rem;\">\r\n              <button class=\"anchor-mock\" id=\"anchor-as-v\">Bottom</button>\r\n              <is-popover for=\"anchor-as-v\" placement=\"bottom\" auto-size=\"vertical\" style=\"--max-width: 60rem;\">\r\n                <div style=\"height: 30rem; padding: 1rem;\">\r\n                  Mismo contenido, ahora <code>auto-size=\"vertical\"</code>:\r\n                  recorto alto, dejo ancho libre.\r\n                </div>\r\n              </is-popover>\r\n            </div>\r\n          </div>\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "trigger",
+      "title": "trigger manual / click",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"empty-note\">\r\n          Por defecto <code>&lt;is-popover&gt;</code> se abre/cierra con click\r\n          en el ancla y se cierra con Escape / click fuera. Si prefieres\r\n          controlarlo por código, lanza <code>show()</code> / <code>hide()</code>\r\n          o establece <code>open</code> programáticamente.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<button id=\"t-manual\" class=\"controls-popover-target\">Abrir / cerrar programáticamente</button>\r\n          <is-popover id=\"po-manual\" for=\"t-manual\">\r\n            <p style=\"margin:0 0 0.5em\">Pulsa el ancla o el botón externo.</p>\r\n            <is-button data-popover=\"close\" color=\"brand\">Cerrar</is-button>\r\n          </is-popover>\r\n\r\n          <is-button id=\"t-default\">Trigger por defecto (click en ancla)</is-button>\r\n          <is-popover for=\"t-default\" placement=\"bottom-end\">\r\n            <p style=\"margin:0\">Click en el ancla para alternar.</p>\r\n          </is-popover>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>for</code> <code>open</code> <code>anchor</code>",
+              "ancla + estado (anchor acepta Element, string id o VirtualElement)"
+            ],
+            [
+              "<code>placement</code> <code>distance</code> <code>skidding</code>",
+              "posicionamiento"
+            ],
+            [
+              "<code>flip</code> <code>shift</code> <code>arrow</code>",
+              "boolean — modifican el cálculo de coordenadas"
+            ],
+            [
+              "<code>strategy</code> <code>boundary</code>",
+              "<code>absolute|fixed</code> · <code>viewport|scroll</code>"
+            ],
+            [
+              "<code>auto-size</code> <code>*-padding</code> <code>flip-fallback-*</code>",
+              "recorte y fallbacks"
+            ],
+            [
+              "<code>without-arrow</code>",
+              "oculta la flecha"
+            ],
+            [
+              "<code>show()</code> <code>hide()</code> <code>reposition()</code>",
+              "métodos imperativos"
+            ],
+            [
+              "events",
+              "is-show / is-hide (cancelables) + after-* · is-reposition { placement, x, y }"
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"empty-note\">\r\n          El tag <code>&lt;is-popup&gt;</code> fue eliminado. Usa siempre\r\n          <code>&lt;is-popover&gt;</code>. El posicionamiento interno usa\r\n          <code>&lt;is-floating&gt;</code> (no es API pública).\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

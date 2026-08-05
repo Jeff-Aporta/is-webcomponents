@@ -1,0 +1,261 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-card",
+  "category": "layout",
+  "title": "<is-card>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-card de InSoft.",
+  "storageKey": "docs-is-card",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-card>",
+      "lede": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones. JavaScript nativo, Shadow DOM, sin frameworks.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-card>Hola mundo</is-card>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-card></span>Hola mundo<span class=\"tag\"></is-card></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "appearances",
+      "title": "Apariencias",
+      "lede": "El atributo <code class=\"code\">appearance</code> define el tratamiento visual.\r\n          Default: <code class=\"code\">outlined</code>.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"card-grid\">\r\n          <is-card variant=\"outlined\">\r\n            <strong>outlined</strong>\r\n            <p class=\"card-meta\">Borde 1px, fondo transparente.</p>\r\n          </is-card>\r\n          <is-card variant=\"filled\">\r\n            <strong>filled</strong>\r\n            <p class=\"card-meta\">Fondo elevado, sin borde.</p>\r\n          </is-card>\r\n          <is-card variant=\"filled-outlined\">\r\n            <strong>filled-outlined</strong>\r\n            <p class=\"card-meta\">Fondo + borde.</p>\r\n          </is-card>\r\n          <is-card variant=\"plain\">\r\n            <strong>plain</strong>\r\n            <p class=\"card-meta\">Sin fondo ni borde, solo espaciado.</p>\r\n          </is-card>\r\n          <is-card variant=\"accent\">\r\n            <strong>accent</strong>\r\n            <p class=\"card-meta\">Borde lateral de color de marca.</p>\r\n          </is-card>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-card</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"accent\"</span><span class=\"tag\">></span>...<span class=\"tag\"></is-card></span>\r\n<span class=\"tag\"><is-card</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"filled-outlined\"</span><span class=\"tag\">></span>...<span class=\"tag\"></is-card></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "vertical-full",
+      "title": "Vertical con header, media y footer",
+      "lede": "Composición vertical completa. El slot <code class=\"code\">media</code> va arriba,\r\n          <code class=\"code\">header</code> debajo, <code class=\"code\">body</code> en el centro y\r\n          <code class=\"code\">footer</code> al final.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"card-stage-h\">\r\n          <is-card style=\"max-width: 360px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <div class=\"card-demo-img\" role=\"img\" aria-label=\"Mockup\"></div>\r\n            </div>\r\n            <div slot=\"header\"><strong>Notificación importante</strong></div>\r\n            <p>Hemos detectado actividad inusual en tu cuenta. Revisa los detalles y confirma si fuiste tú.</p>\r\n            <div slot=\"footer\" class=\"card-row-actions\">\r\n              <is-button color=\"neutral\" variant=\"plain\">Más tarde</is-button>\r\n              <is-button color=\"brand\">Revisar</is-button>\r\n            </div>\r\n          </is-card>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-card</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"media\"</span><span class=\"tag\">></span><span class=\"tag\"><img</span> <span class=\"attr\">src</span>=<span class=\"val\">\"...\"</span> <span class=\"attr\">alt</span>=<span class=\"val\">\"...\"</span><span class=\"tag\">/></span><span class=\"tag\"></div></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"header\"</span><span class=\"tag\">></span>Título<span class=\"tag\"></div></span>\r\n  Contenido del body.\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button></span>Cancelar<span class=\"tag\"></is-button></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Aceptar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-card></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "horizontal",
+      "title": "Horizontal",
+      "lede": "Con <code class=\"code\">orientation=\"horizontal\"</code> el card se vuelve una fila:\r\n          <code class=\"code\">media</code> a la izquierda, <code class=\"code\">body</code> crece, <code class=\"code\">actions</code> a la derecha.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"card-stage-h\">\r\n          <is-card orientation=\"horizontal\" style=\"max-width: 560px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <is-icon icon=\"mdi:bell-ring-outline\" style=\"font-size: 2.4rem; color: var(--is-accent);\"></is-icon>\r\n            </div>\r\n            <div>\r\n              <strong>Nueva mención</strong>\r\n              <p class=\"card-meta\">Te han mencionado en <code>#general</code> hace 3 min.</p>\r\n            </div>\r\n            <div slot=\"actions\" class=\"card-row-actions\">\r\n              <is-button color=\"neutral\" variant=\"outlined\">Ignorar</is-button>\r\n              <is-button color=\"brand\">Ver</is-button>\r\n            </div>\r\n          </is-card>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-card</span> <span class=\"attr\">orientation</span>=<span class=\"val\">\"horizontal\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"media\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:bell\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  <span class=\"tag\"><strong</span><span class=\"tag\">></span>Nueva mención<span class=\"tag\"></strong></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"actions\"</span><span class=\"tag\">></span><span class=\"tag\"><is-button></span>Ver<span class=\"tag\"></is-button></span><span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-card></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "header-footer-actions",
+      "title": "Header / footer con acciones",
+      "lede": "Slots <code class=\"code\">header-actions</code> y <code class=\"code\">footer-actions</code>\r\n          reservan un extremo del header/footer para botones o iconos.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"card-stage-h\">\r\n          <is-card style=\"max-width: 420px; width: 100%;\">\r\n            <div slot=\"header\"><strong>Proyecto InSoft</strong></div>\r\n            <div slot=\"header-actions\">\r\n              <is-button color=\"neutral\" variant=\"plain\" pill title=\"Más opciones\">\r\n                <is-icon icon=\"mdi:dots-horizontal\"></is-icon>\r\n              </is-button>\r\n            </div>\r\n            <p>Repositorio privado con 3 issues abiertos y 12 PRs en revisión.</p>\r\n            <div slot=\"footer\" class=\"card-meta\">Actualizado hace 2 horas</div>\r\n            <div slot=\"footer-actions\">\r\n              <is-button color=\"brand\" variant=\"outlined\">Ver repo</is-button>\r\n            </div>\r\n          </is-card>\r\n        </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-card></span>\r\n  <span class=\"tag\"><strong</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"header\"</span><span class=\"tag\">></span>Título<span class=\"tag\"></strong></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"header-actions\"</span><span class=\"tag\">></span>...<span class=\"tag\"></is-button></span>\r\n  Contenido.\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>Meta<span class=\"tag\"></span></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer-actions\"</span><span class=\"tag\">></span>CTA<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></is-card></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "methods",
+      "title": "API JavaScript",
+      "lede": "Como cualquier custom element, accedes con <code class=\"code\">document.querySelector('is-card')</code>.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Propiedad",
+            "Tipo",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>appearance</code>",
+              "accent · filled · outlined · filled-outlined · plain",
+              "Tratamiento visual (atributo reflected)."
+            ],
+            [
+              "<code>orientation</code>",
+              "horizontal · vertical",
+              "Layout del card (atributo reflected)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h4>Demo en vivo</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">cambia propiedades</span>\r\n          <is-card id=\"apiCard\" variant=\"outlined\">\r\n            <strong id=\"apiLabel\">Hola</strong>\r\n            <p class=\"card-meta\">Cambia appearance / orientation desde los botones.</p>\r\n          </is-card>\r\n          <div class=\"demo-row\" style=\"margin-top: 12px; flex-wrap: wrap;\">\r\n            <is-button id=\"apiOutlined\"  color=\"neutral\" variant=\"outlined\">outlined</is-button>\r\n            <is-button id=\"apiFilled\"    color=\"neutral\" variant=\"outlined\">filled</is-button>\r\n            <is-button id=\"apiFilledOut\"  color=\"neutral\" variant=\"outlined\">filled-outlined</is-button>\r\n            <is-button id=\"apiAccent\"     color=\"neutral\" variant=\"outlined\">accent</is-button>\r\n            <is-button id=\"apiPlain\"      color=\"neutral\" variant=\"outlined\">plain</is-button>\r\n            <is-button id=\"apiOrient\"     color=\"brand\" variant=\"outlined\">toggle orientation</is-button>\r\n          </div>\r\n          <div class=\"log\" id=\"apiLog\" aria-live=\"polite\" style=\"margin-top: 12px;\">\r\n            <div class=\"row hint\">El log aparece al cambiar appearance u orientation.</div>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"kw\">const</span> c = document.<span class=\"attr\">querySelector</span>(<span class=\"str\">'is-card'</span>);\r\nc.<span class=\"attr\">variant</span> = <span class=\"str\">'filled'</span>;\r\nc.<span class=\"attr\">orientation</span> = <span class=\"str\">'horizontal'</span>;\r\nc.<span class=\"attr\">addEventListener</span>(<span class=\"str\">'slotchange'</span>, e => <span class=\"kw\">this</span>.log(e));",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos / propiedades</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>appearance</code>",
+              "accent · filled · outlined · filled-outlined · plain",
+              "outlined",
+              "Tratamiento visual. Reflected."
+            ],
+            [
+              "<code>orientation</code>",
+              "horizontal · vertical",
+              "vertical",
+              "Layout. Reflected."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Cuerpo principal (body, siempre presente)."
+            ],
+            [
+              "<code>media</code>",
+              "Sección de medios. Vertical: arriba. Horizontal: izquierda."
+            ],
+            [
+              "<code>header</code>",
+              "Encabezado (solo vertical)."
+            ],
+            [
+              "<code>footer</code>",
+              "Pie (solo vertical)."
+            ],
+            [
+              "<code>actions</code>",
+              "Acciones (solo horizontal, extremo derecho)."
+            ],
+            [
+              "<code>header-actions</code>",
+              "Acciones dentro del header (solo vertical)."
+            ],
+            [
+              "<code>footer-actions</code>",
+              "Acciones dentro del footer (solo vertical)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(media)</code>",
+              "Contenedor del slot <code>media</code>."
+            ],
+            [
+              "<code>::part(header)</code>",
+              "Contenedor del slot <code>header</code>."
+            ],
+            [
+              "<code>::part(body)</code>",
+              "Contenedor del slot por defecto."
+            ],
+            [
+              "<code>::part(footer)</code>",
+              "Contenedor del slot <code>footer</code>."
+            ],
+            [
+              "<code>::part(actions)</code>",
+              "Contenedor del slot <code>actions</code>."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS custom properties</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Variable",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>--spacing</code>",
+              "<code>var(--is-space-l, 1rem)</code>",
+              "Padding y gap entre secciones."
+            ]
+          ]
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>Nota:</strong> AppWebcomponents no hace SSR; la detección de slots\r\n          vacíos se hace en cliente vía <code>slotchange</code>."
+        }
+      ]
+    }
+  ]
+}

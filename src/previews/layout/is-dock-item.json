@@ -1,0 +1,39 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-dock-item",
+  "category": "layout",
+  "title": "<is-dock-item>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-dock-item de InSoft.",
+  "styles": ".dock-stage { position:relative; transform:translateZ(0); height:200px;\r\n      border:1px dashed var(--is-border); border-radius:.6rem; }",
+  "storageKey": "docs-is-dock-item",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-dock-item>",
+      "lede": "Icono de un <code class=\"code\">&lt;is-dock&gt;</code>, con su etiqueta y estado activo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"dock-stage\">\r\n            <is-dock>\r\n              <is-dock-item icon=\"mdi:home\" label=\"Inicio\" active></is-dock-item>\r\n              <is-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></is-dock-item>\r\n              <is-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></is-dock-item>\r\n            </is-dock>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<div class=\"dock-stage\">\r\n  <is-dock>\r\n    <is-dock-item icon=\"mdi:home\" label=\"Inicio\" active></is-dock-item>\r\n    <is-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></is-dock-item>\r\n    <is-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></is-dock-item>\r\n  </is-dock>\r\n</div>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-dock&gt; — Barra tipo macOS. Los hijos se redimensionan al pasar el puntero cerca, simulando la lupa del Dock. &lt;is-dock&gt; &lt;is-dock-item label=\"Inicio\"     icon=\"mdi:home\"&gt;&lt;/is-dock-item&gt; &lt;is-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"&gt;&lt;/is-dock-item&gt; ... &lt;/is-dock&gt; Atributos position    bottom (default) | top | left | right max-scale   factor máximo de magnificación (default 1.6) range       píxeles: la magnificación cae a 0 a esta distancia del item bajo el cursor (default 110) Custom states: hovering Eventos: is-select   detail: { item } is-dock-item acepta: icon, label, href, active (booleano, marca el ítem activo)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/layout/dock.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

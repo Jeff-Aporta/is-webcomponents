@@ -1,0 +1,112 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-cdn-snippet",
+  "category": "feedback",
+  "title": "<is-cdn-snippet>",
+  "titleHtml": true,
+  "storageKey": "docs-is-cdn-snippet",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-cdn-snippet>",
+      "lede": "Panel reusablede enlaces CDN para un componente. Pinta 3 filas base\r\n          (individual / categor\\u00eda / bundle global) y, opcionalmente, una fila\r\n          adicional por cada <strong>dependencia externa</strong> que el\r\n          consumidor declare (CodeMirror, librer\\u00edas externas, etc.).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-cdn-snippet tag=\"is-button\" category=\"actions\"></is-cdn-snippet>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-cdn-snippet\r\n  tag=\"is-button\"\r\n  category=\"actions\"\r\n></is-cdn-snippet>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "dependencies",
+      "title": "Dependencias externas",
+      "lede": "Si tu componente necesita otra librer\\u00eda para funcionar (p. ej. CodeMirror para\r\n          el visor de c\\u00f3digo), declara sus enlaces con el slot <code class=\"code\">deps</code>:\r\n          un <code class=\"code\">&lt;script type=\"application/json\"&gt;</code> con un array de\r\n          objetos <code class=\"code\">{name, version?, css?, js?, note?}</code>. El componente\r\n          pinta una fila por cada dep con borde y label distintos, para que se note\r\n          que son REQUISITOS, no opciones del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-cdn-snippet\r\n            tag=\"is-popconfirm\"\r\n            category=\"feedback\"\r\n            title=\"Popconfirm — Consumo por CDN\"\r\n          >\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"CodeMirror\",\r\n                  \"version\": \"5.65.16\",\r\n                  \"css\": \"https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js\",\r\n                  \"note\": \"CodeMirror 5 (no 6) para mantener la API cl\\u00e1sica y el sistema de addons (mode, hint, etc.). Si usas un theme distinto a material-darker, a\\u00f1ade el .css correspondiente antes del script del componente.\"\r\n                }\r\n              ]\r\n            </script>\r\n          </is-cdn-snippet>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-cdn-snippet tag=\"is-popconfirm\" category=\"feedback\">\r\n  <script type=\"application/json\" slot=\"deps\">\r\n    [\r\n      {\r\n        \"name\": \"CodeMirror\",\r\n        \"version\": \"5.65.16\",\r\n        \"css\": \"https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css\",\r\n        \"js\":  \"https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js\",\r\n        \"note\": \"CodeMirror 5 (no 6) para mantener la API cl\\u00e1sica.\"\r\n      }\r\n    ]\r\n  </script>\r\n</is-cdn-snippet>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "deps-attribute",
+      "title": "Dependencias v\\u00eda atributo",
+      "lede": "Si te queda m\\u00e1s c\\u00f3modo, tambi\\u00e9n puedes pasar las deps como atributo\r\n          <code class=\"code\">dependencies</code> con JSON. El slot y el atributo se\r\n          MERGEAN: si pasas ambos, el atributo gana.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-cdn-snippet\r\n            tag=\"is-chart\"\r\n            category=\"data\"\r\n            dependencies='[\r\n              {\"name\":\"Chart.js\",\"version\":\"4.4.0\",\"js\":\"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\",\"note\":\"Necesario si usas &lt;is-chart&gt; con type=&quot;bar&quot; o &quot;line&quot;.\"}\r\n            ]'\r\n          ></is-cdn-snippet>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-cdn-snippet\r\n  tag=\"is-chart\"\r\n  category=\"data\"\r\n  dependencies='[\r\n    { \"name\": \"Chart.js\", \"version\": \"4.4.0\",\r\n      \"js\": \"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\" }\r\n  ]'\r\n></is-cdn-snippet>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "multiple",
+      "title": "M\\u00faltiples dependencias",
+      "lede": "Puedes declarar N deps en el mismo array. El componente las pinta\r\n          todas, en el orden dado, con su propio bloque copiable.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-cdn-snippet tag=\"is-textarea\" category=\"forms\" title=\"Textarea + CodeMirror + tema\">\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"CodeMirror\",\r\n                  \"version\": \"5.65.16\",\r\n                  \"css\": \"https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js\"\r\n                },\r\n                {\r\n                  \"name\": \"CodeMirror theme · material-darker\",\r\n                  \"version\": \"5.65.16\",\r\n                  \"css\": \"https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css\",\r\n                  \"note\": \"Opcional. Define la paleta usada por el theme-toggle del preview.\"\r\n                }\r\n              ]\r\n            </script>\r\n          </is-cdn-snippet>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>tag</code>",
+              "string — p. ej. <code>\"is-button\"</code> (obligatorio para single + category)"
+            ],
+            [
+              "<code>category</code>",
+              "string — p. ej. <code>\"actions\"</code> (categor\\u00eda del manifest)"
+            ],
+            [
+              "<code>base</code>",
+              "string — override del CDN base (default <code>cdn.jsdelivr.net/.../dist/cdn</code>)"
+            ],
+            [
+              "<code>title</code>",
+              "string — t\\u00edtulo del panel (default \"Consumo por CDN\")"
+            ],
+            [
+              "<code>dependencies</code>",
+              "JSON string — array de deps externas (alternativa al slot)"
+            ],
+            [
+              "<code>slot=\"deps\"</code>",
+              "<code>&lt;script type=\"application/json\"&gt;</code> con array de deps"
+            ],
+            [
+              "Dep shape",
+              "<code>{name, version?, css?, js?, note?}</code> &mdash; css y js son opcionales independientes"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

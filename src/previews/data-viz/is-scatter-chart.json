@@ -1,0 +1,127 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-scatter-chart",
+  "category": "data-viz",
+  "title": "Scatter Chart",
+  "titleHtml": false,
+  "styles": ".demo--chart { height: 22rem; display: flex; flex-direction: column; }\r\n    .demo--chart-sm { height: 18rem; }",
+  "storageKey": "docs-is-scatter-chart",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Scatter Chart",
+      "lede": "<code class=\"code\">&lt;is-scatter-chart&gt;</code>",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          Muestra la relación entre dos variables con puntos en una rejilla.\r\n          Ideal para correlaciones, clusters y outliers.\r\n        </p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-scatter-chart open-on-click label=\"Measurements\" x-label=\"Height (cm)\" y-label=\"Weight (kg)\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"datasets\": [{\r\n                    \"label\": \"Measurements\",\r\n                    \"data\": [\r\n                      { \"x\": 158, \"y\": 55 }, { \"x\": 163, \"y\": 62 }, { \"x\": 165, \"y\": 68 },\r\n                      { \"x\": 170, \"y\": 72 }, { \"x\": 173, \"y\": 75 }, { \"x\": 175, \"y\": 80 },\r\n                      { \"x\": 178, \"y\": 78 }, { \"x\": 180, \"y\": 85 }, { \"x\": 183, \"y\": 82 },\r\n                      { \"x\": 188, \"y\": 90 }\r\n                    ]\r\n                  }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-scatter-chart>"
+        },
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\" style=\"margin-top:1rem\">A diferencia de barras/líneas, cada punto es un objeto <code class=\"code\">{ x, y }</code>.</p>"
+        }
+      ]
+    },
+    {
+      "id": "json",
+      "title": "Datos con JSON",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scatter-chart open-on-click label=\"Students\" x-label=\"Hours studied\" y-label=\"Score\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"datasets\": [{\r\n                    \"label\": \"Students\",\r\n                    \"data\": [\r\n                      { \"x\": 2, \"y\": 65 }, { \"x\": 3, \"y\": 72 }, { \"x\": 4, \"y\": 78 },\r\n                      { \"x\": 5, \"y\": 82 }, { \"x\": 6, \"y\": 88 }, { \"x\": 7, \"y\": 85 },\r\n                      { \"x\": 8, \"y\": 92 }, { \"x\": 9, \"y\": 95 }\r\n                    ]\r\n                  }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-scatter-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-scatter-chart label=\"Students\" x-label=\"Hours\" y-label=\"Score\">\r\n  <script type=\"application/json\">\r\n    { \"data\": { \"datasets\": [{ \"label\": \"Students\", \"data\": [{ \"x\": 2, \"y\": 65 }, …] }] } }\r\n  </script>\r\n</is-scatter-chart>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "js",
+      "title": "Datos con JavaScript",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scatter-chart open-on-click id=\"scatterJs\" label=\"Students\" x-label=\"Hours\" y-label=\"Score\"></is-scatter-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "const chart = document.querySelector('#scatterJs');\r\nchart.config = {\r\n  data: {\r\n    datasets: [{\r\n      label: 'Students',\r\n      data: [\r\n        { x: 2, y: 65 }, { x: 3, y: 72 }, { x: 4, y: 78 },\r\n        { x: 5, y: 82 }, { x: 6, y: 88 }, { x: 7, y: 85 },\r\n        { x: 8, y: 92 }, { x: 9, y: 95 },\r\n      ],\r\n    }],\r\n  },\r\n};",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "multi",
+      "title": "Múltiples datasets",
+      "lede": "Compara grupos; cada dataset recibe su color de la serie fija.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scatter-chart open-on-click id=\"scatterMulti\" label=\"Study methods\" x-label=\"Hours\" y-label=\"Score\"></is-scatter-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "datasets: [\r\n  { label: 'Tutored', data: [{ x: 3, y: 78 }, …] },\r\n  { label: 'Self-study', data: [{ x: 3, y: 68 }, …] },\r\n]",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "title": "Grid y ejes",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-scatter-chart open-on-click grid=\"y\" x-label=\"Temp (°F)\" y-label=\"Sales\" label=\"Ice cream\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"datasets\": [{\r\n                    \"label\": \"Ice cream sales\",\r\n                    \"data\": [\r\n                      { \"x\": 68, \"y\": 120 }, { \"x\": 74, \"y\": 175 }, { \"x\": 79, \"y\": 210 },\r\n                      { \"x\": 84, \"y\": 280 }, { \"x\": 89, \"y\": 340 }, { \"x\": 95, \"y\": 410 }\r\n                    ]\r\n                  }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-scatter-chart>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-scatter-chart grid=\"y\" x-label=\"Temp\" y-label=\"Sales\">…</is-scatter-chart>\r\n<is-scatter-chart without-legend without-animation>…</is-scatter-chart>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / prop",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>type</code>",
+              "Fijo <code>scatter</code>"
+            ],
+            [
+              "Puntos",
+              "<code>{ x, y }</code> (opcional: props extra para tooltips)"
+            ],
+            [
+              "<code>x-label</code> / <code>y-label</code> / <code>grid</code>",
+              "Ejes"
+            ],
+            [
+              "<code>config</code>",
+              "Objeto Chart.js"
+            ],
+            [
+              "<code>--fill-color-*</code> / <code>--border-color-*</code> / <code>--point-radius</code>",
+              "Serie fija"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,284 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-button-group",
+  "category": "actions",
+  "title": "<is-button-group>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-button-group de InSoft.",
+  "styles": "\n  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }\n  .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }\n  .field { display: grid; gap: 0.4rem; justify-items: start; }\n  .field > .cap {\n    font-family: \"JetBrains Mono\", var(--is-mono);\n    font-size: 0.7rem;\n    color: var(--is-text-dim);\n  }\n  .native-demo {\n    font: inherit;\n    padding: 0.55em 1em;\n    border: 1px solid var(--is-border);\n    background: var(--is-control-bg);\n    color: var(--is-text);\n    cursor: pointer;\n  }\n",
+  "storageKey": "docs-is-button-group",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-button-group>",
+      "titleHtml": true,
+      "lede": "Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona cuál está activo. Sirve para controles segmentados, toolbars y split buttons.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">appearance=\"segmented\" · select=\"single\" · <code class=\"code\">hue</code> por botón</span>\n                    <is-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n                      <is-button variant=\"plain\" value=\"lista\" hue=\"210\">\n                        <is-icon slot=\"start\" icon=\"mdi:format-list-bulleted\"></is-icon>\n                        Lista\n                      </is-button>\n                      <is-button variant=\"plain\" value=\"tabla\" hue=\"160\">\n                        <is-icon slot=\"start\" icon=\"mdi:table\"></is-icon>\n                        Tabla\n                      </is-button>\n                      <is-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">\n                        <is-icon slot=\"start\" icon=\"mdi:view-grid-outline\"></is-icon>\n                        Tarjetas\n                      </is-button>\n                    </is-button-group>\n                  </div>\n                  <p class=\"lede\" id=\"introLog\">vista: <code class=\"code\">lista</code></p>\n                </div>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>Dale siempre un <code class=\"code\">label</code>.</strong> No se muestra en pantalla, pero los lectores de pantalla lo anuncian."
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n  <is-button variant=\"plain\" value=\"lista\" hue=\"210\">Lista</is-button>\n  <is-button variant=\"plain\" value=\"tabla\" hue=\"160\">Tabla</is-button>\n  <is-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">Tarjetas</is-button>\n</is-button-group>"
+        }
+      ]
+    },
+    {
+      "id": "appearance",
+      "title": "Appearance",
+      "lede": "<code class=\"code\">joined</code> fusiona los bordes en una sola pieza (default), <code class=\"code\">segmented</code> hunde la pista y eleva el segmento activo, y <code class=\"code\">separated</code> deja los botones sueltos con separación.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">joined</span>\n                    <is-button-group label=\"Alineación\" select=\"single\" value=\"Centro\">\n                      <is-button variant=\"outlined\">Izquierda</is-button>\n                      <is-button variant=\"outlined\">Centro</is-button>\n                      <is-button variant=\"outlined\">Derecha</is-button>\n                    </is-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">segmented</span>\n                    <is-button-group label=\"Alineación\" variant=\"segmented\" select=\"single\" value=\"Centro\">\n                      <is-button variant=\"plain\">Izquierda</is-button>\n                      <is-button variant=\"plain\">Centro</is-button>\n                      <is-button variant=\"plain\">Derecha</is-button>\n                    </is-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">separated</span>\n                    <is-button-group label=\"Alineación\" variant=\"separated\" select=\"single\" value=\"Centro\">\n                      <is-button variant=\"outlined\">Izquierda</is-button>\n                      <is-button variant=\"outlined\">Centro</is-button>\n                      <is-button variant=\"outlined\">Derecha</is-button>\n                    </is-button-group>\n                  </div>\n                </div>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-button-group variant=\"segmented\" select=\"single\">…</is-button-group>"
+        }
+      ]
+    },
+    {
+      "id": "orientation",
+      "title": "Orientation",
+      "lede": "Con <code class=\"code\">orientation=\"vertical\"</code> los botones se apilan y los radios se reordenan a los extremos de arriba y abajo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"bar\" style=\"align-items: flex-start;\">\n                  <div class=\"field\">\n                    <span class=\"cap\">joined</span>\n                    <is-button-group orientation=\"vertical\" label=\"Opciones\" select=\"single\" value=\"Medio\">\n                      <is-button variant=\"outlined\">Arriba</is-button>\n                      <is-button variant=\"outlined\">Medio</is-button>\n                      <is-button variant=\"outlined\">Abajo</is-button>\n                    </is-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">segmented</span>\n                    <is-button-group orientation=\"vertical\" variant=\"segmented\" label=\"Opciones\" select=\"single\" value=\"Medio\">\n                      <is-button variant=\"plain\">Arriba</is-button>\n                      <is-button variant=\"plain\">Medio</is-button>\n                      <is-button variant=\"plain\">Abajo</is-button>\n                    </is-button-group>\n                  </div>\n                </div>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-button-group orientation=\"vertical\" label=\"Opciones\">\n  <is-button variant=\"outlined\">Arriba</is-button>\n  …\n</is-button-group>"
+        }
+      ]
+    },
+    {
+      "id": "select",
+      "title": "Selección",
+      "lede": "<code class=\"code\">select=\"single\"</code> se comporta como un grupo de radios; <code class=\"code\">select=\"multiple\"</code> como casillas. Añade <code class=\"code\">allow-empty</code> para poder deseleccionar el activo en modo single. El grupo escribe <code class=\"code\">selected</code> y <code class=\"code\">aria-pressed</code> en cada botón, y emite <code class=\"code\">is-change</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">single</span>\n                    <is-button-group id=\"selSingle\" label=\"Periodo\" variant=\"segmented\" select=\"single\" value=\"mes\">\n                      <is-button variant=\"plain\" value=\"dia\">Día</is-button>\n                      <is-button variant=\"plain\" value=\"semana\">Semana</is-button>\n                      <is-button variant=\"plain\" value=\"mes\">Mes</is-button>\n                      <is-button variant=\"plain\" value=\"anio\">Año</is-button>\n                    </is-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">multiple</span>\n                    <is-button-group id=\"selMulti\" label=\"Formato\" select=\"multiple\" value=\"bold\">\n                      <is-button variant=\"outlined\" value=\"bold\" aria-label=\"Negrita\">\n                        <is-icon icon=\"mdi:format-bold\" label=\"Negrita\"></is-icon>\n                      </is-button>\n                      <is-button variant=\"outlined\" value=\"italic\" aria-label=\"Cursiva\">\n                        <is-icon icon=\"mdi:format-italic\" label=\"Cursiva\"></is-icon>\n                      </is-button>\n                      <is-button variant=\"outlined\" value=\"underline\" aria-label=\"Subrayado\">\n                        <is-icon icon=\"mdi:format-underline\" label=\"Subrayado\"></is-icon>\n                      </is-button>\n                    </is-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">single + allow-empty</span>\n                    <is-button-group id=\"selEmpty\" label=\"Prioridad\" select=\"single\" allow-empty>\n                      <is-button variant=\"outlined\" value=\"baja\">Baja</is-button>\n                      <is-button variant=\"outlined\" value=\"media\">Media</is-button>\n                      <is-button variant=\"outlined\" value=\"alta\">Alta</is-button>\n                    </is-button-group>\n                  </div>\n                  <p class=\"lede\" id=\"selLog\">Sin cambios todavía.</p>\n                </div>"
+        },
+        {
+          "kind": "code",
+          "lang": "javascript",
+          "code": "group.addEventListener('is-change', (e) => {\n  e.detail.value;   // 'mes'  ·  ['bold', 'italic'] en multiple\n  e.detail.values;  // siempre array\n});"
+        }
+      ]
+    },
+    {
+      "id": "modifiers",
+      "title": "Pill y stretch",
+      "lede": "<code class=\"code\">pill</code> redondea los extremos del grupo completo sin tocar cada botón. <code class=\"code\">stretch</code> reparte el ancho disponible en partes iguales.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"stack\" style=\"align-self: stretch;\">\n                  <div class=\"field\">\n                    <span class=\"cap\">pill</span>\n                    <is-button-group label=\"Alineación\" pill select=\"single\" value=\"Centro\">\n                      <is-button variant=\"outlined\">Izquierda</is-button>\n                      <is-button variant=\"outlined\">Centro</is-button>\n                      <is-button variant=\"outlined\">Derecha</is-button>\n                    </is-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">pill + segmented</span>\n                    <is-button-group label=\"Alineación\" pill variant=\"segmented\" select=\"single\" value=\"Centro\">\n                      <is-button variant=\"plain\">Izquierda</is-button>\n                      <is-button variant=\"plain\">Centro</is-button>\n                      <is-button variant=\"plain\">Derecha</is-button>\n                    </is-button-group>\n                  </div>\n                  <div class=\"field\" style=\"justify-items: stretch; width: 100%;\">\n                    <span class=\"cap\">stretch + segmented</span>\n                    <is-button-group label=\"Plan\" stretch variant=\"segmented\" select=\"single\" value=\"pro\">\n                      <is-button variant=\"plain\" value=\"free\">Free</is-button>\n                      <is-button variant=\"plain\" value=\"pro\">Pro</is-button>\n                      <is-button variant=\"plain\" value=\"empresa\">Empresa</is-button>\n                    </is-button-group>\n                  </div>\n                </div>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-button-group pill stretch variant=\"segmented\" select=\"single\">…</is-button-group>"
+        }
+      ]
+    },
+    {
+      "id": "split",
+      "title": "Split button",
+      "lede": "Empareja un botón primario con uno de caret para acciones secundarias. (Con <code class=\"code\">is-dropdown</code>: usa <code class=\"code\">with-caret</code> en el trigger.)",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"bar\">\n                  <is-button-group label=\"Guardar\">\n                    <is-button variant=\"filled\" color=\"brand\">Guardar</is-button>\n                    <is-button variant=\"filled\" color=\"brand\" aria-label=\"Más opciones de guardado\">\n                      <is-icon icon=\"mdi:chevron-down\" label=\"Más opciones de guardado\"></is-icon>\n                    </is-button>\n                  </is-button-group>\n                  <is-button-group label=\"Exportar\" variant=\"joined\">\n                    <is-button variant=\"outlined\">Exportar</is-button>\n                    <is-button variant=\"outlined\" aria-label=\"Formatos de exportación\">\n                      <is-icon icon=\"mdi:chevron-down\" label=\"Formatos de exportación\"></is-icon>\n                    </is-button>\n                  </is-button-group>\n                </div>"
+        }
+      ]
+    },
+    {
+      "id": "toolbar",
+      "title": "Toolbar",
+      "lede": "Varios grupos en una barra: los de acción sin selección y los de estado con <code class=\"code\">select</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"bar\">\n                  <is-button-group label=\"Historial\">\n                    <is-button variant=\"outlined\" aria-label=\"Deshacer\">\n                      <is-icon icon=\"mdi:undo\" label=\"Deshacer\"></is-icon>\n                    </is-button>\n                    <is-button variant=\"outlined\" aria-label=\"Rehacer\">\n                      <is-icon icon=\"mdi:redo\" label=\"Rehacer\"></is-icon>\n                    </is-button>\n                  </is-button-group>\n                  <is-button-group label=\"Formato\" select=\"multiple\">\n                    <is-button variant=\"outlined\" value=\"bold\" aria-label=\"Negrita\">\n                      <is-icon icon=\"mdi:format-bold\" label=\"Negrita\"></is-icon>\n                    </is-button>\n                    <is-button variant=\"outlined\" value=\"italic\" aria-label=\"Cursiva\">\n                      <is-icon icon=\"mdi:format-italic\" label=\"Cursiva\"></is-icon>\n                    </is-button>\n                    <is-button variant=\"outlined\" value=\"underline\" aria-label=\"Subrayado\">\n                      <is-icon icon=\"mdi:format-underline\" label=\"Subrayado\"></is-icon>\n                    </is-button>\n                  </is-button-group>\n                  <is-button-group label=\"Alineación\" select=\"single\" value=\"left\">\n                    <is-button variant=\"outlined\" value=\"left\" aria-label=\"Izquierda\">\n                      <is-icon icon=\"mdi:format-align-left\" label=\"Izquierda\"></is-icon>\n                    </is-button>\n                    <is-button variant=\"outlined\" value=\"center\" aria-label=\"Centro\">\n                      <is-icon icon=\"mdi:format-align-center\" label=\"Centro\"></is-icon>\n                    </is-button>\n                    <is-button variant=\"outlined\" value=\"right\" aria-label=\"Derecha\">\n                      <is-icon icon=\"mdi:format-align-right\" label=\"Derecha\"></is-icon>\n                    </is-button>\n                  </is-button-group>\n                </div>"
+        }
+      ]
+    },
+    {
+      "id": "native",
+      "title": "Botones nativos",
+      "lede": "También funciona con <code class=\"code\">&lt;button&gt;</code> nativos.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"bar\">\n                  <is-button-group label=\"Alineación\">\n                    <button type=\"button\" class=\"native-demo\">Izquierda</button>\n                    <button type=\"button\" class=\"native-demo\">Centro</button>\n                    <button type=\"button\" class=\"native-demo\">Derecha</button>\n                  </is-button-group>\n                </div>"
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "title": "Teclado",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Tecla",
+            "Acción"
+          ],
+          "rows": [
+            [
+              "<code>→</code> <code>↓</code>",
+              "Foco al botón siguiente (envuelve al final)"
+            ],
+            [
+              "<code>←</code> <code>↑</code>",
+              "Foco al botón anterior (envuelve al principio)"
+            ],
+            [
+              "<code>Home</code> <code>End</code>",
+              "Primer / último botón habilitado"
+            ],
+            [
+              "<code>Enter</code> <code>Space</code>",
+              "Activa el botón enfocado (lo aporta el propio botón)"
+            ]
+          ]
+        },
+        {
+          "kind": "lede",
+          "html": "En orientación vertical las flechas verticales son las que navegan; en horizontal, las laterales. Los botones deshabilitados se saltan."
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API live",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "\n                <div class=\"stack\">\n                  <is-button-group id=\"apiGroup\" label=\"Demo\" select=\"single\" value=\"B\">\n                    <is-button variant=\"outlined\">A</is-button>\n                    <is-button variant=\"outlined\">B</is-button>\n                    <is-button variant=\"outlined\">C</is-button>\n                  </is-button-group>\n                  <div class=\"bar\">\n                    <is-button id=\"apiOrient\" variant=\"outlined\">Toggle orientation</is-button>\n                    <is-button id=\"apiAppear\" variant=\"outlined\">Ciclar appearance</is-button>\n                    <is-button id=\"apiPill\" variant=\"outlined\">Toggle pill</is-button>\n                    <is-button id=\"apiValue\" variant=\"outlined\">value = 'C'</is-button>\n                  </div>\n                </div>\n                <div class=\"log\" id=\"apiLog\"><div class=\"row\"><span class=\"hint\">Acciones de API aparecerán aquí.</span></div></div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Attr",
+            "Tipo",
+            "Default",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>label</code>",
+              "string",
+              "''",
+              "Nombre accesible del grupo"
+            ],
+            [
+              "<code>orientation</code>",
+              "horizontal | vertical",
+              "horizontal",
+              "Reflejado"
+            ],
+            [
+              "<code>appearance</code>",
+              "joined | segmented | separated",
+              "joined",
+              "Reflejado"
+            ],
+            [
+              "<code>select</code>",
+              "none | single | multiple",
+              "none",
+              "Activa la gestión de selección"
+            ],
+            [
+              "<code>value</code>",
+              "string",
+              "—",
+              "En <code>multiple</code>, valores separados por coma"
+            ],
+            [
+              "<code>pill</code>",
+              "boolean",
+              "false",
+              "Extremos redondeados en todo el grupo"
+            ],
+            [
+              "<code>stretch</code>",
+              "boolean",
+              "false",
+              "Los botones reparten el ancho"
+            ],
+            [
+              "<code>allow-empty</code>",
+              "boolean",
+              "false",
+              "En <code>single</code>, permite deseleccionar"
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "false",
+              "Bloquea el grupo completo"
+            ]
+          ]
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "propiedades",
+              "<code>value</code> · <code>values</code> · <code>items</code> · <code>selectedItems</code>"
+            ],
+            [
+              "eventos",
+              "<code>is-change</code> con <code>{ value, values }</code>"
+            ],
+            [
+              "slot",
+              "default: uno o más <code class=\"code\">is-button</code> o <code class=\"code\">button</code>"
+            ],
+            [
+              "part",
+              "<code>base</code>"
+            ],
+            [
+              "en los hijos",
+              "el grupo escribe <code>selected</code> y <code>aria-pressed</code>"
+            ],
+            [
+              "valor de un hijo",
+              "atributo <code>value</code>; si falta, texto; si vacío, índice"
+            ],
+            [
+              "tokens",
+              "<code>--is-button-group-radius</code> <code>--is-button-group-gap</code> <code>--is-button-group-pad</code> <code>--is-button-group-accent</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "hasBehavior": true
+}

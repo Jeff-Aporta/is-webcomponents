@@ -1,0 +1,73 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-pivot-table",
+  "category": "data",
+  "title": "<is-pivot-table>",
+  "titleHtml": true,
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
+  "storageKey": "docs-is-pivot-table",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-pivot-table>",
+      "lede": "Tabla pivot: agrupa por filas y columnas, agrega una medida. Soporta <code>sum</code>, <code>avg</code>, <code>count</code>, <code>min</code> y <code>max</code>.",
+      "blocks": []
+    },
+    {
+      "id": "sum",
+      "title": "Suma de ventas",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-pivot-table rows=\"region\" cols=\"trimestre\" measure=\"ventas\" agg=\"sum\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"region\": \"Norte\", \"trimestre\": \"Q1\", \"ventas\": 320 },\r\n                { \"region\": \"Norte\", \"trimestre\": \"Q2\", \"ventas\": 410 },\r\n                { \"region\": \"Norte\", \"trimestre\": \"Q3\", \"ventas\": 380 },\r\n                { \"region\": \"Norte\", \"trimestre\": \"Q4\", \"ventas\": 520 },\r\n                { \"region\": \"Sur\",   \"trimestre\": \"Q1\", \"ventas\": 220 },\r\n                { \"region\": \"Sur\",   \"trimestre\": \"Q2\", \"ventas\": 280 },\r\n                { \"region\": \"Sur\",   \"trimestre\": \"Q3\", \"ventas\": 350 },\r\n                { \"region\": \"Sur\",   \"trimestre\": \"Q4\", \"ventas\": 410 },\r\n                { \"region\": \"Este\",  \"trimestre\": \"Q1\", \"ventas\": 180 },\r\n                { \"region\": \"Este\",  \"trimestre\": \"Q2\", \"ventas\": 240 },\r\n                { \"region\": \"Este\",  \"trimestre\": \"Q3\", \"ventas\": 300 },\r\n                { \"region\": \"Este\",  \"trimestre\": \"Q4\", \"ventas\": 360 },\r\n                { \"region\": \"Oeste\", \"trimestre\": \"Q1\", \"ventas\": 140 },\r\n                { \"region\": \"Oeste\", \"trimestre\": \"Q2\", \"ventas\": 190 },\r\n                { \"region\": \"Oeste\", \"trimestre\": \"Q3\", \"ventas\": 230 },\r\n                { \"region\": \"Oeste\", \"trimestre\": \"Q4\", \"ventas\": 280 }\r\n              ]\r\n            </script>\r\n          </is-pivot-table>"
+        }
+      ]
+    },
+    {
+      "id": "avg",
+      "title": "Promedio de tickets",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-pivot-table rows=\"canal\" cols=\"mes\" measure=\"ticket\" agg=\"avg\" decimals=\"0\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"canal\": \"Web\",     \"mes\": \"Ene\", \"ticket\": 420 },\r\n                { \"canal\": \"Web\",     \"mes\": \"Feb\", \"ticket\": 480 },\r\n                { \"canal\": \"Web\",     \"mes\": \"Mar\", \"ticket\": 510 },\r\n                { \"canal\": \"Móvil\",   \"mes\": \"Ene\", \"ticket\": 320 },\r\n                { \"canal\": \"Móvil\",   \"mes\": \"Feb\", \"ticket\": 360 },\r\n                { \"canal\": \"Móvil\",   \"mes\": \"Mar\", \"ticket\": 410 },\r\n                { \"canal\": \"Mostrador\",\"mes\": \"Ene\", \"ticket\": 580 },\r\n                { \"canal\": \"Mostrador\",\"mes\": \"Feb\", \"ticket\": 600 },\r\n                { \"canal\": \"Mostrador\",\"mes\": \"Mar\", \"ticket\": 640 }\r\n              ]\r\n            </script>\r\n          </is-pivot-table>"
+        }
+      ]
+    },
+    {
+      "id": "count",
+      "title": "Cuenta (sin medida)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Si no pasás <code class=\"code\">measure</code>, cuenta filas por combinación.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-pivot-table rows=\"estado\" cols=\"prioridad\" agg=\"count\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"estado\": \"Nuevo\",    \"prioridad\": \"Alta\" },\r\n                { \"estado\": \"Nuevo\",    \"prioridad\": \"Alta\" },\r\n                { \"estado\": \"En curso\", \"prioridad\": \"Alta\" },\r\n                { \"estado\": \"En curso\", \"prioridad\": \"Media\" },\r\n                { \"estado\": \"En curso\", \"prioridad\": \"Baja\" },\r\n                { \"estado\": \"Cerrado\",  \"prioridad\": \"Media\" },\r\n                { \"estado\": \"Cerrado\",  \"prioridad\": \"Baja\" }\r\n              ]\r\n            </script>\r\n          </is-pivot-table>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "// Atributos\r\n// rows, cols            nombre de campo (requeridos)\r\n// measure               nombre de campo a agregar (opcional)\r\n// agg                   sum | avg | count | min | max   (default sum)\r\n// format                locale para Intl.NumberFormat (default 'es-CO')\r\n// decimals              dígitos (default 0; máximo 2)\r\n\r\n// Datos: cualquier objeto plano serializable en <script type=\"application/json\">\r\n// o vía propiedad: chart.dataset = [...]\r\n\r\n// Evento\r\ntable.addEventListener('is-cell-click', e => {\r\n  console.log(e.detail.row, '·', e.detail.col, '=', e.detail.value);\r\n});",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Bitácora",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"log\" id=\"log\"></pre>"
+        }
+      ]
+    }
+  ]
+}

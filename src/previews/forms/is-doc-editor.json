@@ -1,0 +1,49 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-doc-editor",
+  "category": "forms",
+  "title": "<is-doc-editor>",
+  "titleHtml": true,
+  "styles": "pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .65rem .85rem;\r\n      max-height: 14rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }\r\n    .kbd-hint {\r\n      font-size: .78rem; color: var(--is-text-soft);\r\n    }\r\n    .kbd-hint kbd {\r\n      font-family: ui-monospace, monospace; font-size: .72rem;\r\n      padding: 1px 5px;\r\n      border-radius: 4px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg-elev);\r\n    }",
+  "storageKey": "docs-is-doc-editor",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-doc-editor>",
+      "lede": "Editor por bloques tipo Notion. Tipeá <kbd class=\"ic\">/</kbd> al inicio de una línea para cambiar el tipo. <kbd class=\"ic\">Enter</kbd> crea otro bloque, <kbd class=\"ic\">Backspace</kbd> sobre texto vacío elimina.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-doc-editor id=\"doc\" placeholder=\"Tipeá algo…\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"type\": \"heading-1\", \"text\": \"Bitácora de julio\" },\r\n                { \"type\": \"paragraph\", \"text\": \"Resumen del cierre mensual. Editá lo que necesites.\" },\r\n                { \"type\": \"heading-2\", \"text\": \"Por hacer\" },\r\n                { \"type\": \"todo\", \"text\": \"Cruzar facturas con el banco\", \"checked\": true },\r\n                { \"type\": \"todo\", \"text\": \"Revisar depreciaciones\" },\r\n                { \"type\": \"todo\", \"text\": \"Pasar al board de cierre\" },\r\n                { \"type\": \"divider\" },\r\n                { \"type\": \"heading-2\", \"text\": \"Notas\" },\r\n                { \"type\": \"bullet-list\", \"text\": \"Cartera con morosidad al alza\" },\r\n                { \"type\": \"bullet-list\", \"text\": \"Inventario estable, revisar lento\" },\r\n                { \"type\": \"quote\",     \"text\": \"Lo importante se hizo; lo urgente se va acumulando.\" },\r\n                { \"type\": \"code\",      \"text\": \"SELECT sum(saldo) FROM cartera WHERE vencida = true;\" }\r\n              ]\r\n            </script>\r\n          </is-doc-editor>"
+        }
+      ]
+    },
+    {
+      "id": "json",
+      "title": "JSON actual",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<pre class=\"output\" id=\"out\"></pre>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const doc = document.querySelector('is-doc-editor');\r\ndoc.value;          // string JSON\r\ndoc.blocks;         // array vivo\r\ndoc.addBlock('paragraph');\r\ndoc.removeBlock(id);\r\ndoc.updateBlock(id, { text: '…' });\r\ndoc.addEventListener('is-change', e => console.log(e.detail.blocks));\r\n\r\n// Atajos en bloques\r\n// Enter          crear bloque del mismo tipo\r\n// Backspace      eliminar bloque si está vacío\r\n// \"/\" inicio     abre menú de tipos (heading-1..3, list, todo, quote, code, divider)\r\n// Shift+Enter    salto de línea dentro del bloque",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

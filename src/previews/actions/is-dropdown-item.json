@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-dropdown-item",
+  "category": "actions",
+  "title": "<is-dropdown-item>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-dropdown-item de InSoft.",
+  "storageKey": "docs-is-dropdown-item",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-dropdown-item>",
+      "lede": "Item de un <code class=\"code\">&lt;is-dropdown&gt;</code>. Aporta el estado (activo, deshabilitado), el slot de icono y el valor que viaja en el evento de selección.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-dropdown placement=\"bottom-start\">\r\n            <is-button slot=\"trigger\" color=\"brand\">Acciones</is-button>\r\n            <is-dropdown-item value=\"edit\"><is-icon slot=\"start\" icon=\"mdi:pencil\"></is-icon>Editar</is-dropdown-item>\r\n            <is-dropdown-item value=\"dup\"><is-icon slot=\"start\" icon=\"mdi:content-copy\"></is-icon>Duplicar</is-dropdown-item>\r\n            <is-dropdown-item value=\"del\" color=\"danger\"><is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>Eliminar</is-dropdown-item>\r\n            <is-dropdown-item value=\"off\" disabled>No disponible</is-dropdown-item>\r\n          </is-dropdown>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-dropdown placement=\"bottom-start\">\r\n  <is-button slot=\"trigger\" color=\"brand\">Acciones</is-button>\r\n  <is-dropdown-item value=\"edit\"><is-icon slot=\"start\" icon=\"mdi:pencil\"></is-icon>Editar</is-dropdown-item>\r\n  <is-dropdown-item value=\"dup\"><is-icon slot=\"start\" icon=\"mdi:content-copy\"></is-icon>Duplicar</is-dropdown-item>\r\n  <is-dropdown-item value=\"del\" color=\"danger\"><is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>Eliminar</is-dropdown-item>\r\n  <is-dropdown-item value=\"off\" disabled>No disponible</is-dropdown-item>\r\n</is-dropdown>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-dropdown-item&gt; — ítem de menú para is-dropdown. El submenú va en un popover (top layer) y se posiciona con computePosition: el menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría recortado y le abriría scroll horizontal. Attrs: value, type (normal|checkbox), checked, disabled, color (default|danger) Slots: default (label), icon, details, submenu Methods: openSubmenu(), closeSubmenu() Parts: checkmark, icon, label, details, submenu, submenu-icon",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/actions/dropdown-item.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

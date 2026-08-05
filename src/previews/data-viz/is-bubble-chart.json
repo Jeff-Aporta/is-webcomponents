@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-bubble-chart",
+  "category": "data-viz",
+  "title": "<is-bubble-chart>",
+  "titleHtml": true,
+  "storageKey": "docs-is-bubble-chart",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-bubble-chart>",
+      "lede": "Tercera dimensión por tamaño.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-bubble-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"datasets\":[{\"label\":\"Canales\",\"data\":[{\"x\":0.4,\"y\":8.5,\"r\":10},{\"x\":1.8,\"y\":6.9,\"r\":13},{\"x\":2.8,\"y\":5.2,\"r\":20}]}]}}\r\n            </script>\r\n          </is-bubble-chart>"
+        }
+      ]
+    }
+  ]
+}

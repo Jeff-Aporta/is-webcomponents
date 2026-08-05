@@ -1,0 +1,96 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-block-layout",
+  "category": "isp",
+  "title": "<is-block-layout>",
+  "titleHtml": true,
+  "styles": ".bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); margin: 0; }\r\n    is-block-layout[data-szw-lg] .bl-title { font-weight: 700; }",
+  "storageKey": "docs-is-block-layout",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-block-layout>",
+      "lede": "Caja de bloque que mide su propio ancho y publica el breakpoint como\r\n          <code class=\"code\">data-sizew</code>, banderas <code class=\"code\">data-szw-*</code> y las custom properties\r\n          <code class=\"code\">--clientw</code> / <code class=\"code\">--lerpw</code>. Port del <code class=\"code\">BlockLayout.svelte</code> de ISP.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-block-layout id=\"bl-intro\" style=\"border:1px solid var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>\r\n            <p>sizew actual: <strong id=\"bl-out\">—</strong></p>\r\n          </is-block-layout>"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "title": "Breakpoint como atributo y como variable",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>El atributo <code class=\"code\">data-sizew</code> se puede estilar desde el light DOM, y\r\n          <code class=\"code\">--lerpw</code> se puede interpolar con <code class=\"code\">calc()</code>.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-block-layout class=\"bl-demo\" style=\"border:1px dashed var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p class=\"bl-title\">Título que crece con el ancho del contenedor</p>\r\n          </is-block-layout>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-block-layout>…</is-block-layout>\r\n\r\n/* light DOM */\r\nis-block-layout[data-szw-lg] .bl-title { font-weight: 700; }\r\n.bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); }",
+          "lang": "html"
+        },
+        {
+          "kind": "html",
+          "html": "<h2>Inline y scroll</h2>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-block-layout inline style=\"border:1px solid var(--is-border);padding:0.5rem 1rem\">inline</is-block-layout>\r\n          <is-block-layout inline style=\"border:1px solid var(--is-border);padding:0.5rem 1rem\">otro inline</is-block-layout>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-block-layout cscroll style=\"border:1px solid var(--is-border);padding:1rem;max-height:6rem;width:100%\">\r\n            <p>Con <code class=\"code\">cscroll</code> la caja hace scroll con el scrollbar del tema.</p>\r\n            <p>Línea 2</p><p>Línea 3</p><p>Línea 4</p><p>Línea 5</p><p>Línea 6</p>\r\n          </is-block-layout>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo / var / evento",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>inline</code>",
+              "boolean → <code>display:inline-block</code>"
+            ],
+            [
+              "<code>cscroll</code>",
+              "boolean → <code>overflow:auto</code>"
+            ],
+            [
+              "<code>data-sizew</code>",
+              "reflejado: xs · sm · md · lg · xl"
+            ],
+            [
+              "<code>data-szw-xs…xl</code>",
+              "reflejados; presentes si el breakpoint es &lt;= al actual (el <code>boolszw</code> de ISP)"
+            ],
+            [
+              "<code>--clientw</code>",
+              "ancho en px sin unidad"
+            ],
+            [
+              "<code>--lerpw</code>",
+              "<code>lerpw('sm','xl')</code> — progreso 0→1 sin recortar"
+            ],
+            [
+              "<code>is-breakpoint</code>",
+              "detail <code>{ width, sizew, boolszw, lerpw(b0,b1) }</code>"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

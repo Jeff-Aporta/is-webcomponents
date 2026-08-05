@@ -1,0 +1,49 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-signature",
+  "category": "forms",
+  "title": "<is-signature>",
+  "titleHtml": true,
+  "styles": ".sig-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }\r\n    .sig-card { border: 1px solid var(--is-border); border-radius: var(--is-radius); padding: .85rem; background: var(--is-bg-elev); }\r\n    .sig-card h4 { margin: 0 0 .55rem; font-size: .85rem; }\r\n    .sig-toolbar { display: flex; gap: .35rem; margin-top: .55rem; }\r\n    .sig-toolbar button { font: inherit; padding: .25rem .55rem; border: 1px solid var(--is-border); background: var(--is-bg-soft); color: inherit; border-radius: 6px; cursor: pointer; font-size: .82rem; }\r\n    .sig-toolbar button:hover { background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-soft)); }\r\n    .sig-output { display: flex; gap: 1rem; align-items: end; }\r\n    .sig-output figure { margin: 0; }\r\n    .sig-output figcaption { font-size: .7rem; color: var(--is-text-soft); }\r\n    .sig-output img { border: 1px solid var(--is-border); border-radius: 6px; background: white; padding: 4px; max-width: 16rem; }",
+  "storageKey": "docs-is-signature",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-signature>",
+      "lede": "Pad de firma manuscrita. Funciona con ratón, táctil y stylus. Exporta a PNG y SVG.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"sig-card\" style=\"width:340px\">\r\n            <h4>Firma del cliente</h4>\r\n            <is-signature id=\"sig\" hint=\"Firme aquí\"></is-signature>\r\n            <div class=\"sig-toolbar\">\r\n              <button id=\"bClear\">Limpiar</button>\r\n              <button id=\"bPNG\">Exportar PNG</button>\r\n              <button id=\"bSVG\">Exportar SVG</button>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "Exportar",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"sig-output\" id=\"output\">\r\n            <small style=\"color:var(--is-text-soft)\">— presioná \"Exportar\" para ver el resultado —</small>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "api-doc",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const pad = document.querySelector('is-signature');\r\npad.toDataURL('image/png');      // dataURL PNG\r\npad.toDataURL('image/svg+xml'); // dataURL SVG\r\npad.toSVG();                    // SVG inline\r\npad.clear();\r\npad.isEmpty;                    // boolean\r\n\r\npad.addEventListener('is-stroke-end', e => {\r\n  console.log('dataURL al terminar trazo:', e.detail.dataURL.slice(0, 50), '...');\r\n});\r\n\r\n// Atributos:\r\n// width, height      dimensiones (default 320x140)\r\n// pen-color          color del trazo\r\n// line-width         grosor (default 2)\r\n// background         color de fondo (default transparent)\r\n// hint               texto del placeholder",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,240 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-copy-button",
+  "category": "actions",
+  "title": "<is-copy-button>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-copy-button de InSoft.",
+  "styles": ".cluster { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }\r\n    .stack { display: flex; flex-direction: column; gap: 0.75rem; }\r\n    /* Hueco generoso: los tooltips de los 12 placements se despliegan sin taparse */\r\n    .placement-cell {\r\n      display: inline-flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.45rem;\r\n    }\r\n    /* El nombre visible evita la \"pared de botones grises\": sin el, las 12\r\n       celdas son identicas y hay que pasar el raton para saber cual es cual. */\r\n    .placement-cell__name {\r\n      font-family: var(--is-mono, ui-monospace, Consolas, monospace);\r\n      font-size: 0.68rem;\r\n      color: var(--is-text-soft);\r\n    }\r\n\r\n    .placements {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));\r\n      gap: 2.5rem 1rem;\r\n      justify-items: center;\r\n      padding: 2rem 1rem;\r\n    }\r\n    /* El demo debe dejar claro QUE se copia: valor visible, boton pegado a el\r\n       y un campo donde pegar para comprobar el resultado. */\r\n    .copy-showcase {\r\n      display: grid;\r\n      gap: 1.25rem;\r\n      max-width: 34rem;\r\n    }\r\n    .copy-field__label,\r\n    .copy-proof__label {\r\n      display: block;\r\n      margin-bottom: 0.4rem;\r\n      font-size: 0.72rem;\r\n      font-weight: 700;\r\n      letter-spacing: 0.06em;\r\n      text-transform: uppercase;\r\n      color: var(--is-text-soft);\r\n    }\r\n    .copy-field__row {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n      padding: 0.45rem 0.5rem 0.45rem 0.85rem;\r\n      border: 1px solid var(--is-border);\r\n      border-radius: 0.5rem;\r\n      background: var(--is-code-bg, var(--is-bg-elev));\r\n    }\r\n    .copy-field__value {\r\n      flex: 1;\r\n      min-width: 0;\r\n      overflow-x: auto;\r\n      white-space: nowrap;\r\n      font-family: var(--is-mono, ui-monospace, Consolas, monospace);\r\n      font-size: 0.85rem;\r\n      color: var(--is-code-text, var(--is-text));\r\n    }\r\n\r\n    .from-input {\r\n      font: inherit;\r\n      padding: 0.45em 0.7em;\r\n      border: 1px solid var(--is-border);\r\n      border-radius: 6px;\r\n      background: var(--is-bg-elev, transparent);\r\n      color: var(--is-text);\r\n      max-width: 280px;\r\n      width: 100%;\r\n    }",
+  "storageKey": "docs-is-copy-button",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-copy-button>",
+      "lede": "Copia texto al portapapeles con feedback de éxito/error.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"copy-showcase\">\r\n            <div class=\"copy-field\">\r\n              <span class=\"copy-field__label\">Endpoint de la API</span>\r\n              <div class=\"copy-field__row\">\r\n                <code class=\"copy-field__value\" id=\"cbValue\">https://api.insoft.com.co/v1</code>\r\n                <is-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></is-copy-button>\r\n              </div>\r\n            </div>\r\n\r\n            <div class=\"copy-proof\">\r\n              <label class=\"copy-proof__label\" for=\"cbPaste\">Pega aquí para comprobarlo</label>\r\n              <input id=\"cbPaste\" class=\"from-input\" type=\"text\" placeholder=\"Ctrl+V / Cmd+V\">\r\n            </div>\r\n          </div>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>Requiere contexto seguro.</strong>\r\n          <code class=\"code\">clipboard.writeText()</code> necesita HTTPS o localhost."
+        },
+        {
+          "kind": "code",
+          "code": "<code id=\"cbValue\">https://api.insoft.com.co/v1</code>\r\n<is-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></is-copy-button>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "from",
+      "title": "Copiar desde otros elementos",
+      "lede": "Usa <code class=\"code\">from</code> para apuntar a un <code class=\"code\">id</code>.\r\n          Si hay <code class=\"code\">value</code> y <code class=\"code\">from</code>, gana <code class=\"code\">from</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"cluster\">\r\n            <span id=\"my-phone\">+57 300 123 4567</span>\r\n            <is-copy-button from=\"my-phone\"></is-copy-button>\r\n          </div>\r\n          <div class=\"cluster\">\r\n            <input id=\"my-input\" class=\"from-input\" type=\"text\" value=\"Texto del usuario\" />\r\n            <is-copy-button from=\"my-input.value\"></is-copy-button>\r\n          </div>\r\n          <div class=\"cluster\">\r\n            <a id=\"my-link\" href=\"https://insoft.com.co\">Sitio InSoft</a>\r\n            <is-copy-button from=\"my-link[href]\"></is-copy-button>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><span</span> <span class=\"attr\">id</span>=<span class=\"val\">\"my-phone\"</span><span class=\"tag\">></span>+57 300 123 4567<span class=\"tag\"></span></span>\r\n<span class=\"tag\"><is-copy-button</span> <span class=\"attr\">from</span>=<span class=\"val\">\"my-phone\"</span><span class=\"tag\">></is-copy-button></span>\r\n\r\n<span class=\"tag\"><is-copy-button</span> <span class=\"attr\">from</span>=<span class=\"val\">\"my-input.value\"</span><span class=\"tag\">></is-copy-button></span>\r\n<span class=\"tag\"><is-copy-button</span> <span class=\"attr\">from</span>=<span class=\"val\">\"my-link[href]\"</span><span class=\"tag\">></is-copy-button></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "labels",
+      "title": "Labels custom",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-copy-button\r\n            value=\"Labels custom\"\r\n            copy-label=\"Clic para copiar\"\r\n            success-label=\"¡Listo!\"\r\n            error-label=\"Tu navegador no lo soporta\"\r\n          ></is-copy-button>"
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "title": "Iconos custom",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-copy-button value=\"Iconos custom\">\r\n            <is-icon slot=\"copy-icon\" icon=\"mdi:clipboard-outline\"></is-icon>\r\n            <is-icon slot=\"success-icon\" icon=\"mdi:thumb-up\"></is-icon>\r\n            <is-icon slot=\"error-icon\" icon=\"mdi:close-circle\"></is-icon>\r\n          </is-copy-button>"
+        }
+      ]
+    },
+    {
+      "id": "trigger",
+      "title": "Trigger custom",
+      "lede": "Slot default: mete un <code class=\"code\">is-button</code> u otro control.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-copy-button value=\"Desde un botón custom\">\r\n            <is-button variant=\"outlined\" style=\"font-size:.8125rem\">\r\n              <is-icon slot=\"start\" icon=\"mdi:content-copy\"></is-icon>\r\n              Copiar al portapapeles\r\n            </is-button>\r\n          </is-copy-button>"
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "title": "Disabled",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-copy-button value=\"No se puede copiar\" disabled></is-copy-button>"
+        }
+      ]
+    },
+    {
+      "id": "errors",
+      "title": "Manejo de errores",
+      "lede": "Sin <code class=\"code\">value</code> ni <code class=\"code\">from</code> válido → <code class=\"code\">is-error</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-copy-button id=\"errBtn\"></is-copy-button>\r\n          <span class=\"card-meta\" id=\"errLog\">Haz clic para forzar error.</span>"
+        }
+      ]
+    },
+    {
+      "id": "duration",
+      "title": "Feedback duration",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-copy-button value=\"Rápido\" feedback-duration=\"250\" copy-label=\"250ms\"></is-copy-button>\r\n          <is-copy-button value=\"Lento\" feedback-duration=\"3000\" copy-label=\"3s\"></is-copy-button>"
+        }
+      ]
+    },
+    {
+      "id": "tooltip-mode",
+      "title": "Tooltip mode",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-copy-button value=\"full\" tooltip=\"full\" copy-label=\"full\"></is-copy-button>\r\n          <is-copy-button value=\"copy\" tooltip=\"copy\" copy-label=\"copy (solo feedback)\"></is-copy-button>\r\n          <is-copy-button value=\"none\" tooltip=\"none\" copy-label=\"none\"></is-copy-button>"
+        }
+      ]
+    },
+    {
+      "id": "placement",
+      "title": "Tooltip placement",
+      "lede": "El tooltip es un <code class=\"code\">is-tooltip</code> interno, así que acepta los\r\n          doce placements de <code class=\"code\">is-popover</code> y hace flip solo si no cabe\r\n          en la dirección pedida.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"placements\">\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"top\" tooltip-placement=\"top\" copy-label=\"top\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">top</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"top-start\" tooltip-placement=\"top-start\" copy-label=\"top-start\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">top-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"top-end\" tooltip-placement=\"top-end\" copy-label=\"top-end\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">top-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"right\" tooltip-placement=\"right\" copy-label=\"right\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">right</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"right-start\" tooltip-placement=\"right-start\" copy-label=\"right-start\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">right-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"right-end\" tooltip-placement=\"right-end\" copy-label=\"right-end\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">right-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"bottom\" tooltip-placement=\"bottom\" copy-label=\"bottom\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">bottom</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"bottom-start\" tooltip-placement=\"bottom-start\" copy-label=\"bottom-start\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">bottom-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"bottom-end\" tooltip-placement=\"bottom-end\" copy-label=\"bottom-end\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">bottom-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"left\" tooltip-placement=\"left\" copy-label=\"left\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">left</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"left-start\" tooltip-placement=\"left-start\" copy-label=\"left-start\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">left-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <is-copy-button value=\"left-end\" tooltip-placement=\"left-end\" copy-label=\"left-end\"></is-copy-button>\r\n              <small class=\"placement-cell__name\">left-end</small>\r\n            </span>\r\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-copy-button</span> <span class=\"attr\">value</span>=<span class=\"val\">\"…\"</span> <span class=\"attr\">tooltip-placement</span>=<span class=\"val\">\"bottom-start\"</span><span class=\"tag\">></is-copy-button></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API live",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-copy-button id=\"apiCopy\" value=\"hola-is-copy\"></is-copy-button>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"log\" id=\"apiLog\"><div class=\"row\"><span class=\"hint\">Eventos is-copy / is-error aparecerán aquí.</span></div></div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Attr",
+            "Tipo",
+            "Default"
+          ],
+          "rows": [
+            [
+              "<code>value</code>",
+              "string",
+              "''"
+            ],
+            [
+              "<code>from</code>",
+              "string",
+              "''"
+            ],
+            [
+              "<code>copy-label</code>",
+              "string",
+              "'' → Copiar"
+            ],
+            [
+              "<code>success-label</code>",
+              "string",
+              "'' → Copiado"
+            ],
+            [
+              "<code>error-label</code>",
+              "string",
+              "'' → Error"
+            ],
+            [
+              "<code>feedback-duration</code>",
+              "number",
+              "1000"
+            ],
+            [
+              "<code>tooltip</code>",
+              "full | copy | none",
+              "full"
+            ],
+            [
+              "<code>tooltip-placement</code>",
+              "los 12 de <code>is-popover</code>: top | top-start | top-end | bottom* | left* | right*",
+              "top"
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "false"
+            ]
+          ]
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "eventos",
+              "<code>is-copy</code> con <code>{ value }</code> · <code>is-error</code>"
+            ],
+            [
+              "states",
+              "<code>:state(success)</code> · <code>:state(error)</code> · <code>:state(disabled)</code>"
+            ],
+            [
+              "parts",
+              "<code>button</code> · <code>copy-icon</code> · <code>success-icon</code> · <code>error-icon</code> · <code>feedback</code> (burbuja) · <code>feedback-body</code>"
+            ],
+            [
+              "compone",
+              "<code class=\"code\">is-tooltip</code> (posición, flip, flecha) e <code class=\"code\">is-icon</code>"
+            ],
+            [
+              "tokens",
+              "<code>--is-tooltip-bg</code> y <code>--is-tooltip-fg</code> mandan en la burbuja; éxito y error la tiñen solos"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

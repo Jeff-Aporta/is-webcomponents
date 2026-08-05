@@ -1,0 +1,166 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-pin-input",
+  "category": "forms",
+  "title": "<is-pin-input>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-pin-input de InSoft.",
+  "storageKey": "docs-is-pin-input",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-pin-input>",
+      "lede": "Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,\r\n          Backspace retrocede, pegar reparte todos los dígitos, navegación con\r\n          flechas y soporte para enmascarar el contenido.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-pin-input id=\"otp1\" length=\"6\"></is-pin-input>\r\n          <p>Valor: <code class=\"code\" id=\"otp1Val\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<span class=\"tag\"><is-pin-input</span> <span class=\"attr\">length</span>=<span class=\"val\">\"6\"</span><span class=\"tag\">></span><span class=\"tag\"></is-pin-input></span>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "lengths",
+      "title": "Diferentes longitudes",
+      "lede": "3, 4, 5, 6, 8 dígitos.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">\r\n            <div>\r\n              <small>3 dígitos</small>\r\n              <is-pin-input length=\"3\"></is-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>4 dígitos</small>\r\n              <is-pin-input length=\"4\"></is-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>6 dígitos</small>\r\n              <is-pin-input length=\"6\"></is-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>8 dígitos</small>\r\n              <is-pin-input length=\"8\"></is-pin-input>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Tamaños",
+      "lede": "small, medium, large.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start\">\r\n            <div><small>0.8em</small><is-pin-input style=\"font-size:0.8em\" length=\"6\"></is-pin-input></div>\r\n            <div><small>1em</small><is-pin-input length=\"6\"></is-pin-input></div>\r\n            <div><small>1.25em</small><is-pin-input style=\"font-size:1.25em\" length=\"6\"></is-pin-input></div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "title": "Tipo texto",
+      "lede": "Con <code class=\"code\">type=\"text\"</code> admite letras y números.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-pin-input length=\"6\" type=\"text\" placeholder=\"·\"></is-pin-input>"
+        }
+      ]
+    },
+    {
+      "id": "mask",
+      "title": "Enmascarado",
+      "lede": "Con <code class=\"code\">mask</code> los caracteres se ocultan con bullets.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-pin-input length=\"6\" mask></is-pin-input>"
+        }
+      ]
+    },
+    {
+      "id": "states",
+      "title": "Estados",
+      "lede": "Disabled e invalid.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">\r\n            <div>\r\n              <small>disabled</small>\r\n              <is-pin-input length=\"6\" disabled value=\"123456\"></is-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>invalid</small>\r\n              <is-pin-input id=\"otpErr\" length=\"6\" invalid></is-pin-input>\r\n            </div>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-pin-input&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>length</code>",
+              "number",
+              "6",
+              "Cantidad de dígitos (3-8)."
+            ],
+            [
+              "<code>type</code>",
+              "number | text",
+              "number",
+              "Tipo de carácter aceptado."
+            ],
+            [
+              "<code>mask</code>",
+              "boolean",
+              "false",
+              "Oculta el contenido."
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "false",
+              "Deshabilita."
+            ],
+            [
+              "<code>invalid</code>",
+              "boolean",
+              "false",
+              "Marca error."
+            ],
+            [
+              "<code>placeholder</code>",
+              "string",
+              "—",
+              "Marcador para casillas vacías."
+            ],
+            [
+              "<code>value</code>",
+              "string",
+              "—",
+              "Valor inicial."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "<tr><th>Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-pin-change</code>",
+              "Cambia cualquier dígito. <code>detail: { value, index }</code>."
+            ],
+            [
+              "<code>is-pin-complete</code>",
+              "Todos los dígitos completos."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

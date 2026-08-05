@@ -202,6 +202,24 @@ de la API), la salta. Si solo faltan algunos iconos, los baja sueltos.
 
 ## 6. Errores a NO repetir (bitácora de mierdas que ya nos pasaron)
 
+### 6.0b Layout `src/`, Utilerías, previews controlados (2026-08)
+
+- **Recrear `components/` en la raíz:** prohibido. Fuente = `src/…`. Guardián:
+  `tests/src-layout.test.mjs`.
+- **Misma profundidad `../` para styles y dist** en previews de categoría:
+  styles/components → `../../`; scripts/dist → `../../../`. Si unificas,
+  resuelves a `src/dist` (404). Guardián: `tests/preview-paths.test.mjs`.
+- **Utilería pública sin tab:** toda `.js` en `helpers/` (salvo `floating.js`
+  internal) necesita `manifest.page` + HTML + MD. Label del nav: **Utilerías**.
+  Guardián: `tests/helpers-homogeneity.test.mjs`.
+- **HTML gordo + lógica en strings/eval:** previews migrados usan
+  `*.preview.js` + `<is-preview-component>` + `ISComponentPreview.mount()`.
+  Markup de demos puede ser string; listeners no. Guardián:
+  `tests/preview-controller.test.mjs`. Guía: `src/docs/preview-controller.md`.
+- **LLM.md sin carta/DO/DON'T:** `tests/llm-contract.test.mjs` exige secciones
+  y que los guardianes citados existan en disco.
+- Detalle completo: `LLM.md` → Carta de leyes + errores 24–26.
+
 ### 6.0 Paleta / canvas / snippets (2026-08)
 
 - **Default `insoft`:** incorrecto. Producto real = ContaPyme → default
@@ -523,11 +541,15 @@ se rellenaran con `col-N` autogenerados.
 - No insertar overrides de `--is-...` para el color del scrollbar dentro
   del shadow — heredan del light DOM via custom property cascades.
 
-## 7. Tests (lo nuevo de esta sesión)
+## 7. Tests
 
-Hemos creado tests en `tests/` que **detectan los errores de §6 antes de que
-lleguen a producción**. Todos terminan con `console.log('... PASS')` para que
-un runner sencillo los pueda enumerar.
+Los `tests/*.test.mjs` **detectan errores de §6 / LLM.md antes de merge**.
+Fuente de verdad narrativa: `LLM.md` (Carta de leyes + Testing). Guardián del
+documento: `tests/llm-contract.test.mjs`.
+
+**`tests/` no está gitignoreado entero** — se commitean los `*.test.mjs`. Solo
+artefactos (`tests/*.tmp`, `coverage/`, `.cache/`). Extensión canónica: `.mjs`
+(no `.ts` mientras el kit sea ESM vanilla).
 
 ### 7.1 Convención
 
@@ -536,16 +558,22 @@ un runner sencillo los pueda enumerar.
 - Si un test depende del servidor (`scripts/serve.mjs`), lo dice en su header
   y `await fetch(...)` con `AbortSignal.timeout` para no colgarse.
 
-### 7.2 Lista actual
+### 7.2 Guardianes prioritarios (carta de leyes)
 
 | Test | Cubre |
 |------|-------|
-| `tests/manifest-paths.test.mjs` | Cada `page:` en `manifest.js` existe; `script:`/`style:` apuntan a archivos reales |
-| `tests/preview-paths.test.mjs` | Los `<script src>` y `<link href>` de cada preview resuelven a archivos reales |
-| `tests/icon-references.test.mjs` | Cada `icon="X:Y"` en previews/componentes existe en `assets/icons/X.json` (o se acepta caer a CDN) |
-| `tests/theme-contract.test.mjs` | Reemplazo del antiguo `verify-theme-contract.cjs` |
-| `tests/palette-and-snippet-contract.test.mjs` | Default `contapyme`; sin `color-scheme` en `:root`; canvas libre; snippets con tema/paleta reactivos |
-| `tests/cdn-icons.test.mjs` | Servidor arriba → cada preview carga `<is-icon>` sin caer al fallback `<iconify-icon>` |
+| `tests/llm-contract.test.mjs` | Secciones DO/DON'T/errores del LLM.md + guardianes en disco |
+| `tests/src-layout.test.mjs` | Fuente bajo `src/`; sin carpetas raíz prohibidas |
+| `tests/helpers-homogeneity.test.mjs` | Utilerías públicas = manifest.page + HTML + MD |
+| `tests/preview-controller.test.mjs` | Kit `is-preview-component` + piloto sin eval |
+| `tests/preview-paths.test.mjs` | `<script src>` / `<link href>` de previews resuelven |
+| `tests/manifest-paths.test.mjs` | `page`/`script`/`style` del manifest existen |
+| `tests/attr-enums.test.mjs` | Enums en previews vs `VALID_*` |
+| `tests/token-vocabulary.test.mjs` | Tokens `--is-color-*` coherentes |
+| `tests/palette-and-snippet-contract.test.mjs` | Default contapyme; canvas libre; snippets |
+| `tests/icon-references.test.mjs` | `icon="X:Y"` existe o cae a CDN de forma aceptada |
+| `tests/theme-contract.test.mjs` | Temas + paletas + tokens `--is-*` |
+| `tests/cdn-icons.test.mjs` | Servidor arriba → iconos locales sin fallback iconify |
 
 ### 7.3 Cómo correrlos
 
@@ -602,8 +630,9 @@ rotura**, y si no, vuelve a leer §6 antes de parchar.
 4. Si necesitas un servidor, **arranca uno efímero en `await using` o
    `try/finally`** con `node:http`. No asumas que `scripts/serve.mjs` está
    corriendo.
-5. **No** crees snapshots binarios (Playwright traces, etc.) — `tests/` está
-   en `.gitignore` y no se commitea.
+5. **No** crees snapshots binarios pesados (traces Playwright, coverage HTML)
+   bajo `tests/` sin añadirlos al gitignore de artefactos. Los `*.test.mjs`
+   **sí se commitean**.
 
 ## 8.5 Highlighter de `<pre class="code">` (scripts/highlight-pre.js)
 
@@ -650,9 +679,13 @@ El test `tests/codemirror-theme.test.mjs` protege este contrato.
 
 ## 9. Reglas de oro (resumen ejecutivo)
 
-- Lee este archivo entero antes de tocar el repo.
+- Lee `LLM.md` (Carta de leyes) y este archivo antes de tocar el repo.
 - Si vas a mover archivos en masa, **primero commit lo pendiente**, luego
   `git mv`, luego `scripts/fix-preview-paths.mjs`.
+- Si vas a tocar layout `src/` / paths de preview → `src-layout` + `preview-paths`.
+- Si vas a añadir utilería en `helpers/` → `helpers-homogeneity`.
+- Si vas a migrar un preview al sistema controlado → `preview-controller` + registry.
+- Si vas a editar `LLM.md` → `llm-contract`.
 - Si vas a descargar iconos, **usa `--only=mdi --only=tabler`** salvo que
   sepas que necesitas los 308k.
 - Si vas a tocar `src/components/_shared/iconify-loader.js`, **corre
@@ -666,7 +699,8 @@ El test `tests/codemirror-theme.test.mjs` protege este contrato.
   aplicar `cm-s-material-darker` (eso da texto blanco sobre fondo gris y
   es ilegible). Aplica `cm-s-mdn-like` por defecto.
 - Si vas a crear un componente nuevo, **asegúrate de que su preview existe
-  en `previews/<category>/` con los paths `../../...` correctos**.
+  en `src/previews/<category>/` con paths styles `../../` y scripts/dist
+  `../../../`**.
 - **No** uses `cd "..."; cmd1 && cmd2 && cmd3 && ...` en PowerShell. Usa `;`
   o un script `.mjs`.
 - **No** declares "listo" sin haber corrido `tests/run-all.mjs`.
