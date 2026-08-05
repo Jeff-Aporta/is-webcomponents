@@ -8,6 +8,7 @@
 
 import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
+import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -17,11 +18,13 @@ const homePath = join(__dirname, '..', 'src', 'previews', 'home.json');
 const homeBeh = join(__dirname, '..', 'src', 'previews', 'behaviors', 'home.js');
 const homeDef = JSON.parse(readFileSync(homePath, 'utf8'));
 /** Contenido buscable: styles + demos JSON + behavior (scripts migrados). */
-const src = [
-  homeDef.styles || '',
-  JSON.stringify(homeDef.sections),
-  readFileSync(homeBeh, 'utf8'),
-].join('\n');
+const behSrc = readFileSync(homeBeh, 'utf8');
+const src = [homeDef.styles || '', JSON.stringify(homeDef.sections), behSrc].join('\n');
+/** Markup de todas las secciones, tal como el chrome lo inserta. */
+const markup = homeDef.sections
+  .flatMap((s) => s.blocks.map((b) => b.html || ''))
+  .concat(homeDef.prelude || '')
+  .join('\n');
 
 /** Extrae el primer bloque CSS cuyo selector empieza con `selectorPrefix`. */
 function extractBlock(prefix) {
@@ -145,8 +148,8 @@ test('script inyecta botón card-demo con is-icon mdi:open-in-new', () => {
 });
 
 test('whitelist de tags demoable cubre los componentes is-* usados en home', () => {
-  const whitelist = src.match(/demoable\s*=\s*new Set\(\[([^\]]+)\]\)/);
-  assert.ok(whitelist, 'debe existir una whitelist demoable');
+  const whitelist = src.match(/CON_DEMO\s*=\s*new Set\(\[([^\]]+)\]\)/);
+  assert.ok(whitelist, 'debe existir una whitelist CON_DEMO');
   for (const tag of [
     'is-bar-chart',
     'is-line-chart',
@@ -222,6 +225,94 @@ test('todo texto con background-clip:text tiene override en modo light', () => {
         'en fondo blanco queda ilegible',
     );
   }
+});
+
+// ─── Estructura: los envoltorios que declaran los tokens ───────────
+//
+// El home es una página completa, no la ficha de un componente. Sus custom
+// properties (--hue-a..e, --glass, --shadow-*) se declaran en `.home` y su
+// scroller es `is-main.home-main`. Una migración anterior pasó el HTML a JSON
+// quedándose SOLO con las <section>: se perdieron los dos envoltorios y con
+// ellos los tokens, así que `linear-gradient(115deg, var(--hue-a), …)` quedó
+// inválido, se descartó, y el titular —que se pinta con ese degradado y tiene
+// el relleno transparente— desapareció. Nada falló: build verde, cero errores
+// en consola, texto invisible.
+
+test('la definición declara los envoltorios de página (wrapper + main)', () => {
+  assert.equal(homeDef.wrapperClass, 'home', 'wrapperClass debe ser "home": ahí viven --hue-a..e');
+  assert.equal(homeDef.mainClass, 'home-main', 'mainClass debe ser "home-main": es el scroller');
+});
+
+test('los tokens que usa el titular se declaran en el wrapper', () => {
+  const wrapper = extractBlock(`.${homeDef.wrapperClass}`);
+  assert.ok(wrapper, `debe existir el bloque .${homeDef.wrapperClass} en el CSS`);
+  for (const token of ['--hue-a:', '--hue-b:', '--hue-c:', '--hue-d:']) {
+    assert.ok(wrapper.includes(token), `.${homeDef.wrapperClass} debe declarar ${token}`);
+  }
+});
+
+test('las tres secciones conservan su clase de layout', () => {
+  const clases = homeDef.sections.map((s) => s.className);
+  assert.deepEqual(clases, ['home-hero', 'home-stage', 'home-showcase']);
+});
+
+test('ninguna sección usa el título de relleno del migrador', () => {
+  for (const s of homeDef.sections) {
+    assert.ok(s.title, `${s.id}: title es la etiqueta del TOC, no puede faltar`);
+    assert.doesNotMatch(
+      s.title,
+      /^section-\d+$/,
+      `${s.id}: "${s.title}" es el id de relleno que puso el migrador, no un título`,
+    );
+    assert.ok(
+      s.hideTitle,
+      `${s.id}: el markup ya trae su propio encabezado; sin hideTitle el chrome pinta un <h2> encima`,
+    );
+  }
+});
+
+// ─── Estructura: markup ↔ lo que el behavior busca ─────────────────
+
+test('todo id que consulta el behavior existe en el markup', () => {
+  const ids = [...behSrc.matchAll(/querySelector\(\s*[`'"]#([\w-]+)/g)].map((m) => m[1]);
+  const plantillas = [...behSrc.matchAll(/querySelector\(\s*`#\$\{(\w+)\}`/g)].length;
+  assert.ok(ids.length + plantillas > 0, 'el behavior debe consultar algún id del markup');
+  for (const id of ids) {
+    assert.ok(markup.includes(`id="${id}"`), `el behavior busca #${id} y no está en el markup`);
+  }
+});
+
+test('los CTA del hero y el bloque de consumo por CDN están en el markup', () => {
+  for (const id of ['ctaExplore', 'ctaButton', 'ctaCharts', 'cdnJsCss', 'cdnBundle', 'homeProgress']) {
+    assert.ok(markup.includes(`id="${id}"`), `falta #${id} en el markup del home`);
+  }
+});
+
+test('el stage con los KPI sobrevive en el markup', () => {
+  // El migrador solo miraba <section>: este bloque es un <aside> y se perdió
+  // entero, con sus tiles de charts y sus contadores.
+  for (const marca of ['home-stage__grid', 'kpi__value', 'kpi__spark', 'data-count-to']) {
+    assert.ok(markup.includes(marca), `falta ${marca}: el stage volvió a perderse`);
+  }
+});
+
+test('el behavior compila', () => {
+  // Este archivo lo generó un migrador concatenando varios <script> en una
+  // sola función: `reduce`, `main`, `track` y `postSelect` quedaron declarados
+  // dos veces y el módulo entero dejó de parsear. El registry se come el fallo
+  // con un console.warn, así que la página salía sin CTAs, sin parallax y sin
+  // contadores, y en consola no había ningún error.
+  execFileSync(process.execPath, ['--check', homeBeh], { stdio: 'pipe' });
+});
+
+test('el behavior no toca el DOM por document.querySelector', () => {
+  // El chrome reusa su `is-main` entre previews: buscar por `document` acopla
+  // el home a una clase que puede cambiar de dueño. Todo va contra ctx.main.
+  assert.doesNotMatch(
+    behSrc,
+    /document\.(querySelector|getElementById)\(/,
+    'el behavior debe consultar sobre ctx.main, no sobre document',
+  );
 });
 
 test('el override light del titular no depende solo de min() en color relativo', () => {

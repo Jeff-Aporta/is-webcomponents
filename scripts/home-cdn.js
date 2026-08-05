@@ -292,29 +292,52 @@ const downloadHtml = (variant) => {
 const jsCssSnippet = buildJsCssSnippet();
 const bundleSnippet = buildBundleSnippet();
 
-const preJs = document.getElementById('cdnJsCss');
-const preB = document.getElementById('cdnBundle');
-if (preJs) preJs.textContent = jsCssSnippet;
-if (preB) preB.textContent = bundleSnippet;
+/** El handler delegado se registra una sola vez por documento. */
+let copiaCableada = false;
 
-// Resaltado por CodeMirror. `ensureCodeMirror()` resuelve cuando el core, el
-// addon runMode y los modos ya bajaron de jsDelivr: se acabó el sondeo por
-// setInterval esperando a que aparezca un global.
-ensureCodeMirror().then(() => {
-  if (preJs) paint(preJs);
-  if (preB) paint(preB);
-}).catch(console.error);
+/**
+ * Rellena los snippets y cablea pestañas y copia dentro de `raiz`.
+ *
+ * Es una función y no efectos de módulo porque el home se monta y desmonta
+ * dentro de la galería: con la lógica al importar, un segundo montaje dejaba
+ * los `<pre>` vacíos (el módulo ya estaba en caché y no volvía a ejecutarse).
+ *
+ * @param {ParentNode} [raiz]
+ */
+export function init(raiz = document) {
+  const preJs = raiz.querySelector('#cdnJsCss');
+  const preB = raiz.querySelector('#cdnBundle');
+  if (preJs) preJs.textContent = jsCssSnippet;
+  if (preB) preB.textContent = bundleSnippet;
 
-// Tabs.
-const tabs = document.querySelectorAll('.home-cdn__tab');
-const panels = document.querySelectorAll('.home-cdn__panel');
-tabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    const target = tab.dataset.tab;
-    tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
-    panels.forEach((p) => { p.hidden = p.dataset.panel !== target; });
+  // Resaltado por CodeMirror. `ensureCodeMirror()` resuelve cuando el core, el
+  // addon runMode y los modos ya bajaron de jsDelivr: se acabó el sondeo por
+  // setInterval esperando a que aparezca un global.
+  ensureCodeMirror()
+    .then(() => {
+      if (preJs) paint(preJs);
+      if (preB) paint(preB);
+    })
+    .catch(console.error);
+
+  // Tabs.
+  const tabs = raiz.querySelectorAll('.home-cdn__tab');
+  const panels = raiz.querySelectorAll('.home-cdn__panel');
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
+      panels.forEach((p) => {
+        p.hidden = p.dataset.panel !== target;
+      });
+    });
   });
-});
+
+  if (!copiaCableada) {
+    cablearCopiaYDescarga();
+    copiaCableada = true;
+  }
+}
 
 // Copy-to-clipboard (fallback para file:// o contextos sin clipboard API).
 const writeText = async (text) => {
@@ -332,31 +355,35 @@ const writeText = async (text) => {
 // Delegated handler: cualquier botón .home-cdn__copy se resuelve en click.
 // Usamos delegación porque los botones pueden re-renderizarse (algunos
 // componentes del home los reemplazan) y un listener directo se perdería.
-document.addEventListener('click', async (ev) => {
-  const btn = ev.target?.closest?.('.home-cdn__copy');
-  if (!btn) return;
-  ev.preventDefault();
-  const key = btn.dataset.copy;
-  if (key) {
-    const text = key === 'bundle' ? bundleSnippet : jsCssSnippet;
-    try {
-      await writeText(text);
-      btn.setAttribute('aria-pressed', 'true');
-      const label = btn.querySelector('is-icon');
-      if (label) label.setAttribute('icon', 'mdi:check');
-      btn.lastChild && (btn.lastChild.textContent = ' Copiado');
-      setTimeout(() => {
-        btn.removeAttribute('aria-pressed');
-        if (label) label.setAttribute('icon', 'mdi:content-copy');
-        btn.lastChild && (btn.lastChild.textContent = ' Copiar');
-      }, 1500);
-    } catch {
-      btn.lastChild && (btn.lastChild.textContent = ' Error');
-      setTimeout(() => { btn.lastChild && (btn.lastChild.textContent = ' Copiar'); }, 1500);
+function cablearCopiaYDescarga() {
+  document.addEventListener('click', async (ev) => {
+    const btn = ev.target?.closest?.('.home-cdn__copy');
+    if (!btn) return;
+    ev.preventDefault();
+    const key = btn.dataset.copy;
+    if (key) {
+      const text = key === 'bundle' ? bundleSnippet : jsCssSnippet;
+      try {
+        await writeText(text);
+        btn.setAttribute('aria-pressed', 'true');
+        const label = btn.querySelector('is-icon');
+        if (label) label.setAttribute('icon', 'mdi:check');
+        btn.lastChild && (btn.lastChild.textContent = ' Copiado');
+        setTimeout(() => {
+          btn.removeAttribute('aria-pressed');
+          if (label) label.setAttribute('icon', 'mdi:content-copy');
+          btn.lastChild && (btn.lastChild.textContent = ' Copiar');
+        }, 1500);
+      } catch {
+        btn.lastChild && (btn.lastChild.textContent = ' Error');
+        setTimeout(() => { btn.lastChild && (btn.lastChild.textContent = ' Copiar'); }, 1500);
+      }
+      return;
     }
-    return;
-  }
 
-  const kind = btn.dataset.download;
-  if (kind) downloadHtml(kind);
-});
+    const kind = btn.dataset.download;
+    if (kind) downloadHtml(kind);
+  });
+}
+
+export default init;
