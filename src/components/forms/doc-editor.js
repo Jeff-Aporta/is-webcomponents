@@ -12,6 +12,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *               o string
  *   placeholder texto cuando un bloque está vacío
  *
+ * Contenido inicial declarativo
+ *   <script type="application/json">[{ "type": "heading-1", "text": "…" }]</script>
+ *   Se usa cuando no hay atributo `value`.
+ *
  * Slots
  *   default — opcional, contenido inicial (oculto tras parsearse a bloques)
  *
@@ -101,14 +105,21 @@ import { adoptCss } from '../_shared/adopt-css.js';
     get blocks() { return this.#blocks; }
 
     #readInitial() {
-      const v = this.getAttribute('value');
-      if (!v) { this.#blocks = []; return; }
+      const v = this.getAttribute('value') ?? this.#inlineJson();
+      if (!v) { this.#blocks = [{ id: 'b0', type: 'paragraph', text: '' }]; return; }
       try {
         const data = typeof v === 'string' ? JSON.parse(v) : v;
         if (Array.isArray(data)) this.#blocks = data.filter((b) => TYPES[b.type]).map((b, i) => ({ id: b.id || crypto.randomUUID?.() || `b${Date.now()}_${i}`, text: b.text || '', checked: !!b.checked, type: b.type }));
         else this.#blocks = [];
       } catch { this.#blocks = []; }
       if (!this.#blocks.length) this.#blocks = [{ id: 'b0', type: 'paragraph', text: '' }];
+    }
+
+    /** Semilla declarativa: mismo convenio que el resto del kit. */
+    #inlineJson() {
+      const script = this.querySelector('script[type="application/json"]');
+      const texto = script?.textContent?.trim();
+      return texto || null;
     }
 
     #renderAll() {

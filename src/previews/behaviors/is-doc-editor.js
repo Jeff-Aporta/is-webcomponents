@@ -1,18 +1,23 @@
 /**
- * Behavior migrado desde HTML inline de is-doc-editor.
- * Se ejecuta en mount() tras pintar la definition JSON.
+ * Behavior de is-doc-editor: refleja el JSON vivo del editor en el `<pre>`.
  * @param {import('../_kit/types.d.ts').PreviewMountContext} ctx
  */
+let sync = null;
+let editor = null;
+
 export async function mount(ctx) {
-  const root = ctx.main;
-  void root;
-  const doc = document.getElementById('doc');
-      const out = document.getElementById('out');
-      const sync = () => out.textContent = doc.value;
-      doc.addEventListener('is-change', sync);
-      sync();
+  const doc = ctx.main.querySelector('#doc');
+  const out = ctx.main.querySelector('#out');
+  if (!doc || !out) return;
+
+  editor = doc;
+  sync = () => { out.textContent = JSON.stringify(doc.blocks, null, 2); };
+  doc.addEventListener('is-change', sync);
+  sync();
 }
 
 export function unmount() {
-  /* no-op: listeners del HTML legado no tenían teardown */
+  if (editor && sync) editor.removeEventListener('is-change', sync);
+  editor = null;
+  sync = null;
 }

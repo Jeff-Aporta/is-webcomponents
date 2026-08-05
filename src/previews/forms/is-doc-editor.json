@@ -11,7 +11,7 @@
     {
       "id": "intro",
       "title": "<is-doc-editor>",
-      "lede": "Editor por bloques tipo Notion. Tipeá <kbd class=\"ic\">/</kbd> al inicio de una línea para cambiar el tipo. <kbd class=\"ic\">Enter</kbd> crea otro bloque, <kbd class=\"ic\">Backspace</kbd> sobre texto vacío elimina.",
+      "lede": "Editor por bloques tipo Notion. Escribe <kbd class=\"ic\">/</kbd> al inicio de una línea para cambiar el tipo. <kbd class=\"ic\">Enter</kbd> crea otro bloque, <kbd class=\"ic\">Backspace</kbd> sobre texto vacío elimina.",
       "blocks": []
     },
     {
@@ -20,7 +20,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-doc-editor id=\"doc\" placeholder=\"Tipeá algo…\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"type\": \"heading-1\", \"text\": \"Bitácora de julio\" },\r\n                { \"type\": \"paragraph\", \"text\": \"Resumen del cierre mensual. Editá lo que necesites.\" },\r\n                { \"type\": \"heading-2\", \"text\": \"Por hacer\" },\r\n                { \"type\": \"todo\", \"text\": \"Cruzar facturas con el banco\", \"checked\": true },\r\n                { \"type\": \"todo\", \"text\": \"Revisar depreciaciones\" },\r\n                { \"type\": \"todo\", \"text\": \"Pasar al board de cierre\" },\r\n                { \"type\": \"divider\" },\r\n                { \"type\": \"heading-2\", \"text\": \"Notas\" },\r\n                { \"type\": \"bullet-list\", \"text\": \"Cartera con morosidad al alza\" },\r\n                { \"type\": \"bullet-list\", \"text\": \"Inventario estable, revisar lento\" },\r\n                { \"type\": \"quote\",     \"text\": \"Lo importante se hizo; lo urgente se va acumulando.\" },\r\n                { \"type\": \"code\",      \"text\": \"SELECT sum(saldo) FROM cartera WHERE vencida = true;\" }\r\n              ]\r\n            </script>\r\n          </is-doc-editor>"
+          "html": "<is-doc-editor id=\"doc\" placeholder=\"Escribe algo…\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"type\": \"heading-1\", \"text\": \"Bitácora de julio\" },\r\n                { \"type\": \"paragraph\", \"text\": \"Resumen del cierre mensual. Edita lo que necesites.\" },\r\n                { \"type\": \"heading-2\", \"text\": \"Por hacer\" },\r\n                { \"type\": \"todo\", \"text\": \"Cruzar facturas con el banco\", \"checked\": true },\r\n                { \"type\": \"todo\", \"text\": \"Revisar depreciaciones\" },\r\n                { \"type\": \"todo\", \"text\": \"Pasar al board de cierre\" },\r\n                { \"type\": \"divider\" },\r\n                { \"type\": \"heading-2\", \"text\": \"Notas\" },\r\n                { \"type\": \"bullet-list\", \"text\": \"Cartera con morosidad al alza\" },\r\n                { \"type\": \"bullet-list\", \"text\": \"Inventario estable, revisar lento\" },\r\n                { \"type\": \"quote\",     \"text\": \"Lo importante se hizo; lo urgente se va acumulando.\" },\r\n                { \"type\": \"code\",      \"text\": \"SELECT sum(saldo) FROM cartera WHERE vencida = true;\" }\r\n              ]\r\n            </script>\r\n          </is-doc-editor>"
         }
       ]
     },

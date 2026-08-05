@@ -25,35 +25,11 @@
     {
       "id": "variants",
       "title": "Variantes",
-      "lede": "El atributo <code class=\"code\">variant</code> elige el tono del callout. Cada\r\n          variante trae un icono por defecto.",
+      "lede": "El atributo <code class=\"code\">color</code> elige el tono del callout. Cada color trae un icono por defecto.",
       "blocks": [
         {
-          "kind": "html",
-          "html": "<div class=\"demo-stack\">"
-        },
-        {
-          "kind": "callout",
-          "html": "Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras."
-        },
-        {
-          "kind": "callout",
-          "html": "Los horarios se muestran en tu zona horaria local."
-        },
-        {
-          "kind": "callout",
-          "html": "Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad."
-        },
-        {
-          "kind": "callout",
-          "html": "Tu sesión está a punto de expirar. Guarda tu trabajo."
-        },
-        {
-          "kind": "callout",
-          "html": "Esta acción no se puede deshacer. Eliminará el proyecto para todos."
-        },
-        {
-          "kind": "html",
-          "html": "</div>"
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout color=\"brand\">Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras.</is-callout>\n  <is-callout color=\"neutral\">Los horarios se muestran en tu zona horaria local.</is-callout>\n  <is-callout color=\"success\">Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad.</is-callout>\n  <is-callout color=\"warning\">Tu sesión está a punto de expirar. Guarda tu trabajo.</is-callout>\n  <is-callout color=\"danger\">Esta acción no se puede deshacer. Eliminará el proyecto para todos.</is-callout>\n</div>"
         },
         {
           "kind": "code",
@@ -64,35 +40,11 @@
     {
       "id": "appearances",
       "title": "Apariencias",
-      "lede": "El atributo <code class=\"code\">appearance</code> controla el tratamiento visual.\r\n          Default: <code class=\"code\">filled-outlined</code>.",
+      "lede": "El atributo <code class=\"code\">variant</code> controla el tratamiento visual. Default: <code class=\"code\">filled-outlined</code>.",
       "blocks": [
         {
-          "kind": "html",
-          "html": "<div class=\"demo-stack\">"
-        },
-        {
-          "kind": "callout",
-          "html": "Esta variante <strong>accent</strong> capta la atención de inmediato."
-        },
-        {
-          "kind": "callout",
-          "html": "Fondo + borde, el más habitual."
-        },
-        {
-          "kind": "callout",
-          "html": "Solo fondo, sin borde."
-        },
-        {
-          "kind": "callout",
-          "html": "Solo borde, fondo transparente."
-        },
-        {
-          "kind": "callout",
-          "html": "Sin fondo ni borde, solo texto e icono."
-        },
-        {
-          "kind": "html",
-          "html": "</div>"
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout color=\"brand\" variant=\"accent\">Esta variante <strong>accent</strong> capta la atención de inmediato.</is-callout>\n  <is-callout color=\"brand\" variant=\"filled-outlined\">Fondo + borde, el más habitual.</is-callout>\n  <is-callout color=\"brand\" variant=\"filled\">Solo fondo, sin borde.</is-callout>\n  <is-callout color=\"brand\" variant=\"outlined\">Solo borde, fondo transparente.</is-callout>\n  <is-callout color=\"brand\" variant=\"plain\">Sin fondo ni borde, solo texto e icono.</is-callout>\n</div>"
         },
         {
           "kind": "code",
@@ -103,74 +55,30 @@
     {
       "id": "sizes",
       "title": "Tamaños",
-      "lede": "El atributo <code class=\"code\">size</code> ajusta padding, icono y tipografía.\r\n          Default: <code class=\"code\">m</code>.",
+      "lede": "El tamaño hereda del contexto. Ajusta <code class=\"code\">font-size</code> en el host para escala.",
       "blocks": [
         {
-          "kind": "html",
-          "html": "<div class=\"demo-stack\">"
-        },
-        {
-          "kind": "callout",
-          "html": "0.8em · callout mínimo."
-        },
-        {
-          "kind": "callout",
-          "html": "0.9em · un poco más de énfasis."
-        },
-        {
-          "kind": "callout",
-          "html": "1em · hereda el tamaño del contexto."
-        },
-        {
-          "kind": "callout",
-          "html": "1.15em · más énfasis."
-        },
-        {
-          "kind": "callout",
-          "html": "1.3em · énfasis máximo."
-        },
-        {
-          "kind": "html",
-          "html": "</div>"
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout style=\"font-size:0.8em\">0.8em · callout mínimo.</is-callout>\n  <is-callout style=\"font-size:0.9em\">0.9em · un poco más de énfasis.</is-callout>\n  <is-callout>1em · hereda el tamaño del contexto.</is-callout>\n  <is-callout style=\"font-size:1.15em\">1.15em · más énfasis.</is-callout>\n  <is-callout style=\"font-size:1.3em\">1.3em · énfasis máximo.</is-callout>\n</div>"
         },
         {
           "kind": "code",
-          "code": "<is-callout size=\"l\">…</is-callout>"
+          "code": "<is-callout style=\"font-size:1.15em\">…</is-callout>"
         }
       ]
     },
     {
       "id": "icon",
       "title": "Icono personalizado",
-      "lede": "Pasa un <code class=\"code\">is-icon</code> por el slot <code class=\"code\">icon</code>\r\n          para reemplazar el icono por defecto.",
+      "lede": "Sobreescribe el icono automático con el slot <code class=\"code\">icon</code>.",
       "blocks": [
         {
-          "kind": "html",
-          "html": "<div class=\"demo-stack\">"
-        },
-        {
-          "kind": "callout",
-          "html": "<is-icon slot=\"icon\" icon=\"mdi:timer-sand\" aria-hidden=\"true\"></is-icon>\r\n            Tiempo limitado: queda 1 día para enviar la solicitud."
-        },
-        {
-          "kind": "callout",
-          "html": "<is-icon slot=\"icon\" icon=\"mdi:rocket-launch\" aria-hidden=\"true\"></is-icon>\r\n            Lanzamiento completado. Métricas disponibles."
-        },
-        {
-          "kind": "callout",
-          "html": "<is-icon slot=\"icon\" icon=\"mdi:shield-alert\" aria-hidden=\"true\"></is-icon>\r\n            Bloqueo de seguridad: demasiados intentos."
-        },
-        {
-          "kind": "callout",
-          "html": "<is-icon slot=\"icon\" icon=\"mdi:bullhorn\" aria-hidden=\"true\"></is-icon>\r\n            Anuncio global: nueva versión disponible."
-        },
-        {
-          "kind": "html",
-          "html": "</div>"
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout color=\"warning\">\n    <is-icon slot=\"icon\" icon=\"mdi:timer-sand\" aria-hidden=\"true\"></is-icon>\n    Tiempo limitado: queda 1 día para enviar la solicitud.\n  </is-callout>\n  <is-callout color=\"success\">\n    <is-icon slot=\"icon\" icon=\"mdi:rocket-launch\" aria-hidden=\"true\"></is-icon>\n    Lanzamiento completado. Métricas disponibles.\n  </is-callout>\n  <is-callout color=\"danger\">\n    <is-icon slot=\"icon\" icon=\"mdi:shield-alert\" aria-hidden=\"true\"></is-icon>\n    Bloqueo de seguridad: demasiados intentos.\n  </is-callout>\n  <is-callout color=\"brand\">\n    <is-icon slot=\"icon\" icon=\"mdi:bullhorn\" aria-hidden=\"true\"></is-icon>\n    Anuncio global: nueva versión disponible.\n  </is-callout>\n</div>"
         },
         {
           "kind": "code",
-          "code": "<is-callout color=\"warning\">\n  <is-icon slot=\"icon\" icon=\"mdi:timer-sand\"></is-icon>\n  Tiempo limitado.\n</is-callout>"
+          "code": "<is-callout color=\"warning\">\n  <is-icon slot=\"icon\" icon=\"mdi:timer-sand\"></is-icon>\n  Tiempo limitado…\n</is-callout>"
         }
       ]
     },
@@ -192,23 +100,11 @@
     {
       "id": "actions",
       "title": "Con acciones",
-      "lede": "Combina <code class=\"code\">is-callout</code> con <code class=\"code\">is-button</code>\r\n          para CTAs dentro del mensaje.",
+      "lede": "Puedes anidar botones u otros controles dentro del callout.",
       "blocks": [
         {
-          "kind": "html",
-          "html": "<div class=\"demo-stack\">"
-        },
-        {
-          "kind": "callout",
-          "html": "<strong>Una nueva versión está disponible</strong>\r\n            <p>Incluye el módulo de reportes y soporte para multi-empresa.</p>\r\n            <is-button variant=\"outlined\" color=\"brand\">Más tarde</is-button>\r\n            <is-button variant=\"filled\" color=\"brand\" style=\"margin-left:.5em\">Actualizar</is-button>"
-        },
-        {
-          "kind": "html",
-          "html": "</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<is-callout color=\"brand\">\n  <strong>Una nueva versión está disponible</strong>\n  <is-button variant=\"outlined\">Más tarde</is-button>\n  <is-button color=\"brand\">Actualizar</is-button>\n</is-callout>"
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout color=\"brand\">\n    <strong>Una nueva versión está disponible</strong>\n    <p>Incluye el módulo de reportes y soporte para multi-empresa.</p>\n    <is-button variant=\"outlined\" color=\"brand\">Más tarde</is-button>\n    <is-button variant=\"filled\" color=\"brand\">Actualizar ahora</is-button>\n  </is-callout>\n</div>"
         }
       ]
     },

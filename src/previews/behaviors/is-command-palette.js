@@ -1,16 +1,32 @@
 /**
- * Behavior migrado desde HTML inline de is-command-palette.
- * Se ejecuta en mount() tras pintar la definition JSON.
+ * Behavior de is-command-palette: abre la paleta desde el botón del demo y
+ * registra el comando elegido.
  * @param {import('../_kit/types.d.ts').PreviewMountContext} ctx
  */
+let paleta = null;
+let boton = null;
+let abrir = null;
+let alElegir = null;
+
 export async function mount(ctx) {
-  const root = ctx.main;
-  void root;
-  const cmd = document.getElementById('cmd');
-      document.getElementById('openBtn').addEventListener('click', () => cmd.open());
-      cmd.addEventListener('is-select', (e) => console.log('ejecutar:', e.detail.command.id));
+  paleta = ctx.main.querySelector('is-command-palette');
+  boton = ctx.main.querySelector('#openBtn');
+  if (!paleta) return;
+
+  alElegir = (e) => console.log('ejecutar:', e.detail.command.id);
+  paleta.addEventListener('is-select', alElegir);
+
+  if (boton) {
+    abrir = () => paleta.open();
+    boton.addEventListener('click', abrir);
+  }
 }
 
 export function unmount() {
-  /* no-op: listeners del HTML legado no tenían teardown */
+  if (paleta && alElegir) paleta.removeEventListener('is-select', alElegir);
+  if (boton && abrir) boton.removeEventListener('click', abrir);
+  paleta = null;
+  boton = null;
+  abrir = null;
+  alElegir = null;
 }

@@ -34,7 +34,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"mention-wrap\">\r\n            <label style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)\">Solo usuarios</label>\r\n            <is-mention trigger=\"@\" placeholder=\"Tipeá @ para nombrar…\">\r\n              <script type=\"application/json\">\r\n                { \"@\": [\"Ana\", \"Pedro\", \"Sofía\", \"Jorge\", \"Lina\", \"Camilo\"] }\r\n              </script>\r\n            </is-mention>\r\n          </div>"
+          "html": "<div class=\"mention-wrap\">\r\n            <label style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)\">Solo usuarios</label>\r\n            <is-mention trigger=\"@\" placeholder=\"Escribe @ para nombrar…\">\r\n              <script type=\"application/json\">\r\n                { \"@\": [\"Ana\", \"Pedro\", \"Sofía\", \"Jorge\", \"Lina\", \"Camilo\"] }\r\n              </script>\r\n            </is-mention>\r\n          </div>"
         }
       ]
     },
