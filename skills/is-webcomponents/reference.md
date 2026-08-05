@@ -61,7 +61,11 @@ Escala: subir `font-size` del contexto o del host.
 
 ## Patrón wrapper de dominio
 
+Tras cargar `all.min.js` (incluye `helpers/ui`), usa `IsUi` / `Ui`:
+
 ```js
+const { html, css, define, jsonScript } = IsUi;
+
 // Bien: traduce payload → kit
 root.append(html`
   <is-tag color="${tono}" variant="filled-outlined" pill>${label}</is-tag>
@@ -75,6 +79,8 @@ root.append(html`
 // Mal: reinventar
 root.append(html`<span class="badge badge-${tono}">${label}</span>`);
 ```
+
+CDN suelto: `…/dist/cdn/helpers/ui.min.js`. Docs: `components/helpers/ui.md`.
 
 Referencia real: wrappers de dominio tipo `tk-badges` → `is-tag`, `tk-chart` → `is-chart`, `tk-block` → `is-callout` para kinds desconocidos.
 

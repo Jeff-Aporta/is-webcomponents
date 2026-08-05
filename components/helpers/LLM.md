@@ -12,6 +12,7 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
+| `IsUi` (módulo) | [ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/ui.md) | Plantilla `html` / CSS / `define` para apps |
 | `<is-popover>` | [popover.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/popover.md) | Popover |
 | `<is-relative-time>` | [relative-time.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/relative-time.md) | Tiempo relativo |
 | `<is-format-date>` | [format-date.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/format-date.md) | Formato de fecha |

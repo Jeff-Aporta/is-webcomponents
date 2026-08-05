@@ -251,7 +251,30 @@ import '../media/icon.js';
     // React: onIsFocus / onIsBlur / onIsClick / onIsInvalid (o addEventListener).
     #boundFocus = (e) => { this.#emit("is-focus",   { originalEvent: e }); };
     #boundBlur  = (e) => { this.#emit("is-blur",    { originalEvent: e }); };
-    #boundClick = (e) => { this.#emit("is-click",   { originalEvent: e }); };
+    #boundClick = (e) => {
+      this.#emit("is-click", { originalEvent: e });
+      // El <button> interno está en Shadow DOM: no es descendiente del <form>
+      // light, así que type=submit|reset no hace nada solos. Activamos el
+      // formulario asociado vía ElementInternals (o closest como fallback).
+      if (e.defaultPrevented) return;
+      if (this.hasAttribute("disabled") || this.hasAttribute("loading")) return;
+      if (this.hasAttribute("href")) return;
+      const type = (this.getAttribute("type") || "button").toLowerCase();
+      if (type !== "submit" && type !== "reset") return;
+      const form = this.#internals?.form ?? this.closest("form");
+      if (!form) return;
+      e.preventDefault();
+      if (type === "reset") {
+        form.reset();
+        return;
+      }
+      if (typeof form.requestSubmit === "function") {
+        try { form.requestSubmit(this); }
+        catch { form.requestSubmit(); }
+      } else {
+        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      }
+    };
 
     #wireEvents() {
       if (this.#wired) return;
