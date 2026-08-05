@@ -371,43 +371,62 @@ body {
   display: none !important;
 }
 
-@media (max-width: 640px) {
-  /* el is-split-panel cambia a vertical via JS (matchMedia listener) */
+/* Hamburguesa del catálogo: solo se muestra cuando el nav vive en el drawer
+   (lo controla syncNavLayout con el atributo hidden). */
+.shell-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.375em;
+  height: 2.375em;
+  padding: 0;
+  border: 1px solid var(--is-border);
+  border-radius: 999px;
+  background: var(--is-control-bg, transparent);
+  color: var(--is-control-text);
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease, transform 120ms ease;
 
+  & svg {
+    width: 1.375em;
+    height: 1.375em;
+  }
+
+  &:hover {
+    color: var(--is-text);
+    border-color: color-mix(in srgb, var(--is-accent) 55%, var(--is-border));
+  }
+
+  &:active { transform: translateY(1px); }
+
+  &:focus-visible {
+    outline: 2px solid var(--is-focus);
+    outline-offset: 2px;
+  }
+
+  &[hidden] { display: none; }
+}
+
+/* El nav conserva su lista vertical dentro del drawer; lo que sobra ahí es el
+   cromo de columna (borde propio, fondo, alto completo). */
+.shell-nav-drawer {
+  --size: min(300px, 88vw);
+  --spacing: 0.9rem;
+
+  & .shell-nav {
+    height: auto;
+    padding: 0;
+    border-right: 0;
+    background: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 640px) {
   .shell-bar {
     flex-wrap: wrap;
 
     & .brand { min-width: 5.5em; }
-  }
-
-  .shell-nav {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: stretch;
-    gap: 0.75em;
-    overflow-x: auto;
-    overflow-y: hidden;
-    border-right: 0;
-    border-bottom: 1px solid var(--is-border);
-    padding: 0.5em;
-
-    & .shell-nav__group {
-      flex: 0 0 auto;
-      flex-direction: row;
-      align-items: center;
-      gap: 0.25em;
-    }
-
-    & .shell-nav__heading {
-      padding: 0.25em 0.35em;
-      white-space: nowrap;
-    }
-
-    & .shell-nav__item {
-      flex: 0 0 auto;
-      white-space: nowrap;
-      margin-inline-start: 0;
-      padding: 0.28em 0.55em;
-    }
   }
 }

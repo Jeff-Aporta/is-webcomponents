@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="src/styles/palettes.css">
   <link rel="stylesheet" href="src/styles/shell.css">
   <link rel="stylesheet" href="src/styles/presentation.css">
+  <link rel="stylesheet" href="src/components/layout/preview-component.css">
   <link rel="icon" href="src/assets/favicon.svg" type="image/svg+xml">
   <script type="module" src="dist/cdn/all.min.js"></script>
   <script type="module" src="src/components/layout/preview-component.js"></script>
@@ -19,6 +20,15 @@
 </head>
 <body>
   <header class="shell-bar">
+    <button type="button" class="shell-menu-btn" id="navToggle" aria-expanded="false"
+            aria-controls="navDrawer" aria-label="Abrir el catálogo de componentes"
+            title="Catálogo de componentes" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+
     <div class="brand-wrap" id="brandWrap">
       <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="ContaPyme — elegir paleta" title="Elegir paleta">
         <span id="brandLead">conta</span><span class="brand__accent" id="brandAccent">pyme</span><span id="brandTail"></span>
@@ -56,6 +66,10 @@
       <iframe class="preview-frame" id="previewFrame" title="Vista del componente"></iframe>
     </div>
   </is-split-panel>
+
+  <!-- En pantallas pequeñas el nav se muda aquí (ver syncNavLayout). -->
+  <is-drawer id="navDrawer" class="shell-nav-drawer" placement="start" light-dismiss
+             label="Componentes"></is-drawer>
 
   <script type="module">
     import components from './manifest.js';
@@ -354,6 +368,8 @@
 
     function selectComponent(tag) {
       const next = catalog.find(item => item.tag === tag) ?? HOME;
+      // Elegir componente cierra el catálogo: en compacto tapa el contenido.
+      document.getElementById('navDrawer')?.hide?.();
       if (next === component) return;
       component = next;
       showPreview();
@@ -433,15 +449,47 @@
       }).observe(shellNav);
     }
 
-    // --- mobile: convertir a vertical si narrow ---
-    const mql = window.matchMedia('(max-width: 640px)');
-    const syncOrientation = () => {
-      if (!mainSplit) return;
-      mainSplit.orientation = mql.matches ? 'vertical' : 'horizontal';
+    // --- mobile: el catálogo se muda a un drawer izquierdo ---
+    const navDrawer = document.getElementById('navDrawer');
+    const navToggle = document.getElementById('navToggle');
+    const compactNav = window.matchMedia('(max-width: 640px)');
+
+    const syncNavLayout = () => {
+      if (!mainSplit || !navDrawer || !navToggle) return;
+      const compact = compactNav.matches;
+      navToggle.hidden = !compact;
+      document.body.dataset.navLayout = compact ? 'drawer' : 'split';
+
+      if (compact) {
+        if (shellNav.parentElement !== navDrawer) {
+          // Dentro del drawer no hay slot "start" al que engancharse.
+          shellNav.removeAttribute('slot');
+          navDrawer.append(shellNav);
+        }
+        mainSplit.setAttribute('collapse', 'start');
+      } else {
+        if (shellNav.parentElement !== mainSplit) {
+          navDrawer.hide?.();
+          shellNav.setAttribute('slot', 'start');
+          mainSplit.prepend(shellNav);
+        }
+        mainSplit.removeAttribute('collapse');
+      }
       scheduleScrollNavToCurrent();
     };
-    mql.addEventListener?.('change', syncOrientation);
-    syncOrientation();
+
+    compactNav.addEventListener?.('change', syncNavLayout);
+    navToggle?.addEventListener('click', () => navDrawer.show?.());
+    navDrawer?.addEventListener('is-show', () => {
+      navToggle.setAttribute('aria-expanded', 'true');
+      // El nav acaba de ganar tamaño: centrar el ítem activo.
+      scheduleScrollNavToCurrent();
+    });
+    navDrawer?.addEventListener('is-after-show', () => scrollNavToCurrent());
+    navDrawer?.addEventListener('is-after-hide', () => {
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+    syncNavLayout();
   </script>
 </body>
 </html>

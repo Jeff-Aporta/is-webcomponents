@@ -43,11 +43,17 @@ const walk = (dir, out = []) => {
   return out;
 };
 
-/** Tags que registra el .js hermano: son los hosts que adoptan esta hoja. */
+/**
+ * Tags que registra el .js hermano: son los hosts que adoptan esta hoja.
+ * Un componente sin shadow root (light DOM a propósito, como
+ * is-preview-component) no adopta nada: ahí `is-x .y {}` es la única forma de
+ * estilarlo y no hay CSS muerto que perseguir.
+ */
 const tagsOf = (cssFile) => {
   const jsFile = cssFile.replace(/\.css$/, '.js');
   if (!existsSync(jsFile)) return [];
   const js = readFileSync(jsFile, 'utf8');
+  if (!/attachShadow|adoptCss/.test(js)) return [];
   return [...js.matchAll(/customElements\.define\(\s*['"]([\w-]+)['"]/g)].map((m) => m[1]);
 };
 

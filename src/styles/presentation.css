@@ -1163,7 +1163,16 @@ html[data-embed="1"] .preview-chrome {
     border-left: 0;
     border-top: 1px solid color-mix(in srgb, var(--is-accent) 45%, var(--is-border));
   }
-  .main { padding: 24px 20px 60px; }
+  /* Las variables acompañan al padding: el preview-chrome sticky se ancla
+     descontándolas, así que cambiar solo `padding` lo dejaba mal puesto. */
+  .main,
+  is-main.main {
+    --main-pad-top: 24px;
+    --main-pad-x: 20px;
+    padding: var(--main-pad-top) var(--main-pad-x) 60px;
+  }
+  /* Hueco para la hamburguesa del índice, que vive en la esquina. */
+  .preview-chrome { margin-right: calc(56px - var(--main-pad-x, 20px)); }
   .playground { grid-template-columns: 1fr; }
   .anatomy is-button { transform: scale(1.1); }
 }

@@ -51,6 +51,7 @@ import './split-panel.js';
 | `position` | string/según contrato | Fuente define default/restricción. |
 | `orientation` | string/según contrato | Fuente define default/restricción. |
 | `primary` | string/según contrato | Fuente define default/restricción. |
+| `collapse` | `start` · `end` | Oculta ese panel y el divisor; el otro toma todo el espacio. |
 | `disabled` | boolean | Fuente define default/restricción. |
 | `snap` | string/según contrato | Fuente define default/restricción. |
 | `snap-threshold` | string/según contrato | Fuente define default/restricción. |
@@ -64,6 +65,7 @@ import './split-panel.js';
 | `storageKey` | lectura/escritura | Declarada por clase. |
 | `orientation` | lectura/escritura | Declarada por clase. |
 | `primary` | lectura/escritura | Declarada por clase. |
+| `collapse` | lectura/escritura | Declarada por clase. |
 | `disabled` | lectura/escritura | Declarada por clase. |
 | `snap` | lectura/escritura | Declarada por clase. |
 | `snapThreshold` | lectura/escritura | Declarada por clase. |
@@ -133,6 +135,11 @@ Documentación de cabecera preservada desde fuente:
 >   position-in-pixels  number          (sin reflect)        — posición en px (sobrevive a resize)
 >   orientation         'horizontal' | 'vertical'  (default horizontal, reflect)
 >   primary             'start' | 'end'   (reflect, opcional)
+>   collapse            'start' | 'end'   (reflect, opcional) — oculta ese panel
+>                       y su divisor; el otro se queda con todo el espacio. No
+>                       toca la posición persistida: al quitarlo vuelve el
+>                       tamaño anterior. Pensado para layouts responsive que
+>                       mudan ese contenido a un <is-drawer>.
 >   disabled            boolean  (reflect)
 >   snap                string  (espacio-sep "100px 50%")
 >   snap-threshold      number  (default 12)  — px ventana de snap

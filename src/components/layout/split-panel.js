@@ -13,6 +13,11 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
  *   position-in-pixels  number          (sin reflect)        — posición en px (sobrevive a resize)
  *   orientation         'horizontal' | 'vertical'  (default horizontal, reflect)
  *   primary             'start' | 'end'   (reflect, opcional)
+ *   collapse            'start' | 'end'   (reflect, opcional) — oculta ese panel
+ *                       y su divisor; el otro se queda con todo el espacio. No
+ *                       toca la posición persistida: al quitarlo vuelve el
+ *                       tamaño anterior. Pensado para layouts responsive que
+ *                       mudan ese contenido a un <is-drawer>.
  *   disabled            boolean  (reflect)
  *   snap                string  (espacio-sep "100px 50%")
  *   snap-threshold      number  (default 12)  — px ventana de snap
@@ -57,7 +62,8 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
     </div>
   `;
 
-  const OBSERVED = ['position', 'orientation', 'primary', 'disabled', 'snap', 'snap-threshold'];
+  const OBSERVED = ['position', 'orientation', 'primary', 'collapse', 'disabled', 'snap', 'snap-threshold'];
+  const VALID_SIDE = ['start', 'end'];
 
   const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
@@ -224,6 +230,16 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
       else this.removeAttribute('primary');
     }
 
+    /** Panel oculto por completo ('start' | 'end'), o null si ambos se ven. */
+    get collapse() {
+      const c = this.getAttribute('collapse');
+      return VALID_SIDE.includes(c) ? c : null;
+    }
+    set collapse(v) {
+      if (VALID_SIDE.includes(v)) this.setAttribute('collapse', v);
+      else this.removeAttribute('collapse');
+    }
+
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
 
@@ -314,6 +330,15 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
 
     _updateStyles() {
       const isVertical = this.orientation === 'vertical';
+
+      // Colapsado: pista única. El CSS oculta el panel y el divisor, y la
+      // posición cacheada se queda intacta para cuando vuelva a expandirse.
+      if (this.collapse) {
+        this.style.gridTemplateColumns = 'minmax(0, 1fr)';
+        this.style.gridTemplateRows = 'minmax(0, 1fr)';
+        return;
+      }
+
       const divider = 'var(--_divider-width)';
       let primaryTrack;
       let secondaryTrack = 'minmax(0, 1fr)';
@@ -354,7 +379,7 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
     // ---- drag ----
 
     _handlePointerDown(event) {
-      if (this.disabled) return;
+      if (this.disabled || this.collapse) return;
       if (event.button !== undefined && event.button !== 0) return;
       event.preventDefault();
       this._detectSize();
@@ -404,7 +429,7 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
     // ---- keyboard ----
 
     _handleKeyDown(event) {
-      if (this.disabled) return;
+      if (this.disabled || this.collapse) return;
       const horizontal = this.orientation === 'horizontal';
       const flip = this.primary === 'end' ? -1 : 1;
       let handled = false;

@@ -63,6 +63,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['open', 'label', 'placement', 'without-header', 'light-dismiss'];
   const VALID_PLACEMENT = ['start', 'end', 'top', 'bottom'];
+  const HIDDEN_KEYFRAME = {
+    start: { transform: 'translateX(-100%)' },
+    end: { transform: 'translateX(100%)' },
+    top: { transform: 'translateY(-100%)' },
+    bottom: { transform: 'translateY(100%)' },
+  };
 
   class IsDrawer extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -219,6 +225,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     #setOpen(desired) {
       if (desired) {
+        if (this.dataset.state === 'open' || this.dataset.state === 'opening') {
+          return Promise.resolve();
+        }
         this.dispatchEvent(new CustomEvent('is-show', { detail: {}, bubbles: true, composed: true }));
         this.#lastFocus = document.activeElement;
         this.dataset.state = 'opening';
@@ -238,7 +247,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     #doClose() {
-      if (!this.open) return Promise.resolve();
+      // El estado manda, no el atributo: cerrar quitando `open` desde fuera
+      // llega aquí con this.open ya en false, y con la guarda puesta en el
+      // atributo el drawer se quedaba pintado en pantalla.
+      const state = this.dataset.state;
+      if (!state || state === 'closing') return Promise.resolve();
       this.dataset.state = 'closing';
       this.removeAttribute('open');
       return this.#animateClose().then(() => {
@@ -255,11 +268,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     #animateOpen() {
       const dur = this.#readDur('--show-duration', 220);
-      const placement = this.placement;
-      const startKeyframe = this.#startKeyframe(true);
-      const endKeyframe = this.#endKeyframe();
       this.#drawer.animate(
-        [startKeyframe, endKeyframe],
+        [this.#hiddenKeyframe(), this.#visibleKeyframe()],
         { duration: dur, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'forwards' },
       );
       this.#backdrop.animate(
@@ -271,10 +281,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     #animateClose() {
       const dur = this.#readDur('--hide-duration', 180);
-      const startKeyframe = this.#endKeyframe();
-      const endKeyframe = this.#startKeyframe(false);
       this.#drawer.animate(
-        [startKeyframe, endKeyframe],
+        [this.#visibleKeyframe(), this.#hiddenKeyframe()],
         { duration: dur, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'forwards' },
       );
       this.#backdrop.animate(
@@ -284,19 +292,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
       return new Promise((resolve) => setTimeout(resolve, dur));
     }
 
-    #startKeyframe(open) {
-      const p = this.placement;
-      const t = open ? 100 : -100;
-      switch (p) {
-        case 'start': return { transform: `translateX(-${t}%)` };
-        case 'end':   return { transform: `translateX(${t}%)` };
-        case 'top':   return { transform: `translateY(-${t}%)` };
-        case 'bottom':return { transform: `translateY(${t}%)` };
-      }
-      return { transform: 'translateX(0)' };
-    }
+    /** Posición fuera de pantalla, del lado del borde que ocupa el drawer. */
+    #hiddenKeyframe() { return HIDDEN_KEYFRAME[this.placement]; }
 
-    #endKeyframe() { return { transform: 'translate(0,0)' }; }
+    #visibleKeyframe() { return { transform: 'translate(0,0)' }; }
 
     #readDur(propName, fallback) {
       const v = parseFloat(getComputedStyle(this).getPropertyValue(propName));

@@ -40,40 +40,54 @@
   overflow: hidden;
 }
 
-:host([placement="end"]) .drawer,
-:host([placement="start"]) .drawer {
-  width: min(var(--size), calc(100vw - 2 * var(--spacing)));
-  height: 100vh;
+/* Los cuatro bordes: el eje que toca el borde va al 100% del host (que es
+   fixed inset:0, así que 100% sigue al viewport visible en móvil, al
+   contrario que 100vh). Cada placement redondea y sombrea solo su cara
+   expuesta. */
+:host([placement="start"]) .drawer,
+:host([placement="end"]) .drawer {
+  width: min(var(--size), calc(100% - 2 * var(--spacing)));
+  height: 100%;
   top: 0;
   bottom: 0;
 }
-:host([placement="end"])   .drawer { right: 0; left: auto; }
-:host([placement="start"]) .drawer { left: 0;  right: auto; }
-
-:host([placement="top"]),
-:host([placement="bottom"]) {
-  --_shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+:host([placement="start"]) .drawer {
+  left: 0;
+  right: auto;
+  border-start-end-radius: var(--_radius);
+  border-end-end-radius: var(--_radius);
 }
-:host([placement="top"]),
+:host([placement="end"]) .drawer {
+  right: 0;
+  left: auto;
+  border-start-start-radius: var(--_radius);
+  border-end-start-radius: var(--_radius);
+}
+
+:host([placement="top"]) .drawer,
 :host([placement="bottom"]) .drawer {
-  height: min(var(--size), calc(100vh - 2 * var(--spacing)));
-  width: 100vw;
+  height: min(var(--size), calc(100% - 2 * var(--spacing)));
+  width: 100%;
   left: 0;
   right: 0;
 }
-:host([placement="top"])    .drawer { top: 0;    bottom: auto; }
-:host([placement="bottom"]) .drawer { bottom: 0; top: auto; }
-
-:host([placement="end"]) .drawer,
 :host([placement="top"]) .drawer {
-  border-top-left-radius: var(--_radius);
-  border-bottom-left-radius: var(--_radius);
+  top: 0;
+  bottom: auto;
+  border-end-start-radius: var(--_radius);
+  border-end-end-radius: var(--_radius);
 }
-:host([placement="start"]) .drawer,
 :host([placement="bottom"]) .drawer {
-  border-top-right-radius: var(--_radius);
-  border-bottom-right-radius: var(--_radius);
+  bottom: 0;
+  top: auto;
+  border-start-start-radius: var(--_radius);
+  border-start-end-radius: var(--_radius);
 }
+
+:host([placement="start"])  { --_shadow: 8px 0 24px rgba(0, 0, 0, 0.18); }
+:host([placement="end"])    { --_shadow: -8px 0 24px rgba(0, 0, 0, 0.18); }
+:host([placement="top"])    { --_shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
+:host([placement="bottom"]) { --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18); }
 
 .header {
   display: flex;

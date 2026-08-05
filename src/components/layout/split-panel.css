@@ -103,3 +103,12 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* collapse="start|end": ese panel y el divisor desaparecen; el track único lo
+   fija _updateStyles (el inline style gana al stylesheet). */
+:host([collapse="start"]) [part~="start"],
+:host([collapse="end"]) [part~="end"],
+:host([collapse="start"]) .divider,
+:host([collapse="end"]) .divider {
+  display: none;
+}

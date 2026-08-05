@@ -224,6 +224,12 @@
               "Panel que mantiene tamaño al resize."
             ],
             [
+              "<code>collapse</code>",
+              "start · end",
+              "—",
+              "Oculta ese panel y el divisor; el otro se queda con todo el espacio. Al quitarlo vuelve el tamaño anterior."
+            ],
+            [
               "<code>disabled</code>",
               "boolean",
               "—",
