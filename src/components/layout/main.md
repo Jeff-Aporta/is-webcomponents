@@ -109,6 +109,16 @@ Documentación de cabecera preservada desde fuente:
 > Methods: scrollToTop(), clearRememberedScroll(), saveScroll(), restoreScroll()
 > Restore solo en reload / back_forward. Navegación fresca (p. ej. cambio
 > de componente en la galería vía iframe.src) arranca en top.
+> storage-key identifica el contenido: cambiarlo en caliente equivale a
+> cambiar de vista, así que resetea a top en vez de restaurar.
+
+Detalle de la restauración:
+
+- El contenido suele pintarse después de que llega `storage-key`, así que la
+  restauración reintenta durante 2,5 s hasta alcanzar el top guardado; un
+  gesto del usuario (`wheel`, `touchstart`, `pointerdown`, `keydown`) la aborta.
+- Cambiar `storage-key` en caliente resetea a top y limpia la lectura
+  recordada de la vista entrante, de modo que un F5 inmediato se queda arriba.
 
 ## Dependencias y componentes relacionados
 
