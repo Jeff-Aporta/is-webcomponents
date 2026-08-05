@@ -10,23 +10,18 @@ description: >-
 
 # IS Web Components — stack obligatorio
 
-## Instalar
+## Consumo (CDN only)
 
-```bash
-npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
-```
-
-La skill y los MD LLM viven en **fuente** (`skills/`, `components/**/*.md`), no en `dist/cdn`.
+El kit **no se publica en npm** todavía. Consume siempre por jsDelivr (`dist/cdn/`). Los MD LLM viven en **fuente** (`components/**/*.md`), no en `dist/cdn`.
 
 ### Prompt para el LLM
 
 ```
-Instala en este entorno la skill is-webcomponents del repo Jeff-Aporta/is-webcomponents.
-Ejecuta exactamente: npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
-La skill vive en skills/is-webcomponents/ del repo (fuente), no en dist/.
-Tras instalarla, úsala siempre que construyas o edites UI con el kit is-* (CDN all.min.js / is-base / palettes):
-reutiliza los tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
-Consulta components/LLM.md y el MD del módulo antes de inventar API.
+Usa el kit IS Web Components solo por CDN (jsDelivr), sin npm ni npx.
+Bootstrap: is-base.min.css + palettes.min.css + el .min.js del tag (o category.*.min.js / all.min.js).
+Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
+Antes de inventar API: lee components/LLM.md, el LLM.md de la categoría y el MD del módulo.
+Tema/paleta: data-theme y data-palette en <html>. Iconos: <is-icon icon="mdi:…">.
 ```
 
 Fuente de verdad: [components/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/LLM.md)  
@@ -71,13 +66,27 @@ Por defecto pin por **commit SHA**. Excepción: apps que declaran seguimiento co
 - Preferir `all.min.js` en previews/apps pequeñas. Bundles por categoría: `dist/cdn/<cat>/category.<cat>.min.js`.
 - Tema: `data-theme` / `data-palette` en `<html>`. Tokens: `--is-text`, `--is-bg`, `--is-border`, `--is-accent`, etc.
 
-## Arquitectura de apps (patrón jagudeloe)
+## Arquitectura de apps (patrón jagudeloe / r2admin)
 
 | Capa | Prefijo | Responsabilidad |
 |------|---------|-----------------|
 | Kit | `is-*` | UI genérica del CDN |
-| Dominio | `tk-*` / propio | Traducir payload → `is-*` |
+| Dominio | `tk-*` / `app-*` | Traducir payload → `is-*` |
 | Shell | `*-app`, `*-nav`, `*-view` | Orquestación, routing, datos |
+
+### CSS de dominio (igual que el kit)
+
+Cada `app-*` / `tk-*` lleva **JS + CSS hermanos**. No embebidos en el TS.
+
+1. Fuente: `app-files.ts` + `app-files.css`
+2. Build: minifica a `dist/cdn/app-files.js` + `dist/cdn/app-files.css`
+3. Runtime: `IsUi.adoptCss(shadow, import.meta.url)` (misma idea que `_shared/adopt-css.js`)
+
+Tras vaciar el shadow, vuelve a llamar `adoptCss` (los `<link>` se borran con el contenido).
+
+`IsUi.css(shadow, cssText)` queda solo para prototipos sin archivo hermano.
+
+Docs: [helpers/ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/ui.md) · `all.min.js` incluye `helpers/ui`.
 
 ## Prohibido / eliminado
 
@@ -110,6 +119,7 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/c
 - Traer MUI / React / Iconify / Chart.js directo cuando el kit cubre el caso.
 - Usar o documentar `is-popup` (eliminado).
 - Meter CSS de componente del kit en el `<head>` (solo tema + paletas).
+- Meter el CSS del wrapper de dominio como string dentro del `.ts` (usar `.css` hermano + `adoptCss`).
 - Inventar props/`data-*` no documentados.
 - Usar `size` colors o APIs ad-hoc fuera del contrato MD.
 - Crear un `tk-*` que pinte UI genérica en vez de delegar a `is-*`.
@@ -122,6 +132,8 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/c
 - [ ] Tema/paleta con tokens `--is-*`.
 - [ ] Wrappers de dominio solo traducen datos → kit.
 - [ ] CDN: SHA fijado **o** `@main` si el proyecto (como tks) sigue tip.
+- [ ] CSS de dominio en archivo hermano + `adoptCss` (no `const CSS` gigante en el JS).
+- [ ] Build de la app emite `.css` minificado junto al `.js` en `dist/cdn`.
 
 ## Fundar una app nueva
 

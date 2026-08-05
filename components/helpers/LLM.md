@@ -30,7 +30,8 @@ Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mis
 
 - `../_shared/position.js`
 - `../_shared/prefs.js`
-- `../_shared/adopt-css.js`
+- `../_shared/adopt-css.js` (kit interno; los `is-*` lo usan con `.css` hermano)
+- `IsUi.adoptCss` en apps ([ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/components/helpers/ui.md)) — mismo contrato, sin embeber CSS en el JS
 
 ## Dependencias compartidas
 

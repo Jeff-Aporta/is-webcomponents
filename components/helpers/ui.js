@@ -153,17 +153,48 @@ export const define = (tag, clase) => {
 };
 
 /**
- * Fábrica de componente con estado propio: shadow + CSS adoptado y
- * `props` que dispara render() (repintado completo).
+ * Inyecta el `.css` hermano del módulo en el ShadowRoot (mismo contrato que
+ * `components/_shared/adopt-css.js` del kit, sin scrollbars del kit).
+ *
+ * Convención CDN/apps: `app-foo.js` ↔ `app-foo.css` (o `.min.js` ↔ `.min.css`).
+ * Llamar **después** de rellenar el shadow: un `innerHTML = …` / vaciado
+ * borra los `<link>`.
+ *
+ * @param {ShadowRoot} shadowRoot
+ * @param {string} moduleUrl  `import.meta.url` del módulo del componente
  */
-export const crearComponente = (cssText, render, inicial) => class extends HTMLElement {
+export const adoptCss = (shadowRoot, moduleUrl) => {
+  const sibling = new URL(moduleUrl);
+  sibling.pathname = sibling.pathname.replace(/\.js$/i, '.css');
+  const ya = shadowRoot.querySelector(`link[rel="stylesheet"][href="${sibling.href}"]`);
+  if (ya) {
+    shadowRoot.prepend(ya);
+    return;
+  }
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = sibling.href;
+  shadowRoot.prepend(link);
+};
+
+const esUrlModulo = (s) =>
+  typeof s === 'string' && (/^[a-z][a-z0-9+.-]*:/i.test(s) || /\.m?js$/i.test(s));
+
+/**
+ * Fábrica de componente con estado propio.
+ *
+ * Primer argumento:
+ *   - `import.meta.url` → CSS hermano vía `adoptCss` (recomendado en apps CDN)
+ *   - string CSS        → hoja constructable vía `css` (solo prototipos)
+ */
+export const crearComponente = (cssOrModuleUrl, render, inicial) => class extends HTMLElement {
   #props = inicial;
   #root;
+  #cssOrUrl = cssOrModuleUrl;
 
   constructor() {
     super();
     this.#root = this.attachShadow({ mode: 'open' });
-    css(this.#root, cssText);
   }
 
   connectedCallback() { this.#render(); }
@@ -177,11 +208,13 @@ export const crearComponente = (cssText, render, inicial) => class extends HTMLE
   #render() {
     while (this.#root.firstChild) this.#root.removeChild(this.#root.firstChild);
     render(this.#root, this.#props, this);
+    if (esUrlModulo(this.#cssOrUrl)) adoptCss(this.#root, this.#cssOrUrl);
+    else if (typeof this.#cssOrUrl === 'string' && this.#cssOrUrl.trim()) css(this.#root, this.#cssOrUrl);
   }
 };
 
 export const IsUi = {
-  css, el, html, raw, esc, rec, fecha, jsonScript, define, crearComponente,
+  css, adoptCss, el, html, raw, esc, rec, fecha, jsonScript, define, crearComponente,
 };
 
 if (typeof globalThis !== 'undefined') {

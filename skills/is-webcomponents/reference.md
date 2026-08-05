@@ -64,21 +64,23 @@ Escala: subir `font-size` del contexto o del host.
 Tras cargar `all.min.js` (incluye `helpers/ui`), usa `IsUi` / `Ui`:
 
 ```js
-const { html, css, define, jsonScript } = IsUi;
+const { html, adoptCss, define, jsonScript } = IsUi;
 
-// Bien: traduce payload → kit
-root.append(html`
-  <is-tag color="${tono}" variant="filled-outlined" pill>${label}</is-tag>
-`);
-
-// Bien: chart
-root.append(html`
-  <is-chart type="${type}">${jsonScript(config)}</is-chart>
-`);
-
-// Mal: reinventar
-root.append(html`<span class="badge badge-${tono}">${label}</span>`);
+class TkBadges extends HTMLElement {
+  #root = this.attachShadow({ mode: 'open' });
+  connectedCallback() {
+    this.#root.append(html`
+      <is-tag color="${tono}" variant="filled-outlined" pill>${label}</is-tag>
+    `);
+    adoptCss(this.#root, import.meta.url); // tk-badges.css hermano
+  }
+}
+define('tk-badges', TkBadges);
 ```
+
+- Fuente: `tk-badges.ts` + `tk-badges.css`
+- Dist: `tk-badges.js` + `tk-badges.css` (minificados)
+- Mal: `const CSS = \`…\`` embebido + reinventar badge con `<span class="badge">`
 
 CDN suelto: `…/dist/cdn/helpers/ui.min.js`. Docs: `components/helpers/ui.md`.
 
