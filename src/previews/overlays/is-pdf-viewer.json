@@ -28,8 +28,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const v = document.querySelector('is-pdf-viewer');\r\nv.src = '/files/manual.pdf';\r\nv.currentPage;  // número de página actual (iframe + #page=N)\r\n\r\n// Eventos\r\nv.addEventListener('is-load',  () => /* listo */);\r\nv.addEventListener('is-error', () => /* error de carga */);\r\n\r\n// Slots\r\n//   title       texto de la izquierda\r\n//   toolbar     contenido extra a la derecha\r\n\r\n// Atributos\r\n// src           URL del PDF (requerido)\r\n// engine        native (default) | pdfjs\r\n// height        alto del iframe\r\n// download      boolean — botón Descargar\r\n// print         boolean — botón Imprimir\r\n// page, zoom    sólo con engine=pdfjs (cuando integres pdfjs en tu build)",
-          "lang": "html"
+          "code": "const v = document.querySelector('is-pdf-viewer');\nv.src = '/files/manual.pdf';\nv.currentPage;  // número de página actual (iframe + #page=N)\n\n// Eventos\nv.addEventListener('is-load',  () => /* listo */);\nv.addEventListener('is-error', () => /* error de carga */);\n\n// Slots\n//   title       texto de la izquierda\n//   toolbar     contenido extra a la derecha\n\n// Atributos\n// src           URL del PDF (requerido)\n// engine        native (default) | pdfjs\n// height        alto del iframe\n// download      boolean — botón Descargar\n// print         boolean — botón Imprimir\n// page, zoom    sólo con engine=pdfjs (cuando integres pdfjs en tu build)"
         }
       ]
     }

@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-breadcrumb>\r\n  <is-breadcrumb-item href=\"#\"><is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>Inicio</is-breadcrumb-item>\r\n  <is-breadcrumb-item href=\"#\">Contabilidad</is-breadcrumb-item>\r\n  <is-breadcrumb-item href=\"#\">Comprobantes</is-breadcrumb-item>\r\n  <is-breadcrumb-item>Detalle</is-breadcrumb-item>\r\n</is-breadcrumb>",
+          "code": "<is-breadcrumb>\n  <is-breadcrumb-item href=\"#\"><is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>Inicio</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"#\">Contabilidad</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"#\">Comprobantes</is-breadcrumb-item>\n  <is-breadcrumb-item>Detalle</is-breadcrumb-item>\n</is-breadcrumb>",
           "lang": "html"
         }
       ]

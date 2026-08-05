@@ -39,8 +39,8 @@
         },
         {
           "kind": "code",
-          "code": "grid.columns = [\r\n  { field: 'name', headerName: 'Nombre', flex: 1, minWidth: 140 },\r\n  { field: 'gross', headerName: 'Bruto', type: 'number' },\r\n  { field: 'taxRate', headerName: 'IVA', type: 'number',\r\n    valueGetter: (v) => v * 100, valueFormatter: (v) => `${v}%` },\r\n  { field: 'profit', headerName: 'Margen', type: 'number',\r\n    valueGetter: (v, row) => row.gross - row.costs },\r\n  { field: 'hired', headerName: 'Alta', type: 'date' },\r\n  { field: 'active', headerName: 'Activo', type: 'boolean',\r\n    renderCell: ({ value }) => {\r\n      const el = document.createElement('span');\r\n      el.className = `tag-cell ${value ? 'tag-ok' : 'tag-no'}`;\r\n      el.textContent = value ? 'activo' : 'baja';\r\n      return el;\r\n    } },\r\n  { field: 'role', headerName: 'Rol', type: 'singleSelect',\r\n    valueOptions: ['Dev', 'QA', 'PM'] },\r\n  { field: 'acciones', type: 'actions', getActions: ({ row }) => [\r\n    { label: 'Ver', icon: '👁', onClick: () => alert(row.name) },\r\n    { label: 'Borrar', icon: '🗑', showInMenu: true, onClick: () => grid.updateRows([]) },\r\n  ] },\r\n];",
-          "lang": "html"
+          "code": "grid.columns = [\n  { field: 'name', headerName: 'Nombre', flex: 1, minWidth: 140 },\n  { field: 'gross', headerName: 'Bruto', type: 'number' },\n  { field: 'taxRate', headerName: 'IVA', type: 'number',\n    valueGetter: (v) => v * 100, valueFormatter: (v) => `${v}%` },\n  { field: 'profit', headerName: 'Margen', type: 'number',\n    valueGetter: (v, row) => row.gross - row.costs },\n  { field: 'hired', headerName: 'Alta', type: 'date' },\n  { field: 'active', headerName: 'Activo', type: 'boolean',\n    renderCell: ({ value }) => {\n      const el = document.createElement('span');\n      el.className = `tag-cell ${value ? 'tag-ok' : 'tag-no'}`;\n      el.textContent = value ? 'activo' : 'baja';\n      return el;\n    } },\n  { field: 'role', headerName: 'Rol', type: 'singleSelect',\n    valueOptions: ['Dev', 'QA', 'PM'] },\n  { field: 'acciones', type: 'actions', getActions: ({ row }) => [\n    { label: 'Ver', icon: '👁', onClick: () => alert(row.name) },\n    { label: 'Borrar', icon: '🗑', showInMenu: true, onClick: () => grid.updateRows([]) },\n  ] },\n];",
+          "lang": "javascript"
         }
       ]
     },
@@ -59,8 +59,8 @@
         },
         {
           "kind": "code",
-          "code": "grid.columnGroupingModel = [\r\n  { groupId: 'persona', headerName: 'Persona', children: [\r\n    { groupId: 'ident', headerName: 'Identidad', children: [{ field: 'name' }, { field: 'email' }] },\r\n    { field: 'city' },\r\n  ] },\r\n  { groupId: 'dinero', headerName: 'Económico', children: [{ field: 'gross' }, { field: 'costs' }] },\r\n];\r\ngrid.pinnedColumns = { left: ['id'], right: ['acciones'] };",
-          "lang": "html"
+          "code": "grid.columnGroupingModel = [\n  { groupId: 'persona', headerName: 'Persona', children: [\n    { groupId: 'ident', headerName: 'Identidad', children: [{ field: 'name' }, { field: 'email' }] },\n    { field: 'city' },\n  ] },\n  { groupId: 'dinero', headerName: 'Económico', children: [{ field: 'gross' }, { field: 'costs' }] },\n];\ngrid.pinnedColumns = { left: ['id'], right: ['acciones'] };",
+          "lang": "javascript"
         }
       ]
     },
@@ -151,8 +151,8 @@
         },
         {
           "kind": "code",
-          "code": "grid.pivotModel = {\r\n  rows: ['city'],\r\n  columns: ['role'],\r\n  values: [{ field: 'gross', fn: 'sum' }],\r\n};",
-          "lang": "html"
+          "code": "grid.pivotModel = {\n  rows: ['city'],\n  columns: ['role'],\n  values: [{ field: 'gross', fn: 'sum' }],\n};",
+          "lang": "javascript"
         }
       ]
     },
@@ -215,7 +215,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Teclas",
+            "Teclas",
             "Acción"
           ],
           "rows": [
@@ -291,7 +291,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Default"
           ],
           "rows": [
@@ -388,7 +388,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Propiedad JS",
+            "Propiedad JS",
             "Forma"
           ],
           "rows": [
@@ -453,7 +453,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Método",
+            "Método",
             "Uso"
           ],
           "rows": [

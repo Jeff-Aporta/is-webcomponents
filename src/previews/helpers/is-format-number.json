@@ -28,7 +28,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-format-number value=\"0.875\" type=\"percent\"></is-format-number>\r\n<is-format-number value=\"99.9\" type=\"currency\" currency=\"USD\"></is-format-number>",
+          "code": "<is-format-number value=\"0.875\" type=\"percent\"></is-format-number>\n<is-format-number value=\"99.9\" type=\"currency\" currency=\"USD\"></is-format-number>",
           "lang": "html"
         }
       ]
@@ -43,7 +43,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-format-number value=\"1234.5\" minimum-fraction-digits=\"2\"></is-format-number>\r\n<is-format-number value=\"1234.56\" maximum-fraction-digits=\"0\"></is-format-number>",
+          "code": "<is-format-number value=\"1234.5\" minimum-fraction-digits=\"2\"></is-format-number>\n<is-format-number value=\"1234.56\" maximum-fraction-digits=\"0\"></is-format-number>",
           "lang": "html"
         }
       ]
@@ -65,7 +65,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Notas"
           ],
           "rows": [

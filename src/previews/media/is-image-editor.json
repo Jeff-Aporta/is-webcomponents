@@ -30,8 +30,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const e = document.querySelector('is-image-editor');\r\ne.zoom = 1.2;             // o e.applyZoom(0.1);\r\ne.rotation = 90;           // grados, sentido horario\r\ne.applyRotation(-90);\r\n\r\nconst out = e.cropped();  // dataURL image/png\r\ne.image;                  // HTMLImageElement cargada\r\n\r\n// Eventos\r\ne.addEventListener('is-load',   e => ...);\r\ne.addEventListener('is-change', e => /* crop rectangle cambia */);\r\ne.addEventListener('is-crop',   e => /* resultado recortado listo */);\r\n\r\n// Atributos\r\n// src, zoom, rotation, aspect (\"1\", \"4/3\", \"16/9\" o \"\")",
-          "lang": "html"
+          "code": "const e = document.querySelector('is-image-editor');\ne.zoom = 1.2;             // o e.applyZoom(0.1);\ne.rotation = 90;           // grados, sentido horario\ne.applyRotation(-90);\n\nconst out = e.cropped();  // dataURL image/png\ne.image;                  // HTMLImageElement cargada\n\n// Eventos\ne.addEventListener('is-load',   e => ...);\ne.addEventListener('is-change', e => /* crop rectangle cambia */);\ne.addEventListener('is-crop',   e => /* resultado recortado listo */);\n\n// Atributos\n// src, zoom, rotation, aspect (\"1\", \"4/3\", \"16/9\" o \"\")"
         }
       ]
     }

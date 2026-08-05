@@ -27,7 +27,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [
@@ -59,7 +59,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-diagram-lightbox id=\"lb\" kind=\"sequence\"></is-diagram-lightbox>\r\n\r\n<script type=\"module\">\r\n  const lb = document.getElementById('lb');\r\n  lb.payload = { preset: 'tk1437191' };\r\n  lb.open = true;\r\n\r\n  // O abrirlo con un click:\r\n  lb.addEventListener('is-share', (e) => {\r\n    console.log('Compartir:', e.detail.url);\r\n  });\r\n</script>",
+          "code": "<is-diagram-lightbox id=\"lb\" kind=\"sequence\"></is-diagram-lightbox>\n\n<script type=\"module\">\n  const lb = document.getElementById('lb');\n  lb.payload = { preset: 'tk1437191' };\n  lb.open = true;\n\n  // O abrirlo con un click:\n  lb.addEventListener('is-share', (e) => {\n    console.log('Compartir:', e.detail.url);\n  });\n</script>",
           "lang": "html"
         }
       ]

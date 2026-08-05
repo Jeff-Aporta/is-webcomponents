@@ -30,8 +30,7 @@
         },
         {
           "kind": "code",
-          "code": "/* marca: sirve a dark y light por igual */\r\n[data-palette=\"contapyme\"] {\r\n  --is-color-brand: #1a6eb0;\r\n  --is-accent: #1a6eb0;\r\n  --is-accent-bg: rgb(26 110 176 / 12%);\r\n  --is-brand-soft: rgb(26 110 176 / 18%);\r\n  --is-focus: #1a6eb0;\r\n}\r\n\r\n/* superficies: dependen de la PAREJA (tema, paleta) */\r\n.theme-dark[data-palette=\"contapyme\"]  { --is-bg: #0a0e14; --is-border: #273040; }\r\n.theme-light[data-palette=\"contapyme\"] { --is-bg: #fff;    --is-border: #ccc; }",
-          "lang": "html"
+          "code": "/* marca: sirve a dark y light por igual */\n[data-palette=\"contapyme\"] {\n  --is-color-brand: #1a6eb0;\n  --is-accent: #1a6eb0;\n  --is-accent-bg: rgb(26 110 176 / 12%);\n  --is-brand-soft: rgb(26 110 176 / 18%);\n  --is-focus: #1a6eb0;\n}\n\n/* superficies: dependen de la PAREJA (tema, paleta) */\n.theme-dark[data-palette=\"contapyme\"]  { --is-bg: #0a0e14; --is-border: #273040; }\n.theme-light[data-palette=\"contapyme\"] { --is-bg: #fff;    --is-border: #ccc; }"
         },
         {
           "kind": "html",
@@ -39,8 +38,7 @@
         },
         {
           "kind": "code",
-          "code": "<html class=\"theme-dark\" data-theme=\"dark\" data-palette=\"contapyme\">\r\n\r\n<!-- o acotado a un trozo del DOM -->\r\n<div class=\"theme-light\" data-theme=\"light\" data-palette=\"mi-marca\"> … </div>",
-          "lang": "html"
+          "code": "<html class=\"theme-dark\" data-theme=\"dark\" data-palette=\"contapyme\">\n\n<!-- o acotado a un trozo del DOM -->\n<div class=\"theme-light\" data-theme=\"light\" data-palette=\"mi-marca\"> … </div>"
         },
         {
           "kind": "html",
@@ -49,7 +47,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Grupo",
+            "Grupo",
             "Tokens",
             "Dónde va"
           ],
@@ -157,7 +155,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Token",
+            "Token",
             "Cómo se calcula"
           ],
           "rows": [

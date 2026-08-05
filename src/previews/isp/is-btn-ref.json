@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-btn-ref id=\"ref\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\r\n<script type=\"module\">\r\n  const el = document.getElementById('ref');\r\n  el.controller = {\r\n    entrie: 'Aplicación',\r\n    primaryKeys: ['app'],\r\n    ColumnsBtnRef: ['app'],\r\n    columns: [{ field: 'app', header: 'Aplicación' }],\r\n    async Lista() {\r\n      return { datos: [{ app: 'ContaPyme' }, { app: 'AgroWin' }] };\r\n    },\r\n  };\r\n</script>",
-          "lang": "html"
+          "code": "<is-btn-ref id=\"ref\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\n<script type=\"module\">\n  const el = document.getElementById('ref');\n  el.controller = {\n    entrie: 'Aplicación',\n    primaryKeys: ['app'],\n    ColumnsBtnRef: ['app'],\n    columns: [{ field: 'app', header: 'Aplicación' }],\n    async Lista() {\n      return { datos: [{ app: 'ContaPyme' }, { app: 'AgroWin' }] };\n    },\n  };\n</script>"
         }
       ]
     }

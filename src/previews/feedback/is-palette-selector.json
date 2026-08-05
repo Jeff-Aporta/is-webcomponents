@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-palette-selector></is-palette-selector>",
-          "lang": "html"
+          "code": "<is-palette-selector></is-palette-selector>"
         }
       ]
     },
@@ -34,12 +33,11 @@
         },
         {
           "kind": "code",
-          "code": "<is-palette-selector>\r\n  <button slot=\"trigger\" class=\"logo-trigger\">\r\n    <span class=\"logo-trigger__lead\">in</span>\r\n    <span class=\"logo-trigger__accent\">soft</span>\r\n  </button>\r\n</is-palette-selector>",
-          "lang": "html"
+          "code": "<is-palette-selector>\n  <button slot=\"trigger\" class=\"logo-trigger\">\n    <span class=\"logo-trigger__lead\">in</span>\n    <span class=\"logo-trigger__accent\">soft</span>\n  </button>\n</is-palette-selector>"
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\">El sitio actualiza el contenido del trigger cuando cambia la paleta (lead/accent pueden cambiar con la marca). Mira el c\\u00f3digo demo para ver c\\u00f3mo se sincroniza.</p>"
+          "html": "<p class=\"lede\">El sitio actualiza el contenido del trigger cuando cambia la paleta (lead/accent pueden cambiar con la marca). Mira el código demo para ver cómo se sincroniza.</p>"
         }
       ]
     },
@@ -54,8 +52,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-palette-selector palettes='[\r\n  {\"value\":\"acme\",\"label\":\"Acme Corp\",\"accent\":\"#e03131\",\"lead\":\"ac\",\"accentLabel\":\"me\"},\r\n  {\"value\":\"ocean\",\"label\":\"Ocean\",\"accent\":\"#0ea5e9\",\"lead\":\"o\",\"accentLabel\":\"cean\"}\r\n]'>\r\n  <button slot=\"trigger\" class=\"logo-trigger\">\r\n    <span data-role=\"lead\">ac</span>\r\n    <span data-role=\"accent\">me</span>\r\n  </button>\r\n</is-palette-selector>",
-          "lang": "html"
+          "code": "<is-palette-selector palettes='[\n  {\"value\":\"acme\",\"label\":\"Acme Corp\",\"accent\":\"#e03131\",\"lead\":\"ac\",\"accentLabel\":\"me\"},\n  {\"value\":\"ocean\",\"label\":\"Ocean\",\"accent\":\"#0ea5e9\",\"lead\":\"o\",\"accentLabel\":\"cean\"}\n]'>\n  <button slot=\"trigger\" class=\"logo-trigger\">\n    <span data-role=\"lead\">ac</span>\n    <span data-role=\"accent\">me</span>\n  </button>\n</is-palette-selector>"
         }
       ]
     },
@@ -70,12 +67,11 @@
         },
         {
           "kind": "code",
-          "code": "<is-palette-selector>\r\n  <template slot=\"option\">\r\n    <li class=\"my-option\">\r\n      <span data-role=\"swatch\"></span>\r\n      <span data-role=\"lead\"></span>\r\n      <span data-role=\"accent\"></span>\r\n      <is-icon data-role=\"check\" icon=\"mdi:check-bold\"></is-icon>\r\n    </li>\r\n  </template>\r\n</is-palette-selector>",
-          "lang": "html"
+          "code": "<is-palette-selector>\n  <template slot=\"option\">\n    <li class=\"my-option\">\n      <span data-role=\"swatch\"></span>\n      <span data-role=\"lead\"></span>\n      <span data-role=\"accent\"></span>\n      <is-icon data-role=\"check\" icon=\"mdi:check-bold\"></is-icon>\n    </li>\n  </template>\n</is-palette-selector>"
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\">El <code class=\"code\">data-role</code> es un atajo: el componente rellena el contenido y color. Tambi\\u00e9n puedes usar <code class=\"code\">{tokens}</code> en atributos y texto directamente: <code class=\"code\">{label}</code>, <code class=\"code\">{accent}</code>, <code class=\"code\">{value}</code>, <code class=\"code\">{lead}</code>, <code class=\"code\">{accentLabel}</code>, <code class=\"code\">{leadColor}</code>, <code class=\"code\">{accentColor}</code>, <code class=\"code\">{bg}</code>, <code class=\"code\">{fg}</code>.</p>"
+          "html": "<p class=\"lede\">El <code class=\"code\">data-role</code> es un atajo: el componente rellena el contenido y color. También puedes usar <code class=\"code\">{tokens}</code> en atributos y texto directamente: <code class=\"code\">{label}</code>, <code class=\"code\">{accent}</code>, <code class=\"code\">{value}</code>, <code class=\"code\">{lead}</code>, <code class=\"code\">{accentLabel}</code>, <code class=\"code\">{leadColor}</code>, <code class=\"code\">{accentColor}</code>, <code class=\"code\">{bg}</code>, <code class=\"code\">{fg}</code>.</p>"
         }
       ]
     },
@@ -91,8 +87,7 @@
         },
         {
           "kind": "code",
-          "code": "<template slot=\"option\">\r\n  <li class=\"token-option\">\r\n    <span class=\"token-option__name\" style=\"color: {accent}\">{label}</span>\r\n    <span class=\"token-option__hash\">#{value}</span>\r\n  </li>\r\n</template>",
-          "lang": "html"
+          "code": "<template slot=\"option\">\n  <li class=\"token-option\">\n    <span class=\"token-option__name\" style=\"color: {accent}\">{label}</span>\n    <span class=\"token-option__hash\">#{value}</span>\n  </li>\n</template>"
         }
       ]
     },
@@ -114,7 +109,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default"
           ],
@@ -148,7 +143,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -165,7 +160,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Campo",
+            "Campo",
             "Uso"
           ],
           "rows": [
@@ -206,7 +201,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Detail"
           ],
           "rows": [

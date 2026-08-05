@@ -27,8 +27,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-combobox label=\"Ciudad\" clearable>\r\n  <is-option value=\"bog\">Bogotá</is-option>\r\n  <is-option value=\"med\">Medellín</is-option>\r\n</is-combobox>",
-          "lang": "html"
+          "code": "<is-combobox label=\"Ciudad\" clearable>\n  <is-option value=\"bog\">Bogotá</is-option>\n  <is-option value=\"med\">Medellín</is-option>\n</is-combobox>"
         }
       ]
     },
@@ -40,7 +39,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Default"
           ],
           "rows": [

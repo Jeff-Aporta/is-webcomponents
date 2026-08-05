@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-kanban></span>\r\n  <span class=\"tag\"><is-kanban-column</span> <span class=\"attr\">title</span>=<span class=\"val\">\"Pending\"</span> <span class=\"attr\">accent</span>=<span class=\"val\">\"dodgerblue\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-kanban-card</span> <span class=\"attr\">heading</span>=<span class=\"val\">\"Diseñar landing\"</span> <span class=\"attr\">tag</span>=<span class=\"val\">\"Design\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-kanban-card></span>\r\n  <span class=\"tag\"></is-kanban-column></span>\r\n<span class=\"tag\"></is-kanban></span>",
-          "lang": "html"
+          "code": "<is-kanban>\n  <is-kanban-column title=\"Pending\" accent=\"dodgerblue\">\n    <is-kanban-card heading=\"Diseñar landing\" tag=\"Design\">…</is-kanban-card>\n  </is-kanban-column>\n</is-kanban>"
         }
       ]
     },
@@ -45,7 +44,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -78,7 +77,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -129,7 +128,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

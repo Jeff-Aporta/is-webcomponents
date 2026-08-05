@@ -21,8 +21,19 @@ const root = dirname(here);
 
 const csJs   = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.js'), 'utf8');
 const csCss  = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.css'), 'utf8');
-const prev   = await readFile(join(root, 'src', 'previews', 'feedback', 'is-cdn-snippet.json'), 'utf8');
+const prevJson = await readFile(join(root, 'src', 'previews', 'feedback', 'is-cdn-snippet.json'), 'utf8');
 const manifest = await readFile(join(root, 'manifest.js'), 'utf8');
+
+// El preview es JSON: en el archivo el markup viaja escapado (`slot=\"deps\"`),
+// así que se buscan los patrones sobre los textos ya parseados y no sobre el
+// archivo en crudo.
+const textos = [];
+(function recorre(v) {
+  if (typeof v === 'string') textos.push(v);
+  else if (Array.isArray(v)) v.forEach(recorre);
+  else if (v && typeof v === 'object') Object.values(v).forEach(recorre);
+})(JSON.parse(prevJson));
+const prev = textos.join('\n');
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

@@ -22,8 +22,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">onclick</span>=<span class=\"val\">\"document.getElementById('dlg').open = true\"</span><span class=\"tag\">></span>Abrir<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"><is-dialog</span> <span class=\"attr\">id</span>=<span class=\"val\">\"dlg\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Título\"</span><span class=\"tag\">></span>\r\n  Contenido.\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">data-dialog</span>=<span class=\"val\">\"close\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-dialog></span>",
-          "lang": "html"
+          "code": "<is-button onclick=\"document.getElementById('dlg').open = true\">Abrir</is-button>\n<is-dialog id=\"dlg\" label=\"Título\">\n  Contenido.\n  <div slot=\"footer\">\n    <is-button data-dialog=\"close\">Cancelar</is-button>\n  </div>\n</is-dialog>"
         }
       ]
     },
@@ -42,8 +41,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">without-header</span><span class=\"tag\">></span>…<span class=\"tag\"></is-dialog></span>",
-          "lang": "html"
+          "code": "<is-dialog without-header>…</is-dialog>"
         }
       ]
     },
@@ -62,8 +60,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">style</span>=<span class=\"val\">\"--width: 800px\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-dialog></span>",
-          "lang": "html"
+          "code": "<is-dialog style=\"--width: 800px\">…</is-dialog>"
         }
       ]
     },
@@ -82,8 +79,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">label</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"header-actions\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button></span>…<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n  …\r\n<span class=\"tag\"></is-dialog></span>",
-          "lang": "html"
+          "code": "<is-dialog label=\"…\">\n  <div slot=\"header-actions\">\n    <is-button>…</is-button>\n  </div>\n  …\n</is-dialog>"
         }
       ]
     },
@@ -102,8 +98,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">light-dismiss</span><span class=\"tag\">></span>…<span class=\"tag\"></is-dialog></span>",
-          "lang": "html"
+          "code": "<is-dialog light-dismiss>…</is-dialog>"
         }
       ]
     },
@@ -122,8 +117,7 @@
         },
         {
           "kind": "code",
-          "code": "dialog.addEventListener('is-hide', (e) => {\r\n  if (e.detail.source !== closeButton) e.preventDefault();\r\n});",
-          "lang": "html"
+          "code": "dialog.addEventListener('is-hide', (e) => {\n  if (e.detail.source !== closeButton) e.preventDefault();\n});"
         }
       ]
     },
@@ -142,8 +136,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-dialog</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Editar perfil\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><form></span>\r\n    <span class=\"tag\"><label></span>Nombre <span class=\"tag\"><is-input</span> <span class=\"attr\">name</span>=<span class=\"val\">\"name\"</span> <span class=\"attr\">required</span><span class=\"tag\">></span><span class=\"tag\"></is-input></span><span class=\"tag\"></label></span>\r\n  <span class=\"tag\"></form></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">data-dialog</span>=<span class=\"val\">\"close\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Guardar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-dialog></span>",
-          "lang": "html"
+          "code": "<is-dialog label=\"Editar perfil\">\n  <form>\n    <label>Nombre <is-input name=\"name\" required></is-input></label>\n  </form>\n  <div slot=\"footer\">\n    <is-button data-dialog=\"close\">Cancelar</is-button>\n    <is-button color=\"brand\">Guardar</is-button>\n  </div>\n</is-dialog>"
         }
       ]
     },
@@ -158,7 +151,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -197,7 +190,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -226,7 +219,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Método",
+            "Método",
             "Descripción"
           ],
           "rows": [
@@ -251,7 +244,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Cancelable",
             "Descripción"
           ],
@@ -285,7 +278,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [
@@ -326,7 +319,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Variable",
+            "Variable",
             "Default",
             "Descripción"
           ],

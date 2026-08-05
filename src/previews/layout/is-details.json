@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"¿Qué es InSoft?\"</span><span class=\"tag\">></span>\r\n  InSoft es un ERP modular…\r\n<span class=\"tag\"></is-details></span>",
-          "lang": "html"
+          "code": "<is-details summary=\"¿Qué es InSoft?\">\n  InSoft es un ERP modular…\n</is-details>"
         }
       ]
     },
@@ -34,8 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"filled\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>",
-          "lang": "html"
+          "code": "<is-details variant=\"filled\" summary=\"…\">…</is-details>"
         }
       ]
     },
@@ -50,8 +48,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">icon-placement</span>=<span class=\"val\">\"start\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>",
-          "lang": "html"
+          "code": "<is-details icon-placement=\"start\" summary=\"…\">…</is-details>"
         }
       ]
     },
@@ -66,8 +63,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"expand-icon\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:plus\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"collapse-icon\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:minus\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  Contenido…\r\n<span class=\"tag\"></is-details></span>",
-          "lang": "html"
+          "code": "<is-details summary=\"…\">\n  <is-icon slot=\"expand-icon\" icon=\"mdi:plus\"></is-icon>\n  <is-icon slot=\"collapse-icon\" icon=\"mdi:minus\"></is-icon>\n  Contenido…\n</is-details>"
         }
       ]
     },
@@ -82,8 +78,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-details></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"summary\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><strong></span>Pedido #A-10293<span class=\"tag\"></strong></span>\r\n    <span class=\"tag\"><is-badge</span> <span class=\"attr\">color</span>=<span class=\"val\">\"success\"</span><span class=\"tag\">></span>Enviado<span class=\"tag\"></is-badge></span>\r\n  <span class=\"tag\"></div></span>\r\n  Cliente: …\r\n<span class=\"tag\"></is-details></span>",
-          "lang": "html"
+          "code": "<is-details>\n  <div slot=\"summary\">\n    <strong>Pedido #A-10293</strong>\n    <is-badge color=\"success\">Enviado</is-badge>\n  </div>\n  Cliente: …\n</is-details>"
         }
       ]
     },
@@ -99,8 +94,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">name</span>=<span class=\"val\">\"faq\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>\r\n<span class=\"tag\"><is-details</span> <span class=\"attr\">name</span>=<span class=\"val\">\"faq\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>",
-          "lang": "html"
+          "code": "<is-details name=\"faq\" summary=\"…\">…</is-details>\n<is-details name=\"faq\" summary=\"…\">…</is-details>"
         }
       ]
     },
@@ -115,8 +109,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">open</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>\r\n<span class=\"tag\"><is-details</span> <span class=\"attr\">disabled</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"…\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>",
-          "lang": "html"
+          "code": "<is-details open summary=\"…\">…</is-details>\n<is-details disabled summary=\"…\">…</is-details>"
         }
       ]
     },
@@ -131,8 +124,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-details</span> <span class=\"attr\">id</span>=<span class=\"val\">\"apiDetails\"</span> <span class=\"attr\">summary</span>=<span class=\"val\">\"Demo\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-details></span>\r\n<span class=\"tag\"><script></span>\r\n  document.getElementById('btnOpen').onclick  = () => document.getElementById('apiDetails').show();\r\n  document.getElementById('btnClose').onclick = () => document.getElementById('apiDetails').hide();\r\n  document.getElementById('btnToggle').onclick = () => document.getElementById('apiDetails').toggle();\r\n<span class=\"tag\"></script></span>",
-          "lang": "html"
+          "code": "<is-details id=\"apiDetails\" summary=\"Demo\">…</is-details>\n<script>\n  document.getElementById('btnOpen').onclick  = () => document.getElementById('apiDetails').show();\n  document.getElementById('btnClose').onclick = () => document.getElementById('apiDetails').hide();\n  document.getElementById('btnToggle').onclick = () => document.getElementById('apiDetails').toggle();\n</script>"
         }
       ]
     },
@@ -147,8 +139,7 @@
         },
         {
           "kind": "code",
-          "code": "document.getElementById('evtDetails').addEventListener('is-after-show', () => {\r\n  console.log('abierto');\r\n});",
-          "lang": "html"
+          "code": "document.getElementById('evtDetails').addEventListener('is-after-show', () => {\n  console.log('abierto');\n});"
         }
       ]
     },
@@ -163,7 +154,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -214,7 +205,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -243,7 +234,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Método",
+            "Método",
             "Descripción"
           ],
           "rows": [
@@ -268,7 +259,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Cuándo",
             "Cancelable"
           ],
@@ -302,7 +293,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [
@@ -335,7 +326,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Variable",
+            "Variable",
             "Default",
             "Descripción"
           ],

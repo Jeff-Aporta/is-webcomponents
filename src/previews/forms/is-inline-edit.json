@@ -53,8 +53,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const ie = document.querySelector('is-inline-edit');\r\nie.value              // string actual\r\nie.editing            // boolean\r\nie.edit()             // entra en modo edición (programáticamente)\r\nie.save()             // guarda y sale\r\nie.cancel()           // revierte y sale\r\nie.addEventListener('is-save',   e => console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));\r\nie.addEventListener('is-cancel', e => ...);\r\nie.addEventListener('is-edit',   () => ...);\r\n\r\n// form-associated\r\n// <form><is-inline-edit name=\"label\"></is-inline-edit></form>\r\nnew FormData(form).get('label')  // = ie.value",
-          "lang": "html"
+          "code": "const ie = document.querySelector('is-inline-edit');\nie.value              // string actual\nie.editing            // boolean\nie.edit()             // entra en modo edición (programáticamente)\nie.save()             // guarda y sale\nie.cancel()           // revierte y sale\nie.addEventListener('is-save',   e => console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));\nie.addEventListener('is-cancel', e => ...);\nie.addEventListener('is-edit',   () => ...);\n\n// form-associated\n// <form><is-inline-edit name=\"label\"></is-inline-edit></form>\nnew FormData(form).get('label')  // = ie.value"
         }
       ]
     }

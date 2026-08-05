@@ -20,7 +20,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Char",
+            "Char",
             "Acepta",
             "¿Requerido?",
             "Nota"
@@ -82,8 +82,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const m = document.querySelector('is-masked-input');\r\nm.value           // texto formateado: \"1234 5678 9012 3456\"\r\nm.raw             // caracteres limpios: \"1234567890123456\"\r\nm.complete        // boolean: ¿rellenó todos los slots requeridos?\r\nm.formatted       // alias de value\r\n\r\nm.addEventListener('is-input',    e => /* cada keystroke */);\r\nm.addEventListener('is-complete', e => /* completó el patrón */);\r\n\r\n// API HTML: <input> invisible participa en formularios vía ElementInternals\r\n//   <form><is-masked-input name=\"card\" pattern=\"0000 0000 0000 0000\"></is-masked-input></form>\r\nformData.get('card');  // texto formateado (no raw; usar raw attr si se quiere limpio)",
-          "lang": "html"
+          "code": "const m = document.querySelector('is-masked-input');\nm.value           // texto formateado: \"1234 5678 9012 3456\"\nm.raw             // caracteres limpios: \"1234567890123456\"\nm.complete        // boolean: ¿rellenó todos los slots requeridos?\nm.formatted       // alias de value\n\nm.addEventListener('is-input',    e => /* cada keystroke */);\nm.addEventListener('is-complete', e => /* completó el patrón */);\n\n// API HTML:  invisible participa en formularios vía ElementInternals\n//   <form><is-masked-input name=\"card\" pattern=\"0000 0000 0000 0000\"></is-masked-input></form>\nformData.get('card');  // texto formateado (no raw; usar raw attr si se quiere limpio)"
         }
       ]
     }

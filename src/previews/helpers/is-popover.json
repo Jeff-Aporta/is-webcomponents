@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-button id=\"pop1\">Show popover</is-button>\r\n<is-popover for=\"pop1\">\r\n  …contenido…\r\n  <is-button data-popover=\"close\">Dismiss</is-button>\r\n</is-popover>",
-          "lang": "html"
+          "code": "<is-button id=\"pop1\">Show popover</is-button>\n<is-popover for=\"pop1\">\n  …contenido…\n  <is-button data-popover=\"close\">Dismiss</is-button>\n</is-popover>"
         }
       ]
     },
@@ -144,7 +143,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

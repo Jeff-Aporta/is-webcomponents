@@ -19,8 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-button id=\"tip-target\">Hover Me</is-button>\r\n<is-tooltip for=\"tip-target\">This is a tooltip</is-tooltip>",
-          "lang": "html"
+          "code": "<is-button id=\"tip-target\">Hover Me</is-button>\n<is-tooltip for=\"tip-target\">This is a tooltip</is-tooltip>"
         }
       ]
     },
@@ -56,8 +55,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-tooltip for=\"t-html\" trigger=\"click\" style=\"--max-width:22rem\">\r\n  <p><strong>Resumen</strong></p>\r\n  <ul><li>…</li></ul>\r\n</is-tooltip>",
-          "lang": "html"
+          "code": "<is-tooltip for=\"t-html\" trigger=\"click\" style=\"--max-width:22rem\">\n  <p><strong>Resumen</strong></p>\n  <ul><li>…</li></ul>\n</is-tooltip>"
         }
       ]
     },
@@ -68,7 +66,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-button id=\"del\" color=\"danger\">Eliminar</is-button>\r\n<is-confirm-delete for=\"del\" entity=\"tercero\"\r\n  pk-label=\"NIT\" confirm-value=\"900123456\"></is-confirm-delete>",
-          "lang": "html"
+          "code": "<is-button id=\"del\" color=\"danger\">Eliminar</is-button>\n<is-confirm-delete for=\"del\" entity=\"tercero\"\n  pk-label=\"NIT\" confirm-value=\"900123456\"></is-confirm-delete>"
         }
       ]
     },
@@ -34,8 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-confirm-delete case-sensitive confirm-value=\"PLT-Alfa\"></is-confirm-delete>",
-          "lang": "html"
+          "code": "<is-confirm-delete case-sensitive confirm-value=\"PLT-Alfa\"></is-confirm-delete>"
         }
       ]
     },

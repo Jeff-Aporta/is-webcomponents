@@ -22,8 +22,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Drawer estándar\"</span><span class=\"tag\">></span>\r\n  Contenido.\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">data-drawer</span>=<span class=\"val\">\"close\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-drawer></span>",
-          "lang": "html"
+          "code": "<is-drawer label=\"Drawer estándar\">\n  Contenido.\n  <div slot=\"footer\">\n    <is-button data-drawer=\"close\">Cancelar</is-button>\n  </div>\n</is-drawer>"
         }
       ]
     },
@@ -38,8 +37,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">placement</span>=<span class=\"val\">\"start\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>\r\n<span class=\"tag\"><is-drawer</span> <span class=\"attr\">placement</span>=<span class=\"val\">\"top\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>\r\n<span class=\"tag\"><is-drawer</span> <span class=\"attr\">placement</span>=<span class=\"val\">\"bottom\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>",
-          "lang": "html"
+          "code": "<is-drawer placement=\"start\">…</is-drawer>\n<is-drawer placement=\"top\">…</is-drawer>\n<is-drawer placement=\"bottom\">…</is-drawer>"
         }
       ]
     },
@@ -58,8 +56,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">style</span>=<span class=\"val\">\"--size: 50%\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>",
-          "lang": "html"
+          "code": "<is-drawer style=\"--size: 50%\">…</is-drawer>"
         }
       ]
     },
@@ -78,8 +75,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">without-header</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>",
-          "lang": "html"
+          "code": "<is-drawer without-header>…</is-drawer>"
         }
       ]
     },
@@ -98,8 +94,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">light-dismiss</span><span class=\"tag\">></span>…<span class=\"tag\"></is-drawer></span>",
-          "lang": "html"
+          "code": "<is-drawer light-dismiss>…</is-drawer>"
         }
       ]
     },
@@ -118,8 +113,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-drawer</span> <span class=\"attr\">placement</span>=<span class=\"val\">\"start\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Menú\"</span> <span class=\"attr\">style</span>=<span class=\"val\">\"--size: 280px\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><nav></span>…<span class=\"tag\"></nav></span>\r\n<span class=\"tag\"></is-drawer></span>",
-          "lang": "html"
+          "code": "<is-drawer placement=\"start\" label=\"Menú\" style=\"--size: 280px\">\n  <nav>…</nav>\n</is-drawer>"
         }
       ]
     },
@@ -134,7 +128,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -179,7 +173,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -208,7 +202,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Método",
+            "Método",
             "Descripción"
           ],
           "rows": [
@@ -225,7 +219,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Cancelable",
             "Descripción"
           ],
@@ -259,7 +253,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Variable",
+            "Variable",
             "Default",
             "Descripción"
           ],

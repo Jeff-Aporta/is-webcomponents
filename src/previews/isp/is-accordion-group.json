@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-accordion-group>\r\n  <is-details summary=\"Datos básicos\" open>…</is-details>\r\n  <is-details summary=\"Contacto\">…</is-details>\r\n</is-accordion-group>",
-          "lang": "html"
+          "code": "<is-accordion-group>\n  <is-details summary=\"Datos básicos\" open>…</is-details>\n  <is-details summary=\"Contacto\">…</is-details>\n</is-accordion-group>"
         }
       ]
     },
@@ -34,8 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-accordion-group multiple>…</is-accordion-group>",
-          "lang": "html"
+          "code": "<is-accordion-group multiple>…</is-accordion-group>"
         }
       ]
     },

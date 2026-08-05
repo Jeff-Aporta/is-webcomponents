@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "const cat = document.querySelector('is-catalogo-gen');\r\ncat.controller = {\r\n  entrie: 'Aplicación',\r\n  primaryKeys: ['app'],\r\n  columns: [\r\n    { field: 'app', header: 'Aplicación' },\r\n    { field: 'bactiva', header: 'Activa' },\r\n  ],\r\n  async Lista() { return { datos: [/* … */] }; },\r\n  async actCrear(o) { return o; },\r\n  async actModificar(o) { return o; },\r\n  async actEliminar(o) { return o; },\r\n  async actVerificar() {\r\n    return { mensajes: [{ itdmensaje: 'info', mensaje: 'OK' }] };\r\n  },\r\n};",
-          "lang": "html"
+          "code": "const cat = document.querySelector('is-catalogo-gen');\ncat.controller = {\n  entrie: 'Aplicación',\n  primaryKeys: ['app'],\n  columns: [\n    { field: 'app', header: 'Aplicación' },\n    { field: 'bactiva', header: 'Activa' },\n  ],\n  async Lista() { return { datos: [/* … */] }; },\n  async actCrear(o) { return o; },\n  async actModificar(o) { return o; },\n  async actEliminar(o) { return o; },\n  async actVerificar() {\n    return { mensajes: [{ itdmensaje: 'info', mensaje: 'OK' }] };\n  },\n};"
         }
       ]
     }

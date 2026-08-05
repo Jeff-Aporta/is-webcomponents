@@ -41,7 +41,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / evento",
+            "Atributo / evento",
             "Qué hace"
           ],
           "rows": [

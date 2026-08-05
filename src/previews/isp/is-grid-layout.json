@@ -39,8 +39,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-grid-layout cells=\"3\" gap=\"0.5rem\">…</is-grid-layout>\r\n<is-grid-layout cells=\"12rem 1fr\" items=\"center\">…</is-grid-layout>\r\n<is-grid-layout direction=\"row\" cells=\"2\">…</is-grid-layout>",
-          "lang": "html"
+          "code": "<is-grid-layout cells=\"3\" gap=\"0.5rem\">…</is-grid-layout>\n<is-grid-layout cells=\"12rem 1fr\" items=\"center\">…</is-grid-layout>\n<is-grid-layout direction=\"row\" cells=\"2\">…</is-grid-layout>"
         }
       ]
     },
@@ -51,7 +50,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Valores / default"
           ],
           "rows": [

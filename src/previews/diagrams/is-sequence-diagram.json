@@ -87,7 +87,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Nombre",
+            "Nombre",
             "Valores",
             "Descripción"
           ],
@@ -111,7 +111,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Nombre",
+            "Nombre",
             "Tipo",
             "Descripción"
           ],
@@ -150,7 +150,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Nombre",
+            "Nombre",
             "detail",
             "Descripción"
           ],
@@ -184,7 +184,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Campo",
+            "Campo",
             "Descripción"
           ],
           "rows": [

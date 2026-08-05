@@ -18,8 +18,8 @@
         },
         {
           "kind": "code",
-          "code": "const toaster = document.getElementById('toaster');\r\n\r\ndocument.getElementById('btn-brand').addEventListener('click', () => {\r\n  toaster.create('Mensaje brand', { variant: 'brand' });\r\n});\r\ndocument.getElementById('btn-success').addEventListener('click', () => {\r\n  toaster.create('Operación correcta', { variant: 'success' });\r\n});\r\ndocument.getElementById('btn-warning').addEventListener('click', () => {\r\n  toaster.create('Revisa los datos', { variant: 'warning' });\r\n});\r\ndocument.getElementById('btn-danger').addEventListener('click', () => {\r\n  toaster.create('Error al guardar', { variant: 'danger' });\r\n});\r\ndocument.getElementById('btn-sticky').addEventListener('click', () => {\r\n  toaster.create('Quédate hasta cerrar', { variant: 'neutral', duration: 0 });\r\n});",
-          "lang": "html"
+          "code": "const toaster = document.getElementById('toaster');\n\ndocument.getElementById('btn-brand').addEventListener('click', () => {\n  toaster.create('Mensaje brand', { variant: 'brand' });\n});\ndocument.getElementById('btn-success').addEventListener('click', () => {\n  toaster.create('Operación correcta', { variant: 'success' });\n});\ndocument.getElementById('btn-warning').addEventListener('click', () => {\n  toaster.create('Revisa los datos', { variant: 'warning' });\n});\ndocument.getElementById('btn-danger').addEventListener('click', () => {\n  toaster.create('Error al guardar', { variant: 'danger' });\n});\ndocument.getElementById('btn-sticky').addEventListener('click', () => {\n  toaster.create('Quédate hasta cerrar', { variant: 'neutral', duration: 0 });\n});",
+          "lang": "javascript"
         }
       ]
     },
@@ -34,8 +34,8 @@
         },
         {
           "kind": "code",
-          "code": "const toaster = document.getElementById('toaster');\r\n\r\ndocument.querySelectorAll('[data-place]').forEach((btn) => {\r\n  btn.addEventListener('click', () => {\r\n    const placement = btn.dataset.place; // top-start | top-center | …\r\n    toaster.placement = placement;\r\n    toaster.create(placement, { variant: 'brand' });\r\n  });\r\n});",
-          "lang": "html"
+          "code": "const toaster = document.getElementById('toaster');\n\ndocument.querySelectorAll('[data-place]').forEach((btn) => {\n  btn.addEventListener('click', () => {\n    const placement = btn.dataset.place; // top-start | top-center | …\n    toaster.placement = placement;\n    toaster.create(placement, { variant: 'brand' });\n  });\n});",
+          "lang": "javascript"
         }
       ]
     },
@@ -50,8 +50,8 @@
         },
         {
           "kind": "code",
-          "code": "// success/error como string\r\ntoaster.promise(guardar(), {\r\n  loading: 'Guardando…',\r\n  success: 'Guardado',\r\n  error: 'No se pudo guardar',\r\n});\r\n\r\n// success como función que recibe data / error que recibe err\r\ntoaster.promise(cargarFilas(), {\r\n  loading: 'Cargando filas…',\r\n  success: (data) => `${data.total} filas cargadas`,\r\n  error: (err) => `Falló: ${err.message}`,\r\n});",
-          "lang": "html"
+          "code": "// success/error como string\ntoaster.promise(guardar(), {\n  loading: 'Guardando…',\n  success: 'Guardado',\n  error: 'No se pudo guardar',\n});\n\n// success como función que recibe data / error que recibe err\ntoaster.promise(cargarFilas(), {\n  loading: 'Cargando filas…',\n  success: (data) => `${data.total} filas cargadas`,\n  error: (err) => `Falló: ${err.message}`,\n});",
+          "lang": "javascript"
         }
       ]
     },
@@ -62,7 +62,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

@@ -34,8 +34,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-input label=\"outlined (default)\"></is-input>\r\n<is-input variant=\"filled\" label=\"filled\"></is-input>\r\n<is-input variant=\"underlined\" label=\"underlined\"></is-input>",
-          "lang": "html"
+          "code": "<is-input label=\"outlined (default)\"></is-input>\n<is-input variant=\"filled\" label=\"filled\"></is-input>\n<is-input variant=\"underlined\" label=\"underlined\"></is-input>"
         }
       ]
     },
@@ -50,8 +49,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-input type=\"password\" label=\"Contraseña\" password-toggle></is-input>\r\n<is-input type=\"number\" label=\"Cantidad\" min=\"0\" max=\"100\" step=\"5\"></is-input>\r\n<is-input type=\"search\" label=\"Buscar\" clearable></is-input>",
-          "lang": "html"
+          "code": "<is-input type=\"password\" label=\"Contraseña\" password-toggle></is-input>\n<is-input type=\"number\" label=\"Cantidad\" min=\"0\" max=\"100\" step=\"5\"></is-input>\n<is-input type=\"search\" label=\"Buscar\" clearable></is-input>"
         }
       ]
     },
@@ -66,8 +64,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-input label=\"Importe\" type=\"number\" prefix=\"$\" suffix=\"COP\"></is-input>\r\n\r\n<is-input label=\"Con iconos\">\r\n  <is-icon slot=\"start\" icon=\"mdi:magnify\"></is-icon>\r\n  <is-icon slot=\"end\" icon=\"mdi:filter-variant\"></is-icon>\r\n</is-input>",
-          "lang": "html"
+          "code": "<is-input label=\"Importe\" type=\"number\" prefix=\"$\" suffix=\"COP\"></is-input>\n\n<is-input label=\"Con iconos\">\n  <is-icon slot=\"start\" icon=\"mdi:magnify\"></is-icon>\n  <is-icon slot=\"end\" icon=\"mdi:filter-variant\"></is-icon>\n</is-input>"
         },
         {
           "kind": "html",
@@ -86,8 +83,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-input error error-text=\"Ese correo no existe en el sistema\"></is-input>\r\n\r\n// error derivado de la validación nativa\r\ninput.reportValidity();          // marca el campo como tocado y pinta el error\r\ninput.error = true;              // o fuérzalo desde fuera",
-          "lang": "html"
+          "code": "<is-input error error-text=\"Ese correo no existe en el sistema\"></is-input>\n\n// error derivado de la validación nativa\ninput.reportValidity();          // marca el campo como tocado y pinta el error\ninput.error = true;              // o fuérzalo desde fuera"
         }
       ]
     },
@@ -102,8 +98,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\"></is-input>",
-          "lang": "html"
+          "code": "<is-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\"></is-input>"
         }
       ]
     },
@@ -118,8 +113,7 @@
         },
         {
           "kind": "code",
-          "code": "<div style=\"--is-field-width: 14rem\">\r\n  <is-input label=\"Estrecho\"></is-input>\r\n  <is-input label=\"Ancho completo\" full-width></is-input>\r\n</div>",
-          "lang": "html"
+          "code": "<div style=\"--is-field-width: 14rem\">\n  <is-input label=\"Estrecho\"></is-input>\n  <is-input label=\"Ancho completo\" full-width></is-input>\n</div>"
         }
       ]
     },
@@ -134,8 +128,7 @@
         },
         {
           "kind": "code",
-          "code": "<div style=\"--is-field-label-width: 7rem\">\r\n  <is-input label-placement=\"start\" label=\"Nombre\" full-width></is-input>\r\n  <is-input label-placement=\"start\" label=\"Correo\" full-width></is-input>\r\n</div>",
-          "lang": "html"
+          "code": "<div style=\"--is-field-label-width: 7rem\">\n  <is-input label-placement=\"start\" label=\"Nombre\" full-width></is-input>\n  <is-input label-placement=\"start\" label=\"Correo\" full-width></is-input>\n</div>"
         }
       ]
     },
@@ -176,7 +169,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Detalle"
           ],
           "rows": [
@@ -241,7 +234,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [
@@ -290,7 +283,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [
@@ -319,7 +312,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Token",
+            "Token",
             "Detalle"
           ],
           "rows": [

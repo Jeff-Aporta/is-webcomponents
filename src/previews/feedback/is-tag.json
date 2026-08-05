@@ -27,8 +27,7 @@
         },
         {
           "kind": "code",
-          "code": "<span style=\"font-size:1.25rem\">\r\n  <is-tag pill>Grande</is-tag>\r\n</span>",
-          "lang": "html"
+          "code": "<span style=\"font-size:1.25rem\">\n  <is-tag pill>Grande</is-tag>\n</span>"
         },
         {
           "kind": "html",
@@ -44,7 +43,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Default"
           ],
           "rows": [

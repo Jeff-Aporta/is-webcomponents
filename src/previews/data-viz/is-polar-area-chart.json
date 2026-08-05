@@ -29,7 +29,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-polar-area-chart label=\"Canales de tráfico\">\r\n  <script type=\"application/json\">\r\n    {\r\n      \"data\": {\r\n        \"labels\": [\"Orgánico\", \"Directo\", \"Social\", \"Email\", \"Paid\"],\r\n        \"datasets\": [{ \"label\": \"Sesiones\", \"data\": [4200, 3100, 1800, 950, 2400] }]\r\n      }\r\n    }\r\n  </script>\r\n</is-polar-area-chart>",
+          "code": "<is-polar-area-chart label=\"Canales de tráfico\">\n  <script type=\"application/json\">\n    {\n      \"data\": {\n        \"labels\": [\"Orgánico\", \"Directo\", \"Social\", \"Email\", \"Paid\"],\n        \"datasets\": [{ \"label\": \"Sesiones\", \"data\": [4200, 3100, 1800, 950, 2400] }]\n      }\n    }\n  </script>\n</is-polar-area-chart>",
           "lang": "html"
         }
       ]
@@ -65,7 +65,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-polar-area-chart legend-position=\"end\" label=\"NPS\">…</is-polar-area-chart>\r\n<is-polar-area-chart without-legend>…</is-polar-area-chart>\r\n<is-polar-area-chart without-animation>…</is-polar-area-chart>",
+          "code": "<is-polar-area-chart legend-position=\"end\" label=\"NPS\">…</is-polar-area-chart>\n<is-polar-area-chart without-legend>…</is-polar-area-chart>\n<is-polar-area-chart without-animation>…</is-polar-area-chart>",
           "lang": "html"
         }
       ]
@@ -81,8 +81,8 @@
         },
         {
           "kind": "code",
-          "code": "is-polar-area-chart.mi-tema {\r\n  --fill-color-1: color-mix(in srgb, #38bdf8 72%, transparent);\r\n  --fill-color-2: color-mix(in srgb, #a78bfa 72%, transparent);\r\n  --border-color-1: #38bdf8;\r\n  --border-color-2: #a78bfa;\r\n}",
-          "lang": "html"
+          "code": "is-polar-area-chart.mi-tema {\n  --fill-color-1: color-mix(in srgb, #38bdf8 72%, transparent);\n  --fill-color-2: color-mix(in srgb, #a78bfa 72%, transparent);\n  --border-color-1: #38bdf8;\n  --border-color-2: #a78bfa;\n}",
+          "lang": "css"
         }
       ]
     },
@@ -94,7 +94,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / prop",
+            "Atributo / prop",
             "Notas"
           ],
           "rows": [

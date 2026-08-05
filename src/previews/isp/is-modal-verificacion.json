@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "const modal = document.querySelector('is-modal-verificacion');\r\nmodal.controller = {\r\n  entrie: 'tercero',\r\n  async actVerificar(record) {\r\n    return { mensajes: [\r\n      { itdmensaje: 'info', mensaje: 'NIT válido.' },\r\n      { itdmensaje: 'warning', mensaje: 'Sin correo registrado.' },\r\n    ] };\r\n  },\r\n};\r\nmodal.record = { nit: '900123456' };\r\nmodal.show();",
-          "lang": "html"
+          "code": "const modal = document.querySelector('is-modal-verificacion');\nmodal.controller = {\n  entrie: 'tercero',\n  async actVerificar(record) {\n    return { mensajes: [\n      { itdmensaje: 'info', mensaje: 'NIT válido.' },\n      { itdmensaje: 'warning', mensaje: 'Sin correo registrado.' },\n    ] };\n  },\n};\nmodal.record = { nit: '900123456' };\nmodal.show();"
         }
       ]
     },

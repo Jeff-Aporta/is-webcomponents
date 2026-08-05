@@ -14,8 +14,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "<is-main class=\"main\" remember-scroll storage-key=\"docs-mi-vista\">\r\n  …\r\n</is-main>",
-          "lang": "html"
+          "code": "<is-main class=\"main\" remember-scroll storage-key=\"docs-mi-vista\">\n  …\n</is-main>"
         }
       ]
     },
@@ -46,7 +45,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

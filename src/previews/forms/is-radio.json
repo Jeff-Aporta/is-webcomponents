@@ -22,8 +22,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radio-group name=\"plan\" value=\"pro\" label=\"Plan\">\r\n  <is-radio value=\"free\">Gratis</is-radio>\r\n  <is-radio value=\"pro\">Profesional</is-radio>\r\n  <is-radio value=\"legacy\" disabled>Heredado</is-radio>\r\n</is-radio-group>",
-          "lang": "html"
+          "code": "<is-radio-group name=\"plan\" value=\"pro\" label=\"Plan\">\n  <is-radio value=\"free\">Gratis</is-radio>\n  <is-radio value=\"pro\">Profesional</is-radio>\n  <is-radio value=\"legacy\" disabled>Heredado</is-radio>\n</is-radio-group>"
         }
       ]
     },
@@ -38,8 +37,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radio-group color=\"success\" row>\r\n  <is-radio value=\"c\">Hereda success</is-radio>\r\n  <is-radio value=\"d\" color=\"danger\">Se sale del grupo</is-radio>\r\n</is-radio-group>",
-          "lang": "html"
+          "code": "<is-radio-group color=\"success\" row>\n  <is-radio value=\"c\">Hereda success</is-radio>\n  <is-radio value=\"d\" color=\"danger\">Se sale del grupo</is-radio>\n</is-radio-group>"
         }
       ]
     },
@@ -54,8 +52,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radio-group label-placement=\"top\" row>…</is-radio-group>\r\n<is-radio value=\"x\" label-placement=\"start\">Solo este</is-radio>",
-          "lang": "html"
+          "code": "<is-radio-group label-placement=\"top\" row>…</is-radio-group>\n<is-radio value=\"x\" label-placement=\"start\">Solo este</is-radio>"
         }
       ]
     },
@@ -70,8 +67,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radio value=\"prio\">\r\n  Prioritario\r\n  <span slot=\"description\">Respuesta en 4 h</span>\r\n</is-radio>",
-          "lang": "html"
+          "code": "<is-radio value=\"prio\">\n  Prioritario\n  <span slot=\"description\">Respuesta en 4 h</span>\n</is-radio>"
         }
       ]
     },
@@ -86,8 +82,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radio-group row>…</is-radio-group>\r\n<is-radio-group orientation=\"horizontal\">…</is-radio-group>",
-          "lang": "html"
+          "code": "<is-radio-group row>…</is-radio-group>\n<is-radio-group orientation=\"horizontal\">…</is-radio-group>"
         }
       ]
     },
@@ -106,8 +101,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radio-group error error-text=\"Debes elegir una opción\">…</is-radio-group>\r\ngrupo.errorText = '';   // limpia mensaje y estado",
-          "lang": "html"
+          "code": "<is-radio-group error error-text=\"Debes elegir una opción\">…</is-radio-group>\ngrupo.errorText = '';   // limpia mensaje y estado"
         }
       ]
     },
@@ -122,8 +116,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radio-group readonly value=\"auto\">…</is-radio-group>",
-          "lang": "html"
+          "code": "<is-radio-group readonly value=\"auto\">…</is-radio-group>"
         }
       ]
     },
@@ -150,7 +143,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Tecla",
+            "Tecla",
             "Acción"
           ],
           "rows": [
@@ -198,7 +191,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>is-radio-group",
+            "is-radio-group",
             "Detalle"
           ],
           "rows": [
@@ -271,7 +264,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>is-radio",
+            "is-radio",
             "Detalle"
           ],
           "rows": [

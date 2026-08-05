@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-kanban>\r\n  <is-kanban-column title=\"Tareas\">\r\n    <is-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-variant=\"danger\">\r\n      Revisar extracto de agosto.\r\n    </is-kanban-card>\r\n    <is-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">\r\n      Cuadrar cuentas de resultado.\r\n    </is-kanban-card>\r\n  </is-kanban-column>\r\n  <is-kanban-column title=\"Hechas\"></is-kanban-column>\r\n</is-kanban>",
+          "code": "<is-kanban>\n  <is-kanban-column title=\"Tareas\">\n    <is-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-variant=\"danger\">\n      Revisar extracto de agosto.\n    </is-kanban-card>\n    <is-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">\n      Cuadrar cuentas de resultado.\n    </is-kanban-card>\n  </is-kanban-column>\n  <is-kanban-column title=\"Hechas\"></is-kanban-column>\n</is-kanban>",
           "lang": "html"
         }
       ]

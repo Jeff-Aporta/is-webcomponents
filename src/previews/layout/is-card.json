@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-card></span>Hola mundo<span class=\"tag\"></is-card></span>",
-          "lang": "html"
+          "code": "<is-card>Hola mundo</is-card>"
         }
       ]
     },
@@ -34,8 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-card</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"accent\"</span><span class=\"tag\">></span>...<span class=\"tag\"></is-card></span>\r\n<span class=\"tag\"><is-card</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"filled-outlined\"</span><span class=\"tag\">></span>...<span class=\"tag\"></is-card></span>",
-          "lang": "html"
+          "code": "<is-card variant=\"accent\">...</is-card>\n<is-card variant=\"filled-outlined\">...</is-card>"
         }
       ]
     },
@@ -50,8 +48,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-card</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"media\"</span><span class=\"tag\">></span><span class=\"tag\"><img</span> <span class=\"attr\">src</span>=<span class=\"val\">\"...\"</span> <span class=\"attr\">alt</span>=<span class=\"val\">\"...\"</span><span class=\"tag\">/></span><span class=\"tag\"></div></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"header\"</span><span class=\"tag\">></span>Título<span class=\"tag\"></div></span>\r\n  Contenido del body.\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>\r\n    <span class=\"tag\"><is-button></span>Cancelar<span class=\"tag\"></is-button></span>\r\n    <span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Aceptar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-card></span>",
-          "lang": "html"
+          "code": "<is-card>\n  <div slot=\"media\"><img src=\"...\" alt=\"...\"/></div>\n  <div slot=\"header\">Título</div>\n  Contenido del body.\n  <div slot=\"footer\">\n    <is-button>Cancelar</is-button>\n    <is-button color=\"brand\">Aceptar</is-button>\n  </div>\n</is-card>"
         }
       ]
     },
@@ -66,8 +63,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-card</span> <span class=\"attr\">orientation</span>=<span class=\"val\">\"horizontal\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"media\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:bell\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  <span class=\"tag\"><strong</span><span class=\"tag\">></span>Nueva mención<span class=\"tag\"></strong></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"actions\"</span><span class=\"tag\">></span><span class=\"tag\"><is-button></span>Ver<span class=\"tag\"></is-button></span><span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-card></span>",
-          "lang": "html"
+          "code": "<is-card orientation=\"horizontal\">\n  <is-icon slot=\"media\" icon=\"mdi:bell\"></is-icon>\n  <strong>Nueva mención</strong>\n  <div slot=\"actions\"><is-button>Ver</is-button></div>\n</is-card>"
         }
       ]
     },
@@ -82,8 +78,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-card></span>\r\n  <span class=\"tag\"><strong</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"header\"</span><span class=\"tag\">></span>Título<span class=\"tag\"></strong></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"header-actions\"</span><span class=\"tag\">></span>...<span class=\"tag\"></is-button></span>\r\n  Contenido.\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer\"</span><span class=\"tag\">></span>Meta<span class=\"tag\"></span></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"footer-actions\"</span><span class=\"tag\">></span>CTA<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></is-card></span>",
-          "lang": "html"
+          "code": "<is-card>\n  <strong slot=\"header\">Título</strong>\n  <is-button slot=\"header-actions\">...</is-button>\n  Contenido.\n  <span slot=\"footer\">Meta</span>\n  <is-button slot=\"footer-actions\">CTA</is-button>\n</is-card>"
         }
       ]
     },
@@ -95,7 +90,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Propiedad",
+            "Propiedad",
             "Tipo",
             "Descripción"
           ],
@@ -122,8 +117,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"kw\">const</span> c = document.<span class=\"attr\">querySelector</span>(<span class=\"str\">'is-card'</span>);\r\nc.<span class=\"attr\">variant</span> = <span class=\"str\">'filled'</span>;\r\nc.<span class=\"attr\">orientation</span> = <span class=\"str\">'horizontal'</span>;\r\nc.<span class=\"attr\">addEventListener</span>(<span class=\"str\">'slotchange'</span>, e => <span class=\"kw\">this</span>.log(e));",
-          "lang": "html"
+          "code": "const c = document.querySelector('is-card');\nc.variant = 'filled';\nc.orientation = 'horizontal';\nc.addEventListener('slotchange', e => this.log(e));"
         }
       ]
     },
@@ -138,7 +132,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -165,7 +159,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -206,7 +200,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [
@@ -239,7 +233,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Variable",
+            "Variable",
             "Default",
             "Descripción"
           ],

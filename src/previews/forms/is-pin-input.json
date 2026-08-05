@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-pin-input</span> <span class=\"attr\">length</span>=<span class=\"val\">\"6\"</span><span class=\"tag\">></span><span class=\"tag\"></is-pin-input></span>",
-          "lang": "html"
+          "code": "<is-pin-input length=\"6\"></is-pin-input>"
         }
       ]
     },
@@ -89,7 +88,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -146,7 +145,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

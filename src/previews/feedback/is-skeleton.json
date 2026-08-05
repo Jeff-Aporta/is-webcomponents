@@ -31,8 +31,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-skeleton effect=\"sheen\" style=\"height:1rem\"></is-skeleton>\r\n<is-skeleton effect=\"pulse\" style=\"height:1rem\"></is-skeleton>",
-          "lang": "html"
+          "code": "<is-skeleton effect=\"sheen\" style=\"height:1rem\"></is-skeleton>\n<is-skeleton effect=\"pulse\" style=\"height:1rem\"></is-skeleton>"
         }
       ]
     },
@@ -43,7 +42,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / var",
+            "Atributo / var",
             "Default"
           ],
           "rows": [

@@ -19,8 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-stepper</span> <span class=\"attr\">active</span>=<span class=\"val\">\"1\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-stepper-step</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Cuenta\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:account\"</span><span class=\"tag\">></span><span class=\"tag\"></is-stepper-step></span>\r\n  <span class=\"tag\"><is-stepper-step</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Perfil\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:card-account-details\"</span><span class=\"tag\">></span><span class=\"tag\"></is-stepper-step></span>\r\n  <span class=\"tag\"><is-stepper-step</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Confirmar\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:check-circle\"</span><span class=\"tag\">></span><span class=\"tag\"></is-stepper-step></span>\r\n<span class=\"tag\"></is-stepper></span>",
-          "lang": "html"
+          "code": "<is-stepper active=\"1\">\n  <is-stepper-step label=\"Cuenta\" icon=\"mdi:account\"></is-stepper-step>\n  <is-stepper-step label=\"Perfil\" icon=\"mdi:card-account-details\"></is-stepper-step>\n  <is-stepper-step label=\"Confirmar\" icon=\"mdi:check-circle\"></is-stepper-step>\n</is-stepper>"
         }
       ]
     },
@@ -90,7 +89,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -129,7 +128,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -173,8 +172,7 @@
         },
         {
           "kind": "code",
-          "code": "stepper.next();          // Siguiente paso\r\nstepper.prev();          // Paso anterior\r\nstepper.goTo(2);         // Salta a paso 2\r\nstepper.active = 1;      // Setter",
-          "lang": "html"
+          "code": "stepper.next();          // Siguiente paso\nstepper.prev();          // Paso anterior\nstepper.goTo(2);         // Salta a paso 2\nstepper.active = 1;      // Setter"
         },
         {
           "kind": "html",
@@ -183,7 +181,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

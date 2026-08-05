@@ -19,8 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-stat</span>\r\n  <span class=\"attr\">label</span>=<span class=\"val\">\"Ingresos\"</span>\r\n  <span class=\"attr\">value</span>=<span class=\"val\">\"€ 1.249,00\"</span>\r\n  <span class=\"attr\">helper</span>=<span class=\"val\">\"vs mes anterior\"</span>\r\n  <span class=\"attr\">trend</span>=<span class=\"val\">\"+12.5%\"</span>\r\n  <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:cash-multiple\"</span>\r\n<span class=\"tag\">></span><span class=\"tag\"></is-stat></span>",
-          "lang": "html"
+          "code": "<is-stat\n  label=\"Ingresos\"\n  value=\"€ 1.249,00\"\n  helper=\"vs mes anterior\"\n  trend=\"+12.5%\"\n  icon=\"mdi:cash-multiple\"\n></is-stat>"
         }
       ]
     },
@@ -68,7 +67,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"

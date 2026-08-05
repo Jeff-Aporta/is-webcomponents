@@ -51,8 +51,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-flex-layout gap=\"0.5rem\" justify=\"between\" align=\"center\">…</is-flex-layout>\r\n<is-flex-layout direction=\"column\" wrap max-width=\"24rem\">…</is-flex-layout>",
-          "lang": "html"
+          "code": "<is-flex-layout gap=\"0.5rem\" justify=\"between\" align=\"center\">…</is-flex-layout>\n<is-flex-layout direction=\"column\" wrap max-width=\"24rem\">…</is-flex-layout>"
         }
       ]
     },
@@ -63,7 +62,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Valores / default"
           ],
           "rows": [

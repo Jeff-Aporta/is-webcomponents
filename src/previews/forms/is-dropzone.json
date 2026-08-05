@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const dz = document.querySelector('is-dropzone');\r\ndz.files;                 // array de FileRecord\r\ndz.addFile(file);\r\ndz.removeFile(id);\r\ndz.upload();              // dispara is-upload-progress por chunk\r\ndz.addEventListener('is-files-change',   e => console.log(e.detail.files));\r\ndz.addEventListener('is-upload-start',   e => ...);\r\ndz.addEventListener('is-upload-progress',e => console.log(e.detail.progress));\r\ndz.addEventListener('is-upload-end',     e => ...);\r\ndz.addEventListener('is-error',          e => /* reason: max-size | accept | max-files */);\r\n\r\n// Atributos\r\n// accept, multiple, max-files, max-size (bytes), chunked",
-          "lang": "html"
+          "code": "const dz = document.querySelector('is-dropzone');\ndz.files;                 // array de FileRecord\ndz.addFile(file);\ndz.removeFile(id);\ndz.upload();              // dispara is-upload-progress por chunk\ndz.addEventListener('is-files-change',   e => console.log(e.detail.files));\ndz.addEventListener('is-upload-start',   e => ...);\ndz.addEventListener('is-upload-progress',e => console.log(e.detail.progress));\ndz.addEventListener('is-upload-end',     e => ...);\ndz.addEventListener('is-error',          e => /* reason: max-size | accept | max-files */);\n\n// Atributos\n// accept, multiple, max-files, max-size (bytes), chunked"
         }
       ]
     }

@@ -19,8 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-fab</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:plus\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Crear\"</span><span class=\"tag\">></span><span class=\"tag\"></is-fab></span>",
-          "lang": "html"
+          "code": "<is-fab icon=\"mdi:plus\" label=\"Crear\"></is-fab>"
         }
       ]
     },
@@ -36,7 +35,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-fab icon=\"mdi:bell\" style=\"font-size: 0.75em\"></is-fab>\r\n<is-fab icon=\"mdi:bell\" style=\"font-size: 1.25em\"></is-fab>",
+          "code": "<is-fab icon=\"mdi:bell\" style=\"font-size: 0.75em\"></is-fab>\n<is-fab icon=\"mdi:bell\" style=\"font-size: 1.25em\"></is-fab>",
           "lang": "html"
         }
       ]
@@ -96,7 +95,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -153,7 +152,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

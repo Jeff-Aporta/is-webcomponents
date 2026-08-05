@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-loading-overlay open message=\"Guardando…\" scroll-lock></is-loading-overlay>",
-          "lang": "html"
+          "code": "<is-loading-overlay open message=\"Guardando…\" scroll-lock></is-loading-overlay>"
         }
       ]
     },
@@ -34,8 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-loading-overlay message=\"Consolidando…\">\r\n  <is-icon icon=\"mdi:database-sync\"></is-icon>\r\n</is-loading-overlay>",
-          "lang": "html"
+          "code": "<is-loading-overlay message=\"Consolidando…\">\n  <is-icon icon=\"mdi:database-sync\"></is-icon>\n</is-loading-overlay>"
         }
       ]
     },
@@ -46,8 +44,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const ov = document.querySelector('is-loading-overlay');\r\nov.show();\r\ntry { await guardar(); } finally { ov.hide(); }",
-          "lang": "html"
+          "code": "const ov = document.querySelector('is-loading-overlay');\nov.show();\ntry { await guardar(); } finally { ov.hide(); }"
         }
       ]
     }

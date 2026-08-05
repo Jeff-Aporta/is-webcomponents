@@ -23,7 +23,7 @@
         },
         {
           "kind": "code",
-          "code": "<code id=\"cbValue\">https://api.insoft.com.co/v1</code>\r\n<is-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></is-copy-button>",
+          "code": "<code id=\"cbValue\">https://api.insoft.com.co/v1</code>\n<is-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></is-copy-button>",
           "lang": "html"
         }
       ]
@@ -39,8 +39,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><span</span> <span class=\"attr\">id</span>=<span class=\"val\">\"my-phone\"</span><span class=\"tag\">></span>+57 300 123 4567<span class=\"tag\"></span></span>\r\n<span class=\"tag\"><is-copy-button</span> <span class=\"attr\">from</span>=<span class=\"val\">\"my-phone\"</span><span class=\"tag\">></is-copy-button></span>\r\n\r\n<span class=\"tag\"><is-copy-button</span> <span class=\"attr\">from</span>=<span class=\"val\">\"my-input.value\"</span><span class=\"tag\">></is-copy-button></span>\r\n<span class=\"tag\"><is-copy-button</span> <span class=\"attr\">from</span>=<span class=\"val\">\"my-link[href]\"</span><span class=\"tag\">></is-copy-button></span>",
-          "lang": "html"
+          "code": "<span id=\"my-phone\">+57 300 123 4567</span>\n<is-copy-button from=\"my-phone\"></is-copy-button>\n\n<is-copy-button from=\"my-input.value\"></is-copy-button>\n<is-copy-button from=\"my-link[href]\"></is-copy-button>"
         }
       ]
     },
@@ -127,8 +126,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-copy-button</span> <span class=\"attr\">value</span>=<span class=\"val\">\"…\"</span> <span class=\"attr\">tooltip-placement</span>=<span class=\"val\">\"bottom-start\"</span><span class=\"tag\">></is-copy-button></span>",
-          "lang": "html"
+          "code": "<is-copy-button value=\"…\" tooltip-placement=\"bottom-start\"></is-copy-button>"
         }
       ]
     },
@@ -153,7 +151,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Attr",
+            "Attr",
             "Tipo",
             "Default"
           ],
@@ -208,7 +206,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

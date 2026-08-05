@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const cal = document.querySelector('is-full-calendar');\r\ncal.prev(); cal.next(); cal.today();\r\ncal.setDate('2026-09-15');\r\ncal.setView('week');\r\ncal.addEventListener('is-day-click',  e => console.log(e.detail.date));\r\ncal.addEventListener('is-event-click',e => console.log(e.detail.event));\r\n\r\n// Atributos\r\n// view          month | week | day\r\n// date          ISO inicial (default hoy)\r\n// first-day     0=Dom, 1=Lun (default 1)\r\n// locale        (default 'es')\r\n// hours-start, hours-end  rango en week/day (default 7..20)\r\n\r\n// Datos\r\n// { events: [ { id, title, date:'YYYY-MM-DD', start:'HH:MM', end?, color? } ] }",
-          "lang": "html"
+          "code": "const cal = document.querySelector('is-full-calendar');\ncal.prev(); cal.next(); cal.today();\ncal.setDate('2026-09-15');\ncal.setView('week');\ncal.addEventListener('is-day-click',  e => console.log(e.detail.date));\ncal.addEventListener('is-event-click',e => console.log(e.detail.event));\n\n// Atributos\n// view          month | week | day\n// date          ISO inicial (default hoy)\n// first-day     0=Dom, 1=Lun (default 1)\n// locale        (default 'es')\n// hours-start, hours-end  rango en week/day (default 7..20)\n\n// Datos\n// { events: [ { id, title, date:'YYYY-MM-DD', start:'HH:MM', end?, color? } ] }"
         }
       ]
     }

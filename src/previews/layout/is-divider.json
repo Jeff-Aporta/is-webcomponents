@@ -35,8 +35,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-divider></is-divider>\r\n<is-divider opacity=\"80\" color=\"brand\"></is-divider>\r\n<is-divider orientation=\"vertical\" color=\"accent\"></is-divider>",
-          "lang": "html"
+          "code": "<is-divider></is-divider>\n<is-divider opacity=\"80\" color=\"brand\"></is-divider>\n<is-divider orientation=\"vertical\" color=\"accent\"></is-divider>"
         }
       ]
     },
@@ -47,7 +46,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / var",
+            "Atributo / var",
             "Default"
           ],
           "rows": [

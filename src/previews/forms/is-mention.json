@@ -44,8 +44,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const m = document.querySelector('is-mention');\r\nm.value;          // string con tokens ya insertos: \"uy @Ana esto es #urgente\"\r\nm.suggestions;    // { \"@\": [...], \"#\": [...] }\r\nm.addEventListener('is-select', e => {\r\n  console.log('elegiste:', e.detail.trigger, e.detail.item, e.detail.range);\r\n});\r\n\r\n// Sugerencias vía propiedad (alternativa al script)\r\nm.suggestions = { '@': persons, '#': tags };\r\n\r\n// Atributos:\r\n// trigger   caracteres que abren el popup (default \"@#\")\r\n// max-items tope del popup (default 8)",
-          "lang": "html"
+          "code": "const m = document.querySelector('is-mention');\nm.value;          // string con tokens ya insertos: \"uy @Ana esto es #urgente\"\nm.suggestions;    // { \"@\": [...], \"#\": [...] }\nm.addEventListener('is-select', e => {\n  console.log('elegiste:', e.detail.trigger, e.detail.item, e.detail.range);\n});\n\n// Sugerencias vía propiedad (alternativa al script)\nm.suggestions = { '@': persons, '#': tags };\n\n// Atributos:\n// trigger   caracteres que abren el popup (default \"@#\")\n// max-items tope del popup (default 8)"
         }
       ]
     },

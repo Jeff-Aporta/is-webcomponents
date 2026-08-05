@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Atributos\r\n// label        texto del trigger\r\n// icon         icono del trigger\r\n// placement    bottom-start | bottom | bottom-end | ...\r\n// width        ancho del panel (default min(60rem, 92vw))\r\n// hover        boolean — abre al hover, no al clic\r\n//\r\n// Slots\r\n// default      columnas (slot=\"column\" con atributo title)\r\n// slot=\"feature\"  bloque destacado (imagen/CTA extra)\r\n//\r\n// Eventos\r\nmenu.addEventListener('is-select', e => console.log(e.detail.href));",
-          "lang": "html"
+          "code": "// Atributos\n// label        texto del trigger\n// icon         icono del trigger\n// placement    bottom-start | bottom | bottom-end | ...\n// width        ancho del panel (default min(60rem, 92vw))\n// hover        boolean — abre al hover, no al clic\n//\n// Slots\n// default      columnas (slot=\"column\" con atributo title)\n// slot=\"feature\"  bloque destacado (imagen/CTA extra)\n//\n// Eventos\nmenu.addEventListener('is-select', e => console.log(e.detail.href));"
         }
       ]
     }

@@ -39,8 +39,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const qr = document.querySelector('is-qrcode');\r\nconst dataURL = await qr.dataURL('image/png');\r\n// descargar, pegar en input[type=file], etc.",
-          "lang": "html"
+          "code": "const qr = document.querySelector('is-qrcode');\nconst dataURL = await qr.dataURL('image/png');\n// descargar, pegar en input[type=file], etc."
         }
       ]
     },
@@ -50,8 +49,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Atributos\r\n// value        texto a codificar (requerido)\r\n// level        L | M | Q | H   (default L)\r\n// cell         tamaño en píxeles de cada módulo (default 4)\r\n// margin       módulos de zona de silencio (default 2)\r\n// fg, bg       colores\r\n\r\n// API JS\r\nqr.svg;        // nodo SVG\r\nqr.dataURL('image/png').then(url => /* … */);\r\n\r\n// Dependencias\r\n// Carga qrcode-generator@1.4.4 desde esm.sh. Si tu build no tiene\r\n// red, vendelo o usa otro loader.",
-          "lang": "html"
+          "code": "// Atributos\n// value        texto a codificar (requerido)\n// level        L | M | Q | H   (default L)\n// cell         tamaño en píxeles de cada módulo (default 4)\n// margin       módulos de zona de silencio (default 2)\n// fg, bg       colores\n\n// API JS\nqr.svg;        // nodo SVG\nqr.dataURL('image/png').then(url => /* … */);\n\n// Dependencias\n// Carga qrcode-generator@1.4.4 desde esm.sh. Si tu build no tiene\n// red, vendelo o usa otro loader."
         }
       ]
     }

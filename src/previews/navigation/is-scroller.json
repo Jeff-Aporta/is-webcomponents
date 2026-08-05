@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-scroller></span>\r\n  <span class=\"tag\"><is-button></span>Pills 1<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"><is-button></span>Pills 2<span class=\"tag\"></is-button></span>\r\n  …\r\n<span class=\"tag\"></is-scroller></span>",
-          "lang": "html"
+          "code": "<is-scroller>\n  <is-button>Pills 1</is-button>\n  <is-button>Pills 2</is-button>\n  …\n</is-scroller>"
         }
       ]
     },
@@ -78,7 +77,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -105,7 +104,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -130,7 +129,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

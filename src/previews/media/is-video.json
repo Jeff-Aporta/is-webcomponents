@@ -32,8 +32,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-video\r\n  controls\r\n  playsinline\r\n  src=\"video.mp4\"\r\n></is-video>",
-          "lang": "html"
+          "code": "<is-video\n  controls\n  playsinline\n  src=\"video.mp4\"\n></is-video>"
         }
       ]
     },
@@ -48,7 +47,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Tecla",
+            "Tecla",
             "Acción"
           ],
           "rows": [
@@ -95,7 +94,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

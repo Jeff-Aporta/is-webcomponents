@@ -60,7 +60,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Nombre",
+            "Nombre",
             "Valores",
             "Descripción"
           ],
@@ -84,7 +84,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Campo",
+            "Campo",
             "Descripción"
           ],
           "rows": [
@@ -141,7 +141,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Nombre",
+            "Nombre",
             "Descripción"
           ],
           "rows": [

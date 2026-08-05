@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Datos\r\n// [\r\n//   { id, title, name, parent, photo? },\r\n//   ...\r\n// ]\r\n\r\nconst org = document.querySelector('is-org-chart');\r\norg.collapse(id); // o .expand(id) / .toggle(id)\r\n\r\norg.addEventListener('is-select', e => console.log(e.detail.id, e.detail.node));\r\norg.addEventListener('is-toggle', e => console.log('toggle', e.detail.id, 'collapsed=', e.detail.collapsed));\r\n\r\n// Atributos\r\n// direction    down (default) | up | right\r\n// node-width   default 200\r\n// node-height  default 78\r\n// gap          default 28",
-          "lang": "html"
+          "code": "// Datos\n// [\n//   { id, title, name, parent, photo? },\n//   ...\n// ]\n\nconst org = document.querySelector('is-org-chart');\norg.collapse(id); // o .expand(id) / .toggle(id)\n\norg.addEventListener('is-select', e => console.log(e.detail.id, e.detail.node));\norg.addEventListener('is-toggle', e => console.log('toggle', e.detail.id, 'collapsed=', e.detail.collapsed));\n\n// Atributos\n// direction    down (default) | up | right\n// node-width   default 200\n// node-height  default 78\n// gap          default 28"
         }
       ]
     }

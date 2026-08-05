@@ -37,7 +37,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-scatter-chart label=\"Students\" x-label=\"Hours\" y-label=\"Score\">\r\n  <script type=\"application/json\">\r\n    { \"data\": { \"datasets\": [{ \"label\": \"Students\", \"data\": [{ \"x\": 2, \"y\": 65 }, …] }] } }\r\n  </script>\r\n</is-scatter-chart>",
+          "code": "<is-scatter-chart label=\"Students\" x-label=\"Hours\" y-label=\"Score\">\n  <script type=\"application/json\">\n    { \"data\": { \"datasets\": [{ \"label\": \"Students\", \"data\": [{ \"x\": 2, \"y\": 65 }, …] }] } }\n  </script>\n</is-scatter-chart>",
           "lang": "html"
         }
       ]
@@ -52,8 +52,8 @@
         },
         {
           "kind": "code",
-          "code": "const chart = document.querySelector('#scatterJs');\r\nchart.config = {\r\n  data: {\r\n    datasets: [{\r\n      label: 'Students',\r\n      data: [\r\n        { x: 2, y: 65 }, { x: 3, y: 72 }, { x: 4, y: 78 },\r\n        { x: 5, y: 82 }, { x: 6, y: 88 }, { x: 7, y: 85 },\r\n        { x: 8, y: 92 }, { x: 9, y: 95 },\r\n      ],\r\n    }],\r\n  },\r\n};",
-          "lang": "html"
+          "code": "const chart = document.querySelector('#scatterJs');\nchart.config = {\n  data: {\n    datasets: [{\n      label: 'Students',\n      data: [\n        { x: 2, y: 65 }, { x: 3, y: 72 }, { x: 4, y: 78 },\n        { x: 5, y: 82 }, { x: 6, y: 88 }, { x: 7, y: 85 },\n        { x: 8, y: 92 }, { x: 9, y: 95 },\n      ],\n    }],\n  },\n};",
+          "lang": "javascript"
         }
       ]
     },
@@ -68,8 +68,8 @@
         },
         {
           "kind": "code",
-          "code": "datasets: [\r\n  { label: 'Tutored', data: [{ x: 3, y: 78 }, …] },\r\n  { label: 'Self-study', data: [{ x: 3, y: 68 }, …] },\r\n]",
-          "lang": "html"
+          "code": "datasets: [\n  { label: 'Tutored', data: [{ x: 3, y: 78 }, …] },\n  { label: 'Self-study', data: [{ x: 3, y: 68 }, …] },\n]",
+          "lang": "javascript"
         }
       ]
     },
@@ -83,7 +83,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-scatter-chart grid=\"y\" x-label=\"Temp\" y-label=\"Sales\">…</is-scatter-chart>\r\n<is-scatter-chart without-legend without-animation>…</is-scatter-chart>",
+          "code": "<is-scatter-chart grid=\"y\" x-label=\"Temp\" y-label=\"Sales\">…</is-scatter-chart>\n<is-scatter-chart without-legend without-animation>…</is-scatter-chart>",
           "lang": "html"
         }
       ]
@@ -95,7 +95,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / prop",
+            "Atributo / prop",
             "Notas"
           ],
           "rows": [

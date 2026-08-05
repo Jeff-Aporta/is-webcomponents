@@ -32,8 +32,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-color-picker\r\n  label=\"Color de marca\"\r\n  name=\"brand\"\r\n  value=\"#1971c2\"\r\n  swatches=\"#e03131,#f59f00,#2f9e44\"\r\n></is-color-picker>",
-          "lang": "html"
+          "code": "<is-color-picker\n  label=\"Color de marca\"\n  name=\"brand\"\n  value=\"#1971c2\"\n  swatches=\"#e03131,#f59f00,#2f9e44\"\n></is-color-picker>"
         }
       ]
     },
@@ -55,7 +54,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

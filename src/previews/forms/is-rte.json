@@ -44,8 +44,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const r = document.querySelector('is-rte');\r\nr.value;        // HTML actual\r\nr.text;         // texto plano\r\nr.focus();\r\nr.exec('bold'); // bold, italic, underline, strike\r\nr.format('h2'); // h1..h6, p, blockquote, pre\r\nr.link();       // prompt → crea <a>\r\nr.clear();      // sin formato, sin listas\r\nr.undo(); r.redo();\r\n\r\nr.addEventListener('is-input',  e => /* cada keystroke */);\r\nr.addEventListener('is-change', e => console.log(e.detail.value));\r\nr.addEventListener('is-blur',   () => /* perdió foco */);\r\n\r\n// Atributos\r\n// value, placeholder, autofocus, readonly\r\n// toolbar   lista separada por comas",
-          "lang": "html"
+          "code": "const r = document.querySelector('is-rte');\nr.value;        // HTML actual\nr.text;         // texto plano\nr.focus();\nr.exec('bold'); // bold, italic, underline, strike\nr.format('h2'); // h1..h6, p, blockquote, pre\nr.link();       // prompt → crea <a>\nr.clear();      // sin formato, sin listas\nr.undo(); r.redo();\n\nr.addEventListener('is-input',  e => /* cada keystroke */);\nr.addEventListener('is-change', e => console.log(e.detail.value));\nr.addEventListener('is-blur',   () => /* perdió foco */);\n\n// Atributos\n// value, placeholder, autofocus, readonly\n// toolbar   lista separada por comas"
         }
       ]
     }

@@ -34,8 +34,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"success\"</span><span class=\"tag\">></span>Aprobado<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"danger\"</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"outlined\"</span><span class=\"tag\">></span>Eliminar<span class=\"tag\"></is-button></span>",
-          "lang": "html"
+          "code": "<is-button color=\"success\">Aprobado</is-button>\n<is-button color=\"danger\" variant=\"outlined\">Eliminar</is-button>"
         }
       ]
     },
@@ -89,8 +88,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><div</span> <span class=\"attr\">style</span>=<span class=\"val\">\"font-size: 1.25rem\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Grande<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></div></span>",
-          "lang": "html"
+          "code": "<div style=\"font-size: 1.25rem\">\n  <is-button color=\"brand\">Grande</is-button>\n</div>"
         }
       ]
     },
@@ -125,8 +123,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><svg</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"start\"</span> <span class=\"attr\">viewBox</span>=<span class=\"val\">\"0 0 16 16\"</span><span class=\"tag\">></span>...<span class=\"tag\"></svg></span>\r\n  Guardar\r\n<span class=\"tag\"></is-button></span>",
-          "lang": "html"
+          "code": "<is-button color=\"brand\">\n  <svg slot=\"start\" viewBox=\"0 0 16 16\">...</svg>\n  Guardar\n</is-button>"
         }
       ]
     },
@@ -208,8 +205,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">href</span>=<span class=\"val\">\"https://www.youtube.com/@JeffAporta\"</span> <span class=\"attr\">target</span>=<span class=\"val\">\"_blank\"</span> <span class=\"attr\">rel</span>=<span class=\"val\">\"noopener\"</span><span class=\"tag\">></span>\r\n  Jeff Aporta en YouTube\r\n<span class=\"tag\"></is-button></span>",
-          "lang": "html"
+          "code": "<is-button href=\"https://www.youtube.com/@JeffAporta\" target=\"_blank\" rel=\"noopener\">\n  Jeff Aporta en YouTube\n</is-button>"
         },
         {
           "kind": "callout",
@@ -228,8 +224,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">type</span>=<span class=\"val\">\"submit\"</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span> <span class=\"attr\">name</span>=<span class=\"val\">\"action\"</span> <span class=\"attr\">value</span>=<span class=\"val\">\"save\"</span><span class=\"tag\">></span>Guardar<span class=\"tag\"></is-button></span>",
-          "lang": "html"
+          "code": "<is-button type=\"submit\" color=\"brand\" name=\"action\" value=\"save\">Guardar</is-button>"
         }
       ]
     },
@@ -244,8 +239,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><button</span> <span class=\"attr\">part</span>=<span class=\"val\">\"button\"</span> <span class=\"attr\">class</span>=<span class=\"val\">\"btn\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"start\"</span>   <span class=\"attr\">class</span>=<span class=\"val\">\"btn__prefix\"</span><span class=\"tag\">></span><span class=\"tag\"><slot</span> <span class=\"attr\">name</span>=<span class=\"val\">\"start\"</span><span class=\"tag\">></slot></span></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"label\"</span>   <span class=\"attr\">class</span>=<span class=\"val\">\"btn__label\"</span><span class=\"tag\">></span><span class=\"tag\"><slot></slot></span></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"end\"</span>     <span class=\"attr\">class</span>=<span class=\"val\">\"btn__suffix\"</span><span class=\"tag\">></span><span class=\"tag\"><slot</span> <span class=\"attr\">name</span>=<span class=\"val\">\"end\"</span><span class=\"tag\">></slot></span></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"caret\"</span>   <span class=\"attr\">class</span>=<span class=\"val\">\"btn__caret\"</span><span class=\"tag\">></span>...<span class=\"tag\"></span></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">part</span>=<span class=\"val\">\"spinner\"</span> <span class=\"attr\">class</span>=<span class=\"val\">\"btn__spinner\"</span><span class=\"tag\">></span>...<span class=\"tag\"></span></span>\r\n<span class=\"tag\"></button></span>",
-          "lang": "html"
+          "code": "<button part=\"button\" class=\"btn\">\n  <span part=\"start\"   class=\"btn__prefix\"><slot name=\"start\"></slot></span>\n  <span part=\"label\"   class=\"btn__label\"><slot></slot></span>\n  <span part=\"end\"     class=\"btn__suffix\"><slot name=\"end\"></slot></span>\n  <span part=\"caret\"   class=\"btn__caret\">...</span>\n  <span part=\"spinner\" class=\"btn__spinner\">...</span>\n</button>"
         }
       ]
     },
@@ -257,7 +251,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>State",
+            "State",
             "Selector",
             "Cuándo se aplica"
           ],
@@ -290,8 +284,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"com\">/* afecta solo cuando está loading */</span>\r\nis-button:state(loading) {\r\n  --is-button-border-radius: 999px;\r\n}\r\n\r\n<span class=\"com\">/* afecta solo cuando es link */</span>\r\nis-button:state(link)::part(button) {\r\n  text-decoration: underline;\r\n}\r\n\r\n<span class=\"com\">/* afecta solo cuando es icon-only */</span>\r\nis-button:state(icon-button) {\r\n  --_hpad: 0;\r\n}",
-          "lang": "html"
+          "code": "/* afecta solo cuando está loading */\nis-button:state(loading) {\n  --is-button-border-radius: 999px;\n}\n\n/* afecta solo cuando es link */\nis-button:state(link)::part(button) {\n  text-decoration: underline;\n}\n\n/* afecta solo cuando es icon-only */\nis-button:state(icon-button) {\n  --_hpad: 0;\n}"
         }
       ]
     },
@@ -303,7 +296,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [
@@ -343,8 +336,7 @@
         },
         {
           "kind": "code",
-          "code": "is-button:state(loading)::part(spinner) svg {\r\n  stroke: var(--is-color-danger);\r\n  stroke-width: 3;\r\n}",
-          "lang": "html"
+          "code": "is-button:state(loading)::part(spinner) svg {\n  stroke: var(--is-color-danger);\n  stroke-width: 3;\n}"
         }
       ]
     },
@@ -359,8 +351,7 @@
         },
         {
           "kind": "code",
-          "code": "--is-color-brand      --is-color-neutral    --is-color-success\r\n--is-color-warning    --is-color-danger     --is-color-info      --is-color-error\r\n\r\n<span class=\"c\">/* cada familia acepta cinco modificadores relativos, sin escala numérica */</span>\r\n--is-color-brand-paler   <span class=\"c\">/* pastel de fondo */</span>\r\n--is-color-brand-pale    <span class=\"c\">/* pastel activo */</span>\r\n--is-color-brand-strong  <span class=\"c\">/* relleno */</span>\r\n--is-color-brand-stronger<span class=\"c\">/* hover del relleno */</span>\r\n--is-color-brand-strongest<span class=\"c\">/* active del relleno */</span>",
-          "lang": "html"
+          "code": "--is-color-brand      --is-color-neutral    --is-color-success\n--is-color-warning    --is-color-danger     --is-color-info      --is-color-error\n\n/* cada familia acepta cinco modificadores relativos, sin escala numérica */\n--is-color-brand-paler   /* pastel de fondo */\n--is-color-brand-pale    /* pastel activo */\n--is-color-brand-strong  /* relleno */\n--is-color-brand-stronger/* hover del relleno */\n--is-color-brand-strongest/* active del relleno */"
         },
         {
           "kind": "html",
@@ -368,8 +359,7 @@
         },
         {
           "kind": "code",
-          "code": "--is-button-font-family\r\n--is-button-font-weight\r\n--is-button-border-radius   <span class=\"com\">/* respeta pill si está presente */</span>\r\n--is-button-border-width\r\n--is-button-transition-duration",
-          "lang": "html"
+          "code": "--is-button-font-family\n--is-button-font-weight\n--is-button-border-radius   /* respeta pill si está presente */\n--is-button-border-width\n--is-button-transition-duration"
         },
         {
           "kind": "html",
@@ -393,7 +383,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Método",
+            "Método",
             "Descripción"
           ],
           "rows": [
@@ -433,8 +423,7 @@
         },
         {
           "kind": "code",
-          "code": "btn.validity            <span class=\"com\">// ValidityState</span>\r\nbtn.validationMessage    <span class=\"com\">// string</span>\r\nbtn.willValidate         <span class=\"com\">// boolean</span>",
-          "lang": "html"
+          "code": "btn.validity            // ValidityState\nbtn.validationMessage    // string\nbtn.willValidate         // boolean"
         },
         {
           "kind": "html",
@@ -446,8 +435,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"kw\">const</span> btn = document.<span class=\"attr\">querySelector</span>(<span class=\"str\">'#apiBtn'</span>);\r\nbtn.<span class=\"attr\">click</span>();\r\nbtn.<span class=\"attr\">setFocus</span>({ preventScroll: <span class=\"kw\">true</span> });\r\nbtn.<span class=\"attr\">toggleAttribute</span>(<span class=\"str\">'loading'</span>);\r\nbtn.<span class=\"attr\">setCustomValidity</span>(<span class=\"str\">'Revisa los campos'</span>);",
-          "lang": "html"
+          "code": "const btn = document.querySelector('#apiBtn');\nbtn.click();\nbtn.setFocus({ preventScroll: true });\nbtn.toggleAttribute('loading');\nbtn.setCustomValidity('Revisa los campos');"
         }
       ]
     },
@@ -459,7 +447,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [
@@ -502,8 +490,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-button></span>Hola mundo<span class=\"tag\"></is-button></span>",
-          "lang": "html"
+          "code": "<is-button>Hola mundo</is-button>"
         }
       ]
     },
@@ -518,7 +505,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -653,7 +640,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -678,7 +665,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [
@@ -715,7 +702,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>State",
+            "State",
             "Cuándo"
           ],
           "rows": [

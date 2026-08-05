@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const d = document.querySelector('is-duration-picker');\r\nd.value;        // segundos totales\r\nd.text;        // \"01:02:05\" o \"02:05\" si hours=0\r\nd.hours; d.minutes; d.seconds;\r\nd.tick(30);    // suma 30 segundos respetando límites\r\nd.setSeconds(3600);\r\nd.set(1, 30, 0);\r\n\r\nd.addEventListener('is-change', e => console.log(e.detail.value, e.detail.text));\r\n\r\n// Atributos\r\n// value, min, max  límites en segundos\r\n// step             incremento del botón (default 1)",
-          "lang": "html"
+          "code": "const d = document.querySelector('is-duration-picker');\nd.value;        // segundos totales\nd.text;        // \"01:02:05\" o \"02:05\" si hours=0\nd.hours; d.minutes; d.seconds;\nd.tick(30);    // suma 30 segundos respetando límites\nd.setSeconds(3600);\nd.set(1, 30, 0);\n\nd.addEventListener('is-change', e => console.log(e.detail.value, e.detail.text));\n\n// Atributos\n// value, min, max  límites en segundos\n// step             incremento del botón (default 1)"
         }
       ]
     }

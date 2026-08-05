@@ -30,8 +30,7 @@
         },
         {
           "kind": "code",
-          "code": "<span style=\"font-size:3rem\">\r\n  <is-avatar initials=\"AB\" shape=\"rounded\"></is-avatar>\r\n</span>",
-          "lang": "html"
+          "code": "<span style=\"font-size:3rem\">\n  <is-avatar initials=\"AB\" shape=\"rounded\"></is-avatar>\n</span>"
         }
       ]
     },
@@ -114,7 +113,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Default",
             "Descripción"
           ],

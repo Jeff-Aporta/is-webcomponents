@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-transfer</span> <span class=\"attr\">searchable</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-transfer-item</span> <span class=\"attr\">value</span>=<span class=\"val\">\"a\"</span><span class=\"tag\">></span>Alpha<span class=\"tag\"></is-transfer-item></span>\r\n  <span class=\"tag\"><is-transfer-item</span> <span class=\"attr\">value</span>=<span class=\"val\">\"b\"</span> <span class=\"attr\">selected</span><span class=\"tag\">></span>Beta<span class=\"tag\"></is-transfer-item></span>\r\n  <span class=\"tag\"><is-transfer-item</span> <span class=\"attr\">value</span>=<span class=\"val\">\"c\"</span><span class=\"tag\">></span>Gamma<span class=\"tag\"></is-transfer-item></span>\r\n  …\r\n<span class=\"tag\"></is-transfer></span>",
-          "lang": "html"
+          "code": "<is-transfer searchable>\n  <is-transfer-item value=\"a\">Alpha</is-transfer-item>\n  <is-transfer-item value=\"b\" selected>Beta</is-transfer-item>\n  <is-transfer-item value=\"c\">Gamma</is-transfer-item>\n  …\n</is-transfer>"
         }
       ]
     },
@@ -67,7 +66,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -118,7 +117,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -151,7 +150,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

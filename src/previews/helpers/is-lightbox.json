@@ -19,8 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<button onclick=\"lb.show()\">Abrir</button>\r\n<is-lightbox id=\"lb\">\r\n  <svg viewBox=\"0 0 320 200\">…</svg>\r\n</is-lightbox>",
-          "lang": "html"
+          "code": "<button onclick=\"lb.show()\">Abrir</button>\n<is-lightbox id=\"lb\">\n  <svg viewBox=\"0 0 320 200\">…</svg>\n</is-lightbox>"
         }
       ]
     },
@@ -64,8 +63,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-lightbox>\r\n  <div slot=\"toolbar\">\r\n    <button>Rotar</button>\r\n    <button>Descargar</button>\r\n  </div>\r\n  <svg>…</svg>\r\n</is-lightbox>",
-          "lang": "html"
+          "code": "<is-lightbox>\n  <div slot=\"toolbar\">\n    <button>Rotar</button>\n    <button>Descargar</button>\n  </div>\n  <svg>…</svg>\n</is-lightbox>"
         }
       ]
     },
@@ -90,7 +88,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

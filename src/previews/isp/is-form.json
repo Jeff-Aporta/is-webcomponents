@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-form mode=\"edit\">\r\n  <h3 slot=\"header\">Nuevo tercero</h3>\r\n  <div slot=\"content\">…</div>\r\n  <span slot=\"pre-buttons\">Campos obligatorios</span>\r\n</is-form>",
-          "lang": "html"
+          "code": "<is-form mode=\"edit\">\n  <h3 slot=\"header\">Nuevo tercero</h3>\n  <div slot=\"content\">…</div>\n  <span slot=\"pre-buttons\">Campos obligatorios</span>\n</is-form>"
         }
       ]
     },

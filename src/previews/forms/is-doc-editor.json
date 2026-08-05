@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const doc = document.querySelector('is-doc-editor');\r\ndoc.value;          // string JSON\r\ndoc.blocks;         // array vivo\r\ndoc.addBlock('paragraph');\r\ndoc.removeBlock(id);\r\ndoc.updateBlock(id, { text: '…' });\r\ndoc.addEventListener('is-change', e => console.log(e.detail.blocks));\r\n\r\n// Atajos en bloques\r\n// Enter          crear bloque del mismo tipo\r\n// Backspace      eliminar bloque si está vacío\r\n// \"/\" inicio     abre menú de tipos (heading-1..3, list, todo, quote, code, divider)\r\n// Shift+Enter    salto de línea dentro del bloque",
-          "lang": "html"
+          "code": "const doc = document.querySelector('is-doc-editor');\ndoc.value;          // string JSON\ndoc.blocks;         // array vivo\ndoc.addBlock('paragraph');\ndoc.removeBlock(id);\ndoc.updateBlock(id, { text: '…' });\ndoc.addEventListener('is-change', e => console.log(e.detail.blocks));\n\n// Atajos en bloques\n// Enter          crear bloque del mismo tipo\n// Backspace      eliminar bloque si está vacío\n// \"/\" inicio     abre menú de tipos (heading-1..3, list, todo, quote, code, divider)\n// Shift+Enter    salto de línea dentro del bloque"
         }
       ]
     }

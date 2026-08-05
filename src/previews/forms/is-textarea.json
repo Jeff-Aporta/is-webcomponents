@@ -34,8 +34,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-textarea variant=\"filled\" label=\"filled\" rows=\"2\"></is-textarea>",
-          "lang": "html"
+          "code": "<is-textarea variant=\"filled\" label=\"filled\" rows=\"2\"></is-textarea>"
         }
       ]
     },
@@ -50,8 +49,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"Comentario\"></is-textarea>\r\n\r\n<!-- equivalente -->\r\n<is-textarea resize=\"auto\" min-rows=\"3\" max-rows=\"6\"></is-textarea>",
-          "lang": "html"
+          "code": "<is-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"Comentario\"></is-textarea>\n\n<!-- equivalente -->\n<is-textarea resize=\"auto\" min-rows=\"3\" max-rows=\"6\"></is-textarea>"
         }
       ]
     },
@@ -66,8 +64,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-textarea resize=\"none\" rows=\"3\"></is-textarea>\r\n<is-textarea resize=\"both\" rows=\"3\"></is-textarea>",
-          "lang": "html"
+          "code": "<is-textarea resize=\"none\" rows=\"3\"></is-textarea>\n<is-textarea resize=\"both\" rows=\"3\"></is-textarea>"
         }
       ]
     },
@@ -82,8 +79,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\"></is-textarea>",
-          "lang": "html"
+          "code": "<is-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\"></is-textarea>"
         }
       ]
     },
@@ -98,8 +94,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-textarea error error-text=\"El comentario contiene términos no permitidos\"></is-textarea>\r\n\r\ntextarea.reportValidity();   // marca el campo como tocado y pinta el error",
-          "lang": "html"
+          "code": "<is-textarea error error-text=\"El comentario contiene términos no permitidos\"></is-textarea>\n\ntextarea.reportValidity();   // marca el campo como tocado y pinta el error"
         }
       ]
     },
@@ -114,8 +109,7 @@
         },
         {
           "kind": "code",
-          "code": "<div style=\"--is-field-width: 18rem\">\r\n  <is-textarea label=\"Estrecho\" rows=\"2\"></is-textarea>\r\n  <is-textarea label=\"Ancho completo\" full-width rows=\"2\"></is-textarea>\r\n</div>",
-          "lang": "html"
+          "code": "<div style=\"--is-field-width: 18rem\">\n  <is-textarea label=\"Estrecho\" rows=\"2\"></is-textarea>\n  <is-textarea label=\"Ancho completo\" full-width rows=\"2\"></is-textarea>\n</div>"
         }
       ]
     },
@@ -130,8 +124,7 @@
         },
         {
           "kind": "code",
-          "code": "<div style=\"--is-field-label-width: 7rem\">\r\n  <is-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\"></is-textarea>\r\n</div>",
-          "lang": "html"
+          "code": "<div style=\"--is-field-label-width: 7rem\">\n  <is-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\"></is-textarea>\n</div>"
         }
       ]
     },
@@ -167,7 +160,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Detalle"
           ],
           "rows": [
@@ -236,7 +229,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [
@@ -281,7 +274,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [
@@ -310,7 +303,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Token",
+            "Token",
             "Detalle"
           ],
           "rows": [

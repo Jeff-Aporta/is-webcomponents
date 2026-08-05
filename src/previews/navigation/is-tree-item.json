@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-tree>\r\n  <is-tree-item expanded><is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>Contabilidad\r\n    <is-tree-item><is-icon slot=\"start\" icon=\"mdi:file-document\"></is-icon>Balance</is-tree-item>\r\n    <is-tree-item><is-icon slot=\"start\" icon=\"mdi:file-document\"></is-icon>Estado de resultados</is-tree-item>\r\n  </is-tree-item>\r\n  <is-tree-item><is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>Inventario</is-tree-item>\r\n</is-tree>",
+          "code": "<is-tree>\n  <is-tree-item expanded><is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>Contabilidad\n    <is-tree-item><is-icon slot=\"start\" icon=\"mdi:file-document\"></is-icon>Balance</is-tree-item>\n    <is-tree-item><is-icon slot=\"start\" icon=\"mdi:file-document\"></is-icon>Estado de resultados</is-tree-item>\n  </is-tree-item>\n  <is-tree-item><is-icon slot=\"start\" icon=\"mdi:folder\"></is-icon>Inventario</is-tree-item>\n</is-tree>",
           "lang": "html"
         }
       ]

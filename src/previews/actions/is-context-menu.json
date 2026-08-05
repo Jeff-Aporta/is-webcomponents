@@ -44,8 +44,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const menu = document.querySelector('is-context-menu');\r\nmenu.openAt(x, y);   // programa el menú en una posición\r\nmenu.close();\r\nmenu.isOpen;\r\n\r\nmenu.addEventListener('is-select', e => {\r\n  console.log('elegido:', e.detail.value);   // valor de data-value o texto\r\n  console.log('item:', e.detail.item);\r\n});\r\n\r\n// items via slot\r\n<is-context-menu for=\"#canvas\">\r\n  <button class=\"item\" data-value=\"open\">Abrir</button>\r\n  <button class=\"item\" data-value=\"delete\">Eliminar</button>\r\n</is-context-menu>",
-          "lang": "html"
+          "code": "const menu = document.querySelector('is-context-menu');\nmenu.openAt(x, y);   // programa el menú en una posición\nmenu.close();\nmenu.isOpen;\n\nmenu.addEventListener('is-select', e => {\n  console.log('elegido:', e.detail.value);   // valor de data-value o texto\n  console.log('item:', e.detail.item);\n});\n\n// items via slot\n<is-context-menu for=\"#canvas\">\n  <button class=\"item\" data-value=\"open\">Abrir</button>\n  <button class=\"item\" data-value=\"delete\">Eliminar</button>\n</is-context-menu>"
         }
       ]
     },

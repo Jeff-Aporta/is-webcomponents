@@ -32,8 +32,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-file-input\r\n  label=\"Adjuntos\"\r\n  accept=\"image/*,.pdf\"\r\n  multiple\r\n  name=\"attachments\"\r\n></is-file-input>",
-          "lang": "html"
+          "code": "<is-file-input\n  label=\"Adjuntos\"\n  accept=\"image/*,.pdf\"\n  multiple\n  name=\"attachments\"\n></is-file-input>"
         }
       ]
     },
@@ -44,7 +43,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

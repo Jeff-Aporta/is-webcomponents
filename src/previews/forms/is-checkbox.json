@@ -34,8 +34,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-checkbox color=\"success\" checked>success</is-checkbox>",
-          "lang": "html"
+          "code": "<is-checkbox color=\"success\" checked>success</is-checkbox>"
         }
       ]
     },
@@ -50,8 +49,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-checkbox label-placement=\"start\" checked>start</is-checkbox>\r\n<is-checkbox label-placement=\"top\" checked>top</is-checkbox>",
-          "lang": "html"
+          "code": "<is-checkbox label-placement=\"start\" checked>start</is-checkbox>\n<is-checkbox label-placement=\"top\" checked>top</is-checkbox>"
         }
       ]
     },
@@ -70,8 +68,7 @@
         },
         {
           "kind": "code",
-          "code": "<div style=\"display:flex;flex-direction:column;align-items:flex-start;gap:.7rem\">\r\n  <is-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</is-checkbox>\r\n  <is-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</is-checkbox>\r\n</div>",
-          "lang": "html"
+          "code": "<div style=\"display:flex;flex-direction:column;align-items:flex-start;gap:.7rem\">\n  <is-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</is-checkbox>\n  <is-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</is-checkbox>\n</div>"
         },
         {
           "kind": "html",
@@ -87,8 +84,7 @@
         },
         {
           "kind": "code",
-          "code": "const all = children.every(c => c.checked);\r\nparent.checked = all;\r\nparent.indeterminate = !all && children.some(c => c.checked);",
-          "lang": "html"
+          "code": "const all = children.every(c => c.checked);\nparent.checked = all;\nparent.indeterminate = !all && children.some(c => c.checked);"
         }
       ]
     },
@@ -103,8 +99,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>\r\n  Favorito\r\n</is-checkbox>",
-          "lang": "html"
+          "code": "<is-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>\n  Favorito\n</is-checkbox>"
         }
       ]
     },
@@ -119,8 +114,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-checkbox name=\"ro1\" checked readonly>Solo lectura</is-checkbox>",
-          "lang": "html"
+          "code": "<is-checkbox name=\"ro1\" checked readonly>Solo lectura</is-checkbox>"
         }
       ]
     },
@@ -135,8 +129,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>\r\n  Acepto los términos\r\n</is-checkbox>",
-          "lang": "html"
+          "code": "<is-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>\n  Acepto los términos\n</is-checkbox>"
         }
       ]
     },
@@ -155,8 +148,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-checkbox name=\"terminos\" value=\"si\" required>\r\n  Acepto los términos\r\n</is-checkbox>",
-          "lang": "html"
+          "code": "<is-checkbox name=\"terminos\" value=\"si\" required>\n  Acepto los términos\n</is-checkbox>"
         }
       ]
     },
@@ -171,8 +163,7 @@
         },
         {
           "kind": "code",
-          "code": "<span style=\"font-size:1.35rem\"><is-checkbox checked>Grande</is-checkbox></span>",
-          "lang": "html"
+          "code": "<span style=\"font-size:1.35rem\"><is-checkbox checked>Grande</is-checkbox></span>"
         }
       ]
     },
@@ -183,7 +174,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Tecla",
+            "Tecla",
             "Acción"
           ],
           "rows": [
@@ -206,7 +197,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

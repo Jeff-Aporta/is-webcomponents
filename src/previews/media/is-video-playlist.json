@@ -19,8 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-video-playlist autoplay-next placement=\"bottom\">\r\n  <is-video title=\"Big Buck Bunny\" channel=\"Blender\" poster=\"…\" src=\"01.mp4\"></is-video>\r\n  <is-video title=\"Sintel\" poster=\"…\" src=\"02.mp4\"></is-video>\r\n  <is-video title=\"Elephants Dream\" poster=\"…\" src=\"03.mp4\"></is-video>\r\n</is-video-playlist>",
-          "lang": "html"
+          "code": "<is-video-playlist autoplay-next placement=\"bottom\">\n  <is-video title=\"Big Buck Bunny\" channel=\"Blender\" poster=\"…\" src=\"01.mp4\"></is-video>\n  <is-video title=\"Sintel\" poster=\"…\" src=\"02.mp4\"></is-video>\n  <is-video title=\"Elephants Dream\" poster=\"…\" src=\"03.mp4\"></is-video>\n</is-video-playlist>"
         }
       ]
     },
@@ -35,8 +34,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-video-playlist placement=\"right\">…</is-video-playlist>",
-          "lang": "html"
+          "code": "<is-video-playlist placement=\"right\">…</is-video-playlist>"
         }
       ]
     },
@@ -51,8 +49,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-video-playlist no-default-tools>\r\n  <button slot=\"tools-left\"><is-icon icon=\"mdi:shuffle\"></is-icon></button>\r\n  <button slot=\"tools-right\"><is-icon icon=\"mdi:fullscreen\"></is-icon></button>\r\n  <is-video …></is-video>\r\n</is-video-playlist>",
-          "lang": "html"
+          "code": "<is-video-playlist no-default-tools>\n  <button slot=\"tools-left\"><is-icon icon=\"mdi:shuffle\"></is-icon></button>\n  <button slot=\"tools-right\"><is-icon icon=\"mdi:fullscreen\"></is-icon></button>\n  <is-video …></is-video>\n</is-video-playlist>"
         }
       ]
     },
@@ -97,7 +94,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

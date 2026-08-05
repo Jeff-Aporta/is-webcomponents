@@ -39,8 +39,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Modo nativo (SVG)\r\nconst m = document.querySelector('is-maps');\r\n// Atributos\r\n// viewbox     \"minLon,minLat,maxLon,maxLat\"  viewport inicial\r\n// interactive boolean — habilita pan/zoom con mouse/touch\r\n//\r\n// Marcadores\r\n//   <is-map-marker lat=\"4.6\" lon=\"-74.0\" label=\"Bogotá\"></is-map-marker>\r\n//\r\n// Modo tile\r\n//   <is-maps engine=\"tile\">\r\n//     <script type=\"application/json\">\r\n//       { \"tileUrl\": \"...\", \"zoom\": 4, \"bbox\": \"...\", \"center\": \"...\",\r\n//         \"attribution\": \"...\" }\r\n//     </script>\r\n//   </is-maps>\r\n//\r\n// Eventos\r\nm.addEventListener('is-viewport',     e => console.log(e.detail));\r\nm.addEventListener('is-marker-click', e => console.log(e.detail.marker));",
-          "lang": "html"
+          "code": "// Modo nativo (SVG)\nconst m = document.querySelector('is-maps');\n// Atributos\n// viewbox     \"minLon,minLat,maxLon,maxLat\"  viewport inicial\n// interactive boolean — habilita pan/zoom con mouse/touch\n//\n// Marcadores\n//   <is-map-marker lat=\"4.6\" lon=\"-74.0\" label=\"Bogotá\"></is-map-marker>\n//\n// Modo tile\n//   <is-maps engine=\"tile\">\n//     <script type=\"application/json\">\n//       { \"tileUrl\": \"...\", \"zoom\": 4, \"bbox\": \"...\", \"center\": \"...\",\n//         \"attribution\": \"...\" }\n//     </script>\n//   </is-maps>\n//\n// Eventos\nm.addEventListener('is-viewport',     e => console.log(e.detail));\nm.addEventListener('is-marker-click', e => console.log(e.detail.marker));"
         }
       ]
     }

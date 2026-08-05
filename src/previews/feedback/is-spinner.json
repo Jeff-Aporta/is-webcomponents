@@ -28,8 +28,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-spinner></is-spinner>\r\n<is-spinner style=\"font-size:2rem;--indicator-color:#40c057\"></is-spinner>",
-          "lang": "html"
+          "code": "<is-spinner></is-spinner>\n<is-spinner style=\"font-size:2rem;--indicator-color:#40c057\"></is-spinner>"
         }
       ]
     },
@@ -57,7 +56,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Variable CSS",
+            "Variable CSS",
             "Default"
           ],
           "rows": [

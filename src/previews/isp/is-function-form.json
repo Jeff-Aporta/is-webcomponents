@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-function-form>\r\n  <script type=\"application/json\">\r\n    { \"ifuncion\": 1, \"label\": \"Saludo\", \"atributos\": [ ... ] }\r\n  </script>\r\n</is-function-form>",
-          "lang": "html"
+          "code": "<is-function-form>\n  <script type=\"application/json\">\n    { \"ifuncion\": 1, \"label\": \"Saludo\", \"atributos\": [ ... ] }\n  </script>\n</is-function-form>"
         }
       ]
     },
@@ -34,8 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-function-form edicion deletable></is-function-form>",
-          "lang": "html"
+          "code": "<is-function-form edicion deletable></is-function-form>"
         }
       ]
     }

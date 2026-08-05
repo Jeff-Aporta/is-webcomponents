@@ -23,8 +23,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-split-panel></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"start\"</span><span class=\"tag\">></span>Start<span class=\"tag\"></div></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"end\"</span><span class=\"tag\">></span>End<span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-split-panel></span>",
-          "lang": "html"
+          "code": "<is-split-panel>\n  <div slot=\"start\">Start</div>\n  <div slot=\"end\">End</div>\n</is-split-panel>"
         }
       ]
     },
@@ -39,8 +38,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-split-panel</span> <span class=\"attr\">orientation</span>=<span class=\"val\">\"horizontal\"</span><span class=\"tag\">></span>\r\n  ...\r\n<span class=\"tag\"></is-split-panel></span>",
-          "lang": "html"
+          "code": "<is-split-panel orientation=\"horizontal\">\n  ...\n</is-split-panel>"
         }
       ]
     },
@@ -55,8 +53,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-split-panel</span> <span class=\"attr\">orientation</span>=<span class=\"val\">\"vertical\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"start\"</span><span class=\"tag\">></span>Top<span class=\"tag\"></div></span>\r\n  <span class=\"tag\"><div</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"end\"</span><span class=\"tag\">></span>Bottom<span class=\"tag\"></div></span>\r\n<span class=\"tag\"></is-split-panel></span>",
-          "lang": "html"
+          "code": "<is-split-panel orientation=\"vertical\">\n  <div slot=\"start\">Top</div>\n  <div slot=\"end\">Bottom</div>\n</is-split-panel>"
         }
       ]
     },
@@ -71,8 +68,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-split-panel</span> <span class=\"attr\">primary</span>=<span class=\"val\">\"end\"</span> <span class=\"attr\">position-in-pixels</span>=<span class=\"val\">\"240\"</span><span class=\"tag\">></span>\r\n  ...\r\n<span class=\"tag\"></is-split-panel></span>",
-          "lang": "html"
+          "code": "<is-split-panel primary=\"end\" position-in-pixels=\"240\">\n  ...\n</is-split-panel>"
         }
       ]
     },
@@ -87,8 +83,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-split-panel</span>\r\n  <span class=\"attr\">snap</span>=<span class=\"val\">\"25% 50% 75%\"</span>\r\n  <span class=\"attr\">snap-threshold</span>=<span class=\"val\">\"12\"</span><span class=\"tag\">></span>\r\n  ...\r\n<span class=\"tag\"></is-split-panel></span>",
-          "lang": "html"
+          "code": "<is-split-panel\n  snap=\"25% 50% 75%\"\n  snap-threshold=\"12\">\n  ...\n</is-split-panel>"
         }
       ]
     },
@@ -103,8 +98,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-split-panel</span> <span class=\"attr\">disabled</span><span class=\"tag\">></span>\r\n  ...\r\n<span class=\"tag\"></is-split-panel></span>",
-          "lang": "html"
+          "code": "<is-split-panel disabled>\n  ...\n</is-split-panel>"
         }
       ]
     },
@@ -127,7 +121,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Propiedad",
+            "Propiedad",
             "Tipo",
             "Descripción"
           ],
@@ -184,8 +178,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"kw\">const</span> sp = document.<span class=\"attr\">getElementById</span>(<span class=\"str\">'apiSplit'</span>);\r\nsp.<span class=\"attr\">position</span> += <span class=\"val\">10</span>;             <span class=\"com\">// asignar valor</span>\r\nsp.<span class=\"attr\">primary</span> = <span class=\"str\">'end'</span>;           <span class=\"com\">// o 'start'</span>\r\nsp.<span class=\"attr\">toggleAttribute</span>(<span class=\"str\">'disabled'</span>);\r\nsp.<span class=\"attr\">addEventListener</span>(<span class=\"str\">'reposition'</span>, e => <span class=\"kw\">this</span>.log(e.detail));",
-          "lang": "html"
+          "code": "const sp = document.getElementById('apiSplit');\nsp.position += 10;             // asignar valor\nsp.primary = 'end';           // o 'start'\nsp.toggleAttribute('disabled');\nsp.addEventListener('reposition', e => this.log(e.detail));"
         }
       ]
     },
@@ -200,7 +193,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -263,7 +256,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -288,7 +281,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [
@@ -317,7 +310,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Variable",
+            "Variable",
             "Default",
             "Descripción"
           ],
@@ -351,7 +344,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "detail",
             "Descripción"
           ],

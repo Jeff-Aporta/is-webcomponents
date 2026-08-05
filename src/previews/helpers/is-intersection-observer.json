@@ -45,8 +45,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-intersection-observer root=\"#scroller\" intersect-class=\"is-in\" threshold=\"0.4\" once>\r\n  <article class=\"io-card\">…</article>\r\n</is-intersection-observer>",
-          "lang": "html"
+          "code": "<is-intersection-observer root=\"#scroller\" intersect-class=\"is-in\" threshold=\"0.4\" once>\n  <article class=\"io-card\">…</article>\n</is-intersection-observer>"
         }
       ]
     },
@@ -57,7 +56,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / evento",
+            "Atributo / evento",
             "Qué hace"
           ],
           "rows": [

@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-tab-group>\r\n  <is-tab slot=\"nav\" panel=\"uno\">Uno</is-tab>\r\n  <is-tab slot=\"nav\" panel=\"dos\">Dos</is-tab>\r\n  <is-tab-panel name=\"uno\">\r\n    <p>El panel es un contenedor normal: acepta cualquier contenido.</p>\r\n    <is-tag color=\"brand\">Contenido rico</is-tag>\r\n  </is-tab-panel>\r\n  <is-tab-panel name=\"dos\">Segundo panel.</is-tab-panel>\r\n</is-tab-group>",
+          "code": "<is-tab-group>\n  <is-tab slot=\"nav\" panel=\"uno\">Uno</is-tab>\n  <is-tab slot=\"nav\" panel=\"dos\">Dos</is-tab>\n  <is-tab-panel name=\"uno\">\n    <p>El panel es un contenedor normal: acepta cualquier contenido.</p>\n    <is-tag color=\"brand\">Contenido rico</is-tag>\n  </is-tab-panel>\n  <is-tab-panel name=\"dos\">Segundo panel.</is-tab-panel>\n</is-tab-group>",
           "lang": "html"
         }
       ]

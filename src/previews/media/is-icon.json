@@ -28,8 +28,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-icon icon=\"mdi:home\"></is-icon>\r\n<is-icon icon=\"mdi:check-circle\"></is-icon>\r\n<is-icon src=\"/logo.svg\" label=\"Logo\"></is-icon>",
-          "lang": "html"
+          "code": "<is-icon icon=\"mdi:home\"></is-icon>\n<is-icon icon=\"mdi:check-circle\"></is-icon>\n<is-icon src=\"/logo.svg\" label=\"Logo\"></is-icon>"
         }
       ]
     },
@@ -40,7 +39,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Default",
             "Descripción"
           ],

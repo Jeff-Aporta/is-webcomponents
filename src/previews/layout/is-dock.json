@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Cambia el ítem activo programáticamente\r\ndocument.querySelector('is-dock-item[label=\"Inicio\"]').setAttribute('active', '');\r\n\r\n// Escucha selección\r\ndock.addEventListener('is-select', e => console.log(e.detail.item.getAttribute('label')));\r\n\r\n// Atributos\r\n// position    bottom (default) | top | left | right\r\n// max-scale   factor máximo (default 1.6)\r\n// range       píxeles de alcance (default 110)\r\n\r\n<is-dock-item label=\"…\" icon=\"mdi:…\" href=\"…\" active />",
-          "lang": "html"
+          "code": "// Cambia el ítem activo programáticamente\ndocument.querySelector('is-dock-item[label=\"Inicio\"]').setAttribute('active', '');\n\n// Escucha selección\ndock.addEventListener('is-select', e => console.log(e.detail.item.getAttribute('label')));\n\n// Atributos\n// position    bottom (default) | top | left | right\n// max-scale   factor máximo (default 1.6)\n// range       píxeles de alcance (default 110)\n\n<is-dock-item label=\"…\" icon=\"mdi:…\" href=\"…\" active />"
         }
       ]
     },

@@ -29,7 +29,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-format-bytes value=\"2.5\" unit=\"megabyte\"></is-format-bytes>\r\n<is-format-bytes value=\"1\" unit=\"gigabyte\"></is-format-bytes>",
+          "code": "<is-format-bytes value=\"2.5\" unit=\"megabyte\"></is-format-bytes>\n<is-format-bytes value=\"1\" unit=\"gigabyte\"></is-format-bytes>",
           "lang": "html"
         }
       ]
@@ -44,7 +44,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-format-bytes value=\"1073741824\" display=\"short\"></is-format-bytes>\r\n<is-format-bytes value=\"1073741824\" display=\"long\"></is-format-bytes>",
+          "code": "<is-format-bytes value=\"1073741824\" display=\"short\"></is-format-bytes>\n<is-format-bytes value=\"1073741824\" display=\"long\"></is-format-bytes>",
           "lang": "html"
         }
       ]
@@ -59,7 +59,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-format-bytes locale=\"es\" value=\"1536000\"></is-format-bytes>\r\n<is-format-bytes locale=\"en\" value=\"1536000\" display=\"long\"></is-format-bytes>",
+          "code": "<is-format-bytes locale=\"es\" value=\"1536000\"></is-format-bytes>\n<is-format-bytes locale=\"en\" value=\"1536000\" display=\"long\"></is-format-bytes>",
           "lang": "html"
         }
       ]
@@ -81,7 +81,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Default",
             "Notas"
           ],

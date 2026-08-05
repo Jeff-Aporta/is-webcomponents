@@ -29,7 +29,7 @@
         },
         {
           "kind": "code",
-          "code": "<div class=\"container-theme theme-dark\" data-theme=\"dark\">\r\n  <is-theme-toggle dark></is-theme-toggle>\r\n  …\r\n</div>\r\n\r\n<div class=\"container-theme theme-light\" data-theme=\"light\">\r\n  <is-theme-toggle></is-theme-toggle>\r\n</div>",
+          "code": "<div class=\"container-theme theme-dark\" data-theme=\"dark\">\n  <is-theme-toggle dark></is-theme-toggle>\n  …\n</div>\n\n<div class=\"container-theme theme-light\" data-theme=\"light\">\n  <is-theme-toggle></is-theme-toggle>\n</div>",
           "lang": "html"
         }
       ]
@@ -41,7 +41,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / API",
+            "Atributo / API",
             "Descripción"
           ],
           "rows": [

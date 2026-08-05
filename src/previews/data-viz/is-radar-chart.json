@@ -34,7 +34,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radar-chart label=\"Feature Comparison\">\r\n  <script type=\"application/json\">\r\n    {\r\n      \"data\": {\r\n        \"labels\": [\"Speed\", \"Reliability\", \"Ease of Use\", \"Features\", \"Support\"],\r\n        \"datasets\": [{ \"label\": \"Product A\", \"data\": [85, 90, 75, 80, 70], \"fill\": true }]\r\n      }\r\n    }\r\n  </script>\r\n</is-radar-chart>",
+          "code": "<is-radar-chart label=\"Feature Comparison\">\n  <script type=\"application/json\">\n    {\n      \"data\": {\n        \"labels\": [\"Speed\", \"Reliability\", \"Ease of Use\", \"Features\", \"Support\"],\n        \"datasets\": [{ \"label\": \"Product A\", \"data\": [85, 90, 75, 80, 70], \"fill\": true }]\n      }\n    }\n  </script>\n</is-radar-chart>",
           "lang": "html"
         }
       ]
@@ -50,8 +50,8 @@
         },
         {
           "kind": "code",
-          "code": "const chart = document.querySelector('#radarJs');\r\nchart.config = {\r\n  data: {\r\n    labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support'],\r\n    datasets: [{ label: 'Product A', data: [85, 90, 75, 80, 70], fill: true }],\r\n  },\r\n};",
-          "lang": "html"
+          "code": "const chart = document.querySelector('#radarJs');\nchart.config = {\n  data: {\n    labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support'],\n    datasets: [{ label: 'Product A', data: [85, 90, 75, 80, 70], fill: true }],\n  },\n};",
+          "lang": "javascript"
         }
       ]
     },
@@ -66,8 +66,8 @@
         },
         {
           "kind": "code",
-          "code": "chart.config = {\r\n  data: {\r\n    labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support', 'Value'],\r\n    datasets: [\r\n      { label: 'Nimbus', data: [85, 90, 75, 80, 70, 88], fill: true },\r\n      { label: 'Atlas', data: [70, 80, 90, 85, 92, 75], fill: true },\r\n    ],\r\n  },\r\n};",
-          "lang": "html"
+          "code": "chart.config = {\n  data: {\n    labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support', 'Value'],\n    datasets: [\n      { label: 'Nimbus', data: [85, 90, 75, 80, 70, 88], fill: true },\n      { label: 'Atlas', data: [70, 80, 90, 85, 92, 75], fill: true },\n    ],\n  },\n};",
+          "lang": "javascript"
         }
       ]
     },
@@ -81,7 +81,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radar-chart legend-position=\"end\">…</is-radar-chart>\r\n<is-radar-chart without-legend without-animation>…</is-radar-chart>",
+          "code": "<is-radar-chart legend-position=\"end\">…</is-radar-chart>\n<is-radar-chart without-legend without-animation>…</is-radar-chart>",
           "lang": "html"
         }
       ]
@@ -93,7 +93,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / prop",
+            "Atributo / prop",
             "Notas"
           ],
           "rows": [

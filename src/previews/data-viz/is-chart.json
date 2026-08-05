@@ -88,7 +88,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Nombre",
+            "Nombre",
             "Valores",
             "Descripción"
           ],
@@ -147,7 +147,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Nombre",
+            "Nombre",
             "Aplica a",
             "Descripción"
           ],
@@ -207,8 +207,7 @@
         },
         {
           "kind": "code",
-          "code": "const el = document.querySelector('#jsChart');\r\nel.config = {\r\n  data: {\r\n    labels: ['Q1', 'Q2', 'Q3', 'Q4'],\r\n    datasets: [{ label: 'Ventas', data: [420, 580, 630, 710], tension: 0.4, fill: true }]\r\n  }\r\n};",
-          "lang": "html"
+          "code": "const el = document.querySelector('#jsChart');\nel.config = {\n  data: {\n    labels: ['Q1', 'Q2', 'Q3', 'Q4'],\n    datasets: [{ label: 'Ventas', data: [420, 580, 630, 710], tension: 0.4, fill: true }]\n  }\n};"
         },
         {
           "kind": "html",
@@ -217,7 +216,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Nombre",
+            "Nombre",
             "Descripción"
           ],
           "rows": [

@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-breadcrumb</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Catálogo\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"/\"</span><span class=\"tag\">></span>Catálogo<span class=\"tag\"></is-breadcrumb-item></span>\r\n  <span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"/ropa\"</span><span class=\"tag\">></span>Ropa<span class=\"tag\"></is-breadcrumb-item></span>\r\n  <span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"/ropa/mujer\"</span><span class=\"tag\">></span>Mujer<span class=\"tag\"></is-breadcrumb-item></span>\r\n  <span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"\"</span><span class=\"tag\">></span>Camisetas<span class=\"tag\"></is-breadcrumb-item></span>\r\n<span class=\"tag\"></is-breadcrumb></span>",
-          "lang": "html"
+          "code": "<is-breadcrumb label=\"Catálogo\">\n  <is-breadcrumb-item href=\"/\">Catálogo</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"/ropa\">Ropa</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"/ropa/mujer\">Mujer</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"\">Camisetas</is-breadcrumb-item>\n</is-breadcrumb>"
         }
       ]
     },
@@ -34,8 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "bc.addEventListener('click', (e) => {\r\n  const item = e.target.closest('is-breadcrumb-item');\r\n  if (item) console.log('item click', item.textContent.trim());\r\n});",
-          "lang": "html"
+          "code": "bc.addEventListener('click', (e) => {\n  const item = e.target.closest('is-breadcrumb-item');\n  if (item) console.log('item click', item.textContent.trim());\n});"
         }
       ]
     },
@@ -50,8 +48,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:home\"</span><span class=\"tag\">></span>Inicio<span class=\"tag\"></is-breadcrumb-item></span>\r\n<span class=\"tag\"><is-breadcrumb-item</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"start\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:home\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  Inicio\r\n<span class=\"tag\"></is-breadcrumb-item></span>",
-          "lang": "html"
+          "code": "<is-breadcrumb-item icon=\"mdi:home\">Inicio</is-breadcrumb-item>\n<is-breadcrumb-item>\n  <is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>\n  Inicio\n</is-breadcrumb-item>"
         }
       ]
     },
@@ -66,8 +63,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-breadcrumb-item</span> <span class=\"attr\">href</span>=<span class=\"val\">\"/home\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><span</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"separator\"</span><span class=\"tag\">></span>/<span class=\"tag\"></span></span>\r\n  Inicio\r\n<span class=\"tag\"></is-breadcrumb-item></span>",
-          "lang": "html"
+          "code": "<is-breadcrumb-item href=\"/home\">\n  <span slot=\"separator\">/</span>\n  Inicio\n</is-breadcrumb-item>"
         }
       ]
     },
@@ -83,7 +79,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -104,7 +100,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -125,7 +121,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [
@@ -146,7 +142,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -185,7 +181,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -214,7 +210,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [

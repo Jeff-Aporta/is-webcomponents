@@ -34,8 +34,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const s = document.querySelector('is-spreadsheet');\r\ns.value;          // string JSON con la matriz\r\ns.addEventListener('is-change', e => {\r\n  console.log(`[${e.detail.row},${e.detail.col}] raw=${e.detail.raw} value=${e.detail.value}`);\r\n});\r\n\r\n// Fórmulas soportadas (en cualquier mayúscula o minúscula)\r\n//   =SUM(rango)        suma\r\n//   =AVERAGE(rango)    promedio\r\n//   =MIN(rango)        mínimo\r\n//   =MAX(rango)        máximo\r\n//   =COUNT(rango)      cuenta números\r\n//   +, -, *, /         aritmética\r\n//   =A1*B1             referencia a celdas individuales\r\n//\r\n// Rangos válidos:\r\n//   A1               celda única\r\n//   A1:B5            rectángulo\r\n//   A1,B2,C3         lista\r\n\r\n// Atributos: rows, cols, value (JSON), read-only",
-          "lang": "html"
+          "code": "const s = document.querySelector('is-spreadsheet');\ns.value;          // string JSON con la matriz\ns.addEventListener('is-change', e => {\n  console.log(`[${e.detail.row},${e.detail.col}] raw=${e.detail.raw} value=${e.detail.value}`);\n});\n\n// Fórmulas soportadas (en cualquier mayúscula o minúscula)\n//   =SUM(rango)        suma\n//   =AVERAGE(rango)    promedio\n//   =MIN(rango)        mínimo\n//   =MAX(rango)        máximo\n//   =COUNT(rango)      cuenta números\n//   +, -, *, /         aritmética\n//   =A1*B1             referencia a celdas individuales\n//\n// Rangos válidos:\n//   A1               celda única\n//   A1:B5            rectángulo\n//   A1,B2,C3         lista\n\n// Atributos: rows, cols, value (JSON), read-only"
         }
       ]
     }

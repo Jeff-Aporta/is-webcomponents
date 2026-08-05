@@ -34,8 +34,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-slider label=\"Volumen\" value=\"30\"></is-slider>\r\n<is-slider value=\"30\" disabled></is-slider>",
-          "lang": "html"
+          "code": "<is-slider label=\"Volumen\" value=\"30\"></is-slider>\n<is-slider value=\"30\" disabled></is-slider>"
         }
       ]
     },
@@ -50,8 +49,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-slider style=\"font-size:0.8em\" value=\"70\" value-label=\"auto\"></is-slider>\r\n<is-slider value=\"50\" value-label=\"auto\"></is-slider>",
-          "lang": "html"
+          "code": "<is-slider style=\"font-size:0.8em\" value=\"70\" value-label=\"auto\"></is-slider>\n<is-slider value=\"50\" value-label=\"auto\"></is-slider>"
         }
       ]
     },
@@ -66,8 +64,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-slider\r\n  label=\"Temperatura\"\r\n  min=\"10\" max=\"110\" step=\"10\" shift-step=\"30\"\r\n  value=\"30\" marks value-label=\"auto\" format=\"{v}°C\"\r\n></is-slider>",
-          "lang": "html"
+          "code": "<is-slider\n  label=\"Temperatura\"\n  min=\"10\" max=\"110\" step=\"10\" shift-step=\"30\"\n  value=\"30\" marks value-label=\"auto\" format=\"{v}°C\"\n></is-slider>"
         }
       ]
     },
@@ -82,8 +79,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-slider step=\"null\" value=\"20\"\r\n  marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"\r\n  value-label=\"auto\"></is-slider>",
-          "lang": "html"
+          "code": "<is-slider step=\"null\" value=\"20\"\n  marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"\n  value-label=\"auto\"></is-slider>"
         }
       ]
     },
@@ -98,8 +94,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-slider value=\"20,37\" value-label=\"auto\" format=\"{v}°C\"></is-slider>\r\n<is-slider value=\"20,37\" min-distance=\"10\" disable-swap></is-slider>",
-          "lang": "html"
+          "code": "<is-slider value=\"20,37\" value-label=\"auto\" format=\"{v}°C\"></is-slider>\n<is-slider value=\"20,37\" min-distance=\"10\" disable-swap></is-slider>"
         }
       ]
     },
@@ -114,8 +109,7 @@
         },
         {
           "kind": "code",
-          "code": "slider.addEventListener('is-input', (e) => { input.value = e.detail.value; });\r\ninput.addEventListener('is-input', (e) => { slider.value = e.detail.value; });",
-          "lang": "html"
+          "code": "slider.addEventListener('is-input', (e) => { input.value = e.detail.value; });\ninput.addEventListener('is-input', (e) => { slider.value = e.detail.value; });"
         }
       ]
     },
@@ -130,8 +124,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-slider color=\"success\" value=\"60\"></is-slider>",
-          "lang": "html"
+          "code": "<is-slider color=\"success\" value=\"60\"></is-slider>"
         }
       ]
     },
@@ -146,8 +139,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-slider orientation=\"vertical\" value=\"20,37\" value-label=\"auto\"></is-slider>",
-          "lang": "html"
+          "code": "<is-slider orientation=\"vertical\" value=\"20,37\" value-label=\"auto\"></is-slider>"
         }
       ]
     },
@@ -162,8 +154,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-slider track=\"inverted\" value=\"20,37\"></is-slider>",
-          "lang": "html"
+          "code": "<is-slider track=\"inverted\" value=\"20,37\"></is-slider>"
         }
       ]
     },
@@ -178,8 +169,7 @@
         },
         {
           "kind": "code",
-          "code": "const slider = document.querySelector('is-slider');\r\nslider.scale = (x) => 2 ** x;\r\nslider.valueLabelFormat = (bytes) => format(bytes); // 1 MB, 2 GB…",
-          "lang": "html"
+          "code": "const slider = document.querySelector('is-slider');\nslider.scale = (x) => 2 ** x;\nslider.valueLabelFormat = (bytes) => format(bytes); // 1 MB, 2 GB…"
         }
       ]
     },
@@ -190,7 +180,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Tecla",
+            "Tecla",
             "Acción"
           ],
           "rows": [
@@ -225,7 +215,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

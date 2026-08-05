@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-transfer>\r\n  <is-transfer-item value=\"a\">Cuentas por cobrar</is-transfer-item>\r\n  <is-transfer-item value=\"b\" selected>Cuentas por pagar</is-transfer-item>\r\n  <is-transfer-item value=\"c\">Inventario</is-transfer-item>\r\n</is-transfer>",
+          "code": "<is-transfer>\n  <is-transfer-item value=\"a\">Cuentas por cobrar</is-transfer-item>\n  <is-transfer-item value=\"b\" selected>Cuentas por pagar</is-transfer-item>\n  <is-transfer-item value=\"c\">Inventario</is-transfer-item>\n</is-transfer>",
           "lang": "html"
         }
       ]

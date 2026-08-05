@@ -34,8 +34,8 @@
         },
         {
           "kind": "code",
-          "code": "let value = 0;\r\nconst bar = document.querySelector('#pbLive');\r\n\r\ndocument.querySelector('#pbPlus').addEventListener('click', () => {\r\n  value = Math.min(100, value + 10);\r\n  bar.value = value;\r\n  bar.label = `Progreso ${value}%`;\r\n});\r\n\r\ndocument.querySelector('#pbReset').addEventListener('click', () => {\r\n  value = 0;\r\n  bar.value = 0;\r\n});",
-          "lang": "html"
+          "code": "let value = 0;\nconst bar = document.querySelector('#pbLive');\n\ndocument.querySelector('#pbPlus').addEventListener('click', () => {\n  value = Math.min(100, value + 10);\n  bar.value = value;\n  bar.label = `Progreso ${value}%`;\n});\n\ndocument.querySelector('#pbReset').addEventListener('click', () => {\n  value = 0;\n  bar.value = 0;\n});",
+          "lang": "javascript"
         }
       ]
     },
@@ -49,7 +49,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-progress-bar value=\"65\" label=\"Carga\"></is-progress-bar>\r\n<is-progress-bar indeterminate label=\"Procesando\"></is-progress-bar>",
+          "code": "<is-progress-bar value=\"65\" label=\"Carga\"></is-progress-bar>\n<is-progress-bar indeterminate label=\"Procesando\"></is-progress-bar>",
           "lang": "html"
         }
       ]
@@ -61,7 +61,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Descripción"
           ],
           "rows": [

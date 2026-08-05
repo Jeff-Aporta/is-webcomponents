@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-callout></span>Esto es un callout estándar.<span class=\"tag\"></is-callout></span>",
-          "lang": "html"
+          "code": "<is-callout>Esto es un callout estándar.</is-callout>"
         }
       ]
     },
@@ -58,8 +57,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">color</span>=<span class=\"val\">\"success\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-callout></span>\r\n<span class=\"tag\"><is-callout</span> <span class=\"attr\">color</span>=<span class=\"val\">\"danger\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-callout></span>",
-          "lang": "html"
+          "code": "<is-callout color=\"success\">…</is-callout>\n<is-callout color=\"danger\">…</is-callout>"
         }
       ]
     },
@@ -98,8 +96,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"accent\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-callout></span>",
-          "lang": "html"
+          "code": "<is-callout variant=\"accent\">…</is-callout>"
         }
       ]
     },
@@ -138,8 +135,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">size</span>=<span class=\"val\">\"l\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-callout></span>",
-          "lang": "html"
+          "code": "<is-callout size=\"l\">…</is-callout>"
         }
       ]
     },
@@ -174,8 +170,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">color</span>=<span class=\"val\">\"warning\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-icon</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"icon\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:timer-sand\"</span><span class=\"tag\">></span><span class=\"tag\"></is-icon></span>\r\n  Tiempo limitado.\r\n<span class=\"tag\"></is-callout></span>",
-          "lang": "html"
+          "code": "<is-callout color=\"warning\">\n  <is-icon slot=\"icon\" icon=\"mdi:timer-sand\"></is-icon>\n  Tiempo limitado.\n</is-callout>"
         }
       ]
     },
@@ -190,8 +185,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"\"</span><span class=\"tag\">></span>Texto plano.<span class=\"tag\"></is-callout></span>",
-          "lang": "html"
+          "code": "<is-callout icon=\"\">Texto plano.</is-callout>"
         }
       ]
     },
@@ -214,8 +208,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-callout</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><strong></span>Una nueva versión está disponible<span class=\"tag\"></strong></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"outlined\"</span><span class=\"tag\">></span>Más tarde<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">color</span>=<span class=\"val\">\"brand\"</span><span class=\"tag\">></span>Actualizar<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></is-callout></span>",
-          "lang": "html"
+          "code": "<is-callout color=\"brand\">\n  <strong>Una nueva versión está disponible</strong>\n  <is-button variant=\"outlined\">Más tarde</is-button>\n  <is-button color=\"brand\">Actualizar</is-button>\n</is-callout>"
         }
       ]
     },
@@ -241,7 +234,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -274,7 +267,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Slot",
+            "Slot",
             "Descripción"
           ],
           "rows": [
@@ -295,7 +288,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Part",
+            "Part",
             "Descripción"
           ],
           "rows": [
@@ -320,7 +313,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Variable",
+            "Variable",
             "Default",
             "Descripción"
           ],

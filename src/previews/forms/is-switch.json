@@ -34,8 +34,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-switch color=\"success\" checked>success</is-switch>",
-          "lang": "html"
+          "code": "<is-switch color=\"success\" checked>success</is-switch>"
         }
       ]
     },
@@ -58,8 +57,7 @@
         },
         {
           "kind": "code",
-          "code": ".settings { display: flex; flex-direction: column; }\r\n.settings is-switch::part(base) { justify-content: space-between; }",
-          "lang": "html"
+          "code": ".settings { display: flex; flex-direction: column; }\n.settings is-switch::part(base) { justify-content: space-between; }"
         }
       ]
     },
@@ -74,8 +72,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-switch icon=\"mdi:weather-night\" checked-icon=\"mdi:white-balance-sunny\"\r\n  color=\"warning\" checked>Tema claro</is-switch>",
-          "lang": "html"
+          "code": "<is-switch icon=\"mdi:weather-night\" checked-icon=\"mdi:white-balance-sunny\"\n  color=\"warning\" checked>Tema claro</is-switch>"
         }
       ]
     },
@@ -90,8 +87,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-switch on-label=\"ON\" off-label=\"OFF\" checked>Encendido</is-switch>",
-          "lang": "html"
+          "code": "<is-switch on-label=\"ON\" off-label=\"OFF\" checked>Encendido</is-switch>"
         }
       ]
     },
@@ -106,8 +102,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-switch name=\"ro1\" checked readonly>Solo lectura</is-switch>",
-          "lang": "html"
+          "code": "<is-switch name=\"ro1\" checked readonly>Solo lectura</is-switch>"
         }
       ]
     },
@@ -122,8 +117,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-switch error hint=\"Actívalo para poder facturar electrónicamente.\" required>\r\n  Firma electrónica\r\n</is-switch>",
-          "lang": "html"
+          "code": "<is-switch error hint=\"Actívalo para poder facturar electrónicamente.\" required>\n  Firma electrónica\n</is-switch>"
         }
       ]
     },
@@ -142,8 +136,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-switch name=\"boletin\" value=\"semanal\" checked>Boletín semanal</is-switch>",
-          "lang": "html"
+          "code": "<is-switch name=\"boletin\" value=\"semanal\" checked>Boletín semanal</is-switch>"
         }
       ]
     },
@@ -158,8 +151,7 @@
         },
         {
           "kind": "code",
-          "code": "<span style=\"font-size:1.35rem\"><is-switch checked>Grande</is-switch></span>",
-          "lang": "html"
+          "code": "<span style=\"font-size:1.35rem\"><is-switch checked>Grande</is-switch></span>"
         }
       ]
     },
@@ -170,7 +162,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Tecla",
+            "Tecla",
             "Acción"
           ],
           "rows": [
@@ -193,7 +185,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

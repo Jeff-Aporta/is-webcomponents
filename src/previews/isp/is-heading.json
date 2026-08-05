@@ -43,8 +43,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-heading level=\"1\">Título</is-heading>\r\n<is-heading level=\"3\" color=\"success\">Sección aprobada</is-heading>\r\n<is-heading level=\"2\" style=\"--h-mix: 0%\">Solo acento</is-heading>",
-          "lang": "html"
+          "code": "<is-heading level=\"1\">Título</is-heading>\n<is-heading level=\"3\" color=\"success\">Sección aprobada</is-heading>\n<is-heading level=\"2\" style=\"--h-mix: 0%\">Solo acento</is-heading>"
         }
       ]
     },
@@ -55,7 +54,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / var",
+            "Atributo / var",
             "Valores / default"
           ],
           "rows": [

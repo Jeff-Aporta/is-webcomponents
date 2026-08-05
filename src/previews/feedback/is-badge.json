@@ -27,8 +27,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-badge color=\"success\" variant=\"filled\">OK</is-badge>\r\n<is-badge pill attention=\"pulse\">Live</is-badge>",
-          "lang": "html"
+          "code": "<is-badge color=\"success\" variant=\"filled\">OK</is-badge>\n<is-badge pill attention=\"pulse\">Live</is-badge>"
         }
       ]
     },
@@ -40,7 +39,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Default"
           ],
           "rows": [

@@ -33,7 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "<span style=\"font-size:4rem\">\r\n  <is-progress-ring value=\"75\" label=\"75%\"></is-progress-ring>\r\n</span>",
+          "code": "<span style=\"font-size:4rem\">\n  <is-progress-ring value=\"75\" label=\"75%\"></is-progress-ring>\n</span>",
           "lang": "html"
         }
       ]
@@ -56,7 +56,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / var",
+            "Atributo / var",
             "Notas"
           ],
           "rows": [

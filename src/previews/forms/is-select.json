@@ -23,8 +23,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select label=\"Ciudad\" name=\"city\" placeholder=\"Elige una ciudad…\" clearable>\r\n  <is-option value=\"bog\">Bogotá</is-option>\r\n  <is-option value=\"med\">Medellín</is-option>\r\n</is-select>",
-          "lang": "html"
+          "code": "<is-select label=\"Ciudad\" name=\"city\" placeholder=\"Elige una ciudad…\" clearable>\n  <is-option value=\"bog\">Bogotá</is-option>\n  <is-option value=\"med\">Medellín</is-option>\n</is-select>"
         }
       ]
     },
@@ -39,8 +38,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select variant=\"filled\" label=\"filled\">…</is-select>\r\n<is-select variant=\"underlined\" label=\"underlined\">…</is-select>",
-          "lang": "html"
+          "code": "<is-select variant=\"filled\" label=\"filled\">…</is-select>\n<is-select variant=\"underlined\" label=\"underlined\">…</is-select>"
         }
       ]
     },
@@ -55,8 +53,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select label=\"Con error\" error error-text=\"Selecciona un valor válido\">\r\n  <is-option value=\"a\">Opción A</is-option>\r\n</is-select>",
-          "lang": "html"
+          "code": "<is-select label=\"Con error\" error error-text=\"Selecciona un valor válido\">\n  <is-option value=\"a\">Opción A</is-option>\n</is-select>"
         }
       ]
     },
@@ -71,8 +68,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select full-width label=\"full-width\">…</is-select>\r\n<is-select auto-width label=\"auto-width\">…</is-select>",
-          "lang": "html"
+          "code": "<is-select full-width label=\"full-width\">…</is-select>\n<is-select auto-width label=\"auto-width\">…</is-select>"
         }
       ]
     },
@@ -87,8 +83,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select max-visible=\"4.5\">…</is-select>",
-          "lang": "html"
+          "code": "<is-select max-visible=\"4.5\">…</is-select>"
         }
       ]
     },
@@ -107,8 +102,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select multiple label=\"Tecnologías\" value=\"js,css\">…</is-select>\r\n<is-select multiple selection-display=\"count\">…</is-select>\r\n<is-select multiple limit-tags=\"2\">…</is-select>",
-          "lang": "html"
+          "code": "<is-select multiple label=\"Tecnologías\" value=\"js,css\">…</is-select>\n<is-select multiple selection-display=\"count\">…</is-select>\n<is-select multiple limit-tags=\"2\">…</is-select>"
         }
       ]
     },
@@ -123,8 +117,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select multiple checkmarks selection-display=\"text\">\r\n  <is-option value=\"oliver\">Oliver Hansen</is-option>\r\n</is-select>",
-          "lang": "html"
+          "code": "<is-select multiple checkmarks selection-display=\"text\">\n  <is-option value=\"oliver\">Oliver Hansen</is-option>\n</is-select>"
         }
       ]
     },
@@ -139,8 +132,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select label=\"Categoría\">\r\n  <is-option value=\"todas\">Todas</is-option>\r\n  <is-option value=\"op1\" group=\"Categoría 1\">Opción 1</is-option>\r\n  <is-option value=\"op3\" group=\"Categoría 2\">Opción 3</is-option>\r\n</is-select>",
-          "lang": "html"
+          "code": "<is-select label=\"Categoría\">\n  <is-option value=\"todas\">Todas</is-option>\n  <is-option value=\"op1\" group=\"Categoría 1\">Opción 1</is-option>\n  <is-option value=\"op3\" group=\"Categoría 2\">Opción 3</is-option>\n</is-select>"
         }
       ]
     },
@@ -155,8 +147,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-option value=\"drive\">\r\n  <is-icon slot=\"start\" icon=\"mdi:google-drive\"></is-icon>\r\n  Google Drive\r\n  <span slot=\"description\">Sincroniza con tu cuenta corporativa</span>\r\n</is-option>",
-          "lang": "html"
+          "code": "<is-option value=\"drive\">\n  <is-icon slot=\"start\" icon=\"mdi:google-drive\"></is-icon>\n  Google Drive\n  <span slot=\"description\">Sincroniza con tu cuenta corporativa</span>\n</is-option>"
         }
       ]
     },
@@ -175,8 +166,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-select label=\"Etiquetas\" name=\"tags\" multiple>\r\n  <is-option value=\"urgente\">Urgente</is-option>\r\n</is-select>",
-          "lang": "html"
+          "code": "<is-select label=\"Etiquetas\" name=\"tags\" multiple>\n  <is-option value=\"urgente\">Urgente</is-option>\n</is-select>"
         }
       ]
     },
@@ -198,7 +188,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Tecla",
+            "Tecla",
             "Acción"
           ],
           "rows": [
@@ -253,7 +243,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [
@@ -346,7 +336,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

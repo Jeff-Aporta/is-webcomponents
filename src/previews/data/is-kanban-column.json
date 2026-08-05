@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-kanban>\r\n  <is-kanban-column title=\"Pendiente\" accent=\"#f59f00\">\r\n    <is-kanban-card heading=\"Conciliar banco\"></is-kanban-card>\r\n  </is-kanban-column>\r\n  <is-kanban-column title=\"En curso\" accent=\"#228be6\">\r\n    <is-kanban-card heading=\"Cierre de mes\"></is-kanban-card>\r\n  </is-kanban-column>\r\n  <is-kanban-column title=\"Listo\" accent=\"#40c057\"></is-kanban-column>\r\n</is-kanban>",
+          "code": "<is-kanban>\n  <is-kanban-column title=\"Pendiente\" accent=\"#f59f00\">\n    <is-kanban-card heading=\"Conciliar banco\"></is-kanban-card>\n  </is-kanban-column>\n  <is-kanban-column title=\"En curso\" accent=\"#228be6\">\n    <is-kanban-card heading=\"Cierre de mes\"></is-kanban-card>\n  </is-kanban-column>\n  <is-kanban-column title=\"Listo\" accent=\"#40c057\"></is-kanban-column>\n</is-kanban>",
           "lang": "html"
         }
       ]

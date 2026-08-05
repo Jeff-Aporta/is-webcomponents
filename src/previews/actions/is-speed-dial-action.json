@@ -19,7 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<div class=\"sd-stage\">\r\n  <is-speed-dial direction=\"up\" open>\r\n    <is-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></is-speed-dial-action>\r\n    <is-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></is-speed-dial-action>\r\n    <is-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></is-speed-dial-action>\r\n  </is-speed-dial>\r\n</div>",
+          "code": "<div class=\"sd-stage\">\n  <is-speed-dial direction=\"up\" open>\n    <is-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></is-speed-dial-action>\n    <is-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></is-speed-dial-action>\n    <is-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></is-speed-dial-action>\n  </is-speed-dial>\n</div>",
           "lang": "html"
         }
       ]

@@ -39,7 +39,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "<is-observer type=\"resize\">\r\n  <div style=\"resize:both;overflow:auto\">…</div>\r\n</is-observer>",
+          "code": "<is-observer type=\"resize\">\n  <div style=\"resize:both;overflow:auto\">…</div>\n</is-observer>",
           "lang": "html"
         }
       ]
@@ -51,7 +51,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo / evento",
+            "Atributo / evento",
             "Descripción"
           ],
           "rows": [

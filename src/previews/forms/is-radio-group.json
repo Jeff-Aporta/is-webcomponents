@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\r\n  <is-radio value=\"contado\">Contado</is-radio>\r\n  <is-radio value=\"credito\">Crédito</is-radio>\r\n  <is-radio value=\"mixto\">Mixto</is-radio>\r\n</is-radio-group>",
+          "code": "<is-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\n  <is-radio value=\"contado\">Contado</is-radio>\n  <is-radio value=\"credito\">Crédito</is-radio>\n  <is-radio value=\"mixto\">Mixto</is-radio>\n</is-radio-group>",
           "lang": "html"
         }
       ]

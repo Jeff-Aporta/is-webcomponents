@@ -23,8 +23,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-rating label=\"Satisfacción\" value=\"3\" name=\"rating\"></is-rating>",
-          "lang": "html"
+          "code": "<is-rating label=\"Satisfacción\" value=\"3\" name=\"rating\"></is-rating>"
         }
       ]
     },
@@ -39,8 +38,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-rating label=\"10 iconos\" max=\"10\" value=\"7\"></is-rating>\r\n<is-rating value=\"3\" style=\"font-size:1.5rem\"></is-rating>",
-          "lang": "html"
+          "code": "<is-rating label=\"10 iconos\" max=\"10\" value=\"7\"></is-rating>\n<is-rating value=\"3\" style=\"font-size:1.5rem\"></is-rating>"
         }
       ]
     },
@@ -55,8 +53,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-rating precision=\"0.25\" value=\"2.75\"></is-rating>\r\n<is-rating allow-half value=\"2.5\"></is-rating>   <!-- = precision=\"0.5\" -->",
-          "lang": "html"
+          "code": "<is-rating precision=\"0.25\" value=\"2.75\"></is-rating>\n<is-rating allow-half value=\"2.5\"></is-rating>   <!-- = precision=\"0.5\" -->"
         }
       ]
     },
@@ -71,8 +68,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-rating icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" value=\"3\"></is-rating>",
-          "lang": "html"
+          "code": "<is-rating icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" value=\"3\"></is-rating>"
         }
       ]
     },
@@ -87,8 +83,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-rating highlight-selected-only value=\"2\" show-label></is-rating>\r\n\r\nrating.labels = ['Muy malo', 'Malo', 'Normal', 'Bueno', 'Excelente'];",
-          "lang": "html"
+          "code": "<is-rating highlight-selected-only value=\"2\" show-label></is-rating>\n\nrating.labels = ['Muy malo', 'Malo', 'Normal', 'Bueno', 'Excelente'];"
         }
       ]
     },
@@ -103,8 +98,7 @@
         },
         {
           "kind": "code",
-          "code": "rating.labels = ['Pésimo', 'Malo', 'Normal', 'Bueno', 'Excelente'];\r\nrating.getLabelText = (v) => `${v} punto${v === 1 ? '' : 's'}`;\r\n\r\nrating.addEventListener('is-hover', (e) => {\r\n  console.log(e.detail.phantomValue, e.detail.label);\r\n});",
-          "lang": "html"
+          "code": "rating.labels = ['Pésimo', 'Malo', 'Normal', 'Bueno', 'Excelente'];\nrating.getLabelText = (v) => `${v} punto${v === 1 ? '' : 's'}`;\n\nrating.addEventListener('is-hover', (e) => {\n  console.log(e.detail.phantomValue, e.detail.label);\n});"
         }
       ]
     },
@@ -119,8 +113,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-rating color=\"success\" value=\"3\"></is-rating>\r\n<is-rating style=\"--is-rating-color:#845ef7\" value=\"3\"></is-rating>",
-          "lang": "html"
+          "code": "<is-rating color=\"success\" value=\"3\"></is-rating>\n<is-rating style=\"--is-rating-color:#845ef7\" value=\"3\"></is-rating>"
         }
       ]
     },
@@ -135,8 +128,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-rating readonly value=\"3.7\"></is-rating>",
-          "lang": "html"
+          "code": "<is-rating readonly value=\"3.7\"></is-rating>"
         }
       ]
     },
@@ -151,8 +143,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-rating clearable value=\"3\"></is-rating>\r\n\r\nrating.clear();   // también por API",
-          "lang": "html"
+          "code": "<is-rating clearable value=\"3\"></is-rating>\n\nrating.clear();   // también por API"
         }
       ]
     },
@@ -178,7 +169,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Tecla",
+            "Tecla",
             "Acción"
           ],
           "rows": [
@@ -213,7 +204,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

@@ -33,8 +33,8 @@
         },
         {
           "kind": "code",
-          "code": "const { html } = IsUi;\r\nhost.append(html`\r\n  <is-button color=\"brand\" onclick=${() => IsUi.toast?.() || console.log('ok')}>\r\n    Guardar\r\n  </is-button>\r\n`);",
-          "lang": "html"
+          "code": "const { html } = IsUi;\nhost.append(html`\n  <is-button color=\"brand\" onclick=${() => IsUi.toast?.() || console.log('ok')}>\n    Guardar\n  </is-button>\n`);",
+          "lang": "javascript"
         }
       ]
     },
@@ -50,8 +50,8 @@
         },
         {
           "kind": "code",
-          "code": "import { html, adoptCss, define } from '…/helpers/ui.min.js';\r\n\r\nclass AppPanel extends HTMLElement {\r\n  #root = this.attachShadow({ mode: 'open' });\r\n  connectedCallback() {\r\n    this.#root.append(html`<is-button color=\"brand\">Acción</is-button>`);\r\n    adoptCss(this.#root, import.meta.url); // → AppPanel.css hermano\r\n  }\r\n}\r\ndefine('app-panel', AppPanel);",
-          "lang": "html"
+          "code": "import { html, adoptCss, define } from '…/helpers/ui.min.js';\n\nclass AppPanel extends HTMLElement {\n  #root = this.attachShadow({ mode: 'open' });\n  connectedCallback() {\n    this.#root.append(html`<is-button color=\"brand\">Acción</is-button>`);\n    adoptCss(this.#root, import.meta.url); // → AppPanel.css hermano\n  }\n}\ndefine('app-panel', AppPanel);",
+          "lang": "javascript"
         }
       ]
     },
@@ -62,7 +62,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "<script type=\"module\"\r\n  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js\">\r\n</script>",
+          "code": "<script type=\"module\"\n  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js\">\n</script>",
           "lang": "html"
         }
       ]
@@ -74,7 +74,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Uso"
           ],
           "rows": [

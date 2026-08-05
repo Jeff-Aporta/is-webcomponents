@@ -66,8 +66,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Atributos\r\n// value        texto a codificar (requerido)\r\n// type         ean13 | code128 (default code128)\r\n// height       alto en píxeles (default 60)\r\n// fg           color de barras\r\n// bg           fondo (default transparent)\r\n// show-text    imprime el texto debajo\r\n// quiet        zonas de silencio EAN13 en módulos (default 9)\r\n\r\n// API JS\r\n// Acceso al SVG: bar.shadowRoot.querySelector('svg')",
-          "lang": "html"
+          "code": "// Atributos\n// value        texto a codificar (requerido)\n// type         ean13 | code128 (default code128)\n// height       alto en píxeles (default 60)\n// fg           color de barras\n// bg           fondo (default transparent)\n// show-text    imprime el texto debajo\n// quiet        zonas de silencio EAN13 en módulos (default 9)\n\n// API JS\n// Acceso al SVG: bar.shadowRoot.querySelector('svg')"
         }
       ]
     }

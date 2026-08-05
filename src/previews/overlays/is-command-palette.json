@@ -30,8 +30,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const cm = document.querySelector('is-command-palette');\r\ncm.open();\r\ncm.close();\r\ncm.toggle();\r\n\r\ncm.addEventListener('is-select', e => console.log(e.detail.command.title));\r\ncm.addEventListener('is-open',   () => ...);\r\ncm.addEventListener('is-close',  () => ...);\r\n\r\n// Atributos\r\n// hotkey        \"mod+k\" (default), \"ctrl+k\", \"cmd+k\", \"mod+/\", \"\" (desactivado)\r\n// placeholder   texto del input\r\n// max-results   tope de resultados (default 12)\r\n// empty-text    texto cuando no hay resultados\r\n\r\n// Comandos vía <script type=\"application/json\">:\r\n// { id, title, group, icon, hint, keywords?, disabled?, run? (función, pero\r\n//    serializable solo con JSON.stringify — usa is-select para acciones reales)\r\n// }\r\n\r\n// Footer vía <div slot=\"footer\">…</div>",
-          "lang": "html"
+          "code": "const cm = document.querySelector('is-command-palette');\ncm.open();\ncm.close();\ncm.toggle();\n\ncm.addEventListener('is-select', e => console.log(e.detail.command.title));\ncm.addEventListener('is-open',   () => ...);\ncm.addEventListener('is-close',  () => ...);\n\n// Atributos\n// hotkey        \"mod+k\" (default), \"ctrl+k\", \"cmd+k\", \"mod+/\", \"\" (desactivado)\n// placeholder   texto del input\n// max-results   tope de resultados (default 12)\n// empty-text    texto cuando no hay resultados\n\n// Comandos vía <script type=\"application/json\">:\n// { id, title, group, icon, hint, keywords?, disabled?, run? (función, pero\n//    serializable solo con JSON.stringify — usa is-select para acciones reales)\n// }\n\n// Footer vía <div slot=\"footer\">…</div>"
         }
       ]
     }

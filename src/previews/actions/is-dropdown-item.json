@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-dropdown placement=\"bottom-start\">\r\n  <is-button slot=\"trigger\" color=\"brand\">Acciones</is-button>\r\n  <is-dropdown-item value=\"edit\"><is-icon slot=\"start\" icon=\"mdi:pencil\"></is-icon>Editar</is-dropdown-item>\r\n  <is-dropdown-item value=\"dup\"><is-icon slot=\"start\" icon=\"mdi:content-copy\"></is-icon>Duplicar</is-dropdown-item>\r\n  <is-dropdown-item value=\"del\" color=\"danger\"><is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>Eliminar</is-dropdown-item>\r\n  <is-dropdown-item value=\"off\" disabled>No disponible</is-dropdown-item>\r\n</is-dropdown>",
+          "code": "<is-dropdown placement=\"bottom-start\">\n  <is-button slot=\"trigger\" color=\"brand\">Acciones</is-button>\n  <is-dropdown-item value=\"edit\"><is-icon slot=\"start\" icon=\"mdi:pencil\"></is-icon>Editar</is-dropdown-item>\n  <is-dropdown-item value=\"dup\"><is-icon slot=\"start\" icon=\"mdi:content-copy\"></is-icon>Duplicar</is-dropdown-item>\n  <is-dropdown-item value=\"del\" color=\"danger\"><is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>Eliminar</is-dropdown-item>\n  <is-dropdown-item value=\"off\" disabled>No disponible</is-dropdown-item>\n</is-dropdown>",
           "lang": "html"
         }
       ]

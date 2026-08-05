@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-button</span> <span class=\"attr\">id</span>=<span class=\"val\">\"btnDelete\"</span><span class=\"tag\">></span>Borrar<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"><is-popconfirm</span> <span class=\"attr\">for</span>=<span class=\"val\">\"btnDelete\"</span> <span class=\"attr\">message</span>=<span class=\"val\">\"¿Seguro?\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"confirm\"</span> <span class=\"attr\">color</span>=<span class=\"val\">\"danger\"</span><span class=\"tag\">></span>Sí, borrar<span class=\"tag\"></is-button></span>\r\n  <span class=\"tag\"><is-button</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"cancel\"</span><span class=\"tag\">></span>Cancelar<span class=\"tag\"></is-button></span>\r\n<span class=\"tag\"></is-popconfirm></span>",
-          "lang": "html"
+          "code": "<is-button id=\"btnDelete\">Borrar</is-button>\n<is-popconfirm for=\"btnDelete\" message=\"¿Seguro?\">\n  <is-button slot=\"confirm\" color=\"danger\">Sí, borrar</is-button>\n  <is-button slot=\"cancel\">Cancelar</is-button>\n</is-popconfirm>"
         }
       ]
     },
@@ -56,7 +55,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -101,7 +100,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

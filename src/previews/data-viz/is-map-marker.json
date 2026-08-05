@@ -18,7 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\r\n  <is-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></is-map-marker>\r\n  <is-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></is-map-marker>\r\n  <is-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></is-map-marker>\r\n</is-maps>",
+          "code": "<is-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\n  <is-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></is-map-marker>\n  <is-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></is-map-marker>\n  <is-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></is-map-marker>\n</is-maps>",
           "lang": "html"
         }
       ]

@@ -20,8 +20,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-gauge</span> <span class=\"attr\">value</span>=<span class=\"val\">\"67\"</span> <span class=\"attr\">label</span>=<span class=\"val\">\"Conversión\"</span> <span class=\"attr\">unit</span>=<span class=\"val\">\"%\"</span><span class=\"tag\">></span><span class=\"tag\"></is-gauge></span>",
-          "lang": "html"
+          "code": "<is-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></is-gauge>"
         }
       ]
     },
@@ -80,7 +79,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"

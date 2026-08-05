@@ -18,8 +18,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-tab-group</span> <span class=\"attr\">active</span>=<span class=\"val\">\"general\"</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-tab</span> <span class=\"attr\">slot</span>=<span class=\"val\">\"nav\"</span> <span class=\"attr\">panel</span>=<span class=\"val\">\"general\"</span><span class=\"tag\">></span>General<span class=\"tag\"></is-tab></span>\r\n  <span class=\"tag\"><is-tab-panel</span> <span class=\"attr\">name</span>=<span class=\"val\">\"general\"</span><span class=\"tag\">></span>Contenido del panel.<span class=\"tag\"></is-tab-panel></span>\r\n  …\r\n<span class=\"tag\"></is-tab-group></span>",
-          "lang": "html"
+          "code": "<is-tab-group active=\"general\">\n  <is-tab slot=\"nav\" panel=\"general\">General</is-tab>\n  <is-tab-panel name=\"general\">Contenido del panel.</is-tab-panel>\n  …\n</is-tab-group>"
         }
       ]
     },
@@ -56,8 +55,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-tab-group</span> <span class=\"attr\">activation</span>=<span class=\"val\">\"manual\"</span><span class=\"tag\">></span>…<span class=\"tag\"></is-tab-group></span>",
-          "lang": "html"
+          "code": "<is-tab-group activation=\"manual\">…</is-tab-group>"
         }
       ]
     },
@@ -72,8 +70,7 @@
         },
         {
           "kind": "code",
-          "code": "group.addEventListener('is-tab-close', (e) => {\r\n  const t = e.detail.tab;\r\n  t.remove();\r\n  const panel = group.querySelector(\\`is-tab-panel[name=\"\\${e.detail.name}\"]\\`);\r\n  if (panel) panel.remove();\r\n});",
-          "lang": "html"
+          "code": "group.addEventListener('is-tab-close', (e) => {\n  const t = e.detail.tab;\n  t.remove();\n  const panel = group.querySelector(\\`is-tab-panel[name=\"\\${e.detail.name}\"]\\`);\n  if (panel) panel.remove();\n});"
         }
       ]
     },
@@ -88,7 +85,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -127,7 +124,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -160,7 +157,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -181,7 +178,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

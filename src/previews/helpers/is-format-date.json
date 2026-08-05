@@ -40,8 +40,8 @@
         },
         {
           "kind": "code",
-          "code": "const asked = ['es','en','fr','de','ja','zh-CN','ar','pt-BR'];\r\nconst ok = Intl.DateTimeFormat.supportedLocalesOf(asked);\r\n// → p.ej. [\"es\",\"en\",\"fr\",\"de\",\"ja\",\"zh-CN\",\"ar\",\"pt-BR\"]\r\n\r\n<is-format-date locale=\"ja\" date=\"2026-07-30\" weekday=\"long\" month=\"long\" day=\"numeric\" year=\"numeric\"></is-format-date>",
-          "lang": "html"
+          "code": "const asked = ['es','en','fr','de','ja','zh-CN','ar','pt-BR'];\nconst ok = Intl.DateTimeFormat.supportedLocalesOf(asked);\n// → p.ej. [\"es\",\"en\",\"fr\",\"de\",\"ja\",\"zh-CN\",\"ar\",\"pt-BR\"]\n\n<is-format-date locale=\"ja\" date=\"2026-07-30\" weekday=\"long\" month=\"long\" day=\"numeric\" year=\"numeric\"></is-format-date>",
+          "lang": "javascript"
         }
       ]
     },
@@ -65,7 +65,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-format-date date=\"2026-07-30T17:30:00\" hour=\"numeric\" minute=\"numeric\" hour-format=\"24\"></is-format-date>\r\n<is-format-date date=\"2026-07-30T17:30:00\" hour=\"numeric\" minute=\"numeric\" hour-format=\"12\"></is-format-date>",
+          "code": "<is-format-date date=\"2026-07-30T17:30:00\" hour=\"numeric\" minute=\"numeric\" hour-format=\"24\"></is-format-date>\n<is-format-date date=\"2026-07-30T17:30:00\" hour=\"numeric\" minute=\"numeric\" hour-format=\"12\"></is-format-date>",
           "lang": "html"
         }
       ]
@@ -87,7 +87,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Default / notas"
           ],
           "rows": [

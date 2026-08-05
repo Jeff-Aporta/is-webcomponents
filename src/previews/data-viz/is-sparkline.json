@@ -37,7 +37,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-sparkline data=\"3 5 4 8 6 9 7 10\" label=\"Ventas\"></is-sparkline>\r\n<is-sparkline type=\"bar\" data=\"2 1 3 2 4 1 2\" label=\"Errores\"></is-sparkline>",
+          "code": "<is-sparkline data=\"3 5 4 8 6 9 7 10\" label=\"Ventas\"></is-sparkline>\n<is-sparkline type=\"bar\" data=\"2 1 3 2 4 1 2\" label=\"Errores\"></is-sparkline>",
           "lang": "html"
         }
       ]
@@ -53,7 +53,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-sparkline variant=\"solid\" data=\"…\"></is-sparkline>\r\n<is-sparkline variant=\"gradient\" data=\"…\"></is-sparkline>\r\n<is-sparkline variant=\"line\" data=\"…\"></is-sparkline>",
+          "code": "<is-sparkline variant=\"solid\" data=\"…\"></is-sparkline>\n<is-sparkline variant=\"gradient\" data=\"…\"></is-sparkline>\n<is-sparkline variant=\"line\" data=\"…\"></is-sparkline>",
           "lang": "html"
         }
       ]
@@ -101,7 +101,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Notas"
           ],
           "rows": [

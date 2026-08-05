@@ -19,7 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-carousel style=\"max-width:520px\">\r\n  <is-carousel-item><div class=\"slide\">Diapositiva 1</div></is-carousel-item>\r\n  <is-carousel-item><div class=\"slide\">Diapositiva 2</div></is-carousel-item>\r\n  <is-carousel-item><div class=\"slide\">Diapositiva 3</div></is-carousel-item>\r\n</is-carousel>",
+          "code": "<is-carousel style=\"max-width:520px\">\n  <is-carousel-item><div class=\"slide\">Diapositiva 1</div></is-carousel-item>\n  <is-carousel-item><div class=\"slide\">Diapositiva 2</div></is-carousel-item>\n  <is-carousel-item><div class=\"slide\">Diapositiva 3</div></is-carousel-item>\n</is-carousel>",
           "lang": "html"
         }
       ]

@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Datos vía JSON o config\r\nchart.config = {\r\n  xLabels: [...],\r\n  yLabels: [...],\r\n  data: [[v, v, ...], ...]\r\n};\r\n\r\n// o por puntos\r\nchart.config = { xLabels, yLabels, points: [{ x, y, v }, ...] };\r\n\r\nchart.addEventListener('is-cell-hover', e => {\r\n  console.log(`${e.detail.x} · ${e.detail.y} = ${e.detail.value}`);\r\n});\r\n\r\n// Atributos:\r\n// x-label, y-label     títulos de eje\r\n// color                brand | neutral | success | warning | danger | red-blue\r\n// cell-radius          esquina (default 2)\r\n// show-values          boolean, imprime el número dentro de cada celda\r\n// legend-position      top | bottom | start | end | none",
-          "lang": "html"
+          "code": "// Datos vía JSON o config\nchart.config = {\n  xLabels: [...],\n  yLabels: [...],\n  data: [[v, v, ...], ...]\n};\n\n// o por puntos\nchart.config = { xLabels, yLabels, points: [{ x, y, v }, ...] };\n\nchart.addEventListener('is-cell-hover', e => {\n  console.log(`${e.detail.x} · ${e.detail.y} = ${e.detail.value}`);\n});\n\n// Atributos:\n// x-label, y-label     títulos de eje\n// color                brand | neutral | success | warning | danger | red-blue\n// cell-radius          esquina (default 2)\n// show-values          boolean, imprime el número dentro de cada celda\n// legend-position      top | bottom | start | end | none"
         }
       ]
     },

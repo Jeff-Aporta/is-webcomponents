@@ -23,8 +23,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-check-icon-button</span>\r\n  <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:play\"</span>\r\n  <span class=\"attr\">checked-icon</span>=<span class=\"val\">\"mdi:pause\"</span>\r\n  <span class=\"attr\">label</span>=<span class=\"val\">\"Reproducir\"</span>\r\n  <span class=\"attr\">checked-label</span>=<span class=\"val\">\"Pausar\"</span>\r\n<span class=\"tag\">></is-check-icon-button></span>",
-          "lang": "html"
+          "code": "<is-check-icon-button\n  icon=\"mdi:play\"\n  checked-icon=\"mdi:pause\"\n  label=\"Reproducir\"\n  checked-label=\"Pausar\"\n></is-check-icon-button>"
         }
       ]
     },
@@ -50,8 +49,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-check-icon-button</span> <span class=\"attr\">variant</span>=<span class=\"val\">\"plain\"</span> <span class=\"attr\">icon</span>=<span class=\"val\">\"mdi:volume-high\"</span> <span class=\"attr\">checked-icon</span>=<span class=\"val\">\"mdi:volume-off\"</span>\r\n  <span class=\"attr\">label</span>=<span class=\"val\">\"Silenciar\"</span> <span class=\"attr\">checked-label</span>=<span class=\"val\">\"Activar sonido\"</span><span class=\"tag\">></is-check-icon-button></span>",
-          "lang": "html"
+          "code": "<is-check-icon-button variant=\"plain\" icon=\"mdi:volume-high\" checked-icon=\"mdi:volume-off\"\n  label=\"Silenciar\" checked-label=\"Activar sonido\"></is-check-icon-button>"
         }
       ]
     },
@@ -73,7 +71,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Tecla",
+            "Tecla",
             "Acción"
           ],
           "rows": [
@@ -110,7 +108,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Attr",
+            "Attr",
             "Tipo",
             "Default",
             "Notas"
@@ -163,7 +161,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>API",
+            "API",
             "Detalle"
           ],
           "rows": [

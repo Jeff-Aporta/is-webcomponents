@@ -54,8 +54,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Atributos\r\n// rows, cols            nombre de campo (requeridos)\r\n// measure               nombre de campo a agregar (opcional)\r\n// agg                   sum | avg | count | min | max   (default sum)\r\n// format                locale para Intl.NumberFormat (default 'es-CO')\r\n// decimals              dígitos (default 0; máximo 2)\r\n\r\n// Datos: cualquier objeto plano serializable en <script type=\"application/json\">\r\n// o vía propiedad: chart.dataset = [...]\r\n\r\n// Evento\r\ntable.addEventListener('is-cell-click', e => {\r\n  console.log(e.detail.row, '·', e.detail.col, '=', e.detail.value);\r\n});",
-          "lang": "html"
+          "code": "// Atributos\n// rows, cols            nombre de campo (requeridos)\n// measure               nombre de campo a agregar (opcional)\n// agg                   sum | avg | count | min | max   (default sum)\n// format                locale para Intl.NumberFormat (default 'es-CO')\n// decimals              dígitos (default 0; máximo 2)\n\n// Datos: cualquier objeto plano serializable en <script type=\"application/json\">\n// o vía propiedad: chart.dataset = [...]\n\n// Evento\ntable.addEventListener('is-cell-click', e => {\n  console.log(e.detail.row, '·', e.detail.col, '=', e.detail.value);\n});"
         }
       ]
     },

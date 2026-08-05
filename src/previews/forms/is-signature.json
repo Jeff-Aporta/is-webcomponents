@@ -40,8 +40,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const pad = document.querySelector('is-signature');\r\npad.toDataURL('image/png');      // dataURL PNG\r\npad.toDataURL('image/svg+xml'); // dataURL SVG\r\npad.toSVG();                    // SVG inline\r\npad.clear();\r\npad.isEmpty;                    // boolean\r\n\r\npad.addEventListener('is-stroke-end', e => {\r\n  console.log('dataURL al terminar trazo:', e.detail.dataURL.slice(0, 50), '...');\r\n});\r\n\r\n// Atributos:\r\n// width, height      dimensiones (default 320x140)\r\n// pen-color          color del trazo\r\n// line-width         grosor (default 2)\r\n// background         color de fondo (default transparent)\r\n// hint               texto del placeholder",
-          "lang": "html"
+          "code": "const pad = document.querySelector('is-signature');\npad.toDataURL('image/png');      // dataURL PNG\npad.toDataURL('image/svg+xml'); // dataURL SVG\npad.toSVG();                    // SVG inline\npad.clear();\npad.isEmpty;                    // boolean\n\npad.addEventListener('is-stroke-end', e => {\n  console.log('dataURL al terminar trazo:', e.detail.dataURL.slice(0, 50), '...');\n});\n\n// Atributos:\n// width, height      dimensiones (default 320x140)\n// pen-color          color del trazo\n// line-width         grosor (default 2)\n// background         color de fondo (default transparent)\n// hint               texto del placeholder"
         }
       ]
     }

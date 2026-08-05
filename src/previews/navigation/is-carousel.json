@@ -19,8 +19,7 @@
         },
         {
           "kind": "code",
-          "code": "<span class=\"tag\"><is-carousel</span> <span class=\"attr\">loop</span><span class=\"tag\">></span>\r\n  <span class=\"tag\"><is-carousel-item></span>Slide 1<span class=\"tag\"></is-carousel-item></span>\r\n  <span class=\"tag\"><is-carousel-item></span>Slide 2<span class=\"tag\"></is-carousel-item></span>\r\n  …\r\n<span class=\"tag\"></is-carousel></span>",
-          "lang": "html"
+          "code": "<is-carousel loop>\n  <is-carousel-item>Slide 1</is-carousel-item>\n  <is-carousel-item>Slide 2</is-carousel-item>\n  …\n</is-carousel>"
         }
       ]
     },
@@ -90,7 +89,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Atributo",
+            "Atributo",
             "Tipo",
             "Default",
             "Descripción"
@@ -152,8 +151,7 @@
         },
         {
           "kind": "code",
-          "code": "carousel.next();        // Avanza\r\ncarousel.prev();        // Retrocede\r\ncarousel.pause();       // Pausa autoplay\r\ncarousel.play();        // Reanuda autoplay\r\ncarousel.active = 2;    // Salta a slide\r\ncarousel.getViewport(); // Devuelve el viewport del scroll",
-          "lang": "html"
+          "code": "carousel.next();        // Avanza\ncarousel.prev();        // Retrocede\ncarousel.pause();       // Pausa autoplay\ncarousel.play();        // Reanuda autoplay\ncarousel.active = 2;    // Salta a slide\ncarousel.getViewport(); // Devuelve el viewport del scroll"
         },
         {
           "kind": "html",
@@ -162,7 +160,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Evento",
+            "Evento",
             "Descripción"
           ],
           "rows": [

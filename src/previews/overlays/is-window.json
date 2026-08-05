@@ -29,8 +29,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const w = document.querySelector('is-window');\r\nw.minimize(); w.restore(); w.maximize(); w.unmaximize(); w.close();\r\n\r\nw.addEventListener('is-minimize',  () => /* guardó última posición y se fue al dock */);\r\nw.addEventListener('is-restore',   () => /* volvió a su posición anterior */);\r\nw.addEventListener('is-maximize',  () => /* ocupa toda la pantalla */);\r\nw.addEventListener('is-close',     () => /* se eliminó del DOM */);\r\n\r\n// Atributos\r\n// title, x, y, width, height\r\n// maximizable, minimizable, closable, resizable\r\n// default    normal | maximized | minimized\r\n// dock       bottom-right (default) | bottom | top | none\r\n\r\n// z-index se autoeleva al hacer click (sigue el foco del usuario)",
-          "lang": "html"
+          "code": "const w = document.querySelector('is-window');\nw.minimize(); w.restore(); w.maximize(); w.unmaximize(); w.close();\n\nw.addEventListener('is-minimize',  () => /* guardó última posición y se fue al dock */);\nw.addEventListener('is-restore',   () => /* volvió a su posición anterior */);\nw.addEventListener('is-maximize',  () => /* ocupa toda la pantalla */);\nw.addEventListener('is-close',     () => /* se eliminó del DOM */);\n\n// Atributos\n// title, x, y, width, height\n// maximizable, minimizable, closable, resizable\n// default    normal | maximized | minimized\n// dock       bottom-right (default) | bottom | top | none\n\n// z-index se autoeleva al hacer click (sigue el foco del usuario)"
         }
       ]
     }

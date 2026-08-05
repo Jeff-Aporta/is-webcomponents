@@ -65,7 +65,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-speed-dial direction=\"radial\" data-arc=\"180\" data-start-angle=\"-90\"\r\n               data-sweep=\"counter-clockwise\" data-wrapper=\".mi-lienzo\">\r\n  <is-speed-dial-action icon=\"mdi:brush\" label=\"Tema\"></is-speed-dial-action>\r\n</is-speed-dial>",
+          "code": "<is-speed-dial direction=\"radial\" data-arc=\"180\" data-start-angle=\"-90\"\n               data-sweep=\"counter-clockwise\" data-wrapper=\".mi-lienzo\">\n  <is-speed-dial-action icon=\"mdi:brush\" label=\"Tema\"></is-speed-dial-action>\n</is-speed-dial>",
           "lang": "html"
         }
       ]
@@ -76,8 +76,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const dial = document.querySelector('is-speed-dial');\r\ndial.open();         // abre\r\ndial.close();        // cierra\r\ndial.toggle();       // alterna\r\ndial.isOpen;         // boolean\r\ndial.addEventListener('is-select', e => console.log(e.detail.action.getAttribute('label')));\r\ndial.addEventListener('is-toggle', e => console.log('open=', e.detail.open));\r\n\r\n// Acciones: cada <is-speed-dial-action> emite is-select en el padre.\r\n// Si tiene href, no se cierra el dial al elegir.\r\n<is-speed-dial-action icon=\"…\" label=\"…\" color=\"brand|neutral|success|warning|danger\" href=\"…\">Texto</is-speed-dial-action>",
-          "lang": "html"
+          "code": "const dial = document.querySelector('is-speed-dial');\ndial.open();         // abre\ndial.close();        // cierra\ndial.toggle();       // alterna\ndial.isOpen;         // boolean\ndial.addEventListener('is-select', e => console.log(e.detail.action.getAttribute('label')));\ndial.addEventListener('is-toggle', e => console.log('open=', e.detail.open));\n\n// Acciones: cada <is-speed-dial-action> emite is-select en el padre.\n// Si tiene href, no se cierra el dial al elegir.\n<is-speed-dial-action icon=\"…\" label=\"…\" color=\"brand|neutral|success|warning|danger\" href=\"…\">Texto</is-speed-dial-action>"
         }
       ]
     },
@@ -89,7 +88,7 @@
         {
           "kind": "table",
           "columns": [
-            "<tr><th>Hora",
+            "Hora",
             "Dial",
             "Evento",
             "Detalle"
