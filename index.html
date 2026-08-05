@@ -8,8 +8,13 @@
   <link rel="stylesheet" href="src/styles/is-base.css">
   <link rel="stylesheet" href="src/styles/palettes.css">
   <link rel="stylesheet" href="src/styles/shell.css">
+  <link rel="stylesheet" href="src/styles/presentation.css">
   <link rel="icon" href="src/assets/favicon.svg" type="image/svg+xml">
   <script type="module" src="dist/cdn/all.min.js"></script>
+  <script type="module" src="src/components/layout/preview-component.js"></script>
+  <script type="module" src="scripts/highlight-pre.js"></script>
+  <script type="module" src="scripts/demo-code.js"></script>
+  <script type="module" src="scripts/docs-chrome.js"></script>
 </head>
 <body>
   <header class="shell-bar">
@@ -45,17 +50,22 @@
 
   <is-split-panel id="mainSplit" class="main-split" orientation="horizontal" position-in-pixels="200" primary="start" storage-key="gallery-nav">
     <nav class="shell-nav" slot="start" id="shellNav" aria-label="Componentes"></nav>
-    <iframe class="preview-frame" slot="end" id="previewFrame" title="Vista del componente"></iframe>
+    <div class="preview-stage" slot="end">
+      <is-preview-component class="preview-host" id="previewHost" hidden></is-preview-component>
+      <iframe class="preview-frame" id="previewFrame" title="Vista del componente"></iframe>
+    </div>
   </is-split-panel>
 
   <script type="module">
     import components from './manifest.js';
+    import { hasControlledPreview, loadPreview } from './src/previews/registry.js';
 
     const root = document.documentElement;
     const themeToggle = document.getElementById('themeToggle');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     const shellNav = document.getElementById('shellNav');
     const frame = document.getElementById('previewFrame');
+    const previewHost = document.getElementById('previewHost');
     const brand = document.getElementById('brand');
     const brandMenu = document.getElementById('brandMenu');
     const brandWrap = document.getElementById('brandWrap');
@@ -232,8 +242,32 @@
       return `src/previews/${page}?s=${encodeState({ embed: true, theme, palette })}`;
     }
 
+    function controlledShellSrc(tag) {
+      return `src/previews/_shell.html?tag=${encodeURIComponent(tag)}&s=${encodeState({ embed: true, theme, palette })}`;
+    }
+
+    async function showPreview() {
+      const tag = component.tag;
+      const useControlled = hasControlledPreview(tag);
+
+      if (useControlled) {
+        frame.hidden = true;
+        frame.removeAttribute('src');
+        previewHost.hidden = false;
+        previewHost.preview = await loadPreview(tag);
+        return;
+      }
+
+      previewHost.hidden = true;
+      previewHost.preview = null;
+      frame.hidden = false;
+      frame.src = previewSrc(component.page);
+    }
+
     function sendContext() {
-      frame.contentWindow?.postMessage({ type: 'is-context', theme, palette }, location.origin);
+      if (!frame.hidden) {
+        frame.contentWindow?.postMessage({ type: 'is-context', theme, palette }, location.origin);
+      }
     }
 
     function updateUrl() {
@@ -320,7 +354,7 @@
       const next = catalog.find(item => item.tag === tag) ?? HOME;
       if (next === component) return;
       component = next;
-      frame.src = previewSrc(component.page);
+      showPreview();
       renderContext({ navSmooth: true });
     }
 
@@ -368,11 +402,13 @@
       renderContext();
     });
     fullscreenBtn.addEventListener('click', () => {
-      // s con theme/palette = iniciales de esa ventana; no se actualizan al toglear ahí
-      window.open(`src/previews/${component.page}?s=${encodeState({ theme, palette })}`, '_blank', 'noopener');
+      const url = hasControlledPreview(component.tag)
+        ? controlledShellSrc(component.tag)
+        : `src/previews/${component.page}?s=${encodeState({ theme, palette })}`;
+      window.open(url, '_blank', 'noopener');
     });
 
-    frame.src = previewSrc(component.page);
+    showPreview();
     renderContext();
     bootScrollNavToCurrent();
 

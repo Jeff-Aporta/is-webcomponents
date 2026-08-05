@@ -13,6 +13,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
   - Manifest `script`/`style`: `../../components/...` (relativo al preview de categoría → resuelve a `src/components/...`)
 - Docs LLM crudos (GitHub): base `…/main/src/` + `components/...` (p. ej. `…/main/src/components/LLM.md`). `LLM_BASE` en `preview-chrome.js` termina en `/src`.
 - **Utilerías (`helpers/`)**: cada módulo público (`ui`, `format`, `observer`, aliases, `popover`, …) tiene **tab en el nav** (`manifest.page`) + HTML en `src/previews/helpers/`. Guardián: `tests/helpers-homogeneity.test.mjs`. `is-floating` es interno (sin tab).
+- **Previews controlados (nuevo):** estructura tipada + `ISComponentPreview.mount()` con funciones reales. Shell: `<is-preview-component>`. Datos en `*.preview.js`; HTML del preview es mínimo. Markup de demos puede ser string HTML; **la lógica nunca**. Registry: `src/previews/registry.js`. Piloto: `is-button-group`. Guardián: `tests/preview-controller.test.mjs`.
 - Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"contapyme|insoft|agrowin"}>`. `scripts/preview-boot.js` lo decodifica y setea `data-theme` / `data-palette` en `<html>`. **`prefers-color-scheme` NO se usa** — el tema es explícito.
 - Build: esbuild → `dist/cdn/` desde `src/components` + `src/styles`. Dev: `node scripts/serve.mjs` (previews en `/src/previews/`). Sin TS, sin framework, sin test runner por defecto (`node --test tests/`).
 - **Paleta default del kit = `contapyme`** (azul ISP `#1a6eb0`). `insoft` y `agrowin` siguen disponibles; no son el default.
@@ -107,7 +108,8 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - **No olvidarse del reset responsive/reduced-motion.** Si el 3D se queda en móvil o con reduced-motion, la página se rompe visualmente.
 - **No `localStorage.setItem(keyPlana)`** para estado de WC con `storage-key`. Tampoco `sessionStorage` canónico ni root `is-components` (solo migración). Un solo store: `prefs.js` → `is-webcomponents[tag][key]`.
 - **No dejar UI de columnas “en el HTML del shadow” sin cablear** (sidebar `hidden` sin handlers): bug real de `is-ag-grid`.
-- **No recrear `components/`, `styles/`, `previews/`, `skills/` o `docs/` en la raíz.** Fuente = `src/<eso>/`. Build y tests asumen `src/`.
+- **No meter lógica de preview en strings/`eval`.** Markup de demos sí puede ser HTML string en `definition`; listeners y API live van en `ISComponentPreview.mount()` con `this.on(...)`.
+- **No recrear HTML gordo por componente** si ya hay (o se puede añadir) `*.preview.js` + `<is-preview-component>`: el HTML del preview es shell mínimo.
 - **No usar la misma profundidad de `../` para `styles` y para `scripts`/`dist` en previews de categoría.** Tras el move: styles/components viven en `src/` (`../../`), scripts/dist en la raíz (`../../../`).
 - **No reinventar botones/forms/tables/dialogs/toasts/icons** si el kit ya tiene `is-*`. Apps: wrappers `app-*`/`tk-*` que traducen datos al kit + CSS hermano + `IsUi.adoptCss`.
 - **No poner CSS de dominio como string gigante en el `.ts`.** Archivo `.css` hermano + `adoptCss(shadow, import.meta.url)`. Tras `innerHTML = ''` del shadow, volver a llamar `adoptCss`.

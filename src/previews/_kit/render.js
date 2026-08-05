@@ -1,0 +1,151 @@
+/**
+ * Render de la definición tipada → DOM (sin ejecutar lógica de preview).
+ * @typedef {import('./types.d.ts').PreviewDefinition} PreviewDefinition
+ * @typedef {import('./types.d.ts').PreviewSection} PreviewSection
+ * @typedef {import('./types.d.ts').PreviewBlock} PreviewBlock
+ */
+
+/**
+ * @param {string} html
+ * @returns {DocumentFragment}
+ */
+export function fragmentFromHtml(html) {
+  const tpl = document.createElement('template');
+  tpl.innerHTML = html.trim();
+  return tpl.content.cloneNode(true);
+}
+
+/**
+ * @param {PreviewBlock} block
+ * @returns {HTMLElement}
+ */
+export function renderBlock(block) {
+  switch (block.kind) {
+    case 'lede': {
+      const p = document.createElement('p');
+      p.className = 'lede';
+      p.innerHTML = block.html;
+      return p;
+    }
+    case 'demo': {
+      const demo = document.createElement('is-demo');
+      demo.className = 'demo';
+      if (block.heading) demo.setAttribute('heading', block.heading);
+      if (block.contain) demo.setAttribute('contain', '');
+      if (block.noCode) demo.dataset.noCode = '';
+      demo.append(fragmentFromHtml(block.html));
+      return demo;
+    }
+    case 'callout': {
+      const el = document.createElement('div');
+      el.className = 'callout';
+      el.innerHTML = block.html;
+      return el;
+    }
+    case 'code': {
+      const pre = document.createElement('pre');
+      pre.className = 'code';
+      if (block.lang) pre.dataset.lang = block.lang;
+      pre.textContent = block.code;
+      return pre;
+    }
+    case 'html': {
+      const wrap = document.createElement('div');
+      wrap.append(fragmentFromHtml(block.html));
+      return wrap;
+    }
+    case 'table': {
+      const wrap = document.createElement('div');
+      if (block.captionHtml) {
+        const cap = document.createElement('div');
+        cap.innerHTML = block.captionHtml;
+        wrap.append(cap);
+      }
+      const table = document.createElement('table');
+      table.className = 'ref';
+      const thead = document.createElement('thead');
+      const hr = document.createElement('tr');
+      for (const col of block.columns) {
+        const th = document.createElement('th');
+        th.textContent = col;
+        hr.append(th);
+      }
+      thead.append(hr);
+      const tbody = document.createElement('tbody');
+      for (const row of block.rows) {
+        const tr = document.createElement('tr');
+        for (const cell of row) {
+          const td = document.createElement('td');
+          td.innerHTML = cell;
+          tr.append(td);
+        }
+        tbody.append(tr);
+      }
+      table.append(thead, tbody);
+      wrap.append(table);
+      return wrap;
+    }
+    default: {
+      const _exhaustive = /** @type {never} */ (block);
+      void _exhaustive;
+      const err = document.createElement('p');
+      err.textContent = `Bloque desconocido`;
+      return err;
+    }
+  }
+}
+
+/**
+ * @param {PreviewSection} section
+ * @returns {HTMLElement}
+ */
+export function renderSection(section) {
+  const el = document.createElement('section');
+  el.className = 'section';
+  el.id = section.id;
+
+  const h2 = document.createElement('h2');
+  if (section.titleHtml) h2.innerHTML = section.title;
+  else h2.textContent = section.title;
+  el.append(h2);
+
+  if (section.lede) {
+    const p = document.createElement('p');
+    p.className = 'lede';
+    p.innerHTML = section.lede;
+    el.append(p);
+  }
+
+  for (const block of section.blocks) {
+    el.append(renderBlock(block));
+  }
+  return el;
+}
+
+/**
+ * @param {PreviewDefinition} def
+ * @param {{ main: HTMLElement, aside: HTMLElement }} targets
+ */
+export function renderDefinition(def, targets) {
+  const { main, aside } = targets;
+  main.replaceChildren();
+  aside.replaceChildren();
+
+  for (const section of def.sections) {
+    main.append(renderSection(section));
+  }
+
+  const h1 = document.createElement('h1');
+  h1.textContent = def.tag;
+  aside.append(h1);
+
+  const spy = document.createElement('is-scrollspy');
+  spy.setAttribute('target', 'is-main');
+  for (const section of def.sections) {
+    const a = document.createElement('a');
+    a.href = `#${section.id}`;
+    a.textContent = section.title.replace(/<[^>]+>/g, '') || section.id;
+    spy.append(a);
+  }
+  aside.append(spy);
+}
