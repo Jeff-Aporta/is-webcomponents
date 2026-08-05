@@ -1,7 +1,7 @@
 export default [
   // isp — primitivas portadas de ISP-SvelteComponents (la librería Svelte de
   // ContaPyme). El orden del nav no sale de aquí sino de `categoryMeta` en
-  // index.html, donde `isp` es la primera clave.
+  // index.html, donde `isp` es la última clave.
   { tag: 'is-accordion-group', title: 'Accordion Group', category: 'isp', origin: 'isp', script: '../../components/isp/accordion-group.js', style: '../../components/isp/accordion-group.css', page: 'isp/is-accordion-group.json' },
   { tag: 'is-block-layout', title: 'Block Layout', category: 'isp', origin: 'isp', script: '../../components/isp/block-layout.js', style: '../../components/isp/block-layout.css', page: 'isp/is-block-layout.json' },
   { tag: 'is-btn-ref', title: 'Btn Ref', category: 'isp', origin: 'isp', script: '../../components/isp/btn-ref.js', style: '../../components/isp/btn-ref.css', page: 'isp/is-btn-ref.json' },
