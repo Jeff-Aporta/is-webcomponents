@@ -18,7 +18,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-pdf-viewer\r\n            src=\"https://raw.githubusercontent.com/mozilla/pdf.js/master/web/compressed.tracemonkey-pldi-03.pdf\"\r\n            download\r\n            print\r\n            height=\"70vh\">\r\n            <span slot=\"title\">Tracemonkey — PDF.js reference paper</span>\r\n            <a slot=\"toolbar\" href=\"https://raw.githubusercontent.com/mozilla/pdf.js/master/web/compressed.tracemonkey-pldi-03.pdf\" target=\"_blank\" rel=\"noopener\" style=\"font-size:.8rem; color:var(--is-text-soft);\">abrir en pestaña ↗</a>\r\n          </is-pdf-viewer>"
+          "html": "<is-pdf-viewer\r\n            src=\"{assets}documento-ejemplo.pdf\"\r\n            download\r\n            print\r\n            height=\"70vh\">\r\n            <span slot=\"title\">Documento de ejemplo</span>\r\n            <a slot=\"toolbar\" href=\"{assets}documento-ejemplo.pdf\" target=\"_blank\" rel=\"noopener\" style=\"font-size:.8rem; color:var(--is-text-soft);\">abrir en pestaña ↗</a>\r\n          </is-pdf-viewer>"
         }
       ]
     },

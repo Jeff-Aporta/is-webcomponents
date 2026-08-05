@@ -1,0 +1,61 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 7 0 R /F2 8 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 7 0 R /F2 8 0 R >> >> /Contents 6 0 R >>
+endobj
+5 0 obj
+<< /Length 519 >>
+stream
+BT /F2 22 Tf 72 700 Td (Documento de ejemplo) Tj ET
+0.86 0.30 0.19 rg 72 686 200 3 re f
+0 0 0 rg
+BT /F1 12 Tf 72 640 Td (Este PDF acompana el demo de <is-pdf-viewer>.) Tj ET
+BT /F1 12 Tf 72 618 Td (Sirve para probar el visor nativo del navegador:) Tj ET
+BT /F1 12 Tf 72 596 Td (paginacion, zoom, descarga e impresion.) Tj ET
+BT /F1 12 Tf 72 574 Td () Tj ET
+BT /F1 12 Tf 72 552 Td (Como es un archivo local del propio kit, el demo no) Tj ET
+BT /F1 12 Tf 72 530 Td (depende de un servidor externo que pueda caerse.) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Length 331 >>
+stream
+BT /F2 22 Tf 72 700 Td (Segunda pagina) Tj ET
+0.86 0.30 0.19 rg 72 686 200 3 re f
+0 0 0 rg
+BT /F1 12 Tf 72 640 Td (La segunda pagina existe para que se vea el control) Tj ET
+BT /F1 12 Tf 72 618 Td (de paginacion del visor.) Tj ET
+BT /F1 12 Tf 72 596 Td () Tj ET
+BT /F1 12 Tf 72 574 Td (IS Web Components - InSoft / ContaPyme) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+8 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000257 00000 n 
+0000000393 00000 n 
+0000000963 00000 n 
+0000001345 00000 n 
+0000001415 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+1490
+%%EOF

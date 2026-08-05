@@ -24,11 +24,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <is-icon src=\"../../assets/icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--is-accent)\"></is-icon>"
+          "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <is-icon src=\"{assets}icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--is-accent)\"></is-icon>"
         },
         {
           "kind": "code",
-          "code": "<is-icon icon=\"mdi:home\"></is-icon>\n<is-icon icon=\"mdi:check-circle\"></is-icon>\n<is-icon src=\"/logo.svg\" label=\"Logo\"></is-icon>"
+          "code": "<is-icon icon=\"mdi:home\"></is-icon>\n<is-icon icon=\"mdi:check-circle\"></is-icon>\n<is-icon src=\"./logo.svg\" label=\"Logo\"></is-icon>"
         }
       ]
     },

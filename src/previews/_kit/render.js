@@ -6,12 +6,36 @@
  */
 
 /**
+ * Base de `src/assets/` para el token `{assets}`.
+ *
+ * Una ruta relativa escrita en el JSON no puede acertar: los previews se pintan
+ * desde `index.html` (raíz) y desde `src/previews/_shell.html`, y este módulo
+ * se ejecuta tanto en fuente como inlineado en `dist/cdn/…`. Por eso la base se
+ * deduce de la raíz del sitio, cortando la URL del módulo en `/src/` o
+ * `/dist/cdn/`; así también acierta publicado (GitHub Pages, jsDelivr).
+ */
+const RAIZ = (() => {
+  const modulo = new URL(import.meta.url).href;
+  const corte = modulo.search(/\/(?:dist\/cdn|src)\//);
+  return corte > 0 ? modulo.slice(0, corte + 1) : new URL('./', modulo).href;
+})();
+const ASSETS = `${RAIZ}src/assets/`;
+
+/**
+ * @param {string} html
+ * @returns {string}
+ */
+export function resolveAssets(html) {
+  return typeof html === 'string' ? html.replaceAll('{assets}', ASSETS) : html;
+}
+
+/**
  * @param {string} html
  * @returns {DocumentFragment}
  */
 export function fragmentFromHtml(html) {
   const tpl = document.createElement('template');
-  tpl.innerHTML = html.trim();
+  tpl.innerHTML = resolveAssets(html).trim();
   return tpl.content.cloneNode(true);
 }
 
@@ -24,7 +48,7 @@ export function renderBlock(block) {
     case 'lede': {
       const p = document.createElement('p');
       p.className = 'lede';
-      p.innerHTML = block.html;
+      p.innerHTML = resolveAssets(block.html);
       return p;
     }
     case 'demo': {
@@ -39,7 +63,7 @@ export function renderBlock(block) {
     case 'callout': {
       const el = document.createElement('div');
       el.className = 'callout';
-      el.innerHTML = block.html;
+      el.innerHTML = resolveAssets(block.html);
       return el;
     }
     case 'code': {
@@ -58,7 +82,7 @@ export function renderBlock(block) {
       const wrap = document.createElement('div');
       if (block.captionHtml) {
         const cap = document.createElement('div');
-        cap.innerHTML = block.captionHtml;
+        cap.innerHTML = resolveAssets(block.captionHtml);
         wrap.append(cap);
       }
       const table = document.createElement('table');
@@ -76,7 +100,7 @@ export function renderBlock(block) {
         const tr = document.createElement('tr');
         for (const cell of row) {
           const td = document.createElement('td');
-          td.innerHTML = cell;
+          td.innerHTML = resolveAssets(cell);
           tr.append(td);
         }
         tbody.append(tr);
@@ -122,7 +146,7 @@ export function renderSection(section) {
   if (section.lede) {
     const p = document.createElement('p');
     p.className = 'lede';
-    p.innerHTML = section.lede;
+    p.innerHTML = resolveAssets(section.lede);
     el.append(p);
   }
 

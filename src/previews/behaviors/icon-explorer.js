@@ -7,9 +7,16 @@ export async function mount(ctx) {
   const root = ctx.main;
   void root;
   const app = document.getElementById('app');
-      const scroller = document.getElementById('scroller');
-      const base = new URL('../../assets/icons/', location.href);
-      const params = new URLSearchParams(location.search);
+  const scroller = document.getElementById('scroller');
+  // Misma lógica que `{assets}` en render.js: la página vive en la raíz o en
+  // `_shell.html`, así que no se puede fijar un relativo a `location.href`.
+  const raiz = (() => {
+    const href = location.href;
+    const corte = href.search(/\/(?:src\/previews|index\.html)/);
+    return corte > 0 ? href.slice(0, corte + 1) : new URL('./', href).href;
+  })();
+  const base = new URL('src/assets/icons/', raiz);
+  const params = new URLSearchParams(location.search);
       const family = params.get('f');
       const PAGE = 240;
   

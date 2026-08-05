@@ -228,8 +228,10 @@ import './icon.js';
       this.#unbindVideos();
       this.#attrObs?.disconnect();
       this.#attrObs = null;
-      this.#mediaObs?.disconnect();
-      this.#mediaObs = null;
+      if (this.#mediaObs) {
+        this.#mediaObs.mq.removeEventListener('change', this.#mediaObs.handler);
+        this.#mediaObs = null;
+      }
       this.#mounted = false;
     }
 
