@@ -179,7 +179,12 @@
         },
         {
           "kind": "demo",
-          "html": "<is-button id=\"loadingDemo\" color=\"brand\">Iniciar carga</is-button>\r\n          <pre class=\"code\" style=\"margin: 12px 0 0;\">btn.<span class=\"attr\">toggleAttribute</span>(<span class=\"str\">'loading'</span>);\r\nbtn.<span class=\"attr\">toggleAttribute</span>(<span class=\"str\">'loading'</span>);  <span class=\"com\">// o false</span></pre>"
+          "html": "<is-button id=\"loadingDemo\" color=\"brand\">Iniciar carga</is-button>"
+        },
+        {
+          "kind": "code",
+          "lang": "javascript",
+          "code": "btn.toggleAttribute('loading');\nbtn.toggleAttribute('loading');  // o false"
         }
       ]
     },
@@ -239,7 +244,8 @@
         },
         {
           "kind": "code",
-          "code": "<button part=\"button\" class=\"btn\">\n  <span part=\"start\"   class=\"btn__prefix\"><slot name=\"start\"></slot></span>\n  <span part=\"label\"   class=\"btn__label\"><slot></slot></span>\n  <span part=\"end\"     class=\"btn__suffix\"><slot name=\"end\"></slot></span>\n  <span part=\"caret\"   class=\"btn__caret\">...</span>\n  <span part=\"spinner\" class=\"btn__spinner\">...</span>\n</button>"
+          "lang": "html",
+          "code": "<button part=\"button\" class=\"btn\">\n  <span part=\"start\" class=\"btn__prefix\">\n    <slot name=\"start\"></slot>\n  </span>\n  <span part=\"label\" class=\"btn__label\">\n    <slot></slot>\n  </span>\n  <span part=\"end\" class=\"btn__suffix\">\n    <slot name=\"end\"></slot>\n  </span>\n  <span part=\"caret\" class=\"btn__caret\">...</span>\n  <span part=\"spinner\" class=\"btn__spinner\">...</span>\n</button>"
         }
       ]
     },

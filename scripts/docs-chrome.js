@@ -3,8 +3,8 @@
  *
  * Botón de copiar (<is-copy-button>) en cada `pre.code` de la página.
  * El bloque "Consumo por CDN" es responsabilidad EXCLUSIVA de
- * <is-cdn-snippet>, auto-inyectado por preview-chrome.js — aquí no se
- * duplica ningún callout CDN.
+ * <is-cdn-snippet>, que monta cdn-panel.js — aquí no se duplica ningún
+ * callout CDN.
  *
  * Opt-out: data-no-copy en un <pre>.
  *

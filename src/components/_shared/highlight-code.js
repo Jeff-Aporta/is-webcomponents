@@ -69,30 +69,62 @@ export const dedent = (text) => {
 };
 
 /**
- * Formato ligero: si viene casi en una línea, inserta saltos básicos
- * para HTML y JS sin un prettier completo.
+ * La migración HTML→JSON dejó en algunos `<pre>` el coloreado a mano
+ * (`<span class="tag">…`) como si fuera el código. CodeMirror lo vuelve a
+ * tokenizar, marca cierres huérfanos como `cm-error` (fondo rojo) y aplana
+ * la indentación. Si detectamos ese markup, lo desempaquetamos a texto plano.
+ */
+const HAND_HL_OPEN = /<span\s+class="(?:tag|attr|val|str|kw|com)">/gi;
+const HAND_HL_CLOSE = /<\/span>/gi;
+const HAND_HL_PROBE = /<span\s+class="(?:tag|attr|val|str|kw|com)"/i;
+
+export const unwrapHandHighlight = (text) => {
+  const raw = String(text);
+  if (!HAND_HL_PROBE.test(raw)) return raw;
+  return raw.replace(HAND_HL_OPEN, '').replace(HAND_HL_CLOSE, '');
+};
+
+const VOID_HTML = /^(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\b/i;
+
+/** Pretty-print HTML mínimo: parte en `><` e indenta abiertos/cerrados. */
+export const prettyHtml = (text) => {
+  const lines = String(text)
+    .replace(/\r\n/g, '\n')
+    .replace(/>\s*</g, '>\n<')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  let depth = 0;
+  const out = [];
+  for (const line of lines) {
+    const isClose = /^<\//.test(line);
+    if (isClose) depth = Math.max(0, depth - 1);
+    out.push(`${'  '.repeat(depth)}${line}`);
+    const isOpen = /^<[^/!?][^>]*>$/.test(line)
+      && !/\/>$/.test(line)
+      && !VOID_HTML.test(line.slice(1));
+    if (!isClose && isOpen) depth += 1;
+  }
+  // `<slot></slot>` vacío no merece dos líneas: el split por `><` lo separó.
+  return out.join('\n').replace(
+    /^(\s*)(<([a-zA-Z][\w:-]*)\b[^>]*>)\n\1(<\/\3>)/gm,
+    '$1$2$4',
+  );
+};
+
+/**
+ * Formato ligero: si viene casi en una línea o con anidación en la misma
+ * línea, inserta saltos básicos para HTML y JS sin un prettier completo.
  */
 export const softFormat = (text, mode) => {
-  let t = dedent(text);
+  let t = dedent(unwrapHandHighlight(text));
   const compact = t.replace(/\s+/g, ' ').trim();
   const fewLines = t.split('\n').length <= 2;
+  const inlineNest = t.split('\n').some((line) => />\s*</.test(line));
 
-  if (mode === 'htmlmixed' && fewLines && compact.includes('<') && compact.length > 80) {
-    t = compact
-      .replace(/>\s*</g, '>\n<')
-      .split('\n')
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .reduce((acc, line) => {
-        const depth = acc.depth;
-        const out = acc.out;
-        const isClose = /^<\//.test(line);
-        const nextDepth = isClose ? Math.max(0, depth - 1) : depth;
-        out.push(`${'  '.repeat(nextDepth)}${line}`);
-        const isOpen = /^<[^/!?][^>]*[^/]>$/.test(line)
-          && !/^<(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\b/i.test(line);
-        return { out, depth: isClose ? nextDepth : depth + (isOpen ? 1 : 0) };
-      }, { out: [], depth: 0 }).out.join('\n');
+  if (mode === 'htmlmixed' && t.includes('<') && (fewLines || inlineNest) && compact.length > 40) {
+    t = prettyHtml(t);
   }
 
   if (mode === 'javascript' && fewLines && /[{;]/.test(compact) && compact.length > 60) {
