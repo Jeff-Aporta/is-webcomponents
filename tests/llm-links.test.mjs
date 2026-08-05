@@ -11,7 +11,7 @@
 // Y no vale componer `components/<categoria>/LLM.md`: la categoría LÓGICA del
 // manifest no es la carpeta. Los tags de `data-viz` viven repartidos entre
 // `components/charts/` y `components/data-viz/`. La ruta se deriva del `script`,
-// que sí apunta a la carpeta real — igual que hace preview-chrome.js.
+// que sí apunta a la carpeta real — igual que hace cdn-panel.js.
 //
 // Uso:  node tests/llm-links.test.mjs
 
@@ -45,18 +45,18 @@ if (!existsSync(join(root, 'src', 'components', 'LLM.md'))) {
 }
 if (!existsSync(join(root, 'LLM.md'))) failures.push('falta LLM.md en la raíz del repo');
 
-// 3) preview-chrome.js no debe volver a componer la ruta desde la categoría ni
-//    apuntar a previews/LLM.md.
+// 3) cdn-panel.js —dueño del panel «Consumo por CDN»— no debe volver a componer
+//    la ruta desde la categoría ni apuntar a previews/LLM.md.
 //    Se analiza el código SIN comentarios: este mismo test documenta la ruta
 //    mala en prosa, y si no se quitan los comentarios se delata a sí mismo.
-const chrome = readFileSync(join(root, 'scripts', 'preview-chrome.js'), 'utf8')
+const panel = readFileSync(join(root, 'scripts', 'cdn-panel.js'), 'utf8')
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/^\s*\/\/.*$/gm, '');
-if (/['"]\.\.\/LLM\.md['"]/.test(chrome)) {
-  failures.push('preview-chrome.js enlaza `../LLM.md` = previews/LLM.md, que no existe');
+if (/['"]\.\.\/LLM\.md['"]/.test(panel)) {
+  failures.push('cdn-panel.js enlaza `../LLM.md` = previews/LLM.md, que no existe');
 }
-if (/components\/\$\{[^}]*categor/i.test(chrome)) {
-  failures.push('preview-chrome.js compone la ruta del LLM.md desde la categoría; debe derivarla del `script` del manifest');
+if (/components\/\$\{[^}]*categor/i.test(panel)) {
+  failures.push('cdn-panel.js compone la ruta del LLM.md desde la categoría; debe derivarla del `script` del manifest');
 }
 
 // 4) Los .md se exponen desde el FUENTE, sin copia en dist: nada de duplicar.
@@ -68,21 +68,21 @@ if (existsSync(join(root, 'dist', 'cdn', 'llm'))) {
 //    `text/plain`, o sea la única con la que el navegador MUESTRA el texto al
 //    entrar. jsDelivr y GitHub Pages lo mandan como `text/markdown` y el
 //    navegador lo descarga. (jsDelivr sí es la base del CÓDIGO, no de los .md.)
-const base = chrome.match(/const LLM_BASE = '([^']+)'/)?.[1] || '';
+const base = panel.match(/const LLM_BASE = '([^']+)'/)?.[1] || '';
 if (!base.startsWith('https://raw.githubusercontent.com/')) {
   failures.push(`LLM_BASE es "${base}"; debe ser raw.githubusercontent para que responda text/plain`);
 }
 if (!base.endsWith('/src')) {
   failures.push(`LLM_BASE es "${base}"; tras el move a src/ debe terminar en /src`);
 }
-if (/pages\.dev/.test(chrome)) {
-  failures.push('preview-chrome.js aún apunta a Cloudflare Pages; el proyecto se desvinculó');
+if (/pages\.dev/.test(panel)) {
+  failures.push('cdn-panel.js aún apunta a Cloudflare Pages; el proyecto se desvinculó');
 }
 
 // 6) Los enlaces se entregan al <is-cdn-snippet> como `config`, no se pintan
 //    sueltos en la página: cada snippet decide si los muestra.
-if (!/setAttribute\('config'/.test(chrome)) {
-  failures.push('preview-chrome.js no pasa los enlaces al <is-cdn-snippet> por `config`');
+if (!/setAttribute\('config'/.test(panel)) {
+  failures.push('cdn-panel.js no pasa los enlaces al <is-cdn-snippet> por `config`');
 }
 const snippet = readFileSync(join(root, 'src', 'components', 'feedback', 'cdn-snippet.js'), 'utf8');
 if (!/#renderDocs/.test(snippet) || !/cdn__docs/.test(snippet)) {

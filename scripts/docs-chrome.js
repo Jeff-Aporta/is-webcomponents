@@ -26,7 +26,9 @@ const addCopy = (pre) => {
 
   const btn = document.createElement('is-copy-button');
   btn.className = 'code-block__copy';
-  btn.setAttribute('value', pre.textContent);
+  // `data-cm-source` es el texto ya dedentado por el highlighter. Sin él se
+  // copiaría la indentación heredada del markup del preview.
+  btn.setAttribute('value', pre.dataset.cmSource ?? pre.textContent);
   btn.setAttribute('copy-label', 'Copiar');
   btn.setAttribute('success-label', 'Copiado');
   btn.setAttribute('tooltip-placement', 'left');
@@ -36,9 +38,14 @@ const addCopy = (pre) => {
 
 const boot = () => {
   // El bloque CDN lo pinta <is-cdn-snippet> (auto-inyectado por
-  // preview-chrome.js). Aquí solo queda el botón de copiar de los <pre>.
+  // cdn-panel.js). Aquí solo queda el botón de copiar de los <pre>.
   document.querySelectorAll('pre.code').forEach(addCopy);
 };
+
+// Los `<pre>` llegan con el preview, no con el HTML de la página: cada vez que
+// `<is-preview-component>` monta uno hay que barrer de nuevo. `addCopy()` es
+// idempotente (`data-copy-ready`), así que repetir el barrido no duplica nada.
+document.addEventListener('is-preview-ready', boot);
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot, { once: true });

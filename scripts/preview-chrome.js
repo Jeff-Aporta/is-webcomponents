@@ -5,18 +5,15 @@
  * «Guardar» (y se copia al portapapeles).
  * Embebido (s.embed / data-embed): oculta controles; aplica is-context del parent.
  *
- * Además inyecta automáticamente un `<is-cdn-snippet>` al final de la página
- * del componente, leyendo tag/categoría desde el nombre del archivo y el
- * `manifest.js` importado aquí. Los snippets ya no viven en el sidebar — la
- * nav solo lista los componentes.
+ * El bloque «Consumo por CDN» ya no se inyecta aquí: vive en `cdn-panel.js`,
+ * que lo monta con el tag del preview y no con el nombre del archivo. Cada
+ * página lo carga por su cuenta, igual que este módulo.
  */
 import '../src/components/feedback/theme-toggle.js';
 import '../src/components/actions/button.js';
 import '../src/components/actions/button-group.js';
 import '../src/components/media/icon.js';
 import '../src/components/actions/copy-button.js';
-import '../src/components/feedback/cdn-snippet.js';
-import components from '../manifest.js';
 
 const THEMES = new Set(['light', 'dark']);
 const PALETTES = new Set(['insoft', 'contapyme', 'agrowin']);
@@ -90,92 +87,6 @@ addEventListener('message', ({ data, origin }) => {
   if (data.palette) applyPalette(data.palette);
 });
 
-/**
- * Inyecta un <is-cdn-snippet> al final del contenedor principal con los
- * enlaces del componente actual. Si la página no es de un componente (p. ej.
- * `home.html`) o no se encuentra en el manifest, no hace nada.
- *
- * Se monta una sola vez por página; si el usuario ya escribió un
- * `<is-cdn-snippet>` a mano, no lo duplica.
- */
-function mountCdnSnippet() {
-  if (document.querySelector('is-cdn-snippet[data-auto-cdn]')) return;
-
-  const file = location.pathname.split('/').pop() || '';
-  const m = /^is-([a-z0-9-]+)\.html$/i.exec(file);
-  if (!m) return;
-
-  // tag canónico: is-<name>; algunos componentes comparten página (p. ej.
-  // is-tab + is-tab-panel). Cuando hay varias entradas con la misma `page`,
-  // el panel del componente se completa con el primero; las filas se siguen
-  // construyendo por tag individual, así que no perdemos información.
-  //
-  // El manifest guarda `page` folderizado (e.g. `actions/is-button.html`).
-  // Comparamos por basename para que coincida tanto si el `page` viene
-  // con categoria como si viene solo con el nombre de archivo.
-  const matches = components.filter((c) => (c.page || '').split('/').pop() === file);
-  if (!matches.length) return;
-
-  const host = document.querySelector('is-main.main, main.main');
-  if (!host) return;
-
-  const snippet = document.createElement('is-cdn-snippet');
-  snippet.dataset.autoCdn = '1';
-  snippet.setAttribute('tag', matches[0].tag);
-  snippet.setAttribute('category', matches[0].category || '');
-  snippet.setAttribute('title', `CDN · ${matches[0].title || matches[0].tag}`);
-  // Los enlaces a la documentación viajan como `config` del propio snippet:
-  // es él quien decide si los pinta. Son opcionales, no obligatorios.
-  snippet.setAttribute('config', JSON.stringify({ docs: llmDocs(matches[0]) }));
-  host.appendChild(snippet);
-}
-
-/**
- * Enlaces a los LLM.md del REPO tal cual, sin copia en dist. Se usa
- * raw.githubusercontent porque es la única de las tres rutas que responde
- * `text/plain`, así que el navegador MUESTRA el texto al entrar; jsDelivr y
- * GitHub Pages lo mandan como `text/markdown` y lo descargan. Verificado con
- * curl sobre las tres. Para un fetch cualquiera de ellas sirve.
- *
- * Antes esto apuntaba a `../LLM.md`, o sea `previews/LLM.md`, que no existe:
- * el enlace daba 404 en blanco.
- *
- * La ruta de la categoría se deriva del `script` del manifest, NO del nombre
- * de la categoría: no son lo mismo. Los tags de `data-viz` viven repartidos
- * entre `components/charts/` y `components/data-viz/`, así que componer
- * `components/<categoria>/LLM.md` daba rutas inexistentes.
- *
- * El "índice global" apunta a `components/LLM.md`, NO al `LLM.md` de la raíz:
- * son documentos distintos con audiencias distintas. El de la raíz son
- * convenciones internas del repo (cómo se construye, qué bugs ya se
- * cometieron) — nada de eso sirve para CONSUMIR un componente. `components/
- * LLM.md` es el catálogo real: tabla de categorías con sus LLM.md y el
- * inventario completo de tags. Confundirlos manda a un LLM consumidor a leer
- * notas de desarrollo del repo en vez de la documentación de la API.
- */
-const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src';
-
-function llmDocs(entry) {
-  // script → ruta fuente relativa al repo (p. ej. components/actions/button.js)
-  const scriptPath = (entry.script || '')
-    .replace(/^\.\.\/\.\.\//, '')
-    .replace(/^\.\.\//, '');
-  const folder = scriptPath.replace(/\/[^/]+\.js$/, '');
-  const moduleMd = scriptPath.replace(/\.js$/, '.md');
-  const docs = [];
-  if (moduleMd && moduleMd !== scriptPath) {
-    docs.push({ label: 'Módulo', url: `${LLM_BASE}/${moduleMd}` });
-  }
-  if (folder) {
-    docs.push({
-      label: `Categoría ${entry.category || ''}`.trim(),
-      url: `${LLM_BASE}/${folder}/LLM.md`,
-    });
-  }
-  docs.push({ label: 'Índice global', url: `${LLM_BASE}/components/LLM.md` });
-  return docs;
-}
-
 function mount() {
   if (document.getElementById('previewChrome')) return;
 
@@ -213,10 +124,17 @@ function mount() {
   if (main) main.prepend(bar);
   else document.body.appendChild(bar);
 
+  // Montar un preview vacía el main, y la barra se va con él. Volver a
+  // ponerla es más simple que sacarla de ahí: su CSS la posiciona respecto
+  // al scroller del contenido.
+  document.addEventListener('is-preview-ready', () => {
+    const host = document.querySelector('is-main.main, main.main');
+    if (host && !bar.isConnected) host.prepend(bar);
+  });
+
   if (embedded) {
     bar.hidden = true;
     bar.setAttribute('inert', '');
-    mountCdnSnippet();
     return;
   }
 
@@ -261,13 +179,10 @@ function mount() {
       }, 1600);
     }
   });
-
-  mountCdnSnippet();
 }
 
 await customElements.whenDefined('is-theme-toggle');
 await customElements.whenDefined('is-button');
-await customElements.whenDefined('is-cdn-snippet');
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', mount, { once: true });
 } else {

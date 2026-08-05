@@ -51,6 +51,46 @@ Toda la documentación/demo vive en JSON con interface compartida
 
 `kind` cerrados: `demo | callout | code | html | table | lede`.
 
+### Texto vs markup en los bloques
+
+El render pinta unos campos con `textContent` y otros con `innerHTML`. Meter
+markup donde va texto no da error: se lee literal en pantalla.
+
+| Campo | Se pinta con | Qué admite |
+| --- | --- | --- |
+| `code` (kind `code`) | `pre.textContent` | Solo el código. El color lo pone CodeMirror |
+| `columns[]` (kind `table`) | `th.textContent` | Solo la etiqueta de la columna |
+| `rows[][]`, `html`, `lede` | `innerHTML` | Markup y entidades (`&lt;`) |
+
+`lang` es opcional y solo vale `html | js | css` (y sus alias). Si sobra, mejor
+omitirlo: `resolveMode()` deduce el modo del texto. Lo que **no** vale es
+mentirlo — `lang: "html"` sobre JavaScript hace que CodeMirror tokenice como
+htmlmixed, que no produce ni un token, y el bloque sale sin una gota de color.
+`tests/preview-blocks.test.mjs` vigila las tres cosas.
+
+## El contenido llega después: `is-preview-ready`
+
+El docs es UNA página que monta los previews desde JSON, así que cuando los
+módulos de `scripts/` arrancan todavía no hay nada que decorar. Al terminar de
+montar, `is-preview-component` emite `is-preview-ready` (bubbles + composed, con
+`detail.tag`) y ahí se reengancha todo lo que decora el contenido:
+
+| Módulo | Qué hace al oírlo |
+| --- | --- |
+| `highlight-pre.js` | Repinta los `pre.code` del preview nuevo |
+| `docs-chrome.js` | Pone el botón de copiar en esos `<pre>` |
+| `cdn-panel.js` | Monta el `<is-cdn-snippet>` del componente |
+| `preview-chrome.js` | Devuelve la barra de tema/paleta al `main` |
+
+Dos detalles que se pagan caro si se olvidan: `renderDefinition()` **vacía** el
+`main`, así que lo que se inyecte ahí hay que remontarlo en cada preview (los
+handlers son idempotentes); y el tag sale de `detail.tag`, nunca de la ruta —
+`location.pathname` es `index.html` o `_shell.html`, no hay una página por
+componente. Así se perdió el panel «Consumo por CDN» de todos los componentes.
+
+`tests/preview-ready-hooks.test.mjs` verifica el emisor, los cuatro oyentes y
+que las dos páginas carguen `cdn-panel.js`.
+
 ## Páginas completas (el home)
 
 Un preview normal es la ficha de un componente y le basta el chrome. Una página
@@ -96,6 +136,10 @@ node scripts/migrate-previews-to-json.mjs   # solo si reaparecen HTML
 - `tests/preview-paths.test.mjs` — refs de `_shell.html`
 - `tests/home-invariants.test.mjs` — estructura del home: envoltorios, ids que
   consulta el behavior y que el behavior compile
+- `tests/preview-blocks.test.mjs` — texto vs markup en `code` y `columns`, y
+  `lang` coherente con el código
+- `tests/preview-ready-hooks.test.mjs` — quién emite y quién escucha
+  `is-preview-ready`
 
 Tras tocar el kit hay que reconstruir `dist/`: `all.min.js` importa
 `layout/preview-component.min.js`, ese bundle registra `is-preview-component`

@@ -10,6 +10,7 @@
  */
 import {
   ensureCodeMirror,
+  isReady,
   paint,
   reapplyTheme,
   softFormat,
@@ -17,6 +18,26 @@ import {
 } from '../src/components/_shared/highlight-code.js';
 
 export { paint, softFormat, reapplyTheme };
+
+/**
+ * El docs ya no es HTML estático: `<is-preview-component>` monta cada preview
+ * cuando su JSON termina de bajar, así que el barrido del arranque solo
+ * alcanza a los `<pre>` que existieran en ese instante. Con CodeMirror en
+ * caché ese barrido gana la carrera y el código se queda sin colorear.
+ *
+ * Cuando CodeMirror ya está listo se pinta en el MISMO turno: el botón de
+ * copiar de `docs-chrome.js` escucha el mismo evento después de este listener
+ * y lee `data-cm-source`, el texto ya dedentado.
+ */
+const repintar = () => {
+  if (isReady()) {
+    paint();
+    return;
+  }
+  ensureCodeMirror().then(() => paint()).catch(console.error);
+};
+
+document.addEventListener('is-preview-ready', repintar);
 
 const boot = async () => {
   await ensureCodeMirror();
