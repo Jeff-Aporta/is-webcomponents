@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-palette-selector · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+    .event-log {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--is-border);
+      border-radius: 8px;
+      background: var(--is-bg-soft);
+      font-family: var(--is-mono);
+      font-size: 0.8rem;
+      min-height: 2em;
+      color: var(--is-text);
+    }
+    .event-log .hint { opacity: 0.6; }
+
+    /* --- Trigger tipo "logo" — el consumer pone SU HTML --- */
+    .logo-trigger {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0;
+      padding: 0.45em 0.85em;
+      background: var(--is-logo-bg, #fff);
+      color: var(--is-logo-fg, #111);
+      border-radius: 0.45em;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      text-transform: lowercase;
+      transition: filter 120ms ease, transform 120ms ease;
+    }
+    .logo-trigger:hover { filter: brightness(1.05); }
+    .logo-trigger:active { transform: translateY(1px); }
+    .logo-trigger__lead { color: var(--is-text, #111); }
+    .logo-trigger__accent { color: var(--is-accent, dodgerblue); }
+    .logo-trigger__caret {
+      margin-left: 0.5em;
+      font-size: 0.95em;
+      opacity: 0.7;
+      color: var(--is-text, #111);
+    }
+
+    /* --- Items del dropdown — el consumidor define el HTML
+       y el CSS local para esos items. Estos estilos no pueden
+       vivir en palette-selector.css porque chaque consumer tiene su
+       propio look. --- */
+    .my-option {
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      padding: 0.5em 0.7em;
+      border-radius: 0.4em;
+      cursor: pointer;
+      font-size: 0.875em;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      transition: background 100ms ease;
+    }
+    .my-option:hover { background: var(--is-control-bg-hover, #e9ecef); }
+    .my-option[aria-selected="true"] { background: color-mix(in srgb, var(--is-accent) 14%, transparent); }
+    .my-option__swatch {
+      width: 0.85em;
+      height: 0.85em;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--is-text) 18%, transparent);
+    }
+    .my-option__lead { color: var(--is-text, #111); font-weight: 800; }
+    .my-option__accent { font-weight: 800; } /* color puesto por el componente */
+    .my-option__check {
+      margin-left: auto;
+      width: 1em;
+      height: 1em;
+      color: var(--is-accent);
+    }
+
+    .token-option {
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      padding: 0.45em 0.65em;
+      border-radius: 0.4em;
+      cursor: pointer;
+      font-size: 0.875em;
+      transition: background 100ms ease;
+    }
+    .token-option:hover { background: var(--is-control-bg-hover, #e9ecef); }
+    .token-option[aria-selected="true"] { background: color-mix(in srgb, var(--is-accent) 14%, transparent); }
+    .token-option__name { font-weight: 600; }
+    .token-option__hash {
+      font-family: var(--is-mono, monospace);
+      font-size: 0.75em;
+      opacity: 0.55;
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-palette-selector">
+      <section class="section" id="intro">
+        <h2>&lt;is-palette-selector&gt;</h2>
+        <p class="lede">Selector visual de paletas de marca. Por defecto expone las 3 paletas de <code class="code">styles/palettes.css</code>; el consumidor puede pasar su propio array JSON para usar SU marca y SU CSS, y opcionalmente inyectar un trigger personalizado en el slot <code class="code">trigger</code>.</p>
+        <is-demo class="demo">
+          <div class="row">
+            <is-palette-selector id="defaultPalette"></is-palette-selector>
+            <is-theme-toggle id="defaultTheme"></is-theme-toggle>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-palette-selector&gt;&lt;/is-palette-selector&gt;</pre>
+      </section>
+
+      <section class="section" id="custom-trigger">
+        <h2>Trigger personalizado (slot)</h2>
+        <p class="lede">El <code class="code">slot="trigger"</code> del componente permite al consumidor inyectar SU HTML para el botón. Esto es ideal cuando el botón lleva el logo de marca (dos mitades con colores) o cualquier look que el trigger interno no represente bien.</p>
+        <is-demo class="demo">
+          <div class="row">
+            <is-palette-selector id="logoPalette">
+              <button type="button" slot="trigger" class="logo-trigger" aria-label="Elegir paleta de marca">
+                <span class="logo-trigger__lead" data-role="lead">in</span><span class="logo-trigger__accent" data-role="accent">soft</span>
+                <is-icon class="logo-trigger__caret" icon="mdi:chevron-down" aria-hidden="true"></is-icon>
+              </button>
+            </is-palette-selector>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-palette-selector&gt;
+  &lt;button slot="trigger" class="logo-trigger"&gt;
+    &lt;span class="logo-trigger__lead"&gt;in&lt;/span&gt;
+    &lt;span class="logo-trigger__accent"&gt;soft&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/is-palette-selector&gt;</pre>
+        <p class="lede">El sitio actualiza el contenido del trigger cuando cambia la paleta (lead/accent pueden cambiar con la marca). Mira el c\u00f3digo demo para ver c\u00f3mo se sincroniza.</p>
+      </section>
+
+      <section class="section" id="custom">
+        <h2>Paletas personalizadas</h2>
+        <p class="lede">Cada consumidor pasa su propio array JSON en el atributo <code class="code">palettes</code>. Si una paleta incluye <code class="code">css</code>, el componente inyecta la hoja bajo demanda al seleccionarla.</p>
+        <is-demo class="demo">
+          <div class="row">
+            <is-palette-selector id="customPalette" palettes='[
+              {"value":"acme","label":"Acme Corp","accent":"#e03131","lead":"ac","accentLabel":"me","leadColor":"#111","accentColor":"#e03131","bg":"#fff","fg":"#111"},
+              {"value":"ocean","label":"Ocean","accent":"#0ea5e9","lead":"o","accentLabel":"cean","leadColor":"#111","accentColor":"#0ea5e9","bg":"#fff","fg":"#111"},
+              {"value":"forest","label":"Forest","accent":"#22c55e","lead":"f","accentLabel":"orest","leadColor":"#111","accentColor":"#22c55e","bg":"#fff","fg":"#111"},
+              {"value":"dusk","label":"Dusk","accent":"#a855f7","lead":"d","accentLabel":"usk","leadColor":"#111","accentColor":"#a855f7","bg":"#fff","fg":"#111"}
+            ]'>
+              <button type="button" slot="trigger" class="logo-trigger" aria-label="Elegir paleta">
+                <span class="logo-trigger__lead" data-role="lead">ac</span><span class="logo-trigger__accent" data-role="accent">me</span>
+                <is-icon class="logo-trigger__caret" icon="mdi:chevron-down" aria-hidden="true"></is-icon>
+              </button>
+            </is-palette-selector>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-palette-selector palettes='[
+  {"value":"acme","label":"Acme Corp","accent":"#e03131","lead":"ac","accentLabel":"me"},
+  {"value":"ocean","label":"Ocean","accent":"#0ea5e9","lead":"o","accentLabel":"cean"}
+]'&gt;
+  &lt;button slot="trigger" class="logo-trigger"&gt;
+    &lt;span data-role="lead"&gt;ac&lt;/span&gt;
+    &lt;span data-role="accent"&gt;me&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/is-palette-selector&gt;</pre>
+      </section>
+
+      <section class="section" id="custom-option">
+        <h2>Items personalizados (slot "option")</h2>
+        <p class="lede">El <code class="code">slot="option"</code> permite al consumidor poner un <code class="code">&lt;template&gt;</code> con el HTML para los items del dropdown. El componente clona esa plantilla por cada paleta y bindea <code class="code">data-palette</code>, <code class="code">aria-selected</code>, reemplaza tokens <code class="code">{value}</code>, <code class="code">{label}</code>, <code class="code">{accent}</code>, etc. y rellena elementos con <code class="code">data-role="lead|accent|swatch|label|check"</code> con los campos de la paleta.</p>
+        <is-demo class="demo">
+          <div class="row">
+            <is-palette-selector id="customOptionPalette">
+              <template slot="option">
+                <li class="my-option">
+                  <span class="my-option__swatch" data-role="swatch"></span>
+                  <span class="my-option__lead" data-role="lead"></span><span class="my-option__accent" data-role="accent"></span>
+                  <is-icon class="my-option__check" data-role="check" icon="mdi:check-bold" aria-hidden="true"></is-icon>
+                </li>
+              </template>
+            </is-palette-selector>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-palette-selector&gt;
+  &lt;template slot="option"&gt;
+    &lt;li class="my-option"&gt;
+      &lt;span data-role="swatch"&gt;&lt;/span&gt;
+      &lt;span data-role="lead"&gt;&lt;/span&gt;
+      &lt;span data-role="accent"&gt;&lt;/span&gt;
+      &lt;is-icon data-role="check" icon="mdi:check-bold"&gt;&lt;/is-icon&gt;
+    &lt;/li&gt;
+  &lt;/template&gt;
+&lt;/is-palette-selector&gt;</pre>
+        <p class="lede">El <code class="code">data-role</code> es un atajo: el componente rellena el contenido y color. Tambi\u00e9n puedes usar <code class="code">{tokens}</code> en atributos y texto directamente: <code class="code">{label}</code>, <code class="code">{accent}</code>, <code class="code">{value}</code>, <code class="code">{lead}</code>, <code class="code">{accentLabel}</code>, <code class="code">{leadColor}</code>, <code class="code">{accentColor}</code>, <code class="code">{bg}</code>, <code class="code">{fg}</code>.</p>
+      </section>
+
+      <section class="section" id="custom-option-tokens">
+        <h2>Items con tokens <code class="code">{<span></span>}</code></h2>
+        <p class="lede">El consumidor puede controlar el render con tokens <code class="code">{label}</code> / <code class="code">{accent}</code> en atributos y texto. Por ejemplo, podemos pintar el label con color accent y un atributo <code class="code">style="background: {accent}"</code>:</p>
+        <is-demo class="demo">
+          <div class="row">
+            <is-palette-selector id="customOptionTokens">
+              <template slot="option">
+                <li class="token-option">
+                  <span class="token-option__name">{label}</span>
+                  <span class="token-option__hash">#{value}</span>
+                </li>
+              </template>
+            </is-palette-selector>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;template slot="option"&gt;
+  &lt;li class="token-option"&gt;
+    &lt;span class="token-option__name" style="color: {accent}"&gt;{label}&lt;/span&gt;
+    &lt;span class="token-option__hash"&gt;#{value}&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/template&gt;</pre>
+      </section>
+
+      <section class="section" id="events">
+        <h2>Eventos</h2>
+        <p class="lede">El componente emite <code class="code">is-palette-change</code> cuando el usuario selecciona una paleta. <code class="code">detail.value</code> trae el identificador, <code class="code">detail.palette</code> trae el objeto entero.</p>
+        <is-demo class="demo">
+          <is-palette-selector id="evPalette"></is-palette-selector>
+          <div class="event-log" id="evLog"><div class="hint">Selecciona una paleta para ver el evento.</div></div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>palettes</code></td><td>JSON string</td><td>3 paletas InSoft / ContaPyme / AgroWin</td></tr>
+            <tr><td><code>value</code></td><td>string</td><td>la primera del array</td></tr>
+            <tr><td><code>storage-key</code></td><td>string</td><td><code>is-palette</code></td></tr>
+            <tr><td><code>aria-label</code></td><td>string</td><td>Elegir paleta</td></tr>
+          </tbody>
+        </table>
+        <h3>Slots</h3>
+        <table class="ref">
+          <thead><tr><th>Slot</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>trigger</code></td><td>Sustituye el botón trigger interno. El consumidor pone SU HTML; el componente aún abre/cierra el menu y emite <code>is-palette-change</code>.</td></tr>
+          </tbody>
+        </table>
+        <h3>Campos del objeto <code>palette</code></h3>
+        <table class="ref">
+          <thead><tr><th>Campo</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td>identificador (requerido)</td></tr>
+            <tr><td><code>label</code></td><td>texto en el menu y el trigger interno</td></tr>
+            <tr><td><code>accent</code></td><td>color del swatch en el menu</td></tr>
+            <tr><td><code>css</code></td><td>URL de <code>&lt;link rel="stylesheet"&gt;</code> cargado al seleccionar</td></tr>
+            <tr><td><code>lead</code> + <code>accentLabel</code></td><td>dos mitades para el trigger interno (estilo logo)</td></tr>
+            <tr><td><code>leadColor</code> + <code>accentColor</code></td><td>colores de las dos mitades</td></tr>
+            <tr><td><code>bg</code> + <code>fg</code></td><td>background y color del trigger interno</td></tr>
+          </tbody>
+        </table>
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-palette-change</code></td><td><code>{ value, palette }</code></td></tr>
+          </tbody>
+        </table>
+        <h3>Mutaciones en el documento</h3>
+        <ul>
+          <li><code>&lt;html data-palette="X"&gt;</code> — aplica la paleta activa</li>
+          <li><code>localStorage["is-palette"] = X</code> — persiste la elección</li>
+        </ul>
+      </section>
+    </is-main>
+  </is-split-panel>
+
+  <script>
+    // Log del evento del último selector para la sección "Eventos".
+    const ev = document.getElementById('evPalette');
+    const evLog = document.getElementById('evLog');
+    ev?.addEventListener('is-palette-change', (e) => {
+      evLog.innerHTML = '';
+      const line = document.createElement('div');
+      line.textContent = `is-palette-change → value="${e.detail.value}" label="${e.detail.palette.label}"`;
+      evLog.appendChild(line);
+    });
+
+    // Actualizar el contenido del slot trigger cuando cambia la paleta
+    // (lead/accent se sincronizan con la paleta activa).
+    const LEAD = { insoft: 'in', contapyme: 'conta', agrowin: 'agro' };
+    const ACCENT = { insoft: 'soft', contapyme: 'pyme', agrowin: 'win' };
+    const ACCENT_COLOR = { insoft: '#e03131', contapyme: 'dodgerblue', agrowin: 'yellowgreen' };
+
+    const CUSTOM_LEAD = { acme: 'ac', ocean: 'o', forest: 'f', dusk: 'd' };
+    const CUSTOM_ACCENT = { acme: 'me', ocean: 'cean', forest: 'orest', dusk: 'usk' };
+    const CUSTOM_ACCENT_COLOR = { acme: '#e03131', ocean: '#0ea5e9', forest: '#22c55e', dusk: '#a855f7' };
+
+    const syncLogoTrigger = (selectorId, leadMap, accentMap, accentColorMap) => {
+      const sel = document.getElementById(selectorId);
+      if (!sel) return;
+      const update = () => {
+        const lead = sel.querySelector('[data-role="lead"]');
+        const accent = sel.querySelector('[data-role="accent"]');
+        if (lead) lead.textContent = leadMap[sel.value] || sel.value;
+        if (accent) {
+          accent.textContent = accentMap[sel.value] || '';
+          accent.style.color = accentColorMap[sel.value] || '';
+        }
+      };
+      sel.addEventListener('is-palette-change', update);
+      update();
+    };
+
+    syncLogoTrigger('logoPalette', LEAD, ACCENT, ACCENT_COLOR);
+    syncLogoTrigger('customPalette', CUSTOM_LEAD, CUSTOM_ACCENT, CUSTOM_ACCENT_COLOR);
+  </script>
+</body>
+</html>

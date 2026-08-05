@@ -54,7 +54,7 @@ try {
 // Cargar indices locales.
 async function loadIndex(prefix) {
   try {
-    const txt = await readFile(join(root, 'assets', 'icons', `${prefix}.json`), 'utf8');
+    const txt = await readFile(join(root, 'src', 'assets', 'icons', `${prefix}.json`), 'utf8');
     return new Set(JSON.parse(txt).icons || []);
   } catch {
     return null;
@@ -68,7 +68,7 @@ async function getIndex(prefix) {
 }
 
 // Recoger un preview que tenga varios iconos locales (no caer al CDN).
-const previewsDir = join(root, 'previews');
+const previewsDir = join(root, 'src', 'previews');
 const previews = await walk(previewsDir);
 const candidates = [];
 for (const f of previews) {

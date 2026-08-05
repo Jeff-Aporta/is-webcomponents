@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-transfer · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-transfer / is-transfer-item de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-transfer">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-transfer&gt;</h2>
+        <p class="lede">
+          Doble lista de selección tipo Material/Ant. Mueve elementos entre
+          origen y destino con botones, click individual, filtro de búsqueda y
+          límite máximo configurable.
+        </p>
+
+        <is-demo class="demo">
+          <is-transfer id="tr1" source-title="Disponibles" target-title="Asignados" searchable>
+            <is-transfer-item value="a">Alpha</is-transfer-item>
+            <is-transfer-item value="b" selected>Beta</is-transfer-item>
+            <is-transfer-item value="c">Gamma</is-transfer-item>
+            <is-transfer-item value="d">Delta</is-transfer-item>
+            <is-transfer-item value="e">Epsilon</is-transfer-item>
+            <is-transfer-item value="f">Zeta</is-transfer-item>
+            <is-transfer-item value="g">Eta</is-transfer-item>
+            <is-transfer-item value="h">Theta</is-transfer-item>
+          </is-transfer>
+          <p id="tr1Log">Seleccionados: <code class="code">b</code></p>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-transfer</span> <span class="attr">searchable</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-transfer-item</span> <span class="attr">value</span>=<span class="val">"a"</span><span class="tag">&gt;</span>Alpha<span class="tag">&lt;/is-transfer-item&gt;</span>
+  <span class="tag">&lt;is-transfer-item</span> <span class="attr">value</span>=<span class="val">"b"</span> <span class="attr">selected</span><span class="tag">&gt;</span>Beta<span class="tag">&lt;/is-transfer-item&gt;</span>
+  <span class="tag">&lt;is-transfer-item</span> <span class="attr">value</span>=<span class="val">"c"</span><span class="tag">&gt;</span>Gamma<span class="tag">&lt;/is-transfer-item&gt;</span>
+  …
+<span class="tag">&lt;/is-transfer&gt;</span></pre>
+      </section>
+
+      <section class="section" id="max-target">
+        <h2>Límite en target</h2>
+        <p class="lede">Con <code class="code">max-target="3"</code> el botón hacia target se desactiva al llegar.</p>
+
+        <is-demo class="demo">
+          <is-transfer max-target="3" source-title="Suscriptores" target-title="Newsletter (máx 3)" searchable>
+            <is-transfer-item value="a">Alice</is-transfer-item>
+            <is-transfer-item value="b">Bob</is-transfer-item>
+            <is-transfer-item value="c" selected>Carol</is-transfer-item>
+            <is-transfer-item value="d">David</is-transfer-item>
+            <is-transfer-item value="e">Eve</is-transfer-item>
+            <is-transfer-item value="f">Frank</is-transfer-item>
+          </is-transfer>
+        </is-demo>
+      </section>
+
+      <section class="section" id="disabled">
+        <h2>Disabled</h2>
+        <p class="lede">Con <code class="code">disabled</code> en algunos items.</p>
+
+        <is-demo class="demo">
+          <is-transfer source-title="Permisos" target-title="Asignados">
+            <is-transfer-item value="read">read</is-transfer-item>
+            <is-transfer-item value="write" selected>write</is-transfer-item>
+            <is-transfer-item value="delete" disabled>delete</is-transfer-item>
+            <is-transfer-item value="admin">admin</is-transfer-item>
+          </is-transfer>
+        </is-demo>
+      </section>
+
+      <section class="section" id="plain">
+        <h2>Sin chrome</h2>
+        <p class="lede">Sin botones ni headings.</p>
+
+        <is-demo class="demo">
+          <is-transfer without-buttons without-headings searchable>
+            <is-transfer-item value="rojo">Rojo</is-transfer-item>
+            <is-transfer-item value="verde" selected>Verde</is-transfer-item>
+            <is-transfer-item value="azul">Azul</is-transfer-item>
+            <is-transfer-item value="amarillo">Amarillo</is-transfer-item>
+          </is-transfer>
+        </is-demo>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-transfer&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>source-title</code></td><td>string</td><td>Disponibles</td><td>Título del panel origen.</td></tr>
+            <tr><td><code>target-title</code></td><td>string</td><td>Asignados</td><td>Título del panel destino.</td></tr>
+            <tr><td><code>searchable</code></td><td>boolean</td><td>false</td><td>Muestra campo de búsqueda.</td></tr>
+            <tr><td><code>without-buttons</code></td><td>boolean</td><td>false</td><td>Oculta los botones de mover.</td></tr>
+            <tr><td><code>without-headings</code></td><td>boolean</td><td>false</td><td>Oculta los headers.</td></tr>
+            <tr><td><code>max-target</code></td><td>number</td><td>—</td><td>Máximo de items en target.</td></tr>
+          </tbody>
+        </table>
+
+        <h3><code class="code">&lt;is-transfer-item&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td>string</td><td>—</td><td>Identificador del item.</td></tr>
+            <tr><td><code>selected</code></td><td>boolean</td><td>false</td><td>Está en target.</td></tr>
+            <tr><td><code>disabled</code></td><td>boolean</td><td>false</td><td>No se puede mover.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-transfer-change</code></td><td>Cambia selección. <code>detail: { item, source, target, values }</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-transfer</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#max-target">Max target</a>
+        <a href="#disabled">Disabled</a>
+        <a href="#plain">Sin chrome</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const tr = document.getElementById('tr1');
+    const log = document.getElementById('tr1Log');
+    tr.addEventListener('is-transfer-change', (e) => {
+      log.innerHTML = `Seleccionados: <code class="code">${e.detail.values.join(', ') || '—'}</code>`;
+    });
+  </script>
+</body>
+</html>

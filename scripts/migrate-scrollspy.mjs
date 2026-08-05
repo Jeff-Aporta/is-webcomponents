@@ -19,7 +19,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const previewsDir = join(root, 'previews');
+const previewsDir = join(root, 'src', 'previews');
 
 const SIDEBAR_NAV_OPEN = /(\s*)<nav>(\s*)/g;
 const SIDEBAR_NAV_CLOSE = /(\s*)<\/nav>/g;

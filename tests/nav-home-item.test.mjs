@@ -24,7 +24,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
 const index = await readFile(join(root, 'index.html'), 'utf8');
-const shellCss = await readFile(join(root, 'styles', 'shell.css'), 'utf8');
+const shellCss = await readFile(join(root, 'src', 'styles', 'shell.css'), 'utf8');
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

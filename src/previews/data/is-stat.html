@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-stat · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-stat (KPI Card) de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-stat">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-stat&gt;</h2>
+        <p class="lede">
+          Tarjeta KPI para dashboards: label, número principal, helper text,
+          trend (subida/bajada) e icono. Detecta automáticamente la dirección
+          del trend según el signo del valor.
+        </p>
+
+        <is-demo class="demo">
+          <div class="stats-grid">
+            <is-stat label="Ingresos" value="€ 1.249,00" helper="vs mes anterior" trend="+12.5%" icon="mdi:cash-multiple"></is-stat>
+            <is-stat label="Usuarios activos" value="3.421" helper="últimas 24h" trend="+8.1%" icon="mdi:account-group" color="brand"></is-stat>
+            <is-stat label="Tasa de conversión" value="2.4%" helper="vs objetivo" trend="-0.3%" icon="mdi:target" color="danger"></is-stat>
+            <is-stat label="Tickets abiertos" value="47" helper="12 críticos" trend="flat" icon="mdi:ticket-outline" color="warning"></is-stat>
+          </div>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-stat</span>
+  <span class="attr">label</span>=<span class="val">"Ingresos"</span>
+  <span class="attr">value</span>=<span class="val">"€ 1.249,00"</span>
+  <span class="attr">helper</span>=<span class="val">"vs mes anterior"</span>
+  <span class="attr">trend</span>=<span class="val">"+12.5%"</span>
+  <span class="attr">icon</span>=<span class="val">"mdi:cash-multiple"</span>
+<span class="tag">&gt;</span><span class="tag">&lt;/is-stat&gt;</span></pre>
+      </section>
+
+      <section class="section" id="sizes">
+        <h2>Tamaños</h2>
+        <p class="lede">small, medium, large.</p>
+
+        <is-demo class="demo">
+          <div class="stats-grid">
+            <is-stat style="font-size:0.85em" label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
+            <is-stat label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
+            <is-stat style="font-size:1.25em" label="Visitas" value="8.432" trend="+3.2%" icon="mdi:eye"></is-stat>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="variants">
+        <h2>Variantes</h2>
+        <p class="lede">brand, neutral, success, warning, danger.</p>
+
+        <is-demo class="demo">
+          <div class="stats-grid">
+            <is-stat color="brand" label="Brand" value="42" icon="mdi:star"></is-stat>
+            <is-stat color="neutral" label="Neutral" value="42" icon="mdi:cog"></is-stat>
+            <is-stat color="success" label="Success" value="98%" trend="+1.2%" icon="mdi:check"></is-stat>
+            <is-stat color="warning" label="Warning" value="12" trend="+4" icon="mdi:alert"></is-stat>
+            <is-stat color="danger" label="Danger" value="3" trend="-1" icon="mdi:close"></is-stat>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="dashboard">
+        <h2>Dashboard de ejemplo</h2>
+        <p class="lede">Cuatro stats juntos para una sección de dashboard.</p>
+
+        <is-demo class="demo">
+          <div class="stats-grid">
+            <is-stat label="MRR" value="€ 48.230" helper="Monthly recurring revenue" trend="+12.5%" icon="mdi:trending-up" color="success"></is-stat>
+            <is-stat label="Churn" value="1.8%" helper="Cancelaciones del mes" trend="-0.4%" icon="mdi:account-remove" color="danger"></is-stat>
+            <is-stat label="LTV" value="€ 1.249" helper="Promedio 12 meses" trend="+5.2%" icon="mdi:cash-multiple" color="brand"></is-stat>
+            <is-stat label="CAC" value="€ 89" helper="Coste de adquisición" trend="flat" icon="mdi:cart-outline"></is-stat>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-stat&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>label</code></td><td>string</td><td>—</td><td>Título del KPI.</td></tr>
+            <tr><td><code>value</code></td><td>string</td><td>—</td><td>Valor principal.</td></tr>
+            <tr><td><code>helper</code></td><td>string</td><td>—</td><td>Texto aclaratorio.</td></tr>
+            <tr><td><code>trend</code></td><td>string</td><td>—</td><td>Valor de cambio (e.g. "+12.5%").</td></tr>
+            <tr><td><code>trend-direction</code></td><td>up | down | flat</td><td>auto</td><td>Dirección manual.</td></tr>
+            <tr><td><code>icon</code></td><td>string</td><td>—</td><td>Iconify id.</td></tr>
+            <tr><td><code>variant</code></td><td>brand | neutral | success | warning | danger</td><td>neutral</td><td>Color.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-stat</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#sizes">Tamaños</a>
+        <a href="#variants">Variantes</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-data-grid · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .grid-tall { --is-grid-height: 30rem; }
+    .grid-short { --is-grid-height: 18rem; }
+    .demo-bar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }
+    .demo-bar button { font: inherit; font-size: .85em; padding: .35em .7em; border: 1px solid var(--is-border); border-radius: var(--is-radius-sm); background: var(--is-control-bg); color: inherit; cursor: pointer; }
+    .demo-bar button:hover { background: var(--is-control-bg-hover); }
+    .out { font-family: var(--is-mono); font-size: .8em; opacity: .85; min-height: 1.2em; }
+    .tag-cell { display: inline-flex; align-items: center; gap: .3em; padding: .1em .5em; border-radius: 1em; font-size: .8em; }
+    .tag-ok { background: rgb(47 158 68 / 18%); color: #51cf66; }
+    .tag-no { background: rgb(224 49 49 / 18%); color: #ff8787; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="240" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-data-grid">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-data-grid&gt;</h2>
+        <p class="lede">
+          Tabla de datos con la superficie de MUI X Data Grid: columnas tipadas, multi-orden, filtros con Y/O,
+          quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,
+          agrupación con agregación, tree data, pivot, virtualización y exportación.
+        </p>
+        <is-demo class="demo">
+          <is-data-grid id="g-full" class="grid-tall" show-toolbar quick-filter checkbox-selection
+            pagination page-size="10" page-size-options="10,25,50" editable undo-redo clipboard
+            tab-navigation="all"></is-data-grid>
+        </is-demo>
+        <p class="out" id="out-full"></p>
+        <p class="empty-note">
+          El snippet del botón <span class="icon-inline" aria-hidden="true"><is-icon icon="mdi:information-outline"></is-icon></span>
+          muestra sólo la etiqueta <code class="code">&lt;is-data-grid&gt;</code>; los datos y columnas se asignan
+          por JS justo debajo. Si lo quieres autocontenido, copia este bloque (incluye <code class="code">columns</code>,
+          <code class="code">rows</code> y <code class="code">aggregationModel</code> con los mismos 40 registros que
+          ves en la tabla):
+        </p>
+        <pre class="code" data-code-id="g-full" data-lang="html"></pre>
+      </section>
+
+      <section class="section" id="columns">
+        <h2>Columnas</h2>
+        <p class="lede">
+          Tipos nativos (<code>string</code>, <code>number</code>, <code>date</code>, <code>dateTime</code>,
+          <code>boolean</code>, <code>singleSelect</code>, <code>actions</code>) con su alineación, comparador y
+          operadores por defecto. <code>valueGetter</code> alimenta orden y filtro, <code>valueFormatter</code>
+          solo el texto y <code>renderCell</code> devuelve nodos.
+        </p>
+        <is-demo class="demo">
+          <is-data-grid id="g-cols" class="grid-short" header-filters></is-data-grid>
+        </is-demo>
+        <pre class="code" data-lang="javascript">grid.columns = [
+  { field: 'name', headerName: 'Nombre', flex: 1, minWidth: 140 },
+  { field: 'gross', headerName: 'Bruto', type: 'number' },
+  { field: 'taxRate', headerName: 'IVA', type: 'number',
+    valueGetter: (v) => v * 100, valueFormatter: (v) => `${v}%` },
+  { field: 'profit', headerName: 'Margen', type: 'number',
+    valueGetter: (v, row) => row.gross - row.costs },
+  { field: 'hired', headerName: 'Alta', type: 'date' },
+  { field: 'active', headerName: 'Activo', type: 'boolean',
+    renderCell: ({ value }) => {
+      const el = document.createElement('span');
+      el.className = `tag-cell ${value ? 'tag-ok' : 'tag-no'}`;
+      el.textContent = value ? 'activo' : 'baja';
+      return el;
+    } },
+  { field: 'role', headerName: 'Rol', type: 'singleSelect',
+    valueOptions: ['Dev', 'QA', 'PM'] },
+  { field: 'acciones', type: 'actions', getActions: ({ row }) => [
+    { label: 'Ver', icon: '👁', onClick: () => alert(row.name) },
+    { label: 'Borrar', icon: '🗑', showInMenu: true, onClick: () => grid.updateRows([]) },
+  ] },
+];</pre>
+      </section>
+
+      <section class="section" id="layout">
+        <h2>Ancho, anclaje y grupos</h2>
+        <p class="lede">
+          Arrastra el borde derecho de una cabecera para redimensionar (doble clic ajusta al contenido),
+          arrastra la cabecera para reordenar y usa el menú de columna para anclar a izquierda o derecha.
+          <code>columnGroupingModel</code> admite grupos anidados y <code>colSpan</code> une celdas.
+        </p>
+        <div class="demo-bar">
+          <button data-act="pin-left">Anclar ID a la izquierda</button>
+          <button data-act="pin-right">Anclar acciones a la derecha</button>
+          <button data-act="unpin">Desanclar todo</button>
+          <button data-act="autosize">Ajustar al contenido</button>
+          <button data-act="hide-city">Ocultar/mostrar Ciudad</button>
+        </div>
+        <is-demo class="demo">
+          <is-data-grid id="g-layout" class="grid-short"></is-data-grid>
+        </is-demo>
+        <pre class="code" data-lang="javascript">grid.columnGroupingModel = [
+  { groupId: 'persona', headerName: 'Persona', children: [
+    { groupId: 'ident', headerName: 'Identidad', children: [{ field: 'name' }, { field: 'email' }] },
+    { field: 'city' },
+  ] },
+  { groupId: 'dinero', headerName: 'Económico', children: [{ field: 'gross' }, { field: 'costs' }] },
+];
+grid.pinnedColumns = { left: ['id'], right: ['acciones'] };</pre>
+      </section>
+
+      <section class="section" id="editing">
+        <h2>Edición</h2>
+        <p class="lede">
+          Doble clic, <kbd>Enter</kbd>, <kbd>F2</kbd> o cualquier carácter entran en edición.
+          <kbd>Enter</kbd> confirma, <kbd>Tab</kbd> confirma y salta, <kbd>Esc</kbd> cancela.
+          <code>preProcessEditCellProps</code> valida en caliente y <code>processRowUpdate</code> confirma
+          (aquí rechaza nombres vacíos). Con <code>clipboard</code> y <code>undo-redo</code>:
+          <kbd>Ctrl+C</kbd>, <kbd>Ctrl+V</kbd>, <kbd>Ctrl+Z</kbd> y <kbd>Ctrl+Shift+Z</kbd>.
+        </p>
+        <div class="demo-bar">
+          <button data-act="edit-cell">Modo celda</button>
+          <button data-act="edit-row">Modo fila</button>
+          <button data-act="undo">Undo</button>
+          <button data-act="redo">Redo</button>
+        </div>
+        <is-demo class="demo">
+          <is-data-grid id="g-edit" class="grid-short" editable clipboard undo-redo cell-selection></is-data-grid>
+        </is-demo>
+        <p class="out" id="out-edit"></p>
+      </section>
+
+      <section class="section" id="selection">
+        <h2>Selección</h2>
+        <p class="lede">
+          Filas con <code>checkbox-selection</code> y <code>selection-mode</code> (single, multiple, none);
+          rangos de celdas con <code>cell-selection</code> (arrastra o <kbd>Shift</kbd>+clic).
+          Teclado: <kbd>Shift+Space</kbd> alterna fila, <kbd>Shift+↑↓</kbd> extiende, <kbd>Ctrl+A</kbd> todo,
+          <kbd>Ctrl+C</kbd> copia.
+        </p>
+        <div class="demo-bar">
+          <button data-act="select-all">Seleccionar todo</button>
+          <button data-act="select-none">Limpiar</button>
+          <button data-act="copy">Copiar selección</button>
+        </div>
+        <is-demo class="demo">
+          <is-data-grid id="g-select" class="grid-short" checkbox-selection cell-selection></is-data-grid>
+        </is-demo>
+        <p class="out" id="out-select"></p>
+      </section>
+
+      <section class="section" id="sorting">
+        <h2>Orden y filtros</h2>
+        <p class="lede">
+          Clic en la cabecera cicla <code>sorting-order</code>; <kbd>Ctrl</kbd> o <kbd>Shift</kbd>+clic añade
+          criterios (el número indica la prioridad). El panel de filtros combina reglas con Y/O, la fila de
+          <code>header-filters</code> filtra por columna y el quick filter exige todas las palabras.
+        </p>
+        <div class="demo-bar">
+          <button data-act="sort-multi">Orden múltiple por rol y bruto</button>
+          <button data-act="filter-set">Filtrar bruto &gt; 5000 Y activo</button>
+          <button data-act="filter-or">Cambiar a O</button>
+          <button data-act="filter-clear">Limpiar filtros</button>
+        </div>
+        <is-demo class="demo">
+          <is-data-grid id="g-sort" class="grid-short" show-toolbar quick-filter header-filters></is-data-grid>
+        </is-demo>
+        <p class="out" id="out-sort"></p>
+      </section>
+
+      <section class="section" id="grouping">
+        <h2>Agrupación, agregación y tree data</h2>
+        <p class="lede">
+          <code>rowGroupingModel</code> agrupa por columnas y <code>aggregationModel</code> resume
+          (<code>sum</code>, <code>avg</code>, <code>min</code>, <code>max</code>, <code>size</code>) tanto en la
+          fila de grupo como en el pie. Con <code>tree-data</code> más <code>getTreeDataPath</code> el árbol lo
+          define la propia fila. <kbd>→</kbd> / <kbd>←</kbd> y <kbd>Space</kbd> expanden y colapsan.
+        </p>
+        <div class="demo-bar">
+          <button data-act="group-city">Agrupar por ciudad</button>
+          <button data-act="group-city-role">Ciudad + rol</button>
+          <button data-act="group-none">Sin agrupar</button>
+          <button data-act="expand">Expandir todo</button>
+          <button data-act="collapse">Colapsar todo</button>
+        </div>
+        <is-demo class="demo">
+          <is-data-grid id="g-group" class="grid-short"></is-data-grid>
+        </is-demo>
+        <is-demo class="demo" style="margin-top:1rem">
+          <is-data-grid id="g-tree" class="grid-short" tree-data></is-data-grid>
+        </is-demo>
+      </section>
+
+      <section class="section" id="pivot">
+        <h2>Pivot</h2>
+        <p class="lede">
+          <code>pivotModel</code> cruza filas y columnas con funciones de agregación: las columnas se generan a
+          partir de los valores encontrados.
+        </p>
+        <is-demo class="demo">
+          <is-data-grid id="g-pivot" class="grid-short"></is-data-grid>
+        </is-demo>
+        <pre class="code" data-lang="javascript">grid.pivotModel = {
+  rows: ['city'],
+  columns: ['role'],
+  values: [{ field: 'gross', fn: 'sum' }],
+};</pre>
+      </section>
+
+      <section class="section" id="detail">
+        <h2>Detail panel y filas ancladas</h2>
+        <p class="lede">
+          <code>getDetailPanelContent</code> añade la columna de expansión y despliega contenido bajo la fila
+          (<kbd>Ctrl+Enter</kbd> también lo alterna). <code>pinnedRows</code> fija filas arriba y abajo,
+          y <code>row-reorder</code> permite arrastrarlas.
+        </p>
+        <is-demo class="demo">
+          <is-data-grid id="g-detail" class="grid-short" row-reorder detail-height="120"></is-data-grid>
+        </is-demo>
+      </section>
+
+      <section class="section" id="virtual">
+        <h2>Virtualización y carga incremental</h2>
+        <p class="lede">
+          50.000 filas en el DOM solo las visibles (más <code>overscan</code>). <code>getRowHeight</code>
+          permite alto variable. Al llegar al final se emite <code>is-rows-scroll-end</code> y, si hay
+          <code>rowsLoader</code>, se piden más filas (modo servidor / lazy loading).
+        </p>
+        <is-demo class="demo">
+          <is-data-grid id="g-virtual" class="grid-tall" show-toolbar quick-filter density="compact"></is-data-grid>
+        </is-demo>
+        <p class="out" id="out-virtual"></p>
+      </section>
+
+      <section class="section" id="density">
+        <h2>Densidad, list view y overlays</h2>
+        <p class="lede">
+          <code>density</code> (compact, standard, comfortable) ajusta alto y padding; <code>list-view</code>
+          con <code>listViewColumn</code> renderiza una sola celda por fila. Overlays: <code>loading</code> con
+          <code>loading-variant</code> spinner, progress o skeleton, y los vacíos sin filas / sin resultados.
+        </p>
+        <div class="demo-bar">
+          <button data-act="d-compact">Compacta</button>
+          <button data-act="d-standard">Estándar</button>
+          <button data-act="d-comfortable">Cómoda</button>
+          <button data-act="list-view">List view</button>
+          <button data-act="loading">Loading spinner</button>
+          <button data-act="loading-skeleton">Loading skeleton</button>
+          <button data-act="loading-progress">Loading progress</button>
+          <button data-act="empty">Sin filas</button>
+          <button data-act="restore">Restaurar</button>
+        </div>
+        <is-demo class="demo">
+          <is-data-grid id="g-density" class="grid-short"></is-data-grid>
+        </is-demo>
+      </section>
+
+      <section class="section" id="export">
+        <h2>Exportación</h2>
+        <p class="lede">
+          Exporta las filas filtradas y ordenadas: CSV (con BOM y delimitador configurable), Excel
+          (SpreadsheetML, sin dependencias) e impresión. También está en el botón Exportar de la toolbar.
+        </p>
+        <div class="demo-bar">
+          <button data-act="csv">exportDataAsCsv()</button>
+          <button data-act="excel">exportDataAsExcel()</button>
+          <button data-act="print">exportDataAsPrint()</button>
+        </div>
+      </section>
+
+      <section class="section" id="keyboard">
+        <h2>Teclado</h2>
+        <table class="ref">
+          <thead><tr><th>Teclas</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td><code>← ↑ → ↓</code></td><td>mover el foco entre celdas</td></tr>
+            <tr><td><code>Home</code> / <code>End</code></td><td>primera / última celda de la fila</td></tr>
+            <tr><td><code>Ctrl+Home</code> / <code>Ctrl+End</code></td><td>primera / última celda del grid</td></tr>
+            <tr><td><code>PageUp</code> / <code>PageDown</code> / <code>Space</code></td><td>página de scroll</td></tr>
+            <tr><td><code>Space</code> (grupo)</td><td>expandir o colapsar</td></tr>
+            <tr><td><code>Shift+Space</code></td><td>alternar la fila</td></tr>
+            <tr><td><code>Shift+↑</code> / <code>Shift+↓</code></td><td>extender la selección</td></tr>
+            <tr><td><code>Ctrl+A</code> / <code>Ctrl+C</code> / <code>Ctrl+V</code></td><td>todo / copiar / pegar</td></tr>
+            <tr><td><code>Ctrl+Z</code> / <code>Ctrl+Shift+Z</code></td><td>undo / redo</td></tr>
+            <tr><td><code>Enter</code> / <code>F2</code> / carácter</td><td>editar la celda</td></tr>
+            <tr><td><code>Enter</code> / <code>Tab</code> / <code>Esc</code> (editando)</td><td>confirmar / confirmar y saltar / cancelar</td></tr>
+            <tr><td><code>Ctrl+Enter</code></td><td>detail panel de la fila</td></tr>
+            <tr><td><code>Enter</code> (cabecera)</td><td>ordenar · <code>Shift+Enter</code> multi-orden</td></tr>
+            <tr><td><code>Ctrl+Enter</code> (cabecera)</td><td>abrir el menú de columna</td></tr>
+            <tr><td><code>Tab</code></td><td>según <code>tab-navigation</code>: none, content, header, all</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>density</code></td><td>standard · compact · comfortable</td></tr>
+            <tr><td><code>row-height</code> / <code>header-height</code></td><td>según densidad</td></tr>
+            <tr><td><code>auto-height</code></td><td>off (alto por <code>--is-grid-height</code>)</td></tr>
+            <tr><td><code>pagination</code> / <code>page-size</code> / <code>page-size-options</code></td><td>off · 25 · 10,25,50,100</td></tr>
+            <tr><td><code>pagination-mode</code> / <code>sorting-mode</code> / <code>filter-mode</code></td><td>client · server</td></tr>
+            <tr><td><code>row-count</code></td><td>total en modo servidor</td></tr>
+            <tr><td><code>sorting-order</code></td><td>asc,desc,null</td></tr>
+            <tr><td><code>selection-mode</code> / <code>checkbox-selection</code> / <code>cell-selection</code></td><td>single · multiple · none</td></tr>
+            <tr><td><code>disable-row-selection-on-click</code></td><td>off</td></tr>
+            <tr><td><code>editable</code> / <code>edit-mode</code></td><td>off · cell · row</td></tr>
+            <tr><td><code>show-toolbar</code> / <code>quick-filter</code> / <code>header-filters</code></td><td>off</td></tr>
+            <tr><td><code>hide-footer</code> / <code>hide-footer-selected-count</code></td><td>off</td></tr>
+            <tr><td><code>virtualize</code> / <code>overscan</code></td><td>on · 6</td></tr>
+            <tr><td><code>loading</code> / <code>loading-variant</code></td><td>off · spinner, progress, skeleton</td></tr>
+            <tr><td><code>tree-data</code> / <code>list-view</code> / <code>row-reorder</code></td><td>off</td></tr>
+            <tr><td><code>detail-height</code></td><td>160</td></tr>
+            <tr><td><code>clipboard</code> / <code>undo-redo</code></td><td>off</td></tr>
+            <tr><td><code>aggregation-position</code></td><td>footer · inline</td></tr>
+            <tr><td><code>tab-navigation</code></td><td>none · content · header · all</td></tr>
+            <tr><td><code>disable-column-menu|filter|sort|resize|reorder</code></td><td>off</td></tr>
+            <tr><td><code>disable-multiple-sorting</code></td><td>off</td></tr>
+            <tr><td><code>selectable</code> / <code>filterable</code></td><td>alias de la v1</td></tr>
+          </tbody>
+        </table>
+        <table class="ref">
+          <thead><tr><th>Propiedad JS</th><th>Forma</th></tr></thead>
+          <tbody>
+            <tr><td><code>columns</code></td><td><code>[{ field, headerName, type, width, flex, minWidth, maxWidth, align, headerAlign, sortable, filterable, hideable, resizable, editable, groupable, description, valueGetter, valueFormatter, valueParser, renderCell, renderHeader, cellClassName, headerClassName, colSpan, getActions, valueOptions, filterOperators, sortComparator, preProcessEditCellProps }]</code></td></tr>
+            <tr><td><code>rows</code> / <code>pinnedRows</code></td><td><code>[obj]</code> · <code>{ top, bottom }</code></td></tr>
+            <tr><td><code>sortModel</code></td><td><code>[{ field, sort }]</code></td></tr>
+            <tr><td><code>filterModel</code></td><td><code>{ items: [{ field, operator, value }], logicOperator }</code></td></tr>
+            <tr><td><code>quickFilterValue</code></td><td>texto</td></tr>
+            <tr><td><code>paginationModel</code></td><td><code>{ page, pageSize }</code></td></tr>
+            <tr><td><code>rowSelectionModel</code> / <code>cellSelectionModel</code></td><td><code>[id]</code> · <code>{ start, end }</code></td></tr>
+            <tr><td><code>columnVisibilityModel</code> / <code>pinnedColumns</code> / <code>columnOrder</code></td><td><code>{ field: bool }</code> · <code>{ left, right }</code> · <code>[field]</code></td></tr>
+            <tr><td><code>columnGroupingModel</code></td><td><code>[{ groupId, headerName, children }]</code> (anidable)</td></tr>
+            <tr><td><code>rowGroupingModel</code> / <code>aggregationModel</code></td><td><code>[field]</code> · <code>{ field: 'sum' }</code></td></tr>
+            <tr><td><code>pivotModel</code></td><td><code>{ rows, columns, values: [{ field, fn }] }</code></td></tr>
+            <tr><td><code>listViewColumn</code></td><td>definición de columna única</td></tr>
+            <tr><td><code>localeText</code></td><td>textos de UI</td></tr>
+            <tr><td>hooks</td><td><code>getRowId</code>, <code>getRowHeight</code>, <code>getRowClassName</code>, <code>getCellClassName</code>, <code>getTreeDataPath</code>, <code>getDetailPanelContent</code>, <code>isRowSelectable</code>, <code>isCellEditable</code>, <code>processRowUpdate</code>, <code>rowsLoader</code></td></tr>
+          </tbody>
+        </table>
+        <table class="ref">
+          <thead><tr><th>Método</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><code>setPage</code>, <code>setPageSize</code></td><td>paginación</td></tr>
+            <tr><td><code>setSortModel</code>, <code>sortColumn</code></td><td>orden</td></tr>
+            <tr><td><code>setFilterModel</code>, <code>setQuickFilter</code></td><td>filtros</td></tr>
+            <tr><td><code>setColumnVisibility</code>, <code>setColumnWidth</code>, <code>pinColumn</code>, <code>autosizeColumns</code></td><td>columnas</td></tr>
+            <tr><td><code>selectRow</code>, <code>selectAll</code>, <code>getRow</code>, <code>updateRows</code></td><td>filas</td></tr>
+            <tr><td><code>startEdit</code>, <code>stopEdit</code></td><td>edición</td></tr>
+            <tr><td><code>toggleGroup</code>, <code>expandAll</code>, <code>collapseAll</code>, <code>toggleDetailPanel</code></td><td>árbol</td></tr>
+            <tr><td><code>setRowGroupingModel</code>, <code>setAggregationModel</code>, <code>setDensity</code></td><td>modelos</td></tr>
+            <tr><td><code>exportDataAsCsv</code>, <code>exportDataAsExcel</code>, <code>exportDataAsPrint</code></td><td>salida</td></tr>
+            <tr><td><code>copySelectionToClipboard</code>, <code>undo</code>, <code>redo</code></td><td>portapapeles e historial</td></tr>
+            <tr><td><code>scrollToIndex</code>, <code>refresh</code></td><td>vista</td></tr>
+          </tbody>
+        </table>
+        <p class="lede">
+          Eventos: <code>is-sort</code>, <code>is-filter</code>, <code>is-quick-filter</code>,
+          <code>is-pagination</code>, <code>is-select</code>, <code>is-cell-select</code>,
+          <code>is-cell-click</code>, <code>is-cell-double-click</code>, <code>is-row-click</code>,
+          <code>is-row-double-click</code>, <code>is-edit-start</code>, <code>is-edit-stop</code>,
+          <code>is-row-update</code>, <code>is-column-resize</code>, <code>is-column-reorder</code>,
+          <code>is-column-visibility</code>, <code>is-column-pin</code>, <code>is-density</code>,
+          <code>is-detail-toggle</code>, <code>is-group-toggle</code>, <code>is-row-reorder</code>,
+          <code>is-copy</code>, <code>is-paste</code>, <code>is-undo</code>, <code>is-redo</code>,
+          <code>is-rows-scroll-end</code>, <code>is-export</code>.
+        </p>
+        <p class="lede">
+          Parts: <code>base</code>, <code>toolbar</code>, <code>toolbar-button</code>, <code>quick-filter</code>,
+          <code>viewport</code>, <code>header</code>, <code>header-row</code>, <code>header-cell</code>,
+          <code>column-groups</code>, <code>header-filters</code>, <code>body</code>, <code>row</code>,
+          <code>cell</code>, <code>pinned-top</code>, <code>pinned-bottom</code>,
+          <code>aggregation-row</code>, <code>detail-panel</code>, <code>overlay</code>, <code>footer</code>,
+          <code>pagination</code>. Alto vía <code>--is-grid-height</code>.
+        </p>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-data-grid</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#columns">Columnas</a>
+        <a href="#layout">Ancho y anclaje</a>
+        <a href="#editing">Edición</a>
+        <a href="#selection">Selección</a>
+        <a href="#sorting">Orden y filtros</a>
+        <a href="#grouping">Agrupación</a>
+        <a href="#pivot">Pivot</a>
+        <a href="#detail">Detail panel</a>
+        <a href="#virtual">Virtualización</a>
+        <a href="#density">Densidad y overlays</a>
+        <a href="#export">Exportación</a>
+        <a href="#keyboard">Teclado</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script type="module">
+    import { paint } from '../../components/_shared/highlight-code.js';
+
+    /* ── Datos de ejemplo ─────────────────────────────────────────────── */
+    const CITIES = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga', 'Pereira'];
+    const NAMES = ['Ana', 'Luis', 'María', 'Carlos', 'Sofía', 'Diego', 'Valentina', 'Andrés', 'Camila', 'Julián', 'Laura', 'Pedro', 'Elena', 'Mateo', 'Lucía', 'Tomás'];
+    const ROLES = ['Dev', 'QA', 'PM'];
+
+    const makeRows = (n, offset = 0) => Array.from({ length: n }, (_, k) => {
+      const i = k + offset;
+      return {
+        id: i + 1,
+        name: `${NAMES[i % NAMES.length]} ${String.fromCharCode(65 + (i % 26))}.`,
+        email: `${NAMES[i % NAMES.length].toLowerCase()}${i}@insoft.co`,
+        city: CITIES[i % CITIES.length],
+        role: ROLES[(i + Math.floor(i / CITIES.length)) % ROLES.length],
+        gross: 1200 + ((i * 617) % 9000),
+        costs: 400 + ((i * 233) % 3000),
+        taxRate: [0.19, 0.05, 0.1][i % 3],
+        hired: new Date(2019 + (i % 6), i % 12, 1 + (i % 27)),
+        active: i % 4 !== 0,
+      };
+    });
+
+    const rows = makeRows(60);
+
+    const tagCell = ({ value }) => {
+      const el = document.createElement('span');
+      el.className = `tag-cell ${value ? 'tag-ok' : 'tag-no'}`;
+      el.textContent = value ? 'activo' : 'baja';
+      return el;
+    };
+
+    const money = (v) => (v == null ? '' : v.toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }));
+
+    const baseColumns = () => [
+      { field: 'id', headerName: 'ID', type: 'number', width: 64 },
+      { field: 'name', headerName: 'Nombre', flex: 1, minWidth: 150, editable: true },
+      { field: 'email', headerName: 'Email', flex: 1.4, minWidth: 200 },
+      { field: 'city', headerName: 'Ciudad', width: 140, type: 'singleSelect', valueOptions: CITIES, editable: true },
+      { field: 'role', headerName: 'Rol', width: 100, type: 'singleSelect', valueOptions: ROLES, editable: true },
+      { field: 'gross', headerName: 'Bruto', type: 'number', width: 130, valueFormatter: money, editable: true },
+      { field: 'costs', headerName: 'Costes', type: 'number', width: 120, valueFormatter: money },
+      {
+        field: 'profit',
+        headerName: 'Margen',
+        type: 'number',
+        width: 130,
+        valueGetter: (v, row) => row.gross - row.costs,
+        valueFormatter: money,
+      },
+      {
+        field: 'taxRate',
+        headerName: 'IVA',
+        type: 'number',
+        width: 90,
+        valueGetter: (v) => Math.round(v * 100),
+        valueFormatter: (v) => `${v}%`,
+      },
+      { field: 'hired', headerName: 'Alta', type: 'date', width: 120, editable: true },
+      { field: 'active', headerName: 'Estado', type: 'boolean', width: 110, renderCell: tagCell, editable: true },
+    ];
+
+    const actionsColumn = (grid) => ({
+      field: 'acciones',
+      type: 'actions',
+      headerName: '',
+      width: 90,
+      getActions: ({ row, id }) => [
+        { label: `Ver ${row.name}`, icon: '👁', onClick: () => { grid.dispatchEvent(new CustomEvent('demo-view', { detail: row })); } },
+        { label: 'Duplicar', icon: '⧉', showInMenu: true, onClick: () => { grid.rows = [...grid.rows, { ...row, id: Date.now() }]; } },
+        { label: 'Borrar', icon: '🗑', showInMenu: true, onClick: () => { grid.rows = grid.rows.filter((r) => r.id !== id); } },
+      ],
+    });
+
+    /* ── 1. Grid completo ─────────────────────────────────────────────── */
+    const full = document.getElementById('g-full');
+    full.columns = [...baseColumns(), actionsColumn(full)];
+    full.rows = rows.slice(0, 40);
+    full.aggregationModel = { gross: 'sum', costs: 'sum', profit: 'avg' };
+    const outFull = document.getElementById('out-full');
+    const logTo = (el) => (e) => { el.textContent = `${e.type} → ${JSON.stringify(e.detail, replacer).slice(0, 220)}`; };
+    const replacer = (key, value) => (key === 'selectedRows' || key === 'row' ? undefined : value);
+
+    // Rellena el <pre data-code-id="g-full"> con un snippet autocontenido
+    // (columnas + filas + aggregation) que reproduce la tabla del #intro.
+    {
+      const introCode = document.querySelector('pre.code[data-code-id="g-full"]');
+      if (introCode) {
+        const cols = [...baseColumns(), actionsColumn(full)];
+        const sampleRows = rows.slice(0, 40).map((r) => ({
+          ...r,
+          hired: r.hired instanceof Date ? r.hired.toISOString().slice(0, 10) : r.hired,
+        }));
+        const code = [
+          '<is-data-grid show-toolbar quick-filter checkbox-selection',
+          '  pagination page-size="10" page-size-options="10,25,50"',
+          '  editable undo-redo clipboard tab-navigation="all" style="height:30rem">',
+          '  <!-- Reemplaza tagCell / money por tus helpers reales -->',
+          '  <script>',
+          '    const tagCell = ({ value }) => {',
+          '      const el = document.createElement("span");',
+          '      el.className = `tag-cell ${value ? "tag-ok" : "tag-no"}`;',
+          '      el.textContent = value ? "activo" : "baja";',
+          '      return el;',
+          '    };',
+          '    const money = (v) => v == null ? "" : v.toLocaleString("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });',
+          '',
+          '    grid.columns = ' + JSON.stringify(cols, null, 2) + ';',
+          '    grid.rows    = ' + JSON.stringify(sampleRows, null, 2) + ';',
+          '    grid.aggregationModel = ' + JSON.stringify({ gross: 'sum', costs: 'sum', profit: 'avg' }, null, 2) + ';',
+          '  </' + 'script>',
+          '</' + 'is-data-grid>',
+        ].join('\n');
+        introCode.textContent = code;
+        paint(introCode);
+      }
+    }
+    for (const type of ['is-sort', 'is-filter', 'is-select', 'is-pagination', 'is-row-update', 'is-column-pin', 'is-export']) {
+      full.addEventListener(type, logTo(outFull));
+    }
+    full.addEventListener('demo-view', (e) => { outFull.textContent = `acción Ver → ${e.detail.name}`; });
+
+    /* ── 2. Columnas y tipos ──────────────────────────────────────────── */
+    const cols = document.getElementById('g-cols');
+    cols.columns = baseColumns();
+    cols.rows = rows.slice(0, 12);
+
+    /* ── 3. Ancho, anclaje, grupos, colSpan ───────────────────────────── */
+    const layout = document.getElementById('g-layout');
+    layout.columns = [
+      ...baseColumns().map((c) => (c.field === 'name'
+        ? { ...c, colSpan: (v, row) => (row.id % 7 === 0 ? 2 : 1) }
+        : c)),
+      actionsColumn(layout),
+    ];
+    layout.rows = rows.slice(0, 14);
+    layout.columnGroupingModel = [
+      {
+        groupId: 'persona',
+        headerName: 'Persona',
+        children: [
+          { groupId: 'ident', headerName: 'Identidad', children: [{ field: 'name' }, { field: 'email' }] },
+          { field: 'city' },
+          { field: 'role' },
+        ],
+      },
+      {
+        groupId: 'dinero',
+        headerName: 'Económico',
+        children: [{ field: 'gross' }, { field: 'costs' }, { field: 'profit' }, { field: 'taxRate' }],
+      },
+    ];
+
+    /* ── 4. Edición ───────────────────────────────────────────────────── */
+    const edit = document.getElementById('g-edit');
+    edit.columns = baseColumns().map((c) => (c.field === 'name'
+      ? {
+        ...c,
+        preProcessEditCellProps: ({ props }) => ({
+          ...props,
+          error: String(props.value || '').trim() === '' ? 'El nombre es obligatorio' : null,
+        }),
+      }
+      : { ...c, editable: c.field !== 'id' && c.field !== 'profit' && c.field !== 'taxRate' }));
+    edit.rows = rows.slice(0, 12).map((r) => ({ ...r }));
+    const outEdit = document.getElementById('out-edit');
+    edit.hooks = {
+      processRowUpdate: (next) => {
+        if (!String(next.name || '').trim()) throw new Error('nombre vacío');
+        outEdit.textContent = `guardado #${next.id} → ${next.name} · ${money(next.gross)}`;
+        return next;
+      },
+    };
+    for (const type of ['is-edit-start', 'is-edit-stop', 'is-copy', 'is-paste', 'is-undo', 'is-redo']) {
+      edit.addEventListener(type, (e) => { outEdit.textContent = `${e.type} → ${JSON.stringify(e.detail, replacer)}`; });
+    }
+
+    /* ── 5. Selección ─────────────────────────────────────────────────── */
+    const select = document.getElementById('g-select');
+    select.columns = baseColumns().slice(0, 7);
+    select.rows = rows.slice(0, 15);
+    select.hooks = { isRowSelectable: ({ row }) => row.active };
+    const outSelect = document.getElementById('out-select');
+    select.addEventListener('is-select', (e) => { outSelect.textContent = `filas → [${e.detail.rowSelectionModel.join(', ')}]`; });
+    select.addEventListener('is-cell-select', (e) => {
+      const { start, end } = e.detail.cellSelectionModel || {};
+      outSelect.textContent = `rango → ${start?.id}:${start?.field} … ${end?.id}:${end?.field}`;
+    });
+
+    /* ── 6. Orden y filtros ───────────────────────────────────────────── */
+    const sort = document.getElementById('g-sort');
+    sort.columns = baseColumns();
+    sort.rows = rows.slice(0, 30);
+    const outSort = document.getElementById('out-sort');
+    sort.addEventListener('is-sort', (e) => { outSort.textContent = `sortModel → ${JSON.stringify(e.detail.sortModel)}`; });
+    sort.addEventListener('is-filter', (e) => { outSort.textContent = `filterModel → ${JSON.stringify(e.detail.filterModel)}`; });
+
+    /* ── 7. Agrupación y tree data ────────────────────────────────────── */
+    const group = document.getElementById('g-group');
+    group.columns = baseColumns();
+    group.rows = rows.slice(0, 30);
+    group.rowGroupingModel = ['city'];
+    group.aggregationModel = { gross: 'sum', profit: 'avg' };
+    group.expandAll();
+
+    const tree = document.getElementById('g-tree');
+    const files = [
+      { id: 'f1', path: ['src'], name: 'src', size: null, kind: 'carpeta' },
+      { id: 'f2', path: ['src', 'components'], name: 'components', size: null, kind: 'carpeta' },
+      { id: 'f3', path: ['src', 'components', 'grid.js'], name: 'grid.js', size: 48120, kind: 'módulo' },
+      { id: 'f4', path: ['src', 'components', 'grid.css'], name: 'grid.css', size: 9210, kind: 'estilo' },
+      { id: 'f5', path: ['src', 'index.js'], name: 'index.js', size: 1240, kind: 'módulo' },
+      { id: 'f6', path: ['docs'], name: 'docs', size: null, kind: 'carpeta' },
+      { id: 'f7', path: ['docs', 'README.md'], name: 'README.md', size: 4300, kind: 'texto' },
+    ];
+    tree.columns = [
+      { field: 'kind', headerName: 'Tipo', width: 120 },
+      { field: 'size', headerName: 'Tamaño', type: 'number', width: 140, valueFormatter: (v) => (v == null ? '—' : `${(v / 1024).toFixed(1)} KB`) },
+    ];
+    tree.hooks = { getTreeDataPath: (row) => row.path };
+    tree.rows = files;
+    tree.aggregationModel = { size: 'sum' };
+    tree.expandAll();
+
+    /* ── 8. Pivot ─────────────────────────────────────────────────────── */
+    const pivot = document.getElementById('g-pivot');
+    pivot.columns = baseColumns();
+    pivot.rows = rows;
+    pivot.pivotModel = { rows: ['city'], columns: ['role'], values: [{ field: 'gross', fn: 'sum' }] };
+
+    /* ── 9. Detail panel y filas ancladas ─────────────────────────────── */
+    const detail = document.getElementById('g-detail');
+    detail.columns = baseColumns().slice(0, 6);
+    detail.rows = rows.slice(0, 12).map((r) => ({ ...r }));
+    detail.pinnedRows = {
+      top: [{ ...rows[0], id: 'top-1', name: 'Fila anclada arriba' }],
+      bottom: [{ ...rows[1], id: 'bottom-1', name: 'Fila anclada abajo' }],
+    };
+    detail.hooks = {
+      getDetailPanelContent: ({ row }) => {
+        const box = document.createElement('div');
+        box.innerHTML = `<strong>${row.name}</strong><br>${row.email}<br>Ciudad: ${row.city} · Rol: ${row.role}<br>Margen: ${money(row.gross - row.costs)}`;
+        return box;
+      },
+    };
+
+    /* ── 10. Virtualización y carga incremental ───────────────────────── */
+    const virtual = document.getElementById('g-virtual');
+    virtual.columns = baseColumns();
+    virtual.rows = makeRows(50000);
+    const outVirtual = document.getElementById('out-virtual');
+    virtual.addEventListener('is-rows-scroll-end', () => { outVirtual.textContent = `is-rows-scroll-end → ${virtual.rows.length} filas cargadas`; });
+
+    /* ── 11. Densidad, list view y overlays ───────────────────────────── */
+    const density = document.getElementById('g-density');
+    const densityRows = rows.slice(0, 20);
+    density.columns = baseColumns();
+    density.rows = densityRows;
+    density.listViewColumn = {
+      field: 'name',
+      headerName: 'Personas',
+      renderCell: ({ row }) => {
+        const box = document.createElement('div');
+        box.style.cssText = 'display:flex;justify-content:space-between;gap:1em;width:100%';
+        box.innerHTML = `<span><strong>${row.name}</strong> · ${row.city}</span><span>${money(row.gross)}</span>`;
+        return box;
+      },
+    };
+
+    /* ── Controles de las demos ───────────────────────────────────────── */
+    const actions = {
+      'pin-left': () => layout.pinColumn('id', 'left'),
+      'pin-right': () => layout.pinColumn('acciones', 'right'),
+      unpin: () => { layout.pinnedColumns = { left: [], right: [] }; },
+      autosize: () => layout.autosizeColumns(),
+      'hide-city': () => layout.setColumnVisibility('city', layout.columnVisibilityModel.city === false),
+      'edit-cell': () => { edit.editMode = 'cell'; },
+      'edit-row': () => { edit.editMode = 'row'; },
+      undo: () => edit.undo(),
+      redo: () => edit.redo(),
+      'select-all': () => select.selectAll(true),
+      'select-none': () => select.selectAll(false),
+      copy: () => select.copySelectionToClipboard(),
+      'sort-multi': () => sort.setSortModel([{ field: 'role', sort: 'asc' }, { field: 'gross', sort: 'desc' }]),
+      'filter-set': () => sort.setFilterModel({
+        items: [
+          { field: 'gross', operator: '>', value: 5000 },
+          { field: 'active', operator: 'is', value: 'true' },
+        ],
+        logicOperator: 'and',
+      }),
+      'filter-or': () => sort.setFilterModel({ ...sort.filterModel, logicOperator: 'or' }),
+      'filter-clear': () => sort.setFilterModel({ items: [] }),
+      'group-city': () => { group.setRowGroupingModel(['city']); group.expandAll(); },
+      'group-city-role': () => { group.setRowGroupingModel(['city', 'role']); group.expandAll(); },
+      'group-none': () => group.setRowGroupingModel([]),
+      expand: () => group.expandAll(),
+      collapse: () => group.collapseAll(),
+      'd-compact': () => density.setDensity('compact'),
+      'd-standard': () => density.setDensity('standard'),
+      'd-comfortable': () => density.setDensity('comfortable'),
+      'list-view': () => { density.listView = !density.listView; },
+      loading: () => { density.setAttribute('loading-variant', 'spinner'); density.loading = !density.loading; },
+      'loading-skeleton': () => { density.setAttribute('loading-variant', 'skeleton'); density.loading = true; },
+      'loading-progress': () => { density.setAttribute('loading-variant', 'progress'); density.loading = true; },
+      empty: () => { density.rows = []; },
+      restore: () => { density.loading = false; density.listView = false; density.rows = densityRows; },
+      csv: () => full.exportDataAsCsv({ fileName: 'personas.csv' }),
+      excel: () => full.exportDataAsExcel({ fileName: 'personas.xls' }),
+      print: () => full.exportDataAsPrint(),
+    };
+    document.querySelectorAll('.demo-bar button').forEach((btn) => {
+      btn.addEventListener('click', () => actions[btn.dataset.act]?.());
+    });
+  </script>
+</body>
+</html>

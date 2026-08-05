@@ -14,7 +14,7 @@ import {
   reapplyTheme,
   softFormat,
   watchTheme,
-} from '../components/_shared/highlight-code.js';
+} from '../src/components/_shared/highlight-code.js';
 
 export { paint, softFormat, reapplyTheme };
 

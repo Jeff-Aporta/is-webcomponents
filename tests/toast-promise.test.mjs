@@ -19,9 +19,9 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
-const toastJs = await readFile(join(root, 'components', 'feedback', 'toast.js'), 'utf8');
-const toastCss = await readFile(join(root, 'components', 'feedback', 'toast-item.css'), 'utf8');
-const preview = await readFile(join(root, 'previews', 'feedback', 'is-toast.html'), 'utf8');
+const toastJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast.js'), 'utf8');
+const toastCss = await readFile(join(root, 'src', 'components', 'feedback', 'toast-item.css'), 'utf8');
+const preview = await readFile(join(root, 'src', 'previews', 'feedback', 'is-toast.html'), 'utf8');
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

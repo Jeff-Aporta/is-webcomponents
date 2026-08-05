@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const css = readFileSync(join(root, 'styles', 'presentation.css'), 'utf8');
+const css = readFileSync(join(root, 'src', 'styles', 'presentation.css'), 'utf8');
 
 // Tomamos el bloque de la regla `.sidebar { ... }` contando {} balanceados.
 function pickBlock(src, selector) {

@@ -252,7 +252,9 @@ const CHILDREN = {
 
 /** Extrae el comentario de cabecera del modulo (la API real, sin inventar). */
 async function headerDoc(scriptRel, tag) {
-  const file = join(root, scriptRel.replace(/^\.\.\/\.\.\//, ''));
+  // scriptRel es ../../components/... relativo a src/previews/<cat>/;
+  // en disco vive bajo src/components/.
+  const file = join(root, 'src', scriptRel.replace(/^\.\.\/\.\.\//, ''));
   let src;
   try { src = await readFile(file, 'utf8'); } catch { return ''; }
   const m = /\/\*\*([\s\S]*?)\*\//.exec(src);
@@ -330,7 +332,7 @@ for (const [tag, cfg] of Object.entries(CHILDREN)) {
 
   const short = tag.replace(/^is-/, '');
   const page = `${entry.category}/${tag}.html`;
-  const out = join(root, 'previews', page);
+  const out = join(root, 'src', 'previews', page);
 
   if (!FORCE) {
     try { await access(out); console.log(`[skip] ${page}: ya existe`); continue; } catch { /* crear */ }
@@ -355,9 +357,9 @@ for (const [tag, cfg] of Object.entries(CHILDREN)) {
   <title>${tag} · IS Web Components</title>
   <meta name="description" content="Documentación y demos de ${tag} de InSoft." />
 
-  <link rel="stylesheet" href="../../styles/is-base.css" />
-  <link rel="stylesheet" href="../../styles/palettes.css" />
-  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="../../src/styles/is-base.css" />
+  <link rel="stylesheet" href="../../src/styles/palettes.css" />
+  <link rel="stylesheet" href="../../src/styles/presentation.css" />
 ${moduleTags}
   <script type="module" src="../../components/layout/split-panel.js"></script>
   <script type="module" src="../../components/layout/main.js"></script>
@@ -413,7 +415,7 @@ ${tables}
 
   await writeFile(out, html, 'utf8');
   created += 1;
-  console.log(`[new]  previews/${page}`);
+  console.log(`[new]  src/previews/${page}`);
 
   // Registrar la page en el manifest (la entrada existe pero sin `page` propia).
   const re = new RegExp(`(\\{ tag: '${tag}',[^}]*?)(, page: '[^']*')?( \\})`);

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import components from '../manifest.js';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
-const previews = path.join(root, 'previews');
+const previews = path.join(root, 'src', 'previews');
 const forceIndex = process.argv.indexOf('--force');
 const forceTag = forceIndex >= 0 ? process.argv[forceIndex + 1] : null;
 

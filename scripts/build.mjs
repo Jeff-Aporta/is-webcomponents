@@ -10,7 +10,7 @@ import { build } from 'esbuild';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 const dist = join(root, 'dist', 'cdn');
-const compRoot = join(root, 'components');
+const compRoot = join(root, 'src', 'components');
 
 // Limpieza selectiva: se borran los artefactos de codigo pero NO
 // dist/cdn/assets/. Ahi viven ~317k SVG que no cambian entre builds; borrarlos
@@ -201,13 +201,13 @@ for (const inFile of entries) {
   if (arreglados) console.log(`  @import hermanos reescritos a .min.css en ${arreglados} archivos`);
 }
 
-const baseIn = join(root, 'styles', 'is-base.css');
+const baseIn = join(root, 'src', 'styles', 'is-base.css');
 const baseOut = join(dist, 'is-base.min.css');
 await bundleCss(baseIn, baseOut);
 const baseStat = await stat(baseOut);
 console.log(`  ${'is-base'.padEnd(18)} css ${String(baseStat.size).padStart(6)}`);
 
-const palettesIn = join(root, 'styles', 'palettes.css');
+const palettesIn = join(root, 'src', 'styles', 'palettes.css');
 const palettesOut = join(dist, 'palettes.min.css');
 await bundleCss(palettesIn, palettesOut);
 const palettesStat = await stat(palettesOut);
@@ -300,7 +300,7 @@ await writeFile(
 // scripts/download-icons.mjs), los copiamos junto al bundle para que
 // <is-icon> pueda servirlos directamente desde el CDN jsDelivr sin
 // depender del script iconify-icon de Iconify.
-const iconsSrc = join(root, 'assets', 'icons');
+const iconsSrc = join(root, 'src', 'assets', 'icons');
 const iconsOut = join(dist, 'assets', 'icons');
 try {
   await access(iconsSrc);

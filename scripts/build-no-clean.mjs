@@ -7,7 +7,7 @@ import { build } from 'esbuild';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 const dist = join(root, 'dist', 'cdn');
-const compRoot = join(root, 'components');
+const compRoot = join(root, 'src', 'components');
 
 await mkdir(dist, { recursive: true });
 

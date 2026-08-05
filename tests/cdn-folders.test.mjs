@@ -101,7 +101,7 @@ for (const cat of categories) {
 // apuntaria al archivo anfitrion, asi que adoptCss cargaria el CSS
 // equivocado (is-icon acabo cargando actions/button.min.css y perdio su
 // tamano). Cada import entre componentes debe quedar como referencia.
-const compRoot = join(root, 'components');
+const compRoot = join(root, 'src', 'components');
 const walkSrc = (dir, out = []) => {
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);

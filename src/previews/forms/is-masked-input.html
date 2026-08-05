@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-masked-input · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .mask-row { display: grid; grid-template-columns: 12rem 1fr; gap: 1rem; align-items: center; padding: .35rem 0; }
+    .mask-row label { font-size: .82rem; color: var(--is-text-soft); }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-masked-input">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-masked-input&gt;</h2>
+        <p class="lede">Campo de texto que aplica un patrón mientras el usuario tipea. Útil para tarjetas, fechas, teléfonos y todo formato con estructura fija.</p>
+      </section>
+
+      <section class="section" id="tokens">
+        <h2>Tokens de patrón</h2>
+        <table class="ref">
+          <thead><tr><th>Char</th><th>Acepta</th><th>¿Requerido?</th><th>Nota</th></tr></thead>
+          <tbody>
+            <tr><td><code>0</code></td><td>0–9</td><td>sí</td><td>Dígito obligatorio.</td></tr>
+            <tr><td><code>9</code></td><td>0–9</td><td>no</td><td>Dígito opcional.</td></tr>
+            <tr><td><code>A</code></td><td>A–Z / a–z</td><td>sí</td><td>Forzado a mayúsculas (case fold).</td></tr>
+            <tr><td><code>a</code></td><td>a–z</td><td>no</td><td>Minúscula.</td></tr>
+            <tr><td><code>*</code></td><td>A–Z / a–z / 0–9</td><td>no</td><td>Alfanumérico opcional.</td></tr>
+            <tr><td>cualquier otro</td><td>—</td><td>—</td><td>Literal: se imprime tal cual cuando hay datos.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="ejemplos">
+        <h2>Patrones comunes</h2>
+        <is-demo class="demo">
+          <div class="mask-row"><label>Tarjeta</label>
+            <is-masked-input id="card" pattern="0000 0000 0000 0000" autocomplete="cc-number"></is-masked-input>
+          </div>
+          <div class="mask-row"><label>Vencimiento</label>
+            <is-masked-input pattern="00/00" placeholder="MM/AA" required></is-masked-input>
+          </div>
+          <div class="mask-row"><label>Fecha</label>
+            <is-masked-input pattern="00/00/0000" placeholder="DD/MM/AAAA"></is-masked-input>
+          </div>
+          <div class="mask-row"><label>Teléfono</label>
+            <is-masked-input pattern="(+00) 0000-0000" placeholder="(+57) 3000-0000"></is-masked-input>
+          </div>
+          <div class="mask-row"><label>Hora</label>
+            <is-masked-input pattern="00:00" placeholder="HH:MM"></is-masked-input>
+          </div>
+          <div class="mask-row"><label>Código postal</label>
+            <is-masked-input pattern="A0A 0A0"></is-masked-input>
+          </div>
+          <div class="mask-row"><label>Placa</label>
+            <is-masked-input pattern="AAA-0000"></is-masked-input>
+          </div>
+          <div class="mask-row"><label>Hex color</label>
+            <is-masked-input pattern="#000000" placeholder="#000000" value="1a2b"></is-masked-input>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="valor">
+        <h2>API</h2>
+        <pre class="code">const m = document.querySelector('is-masked-input');
+m.value           // texto formateado: "1234 5678 9012 3456"
+m.raw             // caracteres limpios: "1234567890123456"
+m.complete        // boolean: ¿rellenó todos los slots requeridos?
+m.formatted       // alias de value
+
+m.addEventListener('is-input',    e =&gt; /* cada keystroke */);
+m.addEventListener('is-complete', e =&gt; /* completó el patrón */);
+
+// API HTML: <input> invisible participa en formularios vía ElementInternals
+//   &lt;form&gt;&lt;is-masked-input name="card" pattern="0000 0000 0000 0000"&gt;&lt;/is-masked-input&gt;&lt;/form&gt;
+formData.get('card');  // texto formateado (no raw; usar raw attr si se quiere limpio)</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-masked-input</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#tokens">Tokens</a>
+        <a href="#ejemplos">Ejemplos</a>
+        <a href="#valor">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script>
+  </script>
+</body>
+</html>

@@ -24,11 +24,11 @@ import assert from 'node:assert/strict';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const assetsIcons = join(root, 'assets', 'icons');
+const assetsIcons = join(root, 'src', 'assets', 'icons');
 
-const iconJs = await readFile(join(root, 'components/media/icon.js'), 'utf8');
-const iconCss = await readFile(join(root, 'components/media/icon.css'), 'utf8');
-const loaderJs = await readFile(join(root, 'components/_shared/icon-loader.js'), 'utf8');
+const iconJs = await readFile(join(root, 'src/components/media/icon.js'), 'utf8');
+const iconCss = await readFile(join(root, 'src/components/media/icon.css'), 'utf8');
+const loaderJs = await readFile(join(root, 'src/components/_shared/icon-loader.js'), 'utf8');
 
 // --- BUG 1: nada de force-cache -------------------------------------------
 

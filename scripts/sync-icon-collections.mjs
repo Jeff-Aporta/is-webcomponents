@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 import https from 'node:https';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const assetsIcons = join(root, 'assets', 'icons');
+const assetsIcons = join(root, 'src', 'assets', 'icons');
 
 const getJson = (url) =>
   new Promise((resolve, reject) => {

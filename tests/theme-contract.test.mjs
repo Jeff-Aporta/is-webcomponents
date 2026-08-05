@@ -21,10 +21,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
 const html = await readFile(join(root, 'index.html'), 'utf8');
-const isBase = await readFile(join(root, 'styles', 'is-base.css'), 'utf8');
-const palettes = await readFile(join(root, 'styles', 'palettes.css'), 'utf8');
+const isBase = await readFile(join(root, 'src', 'styles', 'is-base.css'), 'utf8');
+const palettes = await readFile(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
 const styles = `${isBase}\n${palettes}`;
-const component = await readFile(join(root, 'components', 'actions', 'button.js'), 'utf8');
+const component = await readFile(join(root, 'src', 'components', 'actions', 'button.js'), 'utf8');
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
@@ -87,7 +87,7 @@ async function walk(dir) {
   }
   return out;
 }
-const previewsDir = join(root, 'previews');
+const previewsDir = join(root, 'src', 'previews');
 const previews = await walk(previewsDir);
 let previewCount = 0;
 for (const f of previews) {

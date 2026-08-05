@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-skeleton · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-skeleton">
+      <section class="section" id="intro">
+        <h2>Skeleton</h2>
+        <p class="lede"><code class="code">&lt;is-skeleton&gt;</code></p>
+        <p class="lede">Placeholder de carga con efecto <code class="code">sheen</code> (default) o <code class="code">pulse</code>.</p>
+        <is-demo class="demo" style="max-width:320px">
+          <is-skeleton style="height:.875rem;margin-bottom:.5rem"></is-skeleton>
+          <is-skeleton style="height:.875rem;width:80%;margin-bottom:.5rem"></is-skeleton>
+          <is-skeleton style="height:4rem;border-radius:8px"></is-skeleton>
+        </is-demo>
+      </section>
+      <section class="section" id="examples">
+        <h2>Efectos</h2>
+        <is-demo class="demo" style="max-width:280px;display:flex;flex-direction:column;gap:1rem">
+          <div>
+            <span class="demo-label">sheen</span>
+            <is-skeleton effect="sheen" style="height:1rem"></is-skeleton>
+          </div>
+          <div>
+            <span class="demo-label">pulse</span>
+            <is-skeleton effect="pulse" style="height:1rem"></is-skeleton>
+          </div>
+          <div>
+            <span class="demo-label">none</span>
+            <is-skeleton effect="none" style="height:1rem"></is-skeleton>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-skeleton effect="sheen" style="height:1rem"&gt;&lt;/is-skeleton&gt;
+&lt;is-skeleton effect="pulse" style="height:1rem"&gt;&lt;/is-skeleton&gt;</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo / var</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>effect</code></td><td>sheen (none · pulse)</td></tr>
+            <tr><td><code>--color</code></td><td>control-bg</td></tr>
+            <tr><td><code>--sheen-color</code></td><td>highlight ghost (texto ~11% alpha)</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-skeleton</h1>
+      <is-scrollspy target="is-main"><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script>
+    </script>
+</body>
+</html>

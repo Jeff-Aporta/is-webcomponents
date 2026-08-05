@@ -5,7 +5,7 @@
 > nuevo, te vas a ganar un commit revertido.
 >
 > **Complemento:** `LLM.md` cubre invariantes del home (rotación 3D de cards,
-> parallax + hover, shadows, light mode). Si vas a tocar `previews/home.html`,
+> parallax + hover, shadows, light mode). Si vas a tocar `src/previews/home.html`,
 > léelo antes.
 
 ## 1. ¿Qué es este repo?
@@ -21,57 +21,33 @@ Custom Elements + Shadow DOM, sin frameworks, empaquetado con esbuild.
 
 ```
 c:\ContaPyme\Personal\apps\AppWebcomponents\
-├── components/                 # fuentes por categoría
-│   ├── _shared/                # utilidades (adopt-css, iconify-loader, layout…)
-│   ├── actions/                # button, fab, dropdown, copy-button, …
-│   ├── feedback/               # badge, toast, tooltip, cdn-snippet, …
-│   ├── forms/                  # input, select, combobox, date-picker, …
-│   ├── data/                   # data-grid, kanban, stat, transfer, …
-│   ├── data-viz/               # NO existe; los charts viven en components/charts/
-│   ├── charts/                 # bar-chart, line-chart, pie-chart, gauge, …
-│   ├── diagrams/               # block-diagram, flowchart, mindmap, …
-│   ├── layout/                 # card, dialog, split-panel, …
-│   ├── navigation/             # tab-group, breadcrumb, stepper, …
-│   ├── helpers/                # popover, format-date, resize-observer, …
-│   └── media/                  # icon, avatar, video, video-playlist
-├── previews/
-│   ├── home.html               # landing de la galería (NO category)
-│   └── <category>/is-<name>.html   # demo por componente (un nivel más adentro)
-├── styles/
-│   ├── is-base.css             # tokens + temas
-│   ├── palettes.css            # contapyme (default) / insoft / agrowin
-│   ├── presentation.css        # chrome de los previews
-│   └── shell.css               # barra lateral, iframe split-panel
-├── assets/
-│   └── icons/
-│       ├── mdi/                # 7447 SVGs (commiteado)
-│       ├── tabler/             # 6184 SVGs (commiteado)
-│       ├── mdi.json            # índice por colección (commiteado)
-│       ├── tabler.json         # id
-│       ├── manifest.json       # resumen de TODAS las colecciones (commiteado)
-│       └── .state/             # progreso del download (IGNORADO por git)
-├── scripts/
-│   ├── build.mjs               # genera dist/cdn/{tag}.min.js etc.
-│   ├── build-phase8.mjs        # sub-build sin tocar video.js (legacy, no usar)
-│   ├── download-icons.mjs      # descarga Iconify a assets/icons/
-│   ├── generate-templates.mjs  # esqueleto de preview vacío
-│   ├── serve.mjs               # dev server (no-store) en puerto 8391
-│   ├── preview-chrome.js       # inyecta <is-cdn-snippet>, theme, palette
-│   ├── docs-chrome.js          # TOC + scrollspy de los previews
-│   ├── fix-preview-paths.mjs   # reescribe ../ a ../../ tras folderize
-│   ├── migrate-scrollspy.mjs   # migración antigua del scrollspy
-│   ├── home-cdn.js             # ejemplos de uso por CDN (en el home)
-│   ├── verify-theme-contract.cjs   # asserts de tokens/temas
-│   ├── verify-server.cjs       # servercito tonto en :8765
-│   ├── verify-fetch.cjs        # hit URLs sobre verify-server
-│   └── verify-page.py          # e2e con Playwright (requiere python + playwright)
-├── manifest.js                 # SINGLE SOURCE OF TRUTH de los componentes
-├── index.html                  # landing con iframe de preview
-├── package.json
-└── .gitignore
+├── src/
+│   ├── components/             # fuentes por categoría
+│   │   ├── _shared/            # adopt-css, iconify-loader, prefs, …
+│   │   ├── actions/            # button, fab, dropdown, …
+│   │   ├── feedback/           # badge, toast, cdn-snippet, …
+│   │   ├── forms/ · data/ · charts/ · diagrams/ · layout/ · …
+│   │   ├── helpers/            # popover, IsUi (ui.js), observers, …
+│   │   └── media/              # icon, avatar, video, …
+│   ├── previews/
+│   │   ├── home.html           # landing (profundidad 1)
+│   │   └── <category>/is-<name>.html
+│   ├── styles/                 # is-base, palettes, presentation, shell
+│   ├── assets/icons/           # SVGs Iconify (+ .json índices)
+│   ├── skills/is-webcomponents/
+│   └── docs/
+├── scripts/                    # build, serve, preview-chrome, …
+├── dist/cdn/                   # artefactos CDN (jsDelivr / Pages)
+├── tests/                      # *.test.mjs (commiteados; no ignorar la carpeta)
+├── manifest.js                 # SINGLE SOURCE OF TRUTH
+├── index.html
+├── LLM.md · AGENTS.md · README.md
+└── package.json
 ```
 
-`docs/`, `.superpowers/`, `.impeccable/` y `dist/` **se regeneran o son notas
+**NO** vuelvas a crear `components/`, `styles/`, `previews/`, `skills/` o `docs/` en la raíz.
+
+`src/docs/`, `.superpowers/`, `.impeccable/` y partes de `dist/` **se regeneran o son notas
 personales, no los toques a menos que sea explícito.**
 
 ## 3. Comandos importantes
@@ -118,27 +94,29 @@ node scripts/verify-page.py                # requiere servidor corriendo en :876
 
 ### 4.2 Paths en previews
 
-**Trampa mortal.** Los previews viven en `previews/<category>/is-foo.html` (un
-nivel más adentro que el resto de `previews/is-foo.html`). Las rutas internas
-deben ser **dos niveles arriba**, no uno:
+**Trampa mortal tras el move a `src/`.** Todo vive en `src/previews/…`, pero
+`scripts/` y `dist/` siguen en la **raíz**. `styles/` y `components/` están
+en `src/`. Las profundidades **no son iguales**:
 
 ```html
-<!-- previews/actions/is-button.html -->
-<script src="../../scripts/preview-boot.js"></script>
+<!-- src/previews/actions/is-button.html (categoría = profundidad 2) -->
+<script src="../../../scripts/preview-boot.js"></script>
 <link rel="stylesheet" href="../../styles/is-base.css" />
-<script type="module" src="../../components/actions/button.js"></script>
+<script type="module" src="../../../dist/cdn/all.min.js"></script>
+<!-- manifest script: ../../components/actions/button.js → src/components/... -->
 
-<!-- previews/home.html -->
-<script src="../scripts/preview-boot.js"></script>
+<!-- src/previews/home.html (profundidad 1) -->
+<script src="../../scripts/preview-boot.js"></script>
 <link rel="stylesheet" href="../styles/is-base.css" />
+<script type="module" src="../../dist/cdn/all.min.js"></script>
 ```
 
-> **`home.html` está en `previews/` raíz** y solo necesita `../`. Cualquier
-> preview bajo `previews/<category>/` necesita `../../`. Si te equivocas, el
-> script de carga 404 y la página queda en blanco sin error visible.
+> Si usas `../../dist` desde una categoría, resuelve a `src/dist` (404) y la
+> página queda en blanco. Guardián: `tests/src-layout.test.mjs` +
+> `tests/preview-paths.test.mjs`.
 
 Si haces un folderize o rename masivo de previews, **corre `scripts/fix-preview-paths.mjs`**
-que reescribe los paths en bloque.
+(ajustado a `src/previews`) o revisa profundidades a mano.
 
 ### 4.3 Tema y paleta
 
@@ -179,7 +157,7 @@ build(cdn): regenerar bundles despues de folderize
 
 ### 5.1 Resolución en cadena
 
-`components/_shared/iconify-loader.js` resuelve cada `<is-icon icon="X:Y">` así:
+`src/components/_shared/iconify-loader.js` resuelve cada `<is-icon icon="X:Y">` así:
 
 ```
 1. assets/icons/X.json          → ¿está Y en la lista?    (local index)
@@ -342,7 +320,7 @@ lo desanotes**.
 
 El look del scrollbar está centralizado en dos archivos:
 
-- `components/_shared/scrollbars.css` — inyectado por `adopt-css.js` en
+- `src/components/_shared/scrollbars.css` — inyectado por `adopt-css.js` en
   el shadow DOM de cada `is-*`. Aplica `scrollbar-color` y los pseudo
   elementos WebKit a `:host` y a todos sus descendientes.
 - `styles/is-base.css` (`* { scrollbar-color: ... }`) — light DOM del
@@ -371,7 +349,7 @@ importar `scrollbars.css` manualmente.
 ### 6.17 Helpers de reuso centralizados en `_shared/`
 
 Para evitar el copia-y-pega que se acumuló en 82 componentes, los siguientes
-helpers viven en `components/_shared/`:
+helpers viven en `src/components/_shared/`:
 
 | Helper | Reemplaza |
 |---|---|
@@ -477,7 +455,7 @@ cada vez.
 ### 6.19 `<is-ag-grid>` — motor `datagrid-core` + mimicus-react
 
 El data-grid se reescribió desde cero separando el **núcleo de datos**
-del **render**. El núcleo vive en `components/data/datagrid-core/` y
+del **render**. El núcleo vive en `src/components/data/datagrid-core/` y
 proviene del port del repo
 [mimicus-react/src/datagrid/core](https://github.com/Jeff-Aporta/mimicus-react/tree/main/src/datagrid/core).
 El componente `<is-ag-grid>` es la capa de presentación que consume ese
@@ -499,7 +477,7 @@ núcleo.
 | `grid-model.js`               | `createGridModel({rows, columns, …})` ⇒ `GridApi` (store observable con `subscribe`). |
 | `index.js`                    | Barrel de re-exports. |
 
-**El wrapper `is-ag-grid`** (`components/data/ag-grid.js`) hace:
+**El wrapper `is-ag-grid`** (`src/components/data/ag-grid.js`) hace:
 
 1. Lee filas/columnas desde atributo `rows` / `columns` o desde
    `<script type="application/json">` (acepta `src=...` con fetch).
@@ -553,7 +531,7 @@ un runner sencillo los pueda enumerar.
 
 ### 7.1 Convención
 
-- Patrón existente: `components/_shared/*.selfcheck.mjs` (asserts directos).
+- Patrón existente: `src/components/_shared/*.selfcheck.mjs` (asserts directos).
 - Patrón nuevo: `tests/*.test.mjs` (más completos, pueden leer varios archivos).
 - Si un test depende del servidor (`scripts/serve.mjs`), lo dice en su header
   y `await fetch(...)` con `AbortSignal.timeout` para no colgarse.
@@ -677,7 +655,7 @@ El test `tests/codemirror-theme.test.mjs` protege este contrato.
   `git mv`, luego `scripts/fix-preview-paths.mjs`.
 - Si vas a descargar iconos, **usa `--only=mdi --only=tabler`** salvo que
   sepas que necesitas los 308k.
-- Si vas a tocar `components/_shared/iconify-loader.js`, **corre
+- Si vas a tocar `src/components/_shared/iconify-loader.js`, **corre
   `tests/icon-references.test.mjs` y `tests/cdn-icons.test.mjs` después**.
 - Si vas a tocar `manifest.js`, **corre `tests/manifest-paths.test.mjs`**.
 - Si vas a tocar `styles/is-base.css` o `palettes.css`, **corre
@@ -698,7 +676,7 @@ El test `tests/codemirror-theme.test.mjs` protege este contrato.
   porque así se guarda en `manifest.js` desde el folderize de previews.
   Comparar por basename (`(c.page || '').split('/').pop() === file`) para
   que matchee tanto si el page viene folderizado como si no.
-- Si vas a tocar `components/media/icon.js` o `components/_shared/iconify-loader.js`,
+- Si vas a tocar `src/components/media/icon.js` o `src/components/_shared/iconify-loader.js`,
   **corre `tests/icon-currentcolor.test.mjs`**. `<is-icon>` **NO** debe
   cargar el SVG como `<img src>` (rompe `currentColor` y los iconos
   aparecen negros sobre fondos claros). El flujo correcto es:

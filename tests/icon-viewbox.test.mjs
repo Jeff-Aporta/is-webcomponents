@@ -25,7 +25,7 @@ import assert from 'node:assert/strict';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const assetsIcons = join(root, 'assets', 'icons');
+const assetsIcons = join(root, 'src', 'assets', 'icons');
 
 const readJson = async (f) => JSON.parse(await readFile(join(assetsIcons, f), 'utf8'));
 

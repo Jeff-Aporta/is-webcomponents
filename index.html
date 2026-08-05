@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IS Web Components</title>
   <meta name="description" content="Galería de Web Components ContaPyme / InSoft.">
-  <link rel="stylesheet" href="styles/is-base.css">
-  <link rel="stylesheet" href="styles/palettes.css">
-  <link rel="stylesheet" href="styles/shell.css">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="src/styles/is-base.css">
+  <link rel="stylesheet" href="src/styles/palettes.css">
+  <link rel="stylesheet" href="src/styles/shell.css">
+  <link rel="icon" href="src/assets/favicon.svg" type="image/svg+xml">
   <script type="module" src="dist/cdn/all.min.js"></script>
 </head>
 <body>
@@ -193,7 +193,16 @@
         item.setAttribute('aria-label', `${component.title} ${component.tag}`);
         const title = document.createElement('span');
         title.className = 'shell-nav__title';
-        title.textContent = component.title;
+        // Dot sutil: origen ISP-SvelteComponents (aunque viva en otra categoría).
+        if (component.origin === 'isp' || component.category === 'isp') {
+          const dot = document.createElement('span');
+          dot.className = 'shell-nav__isp-dot';
+          dot.setAttribute('aria-hidden', 'true');
+          dot.title = 'Origen ISP-SvelteComponents';
+          title.append(dot, document.createTextNode(component.title));
+        } else {
+          title.textContent = component.title;
+        }
         const tag = document.createElement('span');
         tag.className = 'shell-nav__tag';
         tag.textContent = `<${component.tag}>`;
@@ -220,7 +229,7 @@
 
     /** Preview URL: ?s= solo con valores iniciales de esa carga (no se reescribe al toglear). */
     function previewSrc(page) {
-      return `previews/${page}?s=${encodeState({ embed: true, theme, palette })}`;
+      return `src/previews/${page}?s=${encodeState({ embed: true, theme, palette })}`;
     }
 
     function sendContext() {
@@ -360,7 +369,7 @@
     });
     fullscreenBtn.addEventListener('click', () => {
       // s con theme/palette = iniciales de esa ventana; no se actualizan al toglear ahí
-      window.open(`previews/${component.page}?s=${encodeState({ theme, palette })}`, '_blank', 'noopener');
+      window.open(`src/previews/${component.page}?s=${encodeState({ theme, palette })}`, '_blank', 'noopener');
     });
 
     frame.src = previewSrc(component.page);

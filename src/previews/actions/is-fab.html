@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-fab · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-fab (Floating Action Button) de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .fab-stage {
+      /* `position: relative` NO contiene hijos `position: fixed` — solo lo
+         hacen transform/filter/contain/perspective. Sin esto el FAB del
+         ejemplo se ancla al viewport y se sale de la caja del demo. */
+      position: relative;
+      transform: translateZ(0);
+      height: 360px;
+      border: 1px dashed var(--is-border, #2a2f3a);
+      border-radius: 0.5rem;
+      background: var(--is-bg, #0f1117);
+      overflow: hidden;
+    }
+    /* Los demos se organizan con flex: alineados por linea base, con hueco
+       uniforme y envolviendo en pantallas estrechas. */
+    .fab-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 1.5rem;
+    }
+    .fab-row__item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-fab">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-fab&gt;</h2>
+        <p class="lede">
+          Floating Action Button: botón circular principal que se posiciona de
+          forma fija en la ventana. Soporta variantes, tamaños, etiquetas
+          extendidas, pulso de atención y posicionamiento en cualquier esquina.
+        </p>
+
+        <is-demo class="demo">
+          <div class="fab-stage">
+            <is-fab id="fb1" icon="mdi:plus" position="bottom-end" label="Crear"></is-fab>
+          </div>
+          <p>Click: <span id="fbLog">0</span></p>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-fab</span> <span class="attr">icon</span>=<span class="val">"mdi:plus"</span> <span class="attr">label</span>=<span class="val">"Crear"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-fab&gt;</span></pre>
+      </section>
+
+      <section class="section" id="sizes">
+        <h2>Escala</h2>
+        <p class="lede">
+          No hay atributo <code class="code">size</code>: el componente se mide entero en
+          <code class="code">em</code>, así que su tamaño sale del
+          <code class="code">font-size</code> del contexto. Para hacerlo más grande o más
+          pequeño se cambia el font-size, y todo (icono, padding, radio) escala con él.
+        </p>
+
+        <is-demo class="demo" heading="El mismo FAB con tres font-size">
+          <div class="fab-row">
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:0.75em" position="inline" label="Notificación"></is-fab>
+              <code class="code">0.75em</code>
+            </span>
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:1em" position="inline" label="Notificación"></is-fab>
+              <code class="code">1em</code>
+            </span>
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:1.25em" position="inline" label="Notificación"></is-fab>
+              <code class="code">1.25em</code>
+            </span>
+          </div>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-fab icon="mdi:bell" style="font-size: 0.75em"&gt;&lt;/is-fab&gt;
+&lt;is-fab icon="mdi:bell" style="font-size: 1.25em"&gt;&lt;/is-fab&gt;</pre>
+      </section>
+
+      <section class="section" id="variants">
+        <h2>Color</h2>
+        <p class="lede">
+          <code class="code">color</code> define el color semántico:
+          brand, neutral, danger, success, warning. Es una dimensión distinta de
+          <code class="code">variant</code>, que gobierna la presentación
+          (filled, outlined, plain…).
+        </p>
+
+        <is-demo class="demo">
+          <is-fab icon="mdi:plus" color="brand" position="inline" label="brand"></is-fab>
+          <is-fab icon="mdi:pencil" color="neutral" position="inline" label="neutral"></is-fab>
+          <is-fab icon="mdi:trash-can" color="danger" position="inline" label="danger"></is-fab>
+          <is-fab icon="mdi:check" color="success" position="inline" label="success"></is-fab>
+          <is-fab icon="mdi:alert" color="warning" position="inline" label="warning"></is-fab>
+        </is-demo>
+      </section>
+
+      <section class="section" id="extended">
+        <h2>Extendido</h2>
+        <p class="lede">Con <code class="code">extended</code> el FAB tiene label al lado del icono.</p>
+
+        <is-demo class="demo">
+          <is-fab icon="mdi:plus" extended label="Nuevo proyecto" position="inline"></is-fab>
+          <is-fab icon="mdi:share" color="neutral" extended label="Compartir" position="inline"></is-fab>
+          <is-fab icon="mdi:download" color="success" extended label="Descargar" position="inline"></is-fab>
+        </is-demo>
+      </section>
+
+      <section class="section" id="positions">
+        <h2>Posiciones</h2>
+        <p class="lede">bottom-end (default), bottom-start, top-end, top-start.</p>
+
+        <is-demo class="demo">
+          <div class="fab-stage">
+            <is-fab icon="mdi:plus" position="top-start" label="top-start"></is-fab>
+            <is-fab icon="mdi:pencil" position="top-end" label="top-end"></is-fab>
+            <is-fab icon="mdi:share" position="bottom-start" label="bottom-start"></is-fab>
+            <is-fab icon="mdi:check" color="success" position="bottom-end" label="bottom-end"></is-fab>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="pulse">
+        <h2>Pulso</h2>
+        <p class="lede">Con <code class="code">pulse</code> el FAB anima un anillo de atención cada 2s.</p>
+
+        <is-demo class="demo">
+          <is-fab icon="mdi:bell" pulse color="warning" position="inline" label="Notificaciones"></is-fab>
+          <is-fab icon="mdi:message" pulse color="brand" position="inline" label="Mensajes"></is-fab>
+        </is-demo>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-fab&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>icon</code></td><td>string</td><td>mdi:plus</td><td>Iconify id.</td></tr>
+            <tr><td><code>position</code></td><td>bottom-end | bottom-start | top-end | top-start | inline</td><td>bottom-end</td><td>Posición fija.</td></tr>
+            <tr><td><code>variant</code></td><td>brand | neutral | danger | success | warning</td><td>brand</td><td>Color.</td></tr>
+            <tr><td><code>extended</code></td><td>boolean</td><td>false</td><td>Forma pill con label.</td></tr>
+            <tr><td><code>pulse</code></td><td>boolean</td><td>false</td><td>Pulso de atención.</td></tr>
+            <tr><td><code>label</code></td><td>string</td><td>—</td><td>aria-label.</td></tr>
+            <tr><td><code>without-shadow</code></td><td>boolean</td><td>false</td><td>Sin sombra.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-fab-click</code></td><td>Click. <code>detail: { originalEvent }</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-fab</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#sizes">Escala</a>
+        <a href="#variants">Color</a>
+        <a href="#extended">Extendido</a>
+        <a href="#positions">Posiciones</a>
+        <a href="#pulse">Pulso</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    let n = 0;
+    const fb = document.getElementById('fb1');
+    const log = document.getElementById('fbLog');
+    fb.addEventListener('is-fab-click', () => {
+      n++;
+      log.textContent = String(n);
+    });
+  </script>
+</body>
+</html>

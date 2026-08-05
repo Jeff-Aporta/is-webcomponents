@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-callout · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-callout de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-callout">
+
+      <!-- ===== 1. INTRO ===== -->
+      <section class="section" id="intro">
+        <h2>&lt;is-callout&gt;</h2>
+        <p class="lede">
+          Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y
+          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,
+          con icono automático según la variante (sobrescribible vía <code class="code">icon</code>
+          o slot <code class="code">icon</code>).
+        </p>
+
+        <is-demo class="demo">
+          <span class="demo-label">caso mínimo</span>
+          <is-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</is-callout>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-callout&gt;</span>Esto es un callout estándar.<span class="tag">&lt;/is-callout&gt;</span></pre>
+      </section>
+
+      <!-- ===== 2. VARIANTES ===== -->
+      <section class="section" id="variants">
+        <h2>Variantes</h2>
+        <p class="lede">
+          El atributo <code class="code">variant</code> elige el tono del callout. Cada
+          variante trae un icono por defecto.
+        </p>
+
+        <div class="demo-stack">
+          <is-callout color="brand">Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras.</is-callout>
+          <is-callout color="neutral">Los horarios se muestran en tu zona horaria local.</is-callout>
+          <is-callout color="success">Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad.</is-callout>
+          <is-callout color="warning">Tu sesión está a punto de expirar. Guarda tu trabajo.</is-callout>
+          <is-callout color="danger">Esta acción no se puede deshacer. Eliminará el proyecto para todos.</is-callout>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">color</span>=<span class="val">"success"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span>
+<span class="tag">&lt;is-callout</span> <span class="attr">color</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span></pre>
+      </section>
+
+      <!-- ===== 3. APARIENCIAS ===== -->
+      <section class="section" id="appearances">
+        <h2>Apariencias</h2>
+        <p class="lede">
+          El atributo <code class="code">appearance</code> controla el tratamiento visual.
+          Default: <code class="code">filled-outlined</code>.
+        </p>
+
+        <div class="demo-stack">
+          <is-callout color="brand" variant="accent">Esta variante <strong>accent</strong> capta la atención de inmediato.</is-callout>
+          <is-callout color="brand" variant="filled-outlined">Fondo + borde, el más habitual.</is-callout>
+          <is-callout color="brand" variant="filled">Solo fondo, sin borde.</is-callout>
+          <is-callout color="brand" variant="outlined">Solo borde, fondo transparente.</is-callout>
+          <is-callout color="brand" variant="plain">Sin fondo ni borde, solo texto e icono.</is-callout>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">variant</span>=<span class="val">"accent"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span></pre>
+      </section>
+
+      <!-- ===== 4. TAMAÑOS ===== -->
+      <section class="section" id="sizes">
+        <h2>Tamaños</h2>
+        <p class="lede">
+          El atributo <code class="code">size</code> ajusta padding, icono y tipografía.
+          Default: <code class="code">m</code>.
+        </p>
+
+        <div class="demo-stack">
+          <is-callout style="font-size:0.8em">0.8em · callout mínimo.</is-callout>
+          <is-callout style="font-size:0.9em">0.9em · un poco más de énfasis.</is-callout>
+          <is-callout>1em · hereda el tamaño del contexto.</is-callout>
+          <is-callout style="font-size:1.15em">1.15em · más énfasis.</is-callout>
+          <is-callout style="font-size:1.3em">1.3em · énfasis máximo.</is-callout>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">size</span>=<span class="val">"l"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-callout&gt;</span></pre>
+      </section>
+
+      <!-- ===== 5. ICONO CUSTOM ===== -->
+      <section class="section" id="icon">
+        <h2>Icono personalizado</h2>
+        <p class="lede">
+          Pasa un <code class="code">is-icon</code> por el slot <code class="code">icon</code>
+          para reemplazar el icono por defecto.
+        </p>
+
+        <div class="demo-stack">
+          <is-callout color="warning">
+            <is-icon slot="icon" icon="mdi:timer-sand" aria-hidden="true"></is-icon>
+            Tiempo limitado: queda 1 día para enviar la solicitud.
+          </is-callout>
+
+          <is-callout color="success">
+            <is-icon slot="icon" icon="mdi:rocket-launch" aria-hidden="true"></is-icon>
+            Lanzamiento completado. Métricas disponibles.
+          </is-callout>
+
+          <is-callout color="danger">
+            <is-icon slot="icon" icon="mdi:shield-alert" aria-hidden="true"></is-icon>
+            Bloqueo de seguridad: demasiados intentos.
+          </is-callout>
+
+          <is-callout>
+            <is-icon slot="icon" icon="mdi:bullhorn" aria-hidden="true"></is-icon>
+            Anuncio global: nueva versión disponible.
+          </is-callout>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">color</span>=<span class="val">"warning"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-icon</span> <span class="attr">slot</span>=<span class="val">"icon"</span> <span class="attr">icon</span>=<span class="val">"mdi:timer-sand"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-icon&gt;</span>
+  Tiempo limitado.
+<span class="tag">&lt;/is-callout&gt;</span></pre>
+      </section>
+
+      <!-- ===== 6. SIN ICONO ===== -->
+      <section class="section" id="no-icon">
+        <h2>Sin icono</h2>
+        <p class="lede">
+          Pasa <code class="code">icon=""</code> para ocultar el icono por defecto y dejar
+          solo el mensaje.
+        </p>
+
+        <is-demo class="demo">
+          <is-callout color="neutral" icon="">Todas las horas se muestran en tu zona horaria local.</is-callout>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">icon</span>=<span class="val">""</span><span class="tag">&gt;</span>Texto plano.<span class="tag">&lt;/is-callout&gt;</span></pre>
+      </section>
+
+      <!-- ===== 7. CON ACCIONES ===== -->
+      <section class="section" id="actions">
+        <h2>Con acciones</h2>
+        <p class="lede">
+          Combina <code class="code">is-callout</code> con <code class="code">is-button</code>
+          para CTAs dentro del mensaje.
+        </p>
+
+        <div class="demo-stack">
+          <is-callout color="brand">
+            <strong>Una nueva versión está disponible</strong>
+            <p>Incluye el módulo de reportes y soporte para multi-empresa.</p>
+            <is-button variant="outlined" color="brand">Más tarde</is-button>
+            <is-button variant="filled" color="brand" style="margin-left:.5em">Actualizar</is-button>
+          </is-callout>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-callout</span> <span class="attr">color</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;strong&gt;</span>Una nueva versión está disponible<span class="tag">&lt;/strong&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">variant</span>=<span class="val">"outlined"</span><span class="tag">&gt;</span>Más tarde<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">color</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Actualizar<span class="tag">&lt;/is-button&gt;</span>
+<span class="tag">&lt;/is-callout&gt;</span></pre>
+      </section>
+
+      <!-- ===== 8. CSS PARTS ===== -->
+      <section class="section" id="parts">
+        <h2>CSS Parts</h2>
+        <p class="lede">
+          Solo dos partes expuestas: <code class="code">icon</code> y <code class="code">message</code>.
+          El contenedor raíz es la <code class="code">::part(base)</code>.
+        </p>
+
+        <is-demo class="demo">
+          <is-callout color="success" style="--callout-bg: #d3f9d8; --callout-border: #2f9e44;">
+            CSS parts en uso: el fondo y el borde se redefinen vía custom properties.
+          </is-callout>
+        </is-demo>
+      </section>
+
+      <!-- ===== 9. REFERENCIA ===== -->
+      <section class="section" id="reference">
+        <h2>Referencia completa</h2>
+
+        <h3>Atributos / propiedades</h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>variant</code></td><td>brand · neutral · success · warning · danger</td><td>neutral</td><td>Tono. Reflected.</td></tr>
+            <tr><td><code>appearance</code></td><td>accent · filled · outlined · filled-outlined · plain</td><td>filled-outlined</td><td>Tratamiento visual. Reflected.</td></tr>
+            <tr><td><code>icon</code></td><td>string</td><td>(según variant)</td><td>Iconify id para el icono por defecto. Vacío = sin icono.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Slots</h3>
+        <table class="ref">
+          <thead><tr><th>Slot</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>(default)</code></td><td>Mensaje principal.</td></tr>
+            <tr><td><code>icon</code></td><td>Icono propio (is-icon o img).</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS Parts</h3>
+        <table class="ref">
+          <thead><tr><th>Part</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>::part(base)</code></td><td>Contenedor raíz.</td></tr>
+            <tr><td><code>::part(icon)</code></td><td>Wrapper del icono.</td></tr>
+            <tr><td><code>::part(message)</code></td><td>Wrapper del mensaje.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS custom properties</h3>
+        <table class="ref">
+          <thead><tr><th>Variable</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>--spacing</code></td><td><code>var(--is-space-l, 1rem)</code></td><td>Padding/gap interno.</td></tr>
+            <tr><td><code>--callout-bg</code></td><td>var de variant</td><td>Fondo computado.</td></tr>
+            <tr><td><code>--callout-border</code></td><td>var de variant</td><td>Color del borde.</td></tr>
+            <tr><td><code>--callout-text</code></td><td>var de variant</td><td>Color del texto.</td></tr>
+            <tr><td><code>--callout-accent</code></td><td>var de variant</td><td>Color del icono.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-callout</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#variants">Variantes</a>
+        <a href="#appearances">Apariencias</a>
+        <a href="#sizes">Tamaños</a>
+        <a href="#icon">Icono custom</a>
+        <a href="#no-icon">Sin icono</a>
+        <a href="#actions">Con acciones</a>
+        <a href="#parts">CSS Parts</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

@@ -49,7 +49,7 @@ async function walk(dir, filter, out = []) {
   return out;
 }
 
-const componentFiles = await walk(join(root, 'components'), /\.js$/);
+const componentFiles = await walk(join(root, 'src', 'components'), /\.js$/);
 
 /** tag -> { attr -> Set(valores), origen } */
 const registry = new Map();
@@ -93,7 +93,7 @@ assert.ok(registry.size >= 10, `se esperaban enums de al menos 10 componentes, h
 // ── 2. Revisar las previews ──────────────────────────────────────────────
 
 const previewFiles = [
-  ...(await walk(join(root, 'previews'), /\.html$/)),
+  ...(await walk(join(root, 'src', 'previews'), /\.html$/)),
   join(root, 'index.html'),
 ];
 
@@ -137,8 +137,8 @@ assert.equal(
 // Regresión concreta: `ghost` existe de verdad en is-button (CSS + JSDoc).
 // Si alguien lo quita del CSS pero lo deja en el JSDoc, el test de arriba deja
 // de proteger y las previews que lo usan se rompen en silencio.
-const buttonCss = await readFile(join(root, 'components/actions/button.css'), 'utf8');
-const buttonJs = await readFile(join(root, 'components/actions/button.js'), 'utf8');
+const buttonCss = await readFile(join(root, 'src/components/actions/button.css'), 'utf8');
+const buttonJs = await readFile(join(root, 'src/components/actions/button.js'), 'utf8');
 if (/variant\s+[^\n]*\bghost\b/.test(buttonJs)) {
   assert.match(
     buttonCss,

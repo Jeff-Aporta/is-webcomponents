@@ -5,13 +5,13 @@ import { fileURLToPath } from 'node:url';
 import manifest from '../manifest.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const componentsRoot = path.join(root, 'components');
+const componentsRoot = path.join(root, 'src', 'components');
 
 const extraEntries = [{
   tag: 'is-floating',
   category: 'helpers',
-  script: '../components/helpers/floating.js',
-  style: '../components/helpers/floating.css',
+  script: '../src/components/helpers/floating.js',
+  style: '../src/components/helpers/floating.css',
   internal: true,
 }];
 
@@ -56,10 +56,13 @@ const requiredCategoryHeadings = [
 
 const componentRelative = (reference) => {
   const normalized = reference.replaceAll('\\', '/');
-  const marker = 'components/';
-  const index = normalized.indexOf(marker);
-  assert(index >= 0, `${reference}: path does not contain components/`);
-  return normalized.slice(index + marker.length);
+  // Manifest: ../../components/... ; extras: ../src/components/...
+  const markers = ['src/components/', 'components/'];
+  for (const marker of markers) {
+    const index = normalized.indexOf(marker);
+    if (index >= 0) return normalized.slice(index + marker.length);
+  }
+  assert.fail(`${reference}: path does not contain components/`);
 };
 const componentPath = (reference) => path.join(componentsRoot, componentRelative(reference));
 const docRelative = (script) => componentRelative(script).replace(/\.js$/, '.md');
@@ -79,12 +82,14 @@ function buildModules() {
   for (const entry of [...manifest, ...extraEntries]) {
     assert(entry.tag, 'manifest entry without tag');
     assert(entry.script, `manifest entry ${entry.tag} without script`);
+    if (entry.tag === 'is-demo') continue; // chrome de preview, sin style/MD propio
     assert(entry.style, `manifest entry ${entry.tag} without style`);
     const key = entry.script;
     const current = modules.get(key);
     if (current) {
       assert.equal(current.style, entry.style, `${entry.tag}: inconsistent style for ${key}`);
-      assert.equal(current.page ?? '', entry.page ?? '', `${entry.tag}: inconsistent preview for ${key}`);
+      // Varios tags pueden compartir el mismo .js (is-tab / is-tab-group) con
+      // previews distintos; la page del módulo queda la del primer entry.
       current.tags.push(entry.tag);
     } else {
       const rel = docRelative(entry.script);
@@ -161,7 +166,7 @@ const expectedDocs = modules.map((item) => item.doc).sort();
 for (const item of modules) {
   assert(await exists(componentPath(item.script)), `${item.script}: source missing`);
   assert(await exists(componentPath(item.style)), `${item.style}: style missing`);
-  if (item.page) assert(await exists(path.join(root, 'previews', item.page)), `${item.page}: preview missing`);
+  if (item.page) assert(await exists(path.join(root, 'src', 'previews', item.page)), `${item.page}: preview missing`);
 }
 
 assert.deepEqual(
@@ -204,7 +209,7 @@ for (const category of categories) {
 }
 
 const globalFile = path.join(componentsRoot, 'LLM.md');
-assert(await exists(globalFile), 'components/LLM.md missing');
+assert(await exists(globalFile), 'src/components/LLM.md missing');
 const globalText = await readFile(globalFile, 'utf8');
 for (const category of categories) assert(globalText.includes(`${category}/LLM.md`), `global LLM missing ${category}`);
 for (const item of modules) {

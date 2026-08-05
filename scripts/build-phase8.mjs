@@ -11,15 +11,15 @@ const dist = join(root, 'dist', 'cdn');
 await mkdir(dist, { recursive: true });
 
 const NEW = [
-  ['components/navigation/stepper.js', 'components/navigation/stepper.css'],
-  ['components/actions/fab.js', 'components/actions/fab.css'],
-  ['components/feedback/popconfirm.js', 'components/feedback/popconfirm.css'],
-  ['components/forms/pin-input.js', 'components/forms/pin-input.css'],
-  ['components/data/stat.js', 'components/data/stat.css'],
-  ['components/data/transfer.js', 'components/data/transfer.css'],
-  ['components/data/gauge.js', 'components/data/gauge.css'],
-  ['components/data/kanban.js', 'components/data/kanban.css'],
-  ['components/feedback/cdn-snippet.js', 'components/feedback/cdn-snippet.css'],
+  ['src/components/navigation/stepper.js', 'src/components/navigation/stepper.css'],
+  ['src/components/actions/fab.js', 'src/components/actions/fab.css'],
+  ['src/components/feedback/popconfirm.js', 'src/components/feedback/popconfirm.css'],
+  ['src/components/forms/pin-input.js', 'src/components/forms/pin-input.css'],
+  ['src/components/data/stat.js', 'src/components/data/stat.css'],
+  ['src/components/data/transfer.js', 'src/components/data/transfer.css'],
+  ['src/components/data/gauge.js', 'src/components/data/gauge.css'],
+  ['src/components/data/kanban.js', 'src/components/data/kanban.css'],
+  ['src/components/feedback/cdn-snippet.js', 'src/components/feedback/cdn-snippet.css'],
 ];
 
 const bundleJs = (entry, out) => build({

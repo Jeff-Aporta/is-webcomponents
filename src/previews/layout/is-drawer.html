@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-drawer · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-drawer de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-drawer">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-drawer&gt;</h2>
+        <p class="lede">
+          Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).
+          Ideal para menús, filtros y contenido secundario.
+        </p>
+
+        <is-demo class="demo">
+          <is-button id="openDefault">Abrir drawer (end)</is-button>
+        </is-demo>
+
+        <is-drawer id="drwDefault" label="Drawer estándar">
+          <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>
+          <div slot="footer">
+            <is-button data-drawer="close" variant="outlined">Cancelar</is-button>
+            <is-button data-drawer="close" color="brand">Aceptar</is-button>
+          </div>
+        </is-drawer>
+
+        <pre class="code"><span class="tag">&lt;is-drawer</span> <span class="attr">label</span>=<span class="val">"Drawer estándar"</span><span class="tag">&gt;</span>
+  Contenido.
+  <span class="tag">&lt;div</span> <span class="attr">slot</span>=<span class="val">"footer"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;is-button</span> <span class="attr">data-drawer</span>=<span class="val">"close"</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/is-drawer&gt;</span></pre>
+      </section>
+
+      <section class="section" id="placements">
+        <h2>Placements</h2>
+        <p class="lede">El atributo <code class="code">placement</code> elige desde qué borde se desliza.</p>
+
+        <div class="demo-stack">
+          <is-button id="openEnd">end (default)</is-button>
+          <is-button id="openStart">start</is-button>
+          <is-button id="openTop">top</is-button>
+          <is-button id="openBottom">bottom</is-button>
+        </div>
+
+        <is-drawer id="drwEnd" label="End" placement="end">
+          <p>Este drawer se desliza desde la derecha (default).</p>
+        </is-drawer>
+        <is-drawer id="drwStart" label="Start" placement="start">
+          <p>Este drawer se desliza desde la izquierda.</p>
+        </is-drawer>
+        <is-drawer id="drwTop" label="Top" placement="top">
+          <p>Este drawer se desliza desde arriba.</p>
+        </is-drawer>
+        <is-drawer id="drwBottom" label="Bottom" placement="bottom">
+          <p>Este drawer se desliza desde abajo.</p>
+        </is-drawer>
+
+        <pre class="code"><span class="tag">&lt;is-drawer</span> <span class="attr">placement</span>=<span class="val">"start"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-drawer&gt;</span>
+<span class="tag">&lt;is-drawer</span> <span class="attr">placement</span>=<span class="val">"top"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-drawer&gt;</span>
+<span class="tag">&lt;is-drawer</span> <span class="attr">placement</span>=<span class="val">"bottom"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-drawer&gt;</span></pre>
+      </section>
+
+      <section class="section" id="size">
+        <h2>Tamaño</h2>
+        <p class="lede">Ajusta <code class="code">--size</code> en el host. Se aplica al ancho o alto según el placement.</p>
+
+        <is-demo class="demo">
+          <is-button id="openWide">Drawer ancho (50%)</is-button>
+        </is-demo>
+
+        <is-drawer id="drwWide" label="50%" style="--size: 50%">
+          <p>Este drawer ocupa siempre el 50% del viewport.</p>
+        </is-drawer>
+
+        <pre class="code"><span class="tag">&lt;is-drawer</span> <span class="attr">style</span>=<span class="val">"--size: 50%"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-drawer&gt;</span></pre>
+      </section>
+
+      <section class="section" id="no-header">
+        <h2>Sin header</h2>
+        <p class="lede"><code class="code">without-header</code> oculta el header y el botón de cerrar.</p>
+
+        <is-demo class="demo">
+          <is-button id="openNoHeader">Abrir sin header</is-button>
+        </is-demo>
+
+        <is-drawer id="drwNoHeader" without-header>
+          <p>¡Mira mamá, sin header!</p>
+          <div slot="footer">
+            <is-button data-drawer="close" color="brand">Cerrar</is-button>
+          </div>
+        </is-drawer>
+
+        <pre class="code"><span class="tag">&lt;is-drawer</span> <span class="attr">without-header</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-drawer&gt;</span></pre>
+      </section>
+
+      <section class="section" id="light-dismiss">
+        <h2>Light dismiss</h2>
+        <p class="lede"><code class="code">light-dismiss</code> cierra al hacer click fuera del drawer.</p>
+
+        <is-demo class="demo">
+          <is-button id="openLD">Abrir (click fuera cierra)</is-button>
+        </is-demo>
+
+        <is-drawer id="drwLD" label="Light dismiss" light-dismiss>
+          <p>Haz click fuera del drawer para cerrarlo.</p>
+        </is-drawer>
+
+        <pre class="code"><span class="tag">&lt;is-drawer</span> <span class="attr">light-dismiss</span><span class="tag">&gt;</span>…<span class="tag">&lt;/is-drawer&gt;</span></pre>
+      </section>
+
+      <section class="section" id="nav-example">
+        <h2>Drawer de navegación</h2>
+        <p class="lede">Caso típico: menú lateral persistente.</p>
+
+        <is-demo class="demo">
+          <is-button id="openNav">Menú</is-button>
+        </is-demo>
+
+        <is-drawer id="drwNav" placement="start" label="Navegación" style="--size: 280px">
+          <nav style="display:flex;flex-direction:column;gap:.5em">
+            <a href="#" style="text-decoration:none">Inicio</a>
+            <a href="#" style="text-decoration:none">Productos</a>
+            <a href="#" style="text-decoration:none">Clientes</a>
+            <a href="#" style="text-decoration:none">Reportes</a>
+            <a href="#" style="text-decoration:none">Configuración</a>
+          </nav>
+        </is-drawer>
+
+        <pre class="code"><span class="tag">&lt;is-drawer</span> <span class="attr">placement</span>=<span class="val">"start"</span> <span class="attr">label</span>=<span class="val">"Menú"</span> <span class="attr">style</span>=<span class="val">"--size: 280px"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;nav&gt;</span>…<span class="tag">&lt;/nav&gt;</span>
+<span class="tag">&lt;/is-drawer&gt;</span></pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia completa</h2>
+
+        <h3>Atributos</h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>open</code></td><td>boolean</td><td>false</td><td>Estado visible. Reflected.</td></tr>
+            <tr><td><code>label</code></td><td>string</td><td>—</td><td>Título del header (a11y).</td></tr>
+            <tr><td><code>placement</code></td><td>start | end | top | bottom</td><td>end</td><td>Borde desde el que se desliza.</td></tr>
+            <tr><td><code>without-header</code></td><td>boolean</td><td>false</td><td>Oculta el header y el botón de cerrar.</td></tr>
+            <tr><td><code>light-dismiss</code></td><td>boolean</td><td>false</td><td>Cierra al click fuera.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Slots</h3>
+        <table class="ref">
+          <thead><tr><th>Slot</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>(default)</code></td><td>Body principal.</td></tr>
+            <tr><td><code>label</code></td><td>Título propio.</td></tr>
+            <tr><td><code>header-actions</code></td><td>Acciones adicionales en el header.</td></tr>
+            <tr><td><code>footer</code></td><td>Pie del drawer.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Métodos</h3>
+        <table class="ref">
+          <thead><tr><th>Método</th><th>Descripción</th></tr></thead>
+          <tbody><tr><td><code>show() / hide() / toggle()</code></td><td>API imperativa.</td></tr></tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Cancelable</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-show</code></td><td>no</td><td>Antes de abrir.</td></tr>
+            <tr><td><code>is-after-show</code></td><td>no</td><td>Tras la animación de apertura.</td></tr>
+            <tr><td><code>is-hide</code></td><td>sí</td><td>Antes de cerrar. <code>detail.source</code> indica quién lo pidió.</td></tr>
+            <tr><td><code>is-after-hide</code></td><td>no</td><td>Tras la animación de cierre.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS custom properties</h3>
+        <table class="ref">
+          <thead><tr><th>Variable</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>--size</code></td><td><code>380px</code></td><td>Tamaño (ancho o alto según placement).</td></tr>
+            <tr><td><code>--spacing</code></td><td><code>var(--is-space-l, 1rem)</code></td><td>Padding interno.</td></tr>
+            <tr><td><code>--backdrop-color</code></td><td><code>rgba(0,0,0,0.45)</code></td><td>Color del fondo.</td></tr>
+            <tr><td><code>--show-duration</code></td><td>220ms</td><td>Duración apertura.</td></tr>
+            <tr><td><code>--hide-duration</code></td><td>180ms</td><td>Duración cierre.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-drawer</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#placements">Placements</a>
+        <a href="#size">Tamaño</a>
+        <a href="#no-header">Sin header</a>
+        <a href="#light-dismiss">Light dismiss</a>
+        <a href="#nav-example">Navegación</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    const openSimple = (id) => { document.getElementById(id).open = true; };
+    document.getElementById('openDefault').onclick  = () => openSimple('drwDefault');
+    document.getElementById('openEnd').onclick      = () => openSimple('drwEnd');
+    document.getElementById('openStart').onclick    = () => openSimple('drwStart');
+    document.getElementById('openTop').onclick      = () => openSimple('drwTop');
+    document.getElementById('openBottom').onclick   = () => openSimple('drwBottom');
+    document.getElementById('openWide').onclick     = () => openSimple('drwWide');
+    document.getElementById('openNoHeader').onclick = () => openSimple('drwNoHeader');
+    document.getElementById('openLD').onclick       = () => openSimple('drwLD');
+    document.getElementById('openNav').onclick      = () => openSimple('drwNav');
+  </script>
+</body>
+</html>

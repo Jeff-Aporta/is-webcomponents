@@ -22,7 +22,7 @@ import assert from 'node:assert/strict';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const html = await readFile(join(root, 'previews/media/icon-explorer.html'), 'utf8');
+const html = await readFile(join(root, 'src/previews/media/icon-explorer.html'), 'utf8');
 
 // --- 1. Scroll propio ------------------------------------------------------
 
@@ -175,7 +175,7 @@ assert.equal(
 // El explorador vive al final de previews/media/is-icon.html, EMBEBIDO, no
 // copiado: duplicar su markup significaria mantener dos buscadores.
 
-const iconHtml = await readFile(join(root, 'previews/media/is-icon.html'), 'utf8');
+const iconHtml = await readFile(join(root, 'src/previews/media/is-icon.html'), 'utf8');
 
 assert.ok(/id="explorer"/.test(iconHtml), 'is-icon.html debe tener la sección #explorer al final');
 assert.ok(

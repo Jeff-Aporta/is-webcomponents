@@ -33,12 +33,16 @@ for (const c of manifest) {
   const rel = `${folder}/LLM.md`;
   if (checked.has(rel)) continue;
   checked.add(rel);
-  if (!existsSync(join(root, rel))) {
-    failures.push(`${c.tag} (categoría ${c.category}): falta ${rel} — el botón "LLM · Categoría" daría 404`);
+  // script del manifest = ../../components/... → disco en src/components/...
+  if (!existsSync(join(root, 'src', rel))) {
+    failures.push(`${c.tag} (categoría ${c.category}): falta src/${rel} — el botón "LLM · Categoría" daría 404`);
   }
 }
 
-// 2) El índice global existe: es el destino del botón "LLM · Todos".
+// 2) Índice global del catálogo (CDN docs) + convenciones del repo.
+if (!existsSync(join(root, 'src', 'components', 'LLM.md'))) {
+  failures.push('falta src/components/LLM.md (índice global del catálogo)');
+}
 if (!existsSync(join(root, 'LLM.md'))) failures.push('falta LLM.md en la raíz del repo');
 
 // 3) preview-chrome.js no debe volver a componer la ruta desde la categoría ni
@@ -68,6 +72,9 @@ const base = chrome.match(/const LLM_BASE = '([^']+)'/)?.[1] || '';
 if (!base.startsWith('https://raw.githubusercontent.com/')) {
   failures.push(`LLM_BASE es "${base}"; debe ser raw.githubusercontent para que responda text/plain`);
 }
+if (!base.endsWith('/src')) {
+  failures.push(`LLM_BASE es "${base}"; tras el move a src/ debe terminar en /src`);
+}
 if (/pages\.dev/.test(chrome)) {
   failures.push('preview-chrome.js aún apunta a Cloudflare Pages; el proyecto se desvinculó');
 }
@@ -77,7 +84,7 @@ if (/pages\.dev/.test(chrome)) {
 if (!/setAttribute\('config'/.test(chrome)) {
   failures.push('preview-chrome.js no pasa los enlaces al <is-cdn-snippet> por `config`');
 }
-const snippet = readFileSync(join(root, 'components', 'feedback', 'cdn-snippet.js'), 'utf8');
+const snippet = readFileSync(join(root, 'src', 'components', 'feedback', 'cdn-snippet.js'), 'utf8');
 if (!/#renderDocs/.test(snippet) || !/cdn__docs/.test(snippet)) {
   failures.push('cdn-snippet.js no construye la sección de documentación');
 }

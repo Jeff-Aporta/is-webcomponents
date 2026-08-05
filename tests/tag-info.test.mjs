@@ -8,7 +8,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
 test('is-tag declara color="info" en VALID_COLOR', () => {
-  const src = readFileSync(join(root, 'components', 'feedback', 'tag.js'), 'utf8');
+  const src = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.js'), 'utf8');
   assert.ok(
     /VALID_COLOR\s*=\s*\[[^\]]*'info'/.test(src),
     'tag.js debe listar "info" en VALID_COLOR',
@@ -16,7 +16,7 @@ test('is-tag declara color="info" en VALID_COLOR', () => {
 });
 
 test('is-tag actualiza doc-block con la colore info', () => {
-  const src = readFileSync(join(root, 'components', 'feedback', 'tag.js'), 'utf8');
+  const src = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.js'), 'utf8');
   assert.ok(
     /brand\s*\|\s*neutral\s*\|\s*info\s*\|\s*success/.test(src),
     'El doc-block debe listar info entre neutral y success',
@@ -24,7 +24,7 @@ test('is-tag actualiza doc-block con la colore info', () => {
 });
 
 test('is-tag.css define los tokens de color=info', () => {
-  const css = readFileSync(join(root, 'components', 'feedback', 'tag.css'), 'utf8');
+  const css = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.css'), 'utf8');
   // Buscar el bloque :host([color="info"]) { ... }
   const m = /:host\(\[\s*color\s*=\s*["']info["']\s*\]\)\s*\{([\s\S]*?)\}/m.exec(css);
   assert.ok(m, 'Debe existir el bloque :host([color="info"]) { ... }');
@@ -39,7 +39,7 @@ test('is-tag.css NO anida selectores con atributos del host dentro de :host', ()
   // CSS Nesting dentro de :host { ... } rompe la cascada: el navegador
   // aplana todas las reglas en una sola y deja de aplicar los selectores
   // &[color="..."]. Hay que sacarlos a top-level como :host([color="..."]).
-  const css = readFileSync(join(root, 'components', 'feedback', 'tag.css'), 'utf8');
+  const css = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.css'), 'utf8');
   // Tomamos el primer bloque :host { ... } y miramos si dentro hay un &
   // seguido de [color= o [variant= o [pill].
   const idx = css.indexOf(':host {');
@@ -78,7 +78,7 @@ test('callout.css NO anida selectores con atributos del host dentro de :host', (
   // Mismo bug que tag.css tenía: callout.css también anidaba
   // &[color=...] y &[variant=...] dentro de :host { ... }.
   // Ya está migrado a top-level, este test protege contra regresiones.
-  const css = readFileSync(join(root, 'components', 'layout', 'callout.css'), 'utf8');
+  const css = readFileSync(join(root, 'src', 'components', 'layout', 'callout.css'), 'utf8');
   const idx = css.indexOf(':host {');
   assert.ok(idx > -1, ':host { ... } existe en callout.css');
   const start = css.indexOf('{', idx);
@@ -112,7 +112,7 @@ test('callout.css NO anida selectores con atributos del host dentro de :host', (
 });
 
 test('Las 3 paletas definen --is-color-info-500', () => {
-  const css = readFileSync(join(root, 'styles', 'palettes.css'), 'utf8');
+  const css = readFileSync(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
   for (const pal of ['insoft', 'contapyme', 'agrowin']) {
     const re = new RegExp(`\\[data-palette=["']${pal}["']\\][\\s\\S]*?--is-color-info-500\\s*:`);
     assert.ok(re.test(css), `La paleta "${pal}" debe definir --is-color-info-500`);
@@ -120,7 +120,7 @@ test('Las 3 paletas definen --is-color-info-500', () => {
 });
 
 test('Las 3 paletas definen la escala completa info-50..800', () => {
-  const css = readFileSync(join(root, 'styles', 'palettes.css'), 'utf8');
+  const css = readFileSync(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
   for (const pal of ['insoft', 'contapyme', 'agrowin']) {
     const re = new RegExp(
       `\\[data-palette=["']${pal}["']\\]([\\s\\S]*?)\\}`,
@@ -137,7 +137,7 @@ test('Las 3 paletas definen la escala completa info-50..800', () => {
 });
 
 test('preview de is-tag muestra la colore info', () => {
-  const html = readFileSync(join(root, 'previews', 'feedback', 'is-tag.html'), 'utf8');
+  const html = readFileSync(join(root, 'src', 'previews', 'feedback', 'is-tag.html'), 'utf8');
   assert.ok(
     /<is-tag\s+color=["']info["']/.test(html),
     'El preview debe incluir al menos un <is-tag color="info">',

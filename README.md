@@ -28,31 +28,27 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 
 | Ruta | Contenido |
 |------|-----------|
-| `components/` | Fuentes por categoría (`actions`, `feedback`, `helpers`, …) |
-| `previews/` | Docs + demos por componente |
-| `styles/` | Tokens (`is-base.css`) y shell |
+| `src/components/` | Fuentes por categoría (`actions`, `feedback`, `helpers`, …) |
+| `src/previews/` | Docs + demos por componente |
+| `src/styles/` | Tokens (`is-base.css`) y shell |
+| `src/assets/` | Iconos Iconify y favicon |
+| `src/skills/is-webcomponents/` | Guía para agentes IDE (CDN-first) — **solo fuente**, no en `dist/` |
+| `src/components/**/*.md` | Docs LLM por módulo / categoría — raw bajo `…/main/src/components/` |
 | `manifest.js` | Índice de la galería |
-| `skills/is-webcomponents/` | Skill para agentes IDE (Cursor, Claude Code, …) — **solo fuente**, no en `dist/` |
-| `components/**/*.md` | Docs LLM por módulo / categoría — **solo fuente** (raw.githubusercontent) |
+| `scripts/` · `dist/cdn/` · `tests/` | Build, CDN, invariantes (`*.test.mjs` commiteados) |
 
-## Skill para agentes IDE
+## Agentes / LLM (CDN)
 
-Obliga a reusar los tags `is-*` del kit al fundar o extender apps consumidoras. Los MD de skill y de LLM viven en el repo fuente; `dist/cdn` solo lleva JS/CSS del kit.
-
-```bash
-npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
-```
-
-Prompt para pegarle al LLM (también en cada `<is-cdn-snippet>`):
+No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada preview, `<is-cdn-snippet>` muestra los enlaces y un prompt CDN-first.
 
 ```
-Instala en este entorno la skill is-webcomponents del repo Jeff-Aporta/is-webcomponents.
-Ejecuta exactamente: npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
-La skill vive en skills/is-webcomponents/ del repo (fuente), no en dist/.
-Tras instalarla, úsala siempre que construyas o edites UI con el kit is-* (CDN all.min.js / is-base / palettes):
-reutiliza los tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
-Consulta components/LLM.md y el MD del módulo antes de inventar API.
+Usa el kit IS Web Components solo por CDN (jsDelivr), sin npm ni npx.
+Bootstrap: is-base.min.css + palettes.min.css + el .min.js del tag (o category.*.min.js / all.min.js).
+Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
+Antes de inventar API: lee src/components/LLM.md, el LLM.md de la categoría y el MD del módulo.
 ```
+
+Docs raw: [índice](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/LLM.md) · guía agentes en `src/skills/is-webcomponents/SKILL.md`.
 
 ## Licencia
 

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-cdn-snippet · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-cdn-snippet">
+      <section class="section" id="intro">
+        <h2>&lt;is-cdn-snippet&gt;</h2>
+        <p class="lede">
+          Panel reusablede enlaces CDN para un componente. Pinta 3 filas base
+          (individual / categor\u00eda / bundle global) y, opcionalmente, una fila
+          adicional por cada <strong>dependencia externa</strong> que el
+          consumidor declare (CodeMirror, librer\u00edas externas, etc.).
+        </p>
+        <is-demo
+          class="demo"
+          data-code='&lt;is-cdn-snippet
+  tag="is-button"
+  category="actions"
+&gt;&lt;/is-cdn-snippet&gt;'
+        >
+          <is-cdn-snippet tag="is-button" category="actions"></is-cdn-snippet>
+        </is-demo>
+        <pre class="code" data-lang="html">&lt;is-cdn-snippet
+  tag="is-button"
+  category="actions"
+&gt;&lt;/is-cdn-snippet&gt;</pre>
+      </section>
+
+      <section class="section" id="dependencies">
+        <h2>Dependencias externas</h2>
+        <p class="lede">
+          Si tu componente necesita otra librer\u00eda para funcionar (p. ej. CodeMirror para
+          el visor de c\u00f3digo), declara sus enlaces con el slot <code class="code">deps</code>:
+          un <code class="code">&lt;script type="application/json"&gt;</code> con un array de
+          objetos <code class="code">{name, version?, css?, js?, note?}</code>. El componente
+          pinta una fila por cada dep con borde y label distintos, para que se note
+          que son REQUISITOS, no opciones del componente.
+        </p>
+        <is-demo class="demo">
+          <is-cdn-snippet
+            tag="is-popconfirm"
+            category="feedback"
+            title="Popconfirm — Consumo por CDN"
+          >
+            <script type="application/json" slot="deps">
+              [
+                {
+                  "name": "CodeMirror",
+                  "version": "5.65.16",
+                  "css": "https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css",
+                  "js":  "https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js",
+                  "note": "CodeMirror 5 (no 6) para mantener la API cl\u00e1sica y el sistema de addons (mode, hint, etc.). Si usas un theme distinto a material-darker, a\u00f1ade el .css correspondiente antes del script del componente."
+                }
+              ]
+            </script>
+          </is-cdn-snippet>
+        </is-demo>
+        <pre class="code" data-lang="html">&lt;is-cdn-snippet tag="is-popconfirm" category="feedback"&gt;
+  &lt;script type="application/json" slot="deps"&gt;
+    [
+      {
+        "name": "CodeMirror",
+        "version": "5.65.16",
+        "css": "https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css",
+        "js":  "https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js",
+        "note": "CodeMirror 5 (no 6) para mantener la API cl\u00e1sica."
+      }
+    ]
+  &lt;/script&gt;
+&lt;/is-cdn-snippet&gt;</pre>
+      </section>
+
+      <section class="section" id="deps-attribute">
+        <h2>Dependencias v\u00eda atributo</h2>
+        <p class="lede">
+          Si te queda m\u00e1s c\u00f3modo, tambi\u00e9n puedes pasar las deps como atributo
+          <code class="code">dependencies</code> con JSON. El slot y el atributo se
+          MERGEAN: si pasas ambos, el atributo gana.
+        </p>
+        <is-demo class="demo">
+          <is-cdn-snippet
+            tag="is-chart"
+            category="data"
+            dependencies='[
+              {"name":"Chart.js","version":"4.4.0","js":"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js","note":"Necesario si usas &lt;is-chart&gt; con type=&quot;bar&quot; o &quot;line&quot;."}
+            ]'
+          ></is-cdn-snippet>
+        </is-demo>
+        <pre class="code" data-lang="html">&lt;is-cdn-snippet
+  tag="is-chart"
+  category="data"
+  dependencies='[
+    { "name": "Chart.js", "version": "4.4.0",
+      "js": "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" }
+  ]'
+&gt;&lt;/is-cdn-snippet&gt;</pre>
+      </section>
+
+      <section class="section" id="multiple">
+        <h2>M\u00faltiples dependencias</h2>
+        <p class="lede">
+          Puedes declarar N deps en el mismo array. El componente las pinta
+          todas, en el orden dado, con su propio bloque copiable.
+        </p>
+        <is-demo class="demo">
+          <is-cdn-snippet tag="is-textarea" category="forms" title="Textarea + CodeMirror + tema">
+            <script type="application/json" slot="deps">
+              [
+                {
+                  "name": "CodeMirror",
+                  "version": "5.65.16",
+                  "css": "https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css",
+                  "js":  "https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"
+                },
+                {
+                  "name": "CodeMirror theme · material-darker",
+                  "version": "5.65.16",
+                  "css": "https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css",
+                  "note": "Opcional. Define la paleta usada por el theme-toggle del preview."
+                }
+              ]
+            </script>
+          </is-cdn-snippet>
+        </is-demo>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>tag</code></td><td>string — p. ej. <code>"is-button"</code> (obligatorio para single + category)</td></tr>
+            <tr><td><code>category</code></td><td>string — p. ej. <code>"actions"</code> (categor\u00eda del manifest)</td></tr>
+            <tr><td><code>base</code></td><td>string — override del CDN base (default <code>cdn.jsdelivr.net/.../dist/cdn</code>)</td></tr>
+            <tr><td><code>title</code></td><td>string — t\u00edtulo del panel (default "Consumo por CDN")</td></tr>
+            <tr><td><code>dependencies</code></td><td>JSON string — array de deps externas (alternativa al slot)</td></tr>
+            <tr><td><code>slot="deps"</code></td><td><code>&lt;script type="application/json"&gt;</code> con array de deps</td></tr>
+            <tr><td>Dep shape</td><td><code>{name, version?, css?, js?, note?}</code> &mdash; css y js son opcionales independientes</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-cdn-snippet</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducci\u00f3n</a>
+        <a href="#dependencies">Dependencias</a>
+        <a href="#deps-attribute">V\u00eda atributo</a>
+        <a href="#multiple">M\u00faltiples</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

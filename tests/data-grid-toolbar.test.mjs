@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 test('data-grid.js expone toolbarTools y observa toolbar-tools', async () => {
-  const js = await readFile(join(root, 'components/data/data-grid.js'), 'utf8');
+  const js = await readFile(join(root, 'src/components/data/data-grid.js'), 'utf8');
 
   assert.match(js, /['"]toolbar-tools['"]/, 'atributo toolbar-tools debe estar observado');
   assert.match(js, /get toolbarTools\s*\(/, 'propiedad toolbarTools (getter)');
@@ -29,13 +29,13 @@ test('data-grid.js expone toolbarTools y observa toolbar-tools', async () => {
 });
 
 test('data-grid.md documenta toolbar-tools', async () => {
-  const md = await readFile(join(root, 'components/data/data-grid.md'), 'utf8');
+  const md = await readFile(join(root, 'src/components/data/data-grid.md'), 'utf8');
   assert.match(md, /toolbar-tools/, 'MD debe listar toolbar-tools');
   assert.match(md, /false/, 'MD debe explicar false = ocultar tools');
 });
 
 test('components/data/LLM.md recuerda no ocultar tools con CSS', async () => {
-  const md = await readFile(join(root, 'components/data/LLM.md'), 'utf8');
+  const md = await readFile(join(root, 'src/components/data/LLM.md'), 'utf8');
   assert.match(md, /toolbar-tools/, 'LLM data debe mencionar toolbar-tools');
   assert.match(md, /No ocultar|no ocultar|CSS/i, 'LLM debe prohibir ocultar con CSS');
 });

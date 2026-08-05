@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-barcode · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .bc-row { padding: 1rem 0; border-bottom: 1px dashed var(--is-border); }
+    .bc-row:last-child { border-bottom: 0; }
+
+    .bc-check { display: grid; gap: 14px; }
+    .bc-case {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      padding: 0.9rem 0;
+      border-bottom: 1px dashed var(--is-border);
+    }
+    .bc-case:last-child { border-bottom: 0; }
+    /* Escala tipografica de esta seccion: DOS pasos declarados sobre el cuerpo
+       (1rem = 15px de presentation.css) → 0.75rem para etiquetas, 1.25rem para
+       el titulo. Ratio ~1.33 entre pasos.
+       El texto normal NO declara font-size: un 0.95rem sobre un cuerpo de 1rem
+       no es jerarquia, es un duplicado que aplana la escala. */
+    .bc-case dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2px 0.75rem;
+      align-content: center;
+    }
+    .bc-case dt { color: var(--is-text-soft); font-size: 0.75rem; align-self: center; }
+    .bc-case dd { margin: 0; }
+    .bc-out { font-family: var(--is-mono, ui-monospace, monospace); letter-spacing: 0.04em; color: var(--is-accent); }
+
+    .bc-verify {
+      margin-top: 1.1rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--is-border);
+      border-radius: 0.6rem;
+      background: var(--is-bg-elev);
+    }
+    .bc-verify h3 { margin: 0 0 0.35rem; font-size: 1.25rem; }
+    .bc-verify ol { margin: 0.5rem 0 0.9rem; padding-left: 1.15rem; display: grid; gap: 3px; }
+    .bc-verify__actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .bc-msg { font-size: 0.75rem; color: var(--is-accent); }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-barcode">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-barcode&gt;</h2>
+        <p class="lede">Genera códigos de barras en SVG puro. Soporta <code>EAN-13</code> (productos) y <code>Code 128</code> (alfanumérico). QR queda como siguiente paso vía lib externa.</p>
+      </section>
+
+      <section class="section" id="ean">
+        <h2>EAN-13 (productos)</h2>
+        <p>
+          Pasás 12 dígitos y el componente calcula el 13º (dígito verificador) con el
+          algoritmo GS1: se suman los dígitos en posición impar ×1 y los de posición par ×3,
+          y el verificador es lo que falta para llegar a la siguiente decena.
+          <b>Lo que un lector devuelve son los 13 dígitos</b>, no los 12 que escribiste.
+        </p>
+
+        <is-demo class="demo" heading="Qué lee un escáner en cada código">
+          <div class="bc-check">
+            <div class="bc-case">
+              <is-barcode type="ean13" value="770123456789" height="70"></is-barcode>
+              <dl>
+                <dt>value=</dt><dd><code class="code">770123456789</code></dd>
+                <dt>Un lector devuelve</dt><dd><b class="bc-out">7701234567897</b></dd>
+                <dt>Prefijo GS1</dt><dd>770 · Colombia</dd>
+              </dl>
+            </div>
+
+            <div class="bc-case">
+              <is-barcode type="ean13" value="750103131130" height="70"></is-barcode>
+              <dl>
+                <dt>value=</dt><dd><code class="code">750103131130</code></dd>
+                <dt>Un lector devuelve</dt><dd><b class="bc-out">7501031311309</b></dd>
+                <dt>Prefijo GS1</dt><dd>750 · México</dd>
+              </dl>
+            </div>
+
+            <div class="bc-case">
+              <is-barcode type="ean13" value="400638133393" height="70"></is-barcode>
+              <dl>
+                <dt>value=</dt><dd><code class="code">400638133393</code></dd>
+                <dt>Un lector devuelve</dt><dd><b class="bc-out">4006381333931</b></dd>
+                <dt>Prefijo GS1</dt><dd>400 · Alemania</dd>
+              </dl>
+            </div>
+          </div>
+        </is-demo>
+
+        <div class="bc-verify">
+          <h3>Compruébalo con un decodificador gratuito</h3>
+          <p>
+            No hace falta un lector físico: el decodificador web de
+            <a href="https://zxing.org/w/decode.jspx" target="_blank" rel="noopener">ZXing</a>
+            (gratuito, sin registro) acepta una imagen y devuelve el contenido leído.
+          </p>
+          <ol>
+            <li>Descargá el PNG de un código con el botón de abajo (o tomá un pantallazo del código).</li>
+            <li>Abrí <code class="code">zxing.org/w/decode.jspx</code> y subilo en <i>Choose File → Submit</i>.</li>
+            <li>ZXing responde <code class="code">Format: EAN_13</code> y <code class="code">Parsed Result</code>
+              con los 13 dígitos: tienen que ser exactamente los de la columna
+              <i>«Un lector devuelve»</i>.</li>
+          </ol>
+          <div class="bc-verify__actions">
+            <is-button id="bcPng" color="brand" variant="filled">Descargar PNG del primer código</is-button>
+            <is-button id="bcCopy" color="neutral" variant="outlined">Copiar valor esperado</is-button>
+            <span id="bcMsg" class="bc-msg" role="status"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="c128">
+        <h2>Code 128 (general)</h2>
+        <is-demo class="demo">
+          <div class="bc-row"><is-barcode type="code128" value="INSOFT-2026-001"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="LOTE-7782-A"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="CEDULA 1234567890"></is-barcode></div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="style">
+        <h2>Personalización</h2>
+        <is-demo class="demo">
+          <div class="bc-row"><is-barcode type="ean13" value="770123456789" height="80"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="DEMO-INSOFT" fg="var(--is-accent)" show-text></is-barcode></div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">// Atributos
+// value        texto a codificar (requerido)
+// type         ean13 | code128 (default code128)
+// height       alto en píxeles (default 60)
+// fg           color de barras
+// bg           fondo (default transparent)
+// show-text    imprime el texto debajo
+// quiet        zonas de silencio EAN13 en módulos (default 9)
+
+// API JS
+// Acceso al SVG: bar.shadowRoot.querySelector('svg')</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-barcode</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#ean">EAN-13</a>
+        <a href="#c128">Code 128</a>
+        <a href="#style">Estilo</a>
+        <a href="#api">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script>
+    /* Exporta el primer EAN-13 como PNG para poder subirlo al decodificador de
+       ZXing y comprobar que devuelve exactamente 7701234567897.
+       El SVG vive en el shadow DOM de <is-barcode>: hay que serializarlo con
+       XMLSerializer y darle width/height explicitos, o el <img> no rasteriza. */
+    const EXPECTED = '7701234567897';
+    const msg = () => document.getElementById('bcMsg');
+    const flash = (t) => { msg().textContent = t; setTimeout(() => { msg().textContent = ''; }, 2200); };
+
+    document.getElementById('bcPng')?.addEventListener('click', async () => {
+      const bar = document.querySelector('is-barcode[value="770123456789"]');
+      const svg = bar?.shadowRoot?.querySelector('svg');
+      if (!svg) return flash('El código aún no se ha renderizado');
+
+      const clone = svg.cloneNode(true);
+      const box = svg.getBoundingClientRect();
+      const w = Math.max(1, Math.round(box.width)) * 2;
+      const h = Math.max(1, Math.round(box.height)) * 2;
+      clone.setAttribute('width', w);
+      clone.setAttribute('height', h);
+      // Fondo blanco: un PNG con fondo transparente se decodifica mal.
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('width', '100%');
+      rect.setAttribute('height', '100%');
+      rect.setAttribute('fill', '#fff');
+      clone.insertBefore(rect, clone.firstChild);
+      for (const el of clone.querySelectorAll('[fill]')) {
+        if (el !== rect) el.setAttribute('fill', '#000');
+      }
+
+      const src = new XMLSerializer().serializeToString(clone);
+      const url = URL.createObjectURL(new Blob([src], { type: 'image/svg+xml' }));
+      const img = new Image();
+      await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      canvas.toBlob((blob) => {
+        if (!blob) return flash('No se pudo generar el PNG');
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `ean13-${EXPECTED}.png`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        flash(`PNG listo · debe decodificar como ${EXPECTED}`);
+      }, 'image/png');
+    });
+
+    document.getElementById('bcCopy')?.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(EXPECTED); flash('Copiado: ' + EXPECTED); }
+      catch { flash('No se pudo copiar'); }
+    });
+  </script>
+</body>
+</html>

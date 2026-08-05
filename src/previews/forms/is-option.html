@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-option · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-option de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/forms/combobox.js"></script>
+  <script type="module" src="../../components/forms/option.js"></script>
+  <script type="module" src="../../components/media/icon.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-option">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-option&gt;</h2>
+        <p class="lede">Opción de un <code class="code">&lt;is-combobox&gt;</code> o <code class="code">&lt;is-select&gt;</code>. El <code class="code">value</code> es lo que expone el control; el contenido es lo que ve el usuario.</p>
+
+        <is-demo class="demo">
+          <is-combobox label="Ciudad" placeholder="Elige una" style="max-width:320px">
+            <is-option value="bog">Bogotá</is-option>
+            <is-option value="mde">Medellín</is-option>
+            <is-option value="cal">Cali</is-option>
+            <is-option value="brr" disabled>Barranquilla (sin cobertura)</is-option>
+          </is-combobox>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-combobox label="Ciudad" placeholder="Elige una" style="max-width:320px"&gt;
+  &lt;is-option value="bog"&gt;Bogotá&lt;/is-option&gt;
+  &lt;is-option value="mde"&gt;Medellín&lt;/is-option&gt;
+  &lt;is-option value="cal"&gt;Cali&lt;/is-option&gt;
+  &lt;is-option value="brr" disabled&gt;Barranquilla (sin cobertura)&lt;/is-option&gt;
+&lt;/is-combobox&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">&lt;is-option&gt; — Opción para is-combobox / is-select (listboxes). Atributos: value, disabled, selected, group Slots: default (etiqueta), start (icono/avatar), description (texto secundario) Parts: base, start, label, description</p>
+
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/forms/option.js</code>.
+        </p>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-option</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

@@ -75,7 +75,7 @@ for (const file of files) {
 }
 
 // El loader debe seguir exponiendo la resolucion propia.
-const loader = readFileSync(join(root, 'components/_shared/icon-loader.js'), 'utf8');
+const loader = readFileSync(join(root, 'src/components/_shared/icon-loader.js'), 'utf8');
 if (!/export async function resolveIconRaw/.test(loader)) {
   failures.push('icon-loader.js: falta resolveIconRaw (is-icon depende de él)');
 }

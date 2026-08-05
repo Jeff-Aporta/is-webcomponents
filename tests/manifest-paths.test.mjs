@@ -26,7 +26,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const previewsRoot = join(root, 'previews');
+const previewsRoot = join(root, 'src', 'previews');
 
 assert(Array.isArray((await import('../manifest.js')).default), 'manifest.js debe exportar un array');
 const manifest = (await import('../manifest.js')).default;

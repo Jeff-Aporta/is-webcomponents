@@ -20,8 +20,8 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const previewsDir = join(root, 'previews');
-const iconsDir = join(root, 'assets', 'icons');
+const previewsDir = join(root, 'src', 'previews');
+const iconsDir = join(root, 'src', 'assets', 'icons');
 
 const ICON_RE = /<is-icon\b[^>]*\bicon\s*=\s*["']([a-z0-9-]+):([a-z0-9-]+)["']/gi;
 

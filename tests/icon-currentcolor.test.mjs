@@ -25,9 +25,9 @@ import assert from 'node:assert/strict';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
-const iconJsPath = join(root, 'components/media/icon.js');
-const iconCssPath = join(root, 'components/media/icon.css');
-const loaderJsPath = join(root, 'components/_shared/icon-loader.js');
+const iconJsPath = join(root, 'src/components/media/icon.js');
+const iconCssPath = join(root, 'src/components/media/icon.css');
+const loaderJsPath = join(root, 'src/components/_shared/icon-loader.js');
 
 const iconJs = await readFile(iconJsPath, 'utf8');
 const iconCss = await readFile(iconCssPath, 'utf8');

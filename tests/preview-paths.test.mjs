@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const previewsDir = join(root, 'previews');
+const previewsDir = join(root, 'src', 'previews');
 
 const SRC_RE = /<(?:script|link)\b[^>]*?\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
 

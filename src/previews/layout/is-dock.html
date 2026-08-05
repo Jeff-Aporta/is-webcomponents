@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-dock · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .stage {
+      height: 28rem;
+      border: 1px dashed var(--is-border);
+      border-radius: var(--is-radius);
+      background:
+        radial-gradient(60rem 30rem at 50% 100%,
+          color-mix(in srgb, var(--is-accent) 14%, transparent),
+          transparent 60%);
+      position: relative;
+    }
+    pre.log {
+      font-family: ui-monospace, monospace; font-size: .8rem;
+      background: var(--is-bg-elev); border: 1px solid var(--is-border);
+      border-radius: var(--is-radius); padding: .55rem .75rem;
+      max-height: 9rem; overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-dock">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-dock&gt;</h2>
+        <p class="lede">Barra tipo macOS: los íconos se magnifican al acercar el cursor. Anclada abajo por defecto; podés moverla con el atributo <code class="code">position</code>.</p>
+      </section>
+
+      <section class="section" id="bottom">
+        <h2>Inferior</h2>
+        <is-demo class="demo">
+          <div class="stage"></div>
+          <is-dock>
+            <is-dock-item label="Inicio"     icon="mdi:home-variant" active></is-dock-item>
+            <is-dock-item label="Buscar"     icon="mdi:magnify"></is-dock-item>
+            <is-dock-item label="Mensajes"   icon="mdi:message-text"></is-dock-item>
+            <is-dock-item label="Calendario" icon="mdi:calendar"></is-dock-item>
+            <is-dock-item label="Notas"      icon="mdi:notebook"></is-dock-item>
+            <is-dock-item label="Música"     icon="mdi:music"></is-dock-item>
+            <is-dock-item label="Ajustes"    icon="mdi:cog"></is-dock-item>
+          </is-dock>
+        </is-demo>
+      </section>
+
+      <section class="section" id="left">
+        <h2>Lateral izquierdo</h2>
+        <is-demo class="demo">
+          <div class="stage"></div>
+          <is-dock position="left">
+            <is-dock-item label="VS Code"  icon="mdi:code-braces"></is-dock-item>
+            <is-dock-item label="Git"      icon="mdi:source-branch"></is-dock-item>
+            <is-dock-item label="Terminal" icon="mdi:console"></is-dock-item>
+            <is-dock-item label="Docker"   icon="mdi:docker"></is-dock-item>
+            <is-dock-item label="Browser"  icon="mdi:web"></is-dock-item>
+          </is-dock>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">// Cambia el ítem activo programáticamente
+document.querySelector('is-dock-item[label="Inicio"]').setAttribute('active', '');
+
+// Escucha selección
+dock.addEventListener('is-select', e =&gt; console.log(e.detail.item.getAttribute('label')));
+
+// Atributos
+// position    bottom (default) | top | left | right
+// max-scale   factor máximo (default 1.6)
+// range       píxeles de alcance (default 110)
+
+&lt;is-dock-item label="…" icon="mdi:…" href="…" active /&gt;</pre>
+      </section>
+
+      <section class="section" id="log">
+        <h2>Bitácora</h2>
+        <pre class="log" id="log"></pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-dock</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#bottom">Inferior</a>
+        <a href="#left">Lateral</a>
+        <a href="#api">API</a>
+        <a href="#log">Bitácora</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const log = document.getElementById('log');
+    function append(line) {
+      log.textContent = line + '\n' + log.textContent;
+      log.scrollTop = 0;
+    }
+    document.querySelectorAll('is-dock').forEach((d) => {
+      d.addEventListener('is-select', (e) => append(`select: ${e.detail.item.getAttribute('label')}`));
+    });
+  </script>
+</body>
+</html>

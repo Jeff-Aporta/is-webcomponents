@@ -10,12 +10,12 @@
  * `manifest.js` importado aquí. Los snippets ya no viven en el sidebar — la
  * nav solo lista los componentes.
  */
-import '../components/feedback/theme-toggle.js';
-import '../components/actions/button.js';
-import '../components/actions/button-group.js';
-import '../components/media/icon.js';
-import '../components/actions/copy-button.js';
-import '../components/feedback/cdn-snippet.js';
+import '../src/components/feedback/theme-toggle.js';
+import '../src/components/actions/button.js';
+import '../src/components/actions/button-group.js';
+import '../src/components/media/icon.js';
+import '../src/components/actions/copy-button.js';
+import '../src/components/feedback/cdn-snippet.js';
 import components from '../manifest.js';
 
 const THEMES = new Set(['light', 'dark']);
@@ -153,17 +153,26 @@ function mountCdnSnippet() {
  * inventario completo de tags. Confundirlos manda a un LLM consumidor a leer
  * notas de desarrollo del repo en vez de la documentación de la API.
  */
-const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
+const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src';
 
 function llmDocs(entry) {
-  const folder = (entry.script || '').replace(/\/[^/]+\.js$/, '').replace(/^\.\.\/\.\.\//, '');
+  // script → ruta fuente relativa al repo (p. ej. components/actions/button.js)
+  const scriptPath = (entry.script || '')
+    .replace(/^\.\.\/\.\.\//, '')
+    .replace(/^\.\.\//, '');
+  const folder = scriptPath.replace(/\/[^/]+\.js$/, '');
+  const moduleMd = scriptPath.replace(/\.js$/, '.md');
   const docs = [];
-  if (folder) docs.push({ label: `Categoría ${entry.category || ''}`.trim(), url: `${LLM_BASE}/${folder}/LLM.md` });
+  if (moduleMd && moduleMd !== scriptPath) {
+    docs.push({ label: 'Módulo', url: `${LLM_BASE}/${moduleMd}` });
+  }
+  if (folder) {
+    docs.push({
+      label: `Categoría ${entry.category || ''}`.trim(),
+      url: `${LLM_BASE}/${folder}/LLM.md`,
+    });
+  }
   docs.push({ label: 'Índice global', url: `${LLM_BASE}/components/LLM.md` });
-  docs.push({
-    label: 'Skill agentes',
-    url: `${LLM_BASE}/skills/is-webcomponents/SKILL.md`,
-  });
   return docs;
 }
 

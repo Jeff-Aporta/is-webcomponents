@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-badge · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-badge">
+      <section class="section" id="intro">
+        <h2>&lt;is-badge&gt;</h2>
+        <p class="lede">Etiqueta compacta con variantes semánticas y apariencias.</p>
+        <is-demo class="demo">
+          <div class="demo-row">
+            <is-badge>Nuevo</is-badge>
+            <is-badge color="success">Activo</is-badge>
+            <is-badge color="warning" attention="pulse">Pendiente</is-badge>
+          </div>
+        </is-demo>
+      </section>
+      <section class="section" id="examples">
+        <h2>Variantes y apariencias</h2>
+        <is-demo class="demo">
+          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+            <is-badge color="brand" variant="accent">accent</is-badge>
+            <is-badge color="brand" variant="filled">filled</is-badge>
+            <is-badge color="brand" variant="outlined">outlined</is-badge>
+            <is-badge color="brand" variant="filled-outlined">filled-outlined</is-badge>
+            <is-badge color="danger" pill attention="bounce">pill bounce</is-badge>
+          </div>
+          <div class="demo-row" style="flex-wrap:wrap;gap:.5rem">
+            <is-badge color="neutral" variant="filled">neutral</is-badge>
+            <is-badge color="success" variant="filled">success</is-badge>
+            <is-badge color="warning" variant="outlined">warning</is-badge>
+            <is-badge color="danger" variant="accent">danger</is-badge>
+            <is-badge attention="pulse">pulse</is-badge>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-badge color="success" variant="filled"&gt;OK&lt;/is-badge&gt;
+&lt;is-badge pill attention="pulse"&gt;Live&lt;/is-badge&gt;</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th></tr></thead>
+          <tbody>
+            <tr><td><code>variant</code></td><td>brand</td></tr>
+            <tr><td><code>appearance</code></td><td>accent</td></tr>
+            <tr><td><code>pill</code></td><td>false</td></tr>
+            <tr><td><code>attention</code></td><td>none · pulse · bounce</td></tr>
+          </tbody>
+        </table>
+        <p class="lede">Slots: default, start, end.</p>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-badge</h1>
+      <is-scrollspy target="is-main"><a href="#intro">Introducción</a><a href="#examples">Ejemplos</a><a href="#reference">Referencia</a></is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script>
+    </script>
+</body>
+</html>

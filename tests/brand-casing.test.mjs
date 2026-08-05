@@ -67,7 +67,7 @@ assert.equal(
 
 // El wordmark compuesto tiene que llevar la S mayúscula en las DOS
 // implementaciones, que hasta ahora divergían.
-const selector = await readFile(join(root, 'components/feedback/palette-selector.js'), 'utf8');
+const selector = await readFile(join(root, 'src/components/feedback/palette-selector.js'), 'utf8');
 assert.match(
   selector,
   /accentLabel:\s*'Soft'/,

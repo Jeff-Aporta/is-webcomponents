@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-image-editor · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .crop-out {
+      max-width: 100%;
+      max-height: 14rem;
+      display: block;
+      border: 1px solid var(--is-border);
+      border-radius: var(--is-radius);
+      margin-top: .55rem;
+    }
+    pre.log {
+      font-family: ui-monospace, monospace; font-size: .8rem;
+      background: var(--is-bg-elev); border: 1px solid var(--is-border);
+      border-radius: var(--is-radius); padding: .55rem .75rem;
+      max-height: 8rem; overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-image-editor">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-image-editor&gt;</h2>
+        <p class="lede">Canvas de edición con crop, zoom y rotación. Clic y arrastra el rectángulo para moverlo; las esquinas redimensionan.</p>
+      </section>
+
+      <section class="section" id="basico">
+        <h2>Básico</h2>
+        <is-demo class="demo">
+          <is-image-editor id="editor1" src="https://picsum.photos/id/1015/1600/1000" aspect="16/10">
+            <div slot="toolbar">
+              <button data-action="zoom-out">−</button>
+              <button data-action="zoom-in">+</button>
+              <button data-action="rotate-ccw">↺</button>
+              <button data-action="rotate">↻</button>
+              <button data-action="reset">Reset</button>
+              <button data-action="crop">Recortar</button>
+            </div>
+          </is-image-editor>
+          <img id="crop1" class="crop-out" alt="Recorte resultante" hidden
+               src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect width='1' height='1' fill='transparent'/></svg>">
+          <pre class="log" id="log">— logs aquí —</pre>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">const e = document.querySelector('is-image-editor');
+e.zoom = 1.2;             // o e.applyZoom(0.1);
+e.rotation = 90;           // grados, sentido horario
+e.applyRotation(-90);
+
+const out = e.cropped();  // dataURL image/png
+e.image;                  // HTMLImageElement cargada
+
+// Eventos
+e.addEventListener('is-load',   e =&gt; ...);
+e.addEventListener('is-change', e =&gt; /* crop rectangle cambia */);
+e.addEventListener('is-crop',   e =&gt; /* resultado recortado listo */);
+
+// Atributos
+// src, zoom, rotation, aspect ("1", "4/3", "16/9" o "")</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-image-editor</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#basico">Básico</a>
+        <a href="#api">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const editor = document.getElementById('editor1');
+    const out = document.getElementById('crop1');
+    const log = document.getElementById('log');
+    editor.addEventListener('is-crop', (e) => {
+      out.src = e.detail.dataURL;
+      out.hidden = false;
+      const c = e.detail.crop;
+      log.textContent = `crop @ ${Math.round(c.x)},${Math.round(c.y)} tamaño ${Math.round(c.width)}x${Math.round(c.height)}`;
+    });
+    editor.addEventListener('is-change', (e) => {
+      const c = e.detail.crop;
+      log.textContent = `crop movido: ${Math.round(c.x)},${Math.round(c.y)} ${Math.round(c.width)}x${Math.round(c.height)}`;
+    });
+  </script>
+</body>
+</html>

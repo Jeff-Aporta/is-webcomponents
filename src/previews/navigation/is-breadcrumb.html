@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-breadcrumb · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-breadcrumb e is-breadcrumb-item de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-breadcrumb">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-breadcrumb&gt;</h2>
+        <p class="lede">
+          Migas de pan accesibles con marcado <code class="code">&lt;nav&gt;</code>,
+          ARIA roles y separador automático entre items.
+        </p>
+
+        <is-demo class="demo">
+          <is-breadcrumb label="Catálogo">
+            <is-breadcrumb-item href="/">Catálogo</is-breadcrumb-item>
+            <is-breadcrumb-item href="/ropa">Ropa</is-breadcrumb-item>
+            <is-breadcrumb-item href="/ropa/mujer">Mujer</is-breadcrumb-item>
+            <is-breadcrumb-item href="">Camisetas</is-breadcrumb-item>
+          </is-breadcrumb>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-breadcrumb</span> <span class="attr">label</span>=<span class="val">"Catálogo"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-breadcrumb-item</span> <span class="attr">href</span>=<span class="val">"/"</span><span class="tag">&gt;</span>Catálogo<span class="tag">&lt;/is-breadcrumb-item&gt;</span>
+  <span class="tag">&lt;is-breadcrumb-item</span> <span class="attr">href</span>=<span class="val">"/ropa"</span><span class="tag">&gt;</span>Ropa<span class="tag">&lt;/is-breadcrumb-item&gt;</span>
+  <span class="tag">&lt;is-breadcrumb-item</span> <span class="attr">href</span>=<span class="val">"/ropa/mujer"</span><span class="tag">&gt;</span>Mujer<span class="tag">&lt;/is-breadcrumb-item&gt;</span>
+  <span class="tag">&lt;is-breadcrumb-item</span> <span class="attr">href</span>=<span class="val">""</span><span class="tag">&gt;</span>Camisetas<span class="tag">&lt;/is-breadcrumb-item&gt;</span>
+<span class="tag">&lt;/is-breadcrumb&gt;</span></pre>
+      </section>
+
+      <section class="section" id="spa">
+        <h2>SPAs — eventos de click</h2>
+        <p class="lede">Sin <code class="code">href</code>, los items se renderizan como texto sin enlace. Conecta tú los handlers.</p>
+
+        <is-demo class="demo">
+          <is-breadcrumb id="bcSpa" label="Navegación SPA">
+            <is-breadcrumb-item>Inicio</is-breadcrumb-item>
+            <is-breadcrumb-item>Productos</is-breadcrumb-item>
+            <is-breadcrumb-item>Detalle</is-breadcrumb-item>
+          </is-breadcrumb>
+          <p id="bcLog">Última navegación: ninguna</p>
+        </is-demo>
+
+        <pre class="code">bc.addEventListener('click', (e) =&gt; {
+  const item = e.target.closest('is-breadcrumb-item');
+  if (item) console.log('item click', item.textContent.trim());
+});</pre>
+      </section>
+
+      <section class="section" id="icons">
+        <h2>Iconos en items</h2>
+        <p class="lede">Usa el atributo <code class="code">icon</code> o el slot <code class="code">start</code>.</p>
+
+        <div class="demo-stack">
+          <is-breadcrumb label="Inicio">
+            <is-breadcrumb-item href="/" icon="mdi:home">Inicio</is-breadcrumb-item>
+            <is-breadcrumb-item href="/articulos" icon="mdi:newspaper-variant">Artículos</is-breadcrumb-item>
+            <is-breadcrumb-item href="" icon="mdi:airplane">Viajes</is-breadcrumb-item>
+          </is-breadcrumb>
+
+          <is-breadcrumb label="App">
+            <is-breadcrumb-item href="/dashboard">
+              <is-icon slot="start" icon="mdi:view-dashboard" aria-hidden="true"></is-icon>
+              Dashboard
+            </is-breadcrumb-item>
+            <is-breadcrumb-item href="/users">
+              <is-icon slot="start" icon="mdi:account-group" aria-hidden="true"></is-icon>
+              Usuarios
+            </is-breadcrumb-item>
+            <is-breadcrumb-item href="">
+              <is-icon slot="start" icon="mdi:account" aria-hidden="true"></is-icon>
+              Perfil
+            </is-breadcrumb-item>
+          </is-breadcrumb>
+        </div>
+
+        <pre class="code"><span class="tag">&lt;is-breadcrumb-item</span> <span class="attr">icon</span>=<span class="val">"mdi:home"</span><span class="tag">&gt;</span>Inicio<span class="tag">&lt;/is-breadcrumb-item&gt;</span>
+<span class="tag">&lt;is-breadcrumb-item</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;is-icon</span> <span class="attr">slot</span>=<span class="val">"start"</span> <span class="attr">icon</span>=<span class="val">"mdi:home"</span><span class="tag">&gt;</span><span class="tag">&lt;/is-icon&gt;</span>
+  Inicio
+<span class="tag">&lt;/is-breadcrumb-item&gt;</span></pre>
+      </section>
+
+      <section class="section" id="separator">
+        <h2>Separador custom</h2>
+        <p class="lede">Cambia el slot <code class="code">separator</code> de cada item — o sólo el último que se ignora.</p>
+
+        <is-demo class="demo">
+          <is-breadcrumb label="Slash">
+            <is-breadcrumb-item href="/home">
+              <span slot="separator">/</span>
+              Inicio
+            </is-breadcrumb-item>
+            <is-breadcrumb-item href="/docs">
+              <span slot="separator">/</span>
+              Docs
+            </is-breadcrumb-item>
+            <is-breadcrumb-item href="">
+              <span slot="separator">/</span>
+              Guía
+            </is-breadcrumb-item>
+          </is-breadcrumb>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-breadcrumb-item</span> <span class="attr">href</span>=<span class="val">"/home"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span</span> <span class="attr">slot</span>=<span class="val">"separator"</span><span class="tag">&gt;</span>/<span class="tag">&lt;/span&gt;</span>
+  Inicio
+<span class="tag">&lt;/is-breadcrumb-item&gt;</span></pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia completa — <code class="code">&lt;is-breadcrumb&gt;</code></h2>
+
+        <h3>Atributos</h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>label</code></td><td>string</td><td>"Ruta"</td><td>aria-label del nav.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Slots</h3>
+        <table class="ref">
+          <thead><tr><th>Slot</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>(default)</code></td><td>Breadcrumb-items.</td></tr>
+            <tr><td><code>separator</code></td><td>Icono o texto entre items. Cada item también acepta su propio separator via slot.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS Parts</h3>
+        <table class="ref">
+          <thead><tr><th>Part</th><th>Descripción</th></tr></thead>
+          <tbody><tr><td><code>::part(breadcrumb)</code></td><td>El wrapper &lt;nav&gt;.</td></tr></tbody>
+        </table>
+
+        <h2>Referencia completa — <code class="code">&lt;is-breadcrumb-item&gt;</code></h2>
+
+        <h3>Atributos</h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>href</code></td><td>string</td><td>—</td><td>Si está, renderiza <code>&lt;a&gt;</code>. <code>href=""</code> = current page.</td></tr>
+            <tr><td><code>target</code></td><td>string</td><td>—</td><td>Pasado al <code>&lt;a&gt;</code>.</td></tr>
+            <tr><td><code>rel</code></td><td>string</td><td>—</td><td>Pasado al <code>&lt;a&gt;</code>.</td></tr>
+            <tr><td><code>icon</code></td><td>string</td><td>—</td><td>Iconify id por defecto (sin slot start).</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Slots</h3>
+        <table class="ref">
+          <thead><tr><th>Slot</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>(default)</code></td><td>Texto del item.</td></tr>
+            <tr><td><code>start</code></td><td>Icono al inicio.</td></tr>
+            <tr><td><code>end</code></td><td>Icono al final.</td></tr>
+            <tr><td><code>separator</code></td><td>Override del separador de este item.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>CSS Parts</h3>
+        <table class="ref">
+          <thead><tr><th>Part</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>::part(label)</code></td><td>Etiqueta (texto o enlace).</td></tr>
+            <tr><td><code>::part(separator)</code></td><td>Separador.</td></tr>
+            <tr><td><code>::part(start)</code></td><td>Wrapper del icono al inicio.</td></tr>
+            <tr><td><code>::part(end)</code></td><td>Wrapper del icono al final.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-breadcrumb</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#spa">SPAs</a>
+        <a href="#icons">Iconos</a>
+        <a href="#separator">Separador</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script>
+    // Demo SPA: log clicks
+    const bc = document.getElementById('bcSpa');
+    const bcLog = document.getElementById('bcLog');
+    bc.addEventListener('click', (e) => {
+      const item = e.target.closest('is-breadcrumb-item');
+      if (item) bcLog.textContent = `Última navegación: ${item.textContent.trim()}`;
+    });
+  </script>
+</body>
+</html>

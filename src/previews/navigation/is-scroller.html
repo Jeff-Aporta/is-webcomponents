@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-scroller · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-scroller de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-scroller">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-scroller&gt;</h2>
+        <p class="lede">
+          Wrapper que añade scroll horizontal (o vertical) con botones prev/next
+          automáticos cuando el contenido del slot desborda. Ideal para
+          listas de pills, carruseles de chips, drawers inline, etc.
+        </p>
+
+        <is-demo class="demo">
+          <is-scroller id="sc1" style="max-width: 480px;">
+            <is-button>Pills 1</is-button>
+            <is-button>Pills 2</is-button>
+            <is-button>Pills 3</is-button>
+            <is-button>Pills 4</is-button>
+            <is-button>Pills 5</is-button>
+            <is-button>Pills 6</is-button>
+            <is-button>Pills 7</is-button>
+            <is-button>Pills 8</is-button>
+            <is-button>Pills 9</is-button>
+            <is-button>Pills 10</is-button>
+            <is-button>Pills 11</is-button>
+            <is-button>Pills 12</is-button>
+          </is-scroller>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-scroller&gt;</span>
+  <span class="tag">&lt;is-button&gt;</span>Pills 1<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button&gt;</span>Pills 2<span class="tag">&lt;/is-button&gt;</span>
+  …
+<span class="tag">&lt;/is-scroller&gt;</span></pre>
+      </section>
+
+      <section class="section" id="cards">
+        <h2>Con cards</h2>
+        <p class="lede">Funciona con cualquier hijo: cards, avatares, breadcrumbs, etc.</p>
+
+        <is-demo class="demo">
+          <is-scroller orientation="horizontal" style="max-width: 640px;">
+            <is-card style="min-width:240px" header="Inbox">
+              <p>3 mensajes sin leer.</p>
+            </is-card>
+            <is-card style="min-width:240px" header="Calendar">
+              <p>2 reuniones hoy.</p>
+            </is-card>
+            <is-card style="min-width:240px" header="Tasks">
+              <p>5 tareas pendientes.</p>
+            </is-card>
+            <is-card style="min-width:240px" header="Notes">
+              <p>1 nota actualizada.</p>
+            </is-card>
+            <is-card style="min-width:240px" header="Files">
+              <p>12 archivos recientes.</p>
+            </is-card>
+          </is-scroller>
+        </is-demo>
+      </section>
+
+      <section class="section" id="vertical">
+        <h2>Vertical</h2>
+        <p class="lede">Con <code class="code">orientation="vertical"</code> el scroll es en columna.</p>
+
+        <is-demo class="demo">
+          <is-scroller orientation="vertical" style="height: 200px; max-width: 480px;">
+            <p>Elemento 1</p>
+            <p>Elemento 2</p>
+            <p>Elemento 3</p>
+            <p>Elemento 4</p>
+            <p>Elemento 5</p>
+            <p>Elemento 6</p>
+            <p>Elemento 7</p>
+            <p>Elemento 8</p>
+            <p>Elemento 9</p>
+            <p>Elemento 10</p>
+          </is-scroller>
+        </is-demo>
+      </section>
+
+      <section class="section" id="both">
+        <h2>Bidimensional</h2>
+        <p class="lede">Con <code class="code">orientation="both"</code>.</p>
+
+        <is-demo class="demo">
+          <is-scroller orientation="both" style="height: 180px;">
+            <div style="min-width:600px;display:grid;grid-template-columns:repeat(6,1fr);gap:0.5rem">
+              <is-button>1</is-button><is-button>2</is-button><is-button>3</is-button>
+              <is-button>4</is-button><is-button>5</is-button><is-button>6</is-button>
+              <is-button>7</is-button><is-button>8</is-button><is-button>9</is-button>
+              <is-button>10</is-button><is-button>11</is-button><is-button>12</is-button>
+            </div>
+          </is-scroller>
+        </is-demo>
+      </section>
+
+      <section class="section" id="plain">
+        <h2>Sin botones</h2>
+        <p class="lede">Con <code class="code">without-scroll-buttons</code> solo se queda el scrollbar nativo.</p>
+
+        <is-demo class="demo">
+          <is-scroller without-scroll-buttons style="max-width: 480px;">
+            <is-button>1</is-button>
+            <is-button>2</is-button>
+            <is-button>3</is-button>
+            <is-button>4</is-button>
+            <is-button>5</is-button>
+            <is-button>6</is-button>
+            <is-button>7</is-button>
+            <is-button>8</is-button>
+            <is-button>9</is-button>
+            <is-button>10</is-button>
+          </is-scroller>
+        </is-demo>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3><code class="code">&lt;is-scroller&gt;</code></h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>orientation</code></td><td>horizontal | vertical | both</td><td>horizontal</td><td>Dirección del scroll.</td></tr>
+            <tr><td><code>without-scroll-buttons</code></td><td>boolean</td><td>false</td><td>Oculta los botones prev/next.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Slots</h3>
+        <table class="ref">
+          <thead><tr><th>Slot</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td>(default)</td><td>Contenido a scrollear.</td></tr>
+            <tr><td>scroll-button-start</td><td>Override del icono del botón prev.</td></tr>
+            <tr><td>scroll-button-end</td><td>Override del icono del botón next.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>is-scroll-start</code></td><td>Click en botón prev.</td></tr>
+            <tr><td><code>is-scroll-end</code></td><td>Click en botón next.</td></tr>
+            <tr><td><code>is-scroll-overflow</code></td><td>Cambia el estado de overflow. <code>detail.overflowing</code>.</td></tr>
+            <tr><td><code>is-scroll-position</code></td><td>Al scrollear. <code>detail.scrollLeft, scrollTop</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-scroller</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#cards">Con cards</a>
+        <a href="#vertical">Vertical</a>
+        <a href="#both">Bidimensional</a>
+        <a href="#plain">Sin botones</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

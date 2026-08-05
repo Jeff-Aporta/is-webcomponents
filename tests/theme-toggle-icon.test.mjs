@@ -32,7 +32,7 @@ import { dirname, join } from 'node:path';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 const themeToggleSrc = readFileSync(
-  join(root, 'components/feedback/theme-toggle.js'),
+  join(root, 'src/components/feedback/theme-toggle.js'),
   'utf8',
 );
 

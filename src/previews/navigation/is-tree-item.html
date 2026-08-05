@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-tree-item · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-tree-item de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/navigation/tree.js"></script>
+  <script type="module" src="../../components/media/icon.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-tree-item">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-tree-item&gt;</h2>
+        <p class="lede">Nodo de un <code class="code">&lt;is-tree&gt;</code>. Anidando items se construye la jerarquía; <code class="code">expanded</code> controla el pliegue.</p>
+
+        <is-demo class="demo">
+          <is-tree>
+            <is-tree-item expanded><is-icon slot="start" icon="mdi:folder"></is-icon>Contabilidad
+              <is-tree-item><is-icon slot="start" icon="mdi:file-document"></is-icon>Balance</is-tree-item>
+              <is-tree-item><is-icon slot="start" icon="mdi:file-document"></is-icon>Estado de resultados</is-tree-item>
+            </is-tree-item>
+            <is-tree-item><is-icon slot="start" icon="mdi:folder"></is-icon>Inventario</is-tree-item>
+          </is-tree>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;is-tree&gt;
+  &lt;is-tree-item expanded&gt;&lt;is-icon slot="start" icon="mdi:folder"&gt;&lt;/is-icon&gt;Contabilidad
+    &lt;is-tree-item&gt;&lt;is-icon slot="start" icon="mdi:file-document"&gt;&lt;/is-icon&gt;Balance&lt;/is-tree-item&gt;
+    &lt;is-tree-item&gt;&lt;is-icon slot="start" icon="mdi:file-document"&gt;&lt;/is-icon&gt;Estado de resultados&lt;/is-tree-item&gt;
+  &lt;/is-tree-item&gt;
+  &lt;is-tree-item&gt;&lt;is-icon slot="start" icon="mdi:folder"&gt;&lt;/is-icon&gt;Inventario&lt;/is-tree-item&gt;
+&lt;/is-tree&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">&lt;is-tree&gt; + &lt;is-tree-item&gt; — Web Components (vanilla, zero dependencies). Árbol jerárquico con expansión, selección, checkboxes, navegación por teclado (Arrow, Home, End, Enter, Space) e iconos por slot. &lt;is-tree selection="leaf"&gt; &lt;is-tree-item expanded&gt; &lt;is-icon slot="icon" icon="mdi:folder"&gt;&lt;/is-icon&gt; Documentos &lt;is-tree-item&gt; … &lt;/is-tree-item&gt; &lt;is-tree-item&gt; … &lt;/is-tree-item&gt; &lt;/is-tree-item&gt; &lt;/is-tree&gt; Atributos &lt;is-tree&gt; selection  none | single | leaf | multiple (default 'single') expanded   boolean — todos los nodos empiezan expandidos. Atributos &lt;is-tree-item&gt; expanded         boolean selected         boolean disabled         boolean has-children     boolean (si lo declaras, se ignoran los hijos declarados) lazy             boolean — carga hijos bajo demanda. Slots &lt;is-tree-item&gt; (default)   label. icon        icono a la izquierda. expand-icon override del caret. checkbox    override del checkbox. Eventos is-tree-select    detail: { item, selected, selectedItems } is-tree-expand    detail: { item, expanded } is-tree-toggle    detail: { item, expanded } CSS Parts is-tree: ::part(base) ::part(items) is-tree-item: ::part(item) ::part(item-content) ::part(item-children) ::part(checkbox) ::part(expand-toggle)</p>
+
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/navigation/tree.js</code>.
+        </p>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-tree-item</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

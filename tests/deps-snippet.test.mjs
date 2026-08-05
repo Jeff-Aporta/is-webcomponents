@@ -19,9 +19,9 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
-const csJs   = await readFile(join(root, 'components', 'feedback', 'cdn-snippet.js'), 'utf8');
-const csCss  = await readFile(join(root, 'components', 'feedback', 'cdn-snippet.css'), 'utf8');
-const prev   = await readFile(join(root, 'previews', 'feedback', 'is-cdn-snippet.html'), 'utf8');
+const csJs   = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.js'), 'utf8');
+const csCss  = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.css'), 'utf8');
+const prev   = await readFile(join(root, 'src', 'previews', 'feedback', 'is-cdn-snippet.html'), 'utf8');
 const manifest = await readFile(join(root, 'manifest.js'), 'utf8');
 
 const failures = [];

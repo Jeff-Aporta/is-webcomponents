@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-spreadsheet · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    pre.output {
+      font-family: ui-monospace, monospace; font-size: .78rem;
+      background: var(--is-bg-elev); border: 1px solid var(--is-border);
+      border-radius: var(--is-radius); padding: .55rem .75rem;
+      max-height: 12rem; overflow: auto;
+      white-space: pre-wrap;
+    }
+    .kbd-hint {
+      font-size: .78rem; color: var(--is-text-soft);
+    }
+    .kbd-hint kbd {
+      font-family: ui-monospace, monospace; font-size: .72rem;
+      padding: 1px 5px;
+      border-radius: 4px;
+      border: 1px solid var(--is-border);
+      background: var(--is-bg-elev);
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-spreadsheet">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-spreadsheet&gt;</h2>
+        <p class="lede">Hoja de cálculo con edición por celda, fórmulas <code class="ic">=SUM(A1:A5)</code> y navegación con flechas + Tab.</p>
+        <p class="kbd-hint">Click para editar · <kbd>Enter</kbd> bajar · <kbd>Tab</kbd> derecha · <kbd>Esc</kbd> cancelar · <kbd>Flechas</kbd> mover.</p>
+      </section>
+
+      <section class="section" id="basico">
+        <h2>Hoja de ejemplo</h2>
+        <is-demo class="demo">
+          <is-spreadsheet rows="8" cols="6"
+            value="[[10,20,30,40,'','=SUM(A1:D1)'],[11,21,31,41,'','=SUM(A2:D2)'],[12,22,32,42,'','=SUM(A3:D3)'],[13,23,33,43,'','=SUM(A4:D4)'],['','','','','','=AVERAGE(F1:F4)'],[15,25,35,45,'','=MIN(A5:D5)'],[16,26,36,46,'','=MAX(A1:A4)']]">
+          </is-spreadsheet>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API / fórmulas</h2>
+        <pre class="code">const s = document.querySelector('is-spreadsheet');
+s.value;          // string JSON con la matriz
+s.addEventListener('is-change', e =&gt; {
+  console.log(`[${e.detail.row},${e.detail.col}] raw=${e.detail.raw} value=${e.detail.value}`);
+});
+
+// Fórmulas soportadas (en cualquier mayúscula o minúscula)
+//   =SUM(rango)        suma
+//   =AVERAGE(rango)    promedio
+//   =MIN(rango)        mínimo
+//   =MAX(rango)        máximo
+//   =COUNT(rango)      cuenta números
+//   +, -, *, /         aritmética
+//   =A1*B1             referencia a celdas individuales
+//
+// Rangos válidos:
+//   A1               celda única
+//   A1:B5            rectángulo
+//   A1,B2,C3         lista
+
+// Atributos: rows, cols, value (JSON), read-only</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-spreadsheet</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#basico">Hoja</a>
+        <a href="#api">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script>
+  </script>
+</body>
+</html>

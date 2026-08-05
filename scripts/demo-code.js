@@ -15,13 +15,13 @@
  * Es un módulo ES: importa lo que necesita (manifest, cdn-ref, el pintor y los
  * componentes del chrome) en vez de leerlo de `window.__*`.
  */
-import '../components/media/icon.js';
-import '../components/actions/dropdown.js';
-import '../components/actions/copy-button.js';
-import '../components/navigation/tab-group.js';
+import '../src/components/media/icon.js';
+import '../src/components/actions/dropdown.js';
+import '../src/components/actions/copy-button.js';
+import '../src/components/navigation/tab-group.js';
 import './highlight-pre.js';
-import { ensureCodeMirror, paint } from '../components/_shared/highlight-code.js';
-import { resolveRef, jsdelivrBase } from '../components/_shared/cdn-ref.js';
+import { ensureCodeMirror, paint } from '../src/components/_shared/highlight-code.js';
+import { resolveRef, jsdelivrBase } from '../src/components/_shared/cdn-ref.js';
 import manifest from '../manifest.js';
 
 {

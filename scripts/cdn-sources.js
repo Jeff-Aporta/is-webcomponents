@@ -31,7 +31,7 @@ export const docsBase = (ref) => RAW(ref);
  * cuota agotada— se cae a `main`, que sigue funcionando: preferimos un
  * snippet vivo a uno roto.
  */
-import { resolveRef, resolvedBase } from '../components/_shared/cdn-ref.js';
+import { resolveRef, resolvedBase } from '../src/components/_shared/cdn-ref.js';
 
 export { resolveRef, resolvedBase };
 

@@ -36,8 +36,8 @@ const failures = [];
 
 // ── 1. El atributo viejo no debe sobrevivir en ningun lado ──────────
 const scanned = [
-  ...walk(join(root, 'components')),
-  ...walk(join(root, 'previews')),
+  ...walk(join(root, 'src', 'components')),
+  ...walk(join(root, 'src', 'previews')),
   join(root, 'index.html'),
 ].filter((f) => /\.(js|css|html|md)$/.test(f));
 

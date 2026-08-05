@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-full-calendar · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    pre.log {
+      font-family: ui-monospace, monospace; font-size: .8rem;
+      background: var(--is-bg-elev); border: 1px solid var(--is-border);
+      border-radius: var(--is-radius); padding: .55rem .75rem;
+      max-height: 6rem; overflow: auto;
+    }
+    .kbds {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      font-size: .78rem; color: var(--is-text-soft);
+    }
+    .kbds b { color: var(--is-text); }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-full-calendar">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-full-calendar&gt;</h2>
+        <p class="lede">Vista mes / semana / día con eventos por día y franjas horarias en week/day.</p>
+      </section>
+
+      <section class="section" id="basico">
+        <h2>Mes actual</h2>
+        <is-demo class="demo">
+          <is-full-calendar id="cal" first-day="1" hours-start="8" hours-end="20">
+            <script type="application/json">
+              {
+                "events": [
+                  { "id": "e1", "title": "Sprint planning",      "date": "2026-08-03", "start": "09:00", "end": "10:30", "color": "var(--is-accent)" },
+                  { "id": "e2", "title": "Demo interna",         "date": "2026-08-03", "start": "15:00", "end": "16:00", "color": "var(--is-success, #16a34a)" },
+                  { "id": "e3", "title": "Cierre mensual",       "date": "2026-08-04", "start": "14:00", "end": "17:00", "color": "var(--is-danger, #dc2626)" },
+                  { "id": "e4", "title": "Standup",              "date": "2026-08-04", "start": "09:15", "end": "09:30", "color": "var(--is-warning, #d97706)" },
+                  { "id": "e5", "title": "1:1 con Sofía",        "date": "2026-08-05", "start": "11:00", "end": "11:30", "color": "var(--is-accent)" },
+                  { "id": "e6", "title": "Lanzamiento v8",       "date": "2026-08-12", "start": "10:00", "end": "12:00", "color": "var(--is-success, #16a34a)" },
+                  { "id": "e7", "title": "Sprint review",        "date": "2026-08-14", "start": "15:00", "end": "17:00", "color": "var(--is-accent)" },
+                  { "id": "e8", "title": "Onboarding (4 pasos)","date": "2026-08-18", "start": "08:00", "end": "12:00", "color": "var(--is-warning, #d97706)" },
+                  { "id": "e9", "title": "Sprint retrospective", "date": "2026-08-21", "start": "16:00", "end": "17:30", "color": "var(--is-accent)" }
+                ]
+              }
+            </script>
+          </is-full-calendar>
+        </is-demo>
+      </section>
+
+      <section class="section" id="log">
+        <h2>Bitácora</h2>
+        <pre class="log" id="log">— clicks —</pre>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">const cal = document.querySelector('is-full-calendar');
+cal.prev(); cal.next(); cal.today();
+cal.setDate('2026-09-15');
+cal.setView('week');
+cal.addEventListener('is-day-click',  e =&gt; console.log(e.detail.date));
+cal.addEventListener('is-event-click',e =&gt; console.log(e.detail.event));
+
+// Atributos
+// view          month | week | day
+// date          ISO inicial (default hoy)
+// first-day     0=Dom, 1=Lun (default 1)
+// locale        (default 'es')
+// hours-start, hours-end  rango en week/day (default 7..20)
+
+// Datos
+// { events: [ { id, title, date:'YYYY-MM-DD', start:'HH:MM', end?, color? } ] }</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-full-calendar</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#basico">Básico</a>
+        <a href="#log">Bitácora</a>
+        <a href="#api">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const log = document.getElementById('log');
+    document.querySelector('is-full-calendar').addEventListener('is-event-click', (e) => log.textContent = `${e.detail.event.title} @ ${e.detail.event.date} ${e.detail.event.start}\n` + log.textContent);
+  </script>
+</body>
+</html>

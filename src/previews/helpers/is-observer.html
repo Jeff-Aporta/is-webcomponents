@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-observer · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-observer">
+      <section class="section" id="intro">
+        <h2>&lt;is-observer&gt;</h2>
+        <p class="lede">
+          Web Component genérico que envuelve
+          <code class="code">IntersectionObserver</code>,
+          <code class="code">MutationObserver</code> y
+          <code class="code">ResizeObserver</code>. Los nombres históricos
+          (<code class="code">&lt;is-intersection-observer&gt;</code>,
+          <code class="code">&lt;is-mutation-observer&gt;</code>,
+          <code class="code">&lt;is-resize-observer&gt;</code>) siguen
+          funcionando como alias con <code class="code">type</code> prefijado.
+        </p>
+        <is-callout color="neutral">
+          El host siempre usa <code class="code">display: contents</code>, así
+          no afecta al flujo. Los hijos directos son los observados
+          (intersection / resize) o el subárbol a vigilar (mutation).
+        </is-callout>
+      </section>
+
+      <section class="section" id="intersection">
+        <h2><code>type="intersection"</code></h2>
+        <p>Igual que el antiguo <code class="code">&lt;is-intersection-observer&gt;</code>.</p>
+        <is-demo class="demo" style="height: 50vh; overflow: auto; border: 1px dashed var(--is-border); padding: 1rem;">
+          <is-observer id="io" type="intersection" intersect-class="visible" style="display:block">
+            <div style="height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem">
+              Caja 1 (aparece al entrar)
+            </div>
+            <div style="height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem">
+              Caja 2 (aparece al entrar)
+            </div>
+            <div style="height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem">
+              Caja 3 (aparece al entrar)
+            </div>
+          </is-observer>
+        </is-demo>
+      </section>
+
+      <section class="section" id="mutation">
+        <h2><code>type="mutation"</code></h2>
+        <p>Igual que el antiguo <code class="code">&lt;is-mutation-observer&gt;</code>.</p>
+        <is-demo class="demo">
+          <is-observer id="mo" type="mutation" attr="data-tag" child-list></is-observer>
+          <button class="is-button" id="add">Añadir atributo data-tag</button>
+          <pre class="code"><code id="mo-log">[…aún sin mutaciones…]</code></pre>
+        </is-demo>
+      </section>
+
+      <section class="section" id="resize">
+        <h2><code>type="resize"</code></h2>
+        <p>Igual que el antiguo <code class="code">&lt;is-resize-observer&gt;</code>.</p>
+        <is-demo class="demo" style="resize: horizontal; overflow: auto; border: 1px dashed var(--is-border); padding: 1rem; width: 100%; min-width: 200px;">
+          <is-observer id="ro" type="resize">
+            <div style="padding: 1rem; background: var(--is-bg-elev); border-radius: 8px">
+              Arrastra el borde para redimensionar el contenedor.
+            </div>
+          </is-observer>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>Referencia</h2>
+        <is-demo class="demo">
+          <table class="is-table">
+            <thead>
+              <tr><th>Atributo</th><th>Aplica a</th><th>Descripción</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>type</code></td><td>todos</td><td><code>intersection | mutation | resize</code></td></tr>
+              <tr><td><code>disabled</code></td><td>todos</td><td>boolean — desconecta el observer</td></tr>
+              <tr><td><code>intersect-class</code></td><td>intersection</td><td>clase a togglear en cada hijo</td></tr>
+              <tr><td><code>once</code></td><td>intersection</td><td>boolean — des-observa tras la primera</td></tr>
+              <tr><td><code>root</code></td><td>intersection</td><td>selector CSS del root (default viewport)</td></tr>
+              <tr><td><code>root-margin</code></td><td>intersection</td><td>ej. <code>"10px 20px"</code></td></tr>
+              <tr><td><code>threshold</code></td><td>intersection</td><td>número 0–1</td></tr>
+              <tr><td><code>attr</code></td><td>mutation</td><td>filtro de atributos a vigilar</td></tr>
+              <tr><td><code>child-list</code></td><td>mutation</td><td>boolean (default true)</td></tr>
+              <tr><td><code>character-data</code></td><td>mutation</td><td>boolean</td></tr>
+            </tbody>
+          </table>
+        </is-demo>
+      </section>
+    </is-main>
+
+    <aside slot="end" class="toc">
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#intersection">type="intersection"</a>
+        <a href="#mutation">type="mutation"</a>
+        <a href="#resize">type="resize"</a>
+        <a href="#api">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    // Demo wiring: feed mutation + resize events into a log area
+    const mo = document.getElementById('mo');
+    const moLog = document.getElementById('mo-log');
+    let moCount = 0;
+    mo?.addEventListener('is-mutate', (e) => {
+      moCount += e.detail.records.length;
+      moLog.textContent = `Mutaciones observadas: ${moCount}`;
+    });
+    document.getElementById('add')?.addEventListener('click', () => {
+      const target = document.querySelector('#mo');
+      target?.toggleAttribute('data-tag');
+    });
+
+    const ro = document.getElementById('ro');
+    let roCount = 0;
+    ro?.addEventListener('is-resize', () => { roCount += 1; });
+
+    const io = document.getElementById('io');
+    let ioCount = 0;
+    io?.addEventListener('is-intersect', () => { ioCount += 1; });
+  </script>
+</body>
+</html>

@@ -23,7 +23,7 @@ import assert from 'node:assert/strict';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const previewsRoot = join(root, 'previews');
+const previewsRoot = join(root, 'src', 'previews');
 
 const manifest = (await import('../manifest.js')).default;
 

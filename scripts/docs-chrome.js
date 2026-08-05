@@ -11,7 +11,7 @@
  * Es un módulo ES: el componente que necesita se importa de forma estática,
  * sin inyectar `<script>` ni buscarse a sí mismo en `document.scripts`.
  */
-import '../components/actions/copy-button.js';
+import '../src/components/actions/copy-button.js';
 
 /** Barra con botón de copiar sobre cada snippet. */
 const addCopy = (pre) => {

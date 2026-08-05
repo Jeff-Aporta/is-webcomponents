@@ -6,7 +6,7 @@ const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/
 
 // dist/cdn folderizado por categoria: <categoria>/<tag>.min.js
 import manifest from '../manifest.js';
-import { ensureCodeMirror, paint } from '../components/_shared/highlight-code.js';
+import { ensureCodeMirror, paint } from '../src/components/_shared/highlight-code.js';
 const catOf = (name) => manifest.find((c) => c.tag === `is-${name}`)?.category || 'helpers';
 const cdnJs = (name) => `${CDN}/${catOf(name)}/${name}.min.js`;
 const open = String.fromCharCode(60);

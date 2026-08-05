@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../components/layout/demo.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-speed-dial-action · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-speed-dial-action de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/actions/speed-dial.js"></script>
+  <script type="module" src="../../components/actions/fab.js"></script>
+  <script type="module" src="../../components/media/icon.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .sd-stage { position:relative; transform:translateZ(0); height:320px;
+      border:1px dashed var(--is-border); border-radius:.6rem; }
+  </style>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-speed-dial-action">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-speed-dial-action&gt;</h2>
+        <p class="lede">Cada acción que despliega un <code class="code">&lt;is-speed-dial&gt;</code>, con su icono y su etiqueta.</p>
+
+        <is-demo class="demo">
+          <div class="sd-stage">
+            <is-speed-dial direction="up" open>
+              <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
+            </is-speed-dial>
+          </div>
+        </is-demo>
+
+        <pre class="code" data-lang="html">&lt;div class="sd-stage"&gt;
+  &lt;is-speed-dial direction="up" open&gt;
+    &lt;is-speed-dial-action icon="mdi:file-document" label="Documento"&gt;&lt;/is-speed-dial-action&gt;
+    &lt;is-speed-dial-action icon="mdi:image" label="Imagen"&gt;&lt;/is-speed-dial-action&gt;
+    &lt;is-speed-dial-action icon="mdi:link" label="Enlace"&gt;&lt;/is-speed-dial-action&gt;
+  &lt;/is-speed-dial&gt;
+&lt;/div&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <p class="lede">&lt;is-speed-dial&gt; — FAB que despliega un abanico de acciones. Cada acción es un &lt;is-speed-dial-action&gt; hijo con icon + label. El dial hereda del FAB de la marca (radius, shadow, accent) pero evita tener que registrar otro elemento raíz solo para eso. Atributos icon          icono con el dial CERRADO (default mdi:plus) open-icon     icono con el dial ABIERTO (default mdi:close). El trigger reusa &lt;is-check-icon-button&gt;, que hace el switch entre los dos iconos en vez de rotar uno solo. label         aria-label del trigger direction     up (default) | down | left | right | radial open          boolean — controlado, refleja estado distance      espacio entre trigger y acciones (default .25rem) Data props (mismo espiritu que data-theme / data-palette: configuracion declarativa y dinamica, sin API imperativa): data-layout    radial (default con direction="radial") | grid | flex Como se distribuyen las acciones. `grid` y `flex` reparten dentro del wrapper con layout nativo, sin coordenadas. data-wrapper   selector CSS del area que ACOTA las acciones. Ninguna accion puede salirse de esta caja. Si no se da, se usa el ancestro que crea containing block y, si no, el viewport. data-start-angle  grados del primer item; 0 = derecha, -90 = arriba. Default: se elige segun el espacio libre alrededor. data-sweep     clockwise (default) | counter-clockwise data-arc       amplitud del abanico en grados (default 360; se recorta solo si el trigger esta pegado a un borde) data-radius    radio en px del primer anillo Los nombres sin prefijo (arc, sweep, boundary...) se siguen aceptando. Reparto: mientras quepan, las acciones se reparten en ANILLOS concentricos (panal) con los anillos alternos desfasados medio paso. Los anillos se recortan al wrapper: si un anillo no cabe entero, no se usa. Cuando ya no queda area radial para todas, el componente marca data-packed y las acciones pasan a un GRID dentro del wrapper, que por construccion no puede desbordarlo. Slots default    &lt;is-speed-dial-action&gt;… Eventos is-toggle  detail: { open } is-select  detail: { action }   — cuando se elige una acción Cada &lt;is-speed-dial-action&gt; acepta: icon, label, color (brand|neutral|success|warning|danger), href, disabled El clic dispara is-select y, si no está disabled ni tiene href, cierra el dial.</p>
+
+        <p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/actions/speed-dial.js</code>.
+        </p>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-speed-dial-action</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+</body>
+</html>

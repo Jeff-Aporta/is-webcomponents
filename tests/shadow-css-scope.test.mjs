@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const compRoot = join(root, 'components');
+const compRoot = join(root, 'src', 'components');
 
 const failures = [];
 

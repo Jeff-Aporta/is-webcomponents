@@ -5,9 +5,15 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 ## Proyecto
 
 - Web Components vanilla (`is-*`), shadow DOM, tokens `--is-*`.
-- `previews/*.html` = demos. Cada preview es self-contained: importa componentes por `<script type="module src="../components/...">`.
+- **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/assets`, `src/docs`. En la raíz solo quedan `scripts/`, `dist/`, `tests/`, `manifest.js`, `index.html`, docs de agente (`LLM.md`, `AGENTS.md`, `README.md`).
+- Guardián: `tests/src-layout.test.mjs` — falla si reaparecen `components/` / `styles/` / `previews/` / `skills/` / `docs/` en la raíz, o si los previews apuntan mal a `scripts/` / `dist/`.
+- `src/previews/**/*.html` = demos. Paths relativos:
+  - Categoría (`src/previews/<cat>/is-x.html`): `../../styles|components` · `../../../scripts|dist`
+  - Home (`src/previews/home.html`): `../styles` · `../../scripts|dist`
+  - Manifest `script`/`style`: `../../components/...` (relativo al preview de categoría → resuelve a `src/components/...`)
+- Docs LLM crudos (GitHub): base `…/main/src/` + `components/...` (p. ej. `…/main/src/components/LLM.md`). `LLM_BASE` en `preview-chrome.js` termina en `/src`.
 - Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"contapyme|insoft|agrowin"}>`. `scripts/preview-boot.js` lo decodifica y setea `data-theme` / `data-palette` en `<html>`. **`prefers-color-scheme` NO se usa** — el tema es explícito.
-- Build: esbuild → `dist/cdn/`. Dev: `node scripts/serve.mjs`. Sin TS, sin framework, sin test runner por defecto.
+- Build: esbuild → `dist/cdn/` desde `src/components` + `src/styles`. Dev: `node scripts/serve.mjs` (previews en `/src/previews/`). Sin TS, sin framework, sin test runner por defecto (`node --test tests/`).
 - **Paleta default del kit = `contapyme`** (azul ISP `#1a6eb0`). `insoft` y `agrowin` siguen disponibles; no son el default.
 - **La marca tipográfica es `InSoft`** (S mayúscula: el logo la pinta en el color de marca, `in` + `Soft`). El identificador de paleta `insoft` va en minúsculas y **no se toca**: es API (`data-palette`, `value`, claves de objeto). Igual el dominio `insoft.com.co`.
 
@@ -37,7 +43,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - Auroras, orbes, halos con `opacity` explícito en light mode (en dark se ven al 100% por gradient, en light quedan como manchas).
 
 ### Paleta default + canvas de la app (CDN)
-- **Default = `contapyme`.** En `styles/palettes.css` va primero y se aplica a `:root, [data-palette="contapyme"]`. Fallbacks JS (`preview-boot`, `preview-chrome`, `chart-palette`, `palette-selector` primera entrada, `index.html`) → `'contapyme'`.
+- **Default = `contapyme`.** En `src/styles/palettes.css` va primero y se aplica a `:root, [data-palette="contapyme"]`. Fallbacks JS (`preview-boot`, `preview-chrome`, `chart-palette`, `palette-selector` primera entrada, `index.html`) → `'contapyme'`.
 - Bootstrap consumidor:
   ```html
   <html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
@@ -81,7 +87,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - Un solo JSON: `localStorage['is-webcomponents'][tag][storage-key]`.
 - Opt-in del consumidor (`remember-state` / `remember-scroll` + `storage-key`).
 - Snapshot de grid → `replaceComponentPrefs`. Patch layout → `setComponentPrefs`. Reset → `removeComponentPrefs`.
-- Docs: `components/data/ag-grid.md`. Test: `tests/prefs-contract.test.mjs`.
+- Docs: `src/components/data/ag-grid.md`. Test: `tests/prefs-contract.test.mjs`.
 
 ---
 
@@ -100,6 +106,13 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 - **No olvidarse del reset responsive/reduced-motion.** Si el 3D se queda en móvil o con reduced-motion, la página se rompe visualmente.
 - **No `localStorage.setItem(keyPlana)`** para estado de WC con `storage-key`. Tampoco `sessionStorage` canónico ni root `is-components` (solo migración). Un solo store: `prefs.js` → `is-webcomponents[tag][key]`.
 - **No dejar UI de columnas “en el HTML del shadow” sin cablear** (sidebar `hidden` sin handlers): bug real de `is-ag-grid`.
+- **No recrear `components/`, `styles/`, `previews/`, `skills/` o `docs/` en la raíz.** Fuente = `src/<eso>/`. Build y tests asumen `src/`.
+- **No usar la misma profundidad de `../` para `styles` y para `scripts`/`dist` en previews de categoría.** Tras el move: styles/components viven en `src/` (`../../`), scripts/dist en la raíz (`../../../`).
+- **No reinventar botones/forms/tables/dialogs/toasts/icons** si el kit ya tiene `is-*`. Apps: wrappers `app-*`/`tk-*` que traducen datos al kit + CSS hermano + `IsUi.adoptCss`.
+- **No poner CSS de dominio como string gigante en el `.ts`.** Archivo `.css` hermano + `adoptCss(shadow, import.meta.url)`. Tras `innerHTML = ''` del shadow, volver a llamar `adoptCss`.
+- **No asumir que `type="submit"` en `<is-button>` envía un `<form>` light-DOM.** El `<button>` real está en Shadow DOM; usar `requestSubmit` cableado en el kit o `onclick` que dispare submit del form.
+- **No usar `is-split-panel` con `%` alto como “sidebar fijo”** (p. ej. 20%): deja un hueco enorme. Shells de app: grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
+- **No instalar skills con `npx skills add` en el panel CDN.** Consumo = CDN + MD raw; el snippet ya no ofrece instalar skills por npm.
 
 ---
 
@@ -123,7 +136,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 
 9. **Cards sin icono de demo** → el usuario no podía navegar al demo del componente desde la card. Fix: JS inyecta un `<button class="card-demo"><is-icon icon="mdi:open-in-new"></button>` en cada `.tile/.collage-card/.lab-card` que tenga un `is-*` de la whitelist. Click → `postMessage('is-select', tag)`.
 
-10. **Persistencia de WC fragmentada** → keys planas / `sessionStorage` / root `is-components` / sidebar de columnas en template sin cablear. Fix: un solo `localStorage['is-webcomponents'][tag][storage-key]` vía `_shared/prefs.js`; `is-ag-grid` con panel de checks + `resetPersistedState`. Guardián: `tests/prefs-contract.test.mjs`. Docs: `components/data/ag-grid.md`.
+10. **Persistencia de WC fragmentada** → keys planas / `sessionStorage` / root `is-components` / sidebar de columnas en template sin cablear. Fix: un solo `localStorage['is-webcomponents'][tag][storage-key]` vía `_shared/prefs.js`; `is-ag-grid` con panel de checks + `resetPersistedState`. Guardián: `tests/prefs-contract.test.mjs`. Docs: `src/components/data/ag-grid.md`.
 
 11. **Paleta default = insoft** → el kit vivía en rojo InSoft; ContaPyme/ISP es el producto real. Quien pegaba el CDN sin `data-palette` (o con fallbacks JS en `'insoft'`) veía marca incorrecta. Fix: default `contapyme` en CSS (`:root`), HTML, fallbacks y `DEFAULT_PALETTES[0]`. Guardián: `tests/palette-and-snippet-contract.test.mjs`.
 
@@ -131,15 +144,25 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 
 13. **Snippets de demo sin tema/paleta** → el markup copiado (`<div class="matrix">…`) no llevaba `data-theme`/`data-palette`; al pegarlo en otra app no heredaba el contexto del preview. Fix: `withSnippetContext` en `demo-code.js` sella la raíz y se actualiza al cambiar tema/paleta.
 
+14. **Move a `src/` a medias** → carpetas en `src/` pero `build.mjs` / tests / previews seguían apuntando a la raíz: build vacío, previews en blanco (`../../dist` → `src/dist` inexistente), LLM raw 404. Fix: `compRoot`/`styles`/`icons` bajo `src/`; previews categoría `../../../scripts|dist` + `../../styles|components`; `LLM_BASE` …`/main/src`; guardián `tests/src-layout.test.mjs` + `tests/preview-paths.test.mjs`.
+
+15. **CSS embebido en apps consumidoras** → `_ui.ts` / `app-*.ts` con CSS en template strings: imposible minificar aparte, divergía del kit. Fix: `helpers/ui` → `IsUi.adoptCss` + `.css` hermano (mismo contrato que `_shared/adopt-css.js`).
+
+16. **Login / forms que “no hacen submit”** → `<is-button type="submit">` dentro de form light-DOM: el click no bidirecciona al form. Fix en kit: `requestSubmit`/`reset` en `button.js`; apps: no depender solo del type nativo sin el cableado.
+
+17. **Sidebar con `is-split-panel` al 20%** → nav estrecho + vacío enorme. Fix: layout grid fijo, no porcentaje de split como “aside”.
+
+18. **FormData vs `.value` en `is-input`** → leer el form nativo no siempre refleja el valor del WC; usar la propiedad `.value` del custom element (o el contrato documentado en el MD del módulo).
+
 ---
 
 ## Sistema de iconos
 
 ### DO
-- El grid nativo de cada colección **no es 24**. `assets/icons/collections.json` guarda el `height` real por prefijo (academicons 32, fa 512, logos variable). Un SVG local tiene que declarar `viewBox="<left> <top> <w> <h>"` con **esas** dimensiones.
+- El grid nativo de cada colección **no es 24**. `src/assets/icons/collections.json` guarda el `height` real por prefijo (academicons 32, fa 512, logos variable). Un SVG local tiene que declarar `viewBox="<left> <top> <w> <h>"` con **esas** dimensiones.
 - Metadatos de colección (nombre, categoría, autor, licencia, paleta, grid) → `node scripts/sync-icon-collections.mjs`. Se consultan **offline**: el explorador no puede pegarle a `api.iconify.design` en runtime.
 - Si una familia "no muestra iconos": `node scripts/fix-icon-viewbox.mjs --detect --only <prefix>` y luego sin `--detect` para reparar.
-- Tras reparar/descargar iconos hay que **re-sincronizar `dist/cdn/assets/icons/`**: GitHub Pages sirve desde ahí, no desde `assets/`.
+- Tras reparar/descargar iconos hay que **re-sincronizar `dist/cdn/assets/icons/`**: GitHub Pages sirve desde ahí, no desde `src/assets/`.
 
 ### DON'T
 - **No "normalizar" todos los SVG a `width="24" height="24" viewBox="0 0 24 24"`.** Es el bug que dejó familias enteras en blanco: el path se dibuja fuera del viewBox y el icono se renderiza vacío. Solo se veía en colecciones con grid ≠ 24, por eso pasó desapercibido (mdi y tabler seguían bien).
@@ -218,7 +241,8 @@ mantenerlo aparte.
 
 ## Testing
 
-- `node --test tests/` — corre los invariantes del CSS de `previews/home.html` (sin test runner externo, sin TS).
+- `node --test tests/` — corre los invariantes (sin test runner externo, sin TS). Incluye layout `src/` (`src-layout`), paths de previews, enums, paleta, prefs, LLM links.
+- `tests/` **no está en gitignore completo**: se commitean los `*.test.mjs`. Solo se ignoran artefactos (`tests/*.tmp`, `tests/coverage/`, `tests/.cache/`).
 - Si en el futuro se agrega TS al proyecto, los `*.test.mjs` se migran a `*.test.ts` con `tsx --test`.
 - `tests/` **no está** en `.gitignore` → tracked. Si algún día se mueve a gitignore, respetarlo: los tests no se commitean.
 

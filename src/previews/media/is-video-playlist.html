@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-video-playlist · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .cluster { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-video-playlist">
+      <section class="section" id="intro">
+        <h2>&lt;is-video-playlist&gt;</h2>
+        <p class="lede">
+          Reproductor de playlist con look YouTube: cabecera con título y canal,
+          barra inferior overlay con play / seek / vol, lista colapsable debajo.
+          Las herramientas adicionales (prev / next / autoplay) se proyectan
+          automáticamente en los slots <code class="code">tools-left</code>
+          y <code class="code">tools-right</code> del reproductor.
+        </p>
+        <is-demo class="demo demo--with-code">
+          <is-video-playlist id="pl" autoplay-next placement="bottom">
+            <is-video
+              title="Big Buck Bunny"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/01-big-buck-bunny.jpg"
+              playsinline
+              src="../assets/playlist/01-big-buck-bunny.mp4"
+            ></is-video>
+            <is-video
+              title="Sintel"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/02-sintel.jpg"
+              playsinline
+              src="../assets/playlist/02-sintel.mp4"
+            ></is-video>
+            <is-video
+              title="Elephants Dream"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/03-elephants-dream.jpg"
+              playsinline
+              src="../assets/playlist/03-elephants-dream.mp4"
+            ></is-video>
+          </is-video-playlist>
+        </is-demo>
+        <pre class="code">&lt;is-video-playlist autoplay-next placement="bottom"&gt;
+  &lt;is-video title="Big Buck Bunny" channel="Blender" poster="…" src="01.mp4"&gt;&lt;/is-video&gt;
+  &lt;is-video title="Sintel" poster="…" src="02.mp4"&gt;&lt;/is-video&gt;
+  &lt;is-video title="Elephants Dream" poster="…" src="03.mp4"&gt;&lt;/is-video&gt;
+&lt;/is-video-playlist&gt;</pre>
+      </section>
+
+      <section class="section" id="placement">
+        <h2>Placement</h2>
+        <p class="lede">
+          <code class="code">placement</code>:
+          <code class="code">left</code> |
+          <code class="code">right</code> |
+          <code class="code">bottom</code> (default).
+        </p>
+        <is-demo class="demo" style="height:28rem">
+          <div class="cluster" style="margin-bottom:0.75rem;flex-shrink:0">
+            <is-button id="placeLeft" variant="outlined">left</is-button>
+            <is-button id="placeRight" variant="outlined">right</is-button>
+            <is-button id="placeBottom" variant="filled">bottom</is-button>
+          </div>
+          <is-video-playlist id="plPlace" placement="bottom">
+            <is-video
+              title="Big Buck Bunny"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/01-big-buck-bunny.jpg"
+              playsinline
+              src="../assets/playlist/01-big-buck-bunny.mp4"
+            ></is-video>
+            <is-video
+              title="Sintel"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/02-sintel.jpg"
+              playsinline
+              src="../assets/playlist/02-sintel.mp4"
+            ></is-video>
+          </is-video-playlist>
+        </is-demo>
+        <pre class="code">&lt;is-video-playlist placement="right"&gt;…&lt;/is-video-playlist&gt;</pre>
+      </section>
+
+      <section class="section" id="tools">
+        <h2>Slots de herramientas</h2>
+        <p class="lede">
+          El reproductor expone dos slots: <code class="code">tools-left</code>
+          (a la izquierda del play) y <code class="code">tools-right</code>
+          (a la derecha del volumen). El playlist inyecta por defecto
+          <em>Primero / Anterior / Siguiente</em> en <code class="code">tools-left</code>
+          y <em>Autoplay</em> en <code class="code">tools-right</code>. Si quieres
+          reemplazarlos, basta con añadir tus propios botones con esos slots
+          desde fuera (o usa el atributo <code class="code">no-default-tools</code>
+          para desactivarlos).
+        </p>
+        <is-demo class="demo demo--with-code">
+          <is-video-playlist id="plTools" placement="bottom">
+            <button slot="tools-left" class="vp-tool vp-custom" aria-label="Aleatorio">
+              <is-icon icon="mdi:shuffle"></is-icon>
+            </button>
+            <button slot="tools-left" class="vp-tool vp-custom" aria-label="Bucle">
+              <is-icon icon="mdi:repeat"></is-icon>
+            </button>
+            <button slot="tools-right" class="vp-tool vp-custom" aria-label="Subtítulos">
+              <is-icon icon="mdi:closed-caption"></is-icon>
+            </button>
+            <button slot="tools-right" class="vp-tool vp-custom" aria-label="Pantalla completa">
+              <is-icon icon="mdi:fullscreen"></is-icon>
+            </button>
+            <is-video
+              title="Big Buck Bunny"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/01-big-buck-bunny.jpg"
+              playsinline
+              src="../assets/playlist/01-big-buck-bunny.mp4"
+            ></is-video>
+            <is-video
+              title="Sintel"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/02-sintel.jpg"
+              playsinline
+              src="../assets/playlist/02-sintel.mp4"
+            ></is-video>
+          </is-video-playlist>
+        </is-demo>
+        <pre class="code">&lt;is-video-playlist no-default-tools&gt;
+  &lt;button slot="tools-left"&gt;&lt;is-icon icon="mdi:shuffle"&gt;&lt;/is-icon&gt;&lt;/button&gt;
+  &lt;button slot="tools-right"&gt;&lt;is-icon icon="mdi:fullscreen"&gt;&lt;/is-icon&gt;&lt;/button&gt;
+  &lt;is-video …&gt;&lt;/is-video&gt;
+&lt;/is-video-playlist&gt;</pre>
+      </section>
+
+      <section class="section" id="channel">
+        <h2>Título y canal</h2>
+        <p class="lede">
+          El playlist muestra automáticamente el título del clip activo en la
+          cabecera y, si está disponible, el canal como caption. También puedes
+          forzar el canal de toda la playlist con el atributo
+          <code class="code">channel</code>.
+        </p>
+        <is-demo class="demo demo--with-code">
+          <is-video-playlist id="plChannel" placement="bottom" channel="InSoft TV">
+            <is-video
+              title="Big Buck Bunny"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/01-big-buck-bunny.jpg"
+              playsinline
+              src="../assets/playlist/01-big-buck-bunny.mp4"
+            ></is-video>
+            <is-video
+              title="Sintel"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/02-sintel.jpg"
+              playsinline
+              src="../assets/playlist/02-sintel.mp4"
+            ></is-video>
+          </is-video-playlist>
+        </is-demo>
+      </section>
+
+      <section class="section" id="config">
+        <h2>Slot <code class="code">config</code></h2>
+        <p class="lede">
+          La esquina superior derecha de la cabecera acepta un slot
+          <code class="code">config</code> para colgar un botón / menú opcional.
+          Si no se usa, esa zona queda vacía.
+        </p>
+        <is-demo class="demo demo--with-code">
+          <is-video-playlist id="plConfig" placement="bottom">
+            <is-button slot="config" variant="plain" aria-label="Ajustes">
+              <is-icon icon="mdi:cog"></is-icon>
+            </is-button>
+            <is-video
+              title="Big Buck Bunny"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/01-big-buck-bunny.jpg"
+              playsinline
+              src="../assets/playlist/01-big-buck-bunny.mp4"
+            ></is-video>
+            <is-video
+              title="Sintel"
+              channel="Blender Open Movies"
+              poster="../assets/playlist/02-sintel.jpg"
+              playsinline
+              src="../assets/playlist/02-sintel.mp4"
+            ></is-video>
+          </is-video-playlist>
+        </is-demo>
+      </section>
+
+      <section class="section" id="events">
+        <h2>Eventos</h2>
+        <p class="lede" id="eventLog">Sin cambios aún.</p>
+        <is-demo class="demo">
+          <is-video-playlist id="eventPl" placement="right" style="max-height:22rem">
+            <is-video
+              title="Alpha"
+              channel="Canal A"
+              poster="../assets/playlist/01-big-buck-bunny.jpg"
+              playsinline
+              src="../assets/playlist/01-big-buck-bunny.mp4"
+            ></is-video>
+            <is-video
+              title="Beta"
+              channel="Canal B"
+              poster="../assets/playlist/02-sintel.jpg"
+              playsinline
+              src="../assets/playlist/02-sintel.mp4"
+            ></is-video>
+          </is-video-playlist>
+        </is-demo>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>placement</code></td><td><code>left</code> | <code>right</code> | <code>bottom</code> (default); <code>top</code> queda como <code>bottom</code>.</td></tr>
+            <tr><td><code>autoplay-next</code></td><td>boolean — al terminar, reproduce el siguiente (en el último se detiene)</td></tr>
+            <tr><td><code>accordion</code></td><td><code>auto</code> (default) | <code>open</code> | <code>closed</code></td></tr>
+            <tr><td><code>channel</code></td><td>caption global (estilo canal YouTube) bajo el título del clip activo</td></tr>
+            <tr><td><code>no-default-tools</code></td><td>desactiva los botones prev / next / autoplay por defecto</td></tr>
+            <tr><td><code>goTo(i)</code> <code>next()</code> <code>previous()</code></td><td>navegación (también botones en el player)</td></tr>
+            <tr><td><code>is-video-change</code></td><td><code>{ previousIndex, currentIndex, video }</code></td></tr>
+            <tr><td>slots</td><td><code>tools-left</code>, <code>tools-right</code> (botones en la barra del reproductor) · <code>config</code> (esquina sup. derecha de la cabecera)</td></tr>
+            <tr><td>parts</td><td><code>video-playlist</code> <code>header</code> <code>title</code> <code>channel</code> <code>player-toolbar</code> <code>tools-left</code> <code>tools-right</code> <code>playlist</code> <code>playlist-item</code> <code>playlist-thumbnail</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-video-playlist</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#placement">Placement</a>
+        <a href="#tools">Tools (slots)</a>
+        <a href="#channel">Título / canal</a>
+        <a href="#config">Slot <code>config</code></a>
+        <a href="#events">Eventos</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const placePl = document.getElementById('plPlace');
+    const placeBtns = [
+      ['placeLeft', 'left'],
+      ['placeRight', 'right'],
+      ['placeBottom', 'bottom'],
+    ];
+    for (const [id, val] of placeBtns) {
+      document.getElementById(id)?.addEventListener('click', () => {
+        placePl.placement = val;
+        for (const [bid] of placeBtns) {
+          const b = document.getElementById(bid);
+          if (b) b.setAttribute('appearance', bid === id ? 'filled' : 'outlined');
+        }
+      });
+    }
+
+    const log = document.getElementById('eventLog');
+    document.getElementById('eventPl')?.addEventListener('is-video-change', (e) => {
+      const t = e.detail.video?.getAttribute('title') || '';
+      const ch = e.detail.video?.getAttribute('channel') || '';
+      log.textContent = `Cambio ${e.detail.previousIndex} → ${e.detail.currentIndex}: "${t}" (${ch})`;
+    });
+  </script>
+  <script>
+    </script>
+</body>
+</html>

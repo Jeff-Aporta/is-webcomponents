@@ -28,10 +28,10 @@ const root = dirname(here);
 // scripts/highlight-pre.js es solo el arranque en las paginas del docs.
 // El contrato se verifica sobre los dos juntos.
 const highlight = [
-  await readFile(join(root, 'components', '_shared', 'highlight-code.js'), 'utf8'),
+  await readFile(join(root, 'src', 'components', '_shared', 'highlight-code.js'), 'utf8'),
   await readFile(join(root, 'scripts', 'highlight-pre.js'), 'utf8'),
 ].join(String.fromCharCode(10));
-const themeToggle = await readFile(join(root, 'components', 'feedback', 'theme-toggle.js'), 'utf8');
+const themeToggle = await readFile(join(root, 'src', 'components', 'feedback', 'theme-toggle.js'), 'utf8');
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

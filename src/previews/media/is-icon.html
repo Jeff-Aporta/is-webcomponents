@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-icon · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .xp-embed {
+      border: 1px solid var(--is-border);
+      border-radius: 0.6rem;
+      overflow: hidden;
+      background: var(--is-bg);
+      /* Alto fijo: el explorador scrollea internamente (su .xp), así que un
+         alto en auto lo colapsaría a 0. */
+      height: min(72vh, 720px);
+    }
+    .xp-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-icon">
+      <section class="section" id="intro">
+        <h2>&lt;is-icon&gt;</h2>
+        <p class="lede">
+          API única de iconos del kit. Usa <code class="code">icon="grupo:nombre"</code> (ids Iconify)
+          o <code class="code">src</code> para un SVG/imagen. Escala con <code class="code">font-size</code>.
+          Iconify se carga solo como dependencia interna.
+        </p>
+        <is-demo class="demo">
+          <div class="demo-row" style="font-size:1.5rem; gap:1rem; align-items:center;">
+            <is-icon icon="mdi:home"></is-icon>
+            <is-icon icon="mdi:check-circle" style="color:var(--is-accent)"></is-icon>
+            <is-icon icon="mdi:star" label="Favorito"></is-icon>
+            <is-icon icon="mdi:cog-outline"></is-icon>
+          </div>
+        </is-demo>
+      </section>
+      <section class="section" id="examples">
+        <h2>Ejemplos</h2>
+        <is-demo class="demo">
+          <span class="demo-label">src personalizado</span>
+          <is-icon src="../../assets/icons/mdi/heart.svg" label="Corazón" style="font-size:1.5rem;color:var(--is-accent)"></is-icon>
+        </is-demo>
+        <pre class="code">&lt;is-icon icon="mdi:home"&gt;&lt;/is-icon&gt;
+&lt;is-icon icon="mdi:check-circle"&gt;&lt;/is-icon&gt;
+&lt;is-icon src="/logo.svg" label="Logo"&gt;&lt;/is-icon&gt;</pre>
+      </section>
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Default</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>icon</code></td><td>—</td><td>Iconify id <code>grupo:nombre</code> (ej. <code>mdi:home</code>).</td></tr>
+            <tr><td><code>label</code></td><td>—</td><td>aria-label; vacío → aria-hidden.</td></tr>
+            <tr><td><code>src</code></td><td>—</td><td>URL img/svg (gana sobre icon).</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- El explorador NO se duplica aquí: se embebe la única fuente
+           (icon-explorer.html) en un iframe y se le propaga theme+palette por
+           ?s=. Copiar su markup seria mantener dos veces el mismo buscador. -->
+      <section class="section" id="explorer">
+        <h2>Explorador de iconos</h2>
+        <p class="lede">
+          Las <b id="xpFamilies">231</b> familias servidas por el CDN, con buscador global,
+          filtros por categoría, grid, paleta y licencia, y un personalizador que exporta
+          SVG, CSS o PNG. Es la misma página que <code class="code">icon-explorer.html</code>,
+          embebida aquí.
+        </p>
+        <div class="xp-embed">
+          <iframe id="xpFrame" title="Explorador de iconos" loading="lazy"></iframe>
+        </div>
+        <p>
+          <is-button id="xpOpen" color="neutral" variant="outlined" href="icon-explorer.html" target="_blank" rel="noopener">
+            <is-icon icon="mdi:open-in-new"></is-icon>
+            Abrir en una pestaña
+          </is-button>
+        </p>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-icon</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#examples">Ejemplos</a>
+        <a href="#reference">Referencia</a>
+        <a href="#explorer">Explorador</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script>
+    /* El iframe hereda theme+palette del contenedor por ?s= (lo decodifica
+       preview-boot.js antes del primer paint, así que no hay flash de tema
+       equivocado). `embed:1` marca <html data-embed="1"> dentro. */
+    (() => {
+      const frame = document.getElementById('xpFrame');
+      if (!frame) return;
+
+      const b64url = (obj) => {
+        const bytes = new TextEncoder().encode(JSON.stringify(obj));
+        let bin = '';
+        for (const b of bytes) bin += String.fromCharCode(b);
+        return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      };
+
+      const srcFor = () => {
+        const root = document.documentElement;
+        const s = b64url({
+          theme: root.dataset.theme || 'dark',
+          palette: root.dataset.palette || 'contapyme',
+          embed: 1,
+        });
+        return `icon-explorer.html?s=${s}`;
+      };
+
+      frame.src = srcFor();
+
+      /* Recargar el iframe en cada cambio de tema pierde el estado del
+         explorador (búsqueda, scroll). Solo se rehace si el tema realmente
+         cambió respecto al que ya tiene cargado. */
+      let applied = document.documentElement.dataset.theme;
+      const onThemeChange = () => {
+        const now = document.documentElement.dataset.theme;
+        if (now === applied) return;
+        applied = now;
+        frame.src = srcFor();
+      };
+      document.addEventListener('is-theme-change', onThemeChange);
+      new MutationObserver(onThemeChange).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme', 'data-palette'],
+      });
+
+      /* El conteo real de familias, para no dejar un número quemado que
+         envejece cada vez que se descargan colecciones nuevas. */
+      fetch('../../assets/icons/index.json')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          const el = document.getElementById('xpFamilies');
+          if (d && el) el.textContent = d.families.length.toLocaleString('es');
+        })
+        .catch(() => {});
+    })();
+  </script>
+</body>
+</html>

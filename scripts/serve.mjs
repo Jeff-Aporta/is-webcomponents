@@ -4,7 +4,7 @@
  * Existe por una sola razón: `Cache-Control: no-store`. Con `python -m
  * http.server` (solo Last-Modified, sin Cache-Control) Chrome cachea los módulos
  * heurísticamente y una recarga normal sigue ejecutando el JS anterior, así que
- * los cambios en components/ parecen no aplicarse.
+ * los cambios en src/components/ parecen no aplicarse.
  *
  *   node serve.mjs [puerto]
  */
@@ -58,5 +58,5 @@ createServer(async (req, res) => {
   });
   createReadStream(file).pipe(res);
 }).listen(PORT, () => {
-  console.log(`previews en http://localhost:${PORT}/previews/ (sin caché)`);
+  console.log(`previews en http://localhost:${PORT}/src/previews/ (sin caché)`);
 });

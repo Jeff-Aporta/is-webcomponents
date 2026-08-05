@@ -13,7 +13,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const root = process.cwd();
-const previews = join(root, 'previews');
+const previews = join(root, 'src', 'previews');
 
 async function walk(dir) {
   const out = [];

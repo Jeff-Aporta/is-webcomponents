@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-modal-verificacion · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-modal-verificacion de InSoft." />
+
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-modal-verificacion">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-modal-verificacion&gt;</h2>
+        <p class="lede">
+          Al abrirse ejecuta <code class="code">controller.actVerificar(record)</code>
+          y pinta los mensajes devueltos coloreados por severidad, con contadores
+          de infos, warnings y errores.
+        </p>
+
+        <is-demo class="demo">
+          <is-button id="mvBtn" color="brand">
+            <is-icon slot="start" icon="mdi:check"></is-icon>
+            Verificar tercero
+          </is-button>
+          <is-modal-verificacion id="mvDemo" entity="tercero"></is-modal-verificacion>
+        </is-demo>
+
+        <pre class="code">const modal = document.querySelector('is-modal-verificacion');
+modal.controller = {
+  entrie: 'tercero',
+  async actVerificar(record) {
+    return { mensajes: [
+      { itdmensaje: 'info', mensaje: 'NIT válido.' },
+      { itdmensaje: 'warning', mensaje: 'Sin correo registrado.' },
+    ] };
+  },
+};
+modal.record = { nit: '900123456' };
+modal.show();</pre>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API rápida</h2>
+        <p class="lede">
+          Propiedades JS: <code class="code">controller</code>, <code class="code">record</code>,
+          <code class="code">onError</code>. Métodos: <code class="code">show()</code>,
+          <code class="code">hide()</code>, <code class="code">verify()</code>.
+        </p>
+      </section>
+
+      <script>
+        const mvDemo = document.getElementById('mvDemo');
+        if (mvDemo) {
+          mvDemo.controller = {
+            entrie: 'tercero',
+            async actVerificar() {
+              await new Promise((r) => setTimeout(r, 600));
+              return {
+                mensajes: [
+                  { itdmensaje: 'info', mensaje: 'NIT válido.' },
+                  { itdmensaje: 'warning', mensaje: 'Sin correo registrado.' },
+                  { itdmensaje: 'error', mensaje: 'Falta el número de teléfono.' },
+                ],
+              };
+            },
+          };
+          mvDemo.record = { nit: '900123456' };
+        }
+        document.getElementById('mvBtn')?.addEventListener('click', () => mvDemo?.show());
+      </script>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>is-modal-verificacion</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#api">API rápida</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+</body>
+</html>

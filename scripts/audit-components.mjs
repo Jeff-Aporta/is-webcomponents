@@ -10,7 +10,7 @@ import { readdirSync, statSync, existsSync, readFileSync } from 'node:fs';
 import { join, basename } from 'node:path';
 
 const root = new URL('..', import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1');
-const compRoot = join(root, 'components');
+const compRoot = join(root, 'src', 'components');
 
 const walk = (d, out = []) => {
   for (const n of readdirSync(d)) {

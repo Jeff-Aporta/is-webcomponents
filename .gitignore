@@ -11,7 +11,7 @@ dist/**/*.map
 .impeccable/
 
 # Estado parcial de descarga de iconos (se regenera con scripts/download-icons.mjs)
-assets/icons/.state/
+src/assets/icons/.state/
 
 # Tests locales: el repo commitea los .test.mjs pero ignora artefactos
 # generados (snapshots, reports, node:test --test-reporter outputs).
@@ -21,16 +21,16 @@ tests/.cache/
 
 # Iconos descargados: commiteamos solo las dos colecciones mas usadas del repo
 # (mdi y tabler). El resto se regenera bajo demanda con `node scripts/download-icons.mjs`.
-assets/icons/*
-!assets/icons/mdi/
-!assets/icons/tabler/
-!assets/icons/mdi.json
-!assets/icons/tabler.json
-!assets/icons/manifest.json
+src/assets/icons/*
+!src/assets/icons/mdi/
+!src/assets/icons/tabler/
+!src/assets/icons/mdi.json
+!src/assets/icons/tabler.json
+!src/assets/icons/manifest.json
 
 # dist/cdn/assets/ NO se ignora: GitHub Pages sirve el sistema de iconos desde
-# ahi (is-icon resuelve dist/cdn/assets/icons/<prefix>/<name>.svg). La regla
-# `assets/icons/*` de arriba esta anclada a la raiz y no alcanza esta ruta.
+# ahi (is-icon resuelve dist/cdn/src/assets/icons/<prefix>/<name>.svg). La regla
+# `src/assets/icons/*` de arriba esta anclada a la raiz y no alcanza esta ruta.
 
 # Scratch local (fuentes vendorizadas, tarballs de terceros).
 tmp/

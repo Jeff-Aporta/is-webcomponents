@@ -2,15 +2,15 @@
  * scripts/download-icons.mjs
  *
  * Descarga todas las colecciones de Iconify y guarda cada icono como
- * SVG individual en `assets/icons/<prefix>/<name>.svg`. Tambien genera
+ * SVG individual en `src/assets/icons/<prefix>/<name>.svg`. Tambien genera
  *
- *   assets/icons/<prefix>.json    (indice de la coleccion)
- *   assets/icons/manifest.json    (manifest global con todas las colecciones)
+ *   src/assets/icons/<prefix>.json    (indice de la coleccion)
+ *   src/assets/icons/manifest.json    (manifest global con todas las colecciones)
  *
  * Si la coleccion ya esta descargada (manifest.json la contiene), la salta.
  * Si solo faltan algunos iconos, los descarga sueltos sin re-bajar el resto.
  *
- * Estado persistente en `assets/icons/.state/` (ignorado por git).
+ * Estado persistente en `src/assets/icons/.state/` (ignorado por git).
  *
  * Uso:
  *   node scripts/download-icons.mjs              # descarga todas las colecciones
@@ -18,12 +18,12 @@
  *   node scripts/download-icons.mjs --no-skip    # re-descarga siempre
  *
  * Output final:
- *   assets/icons/<prefix>/<name>.svg   ~13K-300K SVGs
- *   assets/icons/<prefix>.json          indice por coleccion
- *   assets/icons/manifest.json          manifest global
+ *   src/assets/icons/<prefix>/<name>.svg   ~13K-300K SVGs
+ *   src/assets/icons/<prefix>.json          indice por coleccion
+ *   src/assets/icons/manifest.json          manifest global
  *
  * El `<is-icon>` consume el .json para resolver nombres y el .svg para pintar
- * el icono (via <img src="assets/icons/<prefix>/<name>.svg">). Si el icono
+ * el icono (via <img src="src/assets/icons/<prefix>/<name>.svg">). Si el icono
  * no esta local, cae a https://api.iconify.design/<prefix>/<name>.svg.
  */
 import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
@@ -33,7 +33,7 @@ import https from 'node:https';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const assetsIcons = join(root, 'assets', 'icons');
+const assetsIcons = join(root, 'src', 'assets', 'icons');
 const stateDir = join(assetsIcons, '.state');
 
 const ONLY = (() => {

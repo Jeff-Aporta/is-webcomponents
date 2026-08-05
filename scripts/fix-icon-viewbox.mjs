@@ -25,7 +25,7 @@ import { fileURLToPath } from 'node:url';
 import https from 'node:https';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const assetsIcons = join(root, 'assets', 'icons');
+const assetsIcons = join(root, 'src', 'assets', 'icons');
 
 const argv = process.argv.slice(2);
 const DETECT_ONLY = argv.includes('--detect');

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-ag-grid · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    pre.log {
+      font-family: ui-monospace, monospace; font-size: .78rem;
+      background: var(--is-bg-elev); border: 1px solid var(--is-border);
+      border-radius: var(--is-radius); padding: .55rem .75rem;
+      max-height: 9rem; overflow: auto;
+      white-space: pre-wrap;
+    }
+    .grid-cta {
+      display: flex;
+      gap: .35rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .grid-cta button {
+      font: inherit; font-size: .8rem;
+      padding: .25rem .55rem;
+      border: 1px solid var(--is-border);
+      border-radius: 6px;
+      background: var(--is-bg-soft);
+      color: inherit;
+      cursor: pointer;
+    }
+    .grid-cta button:hover { background: color-mix(in srgb, var(--is-accent) 14%, transparent); }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-ag-grid">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-ag-grid&gt;</h2>
+        <p class="lede">Data grid estilo <strong>ag-grid.com</strong> pero vanilla web component: orden por columna, filtros, paginación, selección, edición y virtual scroll.</p>
+      </section>
+
+      <section class="section" id="basico">
+        <h2>Básico</h2>
+        <is-demo class="demo">
+          <is-ag-grid id="grid"
+                      page-size="8"
+                      page-size-options="5,8,20"
+                      selectable
+                      style="height: 28rem">
+            <script type="application/json">
+              [
+                { "field": "sku",       "header": "SKU",         "width": 100, "sortable": true,  "align": "left" },
+                { "field": "name",      "header": "Producto",    "filter": true, "sortable": true },
+                { "field": "category",  "header": "Categoría",  "filter": true, "width": 130 },
+                { "field": "stock",     "header": "Stock",      "type": "number", "width": 90,  "align": "right", "decimals": 0 },
+                { "field": "price",     "header": "Precio",     "type": "currency", "currency": "COP", "decimals": 0, "width": 130, "align": "right" },
+                { "field": "status",    "header": "Estado",     "type": "enum", "width": 110,
+                  "enumColors": { "Activo": "var(--is-success, #16a34a)", "Bajo": "var(--is-warning, #d97706)", "Agotado": "var(--is-danger, #dc2626)" } },
+                { "field": "tags",      "header": "Tags",       "type": "tags" },
+                { "field": "updated",   "header": "Actualizado","type": "date", "dateFormat": "short", "width": 120, "align": "right" },
+                { "field": "actions",   "header": "",           "type": "actions", "width": 110,
+                  "actions": [
+                    { "icon": "mdi:open-in-new", "label": "Ver",    "value": "view" },
+                    { "icon": "mdi:pencil",      "label": "Editar", "value": "edit" },
+                    { "icon": "mdi:delete",      "label": "Borrar", "value": "delete" }
+                  ] }
+              ]
+            </script>
+            <script type="application/json">
+              [
+                { "id": 1,  "sku": "IN-1001", "name": "Escritorio Ergo Pro",  "category": "Muebles",     "stock": 24,  "price":  890000, "status": "Activo",   "tags": ["nuevo", "top"],      "updated": "2026-07-12" },
+                { "id": 2,  "sku": "IN-1002", "name": "Silla LumbarCare",      "category": "Muebles",     "stock": 6,   "price":  420000, "status": "Bajo",     "tags": ["oferta"],             "updated": "2026-07-21" },
+                { "id": 3,  "sku": "IN-1003", "name": "Lámpara Halo 360",      "category": "Iluminación", "stock": 38,  "price":  180000, "status": "Activo",   "tags": ["viral"],              "updated": "2026-06-30" },
+                { "id": 4,  "sku": "IN-1004", "name": "Teclado Mech Tactile",  "category": "Periféricos","stock":  0,  "price":  320000, "status": "Agotado",  "tags": ["limited"],            "updated": "2026-05-05" },
+                { "id": 5,  "sku": "IN-1005", "name": "Monitor 32\" 4K HDR",   "category": "Pantallas",   "stock": 12,  "price": 1850000, "status": "Activo",   "tags": ["top","nuevo"],        "updated": "2026-07-25" },
+                { "id": 6,  "sku": "IN-1006", "name": "Torre servidor 4U",     "category": "Servidores",  "stock":  4,  "price": 4200000, "status": "Bajo",     "tags": ["enterprise"],         "updated": "2026-07-23" },
+                { "id": 7,  "sku": "IN-1007", "name": "UPS doble conversión",  "category": "Energía",     "stock": 18,  "price":  760000, "status": "Activo",   "tags": [],                     "updated": "2026-07-19" },
+                { "id": 8,  "sku": "IN-1008", "name": "Switch 24 puertos PoE", "category": "Redes",       "stock": 11,  "price":  620000, "status": "Activo",   "tags": ["nuevo"],              "updated": "2026-07-26" },
+                { "id": 9,  "sku": "IN-1009", "name": "Cámara 4K PTZ",         "category": "Seguridad",   "stock":  3,  "price":  920000, "status": "Bajo",     "tags": ["premium"],            "updated": "2026-07-22" },
+                { "id": 10, "sku": "IN-1010", "name": "Micrófono de mesa",     "category": "Audio",       "stock": 22,  "price":  150000, "status": "Activo",   "tags": ["oferta"],             "updated": "2026-07-20" },
+                { "id": 11, "sku": "IN-1011", "name": "Dock USB-C triple",     "category": "Periféricos","stock": 14,  "price":  220000, "status": "Activo",   "tags": [],                     "updated": "2026-07-12" },
+                { "id": 12, "sku": "IN-1012", "name": "Webcam 1080p",          "category": "Periféricos","stock":  0,  "price":   98000, "status": "Agotado",  "tags": [],                     "updated": "2026-07-04" }
+              ]
+            </script>
+          </is-ag-grid>
+          <div class="grid-cta" style="margin-top:.75rem">
+            <button id="btnSelAll">Seleccionar todo</button>
+            <button id="btnCSV">Exportar CSV</button>
+            <button id="btnPage2">Ir a pág. 2</button>
+            <small style="color:var(--is-text-soft)">Click en el botón Editar de una fila dispara <code>is-action</code>.</small>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="log">
+        <h2>Bitácora</h2>
+        <pre class="log" id="log">— eventos —</pre>
+      </section>
+
+      <section class="section" id="density">
+        <h2>Density + columnas + persistencia</h2>
+        <p class="lede">Toolbar: densidad, <strong>Columnas</strong> (checks show/hide), CSV y <strong>Reiniciar</strong> (borra personalización). Sidebar derecha: mismo panel de columnas/filtros. Con <code>remember-state</code> + <code>storage-key</code> se guarda en <code>localStorage['is-webcomponents']['is-ag-grid'][key]</code>: orden, visibilidad, anchos, pin, sort y filtros.</p>
+        <is-demo class="demo">
+          <is-ag-grid id="grid-density" selectable
+                      page-size-options="10,20,50"
+                      remember-state storage-key="demo-density"
+                      style="height: 26rem">
+            <script type="application/json">
+              [
+                { "field": "sku",       "header": "SKU",         "width": 100 },
+                { "field": "name",      "header": "Producto",    "filter": true, "sortable": true },
+                { "field": "category",  "header": "Categoría",  "filter": true, "width": 130 },
+                { "field": "stock",     "header": "Stock",      "type": "number", "width": 90,  "align": "right" },
+                { "field": "price",     "header": "Precio",     "type": "currency", "currency": "COP", "decimals": 0, "width": 130, "align": "right" },
+                { "field": "updated",   "header": "Actualizado","type": "date", "dateFormat": "short", "width": 120, "align": "right" }
+              ]
+            </script>
+            <script type="application/json">
+              [
+                { "id": 1,  "sku": "IN-1001", "name": "Escritorio Ergo Pro",  "category": "Muebles",     "stock": 24,  "price":  890000, "updated": "2026-07-12" },
+                { "id": 2,  "sku": "IN-1002", "name": "Silla LumbarCare",      "category": "Muebles",     "stock": 6,   "price":  420000, "updated": "2026-07-21" },
+                { "id": 3,  "sku": "IN-1003", "name": "Lámpara Halo 360",      "category": "Iluminación", "stock": 38,  "price":  180000, "updated": "2026-06-30" },
+                { "id": 4,  "sku": "IN-1004", "name": "Teclado Mech Tactile",  "category": "Periféricos","stock":  0,  "price":  320000, "updated": "2026-05-05" },
+                { "id": 5,  "sku": "IN-1005", "name": "Monitor 32\" 4K HDR",   "category": "Pantallas",   "stock": 12,  "price": 1850000, "updated": "2026-07-25" },
+                { "id": 6,  "sku": "IN-1006", "name": "Torre servidor 4U",     "category": "Servidores",  "stock":  4,  "price": 4200000, "updated": "2026-07-23" },
+                { "id": 7,  "sku": "IN-1007", "name": "UPS doble conversión",  "category": "Energía",     "stock": 18,  "price":  760000, "updated": "2026-07-19" },
+                { "id": 8,  "sku": "IN-1008", "name": "Switch 24 puertos PoE", "category": "Redes",       "stock": 11,  "price":  620000, "updated": "2026-07-26" }
+              ]
+            </script>
+          </is-ag-grid>
+          <div class="grid-cta" style="margin-top:.75rem">
+            <button id="btnCompact">Compact</button>
+            <button id="btnNormal">Normal</button>
+            <button id="btnComfy">Comfortable</button>
+            <button id="btnResetState">Reiniciar persistencia</button>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="grouping">
+        <h2>Agrupar + agregar</h2>
+        <p class="lede">Arrastra cabeceras al panel de agrupación. Click en una fila de grupo la expande. Botones del panel: expandir/colapsar todos. Las celdas agregadas usan <code>aggFunc</code> por columna (default: <em>sum</em> para números).</p>
+        <is-demo class="demo">
+          <is-ag-grid id="grid-grouping" selectable
+                      page-size-options="10,20"
+                      style="height: 26rem">
+            <script type="application/json">
+              [
+                { "field": "category",  "header": "Categoría",  "width": 130, "rowGroup": true, "enableRowGroup": true },
+                { "field": "name",      "header": "Producto" },
+                { "field": "stock",     "header": "Stock",     "type": "number", "width": 90,  "align": "right", "aggFunc": "sum" },
+                { "field": "price",     "header": "Ingresos",  "type": "currency", "currency": "COP", "decimals": 0, "width": 140, "align": "right", "aggFunc": "sum" }
+              ]
+            </script>
+            <script type="application/json">
+              [
+                { "id": 1,  "name": "Escritorio Ergo Pro",  "category": "Muebles",     "stock": 24, "price":  890000 },
+                { "id": 2,  "name": "Silla LumbarCare",     "category": "Muebles",     "stock":  6, "price":  420000 },
+                { "id": 3,  "name": "Lámpara Halo 360",     "category": "Iluminación", "stock": 38, "price":  180000 },
+                { "id": 4,  "name": "Teclado Mech Tactile", "category": "Periféricos", "stock":  0, "price":  320000 },
+                { "id": 5,  "name": "Monitor 32\" 4K HDR",  "category": "Pantallas",   "stock": 12, "price": 1850000 },
+                { "id": 6,  "name": "Torre servidor 4U",    "category": "Servidores",  "stock":  4, "price": 4200000 },
+                { "id": 7,  "name": "Switch 24 puertos PoE","category": "Redes",       "stock": 11, "price":  620000 }
+              ]
+            </script>
+          </is-ag-grid>
+        </is-demo>
+      </section>
+
+      <section class="section" id="filters">
+        <h2>Filtros por columna + HeaderMenu</h2>
+        <p class="lede">Click en el ⋮ de cada cabecera: filtro (texto/número/fecha/set), pin, ocultar, autosize, agrupar. Drag del handle entre columnas para redimensionar. Drag del nombre de columna para reordenar (al body o a la izquierda del grupo).</p>
+        <is-demo class="demo">
+          <is-ag-grid id="grid-filters" selectable
+                      page-size-options="5,10,20"
+                      style="height: 30rem">
+            <script type="application/json">
+              [
+                { "field": "id",        "header": "ID",       "width": 70,  "filter": "number" },
+                { "field": "name",      "header": "Producto", "filter": "text", "sortable": true, "flex": 2 },
+                { "field": "category",  "header": "Categoría","filter": "set", "width": 140 },
+                { "field": "stock",     "header": "Stock",   "type": "number", "filter": "number", "width": 110, "align": "right" },
+                { "field": "price",     "header": "Precio",  "type": "currency", "currency": "COP", "decimals": 0, "width": 130, "align": "right", "filter": "number" },
+                { "field": "updated",   "header": "Actualizado", "type": "date", "width": 140, "filter": "date" }
+              ]
+            </script>
+            <script type="application/json" src="../../../tmp/data/catalog-large.json">
+              []
+            </script>
+          </is-ag-grid>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API</h2>
+        <pre class="code">const g = document.querySelector('is-ag-grid');
+g.rows;                  // array vivo (read-only)
+g.columns;               // column defs (read-only)
+g.api.getRows();
+g.api.goToPage(2);                  // legacy 1-based
+g.api.setPage(1);                   // nueva (0-based)
+g.api.setPageSize(20);
+g.api.setQuickFilter('oferta');
+g.api.setFilter('stock', 'gt', 5);  // legacy (text)
+g.api.setFilterModel({ stock: { type: 'number', op: 'gt', value: 5 } });
+g.api.setSortModel([{ colId: 'price', dir: 'desc' }]);
+g.api.toggleSort('price', additive);
+g.api.pinColumn('sku', 'left'); g.api.hideColumn('tags');
+g.api.resizeColumn('price', 160); g.api.autosizeColumn('name');
+g.api.reorderColumn('status', 0);
+g.api.setRowGroupCols(['category']);
+g.api.toggleGroup('Muebles'); g.api.expandAllGroups(); g.api.collapseAllGroups();
+g.api.getSelectedRows(); g.api.selectAll(); g.api.clearSelection();
+g.api.setDensity('compact');
+g.api.exportCSV('grid.csv');
+g.api.serializeState();             // JSON { columns, sortModel, filterModel, ... }
+g.api.loadState(json);
+g.api.resetPersistedState();        // borra localStorage[storage-key] y restaura defs
+g.api.openColumnsPanel();
+g.api.refresh();
+
+g.addEventListener('is-cell-click',      e =&gt; /* { row, column, value } */);
+g.addEventListener('is-cell-edit',       e =&gt; /* { row, column, oldValue, newValue } */);
+g.addEventListener('is-row-select',      e =&gt; /* { rows } */);
+g.addEventListener('is-sort-change',     e =&gt; /* { column, direction } */);
+g.addEventListener('is-filter-change',   e =&gt; /* { column, op, value } */);
+g.addEventListener('is-quick-filter',    e =&gt; /* { value } */);
+g.addEventListener('is-action',          e =&gt; /* { row, column, action } */);
+g.addEventListener('is-page-change',     e =&gt; /* { page, pageSize } */);
+g.addEventListener('is-column-reorder',  e =&gt; /* { colId, toIndex } */);
+g.addEventListener('is-column-resize',   e =&gt; /* { colId, width } */);
+g.addEventListener('is-column-pin',      e =&gt; /* { colId, side } */);
+g.addEventListener('is-column-hide',     e =&gt; /* { colId, hide } */);
+g.addEventListener('is-state-loaded',    e =&gt; /* GridState */);
+g.addEventListener('is-state-saved',     e =&gt; /* { json, key } */);
+g.addEventListener('is-state-reset',     e =&gt; /* { key } */);
+
+Atributos:
+  rows, columns                script JSON o atributo
+  get-row-id                   nombre de la propiedad como id (default `id`)
+  page-size, page-size-options
+  pagination                   boolean (activa pager con count)
+  row-selection                single | multiple
+  selectable                   boolean — checkbox
+  density                      compact | normal | comfortable
+  quick-filter                 texto
+  group-by                     CSV de colIds iniciales
+  remember-state               boolean — persiste en localStorage.is-webcomponents
+  storage-key                  keyid bajo is-webcomponents.is-ag-grid
+  toolbar                      true | false
+
+Tipos de columna:
+  text | number | currency | date | boolean | link | badge/enum | tags | actions
+
+Atributos por columna:
+  field, header, width, align (left|right|center), flex
+  sortable, resizable, hide, filterType (text|number|date|set)
+  rowGroup, enableRowGroup, aggFunc (sum|avg|min|max|count|first|last)
+  cellStyle (objeto CSS)
+  editable (true = prompt)
+  type, decimals, format, currency, dateFormat
+  enumColors (map valor → color CSS)
+  actions ([{ icon, label, value }, …])   type=actions
+
+Tokens CSS en el host:
+  --is-grid-row-h, --is-grid-header-h, --is-grid-header-bg,
+  --is-grid-stripe, --is-grid-row-hover, --is-grid-selected,
+  --is-grid-selected-bar, --is-grid-accent-row
+</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-ag-grid</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#basico">Básico</a>
+        <a href="#density">Density</a>
+        <a href="#grouping">Agrupar</a>
+        <a href="#filters">Filtros + HeaderMenu</a>
+        <a href="#log">Bitácora</a>
+        <a href="#api">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const log = document.getElementById('log');
+    const append = (line) => { log.textContent = line + '\n' + log.textContent; log.scrollTop = 0; };
+
+    function attach(g) {
+      if (!g) return;
+      g.addEventListener('is-cell-click',      (e) => append(`cell-click ${e.detail?.column?.field}=${e.detail?.value}`));
+      g.addEventListener('is-cell-edit',       (e) => append(`cell-edit ${e.detail?.column?.field}: ${e.detail?.oldValue} → ${e.detail?.newValue}`));
+      g.addEventListener('is-row-select',      (e) => append(`row-select n=${e.detail?.rows?.length}`));
+      g.addEventListener('is-sort-change',     (e) => append(`sort ${e.detail?.column} ${e.detail?.direction}`));
+      g.addEventListener('is-filter-change',   (e) => append(`filter ${e.detail?.column} ${e.detail?.op} ${JSON.stringify(e.detail?.value)}`));
+      g.addEventListener('is-quick-filter',    (e) => append(`quick-filter ${JSON.stringify(e.detail?.value)}`));
+      g.addEventListener('is-action',          (e) => append(`action ${e.detail?.action} on ${e.detail?.row?.sku ?? ''}`));
+      g.addEventListener('is-page-change',     (e) => append(`page ${e.detail?.page}/${e.detail?.pageSize}`));
+      g.addEventListener('is-column-reorder',  (e) => append(`reorder ${e.detail?.colId} → ${e.detail?.toIndex}`));
+      g.addEventListener('is-column-resize',   (e) => append(`resize ${e.detail?.colId} → ${e.detail?.width}`));
+      g.addEventListener('is-column-pin',      (e) => append(`pin ${e.detail?.colId} ${e.detail?.side}`));
+      g.addEventListener('is-column-hide',     (e) => append(`hide ${e.detail?.colId}`));
+    }
+
+    const g = document.getElementById('grid');
+    attach(g);
+    attach(document.getElementById('grid-density'));
+    attach(document.getElementById('grid-grouping'));
+    attach(document.getElementById('grid-filters'));
+
+    document.getElementById('btnSelAll').addEventListener('click', () => g.api.selectAll());
+    document.getElementById('btnCSV').addEventListener('click', () => g.api.exportCSV('catalogo.csv'));
+    document.getElementById('btnPage2').addEventListener('click', () => g.api.goToPage(2));
+    const gDensity = document.getElementById('grid-density');
+    document.getElementById('btnCompact').addEventListener('click', () => gDensity.api.setDensity('compact'));
+    document.getElementById('btnNormal').addEventListener('click', () => gDensity.api.setDensity('normal'));
+    document.getElementById('btnComfy').addEventListener('click', () => gDensity.api.setDensity('comfortable'));
+    document.getElementById('btnResetState').addEventListener('click', () => gDensity.api.resetPersistedState());
+  </script>
+</body>
+</html>

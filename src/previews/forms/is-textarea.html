@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-textarea · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .stack { display: grid; gap: 1.25rem; max-width: 30rem; }
+    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-textarea">
+      <section class="section" id="intro">
+        <h2>&lt;is-textarea&gt;</h2>
+        <p class="lede">
+          Área de texto form-associated con las mismas piezas que
+          <a href="https://mui.com/material-ui/react-text-field/" target="_blank" rel="noreferrer">TextField</a>
+          en modo <em>multiline</em> y el crecimiento automático de
+          <a href="https://mui.com/material-ui/react-textarea-autosize/" target="_blank" rel="noreferrer">TextareaAutosize</a>:
+          appearances, error, contador y <code class="code">autosize</code> con
+          <code class="code">min-rows</code> / <code class="code">max-rows</code>.
+        </p>
+        <is-demo class="demo">
+          <is-textarea id="demo" label="Descripción" hint="Máximo 200 caracteres" maxlength="200" show-count rows="4" placeholder="Cuéntanos…" name="descripcion"></is-textarea>
+        </is-demo>
+        <p class="lede" id="log">0 caracteres</p>
+      </section>
+
+      <section class="section" id="appearance">
+        <h2>Appearance</h2>
+        <p class="lede">
+          Mismas variantes que <code class="code">is-input</code>:
+          <code class="code">outlined</code> (default) · <code class="code">filled</code> ·
+          <code class="code">underlined</code>.
+        </p>
+        <is-demo class="demo">
+          <div class="stack">
+            <is-textarea label="outlined (default)" rows="2" placeholder="Caja con borde completo"></is-textarea>
+            <is-textarea variant="filled" label="filled" rows="2" placeholder="Superficie + línea inferior"></is-textarea>
+            <is-textarea variant="underlined" label="underlined" rows="2" placeholder="Solo línea inferior"></is-textarea>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-textarea variant="filled" label="filled" rows="2"&gt;&lt;/is-textarea&gt;</pre>
+      </section>
+
+      <section class="section" id="autosize">
+        <h2>Autosize</h2>
+        <p class="lede">
+          <code class="code">autosize</code> hace que la altura siga al contenido. Se mide el
+          <code class="code">scrollHeight</code> real del textarea (sin clones ni librerías) y se acota entre
+          <code class="code">min-rows</code> y <code class="code">max-rows</code>; al pasar de
+          <code class="code">max-rows</code> aparece el scroll. Sin <code class="code">min-rows</code>
+          el mínimo es el valor de <code class="code">rows</code>.
+          Con autosize el <em>resize</em> manual se desactiva: pelearía con la altura calculada.
+        </p>
+        <is-demo class="demo">
+          <div class="stack">
+            <is-textarea autosize min-rows="2" label="min-rows 2 · sin techo" placeholder="Escribe varias líneas y mira cómo crece…"></is-textarea>
+            <is-textarea autosize min-rows="3" max-rows="6" label="min-rows 3 · max-rows 6"
+              hint="A partir de 6 líneas hace scroll"
+              value="Uno&#10;Dos&#10;Tres&#10;Cuatro"></is-textarea>
+            <is-textarea resize="auto" min-rows="1" max-rows="4" label='resize="auto" (alias de autosize)' placeholder="Empieza en una línea"></is-textarea>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-textarea autosize min-rows="3" max-rows="6" label="Comentario"&gt;&lt;/is-textarea&gt;
+
+&lt;!-- equivalente --&gt;
+&lt;is-textarea resize="auto" min-rows="3" max-rows="6"&gt;&lt;/is-textarea&gt;</pre>
+      </section>
+
+      <section class="section" id="resize">
+        <h2>Resize</h2>
+        <p class="lede">
+          <code class="code">resize</code>: <code class="code">none</code> ·
+          <code class="code">vertical</code> (default) · <code class="code">both</code> ·
+          <code class="code">auto</code> (autosize).
+        </p>
+        <is-demo class="demo">
+          <div class="stack">
+            <is-textarea label="none" resize="none" rows="3" value="El usuario no puede redimensionar."></is-textarea>
+            <is-textarea label="vertical (default)" rows="3" placeholder="Arrastra el borde inferior"></is-textarea>
+            <is-textarea label="both" resize="both" rows="3" placeholder="Arrastra la esquina"></is-textarea>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-textarea resize="none" rows="3"&gt;&lt;/is-textarea&gt;
+&lt;is-textarea resize="both" rows="3"&gt;&lt;/is-textarea&gt;</pre>
+      </section>
+
+      <section class="section" id="counter">
+        <h2>Contador de caracteres</h2>
+        <p class="lede">
+          <code class="code">show-count</code> pinta <code class="code">n/maxlength</code> a la derecha de la
+          fila del hint; sin <code class="code">maxlength</code>, solo <code class="code">n</code>.
+        </p>
+        <is-demo class="demo">
+          <div class="stack">
+            <is-textarea label="Reseña" maxlength="120" show-count rows="3" hint="Cuenta tu experiencia" value="Muy buena atención."></is-textarea>
+            <is-textarea label="Sin límite" show-count rows="2" placeholder="Escribe algo…"></is-textarea>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-textarea label="Reseña" maxlength="120" show-count rows="3"&gt;&lt;/is-textarea&gt;</pre>
+      </section>
+
+      <section class="section" id="validation">
+        <h2>Error y validación</h2>
+        <p class="lede">
+          <code class="code">error</code> fuerza el estado de peligro y <code class="code">error-text</code>
+          sustituye al <code class="code">hint</code>. Sin forzarlo, el campo entra en error cuando la
+          validación nativa (<code class="code">required</code>, <code class="code">maxlength</code>) falla tras
+          la primera interacción; si no diste <code class="code">error-text</code>, se muestra el mensaje del
+          navegador. El estado se expone como <code class="code">:state(invalid)</code>.
+        </p>
+        <is-demo class="demo">
+          <div class="stack">
+            <is-textarea label="Error forzado" error error-text="El comentario contiene términos no permitidos"
+              rows="2" value="Texto rechazado por el backend"></is-textarea>
+            <is-textarea label="Error sin error-text" error hint="El hint se pinta en rojo" rows="2"></is-textarea>
+            <is-textarea id="autoErr" label="Obligatorio (sal del campo)" required rows="2"
+              hint="Se valida al perder el foco" error-text="Este comentario es obligatorio"></is-textarea>
+          </div>
+          <div class="actions">
+            <button type="button" id="btnReport">Validar</button>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;is-textarea error error-text="El comentario contiene términos no permitidos"&gt;&lt;/is-textarea&gt;
+
+textarea.reportValidity();   // marca el campo como tocado y pinta el error</pre>
+      </section>
+
+      <section class="section" id="width">
+        <h2>Ancho</h2>
+        <p class="lede">
+          Mismo token que <code class="code">is-input</code>: <code class="code">--is-field-width</code>
+          (heredable) y <code class="code">full-width</code> para ocupar todo el ancho disponible.
+        </p>
+        <is-demo class="demo">
+          <div style="display:grid; gap:1.25rem; --is-field-width:18rem;">
+            <is-textarea label="--is-field-width: 18rem" rows="2" placeholder="Heredado del contenedor"></is-textarea>
+            <is-textarea label="full-width" full-width rows="2" placeholder="Ignora el token"></is-textarea>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;div style="--is-field-width: 18rem"&gt;
+  &lt;is-textarea label="Estrecho" rows="2"&gt;&lt;/is-textarea&gt;
+  &lt;is-textarea label="Ancho completo" full-width rows="2"&gt;&lt;/is-textarea&gt;
+&lt;/div&gt;</pre>
+      </section>
+
+      <section class="section" id="label-placement">
+        <h2>Label a la izquierda</h2>
+        <p class="lede">
+          <code class="code">label-placement="start"</code> para formularios horizontales.
+          El label se alinea con la primera línea del textarea y
+          <code class="code">--is-field-label-width</code> fija su columna.
+        </p>
+        <is-demo class="demo">
+          <div style="display:grid; gap:0.75rem; --is-field-label-width:7rem; max-width:34rem;">
+            <is-textarea label-placement="start" label="Asunto" full-width rows="1"></is-textarea>
+            <is-textarea label-placement="start" label="Mensaje" full-width autosize min-rows="3" max-rows="8"
+              hint="Crece con el texto" show-count maxlength="500"></is-textarea>
+          </div>
+        </is-demo>
+        <pre class="code">&lt;div style="--is-field-label-width: 7rem"&gt;
+  &lt;is-textarea label-placement="start" label="Mensaje" full-width autosize min-rows="3"&gt;&lt;/is-textarea&gt;
+&lt;/div&gt;</pre>
+      </section>
+
+      <section class="section" id="states">
+        <h2>Estados</h2>
+        <is-demo class="demo">
+          <div class="stack">
+            <is-textarea label="Solo lectura" readonly rows="2" value="Contenido fijo"></is-textarea>
+            <is-textarea label="Deshabilitado" disabled rows="2" value="Sin acceso"></is-textarea>
+            <is-textarea variant="filled" label="filled · readonly" readonly rows="2" value="Contenido fijo"></is-textarea>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="form">
+        <h2>Dentro de un &lt;form&gt;</h2>
+        <is-demo class="demo">
+          <form id="f" style="display:grid; gap:0.75rem; max-width:30rem;">
+            <is-textarea name="comentario" label="Comentario" required autosize min-rows="3" max-rows="8"
+              maxlength="300" show-count error-text="El comentario es obligatorio"></is-textarea>
+            <div class="actions">
+              <button type="submit">Enviar</button>
+              <button type="reset">Reset</button>
+            </div>
+          </form>
+        </is-demo>
+        <p class="lede" id="out">FormData: —</p>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia</h2>
+
+        <h3>Atributos</h3>
+        <table class="ref">
+          <thead><tr><th>Atributo</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>appearance</code></td><td><code>outlined</code> (default) · <code>filled</code> · <code>underlined</code></td></tr>
+            <tr><td><code>label-placement</code></td><td><code>top</code> (default) · <code>start</code></td></tr>
+            <tr><td><code>name</code> <code>value</code> <code>placeholder</code></td><td>string</td></tr>
+            <tr><td><code>label</code> <code>hint</code></td><td>texto o slots homónimos</td></tr>
+            <tr><td><code>error-text</code></td><td>mensaje que sustituye al <code>hint</code> cuando hay error</td></tr>
+            <tr><td><code>rows</code></td><td>filas visibles (default 3)</td></tr>
+            <tr><td><code>resize</code></td><td><code>none</code> · <code>vertical</code> (default) · <code>both</code> · <code>auto</code></td></tr>
+            <tr><td><code>min-rows</code> <code>max-rows</code></td><td>límites del autosize; <code>min-rows</code> cae en <code>rows</code></td></tr>
+            <tr><td><code>maxlength</code></td><td>límite de caracteres (pasa al textarea nativo)</td></tr>
+            <tr><td><code>autosize</code></td><td>boolean · altura pegada al contenido (= <code>resize="auto"</code>)</td></tr>
+            <tr><td><code>disabled</code> <code>required</code> <code>readonly</code></td><td>boolean</td></tr>
+            <tr><td><code>error</code></td><td>boolean · fuerza el estado visual de peligro</td></tr>
+            <tr><td><code>show-count</code></td><td>boolean · contador <code>n/maxlength</code> (o <code>n</code>)</td></tr>
+            <tr><td><code>full-width</code></td><td>boolean · 100% del ancho disponible, ignora <code>--is-field-width</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Propiedades y métodos</h3>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code> <code>defaultValue</code></td><td>valor actual · valor del atributo <code>value</code> (el del reset)</td></tr>
+            <tr><td><code>appearance</code> <code>labelPlacement</code> <code>resize</code></td><td>sanitizan valores no válidos al default</td></tr>
+            <tr><td><code>autosize</code> <code>minRows</code> <code>maxRows</code></td><td><code>autosize</code> devuelve <code>true</code> también con <code>resize="auto"</code></td></tr>
+            <tr><td><code>error</code> <code>errorText</code> <code>showCount</code> <code>fullWidth</code></td><td>reflejan sus atributos</td></tr>
+            <tr><td><code>textarea</code></td><td>el <code>&lt;textarea&gt;</code> nativo interno</td></tr>
+            <tr><td><code>validity</code> <code>validationMessage</code> <code>willValidate</code></td><td>espejo de <code>ElementInternals</code></td></tr>
+            <tr><td><code>focus()</code> <code>blur()</code> <code>select()</code> <code>setSelectionRange()</code></td><td>delegan en el textarea interno</td></tr>
+            <tr><td><code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code></td><td><code>reportValidity()</code> además marca el campo como tocado</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Slots, parts y estados</h3>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td>slots</td><td><code>label</code> <code>hint</code></td></tr>
+            <tr><td>parts</td><td><code>form-control</code> <code>label</code> <code>base</code> <code>textarea</code> <code>support</code> <code>hint</code> <code>error-text</code> <code>count</code></td></tr>
+            <tr><td>states</td><td><code>blank</code> <code>disabled</code> <code>readonly</code> <code>focused</code> <code>invalid</code></td></tr>
+            <tr><td>events</td><td><code>is-input</code> <code>is-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Tokens</h3>
+        <table class="ref">
+          <thead><tr><th>Token</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>--is-field-width</code></td><td>ancho del control (default <code>auto</code>); heredable desde el contenedor</td></tr>
+            <tr><td><code>--is-field-label-width</code></td><td>columna del label con <code>label-placement="start"</code></td></tr>
+            <tr><td><code>--is-textarea-bg</code> <code>--is-textarea-border</code> <code>--is-textarea-text</code></td><td>caen en <code>--is-control-*</code></td></tr>
+            <tr><td><code>--is-textarea-border-radius</code> <code>--is-textarea-focus</code></td><td>caen en <code>--is-radius-sm</code> / <code>--is-focus</code></td></tr>
+            <tr><td><code>--is-textarea-danger</code> <code>--is-textarea-danger-text</code></td><td>borde y texto del estado de error</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-textarea</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#appearance">Appearance</a>
+        <a href="#autosize">Autosize</a>
+        <a href="#resize">Resize</a>
+        <a href="#counter">Contador</a>
+        <a href="#validation">Error y validación</a>
+        <a href="#width">Ancho</a>
+        <a href="#label-placement">Label a la izquierda</a>
+        <a href="#states">Estados</a>
+        <a href="#form">Formulario</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script type="module">
+    const demo = document.getElementById('demo');
+    const log = document.getElementById('log');
+    demo.addEventListener('is-input', (e) => {
+      log.textContent = `${e.detail.value.length} caracteres`;
+    });
+
+    const autoErr = document.getElementById('autoErr');
+    document.getElementById('btnReport').addEventListener('click', () => autoErr.reportValidity());
+
+    const f = document.getElementById('f');
+    const out = document.getElementById('out');
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = [...new FormData(f)].map(([k, v]) => `${k}=${v}`).join(' · ');
+      out.textContent = `FormData: ${data || '—'}`;
+    });
+    f.addEventListener('reset', () => { out.textContent = 'FormData: —'; });
+  </script>
+  <script>
+    </script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fase 7 — Compuestos · IS Web Components</title>
+  <meta name="description" content="Composiciones reales integrando múltiples componentes IS: dialogs con forms, cards con acciones, drawers con tabs, selects múltiples y listas con avatares." />
+
+  <link rel="stylesheet" href="../styles/is-base.css" />
+  <link rel="stylesheet" href="../styles/presentation.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script type="module" src="../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../scripts/demo-code.js"></script>
+  <script type="module" src="../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-phase7">
+
+      <section class="section" id="intro">
+        <h2>Fase 7 — Composiciones</h2>
+        <p class="lede">
+          Aquí se demuestra la integración real de los componentes: dialogs con
+          forms, cards con header-actions, drawers con tabs, selects múltiples y
+          listas con avatares. Cada demo es una composición viva, no un mockup.
+        </p>
+      </section>
+
+      <!-- 7.1 Dialog + form -->
+      <section class="section" id="dialog-form">
+        <h2>7.1 — Dialog + form</h2>
+        <p class="lede">Un mini-CRM: crear contacto con nombre, email, rol, suscripción a newsletter y notas.</p>
+
+        <is-demo class="demo">
+          <is-button id="openNewContact">
+            <is-icon slot="start" icon="mdi:account-plus"></is-icon>
+            Nuevo contacto
+          </is-button>
+
+          <is-dialog id="dlgNewContact" label="Nuevo contacto">
+            <form id="contactForm" slot="body" style="display:grid;gap:0.75rem;min-width:420px">
+              <is-input name="nombre" label="Nombre" placeholder="Jane Doe" required></is-input>
+              <is-input name="email" type="email" label="Email" placeholder="jane@empresa.com" required></is-input>
+              <is-select name="rol" label="Rol">
+                <is-option value="admin">Administrador</is-option>
+                <is-option value="user" selected>Usuario</is-option>
+                <is-option value="viewer">Sólo lectura</is-option>
+              </is-select>
+              <is-textarea name="notas" label="Notas" rows="3" placeholder="Información adicional"></is-textarea>
+              <is-switch name="newsletter" checked>Suscribir al newsletter</is-switch>
+            </form>
+
+            <is-button slot="footer" variant="plain" data-dialog-close>Cancelar</is-button>
+            <is-button slot="footer" color="brand" id="submitContact">Crear contacto</is-button>
+          </is-dialog>
+
+          <is-callout id="contactSaved" color="success" hidden style="margin-top:1rem">
+            <strong>Contacto guardado.</strong>
+            <div id="contactSavedDetails"></div>
+          </is-callout>
+        </is-demo>
+
+        <pre class="code"><span class="tag">&lt;is-dialog</span> <span class="attr">id</span>=<span class="val">"dlg"</span> <span class="attr">label</span>=<span class="val">"Nuevo contacto"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;form</span> <span class="attr">slot</span>=<span class="val">"body"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;is-input</span> <span class="attr">name</span>=<span class="val">"nombre"</span> <span class="attr">label</span>=<span class="val">"Nombre"</span> <span class="attr">required</span><span class="tag">&gt;</span><span class="tag">&lt;/is-input&gt;</span>
+    <span class="tag">&lt;is-select</span> <span class="attr">name</span>=<span class="val">"rol"</span> <span class="attr">label</span>=<span class="val">"Rol"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;is-option</span> <span class="attr">value</span>=<span class="val">"admin"</span><span class="tag">&gt;</span>Admin<span class="tag">&lt;/is-option&gt;</span>
+    <span class="tag">&lt;/is-select&gt;</span>
+  <span class="tag">&lt;/form&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"footer"</span> <span class="attr">data-dialog-close</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
+  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"footer"</span> <span class="attr">color</span>=<span class="val">"brand"</span><span class="tag">&gt;</span>Crear<span class="tag">&lt;/is-button&gt;</span>
+<span class="tag">&lt;/is-dialog&gt;</span></pre>
+      </section>
+
+      <!-- 7.2 Card + header-actions -->
+      <section class="section" id="card-actions">
+        <h2>7.2 — Card + header-actions</h2>
+        <p class="lede">Card con badges, dropdown de más acciones y tabs de detalle dentro.</p>
+
+        <is-demo class="demo">
+          <is-card header="Pedido #4290" style="max-width:640px">
+            <div slot="header-actions" style="display:flex;gap:0.5rem;align-items:center">
+              <is-badge color="success">Pagado</is-badge>
+              <is-dropdown id="ddOrder">
+                <is-button slot="trigger" variant="plain" caret>
+                  <is-icon icon="mdi:dots-vertical"></is-icon>
+                </is-button>
+                <is-dropdown-item>Reenviar factura</is-dropdown-item>
+                <is-dropdown-item>Marcar pendiente</is-dropdown-item>
+                <is-dropdown-item color="danger">Cancelar pedido</is-dropdown-item>
+              </is-dropdown>
+            </div>
+
+            <div class="grid-2">
+              <div>
+                <p class="muted">Cliente</p>
+                <p>Jane Doe <is-tag>jane@empresa.com</is-tag></p>
+              </div>
+              <div>
+                <p class="muted">Total</p>
+                <p><strong>€ 1.249,00</strong></p>
+              </div>
+            </div>
+
+            <is-tab-group style="margin-top:1rem">
+              <is-tab slot="nav" panel="resumen">Resumen</is-tab>
+              <is-tab slot="nav" panel="envio">Envío</is-tab>
+              <is-tab slot="nav" panel="historial">Historial</is-tab>
+
+              <is-tab-panel name="resumen">
+                <is-scroller>
+                  <is-tag size="sm">SKU-001</is-tag>
+                  <is-tag size="sm">SKU-002</is-tag>
+                  <is-tag size="sm">SKU-003</is-tag>
+                  <is-tag size="sm">SKU-004</is-tag>
+                  <is-tag size="sm">SKU-005</is-tag>
+                  <is-tag size="sm">SKU-006</is-tag>
+                </is-scroller>
+              </is-tab-panel>
+              <is-tab-panel name="envio">
+                <p>Calle Mayor 12, 28013 Madrid</p>
+                <p>Estimado: 28 jul — 30 jul</p>
+              </is-tab-panel>
+              <is-tab-panel name="historial">
+                <p>· 30 jul — Pago recibido</p>
+                <p>· 28 jul — Pedido creado</p>
+              </is-tab-panel>
+            </is-tab-group>
+          </is-card>
+        </is-demo>
+      </section>
+
+      <!-- 7.3 Drawer + tab + split-panel -->
+      <section class="section" id="drawer-tabs">
+        <h2>7.3 — Drawer + tab + split-panel</h2>
+        <p class="lede">Sidebar persistente a la izquierda + drawer deslizante a la derecha con tabs.</p>
+
+        <is-demo class="demo">
+          <is-button id="openDrawer">
+            <is-icon slot="start" icon="mdi:menu-open"></is-icon>
+            Abrir inspector
+          </is-button>
+
+          <is-split-panel id="fullSplit" style="height: 320px; margin-top:1rem">
+            <div slot="start" style="padding:1rem;background:rgba(255,255,255,0.03);border-radius:0.5rem">
+              <is-tree selection="leaf" expanded>
+                <is-tree-item>
+                  <is-icon slot="icon" icon="mdi:folder"></is-icon>
+                  Documentos
+                  <is-tree-item>factura.pdf</is-tree-item>
+                  <is-tree-item>contrato.odt</is-tree-item>
+                </is-tree-item>
+                <is-tree-item>
+                  <is-icon slot="icon" icon="mdi:folder"></is-icon>
+                  Proyectos
+                  <is-tree-item>app.ts</is-tree-item>
+                  <is-tree-item>styles.css</is-tree-item>
+                </is-tree-item>
+              </is-tree>
+            </div>
+            <div slot="end" style="padding:1rem">
+              <p>Selecciona un archivo del árbol para inspeccionarlo.</p>
+            </div>
+          </is-split-panel>
+
+          <is-drawer id="inspector" label="Inspector" placement="end" style="--size: 380px">
+            <is-tab-group>
+              <is-tab slot="nav" panel="props">Propiedades</is-tab>
+              <is-tab slot="nav" panel="events">Eventos</is-tab>
+              <is-tab slot="nav" panel="acl">Permisos</is-tab>
+
+              <is-tab-panel name="props">
+                <is-card header="propiedades.md">
+                  <p>1 <strong>app.ts</strong> · 67 líneas</p>
+                  <p>Última edición: hoy 14:21</p>
+                </is-card>
+              </is-tab-panel>
+              <is-tab-panel name="events">
+                <p>· onSelect</p>
+                <p>· onEdit</p>
+                <p>· onDelete</p>
+              </is-tab-panel>
+              <is-tab-panel name="acl">
+                <is-switch checked>Lectura</is-switch>
+                <is-switch>Escritura</is-switch>
+                <is-switch>Compartir</is-switch>
+              </is-tab-panel>
+            </is-tab-group>
+            <is-button slot="footer" data-drawer-close variant="plain">Cerrar</is-button>
+          </is-drawer>
+        </is-demo>
+      </section>
+
+      <!-- 7.4 Select múltiple -->
+      <section class="section" id="multi-select">
+        <h2>7.4 — Select múltiple (tag + popup + checkbox)</h2>
+        <p class="lede">Tags seleccionados + popover para agregar/quitar. Patrón típico de invitaciones.</p>
+
+        <is-demo class="demo">
+          <is-card header="Asignar responsables" style="max-width:520px">
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center">
+              <is-tag id="tag1" removable>Jane Doe</is-tag>
+              <is-tag id="tag2" removable>Mike Ross</is-tag>
+              <is-button id="addAssignee" variant="plain">
+                <is-icon slot="start" icon="mdi:plus"></is-icon>
+                Añadir
+              </is-button>
+            </div>
+
+            <is-dialog id="assigneeDialog" label="Seleccionar responsables">
+              <div slot="body" style="display:grid;gap:0.25rem;min-width:280px">
+                <is-checkbox name="u1" checked>Jane Doe</is-checkbox>
+                <is-checkbox name="u2" checked>Mike Ross</is-checkbox>
+                <is-checkbox name="u3">Ana López</is-checkbox>
+                <is-checkbox name="u4">Carlos Pérez</is-checkbox>
+                <is-checkbox name="u5">Sara Núñez</is-checkbox>
+              </div>
+              <is-button slot="footer" data-dialog-close variant="plain">Cancelar</is-button>
+              <is-button slot="footer" color="brand" data-dialog-close id="saveAssignees">Aplicar</is-button>
+            </is-dialog>
+          </is-card>
+        </is-demo>
+      </section>
+
+      <!-- 7.5 Table/list patterns -->
+      <section class="section" id="list">
+        <h2>7.5 — List patterns con avatar, badge, button, dropdown</h2>
+        <p class="lede">Una lista de equipo combinando avatar + badge + button + dropdown.</p>
+
+        <is-demo class="demo">
+          <is-card style="max-width:640px">
+            <ul class="list-custom" id="teamList">
+              <li class="list-row">
+                <is-avatar name="Jane Doe" status="online"></is-avatar>
+                <div class="list-meta">
+                  <strong>Jane Doe</strong>
+                  <span class="muted">jane@empresa.com</span>
+                </div>
+                <is-badge color="success">Admin</is-badge>
+                <is-dropdown>
+                  <is-button slot="trigger" variant="plain">
+                    <is-icon icon="mdi:dots-vertical"></is-icon>
+                  </is-button>
+                  <is-dropdown-item>Ver perfil</is-dropdown-item>
+                  <is-dropdown-item>Enviar mensaje</is-dropdown-item>
+                  <is-dropdown-item color="danger">Quitar</is-dropdown-item>
+                </is-dropdown>
+              </li>
+              <li class="list-row">
+                <is-avatar name="Mike Ross" status="away"></is-avatar>
+                <div class="list-meta">
+                  <strong>Mike Ross</strong>
+                  <span class="muted">mike@empresa.com</span>
+                </div>
+                <is-badge color="warning">Editor</is-badge>
+                <is-dropdown>
+                  <is-button slot="trigger" variant="plain">
+                    <is-icon icon="mdi:dots-vertical"></is-icon>
+                  </is-button>
+                  <is-dropdown-item>Ver perfil</is-dropdown-item>
+                  <is-dropdown-item>Enviar mensaje</is-dropdown-item>
+                  <is-dropdown-item color="danger">Quitar</is-dropdown-item>
+                </is-dropdown>
+              </li>
+              <li class="list-row">
+                <is-avatar name="Ana López" status="offline"></is-avatar>
+                <div class="list-meta">
+                  <strong>Ana López</strong>
+                  <span class="muted">ana@empresa.com</span>
+                </div>
+                <is-badge>Viewer</is-badge>
+                <is-dropdown>
+                  <is-button slot="trigger" variant="plain">
+                    <is-icon icon="mdi:dots-vertical"></is-icon>
+                  </is-button>
+                  <is-dropdown-item>Ver perfil</is-dropdown-item>
+                  <is-dropdown-item>Enviar mensaje</is-dropdown-item>
+                  <is-dropdown-item color="danger">Quitar</is-dropdown-item>
+                </is-dropdown>
+              </li>
+            </ul>
+          </is-card>
+        </is-demo>
+      </section>
+
+    </is-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>Fase 7</h1>
+      <is-scrollspy target="is-main">
+        <a href="#dialog-form">7.1 Dialog + form</a>
+        <a href="#card-actions">7.2 Card + acciones</a>
+        <a href="#drawer-tabs">7.3 Drawer + tabs</a>
+        <a href="#multi-select">7.4 Select múltiple</a>
+        <a href="#list">7.5 List patterns</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <style>
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .muted {
+      color: var(--is-text-muted, #8a90a0);
+      font-size: 0.85em;
+    }
+    .list-custom {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .list-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      transition: background 0.1s;
+    }
+    .list-row:hover {
+      background: rgba(255,255,255,0.04);
+    }
+    .list-meta {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+
+  <script>
+    // 7.1 Dialog + form
+    const openBtn = document.getElementById('openNewContact');
+    const dlg = document.getElementById('dlgNewContact');
+    openBtn.addEventListener('click', () => dlg.show());
+    document.getElementById('submitContact').addEventListener('click', () => {
+      const form = document.getElementById('contactForm');
+      const data = new FormData(form);
+      const obj = Object.fromEntries(data.entries());
+      const saved = document.getElementById('contactSaved');
+      const details = document.getElementById('contactSavedDetails');
+      details.innerHTML = `<pre class="code">${JSON.stringify(obj, null, 2)}</pre>`;
+      saved.hidden = false;
+      dlg.hide();
+    });
+
+    // 7.4 Asignar
+    document.getElementById('addAssignee').addEventListener('click', () => {
+      document.getElementById('assigneeDialog').show();
+    });
+    document.getElementById('saveAssignees').addEventListener('click', () => {
+      const cbs = document.querySelectorAll('#assigneeDialog is-checkbox');
+      // sync tags visibility con checks
+      cbs.forEach(cb => {
+        const name = cb.textContent.trim();
+        if (cb.checked) {
+          // tag must exist
+        }
+      });
+    });
+
+    // 7.3 Drawer
+    document.getElementById('openDrawer').addEventListener('click', () => {
+      document.getElementById('inspector').show();
+    });
+  </script>
+</body>
+</html>

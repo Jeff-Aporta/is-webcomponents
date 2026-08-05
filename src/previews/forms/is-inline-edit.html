@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-inline-edit · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }
+    .ie-row > span.label { font-size: .82rem; color: var(--is-text-soft); width: 7rem; flex: 0 0 auto; }
+    .ie-row p { margin: 0; font-size: .82rem; color: var(--is-text-dim); }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-inline-edit">
+
+      <section class="section" id="intro">
+        <h2>&lt;is-inline-edit&gt;</h2>
+        <p class="lede">Texto plano que se vuelve editable al clic. Enter guarda y sale. Esc cancela y revierte. Blur guarda por defecto; usá <code class="code">cancel-on-blur</code> para invertirlo.</p>
+      </section>
+
+      <section class="section" id="texto">
+        <h2>Texto</h2>
+        <is-demo class="demo">
+          <div class="ie-row">
+            <span class="label">Nombre</span>
+            <is-inline-edit id="ie1" value="Carolina Méndez" placeholder="Sin nombre"></is-inline-edit>
+          </div>
+          <div class="ie-row">
+            <span class="label">Email</span>
+            <is-inline-edit id="ie2" value="caro@empresa.co"></is-inline-edit>
+          </div>
+          <div class="ie-row">
+            <span class="label">Vacío</span>
+            <is-inline-edit placeholder="Clic para escribir"></is-inline-edit>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="textarea">
+        <h2>Multilínea</h2>
+        <is-demo class="demo">
+          <is-inline-edit mode="textarea" rows="3" value="Acá podés tipear varias líneas. Enter adentro inserta un salto de línea; afuera del área Enter sigue guardando." style="--is-inline-edit-min-h: 4.5rem; width: 100%;"></is-inline-edit>
+        </is-demo>
+      </section>
+
+      <section class="section" id="contenido">
+        <h2>Slot display (HTML personalizado)</h2>
+        <p>Si el slot <code class="code">display</code> tiene contenido, ése se muestra en lectura; al editar vuelve al editor interno.</p>
+        <is-demo class="demo">
+          <is-inline-edit value="InSoft" style="font-size:1.15rem; font-weight:600;">
+            <span slot="display"><is-icon icon="mdi:office-building" style="vertical-align:middle"></is-icon> InSoft S.A.</span>
+          </is-inline-edit>
+        </is-demo>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API JS</h2>
+        <pre class="code">const ie = document.querySelector('is-inline-edit');
+ie.value              // string actual
+ie.editing            // boolean
+ie.edit()             // entra en modo edición (programáticamente)
+ie.save()             // guarda y sale
+ie.cancel()           // revierte y sale
+ie.addEventListener('is-save',   e =&gt; console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));
+ie.addEventListener('is-cancel', e =&gt; ...);
+ie.addEventListener('is-edit',   () =&gt; ...);
+
+// form-associated
+// &lt;form&gt;&lt;is-inline-edit name="label"&gt;&lt;/is-inline-edit&gt;&lt;/form&gt;
+new FormData(form).get('label')  // = ie.value</pre>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>is-inline-edit</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#texto">Texto</a>
+        <a href="#textarea">Multilínea</a>
+        <a href="#contenido">Slot display</a>
+        <a href="#api">API</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+  <script>
+  </script>
+</body>
+</html>

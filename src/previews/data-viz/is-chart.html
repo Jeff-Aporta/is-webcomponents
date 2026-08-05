@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>is-chart · IS Web Components</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    /* Rejilla del overview: se acomoda al ancho real del panel, no al viewport. */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    .chart-card {
+      border: 1px solid var(--is-border);
+      border-radius: var(--is-radius);
+      background: var(--is-bg-elev);
+      padding: 0.875rem;
+      min-width: 0;
+    }
+    .chart-card h4 {
+      margin: 0 0 0.15rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+    .chart-card p {
+      margin: 0 0 0.6rem;
+      font-size: 0.75rem;
+      line-height: 1.45;
+      color: var(--is-text-dim);
+    }
+    .chart-card__plot { height: 15rem; }
+    .chart-card__plot.is-tall { height: 18rem; }
+    .spark-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--is-border-soft);
+      font-size: 0.8125rem;
+    }
+    .spark-row:last-child { border-bottom: 0; }
+    .spark-row b { font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-chart">
+
+      <section class="section" id="intro">
+        <h2>Charts</h2>
+        <p class="lede">
+          Motor de gráficos en SVG, sin dependencias externas. La configuración usa el
+          mismo esquema de Chart.js, así que un <code>config</code> existente funciona
+          sin cambios.
+        </p>
+        <p>
+          Cada tipo tiene su elemento (<code>&lt;is-bar-chart&gt;</code>,
+          <code>&lt;is-line-chart&gt;</code>…) y además está
+          <code>&lt;is-chart type="…"&gt;</code>, que resuelve el tipo en tiempo de
+          ejecución. Los colores salen de la paleta de marca activa y se revalidan al
+          cambiar de tema: pruébalo con el selector de paleta del encabezado.
+        </p>
+        <is-demo class="demo" style="height:17rem">
+          <is-chart open-on-click type="bar" label="Ingresos vs gastos" x-label="Mes" y-label="Millones COP">
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+                  "datasets": [
+                    { "label": "Ingresos", "data": [48, 56, 62, 58, 71, 68] },
+                    { "label": "Gastos", "data": [35, 38, 40, 42, 45, 43] }
+                  ]
+                }
+              }
+            </script>
+          </is-chart>
+        </is-demo>
+      </section>
+
+      <section class="section" id="comparacion">
+        <h2>Comparar cantidades</h2>
+        <p>Barras: lo correcto cuando el lector compara magnitudes entre categorías.</p>
+        <div class="chart-grid">
+
+          <article class="chart-card">
+            <h4>Una serie</h4>
+            <p><code>&lt;is-bar-chart&gt;</code></p>
+            <div class="chart-card__plot">
+              <is-bar-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+                    "datasets": [{ "label": "Ventas", "data": [4200000, 5100000, 3800000, 6400000, 5900000, 7200000] }] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Agrupada</h4>
+            <p>Varias series comparten categoría.</p>
+            <div class="chart-card__plot">
+              <is-bar-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["Q1", "Q2", "Q3", "Q4"], "datasets": [
+                    { "label": "Ingresos", "data": [32, 45, 38, 52] },
+                    { "label": "Costos", "data": [22, 28, 25, 31] },
+                    { "label": "Utilidad", "data": [10, 17, 13, 21] } ] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Apilada</h4>
+            <p>Atributo <code>stacked</code>: composición dentro del total.</p>
+            <div class="chart-card__plot">
+              <is-bar-chart stacked>
+                <script type="application/json">
+                  { "data": { "labels": ["Ene", "Feb", "Mar", "Abr"], "datasets": [
+                    { "label": "Contado", "data": [18, 22, 20, 27] },
+                    { "label": "Crédito", "data": [12, 15, 18, 14] },
+                    { "label": "Anticipos", "data": [5, 7, 6, 9] } ] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Horizontal</h4>
+            <p><code>index-axis="y"</code>: mejor con etiquetas largas.</p>
+            <div class="chart-card__plot">
+              <is-bar-chart index-axis="y">
+                <script type="application/json">
+                  { "data": { "labels": ["Bogotá", "Medellín", "Cali", "Barranquilla", "Bucaramanga"],
+                    "datasets": [{ "label": "Clientes", "data": [1240, 890, 610, 430, 280] }] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Con negativos</h4>
+            <p>La línea base marca el cero.</p>
+            <div class="chart-card__plot">
+              <is-bar-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["Ene", "Feb", "Mar", "Abr", "May"],
+                    "datasets": [{ "label": "Flujo neto", "data": [12, -8, 15, -4, 22] }] } }
+                </script>
+              </is-bar-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="section" id="tendencia">
+        <h2>Mostrar tendencia</h2>
+        <p>Líneas: cuando importa la dirección del cambio en el tiempo.</p>
+        <div class="chart-grid">
+
+          <article class="chart-card">
+            <h4>Dos series, curva</h4>
+            <p><code>tension: 0.4</code> en el dataset.</p>
+            <div class="chart-card__plot">
+              <is-line-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["Ene", "Feb", "Mar", "Abr", "May", "Jun"], "datasets": [
+                    { "label": "2025", "data": [30, 42, 38, 55, 48, 62], "tension": 0.4 },
+                    { "label": "2024", "data": [25, 30, 34, 40, 39, 45], "tension": 0.4 } ] } }
+                </script>
+              </is-line-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Área</h4>
+            <p><code>fill: true</code> rellena bajo la línea.</p>
+            <div class="chart-card__plot">
+              <is-line-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["L", "M", "X", "J", "V", "S", "D"], "datasets": [
+                    { "label": "Visitas", "data": [120, 190, 170, 240, 280, 210, 150], "fill": true, "tension": 0.4 } ] } }
+                </script>
+              </is-line-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Escalonada</h4>
+            <p><code>stepped: true</code>: valores que cambian de golpe.</p>
+            <div class="chart-card__plot">
+              <is-line-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["v1", "v2", "v3", "v4", "v5", "v6"], "datasets": [
+                    { "label": "Plan", "data": [10, 10, 25, 25, 40, 40], "stepped": true } ] } }
+                </script>
+              </is-line-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="section" id="proporcion">
+        <h2>Mostrar proporción</h2>
+        <p>
+          Partes de un total. Con más de seis rebanadas dejan de ser legibles y
+          conviene una barra horizontal.
+        </p>
+        <div class="chart-grid">
+
+          <article class="chart-card">
+            <h4>Pie</h4>
+            <p>El porcentaje se rotula dentro de cada rebanada.</p>
+            <div class="chart-card__plot">
+              <is-pie-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["Contado", "Crédito 30", "Crédito 60", "Crédito 90"],
+                    "datasets": [{ "label": "Cartera", "data": [45, 25, 18, 12] }] } }
+                </script>
+              </is-pie-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Doughnut</h4>
+            <p>El hueco muestra el total.</p>
+            <div class="chart-card__plot">
+              <is-doughnut-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["Inventario", "Cartera", "Bancos", "Activo fijo"],
+                    "datasets": [{ "label": "Activos", "data": [3200, 2100, 1450, 5300] }] } }
+                </script>
+              </is-doughnut-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Polar area</h4>
+            <p>Ángulo fijo, radio según el valor.</p>
+            <div class="chart-card__plot">
+              <is-polar-area-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["Norte", "Sur", "Este", "Oeste", "Centro"],
+                    "datasets": [{ "label": "Cobertura", "data": [11, 16, 7, 14, 9] }] } }
+                </script>
+              </is-polar-area-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="section" id="correlacion">
+        <h2>Correlación y multivariable</h2>
+        <div class="chart-grid">
+
+          <article class="chart-card">
+            <h4>Scatter</h4>
+            <p>Dos ejes numéricos, un punto por observación.</p>
+            <div class="chart-card__plot">
+              <is-scatter-chart x-label="Antigüedad (días)" y-label="Saldo">
+                <script type="application/json">
+                  { "data": { "datasets": [
+                    { "label": "Facturas", "data": [
+                      {"x":5,"y":120},{"x":18,"y":340},{"x":32,"y":210},{"x":45,"y":560},
+                      {"x":60,"y":430},{"x":75,"y":720},{"x":88,"y":510},{"x":95,"y":880} ] } ] } }
+                </script>
+              </is-scatter-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Bubble</h4>
+            <p>El radio <code>r</code> agrega una tercera dimensión.</p>
+            <div class="chart-card__plot">
+              <is-bubble-chart x-label="Margen %" y-label="Volumen">
+                <script type="application/json">
+                  { "data": { "datasets": [
+                    { "label": "Productos", "data": [
+                      {"x":12,"y":40,"r":10},{"x":24,"y":75,"r":18},{"x":33,"y":55,"r":8},
+                      {"x":45,"y":90,"r":24},{"x":58,"y":62,"r":14} ] } ] } }
+                </script>
+              </is-bubble-chart>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <h4>Radar</h4>
+            <p>Compara varias métricas entre dos conjuntos.</p>
+            <div class="chart-card__plot is-tall">
+              <is-radar-chart>
+                <script type="application/json">
+                  { "data": { "labels": ["Liquidez", "Rentabilidad", "Endeudamiento", "Eficiencia", "Crecimiento"],
+                    "datasets": [
+                      { "label": "Empresa", "data": [65, 78, 45, 82, 70] },
+                      { "label": "Sector", "data": [55, 62, 60, 58, 52] } ] } }
+                </script>
+              </is-radar-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="section" id="micro">
+        <h2>Micro-gráficos</h2>
+        <p>
+          <code>&lt;is-sparkline&gt;</code> va en línea con el texto, sin ejes ni
+          leyenda. El atributo <code>trend</code> usa los colores semánticos del sistema.
+        </p>
+        <div class="chart-card" style="max-width:26rem">
+          <div class="spark-row">
+            <span>Ventas</span>
+            <is-sparkline trend="positive" values="4,6,5,8,7,11,13"></is-sparkline>
+            <b>+18%</b>
+          </div>
+          <div class="spark-row">
+            <span>Cartera vencida</span>
+            <is-sparkline trend="negative" values="12,11,13,9,8,6,5"></is-sparkline>
+            <b>−22%</b>
+          </div>
+          <div class="spark-row">
+            <span>Rotación</span>
+            <is-sparkline trend="neutral" type="bar" values="5,7,6,8,6,7,7"></is-sparkline>
+            <b>=</b>
+          </div>
+          <div class="spark-row">
+            <span>Margen</span>
+            <is-sparkline variant="gradient" curve="natural" values="3,5,4,7,6,9,12"></is-sparkline>
+            <b>+31%</b>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="config">
+        <h2>Configuración</h2>
+        <p>
+          Los datos entran por un <code>&lt;script type="application/json"&gt;</code> hijo
+          o por la propiedad <code>config</code>. El esquema es el de Chart.js:
+          <code>{ type, data: { labels, datasets }, options }</code>.
+        </p>
+
+        <h3>Atributos</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Valores</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>type</code></td><td>bar · line · pie · doughnut · radar · polarArea · scatter · bubble</td><td>Solo en <code>&lt;is-chart&gt;</code>; los elementos tipados lo fijan.</td></tr>
+            <tr><td><code>label</code></td><td>texto</td><td>Título sobre el gráfico.</td></tr>
+            <tr><td><code>x-label</code> · <code>y-label</code></td><td>texto</td><td>Títulos de eje.</td></tr>
+            <tr><td><code>index-axis</code></td><td><code>x</code> · <code>y</code></td><td><code>y</code> produce barras horizontales.</td></tr>
+            <tr><td><code>stacked</code></td><td>booleano</td><td>Apila las series.</td></tr>
+            <tr><td><code>grid</code></td><td><code>auto</code> · <code>both</code> · <code>x</code> · <code>y</code> · <code>none</code></td><td>Por defecto solo el eje de valor.</td></tr>
+            <tr><td><code>min</code> · <code>max</code></td><td>número</td><td>Fija el dominio del eje de valor.</td></tr>
+            <tr><td><code>legend-position</code></td><td><code>top</code> · <code>bottom</code> · <code>start</code> · <code>end</code></td><td>Ubicación de la leyenda.</td></tr>
+            <tr><td><code>without-legend</code> · <code>without-tooltip</code> · <code>without-animation</code></td><td>booleano</td><td>Desactivan cada parte.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Propiedades del dataset</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Aplica a</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>label</code></td><td>todos</td><td>Nombre de la serie en leyenda y tooltip.</td></tr>
+            <tr><td><code>backgroundColor</code> · <code>borderColor</code></td><td>todos</td><td>Fuerzan el color; si faltan, se usa la paleta de marca.</td></tr>
+            <tr><td><code>tension</code></td><td>line</td><td>Mayor que 0 dibuja curva suave.</td></tr>
+            <tr><td><code>stepped</code></td><td>line</td><td>Línea escalonada.</td></tr>
+            <tr><td><code>fill</code></td><td>line</td><td>Rellena el área bajo la línea.</td></tr>
+            <tr><td><code>borderRadius</code></td><td>bar</td><td>Radio del extremo de la barra.</td></tr>
+            <tr><td><code>borderWidth</code> · <code>pointRadius</code></td><td>line · scatter</td><td>Grosor del trazo y tamaño del punto.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Opciones</h3>
+        <p>
+          De <code>config.options</code> se leen
+          <code>scales.{x,y}.{min,max,stacked,beginAtZero,title.text}</code>,
+          <code>plugins.legend.{display,position}</code>,
+          <code>plugins.title.{display,text}</code>,
+          <code>plugins.tooltip.enabled</code>, <code>indexAxis</code> y
+          <code>cutout</code>. Cuando un atributo del elemento y una opción definen lo
+          mismo, gana el atributo.
+        </p>
+
+        <h3>Config por JavaScript</h3>
+        <is-demo class="demo" style="height:14rem">
+          <is-chart open-on-click id="jsChart" type="line" without-legend></is-chart>
+        </is-demo>
+        <pre class="code">const el = document.querySelector('#jsChart');
+el.config = {
+  data: {
+    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+    datasets: [{ label: 'Ventas', data: [420, 580, 630, 710], tension: 0.4, fill: true }]
+  }
+};</pre>
+
+        <h3>Propiedades del elemento</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>config</code></td><td>Configuración completa; asignarla vuelve a dibujar.</td></tr>
+            <tr><td><code>svg</code></td><td>Nodo <code>&lt;svg&gt;</code> del gráfico (solo lectura).</td></tr>
+            <tr><td><code>chart</code></td><td>Alias histórico de <code>svg</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>Charts</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#comparacion">Comparar</a>
+        <a href="#tendencia">Tendencia</a>
+        <a href="#proporcion">Proporción</a>
+        <a href="#correlacion">Correlación</a>
+        <a href="#micro">Micro-gráficos</a>
+        <a href="#config">Configuración</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script type="module">
+    await customElements.whenDefined('is-chart');
+    const el = document.querySelector('#jsChart');
+    el.config = {
+      data: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [{ label: 'Ventas', data: [420, 580, 630, 710], tension: 0.4, fill: true }],
+      },
+    };
+  </script>
+  <script>
+    </script>
+</body>
+</html>
