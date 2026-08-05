@@ -12,6 +12,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
   - Home (`src/previews/home.html`): `../styles` · `../../scripts|dist`
   - Manifest `script`/`style`: `../../components/...` (relativo al preview de categoría → resuelve a `src/components/...`)
 - Docs LLM crudos (GitHub): base `…/main/src/` + `components/...` (p. ej. `…/main/src/components/LLM.md`). `LLM_BASE` en `preview-chrome.js` termina en `/src`.
+- **Utilerías (`helpers/`)**: cada módulo público (`ui`, `format`, `observer`, aliases, `popover`, …) tiene **tab en el nav** (`manifest.page`) + HTML en `src/previews/helpers/`. Guardián: `tests/helpers-homogeneity.test.mjs`. `is-floating` es interno (sin tab).
 - Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"contapyme|insoft|agrowin"}>`. `scripts/preview-boot.js` lo decodifica y setea `data-theme` / `data-palette` en `<html>`. **`prefers-color-scheme` NO se usa** — el tema es explícito.
 - Build: esbuild → `dist/cdn/` desde `src/components` + `src/styles`. Dev: `node scripts/serve.mjs` (previews en `/src/previews/`). Sin TS, sin framework, sin test runner por defecto (`node --test tests/`).
 - **Paleta default del kit = `contapyme`** (azul ISP `#1a6eb0`). `insoft` y `agrowin` siguen disponibles; no son el default.

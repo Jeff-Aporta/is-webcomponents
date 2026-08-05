@@ -104,6 +104,9 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `forms/date-range-input.md` | `<is-date-range-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
 | `forms/pin-input.md` | `<is-pin-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
 | `helpers/popover.md` | `<is-popover>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
+| `helpers/ui.md` | `is-ui` · `IsUi` (módulo) | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
+| `helpers/format.md` | `<is-format>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
+| `helpers/observer.md` | `<is-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/relative-time.md` | `<is-relative-time>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/format-date.md` | `<is-format-date>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/format-number.md` | `<is-format-number>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |

@@ -83,7 +83,7 @@ function buildModules() {
     assert(entry.tag, 'manifest entry without tag');
     assert(entry.script, `manifest entry ${entry.tag} without script`);
     if (entry.tag === 'is-demo') continue; // chrome de preview, sin style/MD propio
-    assert(entry.style, `manifest entry ${entry.tag} without style`);
+    assert(entry.style || entry.module, `manifest entry ${entry.tag} without style`);
     const key = entry.script;
     const current = modules.get(key);
     if (current) {
@@ -101,6 +101,7 @@ function buildModules() {
         category: rel.split('/')[0],
         doc: rel,
         internal: !!entry.internal,
+        module: !!entry.module,
       });
     }
   }
@@ -185,7 +186,11 @@ for (const item of modules) {
   assert.equal(scalar(front, 'category'), item.category, `${item.doc}: wrong physical category`);
   assert.equal(scalar(front, 'status'), item.internal ? 'internal' : 'public', `${item.doc}: wrong status`);
   assert.equal(scalar(front, 'source'), `./${path.basename(item.script)}`, `${item.doc}: wrong source`);
-  assert.equal(scalar(front, 'style'), `./${path.basename(item.style)}`, `${item.doc}: wrong style`);
+  if (item.style) {
+    assert.equal(scalar(front, 'style'), `./${path.basename(item.style)}`, `${item.doc}: wrong style`);
+  } else {
+    assert.equal(scalar(front, 'style'), undefined, `${item.doc}: module-only no debe declarar style`);
+  }
   const expectedPreview = item.page ? `../../previews/${item.page}` : undefined;
   assert.equal(scalar(front, 'preview'), expectedPreview, `${item.doc}: wrong preview`);
   for (const heading of requiredComponentHeadings) assert(text.includes(heading), `${item.doc}: missing ${heading}`);

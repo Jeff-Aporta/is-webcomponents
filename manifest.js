@@ -47,6 +47,7 @@ export default [
   { tag: 'is-scrollspy', title: 'Scrollspy', category: 'layout', script: '../../components/layout/scrollspy.js', style: '../../components/layout/scrollspy.css', page: 'layout/is-scrollspy.html' },
   { tag: 'is-demo', title: 'Demo', category: 'layout', script: '../../components/layout/demo.js' },
   { tag: 'is-popover', title: 'Popover', category: 'helpers', script: '../../components/helpers/popover.js', style: '../../components/helpers/popover.css', page: 'helpers/is-popover.html' },
+  { tag: 'is-ui', title: 'IsUi', category: 'helpers', script: '../../components/helpers/ui.js', page: 'helpers/is-ui.html', module: true },
   { tag: 'is-breadcrumb', title: 'Breadcrumb', category: 'navigation', script: '../../components/navigation/breadcrumb.js', style: '../../components/navigation/breadcrumb.css', page: 'navigation/is-breadcrumb.html' },
   { tag: 'is-breadcrumb-item', title: 'Breadcrumb Item', category: 'navigation', script: '../../components/navigation/breadcrumb-item.js', style: '../../components/navigation/breadcrumb-item.css', page: 'navigation/is-breadcrumb-item.html' },
   { tag: 'is-tab-group', title: 'Tab Group', category: 'navigation', script: '../../components/navigation/tab-group.js', style: '../../components/navigation/tab-group.css', page: 'navigation/is-tab-group.html' },

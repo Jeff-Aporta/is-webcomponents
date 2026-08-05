@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../../scripts/preview-boot.js"></script>
+  <script type="module" src="../../../dist/cdn/all.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IsUi · IS Web Components</title>
+  <meta name="description" content="Utilidad IsUi: html, adoptCss y define para apps consumidoras del kit." />
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../../scripts/highlight-pre.js"></script>
+  <script type="module" src="../../../scripts/demo-code.js"></script>
+  <script type="module" src="../../../scripts/docs-chrome.js"></script>
+  <script type="module" src="../../../scripts/preview-chrome.js"></script>
+  <style>
+    .ui-stage {
+      display: grid;
+      gap: 0.75rem;
+      padding: 1rem;
+      border: 1px dashed var(--is-border);
+      border-radius: var(--is-radius-md, 8px);
+      background: color-mix(in srgb, var(--is-control-bg) 80%, transparent);
+    }
+    .ui-stage__meta {
+      font-size: 0.85em;
+      color: var(--is-text-muted, var(--is-text));
+      opacity: 0.85;
+    }
+    demo-card {
+      display: block;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--is-border);
+      background: var(--is-bg);
+      color: var(--is-text);
+    }
+    demo-card[data-tone="brand"] {
+      border-color: color-mix(in srgb, var(--is-accent) 55%, var(--is-border));
+    }
+  </style>
+</head>
+<body>
+  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-ui">
+
+      <section class="section" id="intro">
+        <h2>IsUi <span class="lede" style="display:inline;font-weight:400">(módulo · no es un tag)</span></h2>
+        <p class="lede">
+          Utilidad de render para apps consumidoras. Tras cargar el CDN queda en
+          <code class="code">globalThis.IsUi</code> (alias <code class="code">Ui</code>).
+          No reinventes botones ni tablas: monta <code class="code">is-*</code> con
+          <code class="code">html</code> + CSS hermano vía <code class="code">adoptCss</code>.
+        </p>
+        <is-demo class="demo">
+          <span class="demo-label">// Disponible tras all.min.js</span>
+          <div class="ui-stage" id="introStage">
+            <div class="ui-stage__meta">Cargando IsUi…</div>
+          </div>
+        </is-demo>
+      </section>
+
+      <section class="section" id="html">
+        <h2><code>IsUi.html</code></h2>
+        <p class="lede">Plantilla etiquetada → <code class="code">DocumentFragment</code>. Soporta valores, eventos y nodos hijos.</p>
+        <is-demo class="demo">
+          <div class="ui-stage" id="htmlStage"></div>
+        </is-demo>
+        <pre class="code" data-lang="javascript">const { html } = IsUi;
+host.append(html`
+  &lt;is-button color="brand" onclick=${() => IsUi.toast?.() || console.log('ok')}&gt;
+    Guardar
+  &lt;/is-button&gt;
+`);</pre>
+      </section>
+
+      <section class="section" id="define">
+        <h2><code>IsUi.define</code> + <code>adoptCss</code></h2>
+        <p class="lede">
+          Registra un custom element de dominio. El CSS va en archivo hermano
+          (aquí se usa <code class="code">IsUi.css</code> solo para el demo en página).
+        </p>
+        <is-demo class="demo">
+          <span class="demo-label">// demo-card registrado en esta página</span>
+          <div class="ui-stage">
+            <demo-card data-tone="brand">
+              <strong>app-*</strong> traduce datos → <code>is-*</code>
+            </demo-card>
+          </div>
+        </is-demo>
+        <pre class="code" data-lang="javascript">import { html, adoptCss, define } from '…/helpers/ui.min.js';
+
+class AppPanel extends HTMLElement {
+  #root = this.attachShadow({ mode: 'open' });
+  connectedCallback() {
+    this.#root.append(html`&lt;is-button color="brand"&gt;Acción&lt;/is-button&gt;`);
+    adoptCss(this.#root, import.meta.url); // → AppPanel.css hermano
+  }
+}
+define('app-panel', AppPanel);</pre>
+      </section>
+
+      <section class="section" id="cdn">
+        <h2>CDN</h2>
+        <p class="lede">
+          Tag del catálogo: <code class="code">is-ui</code> (módulo). Artefacto:
+          <code class="code">dist/cdn/helpers/ui.min.js</code>. También va dentro de
+          <code class="code">all.min.js</code>.
+        </p>
+        <pre class="code" data-lang="html">&lt;script type="module"
+  src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js"&gt;
+&lt;/script&gt;</pre>
+      </section>
+
+      <section class="section" id="reference">
+        <h2>Referencia rápida</h2>
+        <table class="ref">
+          <thead><tr><th>API</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><code>html</code></td><td>Plantilla → fragment</td></tr>
+            <tr><td><code>adoptCss</code></td><td>CSS hermano en ShadowRoot (preferido)</td></tr>
+            <tr><td><code>css</code></td><td>CSS constructable (prototipos)</td></tr>
+            <tr><td><code>define</code></td><td>customElements.define idempotente</td></tr>
+            <tr><td><code>el</code> / <code>esc</code> / <code>raw</code></td><td>createElement / escape / HTML crudo</td></tr>
+            <tr><td><code>crearComponente</code></td><td>Fábrica shadow + props → render</td></tr>
+            <tr><td><code>jsonScript</code></td><td>Config JSON para is-*</td></tr>
+            <tr><td><code>fecha</code> / <code>rec</code></td><td>Fecha es-CO / coerce record</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </is-main>
+    <aside class="sidebar" slot="end">
+      <h1>IsUi</h1>
+      <is-scrollspy target="is-main">
+        <a href="#intro">Introducción</a>
+        <a href="#html">html</a>
+        <a href="#define">define + adoptCss</a>
+        <a href="#cdn">CDN</a>
+        <a href="#reference">Referencia</a>
+      </is-scrollspy>
+    </aside>
+  </is-split-panel>
+
+  <script type="module">
+    const ready = () => typeof globalThis.IsUi?.html === 'function';
+
+    const paintIntro = () => {
+      const stage = document.getElementById('introStage');
+      const { html, esc } = IsUi;
+      stage.replaceChildren(html`
+        <div class="ui-stage__meta">
+          <code>typeof IsUi.html</code> = <strong>${typeof IsUi.html}</strong>
+          · alias <code>Ui</code> = <strong>${globalThis.Ui === IsUi ? 'mismo objeto' : '—'}</strong>
+        </div>
+        <is-button color="brand" variant="soft">
+          <is-icon slot="start" icon="mdi:check"></is-icon>
+          Kit listo
+        </is-button>
+        <is-tag color="info">${esc('helpers/ui.min.js')}</is-tag>
+      `);
+    };
+
+    const paintHtml = () => {
+      const stage = document.getElementById('htmlStage');
+      const { html } = IsUi;
+      let n = 0;
+      const counter = html`<is-badge color="brand">${String(n)}</is-badge>`;
+      const bump = () => {
+        n += 1;
+        counter.textContent = String(n);
+      };
+      stage.replaceChildren(html`
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
+          <is-button color="brand" onclick=${bump}>Incrementar</is-button>
+          ${counter}
+          <is-format type="relative" date=${new Date().toISOString()} sync></is-format>
+        </div>
+      `);
+    };
+
+    const registerDemoCard = () => {
+      const { define, html, css } = IsUi;
+      define('demo-card', class extends HTMLElement {
+        #root = this.attachShadow({ mode: 'open' });
+        connectedCallback() {
+          css(this.#root, `
+            :host { display: block; }
+            .box {
+              padding: 0.85rem 1rem;
+              border-radius: 8px;
+              border: 1px solid var(--is-border);
+              background: var(--is-bg);
+              color: var(--is-text);
+            }
+            :host([data-tone="brand"]) .box {
+              border-color: color-mix(in srgb, var(--is-accent) 55%, var(--is-border));
+            }
+          `);
+          this.#root.append(html`<div class="box"><slot></slot></div>`);
+        }
+      });
+    };
+
+    const boot = () => {
+      if (!ready()) {
+        requestAnimationFrame(boot);
+        return;
+      }
+      registerDemoCard();
+      paintIntro();
+      paintHtml();
+    };
+    boot();
+  </script>
+</body>
+</html>

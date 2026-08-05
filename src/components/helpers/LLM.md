@@ -12,15 +12,18 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `IsUi` (módulo) | [ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) | Plantilla `html` / CSS / `define` para apps |
+| `is-ui` · `IsUi` (módulo) | [ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) | Plantilla `html` / CSS / `define` para apps |
 | `<is-popover>` | [popover.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/popover.md) | Popover |
-| `<is-relative-time>` | [relative-time.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/relative-time.md) | Tiempo relativo |
-| `<is-format-date>` | [format-date.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-date.md) | Formato de fecha |
-| `<is-format-number>` | [format-number.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-number.md) | Formato de número |
-| `<is-format-bytes>` | [format-bytes.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-bytes.md) | Formato de bytes |
-| `<is-intersection-observer>` | [intersection-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/intersection-observer.md) | Observador de intersección |
-| `<is-mutation-observer>` | [mutation-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/mutation-observer.md) | Observador de mutación |
-| `<is-resize-observer>` | [resize-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/resize-observer.md) | Resize Observer |
+| `<is-format>` | [format.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format.md) | Formato unificado (date/number/bytes/relative) |
+| `<is-relative-time>` | [relative-time.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/relative-time.md) | Tiempo relativo (alias) |
+| `<is-format-date>` | [format-date.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-date.md) | Formato de fecha (alias) |
+| `<is-format-number>` | [format-number.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-number.md) | Formato de número (alias) |
+| `<is-format-bytes>` | [format-bytes.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-bytes.md) | Formato de bytes (alias) |
+| `<is-observer>` | [observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/observer.md) | Observer unificado (intersection/mutation/resize) |
+| `<is-intersection-observer>` | [intersection-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/intersection-observer.md) | Observador de intersección (alias) |
+| `<is-mutation-observer>` | [mutation-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/mutation-observer.md) | Observador de mutación (alias) |
+| `<is-resize-observer>` | [resize-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/resize-observer.md) | Resize Observer (alias) |
+| `<is-lightbox>` | (diagrams/lightbox) | Lightbox en categoría helpers del nav |
 
 ## Composición y relaciones
 
@@ -65,7 +68,7 @@ Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 
 ## Módulos internos
 
-
+- `is-floating` — building block interno de posicionamiento. No es API pública; usar `<is-popover>` / `<is-tooltip>`.
 ## Navegación
 
 - [Índice global](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/LLM.md)
