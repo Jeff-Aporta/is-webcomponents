@@ -13,11 +13,13 @@ import {
   isReady,
   paint,
   reapplyTheme,
+  repaint,
   softFormat,
+  watchDom,
   watchTheme,
 } from '../src/components/_shared/highlight-code.js';
 
-export { paint, softFormat, reapplyTheme };
+export { paint, repaint, softFormat, reapplyTheme };
 
 /**
  * El docs ya no es HTML estático: `<is-preview-component>` monta cada preview
@@ -38,6 +40,10 @@ const repintar = () => {
 };
 
 document.addEventListener('is-preview-ready', repintar);
+
+// El observer se engancha ANTES de que CodeMirror baje: así los `<pre>` que
+// aparezcan mientras carga quedan encolados y ninguno se pierde.
+watchDom();
 
 const boot = async () => {
   await ensureCodeMirror();

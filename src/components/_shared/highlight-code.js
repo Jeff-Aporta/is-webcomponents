@@ -173,6 +173,9 @@ const resolveThemeId = () => {
   return THEMES[t] ? t : 'dark';
 };
 
+/** Repintado en curso: el observer ignora las mutaciones que provoca runMode. */
+let pintando = false;
+
 const paintOne = (el) => {
   if (typeof CodeMirror?.runMode !== 'function') return;
   if (el.classList.contains('demo-code-pop__pre') && !el.textContent.trim() && !el.dataset.forceCm) return;
@@ -183,8 +186,13 @@ const paintOne = (el) => {
   const themeId = resolveThemeId();
   const theme = THEMES[themeId];
 
-  el.textContent = '';
-  CodeMirror.runMode(text, mode, el);
+  pintando = true;
+  try {
+    el.textContent = '';
+    CodeMirror.runMode(text, mode, el);
+  } finally {
+    pintando = false;
+  }
   // Limpia cualquier clase cm-s-* que pudieramos haber puesto antes,
   // para que no se acumulen los dos themes.
   for (const t of Object.values(THEMES)) el.classList.remove(t.className);
@@ -206,6 +214,78 @@ export const paint = (root = document) => {
     targets = [...scope.querySelectorAll('pre.code:not([data-cm])')];
   }
   targets.forEach(paintOne);
+};
+
+/**
+ * Vuelve a colorear un `<pre>` YA pintado. `paint()` se salta los `[data-cm]`
+ * para no rehacer trabajo; esto es para cuando el contenido cambió y el
+ * coloreado anterior ya no corresponde al texto.
+ */
+export const repaint = (el) => {
+  if (!(el instanceof Element)) return;
+  delete el.dataset.cm;
+  delete el.dataset.cmSource;
+  delete el.dataset.cmMode;
+  paintOne(el);
+};
+
+/** ¿El texto visible dejó de ser el que se coloreó? */
+const desincronizado = (el) => el.dataset.cmSource !== undefined
+  && el.textContent !== el.dataset.cmSource;
+
+let observer = null;
+let pendientes = null;
+
+const procesarPendientes = () => {
+  const lote = pendientes;
+  pendientes = null;
+  if (!lote?.size) return;
+
+  const pintar = () => {
+    for (const el of lote) {
+      if (!el.isConnected) continue;
+      if (!el.dataset.cm) paintOne(el);
+      else if (desincronizado(el)) repaint(el);
+    }
+  };
+  if (isReady()) pintar();
+  else ensureCodeMirror().then(pintar).catch(console.error);
+};
+
+const encolar = (el) => {
+  pendientes ??= new Set();
+  if (!pendientes.size) queueMicrotask(procesarPendientes);
+  pendientes.add(el);
+};
+
+/**
+ * Vigila el documento y colorea SIEMPRE: los `<pre class="code">` que aparecen
+ * después del arranque (previews montados desde JSON, paneles de demo) y los
+ * que reescriben su texto en caliente (el taller de temas regenera el CSS en
+ * cada `is-input` del picker). Sin esto, cada consumidor tenía que acordarse de
+ * llamar a `paint()` y el que no lo hacía se quedaba en texto plano.
+ *
+ * Idempotente: el observer es uno por documento.
+ */
+export const watchDom = (root = document.documentElement) => {
+  if (observer || typeof MutationObserver !== 'function') return;
+
+  observer = new MutationObserver((muts) => {
+    // runMode reemplaza los hijos del <pre>: sus propias mutaciones no cuentan.
+    if (pintando) return;
+    for (const m of muts) {
+      const desde = m.target instanceof Element ? m.target : m.target?.parentElement;
+      const propio = desde?.closest?.('pre.code');
+      if (propio) encolar(propio);
+      if (m.type !== 'childList') continue;
+      for (const node of m.addedNodes) {
+        if (!(node instanceof Element)) continue;
+        if (node.matches('pre.code')) encolar(node);
+        for (const pre of node.querySelectorAll?.('pre.code') ?? []) encolar(pre);
+      }
+    }
+  });
+  observer.observe(root, { childList: true, subtree: true, characterData: true });
 };
 
 /** Re-pinta los <pre> ya pintados con el theme actual. Llamalo cuando

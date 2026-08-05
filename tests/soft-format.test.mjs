@@ -50,3 +50,47 @@ test('presentation.css neutraliza el fondo rojo de cm-error', () => {
   assert.match(css, /pre\.code\s+\.cm-error/);
   assert.match(css, /background:\s*transparent\s*!important/);
 });
+
+test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
+  assert.equal(typeof hl.watchDom, 'function', 'falta watchDom');
+  assert.equal(typeof hl.repaint, 'function', 'falta repaint');
+
+  const src = readFileSync(join(root, 'src/components/_shared/highlight-code.js'), 'utf8');
+  // Un <pre> que reescribe su texto tiene que repintarse: el criterio es que el
+  // texto visible ya no sea el que se coloreó.
+  assert.match(src, /textContent\s*!==\s*el\.dataset\.cmSource/);
+  // runMode reemplaza los hijos del <pre>: sin esta guarda el observer se
+  // dispara con sus propias mutaciones y no para nunca.
+  assert.match(src, /if\s*\(pintando\)\s*return/);
+  assert.match(src, /characterData:\s*true/);
+
+  const boot = readFileSync(join(root, 'scripts/highlight-pre.js'), 'utf8');
+  assert.match(boot, /watchDom\(\)/, 'highlight-pre.js debe arrancar el observer');
+});
+
+test('las salidas vivas del docs son pre.code (las colorea CodeMirror)', () => {
+  const casos = [
+    ['src/previews/theming.json', 'cssOut', 'css'],
+    ['src/previews/forms/is-rte.json', 'outHTML', 'html'],
+    ['src/previews/forms/is-doc-editor.json', 'out', 'javascript'],
+  ];
+  for (const [archivo, id, lang] of casos) {
+    const raw = readFileSync(join(root, archivo), 'utf8');
+    const def = JSON.parse(raw);
+    const html = (def.sections ?? []).flatMap((s) => s.blocks ?? [])
+      .map((b) => b.html).filter((h) => typeof h === 'string').join('\n');
+    const tag = html.match(new RegExp(`<pre\\b[^>]*id="${id}"[^>]*>`))?.[0]
+      ?? html.match(new RegExp(`<pre\\b[^>]*>(?=[^]*${id})`))?.[0];
+    assert.ok(tag, `${archivo}: no encontré el <pre id="${id}">`);
+    assert.match(tag, /class="[^"]*\bcode\b/, `${archivo}#${id}: sin la clase code no se colorea`);
+    assert.match(tag, new RegExp(`data-lang="${lang}"`), `${archivo}#${id}: falta data-lang="${lang}"`);
+  }
+});
+
+test('el prompt para agentes del CDN no se tokeniza como markup', () => {
+  const src = readFileSync(join(root, 'src/components/feedback/cdn-snippet.js'), 'utf8');
+  assert.match(src, /slot\s*===\s*'llm-prompt'/);
+  const css = readFileSync(join(root, 'src/components/feedback/cdn-snippet.css'), 'utf8');
+  assert.match(css, /\.cdn__pre\s+\.cm-tag/, 'el shadow necesita sus propios colores de token');
+  assert.match(css, /\.cdn__pre\s+\.cm-error/);
+});

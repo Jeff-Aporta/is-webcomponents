@@ -30,7 +30,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<pre class=\"output\" id=\"out\"></pre>"
+          "html": "<pre class=\"code output\" id=\"out\" data-lang=\"javascript\"></pre>"
         }
       ]
     },

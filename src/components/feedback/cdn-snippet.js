@@ -331,6 +331,9 @@ import '../media/icon.js';
       this.#adoptCodeMirrorCss();
       for (const pre of this.shadowRoot.querySelectorAll('.cdn__pre')) {
         if (!pre.textContent.trim()) continue;
+        // El prompt para agentes es prosa: tokenizarlo como markup lo llena de
+        // cierres huérfanos y no aporta un solo color útil.
+        if (pre.dataset.slot === 'llm-prompt') continue;
         pre.classList.add('code');
         pre.dataset.cmMode = 'htmlmixed';
         delete pre.dataset.cm;

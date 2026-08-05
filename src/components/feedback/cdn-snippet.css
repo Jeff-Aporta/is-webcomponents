@@ -142,6 +142,31 @@
   tab-size: 2;
 }
 
+/* Tokens de CodeMirror dentro del shadow. El theme del CDN se adopta pero sus
+   colores son los de un editor sobre fondo propio: aquí se repiten los mismos
+   valores que presentation.css usa en el docs para que un snippet se lea igual
+   dentro y fuera del componente. `cm-error` va en transparente a propósito: el
+   theme lo pinta con fondo rojo y en documentación un cierre suelto no es un
+   error que valga la pena gritar. */
+.cdn__pre.cm-s-material-darker {
+  background: var(--cdn-pre-bg);
+  color: var(--is-text);
+}
+.cdn__pre .cm-tag { color: #74c0fc; }
+.cdn__pre .cm-attribute { color: #ffe066; }
+.cdn__pre .cm-string { color: #b2f2bb; }
+.cdn__pre .cm-comment { color: #868e96; font-style: italic; }
+.cdn__pre .cm-keyword { color: #e599f7; }
+.cdn__pre .cm-def,
+.cdn__pre .cm-variable { color: #ffc078; }
+.cdn__pre .cm-number { color: #ffc078; }
+.cdn__pre .cm-bracket { color: #868e96; }
+.cdn__pre .cm-atom { color: #ff8787; }
+.cdn__pre .cm-error {
+  background: transparent;
+  color: #74c0fc;
+}
+
 @media (max-width: 540px) {
   .cdn__row-head { gap: 0.4em; }
   .cdn__copy { width: 100%; justify-content: center; }
