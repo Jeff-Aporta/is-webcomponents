@@ -100,11 +100,20 @@ test('is-preview-component: el índice se muda a un drawer derecho en compacto',
     'el split debe colapsar y volver según el ancho',
   );
   assert.ok(/> \.toc-toggle/.test(previewCss), 'la hamburguesa del índice necesita estilo propio');
+  assert.ok(
+    /<is-button[^>]*class="toc-toggle"[^>]*color="brand"[^>]*variant="plain"/.test(previewJs)
+      || /<is-button[^>]*class="toc-toggle"[^>]*variant="plain"[^>]*color="brand"/.test(previewJs),
+    'toc-toggle debe ser is-button plain con color brand',
+  );
 });
 
 test('galería: el catálogo se muda a un drawer izquierdo en móvil', () => {
   assert.ok(/id="navDrawer"[\s\S]*?placement="start"/.test(indexHtml), 'el catálogo abre por la izquierda');
   assert.ok(/id="navToggle"/.test(indexHtml), 'falta la hamburguesa del catálogo');
+  assert.ok(
+    /<is-button[^>]*id="navToggle"[^>]*variant="plain"/.test(indexHtml),
+    'navToggle debe ser is-button variant=plain',
+  );
   assert.ok(/matchMedia\('\(max-width: 640px\)'\)/.test(indexHtml), 'el escalón móvil es 640px');
   assert.ok(
     /mainSplit\.setAttribute\('collapse', 'start'\)/.test(indexHtml),

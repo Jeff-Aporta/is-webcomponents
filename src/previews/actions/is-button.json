@@ -518,16 +518,22 @@
           ],
           "rows": [
             [
-              "<code>variant</code>",
-              "brand · neutral · success · warning · danger",
-              "neutral",
-              "Color semántico."
+              "<code>color</code>",
+              "brand · neutral · success · warning · danger · info · error",
+              "brand",
+              "Color semántico (tono)."
             ],
             [
-              "<code>appearance</code>",
-              "filled · outlined · plain",
+              "<code>variant</code>",
+              "filled · outlined · plain · ghost · soft · text",
               "filled",
-              "Tratamiento visual."
+              "Apariencia. Ortogonal a <code>color</code>."
+            ],
+            [
+              "<code>shape</code>",
+              "round · rect · pill",
+              "round",
+              "Forma del control. <code>pill</code> también vía booleano <code>pill</code>."
             ],
             [
               "<code>disabled</code>",

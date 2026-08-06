@@ -14,6 +14,8 @@
  */
 import { renderDefinition } from '../../previews/_kit/render.js';
 import './drawer.js';
+import '../actions/button.js';
+import '../media/icon.js';
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */
 const COMPACT_QUERY = '(max-width: 900px)';
@@ -24,16 +26,10 @@ TEMPLATE.innerHTML = /* html */ `
     <is-main class="main" part="main" slot="start" remember-scroll></is-main>
     <aside class="sidebar" part="aside" slot="end"></aside>
   </is-split-panel>
-  <button type="button" class="toc-toggle" part="toc-toggle" aria-expanded="false"
-          aria-label="Abrir el índice de la página" title="Índice de la página" hidden>
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M9 7h11M9 12h11M9 17h11" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" />
-      <circle cx="4.6" cy="7" r="1.4" fill="currentColor" />
-      <circle cx="4.6" cy="12" r="1.4" fill="currentColor" />
-      <circle cx="4.6" cy="17" r="1.4" fill="currentColor" />
-    </svg>
-  </button>
+  <is-button class="toc-toggle" part="toc-toggle" color="brand" variant="plain" pill type="button"
+          aria-expanded="false" aria-label="Abrir el índice de la página" title="Índice de la página" hidden>
+    <is-icon slot="start" icon="mdi:format-list-bulleted"></is-icon>
+  </is-button>
   <is-drawer class="toc-drawer" part="toc-drawer" placement="end" light-dismiss
              label="Índice"></is-drawer>
 `;
@@ -106,7 +102,7 @@ class IsPreviewComponent extends HTMLElement {
   }
 
   #toggle() {
-    return this.querySelector(':scope > button.toc-toggle');
+    return this.querySelector(':scope > is-button.toc-toggle, :scope > button.toc-toggle');
   }
 
   /** Hamburguesa + drawer del TOC: solo hace falta atarlos una vez. */

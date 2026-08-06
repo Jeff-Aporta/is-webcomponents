@@ -115,7 +115,8 @@ import '../media/icon.js';
   // El role lo tiene el <button> interno: sin reenviar, un aria-* en el host
   // no llega a AT. Solo los que no dependen de IDs del documento externo.
   const ARIA_FORWARD = [
-    "aria-label", "aria-pressed", "aria-expanded", "aria-haspopup", "aria-current"
+    "aria-label", "aria-pressed", "aria-expanded", "aria-haspopup",
+    "aria-current", "aria-controls",
   ];
 
   class IsButton extends HTMLElement {

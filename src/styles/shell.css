@@ -372,38 +372,9 @@ body {
 }
 
 /* Hamburguesa del catálogo: solo se muestra cuando el nav vive en el drawer
-   (lo controla syncNavLayout con el atributo hidden). */
+   (lo controla syncNavLayout con el atributo hidden). Es is-button plain+pill. */
 .shell-menu-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   flex: 0 0 auto;
-  width: 2.375em;
-  height: 2.375em;
-  padding: 0;
-  border: 1px solid var(--is-border);
-  border-radius: 999px;
-  background: var(--is-control-bg, transparent);
-  color: var(--is-control-text);
-  cursor: pointer;
-  transition: color 120ms ease, border-color 120ms ease, transform 120ms ease;
-
-  & svg {
-    width: 1.375em;
-    height: 1.375em;
-  }
-
-  &:hover {
-    color: var(--is-text);
-    border-color: color-mix(in srgb, var(--is-accent) 55%, var(--is-border));
-  }
-
-  &:active { transform: translateY(1px); }
-
-  &:focus-visible {
-    outline: 2px solid var(--is-focus);
-    outline-offset: 2px;
-  }
 
   &[hidden] { display: none; }
 }

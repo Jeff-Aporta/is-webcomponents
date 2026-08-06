@@ -20,14 +20,11 @@
 </head>
 <body>
   <header class="shell-bar">
-    <button type="button" class="shell-menu-btn" id="navToggle" aria-expanded="false"
-            aria-controls="navDrawer" aria-label="Abrir el catálogo de componentes"
-            title="Catálogo de componentes" hidden>
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" />
-      </svg>
-    </button>
+    <is-button class="shell-menu-btn" id="navToggle" color="neutral" variant="plain" pill type="button"
+            aria-expanded="false" aria-controls="navDrawer"
+            aria-label="Abrir el catálogo de componentes" title="Catálogo de componentes" hidden>
+      <is-icon slot="start" icon="mdi:menu"></is-icon>
+    </is-button>
 
     <div class="brand-wrap" id="brandWrap">
       <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="ContaPyme — elegir paleta" title="Elegir paleta">
