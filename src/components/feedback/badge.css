@@ -69,9 +69,9 @@
 }
 
 :host([color="danger"]) {
-  --_bg: var(--is-danger-soft, rgb(250 82 82 / 18%));
+  --_bg: var(--is-danger-soft, rgb(250 82 82 / 28%));
   --_border: var(--is-color-danger-500, #fa5252);
-  --_text: var(--is-danger-text, #ff8787);
+  --_text: var(--is-danger-text, #ffb4b4);
   --pulse-color: var(--is-color-danger-500, #fa5252);
 }
 

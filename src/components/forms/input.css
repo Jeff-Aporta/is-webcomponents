@@ -145,11 +145,11 @@
 }
 
 :host([variant="underlined"]) .base {
-  background: transparent;
+  background: color-mix(in srgb, var(--is-control-bg, transparent) 35%, transparent);
   border-color: transparent;
-  border-bottom-color: var(--_border);
+  border-bottom: 2px solid var(--_border);
   border-radius: 0;
-  padding-left: 0;
+  padding-left: 0.15em;
 }
 
 /* ---- estado de error -------------------------------------------------- */

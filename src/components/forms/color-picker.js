@@ -34,11 +34,10 @@ import {
     <div class="form-control">
       <label part="label" class="label" hidden><slot name="label"><span class="label-text"></span></slot></label>
       <div part="base" class="base">
-        <button type="button" part="trigger" class="trigger" aria-haspopup="dialog" aria-expanded="false">
+        <is-button variant="plain" with-caret part="trigger" class="trigger" aria-haspopup="dialog" aria-expanded="false">
           <span part="swatch" class="swatch" aria-hidden="true"></span>
           <span class="hex-text"></span>
-          <is-icon class="caret" icon="mdi:chevron-down" aria-hidden="true"></is-icon>
-        </button>
+        </is-button>
       </div>
       <div part="hint" class="hint" hidden><slot name="hint"><span class="hint-text"></span></slot></div>
     </div>
@@ -46,8 +45,8 @@ import {
       <div part="panel" class="panel" role="document">
         <div class="row">
           <input part="input" class="native" type="color" aria-label="Color" />
-          <input part="hex-input" class="hex" type="text" spellcheck="false" autocomplete="off"
-            maxlength="7" aria-label="Código hexadecimal" />
+          <is-input part="hex-input" class="hex" type="text" spellcheck="false" autocomplete="off"
+            maxlength="7" aria-label="Código hexadecimal"></is-input>
         </div>
         <div class="swatches" role="group" aria-label="Colores predefinidos"></div>
       </div>

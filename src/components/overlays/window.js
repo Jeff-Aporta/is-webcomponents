@@ -79,15 +79,20 @@ import { adoptCss } from '../_shared/adopt-css.js';
       window.addEventListener('pointermove', this.#onWinMove);
       window.addEventListener('pointerup', this.#onWinUp);
       this.#sync();
-      // posición inicial
       const x = this.getAttribute('x');
       const y = this.getAttribute('y');
-      if (x != null) this.#root.style.left = `${x}px`;
-      if (y != null) this.#root.style.top = `${y}px`;
+      if (x != null) {
+        this.style.left = this.#cssSize(x);
+        this.style.transform = 'none';
+      }
+      if (y != null) {
+        this.style.top = this.#cssSize(y);
+        this.style.transform = 'none';
+      }
       const w = this.getAttribute('width');
       const h = this.getAttribute('height');
-      if (w) this.#root.style.setProperty('--_w', `${w}px`);
-      if (h) this.#root.style.setProperty('--_h', `${h}px`);
+      if (w) this.style.setProperty('--_w', this.#cssSize(w));
+      if (h) this.style.setProperty('--_h', this.#cssSize(h));
       const def = this.getAttribute('default') || 'normal';
       if (def === 'maximized') this.maximize();
       if (def === 'minimized') this.minimize();
@@ -110,12 +115,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#root.dataset.state = 'minimized';
       const dock = this.getAttribute('dock') || 'bottom-right';
       if (dock !== 'none') {
-        // Encolamos en una esquina
-        this.#root.style.left = '';
-        this.#root.style.top = '';
-        this.#root.style.right = '0';
-        this.#root.style.bottom = '0';
-        // sólo el header
+        this.style.left = '';
+        this.style.top = '';
+        this.style.right = '0';
+        this.style.bottom = '0';
+        this.style.transform = 'none';
         this.#root.classList.add('is-minimized');
       }
       this.dispatchEvent(new CustomEvent('is-minimize', { bubbles: true, composed: true }));
@@ -126,10 +130,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (this.#state !== 'maximized') this.#lastRect = this.#rect();
       this.#state = 'maximized';
       this.#root.dataset.state = 'maximized';
-      this.#root.style.left = '0';
-      this.#root.style.top = '0';
-      this.#root.style.right = '0';
-      this.#root.style.bottom = '0';
+      this.style.left = '0';
+      this.style.top = '0';
+      this.style.right = '0';
+      this.style.bottom = '0';
+      this.style.width = '100%';
+      this.style.height = '100%';
+      this.style.transform = 'none';
       this.dispatchEvent(new CustomEvent('is-maximize', { bubbles: true, composed: true }));
     }
 
@@ -138,13 +145,16 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#state = 'normal';
       this.#root.dataset.state = 'normal';
       this.#root.classList.remove('is-minimized');
-      this.#root.style.right = '';
-      this.#root.style.bottom = '';
+      this.style.right = '';
+      this.style.bottom = '';
+      this.style.width = '';
+      this.style.height = '';
       if (this.#lastRect) {
-        this.#root.style.left = `${this.#lastRect.x}px`;
-        this.#root.style.top = `${this.#lastRect.y}px`;
-        this.#root.style.setProperty('--_w', `${this.#lastRect.w}px`);
-        this.#root.style.setProperty('--_h', `${this.#lastRect.h}px`);
+        this.style.left = `${this.#lastRect.x}px`;
+        this.style.top = `${this.#lastRect.y}px`;
+        this.style.transform = 'none';
+        this.style.setProperty('--_w', `${this.#lastRect.w}px`);
+        this.style.setProperty('--_h', `${this.#lastRect.h}px`);
       }
       this.dispatchEvent(new CustomEvent('is-restore', { bubbles: true, composed: true, detail: { was: target } }));
     }
@@ -184,8 +194,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
         const dx = e.clientX - this.#drag.x;
         const dy = e.clientY - this.#drag.y;
         const r = this.#drag.rect;
-        this.#root.style.left = `${Math.max(0, r.x + dx)}px`;
-        this.#root.style.top = `${Math.max(0, r.y + dy)}px`;
+        this.style.left = `${Math.max(0, r.x + dx)}px`;
+        this.style.top = `${Math.max(0, r.y + dy)}px`;
+        this.style.transform = 'none';
       }
       if (this.#resize) {
         const dx = e.clientX - this.#resize.x;
@@ -193,8 +204,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
         const r = this.#resize.rect;
         const w = Math.max(180, r.w + dx);
         const h = Math.max(120, r.h + dy);
-        this.#root.style.setProperty('--_w', `${w}px`);
-        this.#root.style.setProperty('--_h', `${h}px`);
+        this.style.setProperty('--_w', `${w}px`);
+        this.style.setProperty('--_h', `${h}px`);
       }
     }
 
@@ -209,9 +220,19 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     #rect() {
-      const cs = getComputedStyle(this.#root);
-      const r = this.#root.getBoundingClientRect();
+      const r = this.getBoundingClientRect();
+      const offsetParent = this.offsetParent;
+      if (offsetParent) {
+        const pr = offsetParent.getBoundingClientRect();
+        return { x: r.left - pr.left, y: r.top - pr.top, w: r.width, h: r.height };
+      }
       return { x: r.left, y: r.top, w: r.width, h: r.height };
+    }
+
+    /** Acepta "22rem", "380" o "380px" sin duplicar la unidad. */
+    #cssSize(v) {
+      const s = String(v).trim();
+      return /[a-z%]/i.test(s) ? s : `${s}px`;
     }
 
     #sync() {

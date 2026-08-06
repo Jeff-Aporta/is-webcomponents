@@ -1,5 +1,6 @@
-/* is-dock */
-:host {
+/* is-dock — esta hoja la adoptan is-dock e is-dock-item; cada regla
+   de host debe ir tipada con :host(tag) para no filtrarse al otro. */
+:host(is-dock) {
   display: block;
   position: fixed;
   left: 50%;
@@ -7,9 +8,9 @@
   bottom: 1rem;
   z-index: 50;
 }
-:host([position="top"])    { bottom: auto; top: 1rem; }
-:host([position="left"])   { bottom: 50%; left: 1rem; top: auto; transform: translateY(50%); }
-:host([position="right"])  { bottom: 50%; left: auto; right: 1rem; top: auto; transform: translateY(50%); }
+:host(is-dock[position="top"])    { bottom: auto; top: 1rem; }
+:host(is-dock[position="left"])   { bottom: 50%; left: 1rem; top: auto; transform: translateY(50%); }
+:host(is-dock[position="right"])  { bottom: 50%; left: auto; right: 1rem; top: auto; transform: translateY(50%); }
 
 .root {
   display: inline-flex;
@@ -25,11 +26,11 @@
   backdrop-filter: blur(16px);
   box-shadow: 0 18px 50px rgba(0,0,0,.32);
 }
-:host([position="top"]) .root { align-items: start; }
+:host(is-dock[position="top"]) .root { align-items: start; }
 
-/* is-dock-item: el padre aplica scale a través de --scale del item */
-:host {
+:host(is-dock-item) {
   --scale: 1;
+  display: inline-flex;
 }
 .item {
   --s: var(--scale, 1);

@@ -44,6 +44,8 @@
   .calendars {
     display: flex;
     gap: 1.25em;
+    max-width: 100%;
+    overflow-x: auto;
   }
 
   /* Separador entre meses: ayuda a leer que son dos rejillas, no una de 14. */

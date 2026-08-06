@@ -9,7 +9,12 @@
   --lb-backdrop: rgb(0 0 0 / 60%);
 }
 
+/* Cerrado: no participa del layout. Abierto: contents para que el dialog
+   top-layer no deje un hueco fantasma del host. */
 :host {
+  display: none;
+}
+:host([open]) {
   display: contents;
 }
 

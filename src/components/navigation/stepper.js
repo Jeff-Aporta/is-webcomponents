@@ -112,9 +112,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
       steps.forEach((s, i) => {
         const st = i < active ? 'done' : i === active ? 'active' : 'pending';
         s.dataset.state = st;
-        // Si el step está disabled, debe ser pending forzado.
         if (s.hasAttribute('disabled') && i !== active) s.dataset.state = 'disabled';
         if (s.hasAttribute('error')) s.dataset.state = 'error';
+        const num = s.shadowRoot?.querySelector('.num');
+        if (num) num.textContent = String(i + 1);
       });
     }
 

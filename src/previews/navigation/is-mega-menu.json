@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "<is-mega-menu>",
   "titleHtml": true,
-  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "styles": "pre.log {\n      font-family: ui-monospace, monospace; font-size: .8rem;\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\n      border-radius: var(--is-radius); padding: .55rem .75rem;\n      max-height: 6rem; overflow: auto;\n    }\n    /* ::slotted no alcanza descendientes; los links viven en light DOM. */\n    is-mega-menu [slot=\"column\"] a,\n    is-mega-menu [slot=\"feature\"] a {\n      display: block;\n      padding: 0.25rem 0;\n      color: var(--is-text-soft);\n      text-decoration: none;\n      font-size: 0.88rem;\n    }\n    is-mega-menu [slot=\"column\"] a:hover,\n    is-mega-menu [slot=\"feature\"] a:hover {\n      color: var(--is-accent);\n    }",
   "storageKey": "docs-is-mega-menu",
   "hasBehavior": true,
   "sections": [

@@ -49,7 +49,10 @@ import '../media/icon.js';
             <span class="trigger-label"></span>
             <span class="caret"></span>
           </button>
-          <dialog part="panel" class="panel" aria-label="Mega menú"></dialog>
+          <dialog part="panel" class="panel" aria-label="Mega menú">
+            <slot name="column"></slot>
+            <slot name="feature"></slot>
+          </dialog>
         </div>
       `;
       adoptCss(this.shadowRoot, import.meta.url);
@@ -106,14 +109,20 @@ import '../media/icon.js';
     #positionPanel = () => {
       const placement = this.getAttribute('placement') || 'bottom-start';
       const rect = this.#trigger.getBoundingClientRect();
-      const panelWidth = parseInt(this.getAttribute('width') || 'min(60rem, 92vw)', 10) || Math.min(960, window.innerWidth - 32);
-      this.#panel.style.minWidth = `${panelWidth}px`;
-      this.#panel.style.maxWidth = `${Math.min(960, window.innerWidth - 32)}px`;
-      // posición vía top/left con nativos; el panel es dialog con position:fixed
+      const maxW = Math.min(960, window.innerWidth - 32);
+      const raw = (this.getAttribute('width') || '').trim();
+      const parsed = Number.parseFloat(raw);
+      const panelWidth = Number.isFinite(parsed) && parsed > 0
+        ? Math.min(parsed, maxW)
+        : maxW;
+      this.#panel.style.width = raw && !Number.isFinite(parsed) ? raw : `${panelWidth}px`;
+      this.#panel.style.maxWidth = `${maxW}px`;
       const top = rect.bottom + 8;
       this.#panel.style.top = `${top}px`;
-      if (placement.endsWith('-end')) this.#panel.style.left = `${Math.max(rect.right - panelWidth, 8)}px`;
-      else this.#panel.style.left = `${Math.max(rect.left, 8)}px`;
+      const left = placement.endsWith('-end')
+        ? Math.max(rect.right - panelWidth, 8)
+        : Math.max(rect.left, 8);
+      this.#panel.style.left = `${Math.min(left, window.innerWidth - panelWidth - 8)}px`;
     };
 
     #scheduleOpen() {

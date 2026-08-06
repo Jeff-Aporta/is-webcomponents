@@ -35,8 +35,8 @@
   box-sizing: border-box;
 }
 
-.image,
-.initials,
+.image[hidden],
+.initials[hidden],
 .icon[hidden] {
   display: none;
 }

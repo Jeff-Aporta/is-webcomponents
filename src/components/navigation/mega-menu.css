@@ -48,17 +48,22 @@
   max-height: 75vh;
   overflow: auto;
   position: fixed;
+  /* Explicit: sin esto `display:grid` anula el display:none del UA en dialog cerrado
+     y el contenido slotted se filtra al layout de la página. */
+  display: none;
 }
-.panel[open]::backdrop { background: transparent; }
-
-.panel {
+.panel[open] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
   gap: 1.5rem 2rem;
 }
+.panel[open]::backdrop { background: transparent; }
 .panel ::slotted([slot="column"]),
 .panel ::slotted([slot="feature"]) {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 11rem;
 }
 
 .panel ::slotted([slot="column"][title])::before {

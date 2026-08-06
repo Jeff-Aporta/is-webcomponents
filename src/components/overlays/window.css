@@ -6,6 +6,8 @@
   left: 50%; top: 12%;
   transform: translate(-50%, 0);
   display: block;
+  width: var(--_w);
+  height: var(--_h);
   z-index: var(--z, 100);
   font: inherit;
   color: var(--is-text);
@@ -22,8 +24,6 @@
     0 0 0 1px color-mix(in srgb, var(--is-text) 4%, transparent) inset,
     0 26px 60px rgba(0,0,0,.36);
   overflow: hidden;
-  width: var(--_w);
-  height: var(--_h);
 }
 
 .header {

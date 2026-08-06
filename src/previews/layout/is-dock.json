@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "<is-dock>",
   "titleHtml": true,
-  "styles": ".stage {\r\n      height: 28rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background:\r\n        radial-gradient(60rem 30rem at 50% 100%,\r\n          color-mix(in srgb, var(--is-accent) 14%, transparent),\r\n          transparent 60%);\r\n      position: relative;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
+  "styles": ".stage {\r\n      height: 28rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background:\r\n        radial-gradient(60rem 30rem at 50% 100%,\r\n          color-mix(in srgb, var(--is-accent) 14%, transparent),\r\n          transparent 60%);\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      overflow: hidden;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
   "storageKey": "docs-is-dock",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +20,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stage\"></div>\r\n          <is-dock>\r\n            <is-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></is-dock-item>\r\n            <is-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></is-dock-item>\r\n            <is-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></is-dock-item>\r\n            <is-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></is-dock-item>\r\n            <is-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></is-dock-item>\r\n            <is-dock-item label=\"Música\"     icon=\"mdi:music\"></is-dock-item>\r\n            <is-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></is-dock-item>\r\n          </is-dock>"
+          "html": "<div class=\"stage\"></div>\r\n          <is-dock>\r\n            <is-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></is-dock-item>\r\n            <is-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></is-dock-item>\r\n            <is-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></is-dock-item>\r\n            <is-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></is-dock-item>\r\n            <is-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></is-dock-item>\r\n            <is-dock-item label=\"Música\"     icon=\"mdi:music\"></is-dock-item>\r\n            <is-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></is-dock-item>\r\n          </is-dock>",
+          "contain": true
         }
       ]
     },
@@ -30,7 +31,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stage\"></div>\r\n          <is-dock position=\"left\">\r\n            <is-dock-item label=\"VS Code\"  icon=\"mdi:code-braces\"></is-dock-item>\r\n            <is-dock-item label=\"Git\"      icon=\"mdi:source-branch\"></is-dock-item>\r\n            <is-dock-item label=\"Terminal\" icon=\"mdi:console\"></is-dock-item>\r\n            <is-dock-item label=\"Docker\"   icon=\"mdi:docker\"></is-dock-item>\r\n            <is-dock-item label=\"Browser\"  icon=\"mdi:web\"></is-dock-item>\r\n          </is-dock>"
+          "html": "<div class=\"stage\"></div>\r\n          <is-dock position=\"left\">\r\n            <is-dock-item label=\"VS Code\"  icon=\"mdi:code-braces\"></is-dock-item>\r\n            <is-dock-item label=\"Git\"      icon=\"mdi:source-branch\"></is-dock-item>\r\n            <is-dock-item label=\"Terminal\" icon=\"mdi:console\"></is-dock-item>\r\n            <is-dock-item label=\"Docker\"   icon=\"mdi:docker\"></is-dock-item>\r\n            <is-dock-item label=\"Browser\"  icon=\"mdi:web\"></is-dock-item>\r\n          </is-dock>",
+          "contain": true
         }
       ]
     },
