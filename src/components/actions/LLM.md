@@ -61,6 +61,21 @@ Confundir acción, navegación y selección; revisar semántica button/link/menu
 
 Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 
+### Color × appearance (`is-button`)
+
+**Hacer**
+- `color` → roles `--_tone-*` (tokens relativos de `is-base` / `palettes`).
+- `variant` → solo `--_tone-*` (reglas genéricas `[color][variant=…]`).
+- Color nuevo = una regla de enlace. Appearance nueva = una regla de variant.
+- Fallback: `var(--is-color-X-strong, #hex)` en el sitio de uso.
+
+**No hacer**
+- Matriz N×M `:host([color=X][variant=Y])` por cada celda.
+- Pedir `--is-color-*-600` / `-500` (el tema ya no los define → filled/outlined transparentes sin error).
+- Hex de marca distinto en filled vs outlined (filled azul / outlined rojo).
+
+Guardián: `tests/button-color-appearance.test.mjs`. Detalle: `LLM.md` error **30**.
+
 ## Módulos internos
 
 No expone módulos internos documentales en esta categoría.

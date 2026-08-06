@@ -9,18 +9,17 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | Hacer | No hacer |
 | --- | --- |
 | Fuente bajo `src/` (`components`, `styles`, `previews`, `skills`, `assets`, `docs`) | Recrear esas carpetas en la raíz |
-| Consumir por CDN (`dist/cdn/`) + MD raw bajo `…/main/src/components/` | `npx skills add` / npm del kit (aún no hay paquete) |
+| Consumir por CDN (`dist/cdn/`) + MD raw bajo `…/main/src/components/` | `npx skills add` / npm del kit (aún no hay paquete); artefactos sueltos en `dist/*.js` |
 | Wrappers `app-*`/`tk-*` = datos → `is-*` + `.css` hermano + `IsUi.adoptCss` | CSS gigante en string dentro del `.ts`; reinventar button/dialog/table/toast/icon |
-| Preview: JSON `is-preview/v1` + `<is-preview-component>` (+ behavior opcional) | HTML por tag; lógica en `eval` / strings de listeners |
-
-| Utilería pública en `helpers/`: `manifest.page` + HTML + MD | Módulo público sin tab en Utilerías (`is-floating` es la excepción: internal) |
+| Preview: JSON `is-preview/v1` + `<is-preview-component>` + `behaviors/<tag>.js` opcional | HTML por tag; lógica en `eval` / strings de listeners; iframe legado |
+| Utilería pública en `helpers/`: `manifest.page` (`.json`) + MD | Módulo público sin tab en Utilerías (`is-floating` es la excepción: internal) |
 | Enums/API solo del MD / `VALID_*` del `.js` | Inventar `variant="ghost"` / colores / eventos “porque se parece a otro DS” |
 | Tema: `data-theme` + `data-palette`; default paleta `contapyme` | `prefers-color-scheme`; `color-scheme` en `:root`; default `insoft` |
-| Paths preview categoría: `../../styles` · `../../../scripts\|dist` | Misma profundidad `../` para styles y dist (rompe a `src/dist`) |
-| Commitear `tests/*.test.mjs` | Meter `tests/` entero en gitignore (solo `*.tmp` / coverage / `.cache`) |
+| Publicación: solo `dist/cdn/<cat>/<tag>.min.js` | Commitear bundles huérfanos en `dist/` raíz (ej. `dist/ag-grid.js`) |
+| Commitear `tests/*.test.mjs` | Meter `tests/` entero en gitignore (solo `*.tmp` / coverage / `.cache`); inventar `.test.ts` sin pipeline TS |
 | Refactor mecánico de tokens → commit atómico + `token-vocabulary` | Dejar el rename a medias en el working tree y rebasear encima |
 
-Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `attr-enums` · `token-vocabulary` · `button-events` · `palette-and-snippet-contract` · `llm-contract`.
+Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract`.
 
 ---
 
@@ -28,18 +27,21 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 
 - Web Components vanilla (`is-*`), shadow DOM, tokens `--is-*`.
 - **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/assets`, `src/docs`. En la raíz solo quedan `scripts/`, `dist/`, `tests/`, `manifest.js`, `index.html`, docs de agente (`LLM.md`, `AGENTS.md`, `README.md`).
-- Guardián: `tests/src-layout.test.mjs` — falla si reaparecen `components/` / `styles/` / `previews/` / `skills/` / `docs/` en la raíz, o si los previews apuntan mal a `scripts/` / `dist/`.
-- `src/previews/**/*.html` = demos. Paths relativos:
-  - Categoría (`src/previews/<cat>/is-x.html`): `../../styles|components` · `../../../scripts|dist`
-  - Home (`src/previews/home.html`): `../styles` · `../../scripts|dist`
-  - Manifest `script`/`style`: `../../components/...` (relativo al preview de categoría → resuelve a `src/components/...`)
-- Docs LLM crudos (GitHub): base `…/main/src/` + `components/...` (p. ej. `…/main/src/components/LLM.md`). `LLM_BASE` en `preview-chrome.js` termina en `/src`.
-- **Utilerías (`helpers/`)**: cada módulo público (`ui`, `format`, `observer`, aliases, `popover`, …) tiene **tab en el nav** (`manifest.page`) + HTML en `src/previews/helpers/`. Guardián: `tests/helpers-homogeneity.test.mjs`. `is-floating` es interno (sin tab).
-- **Previews:** un JSON por tag (`$schema: is-preview/v1`), chrome común `<is-preview-component>`, behaviors opcionales. Único HTML: `src/previews/_shell.html`. Guardián: `tests/preview-json-contract.test.mjs`.
-- Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"contapyme|insoft|agrowin"}>`. `scripts/preview-boot.js` lo decodifica y setea `data-theme` / `data-palette` en `<html>`. **`prefers-color-scheme` NO se usa** — el tema es explícito.
-- Build: esbuild → `dist/cdn/` desde `src/components` + `src/styles`. Dev: `node scripts/serve.mjs` (previews en `/src/previews/`). Sin TS, sin framework, sin test runner por defecto (`node --test tests/`).
-- **Paleta default del kit = `contapyme`** (azul ISP `#1a6eb0`). `insoft` y `agrowin` siguen disponibles; no son el default.
-- **La marca tipográfica es `InSoft`** (S mayúscula: el logo la pinta en el color de marca, `in` + `Soft`). El identificador de paleta `insoft` va en minúsculas y **no se toca**: es API (`data-palette`, `value`, claves de objeto). Igual el dominio `insoft.com.co`.
+- Guardián: `tests/src-layout.test.mjs` — falla si reaparecen `components/` / `styles/` / `previews/` / `skills/` / `docs/` en la raíz.
+- **Previews = JSON homogéneo**, no HTML por tag:
+  - Archivo: `src/previews/<cat>/<tag>.json` con `$schema: "is-preview/v1"` (misma interface para todos).
+  - Chrome: `<is-preview-component>` (galería in-app + `_shell.html?tag=` fullscreen).
+  - Comportamiento: `src/previews/behaviors/<tag>.js` con `mount`/`unmount` reales — **nunca** en el JSON.
+  - Índice: `src/previews/catalog.js` (generado / mantenido) + `registry.loadPreview(tag)`.
+  - Manifest `page:` apunta a `.json` (p. ej. `actions/is-button.json`).
+  - **Único HTML permitido bajo previews:** `src/previews/_shell.html`.
+  - Guía: `src/docs/preview-controller.md`. Guardianes: `preview-json-contract` + `preview-controller` + `preview-paths`.
+- Docs LLM crudos (GitHub): base `…/main/src/` + `components/...`. `LLM_BASE` en `preview-chrome.js` termina en `/src`.
+- **Utilerías (`helpers/`)**: cada módulo público tiene **tab** (`manifest.page` → JSON) + MD. Guardián: `tests/helpers-homogeneity.test.mjs`. `is-floating` = internal (sin tab).
+- Build: esbuild → **solo** `dist/cdn/`. Dev: `node scripts/serve.mjs`. Sin TS de producto → tests en `*.test.mjs` (`node --test` / `node tests/….mjs`), no `.test.ts`.
+- Artefactos CDN: `dist/cdn/<cat>/<tag>.min.js` (+ `.min.css`). Guardián: `tests/dist-cdn-layout.test.mjs` (nada suelto en `dist/` raíz salvo `.gitignore`).
+- Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"contapyme|insoft|agrowin"}>`. **`prefers-color-scheme` NO se usa**.
+- **Paleta default = `contapyme`**. Marca tipográfica `InSoft`; id de paleta `insoft` en minúsculas (API).
 
 ---
 
@@ -66,6 +68,12 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - Shadows complejas (multi-layer) y halos: definirlas como **CSS vars en `.home`** (`.home { --shadow-lift: ... }`) y override en `[data-theme="light"] .home`. Custom props cascadean, specificity gana.
 - Auroras, orbes, halos con `opacity` explícito en light mode (en dark se ven al 100% por gradient, en light quedan como manchas).
 
+### Color × appearance (botones y semánticos)
+- **Dos dimensiones ortogonales.** `color` solo enlaza la familia a roles `--_tone-*` (`--_tone`, `-strong`, `-stronger`, `-text`, `-soft`, `-on`, …). `variant` solo consume esos roles (`filled` / `outlined` / `plain` / `ghost` / `soft` / `text`).
+- **Añadir un color** = una regla `:host([color="nuevo"])` que mapee a `--_tone-*` desde tokens relativos de `is-base` / `palettes` (`--is-color-X`, `-strong`, `-stronger`, `-pale`, `-paler` + `--is-X-text` / `-soft`).
+- **Añadir una apariencia** = una regla `:host([color][variant="…"])` genérica. **No** reabrir la matriz N×M.
+- Vocabulario del tema = **relativo** (`strong`/`pale`), no numérico (`-600`/`-50`). Fallback en el sitio de uso: `var(--is-color-info-strong, #1c7ed6)`, nunca un bloque `--is-color-info-600:` en el `:host`.
+- Guardián: `tests/button-color-appearance.test.mjs`.
 ### Paleta default + canvas de la app (CDN)
 - **Default = `contapyme`.** En `src/styles/palettes.css` va primero y se aplica a `:root, [data-palette="contapyme"]`. Fallbacks JS (`preview-boot`, `preview-chrome`, `chart-palette`, `palette-selector` primera entrada, `index.html`) → `'contapyme'`.
 - Bootstrap consumidor:
@@ -115,31 +123,30 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 
 ### Layout `src/` (post-move)
 - Build: `compRoot = src/components`, estilos en `src/styles`, iconos en `src/assets/icons`.
-- Previews categoría: styles/components `../../` · scripts/dist `../../../`.
-- Home/theming en `src/previews/`: styles `../` · scripts/dist `../../`.
+- Único HTML de preview: `_shell.html` en `src/previews/` → scripts/dist `../../`, styles `../`.
 - Raw GitHub LLM: `LLM_BASE` termina en `/src` → URLs `…/main/src/components/…`.
-- Guardián: `tests/src-layout.test.mjs` + `tests/preview-paths.test.mjs`.
+- Guardián: `tests/src-layout.test.mjs` + `tests/preview-paths.test.mjs` + `tests/dist-cdn-layout.test.mjs`.
 
 ### Utilerías (`helpers/`)
-- Nav label: **Utilerías**. Cada `.js` público tiene `manifest` + `page` + HTML + MD.
-- `is-ui` (módulo `IsUi`, no es CE) también tiene tab y presentador.
+- Nav label: **Utilerías**. Cada `.js` público tiene `manifest.page` → `helpers/<tag>.json` + MD.
+- `is-ui` (módulo `IsUi`, no es CE) también tiene tab y presentador JSON.
 - `is-floating` = internal → sin tab. Apps usan `<is-popover>` / `<is-tooltip>`.
 - Guardián: `tests/helpers-homogeneity.test.mjs`.
 
-### Previews controlados (`is-preview-component`)
+### Previews (`is-preview/v1` + `is-preview-component`)
 - Guía: `src/docs/preview-controller.md`.
-- Datos tipados: `src/previews/_kit/types.d.ts` (`PreviewDefinition` / bloques `kind`).
-- Clase: `ISComponentPreview` — `definition` + `mount`/`unmount` + `this.on()` (AbortController).
-- Shell CE: `<is-preview-component>` pinta split + TOC; propiedad `.preview = instancia`.
-- Por tag migrado: `src/previews/<cat>/<tag>.preview.js` + HTML shell mínimo + entrada en `registry.js`.
-- Galería: host in-app si `hasControlledPreview(tag)`; si no, iframe al HTML legado.
-- Fullscreen: `src/previews/_shell.html?tag=…`.
-- **String OK:** markup de demos, code samples, CSS local, tablas.
-- **String NO:** listeners, toggles de API, `whenDefined` — van en `mount()`.
-- Piloto: `is-button-group`. Guardián: `tests/preview-controller.test.mjs`.
+- Interface única: `PreviewDefinition` en `src/previews/_kit/types.d.ts` (`$schema: "is-preview/v1"`).
+- Datos: `src/previews/<cat>/<tag>.json` — sections/blocks (`demo|callout|code|html|table|lede`).
+- Runtime: `JsonPreview` + `registry.js` + `catalog.js`.
+- Behavior opcional: `src/previews/behaviors/<tag>.js` exporta `mount(ctx)` / `unmount(ctx)`.
+- Galería: siempre `loadPreview(tag)` in-app. Fullscreen: `_shell.html?tag=`.
+- Migrar / regenerar: `node scripts/migrate-previews-to-json.mjs` (si reaparecen HTML).
+- **String OK en JSON:** markup de demos, snippets, CSS local, tablas, ledes.
+- **String NO:** listeners, `whenDefined`, toggles de API — van en `behaviors/`.
+- **No** volver a crear `*.html` por tag. Guardián: `tests/preview-json-contract.test.mjs`.
 
 ### Apps consumidoras (CDN)
-- Bootstrap: `is-base.min.css` + `palettes.min.css` + tag/category/`all.min.js`.
+- Bootstrap: `is-base.min.css` + `palettes.min.css` + tag/category/`all.min.js` desde **`dist/cdn/`**.
 - Docs: `components/LLM.md` → categoría → módulo (raw bajo `…/main/src/components/`).
 - Dominio: `app-*`/`tk-*` traducen payload → `is-*`. CSS hermano + `IsUi.adoptCss(shadow, import.meta.url)`.
 - Tras vaciar el shadow, volver a `adoptCss` (los `<link>` se borran).
@@ -163,20 +170,25 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - **No olvidarse del reset responsive/reduced-motion.** Si el 3D se queda en móvil o con reduced-motion, la página se rompe visualmente.
 - **No `localStorage.setItem(keyPlana)`** para estado de WC con `storage-key`. Tampoco `sessionStorage` canónico ni root `is-components` (solo migración). Un solo store: `prefs.js` → `is-webcomponents[tag][key]`.
 - **No dejar UI de columnas “en el HTML del shadow” sin cablear** (sidebar `hidden` sin handlers): bug real de `is-ag-grid`.
-- **No meter lógica de preview en strings/`eval`.** Markup de demos sí puede ser HTML string en `definition`; listeners y API live van en `ISComponentPreview.mount()` con `this.on(...)`.
-- **No recrear HTML gordo por componente** si ya hay (o se puede añadir) `*.preview.js` + `<is-preview-component>`: el HTML del preview es shell mínimo.
-- **No usar la misma profundidad de `../` para `styles` y para `scripts`/`dist` en previews de categoría.** Tras el move: styles/components viven en `src/` (`../../`), scripts/dist en la raíz (`../../../`).
+- **No meter lógica de preview en strings/`eval`.** Markup de demos sí puede ser HTML string en el JSON; listeners y API live van en `behaviors/<tag>.js` (`mount` con funciones reales).
+- **No recrear HTML por componente bajo `src/previews/`.** Solo `_shell.html`. Datos = JSON `is-preview/v1`; chrome = `<is-preview-component>`.
+- **No dejar bundles sueltos en `dist/`** (p. ej. `dist/ag-grid.js`). La publicación es **solo** `dist/cdn/…`. El build actual no limpia basura vieja: si aparece un `.js` en la raíz de `dist/`, bórralo.
+- **No usar la misma profundidad de `../` para `styles` y para `scripts`/`dist` en `_shell.html`.** Shell en `src/previews/` → styles `../`, scripts/dist `../../`.
 - **No reinventar botones/forms/tables/dialogs/toasts/icons** si el kit ya tiene `is-*`. Apps: wrappers `app-*`/`tk-*` que traducen datos al kit + CSS hermano + `IsUi.adoptCss`.
 - **No poner CSS de dominio como string gigante en el `.ts`.** Archivo `.css` hermano + `adoptCss(shadow, import.meta.url)`. Tras `innerHTML = ''` del shadow, volver a llamar `adoptCss`.
 - **No asumir que `type="submit"` en `<is-button>` envía un `<form>` light-DOM.** El `<button>` real está en Shadow DOM; usar `requestSubmit` cableado en el kit o `onclick` que dispare submit del form.
 - **No usar `is-split-panel` con `%` alto como “sidebar fijo”** (p. ej. 20%): deja un hueco enorme. Shells de app: grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
 - **No instalar skills con `npx skills add` en el panel CDN.** Consumo = CDN + MD raw; el snippet ya no ofrece instalar skills por npm.
 - **No duplicar la rampa de color en el `:host` del componente.** Ese bloque de fallbacks (`--is-color-danger-600: #e03131` dentro de `button.css`) es lo que hace que un desajuste de vocabulario con `is-base.css` sea **invisible**: el componente resuelve contra su propia copia y el tema deja de alcanzarlo, sin error. Fallback sí, pero en el `var(--x, #hex)` del sitio de uso, no como bloque paralelo.
+- **No volver a la matriz color×variant N×M en `button.css`.** Cada combinación hardcodeada (`:host([color="info"][variant="outlined"])`) vuelve a acoplar dimensiones: un color nuevo o una apariencia nueva obliga a tocar todas las celdas y se olvida la mitad ( exactamente lo que pasó con `info`/`error` filled/outlined).
+- **No pedir `--is-color-*-600` / `-500` / `-50` en componentes** cuando el tema solo define relativos. El CSS “vale”, el `var()` inválido se traga el valor y filled/outlined salen transparentes **sin error de consola**.
+- **No hardcodear un hex de marca en filled** (`#228be6`) mientras outlined usa `--is-brand-text`: filled queda azul y outlined rojo (o al revés según paleta). Ambas apariencias deben pasar por `--_tone-*` de la misma familia.
 - **No renombrar tokens sin pasar por `tests/token-vocabulary.test.mjs`.** Un rebase o un merge parcial deja mitad de los archivos en cada convención y **nada falla**.
 - **No documentar un evento que nadie emite.** `is-invalid` estuvo en la cabecera de `button.js`, en `button.md` y hasta en el vídeo del componente sin que existiera un solo `#emit("is-invalid")`. El consumidor pone su listener y no salta nunca.
 - **No reemplazar el nodo interno sin volver a cablear sus listeners.** `#syncTag()` cambia `<button>` por `<a>` al aparecer `href`; los listeners vivían en el nodo viejo y `#wired` seguía en `true`, así que no se reponían. Poner `href` en caliente dejaba el botón mudo.
 - **No enganchar la validación a `checkValidity()`.** `ElementInternals` dispara el evento `invalid` nativo tanto en la llamada explícita como al enviar el `<form>`; envolver solo los métodos deja el submit sin avisar. Escuchar `invalid`, no envolver.
 - **No dejar que el preview enseñe menos de lo que el componente acepta.** `button.css` tenía las reglas completas de `info` y `error` mientras la matriz del preview mostraba cinco colores. Nadie lo nota: lo que falta no da error.
+- **No redireccionar `git show` a archivo con PowerShell `>`** sin encoding UTF-8: en Windows sale UTF-16 y el contenido “desaparece” al parsearlo. Usar `execSync`/`git show` desde Node o `-Encoding utf8`.
 
 ---
 
@@ -231,11 +243,22 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 
 23. **`danger` y `error` con el mismo rojo** → los dos existían pero eran casi indistinguibles, lo que anulaba la razón de tenerlos separados. Hoy: `danger: crimson` (acción destructiva, «voy a borrar esto») y `error: red` (estado de fallo, «esto se rompió»). Los fallbacks de `button.css` hay que moverlos **a la vez**; si se queda el hex viejo, el mismo botón se ve de dos rojos distintos según si el consumidor carga `is-base.css` o no.
 
-24. **HTML gordo + lógica mezclada en previews** → 400+ líneas por tag, imposible homogeneizar. Fix: `ISComponentPreview` + `<is-preview-component>`; HTML = shell; comportamiento en `mount()`. Guardián: `tests/preview-controller.test.mjs`.
+24. **HTML gordo + lógica mezclada en previews** → 400+ líneas por tag, imposible homogeneizar. Fix: JSON `is-preview/v1` + `<is-preview-component>` + `behaviors/`. Guardián: `tests/preview-json-contract.test.mjs` + `preview-controller`.
 
-25. **Utilería sin tab** → `IsUi` existía en CDN/MD pero no en el nav: nadie lo descubría desde la galería. Fix: `is-ui` en manifest + presentador; homogeneidad de helpers. Guardián: `tests/helpers-homogeneity.test.mjs`.
+25. **Utilería sin tab** → `IsUi` existía en CDN/MD pero no en el nav: nadie lo descubría desde la galería. Fix: `is-ui` en manifest + presentador JSON; homogeneidad de helpers. Guardián: `tests/helpers-homogeneity.test.mjs`.
 
-26. **Lógica de preview como string** → tentación de meter handlers en JSON/`eval` “para serializar todo”. Rompe tipado, debug y seguridad. Fix: solo markup/CSS/código de muestra en strings; listeners = métodos reales con `this.on`.
+26. **Lógica de preview como string** → tentación de meter handlers en JSON/`eval` “para serializar todo”. Rompe tipado, debug y seguridad. Fix: solo markup/CSS/código de muestra en el JSON; listeners = `behaviors/<tag>.js`.
+
+27. **Migración HTML→JSON que pierde el body** → páginas sin `<section class="section">` (p. ej. `icon-explorer`) caían a un JSON vacío/casi vacío si el migrador no volcaba el body entero. Fix: sin sections → un bloque `html` con el body (menos scripts); verificar tamaños y `tests/icon-explorer` / contenido clave. Script: `scripts/migrate-previews-to-json.mjs`.
+
+28. **`dist/ag-grid.js` huérfano** → bundle viejo (sin minificar, paths pre-`src/`) commiteado fuera de `dist/cdn/`. Confundía: “¿por qué no está en CDN?”. No lo genera el build actual. Fix: borrar; publicar solo `dist/cdn/data/ag-grid.min.js`. Guardián: `tests/dist-cdn-layout.test.mjs`.
+
+29. **PowerShell `git show … > file` en UTF-16** → el archivo “existe” pero Node lo lee basura / sin matches (`fId` “desaparece”). Fix: escribir desde Node `execSync('git show …', { encoding: 'utf8' })` o `Out-File -Encoding utf8`.
+
+30. **`info`/`error` filled y outlined rotos + brand filled de otro color** (5-ago-2026) → la matriz del preview mostraba `info`/`error` filled sin fondo y outlined sin borde; `brand` filled azul con outlined/plain rojos (paleta insoft). **Causa:** `button.css` seguía la escala numérica (`--is-color-info-600`, `-500`) que `is-base` ya no define (ahora `strong`/`pale`), y la matriz N×M hacía que solo las familias con fallbacks locales en `:host` (success/warning/danger) se vieran bien. Brand filled caía al hex azul del 2º `var()`; outlined usaba `--is-brand-text` de la paleta. **Nada fallaba en build ni consola.**
+    **Hacer:** color → roles `--_tone-*`; variant → consume `--_tone-*`. Tokens relativos del tema. Fallback solo `var(--token, #hex)`.
+    **No hacer:** reabrir `:host([color=X][variant=Y])` por cada celda; pedir `-600`/`-500`; hex de marca distinto del token de texto.
+    Fix + guardián: `button.css` ortogonal + `tests/button-color-appearance.test.mjs`.
 
 ---
 
@@ -343,27 +366,28 @@ mantenerlo aparte.
 
 | Test | Caza |
 | --- | --- |
-| `llm-contract.test.mjs` | Secciones obligatorias de este LLM.md + que los guardianes citados existan en disco |
-| `src-layout.test.mjs` | Fuente en `src/`; sin carpetas raíz prohibidas; profundidad scripts/dist en previews |
-| `preview-paths.test.mjs` | `src`/`href` de previews resuelven a archivos reales |
-| `helpers-homogeneity.test.mjs` | Toda utilería pública = manifest.page + JSON + MD |
-| `preview-controller.test.mjs` | Kit JSON + shell único `_shell.html` |
-| `preview-json-contract.test.mjs` | Todos los JSON `is-preview/v1` + catalog ↔ manifest |
+| `llm-contract.test.mjs` | Secciones DO/DON'T/errores de este LLM.md + guardianes en disco |
+| `src-layout.test.mjs` | Fuente en `src/`; sin carpetas raíz prohibidas |
+| `dist-cdn-layout.test.mjs` | Solo `cdn/` bajo `dist/` (nada tipo `dist/ag-grid.js`) |
+| `preview-json-contract.test.mjs` | Todos los JSON `is-preview/v1` + catalog ↔ manifest; cero HTML residual |
+| `preview-controller.test.mjs` | Kit JsonPreview + shell único `_shell.html` |
 | `preview-paths.test.mjs` | Refs de `_shell.html` resuelven |
-| `attr-enums.test.mjs` | Valores de enum en previews vs `VALID_*` del componente |
-| `token-vocabulary.test.mjs` | Tokens `--is-color-*` del tema vs componentes (refactor a medias) |
+| `helpers-homogeneity.test.mjs` | Utilerías públicas = manifest.page `.json` + MD |
+| `attr-enums.test.mjs` | Enums en JSON de previews vs `VALID_*` |
+| `token-vocabulary.test.mjs` | Tokens `--is-color-*` coherentes tema ↔ componentes |
 | `button-events.test.mjs` | Eventos documentados = `#emit` reales; `#syncTag` re-cablea |
+| `button-color-appearance.test.mjs` | Color×appearance ortogonal (`--_tone-*`); sin matriz N×M ni `-600` |
 | `palette-and-snippet-contract.test.mjs` | Default contapyme; canvas libre; snippets con contexto |
 | `prefs-contract.test.mjs` | Un solo store `is-webcomponents[tag][key]` |
 | `manifest-paths.test.mjs` / `llm-links.test.mjs` | Manifest y LLM raw coherentes |
 
 ### Cómo extender
-1. Nuevo error silencioso → test que falle si vuelve.
-2. Nuevo preview controlado → registry + shell + que `preview-controller` / paths sigan verdes.
-3. Nuevo token de color → pasar `token-vocabulary` antes de merge.
-4. Actualizar la **Carta de leyes** y esta tabla al aprender un fallo nuevo.
-4. Familia de color nueva → definirla **solo** en `is-base.css`/`palettes.css`; `token-vocabulary` la recoge sola, no hay lista que actualizar.
-5. Evento nuevo → documentarlo y emitirlo en el mismo commit; añadirlo a `EVENTOS` en `button-events.test.mjs`.
+1. Nuevo error silencioso → test que falle si vuelve (`*.test.mjs`, no `.ts` sin toolchain).
+2. Nuevo preview → `*.json` + entrada en `catalog.js` (+ `behaviors/` si hay lógica) → `preview-json-contract` verde.
+3. Nuevo token de color → `token-vocabulary` antes de merge.
+4. Actualizar la **Carta de leyes** + bitácora de errores + esta tabla.
+5. Familia de color nueva → solo en `is-base.css`/`palettes.css`.
+6. Evento nuevo → documentar y emitir en el mismo commit.
 
 ### Qué clase de test merece la pena aquí
 El patrón que se repite en casi todos los errores de la lista de arriba: **el artefacto se genera bien y el contenido está mal**. Build verde, navegador contento, vista que pinta — y el tema no llega, o el evento no salta, o el preview enseña de menos.
@@ -373,6 +397,7 @@ Por eso los tests que valen en este repo no comprueban que algo *funcione*, sino
 - lo que el componente acepta ↔ lo que la preview usa (`attr-enums`)
 - lo que la documentación promete ↔ lo que el código emite (`button-events`)
 - lo que el tema define ↔ lo que el componente consume (`token-vocabulary`)
+- lo que `color` enlaza ↔ lo que `variant` pinta (`button-color-appearance`)
 - dónde viven los archivos ↔ a dónde apuntan los paths (`src-layout`, `preview-paths`)
 
 Antes de escribir un test nuevo, la pregunta útil es: *¿qué par de cosas puede desincronizarse aquí sin que nada se rompa?* Si la respuesta es "ninguna", probablemente no hace falta el test.

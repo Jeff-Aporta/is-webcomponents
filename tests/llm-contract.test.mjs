@@ -40,12 +40,12 @@ for (const h of requiredHeadings) {
 const requiredPhrases = [
   ['Reusar antes de inventar', 'carta de leyes: reuso'],
   ['src/', 'fuente bajo src/'],
+  ['is-preview/v1', 'schema JSON previews'],
   ['is-preview-component', 'previews controlados'],
-  ['ISComponentPreview', 'clase base de preview'],
   ['Utilerías', 'nav helpers'],
   ['No meter lógica de preview en strings', "DON'T eval/strings"],
-  ['No recrear HTML gordo', "DON'T HTML gordo"],
-  ['No usar la misma profundidad', "DON'T paths styles vs dist"],
+  ['No recrear HTML por componente', "DON'T HTML por tag"],
+  ['No dejar bundles sueltos en `dist/`', "DON'T dist huérfanos"],
   ['No reinventar botones', "DON'T reinventar is-*"],
   ['*.test.mjs', 'extensión canónica de tests'],
   ['gitignoreado', 'tests trackeados (no ignore completo)'],
@@ -62,9 +62,11 @@ const guardians = [
   'preview-json-contract.test.mjs',
   'preview-controller.test.mjs',
   'preview-paths.test.mjs',
+  'dist-cdn-layout.test.mjs',
   'attr-enums.test.mjs',
   'token-vocabulary.test.mjs',
   'button-events.test.mjs',
+  'button-color-appearance.test.mjs',
   'palette-and-snippet-contract.test.mjs',
   'llm-contract.test.mjs',
   'prefs-contract.test.mjs',
@@ -73,16 +75,15 @@ const guardians = [
 for (const file of guardians) {
   const onDisk = existsSync(join(root, 'tests', file));
   if (!onDisk) failures.push(`guardián citado no existe en disco: tests/${file}`);
-  // llm-contract se auto-cita en Testing; el resto deben aparecer por nombre corto o completo
   const short = file.replace('.test.mjs', '');
   if (file !== 'llm-contract.test.mjs' && !llm.includes(short) && !llm.includes(file)) {
     failures.push(`LLM.md no cita el guardián ${file}`);
   }
 }
 
-// Errores 24–26 = lecciones recientes (preview / utilerías / strings)
-for (const n of [24, 25, 26]) {
-  if (!new RegExp(`^${n}\\.`, 'm').test(llm) && !llm.includes(`${n}. **`)) {
+// Errores 24–30 = lecciones preview JSON / dist / PowerShell / color×appearance
+for (const n of [24, 25, 26, 27, 28, 29, 30]) {
+  if (!llm.includes(`${n}. **`)) {
     failures.push(`bitácora de errores: falta entrada ${n}`);
   }
 }

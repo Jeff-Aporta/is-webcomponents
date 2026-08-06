@@ -212,13 +212,14 @@ de la API), la salta. Si solo faltan algunos iconos, los baja sueltos.
 - **Utilería pública sin tab:** toda `.js` en `helpers/` (salvo `floating.js`
   internal) necesita `manifest.page` + HTML + MD. Label del nav: **Utilerías**.
   Guardián: `tests/helpers-homogeneity.test.mjs`.
-- **HTML gordo + lógica en strings/eval:** previews migrados usan
-  `*.preview.js` + `<is-preview-component>` + `ISComponentPreview.mount()`.
-  Markup de demos puede ser string; listeners no. Guardián:
-  `tests/preview-controller.test.mjs`. Guía: `src/docs/preview-controller.md`.
+- **Previews JSON (`is-preview/v1`):** cero HTML por tag (solo `_shell.html`). Datos en
+  `*.json`, lógica en `behaviors/`, chrome `<is-preview-component>`. Guardián:
+  `tests/preview-json-contract.test.mjs`.
+- **`dist/` solo `cdn/`:** nada suelto tipo `dist/ag-grid.js`. Guardián:
+  `tests/dist-cdn-layout.test.mjs`.
 - **LLM.md sin carta/DO/DON'T:** `tests/llm-contract.test.mjs` exige secciones
   y que los guardianes citados existan en disco.
-- Detalle completo: `LLM.md` → Carta de leyes + errores 24–26.
+- Detalle completo: `LLM.md` → Carta de leyes + errores 24–30.
 
 ### 6.0 Paleta / canvas / snippets (2026-08)
 

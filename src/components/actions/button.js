@@ -66,12 +66,14 @@ import '../media/icon.js';
  * (y como fallback los atributos data-state-* equivalentes para entornos sin
  * soporte de ElementInternals.states).
  *
- * CSS variables del componente (todas con fallback, override-friendly):
- *  --is-color-brand-{50..950}
- *  --is-color-neutral-{50..950}
- *  --is-color-success-{50..950}
- *  --is-color-warning-{50..950}
- *  --is-color-danger-{50..950}
+ * Color × appearance: ortogonales. Cada `color` enlaza roles `--_tone-*`
+ * a tokens relativos de is-base; cada `variant` solo consume esos roles.
+ * Añadir color = una regla de enlace; añadir apariencia = una de variant.
+ *
+ * Tokens de familia (por color X = brand|success|warning|danger|info|error):
+ *  --is-color-X, --is-color-X-strong, -stronger, -strongest, -pale, -paler
+ *  --is-X-text, --is-X-soft, --is-X-soft-active  (brand usa --is-brand-*)
+ * Componente:
  *  --is-button-font-family, --is-button-font-weight
  *  --is-button-border-radius, --is-button-border-width
  *  --is-button-transition-duration

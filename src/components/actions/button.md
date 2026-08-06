@@ -256,12 +256,11 @@ Documentación de cabecera preservada desde fuente:
 > El host expone los custom states :state(loading|disabled|link|icon-button)
 > (y como fallback los atributos data-state-* equivalentes para entornos sin
 > soporte de ElementInternals.states).
-> CSS variables del componente (todas con fallback, override-friendly):
->  --is-color-brand-{50..950}
->  --is-color-neutral-{50..950}
->  --is-color-success-{50..950}
->  --is-color-warning-{50..950}
->  --is-color-danger-{50..950}
+> Color × appearance ortogonales: cada color enlaza roles `--_tone-*` a
+> tokens relativos de is-base; cada variant solo consume esos roles.
+> Tokens de familia X (brand|success|warning|danger|info|error):
+>  --is-color-X, --is-color-X-strong/-stronger/-strongest/-pale/-paler
+>  --is-X-text, --is-X-soft, --is-X-soft-active (brand → --is-brand-*)
 >  --is-button-font-family, --is-button-font-weight
 >  --is-button-border-radius, --is-button-border-width
 >  --is-button-transition-duration

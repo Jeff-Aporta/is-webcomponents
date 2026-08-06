@@ -1,24 +1,13 @@
-/* Design tokens (defaults — override desde fuera con CSS)
+/* Color × appearance ortogonales
  *
- * Shadow DOM: :host:is([attr]) NO matchea. Usar siempre :host([attr]) /
- * :host(:state(...)) como reglas hermanas (no &[attr] anidado bajo :host).
+ * 1) `color` solo enlaza la familia a roles `--_tone-*` (tokens relativos
+ *    de is-base: base / strong / stronger / paler / pale + soft/text).
+ * 2) `variant` solo consume esos roles. Añadir un color = una regla de
+ *    enlace; añadir una apariencia = una regla de variant. Sin matriz N×M.
+ *
+ * Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) hermanas.
  */
 :host {
-  --is-color-success-50: #ebfbee;
-  --is-color-success-100: #d3f9d8;
-  --is-color-success-500: #40c057;
-  --is-color-success-600: #2f9e44;
-  --is-color-success-700: #237a35;
-  --is-color-warning-50: #fff9db;
-  --is-color-warning-100: #fff3bf;
-  --is-color-warning-500: #f59f00;
-  --is-color-warning-600: #d97706;
-  --is-color-warning-700: #9a4f00;
-  --is-color-danger-50: #fff5f5;
-  --is-color-danger-100: #ffe3e3;
-  --is-color-danger-500: #fa5252;
-  --is-color-danger-600: #e03131;
-  --is-color-danger-700: #b02525;
   --is-button-font-family: var(--is-font-family, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
   --is-button-font-weight: 500;
   --is-button-border-radius: 6px;
@@ -33,7 +22,7 @@
      pasar de outlined a filled sin dejar el label ilegible. */
   --_text-hover: var(--_text);
   --_border-hover: var(--_border);
-  --_focus: var(--is-focus, var(--is-color-brand-500, #339af0));
+  --_focus: var(--is-focus, var(--is-color-brand, #339af0));
   --_height: 2.5em;
   --_hpad: 1em;
   display: inline-flex;
@@ -126,224 +115,146 @@
   }
 }
 
+/* ── 1. Color → roles de tono (unica capa que conoce nombres) ─────────── */
 :host([color="brand"]) {
-  --_bg: var(--is-color-brand-600, #228be6);
-  --_bg-hover: var(--is-color-brand-700, #1971c2);
-  --_bg-active: var(--is-color-brand-800, #1864ab);
-  --_border: var(--is-color-brand-600, #228be6);
-  --_text: var(--is-on-brand, #fff);
+  /* Solo tokens relativos (+ hex). Nunca -500/-600 aquí: el tema ya no los define
+     y el fallback numérico en var() hace que token-vocabulary / el ojo vean dos idiomas. */
+  --_tone: var(--is-color-brand, #339af0);
+  --_tone-strong: var(--is-color-brand-strong, #228be6);
+  --_tone-stronger: var(--is-color-brand-stronger, #1971c2);
+  --_tone-strongest: var(--is-color-brand-strongest, #1864ab);
+  --_tone-paler: var(--is-color-brand-paler, #e7f5ff);
+  --_tone-pale: var(--is-color-brand-pale, #d0ebff);
+  --_tone-text: var(--is-brand-text, var(--_tone-stronger));
+  --_tone-soft: var(--is-brand-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--is-brand-soft-active, var(--_tone-pale));
+  --_tone-on: var(--is-on-brand, #fff);
 }
-:host([color="brand"][variant="outlined"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-brand-soft, var(--is-color-brand-50, #e7f5ff));
-  --_bg-active: var(--is-brand-soft-active, var(--is-color-brand-100, #d0ebff));
-  --_border: var(--is-color-brand-500, #339af0);
-  --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
-}
-:host([color="brand"][variant="plain"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-brand-soft, var(--is-color-brand-50, #e7f5ff));
-  --_bg-active: var(--is-brand-soft-active, var(--is-color-brand-100, #d0ebff));
-  --_border: transparent;
-  --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
-}
-
 :host([color="success"]) {
-  --_bg: var(--is-color-success-600);
-  --_bg-hover: var(--is-color-success-700);
-  --_bg-active: var(--is-color-success-700);
-  --_border: var(--is-color-success-600);
-  --_text: var(--is-on-brand, #fff);
+  --_tone: var(--is-color-success, #40c057);
+  --_tone-strong: var(--is-color-success-strong, #2f9e44);
+  --_tone-stronger: var(--is-color-success-stronger, #237a35);
+  --_tone-strongest: var(--is-color-success-stronger, #237a35);
+  --_tone-paler: var(--is-color-success-paler, #ebfbee);
+  --_tone-pale: var(--is-color-success-pale, #d3f9d8);
+  --_tone-text: var(--is-success-text, var(--_tone-stronger));
+  --_tone-soft: var(--is-success-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--is-success-soft-active, var(--_tone-pale));
+  --_tone-on: var(--is-on-brand, #fff);
 }
-:host([color="success"][variant="outlined"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-success-soft, var(--is-color-success-50));
-  --_bg-active: var(--is-success-soft-active, var(--is-color-success-100));
-  --_border: var(--is-color-success-500);
-  --_text: var(--is-success-text, var(--is-color-success-700));
-}
-:host([color="success"][variant="plain"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-success-soft, var(--is-color-success-50));
-  --_bg-active: var(--is-success-soft-active, var(--is-color-success-100));
-  --_border: transparent;
-  --_text: var(--is-success-text, var(--is-color-success-700));
-}
-
 :host([color="warning"]) {
-  --_bg: var(--is-color-warning-600);
-  --_bg-hover: var(--is-color-warning-700);
-  --_bg-active: var(--is-color-warning-700);
-  --_border: var(--is-color-warning-600);
-  --_text: var(--is-on-brand, #fff);
+  --_tone: var(--is-color-warning, #f59f00);
+  --_tone-strong: var(--is-color-warning-strong, #d97706);
+  --_tone-stronger: var(--is-color-warning-stronger, #9a4f00);
+  --_tone-strongest: var(--is-color-warning-stronger, #9a4f00);
+  --_tone-paler: var(--is-color-warning-paler, #fff9db);
+  --_tone-pale: var(--is-color-warning-pale, #fff3bf);
+  --_tone-text: var(--is-warning-text, var(--_tone-stronger));
+  --_tone-soft: var(--is-warning-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--is-warning-soft-active, var(--_tone-pale));
+  --_tone-on: var(--is-on-brand, #fff);
 }
-:host([color="warning"][variant="outlined"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-warning-soft, var(--is-color-warning-50));
-  --_bg-active: var(--is-warning-soft-active, var(--is-color-warning-100));
-  --_border: var(--is-color-warning-500);
-  --_text: var(--is-warning-text, var(--is-color-warning-700));
-}
-:host([color="warning"][variant="plain"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-warning-soft, var(--is-color-warning-50));
-  --_bg-active: var(--is-warning-soft-active, var(--is-color-warning-100));
-  --_border: transparent;
-  --_text: var(--is-warning-text, var(--is-color-warning-700));
-}
-
 :host([color="danger"]) {
-  --_bg: var(--is-color-danger-600);
-  --_bg-hover: var(--is-color-danger-700);
-  --_bg-active: var(--is-color-danger-700);
-  --_border: var(--is-color-danger-600);
-  --_text: var(--is-on-brand, #fff);
+  --_tone: var(--is-color-danger, crimson);
+  --_tone-strong: var(--is-color-danger-strong, #e03131);
+  --_tone-stronger: var(--is-color-danger-stronger, #b02525);
+  --_tone-strongest: var(--is-color-danger-stronger, #b02525);
+  --_tone-paler: var(--is-color-danger-paler, #fff5f5);
+  --_tone-pale: var(--is-color-danger-pale, #ffe3e3);
+  --_tone-text: var(--is-danger-text, var(--_tone-stronger));
+  --_tone-soft: var(--is-danger-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--is-danger-soft-active, var(--_tone-pale));
+  --_tone-on: var(--is-on-brand, #fff);
 }
-:host([color="danger"][variant="outlined"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-danger-soft, var(--is-color-danger-50));
-  --_bg-active: var(--is-danger-soft-active, var(--is-color-danger-100));
-  --_border: var(--is-color-danger-500);
-  --_text: var(--is-danger-text, var(--is-color-danger-700));
-}
-:host([color="danger"][variant="plain"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-danger-soft, var(--is-color-danger-50));
-  --_bg-active: var(--is-danger-soft-active, var(--is-color-danger-100));
-  --_border: transparent;
-  --_text: var(--is-danger-text, var(--is-color-danger-700));
-}
-
-/* info: dato neutral que conviene notar, sin implicar exito ni fallo (p.ej. "Nueva version disponible"). */
+/* info: dato a notar sin implicar éxito ni fallo (p.ej. "Nueva versión"). */
 :host([color="info"]) {
-  --_bg: var(--is-color-info-600);
-  --_bg-hover: var(--is-color-info-700);
-  --_bg-active: var(--is-color-info-700);
-  --_border: var(--is-color-info-600);
-  --_text: var(--is-on-brand, #fff);
+  --_tone: var(--is-color-info, #339af0);
+  --_tone-strong: var(--is-color-info-strong, #1c7ed6);
+  --_tone-stronger: var(--is-color-info-stronger, #1864ab);
+  --_tone-strongest: var(--is-color-info-strongest, var(--is-color-info-stronger, #145591));
+  --_tone-paler: var(--is-color-info-paler, #e7f5ff);
+  --_tone-pale: var(--is-color-info-pale, #d0ebff);
+  --_tone-text: var(--is-info-text, var(--_tone-stronger));
+  --_tone-soft: var(--is-info-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--is-info-soft-active, var(--_tone-pale));
+  --_tone-on: var(--is-on-brand, #fff);
 }
-:host([color="info"][variant="outlined"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-info-soft, var(--is-color-info-50));
-  --_bg-active: var(--is-info-soft-active, var(--is-color-info-100));
-  --_border: var(--is-color-info-500);
-  --_text: var(--is-info-text, var(--is-color-info-700));
-}
-:host([color="info"][variant="plain"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-info-soft, var(--is-color-info-50));
-  --_bg-active: var(--is-info-soft-active, var(--is-color-info-100));
-  --_border: transparent;
-  --_text: var(--is-info-text, var(--is-color-info-700));
-}
-
-/* error: estado de fallo ("Error al guardar"), distinto de danger (accion destructiva como "Eliminar"). */
+/* error: fallo ("Error al guardar"), distinto de danger (acción destructiva). */
 :host([color="error"]) {
-  --_bg: var(--is-color-error-600);
-  --_bg-hover: var(--is-color-error-700);
-  --_bg-active: var(--is-color-error-700);
-  --_border: var(--is-color-error-600);
-  --_text: var(--is-on-brand, #fff);
+  --_tone: var(--is-color-error, red);
+  --_tone-strong: var(--is-color-error-strong, #e03131);
+  --_tone-stronger: var(--is-color-error-stronger, #c92a2a);
+  --_tone-strongest: var(--is-color-error-stronger, #c92a2a);
+  --_tone-paler: var(--is-color-error-paler, #fff5f5);
+  --_tone-pale: var(--is-color-error-pale, #ffe3e3);
+  --_tone-text: var(--is-error-text, var(--_tone-stronger));
+  --_tone-soft: var(--is-error-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--is-error-soft-active, var(--_tone-pale));
+  --_tone-on: var(--is-on-brand, #fff);
 }
-:host([color="error"][variant="outlined"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-error-soft, var(--is-color-error-50));
-  --_bg-active: var(--is-error-soft-active, var(--is-color-error-100));
-  --_border: var(--is-color-error-500);
-  --_text: var(--is-error-text, var(--is-color-error-700));
+/* neutral: controles del tema, no una familia semántica. */
+:host([color="neutral"]) {
+  --_tone: var(--is-control-border, #adb5bd);
+  --_tone-strong: var(--is-control-bg, #f1f3f5);
+  --_tone-stronger: var(--is-control-bg-hover, #e9ecef);
+  --_tone-strongest: var(--is-control-bg-active, #dee2e6);
+  --_tone-paler: var(--is-control-bg, #f1f3f5);
+  --_tone-pale: var(--is-control-bg-hover, #e9ecef);
+  --_tone-text: var(--is-control-text, #212529);
+  --_tone-soft: var(--is-control-bg-hover, #e9ecef);
+  --_tone-soft-active: var(--is-control-bg-active, #dee2e6);
+  --_tone-on: var(--is-control-text, #212529);
 }
-:host([color="error"][variant="plain"]) {
+
+/* ── 2. Appearance → consume roles (no conoce nombres de color) ─────────
+   filled = default (sin variant) o variant="filled". */
+:host([color]:not([variant])),
+:host([color][variant=""]),
+:host([color][variant="filled"]) {
+  --_bg: var(--_tone-strong);
+  --_bg-hover: var(--_tone-stronger);
+  --_bg-active: var(--_tone-strongest, var(--_tone-stronger));
+  --_border: var(--_tone-strong);
+  --_text: var(--_tone-on);
+  --_text-hover: var(--_tone-on);
+  --_border-hover: var(--_tone-stronger);
+}
+
+:host([color][variant="outlined"]) {
   --_bg: transparent;
-  --_bg-hover: var(--is-error-soft, var(--is-color-error-50));
-  --_bg-active: var(--is-error-soft-active, var(--is-color-error-100));
+  --_bg-hover: var(--_tone-soft);
+  --_bg-active: var(--_tone-soft-active);
+  --_border: var(--_tone);
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-text);
+  --_border-hover: var(--_tone);
+}
+
+:host([color][variant="plain"]) {
+  --_bg: transparent;
+  --_bg-hover: var(--_tone-soft);
+  --_bg-active: var(--_tone-soft-active);
   --_border: transparent;
-  --_text: var(--is-error-text, var(--is-color-error-700));
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-text);
+  --_border-hover: transparent;
 }
 
-:host([color="neutral"][variant="outlined"]) {
+/* ghost: outlined en reposo, filled al hover (unico que cambia --_*-hover). */
+:host([color][variant="ghost"]) {
   --_bg: transparent;
-  --_bg-hover: var(--is-control-bg-hover, #e9ecef);
-  --_bg-active: var(--is-control-bg-active, #dee2e6);
-  --_border: var(--is-control-border, #adb5bd);
-  --_text: var(--is-control-text, #212529);
-}
-:host([color="neutral"][variant="plain"]) {
-  --_bg: transparent;
-  --_bg-hover: var(--is-control-bg-hover, #e9ecef);
-  --_bg-active: var(--is-control-bg-active, #dee2e6);
-  --_border: transparent;
-  --_text: var(--is-control-text, #212529);
-}
-
-
-/* ── ghost: en reposo se lee como outlined, en hover se rellena ──────────
-   Es el unico variant cuyo hover cambia de nivel de enfasis, por eso usa
-   --_text-hover / --_border-hover. No confundir con `plain`, que no tiene
-   borde en reposo y solo tine el fondo al pasar el mouse. */
-:host([color="brand"][variant="ghost"]) {
-  --_bg: transparent;
-  --_border: var(--is-color-brand-500, #339af0);
-  --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
-  --_bg-hover: var(--is-color-brand-600, #228be6);
-  --_bg-active: var(--is-color-brand-700, #1971c2);
-  --_border-hover: var(--is-color-brand-600, #228be6);
-  --_text-hover: var(--is-on-brand, #fff);
-}
-:host([color="success"][variant="ghost"]) {
-  --_bg: transparent;
-  --_border: var(--is-color-success-500);
-  --_text: var(--is-success-text, var(--is-color-success-700));
-  --_bg-hover: var(--is-color-success-600);
-  --_bg-active: var(--is-color-success-700);
-  --_border-hover: var(--is-color-success-600);
-  --_text-hover: var(--is-on-brand, #fff);
-}
-:host([color="warning"][variant="ghost"]) {
-  --_bg: transparent;
-  --_border: var(--is-color-warning-500);
-  --_text: var(--is-warning-text, var(--is-color-warning-700));
-  --_bg-hover: var(--is-color-warning-600);
-  --_bg-active: var(--is-color-warning-700);
-  --_border-hover: var(--is-color-warning-600);
-  --_text-hover: var(--is-on-brand, #fff);
-}
-:host([color="danger"][variant="ghost"]) {
-  --_bg: transparent;
-  --_border: var(--is-color-danger-500);
-  --_text: var(--is-danger-text, var(--is-color-danger-700));
-  --_bg-hover: var(--is-color-danger-600);
-  --_bg-active: var(--is-color-danger-700);
-  --_border-hover: var(--is-color-danger-600);
-  --_text-hover: var(--is-on-brand, #fff);
-}
-:host([color="info"][variant="ghost"]) {
-  --_bg: transparent;
-  --_border: var(--is-color-info-500);
-  --_text: var(--is-info-text, var(--is-color-info-700));
-  --_bg-hover: var(--is-color-info-600);
-  --_bg-active: var(--is-color-info-700);
-  --_border-hover: var(--is-color-info-600);
-  --_text-hover: var(--is-on-brand, #fff);
-}
-:host([color="error"][variant="ghost"]) {
-  --_bg: transparent;
-  --_border: var(--is-color-error-500);
-  --_text: var(--is-error-text, var(--is-color-error-700));
-  --_bg-hover: var(--is-color-error-600);
-  --_bg-active: var(--is-color-error-700);
-  --_border-hover: var(--is-color-error-600);
-  --_text-hover: var(--is-on-brand, #fff);
+  --_border: var(--_tone);
+  --_text: var(--_tone-text);
+  --_bg-hover: var(--_tone-strong);
+  --_bg-active: var(--_tone-stronger);
+  --_border-hover: var(--_tone-strong);
+  --_text-hover: var(--_tone-on);
 }
 :host([color="neutral"][variant="ghost"]) {
-  --_bg: transparent;
-  --_border: var(--is-control-border, #adb5bd);
-  --_text: var(--is-control-text, #212529);
+  /* Relleno = color de texto del tema; on-brand (blanco) fallaba en dark. */
   --_bg-hover: var(--is-control-text, #212529);
   --_bg-active: var(--is-control-text, #212529);
   --_border-hover: var(--is-control-text, #212529);
-  /* El relleno de neutral es el COLOR DE TEXTO del tema, que en oscuro es
-     claro. Un label `--is-on-brand` (blanco) quedaba blanco sobre blanco.
-     El label debe invertir contra el fondo del tema, no contra la marca. */
   --_text-hover: var(--is-bg, #fff);
 }
 :host([variant="ghost"]:not([color])) {
@@ -356,8 +267,7 @@
   --_text-hover: var(--is-bg, #fff);
 }
 
-/* ── soft: relleno tenue del color + borde apenas insinuado ──────────────
-   A diferencia de `plain` (sin fondo en reposo), `soft` ya nace teñido. */
+/* soft: ya nace teñido (plain no). */
 :host([variant="soft"]) {
   --_bg: var(--is-control-bg, #f1f3f5);
   --_bg-hover: var(--is-control-bg-hover, #e9ecef);
@@ -365,51 +275,15 @@
   --_border: transparent;
   --_text: var(--is-control-text, #212529);
 }
-:host([color="brand"][variant="soft"]) {
-  --_bg: var(--is-brand-soft, var(--is-color-brand-50, #e7f5ff));
-  --_bg-hover: var(--is-brand-soft-active, var(--is-color-brand-100, #d0ebff));
-  --_bg-active: var(--is-brand-soft-active, var(--is-color-brand-100, #d0ebff));
-  --_border: color-mix(in srgb, var(--is-color-brand-500, #339af0) 35%, transparent);
-  --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
-}
-:host([color="success"][variant="soft"]) {
-  --_bg: var(--is-success-soft, var(--is-color-success-50));
-  --_bg-hover: var(--is-success-soft-active, var(--is-color-success-100));
-  --_bg-active: var(--is-success-soft-active, var(--is-color-success-100));
-  --_border: color-mix(in srgb, var(--is-color-success-500) 35%, transparent);
-  --_text: var(--is-success-text, var(--is-color-success-700));
-}
-:host([color="warning"][variant="soft"]) {
-  --_bg: var(--is-warning-soft, var(--is-color-warning-50));
-  --_bg-hover: var(--is-warning-soft-active, var(--is-color-warning-100));
-  --_bg-active: var(--is-warning-soft-active, var(--is-color-warning-100));
-  --_border: color-mix(in srgb, var(--is-color-warning-500) 35%, transparent);
-  --_text: var(--is-warning-text, var(--is-color-warning-700));
-}
-:host([color="danger"][variant="soft"]) {
-  --_bg: var(--is-danger-soft, var(--is-color-danger-50));
-  --_bg-hover: var(--is-danger-soft-active, var(--is-color-danger-100));
-  --_bg-active: var(--is-danger-soft-active, var(--is-color-danger-100));
-  --_border: color-mix(in srgb, var(--is-color-danger-500) 35%, transparent);
-  --_text: var(--is-danger-text, var(--is-color-danger-700));
-}
-:host([color="info"][variant="soft"]) {
-  --_bg: var(--is-info-soft, var(--is-color-info-50));
-  --_bg-hover: var(--is-info-soft-active, var(--is-color-info-100));
-  --_bg-active: var(--is-info-soft-active, var(--is-color-info-100));
-  --_border: color-mix(in srgb, var(--is-color-info-500) 35%, transparent);
-  --_text: var(--is-info-text, var(--is-color-info-700));
-}
-:host([color="error"][variant="soft"]) {
-  --_bg: var(--is-error-soft, var(--is-color-error-50));
-  --_bg-hover: var(--is-error-soft-active, var(--is-color-error-100));
-  --_bg-active: var(--is-error-soft-active, var(--is-color-error-100));
-  --_border: color-mix(in srgb, var(--is-color-error-500) 35%, transparent);
-  --_text: var(--is-error-text, var(--is-color-error-700));
+:host([color][variant="soft"]) {
+  --_bg: var(--_tone-soft);
+  --_bg-hover: var(--_tone-soft-active);
+  --_bg-active: var(--_tone-soft-active);
+  --_border: color-mix(in srgb, var(--_tone) 35%, transparent);
+  --_text: var(--_tone-text);
 }
 
-/* ── text: acción terciaria. Sin caja: solo la etiqueta, subrayada al hover.
-   `plain` sí tiñe el fondo; `text` nunca lo hace. ─────────────────────── */
+/* text: sin caja; plain sí tiñe fondo. */
 :host([variant="text"]) {
   --_hpad: 0.35em;
   --_bg: transparent;
@@ -421,29 +295,9 @@
   --_text-hover: var(--is-control-text, #212529);
 }
 :host([variant="text"]) .btn:hover { text-decoration: underline; }
-:host([color="brand"][variant="text"]) {
-  --_text: var(--is-brand-text, var(--is-color-brand-700, #1971c2));
-  --_text-hover: var(--is-color-brand-600, #228be6);
-}
-:host([color="success"][variant="text"]) {
-  --_text: var(--is-success-text, var(--is-color-success-700));
-  --_text-hover: var(--is-color-success-600);
-}
-:host([color="warning"][variant="text"]) {
-  --_text: var(--is-warning-text, var(--is-color-warning-700));
-  --_text-hover: var(--is-color-warning-600);
-}
-:host([color="danger"][variant="text"]) {
-  --_text: var(--is-danger-text, var(--is-color-danger-700));
-  --_text-hover: var(--is-color-danger-600);
-}
-:host([color="info"][variant="text"]) {
-  --_text: var(--is-info-text, var(--is-color-info-700));
-  --_text-hover: var(--is-color-info-600);
-}
-:host([color="error"][variant="text"]) {
-  --_text: var(--is-error-text, var(--is-color-error-700));
-  --_text-hover: var(--is-color-error-600);
+:host([color][variant="text"]) {
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-strong);
 }
 
 /* ── shape: ortogonal a color y variant ─────────────────────────────────── */
