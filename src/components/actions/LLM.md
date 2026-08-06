@@ -81,6 +81,22 @@ no heredaba font-size del host.
 
 Guardián: `tests/em-scale-font-inherit.test.mjs`.
 
+### Context menu y scroll
+
+**Error (ago/2026):** el menú abierto “seguía” el scroll del documento /
+contenedor (containing block con `transform` en demos).
+
+**Hacer**
+- Default: cerrar al `scroll` (capture en `window`), salvo scroll interno del panel.
+- Menú importante: atributo `scroll-lock` → `documentElement.overflow = hidden`
+  mientras está abierto (mismo patrón que `is-loading-overlay`).
+
+**No hacer**
+- Reposicionar el panel en cada scroll (“perseguir” el cursor/ancla).
+- Bloquear scroll por defecto (rompe páginas largas).
+
+Guardián: `tests/context-menu-scroll.test.mjs`.
+
 ### Color × appearance (`is-button`)
 
 **Hacer**

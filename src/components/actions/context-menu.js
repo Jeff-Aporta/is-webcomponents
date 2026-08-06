@@ -11,6 +11,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *                      top-end  (alias CSS-ish del placement del popup)
  *   distance           píxeles desde el cursor (default 2)
  *   disabled           boolean — desactiva el menú
+ *   scroll-lock        boolean — si está, bloquea el scroll del documento
+ *                      mientras el menú está abierto. Sin él (default),
+ *                      cualquier scroll fuera del panel cierra el menú
+ *                      (no “persigue” el scroll del viewport/contenedor).
  *
  * Slots
  *   default — hijos renderizados dentro del panel; usar <button class="item">
@@ -24,7 +28,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  * Custom states: open, closed
  */
 (() => {
-  const OBSERVED = ['for', 'placement', 'distance', 'disabled'];
+  const OBSERVED = ['for', 'placement', 'distance', 'disabled', 'scroll-lock'];
 
   class IsContextMenu extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -32,6 +36,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #host;
     #target;
     #listener;
+    #panel;
+    #onDocPointerDown;
+    #onDocKeydown;
+    #onScroll;
+    #prevOverflow = null;
+    #scrollListening = false;
 
     constructor() {
       super();
@@ -55,12 +65,19 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#onDocKeydown = (e) => {
         if (e.key === 'Escape' && this.isOpen) this.close();
       };
+      // capture=true: scroll en window, document o cualquier overflow ancestro.
+      this.#onScroll = (e) => {
+        if (!this.isOpen || this.scrollLock) return;
+        // Scroll interno del panel (lista larga) no debe cerrar.
+        const path = typeof e.composedPath === 'function' ? e.composedPath() : [];
+        if (path.includes(this.#panel) || e.target === this.#panel) return;
+        this.close();
+      };
     }
 
     connectedCallback() {
       this.#host = this;
       this.#bindTarget();
-      // cerrar al clic fuera / Escape — vivos solo mientras está conectado
       document.addEventListener('pointerdown', this.#onDocPointerDown, true);
       document.addEventListener('keydown', this.#onDocKeydown);
     }
@@ -69,6 +86,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#unbindTarget();
       document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
       document.removeEventListener('keydown', this.#onDocKeydown);
+      this.#teardownScrollBehavior();
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
@@ -76,9 +94,17 @@ import { adoptCss } from '../_shared/adopt-css.js';
       // guard un atributo puesto en el markup se procesa demasiado pronto.
       if (oldVal === newVal || !this.#host) return;
       if (name === 'for' || name === 'disabled') this.#bindTarget();
+      if (name === 'scroll-lock' && this.isOpen) {
+        // Cambiar el modo en caliente: rearmar listeners / lock.
+        this.#teardownScrollBehavior();
+        this.#setupScrollBehavior();
+      }
     }
 
     get isOpen() { return this.#panel.open; }
+
+    get scrollLock() { return this.hasAttribute('scroll-lock'); }
+    set scrollLock(v) { this.toggleAttribute('scroll-lock', !!v); }
 
     /**
      * Abre el menú anclado a un punto del viewport. Se muestra primero para
@@ -118,6 +144,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       panel.style.visibility = '';
 
       this.setAttribute('open', '');
+      this.#setupScrollBehavior();
       this.dispatchEvent(new CustomEvent('is-open', { bubbles: true, composed: true, detail: { x, y } }));
     }
 
@@ -128,8 +155,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     close() {
+      if (!this.#panel.open && !this.hasAttribute('open')) {
+        this.#teardownScrollBehavior();
+        return;
+      }
       if (this.#panel.open) this.#panel.close();
       this.removeAttribute('open');
+      this.#teardownScrollBehavior();
       this.dispatchEvent(new CustomEvent('is-close', { bubbles: true, composed: true }));
     }
 
@@ -171,9 +203,36 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.openAt(e.clientX, e.clientY);
     }
 
-    #panel;
-    #onDocPointerDown;
-    #onDocKeydown;
+    /** Default: cerrar al scroll. Con `scroll-lock`: congelar el documento. */
+    #setupScrollBehavior() {
+      this.#teardownScrollBehavior();
+      if (this.scrollLock) {
+        this.#lockScroll();
+        return;
+      }
+      window.addEventListener('scroll', this.#onScroll, true);
+      this.#scrollListening = true;
+    }
+
+    #teardownScrollBehavior() {
+      if (this.#scrollListening) {
+        window.removeEventListener('scroll', this.#onScroll, true);
+        this.#scrollListening = false;
+      }
+      this.#releaseScroll();
+    }
+
+    #lockScroll() {
+      if (this.#prevOverflow !== null) return;
+      this.#prevOverflow = document.documentElement.style.overflow;
+      document.documentElement.style.overflow = 'hidden';
+    }
+
+    #releaseScroll() {
+      if (this.#prevOverflow === null) return;
+      document.documentElement.style.overflow = this.#prevOverflow;
+      this.#prevOverflow = null;
+    }
   }
 
   if (!customElements.get('is-context-menu')) customElements.define('is-context-menu', IsContextMenu);

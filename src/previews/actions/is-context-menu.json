@@ -17,10 +17,27 @@
     {
       "id": "basico",
       "title": "Básico",
+      "lede": "Por defecto el menú <strong>se cierra al hacer scroll</strong> (no persigue el viewport). Con <code class=\"code\">scroll-lock</code> bloquea el scroll del documento mientras está abierto.",
       "blocks": [
         {
           "kind": "demo",
           "html": "<div class=\"canvas\" id=\"canvas1\">Clic derecho aquí →</div>\r\n          <is-context-menu for=\"#canvas1\">\r\n            <button class=\"item\" data-value=\"open\">Abrir</button>\r\n            <button class=\"item\" data-value=\"open-tab\">Abrir en pestaña nueva</button>\r\n            <button class=\"item\" data-value=\"duplicate\">Duplicar</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"rename\">Renombrar…</button>\r\n            <button class=\"item\" data-value=\"properties\">Propiedades</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"delete\" disabled>Eliminar</button>\r\n          </is-context-menu>"
+        }
+      ]
+    },
+    {
+      "id": "scroll-lock",
+      "title": "scroll-lock",
+      "lede": "Menú importante: el atributo <code class=\"code\">scroll-lock</code> congela el documento hasta cerrar (Escape, clic fuera o elegir ítem).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"canvas\" id=\"canvas-lock\">Clic derecho (scroll bloqueado) →</div>\r\n          <is-context-menu for=\"#canvas-lock\" scroll-lock>\r\n            <button class=\"item\" data-value=\"confirm\">Confirmar acción</button>\r\n            <button class=\"item\" data-value=\"cancel\">Cancelar</button>\r\n          </is-context-menu>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-context-menu for=\"#canvas\" scroll-lock>\n  <button class=\"item\" data-value=\"ok\">Confirmar</button>\n</is-context-menu>",
+          "lang": "html"
         }
       ]
     },
@@ -44,7 +61,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const menu = document.querySelector('is-context-menu');\nmenu.openAt(x, y);   // programa el menú en una posición\nmenu.close();\nmenu.isOpen;\n\nmenu.addEventListener('is-select', e => {\n  console.log('elegido:', e.detail.value);   // valor de data-value o texto\n  console.log('item:', e.detail.item);\n});\n\n// items via slot\n<is-context-menu for=\"#canvas\">\n  <button class=\"item\" data-value=\"open\">Abrir</button>\n  <button class=\"item\" data-value=\"delete\">Eliminar</button>\n</is-context-menu>"
+          "code": "const menu = document.querySelector('is-context-menu');\nmenu.openAt(x, y);\nmenu.close();\nmenu.isOpen;\nmenu.scrollLock = true; // opcional: bloquear scroll en vez de cerrar\n\nmenu.addEventListener('is-select', e => {\n  console.log('elegido:', e.detail.value);\n});\n\n// Default: cierra al scroll. Importante: scroll-lock.\n<is-context-menu for=\"#canvas\">…</is-context-menu>\n<is-context-menu for=\"#canvas\" scroll-lock>…</is-context-menu>"
         }
       ]
     },
