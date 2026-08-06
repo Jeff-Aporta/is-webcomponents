@@ -393,15 +393,29 @@ is-demo[contain],
   height: auto;
 }
 
-.demo:has(is-sequence-diagram) {
-  min-height: 18rem;
+/* Diagramas / treemap / charts de área: el SVG usa width/height 100% + meet,
+   así que el host DEBE tener altura definida (si queda en auto, el % cae a
+   auto y el dibujo crece hasta que .demo lo recorta). */
+.demo:has(
+  is-sequence-diagram, is-flowchart, is-state-diagram, is-gantt,
+  is-block-diagram, is-class-diagram, is-er-diagram, is-mindmap,
+  is-timeline, is-org-chart, is-treemap, is-funnel-chart, is-heatmap,
+  is-waterfall-chart, is-gauge, is-sparkline
+) {
+  min-height: 22rem;
 }
-.demo > is-sequence-diagram {
+.demo > :is(
+  is-sequence-diagram, is-flowchart, is-state-diagram, is-gantt,
+  is-block-diagram, is-class-diagram, is-er-diagram, is-mindmap,
+  is-timeline, is-org-chart, is-treemap, is-funnel-chart, is-heatmap,
+  is-waterfall-chart, is-gauge, is-sparkline
+) {
   flex: 1 1 auto;
   align-self: stretch;
   width: 100%;
   min-height: 0;
-  height: auto;
+  height: 20rem;
+  max-height: 28rem;
 }
 
 .demo--with-code { padding-right: 3rem; }

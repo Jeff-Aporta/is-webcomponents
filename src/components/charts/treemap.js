@@ -172,9 +172,7 @@ class IsTreemap extends HTMLElement {
     this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     this.#svg.setAttribute('aria-label', layout.title || 'Treemap');
-    this.#svg.style.cssText = this.isViewer
-      ? 'width:100%;height:100%;max-width:none;display:block;margin:0 auto'
-      : 'width:100%;max-width:100%;height:auto;display:block;margin:0 auto';
+    this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
     this.#svg.innerHTML = '';
     this.#nodeNodes.clear();
     this.#hoverId = null;

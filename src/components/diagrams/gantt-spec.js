@@ -159,8 +159,15 @@ export function computeGanttLayout(spec, opts = {}) {
     };
   });
 
-  const width = gutterX + timeW + MARGIN.right;
+  const legendGroups = spec.groups?.length ? spec.groups : undefined;
+  const legendW = legendGroups
+    ? Math.max(...legendGroups.map((g) => Math.ceil(g.name.length * 7) + 36))
+    : 0;
+  // Reserva franja derecha para la leyenda + aire del último hito.
+  const rightPad = MARGIN.right + (legendW ? legendW + 12 : 0) + MILESTONE_SIZE;
+  const width = gutterX + timeW + rightPad;
   const height = offsetY + rowsH + MARGIN.bottom;
+  const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
   const ticks = ticksRaw.map((tk) => ({ ...tk, x: gutterX + scale(tk.ms) }));
   const todayX = (Number.isFinite(now) && now >= domain[0] && now <= domain[1])
@@ -198,12 +205,6 @@ export function computeGanttLayout(spec, opts = {}) {
       });
     }
   }
-
-  const legendGroups = spec.groups?.length ? spec.groups : undefined;
-  const legendW = legendGroups
-    ? Math.max(...legendGroups.map((g) => Math.ceil(g.name.length * 6) + 30))
-    : 0;
-  const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
   return {
     width,

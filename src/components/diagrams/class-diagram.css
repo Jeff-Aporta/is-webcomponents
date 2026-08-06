@@ -1,6 +1,8 @@
 @import url('../_shared/diagram-kit.css');
 
 :host {
+  width: 100%;
+  min-height: 0;
   display: block;
   position: relative;
   box-sizing: border-box;
@@ -17,7 +19,7 @@
 .wrap {
   position: relative;
   border-radius: 0.5rem;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   border: 1px solid var(--is-border, #2a3038);
   padding: 0.75rem;
@@ -52,10 +54,15 @@
 .slot-hidden { display: none !important; }
 
 .cls-svg {
+  display: block;
   position: relative;
   z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
   max-height: 100%;
   margin: auto;
+  overflow: hidden;
 }
 
 /* ── Cajas y relaciones ── */

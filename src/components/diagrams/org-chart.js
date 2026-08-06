@@ -79,16 +79,15 @@ import { escapeHtml } from '../_shared/dom-utils.js';
     }
 
     #render() {
-      const w = Math.max(this.#svg.getBoundingClientRect().width, 320);
-      const h = Math.max(this.#svg.getBoundingClientRect().height, 240);
-      this.#svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-      this.#svg.setAttribute('width', String(w));
-      this.#svg.setAttribute('height', String(h));
-      this.#svg.innerHTML = '';
-
       const nodeW = Number(this.getAttribute('node-width')) || 200;
       const nodeH = Number(this.getAttribute('node-height')) || 78;
       const gap = Number(this.getAttribute('gap')) || 28;
+
+      this.#svg.innerHTML = '';
+      this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block';
+      this.#svg.removeAttribute('width');
+      this.#svg.removeAttribute('height');
 
       // Recolectar subárboles visibles (post-collapse)
       const visible = new Set([this.#root]);
@@ -124,6 +123,7 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       // Normalizar a coordenadas positivas
       const offsets = [...layout.values()].map((p) => p.x);
       const min = offsets.length ? Math.min(...offsets) : 0;
+      const max = offsets.length ? Math.max(...offsets) : 0;
       const baseX = 60 - min;
 
       // Render edges primero
@@ -135,7 +135,6 @@ import { escapeHtml } from '../_shared/dom-utils.js';
         const y1 = p.y + nodeH;
         const x2 = baseX + pos.x;
         const y2 = pos.y;
-        const mx = (x1 + x2) / 2;
         const path = svgEl('path', {
           d: `M ${x1} ${y1} C ${x1} ${(y1 + y2) / 2} ${x2} ${(y1 + y2) / 2} ${x2} ${y2}`,
           class: 'edge',
@@ -163,7 +162,6 @@ import { escapeHtml } from '../_shared/dom-utils.js';
         `;
         card.appendChild(wrap);
         g.appendChild(card);
-        // click events
         wrap.addEventListener('click', (e) => {
           const t = e.target;
           if (t.classList.contains('toggle')) {
@@ -176,9 +174,10 @@ import { escapeHtml } from '../_shared/dom-utils.js';
         this.#svg.appendChild(g);
       }
 
-      // ajustar height
       const maxY = offsets.length ? Math.max(...[...layout.values()].map((p) => p.y)) : 0;
-      this.#svg.setAttribute('height', String(maxY + nodeH + 60));
+      const contentW = Math.max(320, baseX + max + nodeW / 2 + 60);
+      const contentH = Math.max(240, maxY + nodeH + 60);
+      this.#svg.setAttribute('viewBox', `0 0 ${contentW} ${contentH}`);
     }
   }
 

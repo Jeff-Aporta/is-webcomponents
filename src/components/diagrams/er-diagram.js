@@ -170,9 +170,7 @@ class IsErDiagram extends HTMLElement {
     this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     this.#svg.setAttribute('aria-label', layout.title || 'Diagrama entidad-relación');
-    this.#svg.style.cssText = this.isViewer
-      ? 'width:100%;height:100%;max-width:none;display:block;margin:0 auto'
-      : `width:100%;max-width:${W}px;height:auto;display:block;margin:0 auto`;
+    this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
     this.#svg.innerHTML = '';
     this.#entityNodes.clear();
     this.#relNodes.clear();
@@ -224,7 +222,7 @@ class IsErDiagram extends HTMLElement {
   #buildLegend(layout, theme) {
     const g = svgEl('g', { class: 'er-legend' });
     layout.groups.forEach((grp, gi) => {
-      const ly = 18 + gi * 16;
+      const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
       const item = svgEl('g', { class: 'er-legend__item', opacity: off ? 0.4 : 1 });

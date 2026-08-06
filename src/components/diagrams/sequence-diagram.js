@@ -215,7 +215,7 @@ class IsSequenceDiagram extends HTMLElement {
     this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     this.#svg.setAttribute('aria-label', title || 'Diagrama de secuencia');
     // El resto del dimensionado vive en la hoja de estilos.
-    this.#svg.style.maxWidth = this.isViewer ? '' : `${W}px`;
+    this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
     this.#svg.innerHTML = '';
     this.#msgNodes.clear();
     this.#lifelineNodes = [];
@@ -271,7 +271,7 @@ class IsSequenceDiagram extends HTMLElement {
   #buildLegend(groups, legendX, theme) {
     const g = svgEl('g', { class: 'seq-legend' });
     groups.forEach((grp, gi) => {
-      const ly = 18 + gi * 16;
+      const ly = (this.#layout?.subtitleY || this.#layout?.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
       const clickable = this.isViewer;
