@@ -1,17 +1,14 @@
 /**
- * cdn-ref.js — resuelve la rama `main` al SHA del último commit.
+ * cdn-ref.js — pin de `main` → SHA + espejos CDN del kit.
  *
- * Los snippets deben salir CONGELADOS: `@main` cambia bajo los pies de quien
- * pegó el snippet, mientras que `@<sha>` no y jsDelivr lo cachea de forma
- * inmutable.
- *
- * Se pide UNA vez por pestaña (promesa cacheada + sessionStorage) porque la API
- * pública de GitHub va a 60 peticiones/hora por IP. Si falla —sin red o cuota
- * agotada— se cae a `main`: preferimos un snippet vivo a uno roto.
+ * Primario: jsDelivr (`@<sha>` inmutable). Espejo: GitHub Pages (tip
+ * desplegado). Un solo origen por sesión: mezclar bases rompe imports
+ * relativos entre bundles.
  */
 export const GH_REPO = 'Jeff-Aporta/is-webcomponents';
 
 const REF_KEY = 'is-wc:cdn-ref';
+const MIRROR_KEY = 'is-wc:cdn-mirror';
 let refPromise = null;
 
 export const resolveRef = () => {
@@ -32,7 +29,55 @@ export const resolveRef = () => {
   return refPromise;
 };
 
-export const jsdelivrBase = (ref = 'main') => `https://cdn.jsdelivr.net/gh/${GH_REPO}@${ref}/dist/cdn`;
+export const jsdelivrBase = (ref = 'main') =>
+  `https://cdn.jsdelivr.net/gh/${GH_REPO}@${ref}/dist/cdn`;
 
-/** Base ya congelada al último commit. */
+export const pagesBase = () =>
+  'https://jeff-aporta.github.io/is-webcomponents/dist/cdn';
+
+/**
+ * Espejos ofrecibles en la UI y en el boot con fallback.
+ * `base(ref)` — ref es SHA o `main`. Pages ignora el pin (siempre tip).
+ */
+export const MIRRORS = [
+  {
+    id: 'jsdelivr',
+    label: 'jsDelivr',
+    hint: 'Primario · pin por commit',
+    pin: true,
+    base: (ref = 'main') => jsdelivrBase(ref),
+  },
+  {
+    id: 'pages',
+    label: 'GitHub Pages',
+    hint: 'Espejo · tip desplegado',
+    pin: false,
+    base: () => pagesBase(),
+  },
+];
+
+export const mirrorById = (id) =>
+  MIRRORS.find((m) => m.id === id) || MIRRORS[0];
+
+export const readMirrorId = () => {
+  try {
+    const id = globalThis.sessionStorage?.getItem(MIRROR_KEY);
+    if (id && MIRRORS.some((m) => m.id === id)) return id;
+  } catch { /* modo privado */ }
+  return 'jsdelivr';
+};
+
+export const writeMirrorId = (id) => {
+  if (!MIRRORS.some((m) => m.id === id)) return;
+  try { globalThis.sessionStorage?.setItem(MIRROR_KEY, id); } catch { /* modo privado */ }
+};
+
+/** Base ya congelada al último commit (jsDelivr). */
 export const resolvedBase = async () => jsdelivrBase(await resolveRef());
+
+/**
+ * Bases en orden de fallback para el snippet de boot.
+ * jsDelivr primero (pin), Pages de reserva.
+ */
+export const fallbackBases = (ref = 'main') =>
+  MIRRORS.map((m) => m.base(ref));

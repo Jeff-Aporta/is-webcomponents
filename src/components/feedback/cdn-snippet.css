@@ -49,6 +49,114 @@
   color: var(--is-text);
 }
 
+.cdn__tabs {
+  display: inline-flex;
+  gap: 0.25em;
+  padding: 0.2em;
+  border: 1px solid var(--cdn-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--is-bg) 70%, transparent);
+  width: fit-content;
+}
+
+.cdn__tab {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.4em 0.95em;
+  background: transparent;
+  color: var(--cdn-text-dim);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.cdn__tab[aria-selected="true"] {
+  background: color-mix(in srgb, var(--is-accent, currentColor) 18%, var(--is-bg));
+  color: var(--is-text);
+}
+
+.cdn__tab:focus-visible {
+  outline: 2px solid var(--is-focus, currentColor);
+  outline-offset: 2px;
+}
+
+.cdn__panel {
+  display: grid;
+  gap: 0.75em;
+  min-width: 0;
+}
+
+.cdn__panel[hidden] { display: none; }
+
+.cdn__mirrors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45em;
+}
+
+.cdn__chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.35em 0.8em;
+  border: 1px solid var(--cdn-border);
+  border-radius: 999px;
+  background: var(--is-control-bg, transparent);
+  color: var(--is-control-text, var(--is-text));
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cdn__chip.is-active,
+.cdn__chip[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--is-accent, currentColor) 45%, var(--cdn-border));
+  background: color-mix(in srgb, var(--is-accent, currentColor) 14%, transparent);
+  color: var(--is-text);
+}
+
+.cdn__mirror-card {
+  display: grid;
+  gap: 0.45em;
+  width: 100%;
+  padding: 0.7em 0.85em;
+  border: 1px solid var(--cdn-border);
+  border-radius: 0.6em;
+  background: var(--cdn-row-bg);
+}
+
+.cdn__mirror-card.is-active {
+  border-color: color-mix(in srgb, var(--is-accent, currentColor) 40%, var(--cdn-border));
+}
+
+.cdn__mirror-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.cdn__mirror-hint {
+  font-size: 0.78rem;
+  color: var(--cdn-text-dim);
+  margin-right: auto;
+}
+
+.cdn__mirror-base {
+  display: block;
+  font-family: var(--is-mono, ui-monospace, Consolas, monospace);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  word-break: break-all;
+  color: color-mix(in srgb, var(--is-accent, currentColor) 55%, var(--is-text));
+}
+
 .cdn__list {
   display: grid;
   gap: 0.65em;
