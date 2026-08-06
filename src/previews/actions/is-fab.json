@@ -114,10 +114,10 @@
               "Posición fija."
             ],
             [
-              "<code>variant</code>",
+              "<code>color</code>",
               "brand | neutral | danger | success | warning",
               "brand",
-              "Color."
+              "Color semántico."
             ],
             [
               "<code>extended</code>",

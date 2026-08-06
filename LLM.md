@@ -188,7 +188,12 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - **No reemplazar el nodo interno sin volver a cablear sus listeners.** `#syncTag()` cambia `<button>` por `<a>` al aparecer `href`; los listeners vivían en el nodo viejo y `#wired` seguía en `true`, así que no se reponían. Poner `href` en caliente dejaba el botón mudo.
 - **No enganchar la validación a `checkValidity()`.** `ElementInternals` dispara el evento `invalid` nativo tanto en la llamada explícita como al enviar el `<form>`; envolver solo los métodos deja el submit sin avisar. Escuchar `invalid`, no envolver.
 - **No dejar que el preview enseñe menos de lo que el componente acepta.** `button.css` tenía las reglas completas de `info` y `error` mientras la matriz del preview mostraba cinco colores. Nadie lo nota: lo que falta no da error.
-- **No redireccionar `git show` a archivo con PowerShell `>`** sin encoding UTF-8: en Windows sale UTF-16 y el contenido “desaparece” al parsearlo. Usar `execSync`/`git show` desde Node o `-Encoding utf8`.
+- **No confiar en que `<button>`/`<input>` hereden `font-size` del host.** Sin
+  `font: inherit` (o `font-size: inherit`) la escala em del componente miente:
+  todos los demos 0.75/1/1.25em salen iguales (`is-fab`, ago/2026).
+- **No usar `this.variant` para el tono semántico** cuando la API es `color`
+  (`fab`, `dropdown-item`, `toast` → `toast-item`). `variant` = apariencia
+  (filled/outlined); `color` = familia.
 
 ---
 
@@ -259,6 +264,20 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
     **Hacer:** color → roles `--_tone-*`; variant → consume `--_tone-*`. Tokens relativos del tema. Fallback solo `var(--token, #hex)`.
     **No hacer:** reabrir `:host([color=X][variant=Y])` por cada celda; pedir `-600`/`-500`; hex de marca distinto del token de texto.
     Fix + guardián: `button.css` ortogonal + `tests/button-color-appearance.test.mjs`.
+
+31. **Escala em que no escala (`is-fab`)** (6-ago-2026) → el preview prometía tres
+    tamaños (`font-size: 0.75em | 1em | 1.25em`) y los tres FABs salían idénticos.
+    **Causa:** `--size: 3.5em` estaba bien, pero el `<button class="fab">` no
+    declara `font: inherit` / el host no declara `font-size: inherit`. El UA del
+    button fija ~16px y todos los `em` se resuelven contra ese valor. Mismo
+    patrón en `pin-input` (`.cell` input), botones remove/close de tag/toast.
+    De paso: `fab.js` escribía `this.variant` tras rename a `color` →
+    `data-color="undefined"`. **Nada fallaba en build.**
+    **Hacer:** `:host { font-size: inherit }` + control nativo `font: inherit`;
+    tono con `this.color`; demos que cambien `font-size` en el host.
+    **No hacer:** confiar en herencia UA de `button`/`input`; documentar escala
+    sin guardián; mezclar `variant` (apariencia) con `color` (tono) en JS.
+    Fix + guardián: `fab.css`/`fab.js` + `tests/em-scale-font-inherit.test.mjs`.
 
 ---
 
@@ -377,6 +396,7 @@ mantenerlo aparte.
 | `token-vocabulary.test.mjs` | Tokens `--is-color-*` coherentes tema ↔ componentes |
 | `button-events.test.mjs` | Eventos documentados = `#emit` reales; `#syncTag` re-cablea |
 | `button-color-appearance.test.mjs` | Color×appearance ortogonal (`--_tone-*`); sin matriz N×M ni `-600` |
+| `em-scale-font-inherit.test.mjs` | Escala em real: controles nativos con `font: inherit`; fab `color` |
 | `palette-and-snippet-contract.test.mjs` | Default contapyme; canvas libre; snippets con contexto |
 | `prefs-contract.test.mjs` | Un solo store `is-webcomponents[tag][key]` |
 | `manifest-paths.test.mjs` / `llm-links.test.mjs` | Manifest y LLM raw coherentes |

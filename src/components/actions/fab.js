@@ -95,10 +95,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     #sync() {
-      const variant = this.variant;
+      const color = this.color;
       const position = this.position;
-      this.#root.dataset.color = variant;
+      this.#root.dataset.color = color;
       this.dataset.position = position;
+      if (!this.hasAttribute('position')) this.setAttribute('position', position);
       this.#root.classList.toggle('pulse', this.hasAttribute('pulse'));
       this.#root.classList.toggle('extended', this.hasAttribute('extended'));
       this.#root.classList.toggle('no-shadow', this.hasAttribute('without-shadow'));

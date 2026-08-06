@@ -47,8 +47,8 @@ const requiredPhrases = [
   ['No recrear HTML por componente', "DON'T HTML por tag"],
   ['No dejar bundles sueltos en `dist/`', "DON'T dist huérfanos"],
   ['No reinventar botones', "DON'T reinventar is-*"],
-  ['*.test.mjs', 'extensión canónica de tests'],
-  ['gitignoreado', 'tests trackeados (no ignore completo)'],
+  ['No confiar en que `<button>`/`<input>` hereden', "DON'T font inherit en controles nativos"],
+  ['em-scale-font-inherit', 'guardián escala em'],
 ];
 
 for (const [needle, label] of requiredPhrases) {
@@ -67,6 +67,7 @@ const guardians = [
   'token-vocabulary.test.mjs',
   'button-events.test.mjs',
   'button-color-appearance.test.mjs',
+  'em-scale-font-inherit.test.mjs',
   'palette-and-snippet-contract.test.mjs',
   'llm-contract.test.mjs',
   'prefs-contract.test.mjs',
@@ -81,8 +82,8 @@ for (const file of guardians) {
   }
 }
 
-// Errores 24–30 = lecciones preview JSON / dist / PowerShell / color×appearance
-for (const n of [24, 25, 26, 27, 28, 29, 30]) {
+// Errores 24–31 = preview JSON / dist / PowerShell / color×appearance / em-scale
+for (const n of [24, 25, 26, 27, 28, 29, 30, 31]) {
   if (!llm.includes(`${n}. **`)) {
     failures.push(`bitácora de errores: falta entrada ${n}`);
   }

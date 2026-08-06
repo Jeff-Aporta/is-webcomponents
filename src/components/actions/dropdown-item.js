@@ -140,7 +140,7 @@ import '../media/icon.js';
       this.tabIndex = this.disabled ? -1 : 0;
       this.toggleAttribute('data-has-submenu', this.hasSubmenu);
       this.#syncSubmenuPanel();
-      this.#row.classList.toggle('danger', this.variant === 'danger');
+      this.#row.classList.toggle('danger', this.color === 'danger');
       this.#row.classList.toggle('checked', this.checked);
       this.#row.classList.toggle('disabled', this.disabled);
     }

@@ -1,5 +1,6 @@
 :host {
   display: inline-block;
+  font-size: inherit;
   --cell-size: 2.5em;
   --gap: 0.5em;
   --bg: var(--is-bg-elev, #1c2128);
@@ -33,6 +34,8 @@
   width: var(--cell-size);
   height: var(--cell-size);
   text-align: center;
+  /* <input> no hereda font del host (UA); sin inherit --cell-size en em no escala. */
+  font: inherit;
   font-size: 1.25em;
   font-weight: 500;
   background: var(--bg);

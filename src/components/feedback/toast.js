@@ -93,8 +93,9 @@ import './toast-item.js';
     async create(message, options = {}) {
       await customElements.whenDefined('is-toast-item');
       const item = document.createElement('is-toast-item');
-      const variant = VALID_COLOR.includes(options.variant) ? options.variant : 'neutral';
-      item.variant = variant;
+      const tone = options.color ?? options.variant;
+      const color = VALID_COLOR.includes(tone) ? tone : 'neutral';
+      item.color = color;
 
       const duration = options.duration != null ? Number(options.duration) : 5000;
       item.duration = Number.isFinite(duration) ? Math.max(0, duration) : 5000;
@@ -112,7 +113,7 @@ import './toast-item.js';
         iconEl.setAttribute('aria-hidden', 'true');
         const iconName = typeof iconOpt === 'string' && iconOpt
           ? iconOpt
-          : DEFAULT_ICONS[variant];
+          : DEFAULT_ICONS[color];
         iconEl.setAttribute('icon', iconName);
         item.appendChild(iconEl);
       }
@@ -171,8 +172,9 @@ import './toast-item.js';
     /** Actualiza un toast vivo: mensaje, color, icono y relanza el timer. */
     #update(item, message, options = {}) {
       if (!item?.isConnected) return;
-      const variant = VALID_COLOR.includes(options.variant) ? options.variant : item.variant;
-      item.variant = variant;
+      const tone = options.color ?? options.variant ?? item.color;
+      const color = VALID_COLOR.includes(tone) ? tone : 'neutral';
+      item.color = color;
       // Reemplazar texto conservando el slot icon.
       for (const n of [...item.childNodes]) {
         if (n.nodeType === Node.TEXT_NODE || (n instanceof HTMLElement && n.slot !== 'icon')) n.remove();

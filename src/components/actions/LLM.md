@@ -54,12 +54,32 @@ Revisar imports y `_shared/` antes de implementar. Reusar stdlib, plataforma y m
 - No crear abstracción si shared/native resuelve caso.
 - No crear size colors; usar font-size contextual y em.
 - No duplicar MD por tag multi-tag.
+- Controles nativos (`button`/`input`) en shadow: siempre `font: inherit`
+  (o `font-size: inherit`). Sin eso la escala em **miente** (UA fija ~16px).
 
 ## Errores conocidos y prevención
 
 Confundir acción, navegación y selección; revisar semántica button/link/menu.
 
 Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
+
+### Escala em (`is-fab` y hermanos)
+
+**Error (ago/2026):** demos `font-size: 0.75em | 1em | 1.25em` en `<is-fab>`
+salían del mismo tamaño. `--size: 3.5em` estaba bien; el `<button class="fab">`
+no heredaba font-size del host.
+
+**Hacer**
+- `:host { font-size: inherit }` + control interno `font: inherit`.
+- Métricas de caja en `em` (no `px`/`rem` para el tamaño escalable).
+- `color` semántico vía `this.color` (nunca `this.variant` para el tono).
+
+**No hacer**
+- Confiar en que `<button>`/`<input>` hereden font del host.
+- Documentar escala em sin demo que cambie `font-size` en el host.
+- Mezclar `variant` (apariencia) con `color` (tono) en el JS tras un rename.
+
+Guardián: `tests/em-scale-font-inherit.test.mjs`.
 
 ### Color × appearance (`is-button`)
 

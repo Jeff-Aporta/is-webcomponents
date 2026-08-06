@@ -1,0 +1,123 @@
+/**
+ * em-scale-font-inherit.test.mjs — la escala por font-size no puede mentir.
+ *
+ * ago/2026: is-fab documentaba escala en em (0.75 / 1 / 1.25) pero los tres
+ * demos salían idénticos. Causa: el <button> interno no hereda font-size
+ * (stylesheet UA) y `--size: 3.5em` se resolvía contra ~16px fijo.
+ *
+ * Contrato (LLM.md): sin atributo `size`; métricas en em; controles nativos
+ * (button/input) deben declarar `font: inherit` / `font-size: inherit`.
+ *
+ *   npm test -- tests/em-scale-font-inherit.test.mjs
+ */
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile, readdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const raiz = join(dirname(fileURLToPath(import.meta.url)), '..');
+const comps = join(raiz, 'src', 'components');
+
+const read = (...p) => readFile(join(comps, ...p), 'utf8');
+
+/** Controles nativos que el UA no escala con el font del host. */
+const NATIVE_CONTROL = /\b(button|input|select|textarea)\b/i;
+
+test('is-fab: host + .fab heredan font-size (escala em)', async () => {
+  const css = await read('actions', 'fab.css');
+  const js = await read('actions', 'fab.js');
+
+  assert.match(
+    css,
+    /:host\s*\{[^}]*font-size:\s*inherit/s,
+    ':host debe heredar font-size del contexto',
+  );
+  assert.match(
+    css,
+    /\.fab\s*\{[^}]*font:\s*inherit/s,
+    '.fab <button> debe usar font: inherit (UA no hereda)',
+  );
+  assert.match(
+    css,
+    /--size:\s*[\d.]+em/,
+    '--size debe estar en em, no en px/rem fijos',
+  );
+  assert.doesNotMatch(
+    css,
+    /--size:\s*[\d.]+(?:px|rem)\b/,
+    'prohibido --size en px/rem: rompe la escala contextual',
+  );
+  assert.match(
+    js,
+    /this\.color/,
+    'fab sincroniza color semántico con this.color (no this.variant)',
+  );
+  assert.doesNotMatch(
+    js,
+    /this\.variant/,
+    'this.variant en fab es bug post-rename a color',
+  );
+});
+
+test('is-fab preview: demo de escala con tres font-size distintos', async () => {
+  const json = await readFile(
+    join(raiz, 'src', 'previews', 'actions', 'is-fab.json'),
+    'utf8',
+  );
+  assert.match(json, /font-size:0\.75em/, 'demo 0.75em');
+  assert.match(json, /font-size:1em/, 'demo 1em');
+  assert.match(json, /font-size:1\.25em/, 'demo 1.25em');
+  assert.match(json, /"<code>color<\/code>"/, 'tabla API documenta color, no variant-como-tono');
+});
+
+test('controles nativos en CSS con métricas em llevan font inherit', async () => {
+  /** Pares { css, controlClass } donde el control es button/input y dimensiona en em. */
+  const criticos = [
+    ['actions/fab.css', /\.fab\s*\{/],
+    ['feedback/tag.css', /\.remove\s*\{/],
+    ['feedback/toast-item.css', /\.close\s*\{/],
+    ['forms/pin-input.css', /\.cell\s*\{/],
+    ['actions/button.css', /\.btn\s*\{/],
+    ['actions/copy-button.css', /\.button\s*\{/],
+    ['actions/check-icon-button.css', /\.btn\s*\{/],
+  ];
+
+  for (const [rel, bloque] of criticos) {
+    const css = await read(...rel.split('/'));
+    const m = css.match(new RegExp(bloque.source + '[^}]*\\}', 's'));
+    assert.ok(m, `${rel}: no se encontró el bloque del control`);
+    assert.match(
+      m[0],
+      /font(?:-size)?:\s*inherit/,
+      `${rel}: el control nativo debe heredar font para que em escale`,
+    );
+  }
+});
+
+test('JS no asigna item.variant / this.variant cuando la API es color (tonos)', async () => {
+  const toast = await read('feedback', 'toast.js');
+  assert.match(toast, /item\.color\s*=/, 'toast.create debe setear item.color');
+  assert.doesNotMatch(
+    toast,
+    /item\.variant\s*=/,
+    'toast no debe escribir item.variant (toast-item solo tiene color)',
+  );
+
+  const drop = await read('actions', 'dropdown-item.js');
+  assert.match(drop, /this\.color\s*===\s*['"]danger['"]/, 'dropdown-item danger vía color');
+  assert.doesNotMatch(
+    drop,
+    /this\.variant\s*===\s*['"]danger['"]/,
+    'dropdown-item: this.variant === danger es bug post-rename',
+  );
+});
+
+test('LLM actions documenta escala em + font inherit / error de FAB', async () => {
+  const llm = await read('actions', 'LLM.md');
+  assert.match(
+    llm,
+    /font-size contextual|font:\s*inherit|em/i,
+    'actions/LLM.md debe recordar escala por font-size/em',
+  );
+});
