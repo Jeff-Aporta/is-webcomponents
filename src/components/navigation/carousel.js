@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-carousel> + <is-carousel-item> — Web Components (vanilla, zero dependencies).
@@ -67,10 +70,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const TG_OBSERVED = ['active', 'loop', 'autoplay', 'without-controls', 'without-indicators', 'vertical', 'slides-per-page', 'aspect-ratio'];
 
-  class IsCarousel extends HTMLElement {
+  class IsCarousel extends ElementBase {
     static get observedAttributes() { return TG_OBSERVED; }
 
-    #mounted = false;
     #scroller;
     #track;
     #indicators;
@@ -125,7 +127,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
           if (dx < -40) this.next();
           else if (dx > 40) this.prev();
         }
-        this.dispatchEvent(new CustomEvent('is-carousel-slide-end', { bubbles: true, composed: true }));
+        emit(this, 'is-carousel-slide-end');
       });
       // Pause autoplay on hover
       this.addEventListener('mouseenter', () => this.#pause('user'));
@@ -134,8 +136,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.addEventListener('focusout', () => this.#play());
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('slides-per-page')) this.setAttribute('slides-per-page', '1');
       this.#visibilityHandler = () => {
         if (document.hidden) this.#pause('visibility');
@@ -146,13 +147,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#play();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       document.removeEventListener('visibilitychange', this.#visibilityHandler);
       this.#pause('lifecycle');
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'active') this.#goTo(this.active, true);
       if (name === 'autoplay') this.#play();
       if (name === 'without-controls' || name === 'without-indicators' || name === 'vertical' || name === 'slides-per-page' || name === 'aspect-ratio') this.#sync();
@@ -300,11 +300,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.setAttribute('active', String(clamped));
       this.#updateIndicators();
       if (!silent && from !== clamped) {
-        this.dispatchEvent(new CustomEvent('is-carousel-change', {
-          detail: { from, to: clamped, item },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'is-carousel-change', { from, to: clamped, item });
       }
     }
 
@@ -321,7 +317,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const ms = this.autoplay;
       if (ms > 0) {
         this.#autoplayTimer = setInterval(() => this.next(), ms);
-        this.dispatchEvent(new CustomEvent('is-carousel-play', { bubbles: true, composed: true }));
+        emit(this, 'is-carousel-play');
       }
     }
 
@@ -329,17 +325,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (this.#autoplayTimer) {
         clearInterval(this.#autoplayTimer);
         this.#autoplayTimer = null;
-        this.dispatchEvent(new CustomEvent('is-carousel-pause', {
-          detail: { reason },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'is-carousel-pause', { reason });
       }
     }
   }
 
-  if (!customElements.get('is-carousel')) customElements.define('is-carousel', IsCarousel);
-  if (typeof window !== 'undefined') window.IsCarousel = IsCarousel;
+  defineElement('is-carousel', IsCarousel, 'IsCarousel');
 
   // ============ <is-carousel-item> ============
   const ITEM_TEMPLATE = document.createElement('template');
@@ -369,6 +360,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-carousel-item')) customElements.define('is-carousel-item', IsCarouselItem);
-  if (typeof window !== 'undefined') window.IsCarouselItem = IsCarouselItem;
+  defineElement('is-carousel-item', IsCarouselItem, 'IsCarouselItem');
 })();

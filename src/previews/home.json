@@ -8,6 +8,7 @@
   "wrapperClass": "home",
   "prelude": "<is-progress-bar id=\"homeProgress\" class=\"home-progress\" value=\"0\"\n                   aria-label=\"Progreso de lectura\"></is-progress-bar>",
   "hasBehavior": true,
+  "withoutToc": true,
   "sections": [
     {
       "id": "hero",

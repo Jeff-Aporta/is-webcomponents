@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-org-chart> — Organigrama. Layout jerárquico top-down, a partir de un árbol.
@@ -166,9 +168,9 @@ import { escapeHtml } from '../_shared/dom-utils.js';
           const t = e.target;
           if (t.classList.contains('toggle')) {
             this.toggle(id);
-            this.dispatchEvent(new CustomEvent('is-toggle', { bubbles: true, composed: true, detail: { id, collapsed: this.#collapsed.has(id) } }));
+            emit(this, 'is-toggle', { id, collapsed: this.#collapsed.has(id) });
           } else {
-            this.dispatchEvent(new CustomEvent('is-select', { bubbles: true, composed: true, detail: { id, node } }));
+            emit(this, 'is-select', { id, node });
           }
         });
         this.#svg.appendChild(g);
@@ -190,5 +192,5 @@ import { escapeHtml } from '../_shared/dom-utils.js';
     return String(name).split(/\s+/).filter(Boolean).map((p) => p[0]).slice(0, 2).join('').toUpperCase();
   }
 
-  if (!customElements.get('is-org-chart')) customElements.define('is-org-chart', IsOrgChart);
+  defineElement('is-org-chart', IsOrgChart);
 })();

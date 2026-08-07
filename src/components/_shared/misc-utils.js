@@ -20,6 +20,28 @@ export function tidy(n, unit = '') {
 }
 
 /**
+ * Redondea `n` a los decimales que tenga `step`.
+ *
+ * OJO: no es lo mismo que `tidy(n, unit)` de arriba, aunque el nombre se le
+ * parezca. `tidy` redondea SIEMPRE a 3 decimales y concatena una unidad de
+ * texto (`'12.5px'`); esto mira cuántos decimales trae el step y redondea a
+ * esos, devolviendo un número. `<is-slider step="0.01">` necesita 2
+ * decimales, no 3, y necesita el valor como número para seguir sumando.
+ *
+ * Existía duplicado —con el nombre `tidy`, que es justo el de la otra
+ * función— en `is-slider` e `is-rating`.
+ *
+ * @param {number} n
+ * @param {number|string} step
+ * @returns {number}
+ */
+export function tidyToStep(n, step) {
+  const decimals = (String(step).split('.')[1] || '').length;
+  if (!decimals) return n;
+  return Number(n.toFixed(Math.min(20, decimals)));
+}
+
+/**
  * Clamp numérico inclusivo: devuelve n limitado al rango [min, max].
  *
  * @param {number} n

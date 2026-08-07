@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-pin-input> — Web Component (vanilla, zero dependencies).
@@ -41,10 +44,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['length', 'type', 'mask', 'disabled', 'invalid', 'placeholder', 'value', 'autocomplete'];
 
-  class IsPinInput extends HTMLElement {
+  class IsPinInput extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #root;
     #cells;
     #hiddenInput;
@@ -63,8 +65,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#hiddenInput = shadow.querySelector('.hidden-input');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('length')) this.setAttribute('length', '6');
       if (!this.hasAttribute('type')) this.setAttribute('type', 'number');
       this.#render();
@@ -83,12 +84,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#syncState();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.removeEventListener('paste', this.#onPaste);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'length' || name === 'type' || name === 'placeholder' || name === 'mask') {
         this.#render();
       }
@@ -107,7 +107,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     reset() {
       this.#values = this.#lengthArray().map(() => '');
       this.#render();
-      this.dispatchEvent(new CustomEvent('is-pin-change', { detail: { value: '', index: -1 }, bubbles: true, composed: true }));
+      emit(this, 'is-pin-change', { value: '', index: -1 });
     }
 
     focus() {
@@ -237,21 +237,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       }
       const value = this.value;
       const completed = value.length === this.#length() && !this.#values.includes('');
-      this.dispatchEvent(new CustomEvent('is-pin-change', {
-        detail: { value, index: idx },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-pin-change', { value, index: idx });
       if (completed) {
-        this.dispatchEvent(new CustomEvent('is-pin-complete', {
-          detail: { value },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'is-pin-complete', { value });
       }
     }
   }
 
-  if (!customElements.get('is-pin-input')) customElements.define('is-pin-input', IsPinInput);
-  if (typeof window !== 'undefined') window.IsPinInput = IsPinInput;
+  defineElement('is-pin-input', IsPinInput, 'IsPinInput');
 })();

@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { resolveIconRaw } from '../_shared/icon-loader.js';
+import { defineElement } from '../_shared/define.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-icon> — Web Component (vanilla, zero dependencies).
@@ -76,14 +78,14 @@ import { resolveIconRaw } from '../_shared/icon-loader.js';
       return `${lib}:${name}`;
     }
     set icon(v) {
-      v == null || v === '' ? this.removeAttribute('icon') : this.setAttribute('icon', v);
+      setStringAttr(this, 'icon', v);
     }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null || v === '' ? this.removeAttribute('label') : this.setAttribute('label', v); }
+    set label(v) { setStringAttr(this, 'label', v); }
 
     get src() { return this.getAttribute('src') ?? ''; }
-    set src(v) { v == null || v === '' ? this.removeAttribute('src') : this.setAttribute('src', v); }
+    set src(v) { setStringAttr(this, 'src', v); }
 
     #abort() {
       if (this.#abortCtrl) {
@@ -240,8 +242,5 @@ import { resolveIconRaw } from '../_shared/icon-loader.js';
     }
   }
 
-  if (!customElements.get('is-icon')) {
-    customElements.define('is-icon', IsIcon);
-  }
-  if (typeof window !== 'undefined') window.IsIcon = IsIcon;
+  defineElement('is-icon', IsIcon, 'IsIcon');
 })();

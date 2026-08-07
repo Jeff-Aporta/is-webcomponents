@@ -54,7 +54,7 @@ const tagsOf = (cssFile) => {
   if (!existsSync(jsFile)) return [];
   const js = readFileSync(jsFile, 'utf8');
   if (!/attachShadow|adoptCss/.test(js)) return [];
-  return [...js.matchAll(/customElements\.define\(\s*['"]([\w-]+)['"]/g)].map((m) => m[1]);
+  return [...js.matchAll(/(?:customElements\.define|defineElement)\(\s*['"]([\w-]+)['"]/g)].map((m) => m[1]);
 };
 
 /** Numero de linea de un indice de caracter, para poder citar file:line. */

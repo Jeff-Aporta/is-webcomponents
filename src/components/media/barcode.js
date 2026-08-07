@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-barcode> — Generador de códigos de barras en SVG.
@@ -187,7 +189,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         this.#text.hidden = true;
       }
 
-      this.dispatchEvent(new CustomEvent('is-render', { bubbles: true, composed: true, detail: { svg: this.#svg } }));
+      emit(this, 'is-render', { svg: this.#svg });
     }
 
     #svg;
@@ -200,5 +202,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     return n;
   }
 
-  if (!customElements.get('is-barcode')) customElements.define('is-barcode', IsBarcode);
+  defineElement('is-barcode', IsBarcode);
 })();

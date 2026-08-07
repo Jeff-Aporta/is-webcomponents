@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-spreadsheet> — Hoja de cálculo mínima con edición por celda y fórmulas.
@@ -181,7 +183,7 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       this.#formulaCache = null;
       this.#recompute();
       this.#render();
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { row: r, col: c, raw, value: this.#data[r][c].computed } }));
+      emit(this, 'is-change', { row: r, col: c, raw, value: this.#data[r][c].computed });
     }
 
     #move(r, c) {
@@ -322,5 +324,5 @@ import { escapeHtml } from '../_shared/dom-utils.js';
     return n - 1;
   }
 
-  if (!customElements.get('is-spreadsheet')) customElements.define('is-spreadsheet', IsSpreadsheet);
+  defineElement('is-spreadsheet', IsSpreadsheet);
 })();

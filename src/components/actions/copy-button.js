@@ -1,6 +1,10 @@
+import './button.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
 import '../feedback/tooltip.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 
 /**
  * <is-copy-button> — Web Component (vanilla).
@@ -41,7 +45,13 @@ import '../feedback/tooltip.js';
   TEMPLATE.innerHTML = /* html */ `
     <span class="trigger" id="anchor">
       <slot></slot>
-      <button part="button" class="button" type="button" id="copy-btn">
+      <is-button
+        class="button"
+        id="copy-btn"
+        variant="text"
+        color="neutral"
+        exportparts="button: button"
+      >
         <span part="copy-icon" class="icon" data-state="copy">
           <slot name="copy-icon"><is-icon icon="mdi:content-copy"></is-icon></slot>
         </span>
@@ -51,7 +61,7 @@ import '../feedback/tooltip.js';
         <span part="error-icon" class="icon" data-state="error" hidden>
           <slot name="error-icon"><is-icon icon="mdi:close"></is-icon></slot>
         </span>
-      </button>
+      </is-button>
     </span>
     <is-tooltip
       class="tip"
@@ -98,7 +108,7 @@ import '../feedback/tooltip.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#btn = shadow.querySelector('.button');
+      this.#btn = shadow.querySelector('is-button');
       this.#tip = shadow.querySelector('is-tooltip');
       this.#live = shadow.querySelector('.sr-only');
       this.#icons = {
@@ -143,9 +153,9 @@ import '../feedback/tooltip.js';
 
     // --- props ---
     get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v == null ? this.removeAttribute('value') : this.setAttribute('value', v); }
+    set value(v) { setOptionalAttr(this, 'value', v); }
     get from() { return this.getAttribute('from') ?? ''; }
-    set from(v) { v == null || v === '' ? this.removeAttribute('from') : this.setAttribute('from', v); }
+    set from(v) { setStringAttr(this, 'from', v); }
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
     get copyLabel() { return this.getAttribute('copy-label') ?? ''; }
@@ -208,7 +218,9 @@ import '../feedback/tooltip.js';
     }
 
     #syncDisabled() {
-      this.#btn.disabled = this.disabled;
+      // is-button expone `disabled` como atributo, no como propiedad del
+      // elemento (no es un <button> nativo).
+      this.#btn.toggleAttribute('disabled', this.disabled);
       this.#toggleState('disabled', this.disabled);
     }
 
@@ -279,7 +291,7 @@ import '../feedback/tooltip.js';
 
         const target = 'getElementById' in root ? root.getElementById(id) : null;
         if (!target) {
-          this.dispatchEvent(new CustomEvent('is-error', { bubbles: true, composed: true }));
+          emit(this, 'is-error');
           await this.#showStatus('error');
           return;
         }
@@ -289,21 +301,17 @@ import '../feedback/tooltip.js';
       }
 
       if (!valueToCopy) {
-        this.dispatchEvent(new CustomEvent('is-error', { bubbles: true, composed: true }));
+        emit(this, 'is-error');
         await this.#showStatus('error');
         return;
       }
 
       try {
         await navigator.clipboard.writeText(String(valueToCopy));
-        this.dispatchEvent(new CustomEvent('is-copy', {
-          detail: { value: String(valueToCopy) },
-          bubbles: true,
-          composed: true
-        }));
+        emit(this, 'is-copy', { value: String(valueToCopy) });
         await this.#showStatus('success');
       } catch {
-        this.dispatchEvent(new CustomEvent('is-error', { bubbles: true, composed: true }));
+        emit(this, 'is-error');
         await this.#showStatus('error');
       }
     }
@@ -362,8 +370,5 @@ import '../feedback/tooltip.js';
     }
   }
 
-  if (!customElements.get('is-copy-button')) {
-    customElements.define('is-copy-button', IsCopyButton);
-  }
-  if (typeof window !== 'undefined') window.IsCopyButton = IsCopyButton;
+  defineElement('is-copy-button', IsCopyButton, 'IsCopyButton');
 })();

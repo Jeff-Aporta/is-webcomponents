@@ -1,6 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-dropzone> — Zona de drop con preview, cola y progreso por archivo.
@@ -100,15 +102,15 @@ import '../media/icon.js';
       const accept = this.getAttribute('accept');
       for (const f of files) {
         if (this.#files.length >= max) {
-          this.dispatchEvent(new CustomEvent('is-error', { bubbles: true, composed: true, detail: { reason: 'max-files', limit: max } }));
+          emit(this, 'is-error', { reason: 'max-files', limit: max });
           break;
         }
         if (f.size > maxSize) {
-          this.dispatchEvent(new CustomEvent('is-error', { bubbles: true, composed: true, detail: { id: null, file: f, reason: 'max-size', limit: maxSize } }));
+          emit(this, 'is-error', { id: null, file: f, reason: 'max-size', limit: maxSize });
           continue;
         }
         if (accept && !matchesAccept(f, accept)) {
-          this.dispatchEvent(new CustomEvent('is-error', { bubbles: true, composed: true, detail: { id: null, file: f, reason: 'accept' } }));
+          emit(this, 'is-error', { id: null, file: f, reason: 'accept' });
           continue;
         }
         const rec = { id: newId(), file: f, name: f.name, size: f.size, type: f.type, status: 'queued', progress: 0, url: '' };
@@ -135,23 +137,23 @@ import '../media/icon.js';
       for (const rec of queue) {
         rec.status = 'uploading';
         this.#patch(rec);
-        this.dispatchEvent(new CustomEvent('is-upload-start', { bubbles: true, composed: true, detail: { id: rec.id, file: rec.file } }));
+        emit(this, 'is-upload-start', { id: rec.id, file: rec.file });
         const steps = 24;
         for (let i = 1; i <= steps; i++) {
           await new Promise((r) => setTimeout(r, 30 + Math.random() * 60));
           rec.progress = Math.round((i / steps) * 100);
           this.#patch(rec);
-          this.dispatchEvent(new CustomEvent('is-upload-progress', { bubbles: true, composed: true, detail: { id: rec.id, file: rec.file, progress: rec.progress } }));
+          emit(this, 'is-upload-progress', { id: rec.id, file: rec.file, progress: rec.progress });
         }
         rec.status = 'done';
         rec.progress = 100;
         this.#patch(rec);
-        this.dispatchEvent(new CustomEvent('is-upload-end', { bubbles: true, composed: true, detail: { id: rec.id, file: rec.file, ok: true } }));
+        emit(this, 'is-upload-end', { id: rec.id, file: rec.file, ok: true });
       }
     }
 
     #emitFiles() {
-      this.dispatchEvent(new CustomEvent('is-files-change', { bubbles: true, composed: true, detail: { files: this.#files } }));
+      emit(this, 'is-files-change', { files: this.#files });
     }
 
     #patch(rec) {
@@ -220,5 +222,5 @@ import '../media/icon.js';
     return `${(n / 1024 / 1024).toFixed(1)} MB`;
   }
 
-  if (!customElements.get('is-dropzone')) customElements.define('is-dropzone', IsDropzone);
+  defineElement('is-dropzone', IsDropzone);
 })();

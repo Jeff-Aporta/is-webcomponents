@@ -1,5 +1,10 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { INTENT } from '../_shared/intent.js';
+import { TONE } from '../_shared/tone.js';
 
 /**
  * <is-tag> — Web Component (vanilla).
@@ -32,14 +37,13 @@ import '../media/icon.js';
   `;
 
   const OBSERVED = ['color', 'variant', 'pill', 'with-remove', 'remove-label'];
-  const VALID_COLOR = ['brand', 'neutral', 'info', 'success', 'warning', 'danger'];
-  const VALID_VARIANT = ['accent', 'filled', 'outlined', 'filled-outlined'];
+  const VALID_COLOR = [...INTENT, 'info'];
+  const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
 
-  class IsTag extends HTMLElement {
+  class IsTag extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #remove;
-    #mounted = false;
 
     constructor() {
       super();
@@ -50,15 +54,13 @@ import '../media/icon.js';
       this.#remove.addEventListener('click', this.#onRemove);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
       this.#syncRemove();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
         this.setAttribute('color', 'neutral');
       }
@@ -78,14 +80,9 @@ import '../media/icon.js';
 
     #onRemove = (e) => {
       e.stopPropagation();
-      this.dispatchEvent(new CustomEvent('is-remove', { bubbles: true, composed: true }));
+      emit(this, 'is-remove');
     };
   }
 
-  if (!customElements.get('is-tag')) {
-    customElements.define('is-tag', IsTag);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsTag = IsTag;
-  }
+  defineElement('is-tag', IsTag, 'IsTag');
 })();

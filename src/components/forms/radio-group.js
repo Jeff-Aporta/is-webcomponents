@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './radio.js';
+
 import {
   attachFormInternals,
   clearValidity,
@@ -7,7 +8,10 @@ import {
   setFormValue,
   setValidity,
 } from '../_shared/form-associated.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 /**
  * <is-radio-group> — Grupo form-associated de <is-radio>. El grupo es el dueño
  * del valor: los radios solo avisan con `is-radio-select`.
@@ -52,7 +56,7 @@ import {
   const NEXT_KEYS = ['ArrowDown', 'ArrowRight'];
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
-  class IsRadioGroup extends HTMLElement {
+  class IsRadioGroup extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -64,7 +68,6 @@ import {
     #hintSlot;
     #errorEl;
     #errorSlot;
-    #mounted = false;
     #formDisabled = false;
     #defaultsRead = false;
     #defaultValue = null;
@@ -92,8 +95,7 @@ import {
       this.addEventListener('keydown', this.#onKey);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.#defaultsRead) {
         this.#defaultsRead = true;
         this.#defaultValue = this.getAttribute('value');
@@ -103,17 +105,16 @@ import {
       this.#sync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'label' || name === 'hint' || name === 'error-text') this.#syncMeta();
       if (name !== 'label' && name !== 'hint') this.#sync();
     }
 
     get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v == null || v === '' ? this.removeAttribute('value') : this.setAttribute('value', String(v)); }
+    set value(v) { setStringAttr(this, 'value', v); }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', v); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
@@ -135,10 +136,10 @@ import {
     }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null ? this.removeAttribute('label') : this.setAttribute('label', String(v)); }
+    set label(v) { setOptionalAttr(this, 'label', v); }
 
     get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { v == null ? this.removeAttribute('hint') : this.setAttribute('hint', String(v)); }
+    set hint(v) { setOptionalAttr(this, 'hint', v); }
 
     /** `row` solo decide cuando no hay orientation explícita. */
     get orientation() {
@@ -207,10 +208,6 @@ import {
           this[p] = v;
         }
       }
-    }
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
     }
 
     get #isDisabled() { return this.disabled || this.#formDisabled; }
@@ -295,7 +292,7 @@ import {
       const changed = this.value !== value;
       this.value = value;
       this.#sync();
-      if (changed) this.#emit('is-change', { value });
+      if (changed) emit(this, 'is-change', { value });
     }
 
     /** Mueve foco (y selección, salvo readonly) al radio habilitado vecino, con wrap. */
@@ -343,8 +340,5 @@ import {
     };
   }
 
-  if (!customElements.get('is-radio-group')) {
-    customElements.define('is-radio-group', IsRadioGroup);
-  }
-  if (typeof window !== 'undefined') window.IsRadioGroup = IsRadioGroup;
+  defineElement('is-radio-group', IsRadioGroup, 'IsRadioGroup');
 })();

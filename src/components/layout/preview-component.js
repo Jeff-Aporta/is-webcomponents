@@ -16,6 +16,7 @@ import { renderDefinition } from '../../previews/_kit/render.js';
 import './drawer.js';
 import '../actions/button.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */
 const COMPACT_QUERY = '(max-width: 900px)';
@@ -41,6 +42,8 @@ class IsPreviewComponent extends HTMLElement {
   #ctx = null;
   #styleEl = null;
   #mounted = false;
+  /** Invalida mounts en vuelo al cambiar de preview a mitad de un `await`. */
+  #paintGen = 0;
   #compactMql = null;
   #onCompactChange = () => this.#syncLayout();
 
@@ -60,6 +63,19 @@ class IsPreviewComponent extends HTMLElement {
     this.#mounted = true;
     this.#wireCompactChrome();
     if (this.#preview) this.#paint();
+  }
+
+  /**
+   * `storage-key` se leía sólo dentro de `#paint()`, así que declararlo en
+   * `observedAttributes` no servía de nada: cambiarlo en caliente no movía
+   * la clave de scroll hasta el siguiente cambio de componente. Propagarlo
+   * al `<is-main>` es todo lo que hace falta.
+   */
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (name !== 'storage-key' || oldVal === newVal || !this.#mounted) return;
+    const main = this.#main();
+    const def = this.#preview?.definition;
+    if (main && def) main.setAttribute('storage-key', newVal || def.storageKey || `docs-${def.tag}`);
   }
 
   disconnectedCallback() {
@@ -82,6 +98,13 @@ class IsPreviewComponent extends HTMLElement {
   set preview(value) {
     this.#teardown();
     this.#preview = value;
+    if (!value) {
+      this.#paintGen += 1;
+      this.#main()?.replaceChildren();
+      this.#aside()?.replaceChildren();
+      this.#syncLayout();
+      return;
+    }
     if (this.#mounted) this.#paint();
   }
 
@@ -128,6 +151,7 @@ class IsPreviewComponent extends HTMLElement {
   /**
    * Ancho: TOC al lado del contenido en el split. Compacto: TOC dentro del
    * drawer derecho y el split cede todo el ancho al contenido.
+   * `withoutToc` en la definición: sin índice ni panel derecho (home).
    */
   #syncLayout() {
     const panel = this.#panel();
@@ -135,6 +159,19 @@ class IsPreviewComponent extends HTMLElement {
     const drawer = this.#drawer();
     const toggle = this.#toggle();
     if (!panel || !aside || !drawer || !toggle) return;
+
+    const withoutToc = !!this.#preview?.definition?.withoutToc;
+    if (withoutToc) {
+      this.dataset.layout = 'full';
+      toggle.hidden = true;
+      drawer.hide?.();
+      if (aside.parentElement !== panel) {
+        aside.setAttribute('slot', 'end');
+        panel.append(aside);
+      }
+      panel.setAttribute('collapse', 'end');
+      return;
+    }
 
     const compact = !!this.#compactMql?.matches;
     this.dataset.layout = compact ? 'compact' : 'wide';
@@ -179,6 +216,8 @@ class IsPreviewComponent extends HTMLElement {
     const panel = this.#panel();
     if (!preview || !main || !aside || !panel) return;
 
+    const gen = ++this.#paintGen;
+
     // Cambiar de componente cierra el índice, igual que resetea el scroll.
     this.#drawer()?.hide?.();
 
@@ -198,6 +237,7 @@ class IsPreviewComponent extends HTMLElement {
     }
 
     renderDefinition(def, { main, aside });
+    this.#syncLayout();
 
     this.#ctx = {
       root: this,
@@ -212,6 +252,9 @@ class IsPreviewComponent extends HTMLElement {
       console.error(`[is-preview-component] mount ${def.tag}`, err);
     }
 
+    // Otro `preview =` arrancó mientras montábamos: no emitir ready viejo.
+    if (gen !== this.#paintGen || this.#preview !== preview) return;
+
     // Avisar a docs-chrome / demo-code por si ya estaban cargados
     this.dispatchEvent(
       new CustomEvent('is-preview-ready', {
@@ -223,9 +266,7 @@ class IsPreviewComponent extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-preview-component')) {
-  customElements.define('is-preview-component', IsPreviewComponent);
-}
+defineElement('is-preview-component', IsPreviewComponent);
 
 export { IsPreviewComponent };
 export default IsPreviewComponent;

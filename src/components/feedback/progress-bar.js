@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-progress-bar> — Web Component (vanilla).
@@ -25,12 +28,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['value', 'label', 'indeterminate'];
 
-  class IsProgressBar extends HTMLElement {
+  class IsProgressBar extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #track;
     #indicator;
-    #mounted = false;
 
     constructor() {
       super();
@@ -41,13 +43,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#indicator = shadow.querySelector('.indicator');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#render();
     }
 
@@ -61,7 +61,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null || v === '' ? this.removeAttribute('label') : this.setAttribute('label', v); }
+    set label(v) { setStringAttr(this, 'label', v); }
 
     get indeterminate() { return this.hasAttribute('indeterminate'); }
     set indeterminate(v) { this.toggleAttribute('indeterminate', !!v); }
@@ -91,10 +91,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-progress-bar')) {
-    customElements.define('is-progress-bar', IsProgressBar);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsProgressBar = IsProgressBar;
-  }
+  defineElement('is-progress-bar', IsProgressBar, 'IsProgressBar');
 })();

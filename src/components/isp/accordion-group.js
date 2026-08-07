@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../layout/details.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-accordion-group> — Coordinador de varios <is-details>.
@@ -32,10 +35,9 @@ import '../layout/details.js';
 
   const OBSERVED = ['multiple'];
 
-  class IsAccordionGroup extends HTMLElement {
+  class IsAccordionGroup extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #slot;
 
     constructor() {
@@ -46,8 +48,7 @@ import '../layout/details.js';
       this.#slot = shadow.querySelector('slot');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (Object.prototype.hasOwnProperty.call(this, 'multiple')) {
         const v = this.multiple;
         delete this.multiple;
@@ -60,14 +61,13 @@ import '../layout/details.js';
       this.#enforceSingle();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.removeEventListener('is-show', this.#onItemShow);
       this.removeEventListener('is-hide', this.#onItemHide);
       this.#slot.removeEventListener('slotchange', this.#onSlotChange);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'multiple' && !this.multiple) this.#enforceSingle();
     }
 
@@ -99,11 +99,7 @@ import '../layout/details.js';
     // ---- privados ---------------------------------------------------------
 
     #emitChange(opened, closed) {
-      this.dispatchEvent(new CustomEvent('is-accordion-change', {
-        detail: { open: this.openItems, opened: opened ?? null, closed: closed ?? null },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-accordion-change', { open: this.openItems, opened: opened ?? null, closed: closed ?? null });
     }
 
     /** Solo nos interesan los <is-details> que son hijos DIRECTOS del grupo. */
@@ -143,8 +139,5 @@ import '../layout/details.js';
     }
   }
 
-  if (!customElements.get('is-accordion-group')) {
-    customElements.define('is-accordion-group', IsAccordionGroup);
-  }
-  if (typeof window !== 'undefined') window.IsAccordionGroup = IsAccordionGroup;
+  defineElement('is-accordion-group', IsAccordionGroup, 'IsAccordionGroup');
 })();

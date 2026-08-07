@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from '../_shared/date-utils.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-digital-clock> — Selector de hora en lista (MUI DigitalClock) o en
@@ -22,11 +25,10 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
     'min-time', 'max-time', 'skip-disabled', 'locale', 'disabled', 'readonly',
   ];
 
-  class IsDigitalClock extends HTMLElement {
+  class IsDigitalClock extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #base;
-    #mounted = false;
 
     constructor() {
       super();
@@ -38,14 +40,12 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#render();
       this.scrollToSelection();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#render();
       if (name === 'value') this.scrollToSelection();
     }
@@ -102,10 +102,6 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
-
     #allowed(time) {
       const withSeconds = this.seconds;
       const v = toTime(time, withSeconds);
@@ -125,7 +121,7 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
       const next = toTime(time, this.seconds);
       if (next === this.value) return;
       this.setAttribute('value', next);
-      this.#emit('is-change', { value: next });
+      emit(this, 'is-change', { value: next });
     }
 
     #option(label, { section, raw, selected, disabled }) {
@@ -291,8 +287,5 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
     };
   }
 
-  if (!customElements.get('is-digital-clock')) {
-    customElements.define('is-digital-clock', IsDigitalClock);
-  }
-  if (typeof window !== 'undefined') window.IsDigitalClock = IsDigitalClock;
+  defineElement('is-digital-clock', IsDigitalClock, 'IsDigitalClock');
 })();

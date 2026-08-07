@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-popconfirm> — Web Component (vanilla, zero dependencies).
@@ -49,10 +52,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
     'top-start', 'top-end', 'bottom-start', 'bottom-end',
   ];
 
-  class IsPopconfirm extends HTMLElement {
+  class IsPopconfirm extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #pop;
     #trigger;
     #onTriggerClick;
@@ -67,8 +69,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#pop = shadow.querySelector('.popconfirm');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.popup = document.createElement('div');
       this.popup.style.position = 'fixed';
       this.popup.style.top = '0';
@@ -96,7 +97,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#syncMessage();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#unbindTrigger();
       document.removeEventListener('click', this.#onDocClick);
       document.removeEventListener('keydown', this.#onKeydown);
@@ -104,8 +105,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       window.removeEventListener('scroll', this.#reposition, true);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'for') {
         this.#unbindTrigger();
         this.#bindTrigger();
@@ -133,21 +133,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const trigger = this.#trigger;
       this.setAttribute('open', '');
       this.#show();
-      this.dispatchEvent(new CustomEvent('is-popconfirm-show', {
-        detail: { trigger },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-popconfirm-show', { trigger });
     }
 
     hide() {
       this.removeAttribute('open');
       this.popup.style.display = 'none';
-      this.dispatchEvent(new CustomEvent('is-popconfirm-hide', {
-        detail: { trigger: this.#trigger },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-popconfirm-hide', { trigger: this.#trigger });
     }
 
     #show() {
@@ -235,19 +227,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #bindActions() {
       this.#pop.addEventListener('click', (e) => {
         if (e.target.closest('[data-popconfirm-confirm]')) {
-          this.dispatchEvent(new CustomEvent('is-popconfirm-confirm', {
-            detail: { trigger: this.#trigger },
-            bubbles: true,
-            composed: true,
-          }));
+          emit(this, 'is-popconfirm-confirm', { trigger: this.#trigger });
           this.hide();
         }
         if (e.target.closest('[data-popconfirm-cancel]')) {
-          this.dispatchEvent(new CustomEvent('is-popconfirm-cancel', {
-            detail: { trigger: this.#trigger },
-            bubbles: true,
-            composed: true,
-          }));
+          emit(this, 'is-popconfirm-cancel', { trigger: this.#trigger });
           this.hide();
         }
       });
@@ -264,6 +248,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-popconfirm')) customElements.define('is-popconfirm', IsPopconfirm);
-  if (typeof window !== 'undefined') window.IsPopconfirm = IsPopconfirm;
+  defineElement('is-popconfirm', IsPopconfirm, 'IsPopconfirm');
 })();

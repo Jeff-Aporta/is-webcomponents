@@ -1,5 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-avatar> — Web Component (vanilla).
@@ -39,13 +43,12 @@ import './icon.js';
   const VALID_SHAPE = ['circle', 'square', 'rounded'];
   const VALID_LOADING = ['eager', 'lazy'];
 
-  class IsAvatar extends HTMLElement {
+  class IsAvatar extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #img;
     #initials;
     #icon;
-    #mounted = false;
     #imgFailed = false;
 
     constructor() {
@@ -60,28 +63,26 @@ import './icon.js';
       shadow.querySelector('slot[name="icon"]').addEventListener('slotchange', () => this.#syncView());
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('shape')) this.setAttribute('shape', 'circle');
       if (!this.hasAttribute('loading')) this.setAttribute('loading', 'eager');
       this.#imgFailed = false;
       this.#syncView();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'image') this.#imgFailed = false;
       this.#syncView();
     }
 
     get image() { return this.getAttribute('image') ?? ''; }
-    set image(v) { v == null || v === '' ? this.removeAttribute('image') : this.setAttribute('image', v); }
+    set image(v) { setStringAttr(this, 'image', v); }
 
     get initials() { return this.getAttribute('initials') ?? ''; }
-    set initials(v) { v == null || v === '' ? this.removeAttribute('initials') : this.setAttribute('initials', v); }
+    set initials(v) { setStringAttr(this, 'initials', v); }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null || v === '' ? this.removeAttribute('label') : this.setAttribute('label', v); }
+    set label(v) { setStringAttr(this, 'label', v); }
 
     get loading() {
       const v = this.getAttribute('loading');
@@ -104,7 +105,7 @@ import './icon.js';
     #onImgError = () => {
       if (!this.#img.getAttribute('src')) return;
       this.#imgFailed = true;
-      this.dispatchEvent(new CustomEvent('is-error', { bubbles: true, composed: true }));
+      emit(this, 'is-error');
       this.#syncView();
     };
 
@@ -143,10 +144,5 @@ import './icon.js';
     }
   }
 
-  if (!customElements.get('is-avatar')) {
-    customElements.define('is-avatar', IsAvatar);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsAvatar = IsAvatar;
-  }
+  defineElement('is-avatar', IsAvatar, 'IsAvatar');
 })();

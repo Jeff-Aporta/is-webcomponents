@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { INTENT } from '../_shared/intent.js';
+import { TONE } from '../_shared/tone.js';
 
 /**
  * <is-badge> — Web Component (vanilla).
@@ -25,8 +28,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
   `;
 
   const OBSERVED = ['color', 'variant', 'pill', 'attention'];
-  const VALID_COLOR = ['brand', 'neutral', 'success', 'warning', 'danger'];
-  const VALID_VARIANT = ['accent', 'filled', 'outlined', 'filled-outlined'];
+  const VALID_COLOR = INTENT;
+  const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
   const VALID_ATTENTION = ['none', 'pulse', 'bounce'];
 
   class IsBadge extends HTMLElement {
@@ -59,10 +62,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-badge')) {
-    customElements.define('is-badge', IsBadge);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsBadge = IsBadge;
-  }
+  defineElement('is-badge', IsBadge, 'IsBadge');
 })();

@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-image-editor> — Editor de imagen con crop, zoom y rotación.
@@ -126,7 +128,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const ctx = cv.getContext('2d');
       ctx.drawImage(this.#img, Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height), 0, 0, cv.width, cv.height);
       const url = cv.toDataURL('image/png');
-      this.dispatchEvent(new CustomEvent('is-crop', { bubbles: true, composed: true, detail: { dataURL: url, crop: { ...r } } }));
+      emit(this, 'is-crop', { dataURL: url, crop: { ...r } });
       return url;
     }
 
@@ -141,7 +143,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         const w = img.width * 0.8;
         const h = img.height * 0.8;
         this.#cropRect = { x: cxp - w / 2, y: cyp - h / 2, width: w, height: h };
-        this.dispatchEvent(new CustomEvent('is-load', { bubbles: true, composed: true, detail: { image: img } }));
+        emit(this, 'is-load', { image: img });
         this.#draw();
       };
       img.onerror = () => { this.#status.textContent = 'No se pudo cargar la imagen'; };
@@ -306,7 +308,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
       this.#cropRect = { x, y, width, height };
       this.#draw();
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { crop: { ...this.#cropRect } } }));
+      emit(this, 'is-change', { crop: { ...this.#cropRect } });
     }
 
     #endDrag() {
@@ -326,5 +328,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     return a / b;
   }
 
-  if (!customElements.get('is-image-editor')) customElements.define('is-image-editor', IsImageEditor);
+  defineElement('is-image-editor', IsImageEditor);
 })();

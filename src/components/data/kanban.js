@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-kanban> + <is-kanban-column> + <is-kanban-card> — Tablero (vanilla, zero dependencies).
@@ -112,11 +115,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
       }
     }
   }
-  if (!customElements.get('is-kanban')) customElements.define('is-kanban', IsKanban);
+  defineElement('is-kanban', IsKanban);
 
-  class IsKanbanColumn extends HTMLElement {
+  class IsKanbanColumn extends ElementBase {
     static get observedAttributes() { return COLUMN_OBSERVED; }
-    #mounted = false;
     #root;
     #title;
     #badge;
@@ -131,15 +133,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#badge = shadow.querySelector('.badge');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.setAttribute('role', 'listitem');
       this.#sync();
       this.#bindDrop();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
     }
 
@@ -169,11 +169,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         else this.appendChild(dragCard);
         this.#sync();
         if (from && from !== this && typeof from.refreshBadge === 'function') from.refreshBadge();
-        dragCard.dispatchEvent(new CustomEvent('is-kanban-move', {
-          detail: { card: dragCard, from, to: this },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(dragCard, 'is-kanban-move', { card: dragCard, from, to: this });
       });
     }
 
@@ -199,11 +195,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#badge.textContent = badge || String(cards.length);
     }
   }
-  if (!customElements.get('is-kanban-column')) customElements.define('is-kanban-column', IsKanbanColumn);
+  defineElement('is-kanban-column', IsKanbanColumn);
 
-  class IsKanbanCard extends HTMLElement {
+  class IsKanbanCard extends ElementBase {
     static get observedAttributes() { return CARD_OBSERVED; }
-    #mounted = false;
     #root;
     #cover;
     #heading;
@@ -224,8 +219,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#footer = shadow.querySelector('.footer');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.setAttribute('role', 'article');
       this.#sync();
       // Transferible entre stacks vía HTML5 drag & drop.
@@ -242,16 +236,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       });
       this.#root.addEventListener('click', (e) => {
         const column = this.parentElement;
-        this.dispatchEvent(new CustomEvent('is-kanban-card-click', {
-          detail: { card: this, column },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'is-kanban-card-click', { card: this, column });
       });
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
     }
 
@@ -281,5 +270,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#footer.hidden = !footerSlot.assignedNodes().length;
     }
   }
-  if (!customElements.get('is-kanban-card')) customElements.define('is-kanban-card', IsKanbanCard);
+  defineElement('is-kanban-card', IsKanbanCard);
 })();

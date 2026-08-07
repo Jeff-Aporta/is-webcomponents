@@ -1,6 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { attachFormInternals, setCustomState, setFormValue } from '../_shared/form-associated.js';
 import { apply, isComplete } from './masks-tokens.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-masked-input> — Input con formato aplicado (tarjeta de crédito, fecha,
@@ -88,7 +91,7 @@ import { apply, isComplete } from './masks-tokens.js';
 
     get pattern() { return this.getAttribute('pattern') || ''; }
     set pattern(v) {
-      v == null || v === '' ? this.removeAttribute('pattern') : this.setAttribute('pattern', v);
+      setStringAttr(this, 'pattern', v);
     }
 
     get value() { return this.#input.value; }
@@ -100,7 +103,7 @@ import { apply, isComplete } from './masks-tokens.js';
       this.#suppress = false;
       this.#syncComplete();
       if (this.#mounted) {
-        this.dispatchEvent(new CustomEvent('is-input', { bubbles: true, composed: true }));
+        emit(this, 'is-input');
         setFormValue(this.#internals, next);
       }
     }
@@ -130,7 +133,7 @@ import { apply, isComplete } from './masks-tokens.js';
       const newCaret = Math.min(next.length, caret + (next.length - before.length));
       try { this.#input.setSelectionRange(newCaret, newCaret); } catch { /* noop */ }
       this.#syncComplete();
-      this.dispatchEvent(new CustomEvent('is-input', { bubbles: true, composed: true }));
+      emit(this, 'is-input');
       setFormValue(this.#internals, next);
     }
 
@@ -163,7 +166,7 @@ import { apply, isComplete } from './masks-tokens.js';
     #syncComplete() {
       const complete = this.complete;
       setCustomState(this.#internals, 'complete', complete);
-      if (complete) this.dispatchEvent(new CustomEvent('is-complete', { bubbles: true, composed: true }));
+      if (complete) emit(this, 'is-complete');
     }
 
     #syncValidity() {
@@ -175,5 +178,5 @@ import { apply, isComplete } from './masks-tokens.js';
     }
   }
 
-  if (!customElements.get('is-masked-input')) customElements.define('is-masked-input', IsMaskedInput);
+  defineElement('is-masked-input', IsMaskedInput);
 })();

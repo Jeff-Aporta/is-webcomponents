@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './toast-item.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { INTENT } from '../_shared/intent.js';
 
 /**
  * <is-toast> — Web Component (vanilla).
@@ -43,7 +46,7 @@ import './toast-item.js';
     'top-start', 'top-center', 'top-end',
     'bottom-start', 'bottom-center', 'bottom-end'
   ];
-  const VALID_COLOR = ['brand', 'success', 'warning', 'danger', 'neutral'];
+  const VALID_COLOR = INTENT;
   const DEFAULT_ICONS = {
     brand: 'mdi:information',
     success: 'mdi:check-circle',
@@ -52,10 +55,9 @@ import './toast-item.js';
     neutral: 'mdi:information-outline'
   };
 
-  class IsToast extends HTMLElement {
+  class IsToast extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
 
     constructor() {
       super();
@@ -65,13 +67,11 @@ import './toast-item.js';
       this.addEventListener('is-after-hide', this.#onItemHide);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'bottom-end');
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal)) {
         this.setAttribute('placement', 'bottom-end');
       }
@@ -239,10 +239,5 @@ import './toast-item.js';
     };
   }
 
-  if (!customElements.get('is-toast')) {
-    customElements.define('is-toast', IsToast);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsToast = IsToast;
-  }
+  defineElement('is-toast', IsToast, 'IsToast');
 })();

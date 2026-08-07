@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-rte> — Editor de texto enriquecido basado en contentEditable.
@@ -80,9 +83,8 @@ export function registerRteCommand(name, def) {
     html: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
   };
 
-  class IsRte extends HTMLElement {
+  class IsRte extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
 
     constructor() {
       super();
@@ -102,12 +104,11 @@ export function registerRteCommand(name, def) {
       this.#placeholder = this.shadowRoot.querySelector('.placeholder');
 
       this.#content.addEventListener('input', () => this.#onInput());
-      this.#content.addEventListener('blur', () => this.dispatchEvent(new CustomEvent('is-blur', { bubbles: true, composed: true })));
+      this.#content.addEventListener('blur', () => emit(this, 'is-blur'));
       this.#source.addEventListener('input', () => this.#onSourceInput());
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#buildToolbar();
       this.#sync();
       this.#syncReadonly();
@@ -115,8 +116,7 @@ export function registerRteCommand(name, def) {
       if (this.hasAttribute('autofocus')) this.focus();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'toolbar') this.#buildToolbar();
       if (name === 'value') this.#sync();
       if (name === 'readonly') this.#syncReadonly();
@@ -243,7 +243,7 @@ export function registerRteCommand(name, def) {
       this.#source.hidden = !on;
       this.#syncPlaceholder();
       this.#syncToolbarState();
-      this.dispatchEvent(new CustomEvent('is-source-change', { bubbles: true, composed: true, detail: { source: on } }));
+      emit(this, 'is-source-change', { source: on });
       if (!on) this.#emitChange(this.#content.innerHTML);
     }
 
@@ -266,8 +266,8 @@ export function registerRteCommand(name, def) {
     }
 
     #emitChange(html) {
-      this.dispatchEvent(new CustomEvent('is-input', { bubbles: true, composed: true }));
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { value: html, text: this.text } }));
+      emit(this, 'is-input');
+      emit(this, 'is-change', { value: html, text: this.text });
     }
 
     #syncPlaceholder() {
@@ -280,5 +280,5 @@ export function registerRteCommand(name, def) {
     #placeholder;
   }
 
-  if (!customElements.get('is-rte')) customElements.define('is-rte', IsRte);
+  defineElement('is-rte', IsRte);
 })();

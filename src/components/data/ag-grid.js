@@ -86,7 +86,6 @@
 import { ElementBase } from '../_shared/element-base.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { adoptCss } from '../_shared/adopt-css.js';
-import { upgradeProperties } from '../_shared/upgrade-properties.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 import '../media/icon.js';
 import './datagrid-core/index.js';
@@ -120,7 +119,8 @@ import {
   createServerSideDatasource,
   createFakeLista,
 } from './datagrid-core/index.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
   <style>
@@ -132,23 +132,23 @@ TEMPLATE.innerHTML = /* html */ `
       <span class="mim-dg__toolbar-spacer"></span>
       <label class="mim-dg__quick">
         <is-icon icon="mdi:magnify"></is-icon>
-        <input class="mim-dg__quick-input" type="search" placeholder="Buscar…" aria-label="Búsqueda rápida" />
+        <is-input class="mim-dg__quick-input" type="search" placeholder="Buscar…" aria-label="Búsqueda rápida"></is-input>
       </label>
       <div class="mim-dg__density" role="group" aria-label="Densidad">
-        <button class="mim-dg__density-btn" data-density="compact" type="button" title="Compacta" aria-label="Compacta">
+        <is-button variant="plain" pill class="mim-dg__density-btn" data-density="compact" title="Compacta" aria-label="Compacta">
           <is-icon icon="mdi:view-headline"></is-icon>
-        </button>
-        <button class="mim-dg__density-btn is-active" data-density="normal" type="button" title="Normal" aria-label="Normal">
+        </is-button>
+        <is-button variant="plain" pill class="mim-dg__density-btn is-active" data-density="normal" title="Normal" aria-label="Normal">
           <is-icon icon="mdi:view-sequential"></is-icon>
-        </button>
-        <button class="mim-dg__density-btn" data-density="comfortable" type="button" title="Cómoda" aria-label="Cómoda">
+        </is-button>
+        <is-button variant="plain" pill class="mim-dg__density-btn" data-density="comfortable" title="Cómoda" aria-label="Cómoda">
           <is-icon icon="mdi:view-stream"></is-icon>
-        </button>
+        </is-button>
       </div>
-      <button class="mim-dg__tool-btn mim-dg__export-btn" type="button" title="Exportar CSV">
+      <is-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
         <is-icon icon="mdi:file-delimited-outline"></is-icon>
         <span class="mim-dg__tool-btn-label">CSV</span>
-      </button>
+      </is-button>
     </header>
 
     <div class="mim-dg__group-panel" part="group-panel">
@@ -156,12 +156,12 @@ TEMPLATE.innerHTML = /* html */ `
       <span class="mim-dg__group-chips"></span>
       <span class="mim-dg__group-hint">arrastra una columna aquí</span>
       <div class="mim-dg__group-panel-actions">
-        <button class="mim-dg__group-panel-btn" data-action="expand-all" type="button" title="Expandir todos" aria-label="Expandir todos">
+        <is-button variant="plain" pill class="mim-dg__group-panel-btn" data-action="expand-all" title="Expandir todos" aria-label="Expandir todos">
           <is-icon icon="mdi:unfold-more-horizontal"></is-icon>
-        </button>
-        <button class="mim-dg__group-panel-btn" data-action="collapse-all" type="button" title="Plegar todos" aria-label="Plegar todos">
+        </is-button>
+        <is-button variant="plain" pill class="mim-dg__group-panel-btn" data-action="collapse-all" title="Plegar todos" aria-label="Plegar todos">
           <is-icon icon="mdi:unfold-less-horizontal"></is-icon>
-        </button>
+        </is-button>
       </div>
     </div>
 
@@ -175,12 +175,12 @@ TEMPLATE.innerHTML = /* html */ `
       <aside class="mim-dg__sidebar" part="sidebar" hidden>
         <div class="mim-dg__panel" part="tool-panel" hidden></div>
         <div class="mim-dg__sidebar-tabs" role="tablist" aria-orientation="vertical">
-          <button class="mim-dg__sidebar-tab" type="button" role="tab" data-panel="columns" aria-selected="false" title="Columnas">
+          <is-button variant="plain" pill class="mim-dg__sidebar-tab" role="tab" data-panel="columns" aria-selected="false" title="Columnas">
             <is-icon icon="mdi:view-column-outline"></is-icon><span>Columnas</span>
-          </button>
-          <button class="mim-dg__sidebar-tab" type="button" role="tab" data-panel="filters" aria-selected="false" title="Filtro">
+          </is-button>
+          <is-button variant="plain" pill class="mim-dg__sidebar-tab" role="tab" data-panel="filters" aria-selected="false" title="Filtro">
             <is-icon icon="mdi:filter-outline"></is-icon><span>Filtro</span>
-          </button>
+          </is-button>
         </div>
       </aside>
     </div>
@@ -190,17 +190,20 @@ TEMPLATE.innerHTML = /* html */ `
       <span class="mim-dg__footer-spacer"></span>
       <label class="mim-dg__page-size">
         Filas:
-        <select class="mim-dg__page-size-select" aria-label="Filas por página">
-          <option>25</option><option>50</option><option>100</option><option>200</option>
-        </select>
+        <is-select class="mim-dg__page-size-select" aria-label="Filas por página">
+          <is-select-option value="25">25</is-select-option>
+          <is-select-option value="50">50</is-select-option>
+          <is-select-option value="100">100</is-select-option>
+          <is-select-option value="200">200</is-select-option>
+        </is-select>
       </label>
-      <button class="mim-dg__pager-btn" data-action="page-prev" type="button" aria-label="Anterior">
+      <is-button variant="plain" pill class="mim-dg__pager-btn" data-action="page-prev" aria-label="Anterior">
         <is-icon icon="mdi:chevron-left"></is-icon>
-      </button>
+      </is-button>
       <span class="mim-dg__pager-info"></span>
-      <button class="mim-dg__pager-btn" data-action="page-next" type="button" aria-label="Siguiente">
+      <is-button variant="plain" pill class="mim-dg__pager-btn" data-action="page-next" aria-label="Siguiente">
         <is-icon icon="mdi:chevron-right"></is-icon>
-      </button>
+      </is-button>
     </footer>
   </div>
 `;
@@ -274,7 +277,6 @@ export class IsAgGrid extends ElementBase {
   #rememberState = false;
   #storageKey = '';
   #density = Density.NORMAL;
-  #mounted = false;
   #isPaginated = false;
   #page = 0;
   #currentFilter = null; // { colId, op, value } (legacy)
@@ -326,9 +328,7 @@ export class IsAgGrid extends ElementBase {
     const qf = this.shadowRoot.querySelector('.mim-dg__quick-input');
     qf.addEventListener('input', () => {
       this.#api.setQuickFilter(qf.value);
-      this.dispatchEvent(new CustomEvent('is-quick-filter', {
-        bubbles: true, composed: true, detail: { value: qf.value },
-      }));
+      emit(this, 'is-quick-filter', { value: qf.value });
     });
 
     // Density
@@ -420,9 +420,7 @@ export class IsAgGrid extends ElementBase {
       const onUp = () => {
         window.removeEventListener('pointermove', onMove);
         window.removeEventListener('pointerup', onUp);
-        this.dispatchEvent(new CustomEvent('is-column-resize', {
-          bubbles: true, composed: true, detail: { colId, width: this.#api.getColumns().find((c) => c.colId === colId).width },
-        }));
+        emit(this, 'is-column-resize', { colId, width: this.#api.getColumns().find((c) => c.colId === colId).width });
       };
       window.addEventListener('pointermove', onMove);
       window.addEventListener('pointerup', onUp);
@@ -454,15 +452,11 @@ export class IsAgGrid extends ElementBase {
       const cols = this.#api.getColumns();
       const toIndex = cols.findIndex((c) => c.colId === targetColId);
       if (toIndex >= 0) this.#api.reorderColumn(sourceColId, toIndex);
-      this.dispatchEvent(new CustomEvent('is-column-reorder', {
-        bubbles: true, composed: true, detail: { colId: sourceColId, toIndex },
-      }));
+      emit(this, 'is-column-reorder', { colId: sourceColId, toIndex });
     });
   }
 
   async onConnected() {
-    this.#mounted = true;
-    upgradeProperties(this, IsAgGrid.observedAttributes);
     await this.#readData();
     this.#syncPageSize();
     this.#syncAttrs();
@@ -486,7 +480,6 @@ export class IsAgGrid extends ElementBase {
   }
 
   async onAttributeChanged(name, _oldVal, newVal) {
-    if (!this.#mounted) return;
     if (name === 'rows' || name === 'columns' || name === 'get-row-id') {
       await this.#readData();
       this.#initModel();
@@ -1042,16 +1035,12 @@ export class IsAgGrid extends ElementBase {
       const filter = this.#buildFilterFromPopover(col, pop);
       if (filter) this.#api.setFilter(col.colId, filter);
       else this.#api.setFilter(col.colId, null);
-      this.dispatchEvent(new CustomEvent('is-filter-change', {
-        bubbles: true, composed: true, detail: { column: col.colId, op: filter?.op, value: filter?.value },
-      }));
+      emit(this, 'is-filter-change', { column: col.colId, op: filter?.op, value: filter?.value });
       this.#closeFilterPopover();
     };
     const clear = () => {
       this.#api.setFilter(col.colId, null);
-      this.dispatchEvent(new CustomEvent('is-filter-change', {
-        bubbles: true, composed: true, detail: { column: col.colId, op: null, value: null },
-      }));
+      emit(this, 'is-filter-change', { column: col.colId, op: null, value: null });
       this.#closeFilterPopover();
     };
     if (applyBtn) applyBtn.addEventListener('click', apply);
@@ -1183,38 +1172,28 @@ export class IsAgGrid extends ElementBase {
   #setSort(colId, dir) {
     const others = this.#api.getState().sortModel.filter((s) => s.colId !== colId);
     this.#api.setSortModel(dir ? [...others, { colId, dir }] : others);
-    this.dispatchEvent(new CustomEvent('is-sort-change', {
-      bubbles: true, composed: true, detail: { column: colId, direction: dir },
-    }));
+    emit(this, 'is-sort-change', { column: colId, direction: dir });
   }
 
   #clearSort(colId) {
     const others = this.#api.getState().sortModel.filter((s) => s.colId !== colId);
     this.#api.setSortModel(others);
-    this.dispatchEvent(new CustomEvent('is-sort-change', {
-      bubbles: true, composed: true, detail: { column: colId, direction: null },
-    }));
+    emit(this, 'is-sort-change', { column: colId, direction: null });
   }
 
   #pinColumn(colId, side) {
     this.#api.pinColumn(colId, side);
-    this.dispatchEvent(new CustomEvent('is-column-pin', {
-      bubbles: true, composed: true, detail: { colId, side },
-    }));
+    emit(this, 'is-column-pin', { colId, side });
   }
 
   #hideColumn(colId) {
     this.#api.hideColumn(colId, true);
-    this.dispatchEvent(new CustomEvent('is-column-hide', {
-      bubbles: true, composed: true, detail: { colId },
-    }));
+    emit(this, 'is-column-hide', { colId });
   }
 
   #goToPage(p) {
     this.#api.setPage(p);
-    this.dispatchEvent(new CustomEvent('is-page-change', {
-      bubbles: true, composed: true, detail: { page: this.#api.getState().page + 1, pageSize: this.#api.getState().pageSize },
-    }));
+    emit(this, 'is-page-change', { page: this.#api.getState().page + 1, pageSize: this.#api.getState().pageSize });
   }
 
   /* ── Event handlers ───────────────────────────────────────────────────── */
@@ -1241,9 +1220,7 @@ export class IsAgGrid extends ElementBase {
       const all = headerCheckboxStateCore(s.selection, s.pageRows);
       const next = all === HeaderCheckboxState.ALL ? clearSelectionCore() : selectAllCore(s.pageRows);
       this.#api.setSelection(next);
-      this.dispatchEvent(new CustomEvent('is-row-select', {
-        bubbles: true, composed: true, detail: { rows: this.api.getSelectedRows() },
-      }));
+      emit(this, 'is-row-select', { rows: this.api.getSelectedRows() });
       return;
     }
 
@@ -1256,9 +1233,7 @@ export class IsAgGrid extends ElementBase {
         const additive = (e.ctrlKey || e.metaKey || e.shiftKey) && this.#currentSelectionMode === SelectionMode.MULTIPLE;
         this.#api.toggleSort(colId, additive);
         const dir = this.#api.getState().sortModel.find((s) => s.colId === colId)?.dir || null;
-        this.dispatchEvent(new CustomEvent('is-sort-change', {
-          bubbles: true, composed: true, detail: { column: colId, direction: dir },
-        }));
+        emit(this, 'is-sort-change', { column: colId, direction: dir });
       }
       return;
     }
@@ -1284,9 +1259,7 @@ export class IsAgGrid extends ElementBase {
         const colId = this.#api.getColumns().find((c) => c.def.actions?.some((a) => a.value === actionBtn.dataset.action))?.colId;
         const col = this.#api.getColumns().find((c) => c.colId === colId);
         const act = col?.def.actions?.find((a) => a.value === actionBtn.dataset.action);
-        this.dispatchEvent(new CustomEvent('is-action', {
-          bubbles: true, composed: true, detail: { row: node.data, column: col, action: act?.value },
-        }));
+        emit(this, 'is-action', { row: node.data, column: col, action: act?.value });
         return;
       }
 
@@ -1306,9 +1279,7 @@ export class IsAgGrid extends ElementBase {
         );
         if (!e.shiftKey) this.#lastRangeFrom = node.id;
         this.#api.setSelection(next);
-        this.dispatchEvent(new CustomEvent('is-row-select', {
-          bubbles: true, composed: true, detail: { rows: this.api.getSelectedRows() },
-        }));
+        emit(this, 'is-row-select', { rows: this.api.getSelectedRows() });
       }
 
       // Cell click
@@ -1323,15 +1294,11 @@ export class IsAgGrid extends ElementBase {
           if (newValue != null && String(newValue) !== String(oldValue ?? '')) {
             const parsed = parseMaybeNumber(newValue, col);
             node.data[colId] = parsed;
-            this.dispatchEvent(new CustomEvent('is-cell-edit', {
-              bubbles: true, composed: true, detail: { row: node.data, column: col, oldValue, newValue: parsed },
-            }));
+            emit(this, 'is-cell-edit', { row: node.data, column: col, oldValue, newValue: parsed });
             this.#api.setRows([...this.#rawRows]); // notifica al store
           }
         }
-        this.dispatchEvent(new CustomEvent('is-cell-click', {
-          bubbles: true, composed: true, detail: { row: node.data, column: col, value },
-        }));
+        emit(this, 'is-cell-click', { row: node.data, column: col, value });
       }
     }
   }
@@ -1368,22 +1335,16 @@ export class IsAgGrid extends ElementBase {
         const orderedIds = leafRows.map((n) => n.id);
         const next = toggleRowSelectionCore(state.selection, dr.node.id, this.#currentSelectionMode, { additive: true, orderedIds });
         this.#api.setSelection(next);
-        this.dispatchEvent(new CustomEvent('is-row-select', {
-          bubbles: true, composed: true, detail: { rows: this.api.getSelectedRows() },
-        }));
+        emit(this, 'is-row-select', { rows: this.api.getSelectedRows() });
       }
       e.preventDefault();
     } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a' && this.#currentSelectionMode === SelectionMode.MULTIPLE) {
       this.#api.setSelection(selectAllCore(leafRows));
-      this.dispatchEvent(new CustomEvent('is-row-select', {
-        bubbles: true, composed: true, detail: { rows: this.api.getSelectedRows() },
-      }));
+      emit(this, 'is-row-select', { rows: this.api.getSelectedRows() });
       e.preventDefault();
     } else if (e.key === 'Escape' && state.selection.size) {
       this.#api.setSelection(clearSelectionCore());
-      this.dispatchEvent(new CustomEvent('is-row-select', {
-        bubbles: true, composed: true, detail: { rows: [] },
-      }));
+      emit(this, 'is-row-select', { rows: [] });
     }
   }
 
@@ -1512,9 +1473,7 @@ export class IsAgGrid extends ElementBase {
       serializeState: () => self.#api.serializeState(),
       loadState: (json) => {
         self.#api.loadState(json);
-        self.dispatchEvent(new CustomEvent('is-state-loaded', {
-          bubbles: true, composed: true, detail: self.#api.getState(),
-        }));
+        emit(self, 'is-state-loaded', self.#api.getState());
       },
       refresh: () => self.#api.setRows([...self.#rawRows]),
     };
@@ -1755,7 +1714,4 @@ function ensureFloatingStyles() {
   document.head.appendChild(style);
 }
 
-if (!customElements.get('is-ag-grid')) {
-  customElements.define('is-ag-grid', IsAgGrid);
-}
-if (typeof window !== 'undefined') window.IsAgGrid = IsAgGrid;
+defineElement('is-ag-grid', IsAgGrid, 'IsAgGrid');

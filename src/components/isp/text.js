@@ -1,5 +1,6 @@
 import { ElementBase } from '../_shared/element-base.js';
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
 
 /**
  * <is-text> — port de ISP `typography/Text.svelte`.
@@ -57,6 +58,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-text')) customElements.define('is-text', IsText);
-  if (typeof window !== 'undefined') window.IsText = IsText;
+  defineElement('is-text', IsText, 'IsText');
 })();

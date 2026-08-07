@@ -3,7 +3,12 @@ import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '../_shared/form-associated.js';
 import '../media/icon.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import { hasSlotted } from '../_shared/dom-utils.js';
+import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 /**
  * <is-rating> — Valoración form-associated (vanilla + Shadow DOM).
  *
@@ -75,23 +80,11 @@ import '../media/icon.js';
   const ICON_FULL = 'mdi:star';
   const ICON_EMPTY = 'mdi:star-outline';
 
-  function hasSlotted(slot) {
-    return slot.assignedNodes({ flatten: true }).some(
-      (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
-    );
-  }
 
-  function clampTo(n, min, max) {
-    return Math.min(max, Math.max(min, n));
-  }
 
   /** Quita el ruido float que dejan las sumas de precisiones decimales. */
-  function tidy(n, unit) {
-    const decimals = (String(unit).split('.')[1] || '').length;
-    return decimals ? Number(n.toFixed(Math.min(20, decimals))) : n;
-  }
 
-  class IsRating extends HTMLElement {
+  class IsRating extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -107,7 +100,6 @@ import '../media/icon.js';
     #hover = null;
     #labels = null;
     #getLabelText = null;
-    #mounted = false;
 
     constructor() {
       super();
@@ -129,8 +121,7 @@ import '../media/icon.js';
       this.#labelSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProps();
       this.#value = this.#coerce(Number(this.getAttribute('value') ?? 0));
       this.#syncSlots();
@@ -139,8 +130,7 @@ import '../media/icon.js';
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'value') {
         this.#value = this.#coerce(Number(newVal ?? 0));
         this.#render();
@@ -187,14 +177,14 @@ import '../media/icon.js';
     set allowHalf(v) { this.toggleAttribute('allow-half', !!v); }
 
     get icon() { return this.getAttribute('icon') || ICON_FULL; }
-    set icon(v) { v == null || v === '' ? this.removeAttribute('icon') : this.setAttribute('icon', String(v)); }
+    set icon(v) { setStringAttr(this, 'icon', v); }
 
     /** Sin `empty-icon`, un `icon` propio se reutiliza para el hueco (como MUI). */
     get emptyIcon() {
       return this.getAttribute('empty-icon') || (this.hasAttribute('icon') ? this.icon : ICON_EMPTY);
     }
     set emptyIcon(v) {
-      v == null || v === '' ? this.removeAttribute('empty-icon') : this.setAttribute('empty-icon', String(v));
+      setStringAttr(this, 'empty-icon', v);
     }
 
     get highlightSelectedOnly() { return this.hasAttribute('highlight-selected-only'); }
@@ -215,7 +205,7 @@ import '../media/icon.js';
 
     get labelFormat() { return this.getAttribute('label-format') ?? ''; }
     set labelFormat(v) {
-      v == null ? this.removeAttribute('label-format') : this.setAttribute('label-format', String(v));
+      setOptionalAttr(this, 'label-format', v);
     }
 
     get getLabelText() { return this.#getLabelText; }
@@ -231,7 +221,7 @@ import '../media/icon.js';
     set clearable(v) { this.toggleAttribute('clearable', !!v); }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', String(v)); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
@@ -243,7 +233,7 @@ import '../media/icon.js';
     set required(v) { this.toggleAttribute('required', !!v); }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null ? this.removeAttribute('label') : this.setAttribute('label', String(v)); }
+    set label(v) { setOptionalAttr(this, 'label', v); }
 
     // ---- API pública -----------------------------------------------------
 
@@ -291,17 +281,13 @@ import '../media/icon.js';
       }
     }
 
-    #emit(name, detail) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
-
     /** Ajusta a `precision`; en readonly se admite cualquier fracción (ej. 3.7). */
     #coerce(n) {
       if (!Number.isFinite(n) || n <= 0) return 0;
       const max = this.max;
       if (this.readonly) return Math.min(max, n);
       const unit = this.precision;
-      return Math.min(max, tidy(Math.round(n / unit) * unit, unit));
+      return Math.min(max, tidyToStep(Math.round(n / unit) * unit, unit));
     }
 
     #labelText(v) {
@@ -399,7 +385,7 @@ import '../media/icon.js';
       this.#value = v;
       this.setAttribute('value', String(v));
       this.#render();
-      this.#emit('is-change', { value: v, label: this.#labelText(v) });
+      emit(this, 'is-change', { value: v, label: this.#labelText(v) });
     }
 
     /** El primer paso dentro de un icono ya cuenta como `precision`, nunca 0. */
@@ -411,7 +397,7 @@ import '../media/icon.js';
           if (!rect.width) return i + 1;
           const ratio = clampTo((clientX - rect.left) / rect.width, 0, 1);
           const frac = clampTo(Math.ceil(ratio / unit - 1e-9) * unit, unit, 1);
-          return tidy(i + frac, unit);
+          return tidyToStep(i + frac, unit);
         }
       }
       return 0;
@@ -423,14 +409,14 @@ import '../media/icon.js';
       if (next === this.#hover) return;
       this.#hover = next;
       this.#render();
-      this.#emit('is-hover', { value: this.#value, phantomValue: next, label: this.#labelText(next) });
+      emit(this, 'is-hover', { value: this.#value, phantomValue: next, label: this.#labelText(next) });
     };
 
     #onPointerLeave = () => {
       if (this.#hover === null) return;
       this.#hover = null;
       this.#render();
-      this.#emit('is-hover', { value: this.#value, phantomValue: null, label: this.#labelText(this.#value) });
+      emit(this, 'is-hover', { value: this.#value, phantomValue: null, label: this.#labelText(this.#value) });
     };
 
     #onClick = (e) => {
@@ -466,8 +452,5 @@ import '../media/icon.js';
     };
   }
 
-  if (!customElements.get('is-rating')) {
-    customElements.define('is-rating', IsRating);
-  }
-  if (typeof window !== 'undefined') window.IsRating = IsRating;
+  defineElement('is-rating', IsRating, 'IsRating');
 })();

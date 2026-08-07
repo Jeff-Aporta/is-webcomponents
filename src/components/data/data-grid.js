@@ -1,6 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from '../_shared/grid-types.js';
+
 import {
   aggregateRows,
   aggregateTree,
@@ -28,7 +29,8 @@ import {
   renderMenu,
   showPopover,
 } from '../_shared/grid-ui.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 /**
  * <is-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
  *
@@ -137,22 +139,22 @@ import {
         <slot name="toolbar-start"></slot>
         <div class="tool-search" hidden>
           <span class="tool-ico" aria-hidden="true">${ICONS.search}</span>
-          <input type="search" class="quick" part="quick-filter" aria-label="Buscar" />
+          <is-input type="search" class="quick" part="quick-filter" aria-label="Buscar"></is-input>
         </div>
         <span class="tool-gap"></span>
         <slot name="toolbar-end"></slot>
-        <button type="button" class="tool" data-tool="columns" part="toolbar-button" aria-haspopup="dialog">
+        <is-button variant="plain" color="neutral" class="tool" data-tool="columns" part="toolbar-button" aria-haspopup="dialog">
           <span aria-hidden="true">${ICONS.columns}</span><span class="tool-text"></span>
-        </button>
-        <button type="button" class="tool" data-tool="filters" part="toolbar-button" aria-haspopup="dialog">
+        </is-button>
+        <is-button variant="plain" color="neutral" class="tool" data-tool="filters" part="toolbar-button" aria-haspopup="dialog">
           <span aria-hidden="true">${ICONS.filter}</span><span class="tool-text"></span><span class="badge" hidden></span>
-        </button>
-        <button type="button" class="tool" data-tool="density" part="toolbar-button" aria-haspopup="menu">
+        </is-button>
+        <is-button variant="plain" color="neutral" class="tool" data-tool="density" part="toolbar-button" aria-haspopup="menu">
           <span aria-hidden="true">${ICONS.density}</span><span class="tool-text"></span>
-        </button>
-        <button type="button" class="tool" data-tool="export" part="toolbar-button" aria-haspopup="menu">
+        </is-button>
+        <is-button variant="plain" color="neutral" class="tool" data-tool="export" part="toolbar-button" aria-haspopup="menu">
           <span aria-hidden="true">${ICONS.export}</span><span class="tool-text"></span>
-        </button>
+        </is-button>
       </div>
 
       <div class="viewport" part="viewport" role="grid" tabindex="-1">
@@ -179,13 +181,13 @@ import {
         <div class="pager" part="pagination" hidden>
           <label class="page-size">
             <span class="page-size-label"></span>
-            <select class="page-size-select"></select>
+            <is-select class="page-size-select"></is-select>
           </label>
           <span class="page-info"></span>
-          <button type="button" class="page-btn" data-page="first" aria-label="Primera página">«</button>
-          <button type="button" class="page-btn" data-page="prev" aria-label="Página anterior">‹</button>
-          <button type="button" class="page-btn" data-page="next" aria-label="Página siguiente">›</button>
-          <button type="button" class="page-btn" data-page="last" aria-label="Última página">»</button>
+          <is-button variant="plain" pill class="page-btn" data-page="first" aria-label="Primera página">«</is-button>
+          <is-button variant="plain" pill class="page-btn" data-page="prev" aria-label="Página anterior">‹</is-button>
+          <is-button variant="plain" pill class="page-btn" data-page="next" aria-label="Página siguiente">›</is-button>
+          <is-button variant="plain" pill class="page-btn" data-page="last" aria-label="Última página">»</is-button>
         </div>
       </div>
     </div>
@@ -671,25 +673,25 @@ import {
 
     setSortModel(model) {
       this.sortModel = model;
-      this.#emit('is-sort', { sortModel: this.#sortModel });
+      emit(this, 'is-sort', { sortModel: this.#sortModel });
     }
 
     sortColumn(field, dir) { this.#applySort(field, dir, false); }
 
     setFilterModel(model) {
       this.filterModel = model;
-      this.#emit('is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter', { filterModel: this.#filterModel });
     }
 
     setQuickFilter(value) {
       this.quickFilterValue = value;
-      this.#emit('is-quick-filter', { value: this.#quickValue });
+      emit(this, 'is-quick-filter', { value: this.#quickValue });
     }
 
     setColumnVisibility(field, visible) {
       this.#visibility = { ...this.#visibility, [field]: !!visible };
       this.#refresh();
-      this.#emit('is-column-visibility', {
+      emit(this, 'is-column-visibility', {
         columnVisibilityModel: this.columnVisibilityModel, field, visible: !!visible,
       });
     }
@@ -697,7 +699,7 @@ import {
     setColumnWidth(field, width) {
       this.#widthOverrides = { ...this.#widthOverrides, [field]: Math.max(40, Number(width) || 0) };
       this.#refresh();
-      this.#emit('is-column-resize', { field, width: this.#widthOverrides[field] });
+      emit(this, 'is-column-resize', { field, width: this.#widthOverrides[field] });
     }
 
     pinColumn(field, side) {
@@ -707,7 +709,7 @@ import {
       if (side === 'right') right.unshift(field);
       this.#pinnedCols = { left, right };
       this.#refresh();
-      this.#emit('is-column-pin', { field, side: side || null, pinnedColumns: this.pinnedColumns });
+      emit(this, 'is-column-pin', { field, side: side || null, pinnedColumns: this.pinnedColumns });
     }
 
     autosizeColumns(fields) {
@@ -718,7 +720,7 @@ import {
     setDensity(value) {
       if (!DENSITY[value]) return;
       this.setAttribute('density', value);
-      this.#emit('is-density', { density: value });
+      emit(this, 'is-density', { density: value });
     }
 
     selectRow(id, selected = true, keepOthers = true) {
@@ -782,12 +784,12 @@ import {
 
     setRowGroupingModel(model) {
       this.rowGroupingModel = model;
-      this.#emit('is-group-model', { rowGroupingModel: this.rowGroupingModel });
+      emit(this, 'is-group-model', { rowGroupingModel: this.rowGroupingModel });
     }
 
     setAggregationModel(model) {
       this.aggregationModel = model;
-      this.#emit('is-aggregation', { aggregationModel: this.aggregationModel });
+      emit(this, 'is-aggregation', { aggregationModel: this.aggregationModel });
     }
 
     exportDataAsCsv(opts = {}) {
@@ -795,14 +797,14 @@ import {
       const matrix = this.#matrix({ allColumns });
       const body = toDelimited(matrix, delimiter);
       download(fileName, utf8WithBom ? `\uFEFF${body}` : body, 'text/csv');
-      this.#emit('is-export', { format: 'csv', rows: matrix.length - 1 });
+      emit(this, 'is-export', { format: 'csv', rows: matrix.length - 1 });
     }
 
     exportDataAsExcel(opts = {}) {
       const { fileName = 'datos.xls', allColumns = false, sheetName = 'Datos' } = opts;
       const matrix = this.#matrix({ allColumns, raw: true });
       download(fileName, toSpreadsheetXml(matrix, sheetName), 'application/vnd.ms-excel');
-      this.#emit('is-export', { format: 'excel', rows: matrix.length - 1 });
+      emit(this, 'is-export', { format: 'excel', rows: matrix.length - 1 });
     }
 
     exportDataAsPrint(opts = {}) {
@@ -821,7 +823,7 @@ import {
       });
       document.body.appendChild(frame);
       frame.srcdoc = html;
-      this.#emit('is-export', { format: 'print', rows: matrix.length - 1 });
+      emit(this, 'is-export', { format: 'print', rows: matrix.length - 1 });
     }
 
     copySelectionToClipboard() { return this.#copySelection(); }
@@ -830,10 +832,6 @@ import {
     redo() { this.#applyHistory(this.#redoStack, this.#undoStack, 'is-redo', 'after'); }
 
     /* ── Núcleo ──────────────────────────────────────────────────────── */
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
 
     #normalize() {
       this.#cols = normalizeColumns(this.#rawColumns, { editableAll: this.hasAttribute('editable') });
@@ -1631,8 +1629,14 @@ import {
     }
 
     #formatAggregate(agg, col, ctx) {
-      if (agg.value == null) return '';
-      const text = formattedValue(agg.value, null, col, ctx);
+      if (agg.value == null || Number.isNaN(agg.value)) return '';
+      const proxyRow = col?.field ? { [col.field]: agg.value } : {};
+      let text = formattedValue(agg.value, proxyRow, col, ctx);
+      if (text == null || text === '' || text === '!') {
+        text = typeof agg.value === 'number'
+          ? agg.value.toLocaleString('es-CO')
+          : String(agg.value);
+      }
       if (this.aggregationPosition === 'inline') return text;
       return `${AGGREGATION_FNS[agg.fn]?.label || agg.fn}: ${text}`;
     }
@@ -1733,7 +1737,7 @@ import {
     }
 
     #emitSelection() {
-      this.#emit('is-select', {
+      emit(this, 'is-select', {
         rowSelectionModel: this.rowSelectionModel,
         selectedRows: this.selectedRows,
         selectedIndices: this.selectedIndices,
@@ -1813,7 +1817,7 @@ import {
     #setCellRange(start, end) {
       this.#cellRange = { start, end };
       this.#refresh();
-      this.#emit('is-cell-select', { cellSelectionModel: this.#cellRange });
+      emit(this, 'is-cell-select', { cellSelectionModel: this.#cellRange });
     }
 
     /* ── Orden ───────────────────────────────────────────────────────── */
@@ -1834,7 +1838,7 @@ import {
       this.#sortModel = model;
       this.#page = 0;
       this.#refresh();
-      this.#emit('is-sort', { sortModel: this.#sortModel, field, sort: next });
+      emit(this, 'is-sort', { sortModel: this.#sortModel, field, sort: next });
     }
 
     /* ── Filtros ─────────────────────────────────────────────────────── */
@@ -1851,7 +1855,7 @@ import {
       this.#filterModel = { ...this.#filterModel, items };
       this.#page = 0;
       this.#refresh();
-      this.#emit('is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter', { filterModel: this.#filterModel });
     }
 
     /* ── Edición ─────────────────────────────────────────────────────── */
@@ -1894,7 +1898,7 @@ import {
       );
       input?.focus();
       if (input?.select) input.select();
-      this.#emit('is-edit-start', { id: node.id, field, row: node.row });
+      emit(this, 'is-edit-start', { id: node.id, field, row: node.row });
     }
 
     async #stopEdit(save = true) {
@@ -1904,7 +1908,7 @@ import {
       const node = this.#nodeById(edit.id);
       if (!save || !node?.row) {
         this.#refresh();
-        this.#emit('is-edit-stop', { id: edit.id, field: edit.field, saved: false });
+        emit(this, 'is-edit-stop', { id: edit.id, field: edit.field, saved: false });
         return;
       }
 
@@ -1926,15 +1930,15 @@ import {
           next = (await this.#hooks.processRowUpdate(after, before)) || after;
         } catch (error) {
           this.#refresh();
-          this.#emit('is-edit-stop', { id: edit.id, field: edit.field, saved: false, error });
+          emit(this, 'is-edit-stop', { id: edit.id, field: edit.field, saved: false, error });
           return;
         }
       }
       Object.assign(node.row, next);
       this.#pushUndo([{ id: edit.id, before, after: { ...node.row } }]);
       this.#refresh();
-      this.#emit('is-edit-stop', { id: edit.id, field: edit.field, saved: true });
-      this.#emit('is-row-update', { id: edit.id, row: node.row, before });
+      emit(this, 'is-edit-stop', { id: edit.id, field: edit.field, saved: true });
+      emit(this, 'is-row-update', { id: edit.id, row: node.row, before });
     }
 
     #buildEditor(col, value, node) {
@@ -2048,7 +2052,7 @@ import {
       }
       to.push(patch);
       this.#refresh();
-      this.#emit(eventName, { count: patch.length });
+      emit(this, eventName, { count: patch.length });
     }
 
     /* ── Portapapeles ────────────────────────────────────────────────── */
@@ -2058,7 +2062,7 @@ import {
       if (!matrix.length) return '';
       const text = toDelimited(matrix, '\t');
       navigator.clipboard?.writeText?.(text).catch(() => { /* sin permisos */ });
-      this.#emit('is-copy', { text, rows: matrix.length });
+      emit(this, 'is-copy', { text, rows: matrix.length });
       return text;
     }
 
@@ -2108,7 +2112,7 @@ import {
       if (!patch.length) return;
       this.#pushUndo(patch);
       this.#refresh();
-      this.#emit('is-paste', { rows: patch.length });
+      emit(this, 'is-paste', { rows: patch.length });
     }
 
     /* ── Exportación ─────────────────────────────────────────────────── */
@@ -2217,7 +2221,7 @@ import {
       window.removeEventListener('pointermove', this.#onResizeMove);
       window.removeEventListener('pointerup', this.#onResizeEnd);
       window.removeEventListener('pointercancel', this.#onResizeEnd);
-      if (state) this.#emit('is-column-resize', { field: state.field, width: this.#widths[state.field] });
+      if (state) emit(this, 'is-column-resize', { field: state.field, width: this.#widths[state.field] });
     };
 
     #autosize(field) {
@@ -2281,7 +2285,7 @@ import {
       order.splice(at < 0 ? order.length : at, 0, from);
       this.#order = order;
       this.#refresh();
-      this.#emit('is-column-reorder', { field: from, targetField: to, columnOrder: order });
+      emit(this, 'is-column-reorder', { field: from, targetField: to, columnOrder: order });
     };
 
     #onColDragEnd = () => {
@@ -2356,7 +2360,7 @@ import {
 
       if (field && node.row) {
         this.#focusCell(node.id, field);
-        this.#emit('is-cell-click', { id: node.id, field, row: node.row });
+        emit(this, 'is-cell-click', { id: node.id, field, row: node.row });
         if (this.cellSelection) {
           if (e.shiftKey && this.#cellAnchor) {
             this.#setCellRange(this.#cellAnchor, { id: node.id, field });
@@ -2366,7 +2370,7 @@ import {
           }
         }
       }
-      this.#emit('is-row-click', { id: node.id, row: node.row });
+      emit(this, 'is-row-click', { id: node.id, row: node.row });
 
       if (node.kind === 'group' && !node.row && !this.checkboxSelection) {
         this.#toggleGroup(node.id);
@@ -2383,8 +2387,8 @@ import {
       if (!cellEl || !rowEl) return;
       const node = this.#nodeById(rowEl.dataset.id);
       if (!node) return;
-      this.#emit('is-row-double-click', { id: node.id, row: node.row });
-      this.#emit('is-cell-double-click', { id: node.id, field: cellEl.dataset.field, row: node.row });
+      emit(this, 'is-row-double-click', { id: node.id, row: node.row });
+      emit(this, 'is-cell-double-click', { id: node.id, field: cellEl.dataset.field, row: node.row });
       this.#startEdit(node.id, cellEl.dataset.field);
     };
 
@@ -2425,7 +2429,7 @@ import {
       const [moved] = this.#rows.splice(from, 1);
       this.#rows.splice(to, 0, moved);
       this.#refresh();
-      this.#emit('is-row-reorder', { id: fromId, from, to });
+      emit(this, 'is-row-reorder', { id: fromId, from, to });
     };
 
     #toggleGroup(id) {
@@ -2433,7 +2437,7 @@ import {
       if (this.#expanded.has(id)) this.#expanded.delete(id);
       else this.#expanded.add(id);
       this.#refresh();
-      this.#emit('is-group-toggle', { id, expanded: this.#expanded.has(id) });
+      emit(this, 'is-group-toggle', { id, expanded: this.#expanded.has(id) });
     }
 
     #toggleDetail(id) {
@@ -2441,7 +2445,7 @@ import {
       if (this.#detailOpen.has(id)) this.#detailOpen.delete(id);
       else this.#detailOpen.add(id);
       this.#refresh();
-      this.#emit('is-detail-toggle', { id, open: this.#detailOpen.has(id) });
+      emit(this, 'is-detail-toggle', { id, open: this.#detailOpen.has(id) });
     }
 
     /* ── Foco y teclado ──────────────────────────────────────────────── */
@@ -2638,7 +2642,7 @@ import {
       if (!matrix.length) return;
       e.clipboardData?.setData('text/plain', toDelimited(matrix, '\t'));
       e.preventDefault();
-      this.#emit('is-copy', { rows: matrix.length });
+      emit(this, 'is-copy', { rows: matrix.length });
     };
 
     #onPasteEvent = (e) => {
@@ -2668,7 +2672,7 @@ import {
       }
       if (this.#reachedEnd) return;
       this.#reachedEnd = true;
-      this.#emit('is-rows-scroll-end', { rows: this.#rows.length });
+      emit(this, 'is-rows-scroll-end', { rows: this.#rows.length });
       if (!this.#hooks.rowsLoader || this.loading) return;
       const result = this.#hooks.rowsLoader({ start: this.#rows.length, api: this });
       if (!result?.then) return;
@@ -2694,7 +2698,7 @@ import {
       this.#quickValue = this.#quick.value;
       this.#page = 0;
       this.#refresh();
-      this.#emit('is-quick-filter', { value: this.#quickValue });
+      emit(this, 'is-quick-filter', { value: this.#quickValue });
     };
 
     #onToolbarClick = (e) => {
@@ -2867,7 +2871,7 @@ import {
         model[col.field] = btn.dataset.action === 'show-all';
       }
       this.columnVisibilityModel = model;
-      this.#emit('is-column-visibility', { columnVisibilityModel: model });
+      emit(this, 'is-column-visibility', { columnVisibilityModel: model });
       this.#showColumnsPanel(this.#popAnchor);
     };
 
@@ -2895,7 +2899,7 @@ import {
       }
       this.#page = 0;
       this.#refresh();
-      this.#emit('is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter', { filterModel: this.#filterModel });
       renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
       positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
     };
@@ -2932,7 +2936,7 @@ import {
 
       this.#page = 0;
       this.#refresh();
-      this.#emit('is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter', { filterModel: this.#filterModel });
       if (!rerender) return;
       renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
       positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
@@ -2947,12 +2951,12 @@ import {
       this.#filterModel = { ...this.#filterModel, items };
       this.#page = 0;
       this.#refresh();
-      this.#emit('is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter', { filterModel: this.#filterModel });
     };
 
     #emitPagination() {
-      this.#emit('is-pagination', this.paginationModel);
-      this.#emit('is-page-change', this.paginationModel);
+      emit(this, 'is-pagination', this.paginationModel);
+      emit(this, 'is-page-change', this.paginationModel);
     }
 
     #onFooterClick = (e) => {
@@ -3074,8 +3078,5 @@ import {
     }
   }
 
-  if (!customElements.get('is-data-grid')) {
-    customElements.define('is-data-grid', IsDataGrid);
-  }
-  if (typeof window !== 'undefined') window.IsDataGrid = IsDataGrid;
+  defineElement('is-data-grid', IsDataGrid, 'IsDataGrid');
 })();

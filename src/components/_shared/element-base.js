@@ -53,7 +53,12 @@
 import { upgradeProperties } from './upgrade-properties.js';
 
 export class ElementBase extends HTMLElement {
+  /** true desde la primera conexión; nunca vuelve a false. Silencia
+   *  `attributeChangedCallback` para los atributos que el parser ya trae
+   *  puestos, que se procesan en `onConnected()`. */
   #mounted = false;
+  /** true tras correr `upgradeProperties` una vez. */
+  #upgraded = false;
   /** Subclasses pueden sobrescribir este getter para añadir atributos extra. */
   static get observedAttributes() { return []; }
 
@@ -89,11 +94,23 @@ export class ElementBase extends HTMLElement {
   get shadow() { return this.shadowRoot; }
   get mounted() { return this.#mounted; }
 
+  /**
+   * `onConnected()` se llama en CADA conexión, no sólo en la primera: mover
+   * un elemento en el DOM (`appendChild` a otro padre, reordenar una lista)
+   * lo desconecta y lo vuelve a conectar, y los componentes crean ahí sus
+   * observers y listeners (ver `isp/block-layout.js`). Saltarse la segunda
+   * conexión dejaba el elemento sin ResizeObserver para siempre.
+   *
+   * Lo que sí corre una única vez es `upgradeProperties`: sólo tiene sentido
+   * la primera vez, cuando aún puede haber propiedades JS escritas sobre la
+   * instancia antes de que el custom element se registrara.
+   */
   connectedCallback() {
-    if (this.#mounted) return;
+    if (!this.#upgraded) {
+      this.#upgraded = true;
+      upgradeProperties(this, this.constructor.observedAttributes || []);
+    }
     this.#mounted = true;
-    const observed = this.constructor.observedAttributes || [];
-    upgradeProperties(this, observed);
     this.onConnected();
   }
 

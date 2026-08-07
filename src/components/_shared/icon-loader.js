@@ -21,17 +21,34 @@
  *   iconSourceBase(prefix)       -> string|null
  */
 
-/** Bases candidatas para `assets/icons/`, en orden de preferencia. */
+/**
+ * Bases candidatas para `assets/icons/`, en orden de preferencia.
+ *
+ * El loader vive en dos sitios distintos y `../assets` NO significa lo mismo:
+ *   - dist/cdn/media/icon.min.js  → dist/cdn/assets/icons/
+ *   - src/components/_shared/…    → src/assets/icons/  (NO components/assets)
+ * Probar la ruta CDN desde fuente genera 404 ruidosos en consola
+ * (`src/components/assets/icons/*.json`) aunque la segunda base acierte.
+ */
 const ICON_BASES = [
-  // 1. Bundle CDN: dist/cdn/<categoria>/icon.min.js -> dist/cdn/assets/icons/
-  () => new URL('../assets/icons/', import.meta.url).href,
-  // 2. Fuente: components/_shared/icon-loader.js -> <repo>/assets/icons/
-  () => new URL('../../assets/icons/', import.meta.url).href,
-  // 3. Fuente apuntando al bundle: <repo>/dist/cdn/assets/icons/
-  () => new URL('../../dist/cdn/assets/icons/', import.meta.url).href,
-  // 4. GitHub Pages del proyecto (sitio publicado).
+  // Bundle publicado: dist/cdn/<categoria>/*.min.js → dist/cdn/assets/icons/
+  () => {
+    if (!/\/dist\/cdn\//.test(import.meta.url)) return null;
+    return new URL('../assets/icons/', import.meta.url).href;
+  },
+  // Dev (Live Server / serve.mjs): components/_shared → src/assets/icons/
+  () => {
+    if (!/\/(?:src\/)?components\//.test(import.meta.url)) return null;
+    return new URL('../../assets/icons/', import.meta.url).href;
+  },
+  // Fallback local: fuente → dist ya buildeado
+  () => {
+    if (!/\/(?:src\/)?components\//.test(import.meta.url)) return null;
+    return new URL('../../../dist/cdn/assets/icons/', import.meta.url).href;
+  },
+  // GitHub Pages del proyecto (sitio publicado).
   () => 'https://jeff-aporta.github.io/is-webcomponents/dist/cdn/assets/icons/',
-  // 5. jsDelivr sobre el repo.
+  // jsDelivr sobre el repo.
   () => 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/assets/icons/',
 ];
 

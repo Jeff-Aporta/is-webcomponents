@@ -1,0 +1,68 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>smoke</title>
+<!--
+  Página que usa tests/smoke-runtime.test.mjs. NO es una preview: monta cada
+  componente del manifest en un DOM real (Chrome headless) y anota los errores.
+
+  Los tests del repo son análisis estático; esto cubre lo que aquel no ve:
+  que el módulo cargue, que el custom element quede registrado y que
+  construir + conectar + poner un atributo + mover el nodo no lance.
+-->
+<body>
+<div id="host"></div>
+<pre id="out">PENDIENTE</pre>
+<script type="module">
+const errores = [];
+const originalError = console.error;
+console.error = (...a) => { errores.push('console.error: ' + a.map(String).join(' ')); originalError(...a); };
+addEventListener('error', (e) => errores.push('window.error: ' + (e.message || e.error)));
+addEventListener('unhandledrejection', (e) => errores.push('unhandledrejection: ' + e.reason));
+
+const BASE = new URLSearchParams(location.search).get('base') || '../src/';
+const manifest = (await import('../manifest.js')).default;
+const host = document.getElementById('host');
+const filas = [];
+
+for (const item of manifest) {
+  const fila = { tag: item.tag, ok: true, notas: [] };
+  try {
+    await import(new URL(item.script.replace(/^\.\.\/\.\.\//, BASE), import.meta.url).href);
+  } catch (e) {
+    fila.ok = false; fila.notas.push('import: ' + e.message);
+    filas.push(fila); continue;
+  }
+  // `module: true` en el manifest = no es un custom element sino un módulo
+  // de utilidades (`is-ui`); cargar sin lanzar es todo lo que se le pide.
+  if (item.module) { filas.push(fila); continue; }
+  if (!customElements.get(item.tag)) {
+    fila.ok = false; fila.notas.push('no registrado');
+    filas.push(fila); continue;
+  }
+  try {
+    const el = document.createElement(item.tag);
+    host.appendChild(el);
+    await customElements.whenDefined(item.tag);
+    if (!el.shadowRoot && !el.children.length) fila.notas.push('sin shadowRoot ni hijos');
+
+    // Un atributo observado en caliente: el camino de onAttributeChanged.
+    const obs = customElements.get(item.tag).observedAttributes || [];
+    if (obs.length) el.setAttribute(obs[0], el.getAttribute(obs[0]) ?? '1');
+
+    // Mover el nodo: desconecta y reconecta. Es el caso que el #mounted
+    // "una sola vez" rompía.
+    const otro = document.createElement('div');
+    host.appendChild(otro);
+    otro.appendChild(el);
+    await new Promise((r) => setTimeout(r, 0));
+    el.remove(); otro.remove();
+  } catch (e) {
+    fila.ok = false; fila.notas.push('runtime: ' + e.message);
+  }
+  filas.push(fila);
+}
+
+await new Promise((r) => setTimeout(r, 300));
+document.getElementById('out').textContent = JSON.stringify({ filas, errores }, null, 1);
+document.title = 'LISTO';
+</script>

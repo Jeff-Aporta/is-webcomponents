@@ -2,6 +2,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import { addMonths, monthKey, parseISO, startOfMonth, toISO } from '../_shared/date-utils.js';
 import '../actions/button.js';
 import './date-picker.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-date-range-picker> — Rango de fechas con varios meses a la vista
@@ -110,13 +113,12 @@ import './date-picker.js';
     }
   }
 
-  class IsDateRangePicker extends HTMLElement {
+  class IsDateRangePicker extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #shortcuts;
     #presets;
     #calendars;
-    #mounted = false;
     #pickers = [];
     #anchor = startOfMonth(new Date());
 
@@ -131,16 +133,14 @@ import './date-picker.js';
       this.#shortcuts.addEventListener('click', this.#onShortcut);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#anchor = this.#anchorFromState();
       this.#syncPickerCount();
       this.#renderShortcuts();
       this.#sync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'calendars') this.#syncPickerCount();
       if (name === 'shortcuts' || name === 'locale') this.#renderShortcuts();
       if (name === 'value') this.#anchor = this.#anchorFromState();
@@ -180,14 +180,10 @@ import './date-picker.js';
 
     clear() {
       this.removeAttribute('value');
-      this.#emit('is-change', { start: null, end: null });
+      emit(this, 'is-change', { start: null, end: null });
     }
 
     /* ── Interno ──────────────────────────────────────────────────────── */
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
 
     #parts() {
       const [a = null, b = null] = this.value.split(/\s*[/,|]\s*/).filter(Boolean);
@@ -284,7 +280,7 @@ import './date-picker.js';
       else this.setAttribute('value', end ? `${start}/${end}` : start);
       this.#anchor = this.#anchorFromState();
       this.#sync();
-      this.#emit('is-change', { start: start || null, end: end || null, source });
+      emit(this, 'is-change', { start: start || null, end: end || null, source });
     }
 
     #onPickerChange = (e) => {
@@ -296,7 +292,7 @@ import './date-picker.js';
       else this.setAttribute('value', end ? `${start}/${end}` : start);
       this.#anchor = keep;
       this.#sync();
-      this.#emit('is-change', { start: start || null, end: end || null, source: 'calendar' });
+      emit(this, 'is-change', { start: start || null, end: end || null, source: 'calendar' });
     };
 
     #onPickerHover = (e) => {
@@ -317,7 +313,7 @@ import './date-picker.js';
       if (monthKey(anchor) === monthKey(this.#anchor)) return;
       this.#anchor = anchor;
       this.#sync();
-      this.#emit('is-month-change', { month: this.month });
+      emit(this, 'is-month-change', { month: this.month });
     };
 
     #onShortcut = (e) => {
@@ -337,8 +333,5 @@ import './date-picker.js';
     };
   }
 
-  if (!customElements.get('is-date-range-picker')) {
-    customElements.define('is-date-range-picker', IsDateRangePicker);
-  }
-  if (typeof window !== 'undefined') window.IsDateRangePicker = IsDateRangePicker;
+  defineElement('is-date-range-picker', IsDateRangePicker, 'IsDateRangePicker');
 })();

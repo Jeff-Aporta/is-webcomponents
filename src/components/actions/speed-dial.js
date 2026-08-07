@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './check-icon-button.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { clampTo } from '../_shared/misc-utils.js';
 
 /**
  * <is-speed-dial> — FAB que despliega un abanico de acciones.
@@ -65,7 +68,6 @@ import './check-icon-button.js';
   const DIRECTIONS = ['up', 'down', 'left', 'right', 'radial'];
 
   const DEG = Math.PI / 180;
-  const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
 
   class IsSpeedDial extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -160,7 +162,7 @@ import './check-icon-button.js';
         // Tras el reflow: los items ya tienen tamano medible.
         requestAnimationFrame(() => this.#layoutRadial());
       }
-      this.dispatchEvent(new CustomEvent('is-toggle', { bubbles: true, composed: true, detail: { open: true } }));
+      emit(this, 'is-toggle', { open: true });
     }
 
     close() {
@@ -168,7 +170,7 @@ import './check-icon-button.js';
       this.#trigger.setAttribute('aria-expanded', 'false');
       this.shadowRoot.querySelector('.root').hidden = true;
       this.removeAttribute('open');
-      this.dispatchEvent(new CustomEvent('is-toggle', { bubbles: true, composed: true, detail: { open: false } }));
+      emit(this, 'is-toggle', { open: false });
     }
 
     toggle() { this.isOpen ? this.close() : this.open(); }
@@ -209,7 +211,7 @@ import './check-icon-button.js';
         a.__bound = true;
         a.addEventListener('click', (e) => {
           if (a.hasAttribute('disabled')) { e.preventDefault(); return; }
-          this.dispatchEvent(new CustomEvent('is-select', { bubbles: true, composed: true, detail: { action: a } }));
+          emit(this, 'is-select', { action: a });
           if (!a.hasAttribute('href')) this.close();
         });
       }
@@ -396,7 +398,7 @@ import './check-icon-button.js';
        */
       const arcFor = (radius) => {
         let a = attrArc && attrArc > 0
-          ? clamp(attrArc, 10, 360)
+          ? clampTo(attrArc, 10, 360)
           : this.#autoArc(cx, cy, bounds, radius);
         let st = a >= 360 ? center : center - a / 2;
         let guard = 0;
@@ -411,7 +413,7 @@ import './check-icon-button.js';
       };
 
       const capacityAt = (radius, arc) => {
-        const minStep = 2 * Math.asin(clamp((itemHalf + gap / 2) / radius, 0, 1)) / DEG;
+        const minStep = 2 * Math.asin(clampTo((itemHalf + gap / 2) / radius, 0, 1)) / DEG;
         if (!Number.isFinite(minStep) || minStep <= 0) return actions.length;
         return arc >= 360
           ? Math.max(1, Math.floor(360 / minStep))
@@ -538,7 +540,7 @@ import './check-icon-button.js';
     #ro = null;
   }
 
-  if (!customElements.get('is-speed-dial')) customElements.define('is-speed-dial', IsSpeedDial);
+  defineElement('is-speed-dial', IsSpeedDial);
 
   // Acción individual — patrón primario: <button> extendido.
   class IsSpeedDialAction extends HTMLElement {
@@ -580,5 +582,5 @@ import './check-icon-button.js';
       }
     }
   }
-  if (!customElements.get('is-speed-dial-action')) customElements.define('is-speed-dial-action', IsSpeedDialAction);
+  defineElement('is-speed-dial-action', IsSpeedDialAction);
 })();

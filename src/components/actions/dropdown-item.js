@@ -1,6 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { computePosition } from '../_shared/position.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-dropdown-item> — ítem de menú para is-dropdown.
@@ -83,7 +86,7 @@ import '../media/icon.js';
     }
 
     get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v == null || v === '' ? this.removeAttribute('value') : this.setAttribute('value', v); }
+    set value(v) { setStringAttr(this, 'value', v); }
 
     get type() {
       return this.getAttribute('type') === 'checkbox' ? 'checkbox' : 'normal';
@@ -216,11 +219,7 @@ import '../media/icon.js';
         return;
       }
       if (this.type === 'checkbox') this.checked = !this.checked;
-      this.dispatchEvent(new CustomEvent('is-dropdown-item-select', {
-        bubbles: true,
-        composed: true,
-        detail: { item: this },
-      }));
+      emit(this, 'is-dropdown-item-select', { item: this });
     };
 
     #onKey = (e) => {
@@ -238,8 +237,5 @@ import '../media/icon.js';
     };
   }
 
-  if (!customElements.get('is-dropdown-item')) {
-    customElements.define('is-dropdown-item', IsDropdownItem);
-  }
-  if (typeof window !== 'undefined') window.IsDropdownItem = IsDropdownItem;
+  defineElement('is-dropdown-item', IsDropdownItem, 'IsDropdownItem');
 })();

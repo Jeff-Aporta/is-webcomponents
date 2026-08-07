@@ -1,3 +1,6 @@
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+
 /**
  * <is-demo> — sección de demo de documentación (light DOM, zero dependencies).
  *
@@ -32,7 +35,7 @@
       // evento: `demo-code.js` escucha `is-demo-connected` en `document` y
       // añade el botón "Ver código" a los <is-demo> conectados tarde. Si
       // demo-code.js aún no cargó, su barrido inicial nos recogerá igual.
-      this.dispatchEvent(new CustomEvent('is-demo-connected', { bubbles: true, composed: true }));
+      emit(this, 'is-demo-connected');
     }
 
     static get observedAttributes() { return ['heading']; }
@@ -57,6 +60,5 @@
     }
   }
 
-  if (!customElements.get('is-demo')) customElements.define('is-demo', IsDemo);
-  if (typeof window !== 'undefined') window.IsDemo = IsDemo;
+  defineElement('is-demo', IsDemo, 'IsDemo');
 })();

@@ -320,6 +320,58 @@ body::-webkit-scrollbar-corner {
 
 /* --- Demo cards ----------------------------------------------------- */
 
+.demo-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 0 28px;
+}
+
+.demo-block > .demo {
+  margin-bottom: 0;
+  border-radius: calc(var(--is-radius) + 2px) calc(var(--is-radius) + 2px) 0 0;
+}
+
+.demo-equiv {
+  margin: 0 0 8px;
+  padding: 14px 18px 16px;
+  border: 1px dashed color-mix(in srgb, var(--is-border) 80%, var(--is-accent));
+  border-top: none;
+  border-radius: 0 0 calc(var(--is-radius) + 2px) calc(var(--is-radius) + 2px);
+  background: color-mix(in srgb, var(--is-bg) 88%, var(--is-bg-elev));
+}
+
+.demo-equiv__title {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  color: var(--is-text);
+}
+
+.demo-equiv__note {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--is-text-dim);
+  max-width: 72ch;
+}
+
+.demo-equiv__pre {
+  margin: 0;
+  max-height: 22rem;
+  overflow: auto;
+}
+
+.demo-equiv__flow {
+  margin-top: 0.9rem;
+}
+
+.demo-equiv__flow is-flowchart {
+  display: block;
+  min-height: 12rem;
+}
+
 .demo {
   position: relative;
   display: flex;

@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-mega-menu> — Mega-menú para e-commerce/portal masivo. Abre un panel
@@ -68,7 +70,7 @@ import '../media/icon.js';
       this.#panel.addEventListener('click', (e) => {
         const a = e.target.closest('a[href]');
         if (a) {
-          this.dispatchEvent(new CustomEvent('is-select', { bubbles: true, composed: true, detail: { href: a.getAttribute('href'), text: a.textContent.trim() } }));
+          emit(this, 'is-select', { href: a.getAttribute('href'), text: a.textContent.trim() });
           this.close();
         }
       });
@@ -94,14 +96,14 @@ import '../media/icon.js';
       this.#positionPanel();
       this.#panel.show();
       this.setAttribute('open', '');
-      this.dispatchEvent(new CustomEvent('is-open', { bubbles: true, composed: true }));
+      emit(this, 'is-open');
     }
 
     close() {
       this.#panel.close();
       this.#trigger.setAttribute('aria-expanded', 'false');
       this.removeAttribute('open');
-      this.dispatchEvent(new CustomEvent('is-close', { bubbles: true, composed: true }));
+      emit(this, 'is-close');
     }
 
     toggle() { this.#panel.open ? this.close() : this.open(); }
@@ -139,5 +141,5 @@ import '../media/icon.js';
     #labelEl;
   }
 
-  if (!customElements.get('is-mega-menu')) customElements.define('is-mega-menu', IsMegaMenu);
+  defineElement('is-mega-menu', IsMegaMenu);
 })();

@@ -1,4 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { TONE } from '../_shared/tone.js';
 
 /**
  * <is-details> — Web Component (vanilla, zero dependencies).
@@ -65,13 +69,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['open', 'summary', 'name', 'disabled', 'variant', 'icon-placement'];
 
-  const VALID_VARIANT = ['filled', 'outlined', 'filled-outlined', 'plain'];
+  const VALID_VARIANT = TONE.filter((t) => t !== 'accent');
   const VALID_ICON_PLACEMENT = ['start', 'end'];
 
-  class IsDetails extends HTMLElement {
+  class IsDetails extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #button;
     #content;
     #root;
@@ -94,8 +97,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       // fallback. Dejamos el botón como está y añadimos Space/Enter redundantes.
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProperties();
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'outlined');
       if (!this.hasAttribute('icon-placement')) this.setAttribute('icon-placement', 'end');
@@ -116,12 +118,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       }
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       // nada que limpiar
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
         this.setAttribute('variant', 'outlined');
         return;
@@ -277,7 +278,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       // Animación: si el contenido tiene altura conocida, animar; si no, snap.
       const afterEvtName = desired ? 'is-after-show' : 'is-after-hide';
       return this.#animateContent(desired).then(() => {
-        this.dispatchEvent(new CustomEvent(afterEvtName, { detail: {}, bubbles: true, composed: true }));
+        emit(this, afterEvtName, {});
       });
     }
 
@@ -353,10 +354,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-details')) {
-    customElements.define('is-details', IsDetails);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsDetails = IsDetails;
-  }
+  defineElement('is-details', IsDetails, 'IsDetails');
 })();

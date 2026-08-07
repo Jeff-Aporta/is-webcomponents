@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-maps> — Visualizador geográfico.
@@ -168,7 +170,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
         const p = this.#project(lat, lon, W, H);
         const c = svgEl('circle', { cx: p.x, cy: p.y, r: 6, class: 'marker' });
-        c.addEventListener('click', () => this.dispatchEvent(new CustomEvent('is-marker-click', { bubbles: true, composed: true, detail: { marker: m } })));
+        c.addEventListener('click', () => emit(this, 'is-marker-click', { marker: m }));
         svg.appendChild(c);
         const label = m.getAttribute('label');
         if (label) {
@@ -232,7 +234,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #drag = null;
 
     #emit() {
-      this.dispatchEvent(new CustomEvent('is-viewport', { bubbles: true, composed: true, detail: { ...this.#vp } }));
+      emit(this, 'is-viewport', { ...this.#vp });
     }
 
     #canvas;
@@ -245,11 +247,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
     return n;
   }
 
-  if (!customElements.get('is-maps')) customElements.define('is-maps', IsMaps);
+  defineElement('is-maps', IsMaps);
 
   class IsMapMarker extends HTMLElement {
     static get observedAttributes() { return ['lat', 'lon', 'label']; }
     connectedCallback() { /* re-sincroniza el padre cuando entra */ }
   }
-  if (!customElements.get('is-map-marker')) customElements.define('is-map-marker', IsMapMarker);
+  defineElement('is-map-marker', IsMapMarker);
 })();

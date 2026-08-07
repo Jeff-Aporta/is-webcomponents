@@ -3,6 +3,8 @@ import './form.js';
 import '../forms/input.js';
 import '../forms/select.js';
 import '../forms/option.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-function-form> — Formulario de atributos de una "función" del editor.
@@ -280,7 +282,7 @@ export function funcionToCustomCodeTag(funcion, customCodeStyle = '') {
     }
 
     #emit(name, funcion) {
-      this.dispatchEvent(new CustomEvent(name, { detail: { funcion }, bubbles: true, composed: true }));
+      emit(this, name, { funcion });
     }
 
     #onSubmit = (e) => {
@@ -299,5 +301,5 @@ export function funcionToCustomCodeTag(funcion, customCodeStyle = '') {
     #onDelete = () => { this.#emit('is-function-delete', this.#funcion); };
   }
 
-  if (!customElements.get('is-function-form')) customElements.define('is-function-form', IsFunctionForm);
+  defineElement('is-function-form', IsFunctionForm);
 })();

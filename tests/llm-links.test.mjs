@@ -79,14 +79,20 @@ if (/pages\.dev/.test(panel)) {
   failures.push('cdn-panel.js aún apunta a Cloudflare Pages; el proyecto se desvinculó');
 }
 
-// 6) Los enlaces se entregan al <is-cdn-snippet> como `config`, no se pintan
-//    sueltos en la página: cada snippet decide si los muestra.
+// 6) Los enlaces van en `config` → se fusionan en el prompt único de
+//    <is-cdn-snippet> (sin lista de filas con Copiar por enlace).
 if (!/setAttribute\('config'/.test(panel)) {
   failures.push('cdn-panel.js no pasa los enlaces al <is-cdn-snippet> por `config`');
 }
 const snippet = readFileSync(join(root, 'src', 'components', 'feedback', 'cdn-snippet.js'), 'utf8');
-if (!/#renderDocs/.test(snippet) || !/cdn__docs/.test(snippet)) {
-  failures.push('cdn-snippet.js no construye la sección de documentación');
+if (!/buildLlmPrompt/.test(snippet)) {
+  failures.push('cdn-snippet.js debe construir un prompt único con buildLlmPrompt');
+}
+if (/cdn__docs-list|#renderDocs/.test(snippet)) {
+  failures.push('cdn-snippet.js no debe pintar lista de referencias con Copiar por fila');
+}
+if (!/data-copy="llm-prompt"/.test(snippet)) {
+  failures.push('cdn-snippet.js debe tener un único botón Copiar del prompt LLM');
 }
 
 if (failures.length) {

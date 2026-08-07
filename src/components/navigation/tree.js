@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-tree> + <is-tree-item> — Web Components (vanilla, zero dependencies).
@@ -54,10 +57,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const VALID_SELECTION = ['none', 'single', 'leaf', 'multiple'];
 
-  class IsTree extends HTMLElement {
+  class IsTree extends ElementBase {
     static get observedAttributes() { return TREE_OBSERVED; }
 
-    #mounted = false;
 
     constructor() {
       super();
@@ -68,14 +70,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.addEventListener('keydown', this.#onKeyDown);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('selection')) this.setAttribute('selection', 'single');
       this.#syncRoots();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'selection') {
         if (newVal && !VALID_SELECTION.includes(newVal)) this.setAttribute('selection', 'single');
       }
@@ -132,11 +132,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         const item = toggle.closest('is-tree-item');
         if (item) {
           item.toggleAttribute('expanded');
-          this.dispatchEvent(new CustomEvent('is-tree-toggle', {
-            detail: { item, expanded: item.hasAttribute('expanded') },
-            bubbles: true,
-            composed: true,
-          }));
+          emit(this, 'is-tree-toggle', { item, expanded: item.hasAttribute('expanded') });
         }
         e.stopPropagation();
         return;
@@ -161,14 +157,14 @@ import { adoptCss } from '../_shared/adopt-css.js';
             next = Math.min(idx + 1, visible.length - 1);
           } else {
             item.setAttribute('expanded', '');
-            this.dispatchEvent(new CustomEvent('is-tree-toggle', { detail: { item, expanded: true }, bubbles: true, composed: true }));
+            emit(this, 'is-tree-toggle', { item, expanded: true });
           }
           e.preventDefault();
           break;
         case 'ArrowLeft':
           if (item.hasAttribute('expanded')) {
             item.removeAttribute('expanded');
-            this.dispatchEvent(new CustomEvent('is-tree-toggle', { detail: { item, expanded: false }, bubbles: true, composed: true }));
+            emit(this, 'is-tree-toggle', { item, expanded: false });
           } else {
             const parent = item.parentElement && item.parentElement.closest('is-tree-item');
             if (parent) next = visible.indexOf(parent);
@@ -210,20 +206,15 @@ import { adoptCss } from '../_shared/adopt-css.js';
       }
       if (willSelect) item.setAttribute('selected', '');
       else item.removeAttribute('selected');
-      this.dispatchEvent(new CustomEvent('is-tree-select', {
-        detail: {
+      emit(this, 'is-tree-select', {
           item,
           selected: willSelect,
           selectedItems: this.#selectedItems(),
-        },
-        bubbles: true,
-        composed: true,
-      }));
+        });
     }
   }
 
-  if (!customElements.get('is-tree')) customElements.define('is-tree', IsTree);
-  if (typeof window !== 'undefined') window.IsTree = IsTree;
+  defineElement('is-tree', IsTree, 'IsTree');
 
   // ============ <is-tree-item> ============
   const ITEM_TEMPLATE = document.createElement('template');
@@ -249,10 +240,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const ITEM_OBSERVED = ['expanded', 'selected', 'disabled', 'has-children', 'lazy'];
 
-  class IsTreeItem extends HTMLElement {
+  class IsTreeItem extends ElementBase {
     static get observedAttributes() { return ITEM_OBSERVED; }
 
-    #mounted = false;
 
     constructor() {
       super();
@@ -262,8 +252,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.setAttribute('tabindex', '0');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       // ESCUCHAR eventos del is-checkbox interno para sincronizar.
       const cb = this.shadowRoot.querySelector('is-checkbox');
       if (cb) {
@@ -275,8 +264,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#sync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
     }
 
@@ -308,6 +296,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-tree-item')) customElements.define('is-tree-item', IsTreeItem);
-  if (typeof window !== 'undefined') window.IsTreeItem = IsTreeItem;
+  defineElement('is-tree-item', IsTreeItem, 'IsTreeItem');
 })();

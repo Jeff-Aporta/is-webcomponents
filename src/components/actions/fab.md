@@ -118,10 +118,13 @@ Documentación de cabecera preservada desde fuente:
 > <is-fab> — Floating Action Button (vanilla, zero dependencies).
 > Botón flotante de acción principal. Material-like.
 >   <is-fab icon="mdi:plus" position="bottom-end">Crear</is-fab>
+> Está construido SOBRE <is-button>: el color, el foco y la conversión a <a>
+> cuando hay `href` los pone el botón. is-fab añade solo lo suyo: anclaje fijo
+> a una esquina, forma circular, sombra flotante y pulso.
 > Atributos
 >   icon        string  — iconify id del icono principal.
 >   position    bottom-end | bottom-start | top-end | top-start | inline (default 'bottom-end')
->   color     brand | neutral | custom-color (default 'brand')
+>   color       brand | neutral | success | warning | danger (default 'brand')
 >   href        string — si se define, renderiza <a>.
 >   pulse       boolean — animación de pulso para llamar la atención.
 >   extended    boolean — ancho extendido con label.
@@ -136,6 +139,8 @@ Documentación de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
+- [`./button.js`](./button.js) — el fab se apoya en `<is-button>` para la
+  apariencia, el color y el modo enlace.
 
 Tags del módulo: `<is-fab>`.
 

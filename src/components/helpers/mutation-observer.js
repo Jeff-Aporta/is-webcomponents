@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-mutation-observer> — Web Component (vanilla).
@@ -16,9 +19,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
  */
 
 (() => {
-  class IsMutationObserver extends HTMLElement {
+  class IsMutationObserver extends ElementBase {
     #observer = null;
-    #mounted = false;
 
     constructor() {
       super();
@@ -31,17 +33,15 @@ import { adoptCss } from '../_shared/adopt-css.js';
       return ['disabled', 'attr', 'child-list', 'character-data'];
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#setup();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#teardown();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#setup();
     }
 
@@ -68,21 +68,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       };
 
       this.#observer = new MutationObserver((records) => {
-        this.dispatchEvent(new CustomEvent('is-mutate', {
-          bubbles: true,
-          composed: true,
-          detail: { records }
-        }));
+        emit(this, 'is-mutate', { records });
       });
 
       this.#observer.observe(this, opts);
     }
   }
 
-  if (!customElements.get('is-mutation-observer')) {
-    customElements.define('is-mutation-observer', IsMutationObserver);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsMutationObserver = IsMutationObserver;
-  }
+  defineElement('is-mutation-observer', IsMutationObserver, 'IsMutationObserver');
 })();

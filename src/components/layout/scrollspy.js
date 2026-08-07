@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-scrollspy> — Web Component (vanilla, zero dependencies).
@@ -267,11 +269,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (prevLink) {
         prevLink.classList.remove('is-scrollspy-active');
         prevLink.removeAttribute('aria-current');
-        this.dispatchEvent(new CustomEvent('is-deactivated', {
-          detail: { id: prev, link: prevLink },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'is-deactivated', { id: prev, link: prevLink });
       }
       this.#activeId = id;
       if (id) {
@@ -279,11 +277,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         if (link) {
           link.classList.add('is-scrollspy-active');
           link.setAttribute('aria-current', 'location');
-          this.dispatchEvent(new CustomEvent('is-activated', {
-            detail: { id, link },
-            bubbles: true,
-            composed: true,
-          }));
+          emit(this, 'is-activated', { id, link });
         }
       }
     }
@@ -332,10 +326,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     };
   }
 
-  if (!customElements.get('is-scrollspy')) {
-    customElements.define('is-scrollspy', IsScrollspy);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsScrollspy = IsScrollspy;
-  }
+  defineElement('is-scrollspy', IsScrollspy, 'IsScrollspy');
 })();

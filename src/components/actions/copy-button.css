@@ -9,29 +9,45 @@
   .trigger {
     display: inline-flex;
     align-items: center;
-    .button {
+    /* La caja pintada es el <button> de <is-button>, alcanzable por
+       ::part(button). El tipo va delante porque las reglas internas del kit
+       son `:host([color=…]) .btn` (0,2,0): sin él estas serían (0,1,1) y el
+       botón saldría con el alto y el fondo del botón normal en vez del
+       cuadrado transparente que pide el copy. */
+    is-button.button {
       display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      border: none;
-      border-radius: var(--is-radius, 6px);
       color: inherit;
       font: inherit;
-      height: 2em;
-      aspect-ratio: 1;
-      cursor: pointer;
-      transition: background-color 120ms ease, color 120ms ease;
-      &:hover:not(:disabled),
-      &:focus-visible:not(:disabled) { background: var(--is-control-bg-hover, #e9ecef); }
-      &:focus-visible {
+
+      &::part(button) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        border: none;
+        border-radius: var(--is-radius, 6px);
+        color: inherit;
+        font: inherit;
+        height: 2em;
+        min-height: 0;
+        min-width: 0;
+        aspect-ratio: 1;
+        cursor: pointer;
+        transition: background-color 120ms ease, color 120ms ease;
+      }
+
+      &:hover:not([disabled])::part(button),
+      &:focus-within:not([disabled])::part(button) { background: var(--is-control-bg-hover, #e9ecef); }
+
+      &::part(button):focus-visible {
         outline: 2px solid var(--is-focus, var(--is-color-brand-500, #339af0));
         outline-offset: 2px;
       }
-      &:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      &[disabled]::part(button) { opacity: 0.5; cursor: not-allowed; }
       &[hidden] { display: none !important; }
     }
     .icon {

@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-palette-selector> — Web Component (vanilla).
@@ -93,7 +96,7 @@ import '../media/icon.js';
 
   const OBSERVED = ['palettes', 'value', 'storage-key', 'aria-label'];
 
-  class IsPaletteSelector extends HTMLElement {
+  class IsPaletteSelector extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #root;
@@ -103,7 +106,6 @@ import '../media/icon.js';
     #slotOption;
     #palettes = [];
     #value = '';
-    #mounted = false;
     /** CSS cargado dinámicamente por paleta, para no recargar dos veces. */
     #loadedCSS = new Set();
 
@@ -134,7 +136,7 @@ import '../media/icon.js';
       document.addEventListener('click', this.#onDocClick);
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       document.removeEventListener('click', this.#onDocClick);
       this.#menu?.removeEventListener('click', this.#onClick);
       this.#trigger?.removeEventListener('click', this.#onClick);
@@ -142,8 +144,7 @@ import '../media/icon.js';
       this.#slotOption?.removeEventListener('slotchange', this.#onOptionSlotChange);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#parsePalettes();
       this.#loadInitial();
       this.#render();
@@ -151,8 +152,7 @@ import '../media/icon.js';
       this.#syncTriggerVisibility();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'palettes') {
         this.#parsePalettes();
         this.#render();
@@ -457,11 +457,7 @@ import '../media/icon.js';
       const key = this.getAttribute('storage-key') || 'is-palette';
       try { localStorage.setItem(key, value); } catch (_) { /* ignore */ }
       // Emitir evento.
-      this.dispatchEvent(new CustomEvent('is-palette-change', {
-        detail: { value, palette },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-palette-change', { value, palette });
       // Actualizar aria-selected del menu.
       for (const opt of this.#menu.querySelectorAll('[role="option"]')) {
         opt.setAttribute('aria-selected', opt.dataset.palette === value ? 'true' : 'false');
@@ -516,10 +512,5 @@ import '../media/icon.js';
     };
   }
 
-  if (!customElements.get('is-palette-selector')) {
-    customElements.define('is-palette-selector', IsPaletteSelector);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsPaletteSelector = IsPaletteSelector;
-  }
+  defineElement('is-palette-selector', IsPaletteSelector, 'IsPaletteSelector');
 })();

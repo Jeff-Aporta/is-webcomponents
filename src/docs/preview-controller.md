@@ -37,7 +37,12 @@ Toda la documentación/demo vive en JSON con interface compartida
       "title": "…",
       "lede": "…",
       "blocks": [
-        { "kind": "demo", "html": "<is-button>Hola</is-button>" },
+        {
+          "kind": "demo",
+          "html": "<is-button>Hola</is-button>",
+          "equivHtml": "<button type=\"button\">Hola</button>",
+          "equivNote": "Opcional. Si hay ramas, añade equivFlow con is-flowchart."
+        },
         { "kind": "callout", "html": "…" },
         { "kind": "code", "code": "…", "lang": "html" },
         { "kind": "table", "columns": ["A"], "rows": [["b"]] },

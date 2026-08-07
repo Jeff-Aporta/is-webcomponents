@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-qrcode> — Generador de QR en SVG.
@@ -137,12 +139,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       svg.appendChild(fgPath);
       this.#canvas.innerHTML = '';
       this.#canvas.appendChild(svg);
-      this.dispatchEvent(new CustomEvent('is-render', { bubbles: true, composed: true, detail: { svg } }));
+      emit(this, 'is-render', { svg });
     }
 
     #canvas;
     #status;
   }
 
-  if (!customElements.get('is-qrcode')) customElements.define('is-qrcode', IsQrCode);
+  defineElement('is-qrcode', IsQrCode);
 })();

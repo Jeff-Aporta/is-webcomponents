@@ -1,5 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { attachFormInternals, setCustomState } from '../_shared/form-associated.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setOptionalAttr } from '../_shared/reflect.js';
 
 /**
  * <is-radio> — Opción de radio. NO es form-associated a propósito: el valor lo
@@ -36,13 +40,12 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
   const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
   const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
 
-  class IsRadio extends HTMLElement {
+  class IsRadio extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #internals = null;
     #descEl;
     #descSlot;
-    #mounted = false;
 
     constructor() {
       super();
@@ -59,16 +62,14 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
       this.addEventListener('keydown', this.#onKey);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProps();
       if (!this.hasAttribute('role')) this.setAttribute('role', 'radio');
       this.#syncDescription();
       this.#sync();
     }
 
-    attributeChangedCallback(_name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(_name, oldVal, newVal) {
       this.#sync();
     }
 
@@ -81,7 +82,7 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
         .join('')
         .trim();
     }
-    set value(v) { v == null ? this.removeAttribute('value') : this.setAttribute('value', String(v)); }
+    set value(v) { setOptionalAttr(this, 'value', v); }
 
     get checked() { return this.hasAttribute('checked'); }
     set checked(v) { this.toggleAttribute('checked', !!v); }
@@ -161,11 +162,7 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
         return;
       }
       if (group.disabled || group.readonly) return;
-      this.dispatchEvent(new CustomEvent('is-radio-select', {
-        detail: { value: this.value },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-radio-select', { value: this.value });
     }
 
     #onClick = (e) => {
@@ -184,8 +181,5 @@ import { attachFormInternals, setCustomState } from '../_shared/form-associated.
     };
   }
 
-  if (!customElements.get('is-radio')) {
-    customElements.define('is-radio', IsRadio);
-  }
-  if (typeof window !== 'undefined') window.IsRadio = IsRadio;
+  defineElement('is-radio', IsRadio, 'IsRadio');
 })();

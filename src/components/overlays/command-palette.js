@@ -1,6 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-command-palette> — Paleta de comandos al estilo Cmd+K / Ctrl+K.
@@ -109,13 +111,13 @@ import '../media/icon.js';
       // sync atributo open para CSS hooks
       this.setAttribute('open', '');
       this.#input.focus();
-      this.dispatchEvent(new CustomEvent('is-open', { bubbles: true, composed: true }));
+      emit(this, 'is-open');
     }
 
     close() {
       if (this.#dialog.open) this.#dialog.close();
       this.removeAttribute('open');
-      this.dispatchEvent(new CustomEvent('is-close', { bubbles: true, composed: true }));
+      emit(this, 'is-close');
     }
 
     toggle() { this.#dialog.open ? this.close() : this.open(); }
@@ -224,7 +226,7 @@ import '../media/icon.js';
     #selectByIndex(idx) {
       const c = this.#results[idx];
       if (!c) return;
-      this.dispatchEvent(new CustomEvent('is-select', { bubbles: true, composed: true, detail: { command: c, id: c.id } }));
+      emit(this, 'is-select', { command: c, id: c.id });
       try { if (typeof c.run === 'function') c.run(); } catch { /* noop */ }
       this.close();
     }
@@ -236,5 +238,5 @@ import '../media/icon.js';
     #hotkeyHandler;
   }
 
-  if (!customElements.get('is-command-palette')) customElements.define('is-command-palette', IsCommandPalette);
+  defineElement('is-command-palette', IsCommandPalette);
 })();

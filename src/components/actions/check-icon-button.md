@@ -134,6 +134,8 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
+- [`./button.js`](./button.js) — la superficie pintada es un `<is-button variant="text">`;
+  el control accesible sigue siendo el host.
 
 Tags del módulo: `<is-check-icon-button>`.
 

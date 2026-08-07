@@ -1,5 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import './button.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-check-icon-button> — botón icon-only con dos estados (unchecked / checked).
@@ -19,14 +23,32 @@ import '../media/icon.js';
  *   is-change  { checked: boolean }  — tras cada toggle
  *
  * CSS Parts: ::part(button) ::part(icon)
+ *
+ * La superficie que se pinta es un <is-button variant="text">, no un <button>
+ * suelto: así el hover, el active, el estado disabled y la conversión a
+ * enlace salen del botón del kit en vez de reimplementarse aquí.
+ *
+ * El control accesible SIGUE siendo el host (role=button, tabindex, teclado):
+ * es lo que esperan is-video, is-speed-dial y is-theme-toggle, que lo
+ * estilizan y lo enfocan como si fuera un botón. Por eso el is-button interno
+ * va con `tabindex="-1"` y `aria-hidden` — pinta, no participa.
  */
 
 (() => {
   const TEMPLATE = document.createElement('template');
+  // `exportparts` conserva los nombres de part que ya publicaba el
+  // componente: ::part(button) sigue apuntando a la caja que se pinta.
   TEMPLATE.innerHTML = /* html */ `
-    <button part="button" class="btn" type="button" tabindex="-1" aria-hidden="true">
+    <is-button
+      class="btn"
+      variant="text"
+      color="neutral"
+      tabindex="-1"
+      aria-hidden="true"
+      exportparts="button: button"
+    >
       <is-icon part="icon" class="ico" aria-hidden="true"></is-icon>
-    </button>
+    </is-button>
   `;
 
   const OBSERVED = ['checked', 'icon', 'checked-icon', 'label', 'checked-label', 'disabled'];
@@ -43,7 +65,7 @@ import '../media/icon.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#btn = shadow.querySelector('.btn');
+      this.#btn = shadow.querySelector('is-button');
       this.#ico = shadow.querySelector('.ico');
       // El control accesible es el host, no el <button> interno: escuchar aquí
       // hace que el click del usuario (que burbujea) y `el.click()` coincidan.
@@ -74,19 +96,19 @@ import '../media/icon.js';
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
 
     get icon() { return this.getAttribute('icon') ?? ''; }
-    set icon(v) { v == null || v === '' ? this.removeAttribute('icon') : this.setAttribute('icon', v); }
+    set icon(v) { setStringAttr(this, 'icon', v); }
 
     get checkedIcon() { return this.getAttribute('checked-icon') ?? ''; }
     set checkedIcon(v) {
-      v == null || v === '' ? this.removeAttribute('checked-icon') : this.setAttribute('checked-icon', v);
+      setStringAttr(this, 'checked-icon', v);
     }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null || v === '' ? this.removeAttribute('label') : this.setAttribute('label', v); }
+    set label(v) { setStringAttr(this, 'label', v); }
 
     get checkedLabel() { return this.getAttribute('checked-label') ?? ''; }
     set checkedLabel(v) {
-      v == null || v === '' ? this.removeAttribute('checked-label') : this.setAttribute('checked-label', v);
+      setStringAttr(this, 'checked-label', v);
     }
 
     toggle(force) {
@@ -115,11 +137,7 @@ import '../media/icon.js';
     };
 
     #emit() {
-      this.dispatchEvent(new CustomEvent('is-change', {
-        bubbles: true,
-        composed: true,
-        detail: { checked: this.checked },
-      }));
+      emit(this, 'is-change', { checked: this.checked });
     }
 
     #render() {
@@ -132,7 +150,7 @@ import '../media/icon.js';
       if (icon) this.#ico.setAttribute('icon', icon);
       else this.#ico.removeAttribute('icon');
 
-      this.#btn.disabled = this.disabled;
+      this.#btn.toggleAttribute('disabled', this.disabled);
       this.setAttribute('aria-pressed', String(on));
       if (label) this.setAttribute('aria-label', label);
       else this.removeAttribute('aria-label');
@@ -140,8 +158,5 @@ import '../media/icon.js';
     }
   }
 
-  if (!customElements.get('is-check-icon-button')) {
-    customElements.define('is-check-icon-button', IsCheckIconButton);
-  }
-  if (typeof window !== 'undefined') window.IsCheckIconButton = IsCheckIconButton;
+  defineElement('is-check-icon-button', IsCheckIconButton, 'IsCheckIconButton');
 })();

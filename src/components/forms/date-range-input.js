@@ -13,7 +13,7 @@ import './date-range-picker.js';
  * Methods: show(), hide()
  */
 
-const IsDateRangeInput = definePickerInput({
+definePickerInput({
   tag: 'is-date-range-input',
   kind: 'date',
   cssUrl: import.meta.url,
@@ -26,5 +26,3 @@ const IsDateRangeInput = definePickerInput({
     return [calendar];
   },
 });
-
-if (typeof window !== 'undefined') window.IsDateRangeInput = IsDateRangeInput;

@@ -51,6 +51,16 @@ async function walk(dir, filter, out = []) {
 
 const componentFiles = await walk(join(root, 'src', 'components'), /\.js$/);
 
+/** Vocabulario compartido, leído de su fuente real para que no se duplique aquí. */
+const SHARED = {
+  INTENT: [...(await readFile(join(root, 'src/components/_shared/intent.js'), 'utf8'))
+    .match(/export const INTENT = Object\.freeze\(\[([\s\S]*?)\]\)/)[1]
+    .matchAll(/'([^']+)'/g)].map((m) => m[1]),
+  TONE: [...(await readFile(join(root, 'src/components/_shared/tone.js'), 'utf8'))
+    .match(/export const TONE = Object\.freeze\(\[([\s\S]*?)\]\)/)[1]
+    .matchAll(/'([^']+)'/g)].map((m) => m[1]),
+};
+
 /** tag -> { attr -> Set(valores), origen } */
 const registry = new Map();
 
@@ -58,17 +68,36 @@ for (const file of componentFiles) {
   const src = await readFile(file, 'utf8');
 
   // Un mismo .js puede registrar varios tags (is-tab-group + is-tab).
-  const tags = [...src.matchAll(/customElements\.define\(\s*['"]([\w-]+)['"]/g)].map((m) => m[1]);
+  const tags = [...src.matchAll(/(?:customElements\.define|defineElement)\(\s*['"]([\w-]+)['"]/g)].map((m) => m[1]);
   if (!tags.length) continue;
 
   const attrs = new Map();
 
   // 1. const VALID_<ATTR> = ['a', 'b']  — también VALID_TG_PLACEMENT, etc.
-  for (const m of src.matchAll(/const\s+VALID_(?:[A-Z]+_)?([A-Z]+)\s*=\s*\[([^\]]+)\]/g)) {
+  //
+  // El lado derecho puede ser un array literal, o derivarse del vocabulario
+  // compartido de `_shared/intent.js` / `_shared/tone.js`:
+  //
+  //   const VALID_COLOR   = INTENT;
+  //   const VALID_COLOR   = [...INTENT, 'info'];
+  //   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
+  //
+  // Sin resolver esas tres formas, los 8 componentes que ya consumen el
+  // vocabulario compartido se quedaban sin enum y este test dejaba de
+  // vigilarlos en silencio.
+  for (const m of src.matchAll(/const\s+VALID_(?:[A-Z]+_)?([A-Z]+)\s*=\s*([^;]+);/g)) {
     const attr = m[1].toLowerCase();
     if (!ENUM_ATTRS.has(attr)) continue;
-    const vals = [...m[2].matchAll(/['"]([^'"]+)['"]/g)].map((v) => v[1]);
-    if (vals.length) attrs.set(attr, { values: new Set(vals), origen: 'VALID_*' });
+    const rhs = m[2];
+    const vals = new Set();
+    if (/\bINTENT\b/.test(rhs)) for (const v of SHARED.INTENT) vals.add(v);
+    if (/\bTONE\b/.test(rhs)) for (const v of SHARED.TONE) vals.add(v);
+    for (const q of rhs.matchAll(/['"]([^'"]+)['"]/g)) {
+      // `.filter((t) => t !== 'plain')` resta; un literal suelto suma.
+      if (/!==\s*['"]$/.test(rhs.slice(0, q.index + 1))) vals.delete(q[1]);
+      else vals.add(q[1]);
+    }
+    if (vals.size) attrs.set(attr, { values: vals, origen: 'VALID_*' });
   }
 
   // 2. JSDoc:  *  variant   filled | outlined | plain   (default: filled)

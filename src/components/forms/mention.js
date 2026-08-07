@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-mention> — Input con autocompletado al tipear @usuario o #etiqueta.
@@ -112,7 +114,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     #onInput() {
       this.setAttribute('value', this.#input.value);
-      this.dispatchEvent(new CustomEvent('is-input', { bubbles: true, composed: true }));
+      emit(this, 'is-input');
       const triggers = (this.getAttribute('trigger') || '@#').split('');
       const caret = this.#input.selectionStart ?? this.#input.value.length;
       const before = this.#input.value.slice(0, caret);
@@ -188,10 +190,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
       try { this.#input.setSelectionRange(caret, caret); } catch { /* noop */ }
       this.setAttribute('value', next);
       this.#hidePopup();
-      this.dispatchEvent(new CustomEvent('is-select', { bubbles: true, composed: true, detail: { trigger: this.#lastTriggerChar, item, range: [start, caret] } }));
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { value: next } }));
+      emit(this, 'is-select', { trigger: this.#lastTriggerChar, item, range: [start, caret] });
+      emit(this, 'is-change', { value: next });
     }
   }
 
-  if (!customElements.get('is-mention')) customElements.define('is-mention', IsMention);
+  defineElement('is-mention', IsMention);
 })();

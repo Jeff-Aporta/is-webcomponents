@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../feedback/spinner.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-loading-overlay> — Capa de bloqueo a pantalla completa con spinner.
@@ -42,10 +45,9 @@ import '../feedback/spinner.js';
 
   const OBSERVED = ['open', 'message', 'scroll-lock'];
 
-  class IsLoadingOverlay extends HTMLElement {
+  class IsLoadingOverlay extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #backdrop;
     #messageEl;
     #messageText;
@@ -63,8 +65,7 @@ import '../feedback/spinner.js';
       this.#messageSlot = shadow.querySelector('slot[name="message"]');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       for (const p of ['open', 'message', 'scrollLock']) {
         if (Object.prototype.hasOwnProperty.call(this, p)) {
           const v = this[p];
@@ -77,13 +78,12 @@ import '../feedback/spinner.js';
       this.#syncOpen();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#messageSlot.removeEventListener('slotchange', this.#syncMessage);
       this.#releaseScroll();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'open') this.#syncOpen();
       else if (name === 'message') this.#syncMessage();
     }
@@ -111,7 +111,7 @@ import '../feedback/spinner.js';
     // ---- privados ---------------------------------------------------------
 
     #emit(name) {
-      this.dispatchEvent(new CustomEvent(name, { detail: {}, bubbles: true, composed: true }));
+      emit(this, name, {});
     }
 
     #syncOpen() {
@@ -143,8 +143,5 @@ import '../feedback/spinner.js';
     }
   }
 
-  if (!customElements.get('is-loading-overlay')) {
-    customElements.define('is-loading-overlay', IsLoadingOverlay);
-  }
-  if (typeof window !== 'undefined') window.IsLoadingOverlay = IsLoadingOverlay;
+  defineElement('is-loading-overlay', IsLoadingOverlay, 'IsLoadingOverlay');
 })();

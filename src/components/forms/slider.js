@@ -2,7 +2,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '../_shared/form-associated.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import { hasSlotted } from '../_shared/dom-utils.js';
+import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 /**
  * <is-slider> — Control de rango form-associated (vanilla + Shadow DOM).
  *
@@ -73,22 +78,9 @@ import {
   const TRACKS = ['normal', 'none', 'inverted'];
   const VALUE_LABELS = ['off', 'auto', 'on'];
 
-  function hasSlotted(slot) {
-    return slot.assignedNodes({ flatten: true }).some(
-      (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
-    );
-  }
 
   /** Quita el ruido float que dejan las sumas de steps decimales. */
-  function tidy(n, step) {
-    const decimals = (String(step).split('.')[1] || '').length;
-    if (!decimals) return n;
-    return Number(n.toFixed(Math.min(20, decimals)));
-  }
 
-  function clampTo(n, min, max) {
-    return Math.min(max, Math.max(min, n));
-  }
 
   /**
    * "0:0°C, 20:20°C" → [{ value: 0, label: '0°C' }, …]
@@ -108,7 +100,7 @@ import {
       .filter(Boolean);
   }
 
-  class IsSlider extends HTMLElement {
+  class IsSlider extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -127,7 +119,6 @@ import {
     #scale = null;
     #valueLabelFormat = null;
     #ariaValueText = null;
-    #mounted = false;
     #dragging = false;
     #activeIndex = 0;
     #valuesAtStart = [0];
@@ -158,8 +149,7 @@ import {
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProps();
       this.#values = this.#normalize(this.#readAttrValues());
       this.#syncSlots();
@@ -167,12 +157,11 @@ import {
       this.#render();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#endDrag();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'value') {
         this.#values = this.#normalize(this.#readAttrValues());
       } else if (name === 'disabled' || name === 'readonly') {
@@ -277,7 +266,7 @@ import {
     set disableSwap(v) { this.toggleAttribute('disable-swap', !!v); }
 
     get format() { return this.getAttribute('format') ?? ''; }
-    set format(v) { v == null ? this.removeAttribute('format') : this.setAttribute('format', String(v)); }
+    set format(v) { setOptionalAttr(this, 'format', v); }
 
     /** Escala no lineal: el valor mostrado es scale(value). */
     get scale() { return this.#scale; }
@@ -290,7 +279,7 @@ import {
     set getAriaValueText(fn) { this.#ariaValueText = typeof fn === 'function' ? fn : null; this.#render(); }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', String(v)); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
@@ -305,10 +294,10 @@ import {
     set withTooltip(v) { this.valueLabel = v ? 'auto' : 'off'; }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null ? this.removeAttribute('label') : this.setAttribute('label', String(v)); }
+    set label(v) { setOptionalAttr(this, 'label', v); }
 
     get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { v == null ? this.removeAttribute('hint') : this.setAttribute('hint', String(v)); }
+    set hint(v) { setOptionalAttr(this, 'hint', v); }
 
     // ---- API pública -----------------------------------------------------
 
@@ -381,7 +370,7 @@ import {
       const count = Math.floor((max - min) / step);
       if (count > 200) return [];
       const out = [];
-      for (let i = 0; i <= count; i++) out.push({ value: tidy(min + i * step, step), label: '' });
+      for (let i = 0; i <= count; i++) out.push({ value: tidyToStep(min + i * step, step), label: '' });
       return out;
     }
 
@@ -402,7 +391,7 @@ import {
       }
 
       const steps = Math.round((n - min) / step);
-      return clampTo(tidy(min + steps * step, step), min, max);
+      return clampTo(tidyToStep(min + steps * step, step), min, max);
     }
 
     #normalize(list) {
@@ -611,11 +600,7 @@ import {
     }
 
     #emit(name) {
-      this.dispatchEvent(new CustomEvent(name, {
-        detail: { value: this.value, values: this.values },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, name, { value: this.value, values: this.values });
     }
 
     /** Aplica `raw` al thumb `index` respetando swap / min-distance. */
@@ -791,8 +776,5 @@ import {
     }
   }
 
-  if (!customElements.get('is-slider')) {
-    customElements.define('is-slider', IsSlider);
-  }
-  if (typeof window !== 'undefined') window.IsSlider = IsSlider;
+  defineElement('is-slider', IsSlider, 'IsSlider');
 })();

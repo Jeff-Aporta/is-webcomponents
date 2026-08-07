@@ -1,6 +1,8 @@
 import { adoptCss } from './adopt-css.js';
 import { computePosition } from './position.js';
 import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-utils.js';
+import { defineElement } from './define.js';
+import { emit } from './emit.js';
 
 /**
  * Fábrica de los pickers "campo + panel": is-date-input, is-time-input,
@@ -147,7 +149,7 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
       if (!this.#dialog.open) this.#dialog.showModal();
       this.#reposition();
       queueMicrotask(() => this.#panelEls[0]?.focus?.({ preventScroll: true }));
-      this.#emit('is-show');
+      emit(this, 'is-show', {});
     }
 
     hide({ restore = false } = {}) {
@@ -158,7 +160,7 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
       for (const t of this.#triggers) t.setAttribute('aria-expanded', 'false');
       if (this.#dialog.open) this.#dialog.close();
       this.#fields[0]?.focus?.();
-      this.#emit('is-hide');
+      emit(this, 'is-hide', {});
     }
 
     checkValidity() { return this.#fields.every((f) => f.checkValidity?.() !== false); }
@@ -180,15 +182,24 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
         field.className = 'field';
         field.setAttribute('part', `field ${which}`);
         field.dataset.which = which;
-        const trigger = document.createElement('button');
-        trigger.type = 'button';
+        const trigger = document.createElement('is-button');
+        trigger.variant = 'plain';
         trigger.className = 'trigger';
         trigger.setAttribute('part', 'trigger');
         trigger.setAttribute('slot', 'end');
         trigger.setAttribute('aria-haspopup', 'dialog');
         trigger.setAttribute('aria-expanded', 'false');
         trigger.setAttribute('aria-label', 'Abrir selector');
-        trigger.innerHTML = `<svg viewBox="0 0 16 16" width="1.05em" height="1.05em" aria-hidden="true"><path fill="currentColor" d="${TRIGGER_ICONS[kind === 'time' ? 'time' : 'date']}"/></svg>`;
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 16 16');
+        svg.setAttribute('width', '1.05em');
+        svg.setAttribute('height', '1.05em');
+        svg.setAttribute('aria-hidden', 'true');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('fill', 'currentColor');
+        path.setAttribute('d', TRIGGER_ICONS[kind === 'time' ? 'time' : 'date']);
+        svg.appendChild(path);
+        trigger.appendChild(svg);
         field.appendChild(trigger);
         cell.appendChild(field);
         wrap.appendChild(cell);
@@ -205,19 +216,40 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
       dialog.className = 'popup';
       dialog.setAttribute('part', 'dialog');
       dialog.tabIndex = -1;
-      dialog.innerHTML = /* html */ `
-        <div part="panel" class="panel" role="document">
-          <div part="toolbar" class="toolbar" hidden></div>
-          <div part="content" class="content"></div>
-          <div part="actions" class="actions" hidden>
-            <button type="button" class="act" data-act="clear">Limpiar</button>
-            <button type="button" class="act" data-act="now">Hoy</button>
-            <span class="spacer"></span>
-            <button type="button" class="act" data-act="cancel">Cancelar</button>
-            <button type="button" class="act primary" data-act="accept">Aceptar</button>
-          </div>
-        </div>
-      `;
+      const panelWrap = document.createElement('div');
+      panelWrap.setAttribute('part', 'panel');
+      panelWrap.className = 'panel';
+      panelWrap.setAttribute('role', 'document');
+      const toolbar = document.createElement('div');
+      toolbar.setAttribute('part', 'toolbar');
+      toolbar.className = 'toolbar';
+      toolbar.hidden = true;
+      const content = document.createElement('div');
+      content.setAttribute('part', 'content');
+      content.className = 'content';
+      const actions = document.createElement('div');
+      actions.setAttribute('part', 'actions');
+      actions.className = 'actions';
+      actions.hidden = true;
+
+      const mkAct = (act, label, variant = 'plain', color = 'neutral') => {
+        const b = document.createElement('is-button');
+        b.variant = variant;
+        if (color !== 'neutral') b.color = color;
+        b.className = 'act';
+        b.dataset.act = act;
+        b.textContent = label;
+        return b;
+      };
+      actions.append(
+        mkAct('clear', 'Limpiar'),
+        mkAct('now', 'Hoy'),
+        Object.assign(document.createElement('span'), { className: 'spacer' }),
+        mkAct('cancel', 'Cancelar'),
+        mkAct('accept', 'Aceptar', 'filled', 'brand'),
+      );
+      panelWrap.append(toolbar, content, actions);
+      dialog.appendChild(panelWrap);
 
       frag.appendChild(wrap);
       frag.appendChild(dialog);
@@ -225,10 +257,6 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
     }
 
     /* ── Interno ──────────────────────────────────────────────────────── */
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
 
     #parts() {
       if (!range) return [this.value];
@@ -334,7 +362,7 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
       else this.removeAttribute('value');
       this.#syncFields();
       if (this.#open) this.#syncPanels();
-      if (prev !== (value || '')) this.#emit('is-change', { value: value || '', source });
+      if (prev !== (value || '')) emit(this, 'is-change', { value: value || '', source });
     }
 
     #reposition = () => {
@@ -455,6 +483,6 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
     };
   }
 
-  if (!customElements.get(tag)) customElements.define(tag, IsPickerInput);
+  defineElement(tag, IsPickerInput, true);
   return IsPickerInput;
 }

@@ -26,7 +26,8 @@ test('cdn-snippet tiene tabs Enlaces / Mirrors y boot con fallback', async () =>
   assert.match(src, /data-tab=["']enlaces["']/);
   assert.match(src, /data-copy=["']boot["']/);
   assert.match(src, /Boot con fallback/);
-  assert.match(src, /for \(const base of MIRRORS\)/);
+  assert.match(src, /for\s*\(\s*const base of MIRRORS\s*\)/);
+  assert.match(src, /Object\.assign\(document\.createElement\('link'\)/);
 });
 
 test('listSources expone ambos espejos', async () => {

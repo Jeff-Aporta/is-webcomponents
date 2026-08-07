@@ -2,6 +2,7 @@ import { buildTree, layoutTree, layoutRadialTree } from '../_shared/tree-layout.
 import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+
 import {
   makeCostGrid,
   snapDiagramGrid,

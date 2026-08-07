@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-pivot-table> — Pivot table: agrupar una colección por `rows` × `cols`,
@@ -158,7 +160,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       td.dataset.value = value == null ? '' : String(value);
       td.textContent = value == null ? '—' : fmt.format(value);
       td.addEventListener('click', () => {
-        this.dispatchEvent(new CustomEvent('is-cell-click', { bubbles: true, composed: true, detail: { row, col, value } }));
+        emit(this, 'is-cell-click', { row, col, value });
       });
       return td;
     }
@@ -177,5 +179,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     return t;
   }
 
-  if (!customElements.get('is-pivot-table')) customElements.define('is-pivot-table', IsPivotTable);
+  defineElement('is-pivot-table', IsPivotTable);
 })();

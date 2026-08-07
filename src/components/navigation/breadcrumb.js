@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-breadcrumb> — contenedor de una ruta de migas de pan.
@@ -24,10 +26,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </nav>
   `;
 
-  class IsBreadcrumb extends HTMLElement {
+  class IsBreadcrumb extends ElementBase {
     static get observedAttributes() { return ['label']; }
 
-    #mounted = false;
 
     constructor() {
       super();
@@ -36,13 +37,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#syncLabel();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'label') this.#syncLabel();
     }
 
@@ -58,6 +57,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-breadcrumb')) customElements.define('is-breadcrumb', IsBreadcrumb);
-  if (typeof window !== 'undefined') window.IsBreadcrumb = IsBreadcrumb;
+  defineElement('is-breadcrumb', IsBreadcrumb, 'IsBreadcrumb');
 })();

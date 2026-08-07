@@ -141,6 +141,8 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/position.js`](../_shared/position.js)
 - [`./dropdown-item.js`](./dropdown-item.js)
 - [`../layout/divider.js`](../layout/divider.js)
+- [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js) — ciclo de escucha
+  mientras el panel esta abierto (teclado, scroll), compartido con `is-context-menu`.
 
 Tags del módulo: `<is-dropdown>`.
 

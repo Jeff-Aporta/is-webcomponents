@@ -1,5 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './option.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-combobox> — Input + listbox filtrable.
@@ -39,7 +43,7 @@ import './option.js';
     'disabled', 'required', 'open', 'clearable'
   ];
 
-  class IsCombobox extends HTMLElement {
+  class IsCombobox extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -53,7 +57,6 @@ import './option.js';
     #clearBtn;
     #trigger;
     #slot;
-    #mounted = false;
     #activeIndex = -1;
     #options = [];
     #filter = '';
@@ -92,8 +95,7 @@ import './option.js';
       this.#slot.addEventListener('slotchange', () => this.#collectOptions());
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProps();
       this.#syncMeta();
       this.#collectOptions();
@@ -106,14 +108,13 @@ import './option.js';
       addEventListener('scroll', this.#onReposition, true);
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'open') this.#syncOpen();
       else if (name === 'disabled') this.#syncDisabled();
       else if (name === 'value') {
@@ -145,7 +146,7 @@ import './option.js';
     set clearable(v) { this.toggleAttribute('clearable', !!v); }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', v); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     formResetCallback() {
       this.value = this.getAttribute('value') ?? '';
@@ -177,10 +178,6 @@ import './option.js';
       if (!s) return;
       if (on) s.add(name);
       else s.delete(name);
-    }
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
     }
 
     #syncMeta() {
@@ -240,11 +237,11 @@ import './option.js';
         queueMicrotask(() => {
           try { this.#dialog.focus({ preventScroll: true }); } catch { /* noop */ }
         });
-        if (!this.#wasOpen) this.#emit('is-show');
+        if (!this.#wasOpen) emit(this, 'is-show', {});
       } else {
         this.#activeIndex = -1;
         if (this.#dialog.open) this.#dialog.close();
-        if (this.#wasOpen) this.#emit('is-hide');
+        if (this.#wasOpen) emit(this, 'is-hide', {});
       }
       this.#wasOpen = open;
     }
@@ -318,8 +315,8 @@ import './option.js';
       this.#setFormValue();
       this.#updateValidity();
       this.#syncClear();
-      this.#emit('is-input', { value });
-      if (prev !== value) this.#emit('is-change', { value });
+      emit(this, 'is-input', { value });
+      if (prev !== value) emit(this, 'is-change', { value });
       this.#ignoreFocusOpen = true;
       this.#input.focus();
       queueMicrotask(() => { this.#ignoreFocusOpen = false; });
@@ -352,7 +349,7 @@ import './option.js';
       this.#activeIndex = 0;
       if (!this.open) this.open = true;
       else this.#renderList();
-      this.#emit('is-input', { value: this.#input.value });
+      emit(this, 'is-input', { value: this.#input.value });
     };
 
     #onKeydown = (e) => {
@@ -366,7 +363,7 @@ import './option.js';
         this.#activeIndex = 0;
         if (!this.open) this.open = true;
         else this.#renderList();
-        this.#emit('is-input', { value: this.#input.value });
+        emit(this, 'is-input', { value: this.#input.value });
         return;
       }
       if (e.target === this.#dialog && (e.key === 'Backspace' || e.key === 'Delete')) {
@@ -375,7 +372,7 @@ import './option.js';
         this.#input.value = this.#filter;
         this.#activeIndex = 0;
         this.#renderList();
-        this.#emit('is-input', { value: this.#input.value });
+        emit(this, 'is-input', { value: this.#input.value });
         return;
       }
 
@@ -455,8 +452,8 @@ import './option.js';
       this.#setFormValue();
       this.#updateValidity();
       this.#syncClear();
-      this.#emit('is-input', { value: '' });
-      if (prev) this.#emit('is-change', { value: '' });
+      emit(this, 'is-input', { value: '' });
+      if (prev) emit(this, 'is-change', { value: '' });
       this.#input.focus();
       this.open = true;
     };
@@ -470,8 +467,5 @@ import './option.js';
     };
   }
 
-  if (!customElements.get('is-combobox')) {
-    customElements.define('is-combobox', IsCombobox);
-  }
-  if (typeof window !== 'undefined') window.IsCombobox = IsCombobox;
+  defineElement('is-combobox', IsCombobox, 'IsCombobox');
 })();

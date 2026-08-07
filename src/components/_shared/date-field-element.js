@@ -1,6 +1,8 @@
 import { adoptCss } from './adopt-css.js';
 import { SectionField } from './date-field-core.js';
 import { splitDateTime, uses12Hour } from './date-utils.js';
+import { defineElement } from './define.js';
+import { emit } from './emit.js';
 
 /**
  * Fábrica de los campos por secciones: is-date-field, is-time-field e
@@ -194,10 +196,6 @@ export function defineDateField({ tag, kind, cssUrl }) {
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
-
     #setState(name, on) {
       const s = this.#internals?.states;
       if (!s) return;
@@ -214,8 +212,8 @@ export function defineDateField({ tag, kind, cssUrl }) {
       this.#setFormValue();
       this.#updateValidity();
       if (this.#silent) return;
-      this.#emit('is-input', { value });
-      this.#emit('is-change', { value });
+      emit(this, 'is-input', { value });
+      emit(this, 'is-change', { value });
     }
 
     #syncMeta() {
@@ -293,6 +291,6 @@ export function defineDateField({ tag, kind, cssUrl }) {
     }
   }
 
-  if (!customElements.get(tag)) customElements.define(tag, IsDateFieldBase);
+  defineElement(tag, IsDateFieldBase, true);
   return IsDateFieldBase;
 }

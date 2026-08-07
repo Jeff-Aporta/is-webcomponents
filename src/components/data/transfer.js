@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-transfer> — Doble lista de selección (vanilla, zero dependencies).
@@ -73,9 +76,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const TRANSFER_OBSERVED = ['source-title', 'target-title', 'searchable', 'without-buttons', 'without-headings', 'max-target'];
 
-  class IsTransfer extends HTMLElement {
+  class IsTransfer extends ElementBase {
     static get observedAttributes() { return TRANSFER_OBSERVED; }
-    #mounted = false;
     #panelSource;
     #panelTarget;
     #searchSource;
@@ -104,8 +106,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#titleTarget = this.#panelTarget.querySelector('.title');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('source-title')) this.setAttribute('source-title', 'Disponibles');
       if (!this.hasAttribute('target-title')) this.setAttribute('target-title', 'Asignados');
       this.#bindControls();
@@ -113,8 +114,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
       this.#render();
     }
@@ -203,24 +203,15 @@ import { adoptCss } from '../_shared/adopt-css.js';
         }
       });
       this.#render();
-      this.dispatchEvent(new CustomEvent('is-transfer-change', {
-        detail: { source: this.values.length, target: this.values.length, values: this.values },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-transfer-change', { source: this.values.length, target: this.values.length, values: this.values });
     }
 
     #emitChange(item) {
-      this.dispatchEvent(new CustomEvent('is-transfer-change', {
-        detail: { item, source: this.#items().filter((it) => !it.hasAttribute('selected')).length, target: this.values.length, values: this.values },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-transfer-change', { item, source: this.#items().filter((it) => !it.hasAttribute('selected')).length, target: this.values.length, values: this.values });
     }
   }
 
-  if (!customElements.get('is-transfer')) customElements.define('is-transfer', IsTransfer);
-  if (typeof window !== 'undefined') window.IsTransfer = IsTransfer;
+  defineElement('is-transfer', IsTransfer, 'IsTransfer');
 
   // ============ <is-transfer-item> ============
   const ITEM_OBSERVED = ['value', 'selected', 'disabled'];
@@ -235,6 +226,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     attributeChangedCallback() {}
   }
 
-  if (!customElements.get('is-transfer-item')) customElements.define('is-transfer-item', IsTransferItem);
-  if (typeof window !== 'undefined') window.IsTransferItem = IsTransferItem;
+  defineElement('is-transfer-item', IsTransferItem, 'IsTransferItem');
 })();

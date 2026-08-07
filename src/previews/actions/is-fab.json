@@ -15,7 +15,9 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"fab-stage\">\r\n            <is-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></is-fab>\r\n          </div>\r\n          <p>Click: <span id=\"fbLog\">0</span></p>"
+          "html": "<div class=\"fab-stage\">\r\n            <is-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></is-fab>\r\n          </div>\r\n          <p>Click: <span id=\"fbLog\">0</span></p>",
+          "equivNote": "FAB ≈ botón circular; el kit aporta elevación, posiciones y pulse.",
+          "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>"
         },
         {
           "kind": "code",
@@ -31,7 +33,8 @@
         {
           "kind": "demo",
           "html": "<div class=\"fab-row\">\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:0.75em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">0.75em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:1em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">1em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:1.25em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">1.25em</code>\r\n            </span>\r\n          </div>",
-          "heading": "El mismo FAB con tres font-size"
+          "heading": "El mismo FAB con tres font-size",
+          "equivHtml": "<!-- font-size del host escala el FAB -->\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:0.85rem\">+</button>\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1rem\">+</button>\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1.25rem\">+</button>"
         },
         {
           "kind": "code",
@@ -47,7 +50,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></is-fab>\r\n          <is-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></is-fab>\r\n          <is-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></is-fab>\r\n          <is-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></is-fab>\r\n          <is-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></is-fab>"
+          "html": "<is-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></is-fab>\r\n          <is-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></is-fab>\r\n          <is-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></is-fab>\r\n          <is-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></is-fab>\r\n          <is-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></is-fab>",
+          "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>\n<button type=\"button\" aria-label=\"Crear\">+</button><!-- outlined vía CSS propio -->"
         }
       ]
     },
@@ -58,7 +62,9 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-fab icon=\"mdi:plus\" extended label=\"Nuevo proyecto\" position=\"inline\"></is-fab>\r\n          <is-fab icon=\"mdi:share\" color=\"neutral\" extended label=\"Compartir\" position=\"inline\"></is-fab>\r\n          <is-fab icon=\"mdi:download\" color=\"success\" extended label=\"Descargar\" position=\"inline\"></is-fab>"
+          "html": "<is-fab icon=\"mdi:plus\" extended label=\"Nuevo proyecto\" position=\"inline\"></is-fab>\r\n          <is-fab icon=\"mdi:share\" color=\"neutral\" extended label=\"Compartir\" position=\"inline\"></is-fab>\r\n          <is-fab icon=\"mdi:download\" color=\"success\" extended label=\"Descargar\" position=\"inline\"></is-fab>",
+          "equivNote": "extended = icono + etiqueta visible.",
+          "equivHtml": "<button type=\"button\">\n  <span aria-hidden=\"true\">+</span>\n  Crear\n</button>"
         }
       ]
     },
@@ -69,7 +75,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"fab-stage\">\r\n            <is-fab icon=\"mdi:plus\" position=\"top-start\" label=\"top-start\"></is-fab>\r\n            <is-fab icon=\"mdi:pencil\" position=\"top-end\" label=\"top-end\"></is-fab>\r\n            <is-fab icon=\"mdi:share\" position=\"bottom-start\" label=\"bottom-start\"></is-fab>\r\n            <is-fab icon=\"mdi:check\" color=\"success\" position=\"bottom-end\" label=\"bottom-end\"></is-fab>\r\n          </div>"
+          "html": "<div class=\"fab-stage\">\r\n            <is-fab icon=\"mdi:plus\" position=\"top-start\" label=\"top-start\"></is-fab>\r\n            <is-fab icon=\"mdi:pencil\" position=\"top-end\" label=\"top-end\"></is-fab>\r\n            <is-fab icon=\"mdi:share\" position=\"bottom-start\" label=\"bottom-start\"></is-fab>\r\n            <is-fab icon=\"mdi:check\" color=\"success\" position=\"bottom-end\" label=\"bottom-end\"></is-fab>\r\n          </div>",
+          "equivHtml": "<button type=\"button\" aria-label=\"Crear\"\n  style=\"position:fixed; inset:auto 1.5rem 1.5rem auto\">+</button>"
         }
       ]
     },
@@ -80,7 +87,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-fab icon=\"mdi:bell\" pulse color=\"warning\" position=\"inline\" label=\"Notificaciones\"></is-fab>\r\n          <is-fab icon=\"mdi:message\" pulse color=\"brand\" position=\"inline\" label=\"Mensajes\"></is-fab>"
+          "html": "<is-fab icon=\"mdi:bell\" pulse color=\"warning\" position=\"inline\" label=\"Notificaciones\"></is-fab>\r\n          <is-fab icon=\"mdi:message\" pulse color=\"brand\" position=\"inline\" label=\"Mensajes\"></is-fab>",
+          "equivHtml": "<button type=\"button\" aria-label=\"Crear\" class=\"pulse\">+</button>\n<!-- .pulse sería CSS propio; el kit usa el atributo pulse -->"
         }
       ]
     },

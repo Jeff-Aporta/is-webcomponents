@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-doc-editor> — Editor de documento basado en bloques (Notion-like).
@@ -172,7 +174,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #bindEditable(el, block) {
       const onInput = () => { block.text = el.textContent; this.#emit(); };
       el.addEventListener('input', onInput);
-      el.addEventListener('focus', () => this.dispatchEvent(new CustomEvent('is-focus', { bubbles: true, composed: true, detail: { id: block.id } })));
+      el.addEventListener('focus', () => emit(this, 'is-focus', { id: block.id }));
       el.addEventListener('keydown', (e) => this.#onKey(e, el, block));
     }
 
@@ -238,7 +240,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #syncDirty() { /* placeholder for any deferred sync */ }
 
     #emit() {
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { blocks: structuredClone(this.#blocks) } }));
+      emit(this, 'is-change', { blocks: structuredClone(this.#blocks) });
     }
 
     #blocksEl;
@@ -246,5 +248,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #onDocPointerDown;
   }
 
-  if (!customElements.get('is-doc-editor')) customElements.define('is-doc-editor', IsDocEditor);
+  defineElement('is-doc-editor', IsDocEditor);
 })();

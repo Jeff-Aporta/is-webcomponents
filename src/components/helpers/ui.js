@@ -1,3 +1,5 @@
+import { defineElement } from '../_shared/define.js';
+
 /**
  * helpers/ui.js — primitivas de render para apps consumidoras del kit.
  *
@@ -149,7 +151,7 @@ export const fecha = (iso, conHora = false) => {
 
 /** Registro idempotente: volver a cargar el mismo fuente no lanza. */
 export const define = (tag, clase) => {
-  if (!customElements.get(tag)) customElements.define(tag, clase);
+  defineElement(tag, clase);
 };
 
 /**

@@ -13,6 +13,18 @@ export interface PreviewDemoBlock {
   kind: 'demo';
   /** Markup del ejemplo (string HTML estático; el comportamiento se cablea en mount). */
   html: string;
+  /**
+   * HTML puro equivalente (sin tags `is-*`): documentación del mapeo mental
+   * nativo/ARIA. Se pinta debajo del demo como sección fija.
+   */
+  equivHtml?: string;
+  /** Nota corta bajo el título de la sección equivalente. */
+  equivNote?: string;
+  /**
+   * Markup opcional (p. ej. `<is-flowchart>…`) que aclara ramas cuando hay
+   * varios HTML distintos según el caso. Va debajo del `<pre>` equivalente.
+   */
+  equivFlow?: string;
   /** Desactiva botón "Ver código" de demo-code.js */
   noCode?: boolean;
   contain?: boolean;
@@ -113,6 +125,11 @@ export interface PreviewDefinition {
    * No poner lógica en el JSON.
    */
   hasBehavior?: boolean;
+  /**
+   * Si true, el chrome no pinta TOC ni reserva el panel derecho del split
+   * (p. ej. home a ancho completo).
+   */
+  withoutToc?: boolean;
   sections: PreviewSection[];
 }
 

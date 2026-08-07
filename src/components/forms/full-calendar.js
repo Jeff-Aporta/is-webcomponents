@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-full-calendar> — Vista día/semana/mes con eventos.
@@ -95,18 +97,18 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       if (btn.dataset.act === 'prev') this.prev();
       else if (btn.dataset.act === 'next') this.next();
       else if (btn.dataset.act === 'today') this.today();
-      else if (btn.dataset.view) { this.setView(btn.dataset.view); this.shadowRoot.querySelectorAll('.view-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.view === btn.dataset.view)); this.dispatchEvent(new CustomEvent('is-view-change', { bubbles: true, composed: true, detail: { view: btn.dataset.view, date: this.#cursor.toISOString() } })); }
+      else if (btn.dataset.view) { this.setView(btn.dataset.view); this.shadowRoot.querySelectorAll('.view-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.view === btn.dataset.view)); emit(this, 'is-view-change', { view: btn.dataset.view, date: this.#cursor.toISOString() }); }
     }
 
     #onClick(e) {
       const cell = e.target.closest('[data-iso]');
       if (!cell) return;
       const iso = cell.dataset.iso;
-      this.dispatchEvent(new CustomEvent('is-day-click', { bubbles: true, composed: true, detail: { date: iso } }));
+      emit(this, 'is-day-click', { date: iso });
       const ev = e.target.closest('[data-evid]');
       if (ev) {
         const evt = this.#events.find((x) => x.id === ev.dataset.evid);
-        this.dispatchEvent(new CustomEvent('is-event-click', { bubbles: true, composed: true, detail: { event: evt, date: iso } }));
+        emit(this, 'is-event-click', { event: evt, date: iso });
       }
     }
 
@@ -228,5 +230,5 @@ import { escapeHtml } from '../_shared/dom-utils.js';
   function sameDay(a, b) {
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
   }
-  if (!customElements.get('is-full-calendar')) customElements.define('is-full-calendar', IsFullCalendar);
+  defineElement('is-full-calendar', IsFullCalendar);
 })();

@@ -1,5 +1,6 @@
 import { ElementBase } from '../_shared/element-base.js';
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
 
 /**
  * <is-heading> — port de ISP `typography/H1.svelte` … `H6.svelte`.
@@ -81,6 +82,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     set color(v) { v ? this.setAttribute('color', v) : this.removeAttribute('color'); }
   }
 
-  if (!customElements.get('is-heading')) customElements.define('is-heading', IsHeading);
-  if (typeof window !== 'undefined') window.IsHeading = IsHeading;
+  defineElement('is-heading', IsHeading, 'IsHeading');
 })();

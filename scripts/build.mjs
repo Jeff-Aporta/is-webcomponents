@@ -287,9 +287,10 @@ await writeFile(
     '  <script type="module" src=".../actions/category.actions.min.js"></script>',
     '  <script type="module" src=".../all.min.js"></script>',
     '',
-    'Docs / skills (FUENTE, no van en dist/cdn):',
-    '  components/**/LLM.md, components/**/*.md  — docs LLM de componentes',
-    '  skills/is-webcomponents/                  — skill agentes IDE',
+    'Docs / skills:',
+    '  src/components/**/LLM.md, **/*.md           — docs LLM de componentes (fuente)',
+    '  dist/cdn/skills/<name>/SKILL.md             — skills para agentes (copiado en build)',
+    '  npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install',
     '  npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents',
     '',
   ].join('\n'),
@@ -327,6 +328,24 @@ try {
   console.log(`  assets/icons         ${String(copied).padStart(6)} copiados, ${kept} ya al dia en dist/cdn/assets/icons/`);
 } catch {
   // No hay assets/icons/ todavia; ignorar.
+}
+
+// ── Skills para agentes (Cursor / Claude / LLM) ──────────────────
+// Van a dist/cdn/skills/ para que jsDelivr y Pages las sirvan igual que
+// el resto del kit. La fuente canónica sigue en src/skills/.
+const skillsSrc = join(root, 'src', 'skills');
+const skillsOut = join(dist, 'skills');
+try {
+  await access(skillsSrc);
+  const { cp } = await import('node:fs/promises');
+  await mkdir(skillsOut, { recursive: true });
+  await cp(skillsSrc, skillsOut, { recursive: true, force: true });
+  const names = (await readdir(skillsSrc, { withFileTypes: true }))
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name);
+  console.log(`  skills/              ${names.length} → dist/cdn/skills/ (${names.join(', ')})`);
+} catch {
+  // Sin src/skills/: no bloquear el build del CDN.
 }
 
 console.log(`OK dist/cdn  ${entries.length} components + is-base + ${byCategory.size} categories + all`);

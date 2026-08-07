@@ -1,5 +1,7 @@
 import { ElementBase } from '../_shared/element-base.js';
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-block-layout> — port de ISP `layout/BlockLayout.svelte`.
@@ -103,11 +105,7 @@ export class BreakpointHost extends ElementBase {
     this.style.setProperty('--clientw', String(width));
     this.style.setProperty('--lerpw', String(Math.round(lerpw * 1e4) / 1e4));
 
-    this.dispatchEvent(new CustomEvent('is-breakpoint', {
-      bubbles: true,
-      composed: true,
-      detail: { width, sizew, boolszw, lerpw: (b0, b1) => lerpFor(width, b0, b1) },
-    }));
+    emit(this, 'is-breakpoint', { width, sizew, boolszw, lerpw: (b0, b1) => lerpFor(width, b0, b1) });
   }
 }
 
@@ -134,8 +132,5 @@ export class BreakpointHost extends ElementBase {
     set cscroll(v) { this.setBooleanAttr('cscroll', v); }
   }
 
-  if (!customElements.get('is-block-layout')) {
-    customElements.define('is-block-layout', IsBlockLayout);
-  }
-  if (typeof window !== 'undefined') window.IsBlockLayout = IsBlockLayout;
+  defineElement('is-block-layout', IsBlockLayout, 'IsBlockLayout');
 })();

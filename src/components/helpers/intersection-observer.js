@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-intersection-observer> — Web Component (vanilla).
@@ -74,11 +76,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
           if (cls && entry.target instanceof Element) {
             entry.target.classList.toggle(cls, entry.isIntersecting);
           }
-          this.dispatchEvent(new CustomEvent('is-intersect', {
-            bubbles: true,
-            composed: true,
-            detail: { entry }
-          }));
+          emit(this, 'is-intersect', { entry });
           if (once && entry.isIntersecting) {
             this.#observer?.unobserve(entry.target);
           }
@@ -91,10 +89,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-intersection-observer')) {
-    customElements.define('is-intersection-observer', IsIntersectionObserver);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsIntersectionObserver = IsIntersectionObserver;
-  }
+  defineElement('is-intersection-observer', IsIntersectionObserver, 'IsIntersectionObserver');
 })();

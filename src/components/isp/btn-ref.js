@@ -10,7 +10,8 @@ import './catalogo-gen.js';
 import {
   asStr, getProp, isPresent,
 } from '../_shared/isp-record-utils.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 /**
  * <is-btn-ref> — port de `src/lib/form/BtnRef.svelte` (ISP).
  *
@@ -219,10 +220,6 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
     }
 
-    #emit(name, detail) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
-
     #pk() {
       const keys = this.controller?.primaryKeys;
       return keys?.length ? asStr(keys.at(-1)) : 'id';
@@ -303,8 +300,8 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#setValueLabel(label || value, !label);
       this.onSelectedRecord(record);
       this.onChange();
-      this.#emit('is-selected-record', { record, value, label: label.trim() });
-      this.#emit('is-change', { value });
+      emit(this, 'is-selected-record', { record, value, label: label.trim() });
+      emit(this, 'is-change', { value });
       this.#syncValidity();
       this.close();
     }
@@ -328,23 +325,21 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
       this.setAttribute('value', v);
       this.handleInput();
-      this.#emit('is-input', { value: v });
+      emit(this, 'is-input', { value: v });
       this.#syncValidity();
     };
 
     #onFieldChange = () => {
       this.onChange();
-      this.#emit('is-change', { value: this.value });
+      emit(this, 'is-change', { value: this.value });
     };
 
     #onTypingEndEvt = () => {
       void this.#resolveLabel();
       this.onTypingEnd();
-      this.#emit('is-typing-end', { value: this.value });
+      emit(this, 'is-typing-end', { value: this.value });
     };
   }
 
-  if (!customElements.get('is-btn-ref')) {
-    customElements.define('is-btn-ref', IsBtnRef);
-  }
+  defineElement('is-btn-ref', IsBtnRef);
 })();

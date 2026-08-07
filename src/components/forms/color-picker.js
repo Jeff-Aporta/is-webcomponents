@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+
 import {
   attachFormInternals,
   clearValidity,
@@ -7,7 +8,10 @@ import {
   setFormValue,
   setValidity,
 } from '../_shared/form-associated.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr } from '../_shared/reflect.js';
 /**
  * <is-color-picker> — Selector de color form-associated.
  *
@@ -64,7 +68,7 @@ import {
     return /^[0-9a-f]{6}$/.test(s) ? `#${s}` : '';
   }
 
-  class IsColorPicker extends HTMLElement {
+  class IsColorPicker extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -83,7 +87,6 @@ import {
     #hexInput;
     #swatchesEl;
 
-    #mounted = false;
     #open = false;
     #formDisabled = false;
     #defaultsRead = false;
@@ -126,8 +129,7 @@ import {
       this.#hintSlot.addEventListener('slotchange', () => this.#syncMeta());
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProps();
       const initial = normalizeHex(this.getAttribute('value')) || DEFAULT_VALUE;
       this.#writeValueAttr(initial);
@@ -143,14 +145,13 @@ import {
       addEventListener('scroll', this.#onReposition, true);
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'value') {
         if (this.#writingValue) return;
         const norm = normalizeHex(newVal) || DEFAULT_VALUE;
@@ -176,7 +177,7 @@ import {
     set required(v) { this.toggleAttribute('required', !!v); }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', v); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     /** @returns {string[]} paleta activa */
     get swatches() {
@@ -244,10 +245,6 @@ import {
           this[a] = v;
         }
       }
-    }
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
     }
 
     get #isDisabled() { return this.disabled || this.#formDisabled; }
@@ -331,8 +328,8 @@ import {
       const prev = this.value;
       this.#writeValueAttr(norm);
       this.#sync();
-      if (norm !== prev) this.#emit('is-input', { value: norm });
-      if (committed && norm !== prev) this.#emit('is-change', { value: norm });
+      if (norm !== prev) emit(this, 'is-input', { value: norm });
+      if (committed && norm !== prev) emit(this, 'is-change', { value: norm });
     }
 
     #positionPanel() {
@@ -406,8 +403,5 @@ import {
     };
   }
 
-  if (!customElements.get('is-color-picker')) {
-    customElements.define('is-color-picker', IsColorPicker);
-  }
-  if (typeof window !== 'undefined') window.IsColorPicker = IsColorPicker;
+  defineElement('is-color-picker', IsColorPicker, 'IsColorPicker');
 })();

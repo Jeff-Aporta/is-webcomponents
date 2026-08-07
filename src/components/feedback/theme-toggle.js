@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../actions/check-icon-button.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-theme-toggle> — Web Component (vanilla).
@@ -116,11 +118,7 @@ import '../actions/check-icon-button.js';
       applyTheme(container, next);
       this.#applying = false;
       this.#render();
-      this.dispatchEvent(new CustomEvent('theme-toggle', {
-        bubbles: true,
-        composed: true,
-        detail: { theme: next, dark: next === 'dark', container },
-      }));
+      emit(this, 'theme-toggle', { theme: next, dark: next === 'dark', container });
       // Tambien emite 'is-theme-change' en document para que modulos
       // globales (highlight-pre, demos, etc.) reaccionen sin necesidad
       // de conocer el contenedor concreto donde se aplico el tema.
@@ -152,10 +150,5 @@ import '../actions/check-icon-button.js';
     }
   }
 
-  if (!customElements.get('is-theme-toggle')) {
-    customElements.define('is-theme-toggle', IsThemeToggle);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsThemeToggle = IsThemeToggle;
-  }
+  defineElement('is-theme-toggle', IsThemeToggle, 'IsThemeToggle');
 })();

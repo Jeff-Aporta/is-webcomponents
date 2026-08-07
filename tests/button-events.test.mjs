@@ -25,8 +25,10 @@ const EVENTOS = ['is-focus', 'is-blur', 'is-click', 'is-invalid'];
 test('cada evento documentado se emite de verdad', () => {
   for (const ev of EVENTOS) {
     assert.ok(
-      new RegExp(`#emit\\(\\s*["']${ev}["']`).test(src),
-      `${ev} aparece en la documentacion pero no hay ningun #emit("${ev}")`,
+      // `emit(this, ...)` de _shared/emit.js sustituyó al antiguo `#emit(...)`
+      // privado; se aceptan ambas formas.
+      new RegExp(`(?:#emit|emit)\\(\\s*(?:this,\\s*)?["']${ev}["']`).test(src),
+      `${ev} aparece en la documentacion pero no hay ningun emit(this, "${ev}")`,
     );
   }
 });

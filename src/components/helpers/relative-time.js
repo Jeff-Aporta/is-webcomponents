@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-relative-time> — Web Component (vanilla).
@@ -29,12 +32,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
     ['second', 1]
   ];
 
-  class IsRelativeTime extends HTMLElement {
+  class IsRelativeTime extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #el;
     #timer = null;
-    #mounted = false;
 
     constructor() {
       super();
@@ -44,24 +46,22 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#el = shadow.querySelector('.time');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#render();
       this.#setupSync();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#clearSync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#render();
       if (name === 'sync') this.#setupSync();
     }
 
     get date() { return this.getAttribute('date') ?? ''; }
-    set date(v) { v == null || v === '' ? this.removeAttribute('date') : this.setAttribute('date', v); }
+    set date(v) { setStringAttr(this, 'date', v); }
 
     get format() {
       const v = this.getAttribute('format');
@@ -131,10 +131,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-relative-time')) {
-    customElements.define('is-relative-time', IsRelativeTime);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsRelativeTime = IsRelativeTime;
-  }
+  defineElement('is-relative-time', IsRelativeTime, 'IsRelativeTime');
 })();

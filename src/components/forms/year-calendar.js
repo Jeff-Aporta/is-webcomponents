@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-year-calendar> — Rejilla de años desplazable (MUI YearCalendar).
@@ -21,11 +24,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
     return Number.isFinite(n) && n > 0 ? n : fallback;
   }
 
-  class IsYearCalendar extends HTMLElement {
+  class IsYearCalendar extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #base;
-    #mounted = false;
 
     constructor() {
       super();
@@ -37,14 +39,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#render();
       this.scrollToSelection();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#render();
       if (name === 'value') this.scrollToSelection();
     }
@@ -107,11 +107,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #select(year) {
       if (this.disabled || this.readonly) return;
       this.setAttribute('value', String(year));
-      this.dispatchEvent(new CustomEvent('is-change', {
-        detail: { value: String(year), year },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-change', { value: String(year), year });
     }
 
     #onClick = (e) => {
@@ -144,8 +140,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-year-calendar')) {
-    customElements.define('is-year-calendar', IsYearCalendar);
-  }
-  if (typeof window !== 'undefined') window.IsYearCalendar = IsYearCalendar;
+  defineElement('is-year-calendar', IsYearCalendar, 'IsYearCalendar');
 })();

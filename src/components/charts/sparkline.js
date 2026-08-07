@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { pathLine, pathArea, roundedBarRect } from '../_shared/svg-chart-engine.js';
+import { defineElement } from '../_shared/define.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -141,6 +142,5 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
     }
   }
 
-  if (!customElements.get('is-sparkline')) customElements.define('is-sparkline', IsSparkline);
-  if (typeof window !== 'undefined') window.IsSparkline = IsSparkline;
+  defineElement('is-sparkline', IsSparkline, 'IsSparkline');
 })();

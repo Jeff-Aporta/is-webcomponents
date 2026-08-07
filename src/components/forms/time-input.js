@@ -17,7 +17,7 @@ import './digital-clock.js';
  * Methods: show(), hide()
  */
 
-const IsTimeInput = definePickerInput({
+definePickerInput({
   tag: 'is-time-input',
   kind: 'time',
   cssUrl: import.meta.url,
@@ -35,5 +35,3 @@ const IsTimeInput = definePickerInput({
     return [clock];
   },
 });
-
-if (typeof window !== 'undefined') window.IsTimeInput = IsTimeInput;

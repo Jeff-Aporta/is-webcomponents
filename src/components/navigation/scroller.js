@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-scroller> — Web Component (vanilla, zero dependencies).
@@ -47,10 +50,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['orientation', 'without-scroll-buttons'];
 
-  class IsScroller extends HTMLElement {
+  class IsScroller extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #scroller;
     #viewport;
     #btnStart;
@@ -72,8 +74,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#btnEnd.addEventListener('click', () => this.#scrollBy(1));
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
       this.#ro = new ResizeObserver(this.#syncOverflow);
       this.#ro.observe(this.#viewport);
@@ -81,13 +82,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       requestAnimationFrame(() => this.#syncOverflow());
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#ro?.disconnect();
       this.#viewport.removeEventListener('scroll', this.#onScroll);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'orientation') this.#syncOrientation();
       if (name === 'without-scroll-buttons') this.#syncOverflow();
     }
@@ -123,11 +123,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const dx = horiz ? direction * 120 : 0;
       const dy = vert ? direction * 120 : 0;
       this.#viewport.scrollBy({ left: dx, top: dy, behavior: 'smooth' });
-      this.dispatchEvent(new CustomEvent(direction < 0 ? 'is-scroll-start' : 'is-scroll-end', {
-        detail: { direction },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, direction < 0 ? 'is-scroll-start' : 'is-scroll-end', { direction });
     }
 
     #syncOverflow = () => {
@@ -146,19 +142,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const overflow = (horiz && sm > 1) || (vert && sm2 > 1);
       this.#btnStart.hidden = !overflow;
       this.#btnEnd.hidden = !overflow;
-      this.dispatchEvent(new CustomEvent('is-scroll-overflow', {
-        detail: { overflowing: overflow },
-        bubbles: true,
-        composed: true,
-      }));
-      this.dispatchEvent(new CustomEvent('is-scroll-position', {
-        detail: { scrollLeft: sl, scrollTop: st },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-scroll-overflow', { overflowing: overflow });
+      emit(this, 'is-scroll-position', { scrollLeft: sl, scrollTop: st });
     };
   }
 
-  if (!customElements.get('is-scroller')) customElements.define('is-scroller', IsScroller);
-  if (typeof window !== 'undefined') window.IsScroller = IsScroller;
+  defineElement('is-scroller', IsScroller, 'IsScroller');
 })();

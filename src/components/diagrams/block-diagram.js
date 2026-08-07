@@ -6,6 +6,8 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
@@ -236,14 +238,10 @@ class IsBlockDiagram extends HTMLElement {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => this.dispatchEvent(new CustomEvent('is-turtle-state', {
-        bubbles: true, composed: true, detail: state,
-      })),
+      onState: (state) => emit(this, 'is-turtle-state', state),
     });
 
-    this.dispatchEvent(new CustomEvent('is-render', {
-      bubbles: true, composed: true, detail: { layout, svg: this.#svg },
-    }));
+    emit(this, 'is-render', { layout, svg: this.#svg });
   }
 
   #buildLegend(layout, theme) {
@@ -425,9 +423,7 @@ class IsBlockDiagram extends HTMLElement {
     if (this.isViewer) {
       const item = e.composedPath().find((x) => x?.dataset?.groupId);
       if (item) {
-        this.dispatchEvent(new CustomEvent('is-toggle-group', {
-          bubbles: true, composed: true, detail: { id: item.dataset.groupId },
-        }));
+        emit(this, 'is-toggle-group', { id: item.dataset.groupId });
       }
       return;
     }
@@ -505,8 +501,7 @@ class IsBlockDiagram extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-block-diagram')) customElements.define('is-block-diagram', IsBlockDiagram);
-if (typeof window !== 'undefined') window.IsBlockDiagram = IsBlockDiagram;
+defineElement('is-block-diagram', IsBlockDiagram, 'IsBlockDiagram');
 
 registerDiagramKind('block', 'is-block-diagram');
 registerDiagramKind('blockDiagram', 'is-block-diagram');

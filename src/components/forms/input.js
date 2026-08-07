@@ -3,7 +3,11 @@ import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '../_shared/form-associated.js';
 import '../media/icon.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import { hasSlotted } from '../_shared/dom-utils.js';
 /**
  * <is-input> — Campo de texto form-associated (vanilla + Shadow DOM).
  *
@@ -92,13 +96,8 @@ import '../media/icon.js';
     'stepMismatch', 'tooLong', 'tooShort', 'typeMismatch'
   ];
 
-  function hasSlotted(slot) {
-    return slot.assignedNodes({ flatten: true }).some(
-      (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
-    );
-  }
 
-  class IsInput extends HTMLElement {
+  class IsInput extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -120,7 +119,6 @@ import '../media/icon.js';
     #startSlot;
     #endSlot;
     #value = '';
-    #mounted = false;
     #passwordVisible = false;
     #hasHint = false;
     #touched = false;
@@ -162,8 +160,7 @@ import '../media/icon.js';
       }
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProps();
       this.#value = this.getAttribute('value') ?? '';
       this.#syncSlots();
@@ -172,7 +169,7 @@ import '../media/icon.js';
       this.#update();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       // El debounce de `is-typing-end` no debe sobrevivir al desmontaje.
       if (this.#typingTimer != null) {
         clearTimeout(this.#typingTimer);
@@ -180,8 +177,7 @@ import '../media/icon.js';
       }
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'value') {
         this.#value = newVal ?? '';
         this.#syncNative();
@@ -253,7 +249,7 @@ import '../media/icon.js';
     }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', String(v)); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
@@ -274,7 +270,7 @@ import '../media/icon.js';
     set error(v) { this.toggleAttribute('error', !!v); }
 
     get errorText() { return this.getAttribute('error-text') ?? ''; }
-    set errorText(v) { v == null ? this.removeAttribute('error-text') : this.setAttribute('error-text', String(v)); }
+    set errorText(v) { setOptionalAttr(this, 'error-text', v); }
 
     get showCount() { return this.hasAttribute('show-count'); }
     set showCount(v) { this.toggleAttribute('show-count', !!v); }
@@ -284,34 +280,34 @@ import '../media/icon.js';
 
     /** `prefix` ya existe en Element (namespace XML): la propiedad se llama prefixText. */
     get prefixText() { return this.getAttribute('prefix') ?? ''; }
-    set prefixText(v) { v == null ? this.removeAttribute('prefix') : this.setAttribute('prefix', String(v)); }
+    set prefixText(v) { setOptionalAttr(this, 'prefix', v); }
 
     get suffixText() { return this.getAttribute('suffix') ?? ''; }
-    set suffixText(v) { v == null ? this.removeAttribute('suffix') : this.setAttribute('suffix', String(v)); }
+    set suffixText(v) { setOptionalAttr(this, 'suffix', v); }
 
     get placeholder() { return this.getAttribute('placeholder') ?? ''; }
-    set placeholder(v) { v == null ? this.removeAttribute('placeholder') : this.setAttribute('placeholder', String(v)); }
+    set placeholder(v) { setOptionalAttr(this, 'placeholder', v); }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null ? this.removeAttribute('label') : this.setAttribute('label', String(v)); }
+    set label(v) { setOptionalAttr(this, 'label', v); }
 
     get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { v == null ? this.removeAttribute('hint') : this.setAttribute('hint', String(v)); }
+    set hint(v) { setOptionalAttr(this, 'hint', v); }
 
     get min() { return this.getAttribute('min'); }
-    set min(v) { v == null ? this.removeAttribute('min') : this.setAttribute('min', String(v)); }
+    set min(v) { setOptionalAttr(this, 'min', v); }
 
     get max() { return this.getAttribute('max'); }
-    set max(v) { v == null ? this.removeAttribute('max') : this.setAttribute('max', String(v)); }
+    set max(v) { setOptionalAttr(this, 'max', v); }
 
     get step() { return this.getAttribute('step'); }
-    set step(v) { v == null ? this.removeAttribute('step') : this.setAttribute('step', String(v)); }
+    set step(v) { setOptionalAttr(this, 'step', v); }
 
     get maxlength() { return this.getAttribute('maxlength'); }
-    set maxlength(v) { v == null ? this.removeAttribute('maxlength') : this.setAttribute('maxlength', String(v)); }
+    set maxlength(v) { setOptionalAttr(this, 'maxlength', v); }
 
     get autocomplete() { return this.getAttribute('autocomplete'); }
-    set autocomplete(v) { v == null ? this.removeAttribute('autocomplete') : this.setAttribute('autocomplete', String(v)); }
+    set autocomplete(v) { setOptionalAttr(this, 'autocomplete', v); }
 
     /** Input nativo interno — útil para casos avanzados. */
     get input() { return this.#input; }
@@ -367,10 +363,6 @@ import '../media/icon.js';
           this[p] = v;
         }
       }
-    }
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
     }
 
     #syncSlots = () => {
@@ -482,7 +474,7 @@ import '../media/icon.js';
       this.#value = this.#input.value;
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-      this.#emit('is-input', { value: this.#value });
+      emit(this, 'is-input', { value: this.#value });
       this.#scheduleTypingEnd();
     };
 
@@ -491,7 +483,7 @@ import '../media/icon.js';
       if (this.#typingTimer != null) clearTimeout(this.#typingTimer);
       this.#typingTimer = setTimeout(() => {
         this.#typingTimer = null;
-        this.#emit('is-typing-end', { value: this.#value });
+        emit(this, 'is-typing-end', { value: this.#value });
       }, this.typingDelay);
     }
 
@@ -500,7 +492,7 @@ import '../media/icon.js';
       this.#touched = true;
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-      this.#emit('is-change', { value: this.#value });
+      emit(this, 'is-change', { value: this.#value });
     };
 
     #onFocus = () => { setCustomState(this.#internals, 'focused', true); };
@@ -521,8 +513,8 @@ import '../media/icon.js';
       this.#input.focus();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-      this.#emit('is-input', { value: '' });
-      this.#emit('is-change', { value: '' });
+      emit(this, 'is-input', { value: '' });
+      emit(this, 'is-change', { value: '' });
       this.#scheduleTypingEnd();
     };
 
@@ -540,8 +532,5 @@ import '../media/icon.js';
     };
   }
 
-  if (!customElements.get('is-input')) {
-    customElements.define('is-input', IsInput);
-  }
-  if (typeof window !== 'undefined') window.IsInput = IsInput;
+  defineElement('is-input', IsInput, 'IsInput');
 })();

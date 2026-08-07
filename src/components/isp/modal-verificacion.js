@@ -3,6 +3,8 @@ import '../actions/button.js';
 import '../media/icon.js';
 import './text.js';
 import './heading.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-modal-verificacion> — port de `src/lib/base/modal/ModalVerificacion.svelte`.
@@ -224,7 +226,7 @@ export function lowerCase(value) {
           this.#mensajes = Array.isArray(res?.mensajes) ? res.mensajes.slice() : [];
         }
         this.#renderMensajes();
-        this.#emit('is-verificacion', {
+        emit(this, 'is-verificacion', {
           mensajes: this.mensajes,
           qinfos: this.qinfos,
           qwarning: this.qwarning,
@@ -234,7 +236,7 @@ export function lowerCase(value) {
         const sAdd = e instanceof Error ? `\r\n${e.message}` : '';
         const msg = 'No se pudo completar la verificación.' + sAdd;
         this.onError?.(msg);
-        this.#emit('is-verificacion-error', { message: msg, error: e });
+        emit(this, 'is-verificacion-error', { message: msg, error: e });
       } finally {
         this.loading = false;
       }
@@ -242,10 +244,6 @@ export function lowerCase(value) {
     }
 
     // ---- privados ---------------------------------------------------------
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
 
     #syncTexts() {
       const entrie = this.entity || this.controller?.entrie;
@@ -286,7 +284,7 @@ export function lowerCase(value) {
     }
 
     #onCancel = () => {
-      this.#emit('is-cancel');
+      emit(this, 'is-cancel', {});
       this.hide();
     };
 
@@ -320,8 +318,5 @@ export function lowerCase(value) {
     }
   }
 
-  if (!customElements.get('is-modal-verificacion')) {
-    customElements.define('is-modal-verificacion', IsModalVerificacion);
-  }
-  if (typeof window !== 'undefined') window.IsModalVerificacion = IsModalVerificacion;
+  defineElement('is-modal-verificacion', IsModalVerificacion, 'IsModalVerificacion');
 })();

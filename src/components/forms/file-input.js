@@ -1,6 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
 import '../helpers/format-bytes.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-file-input> — Web Component (vanilla).
@@ -56,7 +59,7 @@ import '../helpers/format-bytes.js';
 
   const OBSERVED = ['label', 'hint', 'name', 'accept', 'capture', 'multiple', 'disabled', 'required'];
 
-  class IsFileInput extends HTMLElement {
+  class IsFileInput extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -69,7 +72,6 @@ import '../helpers/format-bytes.js';
     #labelSlot;
     #hintSlot;
     #files = [];
-    #mounted = false;
 
     constructor() {
       super();
@@ -100,8 +102,7 @@ import '../helpers/format-bytes.js';
       this.#hintSlot.addEventListener('slotchange', () => this.#syncSlots());
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#syncAttrs();
       this.#syncSlots();
       this.#syncDisabled();
@@ -110,8 +111,7 @@ import '../helpers/format-bytes.js';
       this.#setState('blank', this.#files.length === 0);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'disabled') this.#syncDisabled();
       else if (name === 'required') this.#syncRequired();
       else if (name === 'label' || name === 'hint') this.#syncSlots();
@@ -330,14 +330,9 @@ import '../helpers/format-bytes.js';
       const detail = { files: this.files };
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-      this.dispatchEvent(new CustomEvent('is-change', { detail, bubbles: true, composed: true }));
+      emit(this, 'is-change', detail);
     }
   }
 
-  if (!customElements.get('is-file-input')) {
-    customElements.define('is-file-input', IsFileInput);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsFileInput = IsFileInput;
-  }
+  defineElement('is-file-input', IsFileInput, 'IsFileInput');
 })();

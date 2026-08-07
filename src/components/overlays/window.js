@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-window> — Ventana flotante dockable (estilo escritorio).
@@ -122,7 +124,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         this.style.transform = 'none';
         this.#root.classList.add('is-minimized');
       }
-      this.dispatchEvent(new CustomEvent('is-minimize', { bubbles: true, composed: true }));
+      emit(this, 'is-minimize');
     }
 
     maximize() {
@@ -137,7 +139,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.style.width = '100%';
       this.style.height = '100%';
       this.style.transform = 'none';
-      this.dispatchEvent(new CustomEvent('is-maximize', { bubbles: true, composed: true }));
+      emit(this, 'is-maximize');
     }
 
     restore() {
@@ -156,7 +158,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         this.style.setProperty('--_w', `${this.#lastRect.w}px`);
         this.style.setProperty('--_h', `${this.#lastRect.h}px`);
       }
-      this.dispatchEvent(new CustomEvent('is-restore', { bubbles: true, composed: true, detail: { was: target } }));
+      emit(this, 'is-restore', { was: target });
     }
 
     unmaximize() {
@@ -166,7 +168,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
     close() {
       this.remove();
-      this.dispatchEvent(new CustomEvent('is-close', { bubbles: true, composed: true }));
+      emit(this, 'is-close');
     }
 
     #raise() {
@@ -251,5 +253,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #titleSlot;
   }
 
-  if (!customElements.get('is-window')) customElements.define('is-window', IsWindow);
+  defineElement('is-window', IsWindow);
 })();

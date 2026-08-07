@@ -18,7 +18,7 @@ import './date-picker.js';
  * Methods: show(), hide()
  */
 
-const IsDateInput = definePickerInput({
+definePickerInput({
   tag: 'is-date-input',
   kind: 'date',
   cssUrl: import.meta.url,
@@ -30,5 +30,3 @@ const IsDateInput = definePickerInput({
     return [calendar];
   },
 });
-
-if (typeof window !== 'undefined') window.IsDateInput = IsDateInput;

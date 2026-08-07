@@ -18,7 +18,9 @@ import {
 import '../actions/dropdown.js';
 import './month-calendar.js';
 import './year-calendar.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 /**
  * <is-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
  *
@@ -45,20 +47,20 @@ import './year-calendar.js';
   TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="base">
       <div class="nav" part="nav">
-        <button type="button" class="nav-btn" data-nav="-1" aria-label="Anterior">‹</button>
+        <is-button variant="plain" pill class="nav-btn" data-nav="-1" aria-label="Anterior">‹</is-button>
         <div class="nav-title" part="month-label">
           <is-dropdown class="jump" data-jump="month" placement="bottom">
-            <button type="button" slot="trigger" class="nav-select" part="month-select">
+            <is-button variant="plain" with-caret slot="trigger" class="nav-select" part="month-select">
               <span class="nav-select-text"></span><span class="caret" aria-hidden="true">▾</span>
-            </button>
+            </is-button>
           </is-dropdown>
           <is-dropdown class="jump" data-jump="year" placement="bottom">
-            <button type="button" slot="trigger" class="nav-select" part="year-select">
+            <is-button variant="plain" with-caret slot="trigger" class="nav-select" part="year-select">
               <span class="nav-select-text"></span><span class="caret" aria-hidden="true">▾</span>
-            </button>
+            </is-button>
           </is-dropdown>
         </div>
-        <button type="button" class="nav-btn" data-nav="1" aria-label="Siguiente">›</button>
+        <is-button variant="plain" pill class="nav-btn" data-nav="1" aria-label="Siguiente">›</is-button>
       </div>
       <div class="day-view">
         <div class="weekdays" part="weekdays"></div>
@@ -82,7 +84,7 @@ import './year-calendar.js';
     return new Set(String(attr || '').split(/[\s,]+/).filter(Boolean));
   }
 
-  class IsDatePicker extends HTMLElement {
+  class IsDatePicker extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #base;
@@ -96,7 +98,6 @@ import './year-calendar.js';
     #dayView;
     #monthView;
     #yearView;
-    #mounted = false;
     #view = startOfMonth(new Date());
     #rangeStart = null;
     #rangeEnd = null;
@@ -135,8 +136,7 @@ import './year-calendar.js';
       this.#yearView.addEventListener('is-change', this.#onYearView);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('mode')) this.setAttribute('mode', 'single');
       if (!this.hasAttribute('view')) {
         this.setAttribute('view', this.getAttribute('open-to') || this.views[0]);
@@ -145,10 +145,9 @@ import './year-calendar.js';
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'value' || name === 'mode') this.#parseValueAttr();
-      if (name === 'view') this.#emit('is-view-change', { view: this.view });
+      if (name === 'view') emit(this, 'is-view-change', { view: this.view });
       if (name === 'month' && newVal && newVal !== monthKey(this.#view)) {
         const d = parseISO(`${newVal}-01`);
         if (d) this.#view = d;
@@ -285,15 +284,11 @@ import './year-calendar.js';
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
-
     /** Punto único de cambio de mes: repinta y avisa una sola vez. */
     #setView(date, { silent = false } = {}) {
       this.#view = startOfMonth(date);
       this.#render();
-      if (!silent) this.#emit('is-month-change', { month: monthKey(this.#view) });
+      if (!silent) emit(this, 'is-month-change', { month: monthKey(this.#view) });
     }
 
     #parseValueAttr() {
@@ -384,7 +379,7 @@ import './year-calendar.js';
         this.#view = kind === 'month'
           ? new Date(this.#view.getFullYear(), n, 1)
           : new Date(n, this.#view.getMonth(), 1);
-        this.#emit('is-month-change', { month: this.month });
+        emit(this, 'is-month-change', { month: this.month });
         this.#render();
       });
 
@@ -639,7 +634,7 @@ import './year-calendar.js';
       if (this.#hoverIso === iso) return;
       this.#hoverIso = iso;
       this.#paintPreview();
-      if (this.mode === 'range') this.#emit('is-day-hover', { iso });
+      if (this.mode === 'range') emit(this, 'is-day-hover', { iso });
     }
 
     /* ── Eventos ──────────────────────────────────────────────────────── */
@@ -687,14 +682,14 @@ import './year-calendar.js';
         }
         this.#writeValue();
         this.#render();
-        this.#emit('is-change', { start: this.#rangeStart, end: this.#rangeEnd });
+        emit(this, 'is-change', { start: this.#rangeStart, end: this.#rangeEnd });
         return;
       }
 
       this.#rangeStart = iso;
       this.#writeValue();
       this.#render();
-      this.#emit('is-change', { value: iso });
+      emit(this, 'is-change', { value: iso });
     }
 
     #onGridKey = (e) => {
@@ -762,7 +757,7 @@ import './year-calendar.js';
       e.stopPropagation();
       const { year, month } = e.detail;
       this.#view = new Date(year, month, 1);
-      this.#emit('is-month-change', { month: this.month });
+      emit(this, 'is-month-change', { month: this.month });
       const views = this.views;
       if (views.includes('day')) {
         this.view = 'day';
@@ -788,8 +783,5 @@ import './year-calendar.js';
     };
   }
 
-  if (!customElements.get('is-date-picker')) {
-    customElements.define('is-date-picker', IsDatePicker);
-  }
-  if (typeof window !== 'undefined') window.IsDatePicker = IsDatePicker;
+  defineElement('is-date-picker', IsDatePicker, 'IsDatePicker');
 })();

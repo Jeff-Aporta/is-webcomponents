@@ -1,0 +1,116 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>visual · is-copy-button</title>
+<!--
+  Banco visual de <is-copy-button>. Se fotografia con Chrome headless antes y
+  despues del refactor para comprobar que el boton no cambia de pinta.
+
+  Los tres estados de icono (reposo / exito / error) se fuerzan a mano
+  ensenando el <span data-state=...> que toque, porque el ciclo real depende
+  del portapapeles y en headless no hay permiso.
+-->
+<link rel="stylesheet" href="/src/styles/is-base.css">
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: var(--is-bg, #0d1117);
+    color: var(--is-text, #e8eaf1);
+    font-family: system-ui, sans-serif;
+  }
+
+  section {
+    margin-bottom: 26px;
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.65;
+    }
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    align-items: center;
+  }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    small {
+      font-size: 11px;
+      opacity: 0.55;
+    }
+  }
+
+  .claro {
+    padding: 14px 18px;
+    border-radius: 8px;
+    background: #eef1f6;
+    color: #1c2128;
+  }
+
+  code {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #1c2128;
+    font-size: 12px;
+  }
+</style>
+
+<section>
+  <h2>estados</h2>
+  <div class="row" id="estados"></div>
+</section>
+
+<section>
+  <h2>trigger slotted / fondo claro</h2>
+  <div class="row">
+    <is-copy-button value="hola">
+      <button type="button">Copiar con trigger propio</button>
+    </is-copy-button>
+    <div class="claro">
+      <code>npm i is-webcomponents</code>
+      <is-copy-button value="npm i is-webcomponents"></is-copy-button>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import '/src/components/actions/copy-button.js';
+  await customElements.whenDefined('is-copy-button');
+
+  const CASOS = [
+    ['reposo', {}, 'copy'],
+    ['disabled', { disabled: '' }, 'copy'],
+    ['exito', {}, 'success'],
+    ['error', {}, 'error'],
+    ['tooltip=none', { tooltip: 'none' }, 'copy'],
+  ];
+
+  for (const [etiqueta, attrs, estado] of CASOS) {
+    const box = document.createElement('div');
+    box.className = 'cell';
+    const el = document.createElement('is-copy-button');
+    el.setAttribute('value', 'texto');
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    const cap = document.createElement('small');
+    cap.textContent = etiqueta;
+    box.append(el, cap);
+    estados.append(box);
+
+    // Forzar el icono del estado: el ciclo real necesita portapapeles.
+    await new Promise((r) => setTimeout(r, 0));
+    for (const s of ['copy', 'success', 'error']) {
+      el.shadowRoot.querySelector(`[data-state="${s}"]`).hidden = s !== estado;
+    }
+  }
+</script>

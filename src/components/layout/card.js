@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { TONE } from '../_shared/tone.js';
 
 /**
  * <is-card> — Web Component (vanilla, zero dependencies).
@@ -62,7 +64,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['variant', 'orientation'];
 
-  const VALID_VARIANT = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+  const VALID_VARIANT = TONE;
   const VALID_ORIENTATION = ['horizontal', 'vertical'];
 
   class IsCard extends HTMLElement {
@@ -164,10 +166,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-card')) {
-    customElements.define('is-card', IsCard);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsCard = IsCard;
-  }
+  defineElement('is-card', IsCard, 'IsCard');
 })();

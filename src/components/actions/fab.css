@@ -18,86 +18,71 @@
   display: inline-block;
 }
 
+/* El color, el foco y la conversión a <a> los pone <is-button>. Aquí solo
+   queda la geometría del fab: círculo del tamaño --size, sombra flotante y
+   pulso. Se ataca por ::part(button) desde `.fab` (clase + pseudo-elemento)
+   para ganar en especificidad a las reglas internas del botón. */
 .fab {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  border: 0;
-  cursor: pointer;
-  background: var(--is-brand, dodgerblue);
-  color: var(--is-brand-fg, #fff);
-  /* Obligatorio: <button> no hereda font-size del host por defecto (UA). */
   font: inherit;
-  font-weight: 500;
-  line-height: 1;
-  transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
-  --fab-shadow: 0 4px 8px rgba(0, 0, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.12);
-  box-shadow: var(--fab-shadow);
-  padding: 0;
-  overflow: hidden;
-}
 
-.fab:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.22), 0 12px 32px rgba(0, 0, 0, 0.16);
-}
+  &::part(button) {
+    width: var(--size);
+    height: var(--size);
+    min-width: 0;
+    padding: 0;
+    gap: 0.5em;
+    border-radius: 50%;
+    font: inherit;
+    font-weight: 500;
+    line-height: 1;
+    overflow: hidden;
+    --fab-shadow: 0 4px 8px rgb(0 0 0 / 0.18), 0 8px 24px rgb(0 0 0 / 0.12);
+    box-shadow: var(--fab-shadow);
+    transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+  }
 
-.fab:active {
-  transform: translateY(0);
-}
+  &:hover::part(button) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgb(0 0 0 / 0.22), 0 12px 32px rgb(0 0 0 / 0.16);
+  }
 
-.fab.no-shadow {
-  box-shadow: none;
-}
+  &:active::part(button) {
+    transform: translateY(0);
+  }
 
+  &.no-shadow::part(button) {
+    box-shadow: none;
+  }
 
-.fab[data-color="brand"] { background: var(--is-brand, dodgerblue); color: var(--is-brand-fg, #fff); }
-.fab[data-color="neutral"] {
-  background: var(--is-bg-elev, #1c2128);
-  color: var(--is-text, #e8eaf1);
-  border: 1px solid var(--is-border, #2a2f3a);
-}
-.fab[data-color="danger"] { background: var(--is-danger, #f64e60); color: #fff; }
-.fab[data-color="success"] { background: var(--is-success, #0bb783); color: #fff; }
-.fab[data-color="warning"] { background: var(--is-warning, #ffa800); color: #fff; }
+  /* El label solo existe en modo extendido; en el circular ocuparía sitio. */
+  &::part(label) {
+    display: none;
+  }
 
-.fab.extended {
-  width: auto;
-  border-radius: calc(var(--size) / 2);
-  padding: 0 1.25em;
-}
+  &.extended {
+    &::part(button) {
+      width: auto;
+      border-radius: calc(var(--size) / 2);
+      padding: 0 1.25em;
+    }
 
-.fab .icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  font-size: 1.5em;
-  line-height: 1;
-}
+    &::part(label) {
+      display: inline;
+      white-space: nowrap;
+    }
+  }
 
-.fab .label {
-  white-space: nowrap;
-  display: none;
-}
-
-.fab.extended .label {
-  display: inline;
-}
-
-/* El pulso es un ANILLO de box-shadow, no un ::before:
-   - `.fab` tiene overflow:hidden, asi que un pseudo-elemento escalado queda
-     recortado por el propio boton y el brillo nunca sale ni toma su tamano.
-   - box-shadow se pinta FUERA de la caja y respeta el border-radius exacto,
-     asi el halo calca la forma del trigger (circulo o pildora extendida).
-   - El color sale del fondo del boton (la marca), no de currentColor, que
-     es el color del TEXTO (blanco) y lavaba el boton. */
-.fab.pulse {
-  animation: fab-pulse 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  /* El pulso es un ANILLO de box-shadow, no un ::before:
+     - la caja tiene overflow:hidden, asi que un pseudo-elemento escalado queda
+       recortado por el propio boton y el brillo nunca sale ni toma su tamano.
+     - box-shadow se pinta FUERA de la caja y respeta el border-radius exacto,
+       asi el halo calca la forma del trigger (circulo o pildora extendida).
+     - El color sale del fondo del boton (la marca), no de currentColor, que
+       es el color del TEXTO (blanco) y lavaba el boton. */
+  &.pulse::part(button) {
+    animation: fab-pulse 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
 }
 
 @keyframes fab-pulse {
@@ -116,7 +101,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fab.pulse { animation: none; }
+  .fab.pulse::part(button) { animation: none; }
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  font-size: 1.5em;
+  line-height: 1;
 }
 
 is-icon {

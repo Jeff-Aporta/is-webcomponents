@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-breadcrumb-item> — un paso individual dentro de un <is-breadcrumb>.
@@ -43,10 +45,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['href', 'icon', 'target', 'rel'];
 
-  class IsBreadcrumbItem extends HTMLElement {
+  class IsBreadcrumbItem extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #anchor;
     #upgradeProps = ['href', 'icon', 'target', 'rel'];
 
@@ -57,14 +58,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProperties();
       this.#renderInteractive();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'href' || name === 'target' || name === 'rel') {
         this.#renderInteractive();
       }
@@ -163,8 +162,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-breadcrumb-item')) {
-    customElements.define('is-breadcrumb-item', IsBreadcrumbItem);
-  }
-  if (typeof window !== 'undefined') window.IsBreadcrumbItem = IsBreadcrumbItem;
+  defineElement('is-breadcrumb-item', IsBreadcrumbItem, 'IsBreadcrumbItem');
 })();

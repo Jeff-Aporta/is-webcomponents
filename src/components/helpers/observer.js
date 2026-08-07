@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-observer type="…"> — Web Component genérico para envolver
@@ -128,11 +130,7 @@ class ObserverElement extends HTMLElement {
         if (cls && entry.target instanceof Element) {
           entry.target.classList.toggle(cls, entry.isIntersecting);
         }
-        this.dispatchEvent(new CustomEvent('is-intersect', {
-          bubbles: true,
-          composed: true,
-          detail: { entry },
-        }));
+        emit(this, 'is-intersect', { entry });
         if (once && entry.isIntersecting) {
           this.#observer?.unobserve(entry.target);
         }
@@ -158,11 +156,7 @@ class ObserverElement extends HTMLElement {
     };
 
     this.#observer = new MutationObserver((records) => {
-      this.dispatchEvent(new CustomEvent('is-mutate', {
-        bubbles: true,
-        composed: true,
-        detail: { records },
-      }));
+      emit(this, 'is-mutate', { records });
     });
 
     this.#observer.observe(this, opts);
@@ -171,11 +165,7 @@ class ObserverElement extends HTMLElement {
   #setupResize() {
     if (typeof ResizeObserver === 'undefined') return;
     this.#observer = new ResizeObserver((entries) => {
-      this.dispatchEvent(new CustomEvent('is-resize', {
-        bubbles: true,
-        composed: true,
-        detail: { entries },
-      }));
+      emit(this, 'is-resize', { entries });
     });
     for (const child of this.children) this.#observer.observe(child);
   }
@@ -192,8 +182,7 @@ class ObserverElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-observer')) customElements.define('is-observer', ObserverElement);
-if (typeof window !== 'undefined') window.IsObserver = ObserverElement;
+defineElement('is-observer', ObserverElement, 'IsObserver');
 
 /**
  * Colore con `type` prefijado al construir. Usada por los wrappers

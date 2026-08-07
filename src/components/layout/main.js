@@ -20,6 +20,7 @@
  */
 
 import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
+import { defineElement } from '../_shared/define.js';
 
 (() => {
   const TAG = 'is-main';
@@ -216,6 +217,5 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
     }
   }
 
-  if (!customElements.get(TAG)) customElements.define(TAG, IsMain);
-  if (typeof window !== 'undefined') window.IsMain = IsMain;
+  defineElement(TAG, IsMain, 'IsMain');
 })();

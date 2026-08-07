@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-format-date> — Web Component (vanilla).
@@ -33,11 +36,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
     'time-zone-name': 'timeZoneName'
   };
 
-  class IsFormatDate extends HTMLElement {
+  class IsFormatDate extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #el;
-    #mounted = false;
 
     constructor() {
       super();
@@ -47,18 +49,16 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#el = shadow.querySelector('.date');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#render();
     }
 
     get date() { return this.getAttribute('date') ?? ''; }
-    set date(v) { v == null || v === '' ? this.removeAttribute('date') : this.setAttribute('date', v); }
+    set date(v) { setStringAttr(this, 'date', v); }
 
     get locale() {
       return this.getAttribute('locale') || document.documentElement.lang || undefined;
@@ -117,10 +117,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-format-date')) {
-    customElements.define('is-format-date', IsFormatDate);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsFormatDate = IsFormatDate;
-  }
+  defineElement('is-format-date', IsFormatDate, 'IsFormatDate');
 })();

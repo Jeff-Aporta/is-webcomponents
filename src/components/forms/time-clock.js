@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from '../_shared/date-utils.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).
@@ -44,7 +47,7 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
 
   const VIEWS = ['hours', 'minutes', 'seconds'];
 
-  class IsTimeClock extends HTMLElement {
+  class IsTimeClock extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #base;
@@ -54,7 +57,6 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
     #inner;
     #units;
     #meridiem;
-    #mounted = false;
     #dragging = false;
 
     constructor() {
@@ -78,15 +80,13 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
       this.#clock.addEventListener('keydown', this.#onKey);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.hasAttribute('view')) this.setAttribute('view', 'hours');
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'view') this.#emit('is-view-change', { view: this.view });
+    onAttributeChanged(name, oldVal, newVal) {
+      if (name === 'view') emit(this, 'is-view-change', { view: this.view });
       this.#render();
     }
 
@@ -132,10 +132,6 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
-
     #minTime() { return this.getAttribute('min-time') || ''; }
     #maxTime() { return this.getAttribute('max-time') || ''; }
 
@@ -170,7 +166,7 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
       const next = toTime(time, this.seconds);
       if (next !== this.value) {
         this.setAttribute('value', next);
-        this.#emit('is-change', { value: next });
+        emit(this, 'is-change', { value: next });
       } else {
         this.#render();
       }
@@ -382,8 +378,5 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
     };
   }
 
-  if (!customElements.get('is-time-clock')) {
-    customElements.define('is-time-clock', IsTimeClock);
-  }
-  if (typeof window !== 'undefined') window.IsTimeClock = IsTimeClock;
+  defineElement('is-time-clock', IsTimeClock, 'IsTimeClock');
 })();

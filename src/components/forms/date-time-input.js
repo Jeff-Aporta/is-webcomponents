@@ -12,7 +12,7 @@ import './digital-clock.js';
  * Methods: show(), hide()
  */
 
-const IsDateTimeInput = definePickerInput({
+definePickerInput({
   tag: 'is-date-time-input',
   kind: 'datetime',
   cssUrl: import.meta.url,
@@ -28,5 +28,3 @@ const IsDateTimeInput = definePickerInput({
     return [calendar, clock];
   },
 });
-
-if (typeof window !== 'undefined') window.IsDateTimeInput = IsDateTimeInput;

@@ -1,6 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { attachFormInternals, setCustomState, setFormValue } from '../_shared/form-associated.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { setOptionalAttr } from '../_shared/reflect.js';
 
 /**
  * <is-inline-edit> — "Inplace" / "Inline edit".
@@ -80,7 +83,7 @@ import { attachFormInternals, setCustomState, setFormValue } from '../_shared/fo
 
     get value() { return this.getAttribute('value') ?? ''; }
     set value(v) {
-      v == null ? this.removeAttribute('value') : this.setAttribute('value', v);
+      setOptionalAttr(this, 'value', v);
     }
 
     get editing() { return this.#state === 'editing'; }
@@ -234,10 +237,10 @@ import { attachFormInternals, setCustomState, setFormValue } from '../_shared/fo
     }
 
     #dispatch(name, detail) {
-      this.dispatchEvent(new CustomEvent(name, { bubbles: true, composed: true, detail }));
+      emit(this, name, detail);
     }
 
   }
 
-  if (!customElements.get('is-inline-edit')) customElements.define('is-inline-edit', IsInlineEdit);
+  defineElement('is-inline-edit', IsInlineEdit);
 })();

@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './floating.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-popover> — panel flotante con contenido interactivo, anclado vía `for`.
@@ -264,7 +266,7 @@ import './floating.js';
 
       document.addEventListener('pointerdown', this.#onDocPointer, true);
       document.addEventListener('keydown', this.#onDocKey, true);
-      this.dispatchEvent(new CustomEvent('is-after-show', { bubbles: true, composed: true }));
+      emit(this, 'is-after-show');
     }
 
     #doHide(silent) {
@@ -282,14 +284,11 @@ import './floating.js';
       document.removeEventListener('pointerdown', this.#onDocPointer, true);
       document.removeEventListener('keydown', this.#onDocKey, true);
       this.#anchor?.focus?.();
-      this.dispatchEvent(new CustomEvent('is-after-hide', { bubbles: true, composed: true }));
+      emit(this, 'is-after-hide');
     }
   }
 
-  if (!customElements.get('is-popover')) {
-    customElements.define('is-popover', IsPopover);
-  }
-  if (typeof window !== 'undefined') window.IsPopover = IsPopover;
+  defineElement('is-popover', IsPopover, 'IsPopover');
 
 
 })();

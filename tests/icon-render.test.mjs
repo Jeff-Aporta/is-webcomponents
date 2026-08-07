@@ -50,6 +50,23 @@ assert.ok(
 // El cache en memoria sigue siendo el que evita requests repetidos por sesion.
 assert.ok(/rawCache\.set\(key, text\)/.test(loaderJs), 'rawCache debe seguir cacheando en memoria');
 
+// Dev no debe pedir src/components/assets/icons (no existe; los índices van en src/assets/icons).
+assert.ok(
+  /\/dist\/cdn\//.test(loaderJs) && /src\/assets\/icons|assets\/icons\//.test(loaderJs),
+  'ICON_BASES debe distinguir dist/cdn vs fuente',
+);
+assert.ok(
+  !/new URL\('\.\.\/assets\/icons\/'/.test(sinComentarios(loaderJs).split('ICON_BASES')[1]?.split('LOCAL_INDEX')[0] ?? '')
+    || /\/dist\/cdn\//.test(loaderJs),
+  'la base ../assets/icons solo aplica bajo dist/cdn',
+);
+// Garantía explícita: en modo fuente la ruta relativa es ../../assets/icons/
+assert.match(
+  loaderJs,
+  /new URL\('\.\.\/\.\.\/assets\/icons\/'/,
+  'desde _shared la base local debe ser ../../assets/icons/ → src/assets/icons/',
+);
+
 // --- BUG 2: los multicolor conservan su paleta -----------------------------
 
 assert.ok(/#isMulticolor/.test(iconJs), 'icon.js debe detectar iconos con paleta propia');

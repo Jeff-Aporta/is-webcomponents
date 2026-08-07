@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-button-group> — Web Component (vanilla, zero dependencies).
@@ -91,7 +94,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     // ---- propiedades ------------------------------------------------------
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null || v === '' ? this.removeAttribute('label') : this.setAttribute('label', v); }
+    set label(v) { setStringAttr(this, 'label', v); }
 
     get orientation() {
       return this.getAttribute('orientation') === 'vertical' ? 'vertical' : 'horizontal';
@@ -212,11 +215,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       else this.setAttribute('value', next.join(','));
       this.#syncSelection();
       if (emit && next.join(',') !== before) {
-        this.dispatchEvent(new CustomEvent('is-change', {
-          detail: { value: this.value, values: this.values },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'is-change', { value: this.value, values: this.values });
       }
     }
 
@@ -280,8 +279,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-button-group')) {
-    customElements.define('is-button-group', IsButtonGroup);
-  }
-  if (typeof window !== 'undefined') window.IsButtonGroup = IsButtonGroup;
+  defineElement('is-button-group', IsButtonGroup, 'IsButtonGroup');
 })();

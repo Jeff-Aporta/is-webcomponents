@@ -13,7 +13,8 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { contrastFontColor } from '../_shared/tk-color.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 /**
  * <is-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
  *
@@ -257,15 +258,11 @@ class IsSequenceDiagram extends HTMLElement {
       viewH: H,
       autoLoop: this.isViewer,
       onState: (state) => {
-        this.dispatchEvent(new CustomEvent('is-turtle-state', {
-          bubbles: true, composed: true, detail: state,
-        }));
+        emit(this, 'is-turtle-state', state);
       },
     });
 
-    this.dispatchEvent(new CustomEvent('is-render', {
-      bubbles: true, composed: true, detail: { layout, svg: this.#svg },
-    }));
+    emit(this, 'is-render', { layout, svg: this.#svg });
   }
 
   #buildLegend(groups, legendX, theme) {
@@ -472,9 +469,7 @@ class IsSequenceDiagram extends HTMLElement {
     if (this.isViewer) {
       const item = e.composedPath().find((n) => n?.dataset?.groupId);
       if (item) {
-        this.dispatchEvent(new CustomEvent('is-toggle-group', {
-          bubbles: true, composed: true, detail: { id: item.dataset.groupId },
-        }));
+        emit(this, 'is-toggle-group', { id: item.dataset.groupId });
       }
       return;
     }
@@ -602,10 +597,7 @@ class IsSequenceDiagram extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-sequence-diagram')) {
-  customElements.define('is-sequence-diagram', IsSequenceDiagram);
-}
-if (typeof window !== 'undefined') window.IsSequenceDiagram = IsSequenceDiagram;
+defineElement('is-sequence-diagram', IsSequenceDiagram, 'IsSequenceDiagram');
 
 registerDiagramKind('sequence', 'is-sequence-diagram');
 registerDiagramKind('sequence-diagram', 'is-sequence-diagram');

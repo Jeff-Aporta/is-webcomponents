@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../helpers/floating.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-tooltip> — tip contextual anclado vía `for`.
@@ -263,7 +265,7 @@ import '../helpers/floating.js';
         document.addEventListener('pointerdown', this.#onDocPointer, true);
         document.addEventListener('keydown', this.#onDocKey, true);
       }
-      this.dispatchEvent(new CustomEvent('is-after-show', { bubbles: true, composed: true }));
+      emit(this, 'is-after-show');
     }
 
     #doHide() {
@@ -275,12 +277,9 @@ import '../helpers/floating.js';
       this.#popup.active = false;
       document.removeEventListener('pointerdown', this.#onDocPointer, true);
       document.removeEventListener('keydown', this.#onDocKey, true);
-      this.dispatchEvent(new CustomEvent('is-after-hide', { bubbles: true, composed: true }));
+      emit(this, 'is-after-hide');
     }
   }
 
-  if (!customElements.get('is-tooltip')) {
-    customElements.define('is-tooltip', IsTooltip);
-  }
-  if (typeof window !== 'undefined') window.IsTooltip = IsTooltip;
+  defineElement('is-tooltip', IsTooltip, 'IsTooltip');
 })();

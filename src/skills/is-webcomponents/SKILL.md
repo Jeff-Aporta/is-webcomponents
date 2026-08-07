@@ -12,12 +12,17 @@ description: >-
 
 ## Consumo (CDN only)
 
-El kit **no se publica en npm** todavía. Consume siempre por jsDelivr (`dist/cdn/`). Los MD LLM viven en **fuente** (`src/components/**/*.md`), no en `dist/cdn`.
+El kit **no se publica en npm** todavía. Consume siempre por CDN (`dist/cdn/`).
+
+**Instalación correcta (skill dedicada):** lee primero
+[`is-cdn-install`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md)
+(también en `dist/cdn/skills/is-cdn-install/SKILL.md` vía jsDelivr/Pages).
 
 ### Prompt para el LLM
 
 ```
 Usa el kit IS Web Components solo por CDN (jsDelivr), sin npm ni npx.
+Lee la skill is-cdn-install antes de escribir HTML de bootstrap.
 Bootstrap: is-base.min.css + palettes.min.css + el .min.js del tag (o category.*.min.js / all.min.js).
 Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
 Antes de inventar API: lee src/components/LLM.md, el LLM.md de la categoría y el MD del módulo.
@@ -25,7 +30,7 @@ Tema/paleta: data-theme y data-palette en <html>. Iconos: <is-icon icon="mdi:…
 ```
 
 Fuente de verdad: [src/components/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/LLM.md)  
-Inventario: [catalog.md](catalog.md) · Mapa intención → tag: [reference.md](reference.md)  
+Skill CDN: [is-cdn-install](../is-cdn-install/SKILL.md) · Inventario: [catalog.md](catalog.md) · Mapa: [reference.md](reference.md)  
 App de referencia: apps consumidoras vanilla (`tk-*` sobre `is-*`), p. ej. jagudeloe/frontend-webcomponents
 
 ## Regla absoluta

@@ -4,6 +4,8 @@ import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/sequence-spec
 import { tkHueToCss } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.
@@ -196,9 +198,7 @@ class IsTreemap extends HTMLElement {
 
     this.#buildNodes(layout, theme);
 
-    this.dispatchEvent(new CustomEvent('is-render', {
-      bubbles: true, composed: true, detail: { layout, svg: this.#svg },
-    }));
+    emit(this, 'is-render', { layout, svg: this.#svg });
   }
 
   #buildNodes(layout, theme) {
@@ -319,8 +319,7 @@ class IsTreemap extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-treemap')) customElements.define('is-treemap', IsTreemap);
-if (typeof window !== 'undefined') window.IsTreemap = IsTreemap;
+defineElement('is-treemap', IsTreemap, 'IsTreemap');
 
 registerDiagramKind('treemap', 'is-treemap');
 

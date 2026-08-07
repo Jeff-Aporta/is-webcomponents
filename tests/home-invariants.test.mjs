@@ -243,6 +243,15 @@ test('la definición declara los envoltorios de página (wrapper + main)', () =>
   assert.equal(homeDef.mainClass, 'home-main', 'mainClass debe ser "home-main": es el scroller');
 });
 
+test('home no reserva el panel TOC a la derecha', () => {
+  assert.equal(homeDef.withoutToc, true, 'withoutToc debe colapsar el índice en el hero');
+  const renderSrc = readFileSync(join(__dirname, '..', 'src/previews/_kit/render.js'), 'utf8');
+  const previewSrc = readFileSync(join(__dirname, '..', 'src/components/layout/preview-component.js'), 'utf8');
+  assert.ok(/def\.withoutToc/.test(renderSrc), 'renderDefinition debe respetar withoutToc');
+  assert.ok(/withoutToc/.test(previewSrc) && /dataset\.layout = 'full'/.test(previewSrc),
+    'is-preview-component debe colapsar el end cuando withoutToc');
+});
+
 test('los tokens que usa el titular se declaran en el wrapper', () => {
   const wrapper = extractBlock(`.${homeDef.wrapperClass}`);
   assert.ok(wrapper, `debe existir el bloque .${homeDef.wrapperClass} en el CSS`);

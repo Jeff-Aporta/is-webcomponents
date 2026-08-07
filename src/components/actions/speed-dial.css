@@ -29,7 +29,11 @@
   height: 3rem;
   transition: transform 180ms ease;
 }
-.trigger::part(button) {
+/* `is-check-icon-button.trigger` y no solo `.trigger`: dentro de ese botón
+   ahora hay un <is-button>, cuyas reglas internas son `:host([color=…]) .btn`
+   (0,2,0). Con `.trigger::part(button)` (0,1,1) el fondo de acento del FAB
+   perdía contra el fondo del botón del kit; añadir el tipo lo sube a (0,2,1). */
+is-check-icon-button.trigger::part(button) {
   width: 3rem;
   height: 3rem;
   border: 0;

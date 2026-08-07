@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
  * <is-context-menu> — Menú emergente anclado al clic derecho del ratón sobre
@@ -37,11 +40,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #target;
     #listener;
     #panel;
-    #onDocPointerDown;
-    #onDocKeydown;
     #onScroll;
-    #prevOverflow = null;
-    #scrollListening = false;
+    /** Ciclo de escucha mientras el menú está abierto (ver _shared/popup-dismiss.js). */
+    #dismiss = null;
 
     constructor() {
       super();
@@ -57,15 +58,6 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#panel = this.shadowRoot.querySelector('dialog');
       this.#panel.addEventListener('click', (e) => this.#onPanelClick(e));
       this.#panel.addEventListener('contextmenu', (e) => e.preventDefault());
-      this.#onDocPointerDown = (e) => {
-        if (!this.isOpen) return;
-        if (e.composedPath().includes(this)) return;
-        this.close();
-      };
-      this.#onDocKeydown = (e) => {
-        if (e.key === 'Escape' && this.isOpen) this.close();
-      };
-      // capture=true: scroll en window, document o cualquier overflow ancestro.
       this.#onScroll = (e) => {
         if (!this.isOpen || this.scrollLock) return;
         // Scroll interno del panel (lista larga) no debe cerrar.
@@ -78,14 +70,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
     connectedCallback() {
       this.#host = this;
       this.#bindTarget();
-      document.addEventListener('pointerdown', this.#onDocPointerDown, true);
-      document.addEventListener('keydown', this.#onDocKeydown);
     }
 
     disconnectedCallback() {
       this.#unbindTarget();
-      document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
-      document.removeEventListener('keydown', this.#onDocKeydown);
       this.#teardownScrollBehavior();
     }
 
@@ -145,7 +133,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
       this.setAttribute('open', '');
       this.#setupScrollBehavior();
-      this.dispatchEvent(new CustomEvent('is-open', { bubbles: true, composed: true, detail: { x, y } }));
+      emit(this, 'is-open', { x, y });
     }
 
     /** Abre el menú anclado a un elemento (esquina inferior izquierda). */
@@ -162,7 +150,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (this.#panel.open) this.#panel.close();
       this.removeAttribute('open');
       this.#teardownScrollBehavior();
-      this.dispatchEvent(new CustomEvent('is-close', { bubbles: true, composed: true }));
+      emit(this, 'is-close');
     }
 
     #onPanelClick(e) {
@@ -170,10 +158,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (!item) return;
       e.preventDefault();
       e.stopPropagation();
-      this.dispatchEvent(new CustomEvent('is-select', {
-        bubbles: true, composed: true,
-        detail: { item, value: item.dataset.value ?? item.textContent.trim() },
-      }));
+      emit(this, 'is-select', { item, value: item.dataset.value ?? item.textContent.trim() });
       this.close();
     }
 
@@ -203,37 +188,31 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.openAt(e.clientX, e.clientY);
     }
 
-    /** Default: cerrar al scroll. Con `scroll-lock`: congelar el documento. */
+    /**
+     * Engancha el ciclo de "menú abierto": Escape, click fuera y, según el
+     * modo, cerrar al hacer scroll (default) o congelar el documento
+     * (`scroll-lock`). Todo eso vive en _shared/popup-dismiss.js, que es lo
+     * mismo que necesita is-dropdown.
+     *
+     * Se crea en cada apertura porque `scroll-lock` puede cambiar entre una y
+     * otra, y el modo se decide al enganchar.
+     */
     #setupScrollBehavior() {
       this.#teardownScrollBehavior();
-      if (this.scrollLock) {
-        this.#lockScroll();
-        return;
-      }
-      window.addEventListener('scroll', this.#onScroll, true);
-      this.#scrollListening = true;
+      this.#dismiss = createPopupDismiss(this, {
+        onEscape: () => this.close(),
+        onOutside: () => { if (this.isOpen) this.close(); },
+        onScroll: this.#onScroll,
+        scrollLock: this.scrollLock,
+      });
+      this.#dismiss.attach();
     }
 
     #teardownScrollBehavior() {
-      if (this.#scrollListening) {
-        window.removeEventListener('scroll', this.#onScroll, true);
-        this.#scrollListening = false;
-      }
-      this.#releaseScroll();
-    }
-
-    #lockScroll() {
-      if (this.#prevOverflow !== null) return;
-      this.#prevOverflow = document.documentElement.style.overflow;
-      document.documentElement.style.overflow = 'hidden';
-    }
-
-    #releaseScroll() {
-      if (this.#prevOverflow === null) return;
-      document.documentElement.style.overflow = this.#prevOverflow;
-      this.#prevOverflow = null;
+      this.#dismiss?.detach();
+      this.#dismiss = null;
     }
   }
 
-  if (!customElements.get('is-context-menu')) customElements.define('is-context-menu', IsContextMenu);
+  defineElement('is-context-menu', IsContextMenu);
 })();

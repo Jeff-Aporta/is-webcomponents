@@ -3,6 +3,9 @@ import { scaleLinear, scaleBand, niceTicks } from '../_shared/svg-chart-engine.j
 import { getCategoricalColors, getFillColors } from '../_shared/chart-palette.js';
 import { PathTurtle } from '../_shared/path-turtle.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-chart> — motor de charts en SVG, sin dependencias.
@@ -153,7 +156,7 @@ class IsChart extends HTMLElement {
   get type() { return this.getAttribute('type') || this.#fixedType || 'bar'; }
   set type(v) {
     if (this.#fixedType) return;
-    v == null || v === '' ? this.removeAttribute('type') : this.setAttribute('type', v);
+    setStringAttr(this, 'type', v);
   }
 
   async updateComplete() { await this.#queueRender(); }
@@ -317,7 +320,7 @@ class IsChart extends HTMLElement {
       });
       t.textContent = 'Sin datos';
       this.#svg.appendChild(t);
-      this.dispatchEvent(new CustomEvent('is-render', { bubbles: true, composed: true, detail: { svg: this.#svg } }));
+      emit(this, 'is-render', { svg: this.#svg });
       return;
     }
 
@@ -404,7 +407,7 @@ class IsChart extends HTMLElement {
     if (opts.animate) this.#primeLineAnimation(group);
     this.#mountTurtle(group, width, height, text);
 
-    this.dispatchEvent(new CustomEvent('is-render', { bubbles: true, composed: true, detail: { svg: this.#svg } }));
+    emit(this, 'is-render', { svg: this.#svg });
   }
 
   /**
@@ -418,9 +421,7 @@ class IsChart extends HTMLElement {
     this.#turtleGroup?.remove();
     this.#turtleGroup = null;
     if (!lines.length) {
-      this.dispatchEvent(new CustomEvent('is-turtle-state', {
-        bubbles: true, composed: true, detail: { playing: false, idx: 0, total: 0, replay: 0 },
-      }));
+      emit(this, 'is-turtle-state', { playing: false, idx: 0, total: 0, replay: 0 });
       return;
     }
 
@@ -438,9 +439,7 @@ class IsChart extends HTMLElement {
       viewW: width,
       viewH: height,
       autoLoop: this.isViewer,
-      onState: (state) => this.dispatchEvent(new CustomEvent('is-turtle-state', {
-        bubbles: true, composed: true, detail: state,
-      })),
+      onState: (state) => emit(this, 'is-turtle-state', state),
     });
   }
 
@@ -759,20 +758,14 @@ function defineTypedChart(tag, fixedType, drawMarks, styleModuleUrl) {
     static drawMarks = drawMarks;
     static styleModuleUrl = styleModuleUrl || null;
   }
-  if (!customElements.get(tag)) customElements.define(tag, Typed);
-  const exportName = tag.replace(/^is-/, 'Is').replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-  if (typeof window !== 'undefined') window[exportName] = Typed;
-  return Typed;
+  return defineElement(tag, Typed, true);
 }
 
-if (!customElements.get('is-chart')) customElements.define('is-chart', IsChart);
+defineElement('is-chart', IsChart, 'IsChart');
 for (const kind of ['chart', 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter', 'bubble']) {
   registerDiagramKind(kind, 'is-chart');
 }
 
-if (typeof window !== 'undefined') {
-  window.IsChart = IsChart;
-  window.__isDefineTypedChart = defineTypedChart;
-}
+if (typeof window !== 'undefined') window.__isDefineTypedChart = defineTypedChart;
 
 export { IsChart, defineTypedChart, formatValue };

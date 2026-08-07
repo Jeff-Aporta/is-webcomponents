@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../actions/button.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-form> — Formulario de ficha con cabecera, contenido y pie automático.
@@ -52,10 +55,9 @@ import '../actions/button.js';
   const VALID_MODE = ['edit', 'view'];
   const OBSERVED = ['mode', 'submit-label', 'cancel-label', 'loading'];
 
-  class IsForm extends HTMLElement {
+  class IsForm extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #form;
     #submitBtn;
     #cancelBtn;
@@ -71,8 +73,7 @@ import '../actions/button.js';
       this.#cancelBtn = shadow.querySelector('.cancel');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProperties();
       if (!this.hasAttribute('mode')) this.setAttribute('mode', 'edit');
       this.#form.addEventListener('submit', this.#onSubmit);
@@ -83,14 +84,13 @@ import '../actions/button.js';
       this.#syncLoading();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#form.removeEventListener('submit', this.#onSubmit);
       this.#submitBtn.removeEventListener('click', this.#onSubmitClick);
       this.#cancelBtn.removeEventListener('click', this.#onCancel);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'mode') {
         if (newVal && !VALID_MODE.includes(newVal)) { this.setAttribute('mode', 'edit'); return; }
         this.#syncMode();
@@ -150,12 +150,7 @@ import '../actions/button.js';
     }
 
     #emit(name) {
-      return this.dispatchEvent(new CustomEvent(name, {
-        detail: { form: this.#form },
-        bubbles: true,
-        composed: true,
-        cancelable: true,
-      }));
+      return emit(this, name, { form: this.#form }, { cancelable: true });
     }
 
     #onSubmit = (e) => {
@@ -185,8 +180,5 @@ import '../actions/button.js';
     #syncLoading() { this.#submitBtn.toggleAttribute('loading', this.loading); }
   }
 
-  if (!customElements.get('is-form')) {
-    customElements.define('is-form', IsForm);
-  }
-  if (typeof window !== 'undefined') window.IsForm = IsForm;
+  defineElement('is-form', IsForm, 'IsForm');
 })();

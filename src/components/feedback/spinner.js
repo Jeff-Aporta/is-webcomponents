@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
 
 /**
  * <is-spinner> — Web Component (vanilla).
@@ -31,10 +32,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-spinner')) {
-    customElements.define('is-spinner', IsSpinner);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsSpinner = IsSpinner;
-  }
+  defineElement('is-spinner', IsSpinner, 'IsSpinner');
 })();

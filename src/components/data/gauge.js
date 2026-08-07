@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-gauge> — Medidor circular de porcentaje (vanilla, zero dependencies).
@@ -39,9 +41,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'color', 'half', 'format', 'show-value'];
 
-  class IsGauge extends HTMLElement {
+  class IsGauge extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
     #svg;
     #circle;
     #track;
@@ -60,13 +61,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#labelEl = shadow.querySelector('.label');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#render();
     }
 
@@ -139,6 +138,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-gauge')) customElements.define('is-gauge', IsGauge);
-  if (typeof window !== 'undefined') window.IsGauge = IsGauge;
+  defineElement('is-gauge', IsGauge, 'IsGauge');
 })();

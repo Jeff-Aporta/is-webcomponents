@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-stat> — Stat / KPI Card (vanilla, zero dependencies).
@@ -45,9 +47,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['label', 'value', 'helper', 'trend', 'trend-direction', 'icon', 'color'];
 
-  class IsStat extends HTMLElement {
+  class IsStat extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
     #root;
 
     constructor() {
@@ -58,13 +59,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#root = shadow.querySelector('.stat');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#sync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
     }
 
@@ -113,6 +112,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-stat')) customElements.define('is-stat', IsStat);
-  if (typeof window !== 'undefined') window.IsStat = IsStat;
+  defineElement('is-stat', IsStat, 'IsStat');
 })();

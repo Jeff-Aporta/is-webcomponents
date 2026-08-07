@@ -2,7 +2,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '../_shared/form-associated.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import { hasSlotted } from '../_shared/dom-utils.js';
 /**
  * <is-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
  *
@@ -57,13 +61,8 @@ import {
     'error', 'errorText', 'showCount', 'fullWidth'
   ];
 
-  function hasSlotted(slot) {
-    return slot.assignedNodes({ flatten: true }).some(
-      (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
-    );
-  }
 
-  class IsTextarea extends HTMLElement {
+  class IsTextarea extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -77,7 +76,6 @@ import {
     #labelSlot;
     #hintSlot;
     #value = '';
-    #mounted = false;
     #hasHint = false;
     #touched = false;
     #ro = null;
@@ -108,8 +106,7 @@ import {
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProps();
       this.#value = this.getAttribute('value') ?? '';
       this.#syncSlots();
@@ -128,14 +125,13 @@ import {
       }
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#ro?.disconnect();
       this.#ro = null;
       this.#lastWidth = -1;
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'value') {
         this.#value = newVal ?? '';
         this.#syncNative();
@@ -167,7 +163,7 @@ import {
     get defaultValue() { return this.getAttribute('value') ?? ''; }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', String(v)); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
@@ -191,10 +187,10 @@ import {
     set autosize(v) { this.toggleAttribute('autosize', !!v); }
 
     get minRows() { return Number(this.getAttribute('min-rows')) || this.rows; }
-    set minRows(v) { v == null ? this.removeAttribute('min-rows') : this.setAttribute('min-rows', String(v)); }
+    set minRows(v) { setOptionalAttr(this, 'min-rows', v); }
 
     get maxRows() { return Number(this.getAttribute('max-rows')) || 0; }
-    set maxRows(v) { v == null ? this.removeAttribute('max-rows') : this.setAttribute('max-rows', String(v)); }
+    set maxRows(v) { setOptionalAttr(this, 'max-rows', v); }
 
     get variant() {
       const a = (this.getAttribute('variant') || '').toLowerCase();
@@ -218,7 +214,7 @@ import {
     set error(v) { this.toggleAttribute('error', !!v); }
 
     get errorText() { return this.getAttribute('error-text') ?? ''; }
-    set errorText(v) { v == null ? this.removeAttribute('error-text') : this.setAttribute('error-text', String(v)); }
+    set errorText(v) { setOptionalAttr(this, 'error-text', v); }
 
     get showCount() { return this.hasAttribute('show-count'); }
     set showCount(v) { this.toggleAttribute('show-count', !!v); }
@@ -227,16 +223,16 @@ import {
     set fullWidth(v) { this.toggleAttribute('full-width', !!v); }
 
     get placeholder() { return this.getAttribute('placeholder') ?? ''; }
-    set placeholder(v) { v == null ? this.removeAttribute('placeholder') : this.setAttribute('placeholder', String(v)); }
+    set placeholder(v) { setOptionalAttr(this, 'placeholder', v); }
 
     get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { v == null ? this.removeAttribute('label') : this.setAttribute('label', String(v)); }
+    set label(v) { setOptionalAttr(this, 'label', v); }
 
     get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { v == null ? this.removeAttribute('hint') : this.setAttribute('hint', String(v)); }
+    set hint(v) { setOptionalAttr(this, 'hint', v); }
 
     get maxlength() { return this.getAttribute('maxlength'); }
-    set maxlength(v) { v == null ? this.removeAttribute('maxlength') : this.setAttribute('maxlength', String(v)); }
+    set maxlength(v) { setOptionalAttr(this, 'maxlength', v); }
 
     get textarea() { return this.#textarea; }
 
@@ -291,10 +287,6 @@ import {
           this[p] = v;
         }
       }
-    }
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
     }
 
     #syncSlots = () => {
@@ -405,7 +397,7 @@ import {
       this.#value = this.#textarea.value;
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-      this.#emit('is-input', { value: this.#value });
+      emit(this, 'is-input', { value: this.#value });
     };
 
     #onChange = () => {
@@ -413,7 +405,7 @@ import {
       this.#touched = true;
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-      this.#emit('is-change', { value: this.#value });
+      emit(this, 'is-change', { value: this.#value });
     };
 
     #onFocus = () => { setCustomState(this.#internals, 'focused', true); };
@@ -425,8 +417,5 @@ import {
     };
   }
 
-  if (!customElements.get('is-textarea')) {
-    customElements.define('is-textarea', IsTextarea);
-  }
-  if (typeof window !== 'undefined') window.IsTextarea = IsTextarea;
+  defineElement('is-textarea', IsTextarea, 'IsTextarea');
 })();

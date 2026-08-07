@@ -2,6 +2,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import { computePosition, PLACEMENTS } from '../_shared/position.js';
 import './dropdown-item.js';
 import '../layout/divider.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
  * <is-dropdown> — menú anclado a un trigger.
@@ -39,7 +42,6 @@ import '../layout/divider.js';
     #defaultSlot;
     #mounted = false;
     #triggerEl = null;
-    #raf = 0;
 
     constructor() {
       super();
@@ -70,7 +72,7 @@ import '../layout/divider.js';
     disconnectedCallback() {
       this.#mounted = false;
       this.#unbindTrigger();
-      this.#teardownListeners();
+      this.#dismiss.detach();
       if (this.#dialog.open) this.#dialog.close();
     }
 
@@ -175,11 +177,21 @@ import '../layout/divider.js';
       }
     };
 
-    #onReposition = () => {
-      if (!this.open) return;
-      cancelAnimationFrame(this.#raf);
-      this.#raf = requestAnimationFrame(() => this.#reposition());
-    };
+    /**
+     * Escuchas mientras el menú está abierto. El ciclo (poner/quitar los
+     * listeners de document y window, agrupar el reposicionado por frame) lo
+     * lleva _shared/popup-dismiss.js, que es el mismo que usa
+     * is-context-menu; aquí solo queda QUÉ hacer.
+     *
+     * No declara `onEscape`: el panel es un <dialog showModal()>, así que
+     * Escape llega como evento `cancel` y se atiende en #onDialogCancel, que
+     * además devuelve el foco al trigger. Y tampoco `onOutside`: el clic
+     * fuera cae en el backdrop del propio dialog (#onDialogClick).
+     */
+    #dismiss = createPopupDismiss(this, {
+      onKeydown: (e) => this.#onDocKey(e),
+      onReposition: () => { if (this.open) this.#reposition(); },
+    });
 
     #focusItem(delta) {
       const list = this.items;
@@ -216,19 +228,6 @@ import '../layout/divider.js';
       this.#menu.dataset.currentPlacement = result.placement;
     }
 
-    #setupListeners() {
-      document.addEventListener('keydown', this.#onDocKey, true);
-      window.addEventListener('resize', this.#onReposition, { passive: true });
-      window.addEventListener('scroll', this.#onReposition, true);
-    }
-
-    #teardownListeners() {
-      document.removeEventListener('keydown', this.#onDocKey, true);
-      window.removeEventListener('resize', this.#onReposition);
-      window.removeEventListener('scroll', this.#onReposition, true);
-      cancelAnimationFrame(this.#raf);
-    }
-
     #doShow(silent) {
       if (!silent) {
         const ev = new CustomEvent('is-show', { bubbles: true, composed: true, cancelable: true });
@@ -246,9 +245,9 @@ import '../layout/divider.js';
       requestAnimationFrame(() => this.#reposition());
 
       this.#triggerEl?.setAttribute('aria-expanded', 'true');
-      this.#setupListeners();
+      this.#dismiss.attach();
       requestAnimationFrame(() => this.items[0]?.focus?.());
-      this.dispatchEvent(new CustomEvent('is-after-show', { bubbles: true, composed: true }));
+      emit(this, 'is-after-show');
     }
 
     #doHide(silent) {
@@ -262,14 +261,11 @@ import '../layout/divider.js';
 
       this.#triggerEl?.setAttribute('aria-expanded', 'false');
       this.querySelectorAll('is-dropdown-item').forEach((el) => el.closeSubmenu?.());
-      this.#teardownListeners();
+      this.#dismiss.detach();
       if (this.#dialog.open) this.#dialog.close();
-      this.dispatchEvent(new CustomEvent('is-after-hide', { bubbles: true, composed: true }));
+      emit(this, 'is-after-hide');
     }
   }
 
-  if (!customElements.get('is-dropdown')) {
-    customElements.define('is-dropdown', IsDropdown);
-  }
-  if (typeof window !== 'undefined') window.IsDropdown = IsDropdown;
+  defineElement('is-dropdown', IsDropdown, 'IsDropdown');
 })();

@@ -43,7 +43,7 @@
  */
 
 import { upgradeProperties } from './upgrade-properties.js';
-
+import { emit } from './emit.js';
 const BASE_OBSERVED = ['open', 'label', 'without-header', 'light-dismiss'];
 
 /** Selector CSS para "cualquier elemento focuseable" usado en focus trap. */
@@ -202,7 +202,7 @@ export class ModalBase extends HTMLElement {
 
   #setOpen(desired) {
     if (desired) {
-      this.dispatchEvent(new CustomEvent('is-show', { detail: {}, bubbles: true, composed: true }));
+      emit(this, 'is-show', {});
       this.#lastFocus = document.activeElement;
       this.dataset.state = 'opening';
       this.#modal.hidden = false;
@@ -213,7 +213,7 @@ export class ModalBase extends HTMLElement {
       return this.animateOpen().then(() => {
         this.dataset.state = 'open';
         this.#focusInitial();
-        this.dispatchEvent(new CustomEvent('is-after-show', { detail: {}, bubbles: true, composed: true }));
+        emit(this, 'is-after-show', {});
       });
     }
     return this.#doClose();
@@ -231,7 +231,7 @@ export class ModalBase extends HTMLElement {
         try { this.#lastFocus.focus(); } catch (_e) { /* ignore */ }
       }
       this.#lastFocus = null;
-      this.dispatchEvent(new CustomEvent('is-after-hide', { detail: {}, bubbles: true, composed: true }));
+      emit(this, 'is-after-hide', {});
     });
   }
 

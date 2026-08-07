@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-resize-observer> — Web Component (vanilla).
@@ -54,11 +56,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (typeof ResizeObserver === 'undefined') return;
 
       this.#observer = new ResizeObserver((entries) => {
-        this.dispatchEvent(new CustomEvent('is-resize', {
-          bubbles: true,
-          composed: true,
-          detail: { entries }
-        }));
+        emit(this, 'is-resize', { entries });
       });
 
       for (const child of this.children) {
@@ -67,10 +65,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-resize-observer')) {
-    customElements.define('is-resize-observer', IsResizeObserver);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsResizeObserver = IsResizeObserver;
-  }
+  defineElement('is-resize-observer', IsResizeObserver, 'IsResizeObserver');
 })();

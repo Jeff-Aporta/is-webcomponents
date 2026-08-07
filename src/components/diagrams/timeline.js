@@ -4,6 +4,8 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.
@@ -201,9 +203,7 @@ class IsTimeline extends HTMLElement {
     this.#buildAxis(layout, theme);
     this.#buildEvents(layout, theme);
 
-    this.dispatchEvent(new CustomEvent('is-render', {
-      bubbles: true, composed: true, detail: { layout, svg: this.#svg },
-    }));
+    emit(this, 'is-render', { layout, svg: this.#svg });
   }
 
   #buildAxis(layout, theme) {
@@ -316,9 +316,7 @@ class IsTimeline extends HTMLElement {
     if (this.isViewer) {
       const item = e.composedPath().find((x) => x?.dataset?.groupId);
       if (item) {
-        this.dispatchEvent(new CustomEvent('is-toggle-group', {
-          bubbles: true, composed: true, detail: { id: item.dataset.groupId },
-        }));
+        emit(this, 'is-toggle-group', { id: item.dataset.groupId });
       }
       return;
     }
@@ -394,8 +392,7 @@ class IsTimeline extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-timeline')) customElements.define('is-timeline', IsTimeline);
-if (typeof window !== 'undefined') window.IsTimeline = IsTimeline;
+defineElement('is-timeline', IsTimeline, 'IsTimeline');
 
 registerDiagramKind('timeline', 'is-timeline');
 

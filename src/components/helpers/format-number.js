@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-format-number> — Web Component (vanilla).
@@ -22,11 +24,10 @@ import { adoptCss } from '../_shared/adopt-css.js';
   const OBSERVED = ['value', 'type', 'currency', 'minimum-fraction-digits', 'maximum-fraction-digits'];
   const VALID_TYPE = ['decimal', 'currency', 'percent', 'unit'];
 
-  class IsFormatNumber extends HTMLElement {
+  class IsFormatNumber extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #el;
-    #mounted = false;
 
     constructor() {
       super();
@@ -36,13 +37,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#el = shadow.querySelector('.number');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#render();
     }
 
@@ -87,10 +86,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-format-number')) {
-    customElements.define('is-format-number', IsFormatNumber);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsFormatNumber = IsFormatNumber;
-  }
+  defineElement('is-format-number', IsFormatNumber, 'IsFormatNumber');
 })();

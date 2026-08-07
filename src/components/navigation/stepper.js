@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-stepper> + <is-stepper-step> — Web Components (vanilla, zero dependencies).
@@ -51,10 +54,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const TG_OBSERVED = ['active', 'orientation', 'without-line', 'color'];
 
-  class IsStepper extends HTMLElement {
+  class IsStepper extends ElementBase {
     static get observedAttributes() { return TG_OBSERVED; }
 
-    #mounted = false;
 
     constructor() {
       super();
@@ -63,13 +65,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       shadow.appendChild(TG_TEMPLATE.content.cloneNode(true));
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#sync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
     }
 
@@ -88,7 +88,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const nextIdx = a + 1;
       if (nextIdx < steps.length) this.#goTo(nextIdx);
       else {
-        this.dispatchEvent(new CustomEvent('is-stepper-complete', { bubbles: true, composed: true }));
+        emit(this, 'is-stepper-complete');
       }
     }
     prev() {
@@ -124,16 +124,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (idx < 0 || idx >= steps.length) return;
       const from = this.active;
       this.setAttribute('active', String(idx));
-      this.dispatchEvent(new CustomEvent('is-stepper-change', {
-        detail: { from, to: idx, step: steps[idx] },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-stepper-change', { from, to: idx, step: steps[idx] });
     }
   }
 
-  if (!customElements.get('is-stepper')) customElements.define('is-stepper', IsStepper);
-  if (typeof window !== 'undefined') window.IsStepper = IsStepper;
+  defineElement('is-stepper', IsStepper, 'IsStepper');
 
   // ============ <is-stepper-step> ============
   const STEP_TEMPLATE = document.createElement('template');
@@ -152,10 +147,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const STEP_OBSERVED = ['label', 'description', 'icon', 'disabled', 'error'];
 
-  class IsStepperStep extends HTMLElement {
+  class IsStepperStep extends ElementBase {
     static get observedAttributes() { return STEP_OBSERVED; }
 
-    #mounted = false;
 
     constructor() {
       super();
@@ -164,14 +158,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       shadow.appendChild(STEP_TEMPLATE.content.cloneNode(true));
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.setAttribute('role', 'listitem');
       this.#sync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
     }
 
@@ -208,6 +200,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-stepper-step')) customElements.define('is-stepper-step', IsStepperStep);
-  if (typeof window !== 'undefined') window.IsStepperStep = IsStepperStep;
+  defineElement('is-stepper-step', IsStepperStep, 'IsStepperStep');
 })();

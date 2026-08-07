@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { BreakpointHost } from './block-layout.js';
+import { defineElement } from '../_shared/define.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-grid-layout> — port de ISP `layout/GridLayout.svelte`.
@@ -73,7 +75,7 @@ import { BreakpointHost } from './block-layout.js';
     }
 
     get cells() { return this.getAttribute('cells'); }
-    set cells(v) { v == null || v === '' ? this.removeAttribute('cells') : this.setAttribute('cells', String(v)); }
+    set cells(v) { setStringAttr(this, 'cells', v); }
 
     get cellsFit() { return this.hasAttribute('cells-fit'); }
     set cellsFit(v) { this.setBooleanAttr('cells-fit', v); }
@@ -88,8 +90,5 @@ import { BreakpointHost } from './block-layout.js';
     set cscroll(v) { this.setBooleanAttr('cscroll', v); }
   }
 
-  if (!customElements.get('is-grid-layout')) {
-    customElements.define('is-grid-layout', IsGridLayout);
-  }
-  if (typeof window !== 'undefined') window.IsGridLayout = IsGridLayout;
+  defineElement('is-grid-layout', IsGridLayout, 'IsGridLayout');
 })();

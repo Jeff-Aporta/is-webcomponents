@@ -3,6 +3,8 @@ import { IsLightbox } from './lightbox.js';
 import { getDiagramTag } from './diagram-kinds.js';
 import { expandSequencePayloadForJson } from './sequence-spec.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-diagram-lightbox> — colore del lightbox para diagramas.
@@ -309,15 +311,10 @@ class IsDiagramLightbox extends IsLightbox {
     };
     if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url).then(done).catch(done);
     else done();
-    this.dispatchEvent(new CustomEvent('is-share', {
-      bubbles: true, composed: true, detail: { url },
-    }));
+    emit(this, 'is-share', { url });
   }
 }
 
-if (!customElements.get('is-diagram-lightbox')) {
-  customElements.define('is-diagram-lightbox', IsDiagramLightbox);
-}
-if (typeof window !== 'undefined') window.IsDiagramLightbox = IsDiagramLightbox;
+defineElement('is-diagram-lightbox', IsDiagramLightbox, 'IsDiagramLightbox');
 
 export { IsDiagramLightbox };

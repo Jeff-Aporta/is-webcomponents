@@ -23,29 +23,59 @@
   pointer-events: none;
 }
 
-.btn {
+/* La caja pintada es el <button> interno de <is-button>, alcanzable por
+   ::part(button). Las reglas propias de is-button son del tipo
+   `:host([color=…]) .btn` (0,2,0), así que aquí hace falta llegar a esa
+   especificidad o superarla: `is-button.btn::part(button)` es (0,2,1) y gana.
+   Con menos —`.btn::part(button)`, (0,1,1)— el botón del kit se impondría y
+   el icono dejaría de ser transparente sobre la chrome oscura del vídeo. */
+is-button.btn {
   display: inline-grid;
   place-items: center;
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
   border-radius: inherit;
-  background: transparent;
   color: inherit;
   font: inherit;
   cursor: inherit;
-  line-height: 0;
-  transition: background-color 120ms ease;
-}
 
-.btn:hover {
-  background: var(--is-control-bg-hover, color-mix(in srgb, currentColor 12%, transparent));
-}
+  /* El tipo va delante a propósito: `is-button` fija la altura del botón con
+     `--_height: 2.5em` desde `:host(...) .btn` (0,2,0). Sin el tipo esta
+     regla sería (0,1,1) y el icono medía 40px de alto en vez de los 36 del
+     host, que tiene `aspect-ratio: 1/1`. */
+  &::part(button) {
+    width: 100%;
+    height: 100%;
+    /* is-button trae `min-height: var(--_height)` (2.5em = 40px). Sin
+       neutralizarlo, el host de 2.25em (36px) con aspect-ratio 1/1 se
+       estiraba a 36x40 y dejaba de ser cuadrado. */
+    min-height: 0;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: inherit;
+    line-height: 0;
+    transition: background-color 120ms ease;
+  }
 
-.btn:active {
-  background: var(--is-control-bg-active, color-mix(in srgb, currentColor 18%, transparent));
+  /* El foco lo dibuja el host (`:host(:focus-visible)`), que es el control
+     real; sin esto saldrían dos anillos, uno dentro del otro. */
+  &::part(button):focus-visible {
+    outline: none;
+  }
+
+  &:hover::part(button) {
+    background: var(--is-control-bg-hover, color-mix(in srgb, currentColor 12%, transparent));
+  }
+
+  &:active::part(button) {
+    background: var(--is-control-bg-active, color-mix(in srgb, currentColor 18%, transparent));
+  }
 }
 
 :host(:focus-visible) {
@@ -69,12 +99,12 @@
   width: 1.5em;
   border-radius: 0.25em;
   color: inherit;
-}
 
-:host([variant="plain"]) .btn:hover {
-  background: color-mix(in srgb, currentColor 15%, transparent);
-}
+  is-button.btn:hover::part(button) {
+    background: color-mix(in srgb, currentColor 15%, transparent);
+  }
 
-:host([variant="plain"]) .btn:active {
-  background: color-mix(in srgb, currentColor 22%, transparent);
+  is-button.btn:active::part(button) {
+    background: color-mix(in srgb, currentColor 22%, transparent);
+  }
 }

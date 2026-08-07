@@ -19,11 +19,22 @@ const src = (...p) => join(raiz, 'src', 'components', ...p);
 
 test('context-menu: cierra al scroll por defecto', async () => {
   const js = await readFile(src('actions', 'context-menu.js'), 'utf8');
+  // El ciclo de escucha (poner/quitar los listeners globales, congelar el
+  // scroll) vive desde ago/2026 en _shared/popup-dismiss.js, compartido con
+  // is-dropdown. El contrato es el mismo; lo que cambia es dónde se cumple:
+  // context-menu.js aporta el QUÉ (su #onScroll y el modo scroll-lock) y el
+  // módulo compartido el CÓMO (capture, overflow hidden).
+  const dismiss = await readFile(src('_shared', 'popup-dismiss.js'), 'utf8');
 
   assert.match(
     js,
-    /addEventListener\(\s*['"]scroll['"]\s*,\s*this\.#onScroll\s*,\s*true\s*\)/,
-    'debe escuchar scroll en capture para cerrar (default)',
+    /onScroll:\s*this\.#onScroll/,
+    'debe entregar su #onScroll al controlador de popup',
+  );
+  assert.match(
+    dismiss,
+    /addEventListener\(\s*['"]scroll['"]\s*,\s*onScroll\s*,\s*true\s*\)/,
+    'el controlador escucha scroll en capture para poder cerrar (default)',
   );
   assert.match(
     js,
@@ -32,6 +43,11 @@ test('context-menu: cierra al scroll por defecto', async () => {
   );
   assert.match(
     js,
+    /scrollLock:\s*this\.scrollLock/,
+    'el modo scroll-lock se pasa al controlador',
+  );
+  assert.match(
+    dismiss,
     /overflow\s*=\s*['"]hidden['"]/,
     'scroll-lock congela documentElement.overflow',
   );

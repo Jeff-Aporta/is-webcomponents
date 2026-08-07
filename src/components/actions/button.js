@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-button> — Web Component (vanilla).
@@ -33,6 +36,10 @@ import '../media/icon.js';
  *  formnovalidate, formtarget                                (form association)
  *  aria-label, aria-pressed, aria-expanded, aria-haspopup,
  *  aria-current                                              (se reenvían al inner)
+ *  tabindex     se reenvía al <button> interno, que es el que está en el
+ *               orden de tabulación. `tabindex="-1"` lo saca del recorrido:
+ *               es lo que necesita un componente que envuelva is-button y
+ *               quiera ser él mismo el control accesible.
  *
  * Slots
  *  default   etiqueta del botón
@@ -85,7 +92,6 @@ import '../media/icon.js';
   const TEMPLATE = document.createElement("template");
   TEMPLATE.innerHTML = /* html */ `
 
-
     <button part="button" class="btn" type="button">
       <span part="start"   class="btn__prefix"><slot name="start"></slot></span>
       <span part="label"   class="btn__label"><slot></slot></span>
@@ -117,9 +123,16 @@ import '../media/icon.js';
   const ARIA_FORWARD = [
     "aria-label", "aria-pressed", "aria-expanded", "aria-haspopup",
     "aria-current", "aria-controls",
+    // `tabindex` va en la misma lista porque tiene el mismo problema: el que
+    // entra en el orden de tabulación es el <button> del Shadow DOM, no el
+    // host, así que ponerlo fuera no lo saca del recorrido. Lo necesita
+    // cualquier componente que envuelva is-button y quiera ser ÉL el control
+    // accesible (is-check-icon-button): sin esto quedan dos paradas de tab,
+    // la del host envolvente y la del botón interno.
+    "tabindex",
   ];
 
-  class IsButton extends HTMLElement {
+  class IsButton extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return [...OBSERVED, ...ARIA_FORWARD]; }
 
@@ -127,7 +140,6 @@ import '../media/icon.js';
     #initialAttrs = new Map();
     #btn;          // inner <button> or <a>
     #rootEl;       // shadow root first child wrapper
-    #mounted = false;
     #wired = false; // idem-potente: re-registrar listeners de eventos
 
     constructor() {
@@ -156,8 +168,7 @@ import '../media/icon.js';
       });
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProperties();
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       this.#syncTag();       // <button> o <a> según href
@@ -170,8 +181,7 @@ import '../media/icon.js';
       this.#wireEvents();    // re-envía focus/blur/click como is-* custom events
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === "href") {
         this.#syncTag();
         this.#syncAttrs();
@@ -252,10 +262,10 @@ import '../media/icon.js';
 
     // Custom events composed+bubbles para cruzar Shadow DOM.
     // React: onIsFocus / onIsBlur / onIsClick / onIsInvalid (o addEventListener).
-    #boundFocus = (e) => { this.#emit("is-focus",   { originalEvent: e }); };
-    #boundBlur  = (e) => { this.#emit("is-blur",    { originalEvent: e }); };
+    #boundFocus = (e) => { emit(this, "is-focus",   { originalEvent: e }); };
+    #boundBlur  = (e) => { emit(this, "is-blur",    { originalEvent: e }); };
     #boundClick = (e) => {
-      this.#emit("is-click", { originalEvent: e });
+      emit(this, "is-click", { originalEvent: e });
       // El <button> interno está en Shadow DOM: no es descendiente del <form>
       // light, así que type=submit|reset no hace nada solos. Activamos el
       // formulario asociado vía ElementInternals (o closest como fallback).
@@ -279,6 +289,13 @@ import '../media/icon.js';
       }
     };
 
+    // `invalid` lo dispara el propio elemento form-associated: tanto cuando
+    // alguien llama a reportValidity() como cuando el <form> intenta enviarse
+    // y este control no pasa la validación. Escuchar el evento nativo —en vez
+    // de envolver checkValidity()/reportValidity()— es lo que cubre también el
+    // submit, donde el navegador valida sin pasar por nuestros métodos.
+    #boundInvalid = (e) => { emit(this, "is-invalid", { originalEvent: e, validationMessage: this.validationMessage }); };
+
     #wireEvents() {
       if (this.#wired) return;
       this.#wired = true;
@@ -286,16 +303,8 @@ import '../media/icon.js';
       b.addEventListener("focus", this.#boundFocus);
       b.addEventListener("blur",  this.#boundBlur);
       b.addEventListener("click", this.#boundClick);
-    }
-
-    #emit(name, detail = {}) {
-      // composed:true para que React (u otros listeners fuera del shadow)
-      // puedan recibirlo. bubbles:true para que suba por el DOM.
-      this.dispatchEvent(new CustomEvent(name, {
-        detail,
-        bubbles: true,
-        composed: true
-      }));
+      // En el host, no en #btn: el <button> del shadow no está asociado al form.
+      this.addEventListener("invalid", this.#boundInvalid);
     }
 
     // ---- privados --------------------------------------------------
@@ -383,7 +392,23 @@ import '../media/icon.js';
       this.#btn.toggleAttribute("disabled", disabled);
       this.#btn.setAttribute("aria-disabled", String(disabled));
       this.#setState("disabled", disabled);
-      this.toggleAttribute("tabindex", disabled ? -1 : null);
+
+      // Sacar del orden de tabulación mientras esté deshabilitado. Va sobre
+      // el nodo interno, que es el que está en el recorrido: cuando hay
+      // `href` el inner es un <a>, y un <a> ignora `disabled`.
+      //
+      // Antes era `this.toggleAttribute("tabindex", disabled ? -1 : null)`
+      // sobre el HOST, y hacía dos cosas mal: con `disabled` escribía
+      // `tabindex=""` (que el navegador lee como 0, o sea seguía siendo
+      // enfocable), y sin `disabled` BORRABA el tabindex que hubiera puesto
+      // el autor — `<is-button tabindex="-1">` perdía su valor al conectarse.
+      if (disabled) {
+        this.#btn.setAttribute("tabindex", "-1");
+      } else {
+        const propio = this.getAttribute("tabindex");
+        if (propio == null) this.#btn.removeAttribute("tabindex");
+        else this.#btn.setAttribute("tabindex", propio);
+      }
     }
 
     #updateIconOnly() {
@@ -434,9 +459,7 @@ import '../media/icon.js';
     }
   }
 
-  if (!customElements.get("is-button")) {
-    customElements.define("is-button", IsButton);
-  }
+  defineElement("is-button", IsButton);
 
   // Exponer para tests / dev
   if (typeof window !== "undefined") {

@@ -105,6 +105,10 @@ test('is-preview-component: el índice se muda a un drawer derecho en compacto',
       || /<is-button[^>]*class="toc-toggle"[^>]*variant="plain"[^>]*color="brand"/.test(previewJs),
     'toc-toggle debe ser is-button plain con color brand',
   );
+  assert.ok(
+    /withoutToc/.test(previewJs) && /dataset\.layout = 'full'/.test(previewJs),
+    'withoutToc debe forzar layout full sin panel derecho',
+  );
 });
 
 test('galería: el catálogo se muda a un drawer izquierdo en móvil', () => {

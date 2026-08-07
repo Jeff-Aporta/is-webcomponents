@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-signature> — Pad de firma manuscrita (touch + mouse). Exporta a PNG/SVG.
@@ -77,7 +79,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#strokes = [];
       this.#paint();
       this.#syncHint();
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { strokes: this.#strokes } }));
+      emit(this, 'is-change', { strokes: this.#strokes });
     }
 
     toDataURL(type = 'image/png') {
@@ -174,8 +176,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #onUp(e) {
       if (!this.#current) return;
       this.#current = null;
-      this.dispatchEvent(new CustomEvent('is-stroke-end', { bubbles: true, composed: true, detail: { dataURL: this.toDataURL() } }));
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { strokes: this.#strokes } }));
+      emit(this, 'is-stroke-end', { dataURL: this.toDataURL() });
+      emit(this, 'is-change', { strokes: this.#strokes });
     }
 
     #localPoint(e) {
@@ -193,5 +195,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #hint;
   }
 
-  if (!customElements.get('is-signature')) customElements.define('is-signature', IsSignature);
+  defineElement('is-signature', IsSignature);
 })();

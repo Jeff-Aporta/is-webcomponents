@@ -69,16 +69,23 @@ if (!/previewHost/.test(index) || !/hasControlledPreview/.test(index)) {
 }
 if (!/loadPreview/.test(index)) failures.push('index.html debe loadPreview desde registry');
 
-const { hasControlledPreview, controlledPreviewTags, loadPreview } = await import('../src/previews/registry.js');
+const { hasControlledPreview, hasCachedPreview, controlledPreviewTags, loadPreview, clearPreviewCache } = await import('../src/previews/registry.js');
 assert.equal(hasControlledPreview('is-button-group'), true);
 assert.equal(hasControlledPreview('is-button'), true);
 assert.equal(hasControlledPreview('home'), true);
 assert.ok(controlledPreviewTags().length >= 100);
 
+clearPreviewCache();
+assert.equal(hasCachedPreview('is-button-group'), false);
 const preview = await loadPreview('is-button-group');
 assert.ok(preview);
 assert.equal(preview.definition.tag, 'is-button-group');
 assert.equal(preview.definition.$schema, 'is-preview/v1');
+assert.equal(hasCachedPreview('is-button-group'), true);
+const again = await loadPreview('is-button-group');
+assert.equal(again.definition, preview.definition, 'segunda carga debe reutilizar la definición en memoria');
+assert.ok(/hasCachedPreview/.test(index), 'index.html debe evitar vaciar el host si el JSON ya está en caché');
+assert.ok(/#paintGen/.test(host) || /paintGen/.test(host), 'is-preview-component debe invalidar mounts en vuelo');
 
 if (failures.length) {
   console.error(`preview-controller.test.mjs: FAIL — ${failures.length}\n`);

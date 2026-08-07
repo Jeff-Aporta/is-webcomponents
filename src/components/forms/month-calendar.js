@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { daysInMonth, isoOf, monthLabels, pad } from '../_shared/date-utils.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-month-calendar> — Rejilla de los 12 meses de un año (MUI MonthCalendar).
@@ -17,11 +20,10 @@ import { daysInMonth, isoOf, monthLabels, pad } from '../_shared/date-utils.js';
 
   const OBSERVED = ['value', 'year', 'min', 'max', 'locale', 'columns', 'month-width', 'disabled', 'readonly'];
 
-  class IsMonthCalendar extends HTMLElement {
+  class IsMonthCalendar extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
     #base;
-    #mounted = false;
 
     constructor() {
       super();
@@ -33,13 +35,11 @@ import { daysInMonth, isoOf, monthLabels, pad } from '../_shared/date-utils.js';
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#render();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#render();
     }
 
@@ -128,11 +128,7 @@ import { daysInMonth, isoOf, monthLabels, pad } from '../_shared/date-utils.js';
       if (this.disabled || this.readonly) return;
       const value = `${this.year}-${pad(month + 1)}`;
       this.setAttribute('value', value);
-      this.dispatchEvent(new CustomEvent('is-change', {
-        detail: { value, year: this.year, month },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'is-change', { value, year: this.year, month });
       if (focus) this.#base.querySelector(`[data-month="${month}"]`)?.focus();
     }
 
@@ -172,8 +168,5 @@ import { daysInMonth, isoOf, monthLabels, pad } from '../_shared/date-utils.js';
     }
   }
 
-  if (!customElements.get('is-month-calendar')) {
-    customElements.define('is-month-calendar', IsMonthCalendar);
-  }
-  if (typeof window !== 'undefined') window.IsMonthCalendar = IsMonthCalendar;
+  defineElement('is-month-calendar', IsMonthCalendar, 'IsMonthCalendar');
 })();

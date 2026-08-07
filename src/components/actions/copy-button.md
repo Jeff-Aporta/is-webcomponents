@@ -163,6 +163,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 - [`../feedback/tooltip.js`](../feedback/tooltip.js)
+- [`./button.js`](./button.js) — la superficie clicable es un `<is-button variant="text">`.
 
 Tags del módulo: `<is-copy-button>`.
 

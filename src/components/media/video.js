@@ -1,6 +1,9 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../actions/check-icon-button.js';
 import './icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { setStringAttr } from '../_shared/reflect.js';
 
 /**
  * <is-video> — Web Component (vanilla).
@@ -287,10 +290,10 @@ import './icon.js';
     }
 
     get src() { return this.getAttribute('src') ?? ''; }
-    set src(v) { v == null || v === '' ? this.removeAttribute('src') : this.setAttribute('src', v); }
+    set src(v) { setStringAttr(this, 'src', v); }
 
     get poster() { return this.getAttribute('poster') ?? ''; }
-    set poster(v) { v == null || v === '' ? this.removeAttribute('poster') : this.setAttribute('poster', v); }
+    set poster(v) { setStringAttr(this, 'poster', v); }
 
     get controls() {
       if (!this.hasAttribute('controls')) return true;
@@ -531,7 +534,7 @@ import './icon.js';
       this.setAttribute('data-playing', '');
       this.#wake();
       this.dispatchEvent(new Event('play', { bubbles: true, composed: true }));
-      this.dispatchEvent(new CustomEvent('is-play', { bubbles: true, composed: true }));
+      emit(this, 'is-play');
     };
 
     #onPause = () => {
@@ -541,14 +544,14 @@ import './icon.js';
       this.removeAttribute('data-idle');
       clearTimeout(this.#idleTimer);
       this.dispatchEvent(new Event('pause', { bubbles: true, composed: true }));
-      this.dispatchEvent(new CustomEvent('is-pause', { bubbles: true, composed: true }));
+      emit(this, 'is-pause');
     };
 
     #onEnded = () => {
       this.removeAttribute('data-playing');
       this.removeAttribute('data-idle');
       this.dispatchEvent(new Event('ended', { bubbles: true, composed: true }));
-      this.dispatchEvent(new CustomEvent('is-ended', { bubbles: true, composed: true }));
+      emit(this, 'is-ended');
     };
 
     #onTime = () => {
@@ -565,10 +568,5 @@ import './icon.js';
     };
   }
 
-  if (!customElements.get('is-video')) {
-    customElements.define('is-video', IsVideo);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsVideo = IsVideo;
-  }
+  defineElement('is-video', IsVideo, 'IsVideo');
 })();

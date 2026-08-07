@@ -62,15 +62,21 @@ export function renderMenu(el, items) {
       frag.appendChild(hr);
       continue;
     }
-    const btn = document.createElement('button');
-    btn.type = 'button';
+    const btn = document.createElement('is-button');
+    btn.variant = 'plain';
     btn.className = 'pop-item';
     btn.dataset.action = item.action;
     if (item.value != null) btn.dataset.value = String(item.value);
-    btn.disabled = !!item.disabled;
+    if (item.disabled) btn.setAttribute('disabled', '');
     if (item.checked) btn.setAttribute('data-checked', '');
-    btn.innerHTML = `<span class="pop-icon" aria-hidden="true">${item.icon || ''}</span><span class="pop-label"></span>`;
-    btn.querySelector('.pop-label').textContent = item.label;
+    const icon = document.createElement('span');
+    icon.className = 'pop-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    if (item.icon) icon.innerHTML = item.icon;
+    const label = document.createElement('span');
+    label.className = 'pop-label';
+    label.textContent = item.label;
+    btn.append(icon, label);
     frag.appendChild(btn);
   }
   el.replaceChildren(frag);
@@ -82,10 +88,13 @@ export function renderColumnsPanel(el, { columns, isVisible, search = '' }) {
   el.replaceChildren();
   const head = document.createElement('div');
   head.className = 'pop-head';
-  head.innerHTML = `
-    <input type="search" class="pop-search" placeholder="Buscar columna" aria-label="Buscar columna" />
-  `;
-  head.querySelector('.pop-search').value = search;
+  const search_ = document.createElement('is-input');
+  search_.type = 'search';
+  search_.className = 'pop-search';
+  search_.placeholder = 'Buscar columna';
+  search_.setAttribute('aria-label', 'Buscar columna');
+  search_.value = search;
+  head.appendChild(search_);
   el.appendChild(head);
 
   const list = document.createElement('div');
@@ -96,21 +105,29 @@ export function renderColumnsPanel(el, { columns, isVisible, search = '' }) {
     if (needle && !String(col.headerName).toLowerCase().includes(needle)) continue;
     const row = document.createElement('label');
     row.className = 'pop-check';
-    row.innerHTML = `<input type="checkbox" data-field="" /><span></span>`;
-    const input = row.querySelector('input');
-    input.dataset.field = col.field;
-    input.checked = isVisible(col.field);
-    row.querySelector('span').textContent = col.headerName;
+    const cb = document.createElement('is-checkbox');
+    cb.dataset.field = col.field;
+    if (isVisible(col.field)) cb.setAttribute('checked', '');
+    const label = document.createElement('span');
+    label.textContent = col.headerName;
+    row.append(cb, label);
     list.appendChild(row);
   }
   el.appendChild(list);
 
   const foot = document.createElement('div');
   foot.className = 'pop-foot';
-  foot.innerHTML = `
-    <button type="button" class="pop-btn" data-action="show-all">Mostrar todo</button>
-    <button type="button" class="pop-btn" data-action="hide-all">Ocultar todo</button>
-  `;
+  const showAll = document.createElement('is-button');
+  showAll.variant = 'plain';
+  showAll.className = 'pop-btn';
+  showAll.dataset.action = 'show-all';
+  showAll.textContent = 'Mostrar todo';
+  const hideAll = document.createElement('is-button');
+  hideAll.variant = 'plain';
+  hideAll.className = 'pop-btn';
+  hideAll.dataset.action = 'hide-all';
+  hideAll.textContent = 'Ocultar todo';
+  foot.append(showAll, hideAll);
   el.appendChild(foot);
 }
 
@@ -150,34 +167,35 @@ export function renderFilterPanel(el, { columns, model }) {
     }
     row.appendChild(logic);
 
-    const del = document.createElement('button');
-    del.type = 'button';
+    const del = document.createElement('is-button');
+    del.variant = 'plain';
+    del.pill = true;
     del.className = 'filter-del';
     del.dataset.action = 'remove-filter';
     del.setAttribute('aria-label', 'Quitar filtro');
     del.textContent = '×';
     row.appendChild(del);
 
-    const colSel = document.createElement('select');
+    const colSel = document.createElement('is-select');
     colSel.className = 'filter-col';
     colSel.setAttribute('aria-label', 'Columna');
     for (const c of columns.filter((c) => c.filterable !== false && c.type !== 'actions')) {
-      const opt = document.createElement('option');
+      const opt = document.createElement('is-select-option');
       opt.value = c.field;
       opt.textContent = c.headerName;
-      opt.selected = c.field === item.field;
+      if (c.field === item.field) opt.setAttribute('selected', '');
       colSel.appendChild(opt);
     }
     row.appendChild(colSel);
 
-    const opSel = document.createElement('select');
+    const opSel = document.createElement('is-select');
     opSel.className = 'filter-op';
     opSel.setAttribute('aria-label', 'Operador');
     for (const o of col?.operators || []) {
-      const opt = document.createElement('option');
+      const opt = document.createElement('is-select-option');
       opt.value = o.value;
       opt.textContent = o.label;
-      opt.selected = o.value === item.operator;
+      if (o.value === item.operator) opt.setAttribute('selected', '');
       opSel.appendChild(opt);
     }
     row.appendChild(opSel);
@@ -197,10 +215,17 @@ export function renderFilterPanel(el, { columns, model }) {
 
   const foot = document.createElement('div');
   foot.className = 'pop-foot';
-  foot.innerHTML = `
-    <button type="button" class="pop-btn" data-action="add-filter">+ Añadir filtro</button>
-    <button type="button" class="pop-btn" data-action="clear-filters">Limpiar</button>
-  `;
+  const addFilter = document.createElement('is-button');
+  addFilter.variant = 'plain';
+  addFilter.className = 'pop-btn';
+  addFilter.dataset.action = 'add-filter';
+  addFilter.textContent = '+ Añadir filtro';
+  const clearFilters = document.createElement('is-button');
+  clearFilters.variant = 'plain';
+  clearFilters.className = 'pop-btn';
+  clearFilters.dataset.action = 'clear-filters';
+  clearFilters.textContent = 'Limpiar';
+  foot.append(addFilter, clearFilters);
   el.appendChild(foot);
 }
 
@@ -215,14 +240,14 @@ export function filterValueInput(col, op, item) {
 
   const type = op?.inputType || col?.type;
   if (type === 'boolean') {
-    const sel = document.createElement('select');
+    const sel = document.createElement('is-select');
     sel.className = 'filter-input';
     sel.setAttribute('aria-label', 'Valor');
     for (const [value, label] of [['', 'cualquiera'], ['true', 'sí'], ['false', 'no']]) {
-      const opt = document.createElement('option');
+      const opt = document.createElement('is-select-option');
       opt.value = value;
       opt.textContent = label;
-      opt.selected = String(item.value ?? '') === value;
+      if (String(item.value ?? '') === value) opt.setAttribute('selected', '');
       sel.appendChild(opt);
     }
     wrap.appendChild(sel);
@@ -230,27 +255,27 @@ export function filterValueInput(col, op, item) {
   }
 
   if (type === 'select' && Array.isArray(col?.valueOptions) && !op?.multiple) {
-    const sel = document.createElement('select');
+    const sel = document.createElement('is-select');
     sel.className = 'filter-input';
     sel.setAttribute('aria-label', 'Valor');
-    const blank = document.createElement('option');
+    const blank = document.createElement('is-select-option');
     blank.value = '';
     blank.textContent = 'cualquiera';
     sel.appendChild(blank);
     for (const raw of col.valueOptions) {
       const value = typeof raw === 'object' ? raw.value : raw;
       const label = typeof raw === 'object' ? raw.label : raw;
-      const opt = document.createElement('option');
+      const opt = document.createElement('is-select-option');
       opt.value = String(value);
       opt.textContent = String(label);
-      opt.selected = String(item.value ?? '') === String(value);
+      if (String(item.value ?? '') === String(value)) opt.setAttribute('selected', '');
       sel.appendChild(opt);
     }
     wrap.appendChild(sel);
     return wrap;
   }
 
-  const input = document.createElement('input');
+  const input = document.createElement('is-input');
   input.className = 'filter-input';
   input.setAttribute('aria-label', 'Valor');
   input.type = op?.multiple || op?.range ? 'text' : (type === 'number' ? 'number' : type === 'date' ? 'date' : type === 'dateTime' ? 'datetime-local' : 'text');

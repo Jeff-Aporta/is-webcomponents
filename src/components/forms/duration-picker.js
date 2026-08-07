@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-duration-picker> — Selector de duración HH:MM:SS.
@@ -31,9 +34,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const pad2 = (n) => String(n).padStart(2, '0');
 
-  class IsDurationPicker extends HTMLElement {
+  class IsDurationPicker extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
     #active = null;
 
     constructor() {
@@ -43,21 +45,21 @@ import { adoptCss } from '../_shared/adopt-css.js';
         <div part="root" class="root">
           <slot name="start"></slot>
           <div class="col">
-            <button class="up" type="button" data-target="h" aria-label="Aumentar horas">+</button>
+            <is-button variant="plain" pill class="up" data-target="h" aria-label="Aumentar horas">+</is-button>
             <input part="hours" class="cell" id="h" inputmode="numeric" maxlength="2" value="0" aria-label="Horas" />
-            <button class="down" type="button" data-target="h" aria-label="Disminuir horas">−</button>
+            <is-button variant="plain" pill class="down" data-target="h" aria-label="Disminuir horas">−</is-button>
           </div>
           <span class="sep" aria-hidden="true">:</span>
           <div class="col">
-            <button class="up" type="button" data-target="m" aria-label="Aumentar minutos">+</button>
+            <is-button variant="plain" pill class="up" data-target="m" aria-label="Aumentar minutos">+</is-button>
             <input part="minutes" class="cell" id="m" inputmode="numeric" maxlength="2" value="00" aria-label="Minutos" />
-            <button class="down" type="button" data-target="m" aria-label="Disminuir minutos">−</button>
+            <is-button variant="plain" pill class="down" data-target="m" aria-label="Disminuir minutos">−</is-button>
           </div>
           <span class="sep" aria-hidden="true">:</span>
           <div class="col">
-            <button class="up" type="button" data-target="s" aria-label="Aumentar segundos">+</button>
+            <is-button variant="plain" pill class="up" data-target="s" aria-label="Aumentar segundos">+</is-button>
             <input part="seconds" class="cell" id="s" inputmode="numeric" maxlength="2" value="00" aria-label="Segundos" />
-            <button class="down" type="button" data-target="s" aria-label="Disminuir segundos">−</button>
+            <is-button variant="plain" pill class="down" data-target="s" aria-label="Disminuir segundos">−</is-button>
           </div>
           <slot name="end"></slot>
         </div>
@@ -85,13 +87,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       });
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#sync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
     }
 
@@ -116,7 +116,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (v === this.value) return;
       this.value = v;
       this.#sync();
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { value: this.value, text: this.text } }));
+      emit(this, 'is-change', { value: this.value, text: this.text });
     }
 
     set(h, m, s) {
@@ -146,8 +146,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const v = h * 3600 + m * 60 + s;
       this.value = v;
       this.#sync();
-      this.dispatchEvent(new CustomEvent('is-input', { bubbles: true, composed: true }));
-      this.dispatchEvent(new CustomEvent('is-change', { bubbles: true, composed: true, detail: { value: v, text: this.text } }));
+      emit(this, 'is-input');
+      emit(this, 'is-change', { value: v, text: this.text });
     }
 
     #onKey(e, input) {
@@ -169,5 +169,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #root;
   }
 
-  if (!customElements.get('is-duration-picker')) customElements.define('is-duration-picker', IsDurationPicker);
+  defineElement('is-duration-picker', IsDurationPicker);
 })();

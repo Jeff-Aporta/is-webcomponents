@@ -5,6 +5,8 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-mindmap> — mapa mental en SVG, sin Mermaid.
@@ -171,9 +173,7 @@ class IsMindmap extends HTMLElement {
     this.#buildEdges(layout, theme);
     this.#buildNodes(layout, theme);
 
-    this.dispatchEvent(new CustomEvent('is-render', {
-      bubbles: true, composed: true, detail: { layout, svg: this.#svg },
-    }));
+    emit(this, 'is-render', { layout, svg: this.#svg });
   }
 
   #buildEdges(layout, theme) {
@@ -344,8 +344,7 @@ class IsMindmap extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-mindmap')) customElements.define('is-mindmap', IsMindmap);
-if (typeof window !== 'undefined') window.IsMindmap = IsMindmap;
+defineElement('is-mindmap', IsMindmap, 'IsMindmap');
 
 registerDiagramKind('mindmap', 'is-mindmap');
 

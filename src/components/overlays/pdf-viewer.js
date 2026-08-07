@@ -1,4 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setOptionalAttr } from '../_shared/reflect.js';
 
 /**
  * <is-pdf-viewer> — Visor de PDF. Por defecto usa el visor nativo del navegador
@@ -25,9 +29,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 (() => {
   const OBSERVED = ['src', 'page', 'zoom', 'engine', 'height', 'download', 'print'];
 
-  class IsPdfViewer extends HTMLElement {
+  class IsPdfViewer extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
 
     constructor() {
       super();
@@ -56,20 +59,18 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#print.addEventListener('click', () => this.#printIt());
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#sync();
-      this.#iframe.addEventListener('load', () => this.dispatchEvent(new CustomEvent('is-load', { bubbles: true, composed: true })));
-      this.#iframe.addEventListener('error', () => this.dispatchEvent(new CustomEvent('is-error', { bubbles: true, composed: true })));
+      this.#iframe.addEventListener('load', () => emit(this, 'is-load'));
+      this.#iframe.addEventListener('error', () => emit(this, 'is-error'));
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       this.#sync();
     }
 
     get src() { return this.getAttribute('src'); }
-    set src(v) { v == null ? this.removeAttribute('src') : this.setAttribute('src', v); }
+    set src(v) { setOptionalAttr(this, 'src', v); }
 
     get currentPage() {
       try {
@@ -115,5 +116,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #print;
   }
 
-  if (!customElements.get('is-pdf-viewer')) customElements.define('is-pdf-viewer', IsPdfViewer);
+  defineElement('is-pdf-viewer', IsPdfViewer);
 })();

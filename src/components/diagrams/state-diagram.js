@@ -5,6 +5,8 @@ import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-state-diagram> — diagrama de estados en SVG, sin Mermaid.
@@ -225,14 +227,10 @@ class IsStateDiagram extends HTMLElement {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => this.dispatchEvent(new CustomEvent('is-turtle-state', {
-        bubbles: true, composed: true, detail: state,
-      })),
+      onState: (state) => emit(this, 'is-turtle-state', state),
     });
 
-    this.dispatchEvent(new CustomEvent('is-render', {
-      bubbles: true, composed: true, detail: { layout, svg: this.#svg },
-    }));
+    emit(this, 'is-render', { layout, svg: this.#svg });
   }
 
   #buildLegend(layout, theme) {
@@ -352,9 +350,7 @@ class IsStateDiagram extends HTMLElement {
     if (this.isViewer) {
       const item = e.composedPath().find((x) => x?.dataset?.groupId);
       if (item) {
-        this.dispatchEvent(new CustomEvent('is-toggle-group', {
-          bubbles: true, composed: true, detail: { id: item.dataset.groupId },
-        }));
+        emit(this, 'is-toggle-group', { id: item.dataset.groupId });
       }
       return;
     }
@@ -440,8 +436,7 @@ class IsStateDiagram extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-state-diagram')) customElements.define('is-state-diagram', IsStateDiagram);
-if (typeof window !== 'undefined') window.IsStateDiagram = IsStateDiagram;
+defineElement('is-state-diagram', IsStateDiagram, 'IsStateDiagram');
 
 registerDiagramKind('state', 'is-state-diagram');
 registerDiagramKind('stateDiagram', 'is-state-diagram');

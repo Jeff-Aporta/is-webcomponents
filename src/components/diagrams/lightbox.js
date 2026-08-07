@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-lightbox> — visor a pantalla completa para cualquier contenido.
@@ -188,7 +190,7 @@ class IsLightbox extends HTMLElement {
     if (this.open) {
       if (!this.#dialog.open) {
         this.#dialog.showModal();
-        this.dispatchEvent(new CustomEvent('is-open', { bubbles: true, composed: true }));
+        emit(this, 'is-open');
       }
     } else if (this.#dialog.open) {
       this.#dialog.close();
@@ -219,7 +221,7 @@ class IsLightbox extends HTMLElement {
 
   #onDialogClose = () => {
     if (this.open) this.removeAttribute('open');
-    this.dispatchEvent(new CustomEvent('is-close', { bubbles: true, composed: true }));
+    emit(this, 'is-close');
   };
 
   #onDialogCancel = (e) => {
@@ -257,9 +259,7 @@ class IsLightbox extends HTMLElement {
       if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(url);
     } catch { /* noop */ }
     done();
-    this.dispatchEvent(new CustomEvent('is-share', {
-      bubbles: true, composed: true, detail: { url },
-    }));
+    emit(this, 'is-share', { url });
   }
 
   /* ── zoom / pan ── */
@@ -281,9 +281,7 @@ class IsLightbox extends HTMLElement {
   #applyView() {
     const { scale, x, y } = this.#view;
     this.#host.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-    this.dispatchEvent(new CustomEvent('is-reposition', {
-      bubbles: true, composed: true, detail: { ...this.#view },
-    }));
+    emit(this, 'is-reposition', { ...this.#view });
   }
 
   /** Zoom anclado al cursor: el punto bajo el puntero no se mueve. */
@@ -341,9 +339,6 @@ class IsLightbox extends HTMLElement {
   };
 }
 
-if (!customElements.get('is-lightbox')) {
-  customElements.define('is-lightbox', IsLightbox);
-}
-if (typeof window !== 'undefined') window.IsLightbox = IsLightbox;
+defineElement('is-lightbox', IsLightbox, 'IsLightbox');
 
 export { IsLightbox };

@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-dock> — Barra tipo macOS. Los hijos se redimensionan al pasar el
@@ -104,7 +106,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-dock')) customElements.define('is-dock', IsDock);
+  defineElement('is-dock', IsDock);
 
   class IsDockItem extends HTMLElement {
     static get observedAttributes() { return ['icon', 'label', 'href', 'active']; }
@@ -121,7 +123,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.addEventListener('click', (e) => {
         if (this.hasAttribute('disabled')) { e.preventDefault(); return; }
         const dock = this.closest('is-dock');
-        dock?.dispatchEvent(new CustomEvent('is-select', { bubbles: true, composed: true, detail: { item: this } }));
+        if (dock) emit(dock, 'is-select', { item: this });
       });
       this.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -157,5 +159,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
       }
     }
   }
-  if (!customElements.get('is-dock-item')) customElements.define('is-dock-item', IsDockItem);
+  defineElement('is-dock-item', IsDockItem);
 })();

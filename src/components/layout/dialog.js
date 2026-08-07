@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-dialog> — Web Component (vanilla, zero dependencies).
@@ -67,10 +70,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['open', 'label', 'without-header', 'light-dismiss'];
 
-  class IsDialog extends HTMLElement {
+  class IsDialog extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #backdrop;
     #dialog;
     #title;
@@ -109,8 +111,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.addEventListener('click', this.#onDelegatedClick);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProperties();
       this.#syncLabel();
       this.#syncFooterVisibility();
@@ -125,12 +126,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       }
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#detachKeydown();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'open') this.#onOpenAttrChanged();
       if (name === 'label') this.#syncLabel();
       if (name === 'without-header') this.#syncHeaderVisibility();
@@ -221,7 +221,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #setOpen(desired) {
       if (desired) {
         // Emit is-show
-        this.dispatchEvent(new CustomEvent('is-show', { detail: {}, bubbles: true, composed: true }));
+        emit(this, 'is-show', {});
         this.#lastFocus = document.activeElement;
         this.dataset.state = 'opening';
         this.#dialog.hidden = false;
@@ -233,7 +233,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         return this.#animateOpen().then(() => {
           this.dataset.state = 'open';
           this.#focusInitial();
-          this.dispatchEvent(new CustomEvent('is-after-show', { detail: {}, bubbles: true, composed: true }));
+          emit(this, 'is-after-show', {});
         });
       }
       this.#doClose();
@@ -252,7 +252,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
           try { this.#lastFocus.focus(); } catch (_e) { /* ignore */ }
         }
         this.#lastFocus = null;
-        this.dispatchEvent(new CustomEvent('is-after-hide', { detail: {}, bubbles: true, composed: true }));
+        emit(this, 'is-after-hide', {});
       });
     }
 
@@ -362,10 +362,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-dialog')) {
-    customElements.define('is-dialog', IsDialog);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsDialog = IsDialog;
-  }
+  defineElement('is-dialog', IsDialog, 'IsDialog');
 })();

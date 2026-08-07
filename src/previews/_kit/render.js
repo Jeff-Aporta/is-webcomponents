@@ -40,6 +40,53 @@ export function fragmentFromHtml(html) {
 }
 
 /**
+ * @param {Extract<PreviewBlock, { kind: 'demo' }>} block
+ * @returns {HTMLElement | null}
+ */
+function renderDemoEquiv(block) {
+  if (!block.equivHtml && !block.equivFlow && !block.equivNote) return null;
+
+  const section = document.createElement('section');
+  section.className = 'demo-equiv';
+  section.setAttribute('aria-label', 'HTML puro equivalente');
+
+  const title = document.createElement('h3');
+  title.className = 'demo-equiv__title';
+  title.textContent = 'HTML puro equivalente';
+  section.append(title);
+
+  if (block.equivNote) {
+    const note = document.createElement('p');
+    note.className = 'demo-equiv__note';
+    note.innerHTML = resolveAssets(block.equivNote);
+    section.append(note);
+  } else {
+    const note = document.createElement('p');
+    note.className = 'demo-equiv__note';
+    note.textContent =
+      'Mapeo documental al HTML/ARIA nativo. No sustituye al componente del kit ni copia sus estilos.';
+    section.append(note);
+  }
+
+  if (block.equivHtml) {
+    const pre = document.createElement('pre');
+    pre.className = 'code demo-equiv__pre';
+    pre.dataset.lang = 'html';
+    pre.textContent = block.equivHtml.trim();
+    section.append(pre);
+  }
+
+  if (block.equivFlow) {
+    const flow = document.createElement('div');
+    flow.className = 'demo-equiv__flow';
+    flow.append(fragmentFromHtml(block.equivFlow));
+    section.append(flow);
+  }
+
+  return section;
+}
+
+/**
  * @param {PreviewBlock} block
  * @returns {HTMLElement}
  */
@@ -52,13 +99,19 @@ export function renderBlock(block) {
       return p;
     }
     case 'demo': {
+      const wrap = document.createElement('div');
+      wrap.className = 'demo-block';
       const demo = document.createElement('is-demo');
       demo.className = 'demo';
       if (block.heading) demo.setAttribute('heading', block.heading);
       if (block.contain) demo.setAttribute('contain', '');
       if (block.noCode) demo.dataset.noCode = '';
+      if (block.equivHtml) demo.dataset.equivHtml = block.equivHtml;
       demo.append(fragmentFromHtml(block.html));
-      return demo;
+      wrap.append(demo);
+      const equiv = renderDemoEquiv(block);
+      if (equiv) wrap.append(equiv);
+      return wrap;
     }
     case 'callout': {
       const el = document.createElement('div');
@@ -188,6 +241,8 @@ export function renderDefinition(def, targets) {
     destino.append(renderSection(section));
   }
   if (destino !== main) main.append(destino);
+
+  if (def.withoutToc) return;
 
   const h1 = document.createElement('h1');
   h1.textContent = def.tag;

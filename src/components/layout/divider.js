@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
 
 /**
  * <is-divider> — Web Component (vanilla).
@@ -90,10 +91,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-divider')) {
-    customElements.define('is-divider', IsDivider);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsDivider = IsDivider;
-  }
+  defineElement('is-divider', IsDivider, 'IsDivider');
 })();

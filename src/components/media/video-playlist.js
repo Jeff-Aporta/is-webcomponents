@@ -32,7 +32,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './video.js';
 import './icon.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -584,14 +585,8 @@ import './icon.js';
       });
       if (emit) {
         const video = list[this.#index];
-        this.dispatchEvent(new CustomEvent('is-video-change', {
-          bubbles: true, composed: true,
-          detail: { previousIndex, currentIndex: this.#index, video },
-        }));
-        this.dispatchEvent(new CustomEvent('is-change', {
-          bubbles: true, composed: true,
-          detail: { index: this.#index },
-        }));
+        emit(this, 'is-video-change', { previousIndex, currentIndex: this.#index, video });
+        emit(this, 'is-change', { index: this.#index });
       }
     }
 
@@ -784,10 +779,5 @@ import './icon.js';
     }
   }
 
-  if (!customElements.get('is-video-playlist')) {
-    customElements.define('is-video-playlist', IsVideoPlaylist);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsVideoPlaylist = IsVideoPlaylist;
-  }
+  defineElement('is-video-playlist', IsVideoPlaylist, 'IsVideoPlaylist');
 })();

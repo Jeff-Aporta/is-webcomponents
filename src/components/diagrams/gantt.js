@@ -6,6 +6,8 @@ import { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-gantt> — diagrama de Gantt en SVG, sin Mermaid.
@@ -204,14 +206,10 @@ class IsGantt extends HTMLElement {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => this.dispatchEvent(new CustomEvent('is-turtle-state', {
-        bubbles: true, composed: true, detail: state,
-      })),
+      onState: (state) => emit(this, 'is-turtle-state', state),
     });
 
-    this.dispatchEvent(new CustomEvent('is-render', {
-      bubbles: true, composed: true, detail: { layout, svg: this.#svg },
-    }));
+    emit(this, 'is-render', { layout, svg: this.#svg });
   }
 
   #buildGrid(layout, theme) {
@@ -350,9 +348,7 @@ class IsGantt extends HTMLElement {
     if (this.isViewer) {
       const item = e.composedPath().find((x) => x?.dataset?.groupId);
       if (item) {
-        this.dispatchEvent(new CustomEvent('is-toggle-group', {
-          bubbles: true, composed: true, detail: { id: item.dataset.groupId },
-        }));
+        emit(this, 'is-toggle-group', { id: item.dataset.groupId });
       }
       return;
     }
@@ -441,8 +437,7 @@ class IsGantt extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-gantt')) customElements.define('is-gantt', IsGantt);
-if (typeof window !== 'undefined') window.IsGantt = IsGantt;
+defineElement('is-gantt', IsGantt, 'IsGantt');
 
 registerDiagramKind('gantt', 'is-gantt');
 

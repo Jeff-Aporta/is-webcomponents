@@ -2,6 +2,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import './option.js';
 import '../media/icon.js';
 import '../feedback/tag.js';
+
 import {
   attachFormInternals,
   clearValidity,
@@ -9,7 +10,10 @@ import {
   setFormValue,
   setValidity,
 } from '../_shared/form-associated.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr } from '../_shared/reflect.js';
 /**
  * <is-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.
@@ -80,7 +84,7 @@ import {
 
   let uidSeq = 0;
 
-  class IsSelect extends HTMLElement {
+  class IsSelect extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -100,7 +104,6 @@ import {
     #slot;
 
     #uid = `is-sel-${++uidSeq}`;
-    #mounted = false;
     #formDisabled = false;
     #defaultsRead = false;
     #defaultValues = [];
@@ -150,8 +153,7 @@ import {
       this.#hintSlot.addEventListener('slotchange', () => this.#syncMeta());
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProps();
       this.#collectOptions();
       this.#readValueAttr(true);
@@ -167,15 +169,14 @@ import {
       addEventListener('scroll', this.#onReposition, true);
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       clearTimeout(this.#typeTimer);
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'value') {
         if (this.#writingValue) return;
         this.#readValueAttr(false);
@@ -237,7 +238,7 @@ import {
     set error(v) { this.toggleAttribute('error', !!v); }
 
     get errorText() { return this.getAttribute('error-text') ?? ''; }
-    set errorText(v) { v == null || v === '' ? this.removeAttribute('error-text') : this.setAttribute('error-text', v); }
+    set errorText(v) { setStringAttr(this, 'error-text', v); }
 
     get fullWidth() { return this.hasAttribute('full-width'); }
     set fullWidth(v) { this.toggleAttribute('full-width', !!v); }
@@ -272,10 +273,10 @@ import {
     }
 
     get placeholder() { return this.getAttribute('placeholder') ?? ''; }
-    set placeholder(v) { v == null || v === '' ? this.removeAttribute('placeholder') : this.setAttribute('placeholder', v); }
+    set placeholder(v) { setStringAttr(this, 'placeholder', v); }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', v); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     get form() { return this.#internals?.form ?? null; }
     get validity() { return this.#internals?.validity ?? null; }
@@ -310,10 +311,6 @@ import {
           this[a] = v;
         }
       }
-    }
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
     }
 
     get #isDisabled() { return this.disabled || this.#formDisabled; }
@@ -430,7 +427,7 @@ import {
       this.#values = this.multiple ? [...new Set(values)] : values.slice(0, 1);
       this.#writeValueAttr();
       this.#apply();
-      if (this.value !== prev) this.#emit('is-change', { value: this.value, values: this.values });
+      if (this.value !== prev) emit(this, 'is-change', { value: this.value, values: this.values });
     }
 
     #toggleValue(value) {
@@ -704,13 +701,13 @@ import {
           try { this.#dialog.focus({ preventScroll: true }); } catch { /* noop */ }
           this.#scrollActive();
         });
-        if (!this.#wasOpen) this.#emit('is-show');
+        if (!this.#wasOpen) emit(this, 'is-show', {});
       } else {
         this.#activeIndex = -1;
         this.#typeBuf = '';
         this.#syncActiveDescendant();
         if (this.#dialog.open) this.#dialog.close();
-        if (this.#wasOpen) this.#emit('is-hide');
+        if (this.#wasOpen) emit(this, 'is-hide', {});
       }
       this.#wasOpen = open;
     }
@@ -857,8 +854,5 @@ import {
     };
   }
 
-  if (!customElements.get('is-select')) {
-    customElements.define('is-select', IsSelect);
-  }
-  if (typeof window !== 'undefined') window.IsSelect = IsSelect;
+  defineElement('is-select', IsSelect, 'IsSelect');
 })();

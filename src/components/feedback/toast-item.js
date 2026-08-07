@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { INTENT } from '../_shared/intent.js';
 
 /**
  * <is-toast-item> — Web Component (vanilla).
@@ -38,7 +41,7 @@ import '../media/icon.js';
   `;
 
   const OBSERVED = ['color', 'duration', 'open'];
-  const VALID_COLOR = ['brand', 'success', 'warning', 'danger', 'neutral'];
+  const VALID_COLOR = INTENT;
   const DEFAULT_DURATION = 5000;
 
   class IsToastItem extends HTMLElement {
@@ -138,7 +141,7 @@ import '../media/icon.js';
       this.hidden = false;
       if (!this.hasAttribute('open')) this.setAttribute('open', '');
       this.#restartCountdown();
-      this.dispatchEvent(new CustomEvent('is-after-show', { bubbles: true, composed: true }));
+      emit(this, 'is-after-show');
       this.#showing = false;
       return this;
     }
@@ -149,7 +152,7 @@ import '../media/icon.js';
       this.#clearTimers();
       if (this.hasAttribute('open')) this.removeAttribute('open');
       this.hidden = true;
-      this.dispatchEvent(new CustomEvent('is-after-hide', { bubbles: true, composed: true }));
+      emit(this, 'is-after-hide');
       this.#hiding = false;
       return Promise.resolve(this);
     }
@@ -208,10 +211,5 @@ import '../media/icon.js';
     }
   }
 
-  if (!customElements.get('is-toast-item')) {
-    customElements.define('is-toast-item', IsToastItem);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsToastItem = IsToastItem;
-  }
+  defineElement('is-toast-item', IsToastItem, 'IsToastItem');
 })();

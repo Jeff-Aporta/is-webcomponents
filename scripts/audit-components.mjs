@@ -42,7 +42,10 @@ for (const f of walk(compRoot)) {
 
   const hasCss = existsSync(f.replace(/\.js$/, '.css'));
   const usesShadow = /attachShadow/.test(src);
-  const usesAdopt = /adoptCss/.test(src);
+  // `adoptCss(` = lo llama. Un módulo que EXPORTA su propio `adoptCss`
+  // (helpers/ui.js) no está adoptando nada y no necesita un .css hermano;
+  // buscar el identificador a secas lo marcaba como falso positivo.
+  const usesAdopt = /(?<!export const )\badoptCss\(/.test(src) && !/export const adoptCss\s*=/.test(src);
   if (hasCss && usesShadow && !usesAdopt) issues.push('css-huerfano: existe .css pero no se adopta en el shadow');
   if (!hasCss && usesAdopt) issues.push('adoptCss-sin-css: adoptCss apunta a un .css inexistente (404 en runtime)');
 

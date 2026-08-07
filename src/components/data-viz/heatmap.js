@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { niceTicks, scaleLinear } from '../_shared/svg-chart-engine.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-heatmap> — Mapa de calor: matriz de celdas coloreadas por valor numérico.
@@ -215,7 +217,7 @@ import { niceTicks, scaleLinear } from '../_shared/svg-chart-engine.js';
       // legend
       this.#renderLegend(domain, palette, W - legendW + 6, plot.y, legendW - 12, plot.height);
 
-      this.dispatchEvent(new CustomEvent('is-render', { bubbles: true, composed: true, detail: { svg: this.#svg } }));
+      emit(this, 'is-render', { svg: this.#svg });
     }
 
     #renderLegend(domain, palette, x, y, w, h) {
@@ -243,7 +245,7 @@ import { niceTicks, scaleLinear } from '../_shared/svg-chart-engine.js';
       if (!cell) return this.#clearHover();
       cell.classList.add('is-hover');
       const detail = { x: cell.dataset.x, y: cell.dataset.y, value: Number(cell.dataset.v) };
-      this.dispatchEvent(new CustomEvent('is-cell-hover', { bubbles: true, composed: true, detail }));
+      emit(this, 'is-cell-hover', detail);
     }
 
     #clearHover() {
@@ -270,5 +272,5 @@ import { niceTicks, scaleLinear } from '../_shared/svg-chart-engine.js';
     return Number(v.toFixed(2)).toString();
   }
 
-  if (!customElements.get('is-heatmap')) customElements.define('is-heatmap', IsHeatmap);
+  defineElement('is-heatmap', IsHeatmap);
 })();

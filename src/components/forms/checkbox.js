@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+
 import {
   attachFormInternals,
   clearValidity,
@@ -7,7 +8,11 @@ import {
   setFormValue,
   setValidity,
 } from '../_shared/form-associated.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import { hasSlotted } from '../_shared/dom-utils.js';
 /**
  * <is-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
  *
@@ -58,13 +63,8 @@ import {
   const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
-  function hasSlotted(slot) {
-    return slot.assignedNodes().some(
-      (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
-    );
-  }
 
-  class IsCheckbox extends HTMLElement {
+  class IsCheckbox extends ElementBase {
     static formAssociated = true;
     static get observedAttributes() { return OBSERVED; }
 
@@ -75,7 +75,6 @@ import {
     #labelSlot;
     #hintEl;
     #hintSlot;
-    #mounted = false;
     #formDisabled = false;
     #defaultsRead = false;
     #defaultChecked = false;
@@ -101,8 +100,7 @@ import {
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       if (!this.#defaultsRead) {
         this.#defaultsRead = true;
         this.#defaultChecked = this.checked;
@@ -114,8 +112,7 @@ import {
       this.#sync();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'hint') {
         this.#syncSlots();
         return;
@@ -142,13 +139,13 @@ import {
     set error(v) { this.toggleAttribute('error', !!v); }
 
     get value() { return this.getAttribute('value') ?? 'on'; }
-    set value(v) { v == null || v === '' ? this.removeAttribute('value') : this.setAttribute('value', String(v)); }
+    set value(v) { setStringAttr(this, 'value', v); }
 
     get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v == null || v === '' ? this.removeAttribute('name') : this.setAttribute('name', v); }
+    set name(v) { setStringAttr(this, 'name', v); }
 
     get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { v == null ? this.removeAttribute('hint') : this.setAttribute('hint', String(v)); }
+    set hint(v) { setOptionalAttr(this, 'hint', v); }
 
     get color() {
       const v = this.getAttribute('color');
@@ -163,13 +160,13 @@ import {
     set labelPlacement(v) { this.setAttribute('label-placement', PLACEMENTS.includes(v) ? v : 'end'); }
 
     get icon() { return this.getAttribute('icon') ?? ''; }
-    set icon(v) { v == null || v === '' ? this.removeAttribute('icon') : this.setAttribute('icon', String(v)); }
+    set icon(v) { setStringAttr(this, 'icon', v); }
 
     get checkedIcon() { return this.getAttribute('checked-icon') ?? ''; }
-    set checkedIcon(v) { v == null || v === '' ? this.removeAttribute('checked-icon') : this.setAttribute('checked-icon', String(v)); }
+    set checkedIcon(v) { setStringAttr(this, 'checked-icon', v); }
 
     get indeterminateIcon() { return this.getAttribute('indeterminate-icon') ?? ''; }
-    set indeterminateIcon(v) { v == null || v === '' ? this.removeAttribute('indeterminate-icon') : this.setAttribute('indeterminate-icon', String(v)); }
+    set indeterminateIcon(v) { setStringAttr(this, 'indeterminate-icon', v); }
 
     get form() { return this.#internals?.form ?? null; }
     get validity() { return this.#internals?.validity ?? null; }
@@ -201,10 +198,6 @@ import {
           this[p] = v;
         }
       }
-    }
-
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
     }
 
     get #isDisabled() { return this.disabled || this.#formDisabled; }
@@ -267,7 +260,7 @@ import {
       const next = !this.checked;
       if (this.indeterminate) this.indeterminate = false;
       this.checked = next;
-      this.#emit('is-change', { checked: next, value: this.value });
+      emit(this, 'is-change', { checked: next, value: this.value });
     }
 
     #onClick = (e) => {
@@ -288,8 +281,5 @@ import {
     };
   }
 
-  if (!customElements.get('is-checkbox')) {
-    customElements.define('is-checkbox', IsCheckbox);
-  }
-  if (typeof window !== 'undefined') window.IsCheckbox = IsCheckbox;
+  defineElement('is-checkbox', IsCheckbox, 'IsCheckbox');
 })();

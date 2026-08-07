@@ -2,6 +2,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import '../actions/button.js';
 import '../forms/input.js';
 import '../media/icon.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-confirm-delete> — Confirmación destructiva de tipo "escribe para confirmar".
@@ -68,10 +71,9 @@ import '../media/icon.js';
     'case-sensitive', 'loading'
   ];
 
-  class IsConfirmDelete extends HTMLElement {
+  class IsConfirmDelete extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #backdrop;
     #headingText;
     #messageText;
@@ -101,8 +103,7 @@ import '../media/icon.js';
       this.#cancelBtn = shadow.querySelector('.cancel');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProperties();
       this.#confirmField.addEventListener('is-input', this.#onConfirmInput);
       this.#deleteBtn.addEventListener('click', this.#onDelete);
@@ -117,7 +118,7 @@ import '../media/icon.js';
       if (this.open) this.#showUI();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#confirmField.removeEventListener('is-input', this.#onConfirmInput);
       this.#deleteBtn.removeEventListener('click', this.#onDelete);
       this.#cancelBtn.removeEventListener('click', this.#onCancel);
@@ -127,8 +128,7 @@ import '../media/icon.js';
       this.#unbindTrigger();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'for') { this.#unbindTrigger(); this.#bindTrigger(); }
       else if (name === 'open') { if (this.open) this.#showUI(); else this.#hideUI(); }
       else if (name === 'message') this.#syncMessage();
@@ -198,10 +198,6 @@ import '../media/icon.js';
       }
     }
 
-    #emit(name, detail = {}) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
-
     #syncTexts() {
       const entity = this.entity;
       this.#headingText.textContent = this.getAttribute('heading')
@@ -242,12 +238,12 @@ import '../media/icon.js';
     #onDelete = () => {
       // Doble comprobación: el botón podría habilitarse desde fuera.
       if (!this.confirmed || this.loading) return;
-      this.#emit('is-confirm-delete', { value: this.#confirmField.value });
+      emit(this, 'is-confirm-delete', { value: this.#confirmField.value });
     };
 
     #onCancel = () => {
       if (this.loading) return;
-      this.#emit('is-cancel-delete');
+      emit(this, 'is-cancel-delete', {});
       this.hide();
     };
 
@@ -292,8 +288,5 @@ import '../media/icon.js';
     #onTriggerClick = () => { this.show(); };
   }
 
-  if (!customElements.get('is-confirm-delete')) {
-    customElements.define('is-confirm-delete', IsConfirmDelete);
-  }
-  if (typeof window !== 'undefined') window.IsConfirmDelete = IsConfirmDelete;
+  defineElement('is-confirm-delete', IsConfirmDelete, 'IsConfirmDelete');
 })();

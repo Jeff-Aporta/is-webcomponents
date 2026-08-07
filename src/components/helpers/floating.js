@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/position.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 
 /**
  * <is-floating> â€” building block interno de posicionamiento anclado.
@@ -260,11 +262,7 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       this.#updateBridge(result);
       this.#bindBridgeEvents();
 
-      this.dispatchEvent(new CustomEvent('is-reposition', {
-        bubbles: true,
-        composed: true,
-        detail: { placement: result.placement, x: result.left, y: result.top },
-      }));
+      emit(this, 'is-reposition', { placement: result.placement, x: result.left, y: result.top });
     }
 
     #getAnchorTarget() {
@@ -350,18 +348,10 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       if (this.#bridgeBound) return;
       this.#bridgeBound = true;
       this.#bridge.addEventListener('pointerenter', () => {
-        this.dispatchEvent(new CustomEvent('is-hover-bridge', {
-          bubbles: true,
-          composed: true,
-          detail: { hovering: true },
-        }));
+        emit(this, 'is-hover-bridge', { hovering: true });
       });
       this.#bridge.addEventListener('pointerleave', () => {
-        this.dispatchEvent(new CustomEvent('is-hover-bridge', {
-          bubbles: true,
-          composed: true,
-          detail: { hovering: false },
-        }));
+        emit(this, 'is-hover-bridge', { hovering: false });
       });
     }
 
@@ -429,8 +419,5 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     }
   }
 
-  if (!customElements.get('is-floating')) {
-    customElements.define('is-floating', IsFloating);
-  }
-  if (typeof window !== 'undefined') window.IsFloating = IsFloating;
+  defineElement('is-floating', IsFloating, 'IsFloating');
 })();

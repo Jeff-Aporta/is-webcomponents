@@ -1,0 +1,150 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>visual · is-check-icon-button</title>
+<!--
+  Banco visual de <is-check-icon-button> y de los tres componentes que lo
+  embeben. No es un test automatico: es la pagina que se fotografia con Chrome
+  headless antes y despues del refactor.
+
+  Los consumidores importan porque cada uno lo estiliza por una via distinta:
+  - is-speed-dial   lo pisa por ::part(button) (fondo de acento, radio de FAB)
+  - is-video        lo estiliza como HOST (.ctrl) sobre chrome oscura
+  - is-theme-toggle lo estira al 100% del host y le hereda el color
+  Si el refactor rompe alguna de esas tres vias, se ve aqui.
+-->
+<link rel="stylesheet" href="/src/styles/is-base.css">
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: var(--is-bg, #0d1117);
+    color: var(--is-text, #e8eaf1);
+    font-family: system-ui, sans-serif;
+  }
+
+  section {
+    margin-bottom: 26px;
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.65;
+    }
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    small {
+      font-size: 11px;
+      opacity: 0.55;
+    }
+  }
+
+  /* Fondo claro para ver el boton en la otra polaridad de tema. */
+  .claro {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #eef1f6;
+    color: #1c2128;
+  }
+
+  .oscuro-chrome {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #101418;
+    color: #fff;
+  }
+</style>
+
+<section>
+  <h2>estados</h2>
+  <div class="row" id="estados"></div>
+</section>
+
+<section>
+  <h2>sobre fondo claro / chrome oscura</h2>
+  <div class="row">
+    <div class="claro">
+      <is-check-icon-button icon="mdi:play" checked-icon="mdi:pause" label="Reproducir"></is-check-icon-button>
+      <is-check-icon-button checked icon="mdi:play" checked-icon="mdi:pause" label="Pausar"></is-check-icon-button>
+    </div>
+    <div class="oscuro-chrome">
+      <is-check-icon-button variant="plain" icon="mdi:volume-high" checked-icon="mdi:volume-off" label="Silenciar"></is-check-icon-button>
+      <is-check-icon-button variant="plain" checked icon="mdi:volume-high" checked-icon="mdi:volume-off" label="Sonido"></is-check-icon-button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>consumidores</h2>
+  <div class="row">
+    <div class="cell">
+      <is-theme-toggle></is-theme-toggle>
+      <small>is-theme-toggle</small>
+    </div>
+    <div class="cell">
+      <is-speed-dial>
+        <is-speed-dial-action icon="mdi:content-copy" label="Copiar"></is-speed-dial-action>
+        <is-speed-dial-action icon="mdi:pencil" label="Editar"></is-speed-dial-action>
+      </is-speed-dial>
+      <small>is-speed-dial (trigger)</small>
+    </div>
+    <div class="cell">
+      <is-speed-dial open>
+        <is-speed-dial-action icon="mdi:content-copy" label="Copiar"></is-speed-dial-action>
+      </is-speed-dial>
+      <small>is-speed-dial abierto</small>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>is-video (controles)</h2>
+  <is-video src="" poster="" style="max-width: 520px; display: block;"></is-video>
+</section>
+
+<script type="module">
+  import '/src/components/actions/check-icon-button.js';
+  import '/src/components/actions/speed-dial.js';
+  import '/src/components/feedback/theme-toggle.js';
+  import '/src/components/media/video.js';
+
+  const CASOS = [
+    ['reposo', {}],
+    ['checked', { checked: '' }],
+    ['disabled', { disabled: '' }],
+    ['checked+disabled', { checked: '', disabled: '' }],
+    ['variant=plain', { variant: 'plain' }],
+    ['sin checked-icon', { 'no-checked': '' }],
+  ];
+
+  for (const [etiqueta, attrs] of CASOS) {
+    const box = document.createElement('div');
+    box.className = 'cell';
+    const el = document.createElement('is-check-icon-button');
+    el.setAttribute('icon', 'mdi:play');
+    if (!('no-checked' in attrs)) el.setAttribute('checked-icon', 'mdi:pause');
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k !== 'no-checked') el.setAttribute(k, v);
+    }
+    el.setAttribute('label', 'Reproducir');
+    const cap = document.createElement('small');
+    cap.textContent = etiqueta;
+    box.append(el, cap);
+    estados.append(box);
+  }
+</script>

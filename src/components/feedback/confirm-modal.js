@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-confirm-modal> — Web Component (vanilla, zero dependencies).
@@ -44,10 +47,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['for', 'heading', 'message', 'open'];
 
-  class IsConfirmModal extends HTMLElement {
+  class IsConfirmModal extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #backdrop;
     #modal;
     #heading;
@@ -81,8 +83,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       });
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#bindTrigger();
       this.#syncHeading();
       this.#syncMessage();
@@ -90,13 +91,12 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (this.hasAttribute('open')) this.#showUI();
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#unbindTrigger();
       document.removeEventListener('keydown', this.#onKeydown);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'for') { this.#unbindTrigger(); this.#bindTrigger(); }
       if (name === 'heading') this.#syncHeading();
       if (name === 'message') this.#syncMessage();
@@ -129,11 +129,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
 
     #emit(type) {
-      this.dispatchEvent(new CustomEvent(type, {
-        detail: { trigger: this.#trigger },
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, type, { trigger: this.#trigger });
     }
 
     #showUI() {
@@ -189,10 +185,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-confirm-modal')) {
-    customElements.define('is-confirm-modal', IsConfirmModal);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsConfirmModal = IsConfirmModal;
-  }
+  defineElement('is-confirm-modal', IsConfirmModal, 'IsConfirmModal');
 })();

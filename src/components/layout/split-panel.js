@@ -1,5 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { clampTo } from '../_shared/misc-utils.js';
 
 /**
  * <is-split-panel> — Web Component (vanilla, zero dependencies).
@@ -65,7 +68,6 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
   const OBSERVED = ['position', 'orientation', 'primary', 'collapse', 'disabled', 'snap', 'snap-threshold'];
   const VALID_SIDE = ['start', 'end'];
 
-  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
   class IsSplitPanel extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -135,11 +137,7 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
         // cambio de % (teclado / API) → recalcular cache px
         this._cachedPositionInPixels = this._percentageToPixels(this.position);
         this.setAttribute('position-in-pixels', String(this._cachedPositionInPixels));
-        this.dispatchEvent(new CustomEvent('reposition', {
-          detail: this.position,
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'reposition', this.position);
       }
 
       this._updateStyles();
@@ -150,10 +148,10 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
 
     get position() {
       const v = parseFloat(this.getAttribute('position'));
-      return Number.isFinite(v) ? clamp(v, 0, 100) : 50;
+      return Number.isFinite(v) ? clampTo(v, 0, 100) : 50;
     }
     set position(v) {
-      const n = clamp(Number(v) || 0, 0, 100);
+      const n = clampTo(Number(v) || 0, 0, 100);
       if (parseFloat(this.getAttribute('position')) === n) return;
       this.setAttribute('position', String(n));
     }
@@ -201,7 +199,7 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
         return;
       }
       const pct = Number(saved.position);
-      if (Number.isFinite(pct)) this.setAttribute('position', String(clamp(pct, 0, 100)));
+      if (Number.isFinite(pct)) this.setAttribute('position', String(clampTo(pct, 0, 100)));
     }
 
     _persistPrefs() {
@@ -353,7 +351,7 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
         primaryTrack = `minmax(var(--min, 0px), min(${Math.max(0, px)}px, var(--max, 100%)))`;
       } else {
         const pct = this.position;
-        primaryTrack = `clamp(0%, clamp(var(--min), ${pct}% - var(--_divider-width) / 2, var(--max)), calc(100% - var(--_divider-width)))`;
+        primaryTrack = `clampTo(0%, clampTo(var(--min), ${pct}% - var(--_divider-width) / 2, var(--max)), calc(100% - var(--_divider-width)))`;
       }
 
       const template = this.primary === 'end'
@@ -400,16 +398,12 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
         ? event.clientY - rect.top
         : event.clientX - rect.left;
       if (this.primary === 'end') px = this._size - px;
-      px = clamp(px, 0, this._size);
+      px = clampTo(px, 0, this._size);
       px = this._applySnap(px);
       this._syncPositionFromPixels(px);
       this._updateStyles();
       this._syncDividerAria();
-      this.dispatchEvent(new CustomEvent('reposition', {
-        detail: this.position,
-        bubbles: true,
-        composed: true,
-      }));
+      emit(this, 'reposition', this.position);
     }
 
     _handlePointerUp(event) {
@@ -468,16 +462,11 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
 
       if (handled) {
         event.preventDefault();
-        this.position = clamp(next, 0, 100);
+        this.position = clampTo(next, 0, 100);
         this._persistPrefs();
       }
     }
   }
 
-  if (!customElements.get('is-split-panel')) {
-    customElements.define('is-split-panel', IsSplitPanel);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsSplitPanel = IsSplitPanel;
-  }
+  defineElement('is-split-panel', IsSplitPanel, 'IsSplitPanel');
 })();

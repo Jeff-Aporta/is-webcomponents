@@ -8,6 +8,7 @@ import './confirm-delete.js';
 import './modal-verificacion.js';
 import './form.js';
 import './heading.js';
+
 import {
   asStr,
   cloneRecord,
@@ -18,7 +19,8 @@ import {
   setProp,
   toGridRow,
 } from '../_shared/isp-record-utils.js';
-
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
 /**
  * <is-catalogo-gen> — port de `src/lib/base/CatalogoGen.svelte` (ISP).
  *
@@ -143,7 +145,7 @@ const DEFAULT_ICONS = {
     bAllowed = { ...DEFAULT_ALLOWED };
     /** @type {(msg: string) => void} */
     onError = (msg) => {
-      this.#emit('is-error', { message: msg });
+      emit(this, 'is-error', { message: msg });
       console.error(msg);
     };
     /** @type {(() => Promise<object>)|null} */
@@ -246,10 +248,6 @@ const DEFAULT_ICONS = {
       return attr || DEFAULT_ICONS[kind] || 'mdi:circle';
     }
 
-    #emit(name, detail) {
-      this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
-    }
-
     #pkField() {
       const keys = this.controller?.primaryKeys;
       return keys?.length ? asStr(keys.at(-1)) : 'id';
@@ -333,7 +331,7 @@ const DEFAULT_ICONS = {
       const rows = e.detail?.rows || [];
       this.selectionData = rows.map((r) => r.__record ?? this.#recordsById.get(asStr(r.id)) ?? r).filter(Boolean);
       this.#rebuildToolbar();
-      this.#emit('is-selection-change', { records: this.selectionData });
+      emit(this, 'is-selection-change', { records: this.selectionData });
     };
 
     #lastClick = { id: null, t: 0 };
@@ -344,7 +342,7 @@ const DEFAULT_ICONS = {
       const now = Date.now();
       if (this.#lastClick.id === id && now - this.#lastClick.t < 400) {
         const record = row.__record ?? this.#recordsById.get(id) ?? row;
-        this.#emit('is-double-click', { record });
+        emit(this, 'is-double-click', { record });
         if (this.selectMode) return;
         if (this.#hasAct('actModificar') && this.#allowed('Modificar')) this.showFrmModificar(record);
         else if (this.#hasAct('actVisualizar') && this.#allowed('Visualizar')) this.showFrmVisualizar(record);
@@ -353,7 +351,7 @@ const DEFAULT_ICONS = {
     };
 
     #onDrawerHide = () => {
-      this.#emit('is-frm-close', {});
+      emit(this, 'is-frm-close', {});
     };
 
     async refreshGrid() {
@@ -390,8 +388,8 @@ const DEFAULT_ICONS = {
       this.#working = record;
       this.#drawer.label = `${mode === 'create' ? 'Crear' : mode === 'edit' ? 'Modificar' : 'Visualizar'} ${asStr(this.controller?.entrie || '')}`;
       this.#drawer.show?.() ?? this.#drawer.setAttribute('open', '');
-      this.#emit('is-frm-open', { mode, record });
-      this.#emit('is-action', { action: mode === 'create' ? 'Crear' : mode === 'edit' ? 'Modificar' : 'Visualizar', record });
+      emit(this, 'is-frm-open', { mode, record });
+      emit(this, 'is-action', { action: mode === 'create' ? 'Crear' : mode === 'edit' ? 'Modificar' : 'Visualizar', record });
     }
 
     closeFrm() {
@@ -428,7 +426,7 @@ const DEFAULT_ICONS = {
       this.#modalVerify.entity = asStr(this.controller?.entrie || '');
       this.#modalVerify.onError = this.onError;
       this.#modalVerify.show?.();
-      this.#emit('is-action', { action: 'Verificar', record: obj });
+      emit(this, 'is-action', { action: 'Verificar', record: obj });
     }
 
     showEliminar(obj) {
@@ -441,7 +439,7 @@ const DEFAULT_ICONS = {
       this.#modalDelete.setAttribute('pk-label', asStr(this.controller?.labelPk || pk));
       this.#modalDelete.setAttribute('confirm-value', val);
       this.#modalDelete.show?.() ?? this.#modalDelete.setAttribute('open', '');
-      this.#emit('is-action', { action: 'Eliminar', record: obj });
+      emit(this, 'is-action', { action: 'Eliminar', record: obj });
     }
 
     #onDeleteConfirm = async () => {
@@ -599,7 +597,5 @@ const DEFAULT_ICONS = {
     }
   }
 
-  if (!customElements.get('is-catalogo-gen')) {
-    customElements.define('is-catalogo-gen', IsCatalogoGen);
-  }
+  defineElement('is-catalogo-gen', IsCatalogoGen);
 })();

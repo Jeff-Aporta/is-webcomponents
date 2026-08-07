@@ -1,4 +1,8 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
+import { INTENT } from '../_shared/intent.js';
+import { TONE } from '../_shared/tone.js';
 
 /**
  * <is-callout> — Web Component (vanilla, zero dependencies).
@@ -49,8 +53,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 
   const OBSERVED = ['color', 'variant', 'icon'];
 
-  const VALID_COLOR = ['brand', 'neutral', 'success', 'warning', 'danger'];
-  const VALID_VARIANT = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+  const VALID_COLOR = INTENT;
+  const VALID_VARIANT = TONE;
 
   const ICON_BY_VARIANT = {
     brand: 'mdi:information-outline',
@@ -60,10 +64,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
     danger: 'mdi:alert-octagon-outline',
   };
 
-  class IsCallout extends HTMLElement {
+  class IsCallout extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
     #defaultIcon;
     #customIconObserver;
     #lastIconName = '';
@@ -76,8 +79,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#defaultIcon = shadow.querySelector('.default-icon');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#upgradeProperties();
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
@@ -95,12 +97,11 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#customIconObserver.observe(this, { childList: true, attributes: true, attributeFilter: ['slot'] });
     }
 
-    disconnectedCallback() {
+    onDisconnected() {
       this.#customIconObserver?.disconnect();
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
         this.setAttribute('color', 'neutral');
         return;
@@ -175,10 +176,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-callout')) {
-    customElements.define('is-callout', IsCallout);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsCallout = IsCallout;
-  }
+  defineElement('is-callout', IsCallout, 'IsCallout');
 })();

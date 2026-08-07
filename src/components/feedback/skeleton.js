@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
 
 /**
  * <is-skeleton> — Web Component (vanilla).
@@ -44,10 +45,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-skeleton')) {
-    customElements.define('is-skeleton', IsSkeleton);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsSkeleton = IsSkeleton;
-  }
+  defineElement('is-skeleton', IsSkeleton, 'IsSkeleton');
 })();

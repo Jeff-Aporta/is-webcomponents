@@ -13,10 +13,8 @@ import { defineDateField } from '../_shared/date-field-element.js';
  * Events: is-change, is-input
  */
 
-const IsDateField = defineDateField({
+defineDateField({
   tag: 'is-date-field',
   kind: 'date',
   cssUrl: import.meta.url,
 });
-
-if (typeof window !== 'undefined') window.IsDateField = IsDateField;

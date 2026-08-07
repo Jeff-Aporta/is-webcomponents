@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { BreakpointHost } from './block-layout.js';
+import { defineElement } from '../_shared/define.js';
 
 /**
  * <is-flex-layout> — port de ISP `layout/FlexLayout.svelte`.
@@ -94,8 +95,5 @@ import { BreakpointHost } from './block-layout.js';
     set inline(v) { this.setBooleanAttr('inline', v); }
   }
 
-  if (!customElements.get('is-flex-layout')) {
-    customElements.define('is-flex-layout', IsFlexLayout);
-  }
-  if (typeof window !== 'undefined') window.IsFlexLayout = IsFlexLayout;
+  defineElement('is-flex-layout', IsFlexLayout, 'IsFlexLayout');
 })();
