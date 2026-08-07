@@ -45,16 +45,18 @@ import './format-bytes.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `unit` | string/según contrato | Fuente define default/restricción. |
-| `display` | string/según contrato | Fuente define default/restricción. |
-| `locale` | string/según contrato | Fuente define default/restricción. |
+| `value` | number | Bytes (o según `unit` de entrada). |
+| `unit` | string | Unidad del `value`: `byte` (default), `kilobyte`, `megabyte`, … |
+| `display` | `short` \| `long` | Forma corta (`KB`) o larga (`kilobytes`). |
+| `locale` | BCP 47 | Override; default = `lang` del documento. |
+| `autofit` | boolean | Unidad más alta cuyo valor sea **≥ 1** (p. ej. `200 KB`, no `0.2 MB`). |
 
 #### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `value` | solo lectura | Declarada por clase. |
+| `autofit` | lectura/escritura | Refleja el atributo booleano. |
 
 ### Slots
 
@@ -99,6 +101,7 @@ Documentación de cabecera preservada desde fuente:
 >   unit     byte | kilobyte | megabyte | … (default byte)
 >   display  short | long (default short)
 >   locale   override de locale (default document lang)
+>   autofit  boolean — unidad más alta con valor ≥ 1 (200 KB, no 0.2 MB)
 
 ## Dependencias y componentes relacionados
 
@@ -115,6 +118,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ```html
 <is-format-bytes value="1073741824" display="short"></is-format-bytes>
 <is-format-bytes value="1073741824" display="long"></is-format-bytes>
+<is-format-bytes autofit value="204800"></is-format-bytes>
 ```
 
 ## Errores comunes

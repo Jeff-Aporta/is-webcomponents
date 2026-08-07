@@ -49,6 +49,9 @@ const requiredPhrases = [
   ['No reinventar botones', "DON'T reinventar is-*"],
   ['No confiar en que `<button>`/`<input>` hereden', "DON'T font inherit en controles nativos"],
   ['em-scale-font-inherit', 'guardián escala em'],
+  ['Un solo query de estado: `s`', 'estado URL solo ?s='],
+  ['No crear query params sueltos', "DON'T params sueltos"],
+  ['is-format-bytes autofit', 'pesos autofit'],
 ];
 
 for (const [needle, label] of requiredPhrases) {
@@ -71,6 +74,9 @@ const guardians = [
   'palette-and-snippet-contract.test.mjs',
   'llm-contract.test.mjs',
   'prefs-contract.test.mjs',
+  'url-nav.test.mjs',
+  'format-bytes-autofit.test.mjs',
+  'ux-gallery-invariants.test.mjs',
 ];
 
 for (const file of guardians) {
@@ -82,8 +88,9 @@ for (const file of guardians) {
   }
 }
 
-// Errores 24–31 = preview JSON / dist / PowerShell / color×appearance / em-scale
-for (const n of [24, 25, 26, 27, 28, 29, 30, 31]) {
+// Errores 24–36 = preview JSON / dist / PowerShell / color×appearance / em-scale /
+// url-nav ?s= / toast host / pesos CDN / ux-audit / on(null)
+for (const n of [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]) {
   if (!llm.includes(`${n}. **`)) {
     failures.push(`bitácora de errores: falta entrada ${n}`);
   }

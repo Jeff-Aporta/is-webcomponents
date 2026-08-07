@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-format type="…" value="…"> — Web Component genérico de formateo.
@@ -24,7 +26,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
  * Atributos por tipo
  *   date      weekday era year month day hour minute second time-zone time-zone-name hour-format
  *   number    format decimal|currency|percent|unit  currency  minimum-fraction-digits  maximum-fraction-digits
- *   bytes     unit byte..petabyte  display short|long
+ *   bytes     unit byte..petabyte  display short|long  autofit
  *   relative  style long|short|narrow  numeric always|auto  sync
  *
  * Slots: ninguno. Es self-contained.
@@ -47,7 +49,7 @@ const OBSERVED = [
   // number
   'currency', 'minimum-fraction-digits', 'maximum-fraction-digits',
   // bytes
-  'unit', 'display',
+  'unit', 'display', 'autofit',
   // relative
   'style', 'numeric', 'sync',
 ];
@@ -88,11 +90,10 @@ const RELATIVE_VALID_STYLE = ['long', 'short', 'narrow'];
 const RELATIVE_VALID_NUMERIC = ['always', 'auto'];
 const TYPE_PARTS = { date: 'date', number: 'number', bytes: 'bytes', relative: 'time' };
 
-class FormatElement extends HTMLElement {
+class FormatElement extends ElementBase {
   static get observedAttributes() { return OBSERVED; }
 
   #el;
-  #mounted = false;
   #timer = null;
 
   constructor() {
@@ -103,19 +104,17 @@ class FormatElement extends HTMLElement {
     this.#el = shadow.querySelector('.value');
   }
 
-  connectedCallback() {
-    this.#mounted = true;
+  onConnected() {
     this.#syncPart();
     this.#render();
     this.#setupSync();
   }
 
-  disconnectedCallback() {
+  onDisconnected() {
     this.#clearSync();
   }
 
-  attributeChangedCallback(name, oldVal, newVal) {
-    if (!this.#mounted || oldVal === newVal) return;
+  onAttributeChanged(name, oldVal, newVal) {
     if (name === 'type') {
       this.#syncPart();
       this.#clearSync();
@@ -254,26 +253,36 @@ class FormatElement extends HTMLElement {
     const mult = BYTE_MULT[BYTE_UNITS.includes(unit) ? unit : 'byte'];
     const bytes = n * mult;
     const display = this.getAttribute('display') === 'long' ? 'long' : 'short';
+    const autofit = this.hasAttribute('autofit');
     let i = 0;
     let abs = Math.abs(bytes);
-    while (abs >= 1024 && i < BYTE_UNITS.length - 1) { abs /= 1024; i++; }
+    // Autofit: unidad más alta con valor ≥ 1 (200 KB, no 0.2 MB).
+    while (i < BYTE_UNITS.length - 1 && abs / 1024 >= 1) {
+      abs /= 1024;
+      i += 1;
+    }
     const sign = bytes < 0 ? -1 : 1;
     const scaled = sign * abs;
     const unitShort = BYTE_UNITS[i];
+    let maxFrac;
+    if (autofit) {
+      maxFrac = (i === 0 || Number.isInteger(abs) || abs >= 10) ? 0 : 1;
+    } else {
+      maxFrac = abs < 10 && i > 0 ? 1 : 2;
+    }
     try {
       const fmt = new Intl.NumberFormat(this.locale, {
         style: 'unit',
         unit: unitShort,
         unitDisplay: display,
-        maximumFractionDigits: abs < 10 && i > 0 ? 1 : 2,
+        maximumFractionDigits: maxFrac,
       });
       this.#el.textContent = fmt.format(scaled);
     } catch {
       const sizes = display === 'long'
         ? ['bytes', 'kilobytes', 'megabytes', 'gigabytes', 'terabytes', 'petabytes']
         : ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-      const digits = abs < 10 && i > 0 ? 1 : 0;
-      this.#el.textContent = `${bytes < 0 ? '-' : ''}${abs.toFixed(digits)} ${sizes[i]}`;
+      this.#el.textContent = `${bytes < 0 ? '-' : ''}${abs.toFixed(maxFrac)} ${sizes[i]}`;
     }
   }
 
@@ -332,8 +341,7 @@ class FormatElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('is-format')) customElements.define('is-format', FormatElement);
-if (typeof window !== 'undefined') window.IsFormat = FormatElement;
+defineElement('is-format', FormatElement, 'IsFormat');
 
 /**
  * Crea una subclase de FormatElement que prefija el `type` en el

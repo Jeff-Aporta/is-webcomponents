@@ -34,3 +34,4 @@ src/assets/icons/*
 
 # Scratch local (fuentes vendorizadas, tarballs de terceros).
 tmp/
+.tmp/

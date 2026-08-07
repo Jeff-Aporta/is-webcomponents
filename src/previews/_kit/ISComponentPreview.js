@@ -47,6 +47,7 @@ export class ISComponentPreview {
    * @param {AddEventListenerOptions} [options]
    */
   on(target, type, listener, options = {}) {
+    if (!target || typeof target.addEventListener !== 'function') return;
     target.addEventListener(type, listener, { ...options, signal: this.signal });
   }
 

@@ -55,6 +55,7 @@ import './tab-group.js';
 | `active` | boolean | Fuente define default/restricción. |
 | `placement` | string/según contrato | Fuente define default/restricción. |
 | `activation` | string/según contrato | Fuente define default/restricción. |
+| `url-key` | string | Opt-in: tab activo en `?s=` como `{ [url-key]: panel }` (b64url). Vacío = off. |
 | `without-scroll-controls` | boolean | Fuente define default/restricción. |
 | `panel` | string/según contrato | Fuente define default/restricción. |
 | `disabled` | boolean | Fuente define default/restricción. |
@@ -69,6 +70,7 @@ import './tab-group.js';
 | `active` | lectura/escritura | Declarada por clase. |
 | `placement` | lectura/escritura | Declarada por clase. |
 | `activation` | lectura/escritura | Declarada por clase. |
+| `urlKey` | lectura/escritura | Key dentro de `?s=`; vacío desactiva. |
 
 ### Slots
 
@@ -153,6 +155,7 @@ Documentación de cabecera preservada desde fuente:
 >   placement     top | bottom | start | end  (default 'top')
 >   activation    auto | manual (default 'auto')
 >   without-scroll-controls  boolean (default false)
+>   url-key       string   — opt-in: tab activo en ?s= como { [url-key]: panel }
 > Atributos <is-tab>
 >   panel         string   — nombre del panel al que apunta (required).
 >   disabled      boolean

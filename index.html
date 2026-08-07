@@ -70,7 +70,7 @@
 
   <script type="module">
     import components from './manifest.js';
-    import { hasControlledPreview, loadPreview } from './src/previews/registry.js';
+    import { hasControlledPreview, hasCachedPreview, loadPreview } from './src/previews/registry.js';
 
     const root = document.documentElement;
     const themeToggle = document.getElementById('themeToggle');
@@ -266,7 +266,12 @@
         frame.hidden = true;
         frame.removeAttribute('src');
         previewHost.hidden = false;
-        previewHost.preview = await loadPreview(tag);
+        // Sin caché el fetch del JSON (no-store) deja la vista anterior colgada.
+        // Con caché el await es inmediato: no vaciar para no parpadear.
+        if (!hasCachedPreview(tag)) previewHost.preview = null;
+        const preview = await loadPreview(tag);
+        if (component.tag !== tag) return;
+        previewHost.preview = preview;
         return;
       }
 
@@ -284,11 +289,17 @@
     }
 
     function updateUrl() {
-      // Gallery: s solo navega el componente. theme/palette no van en la URL live.
-      const encoded = encodeState({ component: component.tag });
-      const next = new URL(location.href);
-      next.search = '?s=' + encoded;
-      history.replaceState(null, '', next);
+      // Gallery: `?s=` es el único state URL. theme/palette no van en la URL live;
+      // sí se conservan otras keys de nav (docs, cdnTab, …) escritas por url-nav.
+      const prev = readStateParam() || {};
+      const next = { ...prev, component: component.tag };
+      delete next.theme;
+      delete next.palette;
+      delete next.embed;
+      const encoded = encodeState(next);
+      const dest = new URL(location.href);
+      dest.search = '?s=' + encoded;
+      history.replaceState(null, '', dest);
     }
 
     function renderContext({ navSmooth = false } = {}) {

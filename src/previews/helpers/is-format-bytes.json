@@ -50,6 +50,22 @@
       ]
     },
     {
+      "id": "autofit",
+      "title": "Autofit · unidad ≥ 1",
+      "lede": "Con <code class=\"code\">autofit</code> se elige la unidad más alta cuyo valor sea al menos 1. <code class=\"code\">204800</code> → 200 KB (no 0.2 MB); desde 1 MiB sí MB.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;204800&quot;\">\n              <code class=\"format-grid__tag\">autofit · 204800 B</code>\n              <is-format-bytes class=\"format-grid__value\" autofit value=\"204800\"></is-format-bytes>\n            </div>\n            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;1048576&quot;\">\n              <code class=\"format-grid__tag\">autofit · 1 MiB</code>\n              <is-format-bytes class=\"format-grid__value\" autofit value=\"1048576\"></is-format-bytes>\n            </div>\n            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;512&quot;\">\n              <code class=\"format-grid__tag\">autofit · 512 B</code>\n              <is-format-bytes class=\"format-grid__value\" autofit value=\"512\"></is-format-bytes>\n            </div>\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-format-bytes autofit value=\"204800\"></is-format-bytes>\n<is-format-bytes autofit value=\"1048576\"></is-format-bytes>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
       "id": "locale",
       "title": "Locale",
       "blocks": [

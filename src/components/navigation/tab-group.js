@@ -1,4 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { defineElement } from '../_shared/define.js';
+import { emit } from '../_shared/emit.js';
+import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 
 /**
  * <is-tab-group>, <is-tab>, <is-tab-panel> — Web Components (vanilla, zero dependencies).
@@ -17,6 +20,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
  *   placement     top | bottom | start | end  (default 'top')
  *   activation    auto | manual (default 'auto')
  *   without-scroll-controls  boolean (default false)
+ *   url-key       string   — opt-in: persiste el tab activo en `?s=` como
+ *                            `{ [url-key]: panel }` (b64url JSON). Vacío = off.
+ *                            Nunca crea query params sueltos.
  *
  * Atributos <is-tab>
  *   panel         string   — nombre del panel al que apunta (required).
@@ -73,7 +79,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     </div>
   `;
 
-  const TG_OBSERVED = ['active', 'placement', 'activation', 'without-scroll-controls'];
+  const TG_OBSERVED = ['active', 'placement', 'activation', 'without-scroll-controls', 'url-key'];
 
   const VALID_PLACEMENT = ['top', 'bottom', 'start', 'end'];
   const VALID_ACTIVATION = ['auto', 'manual'];
@@ -86,7 +92,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
     #scrollStart;
     #scrollRo = null;
     #scrollEnd;
-    #upgradeProps = ['active', 'placement', 'activation', 'without-scroll-controls'];
+    #upgradeProps = ['active', 'placement', 'activation', 'withoutScrollControls', 'urlKey'];
+    /** Evita escribir la URL al restaurar desde ella. */
+    #restoringUrl = false;
 
     constructor() {
       super();
@@ -113,6 +121,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       this.#upgradeProperties();
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'top');
       if (!this.hasAttribute('activation')) this.setAttribute('activation', 'auto');
+      this.#restoreFromUrl();
       this.#syncPanels();
       this.#syncScrollUI();
     }
@@ -132,7 +141,14 @@ import { adoptCss } from '../_shared/adopt-css.js';
       if (name === 'activation') {
         if (newVal && !VALID_ACTIVATION.includes(newVal)) this.setAttribute('activation', 'auto');
       }
-      if (name === 'active') this.#syncPanels();
+      if (name === 'active') {
+        this.#syncPanels();
+        this.#persistToUrl();
+      }
+      if (name === 'url-key') {
+        this.#restoreFromUrl();
+        this.#syncPanels();
+      }
     }
 
     // ---- public properties ----
@@ -160,6 +176,13 @@ import { adoptCss } from '../_shared/adopt-css.js';
       else if (VALID_ACTIVATION.includes(v)) this.setAttribute('activation', v);
     }
 
+    /** Key del query param. Vacío = sin memoria URL. */
+    get urlKey() { return (this.getAttribute('url-key') || '').trim(); }
+    set urlKey(v) {
+      if (v == null || v === '') this.removeAttribute('url-key');
+      else this.setAttribute('url-key', String(v));
+    }
+
     show(name) { this.active = name; }
 
     // ---- private ----
@@ -170,11 +193,38 @@ import { adoptCss } from '../_shared/adopt-css.js';
           const v = this[a];
           delete this[a];
           if (v != null && v !== false) {
-            if (v === true) this.setAttribute(a, '');
-            else this.setAttribute(a, v);
+            const attr = a === 'withoutScrollControls' ? 'without-scroll-controls'
+              : a === 'urlKey' ? 'url-key'
+                : a;
+            if (v === true) this.setAttribute(attr, '');
+            else this.setAttribute(attr, v);
           }
         }
       }
+    }
+
+    #panelNames() {
+      return new Set(this.#allPanels().map((p) => p.getAttribute('name')).filter(Boolean));
+    }
+
+    #restoreFromUrl() {
+      const key = this.urlKey;
+      if (!key) return;
+      const fromUrl = readUrlNav(key);
+      if (!fromUrl) return;
+      if (!this.#panelNames().has(fromUrl)) return;
+      this.#restoringUrl = true;
+      this.active = fromUrl;
+      this.#restoringUrl = false;
+    }
+
+    #persistToUrl() {
+      if (this.#restoringUrl) return;
+      const key = this.urlKey;
+      if (!key) return;
+      const name = this.active;
+      if (!name) return;
+      writeUrlNav(key, name);
     }
 
     #allTabs() {
@@ -224,11 +274,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
       const oldName = this.active;
       this.active = name;
       if (oldName !== name) {
-        this.dispatchEvent(new CustomEvent('is-tab-show', {
-          detail: { name, panel: this.querySelector(`is-tab-panel[name="${name}"]`), tab },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'is-tab-show', { name, panel: this.querySelector(`is-tab-panel[name="${name}"]`), tab });
       }
     };
 
@@ -293,8 +339,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-tab-group')) customElements.define('is-tab-group', IsTabGroup);
-  if (typeof window !== 'undefined') window.IsTabGroup = IsTabGroup;
+  defineElement('is-tab-group', IsTabGroup, 'IsTabGroup');
 
   // ============ <is-tab> ============
   const TAB_TEMPLATE = document.createElement('template');
@@ -330,11 +375,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
         if (!close) return;
         e.stopPropagation();
         e.preventDefault();
-        this.dispatchEvent(new CustomEvent('is-tab-close', {
-          detail: { tab: this, name: this.getAttribute('panel') },
-          bubbles: true,
-          composed: true,
-        }));
+        emit(this, 'is-tab-close', { tab: this, name: this.getAttribute('panel') });
       });
     }
 
@@ -362,8 +403,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-tab')) customElements.define('is-tab', IsTab);
-  if (typeof window !== 'undefined') window.IsTab = IsTab;
+  defineElement('is-tab', IsTab, 'IsTab');
 
   // ============ <is-tab-panel> ============
   const PANEL_TEMPLATE = document.createElement('template');
@@ -398,6 +438,5 @@ import { adoptCss } from '../_shared/adopt-css.js';
     }
   }
 
-  if (!customElements.get('is-tab-panel')) customElements.define('is-tab-panel', IsTabPanel);
-  if (typeof window !== 'undefined') window.IsTabPanel = IsTabPanel;
+  defineElement('is-tab-panel', IsTabPanel, 'IsTabPanel');
 })();

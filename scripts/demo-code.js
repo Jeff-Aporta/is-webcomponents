@@ -22,6 +22,7 @@ import '../src/components/navigation/tab-group.js';
 import './highlight-pre.js';
 import { ensureCodeMirror, paint } from '../src/components/_shared/highlight-code.js';
 import { resolveRef, jsdelivrBase } from '../src/components/_shared/cdn-ref.js';
+import { totalCdnSize } from '../src/components/_shared/cdn-sizes.js';
 import manifest from '../manifest.js';
 
 {
@@ -67,44 +68,7 @@ import manifest from '../manifest.js';
     return `${(bytes / 1024).toFixed(1)} KB`;
   };
 
-  /** sizes.json lo emite el build: {ruta relativa a dist/cdn → bytes}. Se pide
-   *  UNA vez (promesa cacheada) en vez de un HEAD por archivo, que era lento y
-   *  jsDelivr no siempre responde con Content-Length. */
-  let sizesPromise = null;
-  const loadSizes = () => {
-    sizesPromise ??= cdnBase()
-      .then((base) => fetch(`${base}/sizes.json`))
-      .then((r) => (r.ok ? r.json() : {}))
-      .catch(() => ({}));
-    return sizesPromise;
-  };
-
-  /** Suma el peso REAL de lo que descarga el snippet. `all.min.js` y los
-   *  `category.*.min.js` son sólo listas de imports (~250 B), así que sumar la
-   *  url literal daría el resultado al revés: "all" saldría como el más
-   *  liviano. Aquí se expanden a los archivos que acaban bajando. */
-  const totalSize = async (urls) => {
-    const sizes = await loadSizes();
-    const keys = Object.keys(sizes);
-    if (!keys.length) return null;
-
-    const paths = new Set();
-    const isComponentJs = (k) => /^[^/]+\/[^/]+\.min\.js$/.test(k) && !/\/category\./.test(k);
-    for (const url of urls) {
-      const path = url.replace(/^https:\/\/cdn\.jsdelivr\.net\/gh\/[^@]+@[^/]+\/dist\/cdn\//, '');
-      paths.add(path);
-      if (path === 'all.min.js') {
-        for (const k of keys) if (isComponentJs(k)) paths.add(k);
-      } else {
-        const cat = path.match(/^([^/]+)\/category\.[^/]+\.min\.js$/)?.[1];
-        if (cat) for (const k of keys) if (isComponentJs(k) && k.startsWith(`${cat}/`)) paths.add(k);
-      }
-    }
-
-    const known = [...paths].map((p) => sizes[p]).filter((s) => typeof s === 'number');
-    if (!known.length) return null;
-    return known.reduce((a, b) => a + b, 0);
-  };
+  /** sizes.json + expansión category/all: ver `_shared/cdn-sizes.js`. */
 
   /** Devuelve un Set con los nombres cortos (sin prefijo `is-`) de los
    *  componentes <is-*> que aparecen dentro del demo. */
@@ -347,7 +311,8 @@ import manifest from '../manifest.js';
         pre.dataset.filled = '1';
       }
       sizeEl.textContent = 'calculando peso…';
-      const bytes = await totalSize(urls);
+      const base = await cdnBase();
+      const bytes = await totalCdnSize(urls, base);
       sizeEl.textContent = bytes == null ? '' : `≈ ${humanSize(bytes)}`;
     };
 

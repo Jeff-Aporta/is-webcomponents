@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml, copyText } from '../_shared/dom-utils.js';
+
 import {
   resolveRef,
   jsdelivrBase,
@@ -9,8 +10,12 @@ import {
   writeMirrorId,
   fallbackBases,
 } from '../_shared/cdn-ref.js';
+import { totalCdnSize } from '../_shared/cdn-sizes.js';
 import { CODEMIRROR_READY, isReady as cmReady, paint } from '../_shared/highlight-code.js';
+import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 import '../media/icon.js';
+import '../helpers/format-bytes.js';
+import { defineElement } from '../_shared/define.js';
 
 /**
  * <is-cdn-snippet> — panel CDN + mirrors + docs para agentes (sin npm/npx).
@@ -25,19 +30,50 @@ import '../media/icon.js';
  *   base        string  · override del CDN_BASE (opcional; ignora espejo)
  *   title       string  · título del panel
  *   dependencies / config · ver #parseDeps / #parseConfig
+ *   url-key     string · opt-in: tab Enlaces/Mirrors en `?s=` (`{ [url-key]: … }`)
  */
 (() => {
   const CDN_BASE_DEFAULT = jsdelivrBase('main');
 
-  const LLM_PROMPT = [
+  const LLM_PROMPT_BASE = [
     'Usa el kit IS Web Components solo por CDN, sin npm ni npx.',
     'Espejos: jsDelivr (primario, pin @sha) y GitHub Pages (reserva). Un solo origen por página.',
     'Bootstrap: is-base.min.css + palettes.min.css + el .min.js del tag (o category.*.min.js / all.min.js).',
     'Si un espejo cae: usa el snippet «Boot con fallback» del tab Mirrors (prueba jsDelivr → Pages).',
     'Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.',
-    'Antes de inventar API: lee components/LLM.md, el LLM.md de la categoría y el MD del módulo.',
+    'Antes de inventar API: lee los MD enlazados abajo (skills + módulo + categoría + índice).',
     'Tema/paleta: data-theme y data-palette en <html>. Iconos: <is-icon icon="mdi:…">.',
   ].join('\n');
+
+  /** Enlaces fijos que van dentro del prompt único (no se listan aparte). */
+  const SKILL_DOCS = [
+    {
+      label: 'Skill · instalación CDN',
+      url: 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md',
+    },
+    {
+      label: 'Skill · kit (reuso is-*)',
+      url: 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-webcomponents/SKILL.md',
+    },
+    {
+      label: 'Skill CDN · is-cdn-install (jsDelivr)',
+      url: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md',
+    },
+  ];
+
+  /**
+   * Un solo texto copiable: reglas + todas las refs (skills + docs del config).
+   * @param {{ label: string, url: string }[]} docs
+   */
+  const buildLlmPrompt = (docs) => {
+    const lines = [LLM_PROMPT_BASE, '', 'Referencias (léelas en orden):'];
+    for (const d of docs) {
+      lines.push(`- ${d.label}: ${d.url}`);
+    }
+    return lines.join('\n');
+  };
+
+  const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS);
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -69,7 +105,10 @@ import '../media/icon.js';
         <ol class="cdn__list">
           <li class="cdn__row" data-kind="common">
             <div class="cdn__row-head">
-              <span class="cdn__label">1 · CSS común (una vez por página)</span>
+              <span class="cdn__label">
+                1 · CSS común (una vez por página)
+                <is-format-bytes class="cdn__size" data-slot="size-common" autofit display="short" hidden></is-format-bytes>
+              </span>
               <button type="button" class="cdn__copy" data-copy="common" aria-label="Copiar enlaces comunes">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
@@ -79,7 +118,10 @@ import '../media/icon.js';
           </li>
           <li class="cdn__row" data-kind="single">
             <div class="cdn__row-head">
-              <span class="cdn__label">2 · JS del componente · <code data-slot="fileTag"></code></span>
+              <span class="cdn__label">
+                2 · JS del componente · <code data-slot="fileTag"></code>
+                <is-format-bytes class="cdn__size" data-slot="size-single" autofit display="short" hidden></is-format-bytes>
+              </span>
               <button type="button" class="cdn__copy" data-copy="single" aria-label="Copiar enlace individual">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
@@ -89,7 +131,10 @@ import '../media/icon.js';
           </li>
           <li class="cdn__row" data-kind="category">
             <div class="cdn__row-head">
-              <span class="cdn__label">Alternativa · categoría · <code data-slot="category"></code></span>
+              <span class="cdn__label">
+                Alternativa · categoría · <code data-slot="category"></code>
+                <is-format-bytes class="cdn__size" data-slot="size-category" autofit display="short" hidden></is-format-bytes>
+              </span>
               <button type="button" class="cdn__copy" data-copy="category" aria-label="Copiar bundle de categoría">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
@@ -110,7 +155,10 @@ import '../media/icon.js';
           </li>
           <li class="cdn__row" data-kind="all">
             <div class="cdn__row-head">
-              <span class="cdn__label">Alternativa · todo el kit · <code>all.min.js</code></span>
+              <span class="cdn__label">
+                Alternativa · todo el kit · <code>all.min.js</code>
+                <is-format-bytes class="cdn__size" data-slot="size-all" autofit display="short" hidden></is-format-bytes>
+              </span>
               <button type="button" class="cdn__copy" data-copy="all" aria-label="Copiar bundle completo">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
@@ -145,12 +193,12 @@ import '../media/icon.js';
         <header class="cdn__head">
           <h4 class="cdn__docs-title">Para agentes / LLM</h4>
           <p class="cdn__hint">
-            Sin npm ni npx: el agente lee estos MD y consume el kit por CDN.
+            Un solo prompt: reglas CDN + skills + MD del módulo. Sin npm ni npx.
           </p>
         </header>
         <div class="cdn__row" data-kind="llm-prompt">
           <div class="cdn__row-head">
-            <span class="cdn__label">Prompt · usar kit por CDN</span>
+            <span class="cdn__label">Prompt · kit por CDN + referencias</span>
             <button type="button" class="cdn__copy" data-copy="llm-prompt" aria-label="Copiar prompt para agentes">
               <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
               Copiar
@@ -158,15 +206,11 @@ import '../media/icon.js';
           </div>
           <pre class="cdn__pre" data-slot="llm-prompt"></pre>
         </div>
-        <section class="cdn__docs" data-slot="docs" hidden>
-          <h5 class="cdn__docs-subtitle">Referencias MD</h5>
-          <ul class="cdn__docs-list"></ul>
-        </section>
       </section>
     </section>
   `;
 
-  const OBSERVED = ['tag', 'category', 'base', 'title', 'dependencies', 'config'];
+  const OBSERVED = ['tag', 'category', 'base', 'title', 'dependencies', 'config', 'url-key'];
 
   class IsCdnSnippet extends HTMLElement {
     static get observedAttributes() { return OBSERVED; }
@@ -180,6 +224,9 @@ import '../media/icon.js';
     #mirrorId = readMirrorId();
     #tab = 'enlaces';
     #waitingCm = false;
+    #restoringUrl = false;
+    /** @type {number} evita pintar pesos de un render obsoleto */
+    #sizeGen = 0;
 
     constructor() {
       super();
@@ -192,6 +239,7 @@ import '../media/icon.js';
     connectedCallback() {
       this.#mounted = true;
       this.#mirrorId = readMirrorId();
+      this.#restoreTabFromUrl();
       this.#render();
       resolveRef().then((ref) => {
         if (!this.#mounted) return;
@@ -209,7 +257,31 @@ import '../media/icon.js';
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
+      if (name === 'url-key') this.#restoreTabFromUrl();
       this.#render();
+    }
+
+    get urlKey() { return (this.getAttribute('url-key') || '').trim(); }
+    set urlKey(v) {
+      if (v == null || v === '') this.removeAttribute('url-key');
+      else this.setAttribute('url-key', String(v));
+    }
+
+    #restoreTabFromUrl() {
+      const key = this.urlKey;
+      if (!key) return;
+      const fromUrl = readUrlNav(key);
+      if (fromUrl !== 'enlaces' && fromUrl !== 'mirrors') return;
+      this.#restoringUrl = true;
+      this.#tab = fromUrl;
+      this.#restoringUrl = false;
+    }
+
+    #persistTabToUrl() {
+      if (this.#restoringUrl) return;
+      const key = this.urlKey;
+      if (!key) return;
+      writeUrlNav(key, this.#tab);
     }
 
     #activeBase() {
@@ -223,14 +295,20 @@ import '../media/icon.js';
         const script = this.querySelector('script[type="application/json"][slot="config"]');
         raw = script?.textContent || '';
       }
-      this.#docs = [];
+      /** Skills + MD del módulo/categoría: todo va al prompt único. */
+      this.#docs = [...SKILL_DOCS];
       if (!raw.trim()) return null;
       try {
         const cfg = JSON.parse(raw) || {};
         if (Array.isArray(cfg.docs)) {
-          this.#docs = cfg.docs
-            .filter((d) => d && d.url)
-            .map((d) => ({ label: String(d.label || 'Documentación'), url: String(d.url) }));
+          const seen = new Set(this.#docs.map((d) => d.url));
+          for (const d of cfg.docs) {
+            if (!d?.url) continue;
+            const url = String(d.url);
+            if (seen.has(url)) continue;
+            seen.add(url);
+            this.#docs.push({ label: String(d.label || 'Documentación'), url });
+          }
         }
         return cfg;
       } catch {
@@ -238,26 +316,9 @@ import '../media/icon.js';
       }
     }
 
-    #renderDocs() {
-      const section = this.shadowRoot.querySelector('[data-slot="docs"]');
-      const list = section?.querySelector('.cdn__docs-list');
-      if (!section || !list) return;
-      section.hidden = this.#docs.length === 0;
-      list.textContent = '';
-      for (const doc of this.#docs) {
-        const li = document.createElement('li');
-        li.className = 'cdn__docs-row';
-        li.innerHTML = `
-          <span class="cdn__docs-label">${escapeHtml(doc.label)}</span>
-          <a class="cdn__docs-url" href="${escapeHtml(doc.url)}" target="_blank" rel="noopener">${escapeHtml(doc.url)}</a>
-          <button type="button" class="cdn__copy" data-copy="doc" aria-label="Copiar enlace de ${escapeHtml(doc.label)}">
-            <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
-            Copiar
-          </button>
-        `;
-        li.querySelector('[data-copy="doc"]').dataset.copyValue = doc.url;
-        list.appendChild(li);
-      }
+    /** Regenera el prompt único con las refs actuales (`#docs`). */
+    #syncLlmPrompt() {
+      this.#urls.llmPrompt = buildLlmPrompt(this.#docs);
     }
 
     #parseDeps() {
@@ -320,33 +381,23 @@ import '../media/icon.js';
         : 'all.min.js';
 
       return `<script type="module">
-/* IS Web Components — boot con fallback de espejos.
-   Orden: jsDelivr (pin) → GitHub Pages. Un solo origen gana. */
-const MIRRORS = ${JSON.stringify(bases, null, 2)};
-const ENTRY = ${JSON.stringify(entry)};
-
-const loadCss = (href) => new Promise((resolve, reject) => {
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = href;
-  link.onload = () => resolve();
-  link.onerror = () => reject(new Error(href));
-  document.head.append(link);
+/* IS WC — boot espejos: jsDelivr(pin)→Pages. Un origen gana. */
+const MIRRORS=${JSON.stringify(bases)},ENTRY=${JSON.stringify(entry)};
+const loadCss=href=>new Promise((ok,bad)=>{
+  document.head.append(Object.assign(document.createElement('link'),{
+    rel:'stylesheet',href,onload:()=>ok(),onerror:()=>bad(new Error(href)),
+  }));
 });
-
-let ok = false;
-for (const base of MIRRORS) {
-  try {
-    await loadCss(base + '/is-base.min.css');
-    await loadCss(base + '/palettes.min.css');
-    await import(base + '/' + ENTRY);
-    ok = true;
-    break;
-  } catch (err) {
-    console.warn('[is-cdn] espejo falló', base, err);
-  }
+let ok=false;
+for(const base of MIRRORS){
+  try{
+    await loadCss(base+'/is-base.min.css');
+    await loadCss(base+'/palettes.min.css');
+    await import(base+'/'+ENTRY);
+    ok=true;break;
+  }catch(err){console.warn('[is-cdn] espejo falló',base,err)}
 }
-if (!ok) throw new Error('[is-cdn] ningún espejo respondió');
+if(!ok)throw new Error('[is-cdn] ningún espejo respondió');
 <\/script>`;
     }
 
@@ -448,7 +499,6 @@ if (!ok) throw new Error('[is-cdn] ningún espejo respondió');
       if (singlePre) singlePre.innerHTML = escapeHtml(mkJs(this.#urls.single));
       if (catPre) catPre.innerHTML = escapeHtml(mkJs(this.#urls.category));
       if (allPre) allPre.innerHTML = escapeHtml(mkJs(this.#urls.all));
-      if (llmPromptPre) llmPromptPre.innerHTML = escapeHtml(this.#urls.llmPrompt);
       if (bootPre) bootPre.innerHTML = escapeHtml(this.#urls.boot);
 
       const singleRow = root.querySelector('[data-kind="single"]');
@@ -456,11 +506,63 @@ if (!ok) throw new Error('[is-cdn] ningún espejo respondió');
 
       const cfg = this.#parseConfig();
       if (cfg?.title && titleEl) titleEl.textContent = cfg.title;
-      this.#renderDocs();
+      this.#syncLlmPrompt();
+      if (llmPromptPre) llmPromptPre.innerHTML = escapeHtml(this.#urls.llmPrompt);
 
       this.#parseDeps();
       this.#renderDeps();
+      this.#paintSizes();
       this.#highlight();
+    }
+
+    /**
+     * Pinta el peso real (sizes.json) en cada caption con <is-format-bytes autofit>.
+     * category / all expanden a los .min.js que acabarán bajando.
+     * En localhost prioriza `dist/cdn/sizes.json` (build local fresco).
+     */
+    #paintSizes() {
+      const root = this.shadowRoot;
+      if (!root) return;
+      const cdnBase = this.#activeBase() || CDN_BASE_DEFAULT;
+      const host = globalThis.location?.hostname || '';
+      const localDev = host === 'localhost' || host === '127.0.0.1';
+      const sizeBase = localDev
+        ? `${globalThis.location.origin}/dist/cdn`
+        : cdnBase;
+      const gen = ++this.#sizeGen;
+      const jobs = [
+        ['size-common', [this.#urls.common, this.#urls.commonPalette].filter(Boolean)],
+        ['size-single', this.#urls.single ? [this.#urls.single] : []],
+        ['size-category', this.#urls.category ? [this.#urls.category] : []],
+        ['size-all', this.#urls.all ? [this.#urls.all] : []],
+      ];
+
+      for (const [slot] of jobs) {
+        const el = root.querySelector(`[data-slot="${slot}"]`);
+        if (el) { el.removeAttribute('value'); el.hidden = true; }
+      }
+
+      Promise.all(jobs.map(async ([slot, urls]) => {
+        if (!urls.length) return [slot, null];
+        let bytes = await totalCdnSize(urls, sizeBase);
+        if (bytes == null && sizeBase !== cdnBase) {
+          bytes = await totalCdnSize(urls, cdnBase);
+        }
+        return [slot, bytes];
+      })).then((rows) => {
+        if (!this.#mounted || gen !== this.#sizeGen) return;
+        for (const [slot, bytes] of rows) {
+          const el = root.querySelector(`[data-slot="${slot}"]`);
+          if (!el) continue;
+          if (bytes == null || !Number.isFinite(bytes)) {
+            el.removeAttribute('value');
+            el.hidden = true;
+            continue;
+          }
+          el.setAttribute('value', String(bytes));
+          el.hidden = false;
+        }
+      });
     }
 
     #highlight() {
@@ -491,10 +593,10 @@ if (!ok) throw new Error('[is-cdn] ningún espejo respondió');
         .filter((h) => /codemirror/i.test(h));
       for (const href of hrefs) {
         if (this.shadowRoot.querySelector(`link[href="${href}"]`)) continue;
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-        this.shadowRoot.prepend(link);
+        this.shadowRoot.prepend(Object.assign(document.createElement('link'), {
+          rel: 'stylesheet',
+          href,
+        }));
       }
     }
 
@@ -502,6 +604,7 @@ if (!ok) throw new Error('[is-cdn] ningún espejo respondió');
       const tab = e.target.closest('.cdn__tab');
       if (tab?.dataset.tab) {
         this.#tab = tab.dataset.tab;
+        this.#persistTabToUrl();
         this.#syncTabs();
         return;
       }
@@ -521,7 +624,7 @@ if (!ok) throw new Error('[is-cdn] ningún espejo respondió');
       const asCss = (u) => (u ? `<link rel="stylesheet" href="${u}">` : '');
       const asJs = (u) => (u ? `<script type="module" src="${u}"><\/script>` : '');
       let text = '';
-      if (kind === 'dep' || kind === 'doc') {
+      if (kind === 'dep') {
         text = btn.dataset.copyValue || '';
       } else if (kind === 'llm-prompt') {
         text = this.#urls.llmPrompt || LLM_PROMPT;
@@ -544,10 +647,5 @@ if (!ok) throw new Error('[is-cdn] ningún espejo respondió');
     };
   }
 
-  if (!customElements.get('is-cdn-snippet')) {
-    customElements.define('is-cdn-snippet', IsCdnSnippet);
-  }
-  if (typeof window !== 'undefined') {
-    window.IsCdnSnippet = IsCdnSnippet;
-  }
+  defineElement('is-cdn-snippet', IsCdnSnippet, 'IsCdnSnippet');
 })();

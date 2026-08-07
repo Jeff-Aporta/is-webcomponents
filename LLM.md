@@ -15,11 +15,13 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | Utilería pública en `helpers/`: `manifest.page` (`.json`) + MD | Módulo público sin tab en Utilerías (`is-floating` es la excepción: internal) |
 | Enums/API solo del MD / `VALID_*` del `.js` | Inventar `variant="ghost"` / colores / eventos “porque se parece a otro DS” |
 | Tema: `data-theme` + `data-palette`; default paleta `contapyme` | `prefers-color-scheme`; `color-scheme` en `:root`; default `insoft` |
+| Estado de UI en URL: **solo** `?s=<b64url JSON>` (`url-key` = key dentro de `s`) | Query params sueltos (`?docs=`, `?cdnTab=`, `?theme=`) para nav de tabs/espejos |
+| Pesos de archivo: `<is-format-bytes autofit>` | Inventar `0.2 MB` / formateadores paralelos; sumar solo el literal de `all.min.js` |
 | Publicación: solo `dist/cdn/<cat>/<tag>.min.js` | Commitear bundles huérfanos en `dist/` raíz (ej. `dist/ag-grid.js`) |
 | Commitear `tests/*.test.mjs` | Meter `tests/` entero en gitignore (solo `*.tmp` / coverage / `.cache`); inventar `.test.ts` sin pipeline TS |
 | Refactor mecánico de tokens → commit atómico + `token-vocabulary` | Dejar el rename a medias en el working tree y rebasear encima |
 
-Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract`.
+Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants`.
 
 ---
 
@@ -40,7 +42,11 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - **Utilerías (`helpers/`)**: cada módulo público tiene **tab** (`manifest.page` → JSON) + MD. Guardián: `tests/helpers-homogeneity.test.mjs`. `is-floating` = internal (sin tab).
 - Build: esbuild → **solo** `dist/cdn/`. Dev: `node scripts/serve.mjs`. Sin TS de producto → tests en `*.test.mjs` (`node --test` / `node tests/….mjs`), no `.test.ts`.
 - Artefactos CDN: `dist/cdn/<cat>/<tag>.min.js` (+ `.min.css`). Guardián: `tests/dist-cdn-layout.test.mjs` (nada suelto en `dist/` raíz salvo `.gitignore`).
-- Tema/paleta por URL: `?s=<base64 {"theme":"dark|light","palette":"contapyme|insoft|agrowin"}>`. **`prefers-color-scheme` NO se usa**.
+- Tema/paleta por URL: `?s=<b64url({ theme, palette, embed?, component?, … })>`. **`prefers-color-scheme` NO se usa**.
+- **Un solo query de estado: `s`.** Tabs (`url-key="docs"`), espejo CDN (`cdnTab`), componente de galería, etc. viven **dentro** del JSON de `?s=`. Módulo: `src/components/_shared/url-nav.js` (`readUrlNav` / `writeUrlNav`). La galería al cambiar `component` **mergea** el resto de keys (no borra `docs`/`cdnTab`).
+- **No** añadir `?docs=api` ni `?cdnTab=enlaces`: eso se limpia al escribir y está prohibido en la carta.
+- Pesos CDN: `sizes.json` + `cdn-sizes.js` (expande `all.min.js` / `category.*.min.js` a los `.min.js` reales). UI: `<is-format-bytes autofit>`.
+- QA UX de demos: `node scripts/ux-audit.mjs` (Playwright; report en `.tmp/ux-audit/`, ignorado). Artefactos locales `.tmp/` no se commitean.
 - **Paleta default = `contapyme`**. Marca tipográfica `InSoft`; id de paleta `insoft` en minúsculas (API).
 
 ---
@@ -137,6 +143,8 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - Guía: `src/docs/preview-controller.md`.
 - Interface única: `PreviewDefinition` en `src/previews/_kit/types.d.ts` (`$schema: "is-preview/v1"`).
 - Datos: `src/previews/<cat>/<tag>.json` — sections/blocks (`demo|callout|code|html|table|lede`).
+  Cada `demo` debe llevar `equivHtml` (HTML/ARIA nativo documental) y, si hay ramas,
+  `equivFlow` (p. ej. `<is-flowchart>`). El chrome pinta la sección «HTML puro equivalente».
 - Runtime: `JsonPreview` + `registry.js` + `catalog.js`.
 - Behavior opcional: `src/previews/behaviors/<tag>.js` exporta `mount(ctx)` / `unmount(ctx)`.
 - Galería: siempre `loadPreview(tag)` in-app. Fullscreen: `_shell.html?tag=`.
@@ -152,6 +160,15 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - Tras vaciar el shadow, volver a `adoptCss` (los `<link>` se borran).
 - Forms: `.value` del WC; submit via cableado del kit (`requestSubmit`), no confiar solo en Shadow `type=submit`.
 - Shells: grid CSS / `position-in-pixels`, no `is-split-panel` al 20% como aside fijo.
+
+### Behaviors de preview (hosts DOM)
+- Si el `mount` llama `document.getElementById('toaster').create(…)`, el host **debe existir** o crearse en el mismo `mount`. El JSON de demos a menudo solo trae botones.
+- `ISComponentPreview.on(target, …)` tolera `target == null` (no crashea). Preferir `root.querySelector` acotado al `ctx.main`.
+- Reusar `_shared/url-nav.js` y `_shared/cdn-sizes.js`; no reinventar b64url ni sumas de peso.
+
+### `is-format-bytes autofit`
+- Unidad más alta con valor **≥ 1** (`204800` → `200 KB`, no `0.2 MB`; desde `1 MiB` sí `MB`).
+- En captions CDN del panel Enlaces: siempre `autofit` + `sizes.json` expandido.
 
 ---
 
@@ -175,6 +192,11 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - **No dejar bundles sueltos en `dist/`** (p. ej. `dist/ag-grid.js`). La publicación es **solo** `dist/cdn/…`. El build actual no limpia basura vieja: si aparece un `.js` en la raíz de `dist/`, bórralo.
 - **No usar la misma profundidad de `../` para `styles` y para `scripts`/`dist` en `_shell.html`.** Shell en `src/previews/` → styles `../`, scripts/dist `../../`.
 - **No reinventar botones/forms/tables/dialogs/toasts/icons** si el kit ya tiene `is-*`. Apps: wrappers `app-*`/`tk-*` que traducen datos al kit + CSS hermano + `IsUi.adoptCss`.
+- **No crear query params sueltos para estado de UI** (`?docs=`, `?cdnTab=`, `?theme=` live). Todo va en `?s=`. `url-key` es la **clave dentro** del JSON, no el nombre del param.
+- **No formatear pesos como `0.2 MB`.** Usar `<is-format-bytes autofit>` (o la misma regla ≥ 1 unidad).
+- **No asumir que `#toaster` / `#grid` existen** en el JSON de demos. El behavior los crea o falla el UX en silencio/`TypeError`.
+- **No sumar solo el byte-size del literal `all.min.js` / `category.*.min.js`.** Son import lists (~250 B); el peso real está en `sizes.json` expandido (`cdn-sizes.js`).
+- **No commitear `.tmp/` ni reports de `ux-audit`.** Sí commitear `scripts/ux-audit.mjs` y `tests/*.test.mjs`.
 - **No poner CSS de dominio como string gigante en el `.ts`.** Archivo `.css` hermano + `adoptCss(shadow, import.meta.url)`. Tras `innerHTML = ''` del shadow, volver a llamar `adoptCss`.
 - **No asumir que `type="submit"` en `<is-button>` envía un `<form>` light-DOM.** El `<button>` real está en Shadow DOM; usar `requestSubmit` cableado en el kit o `onclick` que dispare submit del form.
 - **No usar `is-split-panel` con `%` alto como “sidebar fijo”** (p. ej. 20%): deja un hueco enorme. Shells de app: grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
@@ -278,6 +300,44 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
     **No hacer:** confiar en herencia UA de `button`/`input`; documentar escala
     sin guardián; mezclar `variant` (apariencia) con `color` (tono) en JS.
     Fix + guardián: `fab.css`/`fab.js` + `tests/em-scale-font-inherit.test.mjs`.
+
+32. **`?docs=` / `?cdnTab=` como params sueltos** (6-ago-2026) → `url-key` escribía
+    `searchParams.set(key, value)` y convivía mal con `?s=` de la galería. Al
+    cambiar de componente, `updateUrl()` reescribía solo `{ component }` y
+    borraba el resto… o dejaba basura en la query.
+    **Hacer:** `url-nav.js` lee/escribe keys **dentro** de `?s=` (b64url JSON);
+    la galería mergea al actualizar `component`.
+    **No hacer:** nuevos query params por feature; localStorage para tabs de docs.
+    Guardián: `tests/url-nav.test.mjs`.
+
+33. **Toast demos sin host** (6-ago-2026) → JSON solo tenía botones; el behavior
+    hacía `document.getElementById('toaster').create(…)` → `Cannot read
+    properties of null (reading 'create')`. Los botones “funcionaban” (click OK)
+    pero **no salía ningún toast**. UX mentía.
+    **Hacer:** en `behaviors/is-toast.js` crear `<is-toast id="toaster">` si falta;
+    o incluirlo en el markup del demo.
+    **No hacer:** documentar `toaster.create` sin garantizar el nodo en mount.
+    Guardián: `tests/ux-gallery-invariants.test.mjs`.
+
+34. **Pesos CDN al revés** → sumar el tamaño de `all.min.js` (~lista de imports)
+    hacía creer que “todo el kit” era lo más liviano. Fix: `cdn-sizes.js`
+    expande a los `.min.js` reales + UI con `autofit` (nunca `0.2 MB`).
+    Guardián: `tests/format-bytes-autofit.test.mjs` + checks en
+    `ux-gallery-invariants`.
+
+35. **QA UX: pageerrors reales vs ruido de clicks** (6-ago-2026) → un barrido
+    Playwright (`scripts/ux-audit.mjs`) marcó 17/158 “fail”. Parte era ruido
+    (clicks al chrome «Ver código» CDN). Parte era bug real (`toast`, grids ISP
+    `getState` null, `data-grid` `options` not iterable, `CodeMirror is not
+    defined` en mutation-observer, 404 `diagram-lightbox.css` sin `.min`).
+    **Hacer:** clasificar pageerror/console vs click timeout; arreglar hosts
+    faltantes primero; report en `.tmp/ux-audit/` (no commit).
+    **No hacer:** dar por roto un componente solo porque falló un click al
+    icono `<>` del demo-code.
+
+36. **`ISComponentPreview.on(null, …)`** → `this.on(main.querySelector('#x'), …)`
+    con `#x` ausente tiraba al montar. Fix: no-op si no hay target.
+    Guardián: `ux-gallery-invariants` (fuente contiene la guarda).
 
 ---
 
@@ -400,6 +460,9 @@ mantenerlo aparte.
 | `palette-and-snippet-contract.test.mjs` | Default contapyme; canvas libre; snippets con contexto |
 | `prefs-contract.test.mjs` | Un solo store `is-webcomponents[tag][key]` |
 | `manifest-paths.test.mjs` / `llm-links.test.mjs` | Manifest y LLM raw coherentes |
+| `url-nav.test.mjs` | Estado UI solo en `?s=`; sin params sueltos |
+| `format-bytes-autofit.test.mjs` | `autofit` + pesos en captions CDN |
+| `ux-gallery-invariants.test.mjs` | Toast host, `on(null)` seguro, cdn-sizes, no params sueltos |
 
 ### Cómo extender
 1. Nuevo error silencioso → test que falle si vuelve (`*.test.mjs`, no `.ts` sin toolchain).
@@ -408,6 +471,8 @@ mantenerlo aparte.
 4. Actualizar la **Carta de leyes** + bitácora de errores + esta tabla.
 5. Familia de color nueva → solo en `is-base.css`/`palettes.css`.
 6. Evento nuevo → documentar y emitir en el mismo commit.
+7. Nuevo estado de UI en URL → key dentro de `?s=` vía `url-nav.js`, nunca param suelto + actualizar `url-nav.test.mjs`.
+8. Behavior que llama APIs sobre un nodo del demo → garantizar el nodo en `mount` + entrada en `ux-gallery-invariants` si es trampa repetible.
 
 ### Qué clase de test merece la pena aquí
 El patrón que se repite en casi todos los errores de la lista de arriba: **el artefacto se genera bien y el contenido está mal**. Build verde, navegador contento, vista que pinta — y el tema no llega, o el evento no salta, o el preview enseña de menos.

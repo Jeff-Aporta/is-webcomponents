@@ -186,6 +186,10 @@
 }
 
 .cdn__label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em 0.55em;
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--is-text);
@@ -197,6 +201,16 @@
   font-size: 0.92em;
   font-weight: 500;
   color: color-mix(in srgb, var(--is-accent, currentColor) 60%, var(--is-text));
+}
+
+.cdn__size {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--is-text) 55%, transparent);
+}
+
+.cdn__size[hidden] {
+  display: none !important;
 }
 
 .cdn__copy {

@@ -59,6 +59,10 @@ function llmDocs(entry) {
     });
   }
   docs.push({ label: 'Índice global', url: `${LLM_BASE}/components/LLM.md` });
+  docs.push({
+    label: 'Skill · instalación CDN',
+    url: `${LLM_BASE}/skills/is-cdn-install/SKILL.md`,
+  });
   return docs;
 }
 
@@ -83,6 +87,8 @@ function mountCdnPanel(tag) {
   snippet.setAttribute('tag', entry.tag);
   snippet.setAttribute('category', entry.category || '');
   snippet.setAttribute('title', `CDN · ${entry.title || entry.tag}`);
+  // Opt-in: F5 recuerda Enlaces/Mirrors dentro de ?s= (key cdnTab)
+  snippet.setAttribute('url-key', 'cdnTab');
   // Los enlaces a la documentación viajan como `config` del propio snippet:
   // es él quien decide si los pinta. Son opcionales, no obligatorios.
   snippet.setAttribute('config', JSON.stringify({ docs: llmDocs(entry) }));
