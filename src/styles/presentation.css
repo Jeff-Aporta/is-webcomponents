@@ -365,11 +365,24 @@ body::-webkit-scrollbar-corner {
 
 .demo-equiv__flow {
   margin-top: 0.9rem;
+  max-width: min(100%, 22rem);
 }
 
 .demo-equiv__flow is-flowchart {
   display: block;
-  min-height: 12rem;
+  width: 100%;
+  height: 14rem;
+  max-height: 14rem;
+  box-sizing: border-box;
+}
+
+.demo-equiv__flow:has(is-flowchart[open-on-click])::after {
+  content: 'Clic para ampliar';
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--is-text-dim, #7a8390);
 }
 
 .demo {
@@ -387,11 +400,46 @@ body::-webkit-scrollbar-corner {
     var(--is-shadow);
   overflow: hidden;
 }
+
+/* Controles nativos en demos: borde/fondo de control para no fundirse con la card.
+   `--pg-*` no existe en el kit; usar tokens `--is-control-*`. */
+.demo-native-field,
+.demo :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="color"]),
+  textarea,
+  select
+) {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5em 0.65em;
+  font: inherit;
+  color: var(--is-control-text, var(--is-text, inherit));
+  background: var(--is-control-bg, #f1f3f5);
+  border: 1px solid var(--is-control-border, #adb5bd);
+  border-radius: var(--is-radius-sm, 0.375em);
+}
+
+.demo-native-field:focus-visible,
+.demo :is(input, textarea, select):focus-visible {
+  outline: 2px solid var(--is-focus, var(--is-accent, #339af0));
+  outline-offset: 1px;
+}
+
+.demo textarea.demo-native-field,
+.demo textarea {
+  resize: vertical;
+  min-height: 4.5em;
+}
 /* is-copy-button lleva un is-tooltip dentro de su shadow: :has() no lo ve. */
-.demo:has(is-tooltip, is-popover, is-dropdown, is-popup, is-copy-button, is-lightbox, is-diagram-lightbox) {
+.demo:has(is-tooltip, is-popover, is-dropdown, is-popup, is-copy-button, is-lightbox, is-diagram-lightbox, is-loading-overlay, is-modal-verificacion) {
   overflow: visible;
 }
 .demo > * { position: relative; z-index: 1; }
+.demo > :is(is-loading-overlay, is-modal-verificacion) {
+  position: static;
+  z-index: auto;
+}
 /* <is-demo> reusa el chrome de .demo; el heading es su label opcional. */
 is-demo.demo { display: flex; }
 
@@ -416,7 +464,7 @@ is-demo[contain],
 }
 /* Overlays: su z-index interno no cruza el stacking del host; subir el host
    para que no lo tapen siblings posteriores (#log, captions, etc.). */
-.demo > :is(is-dropdown, is-popup, is-tooltip, is-popover, is-combobox, is-date-picker, is-date-input, is-lightbox, is-diagram-lightbox) {
+.demo > :is(is-dropdown, is-popup, is-tooltip, is-popover, is-combobox, is-date-picker, is-date-input, is-lightbox, is-diagram-lightbox, is-loading-overlay, is-modal-verificacion) {
   z-index: 5;
 }
 
@@ -471,6 +519,139 @@ is-demo[contain],
 }
 
 .demo--with-code { padding-right: 3rem; }
+.demo--with-sources { padding-right: 3rem; }
+.demo--with-code.demo--with-sources { padding-right: 5.5rem; }
+
+/* Fuentes del componente (JS/CSS/MD) — a la izquierda del botón «Ver código». */
+.demo-sources-btn {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 3;
+  display: inline-grid;
+  place-items: center;
+  width: 2.25em;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--is-text-dim);
+  cursor: pointer;
+  font: inherit;
+  line-height: 0;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.demo--with-code .demo-sources-btn { right: 3.15rem; }
+.demo-sources-btn:hover {
+  background: var(--is-control-bg-hover);
+  color: var(--is-text);
+}
+.demo-sources-btn:focus-visible {
+  outline: 2px solid var(--is-focus);
+  outline-offset: 2px;
+}
+.demo-sources-btn is-icon {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.vs-page-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius, 0.5em);
+  background: var(--is-bg-elev);
+}
+.vs-page-hint {
+  font-size: 0.75rem;
+  color: var(--is-text-dim);
+}
+
+/* Modal full-view de fuentes */
+is-dialog.is-view-sources {
+  --width: min(96vw, 72rem);
+  --spacing: 0.75rem;
+}
+is-dialog.is-view-sources::part(body) {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  max-height: calc(100vh - 7.5rem);
+}
+is-dialog.is-view-sources::part(dialog) {
+  height: min(92vh, 56rem);
+}
+.vs-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.vs-open {
+  font-size: 0.8rem;
+  color: var(--is-accent, var(--is-brand));
+  text-decoration: none;
+}
+.vs-open:hover { text-decoration: underline; }
+.vs-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  height: 100%;
+}
+.vs-path {
+  margin: 0;
+  padding: 0.45rem 0.85rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  color: var(--is-text-soft);
+  border-bottom: 1px solid var(--is-border-soft);
+  background: var(--is-bg-soft);
+  word-break: break-all;
+}
+.vs-tabs {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.vs-tabs::part(tab-group) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+.vs-tabs::part(body) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.vs-panel {
+  box-sizing: border-box;
+  height: min(70vh, 42rem);
+  overflow: auto;
+  padding: 0.75rem 1rem;
+}
+.vs-pre {
+  margin: 0;
+  min-height: 100%;
+  white-space: pre;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+.vs-empty {
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  color: var(--is-text-soft);
+}
 
 .demo-code-btn {
   position: absolute;
@@ -695,7 +876,8 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   font-size: 0.68rem;
   color: var(--is-text-dim);
 }
-.demo-locale-card is-format-date {
+.demo-locale-card is-format-date,
+.demo-locale-card is-relative-time {
   font-size: 0.92rem;
   color: var(--is-text-soft);
 }
@@ -927,7 +1109,65 @@ table.ref td code {
   color: var(--is-text);
   border: 1px solid var(--is-border-soft);
 }
-table.ref td:first-child { width: 36%; }
+table.ref td:first-child { width: 30%; }
+table.ref td:nth-child(2) { width: 16%; color: var(--is-text-soft); white-space: nowrap; }
+table.ref td:nth-child(3) { width: auto; }
+
+/* Tablas de tokens (p. ej. Personalización): la columna Tokens debe
+   envolver; el nowrap global de .ref col-2 la aplastaba. */
+.ref-wrap { width: 100%; overflow-x: auto; }
+table.ref.ref--tokens {
+  table-layout: fixed;
+  width: 100%;
+}
+table.ref.ref--tokens th:nth-child(1),
+table.ref.ref--tokens td:nth-child(1) {
+  width: 8.75rem;
+  white-space: normal;
+}
+table.ref.ref--tokens th:nth-child(2),
+table.ref.ref--tokens td:nth-child(2) {
+  width: auto;
+  color: var(--is-text);
+  white-space: normal;
+}
+table.ref.ref--tokens th:nth-child(3),
+table.ref.ref--tokens td:nth-child(3) {
+  width: 11rem;
+  color: var(--is-text-soft);
+  word-break: break-word;
+}
+table.ref.ref--tokens td:nth-child(2) {
+  line-height: 1.65;
+}
+table.ref.ref--tokens td:nth-child(2) code {
+  display: inline-block;
+  margin: 0.12rem 0.3rem 0.12rem 0;
+  max-width: 100%;
+  word-break: break-all;
+  vertical-align: middle;
+}
+
+/* Derivación (2 cols): la 2ª columna es prosa, no un tipo corto. */
+table.ref.ref--derive {
+  table-layout: fixed;
+  width: 100%;
+}
+table.ref.ref--derive td:nth-child(1) {
+  width: 38%;
+  white-space: normal;
+}
+table.ref.ref--derive td:nth-child(2) {
+  width: auto;
+  white-space: normal;
+  color: var(--is-text-soft);
+  line-height: 1.45;
+}
+table.ref.ref--derive td:nth-child(1) code {
+  display: inline-block;
+  margin: 0.1rem 0.2rem 0.1rem 0;
+  word-break: break-all;
+}
 
 /* --- Anatomy diagram ----------------------------------------------- */
 
