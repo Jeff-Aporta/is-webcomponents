@@ -5,45 +5,66 @@
   "title": "<is-heading>",
   "titleHtml": true,
   "storageKey": "docs-is-heading",
+  "hasBehavior": true,
+  "styles": ".hd-pg {\n      display: grid;\n      gap: 1rem;\n      padding: 0.85rem 1rem;\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius, 0.5em);\n      background: var(--is-bg-elev);\n    }\n    .hd-stage {\n      min-height: 3.5rem;\n      padding: 0.75rem 0;\n      border-bottom: 1px dashed var(--is-border);\n    }\n    .hd-controls {\n      display: grid;\n      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));\n      gap: 0.75rem 1rem;\n      align-items: end;\n    }\n    .hd-field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.3rem;\n      font-size: 0.75rem;\n      color: var(--is-text-soft);\n    }\n    .hd-field input[type=\"text\"],\n    .hd-field input[type=\"number\"],\n    .hd-field select {\n      font: inherit;\n      font-size: 0.875rem;\n      color: var(--is-text);\n      background: var(--is-bg);\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius-sm, 0.35em);\n      padding: 0.35rem 0.5rem;\n    }\n    .hd-field input[type=\"range\"] { width: 100%; accent-color: var(--is-accent, var(--is-brand)); }\n    .hd-range-row { display: flex; align-items: center; gap: 0.5rem; }\n    .hd-range-val {\n      font-variant-numeric: tabular-nums;\n      font-size: 0.8rem;\n      color: var(--is-text);\n      min-width: 2.75rem;\n    }\n    .hd-caption {\n      margin: 0;\n      font-size: 0.75rem;\n      color: var(--is-text-dim);\n    }\n    .hd-caption code { font-size: 0.85em; }\n    .hd-snippet {\n      margin: 0;\n      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n      font-size: 0.75rem;\n      color: var(--is-text-soft);\n      word-break: break-all;\n    }\n    .hd-stack { display: flex; flex-direction: column; gap: 0.85rem; }\n    .hd-ex {\n      display: flex;\n      flex-direction: column;\n      gap: 0.25rem;\n    }",
   "sections": [
     {
       "id": "intro",
       "title": "<is-heading>",
-      "lede": "Un solo módulo para los seis niveles. Port de <code class=\"code\">H1…H6.svelte</code> de ISP:\r\n          el color va mezclando el acento de la paleta con el color de texto según baja el nivel\r\n          (15 · 30 · 45 · 65 · 80 · 90 %).",
+      "lede": "Niveles tipográficos con color semántico, CSS libre o <code class=\"code\">current</code>. <code class=\"code\">mix</code> / <code class=\"code\">mix-with</code> atenúan hacia texto, transparente, blanco o negro.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:0.5rem\">\r\n            <is-heading level=\"1\">Nivel 1</is-heading>\r\n            <is-heading level=\"2\">Nivel 2</is-heading>\r\n            <is-heading level=\"3\">Nivel 3</is-heading>\r\n            <is-heading level=\"4\">Nivel 4</is-heading>\r\n            <is-heading level=\"5\">Nivel 5</is-heading>\r\n            <is-heading level=\"6\">Nivel 6</is-heading>\r\n          </div>"
+          "html": "<div class=\"hd-pg\" id=\"hdPlayground\">\n            <div class=\"hd-stage\" style=\"color:#339af0\">\n              <is-heading id=\"hdLive\" level=\"2\">Título de ejemplo</is-heading>\n            </div>\n            <div class=\"hd-controls\">\n              <label class=\"hd-field\">level\n                <div class=\"hd-range-row\">\n                  <input id=\"hdLevel\" type=\"range\" min=\"1\" max=\"6\" step=\"1\" value=\"2\" />\n                  <span class=\"hd-range-val\" id=\"hdLevelVal\">2</span>\n                </div>\n              </label>\n              <label class=\"hd-field\">color\n                <select id=\"hdColorMode\">\n                  <option value=\"\" selected>(acento / default)</option>\n                  <option value=\"brand\">brand</option>\n                  <option value=\"neutral\">neutral</option>\n                  <option value=\"info\">info</option>\n                  <option value=\"success\">success</option>\n                  <option value=\"warning\">warning</option>\n                  <option value=\"danger\">danger</option>\n                  <option value=\"current\">current</option>\n                  <option value=\"css\">CSS libre…</option>\n                </select>\n              </label>\n              <label class=\"hd-field\">color CSS\n                <input id=\"hdColorCss\" type=\"text\" value=\"#e8590c\" disabled />\n              </label>\n              <label class=\"hd-field\">mix (%)\n                <div class=\"hd-range-row\">\n                  <input id=\"hdMix\" type=\"range\" min=\"0\" max=\"100\" step=\"1\" value=\"30\" />\n                  <span class=\"hd-range-val\" id=\"hdMixVal\">30%</span>\n                </div>\n              </label>\n              <label class=\"hd-field\">\n                <span><input id=\"hdMixDefault\" type=\"checkbox\" /> usar default mix</span>\n              </label>\n              <label class=\"hd-field\">mix-with\n                <select id=\"hdMixWith\">\n                  <option value=\"\" selected>text (default)</option>\n                  <option value=\"transparent\">transparent</option>\n                  <option value=\"white\">white</option>\n                  <option value=\"black\">black</option>\n                  <option value=\"current\">current</option>\n                </select>\n              </label>\n              <label class=\"hd-field\">size\n                <input id=\"hdSize\" type=\"text\" placeholder=\"(default nivel)\" value=\"\" />\n              </label>\n              <label class=\"hd-field\">texto\n                <input id=\"hdText\" type=\"text\" value=\"Título de ejemplo\" />\n              </label>\n            </div>\n            <p class=\"hd-caption\">Props: <code>level</code>, <code>color</code>, <code>mix</code>, <code>mix-with</code>, <code>size</code></p>\n            <pre class=\"hd-snippet\" id=\"hdSnippet\"></pre>\n          </div>"
         }
       ]
     },
     {
-      "id": "examples",
-      "title": "Colores semánticos",
+      "id": "levels",
+      "title": "Niveles",
+      "lede": "Sin <code class=\"code\">mix</code> cada nivel usa su default (15 · 30 · 45 · 65 · 80 · 90 %).",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:0.35rem\">\r\n            <is-heading level=\"3\" color=\"brand\">brand</is-heading>\r\n            <is-heading level=\"3\" color=\"neutral\">neutral</is-heading>\r\n            <is-heading level=\"3\" color=\"info\">info</is-heading>\r\n            <is-heading level=\"3\" color=\"success\">success</is-heading>\r\n            <is-heading level=\"3\" color=\"warning\">warning</is-heading>\r\n            <is-heading level=\"3\" color=\"danger\">danger</is-heading>\r\n          </div>"
-        },
-        {
-          "kind": "html",
-          "html": "<h2>Escala por font-size</h2>"
-        },
-        {
-          "kind": "demo",
-          "html": "<div style=\"font-size: 1.25em\">\r\n            <is-heading level=\"2\">Todo el nivel escala desde el contexto</is-heading>\r\n          </div>"
-        },
-        {
-          "kind": "html",
-          "html": "<h2>Override de tinte</h2>"
-        },
+          "html": "<div class=\"hd-stack\">\n            <div class=\"hd-ex\">\n              <is-heading level=\"1\">Nivel 1</is-heading>\n              <p class=\"hd-caption\"><code>level=\"1\"</code> · (default mix)</p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"2\">Nivel 2</is-heading>\n              <p class=\"hd-caption\"><code>level=\"2\"</code> · (default mix)</p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\">Nivel 3</is-heading>\n              <p class=\"hd-caption\"><code>level=\"3\"</code> · (default mix)</p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"4\">Nivel 4</is-heading>\n              <p class=\"hd-caption\"><code>level=\"4\"</code> · (default mix)</p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"5\">Nivel 5</is-heading>\n              <p class=\"hd-caption\"><code>level=\"5\"</code> · (default mix)</p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"6\">Nivel 6</is-heading>\n              <p class=\"hd-caption\"><code>level=\"6\"</code> · (default mix)</p>\n            </div>\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "color",
+      "title": "color",
+      "lede": "Prop <code class=\"code\">color</code> — tinte semántico del acento base.",
+      "blocks": [
         {
           "kind": "demo",
-          "html": "<is-heading level=\"2\" style=\"--h-mix: 0%\">Sin mezcla (100 % acento)</is-heading>\r\n          <is-heading level=\"2\" style=\"--h-mix: 100%\">Mezcla total (color de texto)</is-heading>"
+          "html": "<div class=\"hd-stack\">\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"brand\">brand</is-heading>\n              <p class=\"hd-caption\"><code>color=\"brand\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"neutral\">neutral</is-heading>\n              <p class=\"hd-caption\"><code>color=\"neutral\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"info\">info</is-heading>\n              <p class=\"hd-caption\"><code>color=\"info\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"success\">success</is-heading>\n              <p class=\"hd-caption\"><code>color=\"success\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"warning\">warning</is-heading>\n              <p class=\"hd-caption\"><code>color=\"warning\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"danger\">danger</is-heading>\n              <p class=\"hd-caption\"><code>color=\"danger\"</code></p>\n            </div>\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "css-current",
+      "title": "CSS libre y current",
+      "lede": "Si no es semántico, <code class=\"code\">color</code> es un color CSS. <code class=\"code\">current</code> hereda el color tipográfico del contexto.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"hd-stack\">\n            <div class=\"hd-ex\" style=\"color:#339af0\">\n              <is-heading level=\"3\" color=\"current\">current (hereda azul del padre)</is-heading>\n              <p class=\"hd-caption\"><code>color=\"current\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"#e8590c\">Naranja CSS</is-heading>\n              <p class=\"hd-caption\"><code>color=\"#e8590c\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"oklch(0.65 0.2 250)\" mix=\"0%\">oklch sin mix</is-heading>\n              <p class=\"hd-caption\"><code>color=\"oklch(…)\"</code> · <code>mix=\"0%\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"3\" color=\"#e8590c\" mix=\"50%\" mix-with=\"transparent\">50% transparent</is-heading>\n              <p class=\"hd-caption\"><code>mix=\"50%\"</code> · <code>mix-with=\"transparent\"</code></p>\n            </div>\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "mix",
+      "title": "mix",
+      "lede": "Prop <code class=\"code\">mix</code> (antes <code class=\"code\">style=\"--h-mix\"</code>). Porcentaje de\n          <code class=\"code\">--is-text</code> mezclado sobre el acento.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"hd-stack\">\n            <div class=\"hd-ex\">\n              <is-heading level=\"2\">Sin override</is-heading>\n              <p class=\"hd-caption\">sin <code>mix</code> · (default mix)</p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"2\" mix=\"0%\">Solo acento</is-heading>\n              <p class=\"hd-caption\"><code>mix=\"0%\"</code> · sin mezcla con texto</p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"2\" mix=\"50%\">Mitad</is-heading>\n              <p class=\"hd-caption\"><code>mix=\"50%\"</code></p>\n            </div>\n            <div class=\"hd-ex\">\n              <is-heading level=\"2\" mix=\"100%\">Todo texto</is-heading>\n              <p class=\"hd-caption\"><code>mix=\"100%\"</code> · color de texto</p>\n            </div>\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-heading level=\"1\">Título</is-heading>\n<is-heading level=\"3\" color=\"success\">Sección aprobada</is-heading>\n<is-heading level=\"2\" style=\"--h-mix: 0%\">Solo acento</is-heading>"
+          "code": "<is-heading level=\"2\">(default mix)</is-heading>\n<is-heading level=\"2\" mix=\"0%\">Solo acento</is-heading>\n<is-heading level=\"2\" mix=\"100%\">Todo texto</is-heading>\n<is-heading level=\"3\" color=\"success\" size=\"1.8em\">Custom size</is-heading>",
+          "lang": "html"
         }
       ]
     },
@@ -54,33 +75,33 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo / var",
+            "Atributo",
             "Valores / default"
           ],
           "rows": [
             [
               "<code>level</code>",
-              "1…6 (default 1, reflejado) — construye el <code>&lt;hN&gt;</code> real en el shadow"
+              "1…6 (default 1)"
             ],
             [
               "<code>color</code>",
-              "brand (default) · neutral · info · success · warning · danger"
+              "semántico · <code>current</code> · color CSS"
             ],
             [
-              "<code>--h-clr</code>",
-              "color base; default <code>--is-accent</code>"
+              "<code>mix</code>",
+              "% → <code>--h-mix</code>; ausente = default del nivel"
             ],
             [
-              "<code>--h-mix</code>",
-              "% de <code>--is-text</code> mezclado; default según nivel"
+              "<code>mix-with</code>",
+              "text · transparent · white · black · current · CSS"
             ],
             [
-              "<code>--h-size</code>",
-              "tamaño en em del nivel"
+              "<code>size</code>",
+              "CSS → <code>--h-size</code>"
             ],
             [
               "<code>::part(heading)</code>",
-              "el elemento <code>&lt;hN&gt;</code>"
+              "el <code>&lt;hN&gt;</code> interno"
             ]
           ]
         }
