@@ -133,13 +133,16 @@ export function renderBlock(block) {
     }
     case 'table': {
       const wrap = document.createElement('div');
+      wrap.className = 'ref-wrap';
       if (block.captionHtml) {
         const cap = document.createElement('div');
         cap.innerHTML = resolveAssets(block.captionHtml);
         wrap.append(cap);
       }
       const table = document.createElement('table');
-      table.className = 'ref';
+      table.className = block.className
+        ? `ref ${block.className}`.trim()
+        : 'ref';
       const thead = document.createElement('thead');
       const hr = document.createElement('tr');
       for (const col of block.columns) {

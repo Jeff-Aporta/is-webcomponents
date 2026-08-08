@@ -139,9 +139,9 @@ body {
     }
 
     /* Punto de color: gradiente de marca por paleta, ring neutro. */
-    & [data-palette="insoft"]    .brand-menu__swatch { background: var(--is-color-brand-500, #e03131); }
-    & [data-palette="contapyme"] .brand-menu__swatch { background: var(--is-color-brand-500, dodgerblue); }
-    & [data-palette="agrowin"]   .brand-menu__swatch { background: var(--is-color-brand-500, yellowgreen); }
+    & [data-palette="insoft"]    .brand-menu__swatch { background: var(--is-color-brand, #e03131); }
+    & [data-palette="contapyme"] .brand-menu__swatch { background: var(--is-color-brand, dodgerblue); }
+    & [data-palette="agrowin"]   .brand-menu__swatch { background: var(--is-color-brand, yellowgreen); }
 
     & .brand-menu__swatch {
       flex: 0 0 auto;
@@ -248,17 +248,22 @@ body {
     text-transform: uppercase;
     color: var(--is-text-dim);
     line-height: 1.25;
-    user-select: none;
+    user-select: text;
 
     &::after {
       content: "";
       flex: 1;
       height: 1px;
       background: linear-gradient(90deg, var(--is-border), transparent);
+      /* El hilo decorativo no debe robar selección del título. */
+      user-select: none;
+      pointer-events: none;
     }
   }
 
-  /* El item es <button>: layout vertical para title + tag. */
+  /* El item es <button>: layout vertical para title + tag.
+     user-select:text — el UA de button suele bloquear selección; aquí se permite
+     copiar nombre/tag del catálogo. */
   & .shell-nav__item {
     position: relative;
     display: flex;
@@ -276,6 +281,8 @@ body {
     line-height: 1.22;
     cursor: pointer;
     text-align: left;
+    user-select: text;
+    -webkit-user-select: text;
     transition: background-color 140ms ease, border-color 140ms ease,
                 color 140ms ease, padding-inline-start 140ms ease;
 

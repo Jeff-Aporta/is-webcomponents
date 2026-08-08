@@ -14,7 +14,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-theme-toggle dark></is-theme-toggle>\r\n          <span class=\"demo-label\" style=\"margin-left:.75rem\">afecta al documento (html)</span>"
+          "html": "<is-theme-toggle dark></is-theme-toggle>\r\n          <span class=\"demo-label\" style=\"margin-left:.75rem\">afecta al documento (html)</span>",
+          "equivNote": "Cascada de dónde escribe el tema al conmutar.",
+          "equivHtml": "<!-- ver diagrama de ramas -->",
+          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-theme-toggle: contenedor\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"buscar contenedor\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"[container-theme]\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \".container-theme\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \".theme-* / data-theme\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"<html>\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"1º\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"b\",\n          \"label\": \"2º\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"3º\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"fallback\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
         }
       ]
     },

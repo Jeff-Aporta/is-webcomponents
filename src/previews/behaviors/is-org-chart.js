@@ -7,7 +7,17 @@ export async function mount(ctx) {
   const root = ctx.main;
   void root;
   const log = document.getElementById('log');
-      document.querySelector('is-org-chart').addEventListener('is-select', (e) => log.textContent = `${e.detail.node.title}: ${e.detail.node.name}\n` + log.textContent);
+  for (const org of document.querySelectorAll('is-org-chart')) {
+    org.addEventListener('is-select', (e) => {
+      log.textContent = `[${org.id}] ${e.detail.node.title || ''}: ${e.detail.node.name}\n` + log.textContent;
+    });
+    org.addEventListener('is-toggle', (e) => {
+      log.textContent = `[${org.id}] toggle ${e.detail.id} → collapsed=${e.detail.collapsed}\n` + log.textContent;
+    });
+    org.addEventListener('is-open-viewer', () => {
+      log.textContent = `[${org.id}] abrir visor\n` + log.textContent;
+    });
+  }
 }
 
 export function unmount() {

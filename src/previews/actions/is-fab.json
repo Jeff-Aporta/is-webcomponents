@@ -16,8 +16,9 @@
         {
           "kind": "demo",
           "html": "<div class=\"fab-stage\">\r\n            <is-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></is-fab>\r\n          </div>\r\n          <p>Click: <span id=\"fbLog\">0</span></p>",
-          "equivNote": "FAB ≈ botón circular; el kit aporta elevación, posiciones y pulse.",
-          "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>"
+          "equivNote": "position fija vs inline; pulse es atención opcional.",
+          "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>",
+          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-fab: position\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"position=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"inline → en flujo\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"esquina fixed\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"pulse?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"anillo de atención\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"inline\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"corner\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
         },
         {
           "kind": "code",

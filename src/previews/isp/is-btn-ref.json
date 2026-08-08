@@ -4,21 +4,39 @@
   "category": "isp",
   "title": "<is-btn-ref>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-btn-ref de InSoft.",
+  "description": "Campo + modal de selección ISP (BtnRef).",
   "storageKey": "docs-is-btn-ref",
+  "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "<is-btn-ref>",
-      "lede": "Campo de texto con selector modal (port de ISP <code class=\"code\">BtnRef</code>).\r\n          Escribe la clave o abre el filtro para elegir un registro del catálogo.",
+      "lede": "Campo con selector modal (port <code class=\"code\">BtnRef</code>). El modal usa\n          <code class=\"code\">&lt;is-catalogo-gen select-mode&gt;</code> centrado. Controller vía\n          <code class=\"code\">createBtnRefController</code> — <strong>sin acciones CRUD</strong>, solo listado y selección.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-btn-ref id=\"btnRefDemo\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\r\n          <p id=\"btnRefLog\">Seleccionado: <code class=\"code\">—</code></p>"
+          "html": "<is-btn-ref id=\"btnRefDemo\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\n          <p id=\"btnRefLog\">Seleccionado: <code class=\"code\">—</code></p>"
         },
         {
           "kind": "code",
-          "code": "<is-btn-ref id=\"ref\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\n<script type=\"module\">\n  const el = document.getElementById('ref');\n  el.controller = {\n    entrie: 'Aplicación',\n    primaryKeys: ['app'],\n    ColumnsBtnRef: ['app'],\n    columns: [{ field: 'app', header: 'Aplicación' }],\n    async Lista() {\n      return { datos: [{ app: 'ContaPyme' }, { app: 'AgroWin' }] };\n    },\n  };\n</script>"
+          "code": "import { createBtnRefController } from './isp/controller-from-config.min.js';\n\nel.controller = createBtnRefController({\n  entrie: 'Aplicación',\n  primaryKeys: ['app'],\n  ColumnsBtnRef: ['app'],\n  columns: [{ field: 'app', header: 'Aplicación' }],\n  mock: [{ app: 'ContaPyme' }, { app: 'AgroWin' }],\n});",
+          "lang": "js"
+        }
+      ]
+    },
+    {
+      "id": "multi",
+      "title": "Multi-select",
+      "lede": "Atributo <code class=\"code\">multi</code> (o <code class=\"code\">multiSelect: true</code> en el JSON).\n          El modal permite marcar varias filas; al confirmar se aplica el registro elegido (último / pick).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-btn-ref id=\"btnRefMulti\" label=\"Aplicaciones\" multi style=\"width: 22rem;\"></is-btn-ref>\n          <p id=\"btnRefMultiLog\">Seleccionado: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-btn-ref label=\"Apps\" multi></is-btn-ref>\n\ncreateBtnRefController({ …, multiSelect: true, mock: […] });",
+          "lang": "html"
         }
       ]
     }

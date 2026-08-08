@@ -15,7 +15,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"tip-target\">Hover Me</is-button>\r\n          <is-tooltip for=\"tip-target\">This is a tooltip</is-tooltip>"
+          "html": "<is-button id=\"tip-target\">Hover Me</is-button>\r\n          <is-tooltip for=\"tip-target\">This is a tooltip</is-tooltip>",
+          "equivNote": "trigger decide cómo se abre; tip con HTML suele ir mejor con click.",
+          "equivHtml": "<!-- ver diagrama de ramas -->",
+          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-tooltip: trigger\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"trigger=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"hover → show/hide\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"click → toggle\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"manual → API\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"hover\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"click\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"manual\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
         },
         {
           "kind": "code",

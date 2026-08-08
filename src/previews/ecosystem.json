@@ -1,0 +1,22 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "ecosystem",
+  "category": "",
+  "title": "Ecosistema JS",
+  "storageKey": "docs-ecosystem",
+  "hasBehavior": true,
+  "styles": ".eco-toolbar {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.75rem 1rem;\n      align-items: end;\n      margin: 0 0 1rem;\n    }\n    .eco-field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.3rem;\n      font-size: 0.75rem;\n      color: var(--is-text-soft);\n      min-width: min(100%, 16rem);\n      flex: 1 1 14rem;\n    }\n    .eco-field input {\n      font: inherit;\n      font-size: 0.875rem;\n      color: var(--is-text);\n      background: var(--is-bg);\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius-sm, 0.35em);\n      padding: 0.4rem 0.55rem;\n    }\n    .eco-count {\n      margin: 0 0 0.75rem;\n      font-size: 0.8rem;\n      color: var(--is-text-dim);\n    }\n    .eco-list {\n      display: flex;\n      flex-direction: column;\n      gap: 0.65rem;\n    }\n    .eco-card {\n      padding: 0.75rem 0.9rem;\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius, 0.5em);\n      background: var(--is-bg-elev);\n    }\n    .eco-card__head {\n      display: flex;\n      flex-wrap: wrap;\n      align-items: baseline;\n      gap: 0.35rem 0.75rem;\n      margin-bottom: 0.35rem;\n    }\n    .eco-card__id {\n      margin: 0;\n      font-size: 1rem;\n      font-weight: 650;\n      color: var(--is-text);\n    }\n    .eco-card__path {\n      font-family: ui-monospace, Menlo, Consolas, monospace;\n      font-size: 0.72rem;\n      color: var(--is-text-dim);\n      word-break: break-all;\n    }\n    .eco-card__sum {\n      margin: 0 0 0.45rem;\n      font-size: 0.875rem;\n      color: var(--is-text-soft);\n      line-height: 1.4;\n    }\n    .eco-exports {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.3rem;\n      margin: 0;\n      padding: 0;\n      list-style: none;\n    }\n    .eco-exports code {\n      font-size: 0.72rem;\n      padding: 0.1rem 0.35rem;\n      border-radius: 0.25em;\n      background: var(--is-code-bg, var(--is-bg-soft));\n      color: var(--is-code-text, var(--is-text));\n    }\n    .eco-meta {\n      margin: 0.45rem 0 0;\n      font-size: 0.72rem;\n      color: var(--is-text-dim);\n    }",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Ecosistema JS",
+      "lede": "Utilidades compartidas en <code class=\"code\">src/components/_shared/</code>: no son Web Components, pero sostienen el kit (eventos, CSS adoption, CDN, fechas, grids, diagramas…). Listado completo, sin filtrar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"eco-toolbar\">\n            <label class=\"eco-field\">Buscar\n              <input id=\"ecoFilter\" type=\"search\" placeholder=\"nombre, path, export…\" autocomplete=\"off\" />\n            </label>\n          </div>\n          <p class=\"eco-count\" id=\"ecoCount\"></p>\n          <div class=\"eco-list\" id=\"ecoList\"></div>"
+        }
+      ]
+    }
+  ]
+}

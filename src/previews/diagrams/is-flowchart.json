@@ -17,7 +17,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-flowchart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"subtitle\": \"de la venta al acuse de la DIAN\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },\r\n                    { \"id\": \"g-dian\", \"name\": \"DIAN\", \"hue\": 199 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"nodes\": [\r\n                    { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"b\", \"label\": \"Registrar venta\", \"group\": \"g-emision\",\r\n                      \"desc\": \"Se arma el documento con el tercero y los ítems facturados.\" },\r\n                    { \"id\": \"c\", \"label\": \"¿Datos completos?\", \"shape\": \"diamond\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"d\", \"label\": \"Corregir datos\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"e\", \"label\": \"Generar XML y firmar\", \"group\": \"g-dian\",\r\n                      \"desc\": \"Se construye el **XML UBL** y se aplica la firma digital del emisor.\" },\r\n                    { \"id\": \"f\", \"label\": \"Enviar a la DIAN\", \"group\": \"g-dian\" },\r\n                    { \"id\": \"g\", \"label\": \"Almacenar CUFE\", \"shape\": \"cylinder\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"h\", \"label\": \"Fin\", \"shape\": \"stadium\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"a\", \"to\": \"b\" },\r\n                    { \"from\": \"b\", \"to\": \"c\" },\r\n                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },\r\n                    { \"from\": \"d\", \"to\": \"b\", \"kind\": \"dashed\" },\r\n                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" },\r\n                    { \"from\": \"e\", \"to\": \"f\" },\r\n                    { \"from\": \"f\", \"to\": \"g\" },\r\n                    { \"from\": \"g\", \"to\": \"h\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-flowchart>"
+          "html": "<is-flowchart open-on-click animation=\"flow\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"subtitle\": \"de la venta al acuse de la DIAN\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },\r\n                    { \"id\": \"g-dian\", \"name\": \"DIAN\", \"hue\": 199 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"nodes\": [\r\n                    { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"b\", \"label\": \"Registrar venta\", \"group\": \"g-emision\",\r\n                      \"desc\": \"Se arma el documento con el tercero y los ítems facturados.\" },\r\n                    { \"id\": \"c\", \"label\": \"¿Datos completos?\", \"shape\": \"diamond\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"d\", \"label\": \"Corregir datos\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"e\", \"label\": \"Generar XML y firmar\", \"group\": \"g-dian\",\r\n                      \"desc\": \"Se construye el **XML UBL** y se aplica la firma digital del emisor.\" },\r\n                    { \"id\": \"f\", \"label\": \"Enviar a la DIAN\", \"group\": \"g-dian\" },\r\n                    { \"id\": \"g\", \"label\": \"Almacenar CUFE\", \"shape\": \"cylinder\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"h\", \"label\": \"Fin\", \"shape\": \"stadium\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"a\", \"to\": \"b\" },\r\n                    { \"from\": \"b\", \"to\": \"c\" },\r\n                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },\r\n                    { \"from\": \"d\", \"to\": \"b\", \"kind\": \"dashed\" },\r\n                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" },\r\n                    { \"from\": \"e\", \"to\": \"f\" },\r\n                    { \"from\": \"f\", \"to\": \"g\" },\r\n                    { \"from\": \"g\", \"to\": \"h\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-flowchart>"
         }
       ]
     },
@@ -64,6 +64,22 @@
       ]
     },
     {
+      "id": "animation",
+      "title": "Animación de flujo",
+      "lede": "Atributo <code class=\"code\">animation</code> (tokens espacio-separados). Default off. Token <code class=\"code\">flow</code>: arista dashed brand detrás de la continua, con dashes en movimiento.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"animation=flow\",\n      \"direction\": \"LR\",\n      \"nodes\": [\n        { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\" },\n        { \"id\": \"b\", \"label\": \"Procesar\" },\n        { \"id\": \"c\", \"label\": \"¿Ok?\", \"shape\": \"diamond\" },\n        { \"id\": \"d\", \"label\": \"Fin\", \"shape\": \"stadium\" }\n      ],\n      \"edges\": [\n        { \"from\": \"a\", \"to\": \"b\" },\n        { \"from\": \"b\", \"to\": \"c\" },\n        { \"from\": \"c\", \"to\": \"d\", \"label\": \"sí\" }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-flowchart animation=\"flow\" open-on-click>…</is-flowchart>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
       "id": "api",
       "title": "Referencia",
       "blocks": [
@@ -88,6 +104,11 @@
               "<code>open-on-click</code>",
               "booleano",
               "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ],
+            [
+              "<code>animation</code>",
+              "tokens (`flow`, …)",
+              "Efectos opcionales (espacio-separados). <code>flow</code>: dashed brand animada detrás de cada arista continua. Default: off."
             ]
           ]
         },

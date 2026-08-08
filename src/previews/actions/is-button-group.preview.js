@@ -471,9 +471,9 @@ export class ButtonGroupPreview extends ISComponentPreview {
       });
       const APPEARANCES = ['joined', 'segmented', 'separated'];
       this.on(main.querySelector('#apiAppear'), 'click', () => {
-        const next = APPEARANCES[(APPEARANCES.indexOf(apiGroup.appearance) + 1) % APPEARANCES.length];
-        apiGroup.appearance = next;
-        logLine(`appearance = '${next}'`);
+        const next = APPEARANCES[(APPEARANCES.indexOf(apiGroup.variant) + 1) % APPEARANCES.length];
+        apiGroup.variant = next;
+        logLine(`variant = '${next}'`);
       });
       this.on(main.querySelector('#apiPill'), 'click', () => {
         apiGroup.pill = !apiGroup.pill;

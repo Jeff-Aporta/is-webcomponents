@@ -123,7 +123,7 @@ export async function mount(ctx) {
           paint(introCode);
         }
       }
-      for (const type of ['is-sort', 'is-filter', 'is-select', 'is-pagination', 'is-row-update', 'is-column-pin', 'is-export']) {
+      for (const type of ['is-sort-change', 'is-filter-change', 'is-select', 'is-page-change', 'is-row-update', 'is-column-pin', 'is-export']) {
         full.addEventListener(type, logTo(outFull));
       }
       full.addEventListener('demo-view', (e) => { outFull.textContent = `acción Ver → ${e.detail.name}`; });
@@ -200,8 +200,8 @@ export async function mount(ctx) {
       sort.columns = baseColumns();
       sort.rows = rows.slice(0, 30);
       const outSort = document.getElementById('out-sort');
-      sort.addEventListener('is-sort', (e) => { outSort.textContent = `sortModel → ${JSON.stringify(e.detail.sortModel)}`; });
-      sort.addEventListener('is-filter', (e) => { outSort.textContent = `filterModel → ${JSON.stringify(e.detail.filterModel)}`; });
+      sort.addEventListener('is-sort-change', (e) => { outSort.textContent = `sortModel → ${JSON.stringify(e.detail.sortModel)}`; });
+      sort.addEventListener('is-filter-change', (e) => { outSort.textContent = `filterModel → ${JSON.stringify(e.detail.filterModel)}`; });
   
       /* ── 7. Agrupación y tree data ────────────────────────────────────── */
       const group = document.getElementById('g-group');
