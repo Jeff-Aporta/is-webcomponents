@@ -31,6 +31,11 @@ import {
 } from '../_shared/grid-ui.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import '../actions/button.js';
+import '../forms/input.js';
+import '../forms/select.js';
+import '../forms/option.js';
+import '../forms/checkbox.js';
 /**
  * <is-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
  *
@@ -61,10 +66,10 @@ import { emit } from '../_shared/emit.js';
  * undo-redo, aggregation-position, disable-column-menu, disable-column-filter,
  * disable-column-sort, disable-column-resize, disable-column-reorder,
  * disable-multiple-sorting, disable-row-selection-on-click
- * Events: is-sort, is-filter, is-quick-filter, is-pagination, is-page-change,
+ * Events: is-sort-change, is-filter-change, is-quick-filter, is-page-change,
  * is-select, is-cell-select, is-cell-click, is-cell-double-click, is-row-click,
  * is-row-double-click, is-edit-start, is-edit-stop, is-row-update,
- * is-column-resize, is-column-reorder, is-column-visibility, is-column-pin,
+ * is-column-resize, is-column-reorder, is-column-hide, is-column-pin,
  * is-density, is-detail-toggle, is-group-toggle, is-row-reorder, is-copy,
  * is-paste, is-undo, is-redo, is-rows-scroll-end, is-export
  * CSS parts: base, toolbar, toolbar-button, quick-filter, viewport, header,
@@ -328,13 +333,14 @@ import { emit } from '../_shared/emit.js';
       this.#rowsEl.addEventListener('dragover', this.#onRowDragOver);
       this.#rowsEl.addEventListener('drop', this.#onRowDrop);
       this.#footer.addEventListener('click', this.#onFooterClick);
-      this.#pageSizeSelect.addEventListener('change', this.#onPageSizeChange);
+      this.#pageSizeSelect.addEventListener('is-change', this.#onPageSizeChange);
       this.#menu.addEventListener('click', this.#onMenuClick);
       this.#columnsPanel.addEventListener('change', this.#onColumnsPanelChange);
       this.#columnsPanel.addEventListener('input', this.#onColumnsPanelSearch);
       this.#columnsPanel.addEventListener('click', this.#onColumnsPanelClick);
       this.#filterPanel.addEventListener('click', this.#onFilterPanelClick);
       this.#filterPanel.addEventListener('change', this.#onFilterPanelChange);
+      this.#filterPanel.addEventListener('is-change', this.#onFilterPanelChange);
       this.#filterPanel.addEventListener('input', this.#onFilterPanelInput);
     }
 
@@ -673,14 +679,14 @@ import { emit } from '../_shared/emit.js';
 
     setSortModel(model) {
       this.sortModel = model;
-      emit(this, 'is-sort', { sortModel: this.#sortModel });
+      emit(this, 'is-sort-change', { sortModel: this.#sortModel });
     }
 
     sortColumn(field, dir) { this.#applySort(field, dir, false); }
 
     setFilterModel(model) {
       this.filterModel = model;
-      emit(this, 'is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
     }
 
     setQuickFilter(value) {
@@ -691,7 +697,7 @@ import { emit } from '../_shared/emit.js';
     setColumnVisibility(field, visible) {
       this.#visibility = { ...this.#visibility, [field]: !!visible };
       this.#refresh();
-      emit(this, 'is-column-visibility', {
+      emit(this, 'is-column-hide', {
         columnVisibilityModel: this.columnVisibilityModel, field, visible: !!visible,
       });
     }
@@ -1673,11 +1679,12 @@ import { emit } from '../_shared/emit.js';
       const to = Math.min(totalRows, (this.#page + 1) * size);
       this.#pageInfo.textContent = `${from}–${to} / ${totalRows}`;
 
-      const options = [...new Set([...this.pageSizeOptions, size])].sort((a, b) => a - b);
-      const current = [...this.#pageSizeSelect.options].map((o) => Number(o.value)).join(',');
-      if (current !== options.join(',')) {
-        this.#pageSizeSelect.replaceChildren(...options.map((n) => {
-          const opt = document.createElement('option');
+      const sizeChoices = [...new Set([...this.pageSizeOptions, size])].sort((a, b) => a - b);
+      const currentOpts = this.#pageSizeSelect.querySelectorAll('is-option, option');
+      const current = [...currentOpts].map((o) => Number(o.value)).join(',');
+      if (current !== sizeChoices.join(',')) {
+        this.#pageSizeSelect.replaceChildren(...sizeChoices.map((n) => {
+          const opt = document.createElement('is-option');
           opt.value = String(n);
           opt.textContent = String(n);
           return opt;
@@ -1838,7 +1845,7 @@ import { emit } from '../_shared/emit.js';
       this.#sortModel = model;
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-sort', { sortModel: this.#sortModel, field, sort: next });
+      emit(this, 'is-sort-change', { sortModel: this.#sortModel, field, sort: next });
     }
 
     /* ── Filtros ─────────────────────────────────────────────────────── */
@@ -1855,7 +1862,7 @@ import { emit } from '../_shared/emit.js';
       this.#filterModel = { ...this.#filterModel, items };
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
     }
 
     /* ── Edición ─────────────────────────────────────────────────────── */
@@ -2871,7 +2878,7 @@ import { emit } from '../_shared/emit.js';
         model[col.field] = btn.dataset.action === 'show-all';
       }
       this.columnVisibilityModel = model;
-      emit(this, 'is-column-visibility', { columnVisibilityModel: model });
+      emit(this, 'is-column-hide', { columnVisibilityModel: model });
       this.#showColumnsPanel(this.#popAnchor);
     };
 
@@ -2899,7 +2906,7 @@ import { emit } from '../_shared/emit.js';
       }
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
       renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
       positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
     };
@@ -2936,7 +2943,7 @@ import { emit } from '../_shared/emit.js';
 
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
       if (!rerender) return;
       renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
       positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
@@ -2951,11 +2958,10 @@ import { emit } from '../_shared/emit.js';
       this.#filterModel = { ...this.#filterModel, items };
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-filter', { filterModel: this.#filterModel });
+      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
     };
 
     #emitPagination() {
-      emit(this, 'is-pagination', this.paginationModel);
       emit(this, 'is-page-change', this.paginationModel);
     }
 

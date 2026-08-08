@@ -1,14 +1,8 @@
+@import './_tokens.css';
+
 /* ============ <is-kanban> ============ */
 :host {
   display: block;
-  --bg: var(--is-bg-elev, #1c2128);
-  --fg: var(--is-text, #e8eaf1);
-  --muted: color-mix(in srgb, var(--fg) 65%, transparent);
-  --border: var(--is-border, #2a2f3a);
-  --brand: var(--is-brand, dodgerblue);
-  --success: var(--is-success, #0bb783);
-  --warning: var(--is-warning, #ffa800);
-  --danger: var(--is-danger, #f64e60);
   --accent: var(--brand);
 }
 
@@ -96,15 +90,17 @@
 }
 
 /* Columna dentro de un board orientation="row": las cards fluyen en fila. */
-:host([data-orientation="row"]) .column { max-height: none; }
-:host([data-orientation="row"]) .lane {
-  flex-direction: row;
-  flex-wrap: wrap;
-  overflow-y: visible;
-}
-:host([data-orientation="row"]) .lane ::slotted(is-kanban-card),
-:host([data-orientation="row"]) ::slotted(is-kanban-card) {
-  flex: 0 0 260px;
+:host([data-orientation="row"]) {
+  & .column { max-height: none; }
+  & .lane {
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: visible;
+  }
+  & .lane ::slotted(is-kanban-card),
+  & ::slotted(is-kanban-card) {
+    flex: 0 0 260px;
+  }
 }
 
 .col-foot {
@@ -123,16 +119,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
 
-.card:hover {
-  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18);
-}
+  &:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18);
+  }
 
-.card.no-shadow {
-  box-shadow: none;
+  &.no-shadow { box-shadow: none; }
 }
 
 .cover {
@@ -164,10 +158,12 @@
   color: var(--muted);
 }
 
-.tag[data-color="brand"] { background: color-mix(in srgb, var(--brand) 25%, transparent); color: var(--brand); }
-.tag[data-color="success"] { background: color-mix(in srgb, var(--success) 25%, transparent); color: var(--success); }
-.tag[data-color="warning"] { background: color-mix(in srgb, var(--warning) 25%, transparent); color: var(--warning); }
-.tag[data-color="danger"] { background: color-mix(in srgb, var(--danger) 25%, transparent); color: var(--danger); }
+.tag {
+  &[data-color="brand"] { background: color-mix(in srgb, var(--brand) 25%, transparent); color: var(--brand); }
+  &[data-color="success"] { background: color-mix(in srgb, var(--success) 25%, transparent); color: var(--success); }
+  &[data-color="warning"] { background: color-mix(in srgb, var(--warning) 25%, transparent); color: var(--warning); }
+  &[data-color="danger"] { background: color-mix(in srgb, var(--danger) 25%, transparent); color: var(--danger); }
+}
 
 .meta {
   font-size: 0.8rem;
