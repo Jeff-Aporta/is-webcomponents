@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./progress-bar.js
 style: ./progress-bar.css
-preview: ../../previews/feedback/is-progress-bar.html
+preview: ../../previews/feedback/is-progress-bar.json
 ---
 # `<is-progress-bar>`
 
@@ -152,4 +152,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./progress-bar.js)
 - [CSS](./progress-bar.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-progress-bar.html)
+- [Preview](../../previews/feedback/is-progress-bar.json)

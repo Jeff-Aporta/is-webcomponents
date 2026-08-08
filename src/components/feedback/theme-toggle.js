@@ -12,7 +12,7 @@ import { emit } from '../_shared/emit.js';
  *      (fallback: document.documentElement)
  *   2. Alterna theme-dark / theme-light + data-theme en ese contenedor
  *   3. Refleja `dark` en el host
- *   4. Emite `theme-toggle` { detail: { theme, dark, container } }
+ *   4. Emite `is-theme-change` { detail: { theme, dark, container } }
  *
  * Attributes
  *   dark  boolean (reflected) — tema actual (dark=true → icono de sol / próximo click a light)
@@ -118,13 +118,12 @@ import { emit } from '../_shared/emit.js';
       applyTheme(container, next);
       this.#applying = false;
       this.#render();
-      emit(this, 'theme-toggle', { theme: next, dark: next === 'dark', container });
-      // Tambien emite 'is-theme-change' en document para que modulos
-      // globales (highlight-pre, demos, etc.) reaccionen sin necesidad
-      // de conocer el contenedor concreto donde se aplico el tema.
-      document.dispatchEvent(new CustomEvent('is-theme-change', {
-        detail: { theme: next, dark: next === 'dark' },
-      }));
+      // Un solo evento para la transicion de tema: 'is-theme-change'.
+      // Antes se emitian dos nombres ('theme-toggle' en el host, sin prefijo,
+      // y 'is-theme-change' en document). Como emit() ya sale con
+      // bubbles+composed, este llega igual a los listeners de document
+      // (highlight-code, cdn-snippet, demos) sin dispararlo dos veces.
+      emit(this, 'is-theme-change', { theme: next, dark: next === 'dark', container });
     };
 
     /** Re-sincroniza el icono desde fuera (p.ej. is-context por postMessage)

@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./skeleton.js
 style: ./skeleton.css
-preview: ../../previews/feedback/is-skeleton.html
+preview: ../../previews/feedback/is-skeleton.json
 ---
 # `<is-skeleton>`
 
@@ -137,4 +137,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./skeleton.js)
 - [CSS](./skeleton.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-skeleton.html)
+- [Preview](../../previews/feedback/is-skeleton.json)

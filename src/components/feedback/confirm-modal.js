@@ -2,6 +2,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
+import { createPopupDismiss } from '../_shared/popup-dismiss.js';
+import '../actions/button.js';
 
 /**
  * <is-confirm-modal> — Web Component (vanilla, zero dependencies).
@@ -38,8 +40,8 @@ import { ElementBase } from '../_shared/element-base.js';
         <h2 class="heading" part="heading" hidden></h2>
         <div class="message" part="message"><span class="message-text"></span><slot name="message"></slot></div>
         <div class="actions" part="actions">
-          <span class="cancel-wrap"><slot name="cancel"><button type="button" class="cancel" data-confirm-cancel>Cancelar</button></slot></span>
-          <span class="confirm-wrap"><slot name="confirm"><button type="button" class="confirm" data-confirm-confirm>Aceptar</button></slot></span>
+          <span class="cancel-wrap"><slot name="cancel"><is-button variant="text" color="neutral" class="cancel" data-confirm-cancel>Cancelar</is-button></slot></span>
+          <span class="confirm-wrap"><slot name="confirm"><is-button color="brand" class="confirm" data-confirm-confirm>Aceptar</is-button></slot></span>
         </div>
       </div>
     </div>
@@ -56,6 +58,13 @@ import { ElementBase } from '../_shared/element-base.js';
     #trigger = null;
     #onTriggerClick = null;
     #lastFocus = null;
+
+    // El click fuera lo resuelve el propio backdrop (ver constructor), así que
+    // aquí solo vive el Escape. scrollLock: el modal bloquea el fondo.
+    #dismiss = createPopupDismiss(this, {
+      onEscape: () => { if (this.hasAttribute('open')) this.#cancel(); },
+      scrollLock: true,
+    });
 
     constructor() {
       super();
@@ -87,13 +96,12 @@ import { ElementBase } from '../_shared/element-base.js';
       this.#bindTrigger();
       this.#syncHeading();
       this.#syncMessage();
-      document.addEventListener('keydown', this.#onKeydown);
       if (this.hasAttribute('open')) this.#showUI();
     }
 
     onDisconnected() {
       this.#unbindTrigger();
-      document.removeEventListener('keydown', this.#onKeydown);
+      this.#dismiss.detach();
     }
 
     onAttributeChanged(name, oldVal, newVal) {
@@ -133,6 +141,7 @@ import { ElementBase } from '../_shared/element-base.js';
     }
 
     #showUI() {
+      this.#dismiss.attach();
       this.#lastFocus = document.activeElement;
       this.#backdrop.hidden = false;
       requestAnimationFrame(() => {
@@ -143,14 +152,11 @@ import { ElementBase } from '../_shared/element-base.js';
     }
 
     #hideUI() {
+      this.#dismiss.detach();
       this.#backdrop.hidden = true;
       this.#lastFocus?.focus?.();
       this.#lastFocus = null;
     }
-
-    #onKeydown = (e) => {
-      if (e.key === 'Escape' && this.hasAttribute('open')) this.#cancel();
-    };
 
     #bindTrigger() {
       const id = this.getAttribute('for');

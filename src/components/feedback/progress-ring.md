@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./progress-ring.js
 style: ./progress-ring.css
-preview: ../../previews/feedback/is-progress-ring.html
+preview: ../../previews/feedback/is-progress-ring.json
 ---
 # `<is-progress-ring>`
 
@@ -151,4 +151,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./progress-ring.js)
 - [CSS](./progress-ring.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-progress-ring.html)
+- [Preview](../../previews/feedback/is-progress-ring.json)

@@ -6,13 +6,19 @@ category: feedback
 status: public
 source: ./toast-item.js
 style: ./toast-item.css
-preview: ../../previews/feedback/is-toast.html
+preview: ../../previews/feedback/is-toast-item.json
 ---
 # `<is-toast-item>`
 
 ## Propósito
 
-Contenedor fijo de notificaciones. Crea ítems con create() o declara <is-toast-item>.
+Un toast individual: la tarjeta que muestra el mensaje, su icono opcional, el
+botón de cerrar y la barra de countdown que se agota hasta auto-ocultarse
+(pausa al pasar el ratón o al enfocar dentro).
+
+Es la pieza que apila `<is-toast>`; normalmente no se instancia a mano, pero
+puede declararse suelto cuando se quiere un aviso fijo en una zona concreta.
+No tiene `create()` — eso vive en `<is-toast>` (ver [toast.md](./toast.md)).
 
 Este módulo registra `<is-toast-item>`.
 
@@ -178,4 +184,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`,
 - [JavaScript](./toast-item.js)
 - [CSS](./toast-item.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-toast.html)
+- [Preview](../../previews/feedback/is-toast-item.json)

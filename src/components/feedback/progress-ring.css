@@ -66,10 +66,10 @@
   letter-spacing: -0.03em;
   line-height: 1.05;
   color: var(--is-text, inherit);
-}
 
-.label[hidden] {
-  display: none !important;
+  &[hidden] {
+    display: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

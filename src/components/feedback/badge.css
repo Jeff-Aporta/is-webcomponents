@@ -23,17 +23,17 @@
   color: var(--_text);
   box-sizing: border-box;
   white-space: nowrap;
-}
 
-.badge .prefix:not(:empty),
-.badge .suffix:not(:empty) {
-  display: inline-flex;
-  align-items: center;
-}
+  & .prefix:not(:empty),
+  & .suffix:not(:empty) {
+    display: inline-flex;
+    align-items: center;
+  }
 
-.badge .prefix:empty,
-.badge .suffix:empty {
-  display: none;
+  & .prefix:empty,
+  & .suffix:empty {
+    display: none;
+  }
 }
 
 :host([pill]) .badge {

@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./spinner.js
 style: ./spinner.css
-preview: ../../previews/feedback/is-spinner.html
+preview: ../../previews/feedback/is-spinner.json
 ---
 # `<is-spinner>`
 
@@ -135,4 +135,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./spinner.js)
 - [CSS](./spinner.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-spinner.html)
+- [Preview](../../previews/feedback/is-spinner.json)

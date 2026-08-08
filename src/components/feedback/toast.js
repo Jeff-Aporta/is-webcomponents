@@ -2,7 +2,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import './toast-item.js';
 import { defineElement } from '../_shared/define.js';
 import { ElementBase } from '../_shared/element-base.js';
-import { INTENT } from '../_shared/intent.js';
+import { normalizeIntent } from '../_shared/intent.js';
 
 /**
  * <is-toast> — Web Component (vanilla).
@@ -46,7 +46,6 @@ import { INTENT } from '../_shared/intent.js';
     'top-start', 'top-center', 'top-end',
     'bottom-start', 'bottom-center', 'bottom-end'
   ];
-  const VALID_COLOR = INTENT;
   const DEFAULT_ICONS = {
     brand: 'mdi:information',
     success: 'mdi:check-circle',
@@ -93,8 +92,7 @@ import { INTENT } from '../_shared/intent.js';
     async create(message, options = {}) {
       await customElements.whenDefined('is-toast-item');
       const item = document.createElement('is-toast-item');
-      const tone = options.color ?? options.variant;
-      const color = VALID_COLOR.includes(tone) ? tone : 'neutral';
+      const color = normalizeIntent(options.color ?? options.variant, 'neutral');
       item.color = color;
 
       const duration = options.duration != null ? Number(options.duration) : 5000;
@@ -172,8 +170,7 @@ import { INTENT } from '../_shared/intent.js';
     /** Actualiza un toast vivo: mensaje, color, icono y relanza el timer. */
     #update(item, message, options = {}) {
       if (!item?.isConnected) return;
-      const tone = options.color ?? options.variant ?? item.color;
-      const color = VALID_COLOR.includes(tone) ? tone : 'neutral';
+      const color = normalizeIntent(options.color ?? options.variant ?? item.color, 'neutral');
       item.color = color;
       // Reemplazar texto conservando el slot icon.
       for (const n of [...item.childNodes]) {

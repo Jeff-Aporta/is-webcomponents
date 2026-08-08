@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./badge.js
 style: ./badge.css
-preview: ../../previews/feedback/is-badge.html
+preview: ../../previews/feedback/is-badge.json
 ---
 # `<is-badge>`
 
@@ -168,4 +168,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./badge.js)
 - [CSS](./badge.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-badge.html)
+- [Preview](../../previews/feedback/is-badge.json)

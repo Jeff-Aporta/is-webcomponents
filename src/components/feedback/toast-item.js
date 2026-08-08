@@ -2,7 +2,8 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
-import { INTENT } from '../_shared/intent.js';
+import { INTENT, normalizeIntent } from '../_shared/intent.js';
+import '../actions/button.js';
 
 /**
  * <is-toast-item> — Web Component (vanilla).
@@ -31,9 +32,15 @@ import { INTENT } from '../_shared/intent.js';
         <slot name="icon"><slot name="start"></slot></slot>
       </span>
       <div part="message" class="message"><slot></slot></div>
-      <button type="button" part="close-button" class="close" aria-label="Cerrar">
+      <is-button
+        class="close"
+        variant="text"
+        color="neutral"
+        label="Cerrar"
+        exportparts="button: close-button"
+      >
         <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-      </button>
+      </is-button>
       <div part="progress" class="progress" hidden aria-hidden="true">
         <div class="progress-bar"></div>
       </div>
@@ -92,7 +99,7 @@ import { INTENT } from '../_shared/intent.js';
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
-        this.setAttribute('color', 'neutral');
+        this.setAttribute('color', normalizeIntent(newVal, 'neutral'));
         return;
       }
       if (name === 'open') {
@@ -107,13 +114,10 @@ import { INTENT } from '../_shared/intent.js';
       }
     }
 
-    get color() {
-      const v = this.getAttribute('color');
-      return VALID_COLOR.includes(v) ? v : 'neutral';
-    }
+    get color() { return normalizeIntent(this.getAttribute('color'), 'neutral'); }
     set color(v) {
       if (v == null || v === '') this.removeAttribute('color');
-      else this.setAttribute('color', VALID_COLOR.includes(v) ? v : 'neutral');
+      else this.setAttribute('color', normalizeIntent(v, 'neutral'));
     }
 
     get duration() {

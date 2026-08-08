@@ -45,20 +45,11 @@
   pointer-events: none;
   width: max-content;
   max-width: min(24rem, calc(100vw - 2rem));
-}
 
-:host([placement^="bottom"]) .stack {
-  flex-direction: column-reverse;
-}
-
-:host([placement$="center"]) .stack {
-  margin-inline: auto;
-}
-:host([placement$="end"]) .stack {
-  margin-inline-start: auto;
-}
-:host([placement$="start"]) .stack {
-  margin-inline-end: auto;
+  :host([placement^="bottom"]) & { flex-direction: column-reverse; }
+  :host([placement$="center"]) & { margin-inline: auto; }
+  :host([placement$="end"]) & { margin-inline-start: auto; }
+  :host([placement$="start"]) & { margin-inline-end: auto; }
 }
 
 ::slotted(is-toast-item) {

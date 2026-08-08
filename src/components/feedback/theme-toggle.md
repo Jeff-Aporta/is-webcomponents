@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./theme-toggle.js
 style: ./theme-toggle.css
-preview: ../../previews/feedback/is-theme-toggle.html
+preview: ../../previews/feedback/is-theme-toggle.json
 ---
 # `<is-theme-toggle>`
 
@@ -17,7 +17,7 @@ Alterna el tema del contenedor más cercano
 / .theme-dark|.theme-light / [data-theme];
 si no hay, <html>).
 Compone is-check-icon-button (noche ↔ sol).
-Emite theme-toggle con detail.theme y
+Emite is-theme-change con detail.theme y
 detail.container.
 
 Este módulo registra `<is-theme-toggle>`.
@@ -73,8 +73,10 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `theme-toggle` | sí | sí | sí | no |
-| `is-theme-change` | sí | no/según fuente | no/según fuente | no |
+| `is-theme-change` | sí | sí | sí | no |
+
+`detail`: `{ theme: 'light' \| 'dark', dark: boolean, container: Element }`.
+Al ser `composed` + `bubbles`, también se puede escuchar en `document`.
 
 ### Métodos y propiedades públicas
 
@@ -113,7 +115,7 @@ Documentación de cabecera preservada desde fuente:
 >      (fallback: document.documentElement)
 >   2. Alterna theme-dark / theme-light + data-theme en ese contenedor
 >   3. Refleja `dark` en el host
->   4. Emite `theme-toggle` { detail: { theme, dark, container } }
+>   4. Emite `is-theme-change` { detail: { theme, dark, container } }
 > Attributes
 >   dark  boolean (reflected) — tema actual (dark=true → icono de sol / próximo click a light)
 
@@ -161,4 +163,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./theme-toggle.js)
 - [CSS](./theme-toggle.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-theme-toggle.html)
+- [Preview](../../previews/feedback/is-theme-toggle.json)
