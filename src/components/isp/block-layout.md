@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./block-layout.js
 style: ./block-layout.css
-preview: ../../previews/isp/is-block-layout.html
+preview: ../../previews/isp/is-block-layout.json
 ---
 # `<is-block-layout>`
 
@@ -37,6 +37,26 @@ paga un `ResizeObserver`. Tampoco para layout flex/grid — para eso están
 ```js
 import './block-layout.js';
 ```
+
+## Cuerpo JSON (json2html / html2json)
+
+Mismo codec compacto que `<is-form>`: `[tag, attrs?, …hijos]`.
+
+```js
+block.fromJSON({
+  body: [
+    ['p', 'Hola'],
+    ['strong', 'desde JSON'],
+  ],
+});
+block.html2json();
+```
+
+| Método | Uso |
+| --- | --- |
+| `json2html(body)` / `html2json()` | Light DOM ↔ JSON |
+| `toJSON()` / `fromJSON(json)` | `{ inline, cscroll, body }` |
+| `IsBlockLayout.json2html` / `html2json` | Estáticos |
 
 ## Ejemplo mínimo
 
@@ -126,6 +146,10 @@ para el `overflow: auto`.
 | --- | --- |
 | `content` | El `<slot>` del contenido. |
 
+### Custom states
+
+No expone custom states.
+
 ### CSS custom properties
 
 | Token | Uso |
@@ -133,6 +157,10 @@ para el `overflow: auto`.
 | `--clientw` | Escrita por el componente: ancho en px sin unidad. |
 | `--lerpw` | Escrita por el componente: `lerpw('sm','xl')`. |
 
+
+### Integración con formularios
+
+No declara integración form-associated.
 ## Comportamiento
 
 Anclas de breakpoint idénticas a ISP: `xs: 0`, `sm: 480`, `md: 600`, `lg: 800`,
@@ -182,4 +210,4 @@ Contenedor sin semántica propia: no altera el árbol de accesibilidad.
 - [JavaScript](./block-layout.js)
 - [CSS](./block-layout.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-block-layout.html)
+- [Preview](../../previews/isp/is-block-layout.json)

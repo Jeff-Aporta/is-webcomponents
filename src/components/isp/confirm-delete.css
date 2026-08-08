@@ -1,52 +1,26 @@
-/* Estados del host en `:host([attr])` a nivel superior; `&[attr]` anidado
-   dentro de `:host {}` compila a `:host[attr]` y nunca matchea. */
+/* El backdrop, la caja, el radio, la sombra y el scroll los pone el
+   <is-dialog> interno (y `_shared/modal-chrome.css` a través de él). Aquí sólo
+   queda lo propio del contenido. */
 :host {
   --is-confirm-delete-accent: var(--is-color-danger-500, #fa5252);
   display: contents;
   font-family: var(--is-sans, inherit);
 
-  /* Capa de bloqueo: fixed obligatorio, si no ocuparía sitio en el flujo. */
-  .backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: var(--is-z-modal, 1100);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1em;
-    background: color-mix(in srgb, var(--is-bg, #101418) 68%, transparent);
-  }
-
-  .backdrop[hidden] { display: none; }
-
-  .modal {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85em;
-    inline-size: min(100%, 26em);
-    max-block-size: 90vh;
-    overflow: auto;
-    box-sizing: border-box;
-    padding: 1.25em;
-    background: var(--is-bg-elevated, var(--is-bg, #101418));
-    color: var(--is-text, inherit);
-    border: 1px solid var(--is-border, #2a3038);
-    border-radius: var(--is-radius-md, 0.75em);
-    box-shadow: var(--is-shadow-lg, 0 1.5em 3em rgb(0 0 0 / 0.35));
+  .dlg {
+    --width: 26em;
   }
 
   .heading {
     display: flex;
     align-items: center;
     gap: 0.4em;
-    margin: 0;
-    font-size: 1.15em;
+    font-size: 1em;
     font-weight: 600;
     color: var(--is-confirm-delete-accent);
   }
 
   .message {
-    margin: 0;
+    margin: 0 0 0.85em;
     font-size: 0.95em;
     color: var(--is-text-soft, inherit);
   }
@@ -69,9 +43,8 @@
     justify-content: flex-end;
     align-items: center;
     gap: 0.5em;
-    margin-block-start: 0.25em;
   }
 }
 
 /* Mientras corre el borrado el diálogo no acepta interacción nueva. */
-:host([loading]) .modal { cursor: progress; }
+:host([loading]) .dlg { cursor: progress; }

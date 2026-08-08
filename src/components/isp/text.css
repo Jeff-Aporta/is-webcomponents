@@ -1,9 +1,12 @@
-/* <is-text> — texto en línea con color semántico y line-clamp.
+/* <is-text> — texto en línea con color semántico / CSS libre / current + mix.
    Índice de --vars:
-     --text-clr : color tipográfico resuelto (solo cuando hay `color`).
-     --mx-lns   : número máximo de líneas del clamp (lo escribe el JS). */
+     --text-clr       : color tipográfico resuelto.
+     --text-mix       : % hacia --text-mix-with (solo con attr mix).
+     --text-mix-with  : destino del mix (default: texto del tema).
+     --mx-lns         : líneas del clamp (lo escribe el JS). */
 
 :host {
+  --text-mix-with: var(--is-text, currentColor);
   display: inline;
   color: var(--text-clr, inherit);
   font: inherit;
@@ -13,15 +16,29 @@
 
 :host([hidden]) { display: none; }
 
-/* Colores semánticos: siempre caen a tokens del tema, nunca a un literal. */
-:host([color="brand"]) { --text-clr: var(--is-brand-text, var(--is-accent, var(--is-color-brand, var(--is-text)))); }
+/* Con mix: atenuar / aclarar / oscurecer vía color-mix. */
+:host([mix]),
+:host([data-has-mix]) {
+  color: var(--text-clr, currentColor);
+  color: color-mix(
+    in srgb,
+    var(--text-clr, currentColor),
+    var(--text-mix-with) var(--text-mix, 0%)
+  );
+}
+
+/* Semánticos → tokens del tema. */
+:host([color="brand"]) {
+  --text-clr: var(--is-brand-text, var(--is-accent, var(--is-color-brand, var(--is-text))));
+}
 :host([color="neutral"]) { --text-clr: var(--is-text-soft, var(--is-text)); }
 :host([color="info"]) { --text-clr: var(--is-info-text, var(--is-color-info, var(--is-text))); }
 :host([color="success"]) { --text-clr: var(--is-success-text, var(--is-color-success, var(--is-text))); }
 :host([color="warning"]) { --text-clr: var(--is-warning-text, var(--is-color-warning, var(--is-text))); }
 :host([color="danger"]) { --text-clr: var(--is-danger-text, var(--is-color-danger, var(--is-text))); }
 
-/* Clamp tipográfico. Necesita display:-webkit-box en el propio host. */
+:host([color="current"]) { --text-clr: currentColor; }
+
 :host([lines]) {
   display: -webkit-box;
   box-sizing: border-box;
@@ -34,9 +51,3 @@
   word-break: break-word;
   white-space: normal;
 }
-
-/* `max-height` con un factor hardcoded (1.3) recorta la última línea cuando el
-   `line-height` heredado es > 1.3 (típico 1.4–1.6), y entra en conflicto con
-   `-webkit-line-clamp`, que ya trunca por líneas reales. `-webkit-line-clamp`
-   hace el trabajo solo; mantener el host con altura libre garantiza que el
-   elipsis caiga exactamente al final de la N-ésima línea visible. */
