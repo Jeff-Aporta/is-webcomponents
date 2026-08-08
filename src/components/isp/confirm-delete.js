@@ -2,6 +2,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import '../actions/button.js';
 import '../forms/input.js';
 import '../media/icon.js';
+import '../layout/dialog.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
@@ -13,6 +14,11 @@ import { ElementBase } from '../_shared/element-base.js';
  * eliminar permanece deshabilitado hasta que el usuario RE-ESCRIBE la clave del
  * registro. `<is-confirm-modal>` y `<is-popconfirm>` confirman con un clic; este
  * añade la fricción deliberada para borrados irreversibles.
+ *
+ * El ciclo de vida del modal (focus-trap, Escape, backdrop, restore de foco,
+ * animaciones) NO se implementa aquí: se COMPONE un `<is-dialog>` dentro del
+ * shadow root y el contenido va como light DOM suyo, que es justo lo que el
+ * focus-trap de `ModalBase` recorre. Antes este componente no tenía trap.
  *
  * Atributos
  *   for            string  — id del trigger que abre el diálogo
@@ -28,14 +34,20 @@ import { ElementBase } from '../_shared/element-base.js';
  *   maxlength      número  — límite del campo de confirmación
  *   case-sensitive boolean — por defecto se compara sin distinguir mayúsculas
  *   loading        boolean — bloquea ambos botones mientras corre el borrado
+ *   light-dismiss  boolean — OPT-IN: cerrar al hacer click en el backdrop.
+ *                  Antes cerraba siempre; ahora hay que pedirlo, igual que en
+ *                  <is-dialog> / <is-drawer>.
  *
  * Slots
- *   message      contenido rico en lugar del atributo `message`
+ *   message       contenido rico en lugar del atributo `message`
  *   description   detalle adicional bajo los campos
  *
  * Eventos (bubbles + composed)
+ *   is-show / is-after-show / is-hide (cancelable) / is-after-hide
+ *                       — ciclo estándar, re-emitidos por el <is-dialog> interno.
  *   is-confirm-delete   detail: { value } — solo se emite si la clave coincide
- *   is-cancel-delete    detail: {}
+ *   is-cancel-delete    detail: {} — evento semántico ADICIONAL, acompaña a
+ *                       `is-hide` cuando el cierre lo pide el usuario.
  *
  * CSS Parts: ::part(backdrop) ::part(base) ::part(heading) ::part(message)
  *            ::part(fields) ::part(actions)
@@ -43,38 +55,40 @@ import { ElementBase } from '../_shared/element-base.js';
 
 (() => {
   const TEMPLATE = document.createElement('template');
+  // ponytail: `tabindex="0"` en los custom elements NO es decorativo. El
+  // focus-trap de ModalBase busca `[tabindex]:not([tabindex="-1"])` y compañía;
+  // <is-button>/<is-input> usan `delegatesFocus`, así que el host no matchea
+  // ningún selector focuseable y el trap se quedaría sin anclas (Tab muerto).
   TEMPLATE.innerHTML = /* html */ `
-    <div part="backdrop" class="backdrop" hidden>
-      <div part="base" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="heading">
-        <h2 part="heading" class="heading" id="heading">
-          <is-icon icon="mdi:trash-can-outline" aria-hidden="true"></is-icon>
-          <span class="heading-text"></span>
-        </h2>
-        <div part="message" class="message"><span class="message-text"></span><slot name="message"></slot></div>
-        <div part="fields" class="fields">
-          <is-input class="current" label-placement="float" readonly></is-input>
-          <is-input class="confirm" label-placement="float" required autocomplete="off"></is-input>
-          <p class="help"></p>
-        </div>
-        <slot name="description"></slot>
-        <div part="actions" class="actions">
-          <is-button class="cancel" color="neutral" variant="outlined">Cancelar</is-button>
-          <is-button class="delete" color="danger" disabled>Eliminar</is-button>
-        </div>
+    <is-dialog class="dlg" exportparts="backdrop, dialog: base">
+      <span slot="label" part="heading" class="heading">
+        <is-icon icon="mdi:trash-can-outline" aria-hidden="true"></is-icon>
+        <span class="heading-text"></span>
+      </span>
+      <div part="message" class="message"><span class="message-text"></span><slot name="message"></slot></div>
+      <div part="fields" class="fields">
+        <is-input class="current" label-placement="float" readonly tabindex="0"></is-input>
+        <is-input class="confirm" label-placement="float" required autocomplete="off" autofocus tabindex="0"></is-input>
+        <p class="help"></p>
       </div>
-    </div>
+      <slot name="description"></slot>
+      <div part="actions" class="actions" slot="footer">
+        <is-button class="cancel" color="neutral" variant="outlined" data-dialog="close" tabindex="0">Cancelar</is-button>
+        <is-button class="delete" color="danger" disabled tabindex="0">Eliminar</is-button>
+      </div>
+    </is-dialog>
   `;
 
   const OBSERVED = [
     'for', 'open', 'heading', 'entity', 'confirm-value', 'confirm-label',
     'pk-label', 'message', 'delete-label', 'cancel-label', 'maxlength',
-    'case-sensitive', 'loading'
+    'case-sensitive', 'loading', 'light-dismiss'
   ];
 
   class IsConfirmDelete extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #backdrop;
+    #dlg;
     #headingText;
     #messageText;
     #messageSlot;
@@ -84,7 +98,6 @@ import { ElementBase } from '../_shared/element-base.js';
     #deleteBtn;
     #cancelBtn;
     #trigger = null;
-    #lastFocus = null;
 
     constructor() {
       super();
@@ -92,7 +105,7 @@ import { ElementBase } from '../_shared/element-base.js';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       adoptCss(shadow, import.meta.url);
 
-      this.#backdrop = shadow.querySelector('.backdrop');
+      this.#dlg = shadow.querySelector('.dlg');
       this.#headingText = shadow.querySelector('.heading-text');
       this.#messageText = shadow.querySelector('.message-text');
       this.#messageSlot = shadow.querySelector('slot[name="message"]');
@@ -104,27 +117,25 @@ import { ElementBase } from '../_shared/element-base.js';
     }
 
     onConnected() {
-      this.#upgradeProperties();
       this.#confirmField.addEventListener('is-input', this.#onConfirmInput);
       this.#deleteBtn.addEventListener('click', this.#onDelete);
-      this.#cancelBtn.addEventListener('click', this.#onCancel);
-      this.#backdrop.addEventListener('click', this.#onBackdropClick);
       this.#messageSlot.addEventListener('slotchange', this.#syncMessage);
-      document.addEventListener('keydown', this.#onKeydown);
+      this.#dlg.addEventListener('is-hide', this.#onDialogHide);
+      this.#dlg.addEventListener('is-after-hide', this.#onDialogAfterHide);
       this.#bindTrigger();
       this.#syncTexts();
       this.#syncMessage();
       this.#syncGate();
+      this.#syncLightDismiss();
       if (this.open) this.#showUI();
     }
 
     onDisconnected() {
       this.#confirmField.removeEventListener('is-input', this.#onConfirmInput);
       this.#deleteBtn.removeEventListener('click', this.#onDelete);
-      this.#cancelBtn.removeEventListener('click', this.#onCancel);
-      this.#backdrop.removeEventListener('click', this.#onBackdropClick);
       this.#messageSlot.removeEventListener('slotchange', this.#syncMessage);
-      document.removeEventListener('keydown', this.#onKeydown);
+      this.#dlg.removeEventListener('is-hide', this.#onDialogHide);
+      this.#dlg.removeEventListener('is-after-hide', this.#onDialogAfterHide);
       this.#unbindTrigger();
     }
 
@@ -133,6 +144,7 @@ import { ElementBase } from '../_shared/element-base.js';
       else if (name === 'open') { if (this.open) this.#showUI(); else this.#hideUI(); }
       else if (name === 'message') this.#syncMessage();
       else if (name === 'loading') this.#syncGate();
+      else if (name === 'light-dismiss') this.#syncLightDismiss();
       else { this.#syncTexts(); this.#syncGate(); }
     }
 
@@ -165,6 +177,9 @@ import { ElementBase } from '../_shared/element-base.js';
     get loading() { return this.hasAttribute('loading'); }
     set loading(v) { this.toggleAttribute('loading', !!v); }
 
+    get lightDismiss() { return this.hasAttribute('light-dismiss'); }
+    set lightDismiss(v) { this.toggleAttribute('light-dismiss', !!v); }
+
     /** `true` cuando lo escrito coincide con `confirm-value`. */
     get confirmed() {
       const target = this.confirmValue.trim();
@@ -187,16 +202,6 @@ import { ElementBase } from '../_shared/element-base.js';
     }
 
     // ---- privados ---------------------------------------------------------
-
-    #upgradeProperties() {
-      for (const p of ['open', 'confirmValue', 'entity', 'pkLabel', 'caseSensitive', 'loading']) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
-    }
 
     #syncTexts() {
       const entity = this.entity;
@@ -225,6 +230,11 @@ import { ElementBase } from '../_shared/element-base.js';
         : (this.getAttribute('message') || '¿Confirma que desea eliminar este registro?');
     };
 
+    /** `light-dismiss` es opt-in y se delega tal cual al <is-dialog>. */
+    #syncLightDismiss() {
+      this.#dlg.toggleAttribute('light-dismiss', this.lightDismiss);
+    }
+
     /** Única fuente de verdad del "candado" del botón destructivo. */
     #syncGate() {
       const enabled = this.confirmed && !this.loading;
@@ -241,32 +251,26 @@ import { ElementBase } from '../_shared/element-base.js';
       emit(this, 'is-confirm-delete', { value: this.#confirmField.value });
     };
 
-    #onCancel = () => {
-      if (this.loading) return;
+    /**
+     * `is-hide` sólo lo emite ModalBase cuando el cierre lo PIDE el usuario
+     * (Escape, backdrop, botón Cancelar): `hide()` programático no pasa por
+     * aquí. Es justo la semántica que tenía `is-cancel-delete`.
+     */
+    #onDialogHide = (e) => {
+      if (this.loading) { e.preventDefault(); return; }
       emit(this, 'is-cancel-delete', {});
-      this.hide();
     };
 
-    #onBackdropClick = (e) => {
-      if (e.target === this.#backdrop) this.#onCancel();
-    };
-
-    #onKeydown = (e) => {
-      if (e.key === 'Escape' && this.open) this.#onCancel();
-    };
+    #onDialogAfterHide = () => { this.removeAttribute('open'); };
 
     #showUI() {
-      this.#lastFocus = document.activeElement;
       this.reset();
       this.#syncTexts();
-      this.#backdrop.hidden = false;
-      requestAnimationFrame(() => this.#confirmField.focus?.());
+      this.#dlg.show();
     }
 
     #hideUI() {
-      this.#backdrop.hidden = true;
-      this.#lastFocus?.focus?.();
-      this.#lastFocus = null;
+      this.#dlg.hide();
     }
 
     #bindTrigger() {
