@@ -15,11 +15,11 @@ const root = dirname(here);
    button, tag, callout, toast-item, stat, badge. */
 
 const VARIANT_DEFAULTS = [
-  { file: 'components/actions/button.js', expected: 'brand' },
-  { file: 'components/feedback/tag.js', expected: 'brand' },
-  { file: 'components/layout/callout.js', expected: 'brand' },
-  { file: 'components/feedback/toast-item.js', expected: 'brand' },
-  { file: 'components/data/stat.js', expected: 'brand' },
+  { file: 'src/components/actions/button.js', expected: 'brand' },
+  { file: 'src/components/feedback/tag.js', expected: 'brand' },
+  { file: 'src/components/layout/callout.js', expected: 'brand' },
+  { file: 'src/components/feedback/toast-item.js', expected: 'brand' },
+  { file: 'src/components/data/stat.js', expected: 'brand' },
 ];
 
 test('Todos los componentes con color tienen default="brand" (no "neutral")', () => {

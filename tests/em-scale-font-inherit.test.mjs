@@ -76,20 +76,27 @@ test('controles nativos en CSS con métricas em llevan font inherit', async () =
   const criticos = [
     ['actions/fab.css', /\.fab\s*\{/],
     ['feedback/tag.css', /\.remove\s*\{/],
-    ['feedback/toast-item.css', /\.close\s*\{/],
     ['forms/pin-input.css', /\.cell\s*\{/],
     ['actions/button.css', /\.btn\s*\{/],
     ['actions/copy-button.css', /\.button\s*\{/],
     ['actions/check-icon-button.css', /\.btn\s*\{/],
   ];
 
+  // El cierre del toast dejó de ser un <button> propio: ahora es <is-button>,
+  // que ya hereda font-size desde su :host. Comprobar el CSS del consumidor
+  // aquí buscaría una regla que no debe existir.
+  const toastJs = await read('feedback', 'toast-item.js');
+  assert.match(toastJs, /<is-button[^>]*class="close"/s,
+    'feedback/toast-item.js: el cierre debe ser <is-button>, no un control nativo');
+
   for (const [rel, bloque] of criticos) {
     const css = await read(...rel.split('/'));
-    const m = css.match(new RegExp(bloque.source + '[^}]*\\}', 's'));
-    assert.ok(m, `${rel}: no se encontró el bloque del control`);
-    assert.match(
-      m[0],
-      /font(?:-size)?:\s*inherit/,
+    // Con CSS anidado el selector aparece varias veces (`&[data-state] .cell`
+    // antes que la regla base): vale con que ALGUNO de esos bloques herede.
+    const bloques = [...css.matchAll(new RegExp(bloque.source + '[^}]*\\}', 'gs'))];
+    assert.ok(bloques.length, `${rel}: no se encontró el bloque del control`);
+    assert.ok(
+      bloques.some((m) => /font(?:-size)?:\s*inherit/.test(m[0])),
       `${rel}: el control nativo debe heredar font para que em escale`,
     );
   }

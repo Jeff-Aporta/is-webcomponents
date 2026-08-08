@@ -32,8 +32,11 @@ test('is-cdn-snippet compacta skills + docs en un solo prompt', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.js'), 'utf8');
   assert.match(src, /SKILL_DOCS/);
   assert.match(src, /buildLlmPrompt/);
-  assert.match(src, /skills\/is-cdn-install\/SKILL\.md/);
-  assert.match(src, /Referencias \(léelas en orden\)/);
+  // El armado del prompt vive en `_shared/llm-agent-prompt.js`: cdn-snippet lo
+  // consume, no lo reimplementa.
+  const prompt = await readFile(join(raiz, 'src/components/_shared/llm-agent-prompt.js'), 'utf8');
+  assert.match(prompt, /## Referencias de este componente/);
+  assert.match(prompt, /skills\/is-cdn-install\/SKILL\.md/);
   assert.doesNotMatch(src, /cdn__docs-list|#renderDocs/);
 });
 

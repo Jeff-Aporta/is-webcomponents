@@ -12,6 +12,9 @@ const root = dirname(here);
 const dist = join(root, 'dist', 'cdn');
 const compRoot = join(root, 'src', 'components');
 
+// Índice de utilidades _shared para el preview «Ecosistema JS».
+await import('./gen-shared-index.mjs');
+
 // Limpieza selectiva: se borran los artefactos de codigo pero NO
 // dist/cdn/assets/. Ahi viven ~317k SVG que no cambian entre builds; borrarlos
 // y recopiarlos en cada corrida hace el build lento y, sobre todo, dispara los
@@ -127,12 +130,25 @@ const externalComponents = {
 // cosas, `.dg-tooltip { position: absolute }`, y el tooltip pasaba a ocupar
 // espacio en el flujo y empujaba el grafico al hacer hover.
 const sharedImports = new Set();
+// Igual que los de `../_shared/`, los parciales locales de carpeta
+// (`@import './_tokens.css'`) se resuelven en el navegador contra el .css
+// publicado: hay que emitirlos por carpeta o dan 404 en silencio.
+const localPartials = new Set();
 for (const file of entries) {
   const cssFile = file.replace(/\.js$/i, '.css');
   let css = '';
   try { css = await readFile(cssFile, 'utf8'); } catch { continue; }
-  for (const m of css.matchAll(/@import\s+url\(\s*['"]\.\.\/_shared\/([\w.-]+\.css)['"]\s*\)/g)) {
+  for (const m of css.matchAll(/@import\s+(?:url\(\s*)?['"]\.\.\/_shared\/([\w.-]+\.css)['"]/g)) {
     sharedImports.add(m[1]);
+  }
+  for (const m of css.matchAll(/@import\s+(?:url\(\s*)?['"]\.\/([\w.-]+\.css)['"]/g)) {
+    // Origen: la carpeta FISICA del css. Destino: la carpeta de publicacion,
+    // que para algunos tags no coincide (chart.js vive en charts/ y se publica
+    // en data-viz/ segun el manifest).
+    localPartials.add(JSON.stringify({
+      from: join(dirname(cssFile), m[1]),
+      to: `${folderFor(file)}/${m[1]}`,
+    }));
   }
 }
 for (const name of sharedImports) {
@@ -141,7 +157,15 @@ for (const name of sharedImports) {
   console.log(`  ${('_shared/' + name).padEnd(28)} css (destino de @import)`);
 }
 
+for (const raw of localPartials) {
+  const { from, to } = JSON.parse(raw);
+  await mkdir(join(dist, dirname(to)), { recursive: true });
+  await bundleCss(from, join(dist, to));
+  console.log(`  ${to.padEnd(28)} css (parcial de carpeta)`);
+}
+
 const scrollbarsIn = join(compRoot, '_shared', 'scrollbars.css');
+const hostBaseIn = join(compRoot, '_shared', 'host-base.css');
 const emittedFolders = new Set();
 
 for (const inFile of entries) {
@@ -153,10 +177,12 @@ for (const inFile of entries) {
   const outJs = join(outDir, `${tag}.min.js`);
   const outCss = join(outDir, `${tag}.min.css`);
 
-  // adoptCss busca ./scrollbars.css junto al modulo: emitirlo una vez por carpeta.
+  // adoptCss busca ./host-base.css y ./scrollbars.css junto al modulo:
+  // emitirlos una vez por carpeta.
   if (!emittedFolders.has(folder)) {
     emittedFolders.add(folder);
     await bundleCss(scrollbarsIn, join(outDir, 'scrollbars.css'));
+    await bundleCss(hostBaseIn, join(outDir, 'host-base.css'));
   }
 
   await bundleJs(inFile, outJs, [externalComponents]);

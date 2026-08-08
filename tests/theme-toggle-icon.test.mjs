@@ -96,10 +96,17 @@ test('theme-toggle expone forceSync() publico para re-sincronizar desde fuera', 
     'forceSync() debe releer el tema del container via readTheme()');
 });
 
-test('theme-toggle sigue emitiendo `is-theme-change` en document', () => {
+// El evento ya no se dispara a mano sobre `document`: `emit()` sale con
+// bubbles + composed, así que un solo `is-theme-change` desde el host llega
+// igual a los listeners globales. Disparar los dos los invocaba dos veces.
+test('theme-toggle emite `is-theme-change` y llega a document', () => {
   assert.ok(
-    /document\.dispatchEvent\(new CustomEvent\(['"]is-theme-change['"]/.test(themeToggleSrc),
-    'el toggle debe emitir is-theme-change en document para modulos globales',
+    /emit\(this, ['"]is-theme-change['"]/.test(themeToggleSrc),
+    'el toggle debe emitir is-theme-change',
+  );
+  assert.ok(
+    !/document\.dispatchEvent\(new CustomEvent\(['"]is-theme-change['"]/.test(themeToggleSrc),
+    'no debe además dispararlo a mano en document: llegaría duplicado',
   );
 });
 

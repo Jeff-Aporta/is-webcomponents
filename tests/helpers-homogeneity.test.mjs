@@ -17,7 +17,11 @@ const previewsDir = join(root, 'src', 'previews', 'helpers');
 const { default: manifest } = await import('../manifest.js');
 const failures = [];
 
-const INTERNAL_JS = new Set(['floating.js']); // documentado como internal
+const INTERNAL_JS = new Set([
+  'floating.js', // building block interno
+  'md-lite.js', // util compartida (no tag)
+  'md-editor-api.js', // cliente CRUD del editor (no tag)
+]);
 
 const helperJs = readdirSync(helpersDir).filter((f) => f.endsWith('.js'));
 for (const file of helperJs) {

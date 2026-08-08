@@ -28,13 +28,13 @@ const ANT_DESIGN = [
   { antd: 'Layout',             ours: 'is-split-panel',          tier: 'core' },     // Header/Sider/Content → split-panel + main
   { antd: 'Masonry',            ours: null,                      tier: 'nice' },     // layout avanzado (CSS columns o masonry nativo)
   { antd: 'Space',              ours: null,                      tier: 'pure-css' }, // CSS gap/margin
-  { antd: 'Splitter',           ours: null,                      tier: 'core' },     // split-panel hace algo similar
+  { antd: 'Splitter',           ours: 'is-split-panel',          tier: 'core' },
 
   // ── Navigation (7) ──
-  { antd: 'Anchor',             ours: null,                      tier: 'core' },
+  { antd: 'Anchor',             ours: 'is-scrollspy',            tier: 'core' },   // nav por anclas que resalta según scroll
   { antd: 'Breadcrumb',         ours: 'is-breadcrumb',           tier: 'core' },
   { antd: 'Dropdown',           ours: 'is-dropdown',             tier: 'core' },
-  { antd: 'Menu',               ours: null,                      tier: 'core' },
+  { antd: 'Menu',               ours: 'is-mega-menu',            tier: 'core' },   // + is-context-menu para el menú contextual
   { antd: 'Pagination',         ours: null,                      tier: 'core' },
   { antd: 'Steps',              ours: 'is-stepper',              tier: 'core' },
   { antd: 'Tabs',               ours: 'is-tab-group',            tier: 'core' },
@@ -45,7 +45,7 @@ const ANT_DESIGN = [
   { antd: 'Checkbox',           ours: 'is-checkbox',             tier: 'core' },
   { antd: 'ColorPicker',        ours: 'is-color-picker',         tier: 'core' },
   { antd: 'DatePicker',         ours: 'is-date-picker',          tier: 'core' },
-  { antd: 'Form',               ours: null,                      tier: 'core' },
+  { antd: 'Form',               ours: 'is-form',                 tier: 'core' },
   { antd: 'Input',              ours: 'is-input',                tier: 'core' },
   { antd: 'InputNumber',        ours: null,                      tier: 'core' },   // tenemos input, falta spinbutton
   { antd: 'Mentions',           ours: null,                      tier: 'nice' },   // input con @-references
@@ -72,7 +72,7 @@ const ANT_DESIGN = [
   { antd: 'List',               ours: null,                      tier: 'core' },   // Deprecated en antd 6.x
   { antd: 'Popover',            ours: 'is-popover',              tier: 'core' },
   { antd: 'QRCode',             ours: null,                      tier: 'nice' },
-  { antd: 'Segmented',          ours: null,                      tier: 'core' },
+  { antd: 'Segmented',          ours: 'is-button-group',         tier: 'core' },   // control segmentado con selección
   { antd: 'Statistic',          ours: 'is-stat',                 tier: 'core' },
   { antd: 'Table',              ours: 'is-data-grid',            tier: 'core' },
   { antd: 'Tag',                ours: 'is-tag',                  tier: 'core' },

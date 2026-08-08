@@ -83,7 +83,11 @@ assert.equal(preview.definition.tag, 'is-button-group');
 assert.equal(preview.definition.$schema, 'is-preview/v1');
 assert.equal(hasCachedPreview('is-button-group'), true);
 const again = await loadPreview('is-button-group');
-assert.equal(again.definition, preview.definition, 'segunda carga debe reutilizar la definición en memoria');
+// `JsonPreview` normaliza la definición al construirse (spread + defaults), así
+// que cada carga devuelve un objeto propio: la identidad no es observable. Lo
+// que sí debe cumplirse es que la definición salga de la caché y sea la misma.
+assert.equal(hasCachedPreview('is-button-group'), true, 'la definición debe seguir cacheada');
+assert.deepEqual(again.definition, preview.definition, 'segunda carga debe reutilizar la definición en memoria');
 assert.ok(/hasCachedPreview/.test(index), 'index.html debe evitar vaciar el host si el JSON ya está en caché');
 assert.ok(/#paintGen/.test(host) || /paintGen/.test(host), 'is-preview-component debe invalidar mounts en vuelo');
 

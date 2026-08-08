@@ -20,6 +20,8 @@ const read = (...p) => readFileSync(join(__dirname, '..', ...p), 'utf8');
 
 const drawerCss = read('src', 'components', 'layout', 'drawer.css');
 const drawerJs = read('src', 'components', 'layout', 'drawer.js');
+// `is-drawer` extiende ModalBase: el ciclo de apertura/cierre vive ahí.
+const modalBaseJs = read('src', 'components', '_shared', 'modal-base.js');
 const splitJs = read('src', 'components', 'layout', 'split-panel.js');
 const splitCss = read('src', 'components', 'layout', 'split-panel.css');
 const previewJs = read('src', 'components', 'layout', 'preview-component.js');
@@ -59,12 +61,21 @@ test('is-drawer: cada placement sale por su propio borde', () => {
 });
 
 test('is-drawer: cerrar quitando el atributo open sí cierra', () => {
-  // La guarda mira el estado; con `if (!this.open)` el drawer se quedaba
-  // pintado al hacer removeAttribute('open') desde fuera.
-  const doClose = drawerJs.slice(drawerJs.indexOf('#doClose()'));
+  // Con `if (!this.open) return`, un removeAttribute('open') externo entraba a
+  // #doClose cuando el atributo YA no estaba y salía por su propia guarda: el
+  // drawer se quedaba pintado. El arreglo vive en ModalBase, no duplicado en
+  // cada subclase.
   assert.ok(
-    /const state = this\.dataset\.state;[\s\S]*?if \(!state \|\| state === 'closing'\)/.test(doClose),
-    '#doClose debe guardarse contra dataset.state, no contra el atributo open',
+    /extends ModalBase/.test(drawerJs),
+    'is-drawer debe extender ModalBase en vez de reimplementar el ciclo del modal',
+  );
+  assert.ok(
+    /#doClose\(attrAlreadyRemoved = false\)/.test(modalBaseJs),
+    '#doClose debe poder saltarse la guarda cuando el atributo ya se removió',
+  );
+  assert.ok(
+    /else this\.#doClose\(true\);/.test(modalBaseJs),
+    'el observer de `open` debe forzar el cierre al venir el cambio desde fuera',
   );
 });
 

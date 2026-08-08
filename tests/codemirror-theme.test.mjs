@@ -94,13 +94,15 @@ check(/theme\/mdn-like\.min\.css/.test(highlight),
 
 // ─── is-theme-toggle: emite el evento que el highlighter escucha ─────────────
 
-check(/document\.dispatchEvent\([\s\S]*?['"]is-theme-change['"]/.test(themeToggle),
-  'theme-toggle.js: debe emitir document.dispatchEvent(new CustomEvent("is-theme-change"))');
+// `emit()` sale con bubbles+composed: el evento del host llega a los listeners
+// de `document` sin dispararlo también a mano (eso los invocaba dos veces).
+check(/emit\(this,\s*['"]is-theme-change['"]/.test(themeToggle),
+  'theme-toggle.js: debe emitir is-theme-change (llega a document por bubbles+composed)');
 
 // `emit()` de _shared/emit.js aplica bubbles+composed por defecto, así que
 // tanto el literal como el helper valen.
-check(/composed:\s*true/.test(themeToggle) || /emit\(this,\s*['"]theme-toggle['"]/.test(themeToggle),
-  'theme-toggle.js: el evento theme-toggle debe tener composed: true (literal o vía emit())');
+check(/composed:\s*true/.test(themeToggle) || /emit\(this,\s*['"]is-theme-change['"]/.test(themeToggle),
+  'theme-toggle.js: el evento debe salir con composed: true (literal o vía emit())');
 
 // ─── Sanity: NO debe quedar el theme hardcoded a material-darker ─────────────
 
