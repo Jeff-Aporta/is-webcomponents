@@ -1,3 +1,5 @@
+@import url('../_shared/modal-chrome.css');
+
 /* <is-drawer> — panel deslizante desde un borde del viewport. */
 
 :host {
@@ -89,26 +91,7 @@
 :host([placement="top"])    { --_shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
 :host([placement="bottom"]) { --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18); }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing);
-  padding: calc(var(--spacing) * 0.85) var(--spacing);
-  border-bottom: 1px solid var(--is-border, transparent);
-  font-family: var(--is-font-family, inherit);
-}
-
-.title {
-  margin: 0;
-  flex: 1 1 auto;
-  min-width: 0;
-  font-size: 1.125rem;
-  font-weight: 650;
-  color: inherit;
-  line-height: 1.3;
-}
-.title:empty { display: none; }
+/* .header / .title / .body / .footer → _shared/modal-chrome.css */
 
 .header-actions {
   display: flex;
@@ -119,40 +102,9 @@
 .header-actions:empty { display: none; }
 
 .close-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2em;
-  height: 2em;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  color: var(--is-text-muted, #6c757d);
-  cursor: pointer;
-  border-radius: 999px;
+  flex: 0 0 auto;
   font-size: 1rem;
-  transition: background 120ms ease, color 120ms ease;
+  line-height: 0;
+  color: var(--is-text-muted, #6c757d);
 }
-.close-btn:hover { background: var(--is-bg-elev, #f1f3f5); color: var(--is-text, #212529); }
-.close-btn:focus-visible { outline: 2px solid var(--is-focus, #339af0); outline-offset: 2px; }
-
-.body {
-  padding: var(--spacing);
-  overflow-y: auto;
-  min-height: 0;
-  font-family: var(--is-font-family, inherit);
-}
-.body ::slotted(:first-child) { margin-top: 0; }
-.body ::slotted(:last-child)  { margin-bottom: 0; }
-
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5em;
-  padding: calc(var(--spacing) * 0.65) var(--spacing);
-  border-top: 1px solid var(--is-border, transparent);
-  background: var(--is-bg-elev, transparent);
-}
-.footer:empty, .footer[hidden] { display: none; }
-.footer ::slotted(*) { margin: 0; }
+.close-btn:hover { color: var(--is-text, #212529); }

@@ -15,14 +15,16 @@
 .label {
   font-weight: 600;
   font-size: 0.95em;
+
+  &[hidden] { display: none !important; }
 }
-.label[hidden] { display: none !important; }
 
 .hint {
   font-size: 0.85em;
   color: var(--is-text-soft, #868e96);
+
+  &[hidden] { display: none !important; }
 }
-.hint[hidden] { display: none !important; }
 
 .dropzone {
   position: relative;
@@ -38,14 +40,16 @@
   transition: border-color 120ms ease, background 120ms ease;
   outline: none;
   box-sizing: border-box;
-}
-.dropzone:hover {
-  border-color: color-mix(in srgb, var(--is-color-brand-500, #339af0) 45%, var(--is-control-border, #dee2e6));
-  background: color-mix(in srgb, var(--is-color-brand-500, #339af0) 30%, transparent);
-}
-.dropzone:focus-visible {
-  outline: 2px solid var(--is-focus, var(--is-color-brand-500, #339af0));
-  outline-offset: 2px;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--is-color-brand-500, #339af0) 45%, var(--is-control-border, #dee2e6));
+    background: color-mix(in srgb, var(--is-color-brand-500, #339af0) 30%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--is-focus, var(--is-color-brand-500, #339af0));
+    outline-offset: 2px;
+  }
 }
 
 :host([data-state-dragging]) .dropzone,
@@ -72,11 +76,12 @@
   color: var(--is-text-soft, #868e96);
   font-size: 0.95em;
   pointer-events: none;
-}
-.dropzone-default is-icon,
-.dropzone-default ::slotted(is-icon) {
-  font-size: 1.75em;
-  color: var(--is-color-brand-500, #339af0);
+
+  & is-icon,
+  & ::slotted(is-icon) {
+    font-size: 1.75em;
+    color: var(--is-color-brand-500, #339af0);
+  }
 }
 
 .native {
@@ -98,8 +103,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.35em;
+
+  &[hidden] { display: none !important; }
 }
-.file-list[hidden] { display: none !important; }
 
 .file {
   display: grid;
@@ -127,21 +133,11 @@
 }
 
 .remove {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.15em;
-  border: none;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  opacity: 0.65;
-  border-radius: 0.25em;
+  flex: none;
   line-height: 0;
   font-size: 1.1em;
-}
-.remove:hover { opacity: 1; color: var(--is-color-danger-500, #fa5252); }
-.remove:focus-visible {
-  outline: 2px solid var(--is-focus, var(--is-color-brand-500, #339af0));
-  outline-offset: 1px;
+  opacity: 0.65;
+  color: inherit;
+
+  &:hover { opacity: 1; color: var(--is-color-danger-500, #fa5252); }
 }

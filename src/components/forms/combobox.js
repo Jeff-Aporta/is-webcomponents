@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './option.js';
+import '../media/icon.js';
+import '../actions/button.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
@@ -25,10 +27,29 @@ import { setStringAttr } from '../_shared/reflect.js';
         <input part="input" class="input" type="text" role="combobox"
           autocomplete="off" aria-autocomplete="list" aria-expanded="false"
           aria-controls="listbox" />
-        <button type="button" part="clear" class="clear" hidden aria-label="Limpiar" tabindex="-1">×</button>
-        <button type="button" part="trigger" class="trigger" aria-label="Abrir" tabindex="-1">
-          <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true"><path fill="currentColor" d="M4.5 6l3.5 3.5L11.5 6z"/></svg>
-        </button>
+        <is-button
+          type="button"
+          part="clear"
+          class="clear"
+          variant="text"
+          color="neutral"
+          tabindex="-1"
+          aria-label="Limpiar"
+          hidden
+        >
+          <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
+        </is-button>
+        <is-button
+          type="button"
+          part="trigger"
+          class="trigger"
+          variant="text"
+          color="neutral"
+          tabindex="-1"
+          aria-label="Abrir"
+        >
+          <is-icon icon="mdi:chevron-down" aria-hidden="true"></is-icon>
+        </is-button>
       </div>
       <div part="hint" class="hint" hidden></div>
     </div>
@@ -96,7 +117,6 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     onConnected() {
-      this.#upgradeProps();
       this.#syncMeta();
       this.#collectOptions();
       this.#syncValueToInput(false);
@@ -161,16 +181,6 @@ import { setStringAttr } from '../_shared/reflect.js';
     setCustomValidity(msg) {
       if (!this.#internals) return;
       this.#internals.setValidity(msg ? { customError: true } : {}, msg || '', this.#input);
-    }
-
-    #upgradeProps() {
-      for (const a of OBSERVED) {
-        if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
-          this[a] = v;
-        }
-      }
     }
 
     #setState(name, on) {
