@@ -1,5 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import '../actions/button.js';
+import '../forms/input.js';
 
 import {
   attachFormInternals,
@@ -12,6 +14,7 @@ import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
+import { computePosition } from '../_shared/position.js';
 /**
  * <is-color-picker> — Selector de color form-associated.
  *
@@ -73,7 +76,6 @@ import { setStringAttr } from '../_shared/reflect.js';
     static get observedAttributes() { return OBSERVED; }
 
     #internals = null;
-    #base;
     #trigger;
     #swatch;
     #hexText;
@@ -99,7 +101,6 @@ import { setStringAttr } from '../_shared/reflect.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
-      this.#base = shadow.querySelector('.base');
       this.#trigger = shadow.querySelector('.trigger');
       this.#swatch = shadow.querySelector('.swatch');
       this.#hexText = shadow.querySelector('.hex-text');
@@ -130,7 +131,6 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     onConnected() {
-      this.#upgradeProps();
       const initial = normalizeHex(this.getAttribute('value')) || DEFAULT_VALUE;
       this.#writeValueAttr(initial);
       if (!this.#defaultsRead) {
@@ -201,9 +201,11 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#open = true;
       setCustomState(this.#internals, 'open', true);
       this.#trigger.setAttribute('aria-expanded', 'true');
-      this.#positionPanel();
       if (!this.#dialog.open) this.#dialog.showModal();
+      // Tras showModal el scrollbar del body puede desaparecer y mover el ancla:
+      // posicionar en rAF garantiza rects estables.
       this.#positionPanel();
+      requestAnimationFrame(() => this.#positionPanel());
       queueMicrotask(() => {
         try { this.#hexInput.focus({ preventScroll: true }); } catch { /* noop */ }
       });
@@ -235,16 +237,6 @@ import { setStringAttr } from '../_shared/reflect.js';
     formDisabledCallback(disabled) {
       this.#formDisabled = !!disabled;
       this.#syncDisabled();
-    }
-
-    #upgradeProps() {
-      for (const a of OBSERVED) {
-        if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
-          this[a] = v;
-        }
-      }
     }
 
     get #isDisabled() { return this.disabled || this.#formDisabled; }
@@ -333,17 +325,37 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     #positionPanel() {
-      const rect = this.#base.getBoundingClientRect();
-      const panelW = Math.min(17 * 16, window.innerWidth - 16);
-      let left = rect.left;
-      if (left + panelW > window.innerWidth - 8) left = Math.max(8, window.innerWidth - panelW - 8);
-      const spaceBelow = window.innerHeight - rect.bottom - 8;
-      const openUp = spaceBelow < 200 && rect.top > spaceBelow;
+      if (!this.#dialog.open) return;
+
+      // Ancho del panel ≈ ancho del trigger (mín. cómodo, máx. viewport).
+      const anchor = this.#trigger.getBoundingClientRect();
+      const margin = 8;
+      const minW = 13 * 16;
+      const maxW = Math.min(18 * 16, window.innerWidth - margin * 2);
+      const panelW = Math.min(maxW, Math.max(minW, Math.round(anchor.width)));
+      this.#panel.style.width = `${panelW}px`;
+      this.#panel.style.maxWidth = `${maxW}px`;
+
+      const result = computePosition({
+        anchor: this.#trigger,
+        popupEl: this.#panel,
+        placement: 'bottom-start',
+        distance: 6,
+        flip: true,
+        shift: true,
+        shiftPadding: margin,
+        flipPadding: margin,
+        strategy: 'fixed',
+        boundary: 'viewport',
+      });
+      if (!result) return;
+
       Object.assign(this.#panel.style, {
-        width: `${panelW}px`,
-        left: `${left}px`,
-        top: openUp ? 'auto' : `${rect.bottom + 4}px`,
-        bottom: openUp ? `${window.innerHeight - rect.top + 4}px` : 'auto',
+        position: 'fixed',
+        left: `${result.left}px`,
+        top: `${result.top}px`,
+        right: 'auto',
+        bottom: 'auto',
       });
     }
 

@@ -1,20 +1,25 @@
 :host {
   display: inline-block;
   font-size: inherit;
-  --cell-size: 2.5em;
-  --gap: 0.5em;
-  --bg: var(--is-bg-elev, #1c2128);
-  --fg: var(--is-text, #e8eaf1);
-  --border: var(--is-border, #2a2f3a);
-  --brand: var(--is-brand, dodgerblue);
-  --danger: var(--is-danger, #f64e60);
+  --is-pin-cell-size: 2.5em;
+  --is-pin-gap: 0.5em;
+  --is-pin-bg: var(--is-control-bg, #f1f3f5);
+  --is-pin-text: var(--is-control-text, var(--is-text, #212529));
+  --is-pin-border: var(--is-control-border, #adb5bd);
+  --is-pin-focus: var(--is-focus, var(--is-accent, #339af0));
+  --is-pin-danger: var(--is-color-danger-500, #fa5252);
 }
 
 .pin {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap);
+  gap: var(--is-pin-gap);
   position: relative;
+
+  &[data-state="invalid"] .cell {
+    border-color: var(--is-pin-danger);
+    animation: pin-shake 0.3s;
+  }
 }
 
 .hidden-input {
@@ -27,49 +32,43 @@
 
 .cells {
   display: flex;
-  gap: var(--gap);
+  gap: var(--is-pin-gap);
 }
 
 .cell {
-  width: var(--cell-size);
-  height: var(--cell-size);
+  width: var(--is-pin-cell-size);
+  height: var(--is-pin-cell-size);
   text-align: center;
-  /* <input> no hereda font del host (UA); sin inherit --cell-size en em no escala. */
+  /* <input> no hereda font del host (UA); sin inherit --is-pin-cell-size en em no escala. */
   font: inherit;
   font-size: 1.25em;
   font-weight: 500;
-  background: var(--bg);
-  color: var(--fg);
-  border: 1px solid var(--border);
-  border-radius: 0.5em;
+  background: var(--is-pin-bg);
+  color: var(--is-pin-text);
+  border: 1px solid var(--is-pin-border);
+  border-radius: var(--is-radius-sm, 0.5em);
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
   caret-color: transparent;
-}
 
-.cell:focus {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 25%, transparent);
-}
+  &:focus {
+    border-color: var(--is-pin-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--is-pin-focus) 25%, transparent);
+  }
 
+  &.mask {
+    -webkit-text-security: disc;
+    text-security: disc;
+  }
+}
 
 :host([disabled]) .cell {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.pin[data-state="invalid"] .cell {
-  border-color: var(--danger);
-  animation: pin-shake 0.3s;
-}
-
 @keyframes pin-shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
-}
-
-.cell.mask {
-  -webkit-text-security: disc;
-  text-security: disc;
 }
