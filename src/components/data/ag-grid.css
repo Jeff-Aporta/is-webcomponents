@@ -613,10 +613,39 @@
   padding: 0.65rem;
   overflow: auto;
   border-right: 1px solid var(--grid-border);
+
+  &[hidden] {
+    display: none !important;
+  }
 }
 
-.mim-dg__panel[hidden] {
-  display: none !important;
+.mim-dg__panel-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--is-text-soft);
+}
+
+.mim-dg__panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.mim-dg__panel-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  cursor: pointer;
+
+  &:hover {
+    background: color-mix(in srgb, var(--is-accent, #1e90ff) 10%, transparent);
+  }
 }
 
 /* ── Footer ───────────────────────────────────────────────────────────── */

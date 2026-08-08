@@ -1,10 +1,7 @@
+@import './_tokens.css';
+
 :host {
   display: block;
-  --bg: var(--is-bg-elev, #1c2128);
-  --fg: var(--is-text, #e8eaf1);
-  --muted: color-mix(in srgb, var(--fg) 65%, transparent);
-  --border: var(--is-border, #2a2f3a);
-  --brand: var(--is-brand, dodgerblue);
   --row-h: 2.25em;
 }
 
@@ -59,10 +56,8 @@
   border-radius: 0.375em;
   font-size: 0.85em;
   outline: none;
-}
 
-.search input:focus {
-  border-color: var(--brand);
+  &:focus { border-color: var(--brand); }
 }
 
 .search[hidden] {
@@ -89,15 +84,13 @@
   font-size: 0.9em;
   transition: background 0.1s;
   user-select: none;
-}
 
-.list .item:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
+  &:hover { background: rgba(255, 255, 255, 0.05); }
 
-.list .item.disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }
 
 .controls {

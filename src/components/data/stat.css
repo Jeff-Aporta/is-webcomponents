@@ -1,14 +1,6 @@
-:host {
-  display: block;
-  --bg: var(--is-bg-elev, #1c2128);
-  --fg: var(--is-text, #e8eaf1);
-  --muted: color-mix(in srgb, var(--fg) 65%, transparent);
-  --border: var(--is-border, #2a2f3a);
-  --brand: var(--is-brand, dodgerblue);
-  --success: var(--is-success, #0bb783);
-  --danger: var(--is-danger, #f64e60);
-  --warning: var(--is-warning, #ffa800);
-}
+@import './_tokens.css';
+
+:host { display: block; }
 
 .stat {
   background: var(--bg);
@@ -22,11 +14,11 @@
   transition: border-color 0.2s, transform 0.2s;
   position: relative;
   overflow: hidden;
-}
 
-.stat:hover {
-  border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
-  transform: translateY(-1px);
+  &:hover {
+    border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
+    transform: translateY(-1px);
+  }
 }
 
 
@@ -59,9 +51,11 @@
 }
 
 
-.stat[data-color="success"] .icon { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
-.stat[data-color="danger"] .icon { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
-.stat[data-color="warning"] .icon { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
+.stat {
+  &[data-color="success"] .icon { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
+  &[data-color="danger"] .icon { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
+  &[data-color="warning"] .icon { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
+}
 
 .value {
   font-size: 1.75em;
@@ -89,14 +83,9 @@
   color: var(--muted);
 }
 
-.stat[data-trend="up"] .trend {
-  background: color-mix(in srgb, var(--success) 18%, transparent);
-  color: var(--success);
-}
-
-.stat[data-trend="down"] .trend {
-  background: color-mix(in srgb, var(--danger) 18%, transparent);
-  color: var(--danger);
+.stat {
+  &[data-trend="up"] .trend { background: color-mix(in srgb, var(--success) 18%, transparent); color: var(--success); }
+  &[data-trend="down"] .trend { background: color-mix(in srgb, var(--danger) 18%, transparent); color: var(--danger); }
 }
 
 .helper {

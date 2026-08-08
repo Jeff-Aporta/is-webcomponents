@@ -1,19 +1,10 @@
-import { roundedBarRect } from '../_shared/svg-chart-engine.js';
+import { roundedBarRect, svgEl } from '../_shared/svg-chart-engine.js';
+import { getStatusColor } from '../_shared/chart-palette.js';
 
 /**
  * Marca de cascada (waterfall): cada punto es un delta sobre el acumulado,
  * salvo los índices en `totals`, que son barras absolutas medidas desde cero.
  */
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
 
 /**
  * Calcula el rango de cada barra a partir de los valores brutos.
@@ -44,10 +35,9 @@ export function drawWaterfallMarks(ctx) {
   const ds = data.datasets[0];
   if (!ds) return;
 
-  const host = ctx.svg.getRootNode().host;
-  const cs = host ? getComputedStyle(host) : null;
-  const successColor = cs?.getPropertyValue('--is-success-text').trim() || '#22c55e';
-  const dangerColor = cs?.getPropertyValue('--is-danger-text').trim() || '#ef4444';
+  const host = ctx.svg.getRootNode().host || ctx.svg;
+  const successColor = getStatusColor(host, 'success') || '#22c55e';
+  const dangerColor = getStatusColor(host, 'danger') || '#ef4444';
   const totalColor = colors[0];
 
   const bars = waterfallBars(ds.data, ds.totals || []);

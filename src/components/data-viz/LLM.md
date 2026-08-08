@@ -17,8 +17,40 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-heatmap>` | [heatmap.js](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/heatmap.js) | Matriz de intensidad |
-| `<is-maps>`, `<is-map-marker>` | [maps.js](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/maps.js) | Mapa con marcadores |
+| `<is-heatmap>` | [heatmap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/heatmap.md) | Matriz de intensidad |
+| `<is-maps>`, `<is-map-marker>` | [maps.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/maps.md) | Mapa con marcadores |
+
+## Composición y relaciones
+
+Módulos multi-tag se documentan juntos. `<is-map-marker>` solo tiene sentido dentro de
+`<is-maps>`: el padre lee los marcadores proyectados y los posiciona.
+
+## Reusar antes de crear
+
+- `../_shared/adopt-css.js`
+- `../_shared/element-base.js`
+- `../charts/` para cualquier serie cartesiana
+
+## Dependencias compartidas
+
+Revisar imports y `_shared/` antes de implementar. Reusar stdlib, plataforma y módulos existentes.
+
+## Patrones comunes
+
+- Importar módulo ES antes de usar tag.
+- Usar propiedades para objetos/payloads y atributos declarados para escalares.
+- Respetar contrato de eventos, parts, states y tokens.
+
+## Qué hacer
+
+- Leer MD, JS, CSS y preview exacto de manifest.
+- Ejecutar `node scripts/docs-consistency.selfcheck.mjs` tras tocar documentación.
+
+## Qué no hacer
+
+- No inventar API ni copiar contrato de una gráfica de `../charts/`.
+- No crear size colors; usar font-size contextual y em.
+- No duplicar MD por tag en módulos multi-tag.
 
 ## Errores conocidos y prevención
 

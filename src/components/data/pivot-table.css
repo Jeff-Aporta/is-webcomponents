@@ -1,3 +1,5 @@
+@import './_sticky.css';
+
 /* is-pivot-table */
 :host { display: block; font: inherit; color: var(--is-text); }
 
@@ -18,22 +20,38 @@ table.pivot {
   white-space: nowrap;
   vertical-align: middle;
 }
+/* position/left/font-weight vienen de _sticky.css. El `background` se repite
+ * aquí a propósito: `.pivot thead th` (0,1,2) le gana en especificidad al
+ * `.corner` (0,1,0) del partial y le pisaría el color-mix. */
 .pivot th.corner,
 .pivot td.row-head {
   text-align: left;
-  position: sticky;
-  left: 0;
   background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
-  font-weight: 600;
   z-index: 2;
 }
-.pivot thead th { position: sticky; top: 0; background: var(--is-bg-elev); z-index: 1; font-weight: 600; }
-.pivot thead th.corner { z-index: 3; left: 0; }
-.pivot .cell { cursor: pointer; }
-.pivot .cell:hover { background: color-mix(in srgb, var(--is-accent) 14%, transparent); }
-.pivot .total {
-  font-weight: 600;
-  background: color-mix(in srgb, var(--is-accent) 8%, transparent);
+
+.pivot {
+  & thead th {
+    position: sticky;
+    top: 0;
+    background: var(--is-bg-elev);
+    z-index: 1;
+    font-weight: 600;
+
+    &.corner { z-index: 3; left: 0; }
+  }
+
+  & .cell {
+    cursor: pointer;
+
+    &:hover { background: color-mix(in srgb, var(--is-accent) 14%, transparent); }
+  }
+
+  & .total {
+    font-weight: 600;
+    background: color-mix(in srgb, var(--is-accent) 8%, transparent);
+  }
+
+  & tfoot td { border-bottom: 0; border-top: 2px solid var(--is-border); }
+  & .empty { padding: 1rem; text-align: center; color: var(--is-text-soft); }
 }
-.pivot tfoot td { border-bottom: 0; border-top: 2px solid var(--is-border); }
-.pivot .empty { padding: 1rem; text-align: center; color: var(--is-text-soft); }
