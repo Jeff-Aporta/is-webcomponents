@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<html lang="" class="theme-dark" data-theme="dark" data-palette="contapyme">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IS Web Components</title>
   <meta name="description" content="Galería de Web Components ContaPyme / InSoft.">
+  <script>
+    /* Locale por defecto: sistema → es (misma regla que resolveLocale del kit). */
+    (function () {
+      var sys = (navigator.language || (navigator.languages && navigator.languages[0]) || '').trim();
+      document.documentElement.lang = sys || 'es';
+    })();
+  </script>
   <link rel="stylesheet" href="src/styles/is-base.css">
   <link rel="stylesheet" href="src/styles/palettes.css">
   <link rel="stylesheet" href="src/styles/shell.css">
@@ -17,6 +24,7 @@
   <script type="module" src="scripts/demo-code.js"></script>
   <script type="module" src="scripts/docs-chrome.js"></script>
   <script type="module" src="scripts/cdn-panel.js"></script>
+  <script type="module" src="scripts/view-sources.js"></script>
 </head>
 <body>
   <header class="shell-bar">
@@ -127,7 +135,8 @@
     // Igual que Inicio, no es un componente del catálogo sino una página
     // suelta en previews/ raíz: el taller para armarse una paleta propia.
     const THEMING = { tag: 'theming', title: 'Personalización', page: 'theming.json' };
-    const catalog = [HOME, THEMING, ...components];
+    const ECOSYSTEM = { tag: 'ecosystem', title: 'Ecosistema JS', page: 'ecosystem.json' };
+    const catalog = [HOME, THEMING, ECOSYSTEM, ...components];
 
     // --- build nav (Home + agrupado por categoría) ---
     // Sin filtro: el nav lista el catálogo completo del manifest.
@@ -180,6 +189,20 @@
       title.textContent = THEMING.title;
       btn.append(title);
       btn.addEventListener('click', () => selectComponent(THEMING.tag));
+      shellNav.appendChild(btn);
+    }
+
+    {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'shell-nav__item shell-nav__item--home';
+      btn.dataset.tag = ECOSYSTEM.tag;
+      btn.setAttribute('aria-label', 'Ecosistema JS — utilidades compartidas');
+      const title = document.createElement('span');
+      title.className = 'shell-nav__title';
+      title.textContent = ECOSYSTEM.title;
+      btn.append(title);
+      btn.addEventListener('click', () => selectComponent(ECOSYSTEM.tag));
       shellNav.appendChild(btn);
     }
 
@@ -422,7 +445,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') setMenuOpen(false);
     });
-    themeToggle.addEventListener('theme-toggle', (e) => {
+    themeToggle.addEventListener('is-theme-change', (e) => {
       // El toggle ya cambió el contenedor (html); sincronizar estado de la galería
       theme = e.detail?.theme === 'light' ? 'light' : 'dark';
       renderContext();

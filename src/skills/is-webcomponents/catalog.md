@@ -133,6 +133,8 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `helpers/intersection-observer.md` | `<is-intersection-observer>` |
 | `helpers/mutation-observer.md` | `<is-mutation-observer>` |
 | `helpers/resize-observer.md` | `<is-resize-observer>` |
+| `helpers/md-render.md` | `<is-md-render>` |
+| `helpers/md-editor.md` | `<is-md-editor>` |
 
 ### isp
 | Doc | Tags |
@@ -142,7 +144,6 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `isp/confirm-delete.md` | `<is-confirm-delete>` |
 | `isp/flex-layout.md` | `<is-flex-layout>` |
 | `isp/form.md` | `<is-form>` |
-| `isp/function-form.md` | `<is-function-form>` |
 | `isp/modal-verificacion.md` | `<is-modal-verificacion>` |
 | `isp/grid-layout.md` | `<is-grid-layout>` |
 | `isp/heading.md` | `<is-heading>` |

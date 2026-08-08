@@ -41,20 +41,20 @@
   --is-color-info-stronger: #1864ab;
   --is-color-info-strongest: #145591;
 
-  --is-color-brand-paler: #eaf4ff;
-  --is-color-brand-pale: #cce5ff;
-  --is-color-brand: dodgerblue;
+  --is-color-brand-paler: #e7f1f9;
+  --is-color-brand-pale: #c3ddef;
+  --is-color-brand: #1a6eb0;
   --is-color-brand-500: var(--is-color-brand);
-  --is-color-brand-strong: #1a7ae6;
-  --is-color-brand-stronger: #1566c2;
-  --is-color-brand-strongest: #0f4d93;
-  --is-accent: dodgerblue;
-  --is-accent-bg: rgb(30 144 255 / 12%);
-  --is-brand-soft: rgb(30 144 255 / 18%);
-  --is-brand-soft-active: rgb(30 144 255 / 28%);
-  --is-brand-text: #7ec8ff;
-  --is-focus: dodgerblue;
-  --is-logo-bg: dodgerblue;
+  --is-color-brand-strong: #16639f;
+  --is-color-brand-stronger: #0f5c96;
+  --is-color-brand-strongest: #00598a;
+  --is-accent: #1a6eb0;
+  --is-accent-bg: rgb(26 110 176 / 12%);
+  --is-brand-soft: rgb(26 110 176 / 18%);
+  --is-brand-soft-active: rgb(26 110 176 / 28%);
+  --is-brand-text: #00bcff;
+  --is-focus: #1a6eb0;
+  --is-logo-bg: #1a6eb0;
   --is-logo-fg: #fff;
   --is-logo-accent: #fff;
 
@@ -62,10 +62,10 @@
   --is-radius-sm: 0.25em;
 }
 
-/* surfaces / bg: azul desaturado sobre dodgerblue — c * 0.25 */
+/* surfaces / bg: azul desaturado sobre el primary de marca — c * 0.25 */
 .theme-dark:not([data-palette]),
 .theme-dark[data-palette="contapyme"] {
-  --is-contapyme-surface: oklch(from #1e90ff l calc(c * 0.25) h);
+  --is-contapyme-surface: oklch(from #1a6eb0 l calc(c * 0.25) h);
   --is-bg: color-mix(in srgb, var(--is-contapyme-surface) 5%, #0a0e14);
   --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 6%, #121820);
   --is-bg-elev: color-mix(in srgb, var(--is-contapyme-surface) 7%, #18202a);
@@ -81,7 +81,7 @@
 
 .theme-light:not([data-palette]),
 .theme-light[data-palette="contapyme"] {
-  --is-contapyme-surface: oklch(from #1e90ff l calc(c * 0.25) h);
+  --is-contapyme-surface: oklch(from #1a6eb0 l calc(c * 0.25) h);
   --is-bg: #fff;
   --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 4%, #f6f8fa);
   --is-bg-elev: #fff;

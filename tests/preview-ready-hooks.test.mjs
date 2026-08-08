@@ -33,6 +33,7 @@ const oyentes = {
   'scripts/highlight-pre.js': 'repintar el código del preview recién montado',
   'scripts/docs-chrome.js': 'poner el botón de copiar en los <pre> nuevos',
   'scripts/cdn-panel.js': 'montar el panel «Consumo por CDN» del componente',
+  'scripts/view-sources.js': 'montar el visor de fuentes JS/CSS/MD del componente',
   'scripts/preview-chrome.js': 'devolver la barra de tema/paleta al main que se vació',
 };
 for (const [rel, motivo] of Object.entries(oyentes)) {
@@ -64,7 +65,9 @@ if (/createElement\(\s*'is-cdn-snippet'/.test(previewChrome)) {
 // Las dos páginas del docs tienen que cargar el módulo del panel.
 for (const [rel, ruta] of [
   ['index.html', 'scripts/cdn-panel.js'],
+  ['index.html', 'scripts/view-sources.js'],
   ['src/previews/_shell.html', '../../scripts/cdn-panel.js'],
+  ['src/previews/_shell.html', '../../scripts/view-sources.js'],
 ]) {
   if (!leer(rel).includes(ruta)) failures.push(`${rel}: falta <script src="${ruta}">`);
 }

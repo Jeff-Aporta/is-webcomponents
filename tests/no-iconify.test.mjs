@@ -28,7 +28,10 @@ const SCAN_EXT = /\.(js|mjs|css|html)$/;
 // Mismo caso que download-icons.mjs: herramientas offline de mantenimiento del
 // catalogo, se corren a mano y dejan el resultado en assets/. Nada de esto se
 // ejecuta en runtime ni entra al bundle.
+// Herramientas de build/CLI: se ejecutan a mano en Node para llenar
+// `assets/icons`, nunca en el navegador. La regla es sobre RUNTIME.
 const ALLOWED_API_FILES = new Set([
+  'scripts/download-iconify.mjs',
   'scripts/download-icons.mjs',
   'scripts/fix-icon-viewbox.mjs',
   'scripts/sync-icon-collections.mjs',

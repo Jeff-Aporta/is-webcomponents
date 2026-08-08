@@ -62,7 +62,9 @@ check(/prefers-reduced-motion/.test(toastCss),
 
 // ─── preview: demuestra los 3 demos ────────────────────────────────────────
 
-check(/id="promise"/.test(preview),
+// El preview es JSON v1: la sección es `"id": "promise"`, no un `id="promise"`
+// de HTML como en el formato viejo.
+check(/"id":\s*"promise"/.test(preview),
   'preview: debe existir una sección #promise');
 
 check(/btn-promise-ok/.test(preview),

@@ -15,7 +15,9 @@ import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { setTimeout as wait } from 'node:timers/promises';
 
-const ROOT_KEY = 'is-components';
+// Root canonico de `_shared/prefs.js`. `is-components` es solo legacy: prefs
+// lo lee una vez para migrarlo y lo borra.
+const ROOT_KEY = 'is-webcomponents';
 
 /** localStorage de juguete. */
 function fakeStorage() {

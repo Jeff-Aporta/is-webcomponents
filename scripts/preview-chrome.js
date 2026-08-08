@@ -141,7 +141,7 @@ function mount() {
   applyTheme(root.dataset.theme || 'dark');
   applyPalette(root.dataset.palette || 'contapyme');
 
-  document.getElementById('previewTheme')?.addEventListener('theme-toggle', (e) => {
+  document.getElementById('previewTheme')?.addEventListener('is-theme-change', (e) => {
     const theme = e.detail?.theme || (root.dataset.theme === 'dark' ? 'light' : 'dark');
     if (e.detail?.container === root || !e.detail?.container) {
       applyTheme(theme);

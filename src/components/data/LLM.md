@@ -13,6 +13,9 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
 | `<is-data-grid>` | [data-grid.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/data-grid.md) | Data Grid |
+| `<is-ag-grid>` | [ag-grid.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/ag-grid.md) | Grid estilo ag-Grid con persistencia opt-in |
+| `<is-pivot-table>` | [pivot-table.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/pivot-table.md) | Tabla dinámica con agregación |
+| `<is-spreadsheet>` | [spreadsheet.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/spreadsheet.md) | Hoja de cálculo editable |
 | `<is-stat>` | [stat.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/stat.md) | Stat KPI |
 | `<is-transfer>`, `<is-transfer-item>` | [transfer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/transfer.md) | Transfer |
 | `<is-gauge>` | [gauge.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/gauge.md) | Gauge |

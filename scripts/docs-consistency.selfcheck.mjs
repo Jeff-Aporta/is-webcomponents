@@ -166,7 +166,8 @@ const expectedDocs = modules.map((item) => item.doc).sort();
 
 for (const item of modules) {
   assert(await exists(componentPath(item.script)), `${item.script}: source missing`);
-  assert(await exists(componentPath(item.style)), `${item.style}: style missing`);
+  // Los módulos sin shadow DOM (manifest: module) no declaran hoja de estilos.
+  if (item.style) assert(await exists(componentPath(item.style)), `${item.style}: style missing`);
   if (item.page) assert(await exists(path.join(root, 'src', 'previews', item.page)), `${item.page}: preview missing`);
 }
 

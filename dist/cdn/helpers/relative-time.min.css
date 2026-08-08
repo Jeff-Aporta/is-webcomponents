@@ -1,1 +1,1 @@
-:host{display:inline;.time{display:inline}}
+@import"./_inline-host.css";:host{.time{display:inline}}

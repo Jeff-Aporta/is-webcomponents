@@ -18,6 +18,8 @@ const addCopy = (pre) => {
   if (pre.dataset.copyReady || pre.hasAttribute('data-no-copy')) return;
   // El panel del demo trae su propia barra de copiar.
   if (pre.closest('.demo-code-pop')) return;
+  // Visor de fuentes: copy en el header del modal.
+  if (pre.classList.contains('vs-pre') || pre.closest('.is-view-sources, .vs-body')) return;
   pre.dataset.copyReady = '1';
 
   const wrap = document.createElement('div');
