@@ -36,9 +36,10 @@
   font-variant-numeric: tabular-nums;
   padding: .25rem 0;
   border-radius: 4px;
-}
-.cell:focus {
-  background: color-mix(in srgb, var(--is-accent) 14%, transparent);
+
+  &:focus {
+    background: color-mix(in srgb, var(--is-accent) 14%, transparent);
+  }
 }
 
 .col button {
@@ -52,10 +53,11 @@
   font-size: .65rem;
   height: 1rem;
   border-radius: 4px;
-}
-.col button:hover {
-  background: color-mix(in srgb, var(--is-accent) 18%, transparent);
-  color: var(--is-accent);
+
+  &:hover {
+    background: color-mix(in srgb, var(--is-accent) 18%, transparent);
+    color: var(--is-accent);
+  }
 }
 
 .sep {

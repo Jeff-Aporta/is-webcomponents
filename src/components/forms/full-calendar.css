@@ -19,18 +19,14 @@
   border-bottom: 1px solid var(--is-border-soft);
   background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
 }
-.ctrl, .view-btn {
-  border: 1px solid var(--is-border);
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  padding: .3rem .6rem;
-  border-radius: var(--is-radius, 6px);
-  cursor: pointer;
+/* Botones de la barra: <is-button>. La apariencia (incluida la del botón de
+   vista activo) se pide por atributos `variant`/`color`; pintar fondo o borde
+   desde aquí caería en el host, no en el <button> de su shadow root. */
+.ctrl,
+.view-btn {
   font-size: .82rem;
 }
-.ctrl:hover, .view-btn:hover { background: color-mix(in srgb, var(--is-accent) 14%, transparent); }
-.view-btn.is-active { background: var(--is-accent); color: var(--is-on-accent, #fff); border-color: var(--is-accent); }
+
 .title { font-weight: 600; margin-left: .5rem; text-transform: capitalize; }
 .spacer { flex: 1 1 auto; }
 

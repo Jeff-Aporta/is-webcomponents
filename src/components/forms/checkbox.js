@@ -53,12 +53,6 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     'icon', 'checked-icon', 'indeterminate-icon',
   ];
 
-  const PROPS = [
-    'name', 'value', 'checked', 'disabled', 'readonly', 'required', 'indeterminate',
-    'error', 'hint', 'color', 'labelPlacement',
-    'icon', 'checkedIcon', 'indeterminateIcon',
-  ];
-
   const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
   const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
 
@@ -106,7 +100,6 @@ import { hasSlotted } from '../_shared/dom-utils.js';
         this.#defaultChecked = this.checked;
         this.#defaultIndeterminate = this.indeterminate;
       }
-      this.#upgradeProps();
       if (!this.hasAttribute('role')) this.setAttribute('role', 'checkbox');
       this.#syncSlots();
       this.#sync();
@@ -188,16 +181,6 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     formDisabledCallback(disabled) {
       this.#formDisabled = !!disabled;
       this.#sync();
-    }
-
-    #upgradeProps() {
-      for (const p of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
     }
 
     get #isDisabled() { return this.disabled || this.#formDisabled; }

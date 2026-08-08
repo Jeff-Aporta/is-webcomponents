@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./date-picker.js
 style: ./date-picker.css
-preview: ../../previews/forms/is-date-picker.html
+preview: ../../previews/forms/is-date-picker.json
 ---
 # `<is-date-picker>`
 
@@ -229,4 +229,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./date-picker.js)
 - [CSS](./date-picker.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-picker.html)
+- [Preview](../../previews/forms/is-date-picker.json)

@@ -1,3 +1,4 @@
+import '../actions/button.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -24,10 +25,6 @@ import { ElementBase } from '../_shared/element-base.js';
  *
  * Eventos
  *   is-input, is-change
- *   Custom states: valid, invalid (sólo lectura — los inputs nativos se invalidan)
- *
- * Tokens CSS:
- *   --is-duration-step-size (default 2.5rem para los botones up/down)
  */
 (() => {
   const OBSERVED = ['value', 'min', 'max', 'step'];
@@ -76,7 +73,9 @@ import { ElementBase } from '../_shared/element-base.js';
         input.addEventListener('keydown', (e) => this.#onKey(e, input));
       });
       this.#root.addEventListener('click', (e) => {
-        const btn = e.target.closest('button[data-target]');
+        // `is-button` es el host: el click se retarget al custom element, no
+        // al <button> interno de su shadow root.
+        const btn = e.target.closest('is-button[data-target]');
         if (!btn) return;
         const target = btn.dataset.target;
         const step = Number(this.getAttribute('step')) || 1;
@@ -152,8 +151,15 @@ import { ElementBase } from '../_shared/element-base.js';
 
     #onKey(e, input) {
       const target = e.target;
-      if (e.key === 'ArrowUp') { e.preventDefault(); target.select(); return; }
-      if (e.key === 'ArrowDown') { e.preventDefault(); target.select(); return; }
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        const step = Number(this.getAttribute('step')) || 1;
+        const dir = e.key === 'ArrowUp' ? +1 : -1;
+        const unit = input === this.#h ? 3600 : input === this.#m ? 60 : 1;
+        this.tick(unit * step * dir);
+        target.select();
+        return;
+      }
       if (e.key === ':' || e.key === ';') {
         e.preventDefault();
         if (input === this.#h) this.#m.focus();

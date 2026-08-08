@@ -36,7 +36,6 @@ import { setOptionalAttr } from '../_shared/reflect.js';
   `;
 
   const OBSERVED = ['value', 'checked', 'disabled', 'color', 'label-placement'];
-  const PROPS = ['value', 'checked', 'disabled', 'color', 'labelPlacement'];
   const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
   const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
 
@@ -63,7 +62,6 @@ import { setOptionalAttr } from '../_shared/reflect.js';
     }
 
     onConnected() {
-      this.#upgradeProps();
       if (!this.hasAttribute('role')) this.setAttribute('role', 'radio');
       this.#syncDescription();
       this.#sync();
@@ -129,16 +127,6 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       if (allowed.includes(own)) return own;
       const fromGroup = group?.getAttribute(attr);
       return allowed.includes(fromGroup) ? fromGroup : null;
-    }
-
-    #upgradeProps() {
-      for (const p of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
     }
 
     #syncDescription = () => {

@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./radio.js
 style: ./radio.css
-preview: ../../previews/forms/is-radio.html
+preview: ../../previews/forms/is-radio.json
 ---
 # `<is-radio>`
 
@@ -207,4 +207,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 - [JavaScript](./radio.js)
 - [CSS](./radio.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-radio.html)
+- [Preview](../../previews/forms/is-radio.json)

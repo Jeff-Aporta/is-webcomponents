@@ -46,11 +46,6 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
     'orientation', 'row', 'color', 'label-placement', 'error', 'error-text',
   ];
 
-  const PROPS = [
-    'name', 'value', 'disabled', 'required', 'readonly', 'label', 'hint',
-    'orientation', 'row', 'color', 'labelPlacement', 'error', 'errorText',
-  ];
-
   const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
   const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
   const NEXT_KEYS = ['ArrowDown', 'ArrowRight'];
@@ -100,7 +95,6 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
         this.#defaultsRead = true;
         this.#defaultValue = this.getAttribute('value');
       }
-      this.#upgradeProps();
       this.#syncMeta();
       this.#sync();
     }
@@ -198,16 +192,6 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
     formDisabledCallback(disabled) {
       this.#formDisabled = !!disabled;
       this.#sync();
-    }
-
-    #upgradeProps() {
-      for (const p of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
     }
 
     get #isDisabled() { return this.disabled || this.#formDisabled; }

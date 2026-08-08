@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./checkbox.js
 style: ./checkbox.css
-preview: ../../previews/forms/is-checkbox.html
+preview: ../../previews/forms/is-checkbox.json
 ---
 # `<is-checkbox>`
 
@@ -225,4 +225,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 - [JavaScript](./checkbox.js)
 - [CSS](./checkbox.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-checkbox.html)
+- [Preview](../../previews/forms/is-checkbox.json)

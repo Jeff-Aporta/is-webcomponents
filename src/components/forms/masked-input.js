@@ -28,7 +28,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  *   start, end      adornos
  *
  * Eventos
- *   is-input, is-change (bubbles + composed)
+ *   is-input, is-change, is-complete (bubbles + composed)
  *
  * Token CSS: --is-field-width
  */
@@ -62,6 +62,9 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#input = shadow.getElementById('input');
       this.#input.addEventListener('input', () => this.#onInput());
       this.#input.addEventListener('blur', () => this.#syncValidity());
+      // El input interno vive en shadow: su `change` no cruza el límite, hay
+      // que reemitirlo con el vocabulario de la librería.
+      this.#input.addEventListener('change', () => emit(this, 'is-change', { value: this.value }));
       this.addEventListener('slotchange', () => this.#syncSlots());
     }
 
@@ -153,6 +156,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       const endSlot = this.shadowRoot.querySelector('slot[name="end"]');
       // si los slots están vacíos, ocupa todo el ancho; si no, deja hueco
       this.#input.classList.toggle('with-start', !!startSlot?.assignedNodes?.().length);
+      this.#input.classList.toggle('with-end', !!endSlot?.assignedNodes?.().length);
     }
 
     #syncDisabled() {

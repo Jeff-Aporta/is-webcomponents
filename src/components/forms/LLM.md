@@ -39,6 +39,15 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-date-time-input>` | [date-time-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-time-input.md) | Date Time Input |
 | `<is-date-range-input>` | [date-range-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-range-input.md) | Date Range Input |
 | `<is-pin-input>` | [pin-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/pin-input.md) | Pin Input |
+| `<is-masked-input>` | [masked-input.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/masked-input.md) | Input con máscara de formato |
+| `<is-inline-edit>` | [inline-edit.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/inline-edit.md) | Edición en línea de un valor |
+| `<is-duration-picker>` | [duration-picker.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/duration-picker.md) | Selector de duración |
+| `<is-dropzone>` | [dropzone.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/dropzone.md) | Zona de arrastre de archivos |
+| `<is-mention>` | [mention.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/mention.md) | Editor con menciones |
+| `<is-full-calendar>` | [full-calendar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/full-calendar.md) | Calendario de eventos |
+| `<is-signature>` | [signature.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/signature.md) | Captura de firma |
+| `<is-rte>` | [rte.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/rte.md) | Editor de texto enriquecido |
+| `<is-doc-editor>` | [doc-editor.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/doc-editor.md) | Editor de documentos por páginas |
 
 ## Composición y relaciones
 

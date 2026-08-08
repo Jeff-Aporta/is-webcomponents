@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./option.js
 style: ./option.css
-preview: ../../previews/forms/is-combobox.html
+preview: ../../previews/forms/is-option.json
 ---
 # `<is-option>`
 
@@ -160,4 +160,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-select
 - [JavaScript](./option.js)
 - [CSS](./option.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-combobox.html)
+- [Preview](../../previews/forms/is-option.json)

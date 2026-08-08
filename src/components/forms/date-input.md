@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./date-input.js
 style: ./date-input.css
-preview: ../../previews/forms/is-date-input.html
+preview: ../../previews/forms/is-date-input.json
 ---
 # `<is-date-input>`
 
@@ -151,4 +151,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./date-input.js)
 - [CSS](./date-input.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-input.html)
+- [Preview](../../previews/forms/is-date-input.json)

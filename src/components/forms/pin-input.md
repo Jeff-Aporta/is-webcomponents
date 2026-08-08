@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./pin-input.js
 style: ./pin-input.css
-preview: ../../previews/forms/is-pin-input.html
+preview: ../../previews/forms/is-pin-input.json
 ---
 # `<is-pin-input>`
 
@@ -178,4 +178,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./pin-input.js)
 - [CSS](./pin-input.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-pin-input.html)
+- [Preview](../../previews/forms/is-pin-input.json)

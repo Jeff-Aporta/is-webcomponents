@@ -23,6 +23,8 @@ import { emit } from '../_shared/emit.js';
  *   is-change       detail: { strokes }
  */
 (() => {
+  const DEFAULT_HINT = 'Firma aquí';
+
   const OBSERVED = ['width', 'height', 'pen-color', 'line-width', 'background', 'hint'];
 
   class IsSignature extends HTMLElement {
@@ -58,6 +60,7 @@ import { emit } from '../_shared/emit.js';
       this.#mounted = true;
       this.#resize();
       this.#paint();
+      this.#syncHint();
     }
 
     disconnectedCallback() {
@@ -68,6 +71,7 @@ import { emit } from '../_shared/emit.js';
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'width' || name === 'height') this.#resize();
       this.#paint();
+      if (name === 'hint') this.#syncHint();
     }
 
     get width() { return Number(this.getAttribute('width')) || 320; }
@@ -88,8 +92,9 @@ import { emit } from '../_shared/emit.js';
     }
 
     toSVG() {
-      const w = this.#canvas.width;
-      const h = this.#canvas.height;
+      // Los puntos se guardan en px CSS; canvas.width viene escalado por dpr.
+      const w = this.width;
+      const h = this.height;
       const strokes = this.#strokes.map((stroke) => {
         if (stroke.length < 2) return '';
         let d = `M ${stroke[0].x} ${stroke[0].y}`;
@@ -187,7 +192,7 @@ import { emit } from '../_shared/emit.js';
 
     #syncHint() {
       this.#hint.style.display = this.isEmpty ? '' : 'none';
-      this.#hint.textContent = this.getAttribute('hint') || this.#hint.textContent;
+      this.#hint.textContent = this.getAttribute('hint') || DEFAULT_HINT;
     }
 
     #canvas;

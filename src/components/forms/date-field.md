@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./date-field.js
 style: ./date-field.css
-preview: ../../previews/forms/is-date-field.html
+preview: ../../previews/forms/is-date-field.json
 ---
 # `<is-date-field>`
 
@@ -141,4 +141,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./date-field.js)
 - [CSS](./date-field.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-field.html)
+- [Preview](../../previews/forms/is-date-field.json)

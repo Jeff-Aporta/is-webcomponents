@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./date-range-input.js
 style: ./date-range-input.css
-preview: ../../previews/forms/is-date-input.html
+preview: ../../previews/forms/is-date-range-input.json
 ---
 # `<is-date-range-input>`
 
@@ -147,4 +147,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./date-range-input.js)
 - [CSS](./date-range-input.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-input.html)
+- [Preview](../../previews/forms/is-date-range-input.json)

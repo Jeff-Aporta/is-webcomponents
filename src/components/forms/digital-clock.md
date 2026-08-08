@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./digital-clock.js
 style: ./digital-clock.css
-preview: ../../previews/forms/is-time-clock.html
+preview: ../../previews/forms/is-digital-clock.json
 ---
 # `<is-digital-clock>`
 
@@ -173,4 +173,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-select
 - [JavaScript](./digital-clock.js)
 - [CSS](./digital-clock.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-time-clock.html)
+- [Preview](../../previews/forms/is-digital-clock.json)

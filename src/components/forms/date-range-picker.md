@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./date-range-picker.js
 style: ./date-range-picker.css
-preview: ../../previews/forms/is-date-range-picker.html
+preview: ../../previews/forms/is-date-range-picker.json
 ---
 # `<is-date-range-picker>`
 
@@ -183,4 +183,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./date-range-picker.js)
 - [CSS](./date-range-picker.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-range-picker.html)
+- [Preview](../../previews/forms/is-date-range-picker.json)

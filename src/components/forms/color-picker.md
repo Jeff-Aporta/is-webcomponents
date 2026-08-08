@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./color-picker.js
 style: ./color-picker.css
-preview: ../../previews/forms/is-color-picker.html
+preview: ../../previews/forms/is-color-picker.json
 ---
 # `<is-color-picker>`
 
@@ -205,4 +205,4 @@ swatches="#e03131,#f59f00,#2f9e44"
 - [JavaScript](./color-picker.js)
 - [CSS](./color-picker.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-color-picker.html)
+- [Preview](../../previews/forms/is-color-picker.json)

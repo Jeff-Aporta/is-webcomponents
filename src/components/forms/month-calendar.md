@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./month-calendar.js
 style: ./month-calendar.css
-preview: ../../previews/forms/is-date-picker.html
+preview: ../../previews/forms/is-month-calendar.json
 ---
 # `<is-month-calendar>`
 
@@ -159,4 +159,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 - [JavaScript](./month-calendar.js)
 - [CSS](./month-calendar.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-picker.html)
+- [Preview](../../previews/forms/is-month-calendar.json)
