@@ -51,8 +51,8 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       <span part="label-text" class="value-label"></span>
       <button type="button" part="open" class="open" aria-label="Open BtnRef">${FILTER_SVG}</button>
     </div>
-    <is-dialog class="dlg" label="Seleccionar" light-dismiss style="--width: min(90vw, 40rem);">
-      <is-catalogo-gen class="cat" select-mode show-header="false" multi-select q-rows-header="1"></is-catalogo-gen>
+    <is-dialog class="dlg" label="Seleccionar" light-dismiss style="--width: min(90vw, 48rem);">
+      <is-catalogo-gen class="cat" select-mode show-header="false" q-rows-header="1"></is-catalogo-gen>
       <div slot="footer" class="dlg-footer">
         <is-button class="cancel" color="neutral" variant="outlined">Cancelar</is-button>
         <is-button class="pick" color="brand">Seleccionar</is-button>
@@ -61,7 +61,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
   `;
 
   const OBSERVED = [
-    'label', 'value', 'name', 'id', 'required', 'optional', 'readonly', 'maxlength',
+    'label', 'value', 'name', 'id', 'required', 'optional', 'readonly', 'maxlength', 'multi',
   ];
 
   class IsBtnRef extends HTMLElement {
@@ -183,12 +183,18 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     }
     set maxlength(v) { this.setAttribute('maxlength', String(v)); }
 
+    /** Selección múltiple en el modal (default: single). */
+    get multi() { return this.hasAttribute('multi'); }
+    set multi(v) { this.toggleAttribute('multi', !!v); }
+
     focus() {
       setTimeout(() => this.#field?.focus?.(), 50);
     }
 
     open() {
       if (this.readonly) return;
+      const multi = this.multi || !!this.controller?.multiSelect;
+      this.#cat.toggleAttribute('multi-select', multi);
       if (this.controller) this.#cat.controller = this.controller;
       void this.#cat.refreshGrid?.();
       this.#dlg.show?.();
@@ -288,19 +294,42 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
     }
 
+    #labelOf(record) {
+      let label = '';
+      for (const key of this.#columnsBtnRef()) {
+        label += ` ${asStr(getProp(record, key))}`;
+      }
+      return label.trim();
+    }
+
     #applyRecord(record) {
       if (!record) return;
       const pk = this.#pk();
       const value = asStr(getProp(record, pk));
       this.value = value;
-      let label = '';
-      for (const key of this.#columnsBtnRef()) {
-        label += ` ${asStr(getProp(record, key))}`;
-      }
+      const label = this.#labelOf(record);
       this.#setValueLabel(label || value, !label);
       this.onSelectedRecord(record);
       this.onChange();
-      emit(this, 'is-selected-record', { record, value, label: label.trim() });
+      emit(this, 'is-selected-record', { record, records: [record], value, label });
+      emit(this, 'is-change', { value });
+      this.#syncValidity();
+      this.close();
+    }
+
+    /** Multi-select: value = PKs unidos por coma; label = etiquetas unidas. */
+    #applyRecords(records) {
+      if (!records?.length) return;
+      const pk = this.#pk();
+      const values = records.map((r) => asStr(getProp(r, pk))).filter(Boolean);
+      const value = values.join(',');
+      const label = records.map((r) => this.#labelOf(r) || asStr(getProp(r, pk))).filter(Boolean).join(', ');
+      this.value = value;
+      this.#setValueLabel(label || value, !label);
+      const record = records.at(-1);
+      this.onSelectedRecord(record);
+      this.onChange();
+      emit(this, 'is-selected-record', { record, records, value, label });
       emit(this, 'is-change', { value });
       this.#syncValidity();
       this.close();
@@ -309,8 +338,13 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     #onOpen = () => this.open();
 
     #onPick = () => {
-      const rec = this.#cat.selectionData?.[0];
-      this.#applyRecord(rec);
+      const rows = this.#cat.selectionData || [];
+      if (!rows.length) return;
+      if (this.multi || this.controller?.multiSelect) {
+        this.#applyRecords(rows);
+        return;
+      }
+      this.#applyRecord(rows[0]);
     };
 
     #onCatDbl = (e) => {

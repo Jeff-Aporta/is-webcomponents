@@ -1,51 +1,26 @@
-/* Estados del host en `:host([attr])` a nivel superior; `&[attr]` anidado
-   dentro de `:host {}` compila a `:host[attr]` y nunca matchea. */
+/* El backdrop, la caja, el radio, la sombra y el scroll los pone el
+   <is-dialog> interno (y `_shared/modal-chrome.css` a través de él). Aquí sólo
+   queda lo propio del contenido. */
 :host {
   --is-modal-verificacion-accent: var(--is-color-info-500, #339af0);
   display: contents;
   font-family: var(--is-sans, inherit);
 
-  /* Capa de bloqueo: fixed obligatorio, si no ocuparía sitio en el flujo. */
-  .backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: var(--is-z-modal, 1100);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1em;
-    background: color-mix(in srgb, var(--is-bg, #101418) 68%, transparent);
-  }
-
-  .backdrop[hidden] { display: none; }
-
-  .modal {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75em;
-    inline-size: min(100%, 30em);
-    max-block-size: 90vh;
-    box-sizing: border-box;
-    padding: 1.25em;
-    background: var(--is-bg-elevated, var(--is-bg, #101418));
-    color: var(--is-text, inherit);
-    border: 1px solid var(--is-border, #2a3038);
-    border-radius: var(--is-radius-md, 0.75em);
-    box-shadow: var(--is-shadow-lg, 0 1.5em 3em rgb(0 0 0 / 0.35));
+  .dlg {
+    --width: 30em;
   }
 
   .heading {
     display: flex;
     align-items: center;
     gap: 0.4em;
-    margin: 0;
-    font-size: 1.15em;
+    font-size: 1em;
     font-weight: 600;
     color: var(--is-modal-verificacion-accent);
   }
 
   .results-title {
-    margin: 0;
+    margin: 0 0 0.5em;
   }
 
   .results {
@@ -53,6 +28,7 @@
     flex-direction: column;
     gap: 0.5em;
     min-block-size: 0;
+    max-block-size: 45vh;
     overflow: auto;
     padding-inline-end: 0.25em;
 
@@ -76,6 +52,7 @@
   .stats {
     display: flex;
     gap: 1.25em;
+    margin-block-start: 0.75em;
     padding-block: 0.25em;
     border-block: 1px solid var(--is-border, #2a3038);
 
@@ -95,6 +72,4 @@
 }
 
 /* Mientras corre la verificación el diálogo no acepta interacción nueva. */
-.backdrop[aria-busy="true"] .modal {
-  cursor: progress;
-}
+:host .dlg[aria-busy="true"] { cursor: progress; }

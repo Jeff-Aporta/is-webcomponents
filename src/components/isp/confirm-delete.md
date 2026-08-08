@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./confirm-delete.js
 style: ./confirm-delete.css
-preview: ../../previews/isp/is-confirm-delete.html
+preview: ../../previews/isp/is-confirm-delete.json
 ---
 # `<is-confirm-delete>`
 
@@ -62,7 +62,8 @@ import './confirm-delete.js';
 | `cancel-label` | string | Default `Cancelar`. |
 | `maxlength` | número | Límite del campo de confirmación. |
 | `case-sensitive` | boolean | Por defecto compara sin distinguir mayúsculas. |
-| `loading` | boolean | Bloquea ambos botones mientras corre el borrado. |
+| `loading` | boolean | Bloquea ambos botones mientras corre el borrado. Además cancela el `is-hide`. |
+| `light-dismiss` | boolean | **Opt-in**: cerrar al hacer click en el backdrop. Antes cerraba siempre. |
 
 #### Propiedades públicas
 
@@ -87,8 +88,19 @@ import './confirm-delete.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
+| `is-show` | `{}` | sí | sí | no |
+| `is-after-show` | `{}` | sí | sí | no |
+| `is-hide` | `{ source }` | sí | sí | **sí** |
+| `is-after-hide` | `{}` | sí | sí | no |
 | `is-confirm-delete` | `{ value }` | sí | sí | no |
 | `is-cancel-delete` | `{}` | sí | sí | no |
+
+El ciclo `is-show` / `is-hide` / … lo emite el `<is-dialog>` interno
+(`_shared/modal-base.js`) y es el que hay que usar para controlar el cierre:
+`is-hide` es cancelable con `preventDefault()`. `is-cancel-delete` se conserva
+como evento semántico ADICIONAL y acompaña a `is-hide` cuando el cierre lo pide
+el usuario (Escape, backdrop, botón Cancelar); un `hide()` programático no
+emite ninguno de los dos.
 
 ### Métodos y propiedades públicas
 
@@ -109,6 +121,10 @@ import './confirm-delete.js';
 | `fields` | Personalizable con `::part(fields)`. |
 | `actions` | Personalizable con `::part(actions)`. |
 
+### Custom states
+
+No expone custom states.
+
 ### CSS custom properties
 
 | Token | Uso |
@@ -116,11 +132,20 @@ import './confirm-delete.js';
 | `--is-confirm-delete-accent` | Color del título y del icono. |
 | `--is-z-modal` | Capa de apilado. |
 
+
+### Integración con formularios
+
+No declara integración form-associated.
 ## Comportamiento
 
 `is-confirm-delete` SOLO se emite si la clave coincide (se vuelve a comprobar en
 el handler, por si alguien quita el `disabled` desde fuera). Al abrir, el campo
 se vacía siempre: reabrir nunca hereda una confirmación anterior.
+
+El componente NO implementa su propio ciclo de modal: compone un `<is-dialog>`
+dentro de su shadow root y cuelga el contenido como light DOM suyo. De ahí
+salen gratis el focus-trap (que antes no existía), el `Escape`, el restore de
+foco y las animaciones.
 
 ## Dependencias y componentes relacionados
 
@@ -128,13 +153,39 @@ se vacía siempre: reabrir nunca hereda una confirmación anterior.
 - [`../actions/button.js`](../actions/button.js)
 - [`../forms/input.js`](../forms/input.js)
 - [`../media/icon.js`](../media/icon.js)
+- [`../layout/dialog.js`](../layout/dialog.js) — provee todo el ciclo del modal.
 
 Tags del módulo: `<is-confirm-delete>`.
 
 ## Accesibilidad
 
-`role="alertdialog"` + `aria-modal` + `aria-labelledby` al título; el foco entra
-en el campo de confirmación y vuelve al trigger al cerrar.
+`role="dialog"` + `aria-modal` (los pone el `<is-dialog>` interno); el foco
+entra en el campo de confirmación (`autofocus`) y vuelve al trigger al cerrar.
+Hay **focus-trap** con `Tab` / `Shift+Tab`, que antes faltaba.
+
+Los `<is-button>` / `<is-input>` del diálogo llevan `tabindex="0"` a propósito:
+usan `delegatesFocus`, así que sin él no matchean el selector de focuseables
+del trap y `Tab` se quedaría muerto.
+
+## Ejemplo avanzado
+
+```html
+<is-confirm-delete id="borrar" entity="comprobante"
+                   confirm-value="CMP-0007" pk-label="consecutivo">
+</is-confirm-delete>
+
+<script type="module">
+  const modal = document.getElementById('borrar');
+  modal.show();
+  modal.addEventListener('is-confirm-delete', async (e) => {
+    modal.loading = true;                 // bloquea botones y cancela is-hide
+    await fetch(`/api/comprobante/${e.detail.value}`, { method: 'DELETE' });
+    modal.loading = false;
+    modal.hide();
+  });
+  modal.addEventListener('is-cancel-delete', () => modal.reset());
+</script>
+```
 
 ## Errores comunes
 
@@ -151,4 +202,4 @@ en el campo de confirmación y vuelve al trigger al cerrar.
 
 - [JavaScript](./confirm-delete.js)
 - [CSS](./confirm-delete.css)
-- [Preview](../../previews/isp/is-confirm-delete.html)
+- [Preview](../../previews/isp/is-confirm-delete.json)
