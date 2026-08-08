@@ -76,3 +76,42 @@ test('ux-audit harness existe y no se confunde con .test.ts', () => {
   assert.match(src, /pageerror|console/);
   assert.match(src, /screenshot/);
 });
+
+test('is-btn-ref / is-catalogo-gen behaviors asignan controller', () => {
+  for (const tag of ['is-btn-ref', 'is-catalogo-gen']) {
+    assert.ok(existsSync(join(root, `src/previews/behaviors/${tag}.js`)), `${tag} behavior`);
+    const src = read(`src/previews/behaviors/${tag}.js`);
+    assert.match(src, /\.controller\s*=/);
+    // El `Lista` puede venir inline o del factory compartido
+    // `controller-from-config.js`, que ya lo implementa una sola vez.
+    assert.ok(
+      /async\s+Lista/.test(src) || /create\w*Controller/.test(src),
+      `${tag}: el controller debe traer Lista (inline o vía controller-from-config.js)`,
+    );
+  }
+  const catalog = read('src/previews/catalog.js');
+  assert.match(catalog, /is-btn-ref[\s\S]*?behaviors\/is-btn-ref\.js/);
+  assert.match(catalog, /is-catalogo-gen[\s\S]*?behaviors\/is-catalogo-gen\.js/);
+});
+
+test('is-ag-grid api facade no asume #api listo (getState/setRows)', () => {
+  const src = read('src/components/data/ag-grid.js');
+  assert.match(src, /getState:\s*\(\)\s*=>\s*self\.#api\?\.getState/);
+  assert.match(src, /#externalData/);
+  assert.match(src, /if\s*\(!self\.#api\)\s*return/);
+});
+
+test('is-data-grid page-size no usa .options nativo de is-select', () => {
+  const src = read('src/components/data/data-grid.js');
+  assert.doesNotMatch(src, /#pageSizeSelect\.options/);
+  assert.match(src, /querySelectorAll\(['"]is-option, option['"]\)/);
+  const ui = read('src/components/_shared/grid-ui.js');
+  assert.doesNotMatch(ui, /is-select-option/);
+  assert.match(ui, /createElement\(['"]is-option['"]\)/);
+});
+
+test('is-speed-dial behavior garantiza #logTable o no querySelector-on-null', () => {
+  const src = read('src/previews/behaviors/is-speed-dial.js');
+  assert.match(src, /logTable/);
+  assert.match(src, /if\s*\(!logBody\)|!logBody\)\s*return/);
+});

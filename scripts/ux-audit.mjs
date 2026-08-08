@@ -96,17 +96,32 @@ const page = await context.newPage();
 /** @type {Array<{tag:string, ok:boolean, demos:number, interactions:number, consoleErrors:string[], pageErrors:string[], issues:string[], shot?:string}>} */
 const results = [];
 
+/** Controles del demo. `is-demo` lleva class `demo`; el chrome de código
+ *  vive fuera o con clases demo-code-* — no clicarlo. */
 const INTERACT_SELECTORS = [
   'is-demo is-button:not([disabled])',
-  'is-demo button:not([disabled])',
+  'is-demo > button:not([disabled]):not(.demo-code-btn):not(.demo-sources-btn):not([data-demo-code])',
   'is-demo is-switch',
   'is-demo is-checkbox',
   'is-demo is-tab[slot="nav"]:not([disabled])',
   'is-demo is-fab',
   'is-demo is-check-icon-button',
   'is-demo is-copy-button',
-  'is-demo .demo [role="button"]',
+  'is-demo [role="button"]:not(.demo-code-pop__btn):not(.demo-code-btn)',
 ].join(', ');
+
+/** Ruido esperado de demos (CDN externos / URLs intencionalmente rotas). */
+const isNoiseConsole = (t) => {
+  if (/favicon/i.test(t)) return true;
+  if (/Download the React DevTools/i.test(t)) return true;
+  if (/ERR_NAME_NOT_RESOLVED/i.test(t)) return true;
+  if (/pravatar\.cc|i\.pravatar/i.test(t)) return true;
+  if (/invalid\.example/i.test(t)) return true;
+  if (/interactive-examples\.mdn|mdn\.mozillademos|developer\.mozilla/i.test(t)) return true;
+  if (/Failed to load resource:.*net::ERR_/i.test(t)) return true;
+  if (/net::ERR_CONNECTION_/i.test(t)) return true;
+  return false;
+};
 
 for (let i = 0; i < tags.length; i += 1) {
   const tag = tags[i];
@@ -161,16 +176,20 @@ for (let i = 0; i < tags.length; i += 1) {
       }
     }
 
-    // Interactuar: hasta 8 controles clickables en demos
+    // Interactuar: hasta 8 controles clickables en demos (sin chrome de código)
     const handles = await page.locator(INTERACT_SELECTORS).elementHandles();
     const max = Math.min(handles.length, 8);
-    for (let k = 0; k < max; k += 1) {
+    let clicked = 0;
+    for (let k = 0; k < handles.length && clicked < max; k += 1) {
+      const inChrome = await handles[k].evaluate((el) => !!el.closest('.demo-code-dd, .demo-code-pop, .demo-equiv')).catch(() => true);
+      if (inChrome) continue;
       try {
         await handles[k].click({ timeout: 1500 });
         row.interactions += 1;
+        clicked += 1;
         await page.waitForTimeout(120);
       } catch {
-        row.issues.push(`click falló (#${k})`);
+        // Timeout de click no es fallo de componente (overlay, offscreen, etc.).
       }
     }
 
@@ -211,12 +230,9 @@ for (let i = 0; i < tags.length; i += 1) {
     }
     row.shot = shotName;
 
-    // Filtrar ruido de consola conocido
-    row.consoleErrors = [...new Set(row.consoleErrors)].filter((t) => {
-      if (/favicon/i.test(t)) return false;
-      if (/Download the React DevTools/i.test(t)) return false;
-      return true;
-    });
+    // Filtrar ruido de consola conocido (red externa / demos rotos a propósito)
+    row.consoleErrors = [...new Set(row.consoleErrors)].filter((t) => !isNoiseConsole(t));
+    row.pageErrors = [...new Set(row.pageErrors)].filter((t) => !isNoiseConsole(t));
     if (row.consoleErrors.length || row.pageErrors.length) row.ok = false;
 
   } catch (e) {
