@@ -89,14 +89,16 @@ slot { display: none; }
   cursor: pointer;
   transition: transform 220ms cubic-bezier(.2,.7,.3,1), opacity 220ms ease,
               background-color 160ms ease;
-}
 
-.big-play is-icon { font-size: 2em; }
-.big-play:hover {
-  background: color-mix(in srgb, var(--is-video-accent) 82%, #000);
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 30%), 0 8px 26px rgb(0 0 0 / 45%);
+  & is-icon { font-size: 2em; }
+
+  &:hover {
+    background: color-mix(in srgb, var(--is-video-accent) 82%, #000);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 30%), 0 8px 26px rgb(0 0 0 / 45%);
+  }
+
+  &:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 }
-.big-play:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
 :host([data-playing]) .big-play,
 :host([data-no-controls]) .big-play {
@@ -116,9 +118,9 @@ slot { display: none; }
   padding: 0 0.6em 0.35em;
   box-sizing: border-box;
   transition: opacity 200ms ease, transform 200ms ease;
-}
 
-.controls[hidden] { display: none !important; }
+  &[hidden] { display: none !important; }
+}
 
 /* Auto-ocultado: solo mientras reproduce y sin interacción reciente */
 :host([data-idle]) .controls {
@@ -198,14 +200,14 @@ slot { display: none; }
   -webkit-appearance: none;
   background: transparent;
   cursor: pointer;
-}
 
-.seek:focus { outline: none; }
-.seek:focus-visible + .bar { outline: 2px solid #fff; outline-offset: 3px; }
-.seek::-webkit-slider-runnable-track { background: transparent; height: 100%; }
-.seek::-webkit-slider-thumb { -webkit-appearance: none; width: 1px; height: 1px; opacity: 0; }
-.seek::-moz-range-track { background: transparent; }
-.seek::-moz-range-thumb { width: 1px; height: 1px; border: 0; opacity: 0; }
+  &:focus { outline: none; }
+  &:focus-visible + .bar { outline: 2px solid #fff; outline-offset: 3px; }
+  &::-webkit-slider-runnable-track { background: transparent; height: 100%; }
+  &::-webkit-slider-thumb { -webkit-appearance: none; width: 1px; height: 1px; opacity: 0; }
+  &::-moz-range-track { background: transparent; }
+  &::-moz-range-thumb { width: 1px; height: 1px; border: 0; opacity: 0; }
+}
 
 /* Tooltip de tiempo sobre la barra */
 .tip {
@@ -232,9 +234,9 @@ slot { display: none; }
   align-items: center;
   gap: 0.15em;
   min-width: 0;
-}
 
-.row .spacer { flex: 1 1 auto; }
+  & .spacer { flex: 1 1 auto; }
+}
 
 .ctrl,
 .iconbtn {
@@ -253,15 +255,37 @@ slot { display: none; }
   cursor: pointer;
   opacity: 0.92;
   transition: opacity 120ms ease, background-color 120ms ease;
+
+  &:hover { opacity: 1; background: rgb(255 255 255 / 12%); }
+  &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  &[hidden] { display: none; }
 }
 
-.iconbtn:hover,
-.ctrl:hover { opacity: 1; background: rgb(255 255 255 / 12%); }
+/* `.big-play` y `.iconbtn` son <is-button>: la caja que se pinta es su
+   ::part(button). Se neutraliza para que la superficie siga siendo la del
+   host (que ya lleva el fondo, el radio y el anillo de la chrome oscura).
+   Se antepone el tipo por especificidad, igual que en check-icon-button.css. */
+is-button.big-play,
+is-button.iconbtn {
+  &::part(button) {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: inherit;
+    line-height: 0;
+  }
 
-.iconbtn:focus-visible,
-.ctrl:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-
-.iconbtn[hidden] { display: none; }
+  /* El anillo de foco lo dibuja el host: sin esto saldrían dos. */
+  &::part(button):focus-visible { outline: none; }
+}
 
 .time {
   flex-shrink: 0;
@@ -270,9 +294,9 @@ slot { display: none; }
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   opacity: 0.92;
-}
 
-.time .sep { opacity: 0.6; margin-inline: 0.15em; }
+  & .sep { opacity: 0.6; margin-inline: 0.15em; }
+}
 
 /* ── Volumen: se despliega al hover, como YouTube ───────────────────── */
 .vol {
@@ -357,9 +381,9 @@ slot { display: none; }
   box-shadow: 0 8px 24px rgb(0 0 0 / 45%);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-}
 
-.menu[hidden] { display: none; }
+  &[hidden] { display: none; }
+}
 
 .menu__head {
   padding: 0.25em 0.5em 0.4em;
@@ -384,24 +408,24 @@ slot { display: none; }
   font-size: 0.8em;
   text-align: left;
   cursor: pointer;
-}
 
-.menu button:hover { background: rgb(255 255 255 / 14%); }
-.menu button[aria-checked="true"] { color: var(--is-video-accent); font-weight: 700; }
+  &:hover { background: rgb(255 255 255 / 14%); }
+  &[aria-checked="true"] { color: var(--is-video-accent); font-weight: 700; }
 
-.menu button::before {
-  content: "";
-  width: 0.9em;
-  height: 0.9em;
-  border-radius: 50%;
-  border: 1.5px solid currentColor;
-  opacity: 0.45;
-}
+  &::before {
+    content: "";
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    opacity: 0.45;
+  }
 
-.menu button[aria-checked="true"]::before {
-  background: currentColor;
-  box-shadow: inset 0 0 0 2px rgb(28 28 28);
-  opacity: 1;
+  &[aria-checked="true"]::before {
+    background: currentColor;
+    box-shadow: inset 0 0 0 2px rgb(28 28 28);
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
