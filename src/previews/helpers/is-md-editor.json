@@ -1,0 +1,88 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-md-editor",
+  "category": "helpers",
+  "title": "<is-md-editor>",
+  "titleHtml": true,
+  "storageKey": "docs-is-md-editor",
+  "styles": "is-md-editor { display: block; width: 100%; max-width: 40rem; }",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-md-editor>",
+      "lede": "Vista previa MD/HTML + chips <code class=\"code\">{{variable}}</code>. Clic abre diálogo fullscreen.\n          Toolbar completa (disabled en solo lectura). Footer: meta + Descargar (siempre).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-md-editor label=\"Prompt del sistema\" placeholder=\"Sin contenido. Haz clic para editar…\">\n  <script type=\"text/markdown\">\n# Instrucción\n\nEres un asistente que responde en **español** con tono profesional.\n\n- Usa `{{tono}}` como guía de estilo\n- Cita fuentes cuando aplique\n\n> Nunca inventes datos financieros.\n  </script>\n</is-md-editor>"
+        }
+      ]
+    },
+    {
+      "id": "readonly-cdn",
+      "title": "Solo lectura",
+      "lede": "Toolbar visible pero disabled. Footer con caracteres/bytes y <strong>Descargar</strong>. Cerrar = X del header.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-md-editor label=\"Snippet CDN\" filename=\"cdn-snippet.md\" edit-block-reason=\"Generado; no editable\">\n  <textarea hidden data-md-source>\n```html\n<script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/user/repo/dist/cdn/all.min.js\"></script>\n```\n\nPégalo antes de cerrar `</body>`.\n  </textarea>\n</is-md-editor>"
+        }
+      ]
+    },
+    {
+      "id": "editable",
+      "title": "Editable",
+      "lede": "Con <code class=\"code\">can-edit</code>: herramientas activas, Descartar/Guardar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-md-editor can-edit label=\"Plantilla de correo\" filename=\"plantilla.md\">\n  <script type=\"text/markdown\">\nHola {{nombre_cliente}},\n\nGracias por confiar en {{empresa}}. Tu próxima cita es el {{fecha_cita}}.\n\nUn saludo,\n{{firma}}\n  </script>\n</is-md-editor>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API HTTP vs actions",
+      "lede": "Prioridad: <code class=\"code\">actions</code> (callbacks JS) → <code class=\"code\">api</code>/<code class=\"code\">src</code> (fetch) → solo eventos locales. Tipos en <code class=\"code\">md-editor-api.d.ts</code>.",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "// A) Custom actions (sin app URL)\nel.actions = {\n  load: async () => ({ content: await store.get('doc'), filename: 'doc.md' }),\n  persist: async (doc) => { await store.put(doc); return doc; },\n};\nawait el.load();\n\n// B) Endpoints HTTP\nel.api = {\n  baseUrl: 'https://api.ejemplo.com',\n  endpoints: { get: '/docs/1', put: '/docs/1' },\n  token: () => localStorage.getItem('token'),\n};\nawait el.load();\n\n// Atajo GET:\n// <is-md-editor src=\"/api/docs/1\" can-edit></is-md-editor>",
+          "lang": "js"
+        }
+      ]
+    },
+    {
+      "id": "vs-render",
+      "title": "vs <is-md-render>",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": ["Necesitas", "Usar"],
+          "rows": [
+            ["Pintar MD embebido / edición ligera", "<code>is-md-render</code>"],
+            ["Toolbar, diálogo, CRUD", "<code>is-md-editor</code>"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": ["API", "Notas"],
+          "rows": [
+            ["<code>load()</code> / <code>persistRemote()</code>", "actions → api endpoints"],
+            ["<code>el.actions</code>", "load / persist / delete (JS only)"],
+            ["<code>el.api</code> / <code>src</code>", "IsMdEditorApiConfig"],
+            ["<code>setDocument(doc)</code>", "content + filename + updatedAt/By"],
+            ["<code>download()</code>", "siempre habilitado"],
+            ["<code>is-persist</code>", "<code>{ value, document }</code>"]
+          ]
+        }
+      ]
+    }
+  ]
+}
