@@ -1,4 +1,4 @@
-import { roundedBarRect, pathLine, pathArea } from '../_shared/svg-chart-engine.js';
+import { roundedBarRect, pathLine, pathArea, svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
  * Marks cartesianas (bar, line, scatter, bubble).
@@ -7,16 +7,6 @@ import { roundedBarRect, pathLine, pathArea } from '../_shared/svg-chart-engine.
  * (categoría, valor) y `ctx.pt(c, v)` lo mapea a pantalla, de modo que
  * `index-axis="y"` (barras horizontales) sale gratis.
  */
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
 
 /** Posición en píxeles del cero (o del borde del dominio si el cero queda fuera). */
 function baselinePos(ctx) {

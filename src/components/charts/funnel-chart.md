@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./funnel-chart.js
 style: ./funnel-chart.css
-preview: ../../previews/data-viz/is-funnel-chart.html
+preview: ../../previews/data-viz/is-funnel-chart.json
 ---
 # `<is-funnel-chart>`
 
@@ -143,7 +143,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./chart.md`](./chart.md)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
-- [`../_shared/chart-palette.js`](../_shared/chart-palette.js)
+- [`../_shared/chart-palette.js`](../_shared/chart-palette.js) (transitiva vía `chart.js`)
 
 Tags del módulo: `<is-funnel-chart>`.
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./funnel-chart.js)
 - [CSS](./funnel-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-funnel-chart.html)
+- [Preview](../../previews/data-viz/is-funnel-chart.json)

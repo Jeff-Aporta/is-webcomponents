@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./waterfall-chart.js
 style: ./waterfall-chart.css
-preview: ../../previews/data-viz/is-waterfall-chart.html
+preview: ../../previews/data-viz/is-waterfall-chart.json
 ---
 # `<is-waterfall-chart>`
 
@@ -143,7 +143,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./chart.md`](./chart.md)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
-- [`../_shared/chart-palette.js`](../_shared/chart-palette.js)
+- [`../_shared/chart-palette.js`](../_shared/chart-palette.js) (vía `chart.js` y `getStatusColor` en `marks-waterfall.js`)
 
 Tags del módulo: `<is-waterfall-chart>`.
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./waterfall-chart.js)
 - [CSS](./waterfall-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-waterfall-chart.html)
+- [Preview](../../previews/data-viz/is-waterfall-chart.json)

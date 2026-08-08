@@ -1,0 +1,18 @@
+/**
+ * Tokens semánticos compartidos por los componentes "sueltos" de data/
+ * (stat, kanban, transfer, gauge). Antes cada uno repetía este bloque literal.
+ *
+ * Se consume con `@import './_tokens.css';` en la primera línea del CSS del
+ * componente: `adoptCss` inyecta un <link> y el @import resuelve relativo a
+ * ese archivo. No incluye `display` — cada componente decide el suyo.
+ */
+:host {
+  --bg: var(--is-bg-elev, #1c2128);
+  --fg: var(--is-text, #e8eaf1);
+  --muted: color-mix(in srgb, var(--fg) 65%, transparent);
+  --border: var(--is-border, #2a2f3a);
+  --brand: var(--is-brand, dodgerblue);
+  --success: var(--is-success, #0bb783);
+  --warning: var(--is-warning, #ffa800);
+  --danger: var(--is-danger, #f64e60);
+}

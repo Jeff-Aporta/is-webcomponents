@@ -6,7 +6,7 @@ category: data
 status: public
 source: ./data-grid.js
 style: ./data-grid.css
-preview: ../../previews/data/is-data-grid.html
+preview: ../../previews/data/is-data-grid.json
 ---
 # `<is-data-grid>`
 
@@ -154,10 +154,10 @@ import './data-grid.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-sort` | sí | sí | sí | no |
-| `is-filter` | sí | sí | sí | no |
+| `is-sort-change` | sí | sí | sí | no |
+| `is-filter-change` | sí | sí | sí | no |
 | `is-quick-filter` | sí | sí | sí | no |
-| `is-column-visibility` | sí | sí | sí | no |
+| `is-column-hide` | sí | sí | sí | no |
 | `is-column-resize` | sí | sí | sí | no |
 | `is-column-pin` | sí | sí | sí | no |
 | `is-density` | sí | sí | sí | no |
@@ -180,7 +180,6 @@ import './data-grid.js';
 | `is-group-toggle` | sí | sí | sí | no |
 | `is-detail-toggle` | sí | sí | sí | no |
 | `is-rows-scroll-end` | sí | sí | sí | no |
-| `is-pagination` | sí | sí | sí | no |
 | `is-page-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
@@ -315,10 +314,10 @@ Documentación de cabecera preservada desde fuente:
 > undo-redo, aggregation-position, disable-column-menu, disable-column-filter,
 > disable-column-sort, disable-column-resize, disable-column-reorder,
 > disable-multiple-sorting, disable-row-selection-on-click
-> Events: is-sort, is-filter, is-quick-filter, is-pagination, is-page-change,
+> Events: is-sort-change, is-filter-change, is-quick-filter, is-page-change,
 > is-select, is-cell-select, is-cell-click, is-cell-double-click, is-row-click,
 > is-row-double-click, is-edit-start, is-edit-stop, is-row-update,
-> is-column-resize, is-column-reorder, is-column-visibility, is-column-pin,
+> is-column-resize, is-column-reorder, is-column-hide, is-column-pin,
 > is-density, is-detail-toggle, is-group-toggle, is-row-reorder, is-copy,
 > is-paste, is-undo, is-redo, is-rows-scroll-end, is-export
 > CSS parts: base, toolbar, toolbar-button, quick-filter, viewport, header,
@@ -366,4 +365,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./data-grid.js)
 - [CSS](./data-grid.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data/is-data-grid.html)
+- [Preview](../../previews/data/is-data-grid.json)

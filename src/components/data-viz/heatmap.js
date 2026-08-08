@@ -1,5 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
-import { niceTicks, scaleLinear } from '../_shared/svg-chart-engine.js';
+import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 
@@ -251,12 +251,6 @@ import { emit } from '../_shared/emit.js';
     #clearHover() {
       this.#svg.querySelectorAll('.cell.is-hover').forEach((c) => c.classList.remove('is-hover'));
     }
-  }
-
-  function svgEl(tag, attrs) {
-    const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    for (const [k, v] of Object.entries(attrs || {})) if (v != null) n.setAttribute(k, v);
-    return n;
   }
 
   function colorFor(v, [lo, hi], palette) {

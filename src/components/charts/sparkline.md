@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./sparkline.js
 style: ./sparkline.css
-preview: ../../previews/data-viz/is-sparkline.html
+preview: ../../previews/data-viz/is-sparkline.json
 ---
 # `<is-sparkline>`
 
@@ -51,7 +51,7 @@ import './sparkline.js';
 | `label` | string/según contrato | Fuente define default/restricción. |
 | `variant` | string/según contrato | Fuente define default/restricción. |
 | `curve` | string/según contrato | Fuente define default/restricción. |
-| `trend` | string/según contrato | Fuente define default/restricción. |
+| `trend` | `positive \| negative \| neutral` (sin atributo = color de acento de marca) | Controla `--line-color`/`--border-color-1`/`--fill-color-1` vía tokens de estado (`--is-success-text`, `--is-danger-text`, `--is-text-dim`). |
 
 #### Propiedades públicas
 
@@ -147,4 +147,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./sparkline.js)
 - [CSS](./sparkline.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-sparkline.html)
+- [Preview](../../previews/data-viz/is-sparkline.json)

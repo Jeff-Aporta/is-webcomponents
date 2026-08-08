@@ -1,6 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 import { emit } from '../_shared/emit.js';
 
 /**
@@ -33,9 +34,8 @@ import { emit } from '../_shared/emit.js';
 
   const COLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-  class IsSpreadsheet extends HTMLElement {
+  class IsSpreadsheet extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
     #data = [];     // matriz [rows][cols]: { raw, computed }
     #editing = null;
     #formulaCache = null;
@@ -59,20 +59,17 @@ import { emit } from '../_shared/emit.js';
       };
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#load();
       this.#render();
       document.addEventListener('keydown', this.#onDocKeydown);
     }
 
-    disconnectedCallback() {
-      this.#mounted = false;
+    onDisconnected() {
       document.removeEventListener('keydown', this.#onDocKeydown);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name) {
       if (name === 'value') this.#load();
       this.#render();
     }

@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { svgEl } from '../_shared/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './treemap-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/sequence-spec.js';
 import { tkHueToCss } from '../_shared/tk-hue.js';
@@ -26,14 +27,6 @@ import { emit } from '../_shared/emit.js';
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
 
 function fmtValue(v) {
   return new Intl.NumberFormat('es-CO').format(Math.round(v));
@@ -265,7 +258,7 @@ class IsTreemap extends HTMLElement {
     if (!lb || !lb.isConnected) {
       lb = document.createElement('is-diagram-lightbox');
       lb.setAttribute('kind', 'treemap');
-      lb.addEventListener('is-close', () => lb.remove());
+      lb.addEventListener('is-after-hide', () => lb.remove());
       document.body.appendChild(lb);
       this.#ownLightbox = lb;
     }

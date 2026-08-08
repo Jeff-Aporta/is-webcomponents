@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 import { emit } from '../_shared/emit.js';
 
 /**
@@ -31,9 +32,8 @@ import { emit } from '../_shared/emit.js';
     max: (vs) => Math.max(...vs),
   };
 
-  class IsPivotTable extends HTMLElement {
+  class IsPivotTable extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
 
     constructor() {
       super();
@@ -46,14 +46,13 @@ import { emit } from '../_shared/emit.js';
       adoptCss(this.shadowRoot, import.meta.url);
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
       this.#readData();
       this.#render();
     }
 
-    attributeChangedCallback() {
-      if (this.#mounted) this.#render();
+    onAttributeChanged() {
+      this.#render();
     }
 
     #readData() {

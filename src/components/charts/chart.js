@@ -1,5 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
-import { scaleLinear, scaleBand, niceTicks } from '../_shared/svg-chart-engine.js';
+import { scaleLinear, scaleBand, niceTicks, svgEl } from '../_shared/svg-chart-engine.js';
 import { getCategoricalColors, getFillColors } from '../_shared/chart-palette.js';
 import { PathTurtle } from '../_shared/path-turtle.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
@@ -43,14 +43,6 @@ const plainFmt = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 2 });
 function formatValue(v) {
   if (typeof v !== 'number' || !Number.isFinite(v)) return String(v ?? '');
   return Math.abs(v) >= 10000 ? compactFmt.format(v) : plainFmt.format(v);
-}
-
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
 }
 
 function numOr(value, fallback) {
@@ -459,7 +451,7 @@ class IsChart extends HTMLElement {
     if (!lb || !lb.isConnected) {
       lb = document.createElement('is-diagram-lightbox');
       lb.setAttribute('kind', this.type);
-      lb.addEventListener('is-close', () => lb.remove());
+      lb.addEventListener('is-after-hide', () => lb.remove());
       document.body.appendChild(lb);
       this.#ownLightbox = lb;
     }

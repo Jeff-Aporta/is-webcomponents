@@ -1,17 +1,9 @@
+import { svgEl } from '../_shared/svg-chart-engine.js';
+
 /**
  * Marca de embudo (funnel): bandas horizontales apiladas, cada una centrada
  * y con ancho proporcional a su valor respecto al primer paso.
  */
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
 
 /**
  * Calcula la proporción y la caída de cada paso del embudo.

@@ -197,15 +197,15 @@
   flex: 0 0 auto;
   font-size: var(--chart-legend-size);
   line-height: 1.4;
-}
 
-.wrap[data-legend="start"] .legend,
-.wrap[data-legend="end"] .legend {
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  max-width: 40%;
-  overflow: auto;
+  .wrap[data-legend="start"] &,
+  .wrap[data-legend="end"] & {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    max-width: 40%;
+    overflow: auto;
+  }
 }
 
 .legend-item {

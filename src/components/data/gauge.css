@@ -1,12 +1,8 @@
+@import './_tokens.css';
+
 :host {
   display: inline-block;
-  --brand: var(--is-brand, dodgerblue);
-  --success: var(--is-success, #0bb783);
-  --warning: var(--is-warning, #ffa800);
-  --danger: var(--is-danger, #f64e60);
-  --bg-track: color-mix(in srgb, var(--is-text, #e8eaf1) 8%, transparent);
-  --fg: var(--is-text, #e8eaf1);
-  --muted: color-mix(in srgb, var(--is-text, #e8eaf1) 65%, transparent);
+  --bg-track: color-mix(in srgb, var(--fg) 8%, transparent);
 }
 
 .gauge {

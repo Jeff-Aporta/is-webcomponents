@@ -1,0 +1,17 @@
+/**
+ * Cabeceras de fila/esquina pegadas a la izquierda. Lo comparten
+ * is-pivot-table y is-spreadsheet, que usan las mismas clases `.corner` y
+ * `.row-head` dentro de su <table>.
+ *
+ * Cada componente pone encima lo suyo (text-align, z-index del apilado).
+ *
+ * ponytail: no incluye el "pinned" de data-grid/ag-grid — aquello es anclaje
+ * de columnas con box-shadow y otras clases, no la misma regla.
+ */
+.corner,
+.row-head {
+  position: sticky;
+  left: 0;
+  background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
+  font-weight: 600;
+}

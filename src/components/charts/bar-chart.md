@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./bar-chart.js
 style: ./bar-chart.css
-preview: ../../previews/data-viz/is-bar-chart.html
+preview: ../../previews/data-viz/is-bar-chart.json
 ---
 # `<is-bar-chart>`
 
@@ -143,7 +143,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./chart.md`](./chart.md)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
-- [`../_shared/chart-palette.js`](../_shared/chart-palette.js)
+- [`../_shared/chart-palette.js`](../_shared/chart-palette.js) (transitiva vía `chart.js`)
 
 Tags del módulo: `<is-bar-chart>`.
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./bar-chart.js)
 - [CSS](./bar-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-bar-chart.html)
+- [Preview](../../previews/data-viz/is-bar-chart.json)

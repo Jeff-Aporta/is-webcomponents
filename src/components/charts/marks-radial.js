@@ -1,4 +1,4 @@
-import { pathArc, polarToCartesian } from '../_shared/svg-chart-engine.js';
+import { pathArc, polarToCartesian, svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
  * Marks radiales (pie, doughnut, polarArea, radar).
@@ -7,16 +7,7 @@ import { pathArc, polarToCartesian } from '../_shared/svg-chart-engine.js';
  * `ctx.sliceMask` indica qué rebanadas siguen visibles según la leyenda.
  */
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
 const TAU = Math.PI * 2;
-
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
 
 function sliceColor(ds, index, colors) {
   if (Array.isArray(ds.backgroundColor)) return ds.backgroundColor[index % ds.backgroundColor.length];
