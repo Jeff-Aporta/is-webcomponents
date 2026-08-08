@@ -22,10 +22,11 @@ inferir API desde nombre.
 | `<is-heading>` | [heading.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/heading.md) | Títulos h1..h6 tintados por la paleta |
 | `<is-accordion-group>` | [accordion-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/accordion-group.md) | Acordeón declarativo |
 | `<is-confirm-delete>` | [confirm-delete.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/confirm-delete.md) | Confirmación destructiva "escribe para confirmar" |
-| `<is-form>` | [form.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/form.md) | Formulario con header/content/footer |
-| `<is-function-form>` | [function-form.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/function-form.md) | Atributos de una función del editor enriquecido |
+| `<is-form>` | [form.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/form.md) | Formulario con header/content/footer + json2html/html2json |
 | `<is-modal-verificacion>` | [modal-verificacion.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/modal-verificacion.md) | Verificación asíncrona de un registro |
 | `<is-loading-overlay>` | [loading-overlay.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/loading-overlay.md) | Overlay de carga sobre un contenedor |
+| `<is-btn-ref>` | [btn-ref.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/btn-ref.md) | Campo de referencia a catálogo: input + modal de selección |
+| `<is-catalogo-gen>` | [catalogo-gen.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/catalogo-gen.md) | Catálogo CRUD genérico con grilla, ficha y modales de acción |
 
 ## Composición y relaciones
 

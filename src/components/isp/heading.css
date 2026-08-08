@@ -1,12 +1,14 @@
 /* <is-heading> — títulos h1..h6 con tinte de marca (port de ISP H1..H6).
    Índice de --vars:
-     --h-clr  : color base del título (default: acento de la paleta activa).
-     --h-mix  : cuánto color de texto se mezcla; sube al bajar de nivel.
-     --h-size : tamaño en em del nivel actual. */
+     --h-clr       : color base (semántico / currentColor / CSS libre).
+     --h-mix       : % mezclado hacia --h-mix-with (sube al bajar de nivel).
+     --h-mix-with  : color destino del mix (default: texto del tema).
+     --h-size      : tamaño en em del nivel actual. */
 
 :host {
   --h-clr: var(--is-accent, var(--is-color-brand, var(--is-text)));
   --h-mix: 15%;
+  --h-mix-with: var(--is-text, currentColor);
   --h-size: 2em;
   display: block;
   min-width: 0;
@@ -24,13 +26,11 @@
   letter-spacing: -0.01em;
   min-width: 0;
   max-width: 100%;
-  /* Fallback plano primero: si el navegador no soporta color-mix, el título
-     sale con el color base en vez de quedarse sin declaración. */
+  /* Fallback plano: sin color-mix el título usa el color base. */
   color: var(--h-clr);
-  color: color-mix(in srgb, var(--h-clr), var(--is-text, #e6e8eb) var(--h-mix));
+  color: color-mix(in srgb, var(--h-clr), var(--h-mix-with) var(--h-mix));
 }
 
-/* Escalera de niveles: mismos porcentajes de mezcla que ISP. */
 :host([level="1"]) { --h-mix: 15%; --h-size: 2em; }
 :host([level="2"]) { --h-mix: 30%; --h-size: 1.6em; }
 :host([level="3"]) { --h-mix: 45%; --h-size: 1.35em; }
@@ -38,7 +38,7 @@
 :host([level="5"]) { --h-mix: 80%; --h-size: 1em; }
 :host([level="6"]) { --h-mix: 90%; --h-size: 0.9em; }
 
-/* Colores semánticos: mismos tokens que <is-text> (no existe *-500 en el tema). */
+/* Semánticos → tokens del tema. */
 :host([color="brand"]) {
   --h-clr: var(--is-brand-text, var(--is-accent, var(--is-color-brand, var(--is-text))));
 }
@@ -47,3 +47,6 @@
 :host([color="success"]) { --h-clr: var(--is-success-text, var(--is-color-success, var(--is-text))); }
 :host([color="warning"]) { --h-clr: var(--is-warning-text, var(--is-color-warning, var(--is-text))); }
 :host([color="danger"]) { --h-clr: var(--is-danger-text, var(--is-color-danger, var(--is-text))); }
+
+/* Hereda el color tipográfico del contexto (como em para tamaño). */
+:host([color="current"]) { --h-clr: currentColor; }

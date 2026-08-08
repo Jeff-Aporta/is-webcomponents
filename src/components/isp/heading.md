@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./heading.js
 style: ./heading.css
-preview: ../../previews/isp/is-heading.html
+preview: ../../previews/isp/is-heading.json
 ---
 # `<is-heading>`
 
@@ -39,6 +39,7 @@ import './heading.js';
 ```html
 <is-heading level="1">Título de página</is-heading>
 <is-heading level="3" color="success">Sección aprobada</is-heading>
+<is-heading level="2" mix="0%">Solo acento</is-heading>
 ```
 
 ## Mapeo Svelte → Web Component
@@ -63,7 +64,10 @@ import './heading.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `level` | `1`…`6` | Default `1`, reflejado. Un valor inválido se corrige a `1`. |
-| `color` | `brand` \| `neutral` \| `info` \| `success` \| `warning` \| `danger` | Default `brand` (vía `--h-clr`). |
+| `color` | semántico · `current` · color CSS | Semánticos → tokens. `current` → `currentColor`. Otro string → color CSS tal cual. Default acento vía `--h-clr`. |
+| `mix` | string (`0%`…`100%`) | Override de `--h-mix`. Ausente = default del nivel. |
+| `mix-with` | `text` · `transparent` · `white` · `black` · `current` · CSS | Destino del `color-mix` (default: texto del tema). |
+| `size` | string CSS | Override de `--h-size`. Ausente = default del nivel. |
 
 #### Propiedades públicas
 
@@ -71,6 +75,9 @@ import './heading.js';
 | --- | --- | --- |
 | `level` | lectura/escritura | Devuelve string `'1'`…`'6'`. |
 | `color` | lectura/escritura | Refleja el atributo. |
+| `mix` | lectura/escritura | Refleja el atributo / limpia el override. |
+| `size` | lectura/escritura | Refleja el atributo. |
+| `computedMix` | solo lectura | Mix efectivo (atributo o default del nivel). |
 
 ### Slots
 
@@ -82,11 +89,19 @@ import './heading.js';
 
 No emite eventos propios.
 
+### Métodos y propiedades públicas
+
+No expone métodos públicos: el componente es declarativo y su estado se controla por atributos.
+
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
 | `heading` | El elemento `<hN>`; personalizable con `::part(heading)`. |
+
+### Custom states
+
+No expone custom states.
 
 ### CSS custom properties
 
@@ -96,6 +111,10 @@ No emite eventos propios.
 | `--h-mix` | Porcentaje de `--is-text` mezclado; default según nivel. |
 | `--h-size` | Tamaño en em del nivel. |
 
+
+### Integración con formularios
+
+No declara integración form-associated.
 ## Comportamiento
 
 Escala por nivel: 2 · 1.6 · 1.35 · 1.15 · 1 · 0.9 em sobre el `font-size`
@@ -146,4 +165,4 @@ tamaño.
 - [JavaScript](./heading.js)
 - [CSS](./heading.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-heading.html)
+- [Preview](../../previews/isp/is-heading.json)

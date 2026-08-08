@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./flex-layout.js
 style: ./flex-layout.css
-preview: ../../previews/isp/is-flex-layout.html
+preview: ../../previews/isp/is-flex-layout.json
 ---
 # `<is-flex-layout>`
 
@@ -116,6 +116,10 @@ También refleja `data-sizew` y `data-szw-*` (ver `block-layout.md`).
 | --- | --- |
 | `content` | El `<slot>` de los ítems. |
 
+### Custom states
+
+No expone custom states.
+
 ### CSS custom properties
 
 | Token | Uso |
@@ -125,6 +129,10 @@ También refleja `data-sizew` y `data-szw-*` (ver `block-layout.md`).
 | `--min-width`, `--min-height` | Mínimos. |
 | `--max-width`, `--max-height` | Máximos. |
 
+
+### Integración con formularios
+
+No declara integración form-associated.
 ## Comportamiento
 
 El gap por defecto sale de `data-sizew` (`xs` → 0.2rem, `sm` → 0.35rem, resto
@@ -174,4 +182,4 @@ mientras no se usen `order`/`row-reverse` desde fuera.
 - [JavaScript](./flex-layout.js)
 - [CSS](./flex-layout.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-flex-layout.html)
+- [Preview](../../previews/isp/is-flex-layout.json)

@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./text.js
 style: ./text.css
-preview: ../../previews/isp/is-text.html
+preview: ../../previews/isp/is-text.json
 ---
 # `<is-text>`
 
@@ -60,7 +60,10 @@ import './text.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | `brand` \| `neutral` \| `info` \| `success` \| `warning` \| `danger` | Sin default: si falta, hereda el color del contexto. |
+| `color` | semántico · `current` · color CSS | Sin attr: hereda. `current` → `currentColor`. Otro string → color CSS. |
+| `mix` | string (`0%`…`100%`) | Mezcla hacia `mix-with` vía `color-mix`. |
+| `mix-with` | `text` · `transparent` · `white` · `black` · `current` · CSS | Destino del mix (default: texto del tema). |
+| `lines` | number | Recorte a N líneas. |
 | `lines` | number | `>= 1` activa el clamp; ausente o `0` lo desactiva. |
 
 #### Propiedades públicas
@@ -80,11 +83,19 @@ import './text.js';
 
 No emite eventos propios.
 
+### Métodos y propiedades públicas
+
+No expone métodos públicos: el componente es declarativo y su estado se controla por atributos.
+
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
 | `content` | El `<slot>` del texto. |
+
+### Custom states
+
+No expone custom states.
 
 ### CSS custom properties
 
@@ -93,6 +104,10 @@ No emite eventos propios.
 | `--text-clr` | Color resuelto; se puede pisar directamente. |
 | `--mx-lns` | Líneas del clamp (la escribe el JS). |
 
+
+### Integración con formularios
+
+No declara integración form-associated.
 ## Comportamiento
 
 Con `lines` el host pasa a `display: -webkit-box` con `-webkit-box-orient:
@@ -142,4 +157,4 @@ entero. Si el recorte debe ser también semántico, acortar el contenido.
 - [JavaScript](./text.js)
 - [CSS](./text.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-text.html)
+- [Preview](../../previews/isp/is-text.json)

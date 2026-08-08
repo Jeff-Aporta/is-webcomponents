@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./grid-layout.js
 style: ./grid-layout.css
-preview: ../../previews/isp/is-grid-layout.html
+preview: ../../previews/isp/is-grid-layout.json
 ---
 # `<is-grid-layout>`
 
@@ -109,6 +109,10 @@ También refleja `data-sizew` y `data-szw-*`.
 | --- | --- |
 | `content` | El `<slot>` de las celdas. |
 
+### Custom states
+
+No expone custom states.
+
 ### CSS custom properties
 
 | Token | Uso |
@@ -116,6 +120,10 @@ También refleja `data-sizew` y `data-szw-*`.
 | `--cells` | Track list ya resuelta. |
 | `--gap` | Gap efectivo. |
 
+
+### Integración con formularios
+
+No declara integración form-associated.
 ## Comportamiento
 
 Sin `cells`, la rejilla queda en `grid-template-columns: none` y las celdas
@@ -162,4 +170,4 @@ tabulares.
 - [JavaScript](./grid-layout.js)
 - [CSS](./grid-layout.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-grid-layout.html)
+- [Preview](../../previews/isp/is-grid-layout.json)

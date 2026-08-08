@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./accordion-group.js
 style: ./accordion-group.css
-preview: ../../previews/isp/is-accordion-group.html
+preview: ../../previews/isp/is-accordion-group.json
 ---
 # `<is-accordion-group>`
 
@@ -86,12 +86,20 @@ import './accordion-group.js';
 | --- | --- |
 | `base` | Personalizable con `::part(base)`. |
 
+### Custom states
+
+No expone custom states.
+
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
 | `--is-accordion-gap` | Separación vertical entre paneles. |
 
+
+### Integración con formularios
+
+No declara integración form-associated.
 ## Comportamiento
 
 El grupo NO reimplementa el disclosure: escucha los `is-show` / `is-hide`
@@ -109,6 +117,23 @@ Tags del módulo: `<is-accordion-group>`.
 
 Cada panel conserva el `aria-expanded` y el botón de `<is-details>`.
 
+## Ejemplo avanzado
+
+```html
+<is-accordion-group id="faq" multiple>
+  <is-details summary="Facturación">Contenido</is-details>
+  <is-details summary="Nómina">Contenido</is-details>
+</is-accordion-group>
+
+<script type="module">
+  const faq = document.getElementById('faq');
+  faq.addEventListener('is-accordion-change', (e) => {
+    console.log(e.detail.opened, e.detail.closed);
+  });
+  faq.showAll();
+</script>
+```
+
 ## Errores comunes
 
 - Anidar los `<is-details>` dentro de un wrapper: deben ser hijos directos.
@@ -124,4 +149,4 @@ Cada panel conserva el `aria-expanded` y el botón de `<is-details>`.
 
 - [JavaScript](./accordion-group.js)
 - [CSS](./accordion-group.css)
-- [Preview](../../previews/isp/is-accordion-group.html)
+- [Preview](../../previews/isp/is-accordion-group.json)

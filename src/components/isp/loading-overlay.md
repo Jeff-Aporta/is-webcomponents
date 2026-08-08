@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./loading-overlay.js
 style: ./loading-overlay.css
-preview: ../../previews/isp/is-loading-overlay.html
+preview: ../../previews/isp/is-loading-overlay.json
 ---
 # `<is-loading-overlay>`
 
@@ -91,6 +91,10 @@ import './loading-overlay.js';
 | `indicator` | Personalizable con `::part(indicator)`. |
 | `message` | Personalizable con `::part(message)`. |
 
+### Custom states
+
+No expone custom states.
+
 ### CSS custom properties
 
 | Token | Uso |
@@ -99,6 +103,10 @@ import './loading-overlay.js';
 | `--is-loading-indicator` | Color del spinner. |
 | `--is-z-overlay` | Capa de apilado. |
 
+
+### Integración con formularios
+
+No declara integración form-associated.
 ## Comportamiento
 
 No es dismissable: no escucha Escape, ni clic en el velo, ni ofrece botón de
@@ -117,6 +125,23 @@ Tags del módulo: `<is-loading-overlay>`.
 `role="alertdialog"` + `aria-busy="true"` en el velo; `<is-spinner>` aporta el
 `role="status"`.
 
+## Ejemplo avanzado
+
+```html
+<is-block-layout style="position: relative">
+  <is-loading-overlay id="cargando" message="Consultando saldos…" scroll-lock>
+  </is-loading-overlay>
+  <is-data-grid></is-data-grid>
+</is-block-layout>
+
+<script type="module">
+  const overlay = document.getElementById('cargando');
+  overlay.open = true;
+  await cargarSaldos();
+  overlay.open = false;
+</script>
+```
+
 ## Errores comunes
 
 - Esperar que Escape la cierre.
@@ -132,4 +157,4 @@ Tags del módulo: `<is-loading-overlay>`.
 
 - [JavaScript](./loading-overlay.js)
 - [CSS](./loading-overlay.css)
-- [Preview](../../previews/isp/is-loading-overlay.html)
+- [Preview](../../previews/isp/is-loading-overlay.json)
