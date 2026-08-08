@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './block-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
@@ -8,6 +9,8 @@ import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { svgEl } from '../_shared/svg-chart-engine.js';
+import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 /**
  * <is-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
@@ -30,121 +33,52 @@ import { emit } from '../_shared/emit.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
-
-class IsBlockDiagram extends HTMLElement {
-  static get observedAttributes() { return ['color']; }
-
-  #wrap; #svg; #tooltipEl;
-  #payload = null;
-  #spec = null;
-  #layout = null;
+class IsBlockDiagram extends DiagramElementBase {
   #theme = null;
   #turtle = null;
-  #mounted = false;
-  #mo = null; #themeObs = null;
-  #renderQueued = false;
   #hiddenGroups = new Set();
   #blockNodes = new Map();
   #edgeNodes = new Map();
   #hoverId = null;
-  #ownLightbox = null;
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.innerHTML = /* html */ `
-      <div part="base" class="wrap">
-        <svg part="canvas" class="block-svg" xmlns="${SVG_NS}" role="img"></svg>
-        <div part="tooltip" class="block-tooltip dg-tooltip is-rich" hidden></div>
-        <div class="slot-hidden"><slot></slot></div>
-      </div>
-    `;
-    adoptCss(shadow, import.meta.url);
-    this.#wrap = shadow.querySelector('.wrap');
-    this.#svg = shadow.querySelector('.block-svg');
-    this.#tooltipEl = shadow.querySelector('.block-tooltip');
+    this.initDiagramShadow('block-svg', 'block-tooltip');
+    adoptCss(this.shadowRoot, import.meta.url);
   }
 
-  connectedCallback() {
-    this.#mounted = true;
-    this.#readJsonSlot();
-    this.#mo = new MutationObserver(() => this.#readJsonSlot());
-    this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
-    this.#themeObs = new MutationObserver(() => this.#queueRender());
-    this.#themeObs.observe(document.documentElement, {
-      attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette'],
-    });
-    this.#wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.addEventListener('click', this.#onClick);
-    this.#queueRender();
+  onDiagramConnected() {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
+    this.wrap.addEventListener('click', this.#onClick);
   }
 
-  disconnectedCallback() {
-    this.#mounted = false;
-    this.#mo?.disconnect();
-    this.#themeObs?.disconnect();
+  onDiagramDisconnected() {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.#wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
+    this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  attributeChangedCallback(name, oldVal, newVal) {
-    if (!this.#mounted || oldVal === newVal) return;
-    this.#queueRender();
-  }
+  onPayloadChanged() { this.#hiddenGroups = new Set(); }
 
-  get isViewer() { return this.getAttribute('color') === 'viewer'; }
-  get payload() { return this.#payload; }
-  set payload(v) { this.#payload = v; this.#hiddenGroups = new Set(); this.#queueRender(); }
-  get spec() { return this.#spec; }
-  get layout() { return this.#layout; }
   get turtle() { return this.#turtle; }
   get hiddenGroups() { return this.#hiddenGroups; }
   set hiddenGroups(v) {
     this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
-    this.#queueRender();
+    this.queueRender();
   }
 
-  async updateComplete() { await this.#queueRender(); }
-
-  #readJsonSlot() {
-    const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
-    if (!script) return;
-    try {
-      this.#payload = JSON.parse(script.textContent.trim());
-      this.#queueRender();
-    } catch { /* JSON inválido: conserva el último válido */ }
-  }
-
-  #queueRender() {
-    if (this.#renderQueued) return this.#renderQueued;
-    this.#renderQueued = (async () => {
-      await Promise.resolve();
-      try { this.#render(); } finally { this.#renderQueued = false; }
-    })();
-    return this.#renderQueued;
-  }
-
-  #render() {
-    if (!this.#mounted) return;
-    const spec = resolveBlockSpec(this.#payload ?? {});
-    this.#spec = spec;
+  renderDiagram() {
+    const spec = resolveBlockSpec(this.payload ?? {});
+    this.spec = spec;
     if (!spec) {
-      this.#svg.innerHTML = '';
-      this.#wrap.dataset.empty = '';
+      this.svg.innerHTML = '';
+      this.wrap.dataset.empty = '';
       return;
     }
-    delete this.#wrap.dataset.empty;
+    delete this.wrap.dataset.empty;
 
     // Ocultar un grupo quita sus bloques y las aristas que los tocan.
     const hidden = this.#hiddenGroups;
@@ -155,29 +89,29 @@ class IsBlockDiagram extends HTMLElement {
       visible = { ...spec, blocks, edges: spec.edges.filter((e) => keep.has(e.from) && keep.has(e.to)) };
     }
     if (!visible.blocks.length) {
-      this.#svg.innerHTML = '';
-      this.#wrap.dataset.empty = '';
+      this.svg.innerHTML = '';
+      this.wrap.dataset.empty = '';
       return;
     }
 
-    const dark = !document.documentElement.classList.contains('theme-light');
+    const dark = this.isDarkTheme;
     const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
-    this.#wrap.dataset.theme = dark ? 'dark' : 'light';
+    this.syncThemeAttr();
 
     const layout = computeBlockLayout(visible);
-    this.#layout = layout;
+    this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.#wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
   #buildSvg(layout, theme) {
     const { width: W, height: H } = layout;
-    this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    this.#svg.setAttribute('aria-label', layout.title || 'Diagrama de bloques');
-    this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
-    this.#svg.innerHTML = '';
+    this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    this.svg.setAttribute('aria-label', layout.title || 'Diagrama de bloques');
+    this.svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
+    this.svg.innerHTML = '';
 
     // Definiciones: sombras reutilizables para bloques y aristas.
     const defs = svgEl('defs');
@@ -197,7 +131,7 @@ class IsBlockDiagram extends HTMLElement {
         <stop offset="100%" stop-color="rgb(248 250 255 / 0.85)" />
       </linearGradient>
     `;
-    this.#svg.appendChild(defs);
+    this.svg.appendChild(defs);
 
     this.#blockNodes.clear();
     this.#edgeNodes.clear();
@@ -210,7 +144,7 @@ class IsBlockDiagram extends HTMLElement {
         'letter-spacing': '-0.01em',
       });
       t.textContent = layout.title;
-      this.#svg.appendChild(t);
+      this.svg.appendChild(t);
     }
     if (layout.subtitle) {
       const t = svgEl('text', {
@@ -219,7 +153,7 @@ class IsBlockDiagram extends HTMLElement {
         'font-weight': '500',
       });
       t.textContent = layout.subtitle;
-      this.#svg.appendChild(t);
+      this.svg.appendChild(t);
     }
 
     if (layout.groups?.length) this.#buildLegend(layout, theme);
@@ -227,7 +161,7 @@ class IsBlockDiagram extends HTMLElement {
     this.#buildBlocks(layout, theme);
 
     const turtleGroup = svgEl('g');
-    this.#svg.appendChild(turtleGroup);
+    this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
     this.#turtle = new SequenceTurtle(turtleGroup);
     this.#turtle.setData({
@@ -241,7 +175,7 @@ class IsBlockDiagram extends HTMLElement {
       onState: (state) => emit(this, 'is-turtle-state', state),
     });
 
-    emit(this, 'is-render', { layout, svg: this.#svg });
+    emit(this, 'is-render', { layout, svg: this.svg });
   }
 
   #buildLegend(layout, theme) {
@@ -277,11 +211,11 @@ class IsBlockDiagram extends HTMLElement {
       item.appendChild(label);
       g.appendChild(item);
     });
-    this.#svg.appendChild(g);
+    this.svg.appendChild(g);
   }
 
   #buildEdges(layout, theme) {
-    const dark = this.#wrap.dataset.theme === 'dark';
+    const dark = this.wrap.dataset.theme === 'dark';
     const haloColor = dark ? 'rgb(0 0 0 / 0.45)' : 'rgb(15 23 42 / 0.18)';
     for (const e of layout.edges) {
       const color = theme.accent;
@@ -302,11 +236,16 @@ class IsBlockDiagram extends HTMLElement {
       g.appendChild(halo);
       g.appendChild(path);
 
-      const head = svgEl('polygon', {
-        points: '0,0 -9,-4.5 -9,4.5',
-        fill: color,
-        transform: `translate(${e.arrowTipX},${e.arrowTipY}) rotate(${e.arrowAngle})`,
-        class: 'block-edge__head',
+      // La orientación sale del último tramo REAL del path: el ángulo del
+      // layout supone el lado de entrada planificado, que no siempre es por
+      // donde el A* acaba llegando.
+      const head = svgArrowHead({
+        d: e.path,
+        tip: { x: e.arrowTipX, y: e.arrowTipY },
+        color,
+        len: 9,
+        halfWidth: 4.5,
+        className: 'block-edge__head',
       });
       g.appendChild(head);
 
@@ -335,13 +274,13 @@ class IsBlockDiagram extends HTMLElement {
         g.appendChild(t);
       }
 
-      this.#svg.appendChild(g);
+      this.svg.appendChild(g);
       this.#edgeNodes.set(e.id, { e, g, path });
     }
   }
 
   #buildBlocks(layout, theme) {
-    const dark = this.#wrap.dataset.theme === 'dark';
+    const dark = this.wrap.dataset.theme === 'dark';
     const fillId = dark ? 'bd-block-fill' : 'bd-block-fill-light';
     for (const b of layout.blocks) {
       const color = (b.hue != null && tkHueToHex(b.hue)) || theme.accent;
@@ -412,7 +351,7 @@ class IsBlockDiagram extends HTMLElement {
         g.appendChild(t);
       }
 
-      this.#svg.appendChild(g);
+      this.svg.appendChild(g);
       this.#blockNodes.set(b.id, { b, g, box });
     }
   }
@@ -431,25 +370,11 @@ class IsBlockDiagram extends HTMLElement {
     // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
-      bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
+      bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
-    if (!ev.defaultPrevented) this.#openOwnViewer();
+    if (!ev.defaultPrevented) this.openOwnViewer('blockDiagram');
   };
-
-  async #openOwnViewer() {
-    await import('./diagram-lightbox.js');
-    let lb = this.#ownLightbox;
-    if (!lb || !lb.isConnected) {
-      lb = document.createElement('is-diagram-lightbox');
-      lb.setAttribute('kind', 'blockDiagram');
-      lb.addEventListener('is-close', () => lb.remove());
-      document.body.appendChild(lb);
-      this.#ownLightbox = lb;
-    }
-    lb.payload = this.#payload;
-    lb.open = true;
-  }
 
   #onMouseMove = (e) => {
     if (!this.isViewer) return;
@@ -457,10 +382,10 @@ class IsBlockDiagram extends HTMLElement {
     const id = g?.dataset.blockId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
-      const rect = this.#wrap.getBoundingClientRect();
+      const rect = this.wrap.getBoundingClientRect();
       const left = Math.max(8, Math.min(rect.width - 300, e.clientX - rect.left + 16));
-      this.#tooltipEl.style.left = `${left}px`;
-      this.#tooltipEl.style.top = `${e.clientY - rect.top + 22}px`;
+      this.tooltipEl.style.left = `${left}px`;
+      this.tooltipEl.style.top = `${e.clientY - rect.top + 22}px`;
     }
   };
 
@@ -488,16 +413,16 @@ class IsBlockDiagram extends HTMLElement {
     this.#turtle?.setPaused(!!id);
 
     if (!entry) {
-      this.#tooltipEl.hidden = true;
+      this.tooltipEl.hidden = true;
       return;
     }
     const b = entry.b;
-    this.#tooltipEl.hidden = false;
-    this.#tooltipEl.innerHTML = '';
+    this.tooltipEl.hidden = false;
+    this.tooltipEl.innerHTML = '';
     const title = document.createElement('span');
     title.className = 'dg-tooltip__title';
     title.innerHTML = inlineMdWeb(b.label);
-    this.#tooltipEl.appendChild(title);
+    this.tooltipEl.appendChild(title);
   }
 }
 
