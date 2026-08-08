@@ -30,6 +30,7 @@
  */
 
 import { adoptCss } from '../_shared/adopt-css.js';
+import '../actions/button.js';
 import './video.js';
 import './icon.js';
 import { defineElement } from '../_shared/define.js';
@@ -98,6 +99,20 @@ import { emit } from '../_shared/emit.js';
   const PLACEMENTS = new Set(['left', 'right', 'bottom']);
   const ACCORDIONS = new Set(['auto', 'open', 'closed']);
   const posterCache = new WeakMap();
+
+  /** Botón por defecto de la barra de herramientas (light DOM, proyectado). */
+  function makeTool(cls, slot, label, html, onClick) {
+    const btn = document.createElement('is-button');
+    btn.className = `vp-default ${cls}`;
+    btn.setAttribute('slot', slot);
+    btn.setAttribute('variant', 'text');
+    btn.setAttribute('color', 'neutral');
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+    btn.innerHTML = html;
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
 
   function fmtTime(sec) {
     if (!Number.isFinite(sec) || sec < 0) return '';
@@ -350,7 +365,7 @@ import { emit } from '../_shared/emit.js';
       // custom, sincronizamos su `aria-pressed`. Si no, el playlist inyecta
       // su propio botón (#buildDefaultTools).
       for (const node of this.#toolRightChildren()) {
-        if (node.tagName === 'BUTTON') node.setAttribute('aria-pressed', String(this.autoplayNext));
+        if (node.tagName === 'IS-BUTTON' || node.tagName === 'BUTTON') node.setAttribute('aria-pressed', String(this.autoplayNext));
       }
     }
 
@@ -362,51 +377,22 @@ import { emit } from '../_shared/emit.js';
       if (this.hasAttribute('no-default-tools')) return;
       // Solo añadimos los defaults que falten.
       if (this.#toolLeftChildren().length === 0) {
-        const first = document.createElement('button');
-        first.type = 'button';
-        first.className = 'vp-default vp-first';
-        first.setAttribute('slot', 'tools-left');
-        first.setAttribute('aria-label', 'Primero');
-        first.title = 'Primero';
-        first.innerHTML = '<is-icon icon="mdi:skip-backward" aria-hidden="true"></is-icon>';
-        first.addEventListener('click', () => this.goTo(0));
-        this.appendChild(first);
-
-        const prev = document.createElement('button');
-        prev.type = 'button';
-        prev.className = 'vp-default vp-prev';
-        prev.setAttribute('slot', 'tools-left');
-        prev.setAttribute('aria-label', 'Anterior');
-        prev.title = 'Anterior';
-        prev.innerHTML = '<is-icon icon="mdi:skip-previous" aria-hidden="true"></is-icon>';
-        prev.addEventListener('click', () => this.previous());
-        this.appendChild(prev);
-
-        const next = document.createElement('button');
-        next.type = 'button';
-        next.className = 'vp-default vp-next';
-        next.setAttribute('slot', 'tools-left');
-        next.setAttribute('aria-label', 'Siguiente');
-        next.title = 'Siguiente';
-        next.innerHTML = '<is-icon icon="mdi:skip-next" aria-hidden="true"></is-icon>';
-        next.addEventListener('click', () => this.next());
-        this.appendChild(next);
+        this.appendChild(makeTool('vp-first', 'tools-left', 'Primero',
+          '<is-icon icon="mdi:skip-backward" aria-hidden="true"></is-icon>',
+          () => this.goTo(0)));
+        this.appendChild(makeTool('vp-prev', 'tools-left', 'Anterior',
+          '<is-icon icon="mdi:skip-previous" aria-hidden="true"></is-icon>',
+          () => this.previous()));
+        this.appendChild(makeTool('vp-next', 'tools-left', 'Siguiente',
+          '<is-icon icon="mdi:skip-next" aria-hidden="true"></is-icon>',
+          () => this.next()));
       }
       if (this.#toolRightChildren().length === 0) {
-        const autoplay = document.createElement('button');
-        autoplay.type = 'button';
-        autoplay.className = 'vp-default vp-autoplay';
-        autoplay.setAttribute('slot', 'tools-right');
-        autoplay.setAttribute('aria-pressed', String(this.autoplayNext));
-        autoplay.setAttribute('aria-label', 'Autoplay');
-        autoplay.title = 'Autoplay';
-        autoplay.innerHTML = `
+        const autoplay = makeTool('vp-autoplay', 'tools-right', 'Autoplay', `
           <is-icon icon="mdi:playlist-play" aria-hidden="true"></is-icon>
           <span class="vp-autoplay__label">Autoplay</span>
-        `;
-        autoplay.addEventListener('click', () => {
-          this.autoplayNext = !this.autoplayNext;
-        });
+        `, () => { this.autoplayNext = !this.autoplayNext; });
+        autoplay.setAttribute('aria-pressed', String(this.autoplayNext));
         this.appendChild(autoplay);
       }
     }
@@ -580,7 +566,7 @@ import { emit } from '../_shared/emit.js';
         v.style.zIndex = on ? '1' : '0';
         // Desactivamos la barra de controles nativa del <is-video>; el
         // playlist muestra su propia barra (player-toolbar) encima.
-        v.setAttribute('controls', 'false');
+        v.setAttribute('without-controls', '');
         if (!on) v.pause?.();
       });
       if (emit) {

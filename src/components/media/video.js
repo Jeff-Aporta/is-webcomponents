@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import '../actions/button.js';
 import '../actions/check-icon-button.js';
 import './icon.js';
 import { defineElement } from '../_shared/define.js';
@@ -15,7 +16,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  *
  * Atributos
  *   src, poster
- *   controls     boolean (default true)
+ *   without-controls  boolean — oculta la chrome propia (por defecto se muestra)
  *   muted, loop, autoplay, playsinline  boolean
  *
  * Slots: default — tracks / sources
@@ -43,9 +44,9 @@ import { setStringAttr } from '../_shared/reflect.js';
       <video part="video" class="video" playsinline></video>
       <slot></slot>
       <div class="scrim" aria-hidden="true"></div>
-      <button part="big-play" class="big-play" type="button" aria-label="Reproducir">
+      <is-button part="big-play" class="big-play" variant="text" color="neutral" aria-label="Reproducir">
         <is-icon icon="mdi:play" aria-hidden="true"></is-icon>
-      </button>
+      </is-button>
       <div part="controls" class="controls" hidden>
         <div part="progress" class="progress">
           <input part="seek" class="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Posición" />
@@ -60,7 +61,7 @@ import { setStringAttr } from '../_shared/reflect.js';
           <is-check-icon-button
             part="play-button"
             class="ctrl play"
-            appearance="plain"
+            variant="plain"
             icon="mdi:play"
             checked-icon="mdi:pause"
             label="Reproducir"
@@ -70,7 +71,7 @@ import { setStringAttr } from '../_shared/reflect.js';
             <is-check-icon-button
               part="mute-button"
               class="ctrl mute"
-              appearance="plain"
+              variant="plain"
               icon="mdi:volume-high"
               checked-icon="mdi:volume-off"
               label="Silenciar"
@@ -91,26 +92,39 @@ import { setStringAttr } from '../_shared/reflect.js';
           </span>
           <span class="spacer"></span>
           <div class="settings">
-            <button part="settings-button" class="iconbtn speed" type="button"
+            <is-button part="settings-button" class="iconbtn speed" variant="text" color="neutral"
                     aria-label="Velocidad de reproducción" aria-haspopup="true" aria-expanded="false">
               <is-icon icon="mdi:cog-outline" aria-hidden="true"></is-icon>
-            </button>
+            </is-button>
             <ul class="menu" role="menu" hidden>
               <li class="menu__head" role="presentation">Velocidad</li>
             </ul>
           </div>
-          <button part="pip-button" class="iconbtn pip" type="button" aria-label="Picture in picture" hidden>
-            <is-icon icon="mdi:picture-in-picture-bottom-right" aria-hidden="true"></is-icon>
-          </button>
-          <button part="fullscreen-button" class="iconbtn fs" type="button" aria-label="Pantalla completa">
-            <is-icon icon="mdi:fullscreen" aria-hidden="true"></is-icon>
-          </button>
+          <is-check-icon-button
+            part="pip-button"
+            class="ctrl pip"
+            variant="plain"
+            icon="mdi:picture-in-picture-bottom-right"
+            checked-icon="mdi:picture-in-picture-top-right"
+            label="Picture in picture"
+            checked-label="Salir de picture in picture"
+            hidden
+          ></is-check-icon-button>
+          <is-check-icon-button
+            part="fullscreen-button"
+            class="ctrl fs"
+            variant="plain"
+            icon="mdi:fullscreen"
+            checked-icon="mdi:fullscreen-exit"
+            label="Pantalla completa"
+            checked-label="Salir de pantalla completa"
+          ></is-check-icon-button>
         </div>
       </div>
     </div>
   `;
 
-  const OBSERVED = ['src', 'poster', 'controls', 'muted', 'loop', 'autoplay', 'playsinline'];
+  const OBSERVED = ['src', 'poster', 'without-controls', 'muted', 'loop', 'autoplay', 'playsinline'];
   const RATES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
   const IDLE_MS = 2600;
 
@@ -232,8 +246,10 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#video.addEventListener('click', () => { if (this.controls) this.#togglePlay(); });
       this.#video.addEventListener('dblclick', () => { if (this.controls) this.toggleFullscreen(); });
 
-      this.#fsBtn.addEventListener('click', () => this.toggleFullscreen());
-      this.#pipBtn.addEventListener('click', () => this.togglePictureInPicture());
+      // `checked` es optimista: fullscreenchange / enter-leavepictureinpicture
+      // lo corrigen si el navegador rechaza el gesto.
+      this.#fsBtn.addEventListener('is-change', () => this.toggleFullscreen());
+      this.#pipBtn.addEventListener('is-change', () => this.togglePictureInPicture());
       this.#speedBtn.addEventListener('click', () => this.#toggleMenu());
       this.addEventListener('keydown', this.#onKeydown);
 
@@ -284,7 +300,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'controls') this.#syncControlsVisibility();
+      if (name === 'without-controls') this.#syncControlsVisibility();
       else this.#syncAttrs();
       if (name === 'muted') this.#syncVolumeUi();
     }
@@ -295,14 +311,12 @@ import { setStringAttr } from '../_shared/reflect.js';
     get poster() { return this.getAttribute('poster') ?? ''; }
     set poster(v) { setStringAttr(this, 'poster', v); }
 
-    get controls() {
-      if (!this.hasAttribute('controls')) return true;
-      return this.getAttribute('controls') !== 'false';
-    }
-    set controls(v) {
-      if (v) this.setAttribute('controls', '');
-      else this.setAttribute('controls', 'false');
-    }
+    get withoutControls() { return this.hasAttribute('without-controls'); }
+    set withoutControls(v) { this.toggleAttribute('without-controls', !!v); }
+
+    /** Conveniencia: `controls` es el inverso de `without-controls`. */
+    get controls() { return !this.withoutControls; }
+    set controls(v) { this.withoutControls = !v; }
 
     get muted() { return this.hasAttribute('muted'); }
     set muted(v) { this.toggleAttribute('muted', !!v); }
@@ -435,18 +449,13 @@ import { setStringAttr } from '../_shared/reflect.js';
         ?.setAttribute('icon', rate === 1 ? 'mdi:cog-outline' : 'mdi:play-speed');
     }
 
+    // is-check-icon-button ya intercambia icono y aria-label según `checked`.
     #syncPipUi = () => {
-      const on = document.pictureInPictureElement === this.#video;
-      this.#pipBtn.querySelector('is-icon')?.setAttribute(
-        'icon',
-        on ? 'mdi:picture-in-picture-top-right' : 'mdi:picture-in-picture-bottom-right',
-      );
+      this.#pipBtn.checked = document.pictureInPictureElement === this.#video;
     };
 
     #syncFsUi = () => {
-      const on = document.fullscreenElement === this;
-      this.#fsBtn.querySelector('is-icon')?.setAttribute('icon', on ? 'mdi:fullscreen-exit' : 'mdi:fullscreen');
-      this.#fsBtn.setAttribute('aria-label', on ? 'Salir de pantalla completa' : 'Pantalla completa');
+      this.#fsBtn.checked = document.fullscreenElement === this;
     };
 
     #onBuffer = () => {
