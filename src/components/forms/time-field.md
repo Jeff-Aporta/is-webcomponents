@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./time-field.js
 style: ./time-field.css
-preview: ../../previews/forms/is-date-field.html
+preview: ../../previews/forms/is-time-field.json
 ---
 # `<is-time-field>`
 
@@ -139,4 +139,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./time-field.js)
 - [CSS](./time-field.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-field.html)
+- [Preview](../../previews/forms/is-time-field.json)

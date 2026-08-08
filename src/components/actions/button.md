@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./button.js
 style: ./button.css
-preview: ../../previews/actions/is-button.html
+preview: ../../previews/actions/is-button.json
 ---
 # `<is-button>`
 
@@ -211,7 +211,7 @@ Documentación de cabecera preservada desde fuente:
 > y expone parts + custom states para personalización desde fuera.
 > Atributos
 >  color      brand | neutral | success | warning | danger | info | error   (default: brand)
->  variant   filled | outlined | plain                     (default: filled)
+>  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
 >  hue          number (0-360)  color propio para el highlight cuando está
 >                             [selected] dentro de <is-button-group>. Si no
 >                             se define, el grupo usa su --is-accent.
@@ -305,4 +305,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./button.js)
 - [CSS](./button.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-button.html)
+- [Preview](../../previews/actions/is-button.json)

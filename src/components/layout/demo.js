@@ -6,8 +6,9 @@ import { emit } from '../_shared/emit.js';
  *
  * Componente reutilizable para las cajas de demo de los previews. Reusa el
  * chrome incumbente (fondo con retícula, borde, sombra de presentation.css)
- * y el botón "Ver código" de demo-code.js, que ahora también procesa
- * elementos <is-demo>.
+ * y los botones de chrome:
+ *   - "Ver código" (`demo-code.js`) — snippet CDN del ejemplo
+ *   - "Ver fuentes" (`view-sources.js`) — JS/CSS/MD del módulo sin minificar
  *
  *   <is-demo heading="Apariencias">
  *     <is-button variant="filled">Filled</is-button>
@@ -15,11 +16,10 @@ import { emit } from '../_shared/emit.js';
  *   </is-demo>
  *
  * Atributos
- *   heading       string  — título pequeño sobre el contenido (opcional).
- *   contain       boolean — crea un containing block para que los hijos con
- *                 `position: fixed` (is-fab, is-speed-dial, is-toast…) queden
- *                 anclados al demo y no al viewport.
- *   data-no-code  boolean — desactiva el botón "Ver código".
+ *   heading         string  — título pequeño sobre el contenido (opcional).
+ *   contain         boolean — containing block para hijos `position: fixed`.
+ *   data-no-code    boolean — desactiva el botón "Ver código".
+ *   data-no-sources boolean — desactiva el botón "Ver fuentes".
  *
  * El contenido va en light DOM a propósito: los estilos de la página y el
  * extractor de código del demo ven el markup real del ejemplo.

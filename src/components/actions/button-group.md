@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./button-group.js
 style: ./button-group.css
-preview: ../../previews/actions/is-button-group.html
+preview: ../../previews/actions/is-button-group.json
 ---
 # `<is-button-group>`
 
@@ -205,4 +205,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 - [JavaScript](./button-group.js)
 - [CSS](./button-group.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-button-group.html)
+- [Preview](../../previews/actions/is-button-group.json)

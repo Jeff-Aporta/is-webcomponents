@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./fab.js
 style: ./fab.css
-preview: ../../previews/actions/is-fab.html
+preview: ../../previews/actions/is-fab.json
 ---
 # `<is-fab>`
 
@@ -97,15 +97,9 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--size` | Token leído o definido por componente. |
-| `--is-brand` | Token leído o definido por componente. |
-| `--is-brand-fg` | Token leído o definido por componente. |
-| `--is-bg-2` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-danger` | Token leído o definido por componente. |
-| `--is-success` | Token leído o definido por componente. |
-| `--is-warning` | Token leído o definido por componente. |
+| `--size` | Diámetro del botón (default `3.5em`). Escala con el `font-size` del host. |
+| `--fab-shadow` | Sombra flotante. |
+| `--is-brand` | Color de marca usado por el pulso de atención. |
 
 ### Integración con formularios
 
@@ -175,4 +169,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./fab.js)
 - [CSS](./fab.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-fab.html)
+- [Preview](../../previews/actions/is-fab.json)

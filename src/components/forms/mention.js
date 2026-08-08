@@ -136,6 +136,9 @@ import { emit } from '../_shared/emit.js';
         ? list.filter((s) => String(s).toLowerCase().includes(query.toLowerCase())).slice(0, Number(this.getAttribute('max-items')) || 8)
         : list.slice(0, Number(this.getAttribute('max-items')) || 8);
       if (!filtered.length) { this.#hidePopup(); return; }
+      // La lista filtrada cambió de tamaño: un índice viejo puede quedar fuera
+      // de rango y Enter seleccionaría undefined.
+      if (this.#activeIndex >= filtered.length) this.#activeIndex = 0;
       this.#renderPopup(filtered, triggerChar);
       this.#positionPopup();
     }

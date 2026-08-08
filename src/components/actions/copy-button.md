@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./copy-button.js
 style: ./copy-button.css
-preview: ../../previews/actions/is-copy-button.html
+preview: ../../previews/actions/is-copy-button.json
 ---
 # `<is-copy-button>`
 
@@ -201,4 +201,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`,
 - [JavaScript](./copy-button.js)
 - [CSS](./copy-button.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-copy-button.html)
+- [Preview](../../previews/actions/is-copy-button.json)

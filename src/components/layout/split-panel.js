@@ -2,6 +2,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { upgradeProperties } from '../_shared/upgrade-properties.js';
 import { clampTo } from '../_shared/misc-utils.js';
 
 /**
@@ -94,7 +95,7 @@ import { clampTo } from '../_shared/misc-utils.js';
 
     connectedCallback() {
       this._mounted = true;
-      this._upgradeProperties();
+      upgradeProperties(this, OBSERVED);
 
       this._divider.addEventListener('keydown', this._onKeyDown);
       this._divider.addEventListener('pointerdown', this._onPointerDown);
@@ -267,16 +268,6 @@ import { clampTo } from '../_shared/misc-utils.js';
       this._fromPixels = true;
       try { this.position = this._pixelsToPercentage(px); }
       finally { this._fromPixels = false; }
-    }
-
-    _upgradeProperties() {
-      for (const a of OBSERVED) {
-        if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
-          if (v != null) this.setAttribute(a, v);
-        }
-      }
     }
 
     _detectSize() {

@@ -1,15 +1,20 @@
 /* is-context-menu */
+@import url('../_shared/popover-panel.css');
+
 :host { display: contents; }
 
+/* Mismo chrome de superficie flotante que is-dropdown / is-dropdown-item
+   (ver _shared/popover-panel.css): borde, radio y sombra vía los tokens
+   --is-popover-radius / --is-popover-shadow. */
 .panel {
   border: 1px solid var(--is-border);
-  border-radius: var(--is-radius, 8px);
+  border-radius: var(--is-popover-radius, var(--is-radius, 8px));
   background: var(--is-bg-elev);
   color: var(--is-text);
   padding: .35rem;
   min-width: 12rem;
   max-width: 22rem;
-  box-shadow: var(--is-shadow, 0 18px 44px rgba(0,0,0,.26)), 0 0 0 1px color-mix(in srgb, var(--is-text) 4%, transparent) inset;
+  box-shadow: var(--is-popover-shadow, var(--is-shadow, 0 18px 44px rgba(0,0,0,.26))), 0 0 0 1px color-mix(in srgb, var(--is-text) 4%, transparent) inset;
   /* El UA aplica a <dialog>: position:absolute, inset-inline 0, width:fit-content
      y margin:auto. Con solo `left`/`top` desde JS, el `right:0` heredado y el
      margin auto RE-CENTRAN el panel y nunca aparece en el cursor. Hay que

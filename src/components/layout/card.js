@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { upgradeProperties } from '../_shared/upgrade-properties.js';
 import { defineElement } from '../_shared/define.js';
 import { TONE } from '../_shared/tone.js';
 
@@ -87,7 +88,7 @@ import { TONE } from '../_shared/tone.js';
 
     connectedCallback() {
       this._mounted = true;
-      this._upgradeProperties();
+      upgradeProperties(this, OBSERVED);
       // reflejar defaults para que :host([orientation]/[appearance]) siempre matcheen
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'vertical');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'outlined');
@@ -134,16 +135,6 @@ import { TONE } from '../_shared/tone.js';
     }
 
     // ---- private ----
-
-    _upgradeProperties() {
-      for (const a of OBSERVED) {
-        if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
-          if (v != null) this.setAttribute(a, v);
-        }
-      }
-    }
 
     _syncEmpty() {
       // Cada section es empty si TODOS sus slots no tienen contenido

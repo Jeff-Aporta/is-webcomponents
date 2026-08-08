@@ -1,4 +1,6 @@
 /* is-speed-dial */
+@import url('../_shared/focus-ring.css');
+
 :host {
   display: inline-block;
   position: relative;
@@ -50,7 +52,7 @@ is-check-icon-button.trigger::part(button) {
   transition: background 180ms ease, box-shadow 180ms ease;
 }
 .trigger:hover { transform: translateY(-1px); }
-.trigger:focus-visible { outline: 2px solid var(--is-focus); outline-offset: 3px; }
+.trigger:focus-visible { outline: 2px solid var(--is-focus, var(--is-focus-fallback)); outline-offset: var(--is-focus-offset); }
 
 .actions {
   display: flex;

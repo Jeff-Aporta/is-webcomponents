@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./switch.js
 style: ./switch.css
-preview: ../../previews/forms/is-switch.html
+preview: ../../previews/forms/is-switch.json
 ---
 # `<is-switch>`
 
@@ -225,4 +225,4 @@ color="warning" checked>Tema claro</is-switch>
 - [JavaScript](./switch.js)
 - [CSS](./switch.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-switch.html)
+- [Preview](../../previews/forms/is-switch.json)

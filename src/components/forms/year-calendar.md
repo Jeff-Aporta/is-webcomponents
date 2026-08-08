@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./year-calendar.js
 style: ./year-calendar.css
-preview: ../../previews/forms/is-date-picker.html
+preview: ../../previews/forms/is-year-calendar.json
 ---
 # `<is-year-calendar>`
 
@@ -156,4 +156,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 - [JavaScript](./year-calendar.js)
 - [CSS](./year-calendar.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-picker.html)
+- [Preview](../../previews/forms/is-year-calendar.json)

@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./check-icon-button.js
 style: ./check-icon-button.css
-preview: ../../previews/actions/is-check-icon-button.html
+preview: ../../previews/actions/is-check-icon-button.json
 ---
 # `<is-check-icon-button>`
 
@@ -171,4 +171,4 @@ label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
 - [JavaScript](./check-icon-button.js)
 - [CSS](./check-icon-button.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-check-icon-button.html)
+- [Preview](../../previews/actions/is-check-icon-button.json)

@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./slider.js
 style: ./slider.css
-preview: ../../previews/forms/is-slider.html
+preview: ../../previews/forms/is-slider.json
 ---
 # `<is-slider>`
 
@@ -249,4 +249,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./slider.js)
 - [CSS](./slider.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-slider.html)
+- [Preview](../../previews/forms/is-slider.json)

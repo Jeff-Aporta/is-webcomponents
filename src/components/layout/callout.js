@@ -80,7 +80,6 @@ import { TONE } from '../_shared/tone.js';
     }
 
     onConnected() {
-      this.#upgradeProperties();
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
 
@@ -140,16 +139,6 @@ import { TONE } from '../_shared/tone.js';
     }
 
     // ---- private ----
-
-    #upgradeProperties() {
-      for (const a of OBSERVED) {
-        if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
-          if (v != null) this.setAttribute(a, v);
-        }
-      }
-    }
 
     #syncDefaultIcon() {
       const slotted = this.querySelector(':scope > [slot="icon"]');

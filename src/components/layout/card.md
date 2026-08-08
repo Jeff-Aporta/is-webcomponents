@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./card.js
 style: ./card.css
-preview: ../../previews/layout/is-card.html
+preview: ../../previews/layout/is-card.json
 ---
 # `<is-card>`
 
@@ -177,4 +177,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./card.js)
 - [CSS](./card.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-card.html)
+- [Preview](../../previews/layout/is-card.json)

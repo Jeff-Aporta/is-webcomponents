@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./time-input.js
 style: ./time-input.css
-preview: ../../previews/forms/is-date-input.html
+preview: ../../previews/forms/is-time-input.json
 ---
 # `<is-time-input>`
 
@@ -150,4 +150,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./time-input.js)
 - [CSS](./time-input.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-date-input.html)
+- [Preview](../../previews/forms/is-time-input.json)

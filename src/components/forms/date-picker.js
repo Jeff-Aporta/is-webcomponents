@@ -1,3 +1,4 @@
+import '../actions/button.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import {
   addMonths,

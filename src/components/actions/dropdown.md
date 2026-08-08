@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./dropdown.js
 style: ./dropdown.css
-preview: ../../previews/actions/is-dropdown.html
+preview: ../../previews/actions/is-dropdown.json
 ---
 # `<is-dropdown>`
 
@@ -182,4 +182,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 - [JavaScript](./dropdown.js)
 - [CSS](./dropdown.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-dropdown.html)
+- [Preview](../../previews/actions/is-dropdown.json)

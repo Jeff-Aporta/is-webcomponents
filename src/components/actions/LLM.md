@@ -19,6 +19,8 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-dropdown>` | [dropdown.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/dropdown.md) | Dropdown |
 | `<is-dropdown-item>` | [dropdown-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/dropdown-item.md) | Dropdown Item |
 | `<is-fab>` | [fab.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/fab.md) | Floating Action Button |
+| `<is-context-menu>` | [context-menu.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/context-menu.md) | Menú contextual (click derecho) |
+| `<is-speed-dial>` `<is-speed-dial-action>` | [speed-dial.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/speed-dial.md) | Speed Dial (FAB con acciones) |
 
 ## Composición y relaciones
 

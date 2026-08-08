@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./textarea.js
 style: ./textarea.css
-preview: ../../previews/forms/is-textarea.html
+preview: ../../previews/forms/is-textarea.json
 ---
 # `<is-textarea>`
 
@@ -245,4 +245,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 - [JavaScript](./textarea.js)
 - [CSS](./textarea.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-textarea.html)
+- [Preview](../../previews/forms/is-textarea.json)

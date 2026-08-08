@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./rating.js
 style: ./rating.css
-preview: ../../previews/forms/is-rating.html
+preview: ../../previews/forms/is-rating.json
 ---
 # `<is-rating>`
 
@@ -226,4 +226,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labell
 - [JavaScript](./rating.js)
 - [CSS](./rating.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-rating.html)
+- [Preview](../../previews/forms/is-rating.json)

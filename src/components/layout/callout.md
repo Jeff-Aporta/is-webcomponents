@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./callout.js
 style: ./callout.css
-preview: ../../previews/layout/is-callout.html
+preview: ../../previews/layout/is-callout.json
 ---
 # `<is-callout>`
 
@@ -194,4 +194,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./callout.js)
 - [CSS](./callout.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-callout.html)
+- [Preview](../../previews/layout/is-callout.json)
