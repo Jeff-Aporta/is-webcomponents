@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./popover.js
 style: ./popover.css
-preview: ../../previews/helpers/is-popover.html
+preview: ../../previews/helpers/is-popover.json
 ---
 # `<is-popover>`
 
@@ -203,4 +203,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 - [JavaScript](./popover.js)
 - [CSS](./popover.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-popover.html)
+- [Preview](../../previews/helpers/is-popover.json)

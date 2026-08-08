@@ -1,5 +1,6 @@
+@import './_inline-host.css';
+
 :host {
-  display: inline;
   .number {
     display: inline;
     font-variant-numeric: tabular-nums;

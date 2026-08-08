@@ -1,9 +1,9 @@
-:host {
-  display: inline;
-}
+@import './_inline-host.css';
+
 .value {
   display: inline;
 }
+
 :host([data-type="number"]) .value,
 :host([data-type="bytes"]) .value {
   font-variant-numeric: tabular-nums;

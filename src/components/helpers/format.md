@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./format.js
 style: ./format.css
-preview: ../../previews/helpers/is-format.html
+preview: ../../previews/helpers/is-format.json
 ---
 # `<is-format>`
 
@@ -128,4 +128,4 @@ Texto plano en shadow; hereda idioma del documento / `locale`.
 ## Fuentes
 
 - `./format.js` · `./format.css`
-- Preview: `../../previews/helpers/is-format.html`
+- Preview: `../../previews/helpers/is-format.json`

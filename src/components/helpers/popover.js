@@ -174,7 +174,9 @@ import { emit } from '../_shared/emit.js';
     // ── Privados ──────────────────────────────────────────────────────────
     #syncPopup() {
       this.#popup.placement = this.getAttribute('placement') || 'top';
-      this.#popup.distance = Number(this.getAttribute('distance')) || 0;
+      this.#popup.distance = this.hasAttribute('distance')
+        ? (Number(this.getAttribute('distance')) || 0)
+        : 8;
       this.#popup.skidding = Number(this.getAttribute('skidding')) || 0;
       this.#popup.arrow = !this.hasAttribute('without-arrow');
       this.#popup.strategy = this.getAttribute('strategy') || 'fixed';

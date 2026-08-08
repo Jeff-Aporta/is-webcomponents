@@ -2,6 +2,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
 import { ElementBase } from '../_shared/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
+import { resolveLocale } from '../_shared/resolve-locale.js';
 
 /**
  * <is-format-date> — Web Component (vanilla).
@@ -10,8 +11,32 @@ import { setStringAttr } from '../_shared/reflect.js';
  *
  * Atributos: date, weekday, era, year, month, day, hour, minute, second,
  *            time-zone, time-zone-name, hour-format (auto|12|24),
- *            locale (BCP 47; default = lang del documento)
+ *            locale (BCP 47; default = html lang → sistema → es)
  */
+
+/**
+ * Parseo laxo de fecha compartido por los helpers de formato
+ * (is-format-date, is-relative-time, is-format).
+ * Acepta timestamp numérico, `YYYY-MM-DD` (interpretado en hora local) o
+ * cualquier cosa que `new Date()` entienda. Devuelve null si no es válida.
+ * @param {string|number|null|undefined} raw
+ * @returns {Date|null}
+ */
+export function parseLooseDate(raw) {
+  const s = String(raw ?? '').trim();
+  if (!s) return null;
+  if (/^-?\d+(\.\d+)?$/.test(s)) {
+    const d = new Date(Number(s));
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+  const only = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+  if (only) {
+    const d = new Date(+only[1], +only[2] - 1, +only[3]);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -61,27 +86,11 @@ import { setStringAttr } from '../_shared/reflect.js';
     set date(v) { setStringAttr(this, 'date', v); }
 
     get locale() {
-      return this.getAttribute('locale') || document.documentElement.lang || undefined;
+      return resolveLocale(this.getAttribute('locale'));
     }
     set locale(v) {
       if (v == null || v === '') this.removeAttribute('locale');
       else this.setAttribute('locale', String(v));
-    }
-
-    #parseDate() {
-      const raw = this.date.trim();
-      if (!raw) return null;
-      if (/^-?\d+(\.\d+)?$/.test(raw)) {
-        const d = new Date(Number(raw));
-        return Number.isNaN(d.getTime()) ? null : d;
-      }
-      const only = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
-      if (only) {
-        const d = new Date(+only[1], +only[2] - 1, +only[3]);
-        return Number.isNaN(d.getTime()) ? null : d;
-      }
-      const d = new Date(raw);
-      return Number.isNaN(d.getTime()) ? null : d;
     }
 
     #buildOptions() {
@@ -101,7 +110,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     #render() {
-      const d = this.#parseDate();
+      const d = parseLooseDate(this.date);
       if (!d) {
         this.#el.textContent = '';
         this.#el.removeAttribute('datetime');

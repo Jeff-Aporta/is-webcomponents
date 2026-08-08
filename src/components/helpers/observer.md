@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./observer.js
 style: ./observer.css
-preview: ../../previews/helpers/is-observer.html
+preview: ../../previews/helpers/is-observer.json
 ---
 # `<is-observer>`
 
@@ -135,4 +135,4 @@ No altera el árbol accesible (`display: contents`); el contenido observado sigu
 ## Fuentes
 
 - `./observer.js` · `./observer.css`
-- Preview: `../../previews/helpers/is-observer.html`
+- Preview: `../../previews/helpers/is-observer.json`

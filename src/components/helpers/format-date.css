@@ -1,4 +1,5 @@
+@import './_inline-host.css';
+
 :host {
-  display: inline;
   .date { display: inline; }
 }

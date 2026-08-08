@@ -32,39 +32,21 @@
 }
 
 /* ── Flecha ──
-   SVG inline de un rombo: dos triángulos del color de relleno y borde.
-   El triángulo interior es 1px más chico en cada lado, así el stroke de
-   1px cierra sobre el borde del popup sin sangrar hacia dentro.
-   La geometría `position.js` sigue siendo con coordenadas CSS (top/bottom/
-   left/right), sólo cambia el marcado de la flecha. */
-
+   Cuadrado rotado 45° (rombo). La mitad interior queda detrás del body
+   (z-index: -1); la punta exterior asoma gracias al offset negativo que
+   calcula `position.js` (`top/right/bottom/left: -arrowSize`). */
 .arrow {
   --arrow-color: var(--is-bg-elev, #1c2128);
   --arrow-border-color: var(--is-border, #2a3038);
   position: absolute;
+  box-sizing: border-box;
   width: calc(var(--arrow-size) * 2);
   height: calc(var(--arrow-size) * 2);
+  background: var(--arrow-color);
+  border: 1px solid var(--arrow-border-color);
+  transform: rotate(45deg);
   z-index: -1;
   pointer-events: none;
-  overflow: visible;
-}
-
-.arrow svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.arrow-fill {
-  fill: var(--arrow-color);
-}
-
-.arrow-stroke {
-  fill: var(--arrow-color);
-  stroke: var(--arrow-border-color);
-  stroke-width: 1px;
-  stroke-linejoin: miter;
 }
 
 .arrow[hidden] {

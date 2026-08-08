@@ -1,0 +1,5 @@
+/* `:host { display: inline }` común a los helpers de formato.
+   Se consume con `@import './_inline-host.css';` en la primera línea. */
+:host {
+  display: inline;
+}

@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./format-date.js
 style: ./format-date.css
-preview: ../../previews/helpers/is-format-date.html
+preview: ../../previews/helpers/is-format-date.json
 ---
 # `<is-format-date>`
 
@@ -148,4 +148,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./format-date.js)
 - [CSS](./format-date.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-format-date.html)
+- [Preview](../../previews/helpers/is-format-date.json)

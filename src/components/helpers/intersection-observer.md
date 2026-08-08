@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./intersection-observer.js
 style: ./intersection-observer.css
-preview: ../../previews/helpers/is-intersection-observer.html
+preview: ../../previews/helpers/is-intersection-observer.json
 ---
 # `<is-intersection-observer>`
 
@@ -150,4 +150,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./intersection-observer.js)
 - [CSS](./intersection-observer.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-intersection-observer.html)
+- [Preview](../../previews/helpers/is-intersection-observer.json)

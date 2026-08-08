@@ -1,17 +1,13 @@
 :host {
   display: contents;
   --max-width: 25rem;
-  --arrow-size: 0.375rem;
+  --arrow-size: 8px;
   --show-duration: 120ms;
   --hide-duration: 100ms;
 }
 
 :host([hidden]) {
   display: none !important;
-}
-
-.popup {
-  --arrow-size: var(--arrow-size, 0.5rem);
 }
 
 .dialog {

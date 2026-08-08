@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./format-bytes.js
 style: ./format-bytes.css
-preview: ../../previews/helpers/is-format-bytes.html
+preview: ../../previews/helpers/is-format-bytes.json
 ---
 # `<is-format-bytes>`
 
@@ -142,4 +142,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./format-bytes.js)
 - [CSS](./format-bytes.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-format-bytes.html)
+- [Preview](../../previews/helpers/is-format-bytes.json)

@@ -108,7 +108,9 @@ class ObserverElement extends HTMLElement {
 
   // ---- privados ----
   #onSlotChange = () => {
-    if (this.#mounted) this.#setup();
+    // El observer de mutación vigila el host, no los hijos: reconectarlo en
+    // cada slotchange sólo perdería registros pendientes.
+    if (this.#mounted && this.type !== 'mutation') this.#setup();
   };
 
   #teardown() {

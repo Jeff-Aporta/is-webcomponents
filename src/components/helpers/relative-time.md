@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./relative-time.js
 style: ./relative-time.css
-preview: ../../previews/helpers/is-relative-time.html
+preview: ../../previews/helpers/is-relative-time.json
 ---
 # `<is-relative-time>`
 
@@ -139,4 +139,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./relative-time.js)
 - [CSS](./relative-time.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-relative-time.html)
+- [Preview](../../previews/helpers/is-relative-time.json)

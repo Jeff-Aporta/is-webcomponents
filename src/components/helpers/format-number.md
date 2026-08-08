@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./format-number.js
 style: ./format-number.css
-preview: ../../previews/helpers/is-format-number.html
+preview: ../../previews/helpers/is-format-number.json
 ---
 # `<is-format-number>`
 
@@ -141,4 +141,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./format-number.js)
 - [CSS](./format-number.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-format-number.html)
+- [Preview](../../previews/helpers/is-format-number.json)
