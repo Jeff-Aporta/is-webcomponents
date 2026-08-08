@@ -6,7 +6,7 @@ category: data
 status: public
 source: ./ag-grid.js
 style: ./ag-grid.css
-preview: ../../previews/data/is-ag-grid.html
+preview: ../../previews/data/is-ag-grid.json
 ---
 # `<is-ag-grid>`
 
@@ -98,9 +98,11 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 - Markup: `.mim-dg__sidebar`, `.mim-dg__panel`, `.mim-dg__col-check`.
 - No reinventar un popover aparte: el sidebar ya es el contrato UI.
 
-## API resumida
+## API
 
-### Atributos clave
+### Atributos y propiedades
+
+#### Atributos clave
 
 | Atributo | Notas |
 | --- | --- |
@@ -113,7 +115,21 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 | `storage-key` | keyid bajo `is-webcomponents.is-ag-grid` |
 | `toolbar` | `false` oculta toolbar |
 
-### API `grid.api` (persistencia / columnas)
+#### Propiedades públicas
+
+| Propiedad | Acceso | Notas |
+| --- | --- | --- |
+| `rows` | lectura/escritura | Filas del grid. |
+| `columns` | lectura/escritura | Definiciones de columna. |
+| `api` | lectura | Fachada del motor (`datagrid-core`); ver tabla siguiente. |
+
+### Slots
+
+| Slot | Uso |
+| --- | --- |
+| (default) | Hasta dos `<script type="application/json">`: primero columnas, luego filas. |
+
+### Métodos y propiedades públicas — `grid.api` (persistencia / columnas)
 
 | Método | Notas |
 | --- | --- |
@@ -125,8 +141,70 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 
 ### Eventos
 
+| Evento | detail | bubbles | composed | cancelable |
+| --- | --- | --- | --- | --- |
+| `is-sort-change` | modelo de orden | sí | sí | no |
+| `is-filter-change` | modelo de filtros | sí | sí | no |
+| `is-column-hide` | `{ colId, hidden }` | sí | sí | no |
+| `is-column-reorder` | `{ colId, from, to }` | sí | sí | no |
+| `is-column-resize` | `{ colId, width }` | sí | sí | no |
+| `is-column-pin` | `{ colId, pinned }` | sí | sí | no |
+| `is-state-saved` | snapshot guardado | sí | sí | no |
+| `is-state-loaded` | snapshot aplicado | sí | sí | no |
+| `is-state-reset` | sin detail | sí | sí | no |
+
+Nombres completos emitidos por el módulo:
+
 `is-sort-change`, `is-filter-change`, `is-column-hide`, `is-column-reorder`, `is-column-resize`,
 `is-column-pin`, `is-state-saved`, `is-state-loaded`, `is-state-reset`, …
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `root` | Contenedor; lleva `data-density`. |
+| `toolbar` | Barra superior (`role="toolbar"`). |
+| `group-panel` | Zona de agrupación por columnas. |
+| `viewport` | Área desplazable (`role="grid"`). |
+| `group-header` | Cabecera de grupos. |
+| `header` | Fila de encabezados. |
+| `body` | Cuerpo de filas. |
+| `sidebar` | Panel lateral. |
+| `tool-panel` | Contenido del panel lateral. |
+| `footer` | Pie del grid. |
+| `count` | Contador de filas del pie. |
+
+### Custom states
+
+No expone custom states.
+
+### CSS custom properties
+
+| Token | Uso |
+| --- | --- |
+| `--is-grid-row-h` | Alto de fila. |
+| `--is-grid-header-h` | Alto del encabezado. |
+| `--is-grid-header-bg` | Fondo del encabezado. |
+| `--is-grid-stripe` | Fondo alterno de filas. |
+| `--is-grid-row-hover` | Fondo de fila en hover. |
+| `--is-grid-selected` | Fondo de fila seleccionada. |
+| `--is-grid-selected-bar` | Barra indicadora de selección. |
+
+### Integración con formularios
+
+No es form-associated: es una vista de datos. Los editores de celda gestionan
+su propio valor y lo devuelven al modelo del core.
+
+## Comportamiento
+
+- El modelo lo aporta `createGridModel` de `./datagrid-core/`: orden, filtros,
+  agrupación, agregación, paginación y visibilidad de columnas.
+- Las columnas y filas se leen de los `<script type="application/json">` hijos
+  o de los atributos correspondientes.
+- Con `remember-state` y `storage-key`, el snapshot se guarda mediante
+  `_shared/prefs.js` bajo `localStorage['is-webcomponents']['is-ag-grid'][keyid]`.
+- El panel lateral de columnas se abre con `api.openColumnsPanel()` y refleja
+  la visibilidad del modelo.
 
 ## Qué hacer
 
@@ -159,17 +237,65 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 | Documentar persistencia sin mencionar el root único | MD + preview deben decir `localStorage['is-webcomponents'][tag][key]` |
 | Olvidar botón Reiniciar cuando hay `remember-state` | Toolbar `.mim-dg__reset-btn` + `api.resetPersistedState` |
 
-## Dependencias
+## Dependencias y componentes relacionados
 
 - `../_shared/prefs.js`
 - `../_shared/element-base.js`, `adopt-css.js`, `dom-utils.js`
 - `./datagrid-core/*`
 - `../media/icon.js`
 
-## Tokens CSS (host)
+## Accesibilidad
 
-`--is-grid-row-h`, `--is-grid-header-h`, `--is-grid-header-bg`, `--is-grid-stripe`,
-`--is-grid-row-hover`, `--is-grid-selected`, `--is-grid-selected-bar`
+El viewport declara `role="grid"` y es enfocable (`tabindex="0"`); la toolbar
+usa `role="toolbar"`. Al ocultar columnas, mantener disponible el panel lateral
+para poder restaurarlas por teclado.
+
+## Ejemplo avanzado
+
+```html
+<is-ag-grid id="grid" selectable row-selection="multiple"
+            remember-state storage-key="inventario"
+            density="compact" page-size="50" style="height: 30rem">
+</is-ag-grid>
+
+<script type="module">
+  const grid = document.getElementById('grid');
+  grid.columns = [
+    { field: 'name', header: 'Producto', filter: true, sortable: true },
+    { field: 'stock', header: 'Stock', type: 'number', align: 'right' },
+  ];
+  grid.rows = await (await fetch('/api/inventario')).json();
+
+  grid.addEventListener('is-sort-change', (e) => console.log(e.detail));
+  grid.api.openColumnsPanel();
+  const snapshot = grid.api.serializeState();
+  grid.api.resetPersistedState();      // borra keyid y vuelve a defaults
+</script>
+```
+
+## Errores comunes
+
+- Persistir con `remember-state` pero sin `storage-key`: la persistencia es
+  opt-in estricto y necesita ambos.
+- Escuchar `is-sort` / `is-filter`: el vocabulario es `-change`.
+- Escribir el estado a mano en `localStorage` en vez de usar `prefs.js`.
+- Confundirlo con `<is-data-grid>`: otro contrato y otro archivo.
+- Usar tag sin importar módulo primero.
+
+## Reglas para LLM
+
+- Reusar `datagrid-core` antes de reimplementar orden, filtro o agrupación.
+- Mantener nombres exactos de tags y API.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Persistir solo por `_shared/prefs.js` con la raíz `is-webcomponents`.
+- No modificar API basándose solo en preview.
+
+## Fuentes
+
+- [JavaScript](./ag-grid.js)
+- [CSS](./ag-grid.css)
+- [Índice de categoría](./LLM.md)
+- [Preview](../../previews/data/is-ag-grid.json)
 
 ## Checker
 
@@ -182,4 +308,4 @@ node scripts/docs-consistency.selfcheck.mjs
 
 - [Índice data](./LLM.md)
 - [Índice global](../LLM.md)
-- Preview: `previews/data/is-ag-grid.html`
+- Preview: `previews/data/is-ag-grid.json`
