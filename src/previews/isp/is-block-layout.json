@@ -6,6 +6,7 @@
   "titleHtml": true,
   "styles": ".bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); margin: 0; }\r\n    is-block-layout[data-szw-lg] .bl-title { font-weight: 700; }",
   "storageKey": "docs-is-block-layout",
+  "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
@@ -36,7 +37,7 @@
         },
         {
           "kind": "html",
-          "html": "<h2>Inline y scroll</h2>"
+          "html": "<is-heading level=\"2\">Inline y scroll</is-heading>"
         },
         {
           "kind": "demo",
@@ -49,13 +50,29 @@
       ]
     },
     {
+      "id": "json",
+      "title": "json2html · html2json",
+      "lede": "El cuerpo se define en JSON compacto <code class=\"code\">[tag, attrs?, …hijos]</code>\n          (mismo codec que <code class=\"code\">&lt;is-form&gt;</code>).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-block-layout id=\"blJson\" style=\"border:1px solid var(--is-border);padding:1rem;min-height:6rem\"></is-block-layout>\n          <div style=\"display:flex;gap:0.5rem;margin:0.75rem 0\">\n            <is-button id=\"blBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json()</is-button>\n            <is-button id=\"blBtnFromJson\" color=\"brand\">fromJSON(body)</is-button>\n          </div>\n          <pre id=\"blJsonOut\" style=\"margin:0;padding:0.65rem 0.75rem;border:1px solid var(--is-border);border-radius:0.5rem;background:var(--is-bg-elev);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.75rem;white-space:pre-wrap;max-height:12rem;overflow:auto\"></pre>"
+        },
+        {
+          "kind": "code",
+          "code": "block.fromJSON({\n  body: [\n    ['p', 'Hola desde JSON'],\n    ['is-text', { color: 'neutral' }, 'secundario'],\n  ],\n});\nblock.html2json();",
+          "lang": "js"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "blocks": [
         {
           "kind": "table",
           "columns": [
-            "Atributo / var / evento",
+            "Atributo / API / evento",
             "Notas"
           ],
           "rows": [
@@ -68,20 +85,24 @@
               "boolean → <code>overflow:auto</code>"
             ],
             [
+              "<code>json2html</code> / <code>html2json</code>",
+              "cuerpo light DOM ↔ JSON compacto"
+            ],
+            [
+              "<code>toJSON</code> / <code>fromJSON</code>",
+              "<code>{ inline, cscroll, body }</code>"
+            ],
+            [
               "<code>data-sizew</code>",
               "reflejado: xs · sm · md · lg · xl"
             ],
             [
               "<code>data-szw-xs…xl</code>",
-              "reflejados; presentes si el breakpoint es &lt;= al actual (el <code>boolszw</code> de ISP)"
+              "reflejados; presentes si el breakpoint es &lt;= al actual"
             ],
             [
-              "<code>--clientw</code>",
-              "ancho en px sin unidad"
-            ],
-            [
-              "<code>--lerpw</code>",
-              "<code>lerpw('sm','xl')</code> — progreso 0→1 sin recortar"
+              "<code>--clientw</code> / <code>--lerpw</code>",
+              "ancho px · progreso sm→xl"
             ],
             [
               "<code>is-breakpoint</code>",
