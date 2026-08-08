@@ -9,55 +9,79 @@
     {
       "id": "intro",
       "title": "<is-format>",
-      "lede": "Web Component genérico de formateo con <code class=\"code\">Intl</code>. Un solo\r\n          elemento cubre fechas, números, bytes y tiempo relativo. Los nombres históricos\r\n          (<code class=\"code\">&lt;is-format-date&gt;</code>, <code class=\"code\">&lt;is-format-number&gt;</code>,\r\n          <code class=\"code\">&lt;is-format-bytes&gt;</code>, <code class=\"code\">&lt;is-relative-time&gt;</code>)\r\n          siguen funcionando como alias con <code class=\"code\">type</code> prefijado.",
+      "lede": "Formateo con <code class=\"code\">Intl</code> y presets estilo Excel vía <code class=\"code\">pattern</code>. Un solo elemento cubre número, fecha/hora, texto, bytes y tiempo relativo.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">los 4 tipos en una línea</span>\r\n          <p style=\"margin:0;display:flex;gap:1rem;flex-wrap:wrap;align-items:center\">\r\n            <is-format type=\"date\" value=\"2026-08-01\"></is-format>\r\n            <is-format type=\"number\" value=\"1234.5\" format=\"currency\" currency=\"EUR\"></is-format>\r\n            <is-format type=\"bytes\" value=\"2048\" display=\"long\"></is-format>\r\n            <is-format type=\"relative\" date=\"2026-08-01T00:00:00Z\"></is-format>\r\n          </p>"
+          "html": "<span class=\"demo-label\">vista rápida</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">#,##0.00</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">yyyy-mm-dd</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-08-01\" pattern=\"yyyy-mm-dd\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00%</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" pattern=\"0.00%\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">title case</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"hola mundo contapyme\" case=\"title\"></is-format>\n            </div>\n          </div>"
         }
       ]
     },
     {
-      "id": "type-date",
-      "title": "<code>type=\"date\"</code>",
-      "titleHtml": true,
+      "id": "excel-number",
+      "title": "Números · patrones Excel",
+      "lede": "Atributo <code class=\"code\">pattern</code> con códigos habituales de Excel (General, Number, Percent, Scientific, Currency, Accounting, Fraction).",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">ISO datetime</code>\r\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:00\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">solo día</code>\r\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">timestamp ms</code>\r\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"1753896600000\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">General · 1234.5</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"General\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"0\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"0.00\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">#,##0</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" pattern=\"#,##0\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">#,##0.00</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234567.8\" pattern=\"#,##0.00\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0%</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" pattern=\"0%\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00%</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.425\" pattern=\"0.00%\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00E+00</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" pattern=\"0.00E+00\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">$#,##0.00</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"12500\" pattern=\"$#,##0.00\" currency=\"USD\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Accounting</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"-1250.5\" pattern=\"Accounting\" currency=\"USD\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\"># ?/?</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"2.75\" pattern=\"# ?/?\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\"># ??/??</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.333\" pattern=\"# ??/??\"></is-format>\n            </div>\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-format type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></is-format>\n<is-format type=\"number\" value=\"0.42\" pattern=\"0.00%\"></is-format>\n<is-format type=\"number\" value=\"2.75\" pattern=\"# ?/?\"></is-format>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "excel-date",
+      "title": "Fechas y hora · patrones Excel",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">yyyy-mm-dd</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:00\" pattern=\"yyyy-mm-dd\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">dd/mm/yyyy</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"dd/mm/yyyy\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">d-mmm-yyyy</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"d-mmm-yyyy\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">mmmm yyyy</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"mmmm yyyy\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">h:mm AM/PM</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:00\" pattern=\"h:mm AM/PM\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">h:mm:ss</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:45\" pattern=\"h:mm:ss\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">yyyy-mm-dd hh:mm:ss</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:45\" pattern=\"yyyy-mm-dd hh:mm:ss\"></is-format>\n            </div>\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "excel-text",
+      "title": "Texto · type=\"text\"",
+      "lede": "Equivalente a formato Texto (@) de Excel, más transformaciones útiles.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">@ / as-is</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"00123\" pattern=\"@\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">upper</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"contapyme\" case=\"upper\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">lower</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"ContaPyme\" case=\"lower\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">title</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"hola mundo\" case=\"title\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">truncate 12</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"Texto demasiado largo para la celda\" truncate=\"12\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">pad-start 0 × 6</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"42\" pad-start=\"0\" pad-length=\"6\"></is-format>\n            </div>\n          </div>"
         }
       ]
     },
     {
       "id": "type-number",
-      "title": "<code>type=\"number\"</code>",
-      "titleHtml": true,
+      "title": "format · atajos Intl",
+      "lede": "Sin <code class=\"code\">pattern</code>, usa <code class=\"code\">format</code>: decimal, currency, percent, scientific, compact, integer, accounting.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">decimal</code>\r\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency EUR</code>\r\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"99.99\" format=\"currency\" currency=\"EUR\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">percent</code>\r\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" format=\"percent\"></is-format>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">decimal</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">currency EUR</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"99.99\" format=\"currency\" currency=\"EUR\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">percent</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" format=\"percent\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">scientific</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" format=\"scientific\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">compact</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1250000\" format=\"compact\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">integer</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.9\" format=\"integer\"></is-format>\n            </div>\n          </div>"
         }
       ]
     },
     {
       "id": "type-bytes",
-      "title": "<code>type=\"bytes\"</code>",
-      "titleHtml": true,
+      "title": "type=\"bytes\"",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">512 B</code>\r\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"512\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">2 MB short</code>\r\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"2097152\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">1.5 GB long</code>\r\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"1610612736\" display=\"long\"></is-format>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">512 B</code>\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"512\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">2 MB short</code>\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"2097152\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">1.5 GB long</code>\n              <is-format class=\"format-grid__value\" type=\"bytes\" value=\"1610612736\" display=\"long\"></is-format>\n            </div>\n          </div>"
         }
       ]
     },
     {
       "id": "type-relative",
-      "title": "<code>type=\"relative\"</code>",
-      "titleHtml": true,
+      "title": "type=\"relative\"",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">ayer</code>\r\n              <is-format class=\"format-grid__value\" type=\"relative\" date=\"2026-07-31T12:00:00\"></is-format>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">en 1 hora</code>\r\n              <is-format class=\"format-grid__value\" type=\"relative\" date=\"2026-08-01T13:00:00\"></is-format>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">pasado</code>\n              <is-format class=\"format-grid__value\" type=\"relative\" date=\"2020-01-01T12:00:00\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">futuro</code>\n              <is-format class=\"format-grid__value\" type=\"relative\" date=\"2099-01-01T12:00:00\"></is-format>\n            </div>\n          </div>"
         }
       ]
     },
@@ -66,8 +90,24 @@
       "title": "Referencia de atributos",
       "blocks": [
         {
-          "kind": "demo",
-          "html": "<table class=\"is-table\">\r\n            <thead>\r\n              <tr><th>Atributo</th><th>Aplica a</th><th>Descripción</th></tr>\r\n            </thead>\r\n            <tbody>\r\n              <tr><td><code>type</code></td><td>todos</td><td><code>date | number | bytes | relative</code> (obligatorio en <code>&lt;is-format&gt;</code>)</td></tr>\r\n              <tr><td><code>value</code></td><td>todos</td><td>el dato a formatear (string | number)</td></tr>\r\n              <tr><td><code>date</code></td><td>relative</td><td>ISO o timestamp; en relative también vale <code>value</code></td></tr>\r\n              <tr><td><code>locale</code></td><td>todos</td><td>BCP 47; cae al <code>lang</code> del documento</td></tr>\r\n              <tr><td><code>format</code></td><td>number</td><td><code>decimal | currency | percent | unit</code></td></tr>\r\n              <tr><td><code>currency</code></td><td>number</td><td>ISO 4217 cuando <code>format=\"currency\"</code></td></tr>\r\n              <tr><td><code>unit</code></td><td>bytes</td><td><code>byte | kilobyte | … | petabyte</code> de entrada</td></tr>\r\n              <tr><td><code>display</code></td><td>bytes</td><td><code>short | long</code></td></tr>\r\n              <tr><td><code>style</code></td><td>relative</td><td><code>long | short | narrow</code> (default long)</td></tr>\r\n              <tr><td><code>sync</code></td><td>relative</td><td>boolean: re-renderiza cada 30 s</td></tr>\r\n              <tr><td><code>weekday era year month day hour minute second hour-format</code></td><td>date</td><td>opciones de <code>Intl.DateTimeFormat</code></td></tr>\r\n            </tbody>\r\n          </table>"
+          "kind": "table",
+          "columns": ["Atributo", "Aplica a", "Descripción"],
+          "rows": [
+            ["<code>type</code>", "todos", "<code>date | number | bytes | relative | text</code>"],
+            ["<code>value</code>", "todos", "dato a formatear (string | number)"],
+            ["<code>pattern</code>", "number, date, text", "código Excel-like: <code>#,##0.00</code>, <code>0.00%</code>, <code>yyyy-mm-dd</code>, <code>@</code>, <code>Accounting</code>, <code># ?/?</code>…"],
+            ["<code>format</code>", "number", "<code>decimal | currency | percent | unit | scientific | compact | integer | accounting</code>"],
+            ["<code>currency</code>", "number", "ISO 4217 cuando currency/accounting / patrones <code>$</code>"],
+            ["<code>locale</code>", "todos", "BCP 47; cae al <code>lang</code> del documento"],
+            ["<code>case</code>", "text", "<code>upper | lower | title | capitalize</code>"],
+            ["<code>truncate</code>", "text", "máximo de caracteres (añade …)"],
+            ["<code>pad-start</code> / <code>pad-end</code> + <code>pad-length</code>", "text", "relleno tipo Excel personalizado"],
+            ["<code>date</code>", "relative", "ISO o timestamp; en relative también vale <code>value</code>"],
+            ["<code>unit</code> / <code>display</code> / <code>autofit</code>", "bytes", "unidad de entrada, short|long, autofit"],
+            ["<code>style</code> / <code>numeric</code> / <code>sync</code>", "relative", "long|short|narrow · always|auto · re-render 30s"],
+            ["<code>weekday era year month day hour minute second hour-format</code>", "date", "opciones de <code>Intl.DateTimeFormat</code> (si no hay <code>pattern</code>)"],
+            ["<code>minimum-fraction-digits</code> / <code>maximum-fraction-digits</code>", "number", "decimales Intl (si no hay <code>pattern</code>)"]
+          ]
         }
       ]
     }
