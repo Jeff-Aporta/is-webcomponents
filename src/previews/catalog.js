@@ -455,6 +455,14 @@ export default {
     "behavior": "./behaviors/is-lightbox.js",
     "category": "helpers"
   },
+  "is-md-editor": {
+    "json": "./helpers/is-md-editor.json",
+    "category": "helpers"
+  },
+  "is-md-render": {
+    "json": "./helpers/is-md-render.json",
+    "category": "helpers"
+  },
   "is-mutation-observer": {
     "json": "./helpers/is-mutation-observer.json",
     "behavior": "./behaviors/is-mutation-observer.js",
@@ -471,10 +479,12 @@ export default {
   },
   "is-relative-time": {
     "json": "./helpers/is-relative-time.json",
+    "behavior": "./behaviors/is-relative-time.js",
     "category": "helpers"
   },
   "is-resize-observer": {
     "json": "./helpers/is-resize-observer.json",
+    "behavior": "./behaviors/is-resize-observer.js",
     "category": "helpers"
   },
   "is-ui": {
@@ -493,14 +503,17 @@ export default {
   },
   "is-block-layout": {
     "json": "./isp/is-block-layout.json",
+    "behavior": "./behaviors/is-block-layout.js",
     "category": "isp"
   },
   "is-btn-ref": {
     "json": "./isp/is-btn-ref.json",
+    "behavior": "./behaviors/is-btn-ref.js",
     "category": "isp"
   },
   "is-catalogo-gen": {
     "json": "./isp/is-catalogo-gen.json",
+    "behavior": "./behaviors/is-catalogo-gen.js",
     "category": "isp"
   },
   "is-confirm-delete": {
@@ -509,14 +522,12 @@ export default {
   },
   "is-flex-layout": {
     "json": "./isp/is-flex-layout.json",
+    "behavior": "./behaviors/is-flex-layout.js",
     "category": "isp"
   },
   "is-form": {
     "json": "./isp/is-form.json",
-    "category": "isp"
-  },
-  "is-function-form": {
-    "json": "./isp/is-function-form.json",
+    "behavior": "./behaviors/is-form.js",
     "category": "isp"
   },
   "is-grid-layout": {
@@ -525,18 +536,22 @@ export default {
   },
   "is-heading": {
     "json": "./isp/is-heading.json",
+    "behavior": "./behaviors/is-heading.js",
     "category": "isp"
   },
   "is-loading-overlay": {
     "json": "./isp/is-loading-overlay.json",
+    "behavior": "./behaviors/is-loading-overlay.js",
     "category": "isp"
   },
   "is-modal-verificacion": {
     "json": "./isp/is-modal-verificacion.json",
+    "behavior": "./behaviors/is-modal-verificacion.js",
     "category": "isp"
   },
   "is-text": {
     "json": "./isp/is-text.json",
+    "behavior": "./behaviors/is-text.js",
     "category": "isp"
   },
   "is-callout": {
@@ -695,6 +710,11 @@ export default {
   "theming": {
     "json": "./theming.json",
     "behavior": "./behaviors/theming.js",
+    "category": ""
+  },
+  "ecosystem": {
+    "json": "./ecosystem.json",
+    "behavior": "./behaviors/ecosystem.js",
     "category": ""
   }
 };

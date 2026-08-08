@@ -4,16 +4,27 @@
   "category": "helpers",
   "title": "<is-resize-observer>",
   "titleHtml": true,
+  "styles": ".ro-box {\n      resize: both;\n      overflow: auto;\n      box-sizing: border-box;\n      min-width: 140px;\n      min-height: 90px;\n      max-width: 100%;\n      width: 220px;\n      height: 120px;\n      padding: 1rem;\n      border: 1px dashed var(--is-border);\n      border-radius: var(--is-radius, 0.5em);\n      background:\n        repeating-linear-gradient(45deg,\n          color-mix(in srgb, var(--is-border) 35%, transparent) 0 8px,\n          transparent 8px 16px),\n        var(--is-bg-elev);\n      color: var(--is-text);\n      font-size: 0.9rem;\n      line-height: 1.4;\n    }\n    .ro-meta {\n      display: flex;\n      flex-wrap: wrap;\n      align-items: center;\n      gap: 0.75rem 1.25rem;\n      margin-top: 0.75rem;\n      font-size: 0.9rem;\n      color: var(--is-text-soft);\n    }\n    .ro-size {\n      font-variant-numeric: tabular-nums;\n      font-weight: 600;\n      color: var(--is-text);\n    }\n    .ro-status {\n      font-size: 0.75rem;\n      font-weight: 600;\n      letter-spacing: 0.04em;\n      text-transform: uppercase;\n      padding: 0.2em 0.55em;\n      border-radius: 999px;\n      background: var(--is-brand-soft, color-mix(in srgb, var(--is-color-brand) 18%, transparent));\n      color: var(--is-brand-text, var(--is-color-brand));\n    }\n    .ro-status.is-off {\n      background: var(--is-control-bg);\n      color: var(--is-text-dim);\n    }\n    .ro-actions {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      align-items: center;\n      margin-bottom: 0.75rem;\n    }\n    .log .type-res { color: #74c0fc; }\n    .log .type-off { color: #ffa8a8; }",
   "storageKey": "docs-is-resize-observer",
+  "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "<is-resize-observer>",
-      "lede": "Observa hijos directos y emite <code class=\"code\">is-resize</code> con entries.\r\n          Alias de <code class=\"code\">&lt;is-observer type=\"resize\"&gt;</code>.",
+      "lede": "Observa hijos directos y emite <code class=\"code\">is-resize</code> con las\n          <code class=\"code\">ResizeObserverEntry</code>. Alias de\n          <code class=\"code\">&lt;is-observer type=\"resize\"&gt;</code>.",
       "blocks": [
         {
+          "kind": "callout",
+          "html": "Arrastra la esquina ↘ del cuadro. El tamaño en vivo y el log se actualizan\n          con cada <code class=\"code\">is-resize</code>."
+        },
+        {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">// arrastra la esquina</span>\r\n          <is-resize-observer id=\"ro\">\r\n            <div id=\"roBox\" style=\"resize:both;overflow:auto;min-width:120px;min-height:80px;max-width:100%;padding:1rem;background:var(--is-control-bg);border-radius:8px;border:1px dashed var(--is-control-border)\">\r\n              Arrastra la esquina para redimensionar\r\n            </div>\r\n          </is-resize-observer>\r\n          <div class=\"log\" id=\"roLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Dimensiones al redimensionar.</div></div>"
+          "html": "<span class=\"demo-label\">resize: both · overflow: auto</span>\n          <is-resize-observer id=\"ro\">\n            <div id=\"roBox\" class=\"ro-box\">\n              Arrastra la esquina ↘ para redimensionar.\n            </div>\n          </is-resize-observer>\n          <div class=\"ro-meta\">\n            <span>Tamaño: <span class=\"ro-size\" id=\"roSize\">— × —</span></span>\n            <span class=\"ro-status\" id=\"roStatus\">activo</span>\n          </div>\n          <div class=\"log\" id=\"roLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Los eventos <code class=\"code\">is-resize</code> aparecen aquí.</div>\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-resize-observer>\n  <div style=\"resize:both; overflow:auto\">…</div>\n</is-resize-observer>\n\nel.addEventListener('is-resize', (e) => {\n  const entry = e.detail.entries[0];\n  console.log(entry.contentRect.width, entry.contentRect.height);\n});",
+          "lang": "html"
         }
       ]
     },
@@ -21,14 +32,15 @@
       "id": "disabled",
       "title": "<code>disabled</code>",
       "titleHtml": true,
+      "lede": "Con <code class=\"code\">disabled</code> el observer se desconecta: redimensionar\n          ya no emite eventos. El botón alterna el atributo y su propia etiqueta.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:.75rem\">\r\n            <is-button id=\"roToggle\" color=\"neutral\" variant=\"outlined\">Desactivar observer</is-button>\r\n          </div>\r\n          <is-resize-observer id=\"ro2\">\r\n            <div style=\"resize:both;overflow:auto;min-width:100px;min-height:60px;padding:.75rem;border:1px solid var(--is-border);border-radius:8px\">\r\n              Panel secundario\r\n            </div>\r\n          </is-resize-observer>"
+          "html": "<div class=\"ro-actions\">\n            <is-button id=\"roToggle\" color=\"neutral\" variant=\"outlined\" type=\"button\">Desactivar observer</is-button>\n            <span class=\"ro-status\" id=\"ro2Status\">activo</span>\n          </div>\n          <is-resize-observer id=\"ro2\">\n            <div id=\"roBox2\" class=\"ro-box\" style=\"width:180px;height:100px\">\n              Panel secundario — redimensiona con el observer ON/OFF.\n            </div>\n          </is-resize-observer>\n          <div class=\"ro-meta\">\n            <span>Tamaño: <span class=\"ro-size\" id=\"roSize2\">— × —</span></span>\n          </div>\n          <div class=\"log\" id=\"roLog2\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Solo registra mientras el observer esté activo.</div>\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-resize-observer disabled>…</is-resize-observer>",
+          "code": "<is-resize-observer disabled>…</is-resize-observer>\n// o en runtime:\nel.toggleAttribute('disabled');",
           "lang": "html"
         }
       ]
@@ -50,19 +62,10 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": [
-            "Atributo / evento",
-            "Descripción"
-          ],
+          "columns": ["Atributo / evento", "Descripción"],
           "rows": [
-            [
-              "<code>disabled</code>",
-              "Desactiva observer"
-            ],
-            [
-              "<code>is-resize</code>",
-              "detail: { entries }"
-            ]
+            ["<code>disabled</code>", "Desconecta el ResizeObserver"],
+            ["<code>is-resize</code>", "detail: { entries } — array de ResizeObserverEntry"]
           ]
         }
       ]

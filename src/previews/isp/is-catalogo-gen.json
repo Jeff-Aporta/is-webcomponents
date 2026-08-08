@@ -4,21 +4,47 @@
   "category": "isp",
   "title": "<is-catalogo-gen>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-catalogo-gen de InSoft.",
+  "description": "Catálogo CRUD genérico ISP con controller JSON.",
   "storageKey": "docs-is-catalogo-gen",
+  "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "<is-catalogo-gen>",
-      "lede": "Catálogo CRUD genérico (port de ISP <code class=\"code\">CatalogoGen</code>):\r\n          toolbar, grilla y acciones Crear / Modificar / Verificar / Eliminar…\r\n          según lo que exponga el <code class=\"code\">controller</code>.",
+      "lede": "Catálogo CRUD (port ISP <code class=\"code\">CatalogoGen</code>). El <code class=\"code\">controller</code>\n          se genera con <code class=\"code\">createCatalogController(json)</code>: listado, columnas y\n          acciones (crear / modificar / visualizar / verificar / duplicar / recodificar / eliminar / consolidar).",
       "blocks": [
         {
+          "kind": "callout",
+          "html": "Selecciona una fila: la toolbar habilita acciones que requieren selección\n          <strong>sin parpadear</strong> (el grid pinta la selección in-place).\n          En demos se usa <code class=\"code\">mock</code>; en producción pasa <code class=\"code\">server</code> + <code class=\"code\">endpoints</code>."
+        },
+        {
           "kind": "demo",
-          "html": "<is-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></is-catalogo-gen>\r\n          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
+          "html": "<is-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></is-catalogo-gen>\n          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
         },
         {
           "kind": "code",
-          "code": "const cat = document.querySelector('is-catalogo-gen');\ncat.controller = {\n  entrie: 'Aplicación',\n  primaryKeys: ['app'],\n  columns: [\n    { field: 'app', header: 'Aplicación' },\n    { field: 'bactiva', header: 'Activa' },\n  ],\n  async Lista() { return { datos: [/* … */] }; },\n  async actCrear(o) { return o; },\n  async actModificar(o) { return o; },\n  async actEliminar(o) { return o; },\n  async actVerificar() {\n    return { mensajes: [{ itdmensaje: 'info', mensaje: 'OK' }] };\n  },\n};"
+          "code": "import { createCatalogController } from './isp/controller-from-config.min.js';\n\ncat.controller = createCatalogController({\n  entrie: 'Curso',\n  primaryKeys: ['icurso'],\n  columns: [\n    { field: 'icurso', header: 'Código' },\n    { field: 'ncurso', header: 'Nombre' },\n  ],\n  // actions: true  → todas (default)\n  // actions: ['crear','modificar','eliminar']\n  mock: [\n    { icurso: 'C001', ncurso: 'Contabilidad básica' },\n  ],\n  // server: {\n  //   useLocal: false,\n  //   local:  { host: 'localhost', port: 20040, https: false },\n  //   remote: { host: '….azurewebsites.net', port: 443, https: true },\n  // },\n  // endpoints: { recurso: 'curso', recursos: 'cursos' },\n  // token: () => sessionStorage.getItem('token'),\n});",
+          "lang": "js"
+        }
+      ]
+    },
+    {
+      "id": "config",
+      "title": "JSON de configuración",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": ["Campo", "Notas"],
+          "rows": [
+            ["<code>entrie</code>", "Nombre singular del recurso (títulos)"],
+            ["<code>primaryKeys</code>", "PK(s) del registro"],
+            ["<code>columns</code>", "Defs de grilla <code>{ field, header }</code>"],
+            ["<code>actions</code>", "<code>true</code> (todas) · lista · <code>false</code>"],
+            ["<code>mock</code>", "Array en memoria (demos / offline)"],
+            ["<code>server.local / remote</code>", "Host/port/https como TInfoConnection"],
+            ["<code>endpoints.recurso</code>", "→ <code>/api/{recurso}</code>; plural auto o <code>recursos</code>"],
+            ["<code>token</code>", "string o <code>() => string</code> (Bearer)"]
+          ]
         }
       ]
     }
