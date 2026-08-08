@@ -84,10 +84,16 @@
  */
 
 import { ElementBase } from '../_shared/element-base.js';
+import {
+  getComponentPrefs, removeComponentPrefs, replaceComponentPrefs,
+} from '../_shared/prefs.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 import '../media/icon.js';
+import '../forms/checkbox.js';
+import '../forms/select.js';
+import '../forms/option.js';
 import './datagrid-core/index.js';
 
 import {
@@ -145,6 +151,12 @@ TEMPLATE.innerHTML = /* html */ `
           <is-icon icon="mdi:view-stream"></is-icon>
         </is-button>
       </div>
+      <is-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
+        <is-icon icon="mdi:view-column-outline"></is-icon>
+      </is-button>
+      <is-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
+        <is-icon icon="mdi:backup-restore"></is-icon>
+      </is-button>
       <is-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
         <is-icon icon="mdi:file-delimited-outline"></is-icon>
         <span class="mim-dg__tool-btn-label">CSV</span>
@@ -191,10 +203,10 @@ TEMPLATE.innerHTML = /* html */ `
       <label class="mim-dg__page-size">
         Filas:
         <is-select class="mim-dg__page-size-select" aria-label="Filas por página">
-          <is-select-option value="25">25</is-select-option>
-          <is-select-option value="50">50</is-select-option>
-          <is-select-option value="100">100</is-select-option>
-          <is-select-option value="200">200</is-select-option>
+          <is-option value="25">25</is-option>
+          <is-option value="50">50</is-option>
+          <is-option value="100">100</is-option>
+          <is-option value="200">200</is-option>
         </is-select>
       </label>
       <is-button variant="plain" pill class="mim-dg__pager-btn" data-action="page-prev" aria-label="Anterior">
@@ -268,6 +280,8 @@ export class IsAgGrid extends ElementBase {
   }
 
   #api = null;
+  /** true si filas/columnas llegaron por `api.setRows/setColumns` antes del init. */
+  #externalData = false;
   #rawRows = [];
   #rawColumns = [];
   #getRowId = null;
@@ -327,6 +341,7 @@ export class IsAgGrid extends ElementBase {
     // Quick filter
     const qf = this.shadowRoot.querySelector('.mim-dg__quick-input');
     qf.addEventListener('input', () => {
+      if (!this.#api) return;
       this.#api.setQuickFilter(qf.value);
       emit(this, 'is-quick-filter', { value: qf.value });
     });
@@ -344,16 +359,40 @@ export class IsAgGrid extends ElementBase {
       this.api.exportCSV();
     });
 
+    // Panel lateral de columnas
+    this.shadowRoot.querySelector('.mim-dg__columns-btn').addEventListener('click', () => {
+      this.#toggleSidePanel('columns');
+    });
+    this.shadowRoot.querySelector('.mim-dg__sidebar-tabs').addEventListener('click', (e) => {
+      const tab = e.target.closest('[data-panel]');
+      if (tab) this.#toggleSidePanel(tab.dataset.panel);
+    });
+    this.shadowRoot.querySelector('.mim-dg__panel').addEventListener('is-change', (e) => {
+      const item = e.target.closest('[data-col-id]');
+      if (!item) return;
+      this.#api?.hideColumn(item.dataset.colId, !e.detail.checked);
+      this.#render();
+      this.#renderBody();
+      this.#renderColumnsPanel();
+    });
+
+    // Reiniciar personalización persistida
+    this.shadowRoot.querySelector('.mim-dg__reset-btn').addEventListener('click', () => {
+      this.api.resetPersistedState();
+    });
+
     // Footer pagination
     this.shadowRoot.querySelector('.mim-dg__footer').addEventListener('click', (e) => {
-      const btn = e.target.closest('button');
+      // Los controles son <is-button>: el click se retarget al host, así que
+      // buscar `button` no encuentra nada.
+      const btn = e.target.closest('[data-action]');
       if (!btn) return;
       const action = btn.dataset.action;
       if (action === 'page-prev') this.#goToPage(this.#page - 1);
       if (action === 'page-next') this.#goToPage(this.#page + 1);
     });
     this.#pageSizeSelect.addEventListener('change', () => {
-      this.#api.setPageSize(Number(this.#pageSizeSelect.value));
+      this.#api?.setPageSize(Number(this.#pageSizeSelect.value));
     });
 
     // Viewport scroll
@@ -371,6 +410,7 @@ export class IsAgGrid extends ElementBase {
     // Group panel (chips + expand/collapse). El ungroup vive aquí: el chip
     // está fuera de #viewport, así que #onViewportClick nunca lo ve.
     this.#groupPanel.addEventListener('click', (e) => {
+      if (!this.#api) return;
       const ungroup = e.target.closest('[data-act="ungroup"]');
       if (ungroup) {
         e.preventDefault();
@@ -379,7 +419,7 @@ export class IsAgGrid extends ElementBase {
         if (colId) this.#api.removeRowGroupCol(colId);
         return;
       }
-      const btn = e.target.closest('button[data-action]');
+      const btn = e.target.closest('[data-action]');
       if (!btn) return;
       if (btn.dataset.action === 'expand-all') this.#api.expandAllGroups();
       if (btn.dataset.action === 'collapse-all') this.#api.collapseAllGroups();
@@ -396,15 +436,16 @@ export class IsAgGrid extends ElementBase {
       e.preventDefault();
       this.#groupPanel.classList.remove('is-over');
       const colId = e.dataTransfer?.getData('application/x-is-col-id');
-      if (colId) this.#api.addRowGroupCol(colId);
+      if (colId) this.#api?.addRowGroupCol(colId);
     });
 
     // Resize
-    this.#ro = new ResizeObserver(() => this.#renderBody());
+    this.#ro = new ResizeObserver(() => { if (this.#api) this.#renderBody(); });
     this.#ro.observe(this.#viewport);
 
     // Header resize pointerdown (delegated)
     this.#headerRow.addEventListener('pointerdown', (e) => {
+      if (!this.#api) return;
       const resizer = e.target.closest('.mim-dg__resizer');
       if (!resizer) return;
       e.preventDefault();
@@ -415,12 +456,13 @@ export class IsAgGrid extends ElementBase {
       const startX = e.clientX;
       const startW = col.width;
       const onMove = (ev) => {
-        this.#api.resizeColumn(colId, startW + (ev.clientX - startX));
+        this.#api?.resizeColumn(colId, startW + (ev.clientX - startX));
       };
       const onUp = () => {
         window.removeEventListener('pointermove', onMove);
         window.removeEventListener('pointerup', onUp);
-        emit(this, 'is-column-resize', { colId, width: this.#api.getColumns().find((c) => c.colId === colId).width });
+        const w = this.#api?.getColumns().find((c) => c.colId === colId)?.width;
+        if (w != null) emit(this, 'is-column-resize', { colId, width: w });
       };
       window.addEventListener('pointermove', onMove);
       window.addEventListener('pointerup', onUp);
@@ -443,6 +485,7 @@ export class IsAgGrid extends ElementBase {
       e.preventDefault();
     });
     this.#headerRow.addEventListener('drop', (e) => {
+      if (!this.#api) return;
       const head = e.target.closest('.mim-dg__head-cell');
       if (!head) return;
       const sourceColId = e.dataTransfer.getData('application/x-is-col-id');
@@ -464,10 +507,8 @@ export class IsAgGrid extends ElementBase {
     this.#stateLoaded = false;
     if (this.#rememberState) {
       const key = this.#storageKey || this.#defaultStorageKey();
-      try {
-        const raw = sessionStorage.getItem(key);
-        if (raw) this.#api.loadState(raw);
-      } catch { /* no sessionStorage */ }
+      const saved = getComponentPrefs('is-ag-grid', key);
+      if (saved && this.#api) this.#api.loadState(saved);
     }
     this.#render();
     this.#renderBody();
@@ -489,19 +530,19 @@ export class IsAgGrid extends ElementBase {
       this.#render();
     } else if (name === 'page-size') {
       this.#pageSize = Number(newVal) || DEFAULT_PAGE_SIZE;
-      this.#api.setPageSize(this.#pageSize);
+      this.#api?.setPageSize(this.#pageSize);
     } else if (name === 'pagination') {
       this.#isPaginated = this.hasAttribute('pagination');
-      this.#api.getState(); // no-op, but ensures state.sync
+      this.#api?.getState(); // no-op, but ensures state.sync
       this.#render();
     } else if (name === 'density') {
       this.#density = newVal || Density.NORMAL;
       this.#render();
     } else if (name === 'quick-filter') {
-      this.#api.setQuickFilter(newVal || '');
+      this.#api?.setQuickFilter(newVal || '');
     } else if (name === 'group-by') {
       const cols = (newVal || '').split(',').map((s) => s.trim()).filter(Boolean);
-      this.#api.setRowGroupCols(cols);
+      this.#api?.setRowGroupCols(cols);
     } else if (name === 'row-selection' || name === 'selectable') {
       this.#syncSelectionMode();
       this.#render();
@@ -532,6 +573,29 @@ export class IsAgGrid extends ElementBase {
   #syncStatePersistence() {
     this.#rememberState = this.hasAttribute('remember-state');
     this.#storageKey = this.getAttribute('storage-key') || '';
+    // Sin persistencia no hay nada que reiniciar: el botón sobra.
+    const resetBtn = this.shadowRoot?.querySelector('.mim-dg__reset-btn');
+    if (resetBtn) resetBtn.hidden = !this.#rememberState;
+  }
+
+  /** `serializeState()` del core devuelve JSON string; en prefs el snapshot se
+   *  guarda como objeto para no anidar un string dentro del JSON raíz. */
+  static #parseState(raw) {
+    if (raw && typeof raw === 'object') return raw;
+    try { return JSON.parse(raw); } catch { return null; }
+  }
+
+  /** Snapshot completo bajo `localStorage['is-webcomponents']['is-ag-grid'][key]`.
+   *  Se reemplaza entero (no merge): un merge dejaría columnas o filtros que
+   *  ya no existen en el estado nuevo. */
+  #persistState() {
+    if (!this.#api) return;
+    const key = this.#storageKey || this.#defaultStorageKey();
+    const raw = this.#api.serializeState();
+    const state = IsAgGrid.#parseState(raw);
+    if (!state) return;
+    replaceComponentPrefs('is-ag-grid', key, state);
+    emit(this, 'is-state-saved', { key, state });
   }
 
   #defaultStorageKey() {
@@ -539,6 +603,12 @@ export class IsAgGrid extends ElementBase {
   }
 
   async #readData() {
+    // Si el consumidor ya empujó filas/columnas vía api (p.ej. catalogo-gen
+    // en connectedCallback), no pisarlas con scripts vacíos del host.
+    if (this.#externalData) {
+      this.#getRowId = this.getAttribute('get-row-id');
+      return;
+    }
     const scripts = [...this.children].filter((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
     const rowsAttr = this.getAttribute('rows');
     const colsAttr = this.getAttribute('columns');
@@ -576,8 +646,12 @@ export class IsAgGrid extends ElementBase {
     const opts = (this.getAttribute('page-size-options') || this.#pageSizeOptions.join(','))
       .split(',').map((s) => Number(s.trim())).filter((n) => Number.isFinite(n) && n > 0);
     this.#pageSizeOptions = opts.length ? opts : [DEFAULT_PAGE_SIZE];
-    this.#pageSizeSelect.innerHTML = this.#pageSizeOptions
-      .map((o) => `<option value="${o}">${o}</option>`).join('');
+    this.#pageSizeSelect.replaceChildren(...this.#pageSizeOptions.map((o) => {
+      const opt = document.createElement('is-option');
+      opt.value = String(o);
+      opt.textContent = String(o);
+      return opt;
+    }));
     const ps = Number(this.getAttribute('page-size')) || DEFAULT_PAGE_SIZE;
     this.#pageSize = this.#pageSizeOptions.includes(ps) ? ps : this.#pageSizeOptions[0];
     this.#pageSizeSelect.value = String(this.#pageSize);
@@ -629,24 +703,72 @@ export class IsAgGrid extends ElementBase {
 
   #bindModelSubscription() {
     this.#unsubscribe?.();
-    this.#unsubscribe = this.#api.subscribe(() => {
+    if (!this.#api) return;
+    this.#unsubscribe = this.#api.subscribe((_state, reason) => {
+      // Selección: pintar clases/checkbox in-place. Un #renderBody completo
+      // recreaba is-icon en cada clic → flickering visible en catalogo-gen.
+      if (reason === 'selection') {
+        this.#paintSelection();
+        this.#paintHeaderCheckbox();
+        return;
+      }
       this.#renderBody();
       this.#renderHeader();
       this.#renderHeaderMenu();
       this.#renderFooter();
       this.#renderGroupPanel();
-      if (this.#rememberState) {
-        try {
-          const key = this.#storageKey || this.#defaultStorageKey();
-          sessionStorage.setItem(key, this.#api.serializeState());
-        } catch { /* no sessionStorage */ }
-      }
+      if (this.#rememberState) this.#persistState();
     });
+  }
+
+  /** Actualiza is-selected / checkbox sin destruir el DOM de filas. */
+  #paintSelection() {
+    if (!this.#api || !this.#body) return;
+    const state = this.#api.getState();
+    for (const row of this.#body.querySelectorAll('.mim-dg__row[data-row-kind="leaf"]')) {
+      const id = row.dataset.rowId;
+      const selected = state.selection.has(id);
+      row.classList.toggle('is-selected', selected);
+      row.setAttribute('aria-selected', selected ? 'true' : 'false');
+      const cb = row.querySelector('.mim-dg__checkbox');
+      if (!cb) continue;
+      cb.classList.toggle('mim-dg__checkbox--all', selected);
+      cb.classList.toggle('mim-dg__checkbox--none', !selected);
+      const icon = cb.querySelector('is-icon');
+      if (icon) icon.setAttribute('icon', selected ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline');
+    }
+  }
+
+  /** Solo el checkbox del header (all / some / none). */
+  #paintHeaderCheckbox() {
+    if (!this.#api || !this.#headerRow) return;
+    if (this.#currentSelectionMode === SelectionMode.NONE) return;
+    const state = this.#api.getState();
+    const checks = state.displayRows.length === 0
+      ? HeaderCheckboxState.NONE
+      : headerCheckboxStateCore(state.selection, state.pageRows);
+    const cell = this.#headerRow.querySelector('.mim-dg__cell--check .mim-dg__checkbox');
+    if (!cell) return;
+    cell.classList.remove('mim-dg__checkbox--all', 'mim-dg__checkbox--some', 'mim-dg__checkbox--none');
+    const cls = checks === HeaderCheckboxState.ALL
+      ? 'all'
+      : checks === HeaderCheckboxState.SOME
+        ? 'some'
+        : 'none';
+    cell.classList.add(`mim-dg__checkbox--${cls}`);
+    const iconName = checks === HeaderCheckboxState.ALL
+      ? 'mdi:checkbox-marked'
+      : checks === HeaderCheckboxState.SOME
+        ? 'mdi:minus-box'
+        : 'mdi:checkbox-blank-outline';
+    const icon = cell.querySelector('is-icon');
+    if (icon) icon.setAttribute('icon', iconName);
   }
 
   /* ── Render ───────────────────────────────────────────────────────────── */
 
   #render() {
+    if (!this.#api) return;
     this.#renderHeader();
     this.#renderBody();
     this.#renderFooter();
@@ -655,6 +777,7 @@ export class IsAgGrid extends ElementBase {
   }
 
   #renderHeader() {
+    if (!this.#api) return;
     const state = this.#api.getState();
     const layout = orderedForLayout(state.columns);
     const flat = [...layout.left, ...layout.center, ...layout.right];
@@ -734,6 +857,7 @@ export class IsAgGrid extends ElementBase {
   }
 
   #renderBody() {
+    if (!this.#api) return;
     const state = this.#api.getState();
     const layout = orderedForLayout(state.columns);
     const flat = [...layout.left, ...layout.center, ...layout.right];
@@ -846,7 +970,54 @@ export class IsAgGrid extends ElementBase {
     return escapeHtml(value == null ? '' : String(value));
   }
 
+  /** Abre/cierra el panel lateral. El markup del `<aside>` ya existía pero
+   *  nacía `hidden` y sin handlers: sin esto las columnas ocultas no se podían
+   *  restaurar desde la UI. */
+  #openSidePanel(panel) {
+    const body = this.shadowRoot.querySelector('.mim-dg__panel');
+    if (body && !body.hidden && body.dataset.panel === panel) return;
+    this.#toggleSidePanel(panel);
+  }
+
+  #toggleSidePanel(panel) {
+    const sidebar = this.shadowRoot.querySelector('.mim-dg__sidebar');
+    const body = this.shadowRoot.querySelector('.mim-dg__panel');
+    if (!sidebar || !body) return;
+    const same = !body.hidden && body.dataset.panel === panel;
+    sidebar.hidden = false;
+    body.hidden = same;
+    body.dataset.panel = panel;
+    for (const tab of this.shadowRoot.querySelectorAll('.mim-dg__sidebar-tab')) {
+      tab.setAttribute('aria-selected', String(!same && tab.dataset.panel === panel));
+    }
+    if (!body.hidden && panel === 'columns') this.#renderColumnsPanel();
+  }
+
+  #closeSidePanel() {
+    const body = this.shadowRoot.querySelector('.mim-dg__panel');
+    if (body) body.hidden = true;
+    for (const tab of this.shadowRoot.querySelectorAll('.mim-dg__sidebar-tab')) {
+      tab.setAttribute('aria-selected', 'false');
+    }
+  }
+
+  #renderColumnsPanel() {
+    const body = this.shadowRoot.querySelector('.mim-dg__panel');
+    if (!body || !this.#api) return;
+    const cols = this.#api.getState().columns;
+    body.innerHTML = `
+      <h3 class="mim-dg__panel-title">Columnas</h3>
+      <div class="mim-dg__panel-list">
+        ${cols.map((c) => `
+          <label class="mim-dg__panel-item" data-col-id="${escapeHtml(c.colId)}">
+            <is-checkbox ${c.hide ? '' : 'checked'}></is-checkbox>
+            <span>${escapeHtml(c.headerName ?? c.colId)}</span>
+          </label>`).join('')}
+      </div>`;
+  }
+
   #renderFooter() {
+    if (!this.#api) return;
     const state = this.#api.getState();
     const total = state.totalRows;
     const sel = state.selection.size;
@@ -871,6 +1042,7 @@ export class IsAgGrid extends ElementBase {
   }
 
   #renderGroupPanel() {
+    if (!this.#api) return;
     const state = this.#api.getState();
     const cols = this.#api.getColumns();
     const chips = state.rowGroupCols.map((colId) => {
@@ -896,6 +1068,7 @@ export class IsAgGrid extends ElementBase {
   }
 
   #openHeaderMenu(col, buttonEl) {
+    if (!this.#api) return;
     this.#closeHeaderMenu();
     const state = this.#api.getState();
     const idx = state.sortModel.findIndex((s) => s.colId === col.colId);
@@ -983,6 +1156,7 @@ export class IsAgGrid extends ElementBase {
   /* ── Filter popover ───────────────────────────────────────────────────── */
 
   #openFilterPopover(col, buttonEl) {
+    if (!this.#api) return;
     this.#closeHeaderMenu();
     this.#closeFilterPopover();
     const state = this.#api.getState();
@@ -1061,14 +1235,9 @@ export class IsAgGrid extends ElementBase {
       const op = existing?.type === 'text' ? existing.op : 'contains';
       const val = existing?.type === 'text' ? existing.value : '';
       return `
-        <select class="mim-dg__filter-field" data-role="op">
-          ${Object.entries(TEXT_OP_LABELS).map(([v, t]) => `<option value="${v}" ${v === op ? 'selected' : ''}>${t}</option>`).join('')}
-        </select>
-        <input class="mim-dg__filter-field" data-role="val" placeholder="Valor…" value="${escapeHtml(val)}" />
-        <div class="mim-dg__filter-actions">
-          <button class="mim-dg__filter-btn" data-act="clear" type="button">Limpiar</button>
-          <button class="mim-dg__filter-btn is-primary" data-act="apply" type="button">Aplicar</button>
-        </div>`;
+        ${opSelectHTML(TEXT_OP_LABELS, op)}
+        <is-input class="mim-dg__filter-field" data-role="val" placeholder="Valor…" value="${escapeHtml(val)}"></is-input>
+        ${FILTER_ACTIONS_HTML}`;
     }
     if (ft === 'number') {
       const nf = existing?.type === 'number' ? existing : null;
@@ -1076,15 +1245,10 @@ export class IsAgGrid extends ElementBase {
       const val = nf?.value != null ? String(nf.value) : '';
       const to = nf?.to != null ? String(nf.to) : '';
       return `
-        <select class="mim-dg__filter-field" data-role="op">
-          ${Object.entries(NUM_OP_LABELS).map(([v, t]) => `<option value="${v}" ${v === op ? 'selected' : ''}>${t}</option>`).join('')}
-        </select>
-        <input class="mim-dg__filter-field" data-role="val" type="number" placeholder="Valor…" value="${escapeHtml(val)}" />
-        ${op === 'inRange' ? `<input class="mim-dg__filter-field" data-role="val-to" type="number" placeholder="Hasta…" value="${escapeHtml(to)}" />` : ''}
-        <div class="mim-dg__filter-actions">
-          <button class="mim-dg__filter-btn" data-act="clear" type="button">Limpiar</button>
-          <button class="mim-dg__filter-btn is-primary" data-act="apply" type="button">Aplicar</button>
-        </div>`;
+        ${opSelectHTML(NUM_OP_LABELS, op)}
+        <is-input class="mim-dg__filter-field" data-role="val" type="number" placeholder="Valor…" value="${escapeHtml(val)}"></is-input>
+        ${op === 'inRange' ? `<is-input class="mim-dg__filter-field" data-role="val-to" type="number" placeholder="Hasta…" value="${escapeHtml(to)}"></is-input>` : ''}
+        ${FILTER_ACTIONS_HTML}`;
     }
     if (ft === 'date') {
       const df = existing?.type === 'date' ? existing : null;
@@ -1092,33 +1256,25 @@ export class IsAgGrid extends ElementBase {
       const val = df?.value || '';
       const to = df?.to || '';
       return `
-        <select class="mim-dg__filter-field" data-role="op">
-          ${Object.entries(DATE_OP_LABELS).map(([v, t]) => `<option value="${v}" ${v === op ? 'selected' : ''}>${t}</option>`).join('')}
-        </select>
-        <input class="mim-dg__filter-field" data-role="val" type="date" value="${escapeHtml(val)}" />
-        ${op === 'inRange' ? `<input class="mim-dg__filter-field" data-role="val-to" type="date" value="${escapeHtml(to)}" />` : ''}
-        <div class="mim-dg__filter-actions">
-          <button class="mim-dg__filter-btn" data-act="clear" type="button">Limpiar</button>
-          <button class="mim-dg__filter-btn is-primary" data-act="apply" type="button">Aplicar</button>
-        </div>`;
+        ${opSelectHTML(DATE_OP_LABELS, op)}
+        <is-input class="mim-dg__filter-field" data-role="val" type="date" value="${escapeHtml(val)}"></is-input>
+        ${op === 'inRange' ? `<is-input class="mim-dg__filter-field" data-role="val-to" type="date" value="${escapeHtml(to)}"></is-input>` : ''}
+        ${FILTER_ACTIONS_HTML}`;
     }
     if (ft === 'set') {
       const sf = existing?.type === 'set' ? existing.values : null;
       const allValues = uniqueValuesSafe(this.#api.getAllRows(), col);
       const selected = sf ? new Set(sf) : new Set(allValues);
       return `
-        <input class="mim-dg__filter-field" data-role="set-search" placeholder="Buscar valores…" />
+        <is-input class="mim-dg__filter-field" data-role="set-search" placeholder="Buscar valores…"></is-input>
         <div class="mim-dg__filter-actions-row">
-          <button class="mim-dg__filter-link" data-set-val="__all__" type="button">Todo</button>
-          <button class="mim-dg__filter-link" data-set-val="__none__" type="button">Nada</button>
+          <is-button class="mim-dg__filter-link" data-set-val="__all__" variant="text">Todo</is-button>
+          <is-button class="mim-dg__filter-link" data-set-val="__none__" variant="text">Nada</is-button>
         </div>
         <div class="mim-dg__filter-set" data-role="set">
-          ${allValues.map((v) => `<label class="mim-dg__filter-set-item" data-set-val="${escapeHtml(v)}"><button type="button" class="mim-dg__checkbox mim-dg__checkbox--${selected.has(v) ? 'all' : 'none'}" data-set-checkbox data-checked="${selected.has(v)}"><is-icon icon="${selected.has(v) ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline'}"></is-icon></button><span>${escapeHtml(v || '(vacío)')}</span></label>`).join('')}
+          ${allValues.map((v) => `<label class="mim-dg__filter-set-item" data-set-val="${escapeHtml(v)}"><is-checkbox data-set-checkbox ${selected.has(v) ? 'checked' : ''}></is-checkbox><span>${escapeHtml(v || '(vacío)')}</span></label>`).join('')}
         </div>
-        <div class="mim-dg__filter-actions">
-          <button class="mim-dg__filter-btn" data-act="clear" type="button">Limpiar</button>
-          <button class="mim-dg__filter-btn is-primary" data-act="apply" type="button">Aplicar</button>
-        </div>`;
+        ${FILTER_ACTIONS_HTML}`;
     }
     return '';
   }
@@ -1170,28 +1326,33 @@ export class IsAgGrid extends ElementBase {
   #closePopoverEscape = (e) => { if (e.key === 'Escape') this.#closeFilterPopover(); };
 
   #setSort(colId, dir) {
+    if (!this.#api) return;
     const others = this.#api.getState().sortModel.filter((s) => s.colId !== colId);
     this.#api.setSortModel(dir ? [...others, { colId, dir }] : others);
     emit(this, 'is-sort-change', { column: colId, direction: dir });
   }
 
   #clearSort(colId) {
+    if (!this.#api) return;
     const others = this.#api.getState().sortModel.filter((s) => s.colId !== colId);
     this.#api.setSortModel(others);
     emit(this, 'is-sort-change', { column: colId, direction: null });
   }
 
   #pinColumn(colId, side) {
+    if (!this.#api) return;
     this.#api.pinColumn(colId, side);
     emit(this, 'is-column-pin', { colId, side });
   }
 
   #hideColumn(colId) {
+    if (!this.#api) return;
     this.#api.hideColumn(colId, true);
     emit(this, 'is-column-hide', { colId });
   }
 
   #goToPage(p) {
+    if (!this.#api) return;
     this.#api.setPage(p);
     emit(this, 'is-page-change', { page: this.#api.getState().page + 1, pageSize: this.#api.getState().pageSize });
   }
@@ -1199,6 +1360,7 @@ export class IsAgGrid extends ElementBase {
   /* ── Event handlers ───────────────────────────────────────────────────── */
 
   #onViewportClick(e) {
+    if (!this.#api) return;
     const state = this.#api.getState();
     const allRows = this.#isPaginated ? state.pageDisplayRows : state.displayRows;
 
@@ -1304,6 +1466,7 @@ export class IsAgGrid extends ElementBase {
   }
 
   #onKeyDown(e) {
+    if (!this.#api) return;
     const state = this.#api.getState();
     const dataRows = this.#isPaginated ? state.pageDisplayRows : state.displayRows;
     const leafRows = this.#isPaginated ? state.pageRows : state.displayedRows;
@@ -1386,29 +1549,33 @@ export class IsAgGrid extends ElementBase {
   get api() {
     const self = this;
     return {
-      getState: () => self.#api.getState(),
+      getState: () => self.#api?.getState() ?? null,
       setRows: (rows) => {
         self.#rawRows = Array.isArray(rows) ? rows : [];
-        self.#api.setRows(self.#rawRows);
+        self.#externalData = true;
+        self.#api?.setRows(self.#rawRows);
       },
       setColumns: (defs) => {
         self.#rawColumns = Array.isArray(defs) ? defs : [];
-        self.#api.setColumnDefs(self.#rawColumns);
+        self.#externalData = true;
+        self.#api?.setColumnDefs(self.#rawColumns);
       },
-      getRows: () => self.#api.getAllRows().map((n) => n.data),
-      getAllRows: () => self.#api.getAllRows().map((n) => n.data),
-      getDisplayedRows: () => self.#api.getDisplayedRows().map((n) => n.data),
-      goToPage: (n) => self.#goToPage(n - 1), // legacy 1-based
-      setPage: (n) => self.#api.setPage(n),
-      setPageSize: (n) => self.#api.setPageSize(n),
+      getRows: () => self.#api?.getAllRows().map((n) => n.data) ?? [],
+      getAllRows: () => self.#api?.getAllRows().map((n) => n.data) ?? [],
+      getDisplayedRows: () => self.#api?.getDisplayedRows().map((n) => n.data) ?? [],
+      goToPage: (n) => { if (self.#api) self.#goToPage(n - 1); }, // legacy 1-based
+      setPage: (n) => self.#api?.setPage(n),
+      setPageSize: (n) => self.#api?.setPageSize(n),
       setQuickFilter: (s) => {
         const v = String(s ?? '');
-        self.shadowRoot.querySelector('.mim-dg__quick-input').value = v;
-        self.#api.setQuickFilter(v);
+        const input = self.shadowRoot?.querySelector('.mim-dg__quick-input');
+        if (input) input.value = v;
+        self.#api?.setQuickFilter(v);
       },
       /** Legacy: (field, op, value) where op ∈ { contains, eq, neq, gt, gte, lt, lte, starts, ends }.
        *  New: (colId, filter | null). Se detecta por el tipo del segundo arg. */
       setFilter: (colIdOrField, opOrFilter, valueMaybe) => {
+        if (!self.#api) return;
         const colId = colIdOrField;
         // Si el segundo arg es un objeto/null → nueva API core.
         if (opOrFilter === null || opOrFilter === undefined || typeof opOrFilter === 'object') {
@@ -1425,36 +1592,42 @@ export class IsAgGrid extends ElementBase {
       },
       /** Nueva: (colId, filter | null). */
       setFilterModel: (model) => {
+        if (!self.#api) return;
         for (const [colId, f] of Object.entries(model || {})) self.#api.setFilter(colId, f);
       },
-      clearFilter: (field) => self.#api.setFilter(field, null),
-      setSortModel: (model) => self.#api.setSortModel(model),
-      toggleSort: (colId, additive) => self.#api.toggleSort(colId, additive),
-      pinColumn: (colId, side) => self.#api.pinColumn(colId, side),
-      hideColumn: (colId, hide = true) => self.#api.hideColumn(colId, hide),
-      resizeColumn: (colId, width) => self.#api.resizeColumn(colId, width),
-      autosizeColumn: (colId) => self.#api.autosizeColumn(colId),
-      reorderColumn: (colId, toIndex) => self.#api.reorderColumn(colId, toIndex),
-      setRowGroupCols: (colIds) => self.#api.setRowGroupCols(colIds),
-      addRowGroupCol: (colId) => self.#api.addRowGroupCol(colId),
-      removeRowGroupCol: (colId) => self.#api.removeRowGroupCol(colId),
-      toggleGroup: (groupId) => self.#api.toggleGroup(groupId),
-      expandAllGroups: () => self.#api.expandAllGroups(),
-      collapseAllGroups: () => self.#api.collapseAllGroups(),
+      clearFilter: (field) => self.#api?.setFilter(field, null),
+      setSortModel: (model) => self.#api?.setSortModel(model),
+      toggleSort: (colId, additive) => self.#api?.toggleSort(colId, additive),
+      pinColumn: (colId, side) => self.#api?.pinColumn(colId, side),
+      hideColumn: (colId, hide = true) => self.#api?.hideColumn(colId, hide),
+      openColumnsPanel: () => self.#openSidePanel('columns'),
+      closeSidePanel: () => self.#closeSidePanel(),
+      resizeColumn: (colId, width) => self.#api?.resizeColumn(colId, width),
+      autosizeColumn: (colId) => self.#api?.autosizeColumn(colId),
+      reorderColumn: (colId, toIndex) => self.#api?.reorderColumn(colId, toIndex),
+      setRowGroupCols: (colIds) => self.#api?.setRowGroupCols(colIds),
+      addRowGroupCol: (colId) => self.#api?.addRowGroupCol(colId),
+      removeRowGroupCol: (colId) => self.#api?.removeRowGroupCol(colId),
+      toggleGroup: (groupId) => self.#api?.toggleGroup(groupId),
+      expandAllGroups: () => self.#api?.expandAllGroups(),
+      collapseAllGroups: () => self.#api?.collapseAllGroups(),
       getSelectedRows: () => {
+        if (!self.#api) return [];
         const sel = self.#api.getState().selection;
         return self.#api.getAllRows().filter((n) => sel.has(n.id)).map((n) => n.data);
       },
       selectAll: () => {
+        if (!self.#api) return;
         if (self.#currentSelectionMode !== SelectionMode.MULTIPLE) return;
         self.#api.setSelection(selectAllCore(self.#api.getDisplayedRows()));
       },
-      clearSelection: () => self.#api.setSelection(clearSelectionCore()),
-      setSelection: (ids) => self.#api.setSelection(new Set(ids)),
+      clearSelection: () => self.#api?.setSelection(clearSelectionCore()),
+      setSelection: (ids) => self.#api?.setSelection(new Set(ids)),
       setDensity: (d) => {
         if (Object.values(Density).includes(d)) self.setAttribute('density', d);
       },
       exportCSV: (filename = 'grid.csv', opts = {}) => {
+        if (!self.#api) return;
         const state = self.#api.getState();
         const sep = opts.separator || ',';
         const onlySelected = opts.onlySelected ?? state.selection.size > 0;
@@ -1470,12 +1643,23 @@ export class IsAgGrid extends ElementBase {
         document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
       },
-      serializeState: () => self.#api.serializeState(),
+      serializeState: () => self.#api?.serializeState() ?? null,
       loadState: (json) => {
+        if (!self.#api) return;
         self.#api.loadState(json);
         emit(self, 'is-state-loaded', self.#api.getState());
       },
-      refresh: () => self.#api.setRows([...self.#rawRows]),
+      refresh: () => {
+        if (!self.#api) return;
+        self.#api.setRows([...self.#rawRows]);
+      },
+      resetPersistedState: () => {
+        removeComponentPrefs('is-ag-grid', self.#storageKey || self.#defaultStorageKey());
+        if (!self.#api) return;
+        self.#initModel();
+        self.#render();
+        emit(self, 'is-state-reset', { key: self.#storageKey || self.#defaultStorageKey() });
+      },
     };
   }
 
