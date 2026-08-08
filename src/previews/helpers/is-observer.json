@@ -4,17 +4,22 @@
   "category": "helpers",
   "title": "<is-observer>",
   "titleHtml": true,
+  "styles": ".obs-scroller {\n      height: 260px;\n      overflow: auto;\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius);\n      background: var(--is-bg);\n      padding: 1rem;\n    }\n    .obs-spacer {\n      height: 100px;\n      display: grid;\n      place-items: center;\n      color: var(--is-text-dim);\n      font-size: 0.8rem;\n      border: 1px dashed var(--is-border-soft);\n      border-radius: var(--is-radius-sm);\n      margin-bottom: 0.75rem;\n    }\n    .obs-card {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      gap: 1rem;\n      padding: 1rem 1.1rem;\n      margin-bottom: 0.75rem;\n      border-radius: var(--is-radius);\n      border: 1px solid var(--is-border);\n      background: var(--is-bg-elev);\n      color: var(--is-text-soft);\n      opacity: 0.4;\n      transform: translateY(8px);\n      transition: opacity 280ms ease, transform 280ms ease, background 280ms ease, border-color 280ms ease, color 280ms ease;\n    }\n    .obs-card.is-in {\n      opacity: 1;\n      transform: none;\n      background: color-mix(in srgb, var(--is-color-brand) 14%, var(--is-bg-elev));\n      border-color: color-mix(in srgb, var(--is-color-brand) 45%, var(--is-border));\n      color: var(--is-text);\n    }\n    .obs-badge {\n      flex: 0 0 auto;\n      font-size: 0.7rem;\n      font-weight: 600;\n      letter-spacing: 0.04em;\n      text-transform: uppercase;\n      padding: 0.25em 0.55em;\n      border-radius: 999px;\n      background: var(--is-control-bg);\n      color: var(--is-text-dim);\n    }\n    .obs-card.is-in .obs-badge {\n      background: var(--is-brand-soft);\n      color: var(--is-brand-text);\n    }\n    .obs-panel {\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius);\n      background: var(--is-bg);\n      padding: 0.85rem;\n    }\n    .obs-panel__title {\n      font-size: 0.72rem;\n      font-weight: 600;\n      letter-spacing: 0.05em;\n      text-transform: uppercase;\n      color: var(--is-text-dim);\n      margin-bottom: 0.65rem;\n    }\n    .obs-target {\n      padding: 1rem;\n      min-height: 3rem;\n      line-height: 1.5;\n      background: var(--is-control-bg);\n      border: 1px solid var(--is-border-soft);\n      border-radius: var(--is-radius-sm);\n      color: var(--is-text);\n    }\n    .obs-target [data-chip] {\n      display: inline-block;\n      margin-left: 0.35em;\n      padding: 0.1em 0.45em;\n      border-radius: 999px;\n      background: var(--is-brand-soft);\n      color: var(--is-brand-text);\n      font-size: 0.8em;\n    }\n    .obs-actions {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      margin-top: 0.75rem;\n    }\n    .obs-hint {\n      margin-top: 0.65rem;\n      font-size: 0.85rem;\n      color: var(--is-text-soft);\n      line-height: 1.45;\n    }\n    .obs-resize-wrap {\n      display: grid;\n      gap: 0.75rem;\n    }\n    .obs-resize-box {\n      width: min(100%, 280px);\n      height: 140px;\n      resize: both;\n      overflow: auto;\n      padding: 1rem;\n      border: 1px dashed var(--is-border);\n      border-radius: var(--is-radius);\n      background:\n        repeating-linear-gradient(45deg,\n          color-mix(in srgb, var(--is-border) 35%, transparent) 0 8px,\n          transparent 8px 16px),\n        var(--is-bg-elev);\n      color: var(--is-text);\n      font-size: 0.9rem;\n      line-height: 1.4;\n    }\n    .obs-size {\n      font-variant-numeric: tabular-nums;\n      font-weight: 600;\n      color: var(--is-text);\n    }\n    .obs-uses {\n      display: grid;\n      gap: 0.55rem;\n      margin: 0;\n      padding: 0;\n      list-style: none;\n    }\n    .obs-uses li {\n      display: grid;\n      grid-template-columns: 1.5rem 1fr;\n      gap: 0.55rem;\n      align-items: start;\n      color: var(--is-text-soft);\n      font-size: 0.92rem;\n      line-height: 1.45;\n    }\n    .obs-uses is-icon {\n      width: 1.15em;\n      height: 1.15em;\n      color: var(--is-accent);\n      margin-top: 0.15em;\n    }\n    .log .type-in { color: #69db7c; }\n    .log .type-out { color: #ffa8a8; }\n    .log .type-mut { color: #ffe066; }\n    .log .type-res { color: #74c0fc; }",
   "storageKey": "docs-is-observer",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "<is-observer>",
-      "lede": "Web Component genérico que envuelve\r\n          <code class=\"code\">IntersectionObserver</code>,\r\n          <code class=\"code\">MutationObserver</code> y\r\n          <code class=\"code\">ResizeObserver</code>. Los nombres históricos\r\n          (<code class=\"code\">&lt;is-intersection-observer&gt;</code>,\r\n          <code class=\"code\">&lt;is-mutation-observer&gt;</code>,\r\n          <code class=\"code\">&lt;is-resize-observer&gt;</code>) siguen\r\n          funcionando como alias con <code class=\"code\">type</code> prefijado.",
+      "lede": "Un solo componente para <code class=\"code\">IntersectionObserver</code>,\n          <code class=\"code\">MutationObserver</code> y <code class=\"code\">ResizeObserver</code>\n          vía <code class=\"code\">type</code>. Los alias históricos\n          (<code class=\"code\">&lt;is-intersection-observer&gt;</code>, etc.) siguen válidos.",
       "blocks": [
         {
           "kind": "callout",
-          "html": "El host siempre usa <code class=\"code\">display: contents</code>, así\r\n          no afecta al flujo. Los hijos directos son los observados\r\n          (intersection / resize) o el subárbol a vigilar (mutation)."
+          "html": "El host usa <code class=\"code\">display: contents</code>: no ocupa caja propia.\n          Los hijos directos son lo observado (intersection / resize) o el subárbol a vigilar (mutation)."
+        },
+        {
+          "kind": "html",
+          "html": "<ul class=\"obs-uses\">\n            <li>\n              <is-icon icon=\"mdi:eye-outline\" aria-hidden=\"true\"></is-icon>\n              <span><strong>intersection</strong> — ¿está visible en el viewport / un scroller?</span>\n            </li>\n            <li>\n              <is-icon icon=\"mdi:file-tree-outline\" aria-hidden=\"true\"></is-icon>\n              <span><strong>mutation</strong> — ¿cambió el DOM (hijos / atributos / texto)?</span>\n            </li>\n            <li>\n              <is-icon icon=\"mdi:arrow-expand-all\" aria-hidden=\"true\"></is-icon>\n              <span><strong>resize</strong> — ¿cambió el tamaño del hijo?</span>\n            </li>\n          </ul>"
         }
       ]
     },
@@ -22,14 +27,16 @@
       "id": "intersection",
       "title": "<code>type=\"intersection\"</code>",
       "titleHtml": true,
+      "lede": "Haz scroll en el panel. Las tarjetas arrancan atenuadas; al entrar (≥&nbsp;40&nbsp;% visible)\n          reciben <code class=\"code\">is-in</code>, se iluminan y el badge pasa a «en vista».",
       "blocks": [
         {
-          "kind": "html",
-          "html": "<p>Igual que el antiguo <code class=\"code\">&lt;is-intersection-observer&gt;</code>.</p>"
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">root = #obsScroller · threshold = 0.4 · intersect-class = is-in</span>\n          <div id=\"obsScroller\" class=\"obs-scroller\">\n            <div class=\"obs-spacer\">↓ baja para revelar las tarjetas ↓</div>\n            <is-observer id=\"io\" type=\"intersection\" root=\"#obsScroller\" intersect-class=\"is-in\" threshold=\"0.4\">\n              <article class=\"obs-card\" data-label=\"A\">\n                <span>Tarjeta A — fade al entrar</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n              <article class=\"obs-card\" data-label=\"B\">\n                <span>Tarjeta B</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n              <article class=\"obs-card\" data-label=\"C\">\n                <span>Tarjeta C</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n            </is-observer>\n            <div class=\"obs-spacer\">fin del scroll</div>\n          </div>\n          <div class=\"log\" id=\"ioLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Eventos <code class=\"code\">is-intersect</code> al entrar/salir.</div>\n          </div>"
         },
         {
-          "kind": "demo",
-          "html": "<is-observer id=\"io\" type=\"intersection\" intersect-class=\"visible\" style=\"display:block\">\r\n            <div style=\"height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem\">\r\n              Caja 1 (aparece al entrar)\r\n            </div>\r\n            <div style=\"height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem\">\r\n              Caja 2 (aparece al entrar)\r\n            </div>\r\n            <div style=\"height: 30vh; margin: 2rem 0; background: var(--is-bg-elev); border-radius: 8px; padding: 1rem\">\r\n              Caja 3 (aparece al entrar)\r\n            </div>\r\n          </is-observer>"
+          "kind": "code",
+          "code": "<is-observer type=\"intersection\" root=\"#scroller\" intersect-class=\"is-in\" threshold=\"0.4\">\n  <article class=\"obs-card\">…</article>\n</is-observer>",
+          "lang": "html"
         }
       ]
     },
@@ -37,14 +44,16 @@
       "id": "mutation",
       "title": "<code>type=\"mutation\"</code>",
       "titleHtml": true,
+      "lede": "El nodo de la izquierda es el subárbol observado. Cada botón dispara una mutación\n          concreta; el log muestra <code class=\"code\">is-mutate</code>.",
       "blocks": [
         {
-          "kind": "html",
-          "html": "<p>Igual que el antiguo <code class=\"code\">&lt;is-mutation-observer&gt;</code>.</p>"
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">child-list + attr=&quot;data-tag&quot;</span>\n          <div class=\"obs-panel\">\n            <div class=\"obs-panel__title\">Nodo observado</div>\n            <is-observer id=\"mo\" type=\"mutation\" attr=\"data-tag\" child-list>\n              <div id=\"moTarget\" class=\"obs-target\" data-tag=\"init\">Contenido editable</div>\n            </is-observer>\n            <div class=\"obs-actions\">\n              <is-button id=\"moAdd\" color=\"brand\" variant=\"outlined\" type=\"button\">\n                <is-icon slot=\"start\" icon=\"mdi:plus\"></is-icon>\n                Añadir hijo\n              </is-button>\n              <is-button id=\"moAttr\" color=\"neutral\" variant=\"outlined\" type=\"button\">\n                <is-icon slot=\"start\" icon=\"mdi:tag-plus-outline\"></is-icon>\n                Cambiar data-tag\n              </is-button>\n              <is-button id=\"moReset\" color=\"neutral\" variant=\"plain\" type=\"button\">\n                Reset\n              </is-button>\n            </div>\n            <p class=\"obs-hint\" id=\"moExplain\">Pulsa un botón para mutar el DOM y ver el evento.</p>\n          </div>\n          <div class=\"log\" id=\"moLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Las mutaciones aparecen aquí.</div>\n          </div>"
         },
         {
-          "kind": "demo",
-          "html": "<is-observer id=\"mo\" type=\"mutation\" attr=\"data-tag\" child-list></is-observer>\r\n          <button class=\"is-button\" id=\"add\">Añadir atributo data-tag</button>\r\n          <pre class=\"code\"><code id=\"mo-log\">[…aún sin mutaciones…]</code></pre>"
+          "kind": "code",
+          "code": "<is-observer type=\"mutation\" attr=\"data-tag\" child-list>\n  <div id=\"target\" data-tag=\"init\">…</div>\n</is-observer>",
+          "lang": "html"
         }
       ]
     },
@@ -52,14 +61,16 @@
       "id": "resize",
       "title": "<code>type=\"resize\"</code>",
       "titleHtml": true,
+      "lede": "Arrastra la esquina inferior derecha del cuadro (CSS <code class=\"code\">resize: both</code>).\n          El tamaño en vivo y el log se actualizan con <code class=\"code\">is-resize</code>.",
       "blocks": [
         {
-          "kind": "html",
-          "html": "<p>Igual que el antiguo <code class=\"code\">&lt;is-resize-observer&gt;</code>.</p>"
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">ResizeObserver sobre el hijo</span>\n          <div class=\"obs-resize-wrap\">\n            <is-observer id=\"ro\" type=\"resize\">\n              <div id=\"roBox\" class=\"obs-resize-box\">\n                Arrastra la esquina ↘ para redimensionar.\n              </div>\n            </is-observer>\n            <p class=\"obs-hint\">\n              Tamaño actual:\n              <span class=\"obs-size\" id=\"roSize\">— × —</span>\n            </p>\n          </div>\n          <div class=\"log\" id=\"roLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Cada resize emite <code class=\"code\">is-resize</code>.</div>\n          </div>"
         },
         {
-          "kind": "demo",
-          "html": "<is-observer id=\"ro\" type=\"resize\">\r\n            <div style=\"padding: 1rem; background: var(--is-bg-elev); border-radius: 8px\">\r\n              Arrastra el borde para redimensionar el contenedor.\r\n            </div>\r\n          </is-observer>"
+          "kind": "code",
+          "code": "<is-observer type=\"resize\">\n  <div style=\"resize:both; overflow:auto\">…</div>\n</is-observer>",
+          "lang": "html"
         }
       ]
     },
@@ -68,8 +79,20 @@
       "title": "Referencia",
       "blocks": [
         {
-          "kind": "demo",
-          "html": "<table class=\"is-table\">\r\n            <thead>\r\n              <tr><th>Atributo</th><th>Aplica a</th><th>Descripción</th></tr>\r\n            </thead>\r\n            <tbody>\r\n              <tr><td><code>type</code></td><td>todos</td><td><code>intersection | mutation | resize</code></td></tr>\r\n              <tr><td><code>disabled</code></td><td>todos</td><td>boolean — desconecta el observer</td></tr>\r\n              <tr><td><code>intersect-class</code></td><td>intersection</td><td>clase a togglear en cada hijo</td></tr>\r\n              <tr><td><code>once</code></td><td>intersection</td><td>boolean — des-observa tras la primera</td></tr>\r\n              <tr><td><code>root</code></td><td>intersection</td><td>selector CSS del root (default viewport)</td></tr>\r\n              <tr><td><code>root-margin</code></td><td>intersection</td><td>ej. <code>\"10px 20px\"</code></td></tr>\r\n              <tr><td><code>threshold</code></td><td>intersection</td><td>número 0–1</td></tr>\r\n              <tr><td><code>attr</code></td><td>mutation</td><td>filtro de atributos a vigilar</td></tr>\r\n              <tr><td><code>child-list</code></td><td>mutation</td><td>boolean (default true)</td></tr>\r\n              <tr><td><code>character-data</code></td><td>mutation</td><td>boolean</td></tr>\r\n            </tbody>\r\n          </table>"
+          "kind": "table",
+          "columns": ["Atributo", "Aplica a", "Descripción"],
+          "rows": [
+            ["<code>type</code>", "todos", "<code>intersection | mutation | resize</code>"],
+            ["<code>disabled</code>", "todos", "boolean — desconecta el observer"],
+            ["<code>intersect-class</code>", "intersection", "clase a togglear en cada hijo"],
+            ["<code>once</code>", "intersection", "boolean — des-observa tras la primera"],
+            ["<code>root</code>", "intersection", "selector CSS del root (default viewport)"],
+            ["<code>root-margin</code>", "intersection", "ej. <code>\"10px 20px\"</code>"],
+            ["<code>threshold</code>", "intersection", "número 0–1"],
+            ["<code>attr</code>", "mutation", "filtro de atributos a vigilar"],
+            ["<code>child-list</code>", "mutation", "boolean (default true)"],
+            ["<code>character-data</code>", "mutation", "boolean"]
+          ]
         }
       ]
     }

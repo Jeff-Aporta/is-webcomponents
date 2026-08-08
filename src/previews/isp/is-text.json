@@ -5,45 +5,38 @@
   "title": "<is-text>",
   "titleHtml": true,
   "storageKey": "docs-is-text",
+  "hasBehavior": true,
+  "styles": ".tx-pg {\n      display: grid;\n      gap: 1rem;\n      padding: 0.85rem 1rem;\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius, 0.5em);\n      background: var(--is-bg-elev);\n    }\n    .tx-stage {\n      min-height: 3rem;\n      max-width: 24rem;\n      padding: 0.5rem 0;\n      border-bottom: 1px dashed var(--is-border);\n    }\n    .tx-controls {\n      display: grid;\n      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));\n      gap: 0.75rem 1rem;\n      align-items: end;\n    }\n    .tx-field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.3rem;\n      font-size: 0.75rem;\n      color: var(--is-text-soft);\n    }\n    .tx-field input, .tx-field select, .tx-field textarea {\n      font: inherit;\n      font-size: 0.875rem;\n      color: var(--is-text);\n      background: var(--is-bg);\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius-sm, 0.35em);\n      padding: 0.35rem 0.5rem;\n    }\n    .tx-field input[type=\"range\"] { width: 100%; accent-color: var(--is-accent, var(--is-brand)); }\n    .tx-range-row { display: flex; align-items: center; gap: 0.5rem; }\n    .tx-range-val { font-variant-numeric: tabular-nums; min-width: 1.5rem; color: var(--is-text); }\n    .tx-caption { margin: 0; font-size: 0.75rem; color: var(--is-text-dim); }\n    .tx-snippet {\n      margin: 0;\n      font-family: ui-monospace, Menlo, Consolas, monospace;\n      font-size: 0.75rem;\n      color: var(--is-text-soft);\n      word-break: break-all;\n    }\n    .tx-stack { display: flex; flex-direction: column; gap: 0.75rem; }\n    .tx-ex { display: flex; flex-direction: column; gap: 0.2rem; }",
   "sections": [
     {
       "id": "intro",
       "title": "<is-text>",
-      "lede": "Texto en línea con color semántico y recorte por líneas.\r\n          Port del <code class=\"code\">Text.svelte</code> de ISP.",
+      "lede": "Color semántico, <code class=\"code\">current</code>, CSS libre y <code class=\"code\">mix</code>. Playground abajo.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-text>Texto normal, hereda el color del contexto.</is-text>"
+          "html": "<div class=\"tx-pg\" id=\"txPlayground\">\n            <div class=\"tx-stage\" style=\"color:#2f9e44\">\n              <is-text id=\"txLive\">Texto de ejemplo para probar color y clamp.</is-text>\n            </div>\n            <div class=\"tx-controls\">\n              <label class=\"tx-field\">color\n                <select id=\"txColorMode\">\n                  <option value=\"\" selected>(hereda)</option>\n                  <option value=\"brand\">brand</option>\n                  <option value=\"neutral\">neutral</option>\n                  <option value=\"info\">info</option>\n                  <option value=\"success\">success</option>\n                  <option value=\"warning\">warning</option>\n                  <option value=\"danger\">danger</option>\n                  <option value=\"current\">current</option>\n                  <option value=\"css\">CSS libre…</option>\n                </select>\n              </label>\n              <label class=\"tx-field\">color CSS\n                <input id=\"txColorCss\" type=\"text\" value=\"#e8590c\" disabled />\n              </label>\n              <label class=\"tx-field\">\n                <span><input id=\"txMixOn\" type=\"checkbox\" /> usar mix</span>\n              </label>\n              <label class=\"tx-field\">mix (%)\n                <div class=\"tx-range-row\">\n                  <input id=\"txMix\" type=\"range\" min=\"0\" max=\"100\" step=\"1\" value=\"40\" disabled />\n                  <span class=\"tx-range-val\" id=\"txMixVal\">off</span>\n                </div>\n              </label>\n              <label class=\"tx-field\">mix-with\n                <select id=\"txMixWith\">\n                  <option value=\"\" selected>text (default)</option>\n                  <option value=\"transparent\">transparent</option>\n                  <option value=\"white\">white</option>\n                  <option value=\"black\">black</option>\n                  <option value=\"current\">current</option>\n                </select>\n              </label>\n              <label class=\"tx-field\">lines\n                <div class=\"tx-range-row\">\n                  <input id=\"txLines\" type=\"range\" min=\"0\" max=\"6\" step=\"1\" value=\"0\" />\n                  <span class=\"tx-range-val\" id=\"txLinesVal\">0</span>\n                </div>\n              </label>\n              <label class=\"tx-field\">texto\n                <textarea id=\"txText\" rows=\"2\">Texto de ejemplo para probar color y clamp. Puedes alargar este párrafo para ver el ellipsis.</textarea>\n              </label>\n            </div>\n            <p class=\"tx-caption\">Props: <code>color</code>, <code>mix</code>, <code>mix-with</code>, <code>lines</code></p>\n            <pre class=\"tx-snippet\" id=\"txSnippet\"></pre>\n          </div>"
         }
       ]
     },
     {
-      "id": "examples",
-      "title": "Colores semánticos",
+      "id": "color",
+      "title": "color",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0.35rem;align-items:flex-start\">\r\n            <is-text color=\"brand\">brand</is-text>\r\n            <is-text color=\"neutral\">neutral</is-text>\r\n            <is-text color=\"info\">info</is-text>\r\n            <is-text color=\"success\">success</is-text>\r\n            <is-text color=\"warning\">warning</is-text>\r\n            <is-text color=\"danger\">danger</is-text>\r\n          </div>"
-        },
-        {
-          "kind": "html",
-          "html": "<h2>Line clamp</h2>"
-        },
-        {
-          "kind": "demo",
-          "html": "<div style=\"max-width:22rem;display:flex;flex-direction:column;gap:0.75rem\">\r\n            <is-text lines=\"1\">Una sola línea: este párrafo se corta con puntos suspensivos en cuanto no cabe en el ancho disponible del contenedor.</is-text>\r\n            <is-text lines=\"2\">Dos líneas: este párrafo se recorta al llegar a la segunda línea, y el resto del contenido desaparece con la elipsis al final.</is-text>\r\n            <is-text lines=\"3\">Tres líneas: el mismo párrafo, ahora con más aire. El clamp usa <code>--mx-lns</code>, que escribe el JS a partir del atributo <code>lines</code>.</is-text>\r\n          </div>"
-        },
-        {
-          "kind": "html",
-          "html": "<h2>Escala por font-size</h2>"
-        },
+          "html": "<div class=\"tx-stack\">\n            <div class=\"tx-ex\"><is-text color=\"brand\">brand</is-text><p class=\"tx-caption\"><code>color=\"brand\"</code></p></div>\n            <div class=\"tx-ex\"><is-text color=\"neutral\">neutral</is-text><p class=\"tx-caption\"><code>color=\"neutral\"</code></p></div>\n            <div class=\"tx-ex\"><is-text color=\"info\">info</is-text><p class=\"tx-caption\"><code>color=\"info\"</code></p></div>\n            <div class=\"tx-ex\"><is-text color=\"success\">success</is-text><p class=\"tx-caption\"><code>color=\"success\"</code></p></div>\n            <div class=\"tx-ex\"><is-text color=\"warning\">warning</is-text><p class=\"tx-caption\"><code>color=\"warning\"</code></p></div>\n            <div class=\"tx-ex\"><is-text color=\"danger\">danger</is-text><p class=\"tx-caption\"><code>color=\"danger\"</code></p></div>\n            <div class=\"tx-ex\" style=\"color:#7048e8\"><is-text color=\"current\">current (hereda)</is-text><p class=\"tx-caption\"><code>color=\"current\"</code></p></div>\n            <div class=\"tx-ex\"><is-text color=\"#e8590c\">#e8590c</is-text><p class=\"tx-caption\"><code>color=\"#e8590c\"</code></p></div>\n            <div class=\"tx-ex\"><is-text color=\"tomato\" mix=\"55%\" mix-with=\"transparent\">tomato · mix transparent</is-text><p class=\"tx-caption\"><code>color=\"tomato\"</code> · <code>mix=\"55%\"</code> · <code>mix-with=\"transparent\"</code></p></div>\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "lines",
+      "title": "lines",
+      "lede": "Prop <code class=\"code\">lines</code> — clamp con ellipsis.",
+      "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"font-size: 1.4em\">\r\n            <is-text color=\"brand\">Escala desde el contexto, sin atributo size.</is-text>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<is-text color=\"success\">Aprobado</is-text>\n<is-text lines=\"2\">Texto largo recortado a dos líneas…</is-text>"
+          "html": "<div class=\"tx-stack\" style=\"max-width:22rem\">\n            <div class=\"tx-ex\">\n              <is-text lines=\"1\">Una sola línea: este párrafo se corta con puntos suspensivos en cuanto no cabe en el ancho disponible del contenedor.</is-text>\n              <p class=\"tx-caption\"><code>lines=\"1\"</code></p>\n            </div>\n            <div class=\"tx-ex\">\n              <is-text lines=\"2\">Dos líneas: este párrafo se recorta al llegar a la segunda línea, y el resto del contenido desaparece con la elipsis al final.</is-text>\n              <p class=\"tx-caption\"><code>lines=\"2\"</code></p>\n            </div>\n            <div class=\"tx-ex\">\n              <is-text lines=\"3\">Tres líneas: el mismo párrafo, ahora con más aire. El clamp usa <code>--mx-lns</code>, que escribe el JS a partir del atributo <code>lines</code>.</is-text>\n              <p class=\"tx-caption\"><code>lines=\"3\"</code></p>\n            </div>\n          </div>"
         }
       ]
     },
@@ -54,25 +47,25 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo / var",
+            "Atributo",
             "Valores"
           ],
           "rows": [
             [
               "<code>color</code>",
-              "brand · neutral · info · success · warning · danger (sin default: hereda)"
+              "semántico · <code>current</code> · color CSS (ausente = hereda)"
+            ],
+            [
+              "<code>mix</code>",
+              "% hacia <code>mix-with</code>"
+            ],
+            [
+              "<code>mix-with</code>",
+              "text · transparent · white · black · current · CSS"
             ],
             [
               "<code>lines</code>",
-              "entero &gt;= 1; ausente o 0 = sin clamp"
-            ],
-            [
-              "<code>--text-clr</code>",
-              "override directo del color"
-            ],
-            [
-              "<code>--mx-lns</code>",
-              "número de líneas del clamp (lo escribe el JS)"
+              "entero ≥ 1; ausente o 0 = sin clamp"
             ]
           ]
         }
