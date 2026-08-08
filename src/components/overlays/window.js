@@ -1,6 +1,9 @@
+import '../actions/button.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 import { emit } from '../_shared/emit.js';
+import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
  * <is-window> — Ventana flotante dockable (estilo escritorio).
@@ -18,11 +21,15 @@ import { emit } from '../_shared/emit.js';
  *   default     contenido principal
  *   title       slot opcional que reemplaza el atributo title
  *
- * Eventos
- *   is-open, is-close
+ * Eventos (vocabulario de ModalBase)
+ *   is-show / is-after-show     al conectarse la ventana
+ *   is-hide  / is-after-hide    al cerrarse
  *   is-minimize, is-restore
- *   is-maximize, is-unmaximize
- *   is-move, is-resize
+ *   is-maximize
+ *
+ * Accesibilidad
+ *   role="dialog" + aria-label del título. Escape cierra (si `closable`) y
+ *   Tab queda contenido dentro de la ventana mientras tiene el foco dentro.
  *
  * API
  *   win.minimize() / .restore() / .maximize() / .unmaximize() / .close()
@@ -30,9 +37,14 @@ import { emit } from '../_shared/emit.js';
 (() => {
   const OBSERVED = ['title', 'x', 'y', 'width', 'height', 'maximizable', 'minimizable', 'closable', 'default', 'resizable', 'dock'];
 
-  class IsWindow extends HTMLElement {
+  /** Igual que el de _shared/modal-base.js, que no lo exporta. */
+  const FOCUSABLE =
+    'a[href], area[href], input:not([disabled]):not([type=hidden]),'
+    + ' select:not([disabled]), textarea:not([disabled]),'
+    + ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
+
+  class IsWindow extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
     #onWinMove;
     #onWinUp;
     #state = 'normal';
@@ -45,13 +57,13 @@ import { emit } from '../_shared/emit.js';
       super();
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.innerHTML = /* html */ `
-        <div part="root" class="root" data-state="normal">
-          <header part="header" class="header">
+        <div part="root" class="root is-popover-panel" data-state="normal">
+          <header part="header" class="header is-surface-bar">
             <span class="title-wrap"><slot name="title"></slot><span class="title" id="ttl"></span></span>
             <span class="controls">
-              <button class="ctrl" data-act="min" title="Minimizar" aria-label="Minimizar" hidden><span aria-hidden="true">▁</span></button>
-              <button class="ctrl" data-act="max" title="Maximizar"  aria-label="Maximizar" hidden><span aria-hidden="true">▢</span></button>
-              <button class="ctrl" data-act="close" title="Cerrar"    aria-label="Cerrar" hidden><span aria-hidden="true">✕</span></button>
+              <is-button variant="plain" class="ctrl" data-act="min" title="Minimizar" aria-label="Minimizar" hidden><span aria-hidden="true">▁</span></is-button>
+              <is-button variant="plain" class="ctrl" data-act="max" title="Maximizar" aria-label="Maximizar" hidden><span aria-hidden="true">▢</span></is-button>
+              <is-button variant="plain" color="danger" class="ctrl" data-act="close" title="Cerrar" aria-label="Cerrar" hidden><span aria-hidden="true">✕</span></is-button>
             </span>
           </header>
           <div part="body" class="body" tabindex="0">
@@ -76,10 +88,12 @@ import { emit } from '../_shared/emit.js';
       this.#root.addEventListener('click', (e) => this.#onClick(e));
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
+      emit(this, 'is-show');
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'dialog');
       window.addEventListener('pointermove', this.#onWinMove);
       window.addEventListener('pointerup', this.#onWinUp);
+      this.#dismiss.attach();
       this.#sync();
       const x = this.getAttribute('x');
       const y = this.getAttribute('y');
@@ -98,17 +112,50 @@ import { emit } from '../_shared/emit.js';
       const def = this.getAttribute('default') || 'normal';
       if (def === 'maximized') this.maximize();
       if (def === 'minimized') this.minimize();
+      emit(this, 'is-after-show');
     }
 
-    disconnectedCallback() {
-      this.#mounted = false;
+    onDisconnected() {
       window.removeEventListener('pointermove', this.#onWinMove);
       window.removeEventListener('pointerup', this.#onWinUp);
+      this.#dismiss.detach();
     }
 
-    attributeChangedCallback() {
-      if (this.#mounted) this.#sync();
+    onAttributeChanged() {
+      this.#sync();
     }
+
+    /** Escape cierra; Tab se queda dentro mientras el foco esté en la ventana.
+     *  El foco NO se atrapa si el usuario está fuera: is-window no es modal,
+     *  conviven varias en pantalla y secuestrar el Tab global las rompería. */
+    #dismiss = createPopupDismiss(this, {
+      onKeydown: (e) => {
+        if (!this.contains(document.activeElement)
+          && !this.shadowRoot.contains(this.shadowRoot.activeElement)) return;
+        if (e.key === 'Escape') {
+          if (!this.hasAttribute('closable')) return;
+          e.stopPropagation();
+          this.close();
+          return;
+        }
+        if (e.key !== 'Tab') return;
+        const items = [
+          ...this.shadowRoot.querySelectorAll(FOCUSABLE),
+          ...this.querySelectorAll(FOCUSABLE),
+        ].filter((el) => !el.hidden && el.offsetParent !== null);
+        if (items.length === 0) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        const active = this.shadowRoot.activeElement || document.activeElement;
+        if (e.shiftKey && active === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      },
+    });
 
     minimize() {
       if (this.#state === 'minimized') return;
@@ -167,8 +214,9 @@ import { emit } from '../_shared/emit.js';
     }
 
     close() {
+      emit(this, 'is-hide');
       this.remove();
-      emit(this, 'is-close');
+      emit(this, 'is-after-hide');
     }
 
     #raise() {
@@ -180,7 +228,7 @@ import { emit } from '../_shared/emit.js';
 
     #onHeaderDown(e) {
       if (this.#state === 'maximized') return;
-      if (e.target.closest('button.ctrl')) return;
+      if (e.target.closest('.ctrl')) return;
       this.#drag = { x: e.clientX, y: e.clientY, rect: this.#rect() };
       this.#header.setPointerCapture(e.pointerId);
     }
@@ -214,7 +262,7 @@ import { emit } from '../_shared/emit.js';
     #endAny() { this.#drag = null; this.#resize = null; }
 
     #onClick(e) {
-      const btn = e.target.closest('button[data-act]');
+      const btn = e.target.closest('[data-act]');
       if (!btn) return;
       if (btn.dataset.act === 'min') this.#state === 'minimized' ? this.restore() : this.minimize();
       if (btn.dataset.act === 'max') this.#state === 'maximized' ? this.restore() : this.maximize();
@@ -238,7 +286,10 @@ import { emit } from '../_shared/emit.js';
     }
 
     #sync() {
-      this.#title.textContent = this.getAttribute('title') || '';
+      const title = this.getAttribute('title') || '';
+      this.#title.textContent = title;
+      if (title) this.setAttribute('aria-label', title);
+      else this.removeAttribute('aria-label');
       this.#root.querySelector('[data-act="min"]').hidden = !this.hasAttribute('minimizable');
       this.#root.querySelector('[data-act="max"]').hidden = !this.hasAttribute('maximizable');
       this.#root.querySelector('[data-act="close"]').hidden = !this.hasAttribute('closable');

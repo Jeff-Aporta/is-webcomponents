@@ -2,6 +2,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
+import { ElementBase } from '../_shared/element-base.js';
 import { emit } from '../_shared/emit.js';
 
 /**
@@ -17,19 +18,22 @@ import { emit } from '../_shared/emit.js';
  * Comandos
  *   <script type="application/json">
  *   [
- *     { "id": "new", "title": "Nuevo documento", "group": "Archivo", "icon": "mdi:file-plus", "hint": "Crear archivo en blanco" },
+ *     { "id": "new", "title": "Nuevo documento", "group": "Archivo",
+ *       "icon": "mdi:file-plus", "hint": "Crear archivo en blanco",
+ *       "keys": ["Ctrl", "N"] },
  *     ...
  *   ]
  *   </script>
  *
- * Cada comando también puede llevar `disabled` y `keywords` (string[]) para
- * búsqueda.
+ * Cada comando también puede llevar `disabled`, `keywords` (string[]) y
+ * `keys` / `shortcut` (string | string[]) para el atajo a la derecha.
  *
  * Slots
- *   footer — bloque bajo los resultados (atajos de teclado, por ejemplo)
+ *   footer — bloque extra bajo los resultados (los atajos ↑↓/↵/Esc ya van
+ *            embebidos en el shadow; el slot se suma a la derecha)
  *
- * Eventos
- *   is-open, is-close
+ * Eventos (vocabulario de ModalBase)
+ *   is-show / is-after-show, is-hide / is-after-hide
  *   is-select   detail: { command, id }
  *
  * API
@@ -40,9 +44,8 @@ import { emit } from '../_shared/emit.js';
 (() => {
   const OBSERVED = ['hotkey', 'placeholder', 'max-results', 'empty-text'];
 
-  class IsCommandPalette extends HTMLElement {
+  class IsCommandPalette extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
-    #mounted = false;
     #commands = [];
     #results = [];
     #active = 0;
@@ -53,15 +56,18 @@ import { emit } from '../_shared/emit.js';
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.innerHTML = /* html */ `
         <dialog part="dialog" class="dialog">
-          <div class="panel" part="panel">
-            <header class="bar">
+          <div class="panel is-popover-panel" part="panel">
+            <header class="bar is-surface-bar">
               <span class="ico"><is-icon icon="mdi:magnify"></is-icon></span>
               <input part="input" class="input" id="input" type="text" autocomplete="off" />
             </header>
             <ol part="results" class="results" id="results" role="listbox"></ol>
             <div part="empty" class="empty" id="empty" hidden></div>
             <footer part="footer" class="footer">
-              <slot name="footer"></slot>
+              <span class="hint-item"><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
+              <span class="hint-item"><kbd>↵</kbd> ejecutar</span>
+              <span class="hint-item"><kbd>Esc</kbd> cerrar</span>
+              <span class="footer-extra"><slot name="footer"></slot></span>
             </footer>
           </div>
         </dialog>
@@ -72,8 +78,14 @@ import { emit } from '../_shared/emit.js';
       this.#resultsEl = this.shadowRoot.getElementById('results');
       this.#empty = this.shadowRoot.getElementById('empty');
 
-      this.#input.addEventListener('input', () => this.#query = this.#input.value, this.#search());
+      this.#input.addEventListener('input', () => {
+        this.#query = this.#input.value;
+        this.#search();
+      });
       this.#input.addEventListener('keydown', (e) => this.#onKey(e));
+      // <dialog> ya emite `cancel` con Escape (y el UA lo cierra solo):
+      // basta sincronizar el estado en vez de interceptar la tecla.
+      this.#dialog.addEventListener('cancel', () => this.close());
       this.#dialog.addEventListener('click', (e) => {
         if (e.target === this.#dialog) this.close();
         const item = e.target.closest('[role="option"]');
@@ -81,19 +93,18 @@ import { emit } from '../_shared/emit.js';
       });
     }
 
-    connectedCallback() {
-      this.#mounted = true;
+    onConnected() {
+      this.#input.placeholder = this.getAttribute('placeholder') || 'Buscar comando…';
+      this.#empty.textContent = this.getAttribute('empty-text') || 'Sin resultados';
       this.#readCommands();
       this.#bindHotkey();
     }
 
-    disconnectedCallback() {
-      this.#mounted = false;
+    onDisconnected() {
       document.removeEventListener('keydown', this.#hotkeyHandler);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, oldVal, newVal) {
       if (name === 'hotkey') this.#bindHotkey();
       if (name === 'placeholder') this.#input.placeholder = newVal || '';
       if (name === 'empty-text') this.#empty.textContent = newVal || '';
@@ -104,6 +115,7 @@ import { emit } from '../_shared/emit.js';
 
     open() {
       if (this.hasAttribute('disabled')) return;
+      emit(this, 'is-show');
       this.#input.value = '';
       this.#query = '';
       this.#search();
@@ -111,13 +123,15 @@ import { emit } from '../_shared/emit.js';
       // sync atributo open para CSS hooks
       this.setAttribute('open', '');
       this.#input.focus();
-      emit(this, 'is-open');
+      emit(this, 'is-after-show');
     }
 
     close() {
+      if (!this.hasAttribute('open')) return;
+      emit(this, 'is-hide');
       if (this.#dialog.open) this.#dialog.close();
       this.removeAttribute('open');
-      emit(this, 'is-close');
+      emit(this, 'is-after-hide');
     }
 
     toggle() { this.#dialog.open ? this.close() : this.open(); }
@@ -150,15 +164,13 @@ import { emit } from '../_shared/emit.js';
       return okMod && e.key.toLowerCase() === wantKey.toLowerCase();
     }
 
+    /** Escape NO se maneja aquí: lo cierra el propio <dialog> y llega por
+     *  el evento `cancel`. */
     #onKey(e) {
-      if (this.#results.length === 0) {
-        if (e.key === 'Escape') this.close();
-        return;
-      }
+      if (this.#results.length === 0) return;
       if (e.key === 'ArrowDown') { e.preventDefault(); this.#active = (this.#active + 1) % this.#results.length; this.#renderResults(); }
       else if (e.key === 'ArrowUp') { e.preventDefault(); this.#active = (this.#active - 1 + this.#results.length) % this.#results.length; this.#renderResults(); }
       else if (e.key === 'Enter') { e.preventDefault(); this.#selectByIndex(this.#active); }
-      else if (e.key === 'Escape') { e.preventDefault(); this.close(); }
     }
 
     #score(item, query) {
@@ -213,7 +225,8 @@ import { emit } from '../_shared/emit.js';
           opt.role = 'option';
           opt.dataset.idx = String(i);
           opt.className = 'opt' + (idx === this.#active ? ' is-active' : '');
-          opt.innerHTML = `<span class="ico">${c.icon ? `<is-icon icon="${c.icon}"></is-icon>` : ''}</span><span class="label"><span class="t">${escapeHtml(c.title || c.id)}</span>${c.hint ? `<span class="hint">${escapeHtml(c.hint)}</span>` : ''}</span>`;
+          const keysHtml = this.#keysHtml(c);
+          opt.innerHTML = `<span class="ico">${c.icon ? `<is-icon icon="${c.icon}"></is-icon>` : ''}</span><span class="label"><span class="t">${escapeHtml(c.title || c.id)}</span>${c.hint ? `<span class="hint">${escapeHtml(c.hint)}</span>` : ''}</span>${keysHtml ? `<span class="keys" part="keys">${keysHtml}</span>` : '<span class="keys" aria-hidden="true"></span>'}`;
           this.#resultsEl.appendChild(opt);
           idx++;
         }
@@ -221,6 +234,17 @@ import { emit } from '../_shared/emit.js';
       if (!this.#results.length) return;
       const active = this.#resultsEl.querySelector('.opt.is-active');
       active?.scrollIntoView({ block: 'nearest' });
+    }
+
+    /** Normaliza `keys` / `shortcut` → chips `<kbd>` a la derecha. */
+    #keysHtml(c) {
+      const raw = c.keys ?? c.shortcut ?? c.hotkey;
+      if (raw == null || raw === '') return '';
+      const parts = Array.isArray(raw)
+        ? raw.map((k) => String(k).trim()).filter(Boolean)
+        : String(raw).split(/[+ ]+/).map((k) => k.trim()).filter(Boolean);
+      if (!parts.length) return '';
+      return parts.map((k) => `<kbd>${escapeHtml(k)}</kbd>`).join('');
     }
 
     #selectByIndex(idx) {
