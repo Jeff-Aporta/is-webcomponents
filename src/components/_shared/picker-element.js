@@ -3,6 +3,7 @@ import { computePosition } from './position.js';
 import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-utils.js';
 import { defineElement } from './define.js';
 import { emit } from './emit.js';
+import { resolveLocale } from './resolve-locale.js';
 
 /**
  * Fábrica de los pickers "campo + panel": is-date-input, is-time-input,
@@ -129,7 +130,7 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
     get readonly() { return this.hasAttribute('readonly'); }
     set readonly(v) { this.toggleAttribute('readonly', !!v); }
 
-    get locale() { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
+    get locale() { return resolveLocale(this.getAttribute('locale')); }
     set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** Cierra al elegir; en móvil o con barra de acciones espera a Aceptar. */

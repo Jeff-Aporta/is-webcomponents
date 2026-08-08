@@ -180,7 +180,7 @@ export function renderFilterPanel(el, { columns, model }) {
     colSel.className = 'filter-col';
     colSel.setAttribute('aria-label', 'Columna');
     for (const c of columns.filter((c) => c.filterable !== false && c.type !== 'actions')) {
-      const opt = document.createElement('is-select-option');
+      const opt = document.createElement('is-option');
       opt.value = c.field;
       opt.textContent = c.headerName;
       if (c.field === item.field) opt.setAttribute('selected', '');
@@ -192,7 +192,7 @@ export function renderFilterPanel(el, { columns, model }) {
     opSel.className = 'filter-op';
     opSel.setAttribute('aria-label', 'Operador');
     for (const o of col?.operators || []) {
-      const opt = document.createElement('is-select-option');
+      const opt = document.createElement('is-option');
       opt.value = o.value;
       opt.textContent = o.label;
       if (o.value === item.operator) opt.setAttribute('selected', '');
@@ -244,7 +244,7 @@ export function filterValueInput(col, op, item) {
     sel.className = 'filter-input';
     sel.setAttribute('aria-label', 'Valor');
     for (const [value, label] of [['', 'cualquiera'], ['true', 'sí'], ['false', 'no']]) {
-      const opt = document.createElement('is-select-option');
+      const opt = document.createElement('is-option');
       opt.value = value;
       opt.textContent = label;
       if (String(item.value ?? '') === value) opt.setAttribute('selected', '');
@@ -258,14 +258,14 @@ export function filterValueInput(col, op, item) {
     const sel = document.createElement('is-select');
     sel.className = 'filter-input';
     sel.setAttribute('aria-label', 'Valor');
-    const blank = document.createElement('is-select-option');
+    const blank = document.createElement('is-option');
     blank.value = '';
     blank.textContent = 'cualquiera';
     sel.appendChild(blank);
     for (const raw of col.valueOptions) {
       const value = typeof raw === 'object' ? raw.value : raw;
       const label = typeof raw === 'object' ? raw.label : raw;
-      const opt = document.createElement('is-select-option');
+      const opt = document.createElement('is-option');
       opt.value = String(value);
       opt.textContent = String(label);
       if (String(item.value ?? '') === String(value)) opt.setAttribute('selected', '');

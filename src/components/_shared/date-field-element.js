@@ -3,6 +3,9 @@ import { SectionField } from './date-field-core.js';
 import { splitDateTime, uses12Hour } from './date-utils.js';
 import { defineElement } from './define.js';
 import { emit } from './emit.js';
+import { resolveLocale } from './resolve-locale.js';
+import '../media/icon.js';
+import '../actions/button.js';
 
 /**
  * Fábrica de los campos por secciones: is-date-field, is-time-field e
@@ -17,7 +20,18 @@ TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="base">
       <slot name="start"></slot>
       <div part="sections" class="sections" role="group"></div>
-      <button type="button" part="clear" class="clear" hidden aria-label="Borrar">×</button>
+      <is-button
+        type="button"
+        part="clear"
+        class="clear"
+        variant="text"
+        color="neutral"
+        tabindex="-1"
+        aria-label="Borrar"
+        hidden
+      >
+        <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
+      </is-button>
       <slot name="end"></slot>
     </div>
     <div part="hint" class="hint" hidden></div>
@@ -149,7 +163,7 @@ export function defineDateField({ tag, kind, cssUrl }) {
     get clearable() { return this.hasAttribute('clearable'); }
     set clearable(v) { this.toggleAttribute('clearable', !!v); }
 
-    get locale() { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
+    get locale() { return resolveLocale(this.getAttribute('locale')); }
     set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** 12 horas: lo decide el locale salvo que `ampm`/`hour24` lo fuercen. */

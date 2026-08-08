@@ -173,7 +173,9 @@ export class ModalBase extends HTMLElement {
 
   #onOpenAttrChanged() {
     if (this.open) this.#setOpen(true);
-    else this.#doClose();
+    // El atributo ya se removió (posiblemente desde fuera), así que el guard
+    // de #doClose lo daría por cerrado y dejaría el modal pintado.
+    else this.#doClose(true);
   }
 
   #requestClose(source) {
@@ -219,8 +221,8 @@ export class ModalBase extends HTMLElement {
     return this.#doClose();
   }
 
-  #doClose() {
-    if (!this.open) return Promise.resolve();
+  #doClose(attrAlreadyRemoved = false) {
+    if (!attrAlreadyRemoved && !this.open) return Promise.resolve();
     this.dataset.state = 'closing';
     this.removeAttribute('open');
     return this.animateClose().then(() => {

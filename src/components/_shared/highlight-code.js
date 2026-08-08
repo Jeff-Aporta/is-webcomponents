@@ -177,7 +177,8 @@ const resolveThemeId = () => {
 let pintando = false;
 
 const paintOne = (el) => {
-  if (typeof CodeMirror?.runMode !== 'function') return;
+  const CM = globalThis.CodeMirror;
+  if (typeof CM?.runMode !== 'function') return;
   if (el.classList.contains('demo-code-pop__pre') && !el.textContent.trim() && !el.dataset.forceCm) return;
 
   const source = el.dataset.cmSource ?? el.textContent;
@@ -189,7 +190,7 @@ const paintOne = (el) => {
   pintando = true;
   try {
     el.textContent = '';
-    CodeMirror.runMode(text, mode, el);
+    CM.runMode(text, mode, el);
   } finally {
     pintando = false;
   }
@@ -205,7 +206,7 @@ const paintOne = (el) => {
 };
 
 export const paint = (root = document) => {
-  if (typeof CodeMirror?.runMode !== 'function') return;
+  if (typeof globalThis.CodeMirror?.runMode !== 'function') return;
   let targets;
   if (root instanceof Element && root.matches('pre.code')) {
     targets = root.dataset.cm ? [] : [root];
@@ -291,7 +292,7 @@ export const watchDom = (root = document.documentElement) => {
 /** Re-pinta los <pre> ya pintados con el theme actual. Llamalo cuando
  *  cambia document.documentElement.dataset.theme. */
 export const reapplyTheme = () => {
-  if (typeof CodeMirror?.runMode !== 'function') {
+  if (typeof globalThis.CodeMirror?.runMode !== 'function') {
     // Todavia no cargo CodeMirror: re-pintara cuando boot() termine.
     return false;
   }
@@ -328,13 +329,14 @@ export const ensureCodeMirror = () => {
     ensureCss(THEMES[initial === 'dark' ? 'light' : 'dark'].css);
 
     if (!globalThis.CodeMirror) await loadScript(`${CDN}/lib/codemirror.min.js`);
-    if (typeof CodeMirror.runMode !== 'function') {
+    const CM = () => globalThis.CodeMirror;
+    if (typeof CM()?.runMode !== 'function') {
       await loadScript(`${CDN}/addon/runmode/runmode.min.js`);
     }
-    if (!CodeMirror.modes?.xml) await loadScript(`${CDN}/mode/xml/xml.min.js`);
-    if (!CodeMirror.modes?.javascript) await loadScript(`${CDN}/mode/javascript/javascript.min.js`);
-    if (!CodeMirror.modes?.css) await loadScript(`${CDN}/mode/css/css.min.js`);
-    if (!CodeMirror.modes?.htmlmixed) await loadScript(`${CDN}/mode/htmlmixed/htmlmixed.min.js`);
+    if (!CM()?.modes?.xml) await loadScript(`${CDN}/mode/xml/xml.min.js`);
+    if (!CM()?.modes?.javascript) await loadScript(`${CDN}/mode/javascript/javascript.min.js`);
+    if (!CM()?.modes?.css) await loadScript(`${CDN}/mode/css/css.min.js`);
+    if (!CM()?.modes?.htmlmixed) await loadScript(`${CDN}/mode/htmlmixed/htmlmixed.min.js`);
 
     document.dispatchEvent(new CustomEvent(CODEMIRROR_READY));
   })();

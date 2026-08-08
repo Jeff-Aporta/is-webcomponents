@@ -6,6 +6,8 @@
  * Los `Date` solo se usan como aritmética intermedia.
  */
 
+import { resolveLocale } from './resolve-locale.js';
+
 export const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 export const ISO_TIME = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/;
 
@@ -77,7 +79,7 @@ export function inRangeISO(iso, min, max) {
  */
 export function firstDayOfWeek(locale) {
   try {
-    const loc = new Intl.Locale(locale || document.documentElement.lang || 'es');
+    const loc = new Intl.Locale(resolveLocale(locale));
     const info = loc.weekInfo ?? loc.getWeekInfo?.();
     const first = info?.firstDay;
     if (first) return first === 7 ? 0 : first;
@@ -136,10 +138,11 @@ export function toTime({ h, m, s = 0 }, withSeconds = false) {
 /** ¿El locale escribe la hora con AM/PM? */
 export function uses12Hour(locale) {
   try {
-    const loc = new Intl.Locale(locale || document.documentElement.lang || 'es');
+    const resolved = resolveLocale(locale);
+    const loc = new Intl.Locale(resolved);
     const cycles = loc.hourCycles ?? loc.getHourCycles?.();
     if (cycles?.length) return cycles[0] === 'h11' || cycles[0] === 'h12';
-    return new Intl.DateTimeFormat(locale, { hour: 'numeric' }).resolvedOptions().hour12 ?? false;
+    return new Intl.DateTimeFormat(resolved, { hour: 'numeric' }).resolvedOptions().hour12 ?? false;
   } catch {
     return false;
   }

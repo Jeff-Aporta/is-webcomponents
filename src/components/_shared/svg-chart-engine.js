@@ -1,5 +1,17 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/** Crea un elemento SVG y le aplica atributos, saltando null/undefined.
+ *  Reimplementada idéntica en 12 componentes (chart, marks-*, treemap,
+ *  heatmap, maps, gantt, mindmap, sequence-diagram, org-chart) — usar esta
+ *  en vez de copiarla de nuevo. */
+export function svgEl(tag, attrs = {}) {
+  const n = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v != null) n.setAttribute(k, v);
+  }
+  return n;
+}
+
 export function scaleLinear(domain, range) {
   const [d0, d1] = domain;
   const [r0, r1] = range;

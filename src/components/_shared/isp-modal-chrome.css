@@ -1,0 +1,19 @@
+/* Capa de bloqueo común de los modales ISP. Se consume con
+   `@import url('../_shared/isp-modal-chrome.css');` en la PRIMERA línea del
+   CSS del componente; lo propio (.modal, .heading, .actions…) va después. */
+
+:host {
+  /* Capa de bloqueo: fixed obligatorio, si no ocuparía sitio en el flujo. */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--is-z-modal, 1100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+    background: color-mix(in srgb, var(--is-bg, #101418) 68%, transparent);
+  }
+
+  .backdrop[hidden] { display: none; }
+}

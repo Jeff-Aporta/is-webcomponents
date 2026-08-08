@@ -1,0 +1,11 @@
+/* Base de host, adoptada por `adopt-css.js` en TODOS los shadow roots.
+ *
+ * Un componente que declara `:host { display: inline-flex }` (o cualquier
+ * display) pisa el `display: none` que el user-agent aplica a `[hidden]`:
+ * la hoja del UA tiene menos prioridad que una regla de autor. El resultado
+ * es que `<is-button hidden>` seguía visible. `:host([hidden])` es (0,2,0)
+ * y gana a `:host` (0,1,0), así que basta declararlo una vez aquí en vez de
+ * repetirlo en cada componente. */
+:host([hidden]) {
+  display: none;
+}

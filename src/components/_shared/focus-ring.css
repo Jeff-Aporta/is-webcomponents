@@ -1,0 +1,21 @@
+/**
+ * Focus ring reutilizable, inyectado vía adoptCss (ver adopt-css.js /
+ * scrollbars.css para el mismo mecanismo). Reemplaza el bloque
+ *   outline: 2px solid var(--is-focus, <fallback>);
+ *   outline-offset: <Npx>;
+ * repetido en 20+ hojas de estilo del kit.
+ *
+ * Uso: agregar `class="is-focus-ring"` (o el selector `:focus-visible`
+ * correspondiente) al elemento enfocable, y opcionalmente sobrescribir
+ * `--is-focus-fallback` / `--is-focus-offset` por componente si su
+ * fallback de color u offset difiere del default.
+ */
+:host {
+  --is-focus-fallback: var(--is-color-brand-500, #339af0);
+  --is-focus-offset: 2px;
+}
+
+.is-focus-ring:focus-visible {
+  outline: 2px solid var(--is-focus, var(--is-focus-fallback));
+  outline-offset: var(--is-focus-offset);
+}

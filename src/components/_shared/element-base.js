@@ -6,8 +6,9 @@
  *   1. `attachShadow` + `adoptCss` + clonar template.
  *   2. `#mounted` flag para silenciar `attributeChangedCallback` antes del
  *      connect (cuando el consumidor todavía no ha visto la luz).
- *   3. `upgradeProperties` para que `el.foo = 'x'` ANTES del connect termine
- *      como `el.setAttribute('foo', 'x')`.
+ *   3. `upgradeProperties` para que `el.foo = 'x'` ANTES del connect pase
+ *      por el setter camelCase (p. ej. `labelPlacement` → atributo
+ *      `label-placement`).
  *   4. Hooks `onConnected / onDisconnected / onAttributeChanged` para que la
  *      subclase añada su lógica sin reescribir la lifecycle.
  *   5. `setBooleanAttr(name, value)` para que un setter de property booleano
@@ -51,6 +52,7 @@
  */
 
 import { upgradeProperties } from './upgrade-properties.js';
+import { syncStyleAttrs, styleAttrNames } from './style-attrs.js';
 
 export class ElementBase extends HTMLElement {
   /** true desde la primera conexión; nunca vuelve a false. Silencia
@@ -61,6 +63,19 @@ export class ElementBase extends HTMLElement {
   #upgraded = false;
   /** Subclasses pueden sobrescribir este getter para añadir atributos extra. */
   static get observedAttributes() { return []; }
+
+  /**
+   * Mapa `atributo → custom property` para personalizar sin `<style>` aparte
+   * (ver `_shared/style-attrs.js`). La subclase lo declara así:
+   *
+   *   static styleAttrs = { radius: '--is-button-border-radius' };
+   *
+   * y añade `...IsFoo.styleAttrNames` a su `observedAttributes`.
+   */
+  static styleAttrs = {};
+
+  /** Atajo para concatenar a `observedAttributes`. */
+  static get styleAttrNames() { return styleAttrNames(this.styleAttrs); }
 
   // Hooks que las subclases pueden implementar:
   /** Se llama tras connectedCallback una vez que #mounted=true y los
@@ -111,6 +126,8 @@ export class ElementBase extends HTMLElement {
       upgradeProperties(this, this.constructor.observedAttributes || []);
     }
     this.#mounted = true;
+    // Antes del hook: la subclase puede leer ya las custom properties puestas.
+    syncStyleAttrs(this, this.constructor.styleAttrs);
     this.onConnected();
   }
 
@@ -120,6 +137,8 @@ export class ElementBase extends HTMLElement {
 
   attributeChangedCallback(name, oldVal, newVal) {
     if (!this.#mounted || oldVal === newVal) return;
+    const styleAttrs = this.constructor.styleAttrs;
+    if (styleAttrs && name in styleAttrs) syncStyleAttrs(this, { [name]: styleAttrs[name] });
     this.onAttributeChanged(name, oldVal, newVal);
   }
 

@@ -1,6 +1,7 @@
 import { tkHueToHex } from './tk-hue.js';
 import { contrastFontColor } from './tk-color.js';
 import { inlineMdWeb } from './tk-inline-md.js';
+import { svgEl } from './svg-chart-engine.js';
 
 /**
  * Dot "tortuga cometa" controlable: recorre los flujos en orden, con cola de cometa
@@ -27,13 +28,7 @@ function clamp(v, lo, hi) {
   return Math.max(lo, Math.min(hi, v));
 }
 
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
+/* svgEl → _shared/svg-chart-engine.js */
 
 export class PathTurtle {
   #group;
