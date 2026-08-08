@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
@@ -6,6 +7,7 @@ import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
  * <is-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.
@@ -25,131 +27,60 @@ import { emit } from '../_shared/emit.js';
  * Eventos: is-render, is-open-viewer, is-toggle-group
  */
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
-
-class IsTimeline extends HTMLElement {
-  static get observedAttributes() { return ['color']; }
-
-  #wrap; #svg; #tooltipEl;
-  #payload = null;
-  #spec = null;
-  #layout = null;
-  #mounted = false;
-  #mo = null; #themeObs = null;
-  #renderQueued = false;
+class IsTimeline extends DiagramElementBase {
   #hiddenGroups = new Set();
   #eventNodes = new Map();
   #hoverId = null;
-  #ownLightbox = null;
   #ro = null;
   #lastWidth = 0;
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.innerHTML = /* html */ `
-      <div part="base" class="wrap">
-        <svg part="canvas" class="tl-svg" xmlns="${SVG_NS}" role="img"></svg>
-        <div part="tooltip" class="tl-tooltip dg-tooltip is-rich" hidden></div>
-        <div class="slot-hidden"><slot></slot></div>
-      </div>
-    `;
-    adoptCss(shadow, import.meta.url);
-    this.#wrap = shadow.querySelector('.wrap');
-    this.#svg = shadow.querySelector('.tl-svg');
-    this.#tooltipEl = shadow.querySelector('.tl-tooltip');
+    this.initDiagramShadow('tl-svg', 'tl-tooltip');
+    adoptCss(this.shadowRoot, import.meta.url);
   }
 
-  connectedCallback() {
-    this.#mounted = true;
-    this.#readJsonSlot();
-    this.#mo = new MutationObserver(() => this.#readJsonSlot());
-    this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
-    this.#themeObs = new MutationObserver(() => this.#queueRender());
-    this.#themeObs.observe(document.documentElement, {
-      attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette'],
-    });
-    this.#wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.addEventListener('click', this.#onClick);
+  onDiagramConnected() {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
+    this.wrap.addEventListener('click', this.#onClick);
     // Re-layout cuando cambia el ancho del contenedor (fit-width).
     if (typeof ResizeObserver !== 'undefined') {
       this.#ro = new ResizeObserver(() => {
-        const w = this.#wrap.clientWidth;
+        const w = this.wrap.clientWidth;
         if (w && Math.abs(w - this.#lastWidth) > 4) {
           this.#lastWidth = w;
-          this.#queueRender();
+          this.queueRender();
         }
       });
-      this.#ro.observe(this.#wrap);
+      this.#ro.observe(this.wrap);
     }
-    this.#queueRender();
   }
 
-  disconnectedCallback() {
-    this.#mounted = false;
-    this.#mo?.disconnect();
-    this.#themeObs?.disconnect();
+  onDiagramDisconnected() {
     this.#ro?.disconnect();
-    this.#wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
+    this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  attributeChangedCallback(name, oldVal, newVal) {
-    if (!this.#mounted || oldVal === newVal) return;
-    this.#queueRender();
-  }
+  onPayloadChanged() { this.#hiddenGroups = new Set(); }
 
-  get isViewer() { return this.getAttribute('color') === 'viewer'; }
-  get payload() { return this.#payload; }
-  set payload(v) { this.#payload = v; this.#hiddenGroups = new Set(); this.#queueRender(); }
-  get spec() { return this.#spec; }
-  get layout() { return this.#layout; }
   get hiddenGroups() { return this.#hiddenGroups; }
   set hiddenGroups(v) {
     this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
-    this.#queueRender();
+    this.queueRender();
   }
 
-  async updateComplete() { await this.#queueRender(); }
-
-  #readJsonSlot() {
-    const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
-    if (!script) return;
-    try {
-      this.#payload = JSON.parse(script.textContent.trim());
-      this.#queueRender();
-    } catch { /* JSON inválido: conserva el último válido */ }
-  }
-
-  #queueRender() {
-    if (this.#renderQueued) return this.#renderQueued;
-    this.#renderQueued = (async () => {
-      await Promise.resolve();
-      try { this.#render(); } finally { this.#renderQueued = false; }
-    })();
-    return this.#renderQueued;
-  }
-
-  #render() {
-    if (!this.#mounted) return;
-    const spec = resolveTimelineSpec(this.#payload ?? {});
-    this.#spec = spec;
+  renderDiagram() {
+    const spec = resolveTimelineSpec(this.payload ?? {});
+    this.spec = spec;
     if (!spec) {
-      this.#svg.innerHTML = '';
-      this.#wrap.dataset.empty = '';
+      this.svg.innerHTML = '';
+      this.wrap.dataset.empty = '';
       return;
     }
-    delete this.#wrap.dataset.empty;
+    delete this.wrap.dataset.empty;
 
     const hidden = this.#hiddenGroups;
     let visible = spec;
@@ -158,35 +89,35 @@ class IsTimeline extends HTMLElement {
       visible = { ...spec, events };
     }
     if (!visible.events.length) {
-      this.#svg.innerHTML = '';
-      this.#wrap.dataset.empty = '';
+      this.svg.innerHTML = '';
+      this.wrap.dataset.empty = '';
       return;
     }
 
-    const dark = !document.documentElement.classList.contains('theme-light');
+    const dark = this.isDarkTheme;
     const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
-    this.#wrap.dataset.theme = dark ? 'dark' : 'light';
+    this.syncThemeAttr();
 
     // `Date.now()` se llama solo aquí (en el componente), nunca dentro del
     // módulo de spec puro, para que el layout siga siendo determinista.
-    const availW = this.#wrap.clientWidth || 0;
+    const availW = this.wrap.clientWidth || 0;
     const layout = computeTimelineLayout(visible, {
       now: Date.now(),
       width: availW > 80 ? Math.max(160, availW - 8) : undefined,
     });
     this.#lastWidth = availW;
-    this.#layout = layout;
+    this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.#wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
   #buildSvg(layout, theme) {
     const { width: W, height: H } = layout;
-    this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    this.#svg.setAttribute('aria-label', layout.title || 'Línea de tiempo');
-    this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
-    this.#svg.innerHTML = '';
+    this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    this.svg.setAttribute('aria-label', layout.title || 'Línea de tiempo');
+    this.svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
+    this.svg.innerHTML = '';
     this.#eventNodes.clear();
     this.#hoverId = null;
 
@@ -196,14 +127,14 @@ class IsTimeline extends HTMLElement {
         'font-size': '13', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
       });
       t.textContent = layout.title;
-      this.#svg.appendChild(t);
+      this.svg.appendChild(t);
     }
 
     if (layout.groups?.length) this.#buildLegend(layout, theme);
     this.#buildAxis(layout, theme);
     this.#buildEvents(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.#svg });
+    emit(this, 'is-render', { layout, svg: this.svg });
   }
 
   #buildAxis(layout, theme) {
@@ -238,7 +169,7 @@ class IsTimeline extends HTMLElement {
       today.setAttribute('stroke-dasharray', '4 3');
       g.appendChild(today);
     }
-    this.#svg.appendChild(g);
+    this.svg.appendChild(g);
   }
 
   #buildEvents(layout, theme) {
@@ -276,7 +207,7 @@ class IsTimeline extends HTMLElement {
       fo.appendChild(div);
       g.appendChild(fo);
 
-      this.#svg.appendChild(g);
+      this.svg.appendChild(g);
       this.#eventNodes.set(e.id, { e, g });
     }
   }
@@ -307,7 +238,7 @@ class IsTimeline extends HTMLElement {
       item.appendChild(label);
       g.appendChild(item);
     });
-    this.#svg.appendChild(g);
+    this.svg.appendChild(g);
   }
 
   /* ── hover / click ── */
@@ -324,25 +255,11 @@ class IsTimeline extends HTMLElement {
     // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
-      bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
+      bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
-    if (!ev.defaultPrevented) this.#openOwnViewer();
+    if (!ev.defaultPrevented) this.openOwnViewer('timeline');
   };
-
-  async #openOwnViewer() {
-    await import('./diagram-lightbox.js');
-    let lb = this.#ownLightbox;
-    if (!lb || !lb.isConnected) {
-      lb = document.createElement('is-diagram-lightbox');
-      lb.setAttribute('kind', 'timeline');
-      lb.addEventListener('is-close', () => lb.remove());
-      document.body.appendChild(lb);
-      this.#ownLightbox = lb;
-    }
-    lb.payload = this.#payload;
-    lb.open = true;
-  }
 
   #onMouseMove = (e) => {
     if (!this.isViewer) return;
@@ -350,10 +267,10 @@ class IsTimeline extends HTMLElement {
     const id = g?.dataset.eventId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
-      const rect = this.#wrap.getBoundingClientRect();
+      const rect = this.wrap.getBoundingClientRect();
       const left = Math.max(8, Math.min(rect.width - 300, e.clientX - rect.left + 16));
-      this.#tooltipEl.style.left = `${left}px`;
-      this.#tooltipEl.style.top = `${e.clientY - rect.top + 22}px`;
+      this.tooltipEl.style.left = `${left}px`;
+      this.tooltipEl.style.top = `${e.clientY - rect.top + 22}px`;
     }
   };
 
@@ -373,21 +290,21 @@ class IsTimeline extends HTMLElement {
     }
 
     if (!entry) {
-      this.#tooltipEl.hidden = true;
+      this.tooltipEl.hidden = true;
       return;
     }
     const e = entry.e;
-    this.#tooltipEl.hidden = false;
-    this.#tooltipEl.innerHTML = '';
+    this.tooltipEl.hidden = false;
+    this.tooltipEl.innerHTML = '';
     const title = document.createElement('span');
     title.className = 'dg-tooltip__title';
     title.innerHTML = inlineMdWeb(e.label);
-    this.#tooltipEl.appendChild(title);
+    this.tooltipEl.appendChild(title);
     if (e.desc) {
       const desc = document.createElement('div');
       desc.className = 'dg-tooltip__desc';
       desc.innerHTML = inlineMdWeb(e.desc);
-      this.#tooltipEl.appendChild(desc);
+      this.tooltipEl.appendChild(desc);
     }
   }
 }
