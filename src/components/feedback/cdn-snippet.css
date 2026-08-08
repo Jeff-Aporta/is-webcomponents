@@ -1,4 +1,7 @@
+@import url('../_shared/focus-ring.css');
+
 :host {
+  --is-focus-fallback: currentColor;
   display: block;
   margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
   font-family: var(--is-sans);
@@ -72,16 +75,12 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   cursor: pointer;
-}
 
-.cdn__tab[aria-selected="true"] {
-  background: color-mix(in srgb, var(--is-accent, currentColor) 18%, var(--is-bg));
-  color: var(--is-text);
-}
-
-.cdn__tab:focus-visible {
-  outline: 2px solid var(--is-focus, currentColor);
-  outline-offset: 2px;
+  /* el foco lo pone .is-focus-ring (_shared/focus-ring.css) */
+  &[aria-selected="true"] {
+    background: color-mix(in srgb, var(--is-accent, currentColor) 18%, var(--is-bg));
+    color: var(--is-text);
+  }
 }
 
 .cdn__panel {
@@ -230,23 +229,19 @@
   cursor: pointer;
   transition: background 160ms ease, border-color 160ms ease,
               color 160ms ease, transform 120ms ease;
-}
 
-.cdn__copy:hover {
-  background: color-mix(in srgb, var(--is-accent, currentColor) 14%, var(--is-bg));
-  border-color: color-mix(in srgb, var(--is-accent, currentColor) 38%, transparent);
-  transform: translateY(-1px);
-}
+  /* el foco lo pone .is-focus-ring (_shared/focus-ring.css) */
+  &:hover {
+    background: color-mix(in srgb, var(--is-accent, currentColor) 14%, var(--is-bg));
+    border-color: color-mix(in srgb, var(--is-accent, currentColor) 38%, transparent);
+    transform: translateY(-1px);
+  }
 
-.cdn__copy:focus-visible {
-  outline: 2px solid var(--is-focus, currentColor);
-  outline-offset: 2px;
-}
-
-.cdn__copy.is-copied {
-  background: color-mix(in srgb, var(--cdn-success) 18%, transparent);
-  border-color: color-mix(in srgb, var(--cdn-success) 55%, transparent);
-  color: var(--cdn-success);
+  &.is-copied {
+    background: color-mix(in srgb, var(--cdn-success) 18%, transparent);
+    border-color: color-mix(in srgb, var(--cdn-success) 55%, transparent);
+    color: var(--cdn-success);
+  }
 }
 
 .cdn__pre {
@@ -262,6 +257,12 @@
   overflow-x: auto;
   white-space: pre;
   tab-size: 2;
+}
+
+.cdn__md-prompt {
+  display: block;
+  margin-top: 0.35rem;
+  --preview-max-height: 18rem;
 }
 
 /* Tokens de CodeMirror dentro del shadow. El theme del CDN se adopta pero sus

@@ -6,12 +6,17 @@ category: feedback
 status: public
 source: ./cdn-snippet.js
 style: ./cdn-snippet.css
+preview: ../../previews/feedback/is-cdn-snippet.json
 ---
 # `<is-cdn-snippet>`
 
 ## Propósito
 
-Panel de consumo por CDN (jsDelivr) + prompt/docs para agentes. Sin npm/npx.
+Panel de consumo por CDN organizado en dos tabs — **Enlaces** (snippets del
+espejo activo) y **Mirrors** (selector de espejo + boot con fallback
+encadenado) — más una sección de prompt/docs para agentes vía
+`<is-md-editor>` (solo lectura, scroll, copiar, abrir diálogo). Sin npm/npx.
+Tools: `/is-webcomponents:build|migrate|local` (ver `src/skills/is-webcomponents/`).
 
 Este módulo registra `<is-cdn-snippet>`.
 
@@ -105,14 +110,19 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-cdn-snippet> — panel con los enlaces CDN de un componente.
+> <is-cdn-snippet> — panel CDN + mirrors + docs para agentes (sin npm/npx).
+> Tabs
+>   enlaces  · snippets del espejo activo (jsDelivr / Pages)
+>   mirrors  · selector de espejo + boot con fallback encadenado
 > Atributos
->   tag         string  · p. ej. "is-button" (obligatorio)
->   category    string  · p. ej. "actions"   (obligatorio para el bundle de categoría)
->   base        string  · override del CDN_BASE (opcional)
->   title       string  · título del panel (default "Consumo por CDN")
-> Pinta 3 filas: archivo individual, bundle de categoría, bundle global.
-> Cada fila tiene su <pre> con el snippet y un botón "Copiar".
+>   tag         string  · p. ej. "is-button"
+>   category    string  · p. ej. "actions"
+>   base        string  · override del CDN_BASE (opcional; ignora espejo)
+>   title       string  · título del panel
+>   dependencies / config · ver #parseDeps / #parseConfig
+>   url-key     string · opt-in: tab Enlaces/Mirrors en `?s=`
+> Dentro del tab "Enlaces" cada fila (CSS común, JS del componente, bundle de
+> categoría, dependencias, bundle completo) tiene su <pre> y su botón "Copiar".
 > Pensado para inyectarse al final de cada preview; el script de chrome
 > (`preview-chrome.js`) lo crea automáticamente leyendo tag+category del
 > `manifest.js` y el nombre del archivo actual.

@@ -3,6 +3,7 @@ import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
+import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
  * <is-palette-selector> — Web Component (vanilla).
@@ -82,7 +83,7 @@ import { ElementBase } from '../_shared/element-base.js';
   TEMPLATE.innerHTML = /* html */ `
     <div class="root">
       <slot name="trigger"></slot>
-      <button type="button" part="trigger" class="trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Elegir paleta" title="Elegir paleta">
+      <button type="button" part="trigger" class="trigger is-focus-ring" aria-haspopup="listbox" aria-expanded="false" aria-label="Elegir paleta" title="Elegir paleta">
         <span part="lead" class="trigger__lead" aria-hidden="true"></span>
         <span part="label" class="trigger__label">Paleta</span>
         <is-icon part="caret" class="trigger__caret" icon="mdi:chevron-down" aria-hidden="true"></is-icon>
@@ -109,6 +110,12 @@ import { ElementBase } from '../_shared/element-base.js';
     /** CSS cargado dinámicamente por paleta, para no recargar dos veces. */
     #loadedCSS = new Set();
 
+    /** Ciclo "menú abierto" compartido con is-dropdown / is-context-menu. */
+    #dismiss = createPopupDismiss(this, {
+      onEscape: () => { this.#setOpen(false); this.#trigger.focus(); },
+      onOutside: () => this.#setOpen(false),
+    });
+
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
@@ -131,13 +138,10 @@ import { ElementBase } from '../_shared/element-base.js';
       // Si el consumidor puso su propio trigger en el slot, capturamos
       // clicks en el root para delegación (slot content vive en light DOM).
       this.addEventListener('click', this.#onSlotClick);
-      this.addEventListener('keydown', this.#onKeydown);
-      // Cerrar al hacer click fuera del componente.
-      document.addEventListener('click', this.#onDocClick);
     }
 
     onDisconnected() {
-      document.removeEventListener('click', this.#onDocClick);
+      this.#dismiss.detach();
       this.#menu?.removeEventListener('click', this.#onClick);
       this.#trigger?.removeEventListener('click', this.#onClick);
       this.#slotTrigger?.removeEventListener('slotchange', this.#onTriggerSlotChange);
@@ -472,6 +476,8 @@ import { ElementBase } from '../_shared/element-base.js';
     #setOpen(open) {
       this.#menu.hidden = !open;
       this.#trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) this.#dismiss.attach();
+      else this.#dismiss.detach();
     }
 
     /** Click dentro del shadow tree: trigger o menu. */
@@ -498,18 +504,6 @@ import { ElementBase } from '../_shared/element-base.js';
       }
     };
 
-    #onKeydown = (e) => {
-      if (e.key === 'Escape' && !this.#menu.hidden) {
-        this.#setOpen(false);
-        this.#trigger.focus();
-      }
-    };
-
-    #onDocClick = (e) => {
-      if (!this.#menu.hidden && !this.contains(e.target)) {
-        this.#setOpen(false);
-      }
-    };
   }
 
   defineElement('is-palette-selector', IsPaletteSelector, 'IsPaletteSelector');

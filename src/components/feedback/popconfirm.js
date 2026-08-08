@@ -2,6 +2,9 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
+import { computePosition } from '../_shared/position.js';
+import { createPopupDismiss } from '../_shared/popup-dismiss.js';
+import '../actions/button.js';
 
 /**
  * <is-popconfirm> — Web Component (vanilla, zero dependencies).
@@ -39,8 +42,8 @@ import { ElementBase } from '../_shared/element-base.js';
       <div class="arrow" part="arrow"></div>
       <div class="message" part="message"><slot name="message"></slot></div>
       <div class="actions" part="actions">
-        <span class="cancel-wrap"><slot name="cancel"><button type="button" class="cancel" data-popconfirm-cancel>Cancelar</button></slot></span>
-        <span class="confirm-wrap"><slot name="confirm"><button type="button" class="confirm" data-popconfirm-confirm>Aceptar</button></slot></span>
+        <span class="cancel-wrap"><slot name="cancel"><is-button variant="text" color="neutral" class="cancel" data-popconfirm-cancel>Cancelar</is-button></slot></span>
+        <span class="confirm-wrap"><slot name="confirm"><is-button color="brand" class="confirm" data-popconfirm-confirm>Aceptar</is-button></slot></span>
       </div>
     </div>
   `;
@@ -59,7 +62,19 @@ import { ElementBase } from '../_shared/element-base.js';
     #trigger;
     #onTriggerClick;
     #onDocClick;
-    #onKeydown;
+
+    /**
+     * Ciclo "abierto" compartido con is-dropdown / is-context-menu
+     * (_shared/popup-dismiss.js): Escape + reposicionado en scroll/resize.
+     * El cierre por click fuera sigue siendo propio (ver #onDocClick más
+     * abajo) porque hay que EXCLUIR el trigger externo — igual que
+     * is-dropdown no le pasa `onOutside` porque resuelve el suyo con el
+     * backdrop del <dialog>.
+     */
+    #dismiss = createPopupDismiss(this, {
+      onEscape: () => { if (this.hasAttribute('open')) this.hide(); },
+      onReposition: () => { if (this.hasAttribute('open')) this.#reposition(); },
+    });
 
     constructor() {
       super();
@@ -86,13 +101,7 @@ import { ElementBase } from '../_shared/element-base.js';
         if (this.#trigger && e.composedPath().includes(this.#trigger)) return;
         this.hide();
       };
-      this.#onKeydown = (e) => {
-        if (e.key === 'Escape' && this.hasAttribute('open')) this.hide();
-      };
       document.addEventListener('click', this.#onDocClick);
-      document.addEventListener('keydown', this.#onKeydown);
-      window.addEventListener('resize', this.#reposition);
-      window.addEventListener('scroll', this.#reposition, true);
       // Si el atributo message está presente y slot vacío, pintar text.
       this.#syncMessage();
     }
@@ -100,9 +109,7 @@ import { ElementBase } from '../_shared/element-base.js';
     onDisconnected() {
       this.#unbindTrigger();
       document.removeEventListener('click', this.#onDocClick);
-      document.removeEventListener('keydown', this.#onKeydown);
-      window.removeEventListener('resize', this.#reposition);
-      window.removeEventListener('scroll', this.#reposition, true);
+      this.#dismiss.detach();
     }
 
     onAttributeChanged(name, oldVal, newVal) {

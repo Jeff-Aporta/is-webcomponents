@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./popconfirm.js
 style: ./popconfirm.css
-preview: ../../previews/feedback/is-popconfirm.html
+preview: ../../previews/feedback/is-popconfirm.json
 ---
 # `<is-popconfirm>`
 
@@ -105,18 +105,15 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--bg` | Token leído o definido por componente. |
-| `--is-bg-2` | Token leído o definido por componente. |
-| `--fg` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--border` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--brand` | Token leído o definido por componente. |
-| `--is-brand` | Token leído o definido por componente. |
-| `--brand-fg` | Token leído o definido por componente. |
-| `--is-brand-fg` | Token leído o definido por componente. |
-| `--danger` | Token leído o definido por componente. |
-| `--is-danger` | Token leído o definido por componente. |
+| `--is-bg-elev` | Fondo del panel (vía `--bg`). |
+| `--is-text` | Color de texto (vía `--fg`). |
+| `--is-border` | Borde del panel (vía `--border`). |
+| `--is-brand` | Color de marca (vía `--brand`). |
+| `--is-brand-fg` | Texto sobre el color de marca (vía `--brand-fg`). |
+| `--is-danger` | Tono destructivo (vía `--danger`). |
+
+Los botones por defecto de los slots `confirm` / `cancel` son `<is-button>`:
+su color y apariencia se controlan desde el propio botón, no desde aquí.
 
 ### Integración con formularios
 
@@ -190,4 +187,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - [JavaScript](./popconfirm.js)
 - [CSS](./popconfirm.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-popconfirm.html)
+- [Preview](../../previews/feedback/is-popconfirm.json)
