@@ -1,10 +1,12 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../actions/button.js';
 import '../media/icon.js';
+import '../layout/dialog.js';
 import './text.js';
 import './heading.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { ElementBase } from '../_shared/element-base.js';
 
 /**
  * <is-modal-verificacion> — port de `src/lib/base/modal/ModalVerificacion.svelte`.
@@ -13,10 +15,11 @@ import { emit } from '../_shared/emit.js';
  * devueltos coloreados por severidad. Al cerrarse vacía la lista (igual que el
  * original, que reasignaba un `TMensajesVerificacion` nuevo).
  *
- * NO extiende `ModalBase`: el focus-trap de `ModalBase` recorre el LIGHT DOM
- * (`this.querySelectorAll`) y aquí todo el contenido vive en el shadow, así que
- * el trap dejaría el diálogo sin tabulación. Se sigue el mismo patrón que
- * `<is-confirm-delete>`, el otro modal ISP ya portado.
+ * NO extiende `ModalBase` directamente: su focus-trap recorre el LIGHT DOM del
+ * modal, y aquí el contenido lo genera el componente. La solución es COMPONER
+ * un `<is-dialog>` dentro del shadow root y colgar el contenido como light DOM
+ * SUYO — así el trap, el Escape, el restore de foco y las animaciones salen
+ * gratis y ya no hay ciclo hand-rolled. Mismo patrón que `<is-confirm-delete>`.
  *
  * Propiedades JS (no atributos: llevan funciones/objetos)
  *   controller  objeto tipo `ICtxActionVerificacion`:
@@ -27,19 +30,25 @@ import { emit } from '../_shared/emit.js';
  *   onError     (msg: string) => void — se llama si `actVerificar` lanza.
  *
  * Atributos
- *   open        boolean — visible (reflected)
- *   loading     boolean — se pone solo mientras corre `actVerificar`
- *   entity      string  — `Controller.entrie`; el título usa su minúscula
- *   icon        string  — icono del título (default `mdi:check`)
- *   close-label string  — texto del botón de cierre (default "Cerrar")
+ *   open          boolean — visible (reflected)
+ *   loading       boolean — se pone solo mientras corre `actVerificar`
+ *   entity        string  — `Controller.entrie`; el título usa su minúscula
+ *   icon          string  — icono del título (default `mdi:check`)
+ *   close-label   string  — texto del botón de cierre (default "Cerrar")
+ *   light-dismiss boolean — OPT-IN: cerrar al hacer click en el backdrop.
+ *                 Antes cerraba siempre; ahora hay que pedirlo, igual que en
+ *                 <is-dialog> / <is-drawer>.
  *
  * Métodos
  *   show() / hide() / verify()  — `verify()` re-ejecuta la verificación
  *
  * Eventos (bubbles + composed)
+ *   is-show / is-after-show / is-hide (cancelable) / is-after-hide
+ *                          — ciclo estándar, re-emitidos por el <is-dialog>.
  *   is-verificacion        detail: { mensajes, qinfos, qwarning, qerrores }
  *   is-verificacion-error  detail: { message, error }
- *   is-cancel              detail: {} — cierre del diálogo
+ *   is-cancel              detail: {} — evento semántico ADICIONAL, acompaña a
+ *                          `is-hide` cuando el cierre lo pide el usuario.
  *
  * CSS Parts: ::part(backdrop) ::part(base) ::part(heading) ::part(results)
  *            ::part(stats) ::part(actions)
@@ -80,43 +89,43 @@ export function lowerCase(value) {
 
 (() => {
   const TEMPLATE = document.createElement('template');
+  // ponytail: `tabindex="0"` en <is-button> NO es decorativo — ver la nota en
+  // confirm-delete.js. `.results` ya lo tenía (lista scrolleable).
   TEMPLATE.innerHTML = /* html */ `
-    <div part="backdrop" class="backdrop" hidden>
-      <div part="base" class="modal" role="dialog" aria-modal="true" aria-labelledby="heading">
-        <h2 part="heading" class="heading" id="heading">
-          <is-icon class="title-icon" icon="mdi:check" aria-hidden="true"></is-icon>
-          <span class="heading-text"></span>
-        </h2>
-        <is-heading level="3" color="neutral" class="results-title">Resultados</is-heading>
-        <div part="results" class="results" tabindex="0"></div>
-        <footer part="stats" class="stats">
-          <div class="stat">
-            <is-icon icon="mdi:information-outline" aria-hidden="true"></is-icon>
-            <is-text color="success" class="q-infos">0</is-text>
-          </div>
-          <div class="stat">
-            <is-icon icon="mdi:alert-outline" aria-hidden="true"></is-icon>
-            <is-text color="warning" class="q-warning">0</is-text>
-          </div>
-          <div class="stat">
-            <is-icon icon="mdi:close-circle-outline" aria-hidden="true"></is-icon>
-            <is-text color="danger" class="q-errores">0</is-text>
-          </div>
-        </footer>
-        <div part="actions" class="actions">
-          <is-button class="close" color="neutral" variant="outlined">Cerrar</is-button>
+    <is-dialog class="dlg" exportparts="backdrop, dialog: base">
+      <span slot="label" part="heading" class="heading">
+        <is-icon class="title-icon" icon="mdi:check" aria-hidden="true"></is-icon>
+        <span class="heading-text"></span>
+      </span>
+      <is-heading level="3" color="neutral" class="results-title">Resultados</is-heading>
+      <div part="results" class="results" tabindex="0"></div>
+      <footer part="stats" class="stats">
+        <div class="stat">
+          <is-icon icon="mdi:information-outline" aria-hidden="true"></is-icon>
+          <is-text color="success" class="q-infos">0</is-text>
         </div>
+        <div class="stat">
+          <is-icon icon="mdi:alert-outline" aria-hidden="true"></is-icon>
+          <is-text color="warning" class="q-warning">0</is-text>
+        </div>
+        <div class="stat">
+          <is-icon icon="mdi:close-circle-outline" aria-hidden="true"></is-icon>
+          <is-text color="danger" class="q-errores">0</is-text>
+        </div>
+      </footer>
+      <div part="actions" class="actions" slot="footer">
+        <is-button class="close" color="neutral" variant="outlined"
+                   data-dialog="close" tabindex="0">Cerrar</is-button>
       </div>
-    </div>
+    </is-dialog>
   `;
 
-  const OBSERVED = ['open', 'loading', 'entity', 'icon', 'close-label'];
+  const OBSERVED = ['open', 'loading', 'entity', 'icon', 'close-label', 'light-dismiss'];
 
-  class IsModalVerificacion extends HTMLElement {
+  class IsModalVerificacion extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
-    #mounted = false;
-    #backdrop;
+    #dlg;
     #headingText;
     #titleIcon;
     #results;
@@ -124,7 +133,6 @@ export function lowerCase(value) {
     #qInfos;
     #qWarning;
     #qErrores;
-    #lastFocus = null;
     /** @type {Array<{itdmensaje: unknown, mensaje: string}>} */
     #mensajes = [];
     #wasOpen = false;
@@ -142,7 +150,7 @@ export function lowerCase(value) {
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       adoptCss(shadow, import.meta.url);
 
-      this.#backdrop = shadow.querySelector('.backdrop');
+      this.#dlg = shadow.querySelector('.dlg');
       this.#headingText = shadow.querySelector('.heading-text');
       this.#titleIcon = shadow.querySelector('.title-icon');
       this.#results = shadow.querySelector('.results');
@@ -152,29 +160,27 @@ export function lowerCase(value) {
       this.#qErrores = shadow.querySelector('.q-errores');
     }
 
-    connectedCallback() {
-      this.#mounted = true;
-      this.#closeBtn.addEventListener('click', this.#onCancel);
-      this.#backdrop.addEventListener('click', this.#onBackdropClick);
-      document.addEventListener('keydown', this.#onKeydown);
+    onConnected() {
+      this.#dlg.addEventListener('is-hide', this.#onDialogHide);
+      this.#dlg.addEventListener('is-after-hide', this.#onDialogAfterHide);
       this.#syncTexts();
+      this.#syncLightDismiss();
       this.#renderMensajes();
       if (this.open) this.#showUI();
     }
 
-    disconnectedCallback() {
-      this.#mounted = false;
-      this.#closeBtn.removeEventListener('click', this.#onCancel);
-      this.#backdrop.removeEventListener('click', this.#onBackdropClick);
-      document.removeEventListener('keydown', this.#onKeydown);
+    onDisconnected() {
+      this.#dlg.removeEventListener('is-hide', this.#onDialogHide);
+      this.#dlg.removeEventListener('is-after-hide', this.#onDialogAfterHide);
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.#mounted || oldVal === newVal) return;
+    onAttributeChanged(name, _oldVal, _newVal) {
       if (name === 'open') {
         if (this.open) this.#showUI(); else this.#hideUI();
       } else if (name === 'loading') {
         this.#syncGate();
+      } else if (name === 'light-dismiss') {
+        this.#syncLightDismiss();
       } else {
         this.#syncTexts();
       }
@@ -187,6 +193,9 @@ export function lowerCase(value) {
 
     get loading() { return this.hasAttribute('loading'); }
     set loading(v) { this.toggleAttribute('loading', !!v); }
+
+    get lightDismiss() { return this.hasAttribute('light-dismiss'); }
+    set lightDismiss(v) { this.toggleAttribute('light-dismiss', !!v); }
 
     get entity() { return this.getAttribute('entity') || ''; }
     set entity(v) {
@@ -254,9 +263,14 @@ export function lowerCase(value) {
       this.#closeBtn.textContent = this.getAttribute('close-label') || 'Cerrar';
     }
 
+    /** `light-dismiss` es opt-in y se delega tal cual al <is-dialog>. */
+    #syncLightDismiss() {
+      this.#dlg.toggleAttribute('light-dismiss', this.lightDismiss);
+    }
+
     #syncGate() {
       this.#closeBtn.toggleAttribute('loading', this.loading);
-      this.#backdrop.setAttribute('aria-busy', String(this.loading));
+      this.#dlg.setAttribute('aria-busy', String(this.loading));
     }
 
     #renderMensajes() {
@@ -283,38 +297,30 @@ export function lowerCase(value) {
       this.#qErrores.textContent = String(this.qerrores);
     }
 
-    #onCancel = () => {
-      emit(this, 'is-cancel', {});
-      this.hide();
-    };
+    /**
+     * `is-hide` sólo lo emite ModalBase cuando el cierre lo PIDE el usuario
+     * (Escape, backdrop, botón Cerrar): `hide()` programático no pasa por aquí.
+     * Es justo la semántica que tenía `is-cancel`.
+     */
+    #onDialogHide = () => { emit(this, 'is-cancel', {}); };
 
-    #onBackdropClick = (e) => {
-      if (e.target === this.#backdrop) this.#onCancel();
-    };
-
-    #onKeydown = (e) => {
-      if (e.key === 'Escape' && this.open) this.#onCancel();
-    };
+    #onDialogAfterHide = () => { this.removeAttribute('open'); };
 
     #showUI() {
       if (this.#wasOpen) return;
       this.#wasOpen = true;
-      this.#lastFocus = document.activeElement;
       this.#syncTexts();
-      this.#backdrop.hidden = false;
+      this.#dlg.show();
       void this.verify();
-      requestAnimationFrame(() => this.#closeBtn.focus?.());
     }
 
     #hideUI() {
       if (!this.#wasOpen) return;
       this.#wasOpen = false;
-      this.#backdrop.hidden = true;
+      this.#dlg.hide();
       // El original reinicia los mensajes al cerrar.
       this.#mensajes = [];
       this.#renderMensajes();
-      this.#lastFocus?.focus?.();
-      this.#lastFocus = null;
     }
   }
 
