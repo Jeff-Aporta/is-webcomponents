@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import '../actions/button.js';
 import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -32,7 +33,14 @@ import { emit } from '../_shared/emit.js';
  *   feature   bloque destacado (imagen, CTA, lo que sea)
  *
  * Eventos
- *   is-open, is-close, is-select  detail: { href }
+ *   is-show / is-after-show   al abrir el panel
+ *   is-hide / is-after-hide   al cerrarlo
+ *   is-select                 detail: { href, text }
+ *
+ * El panel sigue siendo un <dialog> nativo en modo `show()` (no modal):
+ * es un popover anclado al trigger, no un diálogo. Migrarlo a <is-dialog>
+ * (ModalBase: focus-trap, backdrop, centrado) cambiaría la semántica y el
+ * posicionamiento fijo que calcula #positionPanel, así que se deja como está.
  */
 (() => {
   const OBSERVED = ['label', 'icon', 'placement', 'width', 'hover'];
@@ -47,10 +55,11 @@ import { emit } from '../_shared/emit.js';
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.innerHTML = /* html */ `
         <div part="root" class="root">
-          <button part="trigger" class="trigger" type="button" aria-haspopup="true" aria-expanded="false">
+          <is-button part="trigger" class="trigger" variant="text" color="neutral" with-caret
+                     aria-haspopup="true" aria-expanded="false">
+            <is-icon slot="start" class="trigger-icon" hidden aria-hidden="true"></is-icon>
             <span class="trigger-label"></span>
-            <span class="caret"></span>
-          </button>
+          </is-button>
           <dialog part="panel" class="panel" aria-label="Mega menú">
             <slot name="column"></slot>
             <slot name="feature"></slot>
@@ -61,6 +70,7 @@ import { emit } from '../_shared/emit.js';
       this.#trigger = this.shadowRoot.querySelector('.trigger');
       this.#panel = this.shadowRoot.querySelector('.panel');
       this.#labelEl = this.shadowRoot.querySelector('.trigger-label');
+      this.#iconEl = this.shadowRoot.querySelector('.trigger-icon');
 
       this.#trigger.addEventListener('click', () => this.toggle());
       this.#trigger.addEventListener('mouseenter', () => this.hasAttribute('hover') && this.#scheduleOpen());
@@ -89,21 +99,27 @@ import { emit } from '../_shared/emit.js';
 
     #sync() {
       this.#labelEl.textContent = this.getAttribute('label') || '';
+      const icon = (this.getAttribute('icon') || '').trim();
+      this.#iconEl.hidden = !icon;
+      if (icon) this.#iconEl.setAttribute('icon', icon);
+      else this.#iconEl.removeAttribute('icon');
     }
 
     open() {
+      emit(this, 'is-show');
       this.#trigger.setAttribute('aria-expanded', 'true');
       this.#positionPanel();
       this.#panel.show();
       this.setAttribute('open', '');
-      emit(this, 'is-open');
+      emit(this, 'is-after-show');
     }
 
     close() {
+      emit(this, 'is-hide');
       this.#panel.close();
       this.#trigger.setAttribute('aria-expanded', 'false');
       this.removeAttribute('open');
-      emit(this, 'is-close');
+      emit(this, 'is-after-hide');
     }
 
     toggle() { this.#panel.open ? this.close() : this.open(); }
@@ -139,6 +155,7 @@ import { emit } from '../_shared/emit.js';
     #trigger;
     #panel;
     #labelEl;
+    #iconEl;
   }
 
   defineElement('is-mega-menu', IsMegaMenu);

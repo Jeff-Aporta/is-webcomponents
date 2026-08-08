@@ -1,7 +1,14 @@
+@import url('../_shared/popover-panel.css');
+@import './_surface-bar.css';
+
 /* is-window */
 :host {
   --_w: 380px;
   --_h: 260px;
+  /* La sombra propia de la ventana: más profunda que la del popover base. */
+  --is-popover-shadow:
+    0 0 0 1px color-mix(in srgb, var(--is-text) 4%, transparent) inset,
+    0 26px 60px rgba(0, 0, 0, .36);
   position: fixed;
   left: 50%; top: 12%;
   transform: translate(-50%, 0);
@@ -12,36 +19,38 @@
   font: inherit;
   color: var(--is-text);
 }
+
+/* Borde, radio, fondo y sombra vienen de `.is-popover-panel`. */
 .root {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
-  background: var(--is-bg-elev);
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius, 8px);
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--is-text) 4%, transparent) inset,
-    0 26px 60px rgba(0,0,0,.36);
   overflow: hidden;
 }
 
+/* La fila flex, el padding y el separador vienen de `.is-surface-bar`. */
 .header {
-  display: flex;
-  align-items: center;
-  gap: .35rem;
-  padding: .45rem .65rem;
+  --is-surface-bar-gap: .35rem;
+  --is-surface-bar-padding: .45rem .65rem;
   background:
     linear-gradient(180deg,
       color-mix(in srgb, var(--is-bg-elev) 96%, transparent),
       color-mix(in srgb, var(--is-bg-elev) 86%, transparent));
-  border-bottom: 1px solid var(--is-border-soft);
   cursor: grab;
   user-select: none;
-}
-.header:active { cursor: grabbing; }
 
-.title-wrap { display: inline-flex; align-items: center; gap: .35rem; flex: 1 1 auto; min-width: 0; }
+  &:active { cursor: grabbing; }
+}
+
+.title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .title {
   font-weight: 600;
   font-size: .92rem;
@@ -51,17 +60,23 @@
 }
 
 .controls { display: inline-flex; gap: 2px; }
-.ctrl {
-  width: 1.85rem; height: 1.65rem;
-  border: 0;
-  background: transparent;
-  color: var(--is-text-soft);
-  font: inherit;
-  cursor: pointer;
-  border-radius: 6px;
+
+/* La caja pintada es el <button> interno de <is-button>, alcanzable por
+   ::part(button). Las reglas propias de is-button son del tipo
+   `:host([variant=…]) .btn` (0,2,0), así que hace falta llegar a esa
+   especificidad: `is-button.ctrl::part(button)` es (0,2,1) y gana. */
+is-button.ctrl {
+  --is-button-border-radius: 6px;
+  font-size: .8rem;
+
+  &::part(button) {
+    width: 1.85rem;
+    min-width: 1.85rem;
+    height: 1.65rem;
+    padding: 0;
+  }
 }
-.ctrl:hover { background: color-mix(in srgb, var(--is-accent) 18%, transparent); color: var(--is-accent); }
-.ctrl[data-act="close"]:hover { background: var(--is-danger, #dc2626); color: white; }
+
 
 .body {
   flex: 1 1 auto;
@@ -86,6 +101,10 @@
       transparent 85%);
 }
 
-.is-minimized { width: 14rem !important; height: auto !important; }
-.is-minimized .body { display: none; }
-.is-minimized .resizer { display: none; }
+.is-minimized {
+  width: 14rem !important;
+  height: auto !important;
+
+  & .body { display: none; }
+  & .resizer { display: none; }
+}

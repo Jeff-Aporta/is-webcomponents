@@ -22,13 +22,17 @@
   overflow: hidden;
   min-height: 24rem;
   position: relative;
+
+  &[data-placement="left"],
+  &[data-placement="right"] {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 22rem);
+  }
+
+  &[data-placement="left"] {
+    & .player { order: 2; }
+    & .playlist { order: 1; }
+  }
 }
-.video-playlist[data-placement="left"],
-.video-playlist[data-placement="right"] {
-  grid-template-columns: minmax(0, 1fr) minmax(14rem, 22rem);
-}
-.video-playlist[data-placement="left"] .player { order: 2; }
-.video-playlist[data-placement="left"] .playlist { order: 1; }
 
 /* ── Player ─────────────────────────────────────────────── */
 .player { position: relative; min-width: 0; min-height: 0; }
@@ -37,8 +41,9 @@
   width: 100%; height: 100%;
   background: black;
   display: grid; place-items: stretch;
+
+  & > slot { display: contents; }
 }
-.stage > slot { display: contents; }
 
 /* ── Header sobre el player ─────────────────────────────── */
 .player-header {
@@ -50,8 +55,9 @@
   background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, transparent 100%);
   color: #fff;
   pointer-events: none;
+
+  & > * { pointer-events: auto; }
 }
-.player-header > * { pointer-events: auto; }
 .player-header__text { flex: 1 1 auto; min-width: 0; }
 .player-title {
   margin: 0;
@@ -66,13 +72,15 @@
   color: rgba(255,255,255,.78);
   text-transform: uppercase;
   letter-spacing: .04em;
+
+  &[hidden] { display: none; }
 }
-.player-channel[hidden] { display: none; }
 
 .player-header__actions {
   display: inline-flex; align-items: center; gap: .35rem;
+
+  & slot { display: contents; }
 }
-.player-header__actions slot { display: contents; }
 .player-header__actions::slotted(*) { color: #fff; }
 
 /* ── Toolbar inferior ───────────────────────────────────── */
@@ -100,11 +108,13 @@
   cursor: pointer;
   font: inherit;
 }
+/* Los tools por defecto son <is-button variant="text">: pintan su propio
+   hover dentro de su shadow, así que aquí solo va el estado presionado. */
 .tools::slotted(button:hover) {
   background: rgba(255,255,255,.16);
   color: #fff;
 }
-.tools::slotted(button[aria-pressed="true"]) {
+.tools::slotted([aria-pressed="true"]) {
   color: var(--is-accent);
 }
 
@@ -117,8 +127,9 @@
   cursor: pointer;
   font: inherit;
   font-size: 1.1rem;
+
+  &:hover { background: rgba(255,255,255,.16); }
 }
-.vp-play:hover, .vp-mute:hover { background: rgba(255,255,255,.16); }
 
 .vp-seek, .vp-volume {
   appearance: none;
@@ -198,8 +209,9 @@
   border-radius: 999px;
   cursor: pointer;
   font: inherit;
+
+  &:hover { background: color-mix(in srgb, var(--vp-accent) 14%, transparent); color: var(--vp-accent); }
 }
-.playlist-toggle:hover { background: color-mix(in srgb, var(--vp-accent) 14%, transparent); color: var(--vp-accent); }
 
 .video-playlist[data-accordion="closed"] .playlist-items { display: none; }
 .video-playlist[data-accordion="closed"] .playlist-toggle is-icon { transform: rotate(180deg); }
@@ -222,15 +234,16 @@
   cursor: pointer;
   position: relative;
   background: transparent;
-}
-.playlist-item:hover {
-  background: color-mix(in srgb, var(--vp-accent) 8%, transparent);
-}
-.playlist-item.active {
-  background: color-mix(in srgb, var(--vp-accent) 14%, transparent);
-}
-.playlist-item.active .playlist-item-title {
-  color: var(--vp-accent);
+
+  &:hover {
+    background: color-mix(in srgb, var(--vp-accent) 8%, transparent);
+  }
+
+  &.active {
+    background: color-mix(in srgb, var(--vp-accent) 14%, transparent);
+
+    & .playlist-item-title { color: var(--vp-accent); }
+  }
 }
 .playlist-item-index {
   display: inline-grid; place-items: center;

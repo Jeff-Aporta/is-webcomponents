@@ -1,37 +1,41 @@
+@import url('../_shared/popover-panel.css');
+@import './_surface-bar.css';
+
 /* is-pdf-viewer */
 :host {
+  /* Embebido en la página, no flota: sin sombra propia. */
+  --is-popover-shadow: none;
   display: block;
   font: inherit;
   color: var(--is-text);
 }
 
+/* Borde, radio y fondo vienen de `.is-popover-panel`. */
 .root {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius);
-  background: var(--is-bg-elev);
   overflow: hidden;
 }
 
+/* La fila flex, el padding y el separador vienen de `.is-surface-bar`. */
 .toolbar {
-  display: flex;
-  align-items: center;
-  gap: .45rem;
-  padding: .5rem .75rem;
-  border-bottom: 1px solid var(--is-border-soft);
-  background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
+  --is-surface-bar-gap: .45rem;
 }
+
 .title {
   font-weight: 600;
   font-size: .9rem;
-  display: inline-flex; align-items: center;
+  display: inline-flex;
+  align-items: center;
 }
+
 .spacer { flex: 1 1 auto; }
 
 .btn {
   font: inherit;
-  display: inline-flex; align-items: center; gap: .35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
   padding: .3rem .6rem;
   border-radius: var(--is-radius, 6px);
   border: 1px solid var(--is-border);
@@ -39,10 +43,11 @@
   color: inherit;
   cursor: pointer;
   font-size: .82rem;
-}
-.btn:hover {
-  background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-soft));
-  border-color: var(--is-accent);
+
+  &:hover {
+    background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-soft));
+    border-color: var(--is-accent);
+  }
 }
 
 .frame {
