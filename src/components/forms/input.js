@@ -3,9 +3,12 @@ import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
 } from '../_shared/form-associated.js';
 import '../media/icon.js';
+import '../actions/button.js';
+import '../actions/check-icon-button.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
+import { upgradeProperties } from '../_shared/upgrade-properties.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 /**
@@ -48,12 +51,30 @@ import { hasSlotted } from '../_shared/dom-utils.js';
           <slot name="start"></slot>
         </span>
         <input part="input" class="input" id="input" type="text" aria-describedby="hint error-text" />
-        <button type="button" part="clear" class="icon-btn" id="clear" hidden tabindex="-1" aria-label="Limpiar">
-          <is-icon icon="mdi:close-circle"></is-icon>
-        </button>
-        <button type="button" part="toggle" class="icon-btn" id="toggle" hidden tabindex="-1" aria-label="Mostrar contraseña">
-          <is-icon icon="mdi:eye-outline"></is-icon>
-        </button>
+        <is-button
+          type="button"
+          part="clear"
+          class="icon-btn"
+          id="clear"
+          variant="text"
+          color="neutral"
+          tabindex="-1"
+          aria-label="Limpiar"
+          hidden
+        >
+          <is-icon icon="mdi:close-circle" aria-hidden="true"></is-icon>
+        </is-button>
+        <is-check-icon-button
+          part="toggle"
+          class="icon-btn"
+          id="toggle"
+          icon="mdi:eye-outline"
+          checked-icon="mdi:eye-off-outline"
+          label="Mostrar contraseña"
+          checked-label="Ocultar contraseña"
+          tabindex="-1"
+          hidden
+        ></is-check-icon-button>
         <span part="end" class="adorn" id="end" hidden>
           <slot name="end"></slot>
           <span part="suffix" class="adorn-text" id="suffix" hidden></span>
@@ -81,13 +102,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     'error', 'error-text', 'show-count', 'prefix', 'suffix'
   ];
 
-  const PROPS = [
-    'type', 'name', 'value', 'placeholder', 'label', 'hint',
-    'disabled', 'required', 'readonly', 'clearable', 'passwordToggle',
-    'min', 'max', 'step', 'maxlength', 'autocomplete',
-    'variant', 'labelPlacement', 'error', 'errorText', 'showCount',
-    'fullWidth', 'prefixText', 'suffixText', 'typingDelay'
-  ];
+  const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
+  const EXTRA_UPGRADE_PROPS = ['typingDelay', 'prefixText', 'suffixText'];
 
   const NATIVE_ATTRS = ['placeholder', 'min', 'max', 'step', 'maxlength', 'autocomplete', 'name'];
 
@@ -154,14 +170,21 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#input.addEventListener('focus', this.#onFocus);
       this.#input.addEventListener('blur', this.#onBlur);
       this.#clearBtn.addEventListener('click', this.#onClear);
-      this.#toggleBtn.addEventListener('click', this.#onTogglePassword);
+      this.#toggleBtn.addEventListener('is-change', this.#onTogglePassword);
       for (const slot of shadow.querySelectorAll('slot')) {
         slot.addEventListener('slotchange', this.#syncSlots);
       }
     }
 
     onConnected() {
-      this.#upgradeProps();
+      upgradeProperties(this, EXTRA_UPGRADE_ATTRS);
+      for (const p of EXTRA_UPGRADE_PROPS) {
+        if (Object.prototype.hasOwnProperty.call(this, p)) {
+          const v = this[p];
+          delete this[p];
+          if (v != null) this[p] = v;
+        }
+      }
       this.#value = this.getAttribute('value') ?? '';
       this.#syncSlots();
       this.#syncNative();
@@ -355,16 +378,6 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
     // ---- privados --------------------------------------------------------
 
-    #upgradeProps() {
-      for (const p of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
-    }
-
     #syncSlots = () => {
       const labelAttr = this.label.trim();
       const hintAttr = this.hint.trim();
@@ -519,14 +532,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     };
 
     #onTogglePassword = (e) => {
-      e.preventDefault();
-      this.#passwordVisible = !this.#passwordVisible;
+      this.#passwordVisible = !!e.detail?.checked;
       setCustomState(this.#internals, 'password-visible', this.#passwordVisible);
-      this.#toggleBtn.querySelector('is-icon')
-        .setAttribute('icon', this.#passwordVisible ? 'mdi:eye-off-outline' : 'mdi:eye-outline');
-      this.#toggleBtn.setAttribute(
-        'aria-label', this.#passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'
-      );
       this.#syncNative();
       this.#input.focus();
     };
