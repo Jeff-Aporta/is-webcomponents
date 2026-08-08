@@ -4,9 +4,9 @@ import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 
 /**
- * <is-floating> â€” building block interno de posicionamiento anclado.
+ * <is-floating> — building block interno de posicionamiento anclado.
  *
- * No es API pÃºblica: Ãºsalo solo desde `<is-popover>` / `<is-tooltip>`.
+ * No es API pública: úsalo solo desde `<is-popover>` / `<is-tooltip>`.
  * Para UI de producto usa siempre `<is-popover>`.
  *
  * Slots: anchor | default (contenido)
@@ -23,25 +23,28 @@ import { emit } from '../_shared/emit.js';
  */
 
 (() => {
+  /** Lee `--arrow-size` en px. `parseFloat('0.375rem')` devolvía 0.375 y rompía la flecha. */
+  const arrowSizePx = (el) => {
+    const raw = getComputedStyle(el).getPropertyValue('--arrow-size').trim();
+    if (!raw) return 8;
+    const n = parseFloat(raw);
+    if (!Number.isFinite(n) || n <= 0) return 8;
+    if (raw.endsWith('rem')) {
+      return n * (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16);
+    }
+    if (raw.endsWith('em')) {
+      return n * (parseFloat(getComputedStyle(el).fontSize) || 16);
+    }
+    return n;
+  };
+
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="base" part="base">
       <slot name="anchor" class="anchor-slot" part="anchor"></slot>
       <div class="popup" part="popup" hidden>
         <slot></slot>
-        <div class="arrow" part="arrow" hidden>
-          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-            <!-- Rombo: punta arriba/abajo/izq/der a 1px del borde del viewBox
-                 en escala 1:1 con el cuadrado de 16x16 que renderiza arrowSize.
-                 El triangulo exterior cierra sobre el borde del popup; el
-                 interior esta 1px mas adentro para que el stroke de 1px no
-                 sangre dentro del contenido. -->
-            <polygon class="arrow-fill"
-              points="8,8 8,1 15,8 8,15 1,8"></polygon>
-            <polygon class="arrow-stroke"
-              points="8,8 8,2 14,8 8,14 2,8"></polygon>
-          </svg>
-        </div>
+        <div class="arrow" part="arrow" hidden></div>
       </div>
       <div class="hover-bridge" part="hover-bridge" hidden></div>
     </div>
@@ -189,7 +192,7 @@ import { emit } from '../_shared/emit.js';
       const anchor = this.#getAnchorTarget();
       if (!anchor) return;
 
-      const arrowSize = parseFloat(getComputedStyle(this).getPropertyValue('--arrow-size')) || 8;
+      const arrowSize = arrowSizePx(this);
       this.#measuring = true;
       let result;
       try {
@@ -221,14 +224,11 @@ import { emit } from '../_shared/emit.js';
 
       const nextTop = `${result.top}px`;
       const nextLeft = `${result.left}px`;
-      if (
+      const sameBox =
         this.#popup.style.position === result.strategy
         && this.#popup.style.top === nextTop
         && this.#popup.style.left === nextLeft
-        && this.#popup.dataset.currentPlacement === result.placement
-      ) {
-        return;
-      }
+        && this.#popup.dataset.currentPlacement === result.placement;
 
       this.#popup.style.position = result.strategy;
       this.#popup.style.top = nextTop;
@@ -249,6 +249,11 @@ import { emit } from '../_shared/emit.js';
 
       if (this.arrow && result.arrow) {
         this.#arrow.hidden = false;
+        // Limpiar lados previos (si no, quedan top+bottom a la vez al cambiar placement).
+        this.#arrow.style.top = '';
+        this.#arrow.style.left = '';
+        this.#arrow.style.right = '';
+        this.#arrow.style.bottom = '';
         Object.assign(this.#arrow.style, {
           top: result.arrow.top,
           left: result.arrow.left,
@@ -262,7 +267,9 @@ import { emit } from '../_shared/emit.js';
       this.#updateBridge(result);
       this.#bindBridgeEvents();
 
-      emit(this, 'is-reposition', { placement: result.placement, x: result.left, y: result.top });
+      if (!sameBox) {
+        emit(this, 'is-reposition', { placement: result.placement, x: result.left, y: result.top });
+      }
     }
 
     #getAnchorTarget() {
@@ -364,7 +371,7 @@ import { emit } from '../_shared/emit.js';
       const side = result.placement.split('-')[0];
       // El bridge cubre la franja entre el ancla y el cuerpo del popup. Si la
       // flecha estÃ¡ activa, esa franja incluye la mitad exterior del rombo.
-      const arrowSize = parseFloat(getComputedStyle(this).getPropertyValue('--arrow-size')) || 8;
+      const arrowSize = arrowSizePx(this);
       const dist = this.distance + (this.arrow ? arrowSize : 0);
       if (dist <= 0) {
         this.#bridge.hidden = true;
