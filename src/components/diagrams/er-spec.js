@@ -119,19 +119,26 @@ function entityHeight(entity) {
 
 /* ───────────────────────── cardinalidad (pata de gallo) ───────────────────────── */
 
-/** Geometría local de la marca de cardinalidad; el anclaje queda en (0,0) y el
- * trazo se extiende hacia -x (fuera de la caja); se rota según el lado de entrada. */
+/** Geometría local de la marca de cardinalidad; el anclaje queda en (0,0)
+ * (sobre el borde de la caja) y "afuera" (hacia la otra entidad, siguiendo
+ * la línea) es siempre -x local; se rota según el lado de entrada.
+ * Pata de gallo (many): el abanico (3 puntas) va PEGADO al nodo — abre
+ * justo en el anclaje — y converge en un solo punto hacia afuera. Con las
+ * puntas en -x y el punto de unión en 0,0 quedaba invertido (parecía una
+ * flecha "->" entrando al nodo en vez de una pata de gallo "-<" saliendo). */
 function markGeometry(card) {
   switch (card) {
     case 'one':
       return { path: 'M-9,-6 L-9,6', circle: null };
     case 'zeroOrOne':
       return { path: 'M-9,-6 L-9,6', circle: { cx: -17, cy: 0, r: 5 } };
+    // Abanico ancho y largo: con ±7 sobre 13px la figura se leía como una
+    // punta de flecha maciza ("->") en vez de una pata de gallo ("-<").
     case 'zeroOrMany':
-      return { path: 'M-13,-7 L0,0 M-13,0 L0,0 M-13,7 L0,0', circle: { cx: -21, cy: 0, r: 5 } };
+      return { path: 'M0,-9 L-16,0 M0,0 L-16,0 M0,9 L-16,0', circle: { cx: -24, cy: 0, r: 5 } };
     case 'many':
     default:
-      return { path: 'M-13,-7 L0,0 M-13,0 L0,0 M-13,7 L0,0', circle: null };
+      return { path: 'M0,-9 L-16,0 M0,0 L-16,0 M0,9 L-16,0', circle: null };
   }
 }
 
@@ -155,14 +162,18 @@ export function computeErLayout(spec) {
   const hasHeader = !!(title || subtitle);
   const titleY = title ? 22 : 14;
   const subtitleY = title ? 40 : 24;
-  const headerH = hasHeader ? (subtitle ? 54 : 36) : 0;
+  // Igual que en block-spec: fuera de la rejilla de 8 los anclajes quedan
+  // descuadrados y el A* devuelve tramos en diagonal.
+  const headerH = snapDiagramGrid(hasHeader ? (subtitle ? 54 : 36) : 0);
 
   const sized = spec.entities.map((e) => ({ id: e.id, w: entityWidth(e), h: entityHeight(e) }));
 
   const placed = layoutNodeLink(sized, spec.relations, {
     direction: spec.direction,
-    layerGap: 96,
-    nodeGap: 40,
+    // Separación holgada: con 120/56 las cajas grandes (muchos atributos) se
+    // solapaban con sus vecinas de la misma capa.
+    layerGap: 150,
+    nodeGap: 84,
   });
 
   const byId = new Map(placed.nodes.map((n) => [n.id, n]));

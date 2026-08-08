@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./flowchart.js
 style: ./flowchart.css
-preview: ../../previews/diagrams/is-flowchart.html
+preview: ../../previews/diagrams/is-flowchart.json
 ---
 # `<is-flowchart>`
 
@@ -35,8 +35,14 @@ import './flowchart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-flowchart></is-flowchart>
+<is-flowchart open-on-click animation="flow">
+  <script type="application/json">
+    { "flowchart": { "direction": "TB", "nodes": […], "edges": […] } }
+  </script>
+</is-flowchart>
 ```
+
+`animation="flow"` dibuja una arista dashed brand (con transparencia) detrás de cada arista continua; los dash se desplazan en el sentido del flujo. Ausente = sin animación. Tokens futuros se suman con espacios (`animation="flow …"`).
 
 ## API
 
@@ -46,15 +52,17 @@ import './flowchart.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
-| `mode` | string/según contrato | Fuente define default/restricción. |
-| `persist` | string/según contrato | Fuente define default/restricción. |
-| `storage-key` | string/según contrato | Fuente define default/restricción. |
+| `color` | `inline` \| `viewer` | Modo visor vs embebido. |
+| `mode` | `read` \| `edit` | Edición de layout (drag). |
+| `open-on-click` | boolean | Clic abre `<is-diagram-lightbox>`. |
+| `animation` | tokens (`flow`, …) | Efectos opcionales (espacio-separados). Default: off. |
+| `persist` / `storage-key` | string | Persistencia de overrides en edit. |
 
 #### Propiedades públicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
+| `animation` | lectura/escritura | Tokens (`flow`, …). Vacío = off. |
 | `mode` | lectura/escritura | Declarada por clase. |
 | `overrides` | lectura/escritura | Declarada por clase. |
 | `isViewer` | solo lectura | Declarada por clase. |
@@ -172,4 +180,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./flowchart.js)
 - [CSS](./flowchart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-flowchart.html)
+- [Preview](../../previews/diagrams/is-flowchart.json)

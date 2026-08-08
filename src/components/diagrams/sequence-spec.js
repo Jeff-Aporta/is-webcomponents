@@ -134,13 +134,19 @@ export function sequenceSpecFromPayload(payload) {
   if (!rawActors.length) return null;
 
   const actors = rawActors.map(readActor);
-  const flatMessages = (seq.messages ?? []).map((m, i) => readMessage(m, i + 1));
+  // Contador de fallback ÚNICO para todo el spec (nunca se reinicia entre
+  // preamble/alt/epilogue): un `i + 1` local por bloque hacía que dos
+  // mensajes sin `id`/`step` explícitos en bloques distintos cayeran en el
+  // mismo fallback ("m1" en preamble y "m1" en una rama de `alt`), y el Map
+  // de nodos por id (`#msgNodes`) del componente terminaba reutilizando el
+  // nodo cacheado de uno para el hover del otro.
+  let ordinal = 0;
+  const nextMessage = (m) => readMessage(m, ++ordinal);
+
+  const flatMessages = (seq.messages ?? []).map(nextMessage);
   const preamble = flatMessages.length
     ? flatMessages
-    : (seq.preamble ?? []).map((m, i) => readMessage(m, i + 1));
-  const epilogue = (seq.epilogue ?? []).map((m, i) =>
-    readMessage(m, preamble.length + 10 + i),
-  );
+    : (seq.preamble ?? []).map(nextMessage);
 
   let alt;
   const rawAlt = asRecord(seq.alt);
@@ -149,10 +155,12 @@ export function sequenceSpecFromPayload(payload) {
     alt = {
       branches: branches.map((b) => ({
         condition: String(b.condition ?? ''),
-        messages: (b.messages ?? []).map((m, i) => readMessage(m, i + 1)),
+        messages: (b.messages ?? []).map(nextMessage),
       })),
     };
   }
+
+  const epilogue = (seq.epilogue ?? []).map(nextMessage);
 
   return {
     title: String(seq.title ?? p.title ?? ''),
@@ -409,7 +417,6 @@ export function computeSequenceLayout(spec) {
 
   // 5) Rutear cada mensaje y colocar su etiqueta (registrada como obstáculo).
   const messages = [];
-  let stepCounter = 1;
   flat.forEach((f, row) => {
     const y = yAt(row);
     const fromX = ax[f.fromIdx];
@@ -436,7 +443,11 @@ export function computeSequenceLayout(spec) {
 
     messages.push({
       id: f.m.id,
-      step: f.m.step ?? stepCounter++,
+      // Siempre el `step` propio del mensaje (ya resuelto en `readMessage`
+      // con su fallback ordinal) — nunca un contador compartido que se
+      // desincroniza del orden real cuando se mezclan mensajes con y sin
+      // `step` explícito entre preamble/alt/epilogue.
+      step: f.m.step,
       label: f.m.label,
       log: f.m.log,
       description: f.m.description,
@@ -447,8 +458,10 @@ export function computeSequenceLayout(spec) {
       path: route.path,
       lineX1: fromX,
       lineX2: toX,
-      arrowTipX: route.arrowTipX,
-      arrowTipY: route.arrowTipY,
+      // Tip exacto en la lifeline destino (horizontal) o el que calcule el
+      // router (self). Nunca confiar en un tip “a una celda de distancia”.
+      arrowTipX: f.kind === 'self' ? route.arrowTipX : toX,
+      arrowTipY: route.arrowTipY ?? y,
       arrowDir: route.arrowDir,
       labelX,
       labelW: f.labelW,

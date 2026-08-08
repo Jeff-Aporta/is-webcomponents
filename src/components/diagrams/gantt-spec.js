@@ -1,5 +1,5 @@
 import { parseDate, addDuration, timeScale, niceTimeTicks } from '../_shared/lane-layout.js';
-import { makeCostGrid, blockRect, snapDiagramGrid } from '../_shared/diagram-grid.js';
+import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
@@ -17,8 +17,11 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
 const DEFAULT_HUES = [239, 199, 160, 38, 280, 210];
 
 const MARGIN = { top: 16, right: 20, bottom: 20, left: 16 };
-const ROW_H = 28;
-const ROW_GAP = 10;
+// Todas las métricas verticales caen en la rejilla de 8px del router: con
+// 28+10 y un header de 34 las filas quedaban a media celda y el A* devolvía
+// tramos en diagonal al empalmar los anclajes.
+const ROW_H = 32;
+const ROW_GAP = 8;
 const MIN_GUTTER = 140;
 const MAX_GUTTER = 280;
 const DEFAULT_TIME_W = 640;
@@ -95,7 +98,7 @@ export function computeGanttLayout(spec, opts = {}) {
   const now = opts.now;
 
   const title = spec.title ?? '';
-  const headerH = title ? 34 : 10;
+  const headerH = title ? 32 : 8;
   const titleY = 20;
 
   const groupHue = new Map((spec.groups ?? []).map((g) => [g.id, g.hue]));
@@ -186,21 +189,28 @@ export function computeGanttLayout(spec, opts = {}) {
       const from = byId.get(depId);
       const to = byId.get(t.id);
       if (!from || !to) continue;
+      // Sale del predecesor por la derecha y entra al sucesor por arriba
+      // (cerca del extremo izquierdo de la barra): evita que la flecha
+      // rodee toda la figura cuando el sucesor está más abajo en la tabla.
       const a = from.milestone
         ? { x: from.cx + from.size / 2, y: from.cy }
         : { x: from.x + from.w, y: from.y + from.h / 2 };
+      // La X de entrada se snapea a la rejilla: las barras arrancan en píxeles
+      // fraccionarios (vienen de la escala de tiempo) y sin esto el último
+      // tramo entraba en horizontal, dejando la punta de lado.
       const b = to.milestone
-        ? { x: to.cx - to.size / 2, y: to.cy }
-        : { x: to.x, y: to.y + to.h / 2 };
-      const out = { x: a.x + 8, y: a.y };
-      const into = { x: b.x - 8, y: b.y };
-      const aGrid = pixelToGrid(snapDiagramGrid(out.x), snapDiagramGrid(out.y), grid.grid);
-      const bGrid = pixelToGrid(snapDiagramGrid(into.x), snapDiagramGrid(into.y), grid.grid);
+        ? { x: snapDiagramGrid(to.cx), y: to.cy - to.size / 2 }
+        : { x: snapDiagramGrid(to.x + Math.min(14, to.w * 0.2)), y: to.y };
+      const out = snapPointAwayFromSide({ x: a.x + 8, y: a.y }, 'right', grid.grid);
+      const into = snapPointAwayFromSide({ x: b.x, y: b.y - 8 }, 'top', grid.grid);
+      const aGrid = pixelToGrid(out.x, out.y, grid.grid);
+      const bGrid = pixelToGrid(into.x, into.y, grid.grid);
       const points = routeOrthogonal(aGrid, bGrid, grid);
       const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
       arrows.push({
         id: `${depId}->${t.id}`, from: depId, to: t.id, path,
-        arrowTipX: b.x, arrowTipY: b.y, arrowAngle: 0,
+        // Entra por arriba → la punta apunta hacia abajo (90°).
+        arrowTipX: b.x, arrowTipY: b.y, arrowAngle: 90,
         hue: to.hue,
       });
     }

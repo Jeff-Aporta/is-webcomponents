@@ -20,6 +20,9 @@ import { emit } from '../_shared/emit.js';
  *
  * Atributos:
  *   open               bool   Muestra/oculta el visor
+ *   variant            "backdrop" | "solid"  (default backdrop)
+ *                          backdrop = ::backdrop 20% oscuro + blur 2px, dialog transparente
+ *                          solid    = lienzo opaco a pantalla completa
  *   zoomable           bool   Habilita zoom + pan (default true)
  *   close-on-backdrop  bool   Click fuera cierra (default true)
  *   toolbar            "auto" | "none" | "default"   "auto" = usa la barra
@@ -40,8 +43,8 @@ import { emit } from '../_shared/emit.js';
  *   resetView()          scale=1, x=0, y=0
  *
  * Eventos:
- *   is-open       dialog abierto
- *   is-close      dialog cerrado
+ *   is-after-show   dialog abierto
+ *   is-after-hide   dialog cerrado
  *   is-reposition detail: { scale, x, y }
  *
  * CSS parts: dialog, toolbar, toolbar__lead, toolbar__trail, stage,
@@ -62,9 +65,11 @@ const ICON = {
 /** Holgura antes de tratar un pointerdown como pan y no como clic. */
 const PAN_THRESHOLD_PX = 4;
 
+const VALID_VARIANT = ['backdrop', 'solid'];
+
 class IsLightbox extends HTMLElement {
   static get observedAttributes() {
-    return ['open', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
+    return ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
   }
 
   #dialog;
@@ -158,6 +163,15 @@ class IsLightbox extends HTMLElement {
   get open() { return this.hasAttribute('open'); }
   set open(v) { v ? this.setAttribute('open', '') : this.removeAttribute('open'); }
 
+  get variant() {
+    const v = this.getAttribute('variant');
+    return VALID_VARIANT.includes(v) ? v : 'backdrop';
+  }
+  set variant(v) {
+    if (v == null || v === '' || v === 'backdrop') this.removeAttribute('variant');
+    else this.setAttribute('variant', VALID_VARIANT.includes(v) ? v : 'backdrop');
+  }
+
   get zoomable() { return this.hasAttribute('zoomable') ? this.getAttribute('zoomable') !== 'false' : true; }
   set zoomable(v) { this.toggleAttribute('zoomable', !!v); }
 
@@ -190,7 +204,7 @@ class IsLightbox extends HTMLElement {
     if (this.open) {
       if (!this.#dialog.open) {
         this.#dialog.showModal();
-        emit(this, 'is-open');
+        emit(this, 'is-after-show');
       }
     } else if (this.#dialog.open) {
       this.#dialog.close();
@@ -221,7 +235,7 @@ class IsLightbox extends HTMLElement {
 
   #onDialogClose = () => {
     if (this.open) this.removeAttribute('open');
-    emit(this, 'is-close');
+    emit(this, 'is-after-hide');
   };
 
   #onDialogCancel = (e) => {

@@ -6,7 +6,9 @@
   --lb-bg: var(--is-bg, #0d1117);
   --lb-fg: var(--is-text, #e6e8eb);
   --lb-border: var(--is-border, #1d2229);
-  --lb-backdrop: rgb(0 0 0 / 60%);
+  /* variant=backdrop (default): 20% oscuridad + blur 2px */
+  --lb-backdrop: rgb(0 0 0 / 20%);
+  --lb-backdrop-blur: 2px;
 }
 
 /* Cerrado: no participa del layout. Abierto: contents para que el dialog
@@ -22,6 +24,12 @@
   display: none !important;
 }
 
+/* solid: lienzo opaco a pantalla completa (comportamiento histórico) */
+:host([variant="solid"]) {
+  --lb-backdrop: rgb(0 0 0 / 60%);
+  --lb-backdrop-blur: 0px;
+}
+
 .lb {
   border: 0;
   padding: 0;
@@ -30,15 +38,27 @@
   height: 100dvh;
   max-width: none;
   max-height: none;
-  background: var(--lb-bg);
+  /* backdrop (default): dialog transparente; el oscurecido va en ::backdrop */
+  background: transparent;
   color: var(--lb-fg);
   font-family: var(--is-font-family, system-ui, sans-serif);
   overflow: hidden;
   box-shadow: none;
 }
 
+:host([variant="solid"]) .lb {
+  background: var(--lb-bg);
+}
+
 .lb::backdrop {
   background: var(--lb-backdrop);
+  -webkit-backdrop-filter: blur(var(--lb-backdrop-blur));
+  backdrop-filter: blur(var(--lb-backdrop-blur));
+}
+
+:host([variant="solid"]) .lb::backdrop {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .lb-bar {

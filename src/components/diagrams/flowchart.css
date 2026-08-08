@@ -87,6 +87,38 @@
   stroke-width: 2.2;
 }
 
+/* animation="flow": trazo dashed brand detrás de la arista continua.
+   Los dash se desplazan para sugerir sentido del flujo. */
+.flow-edge__flow {
+  stroke: var(--is-color-brand, #e03131);
+  stroke-opacity: 0.4;
+  stroke-dasharray: 7 11;
+  stroke-dashoffset: 0;
+  pointer-events: none;
+}
+
+@supports (stroke: color-mix(in oklab, red 40%, transparent)) {
+  .flow-edge__flow {
+    stroke: color-mix(in oklab, var(--is-color-brand, #e03131) 42%, transparent);
+    stroke-opacity: 1;
+  }
+}
+
+:host([animation~="flow"]) .flow-edge__flow {
+  animation: is-flowchart-flow-dash 0.85s linear infinite;
+}
+
+@keyframes is-flowchart-flow-dash {
+  to { stroke-dashoffset: -18; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([animation~="flow"]) .flow-edge__flow {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
 .flow-legend__item {
   transition: opacity 0.18s ease;
 }
