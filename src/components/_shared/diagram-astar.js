@@ -151,6 +151,48 @@ function collapseColinear(points) {
   return out;
 }
 
+
+/** ¿El tramo recto entre dos celdas (mismo eje) está libre de obstáculos? */
+function segmentClear(g, a, b) {
+  if (a.col !== b.col && a.row !== b.row) return false;
+  const stepCol = Math.sign(b.col - a.col);
+  const stepRow = Math.sign(b.row - a.row);
+  let { col, row } = a;
+  const steps = Math.abs(b.col - a.col) + Math.abs(b.row - a.row);
+  for (let i = 0; i <= steps; i += 1) {
+    if (cellCost(g, col, row) === COST_BLOCKED) return false;
+    col += stepCol;
+    row += stepRow;
+  }
+  return true;
+}
+
+/**
+ * Quita el escalón de más: cuando la polyline hace A→B→C→D y la L directa
+ * A→(esquina)→D está libre, ese zigzag intermedio es un giro que no aporta.
+ * El A* lo produce porque el coste de giro es local y no ve que dos vueltas
+ * seguidas se pueden fundir en una.
+ */
+function collapseJogs(points, g) {
+  if (points.length < 4) return points;
+  let out = points;
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (let i = 0; i + 3 < out.length; i += 1) {
+      const [a, , , d] = [out[i], out[i + 1], out[i + 2], out[i + 3]];
+      for (const corner of [{ col: a.col, row: d.row }, { col: d.col, row: a.row }]) {
+        if (!segmentClear(g, a, corner) || !segmentClear(g, corner, d)) continue;
+        out = collapseColinear([...out.slice(0, i + 1), corner, ...out.slice(i + 3)]);
+        changed = true;
+        break;
+      }
+      if (changed) break;
+    }
+  }
+  return out;
+}
+
 /**
  * Si `cell` cae en una celda bloqueada, busca la más cercana libre (anillos
  * crecientes, Chebyshev). Sin esto, un waypoint o ancla que quede sobre un
@@ -195,7 +237,7 @@ export function routeOrthogonal(start, end, g, opts = {}) {
     const seg = astarSegment(stops[i], stops[i + 1], g, turnCost);
     for (let j = 1; j < seg.length; j++) full.push(seg[j]);
   }
-  const out = collapseColinear(full);
+  const out = collapseJogs(collapseColinear(full), g);
   if (opts.forbiddenRegions && Array.isArray(opts.forbiddenRegions)) {
     for (const r of opts.forbiddenRegions) {
       if (r.id && g.forbidden?.has(r.id)) g.forbidden.delete(r.id);
@@ -300,17 +342,35 @@ export function gridPathToSvg(points, grid = TK_DIAGRAM_GRID) {
   return d;
 }
 
-function arrowFromPolyline(points, grid = TK_DIAGRAM_GRID) {
-  if (points.length < 2) {
-    const p = gridToPixel(points[0] ?? { col: 0, row: 0 }, grid);
-    return { arrowTipX: p.x, arrowTipY: p.y, arrowDir: 1 };
-  }
-  const a = gridToPixel(points[points.length - 2], grid);
-  const b = gridToPixel(points[points.length - 1], grid);
+/**
+ * Une dos puntos con 1–2 segmentos estrictamente ortogonales (nunca diagonal).
+ * Si ya comparten eje → un solo L. Si no → L intermedio alineando primero el
+ * eje que el `prefer` indique ('h' = horizontal primero, 'v' = vertical primero,
+ * 'auto' = el eje de mayor delta primero para menos “escalón” visual).
+ * @returns {string[]} comandos `L x,y` (sin M).
+ */
+function orthoConnect(from, to, prefer = 'auto') {
+  const ax = from.x;
+  const ay = from.y;
+  const bx = to.x;
+  const by = to.y;
+  if (ax === bx || ay === by) return [`L${bx},${by}`];
+  let horizFirst = prefer === 'h';
+  if (prefer === 'v') horizFirst = false;
+  if (prefer === 'auto') horizFirst = Math.abs(bx - ax) >= Math.abs(by - ay);
+  if (horizFirst) return [`L${bx},${ay}`, `L${bx},${by}`];
+  return [`L${ax},${by}`, `L${bx},${by}`];
+}
+
+/**
+ * Si el empalme queda a menos de media celda del ancla en un eje, lo pega
+ * al ancla: evita el micro-giro de 1 celda (class/flowchart “casi recto”).
+ */
+function snapSeamToAnchor(anchor, seam, grid) {
+  const tol = Math.max(1, grid / 2);
   return {
-    arrowTipX: b.x,
-    arrowTipY: b.y,
-    arrowDir: (b.x >= a.x ? 1 : -1),
+    x: Math.abs(seam.x - anchor.x) <= tol ? anchor.x : seam.x,
+    y: Math.abs(seam.y - anchor.y) <= tol ? anchor.y : seam.y,
   };
 }
 
@@ -322,36 +382,84 @@ function arrowFromPolyline(points, grid = TK_DIAGRAM_GRID) {
  *
  * Estructura del path:
  *   M a                → arranca en el borde del nodo origen
- *   L outPx(aGrid)     → sale recto hasta el primer punto del A*
+ *   (ortho) outPx      → sale ortogonal hasta el primer punto del A*
  *   <polyline A*>      → ortogonal entre aGrid y bGrid
- *   L intoPx(bGrid)    → recto hasta antes del borde del nodo destino
- *   L b                → entra al destino
+ *   (ortho) intoPx→b   → entra ortogonal al destino
  */
 export function buildOrthogonalPath(a, b, aGrid, bGrid, points, grid = TK_DIAGRAM_GRID) {
   // outPx/intoPx se derivan de `points` (el arranque/fin REAL de la polyline),
   // no de aGrid/bGrid: si el ancla pedida caía en una celda bloqueada,
   // `routeOrthogonal` la desplaza a la celda libre más cercana (ver
   // `nearestOpenCell`) y ese es el punto con el que de verdad hay que
-  // empalmar — usar aGrid/bGrid aquí dejaría una costura en diagonal de una
-  // celda entre el tramo de salida y el resto de la ruta.
-  const outPx = points.length ? gridToPixel(points[0], grid) : { x: aGrid.col * grid, y: aGrid.row * grid };
-  const intoPx = points.length ? gridToPixel(points[points.length - 1], grid) : { x: bGrid.col * grid, y: bGrid.row * grid };
-  const segs = [`M${a.x},${a.y}`, `L${outPx.x},${outPx.y}`];
-  const star = gridPathToSvg(points, grid);
-  if (star) segs.push(star.slice(1));
-  segs.push(`L${intoPx.x},${intoPx.y}`);
-  segs.push(`L${b.x},${b.y}`);
-  return segs.join(' ');
+  // empalmar — usar aGrid/bGrid aquí dejaría una costura en diagonal.
+  let outPx = points.length ? gridToPixel(points[0], grid) : { x: aGrid.col * grid, y: aGrid.row * grid };
+  let intoPx = points.length ? gridToPixel(points[points.length - 1], grid) : { x: bGrid.col * grid, y: bGrid.row * grid };
+  outPx = snapSeamToAnchor(a, outPx, grid);
+  intoPx = snapSeamToAnchor(b, intoPx, grid);
+
+  // Preferencia de empalme: al salir, seguir primero el eje donde ya hubo
+  // movimiento desde el ancla (stub); al entrar, alinear primero al destino.
+  const exitPrefer = (Math.abs(outPx.x - a.x) >= Math.abs(outPx.y - a.y)) ? 'h' : 'v';
+  const enterPrefer = (Math.abs(b.x - intoPx.x) >= Math.abs(b.y - intoPx.y)) ? 'h' : 'v';
+
+  const segs = [`M${a.x},${a.y}`, ...orthoConnect(a, outPx, exitPrefer)];
+  // Polyline A*: saltar el primer punto (ya empalmado) para no duplicar.
+  if (points.length > 1) {
+    for (let i = 1; i < points.length; i += 1) {
+      const p = gridToPixel(points[i], grid);
+      // Último punto de A* se reemplaza por intoPx snappeado
+      if (i === points.length - 1) {
+        segs.push(...orthoConnect(
+          i === 1 ? outPx : gridToPixel(points[i - 1], grid),
+          intoPx,
+          'auto',
+        ));
+      } else {
+        segs.push(`L${p.x},${p.y}`);
+      }
+    }
+  } else {
+    segs.push(...orthoConnect(outPx, intoPx, 'auto'));
+  }
+  segs.push(...orthoConnect(intoPx, b, enterPrefer));
+  return collapseSvgOrtho(segs.join(' '));
+}
+
+/** Colapsa vértices colineales en un path SVG M/L ortogonal. */
+function collapseSvgOrtho(d) {
+  const tokens = d.match(/[ML]-?\d+(?:\.\d+)?,-?\d+(?:\.\d+)?/g);
+  if (!tokens || tokens.length < 2) return d;
+  const pts = tokens.map((t) => {
+    const [x, y] = t.slice(1).split(',').map(Number);
+    return { cmd: t[0], x, y };
+  });
+  const out = [pts[0]];
+  for (let i = 1; i < pts.length - 1; i += 1) {
+    const a = out[out.length - 1];
+    const b = pts[i];
+    const c = pts[i + 1];
+    const colinear = (a.x === b.x && b.x === c.x) || (a.y === b.y && b.y === c.y);
+    if (!colinear) out.push(b);
+  }
+  out.push(pts[pts.length - 1]);
+  return out.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
 }
 
 /** Mensaje horizontal entre dos lifelines (A* sobre la rejilla de costos). */
 export function routeSequenceHorizontal(fromX, toX, y, g) {
   const ySn = snapDiagramGrid(y);
   const dir = toX >= fromX ? 1 : -1;
-  const start = pixelToGrid(snapDiagramGrid(fromX + dir * 8), ySn, g.grid);
-  const end = pixelToGrid(snapDiagramGrid(toX - dir * 12), ySn, g.grid);
+  // Anclas reales: el dot de origen (fromX) y la lifeline de destino (toX)
+  // exacta — `buildOrthogonalPath` empalma el tramo A* con estos píxeles
+  // reales, así la punta SIEMPRE toca la lifeline en vez de quedarse corta
+  // por el redondeo a rejilla.
+  const a = { x: fromX + dir * 8, y: ySn };
+  const b = { x: toX, y: ySn };
+  const start = pixelToGrid(snapDiagramGrid(a.x), ySn, g.grid);
+  const end = pixelToGrid(snapDiagramGrid(b.x - dir * 12), ySn, g.grid);
   const points = routeOrthogonal(start, end, g);
-  return { path: gridPathToSvg(points, g.grid), ...arrowFromPolyline(points, g.grid), points };
+  const path = buildOrthogonalPath(a, b, start, end, points, g.grid);
+  return { path, arrowTipX: b.x, arrowTipY: b.y, arrowDir: dir, points };
 }
 
 /**
@@ -382,7 +490,8 @@ export function routeSequenceSelf(
   // ella: a la derecha si el bucle va a la izquierda (side=-1) y viceversa.
   return {
     path: gridPathToSvg(points, g.grid),
-    arrowTipX: gx + side * g.grid,
+    // Punta pegada a la lifeline (no a una celda de rejilla a un lado).
+    arrowTipX: gx,
     arrowTipY: gy - hCells * g.grid,
     arrowDir: (side === 1 ? -1 : 1),
     points,
