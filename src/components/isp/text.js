@@ -1,23 +1,26 @@
 import { ElementBase } from '../_shared/element-base.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
+import {
+  classifyColor,
+  normalizeMix,
+  syncIspColor,
+} from '../_shared/isp-color.js';
 
 /**
  * <is-text> — port de ISP `typography/Text.svelte`.
  *
- * Dos responsabilidades, ambas heredadas del original:
- *   1. `color` semántico. ISP lo resolvía con `colorVar()` a `var(--is-<color>)`;
- *      aquí se mapea a los tokens del kit desde el CSS (`:host([color=…])`).
- *   2. Line-clamp. ISP usaba `--mx-lns: attr(data-clamp-lines type(<integer>))`,
- *      que hoy solo soporta Chrome. Aquí el JS escribe `--mx-lns` directamente,
- *      así funciona en todos los navegadores.
- *
  * Atributos
- *   color   brand | neutral | info | success | warning | danger  (sin default:
- *           si no se pasa, hereda el color del contexto)
- *   lines   number >= 1 → recorta a N líneas con ellipsis. 0 / ausente = sin clamp.
+ *   color      brand | neutral | info | success | warning | danger
+ *              | current | <color CSS>
+ *              Ausente → hereda el color del contexto.
+ *   mix        % → mezcla hacia `mix-with` (atenuar / aclarar / oscurecer).
+ *   mix-with   text | transparent | white | black | current | <color CSS>
+ *              (default: texto del tema)
+ *   lines      number >= 1 → clamp con ellipsis. 0 / ausente = sin clamp.
  *
- * No hay atributo `size`: la escala sale del `font-size` heredado.
+ * `current` fuerza `currentColor` (útil junto a `mix` sobre el color heredado).
+ * Strings no semánticos se aplican como color CSS/HTML natural.
  */
 
 (() => {
@@ -26,8 +29,9 @@ import { defineElement } from '../_shared/define.js';
 
   class IsText extends ElementBase {
     static TEMPLATE = TEMPLATE;
-    static get observedAttributes() { return ['color', 'lines']; }
-    // El attributeChangedCallback lo aporta ElementBase; aquí va el hook.
+    static get observedAttributes() {
+      return ['color', 'mix', 'mix-with', 'lines'];
+    }
 
     constructor() {
       super();
@@ -35,12 +39,30 @@ import { defineElement } from '../_shared/define.js';
       adoptCss(this.shadowRoot, import.meta.url);
     }
 
-    onConnected() { this.#syncLines(); }
+    onConnected() {
+      this.#syncColor();
+      this.#syncLines();
+    }
 
-    onAttributeChanged(name) { if (name === 'lines') this.#syncLines(); }
+    onAttributeChanged(name) {
+      if (name === 'lines') this.#syncLines();
+      else if (name === 'color' || name === 'mix' || name === 'mix-with') this.#syncColor();
+    }
+
+    #syncColor() {
+      syncIspColor(this, {
+        colorVar: '--text-clr',
+        mixVar: '--text-mix',
+        mixWithVar: '--text-mix-with',
+      });
+      // Sin attr mix → no forzar --text-mix (el CSS solo mezcla si hay [mix]).
+      if (!normalizeMix(this.getAttribute('mix'))) {
+        this.style.removeProperty('--text-mix');
+      }
+      this.toggleAttribute('data-has-mix', !!normalizeMix(this.getAttribute('mix')));
+    }
 
     #syncLines() {
-      // ISP: fit = max(0, floor(Number(lines))) y el clamp solo si lines >= 1.
       const raw = this.getAttribute('lines');
       const n = raw == null || raw === '' ? 0 : Math.max(0, Math.floor(Number(raw)));
       if (Number.isFinite(n) && n >= 1) this.style.setProperty('--mx-lns', String(n));
@@ -48,13 +70,33 @@ import { defineElement } from '../_shared/define.js';
     }
 
     get color() { return this.getAttribute('color'); }
-    set color(v) { v ? this.setAttribute('color', v) : this.removeAttribute('color'); }
+    set color(v) {
+      if (v == null || v === '') this.removeAttribute('color');
+      else this.setAttribute('color', String(v));
+    }
+
+    get mix() { return this.getAttribute('mix'); }
+    set mix(v) {
+      if (v == null || v === '') this.removeAttribute('mix');
+      else this.setAttribute('mix', String(v));
+    }
+
+    get mixWith() { return this.getAttribute('mix-with'); }
+    set mixWith(v) {
+      if (v == null || v === '') this.removeAttribute('mix-with');
+      else this.setAttribute('mix-with', String(v));
+    }
 
     get lines() { return Number(this.getAttribute('lines') ?? 0) || 0; }
     set lines(v) {
       const n = Math.max(0, Math.floor(Number(v) || 0));
       if (n >= 1) this.setAttribute('lines', String(n));
       else this.removeAttribute('lines');
+    }
+
+    /** @returns {'none'|'semantic'|'current'|'css'} */
+    get colorKind() {
+      return classifyColor(this.color).kind;
     }
   }
 

@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./modal-verificacion.js
 style: ./modal-verificacion.css
-preview: ../../previews/isp/is-modal-verificacion.html
+preview: ../../previews/isp/is-modal-verificacion.json
 ---
 # `<is-modal-verificacion>`
 
@@ -28,6 +28,11 @@ el trap dejaría el diálogo sin tabulación. Sigue el mismo patrón que
 
 Verificaciones asíncronas de un registro antes de una acción (guardar, cerrar,
 aprobar), donde el backend devuelve una lista de mensajes por severidad.
+
+## Cuándo no usarlo
+
+Para confirmar un borrado usar `<is-confirm-delete>`; para un aviso sin
+verificación asíncrona usar `<is-dialog>` o `<is-toast>`.
 
 ## Importación
 
@@ -55,7 +60,9 @@ import './modal-verificacion.js';
 
 ## API
 
-### Propiedades JS (no atributos: llevan funciones/objetos)
+### Atributos y propiedades
+
+#### Propiedades JS (no atributos: llevan funciones/objetos)
 
 | Propiedad | Notas |
 | --- | --- |
@@ -63,7 +70,7 @@ import './modal-verificacion.js';
 | `record` | Registro a verificar (objeto plano). |
 | `onError` | `(msg: string) => void`, se llama si `actVerificar` lanza. Default `console.error`. |
 
-### Atributos observados
+#### Atributos observados
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
@@ -72,15 +79,21 @@ import './modal-verificacion.js';
 | `entity` | string | `Controller.entrie`; el título usa su minúscula. |
 | `icon` | string | Icono del título. Default `mdi:check`. |
 | `close-label` | string | Texto del botón de cierre. Default `Cerrar`. |
+| `light-dismiss` | boolean | **Opt-in**: cerrar al hacer click en el backdrop. Antes cerraba siempre. |
 
-### Propiedades de solo lectura
+#### Propiedades de solo lectura
+
 
 | Propiedad | Notas |
 | --- | --- |
 | `mensajes` | Copia del array de mensajes actual. |
 | `qerrores` / `qwarning` / `qinfos` | Contadores DERIVADOS de `mensajes` (no se leen del backend, como en ispgen). |
 
-### Métodos
+### Slots
+
+No expone: todo el contenido del diálogo se construye en el shadow root.
+
+### Métodos y propiedades públicas
 
 | Método | Uso |
 | --- | --- |
@@ -94,7 +107,17 @@ import './modal-verificacion.js';
 | --- | --- | --- | --- |
 | `is-verificacion` | `{ mensajes, qinfos, qwarning, qerrores }` | sí | sí |
 | `is-verificacion-error` | `{ message, error }` | sí | sí |
-| `is-cancel` | `{}` — cierre del diálogo | sí | sí |
+| `is-cancel` | `{}` — cierre pedido por el usuario | sí | sí |
+| `is-show` / `is-after-show` / `is-hide` / `is-after-hide` | ciclo estándar del `<is-dialog>` interno | sí | sí |
+
+`is-hide` es **cancelable**: es la vía para vetar un cierre. `is-cancel` se
+conserva como evento semántico ADICIONAL y acompaña a `is-hide` cuando el
+cierre lo pide el usuario (Escape, backdrop, botón Cerrar); un `hide()`
+programático no emite ninguno de los dos.
+
+### Custom states
+
+No expone custom states.
 
 ### CSS parts
 
@@ -114,6 +137,11 @@ import './modal-verificacion.js';
 | `--is-modal-verificacion-accent` | Color del título. |
 | `--is-z-modal` | Capa de apilado. |
 
+### Integración con formularios
+
+No declara integración form-associated: es un diálogo de verificación, no un
+campo.
+
 ## Exports adicionales del módulo
 
 - `getMsgColor(itd)` — mapea severidad (`1..4`, o `'info'|'warning'|'error'|'success'`,
@@ -128,6 +156,11 @@ esperar la promesa de `actVerificar`, exactamente como el original. Si
 `actVerificar` lanza, se llama a `onError` y se emite `is-verificacion-error`
 en vez de `is-verificacion`.
 
+El componente NO implementa su propio ciclo de modal: compone un `<is-dialog>`
+dentro de su shadow root y cuelga el contenido como light DOM suyo. De ahí
+salen gratis el focus-trap (que antes no existía), el `Escape`, el restore de
+foco y las animaciones.
+
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
@@ -135,14 +168,39 @@ en vez de `is-verificacion`.
 - [`../media/icon.js`](../media/icon.js)
 - [`./text.js`](./text.js)
 - [`./heading.js`](./heading.js)
+- [`../layout/dialog.js`](../layout/dialog.js) — provee todo el ciclo del modal.
 
 Tags del módulo: `<is-modal-verificacion>`.
 
 ## Accesibilidad
 
-`role="dialog"` + `aria-modal` + `aria-labelledby` al título; el foco entra en
-el botón de cierre al abrir y vuelve al elemento previamente enfocado al
-cerrar. `Escape` cierra el diálogo.
+`role="dialog"` + `aria-modal` (los pone el `<is-dialog>` interno); el foco
+entra en el primer elemento focuseable y vuelve al elemento previamente
+enfocado al cerrar. `Escape` cierra el diálogo. Hay **focus-trap** con `Tab` /
+`Shift+Tab`, que antes faltaba.
+
+Los `<is-button>` llevan `tabindex="0"` a propósito: usan `delegatesFocus`, así
+que sin él no matchean el selector de focuseables del trap.
+
+## Ejemplo avanzado
+
+```html
+<is-modal-verificacion id="modal" entity="comprobante"></is-modal-verificacion>
+
+<script type="module">
+  const modal = document.getElementById('modal');
+  modal.controller = {
+    entrie: 'comprobante',
+    async actVerificar(record) {
+      const r = await fetch(`/api/comprobante/${record.id}/verificar`);
+      return r.json();          // { mensajes: [{ itdmensaje, mensaje }] }
+    },
+  };
+  modal.record = { id: 7 };
+  modal.addEventListener('is-after-hide', () => console.log('mensajes vaciados'));
+  modal.show();
+</script>
+```
 
 ## Errores comunes
 
@@ -160,4 +218,4 @@ cerrar. `Escape` cierra el diálogo.
 
 - [JavaScript](./modal-verificacion.js)
 - [CSS](./modal-verificacion.css)
-- [Preview](../../previews/isp/is-modal-verificacion.html)
+- [Preview](../../previews/isp/is-modal-verificacion.json)
