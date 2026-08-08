@@ -1,0 +1,1 @@
+.is-popover-panel{background:var(--is-bg-elev);border:1px solid var(--is-border);border-radius:var(--is-popover-radius, var(--is-radius, 8px));box-shadow:var(--is-popover-shadow, var(--is-shadow, 0 18px 44px rgba(0, 0, 0, .26)))}
