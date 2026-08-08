@@ -5,12 +5,15 @@ import '../feedback/tooltip.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import { setCustomState } from '../_shared/form-associated.js';
+import { copyText } from '../_shared/dom-utils.js';
+import { upgradeProperties } from '../_shared/upgrade-properties.js';
 
 /**
  * <is-copy-button> — Web Component (vanilla).
  *
  * Copia texto al portapapeles con feedback visual (éxito / error).
- * Requiere contexto seguro (HTTPS o localhost) para clipboard.writeText().
+ * Usa clipboard.writeText() y cae a execCommand fuera de contexto seguro.
  *
  * Compone <is-tooltip> (posicionamiento, flip, flecha) e <is-icon>. El tooltip
  * va en `trigger="none"`: quién lo abre y con qué texto lo decide el estado de
@@ -130,7 +133,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       this.#mounted = true;
       if (!this.hasAttribute('tooltip')) this.setAttribute('tooltip', 'full');
       if (!this.hasAttribute('tooltip-placement')) this.setAttribute('tooltip-placement', 'top');
-      this.#upgradeProps();
+      upgradeProperties(this, IsCopyButton.observedAttributes);
       this.#onSlotChange();
       this.#syncDisabled();
       this.#syncTipPlacement();
@@ -159,11 +162,11 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
     get copyLabel() { return this.getAttribute('copy-label') ?? ''; }
-    set copyLabel(v) { v ? this.setAttribute('copy-label', v) : this.removeAttribute('copy-label'); }
+    set copyLabel(v) { setStringAttr(this, 'copy-label', v); }
     get successLabel() { return this.getAttribute('success-label') ?? ''; }
-    set successLabel(v) { v ? this.setAttribute('success-label', v) : this.removeAttribute('success-label'); }
+    set successLabel(v) { setStringAttr(this, 'success-label', v); }
     get errorLabel() { return this.getAttribute('error-label') ?? ''; }
-    set errorLabel(v) { v ? this.setAttribute('error-label', v) : this.removeAttribute('error-label'); }
+    set errorLabel(v) { setStringAttr(this, 'error-label', v); }
     get feedbackDuration() {
       // Ojo: Number(null) es 0, así que hay que descartar el atributo ausente
       // antes de convertir o el feedback dura 0 ms.
@@ -190,17 +193,6 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       return this.copyLabel || LABELS.copy;
     }
 
-    #upgradeProps() {
-      for (const a of IsCopyButton.observedAttributes) {
-        const camel = a.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-        if (Object.prototype.hasOwnProperty.call(this, camel)) {
-          const v = this[camel];
-          delete this[camel];
-          this[camel] = v;
-        }
-      }
-    }
-
     #onSlotChange() {
       const slot = this.shadowRoot.querySelector('slot:not([name])');
       const els = slot.assignedElements({ flatten: true }).filter((el) => el instanceof HTMLElement);
@@ -209,19 +201,11 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       this.#syncLabel();
     }
 
-    /** CustomStateSet no tiene .toggle() — solo add/delete. */
-    #toggleState(name, on) {
-      const s = this.#internals?.states;
-      if (!s) return;
-      if (on) s.add(name);
-      else s.delete(name);
-    }
-
     #syncDisabled() {
       // is-button expone `disabled` como atributo, no como propiedad del
       // elemento (no es un <button> nativo).
       this.#btn.toggleAttribute('disabled', this.disabled);
-      this.#toggleState('disabled', this.disabled);
+      setCustomState(this.#internals, 'disabled', this.disabled);
     }
 
     #syncTipPlacement() {
@@ -241,8 +225,8 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
     }
 
     #setState(success, error) {
-      this.#toggleState('success', success);
-      this.#toggleState('error', error);
+      setCustomState(this.#internals, 'success', success);
+      setCustomState(this.#internals, 'error', error);
       this.toggleAttribute('data-state-success', success);
       this.toggleAttribute('data-state-error', error);
     }
@@ -306,11 +290,12 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
         return;
       }
 
-      try {
-        await navigator.clipboard.writeText(String(valueToCopy));
+      // copyText ya trae el fallback a execCommand para contextos sin
+      // Clipboard API (http, iframes sin permiso).
+      if (await copyText(valueToCopy)) {
         emit(this, 'is-copy', { value: String(valueToCopy) });
         await this.#showStatus('success');
-      } catch {
+      } else {
         emit(this, 'is-error');
         await this.#showStatus('error');
       }

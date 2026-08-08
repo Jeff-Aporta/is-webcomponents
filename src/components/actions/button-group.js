@@ -2,6 +2,7 @@ import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { setStringAttr } from '../_shared/reflect.js';
+import { upgradeProperties } from '../_shared/upgrade-properties.js';
 
 /**
  * <is-button-group> — Web Component (vanilla, zero dependencies).
@@ -45,11 +46,6 @@ import { setStringAttr } from '../_shared/reflect.js';
     'pill', 'stretch', 'allow-empty', 'disabled',
   ];
 
-  const PROPS = [
-    'label', 'orientation', 'variant', 'select', 'value', 'values',
-    'pill', 'stretch', 'allowEmpty', 'disabled',
-  ];
-
   const APPEARANCES = ['joined', 'segmented', 'separated'];
   const MODES = ['none', 'single', 'multiple'];
 
@@ -74,7 +70,12 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     connectedCallback() {
       this.#mounted = true;
-      this.#upgradeProps();
+      upgradeProperties(this, OBSERVED);
+      if (Object.prototype.hasOwnProperty.call(this, 'values')) {
+        const v = this.values;
+        delete this.values;
+        if (v != null) this.values = v;
+      }
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'joined');
       this.#selected = this.#readSelection();
@@ -208,13 +209,13 @@ import { setStringAttr } from '../_shared/reflect.js';
       });
     }
 
-    #applySelection(next, emit) {
+    #applySelection(next, shouldEmit) {
       const before = this.#selected.join(',');
       this.#selected = next;
       if (this.select === 'none') this.removeAttribute('value');
       else this.setAttribute('value', next.join(','));
       this.#syncSelection();
-      if (emit && next.join(',') !== before) {
+      if (shouldEmit && next.join(',') !== before) {
         emit(this, 'is-change', { value: this.value, values: this.values });
       }
     }
@@ -267,16 +268,6 @@ import { setStringAttr } from '../_shared/reflect.js';
       e.preventDefault();
       target.focus?.();
     };
-
-    #upgradeProps() {
-      for (const p of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
-    }
   }
 
   defineElement('is-button-group', IsButtonGroup, 'IsButtonGroup');

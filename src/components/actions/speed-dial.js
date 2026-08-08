@@ -3,6 +3,7 @@ import './check-icon-button.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { clampTo } from '../_shared/misc-utils.js';
+import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
  * <is-speed-dial> — FAB que despliega un abanico de acciones.
@@ -92,15 +93,10 @@ import { clampTo } from '../_shared/misc-utils.js';
       adoptCss(this.shadowRoot, import.meta.url);
       this.#trigger = this.shadowRoot.querySelector('.trigger');
       // is-check-icon-button ya gestiona el estado visual y emite is-change.
-      this.#trigger.addEventListener('is-change', (e) => {
+      this.#trigger?.addEventListener('is-change', (e) => {
         if (e.detail.checked === this.isOpen) return; // ya sincronizado
         e.detail.checked ? this.open() : this.close();
       });
-      this.#onDocPointerDown = (e) => {
-        if (!this.isOpen) return;
-        if (e.composedPath().includes(this)) return;
-        this.close();
-      };
     }
 
     connectedCallback() {
@@ -109,10 +105,7 @@ import { clampTo } from '../_shared/misc-utils.js';
       this.#syncIcon();
       this.#mountActions();
       if (this.hasAttribute('open')) this.open();
-      document.addEventListener('pointerdown', this.#onDocPointerDown, true);
       this.#onWinResize = () => { if (this.#isRadial && this.isOpen) this.#layoutRadial(); };
-      window.addEventListener('resize', this.#onWinResize);
-      window.addEventListener('scroll', this.#onWinResize, true);
       // El primer layout corre antes de que iconos y fuentes fijen el tamano
       // real de las acciones, asi que el abanico salia descolocado hasta que
       // algo (un scroll) lo recalculaba. Se re-mide cuando el tamano cambia.
@@ -128,9 +121,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     disconnectedCallback() {
       this.#mounted = false;
       this.#mo?.disconnect();
-      document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
-      window.removeEventListener('resize', this.#onWinResize);
-      window.removeEventListener('scroll', this.#onWinResize, true);
+      this.#dismiss.detach();
       window.removeEventListener('load', this.#onWinResize);
       this.#ro?.disconnect();
       this.#ro = null;
@@ -153,35 +144,44 @@ import { clampTo } from '../_shared/misc-utils.js';
     get isOpen() { return this.hasAttribute('open'); }
 
     open() {
+      if (!this.#trigger || !this.shadowRoot) return;
       this.#trigger.checked = true;
       this.#trigger.setAttribute('aria-expanded', 'true');
-      this.shadowRoot.querySelector('.root').hidden = false;
+      const root = this.shadowRoot.querySelector('.root');
+      if (root) root.hidden = false;
       this.setAttribute('open', '');
       this.#mountActions();
       if (this.#isRadial) {
         // Tras el reflow: los items ya tienen tamano medible.
         requestAnimationFrame(() => this.#layoutRadial());
       }
+      this.#dismiss.attach();
       emit(this, 'is-toggle', { open: true });
     }
 
     close() {
+      if (!this.#trigger || !this.shadowRoot) return;
       this.#trigger.checked = false;
       this.#trigger.setAttribute('aria-expanded', 'false');
-      this.shadowRoot.querySelector('.root').hidden = true;
+      const root = this.shadowRoot.querySelector('.root');
+      if (root) root.hidden = true;
       this.removeAttribute('open');
+      this.#dismiss.detach();
       emit(this, 'is-toggle', { open: false });
     }
 
     toggle() { this.isOpen ? this.close() : this.open(); }
 
     #syncDirection() {
+      const root = this.shadowRoot?.querySelector('.root');
+      if (!root) return;
       const d = this.getAttribute('direction') || 'up';
       const dir = DIRECTIONS.includes(d) ? d : 'up';
-      this.shadowRoot.querySelector('.root').dataset.direction = dir;
+      root.dataset.direction = dir;
     }
 
     #syncIcon() {
+      if (!this.#trigger) return;
       const icon = this.#prop('icon');
       const openIcon = this.#prop('open-icon');
       if (icon) this.#trigger.setAttribute('icon', icon);
@@ -191,6 +191,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
 
     #mountActions() {
+      if (!this.shadowRoot) return;
       const slot = this.shadowRoot.querySelector('slot');
       const actions = slot?.assignedElements?.() ?? [];
       const observer = new MutationObserver(() => this.#toggleActionBindings());
@@ -205,6 +206,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
 
     #toggleActionBindings() {
+      if (!this.shadowRoot) return;
       const actions = [...(this.shadowRoot.querySelector('slot')?.assignedElements?.() ?? [])];
       for (const a of actions) {
         if (a.__bound) continue;
@@ -340,6 +342,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
 
     #layoutRadial() {
+      if (!this.shadowRoot || !this.#trigger) return;
       const actions = [...(this.shadowRoot.querySelector('slot')?.assignedElements?.() ?? [])];
       if (!actions.length) return;
 
@@ -494,12 +497,15 @@ import { clampTo } from '../_shared/misc-utils.js';
       this.#clearPolar(actions);
       this.dataset.packed = mode;
 
+      const rootEl = this.shadowRoot?.querySelector('.root');
+      if (!rootEl || !this.#trigger) return;
+
       const bounds = this.#boundaryRect();
       const triggerRect = this.#trigger.getBoundingClientRect();
       // Origen ESTABLE: .root, que no se mueve. Medir contra .actions daba un
       // delta de 0 en la segunda pasada (es el elemento que este mismo
       // calculo reposiciona) y la caja se quedaba pegada al trigger.
-      const box = this.shadowRoot.querySelector('.root').getBoundingClientRect();
+      const box = rootEl.getBoundingClientRect();
       const area = this.#packArea(bounds, triggerRect, 12);
       if (!area) { this.style.removeProperty('--sd-pack-left'); return; }
 
@@ -526,6 +532,7 @@ import { clampTo } from '../_shared/misc-utils.js';
 
     /** Limpia las coordenadas polares al salir de radial. */
     #clearRadial() {
+      if (!this.shadowRoot) return;
       for (const a of this.shadowRoot.querySelector('slot')?.assignedElements?.() ?? []) {
         a.style.removeProperty('--sd-x');
         a.style.removeProperty('--sd-y');
@@ -535,8 +542,18 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
 
     #trigger;
-    #onDocPointerDown;
     #onWinResize;
+
+    /**
+     * Ciclo "abierto" compartido con is-dropdown / is-context-menu
+     * (_shared/popup-dismiss.js): pointerdown fuera, Escape y recolocado
+     * del abanico radial en scroll/resize, todo solo mientras esta abierto.
+     */
+    #dismiss = createPopupDismiss(this, {
+      onEscape: () => this.close(),
+      onOutside: () => this.close(),
+      onReposition: () => { if (this.#isRadial) this.#layoutRadial(); },
+    });
     #ro = null;
   }
 
@@ -557,7 +574,8 @@ import { clampTo } from '../_shared/misc-utils.js';
       adoptCss(this.shadowRoot, import.meta.url);
     }
     connectedCallback() {
-      const link = this.shadowRoot.querySelector('a');
+      const link = this.shadowRoot?.querySelector('a');
+      if (!link) return;
       const href = this.getAttribute('href');
       if (href) link.setAttribute('href', href);
       const label = this.getAttribute('label');
@@ -571,7 +589,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
     attributeChangedCallback(name, oldVal, newVal) {
       if (oldVal === newVal) return;
-      const link = this.shadowRoot.querySelector('a');
+      const link = this.shadowRoot?.querySelector('a');
       if (!link) return;
       if (name === 'href') link.setAttribute('href', newVal || '#');
       if (name === 'label') link.setAttribute('aria-label', newVal || '');

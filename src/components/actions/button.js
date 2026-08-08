@@ -3,6 +3,8 @@ import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
+import { applyToneRamp, isCssColorValue, syncPresentStyleAttrs } from '../_shared/style-attrs.js';
+import { setCustomState } from '../_shared/form-associated.js';
 
 /**
  * <is-button> — Web Component (vanilla).
@@ -134,7 +136,40 @@ import { ElementBase } from '../_shared/element-base.js';
 
   class IsButton extends ElementBase {
     static formAssociated = true;
-    static get observedAttributes() { return [...OBSERVED, ...ARIA_FORWARD]; }
+
+    /**
+     * Personalización sin `<style>` aparte (ver `_shared/style-attrs.js`).
+     * `color` es doble: un nombre de familia (`brand`, `danger`, …) sigue
+     * siendo la variante semántica de siempre; un color CSS literal
+     * (`#ae3ec9`, `var(--x)`, `oklch(…)`) pinta el tono base directamente.
+     */
+    static styleAttrs = {
+      radius: '--is-button-border-radius',
+      'border-width': '--is-button-border-width',
+      'font-weight': '--is-button-font-weight',
+      'font-family': '--is-button-font-family',
+      'transition-duration': '--is-button-transition-duration',
+      // `color` literal no se mapea aquí: deriva la rampa entera en
+      // `#syncToneColor()`. Estos tres afinan roles concretos por encima
+      // de esa rampa (o del tono semántico, si `color` es una familia).
+      'color-hover': { prop: '--_tone-stronger', onlyColorValues: true },
+      'color-active': { prop: '--_tone-strongest', onlyColorValues: true },
+      'color-text': { prop: '--_tone-on', onlyColorValues: true },
+    };
+
+    static get observedAttributes() {
+      return [...OBSERVED, ...ARIA_FORWARD, ...IsButton.styleAttrNames];
+    }
+
+    /** `color` es doble: familia semántica (la resuelve el CSS) o color CSS
+     *  literal (la rampa la deriva aquí). */
+    #syncToneColor() {
+      const raw = this.getAttribute('color');
+      applyToneRamp(this, isCssColorValue(raw) ? raw : null);
+      // La rampa pisa los mismos roles que `color-hover` / `color-active` /
+      // `color-text`: re-aplicarlos deja mandando al ajuste fino explícito.
+      syncPresentStyleAttrs(this, IsButton.styleAttrs);
+    }
 
     #internals = null;
     #initialAttrs = new Map();
@@ -169,8 +204,11 @@ import { ElementBase } from '../_shared/element-base.js';
     }
 
     onConnected() {
-      this.#upgradeProperties();
+      // El upgrade de propiedades (el.variant = 'x' antes de connect) ya lo
+      // hace ElementBase.connectedCallback() vía upgradeProperties(); no hay
+      // que repetirlo aquí.
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
+      this.#syncToneColor();
       this.#syncTag();       // <button> o <a> según href
       this.#syncAttrs();     // propaga atributos al inner
       this.#syncDisabled();
@@ -192,6 +230,8 @@ import { ElementBase } from '../_shared/element-base.js';
         this.#updateLoadingState();
       } else if (name === "hue") {
         this.#syncHue();
+      } else if (name === "color") {
+        this.#syncToneColor();
       } else if (name === "shape") {
         // Red de seguridad: un valor fuera de la enum vuelve al default.
         if (newVal && !VALID_SHAPE.includes(newVal)) this.setAttribute("shape", "round");
@@ -309,17 +349,6 @@ import { ElementBase } from '../_shared/element-base.js';
 
     // ---- privados --------------------------------------------------
 
-    #upgradeProperties() {
-      // si alguien hizo `button.variant = "brand"` antes de connectedCallback
-      for (const a of OBSERVED) {
-        if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
-          if (v != null) this.setAttribute(a, v);
-        }
-      }
-    }
-
     #syncTag() {
       const wantLink = this.hasAttribute("href");
       const currentTag = this.#btn.tagName.toLowerCase();
@@ -379,19 +408,11 @@ import { ElementBase } from '../_shared/element-base.js';
       }
     }
 
-    /** CustomStateSet no tiene .toggle() — solo add/delete. */
-    #setState(name, on) {
-      const s = this.#internals?.states;
-      if (!s) return;
-      if (on) s.add(name);
-      else s.delete(name);
-    }
-
     #syncDisabled(formDisabled) {
       const disabled = !!formDisabled || this.hasAttribute("disabled");
       this.#btn.toggleAttribute("disabled", disabled);
       this.#btn.setAttribute("aria-disabled", String(disabled));
-      this.#setState("disabled", disabled);
+      setCustomState(this.#internals, "disabled", disabled);
 
       // Sacar del orden de tabulación mientras esté deshabilitado. Va sobre
       // el nodo interno, que es el que está en el recorrido: cuando hay
@@ -421,16 +442,16 @@ import { ElementBase } from '../_shared/element-base.js';
         }
       }
       const isIconOnly = elems === 1 && !hasText;
-      this.#setState("icon-button", isIconOnly);
+      setCustomState(this.#internals, "icon-button", isIconOnly);
     }
 
     #updateLinkState() {
-      this.#setState("link", this.hasAttribute("href"));
+      setCustomState(this.#internals, "link", this.hasAttribute("href"));
     }
 
     #updateLoadingState() {
       const loading = this.hasAttribute("loading");
-      this.#setState("loading", loading);
+      setCustomState(this.#internals, "loading", loading);
       this.toggleAttribute("data-state-loading", loading);
       this.#btn.setAttribute("aria-busy", String(loading));
       if (loading) {
