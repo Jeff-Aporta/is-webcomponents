@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveFlowchartSpec, computeFlowchartLayout, shapePath } from './flowchart-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
@@ -6,12 +7,13 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
+import { svgEl } from '../_shared/svg-chart-engine.js';
+import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 import {
   loadOverrides,
   saveOverrides,
   emitLayoutChange,
-  applyOverrides,
   attachNodeDrag,
   snap as snapToGrid,
   openInlineEditor,
@@ -29,136 +31,107 @@ import { emit } from '../_shared/emit.js';
  *     </script>
  *   </is-flowchart>
  *
- * Atributos: color (inline | viewer), open-on-click
- * Propiedades: payload, spec, layout, turtle, hiddenGroups
+ * Atributos: color (inline | viewer), open-on-click,
+ *   mode (read | edit), persist (none | session | local — leído por
+ *   `_shared/diagram-edit.js` al cargar/guardar overrides), storage-key,
+ *   animation (tokens separados por espacio; default off).
+ *   Token actual: `flow` — arista dashed brand animada detrás de la continua.
+ * Propiedades: payload, spec, layout, turtle, hiddenGroups, animation
  * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
+/** Tokens de `animation` conocidos (otros se ignoran para no romper). */
+const VALID_ANIMATION = new Set(['flow']);
+
+function parseAnimationTokens(raw) {
+  const out = [];
+  const seen = new Set();
+  for (const t of String(raw || '').trim().split(/\s+/)) {
+    if (!t || !VALID_ANIMATION.has(t) || seen.has(t)) continue;
+    seen.add(t);
+    out.push(t);
   }
-  return n;
+  return out;
 }
 
-class IsFlowchart extends HTMLElement {
-  static get observedAttributes() { return ['color', 'mode', 'persist', 'storage-key']; }
+class IsFlowchart extends DiagramElementBase {
+  static get observedAttributes() {
+    return [...DiagramElementBase.observedAttributes, 'mode', 'persist', 'storage-key', 'animation'];
+  }
 
-  #wrap; #svg; #tooltipEl;
-  #payload = null;
-  #spec = null;
-  #layout = null;
   #theme = null;
   #turtle = null;
-  #mounted = false;
-  #mo = null; #themeObs = null;
-  #renderQueued = false;
   #hiddenGroups = new Set();
   #nodeNodes = new Map();
   #edgeNodes = new Map();
   #hoverId = null;
-  #ownLightbox = null;
   #overrides = null;
   #dragDetach = null;
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.innerHTML = /* html */ `
-      <div part="base" class="wrap">
-        <svg part="canvas" class="flow-svg" xmlns="${SVG_NS}" role="img"></svg>
-        <div part="tooltip" class="flow-tooltip dg-tooltip is-rich" hidden></div>
-        <div class="slot-hidden"><slot></slot></div>
-      </div>
-    `;
-    adoptCss(shadow, import.meta.url);
-    this.#wrap = shadow.querySelector('.wrap');
-    this.#svg = shadow.querySelector('.flow-svg');
-    this.#tooltipEl = shadow.querySelector('.flow-tooltip');
+    this.initDiagramShadow('flow-svg', 'flow-tooltip');
+    adoptCss(this.shadowRoot, import.meta.url);
   }
 
-  connectedCallback() {
-    this.#mounted = true;
+  onDiagramConnected() {
     this.#overrides = loadOverrides(this, this.getAttribute('storage-key')) || { nodes: {}, edges: {} };
-    this.#readJsonSlot();
-    this.#mo = new MutationObserver(() => this.#readJsonSlot());
-    this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
-    this.#themeObs = new MutationObserver(() => this.#queueRender());
-    this.#themeObs.observe(document.documentElement, {
-      attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette'],
-    });
-    this.#wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.addEventListener('click', this.#onClick);
-    this.#queueRender();
+    this.wrap.addEventListener('mousemove', this.#onMouseMove);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
+    this.wrap.addEventListener('click', this.#onClick);
   }
+
+  onDiagramDisconnected() {
+    this.#turtle?.destroy();
+    this.#turtle = null;
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
+    this.wrap.removeEventListener('click', this.#onClick);
+  }
+
+  onPayloadChanged() { this.#hiddenGroups = new Set(); }
 
   get mode() { return this.getAttribute('mode') || 'read'; }
   set mode(v) { this.setAttribute('mode', v); }
   get overrides() { return this.#overrides; }
-  set overrides(v) { this.#overrides = v || { nodes: {}, edges: {} }; this.#queueRender(); }
+  set overrides(v) { this.#overrides = v || { nodes: {}, edges: {} }; this.queueRender(); }
 
-  disconnectedCallback() {
-    this.#mounted = false;
-    this.#mo?.disconnect();
-    this.#themeObs?.disconnect();
-    this.#turtle?.destroy();
-    this.#turtle = null;
-    this.#wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.removeEventListener('click', this.#onClick);
+  /**
+   * Tokens de animación activos (`flow`, …). Ausente / vacío = sin animación.
+   * Espacio-separados para sumar efectos futuros: `animation="flow pulse"`.
+   */
+  get animation() {
+    return parseAnimationTokens(this.getAttribute('animation')).join(' ');
+  }
+  set animation(v) {
+    const next = parseAnimationTokens(v).join(' ');
+    if (next) this.setAttribute('animation', next);
+    else this.removeAttribute('animation');
   }
 
-  attributeChangedCallback(name, oldVal, newVal) {
-    if (!this.#mounted || oldVal === newVal) return;
-    this.#queueRender();
+  /** @param {string} token */
+  hasAnimation(token) {
+    return parseAnimationTokens(this.getAttribute('animation')).includes(token);
   }
 
-  get isViewer() { return this.getAttribute('color') === 'viewer'; }
-  get payload() { return this.#payload; }
-  set payload(v) { this.#payload = v; this.#hiddenGroups = new Set(); this.#queueRender(); }
-  get spec() { return this.#spec; }
-  get layout() { return this.#layout; }
   get turtle() { return this.#turtle; }
   get hiddenGroups() { return this.#hiddenGroups; }
   set hiddenGroups(v) {
     this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
-    this.#queueRender();
+    this.queueRender();
   }
 
-  async updateComplete() { await this.#queueRender(); }
-
-  #readJsonSlot() {
-    const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
-    if (!script) return;
-    try {
-      this.#payload = JSON.parse(script.textContent.trim());
-      this.#queueRender();
-    } catch { /* JSON inválido: conserva el último válido */ }
-  }
-
-  #queueRender() {
-    if (this.#renderQueued) return this.#renderQueued;
-    this.#renderQueued = (async () => {
-      await Promise.resolve();
-      try { this.#render(); } finally { this.#renderQueued = false; }
-    })();
-    return this.#renderQueued;
-  }
-
-  #render() {
-    if (!this.#mounted) return;
-    const spec = resolveFlowchartSpec(this.#payload ?? {});
-    this.#spec = spec;
+  renderDiagram() {
+    const spec = resolveFlowchartSpec(this.payload ?? {});
+    this.spec = spec;
     if (!spec) {
-      this.#svg.innerHTML = '';
-      this.#wrap.dataset.empty = '';
+      this.svg.innerHTML = '';
+      this.wrap.dataset.empty = '';
       return;
     }
-    delete this.#wrap.dataset.empty;
+    delete this.wrap.dataset.empty;
 
     // Ocultar un grupo quita sus nodos y las aristas que los tocan.
     const hidden = this.#hiddenGroups;
@@ -169,31 +142,31 @@ class IsFlowchart extends HTMLElement {
       visible = { ...spec, nodes, edges: spec.edges.filter((e) => keep.has(e.from) && keep.has(e.to)) };
     }
     if (!visible.nodes.length) {
-      this.#svg.innerHTML = '';
-      this.#wrap.dataset.empty = '';
+      this.svg.innerHTML = '';
+      this.wrap.dataset.empty = '';
       return;
     }
 
-    const dark = !document.documentElement.classList.contains('theme-light');
+    const dark = this.isDarkTheme;
     const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
-    this.#wrap.dataset.theme = dark ? 'dark' : 'light';
+    this.syncThemeAttr();
 
     const layout = computeFlowchartLayout(visible, this.#overrides);
-    this.#layout = layout;
+    this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.#wrap.classList.toggle('is-viewer', this.isViewer);
-    this.#wrap.classList.toggle('is-editable', this.mode === 'edit');
+    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('is-editable', this.mode === 'edit');
     if (this.mode === 'edit') this.#installEditInteractions();
   }
 
   #buildSvg(layout, theme) {
     const { width: W, height: H } = layout;
-    this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    this.#svg.setAttribute('aria-label', layout.title || 'Diagrama de flujo');
-    this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
-    this.#svg.innerHTML = '';
+    this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    this.svg.setAttribute('aria-label', layout.title || 'Diagrama de flujo');
+    this.svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
+    this.svg.innerHTML = '';
     this.#nodeNodes.clear();
     this.#edgeNodes.clear();
     this.#hoverId = null;
@@ -204,7 +177,7 @@ class IsFlowchart extends HTMLElement {
         'font-size': '13', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
       });
       t.textContent = layout.title;
-      this.#svg.appendChild(t);
+      this.svg.appendChild(t);
     }
     if (layout.subtitle) {
       const t = svgEl('text', {
@@ -212,7 +185,7 @@ class IsFlowchart extends HTMLElement {
         'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
       });
       t.textContent = layout.subtitle;
-      this.#svg.appendChild(t);
+      this.svg.appendChild(t);
     }
 
     if (layout.groups?.length) this.#buildLegend(layout, theme);
@@ -220,7 +193,7 @@ class IsFlowchart extends HTMLElement {
     this.#buildNodes(layout, theme);
 
     const turtleGroup = svgEl('g');
-    this.#svg.appendChild(turtleGroup);
+    this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
     this.#turtle = new SequenceTurtle(turtleGroup);
     // La tortuga recorre las aristas en orden; reutiliza el motor del secuencia.
@@ -235,7 +208,7 @@ class IsFlowchart extends HTMLElement {
       onState: (state) => emit(this, 'is-turtle-state', state),
     });
 
-    emit(this, 'is-render', { layout, svg: this.#svg });
+    emit(this, 'is-render', { layout, svg: this.svg });
   }
 
   #buildLegend(layout, theme) {
@@ -264,10 +237,11 @@ class IsFlowchart extends HTMLElement {
       item.appendChild(label);
       g.appendChild(item);
     });
-    this.#svg.appendChild(g);
+    this.svg.appendChild(g);
   }
 
   #buildEdges(layout, theme) {
+    const flowAnim = this.hasAnimation('flow');
     for (const e of layout.edges) {
       const color = (e.hue != null && tkHueToHex(e.hue)) || theme.accent;
       const g = svgEl('g', { class: 'flow-edge' });
@@ -275,6 +249,19 @@ class IsFlowchart extends HTMLElement {
 
       const dash = e.kind === 'dashed' ? '6 4' : null;
       const wdt = e.kind === 'thick' ? 2.4 : 1.3;
+
+      // Capa de flujo (opcional): dashed brand detrás de la arista continua.
+      if (flowAnim && e.kind !== 'dashed') {
+        g.appendChild(svgEl('path', {
+          d: e.path,
+          fill: 'none',
+          'stroke-width': Math.max(wdt + 1.4, 2.6),
+          'stroke-linejoin': 'round',
+          'stroke-linecap': 'round',
+          class: 'flow-edge__flow',
+        }));
+      }
+
       const path = svgEl('path', {
         d: e.path, fill: 'none', stroke: color, 'stroke-width': wdt,
         'stroke-dasharray': dash, 'stroke-linejoin': 'round', 'stroke-linecap': 'round',
@@ -282,12 +269,15 @@ class IsFlowchart extends HTMLElement {
       });
       g.appendChild(path);
 
-      // Punta: triángulo rotado hacia el lado por el que entra al nodo.
-      g.appendChild(svgEl('polygon', {
-        points: '0,0 -8,-4 -8,4',
-        fill: color,
-        transform: `translate(${e.arrowTipX},${e.arrowTipY}) rotate(${e.arrowAngle})`,
-        class: 'flow-edge__head',
+      // Punta orientada por el último tramo REAL del path (no por el lado de
+      // entrada planificado, que el router puede no respetar).
+      g.appendChild(svgArrowHead({
+        d: e.path,
+        tip: { x: e.arrowTipX, y: e.arrowTipY },
+        color,
+        len: 8,
+        halfWidth: 4,
+        className: 'flow-edge__head',
       }));
 
       if (e.label) {
@@ -305,7 +295,7 @@ class IsFlowchart extends HTMLElement {
         g.appendChild(t);
       }
 
-      this.#svg.appendChild(g);
+      this.svg.appendChild(g);
       this.#edgeNodes.set(e.id, { e, g, path });
     }
   }
@@ -364,7 +354,7 @@ class IsFlowchart extends HTMLElement {
         g.appendChild(t);
       }
 
-      this.#svg.appendChild(g);
+      this.svg.appendChild(g);
       this.#nodeNodes.set(n.id, { n, g, box });
     }
   }
@@ -393,10 +383,10 @@ class IsFlowchart extends HTMLElement {
     // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
-      bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
+      bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
-    if (!ev.defaultPrevented) this.#openOwnViewer();
+    if (!ev.defaultPrevented) this.openOwnViewer('flowchart');
   };
 
   /* ── edit mode: drag de nodos + editor inline ── */
@@ -427,7 +417,7 @@ class IsFlowchart extends HTMLElement {
           this.#overrides.nodes[cur.id].y = cur.y;
           saveOverrides(this, this.getAttribute('storage-key'), this.#overrides);
           emitLayoutChange(this, { nodeId: cur.id, x: cur.x, y: cur.y, overrides: this.#overrides });
-          this.#queueRender();
+          this.queueRender();
         },
       );
       this.#dragDetach = detach;
@@ -445,23 +435,9 @@ class IsFlowchart extends HTMLElement {
         if (Number.isFinite(hue)) this.#overrides.nodes[node.id].hue = hue;
         saveOverrides(this, this.getAttribute('storage-key'), this.#overrides);
         emitLayoutChange(this, { nodeId: node.id, overrides: this.#overrides });
-        this.#queueRender();
+        this.queueRender();
       },
     });
-  }
-
-  async #openOwnViewer() {
-    await import('./diagram-lightbox.js');
-    let lb = this.#ownLightbox;
-    if (!lb || !lb.isConnected) {
-      lb = document.createElement('is-diagram-lightbox');
-      lb.setAttribute('kind', 'flowchart');
-      lb.addEventListener('is-close', () => lb.remove());
-      document.body.appendChild(lb);
-      this.#ownLightbox = lb;
-    }
-    lb.payload = this.#payload;
-    lb.open = true;
   }
 
   #onMouseMove = (e) => {
@@ -470,10 +446,10 @@ class IsFlowchart extends HTMLElement {
     const id = g?.dataset.nodeId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
-      const rect = this.#wrap.getBoundingClientRect();
+      const rect = this.wrap.getBoundingClientRect();
       const left = Math.max(8, Math.min(rect.width - 300, e.clientX - rect.left + 16));
-      this.#tooltipEl.style.left = `${left}px`;
-      this.#tooltipEl.style.top = `${e.clientY - rect.top + 22}px`;
+      this.tooltipEl.style.left = `${left}px`;
+      this.tooltipEl.style.top = `${e.clientY - rect.top + 22}px`;
     }
   };
 
@@ -502,21 +478,21 @@ class IsFlowchart extends HTMLElement {
     this.#turtle?.setPaused(!!id);
 
     if (!entry) {
-      this.#tooltipEl.hidden = true;
+      this.tooltipEl.hidden = true;
       return;
     }
     const n = entry.n;
-    this.#tooltipEl.hidden = false;
-    this.#tooltipEl.innerHTML = '';
+    this.tooltipEl.hidden = false;
+    this.tooltipEl.innerHTML = '';
     const title = document.createElement('span');
     title.className = 'dg-tooltip__title';
     title.innerHTML = inlineMdWeb(n.label);
-    this.#tooltipEl.appendChild(title);
+    this.tooltipEl.appendChild(title);
     if (n.description) {
       const desc = document.createElement('div');
       desc.className = 'dg-tooltip__desc';
       desc.innerHTML = inlineMdWeb(n.description);
-      this.#tooltipEl.appendChild(desc);
+      this.tooltipEl.appendChild(desc);
     }
   }
 }
