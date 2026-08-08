@@ -79,7 +79,6 @@ import { TONE } from '../_shared/tone.js';
     #content;
     #root;
     #defaultIcon;
-    #upgradeProps = ['open', 'summary', 'name', 'disabled', 'variant', 'icon-placement'];
 
     constructor() {
       super();
@@ -98,7 +97,6 @@ import { TONE } from '../_shared/tone.js';
     }
 
     onConnected() {
-      this.#upgradeProperties();
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'outlined');
       if (!this.hasAttribute('icon-placement')) this.setAttribute('icon-placement', 'end');
 
@@ -191,19 +189,6 @@ import { TONE } from '../_shared/tone.js';
     toggle() { return this.#setOpen(!this.open, /* fromUser */ false); }
 
     // ---- private ----
-
-    #upgradeProperties() {
-      for (const a of this.#upgradeProps) {
-        if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
-          if (v != null && v !== false) {
-            if (v === true) this.setAttribute(a, '');
-            else this.setAttribute(a, v);
-          }
-        }
-      }
-    }
 
     #onClick(e) {
       if (this.disabled) return;

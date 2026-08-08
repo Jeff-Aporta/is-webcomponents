@@ -24,6 +24,8 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-tooltip>` | [tooltip.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/tooltip.md) | Tooltip |
 | `<is-cdn-snippet>` | [cdn-snippet.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/cdn-snippet.md) | CDN Snippet |
 | `<is-popconfirm>` | [popconfirm.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/popconfirm.md) | Popconfirm |
+| `<is-confirm-modal>` | [confirm-modal.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/confirm-modal.md) | Confirmación en modal con backdrop |
+| `<is-palette-selector>` | [palette-selector.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/palette-selector.md) | Selector de paleta de color |
 
 ## Composición y relaciones
 

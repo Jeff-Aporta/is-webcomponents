@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./tooltip.js
 style: ./tooltip.css
-preview: ../../previews/feedback/is-tooltip.html
+preview: ../../previews/feedback/is-tooltip.json
 ---
 # `<is-tooltip>`
 
@@ -184,4 +184,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 - [JavaScript](./tooltip.js)
 - [CSS](./tooltip.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-tooltip.html)
+- [Preview](../../previews/feedback/is-tooltip.json)
