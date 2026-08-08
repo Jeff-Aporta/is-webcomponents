@@ -5,29 +5,47 @@
   "title": "<is-relative-time>",
   "titleHtml": true,
   "storageKey": "docs-is-relative-time",
+  "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "<is-relative-time>",
-      "lede": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code>.\r\n          Alias de <code class=\"code\">&lt;is-format type=\"relative\"&gt;</code>.",
+          "lede": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).\n          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.\n          Alias de <code class=\"code\">&lt;is-format type=\"relative\"&gt;</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">// sync refresca cada ~30s</span>\r\n          <p style=\"margin:0\">Actualizado <is-relative-time id=\"live\" sync></is-relative-time></p>"
+          "html": "<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>\n          <p style=\"margin:0;font-size:1.15rem\">Actualizado <is-relative-time id=\"live\" sync></is-relative-time></p>"
         }
       ]
     },
     {
       "id": "formats",
       "title": "Formatos",
+      "lede": "Mismos offsets relativos; cambia solo <code class=\"code\">format</code> / <code class=\"code\">numeric</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">long</code>\r\n              <is-relative-time class=\"format-grid__value\" date=\"2026-07-29T12:00:00\" format=\"long\"></is-relative-time>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">short</code>\r\n              <is-relative-time class=\"format-grid__value\" date=\"2026-07-31T12:00:00\" format=\"short\"></is-relative-time>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">narrow</code>\r\n              <is-relative-time class=\"format-grid__value\" date=\"2026-08-05T12:00:00\" format=\"narrow\"></is-relative-time>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">numeric=always</code>\r\n              <is-relative-time class=\"format-grid__value\" date=\"2026-08-03T12:00:00\" numeric=\"always\"></is-relative-time>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">long</code>\n              <is-relative-time class=\"format-grid__value\" data-rt-offset=\"-86400\" format=\"long\"></is-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">short</code>\n              <is-relative-time class=\"format-grid__value\" data-rt-offset=\"-3600\" format=\"short\"></is-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">narrow</code>\n              <is-relative-time class=\"format-grid__value\" data-rt-offset=\"-120\" format=\"narrow\"></is-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">numeric=always</code>\n              <is-relative-time class=\"format-grid__value\" data-rt-offset=\"0\" numeric=\"always\"></is-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">en 3 días</code>\n              <is-relative-time class=\"format-grid__value\" data-rt-offset=\"259200\" format=\"long\"></is-relative-time>\n            </div>\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-relative-time date=\"2026-07-30T10:00:00\" format=\"short\" sync></is-relative-time>",
+          "code": "<is-relative-time date=\"2026-07-30T10:00:00\" format=\"short\" sync></is-relative-time>\n<is-relative-time date=\"…\" locale=\"en\" numeric=\"always\"></is-relative-time>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "locales",
+      "title": "Locales (Intl nativo)",
+      "lede": "Se filtran con <code class=\"code\">Intl.RelativeTimeFormat.supportedLocalesOf()</code>.\n          Cada tarjeta muestra el mismo instante relativo en ese locale. Como mínimo\n          verás <strong>es</strong> y <strong>en</strong> en cualquier motor moderno.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>\n          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">\n            Probar locale\n            <input id=\"localeProbe\" type=\"text\" value=\"es-CO\" list=\"localeHints\"\n              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--is-border);border-radius:var(--is-radius-sm);background:var(--is-control-bg);color:var(--is-text);max-width:10rem\" />\n            <datalist id=\"localeHints\"></datalist>\n            <span id=\"localeProbeOut\"></span>\n          </label>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-relative-time date=\"…\" locale=\"es\"></is-relative-time>\n<is-relative-time date=\"…\" locale=\"en\"></is-relative-time>\n<is-relative-time date=\"…\" locale=\"ja\" format=\"short\"></is-relative-time>",
           "lang": "html"
         }
       ]
@@ -38,11 +56,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<p style=\"margin:0\">\r\n            <is-format type=\"relative\" date=\"2026-07-30T10:00:00\" style=\"short\"></is-format>\r\n          </p>"
+          "html": "<p style=\"margin:0\">\n            <is-format type=\"relative\" data-rt-offset=\"-7200\" style=\"short\"></is-format>\n          </p>"
         },
         {
           "kind": "code",
-          "code": "<is-format type=\"relative\" date=\"2026-07-30T10:00:00\" style=\"short\"></is-format>",
+          "code": "<is-format type=\"relative\" date=\"…\" style=\"short\" locale=\"en\"></is-format>",
           "lang": "html"
         }
       ]
@@ -53,31 +71,13 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": [
-            "Atributo",
-            "Default"
-          ],
+          "columns": ["Atributo", "Default"],
           "rows": [
-            [
-              "<code>date</code>",
-              "ISO o timestamp"
-            ],
-            [
-              "<code>format</code>",
-              "long · short · narrow"
-            ],
-            [
-              "<code>numeric</code>",
-              "auto · always"
-            ],
-            [
-              "<code>locale</code>",
-              "lang del documento"
-            ],
-            [
-              "<code>sync</code>",
-              "actualiza periódicamente"
-            ]
+            ["<code>date</code>", "ISO o timestamp"],
+            ["<code>format</code>", "long · short · narrow"],
+            ["<code>numeric</code>", "auto · always"],
+            ["<code>locale</code>", "<code>html lang</code> (sistema) → <code>es</code>"],
+            ["<code>sync</code>", "actualiza cada ~30s"]
           ]
         }
       ]

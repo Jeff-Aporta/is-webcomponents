@@ -10,11 +10,11 @@
     {
       "id": "intro",
       "title": "<is-format-date>",
-      "lede": "Formatea fechas con <code class=\"code\">Intl.DateTimeFormat</code>. Cualquier locale BCP&nbsp;47 vía <code class=\"code\">locale</code> (o <code class=\"code\">lang</code> del documento).",
+      "lede": "Formatea fechas con <code class=\"code\">Intl.DateTimeFormat</code>. En esta página todos los ejemplos usan la <strong>hora actual</strong> y se actualizan cada 1&nbsp;s.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">lang del documento</span>\r\n          <p style=\"margin:0\"><is-format-date date=\"2026-07-30T17:30:00\"></is-format-date></p>"
+          "html": "<span class=\"demo-label\">ahora · en vivo</span>\n          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">\n            <is-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format-date>\n          </p>"
         }
       ]
     },
@@ -22,61 +22,65 @@
       "id": "inputs",
       "title": "Entradas de <code>date</code>",
       "titleHtml": true,
+      "lede": "El behavior escribe el instante actual en <code class=\"code\">date</code> (ISO). Aquí se ve el mismo now con distintos atributos de formato.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">ISO datetime</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30T17:30:00\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">YYYY-MM-DD</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">timestamp ms</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"1753896600000\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format-date>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">fecha + hora + s</code>\n              <is-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">solo día</code>\n              <is-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">timestamp (attr)</code>\n              <is-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></is-format-date>\n            </div>\n          </div>"
         }
       ]
     },
     {
       "id": "locales",
       "title": "Locales (Intl nativo)",
-      "lede": "Se filtran con <code class=\"code\">Intl.DateTimeFormat.supportedLocalesOf()</code> y se etiquetan con <code class=\"code\">Intl.DisplayNames</code>. Cualquier BCP&nbsp;47 soportado por el motor funciona en <code class=\"code\">locale</code>.",
+      "lede": "Se filtran con <code class=\"code\">Intl.DateTimeFormat.supportedLocalesOf()</code>. Cada tarjeta muestra el <strong>ahora</strong> en ese locale (con segundos).",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\r\n          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>\r\n          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem\">\r\n            Probar locale\r\n            <input id=\"localeProbe\" type=\"text\" value=\"es-MX\" list=\"localeHints\"\r\n              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--is-border);border-radius:var(--is-radius-sm);background:var(--is-control-bg);color:var(--is-text);max-width:10rem\" />\r\n            <datalist id=\"localeHints\"></datalist>\r\n            <span id=\"localeProbeOut\"></span>\r\n          </label>"
+          "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>\n          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">\n            Probar locale\n            <input id=\"localeProbe\" type=\"text\" value=\"es-MX\" list=\"localeHints\"\n              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--is-border);border-radius:var(--is-radius-sm);background:var(--is-control-bg);color:var(--is-text);max-width:10rem\" />\n            <datalist id=\"localeHints\"></datalist>\n            <span id=\"localeProbeOut\"></span>\n          </label>"
         },
         {
           "kind": "code",
-          "code": "const asked = ['es','en','fr','de','ja','zh-CN','ar','pt-BR'];\nconst ok = Intl.DateTimeFormat.supportedLocalesOf(asked);\n// → p.ej. [\"es\",\"en\",\"fr\",\"de\",\"ja\",\"zh-CN\",\"ar\",\"pt-BR\"]\n\n<is-format-date locale=\"ja\" date=\"2026-07-30\" weekday=\"long\" month=\"long\" day=\"numeric\" year=\"numeric\"></is-format-date>",
-          "lang": "javascript"
+          "code": "<is-format-date\n  locale=\"ja\"\n  weekday=\"long\" month=\"long\" day=\"numeric\" year=\"numeric\"\n  hour=\"numeric\" minute=\"numeric\" second=\"numeric\"\n></is-format-date>\n<!-- en el preview, date se reescribe cada 1s con Date.now() -->",
+          "lang": "html"
         }
       ]
     },
     {
       "id": "parts",
       "title": "Partes de fecha",
+      "lede": "Mismo instante actual; cada fila muestra un subconjunto de campos Intl.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">weekday long</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30\" weekday=\"long\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">month short</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30\" month=\"short\" day=\"numeric\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">month narrow · 2-digit</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30\" month=\"narrow\" day=\"numeric\" year=\"2-digit\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">era · long</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30\" era=\"short\" year=\"numeric\" month=\"long\" day=\"numeric\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">year 2-digit</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30\" year=\"2-digit\" month=\"numeric\" day=\"numeric\"></is-format-date>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">weekday long</code>\n              <is-format-date class=\"format-grid__value\" weekday=\"long\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">month short</code>\n              <is-format-date class=\"format-grid__value\" month=\"short\" day=\"numeric\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">month narrow · 2-digit</code>\n              <is-format-date class=\"format-grid__value\" month=\"narrow\" day=\"numeric\" year=\"2-digit\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">era · short</code>\n              <is-format-date class=\"format-grid__value\" era=\"short\" year=\"numeric\" month=\"long\" day=\"numeric\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">year 2-digit</code>\n              <is-format-date class=\"format-grid__value\" year=\"2-digit\" month=\"numeric\" day=\"numeric\"></is-format-date>\n            </div>\n          </div>"
         }
       ]
     },
     {
       "id": "time",
-      "title": "Hora · hour-format",
+      "title": "Hora · hour-format (en vivo)",
+      "lede": "Segundos visibles: el valor cambia cada segundo.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">24h</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30T17:30:45\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">12h</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30T17:30:45\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">auto</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30T17:30:00\" hour=\"numeric\" minute=\"numeric\" hour-format=\"auto\"></is-format-date>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">24h</code>\n              <is-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">12h</code>\n              <is-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">auto</code>\n              <is-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"auto\"></is-format-date>\n            </div>\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-format-date date=\"2026-07-30T17:30:00\" hour=\"numeric\" minute=\"numeric\" hour-format=\"24\"></is-format-date>\n<is-format-date date=\"2026-07-30T17:30:00\" hour=\"numeric\" minute=\"numeric\" hour-format=\"12\"></is-format-date>",
+          "code": "<is-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n<is-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></is-format-date>",
           "lang": "html"
         }
       ]
     },
     {
       "id": "timezone",
-      "title": "Zona horaria",
+      "title": "Zona horaria (en vivo)",
+      "lede": "Mismo instante UTC actual proyectado en distintas zonas.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">UTC · short</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30T17:30:00Z\" time-zone=\"UTC\" time-zone-name=\"short\"\r\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">America/Bogota · long</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30T17:30:00Z\" time-zone=\"America/Bogota\" time-zone-name=\"long\"\r\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" hour-format=\"24\"></is-format-date>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">Europe/Madrid · shortOffset</code>\r\n              <is-format-date class=\"format-grid__value\" date=\"2026-07-30T17:30:00Z\" time-zone=\"Europe/Madrid\" time-zone-name=\"shortOffset\"\r\n                hour=\"numeric\" minute=\"numeric\" hour-format=\"24\"></is-format-date>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">UTC · short</code>\n              <is-format-date class=\"format-grid__value\" time-zone=\"UTC\" time-zone-name=\"short\"\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">America/Bogota</code>\n              <is-format-date class=\"format-grid__value\" time-zone=\"America/Bogota\" time-zone-name=\"short\"\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Europe/Madrid</code>\n              <is-format-date class=\"format-grid__value\" time-zone=\"Europe/Madrid\" time-zone-name=\"shortOffset\"\n                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Asia/Tokyo</code>\n              <is-format-date class=\"format-grid__value\" time-zone=\"Asia/Tokyo\" time-zone-name=\"short\"\n                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n          </div>"
         }
       ]
     },
@@ -86,35 +90,14 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": [
-            "Atributo",
-            "Default / notas"
-          ],
+          "columns": ["Atributo", "Default / notas"],
           "rows": [
-            [
-              "<code>date</code>",
-              "ISO, <code>YYYY-MM-DD</code> o timestamp ms"
-            ],
-            [
-              "<code>locale</code>",
-              "BCP 47 · fallback <code>document.documentElement.lang</code>"
-            ],
-            [
-              "<code>hour-format</code>",
-              "auto · 12 · 24"
-            ],
-            [
-              "<code>weekday</code> / <code>era</code> / <code>year</code> / <code>month</code> / <code>day</code>",
-              "valores Intl"
-            ],
-            [
-              "<code>hour</code> / <code>minute</code> / <code>second</code>",
-              "valores Intl"
-            ],
-            [
-              "<code>time-zone</code> / <code>time-zone-name</code>",
-              "IANA + estilo de nombre"
-            ]
+            ["<code>date</code>", "ISO, <code>YYYY-MM-DD</code> o timestamp ms — en este preview se reescribe cada 1&nbsp;s"],
+            ["<code>locale</code>", "BCP 47 · fallback <code>document.documentElement.lang</code>"],
+            ["<code>hour-format</code>", "auto · 12 · 24"],
+            ["<code>weekday</code> / <code>era</code> / <code>year</code> / <code>month</code> / <code>day</code>", "valores Intl"],
+            ["<code>hour</code> / <code>minute</code> / <code>second</code>", "valores Intl"],
+            ["<code>time-zone</code> / <code>time-zone-name</code>", "IANA + estilo de nombre"]
           ]
         }
       ]
