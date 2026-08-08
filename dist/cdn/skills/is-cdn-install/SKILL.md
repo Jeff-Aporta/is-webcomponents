@@ -12,19 +12,29 @@ description: >-
 
 ## Regla absoluta
 
-- **No** `npm install` / `npx` del kit (aún no es el canal oficial).
+- **No** `npm install` / `npx` / `yarn` / `pnpm` / `bun` / bundler (`vite`, `webpack`, …) del kit (no hay canal npm; no hace falta build step para consumirlo).
 - **Un solo origen** por página: no mezclar jsDelivr + Pages en el mismo documento (rompe imports relativos).
 - En el `<head>` solo van **tema + paletas + JS**. El CSS de cada `is-*` lo carga el propio componente.
+- Si la app no puede depender de red en runtime: usar copia **local** en vez de CDN puro — ver [`/is-webcomponents:local`](../is-webcomponents/tools/local.md) en la skill del kit.
+
+## Prompt LLM y herramientas
+
+Prompt completo listo para copiar: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md).
+Herramientas tipo slash del kit: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) —
+en particular [`/is-webcomponents:local`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/local.md) para vendorizar el kit y bootear local-first.
 
 ## Skill publicada (léela primero)
 
+Los agentes instalan/siguen mejor skills desde URLs de **repo de GitHub**. Usa raw solo para lectura como texto plano.
+
 | Canal | URL |
 | --- | --- |
-| Raw (texto en navegador) | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md` |
+| GitHub (preferido) | `https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md` |
+| Raw (texto plano) | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md` |
 | CDN jsDelivr | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md` |
 | Pages | `https://jeff-aporta.github.io/is-webcomponents/dist/cdn/skills/is-cdn-install/SKILL.md` |
 
-Skill general del kit (reuso de tags, arquitectura): `src/skills/is-webcomponents/SKILL.md` (misma carpeta en `dist/cdn/skills/`).
+Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src/skills/is-webcomponents/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md) (misma carpeta en `dist/cdn/skills/`).
 
 ## Espejos
 
@@ -127,7 +137,7 @@ No inventar props/eventos que no estén en el MD.
 - [ ] `is-base.min.css` + `palettes.min.css` en `<head>`
 - [ ] JS: tag **o** category **o** `all.min.js`
 - [ ] `data-theme` + `data-palette` en `<html>`
-- [ ] Pin `@<sha>` (o `@main` justificado)
+- [ ] Pin `@<sha>` (o `@main` justificado, o copia local vía `/is-webcomponents:local`)
 - [ ] Skill + MD del módulo leídos antes de componer UI
 
 ## Prohibido
@@ -136,8 +146,11 @@ No inventar props/eventos que no estén en el MD.
 - Meter CSS de componentes del kit en el `<head>`
 - Usar Iconify CDN / Chart.js / MUI cuando el kit cubre el caso
 - Asumir que Pages pinnea el mismo SHA que jsDelivr
+- `npm`/`npx`/`yarn`/`pnpm`/`bun`/`vite`/`webpack` para instalar o servir el kit
 
 ## Más detalle
 
+- Prompt LLM completo: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md)
+- Herramientas `/is-webcomponents:build|migrate|local`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools)
 - Espejos y resolución de ref: [reference.md](reference.md)
 - Skill de reuso de tags: `../is-webcomponents/SKILL.md`
