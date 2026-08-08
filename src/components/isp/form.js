@@ -1,38 +1,36 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../actions/button.js';
+import '../forms/input.js';
+import '../forms/textarea.js';
+import '../forms/select.js';
+import '../forms/option.js';
+import '../forms/checkbox.js';
+import '../forms/switch.js';
+import '../forms/radio.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
+import {
+  applyJsonBody,
+  html2json,
+  hostToJson,
+  json2html,
+} from '../_shared/json-html.js';
+import { getValues, setValues } from './form-json.js';
 
 /**
- * <is-form> — Formulario de ficha con cabecera, contenido y pie automático.
+ * <is-form> — Ficha con header / content / footer (Aceptar · Cancelar).
  *
- * Port de `src/lib/form/Form.svelte` (ISP-SvelteComponents): un `<form>` en
- * columna con header + contenido scrolleable + footer que ya trae los botones
- * Aceptar / Cancelar. Por debajo de 600px de ANCHO PROPIO el pie pasa de fila
- * a columna (container query, no media query: el formulario suele vivir dentro
- * de un panel más estrecho que la ventana).
+ * Definición del cuerpo: siempre JSON compacto (html2json / json2html).
+ * Los valores de controles con `name` van aparte (`getValues` / `setValues`).
  *
- * Atributos
- *   mode           edit (default) | view   — `view` oculta el botón Aceptar,
- *                  igual que el `itdForm === "view"` de ISP.
- *   submit-label   texto del botón de aceptar   (default "Aceptar")
- *   cancel-label   texto del botón de cancelar  (default "Cancelar")
- *   loading        boolean — pone el botón Aceptar en estado de carga
+ *   form.json2html(bodyJson)   // monta light DOM
+ *   form.html2json()           // serializa light DOM
+ *   form.toJSON()              // { mode, …, body, values }
+ *   form.fromJSON(json)        // chrome + body + values
  *
- * Slots
- *   header        cabecera del formulario
- *   content       cuerpo (crece y hace scroll)
- *   pre-buttons   contenido a la izquierda del bloque de botones
- *   post-buttons  contenido bajo el bloque de botones
- *
- * Eventos (bubbles + composed)
- *   is-submit  cancelable — el envío nativo siempre se detiene; el consumidor
- *              decide qué hacer. detail: { form }
- *   is-cancel  detail: { form }
- *
- * CSS Parts: ::part(form) ::part(header) ::part(content) ::part(footer)
- *            ::part(buttons)
+ * Atributos: mode, submit-label, cancel-label, loading
+ * Eventos: is-submit / is-cancel → detail { form, values, json }
  */
 
 (() => {
@@ -58,9 +56,16 @@ import { ElementBase } from '../_shared/element-base.js';
   class IsForm extends ElementBase {
     static get observedAttributes() { return OBSERVED; }
 
+    static json2html = json2html;
+    static html2json = html2json;
+
+    static toJSON(host) { return host?.toJSON?.() ?? null; }
+    static fromJSON(host, json, opts) { return host?.fromJSON?.(json, opts) ?? host; }
+
     #form;
     #submitBtn;
     #cancelBtn;
+    #inlineApplied = false;
 
     constructor() {
       super();
@@ -74,7 +79,6 @@ import { ElementBase } from '../_shared/element-base.js';
     }
 
     onConnected() {
-      this.#upgradeProperties();
       if (!this.hasAttribute('mode')) this.setAttribute('mode', 'edit');
       this.#form.addEventListener('submit', this.#onSubmit);
       this.#submitBtn.addEventListener('click', this.#onSubmitClick);
@@ -82,6 +86,7 @@ import { ElementBase } from '../_shared/element-base.js';
       this.#syncMode();
       this.#syncLabels();
       this.#syncLoading();
+      this.#applyInlineJson();
     }
 
     onDisconnected() {
@@ -90,7 +95,7 @@ import { ElementBase } from '../_shared/element-base.js';
       this.#cancelBtn.removeEventListener('click', this.#onCancel);
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name, _oldVal, newVal) {
       if (name === 'mode') {
         if (newVal && !VALID_MODE.includes(newVal)) { this.setAttribute('mode', 'edit'); return; }
         this.#syncMode();
@@ -100,8 +105,6 @@ import { ElementBase } from '../_shared/element-base.js';
         this.#syncLabels();
       }
     }
-
-    // ---- propiedades ------------------------------------------------------
 
     get mode() {
       const v = this.getAttribute('mode');
@@ -127,42 +130,92 @@ import { ElementBase } from '../_shared/element-base.js';
     get loading() { return this.hasAttribute('loading'); }
     set loading(v) { this.toggleAttribute('loading', !!v); }
 
-    /** `<form>` interno — para checkValidity() o FormData desde fuera. */
     get form() { return this.#form; }
 
-    // ---- API pública ------------------------------------------------------
+    // ---- JSON / HTML ------------------------------------------------------
 
-    /** Lanza el mismo flujo que pulsar Aceptar. */
+    /** Monta el light DOM desde JSON compacto. */
+    json2html(body, opts) {
+      applyJsonBody(this, body, opts);
+      return this;
+    }
+
+    /** Serializa el light DOM a JSON compacto. */
+    html2json(opts) {
+      return hostToJson(this, opts);
+    }
+
+    getValues() { return getValues(this); }
+    setValues(values) { setValues(this, values); return this; }
+
+    /**
+     * Snapshot persistible: chrome + body (HTML↔JSON) + values.
+     * @returns {{ mode: string, submitLabel?: string, cancelLabel?: string, loading: boolean, body: unknown, values: object }}
+     */
+    toJSON() {
+      return {
+        mode: this.mode,
+        submitLabel: this.submitLabel,
+        cancelLabel: this.cancelLabel,
+        loading: this.loading,
+        body: hostToJson(this),
+        values: getValues(this),
+      };
+    }
+
+    /**
+     * @param {object} json
+     * @param {{ replace?: boolean }} [opts]
+     */
+    fromJSON(json, opts) {
+      if (!json || typeof json !== 'object') return this;
+      if (json.mode != null) this.mode = json.mode;
+      if (json.submitLabel != null) this.submitLabel = json.submitLabel;
+      if (json.cancelLabel != null) this.cancelLabel = json.cancelLabel;
+      if (json.loading != null) this.loading = !!json.loading;
+
+      const body = json.body ?? json.html ?? (Array.isArray(json) ? json : null);
+      if (body != null) applyJsonBody(this, body, opts);
+
+      if (json.values && typeof json.values === 'object') {
+        requestAnimationFrame(() => setValues(this, json.values));
+      }
+      return this;
+    }
+
     submit() { this.#form.requestSubmit(); }
-    /** Restablece los controles nativos proyectados dentro del formulario. */
     reset() { this.#form.reset(); }
 
     // ---- privados ---------------------------------------------------------
 
-    #upgradeProperties() {
-      for (const p of ['mode', 'submitLabel', 'cancelLabel', 'loading']) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
+    #applyInlineJson() {
+      if (this.#inlineApplied) return;
+      const script = this.querySelector(':scope > script[type="application/json"]');
+      if (!script) return;
+      this.#inlineApplied = true;
+      try {
+        const json = JSON.parse(script.textContent || 'null');
+        if (json && typeof json === 'object') this.fromJSON(json);
+      } catch {
+        console.warn('<is-form> script JSON inválido');
       }
     }
 
+    #detail() {
+      const values = getValues(this);
+      return { form: this.#form, values, json: this.toJSON() };
+    }
+
     #emit(name) {
-      return emit(this, name, { form: this.#form }, { cancelable: true });
+      return emit(this, name, this.#detail(), { cancelable: true });
     }
 
     #onSubmit = (e) => {
-      // El envío nativo nunca navega: este componente es de UI, el consumidor
-      // decide (fetch, router, etc.) escuchando `is-submit`.
       e.preventDefault();
       if (this.mode === 'view' || this.loading) return;
       this.#emit('is-submit');
     };
 
-    // El <button type="submit"> real vive en el shadow de <is-button>, y los
-    // formularios no cruzan shadow roots: hay que pedir el submit a mano.
     #onSubmitClick = () => {
       if (this.mode === 'view' || this.loading) return;
       this.#form.requestSubmit();
