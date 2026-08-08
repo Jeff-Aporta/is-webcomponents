@@ -1,3 +1,5 @@
+@import url('../_shared/diagram-kit.css');
+
 /* is-org-chart */
 :host {
   display: block;
@@ -5,7 +7,15 @@
   color: var(--is-text);
   width: 100%;
   min-height: 0;
+  position: relative;
+  box-sizing: border-box;
 }
+
+:host([color="viewer"]) {
+  width: 100%;
+  height: 100%;
+}
+
 .root {
   width: 100%;
   height: 100%;
@@ -13,12 +23,31 @@
   overflow: hidden;
   padding: 1rem;
   box-sizing: border-box;
+  position: relative;
+}
+.root.is-viewer {
+  min-height: 0;
+  padding: 0;
 }
 .canvas {
   display: block;
   width: 100%;
   height: 100%;
   min-height: 12rem;
+}
+
+/* El visor es opt-in: sin `open-on-click` un clic en el fondo no hace nada,
+   así que tampoco debe insinuar con el cursor que se puede hacer clic. */
+:host([open-on-click]) .root {
+  cursor: zoom-in;
+}
+:host([open-on-click]) .card {
+  cursor: pointer;
+}
+
+.oc-tooltip {
+  top: 0;
+  left: 0;
 }
 
 .card {
@@ -73,3 +102,13 @@
 .toggle:hover { background: var(--is-accent); color: var(--is-on-accent, #fff); }
 
 .edge { stroke: var(--is-text-soft); stroke-width: 1.25; opacity: .55; }
+
+/* Animación al expandir/plegar: los nodos y aristas persisten entre renders
+   (se reconcilian por id, ver org-chart.js) así que un cambio de `transform`
+   o `d` anima de forma fluida en vez de saltar a la posición nueva. */
+.node {
+  transition: transform 300ms cubic-bezier(.4, 0, .2, 1), opacity 220ms ease;
+}
+.edge {
+  transition: d 280ms cubic-bezier(.4, 0, .2, 1), opacity 220ms ease;
+}
