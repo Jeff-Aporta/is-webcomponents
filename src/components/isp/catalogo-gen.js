@@ -4,10 +4,12 @@ import '../forms/input.js';
 import '../media/icon.js';
 import '../data/ag-grid.js';
 import '../layout/drawer.js';
+import '../layout/dialog.js';
 import './confirm-delete.js';
 import './modal-verificacion.js';
 import './form.js';
 import './heading.js';
+import './controller-from-config.js';
 
 import {
   asStr,
@@ -97,16 +99,15 @@ const DEFAULT_ICONS = {
       </is-drawer>
       <is-modal-verificacion class="modal-verify"></is-modal-verificacion>
       <is-confirm-delete class="modal-delete"></is-confirm-delete>
-      <div part="pk-modal" class="pk-backdrop" hidden>
-        <div class="pk-modal" role="dialog" aria-modal="true">
-          <h3 class="pk-title"></h3>
-          <div class="pk-fields"></div>
-          <div class="pk-actions">
-            <is-button class="pk-cancel" color="neutral" variant="outlined">Cancelar</is-button>
-            <is-button class="pk-ok" color="brand">Aceptar</is-button>
-          </div>
+      <is-dialog class="pk-dlg" exportparts="backdrop: pk-backdrop, dialog: pk-modal">
+        <span slot="label" class="pk-title"></span>
+        <div class="pk-fields"></div>
+        <div class="pk-actions" slot="footer">
+          <is-button class="pk-cancel" color="neutral" variant="outlined"
+                     data-dialog="close" tabindex="0">Cancelar</is-button>
+          <is-button class="pk-ok" color="brand" tabindex="0">Aceptar</is-button>
         </div>
-      </div>
+      </is-dialog>
     </div>
   `;
 
@@ -129,7 +130,7 @@ const DEFAULT_ICONS = {
     #drawer;
     #modalVerify;
     #modalDelete;
-    #pkBackdrop;
+    #pkDlg;
     #pkTitle;
     #pkFields;
     #pkCancel;
@@ -140,7 +141,17 @@ const DEFAULT_ICONS = {
     #pkResolve = null;
 
     /** @type {object|null} */
-    controller = null;
+    #controller = null;
+    get controller() { return this.#controller; }
+    set controller(v) {
+      this.#controller = v;
+      if (this.#mounted) {
+        this.#actionsEl.replaceChildren();
+        this.#rebuildToolbar();
+        void this.refreshGrid();
+      }
+    }
+
     /** @type {typeof DEFAULT_ALLOWED} */
     bAllowed = { ...DEFAULT_ALLOWED };
     /** @type {(msg: string) => void} */
@@ -166,7 +177,7 @@ const DEFAULT_ICONS = {
       this.#drawer = shadow.querySelector('.drawer');
       this.#modalVerify = shadow.querySelector('.modal-verify');
       this.#modalDelete = shadow.querySelector('.modal-delete');
-      this.#pkBackdrop = shadow.querySelector('.pk-backdrop');
+      this.#pkDlg = shadow.querySelector('.pk-dlg');
       this.#pkTitle = shadow.querySelector('.pk-title');
       this.#pkFields = shadow.querySelector('.pk-fields');
       this.#pkCancel = shadow.querySelector('.pk-cancel');
@@ -177,15 +188,14 @@ const DEFAULT_ICONS = {
       this.#mounted = true;
       this.#upgradeProps();
       this.#search.addEventListener('is-typing-end', this.#onSearch);
-      this.#grid.addEventListener('is-row-select', this.#onRowSelect);
-      this.#grid.addEventListener('is-cell-click', this.#onCellClick);
+      this.#grid?.addEventListener('is-row-select', this.#onRowSelect);
+      this.#grid?.addEventListener('is-cell-click', this.#onCellClick);
       this.#drawer.addEventListener('is-after-hide', this.#onDrawerHide);
       this.#modalDelete.addEventListener('is-confirm-delete', this.#onDeleteConfirm);
-      this.#pkCancel.addEventListener('click', () => this.#closePkModal(false));
-      this.#pkOk.addEventListener('click', () => this.#closePkModal(true));
-      this.#pkBackdrop.addEventListener('click', (e) => {
-        if (e.target === this.#pkBackdrop) this.#closePkModal(false);
-      });
+      this.#pkOk.addEventListener('click', this.#onPkOk);
+      // Cancelar lleva `data-dialog="close"`; Escape / backdrop / ese botón
+      // pasan todos por `is-hide` de ModalBase, así que basta un listener.
+      this.#pkDlg.addEventListener('is-hide', this.#onPkDismiss);
       this.#syncChrome();
       this.#rebuildToolbar();
       void this.refreshGrid();
@@ -194,10 +204,12 @@ const DEFAULT_ICONS = {
     disconnectedCallback() {
       this.#mounted = false;
       this.#search.removeEventListener('is-typing-end', this.#onSearch);
-      this.#grid.removeEventListener('is-row-select', this.#onRowSelect);
-      this.#grid.removeEventListener('is-cell-click', this.#onCellClick);
+      this.#grid?.removeEventListener('is-row-select', this.#onRowSelect);
+      this.#grid?.removeEventListener('is-cell-click', this.#onCellClick);
       this.#drawer.removeEventListener('is-after-hide', this.#onDrawerHide);
       this.#modalDelete.removeEventListener('is-confirm-delete', this.#onDeleteConfirm);
+      this.#pkOk.removeEventListener('click', this.#onPkOk);
+      this.#pkDlg.removeEventListener('is-hide', this.#onPkDismiss);
     }
 
     attributeChangedCallback() {
@@ -207,7 +219,7 @@ const DEFAULT_ICONS = {
     }
 
     #upgradeProps() {
-      for (const k of ['controller', 'bAllowed', 'onError', 'onNewObject', 'selectionData']) {
+      for (const k of ['bAllowed', 'onError', 'onNewObject', 'selectionData']) {
         if (Object.prototype.hasOwnProperty.call(this, k)) {
           const v = this[k];
           delete this[k];
@@ -257,6 +269,7 @@ const DEFAULT_ICONS = {
       this.#toolbar.hidden = !this.showHeader || this.selectMode;
       this.#search.hidden = !this.showSearch;
       this.#toolbar.style.setProperty('--is-cat-rows', String(this.qRowsHeader));
+      if (!this.#grid) return;
       this.#grid.setAttribute('row-selection', this.multiSelect || this.selectMode ? 'multiple' : 'single');
       if (this.multiSelect || this.selectMode) this.#grid.setAttribute('selectable', '');
       else this.#grid.removeAttribute('selectable');
@@ -271,8 +284,16 @@ const DEFAULT_ICONS = {
     }
 
     #rebuildToolbar() {
-      this.#actionsEl.replaceChildren();
-      if (this.selectMode || !this.showHeader) return;
+      if (this.selectMode || !this.showHeader) {
+        this.#actionsEl.replaceChildren();
+        return;
+      }
+
+      // Si ya hay botones, solo actualizar disabled (evita flickering al seleccionar).
+      if (this.#actionsEl.childElementCount > 0) {
+        this.#syncToolbarDisabled();
+        return;
+      }
 
       const defs = [
         { act: 'actCrear', allow: 'Crear', icon: 'crear', label: 'Crear', needsSel: false, run: () => this.showFrmCrear() },
@@ -291,7 +312,8 @@ const DEFAULT_ICONS = {
         btn.setAttribute('variant', 'plain');
         btn.setAttribute('color', 'neutral');
         btn.className = 'tool-btn';
-        btn.disabled = !this.#allowed(d.allow) || (d.needsSel && !isPresent(this.selectionData));
+        btn.dataset.allow = d.allow;
+        btn.dataset.needsSel = d.needsSel ? '1' : '0';
         btn.innerHTML = `<is-icon slot="start" icon="${this.#icon(d.icon)}"></is-icon>${d.label}`;
         btn.addEventListener('click', () => {
           if (btn.disabled) return;
@@ -305,6 +327,7 @@ const DEFAULT_ICONS = {
       refresh.setAttribute('variant', 'plain');
       refresh.setAttribute('color', 'neutral');
       refresh.className = 'tool-btn';
+      refresh.dataset.static = 'refresh';
       refresh.innerHTML = `<is-icon slot="start" icon="${this.#icon('refrescar')}"></is-icon>Refrescar`;
       refresh.addEventListener('click', () => void this.refreshGrid());
       this.#actionsEl.appendChild(refresh);
@@ -313,18 +336,33 @@ const DEFAULT_ICONS = {
       modeBtn.setAttribute('variant', 'plain');
       modeBtn.setAttribute('color', 'neutral');
       modeBtn.className = 'tool-btn';
+      modeBtn.dataset.static = 'mode';
       const filtro = this.modeFilter;
       modeBtn.innerHTML = `<is-icon slot="start" icon="${filtro ? 'mdi:database-arrow-down-outline' : 'mdi:download-multiple-outline'}"></is-icon>Modo&nbsp;${filtro ? 'filtro' : 'lista'}`;
       modeBtn.addEventListener('click', () => {
         this.modeFilter = !this.modeFilter;
+        this.#actionsEl.replaceChildren();
+        this.#rebuildToolbar();
         void this.refreshGrid();
       });
       this.#actionsEl.appendChild(modeBtn);
+
+      this.#syncToolbarDisabled();
+    }
+
+    #syncToolbarDisabled() {
+      const hasSel = isPresent(this.selectionData);
+      for (const btn of this.#actionsEl.querySelectorAll('.tool-btn')) {
+        if (btn.dataset.static) continue;
+        const needsSel = btn.dataset.needsSel === '1';
+        const allow = btn.dataset.allow;
+        btn.disabled = !this.#allowed(allow) || (needsSel && !hasSel);
+      }
     }
 
     #onSearch = () => {
       const q = asStr(this.#search.value).trim();
-      this.#grid.api?.setQuickFilter?.(q);
+      this.#grid?.api?.setQuickFilter?.(q);
     };
 
     #onRowSelect = (e) => {
@@ -355,6 +393,7 @@ const DEFAULT_ICONS = {
     };
 
     async refreshGrid() {
+      if (!this.#grid) return;
       const ctrl = this.controller;
       if (!ctrl || typeof ctrl.Lista !== 'function') {
         this.#grid.api?.setRows?.([]);
@@ -553,11 +592,13 @@ const DEFAULT_ICONS = {
           br.controller = this.controller.CtxBtnRef;
           br.required = !!f.required;
           br.value = f.value || '';
+          br.tabIndex = 0;
           this.#pkFields.appendChild(br);
           inputs.set(f.key, br);
         } else {
           const inp = document.createElement('is-input');
           inp.setAttribute('label-placement', 'float');
+          inp.tabIndex = 0;
           inp.label = f.label;
           inp.value = f.value || '';
           if (f.readonly) inp.readonly = true;
@@ -569,7 +610,7 @@ const DEFAULT_ICONS = {
         }
       }
       this.#pkOk.textContent = cfg.okLabel;
-      this.#pkBackdrop.hidden = false;
+      this.#pkDlg.show();
       return new Promise((resolve) => {
         this.#pkResolve = () => {
           const out = {};
@@ -585,8 +626,12 @@ const DEFAULT_ICONS = {
       });
     }
 
+    #onPkOk = () => this.#closePkModal(true);
+
+    #onPkDismiss = () => this.#closePkModal(false);
+
     #closePkModal(ok) {
-      this.#pkBackdrop.hidden = true;
+      this.#pkDlg.hide();
       const resolve = this.#pkKind;
       const gather = this.#pkResolve;
       this.#pkKind = null;
