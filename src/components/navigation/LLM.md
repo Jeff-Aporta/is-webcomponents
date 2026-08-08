@@ -19,6 +19,7 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-carousel>`, `<is-carousel-item>` | [carousel.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/carousel.md) | Carousel |
 | `<is-tree>`, `<is-tree-item>` | [tree.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/tree.md) | Tree |
 | `<is-stepper>`, `<is-stepper-step>` | [stepper.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/stepper.md) | Stepper |
+| `<is-mega-menu>` | [mega-menu.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/mega-menu.md) | Mega-menú multicolumna |
 
 ## Composición y relaciones
 

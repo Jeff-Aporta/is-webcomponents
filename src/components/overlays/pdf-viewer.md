@@ -6,7 +6,7 @@ category: overlays
 status: public
 source: ./pdf-viewer.js
 style: ./pdf-viewer.css
-preview: ../../previews/overlays/is-pdf-viewer.html
+preview: ../../previews/overlays/is-pdf-viewer.json
 ---
 # `<is-pdf-viewer>`
 
@@ -148,4 +148,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 - [JavaScript](./pdf-viewer.js)
 - [CSS](./pdf-viewer.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/overlays/is-pdf-viewer.html)
+- [Preview](../../previews/overlays/is-pdf-viewer.json)

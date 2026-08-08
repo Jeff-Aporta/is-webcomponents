@@ -33,12 +33,8 @@
   height: 100%;
   margin: 0;
   box-sizing: border-box;
-}
 
-.image[hidden],
-.initials[hidden],
-.icon[hidden] {
-  display: none;
+  &[hidden] { display: none; }
 }
 
 .image { object-fit: cover; }

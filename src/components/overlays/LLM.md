@@ -16,9 +16,9 @@ Para diálogos y cajones ir a [`../layout/LLM.md`](https://raw.githubusercontent
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-command-palette>` | [command-palette.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/command-palette.md) | Paleta de comandos |
-| `<is-pdf-viewer>` | [pdf-viewer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/pdf-viewer.md) | Visor de PDF |
-| `<is-window>` | [window.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/window.md) | Ventana flotante |
+| `<is-command-palette>` | [command-palette.md](./command-palette.md) | Paleta de comandos |
+| `<is-pdf-viewer>` | [pdf-viewer.md](./pdf-viewer.md) | Visor de PDF |
+| `<is-window>` | [window.md](./window.md) | Ventana flotante |
 
 ## Composición y relaciones
 

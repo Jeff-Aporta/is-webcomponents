@@ -8,7 +8,7 @@ category: navigation
 status: public
 source: ./tab-group.js
 style: ./tab-group.css
-preview: ../../previews/navigation/is-tab-group.html
+preview: ../../previews/navigation/is-tab-group.json
 ---
 # `<is-tab-group>` / `<is-tab>` / `<is-tab-panel>`
 
@@ -219,4 +219,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./tab-group.js)
 - [CSS](./tab-group.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/navigation/is-tab-group.html)
+- [Preview](../../previews/navigation/is-tab-group.json)

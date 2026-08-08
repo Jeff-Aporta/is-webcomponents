@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./video.js
 style: ./video.css
-preview: ../../previews/media/is-video.html
+preview: ../../previews/media/is-video.json
 ---
 # `<is-video>`
 
@@ -52,7 +52,7 @@ src="video.mp4"
 | --- | --- | --- |
 | `src` | string/según contrato | Fuente define default/restricción. |
 | `poster` | string/según contrato | Fuente define default/restricción. |
-| `controls` | boolean | Fuente define default/restricción. |
+| `without-controls` | boolean | Oculta la chrome propia. Por defecto se muestra. |
 | `muted` | boolean | Fuente define default/restricción. |
 | `loop` | boolean | Fuente define default/restricción. |
 | `autoplay` | boolean | Fuente define default/restricción. |
@@ -64,7 +64,8 @@ src="video.mp4"
 | --- | --- | --- |
 | `src` | lectura/escritura | Declarada por clase. |
 | `poster` | lectura/escritura | Declarada por clase. |
-| `controls` | lectura/escritura | Declarada por clase. |
+| `withoutControls` | lectura/escritura | Reflejada a `without-controls`. |
+| `controls` | lectura/escritura | Conveniencia: inverso de `withoutControls`. |
 | `muted` | lectura/escritura | Declarada por clase. |
 | `loop` | lectura/escritura | Declarada por clase. |
 | `autoplay` | lectura/escritura | Declarada por clase. |
@@ -148,7 +149,7 @@ Documentación de cabecera preservada desde fuente:
 > picture-in-picture y menú de velocidad.
 > Atributos
 >   src, poster
->   controls     boolean (default true)
+>   without-controls  boolean — oculta la chrome propia (por defecto se muestra)
 >   muted, loop, autoplay, playsinline  boolean
 > Slots: default — tracks / sources
 > Métodos: play(), pause(), toggleFullscreen(), togglePictureInPicture()
@@ -206,4 +207,4 @@ src="video.mp4"
 - [JavaScript](./video.js)
 - [CSS](./video.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/media/is-video.html)
+- [Preview](../../previews/media/is-video.json)

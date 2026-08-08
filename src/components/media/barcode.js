@@ -1,6 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
  * <is-barcode> — Generador de códigos de barras en SVG.
@@ -196,11 +197,5 @@ import { emit } from '../_shared/emit.js';
     #text;
   }
 
-  function svgEl(tag, attrs) {
-    const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    for (const [k, v] of Object.entries(attrs || {})) if (v != null) n.setAttribute(k, v);
-    return n;
-  }
-
-  defineElement('is-barcode', IsBarcode);
+  defineElement('is-barcode', IsBarcode, 'IsBarcode');
 })();

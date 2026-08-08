@@ -1,0 +1,16 @@
+/* Barra de cabecera / toolbar de una superficie elevada de overlays/.
+   Es el bloque que repetían window.css (.header), pdf-viewer.css (.toolbar)
+   y command-palette.css (.bar): fila flex, padding compacto, separador
+   inferior y un fondo apenas más tenue que la superficie.
+
+   Se consume con `@import './_surface-bar.css';` y `class="is-surface-bar"`
+   en el elemento. Los ajustes propios de cada componente (el cursor grab de
+   is-window, el gradiente) se añaden encima en su propio CSS. */
+.is-surface-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--is-surface-bar-gap, .45rem);
+  padding: var(--is-surface-bar-padding, .5rem .75rem);
+  border-bottom: 1px solid var(--is-border-soft);
+  background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
+}

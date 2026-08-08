@@ -40,11 +40,12 @@
   border: 2px solid var(--is-bg-elev);
   border-radius: 2px;
   pointer-events: auto;
+
+  &.nw { top: -6px;    left: -6px;  cursor: nwse-resize; }
+  &.ne { top: -6px;    right: -6px; cursor: nesw-resize; }
+  &.sw { bottom: -6px; left: -6px;  cursor: nesw-resize; }
+  &.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
 }
-.handle.nw { top: -6px;    left: -6px;  cursor: nwse-resize; }
-.handle.ne { top: -6px;    right: -6px; cursor: nesw-resize; }
-.handle.sw { bottom: -6px; left: -6px;  cursor: nesw-resize; }
-.handle.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
 
 .toolbar {
   display: flex; flex-wrap: wrap; gap: .35rem;

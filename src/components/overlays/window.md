@@ -6,7 +6,7 @@ category: overlays
 status: public
 source: ./window.js
 style: ./window.css
-preview: ../../previews/overlays/is-window.html
+preview: ../../previews/overlays/is-window.json
 ---
 # `<is-window>`
 
@@ -76,14 +76,17 @@ import './window.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-open` | sí | sí | sí | no |
-| `is-close` | sí | sí | sí | no |
-| `is-minimize` | sí | sí | sí | no |
-| `is-restore` | sí | sí | sí | no |
-| `is-maximize` | sí | sí | sí | no |
-| `is-unmaximize` | sí | sí | sí | no |
-| `is-move` | sí | sí | sí | no |
-| `is-resize` | sí | sí | sí | no |
+| `is-show` | no | sí | sí | no |
+| `is-after-show` | no | sí | sí | no |
+| `is-hide` | no | sí | sí | no |
+| `is-after-hide` | no | sí | sí | no |
+| `is-minimize` | no | sí | sí | no |
+| `is-restore` | `{ was }` | sí | sí | no |
+| `is-maximize` | no | sí | sí | no |
+
+Vocabulario unificado con `ModalBase` (`is-show` / `is-after-show` /
+`is-hide` / `is-after-hide`). Los antiguos `is-open` / `is-close` ya no se
+emiten.
 
 ### Métodos y propiedades públicas
 
@@ -132,6 +135,11 @@ Tags del módulo: `<is-window>`.
 
 ## Accesibilidad
 
+El host lleva `role="dialog"` y `aria-label` sincronizado con `title`.
+Escape cierra la ventana cuando tiene `closable`, y Tab se queda dentro de
+ella mientras el foco esté dentro: `is-window` NO es modal —conviven varias
+en pantalla— así que el foco no se secuestra cuando el usuario está fuera.
+
 Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 `connectedCallback` / `disconnectedCallback`.
 
@@ -164,4 +172,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 - [JavaScript](./window.js)
 - [CSS](./window.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/overlays/is-window.html)
+- [Preview](../../previews/overlays/is-window.json)

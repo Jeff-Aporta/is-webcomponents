@@ -6,7 +6,7 @@ category: navigation
 status: public
 source: ./scroller.js
 style: ./scroller.css
-preview: ../../previews/navigation/is-scroller.html
+preview: ../../previews/navigation/is-scroller.json
 ---
 # `<is-scroller>`
 
@@ -178,4 +178,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./scroller.js)
 - [CSS](./scroller.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/navigation/is-scroller.html)
+- [Preview](../../previews/navigation/is-scroller.json)

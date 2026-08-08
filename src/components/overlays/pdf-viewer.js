@@ -36,8 +36,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       super();
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.innerHTML = /* html */ `
-        <div part="root" class="root">
-          <div part="toolbar" class="toolbar">
+        <div part="root" class="root is-popover-panel">
+          <div part="toolbar" class="toolbar is-surface-bar">
             <span class="title"><slot name="title">Documento PDF</slot></span>
             <span class="spacer"></span>
             <button part="download" class="btn" id="dl" hidden>

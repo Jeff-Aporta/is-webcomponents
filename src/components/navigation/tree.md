@@ -7,7 +7,7 @@ category: navigation
 status: public
 source: ./tree.js
 style: ./tree.css
-preview: ../../previews/navigation/is-tree.html
+preview: ../../previews/navigation/is-tree.json
 ---
 # `<is-tree>` / `<is-tree-item>`
 
@@ -206,4 +206,4 @@ Documentos
 - [JavaScript](./tree.js)
 - [CSS](./tree.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/navigation/is-tree.html)
+- [Preview](../../previews/navigation/is-tree.json)

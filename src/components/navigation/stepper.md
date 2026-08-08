@@ -7,7 +7,7 @@ category: navigation
 status: public
 source: ./stepper.js
 style: ./stepper.css
-preview: ../../previews/navigation/is-stepper.html
+preview: ../../previews/navigation/is-stepper.json
 ---
 # `<is-stepper>` / `<is-stepper-step>`
 
@@ -208,4 +208,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./stepper.js)
 - [CSS](./stepper.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/navigation/is-stepper.html)
+- [Preview](../../previews/navigation/is-stepper.json)

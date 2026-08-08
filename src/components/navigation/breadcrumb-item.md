@@ -6,7 +6,7 @@ category: navigation
 status: public
 source: ./breadcrumb-item.js
 style: ./breadcrumb-item.css
-preview: ../../previews/navigation/is-breadcrumb.html
+preview: ../../previews/navigation/is-breadcrumb-item.json
 ---
 # `<is-breadcrumb-item>`
 
@@ -173,4 +173,4 @@ Inicio
 - [JavaScript](./breadcrumb-item.js)
 - [CSS](./breadcrumb-item.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/navigation/is-breadcrumb.html)
+- [Preview](../../previews/navigation/is-breadcrumb-item.json)

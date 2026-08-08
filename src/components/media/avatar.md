@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./avatar.js
 style: ./avatar.css
-preview: ../../previews/media/is-avatar.html
+preview: ../../previews/media/is-avatar.json
 ---
 # `<is-avatar>`
 
@@ -165,4 +165,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./avatar.js)
 - [CSS](./avatar.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/media/is-avatar.html)
+- [Preview](../../previews/media/is-avatar.json)

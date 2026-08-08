@@ -6,7 +6,7 @@ category: overlays
 status: public
 source: ./command-palette.js
 style: ./command-palette.css
-preview: ../../previews/overlays/is-command-palette.html
+preview: ../../previews/overlays/is-command-palette.json
 ---
 # `<is-command-palette>`
 
@@ -74,9 +74,14 @@ import './command-palette.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-open` | sí | sí | sí | no |
-| `is-close` | sí | sí | sí | no |
-| `is-select` | sí | sí | sí | no |
+| `is-show` | no | sí | sí | no |
+| `is-after-show` | no | sí | sí | no |
+| `is-hide` | no | sí | sí | no |
+| `is-after-hide` | no | sí | sí | no |
+| `is-select` | `{ command, id }` | sí | sí | no |
+
+Vocabulario unificado con `ModalBase`. Los antiguos `is-open` / `is-close`
+ya no se emiten. Escape lo cierra el propio `<dialog>` (evento `cancel`).
 
 ### Métodos y propiedades públicas
 
@@ -115,7 +120,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-command-palette> — Cmd/Ctrl+K. Comandos vía JSON hijo; eventos is-open/is-close/is-select.
+> <is-command-palette> — Cmd/Ctrl+K. Comandos vía JSON hijo; eventos is-show/is-after-show/is-hide/is-after-hide/is-select.
 
 ## Dependencias y componentes relacionados
 
@@ -162,4 +167,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 - [JavaScript](./command-palette.js)
 - [CSS](./command-palette.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/overlays/is-command-palette.html)
+- [Preview](../../previews/overlays/is-command-palette.json)

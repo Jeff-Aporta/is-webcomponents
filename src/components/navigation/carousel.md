@@ -7,7 +7,7 @@ category: navigation
 status: public
 source: ./carousel.js
 style: ./carousel.css
-preview: ../../previews/navigation/is-carousel.html
+preview: ../../previews/navigation/is-carousel.json
 ---
 # `<is-carousel>` / `<is-carousel-item>`
 
@@ -212,4 +212,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./carousel.js)
 - [CSS](./carousel.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/navigation/is-carousel.html)
+- [Preview](../../previews/navigation/is-carousel.json)

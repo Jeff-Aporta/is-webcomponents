@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./video-playlist.js
 style: ./video-playlist.css
-preview: ../../previews/media/is-video-playlist.html
+preview: ../../previews/media/is-video-playlist.json
 ---
 # `<is-video-playlist>`
 
@@ -199,4 +199,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./video-playlist.js)
 - [CSS](./video-playlist.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/media/is-video-playlist.html)
+- [Preview](../../previews/media/is-video-playlist.json)

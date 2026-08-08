@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./icon.js
 style: ./icon.css
-preview: ../../previews/media/is-icon.html
+preview: ../../previews/media/is-icon.json
 ---
 # `<is-icon>`
 
@@ -158,4 +158,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./icon.js)
 - [CSS](./icon.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/media/is-icon.html)
+- [Preview](../../previews/media/is-icon.json)
