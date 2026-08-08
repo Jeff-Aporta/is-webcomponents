@@ -1,6 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import './option.js';
 import '../media/icon.js';
+import '../actions/button.js';
 import '../feedback/tag.js';
 
 import {
@@ -44,9 +45,18 @@ import { setStringAttr } from '../_shared/reflect.js';
             <span class="tags" hidden></span>
           </span>
         </div>
-        <button type="button" part="clear" class="clear" hidden aria-label="Limpiar" tabindex="-1">
+        <is-button
+          type="button"
+          part="clear"
+          class="clear"
+          variant="text"
+          color="neutral"
+          tabindex="-1"
+          aria-label="Limpiar"
+          hidden
+        >
           <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-        </button>
+        </is-button>
         <span class="caret" aria-hidden="true"><is-icon icon="mdi:chevron-down"></is-icon></span>
       </div>
       <div part="hint" class="hint" hidden><slot name="hint"><span class="hint-text"></span></slot></div>
@@ -63,13 +73,6 @@ import { setStringAttr } from '../_shared/reflect.js';
     'disabled', 'required', 'clearable', 'open',
     'variant', 'checkmarks', 'selection-display', 'limit-tags',
     'error', 'error-text', 'full-width', 'auto-width', 'max-visible',
-  ];
-
-  const PROPS = [
-    'name', 'value', 'values', 'multiple', 'placeholder', 'label', 'hint',
-    'disabled', 'required', 'clearable', 'open',
-    'variant', 'checkmarks', 'selectionDisplay', 'limitTags',
-    'error', 'errorText', 'fullWidth', 'autoWidth', 'maxVisible',
   ];
 
   const TYPEAHEAD_MS = 500;
@@ -154,7 +157,11 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     onConnected() {
-      this.#upgradeProps();
+      if (Object.prototype.hasOwnProperty.call(this, 'values')) {
+        const v = this.values;
+        delete this.values;
+        if (v != null) this.values = v;
+      }
       this.#collectOptions();
       this.#readValueAttr(true);
       if (!this.#defaultsRead) {
@@ -301,16 +308,6 @@ import { setStringAttr } from '../_shared/reflect.js';
     formDisabledCallback(disabled) {
       this.#formDisabled = !!disabled;
       this.#syncDisabled();
-    }
-
-    #upgradeProps() {
-      for (const a of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
-          this[a] = v;
-        }
-      }
     }
 
     get #isDisabled() { return this.disabled || this.#formDisabled; }

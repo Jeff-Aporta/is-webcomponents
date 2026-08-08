@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./select.js
 style: ./select.css
-preview: ../../previews/forms/is-select.html
+preview: ../../previews/forms/is-select.json
 ---
 # `<is-select>`
 
@@ -245,4 +245,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 - [JavaScript](./select.js)
 - [CSS](./select.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-select.html)
+- [Preview](../../previews/forms/is-select.json)

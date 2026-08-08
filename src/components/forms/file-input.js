@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import '../actions/button.js';
 import '../helpers/format-bytes.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -301,10 +302,12 @@ import { ElementBase } from '../_shared/element-base.js';
         size.setAttribute('value', String(file.size));
         size.className = 'file-size';
 
-        const remove = document.createElement('button');
+        const remove = document.createElement('is-button');
         remove.type = 'button';
         remove.className = 'remove';
         remove.setAttribute('part', 'remove-button');
+        remove.setAttribute('variant', 'text');
+        remove.setAttribute('color', 'neutral');
         remove.setAttribute('aria-label', `Quitar ${file.name}`);
         remove.innerHTML = '<is-icon icon="mdi:close" aria-hidden="true"></is-icon>';
         remove.addEventListener('click', (e) => {

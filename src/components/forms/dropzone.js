@@ -1,6 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import '../media/icon.js';
+import '../actions/button.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 
@@ -186,9 +187,9 @@ import { emit } from '../_shared/emit.js';
         </div>
         <progress max="100" value="${rec.progress}"></progress>
         <span class="status">${rec.status} ${rec.progress}%</span>
-        <button type="button" class="del" aria-label="Quitar">
-          <span aria-hidden="true">✕</span>
-        </button>
+        <is-button type="button" class="del" variant="text" color="neutral" aria-label="Quitar">
+          <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
+        </is-button>
       `;
       li.querySelector('.del').addEventListener('click', (e) => { e.stopPropagation(); this.removeFile(rec.id); });
       return li;

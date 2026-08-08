@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./tag.js
 style: ./tag.css
-preview: ../../previews/feedback/is-tag.html
+preview: ../../previews/feedback/is-tag.json
 ---
 # `<is-tag>`
 
@@ -178,4 +178,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./tag.js)
 - [CSS](./tag.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-tag.html)
+- [Preview](../../previews/feedback/is-tag.json)

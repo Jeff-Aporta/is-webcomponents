@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./combobox.js
 style: ./combobox.css
-preview: ../../previews/forms/is-combobox.html
+preview: ../../previews/forms/is-combobox.json
 ---
 # `<is-combobox>`
 
@@ -198,4 +198,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-autoco
 - [JavaScript](./combobox.js)
 - [CSS](./combobox.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-combobox.html)
+- [Preview](../../previews/forms/is-combobox.json)

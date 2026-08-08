@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./dialog.js
 style: ./dialog.css
-preview: ../../previews/layout/is-dialog.html
+preview: ../../previews/layout/is-dialog.json
 ---
 # `<is-dialog>`
 
@@ -173,6 +173,9 @@ Documentación de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
+- [`../_shared/modal-base.js`](../_shared/modal-base.js) — clase base con el ciclo
+  completo del modal (focus-trap, `Escape`, backdrop light-dismiss, restore de foco,
+  `data-*="close"`, eventos). Aquí sólo queda el chrome y las animaciones.
 
 Tags del módulo: `<is-dialog>`.
 
@@ -207,4 +210,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - [JavaScript](./dialog.js)
 - [CSS](./dialog.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-dialog.html)
+- [Preview](../../previews/layout/is-dialog.json)

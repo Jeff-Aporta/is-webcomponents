@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./drawer.js
 style: ./drawer.css
-preview: ../../previews/layout/is-drawer.html
+preview: ../../previews/layout/is-drawer.json
 ---
 # `<is-drawer>`
 
@@ -169,6 +169,9 @@ Documentación de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
+- [`../_shared/modal-base.js`](../_shared/modal-base.js) — clase base con el ciclo
+  completo del modal (focus-trap, `Escape`, backdrop light-dismiss, restore de foco,
+  `data-*="close"`, eventos). Aquí sólo queda el chrome y las animaciones.
 
 Tags del módulo: `<is-drawer>`.
 
@@ -205,4 +208,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - [JavaScript](./drawer.js)
 - [CSS](./drawer.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-drawer.html)
+- [Preview](../../previews/layout/is-drawer.json)

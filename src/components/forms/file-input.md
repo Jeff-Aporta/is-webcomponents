@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./file-input.js
 style: ./file-input.css
-preview: ../../previews/forms/is-file-input.html
+preview: ../../previews/forms/is-file-input.json
 ---
 # `<is-file-input>`
 
@@ -188,4 +188,4 @@ name="attachments"
 - [JavaScript](./file-input.js)
 - [CSS](./file-input.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-file-input.html)
+- [Preview](../../previews/forms/is-file-input.json)

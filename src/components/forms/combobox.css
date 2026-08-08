@@ -55,21 +55,13 @@
   }
 
   .clear, .trigger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.75em;
-    height: 1.75em;
-    border: 0;
-    background: transparent;
+    flex: none;
     color: var(--is-text-dim, #7a8390);
-    cursor: pointer;
-    border-radius: var(--is-combobox-border-radius);
-    font-size: 1.1em;
-    line-height: 1;
-    padding: 0;
-    &:hover { background: var(--is-control-bg-hover, #e9ecef); color: var(--is-text, inherit); }
+    line-height: 0;
+    font-size: 1.05em;
   }
+
+  .clear[hidden] { display: none !important; }
 
   /* Dialog a viewport completo en top layer → no lo clippea overflow */
   .popup {

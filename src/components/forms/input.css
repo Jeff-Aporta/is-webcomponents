@@ -115,21 +115,10 @@
   .input::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.65; }
 
   .icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.75em;
-    height: 1.75em;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--is-text-dim, #7a8390);
-    cursor: pointer;
-    border-radius: var(--is-input-border-radius);
+    flex: none;
     font-size: 1.05em;
-    line-height: 1;
-    &:hover { background: var(--is-control-bg-hover, #e9ecef); color: var(--is-text, inherit); }
-    &:focus-visible { outline: 2px solid var(--_focus); outline-offset: 1px; }
+    line-height: 0;
+    color: var(--is-text-dim, #7a8390);
   }
 
   .icon-btn[hidden] { display: none !important; }

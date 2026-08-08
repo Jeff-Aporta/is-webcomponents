@@ -83,20 +83,12 @@
   }
 
   .clear {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.35em;
-    height: 1.35em;
+    flex: none;
     margin-inline-start: 0.15em;
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
+    font-size: 0.95em;
+    line-height: 0;
     color: var(--is-text-dim, #7a8390);
-    font-size: 1em;
-    line-height: 1;
-    cursor: pointer;
-    &:hover { background: var(--is-control-bg-hover, #e9ecef); color: var(--is-text, inherit); }
+    &[hidden] { display: none !important; }
   }
 
   .hint {

@@ -1,5 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
+import '../actions/button.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
@@ -30,9 +31,17 @@ import { TONE } from '../_shared/tone.js';
       <span part="start" class="prefix"><slot name="start"></slot></span>
       <span part="label" class="label"><slot></slot></span>
       <span part="end" class="suffix"><slot name="end"></slot></span>
-      <button type="button" part="remove-button" class="remove" hidden aria-label="Quitar">
+      <is-button
+        type="button"
+        part="remove-button"
+        class="remove"
+        variant="text"
+        color="neutral"
+        aria-label="Quitar"
+        hidden
+      >
         <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-      </button>
+      </is-button>
     </span>
   `;
 
