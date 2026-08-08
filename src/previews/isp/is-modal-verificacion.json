@@ -6,6 +6,7 @@
   "titleHtml": true,
   "description": "Documentación y demos de is-modal-verificacion de InSoft.",
   "storageKey": "docs-is-modal-verificacion",
+  "hasBehavior": true,
   "sections": [
     {
       "id": "intro",

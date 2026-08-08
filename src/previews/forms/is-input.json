@@ -15,7 +15,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></is-input>"
+          "html": "<is-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></is-input>",
+          "equivNote": "type especializa chrome (ojo, clear, steppers) sobre el FA base.",
+          "equivHtml": "<!-- ver diagrama de ramas -->",
+          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-input: type\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"type=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"password → toggle\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"search → clearable\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"number → min/max\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"input genérico FA\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"password\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"search\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"number\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"otro\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
         },
         {
           "kind": "html",

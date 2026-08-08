@@ -6,6 +6,7 @@
   "titleHtml": true,
   "description": "Documentación y demos de is-loading-overlay de InSoft.",
   "storageKey": "docs-is-loading-overlay",
+  "hasBehavior": true,
   "sections": [
     {
       "id": "intro",

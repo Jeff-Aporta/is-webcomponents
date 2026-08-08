@@ -53,6 +53,8 @@ export interface PreviewTableBlock {
   rows: string[][];
   /** HTML opcional encima de la tabla */
   captionHtml?: string;
+  /** Clases extra del `<table>` (además de `ref`). Ej. `ref--tokens`. */
+  className?: string;
 }
 
 export interface PreviewLedeBlock {

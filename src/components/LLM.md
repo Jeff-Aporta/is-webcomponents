@@ -35,6 +35,8 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `actions/dropdown.md` | `<is-dropdown>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/dropdown-item.md` | `<is-dropdown-item>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/fab.md` | `<is-fab>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
+| `actions/context-menu.md` | `<is-context-menu>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
+| `actions/speed-dial.md` | `<is-speed-dial>`, `<is-speed-dial-action>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `charts/chart.md` | `<is-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/LLM.md) |
 | `charts/bar-chart.md` | `<is-bar-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/LLM.md) |
 | `charts/line-chart.md` | `<is-line-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/LLM.md) |
@@ -53,6 +55,11 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `data/transfer.md` | `<is-transfer>`, `<is-transfer-item>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/LLM.md) |
 | `data/gauge.md` | `<is-gauge>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/LLM.md) |
 | `data/kanban.md` | `<is-kanban>`, `<is-kanban-column>`, `<is-kanban-card>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/LLM.md) |
+| `data/ag-grid.md` | `<is-ag-grid>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/LLM.md) |
+| `data/pivot-table.md` | `<is-pivot-table>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/LLM.md) |
+| `data/spreadsheet.md` | `<is-spreadsheet>` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/LLM.md) |
+| `data-viz/heatmap.md` | `<is-heatmap>` | [data-viz/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/LLM.md) |
+| `data-viz/maps.md` | `<is-maps>`, `<is-map-marker>` | [data-viz/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/LLM.md) |
 | `diagrams/flowchart.md` | `<is-flowchart>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/sequence-diagram.md` | `<is-sequence-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/lightbox.md` | `<is-lightbox>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
@@ -64,6 +71,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `diagrams/mindmap.md` | `<is-mindmap>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/gantt.md` | `<is-gantt>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/timeline.md` | `<is-timeline>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
+| `diagrams/org-chart.md` | `<is-org-chart>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `feedback/spinner.md` | `<is-spinner>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
 | `feedback/badge.md` | `<is-badge>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
 | `feedback/tag.md` | `<is-tag>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
@@ -76,6 +84,8 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `feedback/tooltip.md` | `<is-tooltip>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
 | `feedback/cdn-snippet.md` | `<is-cdn-snippet>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
 | `feedback/popconfirm.md` | `<is-popconfirm>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
+| `feedback/confirm-modal.md` | `<is-confirm-modal>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
+| `feedback/palette-selector.md` | `<is-palette-selector>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
 | `forms/combobox.md` | `<is-combobox>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
 | `forms/option.md` | `<is-option>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
 | `forms/checkbox.md` | `<is-checkbox>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
@@ -103,6 +113,15 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `forms/date-time-input.md` | `<is-date-time-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
 | `forms/date-range-input.md` | `<is-date-range-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
 | `forms/pin-input.md` | `<is-pin-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/masked-input.md` | `<is-masked-input>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/inline-edit.md` | `<is-inline-edit>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/duration-picker.md` | `<is-duration-picker>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/dropzone.md` | `<is-dropzone>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/mention.md` | `<is-mention>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/full-calendar.md` | `<is-full-calendar>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/signature.md` | `<is-signature>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/rte.md` | `<is-rte>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
+| `forms/doc-editor.md` | `<is-doc-editor>` | [forms/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/LLM.md) |
 | `helpers/popover.md` | `<is-popover>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/ui.md` | `is-ui` · `IsUi` (módulo) | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/format.md` | `<is-format>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
@@ -114,17 +133,21 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `helpers/intersection-observer.md` | `<is-intersection-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/mutation-observer.md` | `<is-mutation-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/resize-observer.md` | `<is-resize-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
+| `helpers/md-render.md` | `<is-md-render>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
+| `helpers/md-editor.md` | `<is-md-editor>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
+| `helpers/floating.md` | `<is-floating>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `isp/accordion-group.md` | `<is-accordion-group>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/block-layout.md` | `<is-block-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/confirm-delete.md` | `<is-confirm-delete>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/flex-layout.md` | `<is-flex-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/form.md` | `<is-form>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
-| `isp/function-form.md` | `<is-function-form>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/modal-verificacion.md` | `<is-modal-verificacion>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/grid-layout.md` | `<is-grid-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/heading.md` | `<is-heading>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/loading-overlay.md` | `<is-loading-overlay>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/text.md` | `<is-text>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
+| `isp/btn-ref.md` | `<is-btn-ref>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
+| `isp/catalogo-gen.md` | `<is-catalogo-gen>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `layout/split-panel.md` | `<is-split-panel>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/LLM.md) |
 | `layout/main.md` | `<is-main>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/LLM.md) |
 | `layout/card.md` | `<is-card>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/LLM.md) |
@@ -134,10 +157,14 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `layout/drawer.md` | `<is-drawer>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/LLM.md) |
 | `layout/divider.md` | `<is-divider>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/LLM.md) |
 | `layout/scrollspy.md` | `<is-scrollspy>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/LLM.md) |
+| `layout/dock.md` | `<is-dock>`, `<is-dock-item>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/LLM.md) |
 | `media/icon.md` | `<is-icon>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/avatar.md` | `<is-avatar>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/video.md` | `<is-video>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/video-playlist.md` | `<is-video-playlist>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
+| `media/barcode.md` | `<is-barcode>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
+| `media/image-editor.md` | `<is-image-editor>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
+| `media/qrcode.md` | `<is-qrcode>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `navigation/breadcrumb.md` | `<is-breadcrumb>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/LLM.md) |
 | `navigation/breadcrumb-item.md` | `<is-breadcrumb-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/LLM.md) |
 | `navigation/tab-group.md` | `<is-tab-group>`, `<is-tab>`, `<is-tab-panel>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/LLM.md) |
@@ -145,6 +172,10 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `navigation/carousel.md` | `<is-carousel>`, `<is-carousel-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/LLM.md) |
 | `navigation/tree.md` | `<is-tree>`, `<is-tree-item>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/LLM.md) |
 | `navigation/stepper.md` | `<is-stepper>`, `<is-stepper-step>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/LLM.md) |
+| `navigation/mega-menu.md` | `<is-mega-menu>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/LLM.md) |
+| `overlays/command-palette.md` | `<is-command-palette>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/LLM.md) |
+| `overlays/pdf-viewer.md` | `<is-pdf-viewer>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/LLM.md) |
+| `overlays/window.md` | `<is-window>` | [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/LLM.md) |
 
 ## Convenciones globales
 
