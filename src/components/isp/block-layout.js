@@ -2,33 +2,22 @@ import { ElementBase } from '../_shared/element-base.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import {
+  applyJsonBody,
+  html2json,
+  hostToJson,
+  json2html,
+} from '../_shared/json-html.js';
 
 /**
  * <is-block-layout> — port de ISP `layout/BlockLayout.svelte`.
  *
- * En Svelte el componente medía su propio `clientWidth` y entregaba
- * `{ sizew, boolszw, lerpw }` como SLOT PROPS. Un Web Component no tiene slot
- * props, así que el equivalente se publica en tres canales:
+ * Cuerpo vía JSON compacto (mismo codec que `<is-form>`):
+ *   block.json2html(body) / block.html2json() / toJSON() / fromJSON()
  *
- *   1. Atributos reflejados en el host  → `data-sizew="xs|sm|md|lg|xl"` y
- *      `data-szw-xs … data-szw-xl` (presentes cuando el breakpoint es <= al
- *      actual; es exactamente el `boolszw` acumulativo de ISP). Sirven para
- *      estilar desde el light DOM: `is-block-layout[data-szw-lg] .foo { … }`.
- *   2. Custom properties en el host     → `--clientw` (ancho en px, sin unidad)
- *      y `--lerpw` (el `lerpw('sm','xl')` por defecto de ISP). Sirven para
- *      interpolar tamaños en CSS con `calc()`.
- *   3. Evento `is-breakpoint`           → detail { width, sizew, boolszw, lerpw }
- *      donde `lerpw` es la MISMA función de ISP `(b0='sm', b1='xl') => number`.
+ * Breakpoints: data-sizew, data-szw-*, --clientw, --lerpw, evento is-breakpoint.
  *
- * Además la clase expone `sizew`, `boolszw` y `lerpw(b0, b1)` como API JS.
- *
- * Atributos
- *   inline     boolean  → display:inline-block (ISP: prop `inline`)
- *   cscroll    boolean  → overflow:auto con el scrollbar temizado del kit
- *                         (ISP añadía la clase `custom-scrollbar`)
- *
- * Este módulo también exporta la maquinaria de breakpoints que reutilizan
- * `flex-layout.js` y `grid-layout.js` (en ISP estaba copiada en los tres).
+ * Atributos: inline, cscroll
  */
 
 export const BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl'];
@@ -68,8 +57,6 @@ export class BreakpointHost extends ElementBase {
   #width = -1;
 
   onConnected() {
-    // El observer se crea en connect y se destruye en disconnect (nunca en el
-    // constructor) para no fugar cuando el elemento se mueve del DOM.
     this.#ro = new ResizeObserver(() => this.measureWidth());
     this.#ro.observe(this);
     this.measureWidth();
@@ -81,7 +68,6 @@ export class BreakpointHost extends ElementBase {
     this.#width = -1;
   }
 
-  /** Ancho medido en el último ciclo (equivale al `clientWidth` bindeado de ISP). */
   get clientWidthMeasured() { return Math.max(0, this.#width); }
 
   get sizew() { return sizewFor(this.clientWidthMeasured); }
@@ -116,8 +102,11 @@ export class BreakpointHost extends ElementBase {
   class IsBlockLayout extends BreakpointHost {
     static TEMPLATE = TEMPLATE;
     static get observedAttributes() { return ['inline', 'cscroll']; }
-    // El attributeChangedCallback lo aporta ElementBase (vía BreakpointHost);
-    // inline/cscroll se resuelven 100% por CSS, no hace falta el hook.
+
+    static json2html = json2html;
+    static html2json = html2json;
+
+    #inlineApplied = false;
 
     constructor() {
       super();
@@ -125,11 +114,57 @@ export class BreakpointHost extends ElementBase {
       adoptCss(this.shadowRoot, import.meta.url);
     }
 
+    onConnected() {
+      super.onConnected();
+      this.#applyInlineJson();
+    }
+
     get inline() { return this.hasAttribute('inline'); }
     set inline(v) { this.setBooleanAttr('inline', v); }
 
     get cscroll() { return this.hasAttribute('cscroll'); }
     set cscroll(v) { this.setBooleanAttr('cscroll', v); }
+
+    /** Monta el light DOM desde JSON compacto. */
+    json2html(body, opts) {
+      applyJsonBody(this, body, opts);
+      return this;
+    }
+
+    /** Serializa el light DOM a JSON compacto. */
+    html2json(opts) {
+      return hostToJson(this, opts);
+    }
+
+    toJSON() {
+      return {
+        inline: this.inline,
+        cscroll: this.cscroll,
+        body: hostToJson(this),
+      };
+    }
+
+    fromJSON(json, opts) {
+      if (!json || typeof json !== 'object') return this;
+      if (json.inline != null) this.inline = !!json.inline;
+      if (json.cscroll != null) this.cscroll = !!json.cscroll;
+      const body = json.body ?? json.html ?? (Array.isArray(json) ? json : null);
+      if (body != null) applyJsonBody(this, body, opts);
+      return this;
+    }
+
+    #applyInlineJson() {
+      if (this.#inlineApplied) return;
+      const script = this.querySelector(':scope > script[type="application/json"]');
+      if (!script) return;
+      this.#inlineApplied = true;
+      try {
+        const json = JSON.parse(script.textContent || 'null');
+        if (json && typeof json === 'object') this.fromJSON(json);
+      } catch {
+        console.warn('<is-block-layout> script JSON inválido');
+      }
+    }
   }
 
   defineElement('is-block-layout', IsBlockLayout, 'IsBlockLayout');

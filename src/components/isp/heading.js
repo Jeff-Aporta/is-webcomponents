@@ -1,35 +1,36 @@
 import { ElementBase } from '../_shared/element-base.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
+import {
+  classifyColor,
+  normalizeMix,
+  syncIspColor,
+} from '../_shared/isp-color.js';
 
 /**
  * <is-heading> — port de ISP `typography/H1.svelte` … `H6.svelte`.
  *
- * ISP tenía seis componentes idénticos salvo por el tag y el `--h-mix`
- * (15/30/45/65/80/90 %). Aquí es UN módulo con el atributo `level` (1-6): el
- * shadow root construye el `<hN>` real, así que la semántica y el árbol de
- * accesibilidad se conservan sin duplicar seis archivos.
- *
- * Color: ISP pintaba `color-mix(in srgb, var(--h-clr), var(--is-color) --h-mix)`,
- * con `--h-clr` = `colorVar(color, "primary")`, es decir tintado de marca por
- * defecto y cada vez más cercano al color de texto según baja el nivel. Aquí
- * `--h-clr` cae a `--is-accent` / `--is-color-brand-500` y el color de mezcla
- * es `--is-text` (equivalente de `--is-color` en este kit).
- *
  * Atributos
- *   level   1 | 2 | 3 | 4 | 5 | 6                       (default 1, reflejado)
- *   color   brand | neutral | info | success | warning | danger  (default brand)
+ *   level      1 | 2 | 3 | 4 | 5 | 6                       (default 1)
+ *   color      brand | neutral | info | success | warning | danger
+ *              | current | <color CSS>                     (default: acento)
+ *   mix        % → `--h-mix`; ausente = default del nivel
+ *   mix-with   text | transparent | white | black | current | <color CSS>
+ *              (default: texto del tema)
+ *   size       string CSS → `--h-size`; ausente = default del nivel
  *
- * No hay atributo `size`: la escala de cada nivel es en `em` sobre el
- * `font-size` heredado.
+ * `current` hereda el color tipográfico del contexto (`currentColor`).
+ * Cualquier otro string no semántico se usa como color CSS tal cual.
  */
 
 (() => {
   const LEVELS = ['1', '2', '3', '4', '5', '6'];
+  const DEFAULT_MIX = { 1: '15%', 2: '30%', 3: '45%', 4: '65%', 5: '80%', 6: '90%' };
 
   class IsHeading extends ElementBase {
-    static get observedAttributes() { return ['level', 'color']; }
-    // El attributeChangedCallback lo aporta ElementBase; aquí va el hook.
+    static get observedAttributes() {
+      return ['level', 'color', 'mix', 'mix-with', 'size'];
+    }
 
     #heading = null;
 
@@ -37,19 +38,43 @@ import { defineElement } from '../_shared/define.js';
       super();
       this.initShadow();
       adoptCss(this.shadowRoot, import.meta.url);
-      // El <hN> se construye en connect: el constructor no debe leer atributos
-      // ni tocar el DOM del host (regla de custom elements).
     }
 
     onConnected() {
       if (!this.hasAttribute('level')) this.setAttribute('level', '1');
       this.#render();
+      this.#syncVars();
     }
 
     onAttributeChanged(name, _oldVal, newVal) {
-      if (name !== 'level') return;
-      if (newVal && !LEVELS.includes(newVal)) { this.setAttribute('level', '1'); return; }
-      this.#render();
+      if (name === 'level') {
+        if (newVal && !LEVELS.includes(newVal)) { this.setAttribute('level', '1'); return; }
+        this.#render();
+        this.#syncVars();
+        return;
+      }
+      if (name === 'color' || name === 'mix' || name === 'mix-with' || name === 'size') {
+        this.#syncVars();
+      }
+    }
+
+    #syncVars() {
+      syncIspColor(this, {
+        colorVar: '--h-clr',
+        mixVar: '--h-mix',
+        mixWithVar: '--h-mix-with',
+      });
+
+      // mix: si el attr está ausente, quitar override para que gane el default del nivel.
+      const mix = normalizeMix(this.getAttribute('mix'));
+      if (!mix) this.style.removeProperty('--h-mix');
+
+      const size = this.getAttribute('size');
+      if (size != null && String(size).trim() !== '') {
+        this.style.setProperty('--h-size', String(size).trim());
+      } else {
+        this.style.removeProperty('--h-size');
+      }
     }
 
     /** Reemplaza SOLO el <hN>; los <link> que puso adoptCss se conservan. */
@@ -79,7 +104,37 @@ import { defineElement } from '../_shared/define.js';
     }
 
     get color() { return this.getAttribute('color'); }
-    set color(v) { v ? this.setAttribute('color', v) : this.removeAttribute('color'); }
+    set color(v) {
+      if (v == null || v === '') this.removeAttribute('color');
+      else this.setAttribute('color', String(v));
+    }
+
+    get mix() { return this.getAttribute('mix'); }
+    set mix(v) {
+      if (v == null || v === '') this.removeAttribute('mix');
+      else this.setAttribute('mix', String(v));
+    }
+
+    get mixWith() { return this.getAttribute('mix-with'); }
+    set mixWith(v) {
+      if (v == null || v === '') this.removeAttribute('mix-with');
+      else this.setAttribute('mix-with', String(v));
+    }
+
+    get size() { return this.getAttribute('size'); }
+    set size(v) {
+      if (v == null || v === '') this.removeAttribute('size');
+      else this.setAttribute('size', String(v));
+    }
+
+    get computedMix() {
+      return normalizeMix(this.mix) || DEFAULT_MIX[this.level] || '15%';
+    }
+
+    /** @returns {'none'|'semantic'|'current'|'css'} */
+    get colorKind() {
+      return classifyColor(this.color).kind;
+    }
   }
 
   defineElement('is-heading', IsHeading, 'IsHeading');
