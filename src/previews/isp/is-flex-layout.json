@@ -5,53 +5,37 @@
   "title": "<is-flex-layout>",
   "titleHtml": true,
   "storageKey": "docs-is-flex-layout",
+  "hasBehavior": true,
+  "styles": ".fx-controls {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.75rem 1.25rem;\n      align-items: flex-end;\n      margin-bottom: 0.85rem;\n      padding: 0.75rem 0.85rem;\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius, 0.5em);\n      background: var(--is-bg-elev);\n    }\n    .fx-controls label.fx-field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.25rem;\n      font-size: 0.75rem;\n      color: var(--is-text-soft);\n      min-width: 7.5rem;\n    }\n    .fx-controls select {\n      font: inherit;\n      font-size: 0.875rem;\n      color: var(--is-text);\n      background: var(--is-bg);\n      border: 1px solid var(--is-border);\n      border-radius: var(--is-radius-sm, 0.35em);\n      padding: 0.35rem 0.5rem;\n    }\n    .fx-bools {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.75rem 1.1rem;\n      align-items: center;\n    }\n    .fx-attr {\n      margin: 0.35rem 0 0.85rem;\n      font-size: 0.8rem;\n      color: var(--is-text-soft);\n      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n      word-break: break-all;\n    }\n    .fx-stage {\n      resize: both;\n      overflow: auto;\n      display: flex;\n      align-items: stretch;\n      box-sizing: border-box;\n      min-width: 10rem;\n      min-height: 5.5rem;\n      width: min(100%, 28rem);\n      height: 9rem;\n      padding: 0.65rem;\n      border: 1px dashed var(--is-border);\n      border-radius: var(--is-radius, 0.5em);\n      background:\n        repeating-linear-gradient(45deg,\n          color-mix(in srgb, var(--is-border) 28%, transparent) 0 7px,\n          transparent 7px 14px),\n        var(--is-bg);\n    }\n    .fx-stage > is-flex-layout {\n      outline: 1px solid color-mix(in srgb, var(--is-brand, #3b82f6) 45%, transparent);\n      outline-offset: -1px;\n      border-radius: 0.35em;\n      background: color-mix(in srgb, var(--is-bg-elev) 88%, transparent);\n      padding: 0.35rem;\n      box-sizing: border-box;\n      min-height: 0;\n    }\n    .fx-stage--tall { height: 12rem; width: min(100%, 22rem); }\n    .fx-stage--wide { width: min(100%, 36rem); height: 7.5rem; }\n    .fx-hint {\n      margin: 0.4rem 0 0;\n      font-size: 0.75rem;\n      color: var(--is-text-dim);\n    }\n    .fx-chip {\n      display: inline-flex;\n      align-items: center;\n      gap: 0.35rem;\n      box-sizing: border-box;\n      padding: 0.35rem 0.55rem;\n      border-radius: 0.55em;\n      border: 1px solid color-mix(in srgb, var(--is-border) 70%, transparent);\n      background: var(--is-bg-elev);\n      color: var(--is-text);\n      font-size: 1.05rem;\n      line-height: 1.2;\n      white-space: nowrap;\n      user-select: none;\n    }\n    .fx-chip .lbl {\n      font-size: 0.78rem;\n      font-weight: 600;\n      color: var(--is-text-soft);\n    }\n    .fx-chip--sm { font-size: 0.95rem; padding: 0.2rem 0.4rem; }\n    .fx-chip--md { font-size: 1.15rem; padding: 0.45rem 0.65rem; }\n    .fx-chip--lg {\n      font-size: 1.45rem;\n      padding: 0.6rem 0.85rem;\n      flex-direction: column;\n      align-items: flex-start;\n    }\n    .fx-chip--lg .lbl { font-size: 0.72rem; }\n    .fx-chip--xl {\n      font-size: 1.75rem;\n      padding: 0.75rem 1rem;\n      min-height: 3.25rem;\n    }\n    .fx-demo-stack { display: flex; flex-direction: column; gap: 1.25rem; }\n    .fx-demo-block h3 {\n      margin: 0 0 0.35rem;\n      font-size: 0.95rem;\n      font-weight: 650;\n    }",
   "sections": [
     {
       "id": "intro",
       "title": "<is-flex-layout>",
-      "lede": "Contenedor flex declarativo. Port del <code class=\"code\">FlexLayout.svelte</code> de ISP:\r\n          el gap por defecto se adapta al ancho propio (0.2 · 0.35 · 0.5rem).",
+      "lede": "Contenedor flex declarativo (port ISP). Arrastra la esquina ↘ del escenario\n          para redimensionar; los switches activan/desactivan props booleanas\n          (<code class=\"code\">wrap</code>, <code class=\"code\">grow</code>, <code class=\"code\">inline</code>).",
       "blocks": [
         {
+          "kind": "callout",
+          "html": "Los ítems son emojis con etiquetas de distinto tamaño para que\n          <code class=\"code\">align</code>, <code class=\"code\">wrap</code> y el gap se noten al instante."
+        },
+        {
           "kind": "demo",
-          "html": "<is-flex-layout gap=\"0.5rem\" align=\"center\">\r\n            <is-button>Uno</is-button>\r\n            <is-button variant=\"outlined\">Dos</is-button>\r\n            <is-button variant=\"plain\">Tres</is-button>\r\n          </is-flex-layout>"
+          "html": "<div class=\"fx-controls\" id=\"fxControls\">\n            <label class=\"fx-field\">direction\n              <select id=\"fxDirection\">\n                <option value=\"row\" selected>row</option>\n                <option value=\"column\">column</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">justify\n              <select id=\"fxJustify\">\n                <option value=\"\">(default)</option>\n                <option value=\"start\">start</option>\n                <option value=\"center\" selected>center</option>\n                <option value=\"end\">end</option>\n                <option value=\"between\">between</option>\n                <option value=\"around\">around</option>\n                <option value=\"evenly\">evenly</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">align\n              <select id=\"fxAlign\">\n                <option value=\"\">(default)</option>\n                <option value=\"start\">start</option>\n                <option value=\"center\" selected>center</option>\n                <option value=\"end\">end</option>\n                <option value=\"stretch\">stretch</option>\n                <option value=\"baseline\">baseline</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">gap\n              <select id=\"fxGap\">\n                <option value=\"\">(responsive)</option>\n                <option value=\"0.25rem\">0.25rem</option>\n                <option value=\"0.5rem\" selected>0.5rem</option>\n                <option value=\"1rem\">1rem</option>\n              </select>\n            </label>\n            <div class=\"fx-bools\">\n              <is-switch id=\"fxWrap\">wrap</is-switch>\n              <is-switch id=\"fxGrow\">grow</is-switch>\n              <is-switch id=\"fxInline\">inline</is-switch>\n            </div>\n          </div>\n          <p class=\"fx-attr\" id=\"fxAttrSnippet\">&lt;is-flex-layout&gt;</p>\n          <div class=\"fx-stage\" id=\"fxStage\" title=\"Redimensionar ↘\">\n            <is-flex-layout id=\"fxPlay\" gap=\"0.5rem\" justify=\"center\" align=\"center\">\n              <span class=\"fx-chip fx-chip--sm\">🍎</span>\n              <span class=\"fx-chip fx-chip--md\">🧀 <span class=\"lbl\">Queso</span></span>\n              <span class=\"fx-chip fx-chip--lg\">🦒 <span class=\"lbl\">Jirafa alta</span></span>\n              <span class=\"fx-chip fx-chip--sm\">🥝 <span class=\"lbl\">Kiwi</span></span>\n              <span class=\"fx-chip fx-chip--xl\">🍕</span>\n              <span class=\"fx-chip fx-chip--md\">🌮 <span class=\"lbl\">Taco XL</span></span>\n            </is-flex-layout>\n          </div>\n          <p class=\"fx-hint\">Redimensiona el recuadro (↘). El contorno marca el área del flex.\n            <code class=\"code\">grow</code> llena el escenario; <code class=\"code\">wrap</code> salta de línea al estrechar;\n            <code class=\"code\">inline</code> encoge al contenido.</p>"
         }
       ]
     },
     {
       "id": "examples",
-      "title": "direction · justify · align",
+      "title": "Casos típicos",
+      "lede": "Cada escenario es redimensionable. Los emojis mantienen tamaños distintos\n          para que se note la alineación.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-flex-layout direction=\"column\" gap=\"0.5rem\" align=\"start\" style=\"width:100%\">\r\n            <is-tag>columna</is-tag>\r\n            <is-tag>en</is-tag>\r\n            <is-tag>fila vertical</is-tag>\r\n          </is-flex-layout>"
-        },
-        {
-          "kind": "demo",
-          "html": "<is-flex-layout justify=\"between\" align=\"center\" style=\"width:100%;border:1px dashed var(--is-border);padding:0.5rem\">\r\n            <span>start</span><span>middle</span><span>end</span>\r\n          </is-flex-layout>"
-        },
-        {
-          "kind": "html",
-          "html": "<h2>wrap · grow · min/max</h2>"
-        },
-        {
-          "kind": "demo",
-          "html": "<is-flex-layout wrap gap=\"0.35rem\" max-width=\"24rem\" style=\"border:1px dashed var(--is-border);padding:0.5rem\">\r\n            <is-tag>alfa</is-tag><is-tag>beta</is-tag><is-tag>gamma</is-tag>\r\n            <is-tag>delta</is-tag><is-tag>epsilon</is-tag><is-tag>zeta</is-tag>\r\n          </is-flex-layout>"
-        },
-        {
-          "kind": "demo",
-          "html": "<is-flex-layout grow gap=\"0.5rem\" style=\"width:100%\">\r\n            <is-card style=\"flex:1 1 0\">A</is-card>\r\n            <is-card style=\"flex:1 1 0\">B</is-card>\r\n          </is-flex-layout>"
-        },
-        {
-          "kind": "html",
-          "html": "<h2>Escala por font-size</h2>"
-        },
-        {
-          "kind": "demo",
-          "html": "<is-flex-layout gap=\"0.5rem\" align=\"center\" style=\"font-size: 1.2em\">\r\n            <is-button>1.2em</is-button>\r\n            <is-text>todo escala desde el contexto</is-text>\r\n          </is-flex-layout>"
+          "html": "<div class=\"fx-demo-stack\">\n            <div class=\"fx-demo-block\">\n              <is-heading level=\"3\">direction=\"column\" · align=\"start\"</is-heading>\n              <div class=\"fx-stage fx-stage--tall\" title=\"Redimensionar ↘\">\n                <is-flex-layout direction=\"column\" gap=\"0.5rem\" align=\"start\">\n                  <span class=\"fx-chip fx-chip--sm\">🚀</span>\n                  <span class=\"fx-chip fx-chip--md\">🌙 <span class=\"lbl\">Luna</span></span>\n                  <span class=\"fx-chip fx-chip--lg\">⭐ <span class=\"lbl\">Estrella grande</span></span>\n                </is-flex-layout>\n              </div>\n            </div>\n\n            <div class=\"fx-demo-block\">\n              <is-heading level=\"3\">justify=\"between\"</is-heading>\n              <div class=\"fx-stage fx-stage--wide\" title=\"Redimensionar ↘\">\n                <is-flex-layout justify=\"between\" align=\"center\" style=\"width:100%;height:100%\">\n                  <span class=\"fx-chip fx-chip--sm\">🐣</span>\n                  <span class=\"fx-chip fx-chip--md\">🦊 <span class=\"lbl\">Medio</span></span>\n                  <span class=\"fx-chip fx-chip--lg\">🐘 <span class=\"lbl\">Final</span></span>\n                </is-flex-layout>\n              </div>\n            </div>\n\n            <div class=\"fx-demo-block\">\n              <is-heading level=\"3\">wrap + max-width (estrecha el wrapper)</is-heading>\n              <div class=\"fx-stage\" style=\"width:16rem;height:10rem\" title=\"Redimensionar ↘\">\n                <is-flex-layout wrap gap=\"0.35rem\" max-width=\"100%\">\n                  <span class=\"fx-chip fx-chip--sm\">🔴</span>\n                  <span class=\"fx-chip fx-chip--sm\">🟠 <span class=\"lbl\">naranja</span></span>\n                  <span class=\"fx-chip fx-chip--md\">🟡</span>\n                  <span class=\"fx-chip fx-chip--sm\">🟢 <span class=\"lbl\">verde</span></span>\n                  <span class=\"fx-chip fx-chip--md\">🔵 <span class=\"lbl\">azul</span></span>\n                  <span class=\"fx-chip fx-chip--sm\">🟣</span>\n                </is-flex-layout>\n              </div>\n            </div>\n\n            <div class=\"fx-demo-block\">\n              <is-heading level=\"3\">grow — hijos con flex:1</is-heading>\n              <div class=\"fx-stage fx-stage--wide\" title=\"Redimensionar ↘\">\n                <is-flex-layout grow gap=\"0.5rem\" style=\"width:100%;height:100%\">\n                  <span class=\"fx-chip fx-chip--md\" style=\"flex:1 1 0;justify-content:center\">🐶 <span class=\"lbl\">A</span></span>\n                  <span class=\"fx-chip fx-chip--lg\" style=\"flex:1 1 0;justify-content:center\">🐱 <span class=\"lbl\">B</span></span>\n                </is-flex-layout>\n              </div>\n            </div>\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-flex-layout gap=\"0.5rem\" justify=\"between\" align=\"center\">…</is-flex-layout>\n<is-flex-layout direction=\"column\" wrap max-width=\"24rem\">…</is-flex-layout>"
+          "code": "<is-flex-layout gap=\"0.5rem\" justify=\"between\" align=\"center\" wrap>\n  <span>🍎</span>\n  <span>🧀 Queso</span>\n  <span>🦒 Jirafa</span>\n</is-flex-layout>",
+          "lang": "html"
         }
       ]
     },
@@ -61,55 +45,16 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": [
-            "Atributo",
-            "Valores / default"
-          ],
+          "columns": ["Atributo", "Valores / default"],
           "rows": [
-            [
-              "<code>gap</code>",
-              "cualquier valor CSS · default responsive 0.2 / 0.35 / 0.5rem"
-            ],
-            [
-              "<code>direction</code>",
-              "row (default) · column"
-            ],
-            [
-              "<code>wrap</code>",
-              "boolean"
-            ],
-            [
-              "<code>justify</code>",
-              "start · center · end · between · around · evenly · left · right · flex-start · flex-end"
-            ],
-            [
-              "<code>align</code> / <code>items</code>",
-              "start · center · end · stretch · baseline"
-            ],
-            [
-              "<code>grow</code>",
-              "boolean → <code>flex: 1 1 auto</code>"
-            ],
-            [
-              "<code>inline</code>",
-              "boolean → <code>display: inline-flex</code>"
-            ],
-            [
-              "<code>width</code>, <code>height</code>",
-              "valor CSS → <code>--width</code>, <code>--height</code>"
-            ],
-            [
-              "<code>min-width</code>, <code>min-height</code>",
-              "valor CSS"
-            ],
-            [
-              "<code>max-width</code>, <code>max-height</code>",
-              "valor CSS"
-            ],
-            [
-              "<code>data-sizew</code> · <code>--lerpw</code>",
-              "igual que <code>&lt;is-block-layout&gt;</code>"
-            ]
+            ["<code>gap</code>", "CSS · default responsive 0.2 / 0.35 / 0.5rem"],
+            ["<code>direction</code>", "row (default) · column"],
+            ["<code>wrap</code>", "boolean (switch en el playground)"],
+            ["<code>justify</code>", "start · center · end · between · around · evenly · …"],
+            ["<code>align</code> / <code>items</code>", "start · center · end · stretch · baseline"],
+            ["<code>grow</code>", "boolean → <code>flex: 1 1 auto</code>"],
+            ["<code>inline</code>", "boolean → <code>display: inline-flex</code>"],
+            ["<code>width</code>, <code>height</code>, <code>min-*</code>, <code>max-*</code>", "valores CSS"]
           ]
         }
       ]
