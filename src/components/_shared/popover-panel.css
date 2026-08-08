@@ -1,0 +1,23 @@
+/**
+ * Chrome de superficie flotante (menú/dropdown/palette/ventana), inyectado
+ * vía adoptCss (ver adopt-css.js / scrollbars.css para el mismo mecanismo).
+ * Reemplaza el bloque
+ *   border: 1px solid var(--is-border);
+ *   border-radius: var(--is-radius, 8px);
+ *   background: var(--is-bg-elev);
+ *   box-shadow: var(--is-shadow, ...);
+ * repetido en context-menu.css, dropdown.css, dropdown-item.css,
+ * palette-selector.css, window.css, command-palette.css, pdf-viewer.css.
+ *
+ * Uso: `class="is-popover-panel"` en el contenedor de la superficie
+ * flotante. El radio y la sombra por defecto son los del patrón más común
+ * (context-menu/window); sobrescribir `--is-popover-radius` /
+ * `--is-popover-shadow` por componente si necesita otro valor (p. ej.
+ * command-palette usa un radio mayor y una sombra más difusa).
+ */
+.is-popover-panel {
+  background: var(--is-bg-elev);
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-popover-radius, var(--is-radius, 8px));
+  box-shadow: var(--is-popover-shadow, var(--is-shadow, 0 18px 44px rgba(0, 0, 0, .26)));
+}

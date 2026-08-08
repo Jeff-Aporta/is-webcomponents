@@ -132,7 +132,9 @@ function scrollParentBoundary(el, padding = 0) {
     const s = getComputedStyle(node);
     const ox = s.overflowX;
     const oy = s.overflowY;
-    if (/(auto|scroll|overlay)/.test(ox) || /(auto|scroll|overlay)/.test(oy)) {
+    // `hidden` también recorta (p. ej. demos de stage); sin él shift/flip
+    // ignoran el contenedor visual y usan el viewport.
+    if (/(auto|scroll|overlay|hidden)/.test(ox) || /(auto|scroll|overlay|hidden)/.test(oy)) {
       const r = node.getBoundingClientRect();
       return {
         top: r.top + padding,
@@ -213,12 +215,12 @@ function availableSize(coords, size, boundary, autoSize) {
 function arrowOffset(placement, anchor, popupCoords, popupSize, arrowSize, arrowPadding, arrowPlacement) {
   const side = sideOf(placement);
   const align = arrowPlacement === 'anchor' ? 'anchor' : arrowPlacement;
-  // El rombo es `arrowSize * 2` por lado (cuadrado rotado 45°); su diagonal
-  // visible es `arrowSize * √2`. Por convención histórica del kit, `arrowSize`
-  // sigue siendo la diagonal horizontal/vertical de la flecha, así que la
-  // hacemos coincidir con un rombo cuyo lado de cuadrado es `arrowSize * 2`.
+  // Cuadrado de lado `arrowSize * 2` (rotado 45° en CSS = rombo). La punta
+  // visible es la mitad que asoma fuera del popup: el offset del lado estático
+  // debe ser `-arrowSize` (no 0), si no el rombo queda entero detrás del body.
   const side2 = arrowSize * 2;
   const result = { top: '', left: '', right: '', bottom: '' };
+  const out = `${-arrowSize}px`;
 
   if (side === 'top' || side === 'bottom') {
     let x;
@@ -231,11 +233,9 @@ function arrowOffset(placement, anchor, popupCoords, popupSize, arrowSize, arrow
       x = Math.max(arrowPadding, Math.min(popupSize.width - side2 - arrowPadding, x));
     }
     result.left = `${x}px`;
-    // La flecha comparte lado con el borde del popup. Para `top`, su base
-    // queda en `bottom: 0` y asoma `arrowSize` hacia arriba; para `bottom`,
-    // su base queda en `top: 0` y asoma `arrowSize` hacia abajo.
-    if (side === 'top') result.bottom = `0px`;
-    else result.top = `0px`;
+    // placement top → popup arriba del ancla → flecha en el borde inferior
+    if (side === 'top') result.bottom = out;
+    else result.top = out;
   } else {
     let y;
     if (align === 'start') y = arrowPadding;
@@ -247,8 +247,8 @@ function arrowOffset(placement, anchor, popupCoords, popupSize, arrowSize, arrow
       y = Math.max(arrowPadding, Math.min(popupSize.height - side2 - arrowPadding, y));
     }
     result.top = `${y}px`;
-    if (side === 'left') result.right = `0px`;
-    else result.left = `0px`;
+    if (side === 'left') result.right = out;
+    else result.left = out;
   }
   return result;
 }
