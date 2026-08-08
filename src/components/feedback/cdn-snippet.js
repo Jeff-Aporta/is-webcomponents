@@ -13,8 +13,15 @@ import {
 import { totalCdnSize } from '../_shared/cdn-sizes.js';
 import { CODEMIRROR_READY, isReady as cmReady, paint } from '../_shared/highlight-code.js';
 import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
+import {
+  SKILL_DOCS,
+  LLM_PROMPT_FALLBACK,
+  loadAgentPromptMd,
+  buildLlmPrompt,
+} from '../_shared/llm-agent-prompt.js';
 import '../media/icon.js';
 import '../helpers/format-bytes.js';
+import '../helpers/md-editor.js';
 import { defineElement } from '../_shared/define.js';
 
 /**
@@ -35,45 +42,7 @@ import { defineElement } from '../_shared/define.js';
 (() => {
   const CDN_BASE_DEFAULT = jsdelivrBase('main');
 
-  const LLM_PROMPT_BASE = [
-    'Usa el kit IS Web Components solo por CDN, sin npm ni npx.',
-    'Espejos: jsDelivr (primario, pin @sha) y GitHub Pages (reserva). Un solo origen por página.',
-    'Bootstrap: is-base.min.css + palettes.min.css + el .min.js del tag (o category.*.min.js / all.min.js).',
-    'Si un espejo cae: usa el snippet «Boot con fallback» del tab Mirrors (prueba jsDelivr → Pages).',
-    'Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.',
-    'Antes de inventar API: lee los MD enlazados abajo (skills + módulo + categoría + índice).',
-    'Tema/paleta: data-theme y data-palette en <html>. Iconos: <is-icon icon="mdi:…">.',
-  ].join('\n');
-
-  /** Enlaces fijos que van dentro del prompt único (no se listan aparte). */
-  const SKILL_DOCS = [
-    {
-      label: 'Skill · instalación CDN',
-      url: 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md',
-    },
-    {
-      label: 'Skill · kit (reuso is-*)',
-      url: 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-webcomponents/SKILL.md',
-    },
-    {
-      label: 'Skill CDN · is-cdn-install (jsDelivr)',
-      url: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md',
-    },
-  ];
-
-  /**
-   * Un solo texto copiable: reglas + todas las refs (skills + docs del config).
-   * @param {{ label: string, url: string }[]} docs
-   */
-  const buildLlmPrompt = (docs) => {
-    const lines = [LLM_PROMPT_BASE, '', 'Referencias (léelas en orden):'];
-    for (const d of docs) {
-      lines.push(`- ${d.label}: ${d.url}`);
-    }
-    return lines.join('\n');
-  };
-
-  const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS);
+  const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS, { sha: 'main', base: LLM_PROMPT_FALLBACK });
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -89,11 +58,11 @@ import { defineElement } from '../_shared/define.js';
       </header>
 
       <div class="cdn__tabs" role="tablist" aria-label="CDN">
-        <button type="button" class="cdn__tab" role="tab" id="tab-enlaces"
+        <button type="button" class="cdn__tab is-focus-ring" role="tab" id="tab-enlaces"
                 data-tab="enlaces" aria-selected="true" aria-controls="panel-enlaces">
           Enlaces
         </button>
-        <button type="button" class="cdn__tab" role="tab" id="tab-mirrors"
+        <button type="button" class="cdn__tab is-focus-ring" role="tab" id="tab-mirrors"
                 data-tab="mirrors" aria-selected="false" aria-controls="panel-mirrors">
           Mirrors
         </button>
@@ -109,7 +78,7 @@ import { defineElement } from '../_shared/define.js';
                 1 · CSS común (una vez por página)
                 <is-format-bytes class="cdn__size" data-slot="size-common" autofit display="short" hidden></is-format-bytes>
               </span>
-              <button type="button" class="cdn__copy" data-copy="common" aria-label="Copiar enlaces comunes">
+              <button type="button" class="cdn__copy is-focus-ring" data-copy="common" aria-label="Copiar enlaces comunes">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
               </button>
@@ -122,7 +91,7 @@ import { defineElement } from '../_shared/define.js';
                 2 · JS del componente · <code data-slot="fileTag"></code>
                 <is-format-bytes class="cdn__size" data-slot="size-single" autofit display="short" hidden></is-format-bytes>
               </span>
-              <button type="button" class="cdn__copy" data-copy="single" aria-label="Copiar enlace individual">
+              <button type="button" class="cdn__copy is-focus-ring" data-copy="single" aria-label="Copiar enlace individual">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
               </button>
@@ -135,7 +104,7 @@ import { defineElement } from '../_shared/define.js';
                 Alternativa · categoría · <code data-slot="category"></code>
                 <is-format-bytes class="cdn__size" data-slot="size-category" autofit display="short" hidden></is-format-bytes>
               </span>
-              <button type="button" class="cdn__copy" data-copy="category" aria-label="Copiar bundle de categoría">
+              <button type="button" class="cdn__copy is-focus-ring" data-copy="category" aria-label="Copiar bundle de categoría">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
               </button>
@@ -145,7 +114,7 @@ import { defineElement } from '../_shared/define.js';
           <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
             <div class="cdn__row-head">
               <span class="cdn__label cdn__dep-name">Dependencia · <code data-slot="dep-name"></code></span>
-              <button type="button" class="cdn__copy" data-copy="dep" aria-label="Copiar enlaces de la dependencia">
+              <button type="button" class="cdn__copy is-focus-ring" data-copy="dep" aria-label="Copiar enlaces de la dependencia">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
               </button>
@@ -159,7 +128,7 @@ import { defineElement } from '../_shared/define.js';
                 Alternativa · todo el kit · <code>all.min.js</code>
                 <is-format-bytes class="cdn__size" data-slot="size-all" autofit display="short" hidden></is-format-bytes>
               </span>
-              <button type="button" class="cdn__copy" data-copy="all" aria-label="Copiar bundle completo">
+              <button type="button" class="cdn__copy is-focus-ring" data-copy="all" aria-label="Copiar bundle completo">
                 <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
                 Copiar
               </button>
@@ -180,7 +149,7 @@ import { defineElement } from '../_shared/define.js';
         <div class="cdn__row" data-kind="boot">
           <div class="cdn__row-head">
             <span class="cdn__label">Boot con fallback · jsDelivr → Pages</span>
-            <button type="button" class="cdn__copy" data-copy="boot" aria-label="Copiar boot con fallback">
+            <button type="button" class="cdn__copy is-focus-ring" data-copy="boot" aria-label="Copiar boot con fallback">
               <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
               Copiar
             </button>
@@ -193,18 +162,26 @@ import { defineElement } from '../_shared/define.js';
         <header class="cdn__head">
           <h4 class="cdn__docs-title">Para agentes / LLM</h4>
           <p class="cdn__hint">
-            Un solo prompt: reglas CDN + skills + MD del módulo. Sin npm ni npx.
+            Prompt canónico (CDN-only + tools). Vista previa con scroll;
+            clic para abrir y copiar. Solo lectura aquí.
           </p>
         </header>
         <div class="cdn__row" data-kind="llm-prompt">
           <div class="cdn__row-head">
             <span class="cdn__label">Prompt · kit por CDN + referencias</span>
-            <button type="button" class="cdn__copy" data-copy="llm-prompt" aria-label="Copiar prompt para agentes">
+            <button type="button" class="cdn__copy is-focus-ring" data-copy="llm-prompt" aria-label="Copiar prompt para agentes">
               <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
               Copiar
             </button>
           </div>
-          <pre class="cdn__pre" data-slot="llm-prompt"></pre>
+          <is-md-editor
+            class="cdn__md-prompt"
+            data-slot="llm-prompt"
+            label="Prompt · IS Web Components"
+            edit-block-reason="Solo lectura: revisa y copia el prompt"
+            placeholder="Cargando prompt…"
+            style="--preview-max-height: 18rem;"
+          ></is-md-editor>
         </div>
       </section>
     </section>
@@ -241,6 +218,7 @@ import { defineElement } from '../_shared/define.js';
       this.#mirrorId = readMirrorId();
       this.#restoreTabFromUrl();
       this.#render();
+      void this.#ensurePromptLoaded();
       resolveRef().then((ref) => {
         if (!this.#mounted) return;
         this.#resolvedRef = ref;
@@ -318,7 +296,18 @@ import { defineElement } from '../_shared/define.js';
 
     /** Regenera el prompt único con las refs actuales (`#docs`). */
     #syncLlmPrompt() {
-      this.#urls.llmPrompt = buildLlmPrompt(this.#docs);
+      this.#urls.llmPrompt = buildLlmPrompt(this.#docs, {
+        sha: this.#resolvedRef || 'main',
+      });
+      const ed = this.shadowRoot?.querySelector('is-md-editor[data-slot="llm-prompt"]');
+      if (ed && ed.value !== this.#urls.llmPrompt) ed.value = this.#urls.llmPrompt;
+    }
+
+    async #ensurePromptLoaded() {
+      await loadAgentPromptMd();
+      if (!this.#mounted) return;
+      this.#parseConfig();
+      this.#syncLlmPrompt();
     }
 
     #parseDeps() {
@@ -482,7 +471,7 @@ if(!ok)throw new Error('[is-cdn] ningún espejo respondió');
       const singlePre = root.querySelector('[data-slot="single"]');
       const catPre = root.querySelector('[data-slot="category-pre"]');
       const allPre = root.querySelector('[data-slot="all"]');
-      const llmPromptPre = root.querySelector('[data-slot="llm-prompt"]');
+      const llmPromptEd = root.querySelector('[data-slot="llm-prompt"]');
       const bootPre = root.querySelector('[data-slot="boot"]');
 
       const title = this.getAttribute('title');
@@ -507,7 +496,9 @@ if(!ok)throw new Error('[is-cdn] ningún espejo respondió');
       const cfg = this.#parseConfig();
       if (cfg?.title && titleEl) titleEl.textContent = cfg.title;
       this.#syncLlmPrompt();
-      if (llmPromptPre) llmPromptPre.innerHTML = escapeHtml(this.#urls.llmPrompt);
+      if (llmPromptEd && llmPromptEd.tagName === 'IS-MD-EDITOR') {
+        llmPromptEd.value = this.#urls.llmPrompt;
+      }
 
       this.#parseDeps();
       this.#renderDeps();
