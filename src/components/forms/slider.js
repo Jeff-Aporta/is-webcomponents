@@ -68,12 +68,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     'disabled', 'readonly', 'required', 'label', 'hint',
   ];
 
-  const PROPS = [
-    'name', 'value', 'values', 'min', 'max', 'step', 'shiftStep', 'marks',
-    'orientation', 'track', 'valueLabel', 'minDistance', 'disableSwap',
-    'format', 'scale', 'valueLabelFormat', 'getAriaValueText',
-    'disabled', 'readonly', 'required', 'label', 'hint',
-  ];
+  const EXTRA_UPGRADE_PROPS = ['values', 'scale', 'valueLabelFormat', 'getAriaValueText'];
 
   const TRACKS = ['normal', 'none', 'inverted'];
   const VALUE_LABELS = ['off', 'auto', 'on'];
@@ -150,7 +145,13 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     }
 
     onConnected() {
-      this.#upgradeProps();
+      for (const p of EXTRA_UPGRADE_PROPS) {
+        if (Object.prototype.hasOwnProperty.call(this, p)) {
+          const v = this[p];
+          delete this[p];
+          if (v != null) this[p] = v;
+        }
+      }
       this.#values = this.#normalize(this.#readAttrValues());
       this.#syncSlots();
       this.#syncDisabled();
@@ -764,16 +765,6 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 
     #onFocusIn = () => { setCustomState(this.#internals, 'focused', true); };
     #onFocusOut = () => { setCustomState(this.#internals, 'focused', false); };
-
-    #upgradeProps() {
-      for (const p of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
-    }
   }
 
   defineElement('is-slider', IsSlider, 'IsSlider');

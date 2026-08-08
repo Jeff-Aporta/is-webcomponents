@@ -38,6 +38,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
  *   --is-inline-edit-radius
  */
 (() => {
+  const STATES = ['idle', 'editing', 'saved', 'cancelled'];
+
   const OBSERVED = [
     'value', 'placeholder', 'name', 'mode',
     'disabled', 'readonly', 'required', 'cancel-on-blur',
@@ -93,8 +95,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       if (this.#state !== 'editing') return;
       if (this.#snapshot !== null) this.value = this.#snapshot;
       this.#dispatch('is-cancel', { value: this.value, previous: this.#snapshot });
-      this.#setState('cancelled');
-      this.#setState('idle', 280);
+      this.#setState('cancelled', 280);
       this.#render();
     }
 
@@ -105,8 +106,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       if (!input) return;
       this.#dispatch('is-save', { value: input.value, previous: this.#snapshot });
       this.value = input.value;
-      this.#setState('saved');
-      this.#setState('idle', 280);
+      this.#setState('saved', 280);
       this.#render();
     }
 
@@ -145,9 +145,10 @@ import { setOptionalAttr } from '../_shared/reflect.js';
 
     #sync() {
       setFormValue(this.#internals, this.value);
-      const slot = this.shadowRoot.querySelector('slot[name="display"]');
-      const display = this.shadowRoot.querySelector('[part="display"]');
-      if (display) display.textContent = this.value || this.getAttribute('placeholder') || '';
+      // Escribir sobre [part="display"] borraría el <slot name="display">; el
+      // texto plano vive en el .text hermano.
+      const text = this.shadowRoot.querySelector('[part="display"] .text');
+      if (text) text.textContent = this.value || this.getAttribute('placeholder') || '';
       setCustomState(this.#internals, 'blank', !this.value);
     }
 
@@ -216,17 +217,17 @@ import { setOptionalAttr } from '../_shared/reflect.js';
 
     #setState(name, autoRevertMs) {
       this.#state = name;
-      setCustomState(this.#internals, name === 'idle' ? undefined : name, true);
-      if (name !== 'idle') setCustomState(this.#internals, 'idle', false);
+      // Los estados son excluyentes: limpiar todos antes de marcar el activo,
+      // si no `editing` sobrevive a `save()` y el selector :state(editing)
+      // queda pegado.
+      for (const candidate of STATES) {
+        setCustomState(this.#internals, candidate, candidate === name);
+      }
       this.#syncStateClass();
       if (autoRevertMs) {
         clearTimeout(this.#stateTimer);
         this.#stateTimer = setTimeout(() => {
-          if (this.#state === name) {
-            this.#state = 'idle';
-            setCustomState(this.#internals, name, false);
-            this.#syncStateClass();
-          }
+          if (this.#state === name) this.#setState('idle');
         }, autoRevertMs);
       }
     }

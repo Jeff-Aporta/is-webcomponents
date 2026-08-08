@@ -1,3 +1,4 @@
+import '../actions/button.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { defineElement } from '../_shared/define.js';
@@ -44,14 +45,14 @@ import { emit } from '../_shared/emit.js';
       this.shadowRoot.innerHTML = /* html */ `
         <div part="root" class="root">
           <header part="toolbar" class="toolbar">
-            <button class="ctrl" data-act="prev" aria-label="Anterior">‹</button>
-            <button class="ctrl today" data-act="today">Hoy</button>
-            <button class="ctrl" data-act="next" aria-label="Siguiente">›</button>
+            <is-button variant="outlined" class="ctrl" data-act="prev" aria-label="Anterior">‹</is-button>
+            <is-button variant="outlined" class="ctrl today" data-act="today">Hoy</is-button>
+            <is-button variant="outlined" class="ctrl" data-act="next" aria-label="Siguiente">›</is-button>
             <span class="title" id="ttl"></span>
             <span class="spacer"></span>
-            <button class="view-btn is-active" data-view="month">Mes</button>
-            <button class="view-btn" data-view="week">Semana</button>
-            <button class="view-btn" data-view="day">Día</button>
+            <is-button variant="filled" color="brand" class="view-btn is-active" data-view="month">Mes</is-button>
+            <is-button variant="outlined" class="view-btn" data-view="week">Semana</is-button>
+            <is-button variant="outlined" class="view-btn" data-view="day">Día</is-button>
           </header>
           <div part="grid" class="grid" id="grid"></div>
         </div>
@@ -68,6 +69,7 @@ import { emit } from '../_shared/emit.js';
       const d = this.getAttribute('date');
       if (d) this.#cursor = new Date(d);
       this.#readEvents();
+      this.#syncViewButtons(this.getAttribute('view') || 'month');
       this.#render();
     }
 
@@ -77,6 +79,10 @@ import { emit } from '../_shared/emit.js';
     }
 
     get events() { return this.#events; }
+    set events(list) {
+      this.#events = Array.isArray(list) ? list : [];
+      if (this.#mounted) this.#render();
+    }
 
     setDate(iso) { this.setAttribute('date', iso); }
     setView(v) { this.setAttribute('view', v); }
@@ -92,12 +98,29 @@ import { emit } from '../_shared/emit.js';
     }
 
     #onToolbar(e) {
-      const btn = e.target.closest('button');
+      // `is-button` es el host: el click no llega como <button>.
+      const btn = e.target.closest('[data-act],[data-view]');
       if (!btn) return;
       if (btn.dataset.act === 'prev') this.prev();
       else if (btn.dataset.act === 'next') this.next();
       else if (btn.dataset.act === 'today') this.today();
-      else if (btn.dataset.view) { this.setView(btn.dataset.view); this.shadowRoot.querySelectorAll('.view-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.view === btn.dataset.view)); emit(this, 'is-view-change', { view: btn.dataset.view, date: this.#cursor.toISOString() }); }
+      else if (btn.dataset.view) {
+        this.setView(btn.dataset.view);
+        this.#syncViewButtons(btn.dataset.view);
+        emit(this, 'is-view-change', { view: btn.dataset.view, date: this.#cursor.toISOString() });
+      }
+    }
+
+    /** El botón activo se marca con la variante de `is-button`, no repintando
+     *  fondo desde este CSS: eso caería en el host y no en su <button>. */
+    #syncViewButtons(view) {
+      this.shadowRoot.querySelectorAll('.view-btn').forEach((b) => {
+        const active = b.dataset.view === view;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('variant', active ? 'filled' : 'outlined');
+        if (active) b.setAttribute('color', 'brand');
+        else b.removeAttribute('color');
+      });
     }
 
     #onClick(e) {

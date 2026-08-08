@@ -69,11 +69,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     'clearable', 'disabled', 'readonly', 'required', 'label',
   ];
 
-  const PROPS = [
-    'name', 'value', 'max', 'precision', 'allowHalf', 'icon', 'emptyIcon',
-    'highlightSelectedOnly', 'color', 'labels', 'labelFormat', 'getLabelText',
-    'showLabel', 'clearable', 'disabled', 'readonly', 'required', 'label',
-  ];
+  const EXTRA_UPGRADE_PROPS = ['labels', 'getLabelText'];
 
   const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
 
@@ -122,7 +118,13 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     }
 
     onConnected() {
-      this.#upgradeProps();
+      for (const p of EXTRA_UPGRADE_PROPS) {
+        if (Object.prototype.hasOwnProperty.call(this, p)) {
+          const v = this[p];
+          delete this[p];
+          if (v != null) this[p] = v;
+        }
+      }
       this.#value = this.#coerce(Number(this.getAttribute('value') ?? 0));
       this.#syncSlots();
       this.#buildStars();
@@ -270,16 +272,6 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     }
 
     // ---- privados --------------------------------------------------------
-
-    #upgradeProps() {
-      for (const p of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
-    }
 
     /** Ajusta a `precision`; en readonly se admite cualquier fracción (ej. 3.7). */
     #coerce(n) {

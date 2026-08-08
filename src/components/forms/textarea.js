@@ -5,6 +5,7 @@ import {
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { ElementBase } from '../_shared/element-base.js';
+import { upgradeProperties } from '../_shared/upgrade-properties.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 /**
@@ -54,13 +55,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     'autosize', 'min-rows', 'max-rows', 'error', 'error-text', 'show-count'
   ];
 
-  const PROPS = [
-    'name', 'value', 'placeholder', 'label', 'hint',
-    'disabled', 'required', 'readonly', 'rows', 'maxlength', 'resize',
-    'autosize', 'minRows', 'maxRows', 'variant', 'labelPlacement',
-    'error', 'errorText', 'showCount', 'fullWidth'
-  ];
-
+  const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
 
   class IsTextarea extends ElementBase {
     static formAssociated = true;
@@ -107,7 +102,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     }
 
     onConnected() {
-      this.#upgradeProps();
+      upgradeProperties(this, EXTRA_UPGRADE_ATTRS);
       this.#value = this.getAttribute('value') ?? '';
       this.#syncSlots();
       this.#syncNative();
@@ -278,16 +273,6 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     }
 
     // ---- privados --------------------------------------------------------
-
-    #upgradeProps() {
-      for (const p of PROPS) {
-        if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
-        }
-      }
-    }
 
     #syncSlots = () => {
       const labelAttr = this.label.trim();
