@@ -36,7 +36,7 @@ Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
 | Timeline | `is-timeline` | lista vertical custom |
 | Icono | `is-icon` | Iconify script / img SVG |
 | Formato fecha/número/bytes | `is-format-*` / `is-relative-time` | Intl wrappers propios |
-| Form ContaPyme | `is-form` / `is-function-form` | form React |
+| Form ContaPyme | `is-form` (+ json2html/html2json) | form React |
 | Layout ISP | `is-flex-layout` / `is-grid-layout` / `is-block-layout` | CSS grid ad-hoc sin necesidad |
 | Título / texto ISP | `is-heading` / `is-text` | typography casera en apps ISP |
 | Superficie contenido | `is-card` | card div |
