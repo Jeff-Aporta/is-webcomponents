@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./timeline.js
 style: ./timeline.css
-preview: ../../previews/diagrams/is-timeline.html
+preview: ../../previews/diagrams/is-timeline.json
 ---
 # `<is-timeline>`
 
@@ -163,4 +163,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./timeline.js)
 - [CSS](./timeline.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-timeline.html)
+- [Preview](../../previews/diagrams/is-timeline.json)

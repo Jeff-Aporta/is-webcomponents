@@ -133,7 +133,10 @@ export function computeBlockLayout(spec) {
   const hasHeader = !!(title || subtitle);
   const titleY = title ? 24 : 14;
   const subtitleY = title ? 42 : 24;
-  const headerH = hasHeader ? (subtitle ? 60 : 38) : 0;
+  // La rejilla del router es de 8px: un headerH fuera de rejilla (60/38)
+  // desplazaba TODAS las filas y dejaba los anclajes a medio píxel de celda,
+  // que es de donde salían las costuras en diagonal.
+  const headerH = snapDiagramGrid(hasHeader ? (subtitle ? 60 : 38) : 0);
 
   // Ancho de columna uniforme: el máximo requerido por cualquier bloque, repartido
   // entre las columnas que ocupa (descontando el hueco entre ellas).

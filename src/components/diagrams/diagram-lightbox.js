@@ -1,4 +1,4 @@
-import { adoptCss } from '../_shared/adopt-css.js';
+import { siblingCssHref } from '../_shared/adopt-css.js';
 import { IsLightbox } from './lightbox.js';
 import { getDiagramTag } from './diagram-kinds.js';
 import { expandSequencePayloadForJson } from './sequence-spec.js';
@@ -81,11 +81,11 @@ class IsDiagramLightbox extends IsLightbox {
 
   constructor() {
     super();
-    // Adoptamos el CSS específico del lightbox de diagramas encima del CSS
-    // base que ya inyectó `adoptCss()` en el padre.
+    // CSS específico encima del base que ya inyectó `adoptCss()` en el padre.
+    // Usar siblingCssHref para respetar .min.js → .min.css en el CDN.
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('./diagram-lightbox.css', import.meta.url).href;
+    link.href = siblingCssHref(import.meta.url);
     this.shadowRoot.appendChild(link);
     this.#installDiagramToolbar();
   }
@@ -232,6 +232,7 @@ class IsDiagramLightbox extends IsLightbox {
       msg.className = 'lb-unsupported';
       msg.textContent = `Tipo de diagrama aún no soportado en el visor: ${this.kind}`;
       host.appendChild(msg);
+      this.#onTurtleState({ playing: false, replay: 0, idx: 0, total: 0 });
       return;
     }
     const el = document.createElement(tag);
@@ -242,6 +243,11 @@ class IsDiagramLightbox extends IsLightbox {
     el.addEventListener('is-toggle-group', (e) => this.#onToggleGroup(e.detail.id));
     host.appendChild(el);
     this.#diagramEl = el;
+    // Diagramas sin API turtle (org-chart, mindmap, timeline…) nunca emiten
+    // `is-turtle-state`: ocultamos la barra ya mismo en vez de esperar un
+    // evento que no va a llegar. Los que sí tienen turtle corrigen este
+    // estado apenas termina su primer render (ver #onTurtleState arriba).
+    if (!el.turtle) this.#onTurtleState({ playing: false, replay: 0, idx: 0, total: 0 });
   }
 
   #onToggleGroup(id) {

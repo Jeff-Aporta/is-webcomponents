@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./scatter-chart.js
 style: ./scatter-chart.css
-preview: ../../previews/data-viz/is-scatter-chart.html
+preview: ../../previews/data-viz/is-scatter-chart.json
 ---
 # `<is-scatter-chart>`
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./scatter-chart.js)
 - [CSS](./scatter-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-scatter-chart.html)
+- [Preview](../../previews/data-viz/is-scatter-chart.json)

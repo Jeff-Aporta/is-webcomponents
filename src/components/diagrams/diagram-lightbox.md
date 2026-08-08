@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./diagram-lightbox.js
 style: ./diagram-lightbox.css
-preview: ../../previews/diagrams/is-diagram-lightbox.html
+preview: ../../previews/diagrams/is-diagram-lightbox.json
 ---
 # `<is-diagram-lightbox>`
 
@@ -187,4 +187,4 @@ console.log('Compartir:', e.detail.url);
 - [JavaScript](./diagram-lightbox.js)
 - [CSS](./diagram-lightbox.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-diagram-lightbox.html)
+- [Preview](../../previews/diagrams/is-diagram-lightbox.json)

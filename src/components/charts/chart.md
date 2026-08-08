@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./chart.js
 style: ./chart.css
-preview: ../../previews/data-viz/is-chart.html
+preview: ../../previews/data-viz/is-chart.json
 ---
 # `<is-chart>`
 
@@ -212,4 +212,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 - [JavaScript](./chart.js)
 - [CSS](./chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-chart.html)
+- [Preview](../../previews/data-viz/is-chart.json)

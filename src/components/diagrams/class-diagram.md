@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./class-diagram.js
 style: ./class-diagram.css
-preview: ../../previews/diagrams/is-class-diagram.html
+preview: ../../previews/diagrams/is-class-diagram.json
 ---
 # `<is-class-diagram>`
 
@@ -165,4 +165,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./class-diagram.js)
 - [CSS](./class-diagram.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-class-diagram.html)
+- [Preview](../../previews/diagrams/is-class-diagram.json)

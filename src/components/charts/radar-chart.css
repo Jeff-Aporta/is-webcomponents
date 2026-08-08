@@ -8,6 +8,5 @@
   --fill-color-4: color-mix(in srgb, #fab005 20%, transparent);
   --fill-color-5: color-mix(in srgb, #7950f2 20%, transparent);
   --fill-color-6: color-mix(in srgb, #fd7e14 20%, transparent);
-  --point-radius: 4;
-  --line-border-width: 2;
+  /* ponytail: hardcoded, sync con chart-palette.js si el pedido de tema dinámico aparece */
 }

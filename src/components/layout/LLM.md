@@ -21,6 +21,7 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-drawer>` | [drawer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/drawer.md) | Drawer |
 | `<is-divider>` | [divider.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/divider.md) | Divider |
 | `<is-scrollspy>` | [scrollspy.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/scrollspy.md) | Scrollspy |
+| `<is-dock>`, `<is-dock-item>` | [dock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/dock.md) | Dock de accesos con magnificación |
 
 ## Composición y relaciones
 

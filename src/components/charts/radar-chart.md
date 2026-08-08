@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./radar-chart.js
 style: ./radar-chart.css
-preview: ../../previews/data-viz/is-radar-chart.html
+preview: ../../previews/data-viz/is-radar-chart.json
 ---
 # `<is-radar-chart>`
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./radar-chart.js)
 - [CSS](./radar-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-radar-chart.html)
+- [Preview](../../previews/data-viz/is-radar-chart.json)

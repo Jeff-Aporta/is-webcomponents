@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./gantt.js
 style: ./gantt.css
-preview: ../../previews/diagrams/is-gantt.html
+preview: ../../previews/diagrams/is-gantt.json
 ---
 # `<is-gantt>`
 
@@ -168,4 +168,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./gantt.js)
 - [CSS](./gantt.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-gantt.html)
+- [Preview](../../previews/diagrams/is-gantt.json)

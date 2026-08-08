@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./sequence-diagram.js
 style: ./sequence-diagram.css
-preview: ../../previews/diagrams/is-sequence-diagram.html
+preview: ../../previews/diagrams/is-sequence-diagram.json
 ---
 # `<is-sequence-diagram>`
 
@@ -173,4 +173,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./sequence-diagram.js)
 - [CSS](./sequence-diagram.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-sequence-diagram.html)
+- [Preview](../../previews/diagrams/is-sequence-diagram.json)

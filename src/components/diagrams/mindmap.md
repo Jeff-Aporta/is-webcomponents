@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./mindmap.js
 style: ./mindmap.css
-preview: ../../previews/diagrams/is-mindmap.html
+preview: ../../previews/diagrams/is-mindmap.json
 ---
 # `<is-mindmap>`
 
@@ -162,4 +162,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./mindmap.js)
 - [CSS](./mindmap.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-mindmap.html)
+- [Preview](../../previews/diagrams/is-mindmap.json)

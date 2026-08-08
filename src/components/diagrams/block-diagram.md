@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./block-diagram.js
 style: ./block-diagram.css
-preview: ../../previews/diagrams/is-block-diagram.html
+preview: ../../previews/diagrams/is-block-diagram.json
 ---
 # `<is-block-diagram>`
 
@@ -169,4 +169,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./block-diagram.js)
 - [CSS](./block-diagram.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-block-diagram.html)
+- [Preview](../../previews/diagrams/is-block-diagram.json)

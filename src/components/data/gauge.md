@@ -6,7 +6,7 @@ category: data
 status: public
 source: ./gauge.js
 style: ./gauge.css
-preview: ../../previews/data-viz/is-gauge.html
+preview: ../../previews/data-viz/is-gauge.json
 ---
 # `<is-gauge>`
 
@@ -172,4 +172,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./gauge.js)
 - [CSS](./gauge.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-gauge.html)
+- [Preview](../../previews/data-viz/is-gauge.json)

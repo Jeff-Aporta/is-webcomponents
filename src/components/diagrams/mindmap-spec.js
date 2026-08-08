@@ -150,8 +150,11 @@ export function computeMindmapLayout(spec) {
   });
 
   const placed = spec.layout === 'tree'
-    ? layoutTree(root, { direction: 'LR', levelGap: 64, siblingGap: 14, measure })
-    : layoutRadialTree(root, { radiusStep: 96, measure });
+    ? layoutTree(root, { direction: 'LR', levelGap: 44, siblingGap: 10, measure })
+    // `radiusStep` es aire ADEMÁS de la media caja de cada anillo, y el layout
+    // ya crece solo si dos nodos del mismo anillo se solapan. Con 72 el mapa
+    // ocupaba mucha más área de la necesaria.
+    : layoutRadialTree(root, { radiusStep: 40, measure });
 
   const byId = new Map();
   (function collect(node) {

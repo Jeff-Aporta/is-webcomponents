@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./main.js
 style: ./main.css
-preview: ../../previews/layout/is-main.html
+preview: ../../previews/layout/is-main.json
 ---
 # `<is-main>`
 
@@ -159,4 +159,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./main.js)
 - [CSS](./main.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-main.html)
+- [Preview](../../previews/layout/is-main.json)

@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./line-chart.js
 style: ./line-chart.css
-preview: ../../previews/data-viz/is-line-chart.html
+preview: ../../previews/data-viz/is-line-chart.json
 ---
 # `<is-line-chart>`
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./line-chart.js)
 - [CSS](./line-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-line-chart.html)
+- [Preview](../../previews/data-viz/is-line-chart.json)

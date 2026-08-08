@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./lightbox.js
 style: ./lightbox.css
-preview: ../../previews/helpers/is-lightbox.html
+preview: ../../previews/helpers/is-lightbox.json
 ---
 # `<is-lightbox>`
 
@@ -81,8 +81,8 @@ import './lightbox.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-open` | no | sí | sí | no |
-| `is-close` | no | sí | sí | no |
+| `is-after-show` | no | sí | sí | no |
+| `is-after-hide` | no | sí | sí | no |
 | `is-share` | sí | sí | sí | no |
 | `is-reposition` | sí | sí | sí | no |
 
@@ -171,8 +171,8 @@ Documentación de cabecera preservada desde fuente:
 >   zoomOut(factor=1.2)  Zoom −
 >   resetView()          scale=1, x=0, y=0
 > Eventos:
->   is-open       dialog abierto
->   is-close      dialog cerrado
+>   is-after-show   dialog abierto
+>   is-after-hide   dialog cerrado
 >   is-reposition detail: { scale, x, y }
 > CSS parts: dialog, toolbar, toolbar__lead, toolbar__trail, stage,
 >            host, code-panel, code-panel__area, code-panel__actions,
@@ -224,4 +224,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./lightbox.js)
 - [CSS](./lightbox.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-lightbox.html)
+- [Preview](../../previews/helpers/is-lightbox.json)

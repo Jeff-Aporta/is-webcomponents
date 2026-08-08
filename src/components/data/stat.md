@@ -6,7 +6,7 @@ category: data
 status: public
 source: ./stat.js
 style: ./stat.css
-preview: ../../previews/data/is-stat.html
+preview: ../../previews/data/is-stat.json
 ---
 # `<is-stat>`
 
@@ -193,4 +193,4 @@ icon="mdi:cash-multiple"
 - [JavaScript](./stat.js)
 - [CSS](./stat.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data/is-stat.html)
+- [Preview](../../previews/data/is-stat.json)

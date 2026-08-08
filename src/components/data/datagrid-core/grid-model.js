@@ -151,10 +151,10 @@ export function createGridModel(options) {
   const listeners = new Set();
   let cache = null;
 
-  function notify() {
+  function notify(reason = 'all') {
     cache = compute();
     for (const fn of listeners) {
-      try { fn(cache); } catch { /* ignore listener error */ }
+      try { fn(cache, reason); } catch { /* ignore listener error */ }
     }
   }
 
@@ -197,7 +197,7 @@ export function createGridModel(options) {
     },
     setSelection(ids) {
       s.selection = ids;
-      notify();
+      notify('selection');
     },
     setDensity(d) {
       s.density = d;

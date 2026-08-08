@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./split-panel.js
 style: ./split-panel.css
-preview: ../../previews/layout/is-split-panel.html
+preview: ../../previews/layout/is-split-panel.json
 ---
 # `<is-split-panel>`
 
@@ -201,4 +201,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-valuen
 - [JavaScript](./split-panel.js)
 - [CSS](./split-panel.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-split-panel.html)
+- [Preview](../../previews/layout/is-split-panel.json)

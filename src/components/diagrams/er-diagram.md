@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./er-diagram.js
 style: ./er-diagram.css
-preview: ../../previews/diagrams/is-er-diagram.html
+preview: ../../previews/diagrams/is-er-diagram.json
 ---
 # `<is-er-diagram>`
 
@@ -165,4 +165,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./er-diagram.js)
 - [CSS](./er-diagram.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-er-diagram.html)
+- [Preview](../../previews/diagrams/is-er-diagram.json)

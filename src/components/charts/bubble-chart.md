@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./bubble-chart.js
 style: ./bubble-chart.css
-preview: ../../previews/data-viz/is-bubble-chart.html
+preview: ../../previews/data-viz/is-bubble-chart.json
 ---
 # `<is-bubble-chart>`
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./bubble-chart.js)
 - [CSS](./bubble-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-bubble-chart.html)
+- [Preview](../../previews/data-viz/is-bubble-chart.json)

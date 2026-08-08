@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./doughnut-chart.js
 style: ./doughnut-chart.css
-preview: ../../previews/data-viz/is-doughnut-chart.html
+preview: ../../previews/data-viz/is-doughnut-chart.json
 ---
 # `<is-doughnut-chart>`
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./doughnut-chart.js)
 - [CSS](./doughnut-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-doughnut-chart.html)
+- [Preview](../../previews/data-viz/is-doughnut-chart.json)

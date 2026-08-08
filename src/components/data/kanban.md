@@ -8,7 +8,7 @@ category: data
 status: public
 source: ./kanban.js
 style: ./kanban.css
-preview: ../../previews/data/is-kanban.html
+preview: ../../previews/data/is-kanban.json
 ---
 # `<is-kanban>` / `<is-kanban-column>` / `<is-kanban-card>`
 
@@ -211,4 +211,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./kanban.js)
 - [CSS](./kanban.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data/is-kanban.html)
+- [Preview](../../previews/data/is-kanban.json)

@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./divider.js
 style: ./divider.css
-preview: ../../previews/layout/is-divider.html
+preview: ../../previews/layout/is-divider.json
 ---
 # `<is-divider>`
 
@@ -158,4 +158,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-orient
 - [JavaScript](./divider.js)
 - [CSS](./divider.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-divider.html)
+- [Preview](../../previews/layout/is-divider.json)

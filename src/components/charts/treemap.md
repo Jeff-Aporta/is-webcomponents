@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./treemap.js
 style: ./treemap.css
-preview: ../../previews/data-viz/is-treemap.html
+preview: ../../previews/data-viz/is-treemap.json
 ---
 # `<is-treemap>`
 
@@ -163,4 +163,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./treemap.js)
 - [CSS](./treemap.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-treemap.html)
+- [Preview](../../previews/data-viz/is-treemap.json)

@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./pie-chart.js
 style: ./pie-chart.css
-preview: ../../previews/data-viz/is-pie-chart.html
+preview: ../../previews/data-viz/is-pie-chart.json
 ---
 # `<is-pie-chart>`
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./pie-chart.js)
 - [CSS](./pie-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-pie-chart.html)
+- [Preview](../../previews/data-viz/is-pie-chart.json)

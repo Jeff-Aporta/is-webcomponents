@@ -23,6 +23,7 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-mindmap>` | [mindmap.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/mindmap.md) | Mapa mental |
 | `<is-gantt>` | [gantt.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/gantt.md) | Diagrama de Gantt |
 | `<is-timeline>` | [timeline.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/timeline.md) | Línea de tiempo |
+| `<is-org-chart>` | [org-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/org-chart.md) | Organigrama jerárquico |
 
 ## Composición y relaciones
 
