@@ -1,4 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { DiagramElementBase } from '../_shared/diagram-element-base.js';
+import { svgArrowHead } from '../_shared/diagram-arrow.js';
 import {
   computeSequenceLayout,
   resolveSequenceSpec,
@@ -15,6 +17,7 @@ import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { svgEl } from '../_shared/svg-chart-engine.js';
 /**
  * <is-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
  *
@@ -39,16 +42,7 @@ import { emit } from '../_shared/emit.js';
  *          is-toggle-group (detail: {id})
  */
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
 const GUIDE_X = 44;
-
-function svgEl(tag, attrs = {}) {
-  const n = document.createElementNS(SVG_NS, tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
-  }
-  return n;
-}
 
 /** Div dentro de foreignObject con HTML inline (iconos / markdown). */
 function foreignHtml(x, y, w, h, className, html, style) {
@@ -62,128 +56,58 @@ function foreignHtml(x, y, w, h, className, html, style) {
   return fo;
 }
 
-class IsSequenceDiagram extends HTMLElement {
-  static get observedAttributes() { return ['color']; }
-
-  #wrap; #svg; #tooltipEl;
-  #payload = null;
-  #spec = null;
-  #layout = null;
+class IsSequenceDiagram extends DiagramElementBase {
   #theme = null;
   #turtle = null;
   #turtleGroup = null;
-  #mounted = false;
-  #mo = null; #themeObs = null; #ro = null;
-  #renderQueued = false;
   #hiddenGroups = new Set();
   /** id de mensaje → nodos cacheados, para aplicar hover sin reconstruir el SVG. */
   #msgNodes = new Map();
   #lifelineNodes = [];
   #actorNodes = [];
   #hoverId = null;
-  #ownLightbox = null;
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.innerHTML = /* html */ `
-      <div part="base" class="wrap">
-        <svg part="canvas" class="seq-svg" xmlns="${SVG_NS}" role="img"></svg>
-        <div part="tooltip" class="seq-tooltip dg-tooltip is-rich" hidden></div>
-        <div class="slot-hidden"><slot></slot></div>
-      </div>
-    `;
-    adoptCss(shadow, import.meta.url);
-    this.#wrap = shadow.querySelector('.wrap');
-    this.#svg = shadow.querySelector('.seq-svg');
-    this.#tooltipEl = shadow.querySelector('.seq-tooltip');
+    this.initDiagramShadow('seq-svg', 'seq-tooltip');
+    adoptCss(this.shadowRoot, import.meta.url);
   }
 
-  connectedCallback() {
-    this.#mounted = true;
-    // Las etiquetas con {{iconify}} rinden <is-icon> dentro de foreignObject.
-    this.#readJsonSlot();
-    this.#mo = new MutationObserver(() => this.#readJsonSlot());
-    this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
-    this.#themeObs = new MutationObserver(() => this.#queueRender());
-    this.#themeObs.observe(document.documentElement, {
-      attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette'],
-    });
-    this.#wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.addEventListener('click', this.#onClick);
-    this.#queueRender();
+  onDiagramConnected() {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
+    this.wrap.addEventListener('click', this.#onClick);
   }
 
-  disconnectedCallback() {
-    this.#mounted = false;
-    this.#mo?.disconnect();
-    this.#themeObs?.disconnect();
-    this.#ro?.disconnect();
+  onDiagramDisconnected() {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.#wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
+    this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  attributeChangedCallback(name, oldVal, newVal) {
-    if (!this.#mounted || oldVal === newVal) return;
-    this.#queueRender();
-  }
+  onPayloadChanged() { this.#hiddenGroups = new Set(); }
 
-  get isViewer() { return this.getAttribute('color') === 'viewer'; }
-
-  get payload() { return this.#payload; }
-  set payload(v) {
-    this.#payload = v;
-    this.#hiddenGroups = new Set();
-    this.#queueRender();
-  }
-
-  get spec() { return this.#spec; }
-  get layout() { return this.#layout; }
   get turtle() { return this.#turtle; }
 
   get hiddenGroups() { return this.#hiddenGroups; }
   set hiddenGroups(v) {
     this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
-    this.#queueRender();
+    this.queueRender();
   }
 
-  async updateComplete() { await this.#queueRender(); }
-
-  #readJsonSlot() {
-    const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
-    if (!script) return;
-    try {
-      this.#payload = JSON.parse(script.textContent.trim());
-      this.#queueRender();
-    } catch { /* JSON inválido: conserva el último payload válido */ }
-  }
-
-  #queueRender() {
-    if (this.#renderQueued) return this.#renderQueued;
-    this.#renderQueued = (async () => {
-      await Promise.resolve();
-      try { this.#render(); } finally { this.#renderQueued = false; }
-    })();
-    return this.#renderQueued;
-  }
-
-  #render() {
-    if (!this.#mounted) return;
-
+  renderDiagram() {
     // Los grupos ocultos se filtran del spec (re-diseña sin esas aristas).
     const hidden = this.#hiddenGroups;
-    const spec = resolveSequenceSpec(this.#payload ?? {});
-    this.#spec = spec;
+    const spec = resolveSequenceSpec(this.payload ?? {});
+    this.spec = spec;
     if (!spec) {
-      this.#svg.innerHTML = '';
-      this.#wrap.dataset.empty = '';
+      this.svg.innerHTML = '';
+      this.wrap.dataset.empty = '';
       return;
     }
-    delete this.#wrap.dataset.empty;
+    delete this.wrap.dataset.empty;
 
     const keep = (m) => !m.group || !hidden.has(m.group);
     const visibleSpec = hidden.size
@@ -198,26 +122,26 @@ class IsSequenceDiagram extends HTMLElement {
         }
       : spec;
 
-    const dark = !document.documentElement.classList.contains('theme-light');
+    const dark = this.isDarkTheme;
     const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
-    this.#wrap.dataset.theme = dark ? 'dark' : 'light';
+    this.syncThemeAttr();
     const layout = computeSequenceLayout(visibleSpec);
-    this.#layout = layout;
+    this.layout = layout;
 
     this.#buildSvg(layout, theme);
-    this.#wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
   #buildSvg(layout, theme) {
     const { width: W, height: H, actors, lifelines, messages, altBox, title, subtitle, titleY, subtitleY, groups, legendX } = layout;
 
-    this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    this.#svg.setAttribute('aria-label', title || 'Diagrama de secuencia');
+    this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    this.svg.setAttribute('aria-label', title || 'Diagrama de secuencia');
     // El resto del dimensionado vive en la hoja de estilos.
-    this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
-    this.#svg.innerHTML = '';
+    this.svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
+    this.svg.innerHTML = '';
     this.#msgNodes.clear();
     this.#lifelineNodes = [];
     this.#actorNodes = [];
@@ -229,7 +153,7 @@ class IsSequenceDiagram extends HTMLElement {
         'font-size': '13', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
       });
       t.textContent = title;
-      this.#svg.appendChild(t);
+      this.svg.appendChild(t);
     }
     if (subtitle) {
       const t = svgEl('text', {
@@ -237,7 +161,7 @@ class IsSequenceDiagram extends HTMLElement {
         'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
       });
       t.textContent = subtitle;
-      this.#svg.appendChild(t);
+      this.svg.appendChild(t);
     }
 
     if (groups?.length) this.#buildLegend(groups, legendX, theme);
@@ -248,7 +172,7 @@ class IsSequenceDiagram extends HTMLElement {
 
     // La tortuga se monta al final: debe quedar por encima de las marks.
     this.#turtleGroup = svgEl('g');
-    this.#svg.appendChild(this.#turtleGroup);
+    this.svg.appendChild(this.#turtleGroup);
     this.#turtle?.destroy();
     this.#turtle = new SequenceTurtle(this.#turtleGroup);
     this.#turtle.setData({
@@ -262,13 +186,13 @@ class IsSequenceDiagram extends HTMLElement {
       },
     });
 
-    emit(this, 'is-render', { layout, svg: this.#svg });
+    emit(this, 'is-render', { layout, svg: this.svg });
   }
 
   #buildLegend(groups, legendX, theme) {
     const g = svgEl('g', { class: 'seq-legend' });
     groups.forEach((grp, gi) => {
-      const ly = (this.#layout?.subtitleY || this.#layout?.titleY || 22) + 18 + gi * 16;
+      const ly = (this.layout?.subtitleY || this.layout?.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
       const clickable = this.isViewer;
@@ -297,7 +221,7 @@ class IsSequenceDiagram extends HTMLElement {
       item.appendChild(label);
       g.appendChild(item);
     });
-    this.#svg.appendChild(g);
+    this.svg.appendChild(g);
   }
 
   #buildActors(actors, theme) {
@@ -345,7 +269,7 @@ class IsSequenceDiagram extends HTMLElement {
         g.appendChild(t);
       }
 
-      this.#svg.appendChild(g);
+      this.svg.appendChild(g);
       this.#actorNodes.push({ x: a.x, g, rect });
     }
   }
@@ -357,7 +281,7 @@ class IsSequenceDiagram extends HTMLElement {
         stroke: theme.grid, 'stroke-width': 1, 'stroke-dasharray': '4 4',
         class: 'seq-lifeline',
       });
-      this.#svg.appendChild(line);
+      this.svg.appendChild(line);
       this.#lifelineNodes.push({ x: l.x, line });
     }
   }
@@ -374,7 +298,7 @@ class IsSequenceDiagram extends HTMLElement {
     });
     t.textContent = altBox.label;
     g.appendChild(t);
-    this.#svg.appendChild(g);
+    this.svg.appendChild(g);
   }
 
   #buildMessages(messages, altBox, theme) {
@@ -402,15 +326,23 @@ class IsSequenceDiagram extends HTMLElement {
       });
       g.appendChild(path);
 
-      // Punta horizontal según la dirección del último tramo.
+      // La orientación sale del ÚLTIMO TRAMO REAL del path: cuando el router
+      // ortogonal desvía la llegada, una punta fija horizontal quedaba de lado
+      // y separada de la línea. Las async llevan la MISMA cabeza triangular
+      // que las sync (solo cambia el trazo punteado): el chevron de dos trazos
+      // se leía como un triángulo al que le falta un lado.
       const tipX = m.arrowTipX;
       const tipY = m.arrowTipY ?? m.y;
-      const head = m.arrowDir > 0
-        ? `${tipX},${tipY} ${tipX - 7},${tipY - 3.5} ${tipX - 7},${tipY + 3.5}`
-        : `${tipX},${tipY} ${tipX + 7},${tipY - 3.5} ${tipX + 7},${tipY + 3.5}`;
-      const arrow = m.kind === 'async'
-        ? svgEl('polyline', { points: head, fill: 'none', stroke: color, 'stroke-width': 1.15, 'stroke-linejoin': 'miter', class: 'seq-msg-head' })
-        : svgEl('polygon', { points: head, fill: color, class: 'seq-msg-head' });
+      const wingLen = m.kind === 'async' ? 9 : 7;
+      const arrow = svgArrowHead({
+        d: m.path,
+        tip: { x: tipX, y: tipY },
+        color,
+        len: wingLen,
+        halfWidth: 3.5,
+        className: 'seq-msg-head',
+        fallbackDir: { x: m.arrowDir > 0 ? 1 : -1, y: 0 },
+      });
       g.appendChild(arrow);
 
       const dotG = svgEl('g', { class: 'seq-start' });
@@ -434,7 +366,7 @@ class IsSequenceDiagram extends HTMLElement {
       const labelNode = this.#buildMessageLabel(m, theme);
       if (labelNode) g.appendChild(labelNode);
 
-      this.#svg.appendChild(g);
+      this.svg.appendChild(g);
       this.#msgNodes.set(m.id, { m, g, path, arrow, dot, labelNode });
     }
   }
@@ -478,27 +410,12 @@ class IsSequenceDiagram extends HTMLElement {
     // `is-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
-      bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
+      bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
     // Si nadie lo intercepta (preventDefault), abre el visor por su cuenta.
-    if (!ev.defaultPrevented) this.#openOwnViewer();
+    if (!ev.defaultPrevented) this.openOwnViewer('sequence');
   };
-
-  /** Lightbox propio, cargado bajo demanda para no crear un ciclo de imports. */
-  async #openOwnViewer() {
-    await import('./diagram-lightbox.js');
-    let lb = this.#ownLightbox;
-    if (!lb || !lb.isConnected) {
-      lb = document.createElement('is-diagram-lightbox');
-      lb.setAttribute('kind', 'sequence');
-      lb.addEventListener('is-close', () => lb.remove());
-      document.body.appendChild(lb);
-      this.#ownLightbox = lb;
-    }
-    lb.payload = this.#payload;
-    lb.open = true;
-  }
 
   #onMouseMove = (e) => {
     if (!this.isViewer) return;
@@ -520,14 +437,15 @@ class IsSequenceDiagram extends HTMLElement {
     const theme = this.#theme;
     const hiColor = hovered?.groupHue != null ? tkHueToHex(hovered.groupHue) || theme.accent : theme.accent;
 
-    this.#wrap.classList.toggle('is-hover-msg', !!id);
+    this.wrap.classList.toggle('is-hover-msg', !!id);
 
     for (const [msgId, node] of this.#msgNodes) {
       const active = msgId === id;
       node.g.classList.toggle('is-active', active);
       node.g.classList.toggle('is-dim', !!id && !active);
       node.path.setAttribute('stroke-width', active ? 1.75 : 1.15);
-      if (node.arrow.tagName === 'polyline') node.arrow.setAttribute('stroke-width', active ? 1.75 : 1.15);
+      // La cabeza es un <polygon> relleno (sync y async): no tiene trazo que
+      // engrosar, el realce lo lleva la línea.
       node.dot.setAttribute('r', active ? 9 : 8);
       if (node.labelNode?.classList?.contains('seq-label-text')) {
         node.labelNode.setAttribute('fill', active ? theme.text : theme.muted);
@@ -555,14 +473,14 @@ class IsSequenceDiagram extends HTMLElement {
     this.#turtle?.setPaused(!!id);
 
     if (!hovered) {
-      this.#tooltipEl.hidden = true;
+      this.tooltipEl.hidden = true;
       return;
     }
     this.#renderTooltip(hovered);
   }
 
   #renderTooltip(m) {
-    const tip = this.#tooltipEl;
+    const tip = this.tooltipEl;
     tip.hidden = false;
     tip.innerHTML = '';
 
@@ -588,12 +506,12 @@ class IsSequenceDiagram extends HTMLElement {
 
   /** Sigue al cursor pero SIEMPRE por debajo de la fila, para no tapar el dot ni la flecha. */
   #positionTooltip(e) {
-    const rect = this.#wrap.getBoundingClientRect();
+    const rect = this.wrap.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const left = Math.max(8, Math.min((rect.width || 320) - 300, x + 16));
-    this.#tooltipEl.style.left = `${left}px`;
-    this.#tooltipEl.style.top = `${y + 26}px`;
+    this.tooltipEl.style.left = `${left}px`;
+    this.tooltipEl.style.top = `${y + 26}px`;
   }
 }
 
