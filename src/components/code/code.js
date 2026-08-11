@@ -39,6 +39,7 @@ import {
 } from '../_shared/code-langs.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from '../_shared/code-format.js';
 import { applyThemeConfig, parseThemeConfig } from '../_shared/code-theme.js';
+import { DIFF_LINE_CLASSES } from '../_shared/code-diff.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
 } from '../_shared/code-model.js';
@@ -431,6 +432,7 @@ class IsCode extends ElementBase {
       this.#ready = true;
       this.#pendingValue = null;
       this.#paintMarks();
+      this.#syncLineClasses();
       setFormValue(this.#internals, this.value);
       setCustomState(this.#internals, 'blank', !this.value);
       if (this.autofocus) this.#cm.focus();
@@ -484,6 +486,7 @@ class IsCode extends ElementBase {
     if (!this.#cm) return;
     const { mode } = await ensureLanguage(this.lang);
     this.#cm.setOption('mode', mode);
+    this.#syncLineClasses();
   }
 
   #applyOptions() {
@@ -534,6 +537,7 @@ class IsCode extends ElementBase {
     this.setAttribute('value', value);
     setFormValue(this.#internals, value);
     setCustomState(this.#internals, 'blank', !value);
+    this.#syncLineClasses();
 
     if (change && change.origin !== 'setValue') {
       const from = cm.indexFromPos(change.from);
@@ -546,6 +550,25 @@ class IsCode extends ElementBase {
     emit(this, 'is-input', { value, change });
     // change “commit” al blur lo emite el host; aquí también is-change para parity con inputs
     emit(this, 'is-change', { value });
+  }
+
+  /**
+   * Pinta la banda de fondo de cada línea para los lenguajes que la piden
+   * (`CodeLangDef.lineClass`). CM colorea tokens, no filas: sin esto un diff
+   * queda con el texto verde/rojo pero sin el bloque de color que es lo que
+   * deja ver de un vistazo el tamaño del cambio.
+   */
+  #syncLineClasses() {
+    const cm = this.#cm;
+    if (!cm) return;
+    const lineClass = resolveLanguage(this.lang)?.lineClass;
+    cm.operation(() => {
+      cm.eachLine((handle) => {
+        for (const cls of DIFF_LINE_CLASSES) cm.removeLineClass(handle, 'background', cls);
+        const cls = lineClass ? lineClass(handle.text) : null;
+        if (cls) cm.addLineClass(handle, 'background', cls);
+      });
+    });
   }
 
   #onCursor() {

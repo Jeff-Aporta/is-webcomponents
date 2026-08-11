@@ -72,6 +72,18 @@ export const THEME_PROP_MAP = Object.freeze({
   errorHighlight: '--is-code-mark-error',
   warningHighlight: '--is-code-mark-warning',
   infoHighlight: '--is-code-mark-info',
+  // Diff / resumen de commit. Van en pares texto + banda: el texto tiene que
+  // contrastar contra la banda, no contra el fondo del editor.
+  diffAdded: '--is-code-diff-added',
+  diffAddedBand: '--is-code-diff-added-band',
+  diffRemoved: '--is-code-diff-removed',
+  diffRemovedBand: '--is-code-diff-removed-band',
+  diffHunk: '--is-code-diff-hunk',
+  diffHunkBand: '--is-code-diff-hunk-band',
+  diffFile: '--is-code-diff-file',
+  diffCommit: '--is-code-diff-commit',
+  diffPath: '--is-code-diff-path',
+  diffNote: '--is-code-diff-note',
 });
 
 /** Presets alineados a material-darker / mdn-like del kit. */
@@ -107,6 +119,16 @@ export const BUILTIN_THEMES = Object.freeze({
     errorHighlight: 'rgba(255, 82, 82, 0.28)',
     warningHighlight: 'rgba(255, 193, 7, 0.28)',
     infoHighlight: 'rgba(33, 150, 243, 0.28)',
+    diffAdded: '#a5e075',
+    diffAddedBand: 'rgba(80, 200, 120, 0.16)',
+    diffRemoved: '#ff8a8a',
+    diffRemovedBand: 'rgba(255, 82, 82, 0.16)',
+    diffHunk: '#89ddff',
+    diffHunkBand: 'rgba(137, 221, 255, 0.10)',
+    diffFile: '#ffcb6b',
+    diffCommit: '#c792ea',
+    diffPath: '#80cbc4',
+    diffNote: '#7f8c99',
   },
   light: {
     background: '#ffffff',
@@ -139,6 +161,16 @@ export const BUILTIN_THEMES = Object.freeze({
     errorHighlight: 'rgba(220, 38, 38, 0.18)',
     warningHighlight: 'rgba(202, 138, 4, 0.2)',
     infoHighlight: 'rgba(37, 99, 235, 0.16)',
+    diffAdded: '#15803d',
+    diffAddedBand: 'rgba(34, 197, 94, 0.14)',
+    diffRemoved: '#b91c1c',
+    diffRemovedBand: 'rgba(239, 68, 68, 0.12)',
+    diffHunk: '#0369a1',
+    diffHunkBand: 'rgba(3, 105, 161, 0.08)',
+    diffFile: '#92400e',
+    diffCommit: '#6d28d9',
+    diffPath: '#0f766e',
+    diffNote: '#6b7280',
   },
 });
 

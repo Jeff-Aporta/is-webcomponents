@@ -294,6 +294,40 @@
 .cm-s-is-code span.cm-variable.cm-def,
 .cm-s-is-code .cm-callee { color: var(--is-code-function); }
 
+/* —— Diff / resumen de commit (lang="diff" · lang="commit") ——
+   Dos capas: el token da el color del texto y la clase de línea da la banda de
+   fondo. La banda es la que hace legible el bloque de un vistazo; el color de
+   texto solo no basta cuando hay muchas líneas seguidas. */
+.cm-s-is-code {
+  & .cm-is-diff-add { color: var(--is-code-diff-added); }
+  & .cm-is-diff-del { color: var(--is-code-diff-removed); }
+  & .cm-is-diff-hunk { color: var(--is-code-diff-hunk); font-weight: 600; }
+  & .cm-is-diff-file { color: var(--is-code-diff-file); font-weight: 600; }
+  & .cm-is-diff-commit { color: var(--is-code-diff-commit); font-weight: 600; }
+  & .cm-is-diff-header { color: var(--is-code-comment); }
+  & .cm-is-diff-comment { color: var(--is-code-comment); font-style: italic; }
+  & .cm-is-diff-note { color: var(--is-code-diff-note); font-style: italic; }
+  & .cm-is-diff-path { color: var(--is-code-diff-path); }
+  & .cm-is-diff-num { color: var(--is-code-number); }
+  & .cm-is-diff-punct { color: var(--is-code-punctuation); }
+
+  & .is-diff-line-add { background: var(--is-code-diff-added-band); }
+  & .is-diff-line-del { background: var(--is-code-diff-removed-band); }
+  & .is-diff-line-hunk { background: var(--is-code-diff-hunk-band); }
+
+  & .is-diff-line-file,
+  & .is-diff-line-commit { background: transparent; }
+}
+
+/* La línea activa comparte elemento con la banda, y su regla vive más arriba en
+   la hoja: sin esto el realce de cursor pisa el color de la fila, que en un
+   diff no es decoración sino el dato. La banda gana. */
+.editor-host .CodeMirror-activeline-background {
+  &.is-diff-line-add { background: var(--is-code-diff-added-band); }
+  &.is-diff-line-del { background: var(--is-code-diff-removed-band); }
+  &.is-diff-line-hunk { background: var(--is-code-diff-hunk-band); }
+}
+
 /* —— External marks (errors / warnings / tooltips) —— */
 .is-code-mark {
   border-radius: 2px;

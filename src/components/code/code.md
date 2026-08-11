@@ -33,7 +33,8 @@ Este módulo registra `<is-code>`.
 - Solo colorear un `<pre>` de documentación: usar `highlight-code.js` /
   `scripts/highlight-pre.js`.
 - Markdown / rich text: `<is-md-editor>` / `<is-rte>` / `<is-doc-editor>`.
-- Diff o merge de archivos: no cubierto.
+- Merge de tres vías (resolver conflictos): no cubierto. Ver un diff o un
+  resumen de commit sí lo está (`lang="diff"` / `lang="commit"`).
 
 ## Importación
 
@@ -57,7 +58,7 @@ import './code.js';
 
 | Atributo | Tipo | Default | Descripción |
 | --- | --- | --- | --- |
-| `lang` | string | `javascript` | `javascript` · `typescript` · `jsx` · `tsx` · `html` · `css` · `json` · `python` · `plaintext` (y alias). Extensible con `registerLanguage`. |
+| `lang` | string | `javascript` | `javascript` · `typescript` · `jsx` · `tsx` · `html` · `css` · `json` · `python` · `diff` · `commit` · `plaintext` (y alias). Extensible con `registerLanguage`. |
 | `value` | string | `""` | Código fuente. |
 | `document` | string (JSON) | — | Documento `is-code-doc/v1`. Si está presente al conectar, manda sobre `value`. |
 | `format` | string (JSON) | ver abajo | Opciones tipo Prettier: `tabWidth`, `useTabs`, `printWidth`, `semi`, `singleQuote`, `trailingComma`, `endOfLine`. |
@@ -144,10 +145,65 @@ Tokens de superficie: `--is-code-radius`, `--is-code-border`,
 Tokens de tema (ver `theme-config`): `--is-code-bg`, `--is-code-fg`,
 `--is-code-keyword`, `--is-code-string`, `--is-code-mark-error`, …
 
+Tokens de diff: `--is-code-diff-added` / `--is-code-diff-added-band`,
+`--is-code-diff-removed` / `--is-code-diff-removed-band`,
+`--is-code-diff-hunk`, `--is-code-diff-file`, `--is-code-diff-commit`,
+`--is-code-diff-path`, `--is-code-diff-note`. Cada color va en pareja con su
+banda porque el texto contrasta contra la banda, no contra el fondo.
+
 ### Integración con formularios
 
 Form-associated (`ElementInternals`). Participa en submit/reset vía `name` +
 `value`. No incluye validación nativa de sintaxis.
+
+## Diff y resumen de commit
+
+`lang="diff"` (alias `patch`, `udiff`) y `lang="commit"` (alias `git-log`,
+`git-show`, `commit-resume`) comparten el modo `is-diff`, definido dentro del
+kit — no se descarga de la CDN de CodeMirror, así que el bloque colorea igual
+aunque el modo remoto no llegue.
+
+Por qué un modo propio y no `javascript`: el `+` y el `-` de la primera columna
+no son código, son marcas de línea. Un tokenizador de lenguaje los lee como
+operadores, arrastra el resto de la línea a un estado sintáctico inexistente y
+el bloque acaba coloreado casi al azar, justo donde el lector solo necesita ver
+qué entra y qué sale. `is-diff` clasifica por línea entera y no interpreta el
+lenguaje de dentro.
+
+Reconoce:
+
+| Forma | Ejemplo | Pintado |
+| --- | --- | --- |
+| Cabecera de commit | `commit 7839bd7`, `Author:` | acento + cabecera |
+| Cabecera de archivo | `diff --git`, `--- a/x`, `+++ b/x` | archivo (no add/del) |
+| Hunk | `@@ -1,4 +1,6 @@` | banda tenue |
+| Añadido / borrado | `+linea` / `-linea` | verde / rojo + banda |
+| Comentario de contexto | `// situando el extracto` | comentario |
+| Anotación | `(commit 8936adb)` | nota tenue |
+| Resumen `--stat` | `src/app.js \| 12 ++++----` | ruta, contador y barra por tramos |
+| Total | `2 files changed, 8 insertions(+), 4 deletions(-)` | verde / rojo |
+
+`--- a/x` y `+++ b/x` se comprueban **antes** que `+`/`-`: empiezan por esos
+signos pero son cabeceras, no contenido cambiado. Del mismo modo `+// nota` es
+una línea añadida, no un comentario suelto.
+
+Cada línea con significado propio recibe además una banda de fondo
+(`CodeLangDef.lineClass`), porque el color de texto solo no basta cuando hay
+muchas líneas seguidas: la banda es la que deja ver el tamaño del cambio de un
+vistazo.
+
+### `format()` sobre un diff
+
+Un diff no se re-indenta ni se re-comilla — sus columnas son datos. Lo único que
+`format()` toca es la rejilla del `--stat`: alinea ruta, contador y barra en
+columnas fijas y junta las barras partidas (`++ --` → `++--`). El ancho se
+calcula por bloque contiguo, así que dos tablas separadas por prosa no se
+contaminan entre sí, y las líneas que no son `--stat` quedan intactas.
+
+```html
+<is-code lang="commit" readonly compact wrap="false"
+  value="src/app.js | 12 ++++----&#10;src/lib/parse.ts | 2 +-"></is-code>
+```
 
 ## Comportamiento
 

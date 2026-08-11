@@ -7,6 +7,7 @@
  */
 
 import { prettyHtml, softFormat, dedent } from './code-text.js';
+import { formatDiff } from './code-diff.js';
 
 /** @typedef {object} CodeFormatConfig
  * @property {number} [tabWidth=2]
@@ -152,7 +153,10 @@ export function formatCode(text, langId, config) {
   const cfg = normalizeFormatConfig(config);
   const id = String(langId || 'javascript').toLowerCase();
   let out;
-  if (id === 'html' || id === 'htm' || id === 'htmlmixed') out = formatHtml(text, cfg);
+  // Un diff no se re-indenta ni se re-comilla: sus columnas son datos. Lo único
+  // que se "formatea" es la rejilla del --stat.
+  if (id === 'diff' || id === 'commit') out = formatDiff(text, { eol: cfg.endOfLine });
+  else if (id === 'html' || id === 'htm' || id === 'htmlmixed') out = formatHtml(text, cfg);
   else if (id === 'css' || id === 'scss' || id === 'less') out = formatCss(text, cfg);
   else if (id === 'python' || id === 'py') out = formatPython(text, cfg);
   else if (id === 'json') {

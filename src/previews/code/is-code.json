@@ -41,7 +41,7 @@
     {
       "id": "langs",
       "title": "Lenguajes",
-      "lede": "Built-ins: <code class=\"code\">javascript</code>, <code class=\"code\">typescript</code>, <code class=\"code\">jsx</code>, <code class=\"code\">tsx</code>, <code class=\"code\">html</code>, <code class=\"code\">css</code>, <code class=\"code\">json</code>, <code class=\"code\">python</code> (plugin heavy), <code class=\"code\">plaintext</code>. Extensible con <code class=\"code\">registerLanguage</code>.",
+      "lede": "Built-ins: <code class=\"code\">javascript</code>, <code class=\"code\">typescript</code>, <code class=\"code\">jsx</code>, <code class=\"code\">tsx</code>, <code class=\"code\">html</code>, <code class=\"code\">css</code>, <code class=\"code\">json</code>, <code class=\"code\">python</code> (plugin heavy), <code class=\"code\">diff</code>, <code class=\"code\">commit</code>, <code class=\"code\">plaintext</code>. Extensible con <code class=\"code\">registerLanguage</code>.",
       "blocks": [
         {
           "kind": "demo",
@@ -50,6 +50,25 @@
         {
           "kind": "code",
           "code": "<is-code lang=\"python\" wrap></is-code>\n<!-- python descarga mode/python bajo demanda -->"
+        }
+      ]
+    },
+    {
+      "id": "diff",
+      "title": "Diff y resumen de commit",
+      "lede": "<code class=\"code\">lang=\"diff\"</code> y <code class=\"code\">lang=\"commit\"</code> comparten un modo propio del kit. Pintar un diff con un modo de lenguaje sale mal siempre: el <code class=\"code\">+</code> de la primera columna no es código, es una marca de línea, y un tokenizador de JS lo lee como operador y descoloca el resto. Aquí se clasifica por línea entera, con banda de fondo en las que entran y salen. <code class=\"code\">format()</code> no re-indenta nada — solo alinea la rejilla del <code class=\"code\">--stat</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\n  <is-code class=\"ed\" id=\"demo-diff\" lang=\"diff\" readonly line-numbers min-height=\"16rem\" value=\"commit 7839bd7  ·  aislamiento del dueño de conversación&#10;&#10;diff --git a/src/lib/filter/conversacion-list-owner.ts b/src/lib/filter/conversacion-list-owner.ts&#10;--- /dev/null&#10;+++ b/src/lib/filter/conversacion-list-owner.ts&#10;@@ -0,0 +1,12 @@&#10;+/** Dueño de conversación solo desde sesión o query auditado. */&#10;+import type { IIssListFilter } from &quot;./parse&quot;;&#10;+&#10;+const OWNER_EQ_KEYS = [&quot;itercero&quot;, &quot;icontacto&quot;] as const;&#10;+&#10;+export function stripOwnerFromListEq(eq) {&#10;   if (!eq) return undefined;&#10;   const rest = { ...eq };&#10;-  return eq;&#10;+  for (const k of OWNER_EQ_KEYS) delete rest[k];&#10;+  return Object.keys(rest).length ? rest : undefined;&#10; }\"></is-code>\n</div>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <is-button id=\"diff-format\" variant=\"outlined\">format() — alinear rejilla</is-button>\n  </div>\n  <is-code class=\"ed\" id=\"demo-diff-stat\" lang=\"commit\" line-numbers min-height=\"12rem\" value=\"// Lote de alineación de permisos — resumen de 8 archivos&#10;src/models-controllers/Ctrl_Auth.ts | 344 + (commit a06e10f, reescrito)&#10;src/lib/storage/UlChatMode.ts | 62 +++++ (commit dcd0b2a)&#10;src/health/perms-open.test.ts | 50 +++ (commit dcd0b2a)&#10;src/lib/filter/conversacion-list-owner.ts | 24 ++ (commit 7839bd7)&#10;src/health/match-branch.test.ts | 4 ++ -- (commit 6c88bb8)&#10;src/models-controllers/_Types.ts | 2 +- (commit 39e911b)&#10;&#10;8 files changed, 486 insertions(+), 12 deletions(-)\"></is-code>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-code lang=\"diff\" readonly line-numbers\n  value=\"@@ -1,2 +1,3 @@\\n-const a = 0;\\n+const a = 1;\"></is-code>\n\n<!-- format() alinea ruta | contador | barra del --stat -->\n<is-code lang=\"commit\" value=\"src/app.js | 12 ++++----\"></is-code>"
         }
       ]
     },

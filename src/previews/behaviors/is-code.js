@@ -34,6 +34,13 @@ export function mount(preview) {
     root.querySelector('#demo-format')?.format();
   });
 
+  // El --stat del demo llega adrede desalineado (barras partidas, columnas
+  // irregulares) para que se vea qué hace `format()` sobre un diff: no toca el
+  // contenido, solo devuelve la rejilla.
+  root.querySelector('#diff-format')?.addEventListener('click', () => {
+    root.querySelector('#demo-diff-stat')?.format();
+  });
+
   const themeEd = root.querySelector('#demo-theme');
   root.querySelector('#theme-ocean')?.addEventListener('click', () => {
     if (!themeEd) return;
