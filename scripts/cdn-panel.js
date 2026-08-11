@@ -13,7 +13,7 @@
  * `_shell.html`—, así que el panel dejó de aparecer en todos los componentes.
  * Ahora el tag lo trae el propio preview montado, en `is-preview-ready`.
  */
-import '../src/components/feedback/cdn-snippet.js';
+import '../dist/cdn/feedback/cdn-snippet.min.js';
 import components from '../manifest.js';
 
 /**

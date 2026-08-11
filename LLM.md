@@ -25,8 +25,10 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | Snippets HTML: `lang="html"` o dejar que `inferLanguage` / softFormat corran | Marcar `data-cm="1"` antes de paint; asumir default `javascript` con markup `<…>` |
 | Consumo selectivo: `loader.min.js` + `load('actions')` / tags; anti-redundancia | Volver a `load('is-button')` tras cargar la categoría; preferir `all.min.js` por defecto |
 | Docs LLM en artefactos: banner `/*! … */` + `dist/cdn/loader.md` | Minificar sin rutas MD; reinventar un segundo loader |
+| **Galería boot:** CSS en `<link>` + shell tags + `preview-component` desde `dist/cdn`; `load('all')` / page-modules en background | `await loadCSS*` + `await load('all')` en el path crítico (FOUC); `await` de `cdn-panel`/`md-editor`; asignar `.preview` antes del upgrade del CE |
+| Dev local galería: `node scripts/serve.mjs` (Cache-Control no-store) | Live Server desde carpeta padre como “servidor oficial” (más lento; OK solo para mirar) |
 
-Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `cdn-loader` · `load-plan` · `code-infer-lang` · `demo-equiv`.
+Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `gallery-boot` · `cdn-loader` · `load-plan` · `code-infer-lang` · `demo-equiv`.
 
 ---
 
@@ -45,7 +47,8 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
   - Guía: `src/docs/preview-controller.md`. Guardianes: `preview-json-contract` + `preview-controller` + `preview-paths`.
 - Docs LLM crudos (GitHub): base `…/main/src/` + `components/...`. `LLM_BASE` en `preview-chrome.js` termina en `/src`.
 - **Utilerías (`helpers/`)**: cada módulo público tiene **tab** (`manifest.page` → JSON) + MD. Guardián: `tests/helpers-homogeneity.test.mjs`. `is-floating` = internal (sin tab).
-- Build: esbuild → **solo** `dist/cdn/`. Dev: `node scripts/serve.mjs`. Sin TS de producto → tests en `*.test.mjs` (`node --test` / `node tests/….mjs`), no `.test.ts`.
+- Build: esbuild → **solo** `dist/cdn/`. Dev galería: **`node scripts/serve.mjs`** (puerto 8391; `Cache-Control: no-store`). Live Server desde `Personal/` funciona pero es más lento. Sin TS de producto → tests en `*.test.mjs` (`node --test` / `node tests/….mjs`), no `.test.ts`.
+- **Boot de `index.html` (galería):** ver carta + error **#43**. Resumen: CSS estático; `await` solo shell mínimo; resto en background; `setHostPreview` borra own-property antes de asignar.
 - Artefactos CDN: `dist/cdn/<cat>/<tag>.min.js` (+ `.min.css`). Guardián: `tests/dist-cdn-layout.test.mjs` (nada suelto en `dist/` raíz salvo `.gitignore`).
 - Tema/paleta por URL: `?s=<b64url({ theme, palette, embed?, component?, … })>`. **`prefers-color-scheme` NO se usa**.
 - **Un solo query de estado: `s`.** Tabs (`url-key="docs"`), espejo CDN (`cdnTab`), componente de galería, etc. viven **dentro** del JSON de `?s=`. Módulo: `src/components/_shared/url-nav.js` (`readUrlNav` / `writeUrlNav`). La galería al cambiar `component` **mergea** el resto de keys (no borra `docs`/`cdnTab`).
@@ -273,6 +276,23 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - **No reimportar `src/components/layout/preview-component.js` en la galería
   Pages** después de `load('all')`: re-arrastra `icon-loader` desde fuente y
   404-ea `src/assets/icons/{lucide,heroicons,material-symbols}.json`.
+- **No hacer el primer paint de la galería depender de `await L.loadCSS*` /
+  `await L.load('all')` / `await L.loadPageModules(...)`.** CSS = `<link>` (y
+  crítico inline). Shell = tags mínimos + `import('./dist/cdn/layout/preview-component.min.js')`.
+  `load('all')` y scripts de chrome van **después**, sin bloquear `dataset.kitShell`.
+- **No poner `cdn-panel.js` (ni nada que importe `cdn-snippet` desde `src/`) en el
+  path crítico del boot.** `cdn-snippet` → `md-editor` cuelga el `Promise.all`
+  varios segundos. El panel se carga en background; el CE ya viene de
+  `dist/cdn/feedback/cdn-snippet.min.js` o de `L.load('feedback')`.
+- **No asignar `previewHost.preview = …` antes de que el tag esté defined.**
+  Top-level await del `<head>` **no** bloquea el módulo del `<body>`: el body
+  puede correr mientras `load('all')` sigue. Eso crea una **own property** que
+  tapa el setter de `<is-preview-component>` → main vacío, demos invisibles,
+  sin error de consola. Siempre `whenDefined` + `delete host.preview` (own) antes
+  de asignar (`setHostPreview` en `index.html`).
+- **No asumir que `is-preview-component` está en el catálogo del loader.** No está
+  en `categories.layout`; solo entra vía `all.min.js` o import directo de
+  `dist/cdn/layout/preview-component.min.js`.
 
 ## Errores aprendidos (no repetir)
 
@@ -444,7 +464,7 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
     El `.js` de fuente reimporta `../media/icon.js` → `_shared/icon-loader.js`.
     Ese módulo resuelve bases con `import.meta.url` bajo `/src/components/` →
     `src/assets/icons/lucide.json` (y heroicons / material-symbols). Esos
-    JSON **no están en git** (`.gitignore` solo deja mdi/tabler); en dist sí
+    JSON **no van en git** (`.gitignore` solo deja mdi/tabler); en dist sí
     existen, pero el primer intento a `src/` ya deja 404 en consola.
     **Hacer:** no reimportar `preview-component` desde `src/` si `load('all'|'layout')`
     ya lo registró desde `dist/cdn/`; prefetch idle solo `mdi`+`tabler`; saltar
@@ -452,6 +472,39 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
     **No hacer:** precargar colecciones gitignoreadas; asumir que Pages sirve
     todo lo que tienes en el disco local bajo `src/assets/icons/`.
     Guardianes: `tests/cdn-loader.test.mjs`, `tests/icon-prefetch.test.mjs`.
+
+43. **Galería FOUC + demos vacíos + boot de 6–10 s** (11-ago-2026)
+    → Tras meter el loader, `index.html` hizo en serie:
+    `await loadCSSBase` → `await loadCSSPalettes` → `await loadPageStyles` →
+    `await load('all')` → `await loadPageModules` (incl. `cdn-panel` →
+    `src/…/cdn-snippet.js` → `md-editor`). Síntomas:
+    1. **FOUC blanco** ~0.8–2 s: cero CSS hasta que el módulo del head corría.
+    2. **Tags crudos** 6–10 s: nav nativo sin estilo de shell mientras bajaba
+       forms/data/diagrams vía `all`.
+    3. **Demos invisibles** con shell ya oscuro: el módulo del **body** asignaba
+       `previewHost.preview = JsonPreview` **antes** de que
+       `is-preview-component` estuviera defined (TLA del head **no** bloquea
+       siblings). Quedaba own property → el setter nunca pintaba →
+       `is-main` vacío. **Sin error de consola.**
+    4. **`cdn-panel` en el `Promise.all` crítico** colgaba el shell aunque las
+       categorías ya estuvieran listas.
+    **Hacer (contrato actual de `index.html`):**
+    - `<link>` a `is-base` / `palettes` / `shell` / `presentation` /
+      `preview-component.css` (+ CSS crítico inline de fondo).
+    - `await` solo: tags shell (`split-panel`, `main`, `drawer`, `demo`,
+      `scrollspy`, `button`, `icon`, `theme-toggle`, `code`) +
+      `import('./dist/cdn/layout/preview-component.min.js')`.
+    - Luego `dataset.kitShell = '1'`; `loadPageModules` y `load('all')` **sin**
+      await en el path crítico.
+    - `setHostPreview`: `delete` own property + `whenDefined` antes de asignar;
+      `ensurePreviewDeps(tag)` carga on-demand si el kit completo aún no llegó.
+    - `cdn-panel.js` importa `dist/cdn/feedback/cdn-snippet.min.js`, no `src/`.
+    - Dev preferido: `node scripts/serve.mjs`.
+    **No hacer:** volver a `await loadCSS*` como primer paint; meter `all` o
+    `cdn-panel`/`md-editor` en el await del shell; reimportar preview desde
+    `src/`; asignar `.preview` sin `whenDefined`/borrado de own property;
+    inventar un segundo bootstrap distinto de este contrato.
+    Guardián: `tests/gallery-boot.test.mjs` (+ `cdn-loader` coherente).
 
 ---
 
@@ -578,7 +631,8 @@ mantenerlo aparte.
 | `format-bytes-autofit.test.mjs` | `autofit` + pesos en captions CDN |
 | `ux-gallery-invariants.test.mjs` | Toast host, `on(null)` seguro, cdn-sizes, no params sueltos |
 | `gallery-sources-meta.test.mjs` | `.file-meta-page`, `#vsPath` absoluto, no `is-code-editor` |
-| `cdn-loader.test.mjs` | Entry `loader.min.js`, boot galería, README pin/mirrors |
+| `gallery-boot.test.mjs` | FOUC: CSS `<link>`; shell sin `await all`; `setHostPreview`; cdn-panel vía dist |
+| `cdn-loader.test.mjs` | Entry `loader.min.js`, banner MD, sin `all.min` suelto en head |
 | `load-plan.test.mjs` | Anti-redundancia categoría → tag / `all` / mismo lote |
 | `code-infer-lang.test.mjs` | HTML de demos ≠ javascript; softFormat separa tags |
 | `demo-equiv.test.mjs` | No pintar «HTML puro equivalente» / no `data-cm` prematuro |
@@ -590,10 +644,11 @@ mantenerlo aparte.
 4. Actualizar la **Carta de leyes** + bitácora de errores + esta tabla.
 5. Familia de color nueva → solo en `is-base.css`/`palettes.css`.
 6. Evento nuevo → documentar y emitir en el mismo commit.
-7. Cambio de loader / plan de carga → `load-plan` + `cdn-loader` verdes + `src/cdn/loader.md`.
+7. Cambio de loader / plan de carga → `load-plan` + `cdn-loader` + `gallery-boot` verdes + `src/cdn/loader.md`.
 8. Cambio de coloreado `is-code` → `code-infer-lang` + no reintroducir `renderDemoEquiv`.
-7. Nuevo estado de UI en URL → key dentro de `?s=` vía `url-nav.js`, nunca param suelto + actualizar `url-nav.test.mjs`.
-8. Behavior que llama APIs sobre un nodo del demo → garantizar el nodo en `mount` + entrada en `ux-gallery-invariants` si es trampa repetible.
+9. Nuevo estado de UI en URL → key dentro de `?s=` vía `url-nav.js`, nunca param suelto + actualizar `url-nav.test.mjs`.
+10. Behavior que llama APIs sobre un nodo del demo → garantizar el nodo en `mount` + entrada en `ux-gallery-invariants` si es trampa repetible.
+11. Cambio del boot de `index.html` (orden CSS/JS, `load('all')`, preview setter) → **obligatorio** `gallery-boot` verde.
 
 ### Qué clase de test merece la pena aquí
 El patrón que se repite en casi todos los errores de la lista de arriba: **el artefacto se genera bien y el contenido está mal**. Build verde, navegador contento, vista que pinta — y el tema no llega, o el evento no salta, o el preview enseña de menos.

@@ -57,6 +57,19 @@ Orden por defecto: `self` (si `preferSelf`) → jsDelivr → Pages. Un fallo en 
 
 ## CSS
 
-- Documento: `loadCSSBase()` + `loadCSSPalettesDefault()` (explícitos).
+### Apps consumidoras (CDN)
+
+- Documento: `loadCSSBase()` + `loadCSSPalettesDefault()` explícitos (o `<link>` a los `.min.css`).
 - Componente: lo trae cada `.min.js` con `adoptCss` en shadow.
-- Galería/app host: `loadPageStyles([...])` / `loadPageModules([...])` (relativos al documento, sin mirrors).
+- Relativos al documento: `loadPageStyles([...])` / `loadPageModules([...])` (sin mirrors).
+
+### Galería local (`index.html`) — distinto
+
+La galería **no** debe esperar CSS del loader para el primer paint (FOUC). Contrato:
+
+1. `<link>` estáticos a `src/styles/is-base.css`, `palettes.css`, `shell.css`, `presentation.css` + `preview-component.css`.
+2. `await` solo shell tags + `import('./dist/cdn/layout/preview-component.min.js')`.
+3. `load('all')` y `loadPageModules` en **background** (no bloquean `dataset.kitShell`).
+4. `is-preview-component` **no** está en el catálogo del loader → import dist, nunca `src/` (Pages 404 lucide).
+
+Detalle + anti-patrones: `LLM.md` raíz error **#43** · guardián `tests/gallery-boot.test.mjs`.

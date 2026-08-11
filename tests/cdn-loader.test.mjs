@@ -51,23 +51,21 @@ test('min.js de componente lleva banner de docs MD', () => {
   assert.match(btn, /is-cdn-install\/SKILL\.md/);
 });
 
-test('index.html arranca solo con el loader (sin all.min suelto)', () => {
+test('index.html arranca con loader (sin all.min suelto; CSS estático)', () => {
   assert.match(indexHtml, /loader\.min\.js/);
-  assert.match(indexHtml, /loadCSSBase/);
-  assert.match(indexHtml, /loadPageStyles/);
-  assert.match(indexHtml, /loadPageModules/);
+  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/is-base\.css"/);
   assert.match(indexHtml, /L\.load\(['"]all['"]\)/);
-  assert.doesNotMatch(indexHtml, /<link rel="stylesheet" href="src\/styles\/is-base/);
   assert.doesNotMatch(indexHtml, /<script type="module" src="dist\/cdn\/all\.min\.js"/);
+  // Detalle del orden await/shell → tests/gallery-boot.test.mjs (error #43)
 });
 
 test('index.html no reimporta preview-component ni icon desde src/ (Pages 404)', () => {
-  // load('all') ya trae layout/preview-component.min.js. Reimportar el .js de
-  // fuente arrastra icon-loader con bases src/assets → 404 lucide/heroicons.
+  // preview-component se importa desde dist/cdn; src/ arrastra icon-loader → lucide 404.
   assert.doesNotMatch(
     indexHtml,
     /loadPageModules\([\s\S]*preview-component\.js/,
   );
+  assert.doesNotMatch(indexHtml, /src\/components\/layout\/preview-component\.js/);
   assert.doesNotMatch(indexHtml, /src\/components\/media\/icon\.js/);
   assert.doesNotMatch(indexHtml, /src\/components\/_shared\/icon-loader\.js/);
 });

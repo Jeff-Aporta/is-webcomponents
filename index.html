@@ -12,31 +12,72 @@
       document.documentElement.lang = sys || 'es';
     })();
   </script>
+  <!-- CSS estático: evita FOUC. El loader JS NO debe ser el primer paint de estilos. -->
+  <style>
+    /* Crítico mínimo antes de que lleguen los <link> (Live Server lento). */
+    html.theme-dark, html.theme-dark body { background: #0f1520; color: #e7eef8; }
+    html.theme-light, html.theme-light body { background: #f4f7fb; color: #142033; }
+  </style>
+  <link rel="stylesheet" href="src/styles/is-base.css">
+  <link rel="stylesheet" href="src/styles/palettes.css">
+  <link rel="stylesheet" href="src/styles/shell.css">
+  <link rel="stylesheet" href="src/styles/presentation.css">
+  <link rel="stylesheet" href="src/components/layout/preview-component.css">
+  <style>
+    /* Chrome del shell: no mostrar tags crudos mientras upgradan. */
+    .shell-bar is-button:not(:defined),
+    .shell-bar is-icon:not(:defined),
+    .shell-bar is-theme-toggle:not(:defined) {
+      visibility: hidden;
+    }
+  </style>
   <link rel="icon" href="src/assets/favicon.svg" type="image/svg+xml">
+  <script src="scripts/preview-boot.js"></script>
   <script type="module">
     import { ISWebComponentsLoader as L } from './dist/cdn/loader.min.js';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
-    // Sin pin → tip de main (SHA vía API). Para congelar: L.pin('abcdef…')
-    await L.loadCSSBase();
-    await L.loadCSSPalettesDefault();
-    await L.loadPageStyles([
-      'src/styles/shell.css',
-      'src/styles/presentation.css',
-    ]);
-    // `all` ya registra <is-preview-component> desde dist/cdn/layout/…
-    // NO volver a importar src/components/layout/preview-component.js: eso
-    // re-carga icon.js/_shared/icon-loader.js desde fuente y en Pages el
-    // prefetch pegaba a src/assets/icons/lucide.json (404 — no está en git).
-    await L.load('all');
-    await L.loadPageModules([
+
+    // Shell mínimo (tags puntuales). Evita:
+    //  - loadCSS* vía JS → FOUC blanco (CSS ya está en <link>)
+    //  - await load('all') → 6–10s de tags crudos
+    //  - await page modules (cdn-panel/md-editor) en el path crítico
+    // preview-component NO está en el catálogo → dist/cdn directo (no src/).
+    try {
+      await Promise.all([
+        L.load(
+          'is-split-panel',
+          'is-main',
+          'is-drawer',
+          'is-demo',
+          'is-scrollspy',
+          'is-button',
+          'is-icon',
+          'is-theme-toggle',
+          'is-code',
+        ),
+        import('./dist/cdn/layout/preview-component.min.js'),
+      ]);
+      document.documentElement.dataset.kitShell = '1';
+      window.dispatchEvent(new Event('is-gallery-shell-ready'));
+    } catch (err) {
+      console.error('[gallery] shell boot', err);
+    }
+
+    // Chrome de docs + categorías útiles + resto del kit: no bloquean paint.
+    L.loadPageModules([
       'scripts/highlight-pre.js',
       'scripts/demo-code.js',
       'scripts/docs-chrome.js',
       'scripts/cdn-panel.js',
       'scripts/view-sources.js',
       'scripts/demo-file-meta.js',
-    ]);
+    ]).catch((err) => console.warn('[gallery] page modules', err));
+
+    L.load('layout', 'actions', 'feedback', 'media', 'code')
+      .catch((err) => console.warn('[gallery] shell cats', err))
+      .then(() => L.load('all'))
+      .catch((err) => console.warn('[gallery] load(all)', err));
   </script>
 </head>
 <body>
@@ -296,25 +337,66 @@
       return `src/previews/_shell.html?tag=${encodeURIComponent(tag)}&s=${encodeState({ embed: true, theme, palette })}`;
     }
 
+    /**
+     * Asigna `.preview` al host ya upgraded. Importante: el módulo del body
+     * puede correr mientras el `<head>` aún carga el shell (TLA no bloquea
+     * siblings). Si asignamos antes del upgrade, queda una own property que
+     * tapa el setter de `<is-preview-component>` y el main nunca se pinta.
+     */
+    function setHostPreview(value) {
+      if (Object.prototype.hasOwnProperty.call(previewHost, 'preview')) {
+        delete previewHost.preview;
+      }
+      previewHost.preview = value;
+    }
+
+    /** Páginas sueltas del nav que meten muchos is-* en el JSON. */
+    const FULL_KIT_PAGES = new Set(['home', 'theming', 'ecosystem']);
+
+    /**
+     * Asegura el CE del preview actual. El shell ya trae layout/actions/…;
+     * el resto llega con `load('all')` en background o aquí on-demand.
+     */
+    async function ensurePreviewDeps(tag) {
+      await customElements.whenDefined('is-preview-component');
+      const L = globalThis.ISWebComponentsLoader;
+      if (!L) return;
+      if (FULL_KIT_PAGES.has(tag)) {
+        if (!L.has('all')) await L.load('all');
+        return;
+      }
+      if (!tag.startsWith('is-')) return;
+      if (!L.has(tag)) await L.load(tag);
+      if (!customElements.get(tag)) {
+        await customElements.whenDefined(tag);
+      }
+    }
+
     async function showPreview() {
       const tag = component.tag;
 
       if (hasControlledPreview(tag)) {
+        await ensurePreviewDeps(tag);
         frame.hidden = true;
         frame.removeAttribute('src');
         previewHost.hidden = false;
         // Sin caché el fetch del JSON (no-store) deja la vista anterior colgada.
         // Con caché el await es inmediato: no vaciar para no parpadear.
-        if (!hasCachedPreview(tag)) previewHost.preview = null;
+        if (!hasCachedPreview(tag)) setHostPreview(null);
         const preview = await loadPreview(tag);
         if (component.tag !== tag) return;
-        previewHost.preview = preview;
+        // Por si el upgrade llegó entre el null y el load (own property otra vez).
+        await customElements.whenDefined('is-preview-component');
+        setHostPreview(preview);
         return;
       }
 
       console.warn(`[gallery] sin JSON de preview para ${tag}`);
       previewHost.hidden = true;
-      previewHost.preview = null;
+      if (customElements.get('is-preview-component')) setHostPreview(null);
+      else if (Object.prototype.hasOwnProperty.call(previewHost, 'preview')) {
+        delete previewHost.preview;
+      }
       frame.hidden = false;
       frame.removeAttribute('src');
     }

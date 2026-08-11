@@ -22,10 +22,18 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-divider>` | [divider.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/divider.md) | Divider |
 | `<is-scrollspy>` | [scrollspy.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/scrollspy.md) | Scrollspy |
 | `<is-dock>`, `<is-dock-item>` | [dock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/dock.md) | Dock de accesos con magnificación |
+| `<is-demo>` | (chrome de demos; ver `demo.js`) | Caja de demo de documentación |
+| `<is-preview-component>` | (shell de docs; **no** está en catálogo loader) | Monta JSON `is-preview/v1` en la galería |
 
 ## Composición y relaciones
 
 Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mismo JS/CSS.
+
+**`<is-preview-component>`:** chrome homogéneo de la galería. Se publica en
+`dist/cdn/layout/preview-component.min.js` y entra en `all.min.js`, pero **no**
+figura en `categories.layout` del loader — `L.load('is-preview-component')` no
+resuelve. La galería lo importa desde `dist/cdn/…` (nunca desde `src/`: Pages
+404 lucide). Ver LLM raíz error **#42–#43** y `tests/gallery-boot.test.mjs`.
 
 ## Reusar antes de crear
 
@@ -70,6 +78,8 @@ Style-attrs de `<is-dialog>`: `width` → `--is-dialog-width`, `spacing` →
 - No usar `is-split-panel` con % alto como sidebar fijo de app.
 - No dejar un dialog “casi fullscreen” cuando el requisito es full page
   (padding del host + `max-height` del panel lo dejan a medias).
+- No importar `preview-component` desde `src/` en la galería/Pages (usar
+  `dist/cdn/layout/preview-component.min.js`). Ver LLM raíz #42–#43.
 
 ## Errores conocidos y prevención
 
@@ -80,6 +90,9 @@ Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 **Dialog fuentes no full-page** (ago/2026): `--width: min(96vw)` + panel `70vh`
 parecía grande pero no era full view. Fix: spacing 0 + stretch. Guardián:
 `tests/gallery-sources-meta.test.mjs`.
+
+**Boot galería FOUC / demos vacíos** (ago/2026): ver LLM raíz error **#43**.
+Guardián: `tests/gallery-boot.test.mjs`.
 
 ## Módulos internos
 
