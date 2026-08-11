@@ -33,7 +33,16 @@ test('src/assets no se intenta para prefijos no shipped', () => {
 });
 
 test('is-preview-component no pone remember-scroll sin storage-key en el template', () => {
-  const tpl = preview.slice(preview.indexOf('TEMPLATE'), preview.indexOf('COMPACT_QUERY'));
+  const start = preview.indexOf('TEMPLATE.innerHTML');
+  const end = preview.indexOf('class IsPreviewComponent');
+  const tpl = preview.slice(start, end > start ? end : start + 800);
   assert.doesNotMatch(tpl, /remember-scroll/);
   assert.match(preview, /toggleAttribute\(['"]remember-scroll['"]/);
+});
+
+test('preview-component fuente declara dependencia de icon (por eso Pages no debe reimportarlo)', () => {
+  // Documenta la cadena: src preview-component → icon.js → icon-loader.
+  // Si index.html vuelve a loadPageModules(ese archivo) tras load('all'),
+  // el prefetch de icon-loader corre con bases src/assets → 404.
+  assert.match(preview, /import\s+['"]\.\.\/media\/icon\.js['"]/);
 });

@@ -270,6 +270,9 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
   `all.min.js`.
 - **No minificar sin banner MD** en `scripts/build.mjs`: cada `.min.js` lleva
   rutas raw para LLMs; `loader.md` se copia a `dist/cdn/`.
+- **No reimportar `src/components/layout/preview-component.js` en la galería
+  Pages** después de `load('all')`: re-arrastra `icon-loader` desde fuente y
+  404-ea `src/assets/icons/{lucide,heroicons,material-symbols}.json`.
 
 ## Errores aprendidos (no repetir)
 
@@ -434,6 +437,21 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
     **No hacer:** reinventar un segundo entry CDN; VP9/WebM para overlays;
     OpenAI en este kit (Groq/ElevenLabs/MiniMax en otros proyectos).
     Guardianes: `tests/load-plan.test.mjs`, `tests/cdn-loader.test.mjs`.
+
+42. **404 lucide/heroicons en GitHub Pages** (11-ago-2026)
+    → En [jeff-aporta.github.io/is-webcomponents](https://jeff-aporta.github.io/is-webcomponents/?s=eyJjb21wb25lbnQiOiJpcy1idXR0b24ifQ)
+    la galería hacía `load('all')` **y** `loadPageModules('src/…/preview-component.js')`.
+    El `.js` de fuente reimporta `../media/icon.js` → `_shared/icon-loader.js`.
+    Ese módulo resuelve bases con `import.meta.url` bajo `/src/components/` →
+    `src/assets/icons/lucide.json` (y heroicons / material-symbols). Esos
+    JSON **no están en git** (`.gitignore` solo deja mdi/tabler); en dist sí
+    existen, pero el primer intento a `src/` ya deja 404 en consola.
+    **Hacer:** no reimportar `preview-component` desde `src/` si `load('all'|'layout')`
+    ya lo registró desde `dist/cdn/`; prefetch idle solo `mdi`+`tabler`; saltar
+    base `src/assets` para prefijos no shipped.
+    **No hacer:** precargar colecciones gitignoreadas; asumir que Pages sirve
+    todo lo que tienes en el disco local bajo `src/assets/icons/`.
+    Guardianes: `tests/cdn-loader.test.mjs`, `tests/icon-prefetch.test.mjs`.
 
 ---
 

@@ -61,6 +61,17 @@ test('index.html arranca solo con el loader (sin all.min suelto)', () => {
   assert.doesNotMatch(indexHtml, /<script type="module" src="dist\/cdn\/all\.min\.js"/);
 });
 
+test('index.html no reimporta preview-component ni icon desde src/ (Pages 404)', () => {
+  // load('all') ya trae layout/preview-component.min.js. Reimportar el .js de
+  // fuente arrastra icon-loader con bases src/assets → 404 lucide/heroicons.
+  assert.doesNotMatch(
+    indexHtml,
+    /loadPageModules\([\s\S]*preview-component\.js/,
+  );
+  assert.doesNotMatch(indexHtml, /src\/components\/media\/icon\.js/);
+  assert.doesNotMatch(indexHtml, /src\/components\/_shared\/icon-loader\.js/);
+});
+
 test('README CDN documenta pin y mirrors', () => {
   const readme = readFileSync(join(root, 'dist', 'cdn', 'README.txt'), 'utf8');
   assert.match(readme, /loader\.min\.js/);

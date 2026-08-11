@@ -23,11 +23,13 @@
     await L.loadPageStyles([
       'src/styles/shell.css',
       'src/styles/presentation.css',
-      'src/components/layout/preview-component.css',
     ]);
+    // `all` ya registra <is-preview-component> desde dist/cdn/layout/…
+    // NO volver a importar src/components/layout/preview-component.js: eso
+    // re-carga icon.js/_shared/icon-loader.js desde fuente y en Pages el
+    // prefetch pegaba a src/assets/icons/lucide.json (404 — no está en git).
     await L.load('all');
     await L.loadPageModules([
-      'src/components/layout/preview-component.js',
       'scripts/highlight-pre.js',
       'scripts/demo-code.js',
       'scripts/docs-chrome.js',

@@ -56,6 +56,7 @@ const requiredPhrases = [
   ['No volver a pintar «HTML puro equivalente»', "DON'T demo-equiv"],
   ['No marcar `data-cm=\"1\"`', "DON'T data-cm prematuro"],
   ['inferLanguage', 'is-code infer lang'],
+  ['No reimportar `src/components/layout/preview-component.js`', "DON'T src preview-component en Pages"],
 ];
 
 for (const [needle, label] of requiredPhrases) {
@@ -99,7 +100,7 @@ for (const file of guardians) {
 // Errores 24–41 = preview / dist / color / em / url / toast / pesos / ux /
 // file-meta / is-code rename / snippets HTML / demo-equiv / loader
 for (const n of [
-  24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
+  24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
 ]) {
   if (!llm.includes(`${n}. **`)) {
     failures.push(`bitácora de errores: falta entrada ${n}`);
