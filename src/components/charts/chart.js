@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { scaleLinear, scaleBand, niceTicks, svgEl } from '../_shared/svg-chart-engine.js';
 import { getCategoricalColors, getFillColors } from '../_shared/chart-palette.js';
 import { PathTurtle } from '../_shared/path-turtle.js';
@@ -61,8 +62,35 @@ function isNumericXY(datasets) {
   return !!first && typeof first === 'object' && 'x' in first;
 }
 
-class IsChart extends HTMLElement {
-  static get observedAttributes() { return OBSERVED; }
+class IsChart extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+      'text-color': { prop: '--chart-text', onlyColorValues: true },
+      'muted-color': { prop: '--chart-muted', onlyColorValues: true },
+      surface: { prop: '--chart-surface', onlyColorValues: true },
+      'grid-color': { prop: '--is-chart-grid-color', onlyColorValues: true },
+      'axis-color': { prop: '--chart-axis-color', onlyColorValues: true },
+      'bar-radius': '--chart-bar-radius',
+      'bar-gap': '--chart-bar-gap',
+      'line-width': '--chart-line-width',
+      'point-radius': '--chart-point-radius',
+      'slice-gap': '--chart-slice-gap',
+      'doughnut-ratio': '--chart-doughnut-ratio',
+      'tick-size': '--chart-tick-size',
+      'legend-size': '--chart-legend-size',
+      'title-size': '--chart-title-size',
+      'tooltip-size': '--chart-tooltip-size',
+      // Slots de paleta: los consumen las variantes radiales (radar,
+      // polar-area) además de las series de is-chart.
+      'fill-1': { prop: '--fill-color-1', onlyColorValues: true },
+      'fill-2': { prop: '--fill-color-2', onlyColorValues: true },
+      'fill-3': { prop: '--fill-color-3', onlyColorValues: true },
+      'fill-4': { prop: '--fill-color-4', onlyColorValues: true },
+      'fill-5': { prop: '--fill-color-5', onlyColorValues: true },
+      'fill-6': { prop: '--fill-color-6', onlyColorValues: true },
+    };
+
+  static get observedAttributes() { return [...OBSERVED, ...IsChart.styleAttrNames]; }
   static fixedType = null;
   static styleModuleUrl = null;
   static drawMarks = null;
@@ -106,6 +134,7 @@ class IsChart extends HTMLElement {
   }
 
   connectedCallback() {
+    super.connectedCallback();
     this.#mounted = true;
     if (this.#fixedType && !this.hasAttribute('type')) this.setAttribute('type', this.#fixedType);
     this.#readJsonSlot();
@@ -129,6 +158,7 @@ class IsChart extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
+    super.attributeChangedCallback(name, oldVal, newVal);
     if (!this.#mounted || oldVal === newVal) return;
     this.#queueRender();
   }

@@ -1,9 +1,9 @@
 /* <is-tab-group>, <is-tab>, <is-tab-panel>. */
 
 :host {
-  --track-color: var(--is-border, rgba(255, 255, 255, 0.2));
-  --indicator-color: var(--is-brand, currentColor);
-  --track-width: 2px;
+  --is-tab-group-track-color: var(--is-border, rgba(255, 255, 255, 0.2));
+  --is-tab-group-indicator-color: var(--is-brand, currentColor);
+  --is-tab-group-track-width: 2px;
 
   display: block;
   font-family: var(--is-font-family, inherit);
@@ -24,13 +24,13 @@
   align-items: center;
   gap: 0.25em;
   position: relative;
-  border-color: var(--track-color);
+  border-color: var(--is-tab-group-track-color);
 }
 
-:host([placement="top"]) .nav    { border-bottom: var(--track-width) solid var(--track-color); }
-:host([placement="bottom"]) .nav { border-top:    var(--track-width) solid var(--track-color); }
-:host([placement="start"]) .nav  { border-right:  var(--track-width) solid var(--track-color); flex-direction: column; }
-:host([placement="end"]) .nav    { border-left:   var(--track-width) solid var(--track-color); flex-direction: column; }
+:host([placement="top"]) .nav    { border-bottom: var(--is-tab-group-track-width) solid var(--is-tab-group-track-color); }
+:host([placement="bottom"]) .nav { border-top:    var(--is-tab-group-track-width) solid var(--is-tab-group-track-color); }
+:host([placement="start"]) .nav  { border-right:  var(--is-tab-group-track-width) solid var(--is-tab-group-track-color); flex-direction: column; }
+:host([placement="end"]) .nav    { border-left:   var(--is-tab-group-track-width) solid var(--is-tab-group-track-color); flex-direction: column; }
 
 .tabs {
   display: flex;
@@ -100,7 +100,7 @@
   & .indicator {
     display: none;
     position: absolute;
-    background: var(--indicator-color);
+    background: var(--is-tab-group-indicator-color);
     border-radius: 2px;
   }
 
@@ -146,8 +146,8 @@
 :host(is-tab[data-placement="bottom"]) {
   & .indicator { inset-inline: 0; height: 2px; }
 }
-:host(is-tab[data-placement="top"])    .indicator { bottom: calc(var(--track-width) * -1); }
-:host(is-tab[data-placement="bottom"]) .indicator { top:    calc(var(--track-width) * -1); }
+:host(is-tab[data-placement="top"])    .indicator { bottom: calc(var(--is-tab-group-track-width) * -1); }
+:host(is-tab[data-placement="bottom"]) .indicator { top:    calc(var(--is-tab-group-track-width) * -1); }
 
 /* En vertical el button se ve stretched, y el indicador va al costado. */
 :host(is-tab[data-placement="start"]),
@@ -155,8 +155,8 @@
   & .tab { width: 100%; justify-content: flex-start; }
   & .indicator { inset-block: 0; width: 2px; }
 }
-:host(is-tab[data-placement="start"]) .indicator { right: calc(var(--track-width) * -1); }
-:host(is-tab[data-placement="end"])   .indicator { left:  calc(var(--track-width) * -1); }
+:host(is-tab[data-placement="start"]) .indicator { right: calc(var(--is-tab-group-track-width) * -1); }
+:host(is-tab[data-placement="end"])   .indicator { left:  calc(var(--is-tab-group-track-width) * -1); }
 
 /* <is-tab-panel> */
 :host(is-tab-panel) {

@@ -40,7 +40,12 @@ import { setOptionalAttr } from '../_shared/reflect.js';
   const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
 
   class IsRadio extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    accent: { prop: '--is-radio-accent', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'accent']; }
 
     #internals = null;
     #descEl;

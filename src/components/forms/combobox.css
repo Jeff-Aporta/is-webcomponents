@@ -3,7 +3,7 @@
   --is-combobox-border: var(--is-control-border, #adb5bd);
   --is-combobox-bg: var(--is-control-bg, #f1f3f5);
   --is-combobox-text: var(--is-control-text, #212529);
-  --is-combobox-focus: var(--is-focus, var(--is-color-brand-500, #339af0));
+  --is-combobox-focus: var(--is-focus, var(--is-color-brand, #339af0));
   display: block;
   font-family: var(--is-sans, inherit);
   color: var(--is-text, inherit);
@@ -111,7 +111,7 @@
   .option[aria-selected="true"],
   .option[data-active] {
     background: var(--is-accent-bg, rgb(224 49 49 / 12%));
-    color: var(--is-brand-text, var(--is-color-brand-700, #a61e1e));
+    color: var(--is-brand-text, var(--is-color-brand-stronger, #a61e1e));
   }
 }
 

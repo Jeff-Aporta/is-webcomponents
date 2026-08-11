@@ -3,16 +3,16 @@
   display: inline-block;
   font: inherit;
   color: var(--is-text);
-  --bg: var(--is-control-bg, var(--is-bg-soft));
-  --border: var(--is-control-border, var(--is-border));
+  --is-duration-picker-bg: var(--is-control-bg, var(--is-bg-soft));
+  --is-duration-picker-border: var(--is-control-border, var(--is-border));
 }
 
 .root {
   display: inline-flex;
   align-items: center;
   gap: .15rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: var(--is-duration-picker-bg);
+  border: 1px solid var(--is-duration-picker-border);
   border-radius: var(--is-radius, 8px);
   padding: .25rem .45rem;
 }

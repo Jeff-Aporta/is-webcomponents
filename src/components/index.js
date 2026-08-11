@@ -111,6 +111,8 @@ const CATALOG = {
   'is-signature':         'forms/signature',
   'is-rte':               'forms/rte',
   'is-doc-editor':        'forms/doc-editor',
+  // code
+  'is-code':       'code/code',
   // navigation
   'is-breadcrumb':        'navigation/breadcrumb',
   'is-tab-group':         'navigation/tab-group',

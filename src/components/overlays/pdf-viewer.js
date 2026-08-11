@@ -30,7 +30,13 @@ import { setOptionalAttr } from '../_shared/reflect.js';
   const OBSERVED = ['src', 'page', 'zoom', 'engine', 'height', 'download', 'print'];
 
   class IsPdfViewer extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    shadow: '--is-popover-shadow',
+    'bar-gap': '--is-surface-bar-gap',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'shadow', 'bar-gap']; }
 
     constructor() {
       super();

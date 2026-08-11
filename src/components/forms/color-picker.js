@@ -72,8 +72,17 @@ import { computePosition } from '../_shared/position.js';
   }
 
   class IsColorPicker extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-picker-radius',
+    'border-color': { prop: '--is-picker-border', onlyColorValues: true },
+    bg: { prop: '--is-picker-bg', onlyColorValues: true },
+    'text-color': { prop: '--is-picker-text', onlyColorValues: true },
+    'focus-color': { prop: '--is-picker-focus', onlyColorValues: true },
+    };
+
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }
 
     #internals = null;
     #trigger;

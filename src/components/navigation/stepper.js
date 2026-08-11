@@ -55,7 +55,15 @@ import { ElementBase } from '../_shared/element-base.js';
   const TG_OBSERVED = ['active', 'orientation', 'without-line', 'color'];
 
   class IsStepper extends ElementBase {
-    static get observedAttributes() { return TG_OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    accent: { prop: '--is-stepper-accent', onlyColorValues: true },
+    'text-color': { prop: '--is-stepper-text', onlyColorValues: true },
+    'muted-color': { prop: '--is-stepper-muted', onlyColorValues: true },
+    'border-color': { prop: '--is-stepper-border', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...TG_OBSERVED, ...IsStepper.styleAttrNames]; }
 
 
     constructor() {

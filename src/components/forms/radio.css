@@ -3,7 +3,7 @@
   --_bg: var(--is-radio-bg, var(--is-control-bg, #f1f3f5));
   --_bg-hover: var(--is-radio-bg-hover, var(--is-control-bg-hover, #e9ecef));
   --_border: var(--is-radio-border, var(--is-control-border, #adb5bd));
-  --_accent: var(--is-radio-accent, var(--is-accent, var(--is-color-brand-500, #339af0)));
+  --_accent: var(--is-radio-accent, var(--is-accent, var(--is-color-brand, #339af0)));
   --_dot: var(--is-radio-dot, var(--is-on-brand, #fff));
   --_focus: var(--is-radio-focus, var(--_accent));
   --_halo: var(--is-radio-halo-size, 0.45em);
@@ -72,14 +72,14 @@
    Sin atributo se hereda el --is-radio-accent que publica el grupo; con él,
    la declaración local gana a la heredada. */
 
-:host([color="brand"]) { --is-radio-accent: var(--is-accent, var(--is-color-brand-500, #339af0)); }
+:host([color="brand"]) { --is-radio-accent: var(--is-accent, var(--is-color-brand, #339af0)); }
 :host([color="neutral"]) { --is-radio-accent: var(--is-control-border, #59636e); }
-:host([color="success"]) { --is-radio-accent: var(--is-color-success-500, #40c057); }
-:host([color="warning"]) { --is-radio-accent: var(--is-color-warning-500, #f59f00); }
-:host([color="danger"]) { --is-radio-accent: var(--is-color-danger-500, #fa5252); }
+:host([color="success"]) { --is-radio-accent: var(--is-color-success, #40c057); }
+:host([color="warning"]) { --is-radio-accent: var(--is-color-warning, #f59f00); }
+:host([color="danger"]) { --is-radio-accent: var(--is-color-danger, #fa5252); }
 
 /* El error del grupo manda sobre cualquier variant */
-:host(:state(error)) { --is-radio-accent: var(--is-color-danger-500, #fa5252); }
+:host(:state(error)) { --is-radio-accent: var(--is-color-danger, #fa5252); }
 
 /* ---- label-placement (propio o heredado del grupo) -------------------- */
 

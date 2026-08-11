@@ -82,10 +82,19 @@ import { ModalBase } from '../_shared/modal-base.js';
   };
 
   class IsDrawer extends ModalBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+      size: '--is-drawer-size',
+      spacing: '--is-drawer-spacing',
+      'backdrop-color': { prop: '--is-drawer-backdrop-color', onlyColorValues: true },
+      'show-duration': '--is-drawer-show-duration',
+      'hide-duration': '--is-drawer-hide-duration',
+    };
+
     static __TEMPLATE = TEMPLATE;
 
     static get observedAttributes() {
-      return [...super.observedAttributes, 'placement'];
+      return [...super.observedAttributes, 'placement', ...IsDrawer.styleAttrNames];
     }
 
     get modalClass() { return '.drawer'; }
@@ -120,7 +129,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     // ---- animaciones ----
 
     animateOpen() {
-      const dur = this.#readDur('--show-duration', 220);
+      const dur = this.#readDur('--is-drawer-show-duration', 220);
       this.$modal.animate(
         [this.#hiddenKeyframe(), this.#visibleKeyframe()],
         { duration: dur, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'forwards' },
@@ -133,7 +142,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
 
     animateClose() {
-      const dur = this.#readDur('--hide-duration', 180);
+      const dur = this.#readDur('--is-drawer-hide-duration', 180);
       this.$modal.animate(
         [this.#visibleKeyframe(), this.#hiddenKeyframe()],
         { duration: dur, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'forwards' },

@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/position.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -23,9 +24,9 @@ import { emit } from '../_shared/emit.js';
  */
 
 (() => {
-  /** Lee `--arrow-size` en px. `parseFloat('0.375rem')` devolvía 0.375 y rompía la flecha. */
+  /** Lee `--is-floating-arrow-size` en px. `parseFloat('0.375rem')` devolvía 0.375 y rompía la flecha. */
   const arrowSizePx = (el) => {
-    const raw = getComputedStyle(el).getPropertyValue('--arrow-size').trim();
+    const raw = getComputedStyle(el).getPropertyValue('--is-floating-arrow-size').trim();
     if (!raw) return 8;
     const n = parseFloat(raw);
     if (!Number.isFinite(n) || n <= 0) return 8;
@@ -58,8 +59,15 @@ import { emit } from '../_shared/emit.js';
     'flip-padding', 'shift-padding', 'auto-size-padding', 'anchor',
   ];
 
-  class IsFloating extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsFloating extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'arrow-size': '--is-floating-arrow-size',
+    'show-duration': '--is-floating-show-duration',
+    'hide-duration': '--is-floating-hide-duration',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration']; }
 
     #popup;
     #arrow;
@@ -86,6 +94,8 @@ import { emit } from '../_shared/emit.js';
     }
 
     connectedCallback() {
+
+      super.connectedCallback();
       this.#mounted = true;
       this.#resolveAnchor();
       this.#syncActive();
@@ -97,6 +107,8 @@ import { emit } from '../_shared/emit.js';
     }
 
     attributeChangedCallback(name) {
+
+      super.attributeChangedCallback(name);
       if (!this.#mounted) return;
       if (name === 'active') this.#syncActive();
       else if (name === 'anchor') this.#resolveAnchor();

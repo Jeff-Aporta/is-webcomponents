@@ -2,7 +2,7 @@
    <is-dialog> interno (y `_shared/modal-chrome.css` a través de él). Aquí sólo
    queda lo propio del contenido. */
 :host {
-  --is-confirm-delete-accent: var(--is-color-danger-500, #fa5252);
+  --is-confirm-delete-accent: var(--is-color-danger, #fa5252);
   display: contents;
   font-family: var(--is-sans, inherit);
 

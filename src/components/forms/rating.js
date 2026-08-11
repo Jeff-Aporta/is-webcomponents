@@ -81,8 +81,17 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
   /** Quita el ruido float que dejan las sumas de precisiones decimales. */
 
   class IsRating extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    size: '--is-rating-size',
+    gap: '--is-rating-gap',
+    color: { prop: '--is-rating-color', onlyColorValues: true },
+    'empty-color': { prop: '--is-rating-empty', onlyColorValues: true },
+    'focus-color': { prop: '--is-rating-focus', onlyColorValues: true },
+    };
+
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color']; }
 
     #internals = null;
     #base;

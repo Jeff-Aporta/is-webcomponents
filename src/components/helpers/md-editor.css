@@ -9,7 +9,7 @@
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  --preview-max-height: 16em;
+  --is-md-editor-preview-max-height: 16em;
   --_radius: var(--is-radius, 0.625em);
 }
 
@@ -20,7 +20,7 @@
   width: 100%;
   max-width: 100%;
   min-height: 3.5em;
-  max-height: var(--preview-max-height);
+  max-height: var(--is-md-editor-preview-max-height);
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0.75em 0.9em;

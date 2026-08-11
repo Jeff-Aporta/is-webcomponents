@@ -67,6 +67,7 @@ export default [
   { tag: 'is-radio', title: 'Radio', category: 'forms', script: '../../components/forms/radio.js', style: '../../components/forms/radio.css', page: 'forms/is-radio.json' },
   { tag: 'is-input', title: 'Input', category: 'forms', script: '../../components/forms/input.js', style: '../../components/forms/input.css', page: 'forms/is-input.json' },
   { tag: 'is-textarea', title: 'Textarea', category: 'forms', script: '../../components/forms/textarea.js', style: '../../components/forms/textarea.css', page: 'forms/is-textarea.json' },
+  { tag: 'is-code', title: 'Code', category: 'code', script: '../../components/code/code.js', style: '../../components/code/code.css', page: 'code/is-code.json' },
   { tag: 'is-slider', title: 'Slider', category: 'forms', script: '../../components/forms/slider.js', style: '../../components/forms/slider.css', page: 'forms/is-slider.json' },
   { tag: 'is-rating', title: 'Rating', category: 'forms', script: '../../components/forms/rating.js', style: '../../components/forms/rating.css', page: 'forms/is-rating.json' },
   { tag: 'is-select', title: 'Select', category: 'forms', script: '../../components/forms/select.js', style: '../../components/forms/select.css', page: 'forms/is-select.json' },

@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { escapeHtml, copyText } from '../_shared/dom-utils.js';
 
 import {
@@ -11,7 +12,7 @@ import {
   fallbackBases,
 } from '../_shared/cdn-ref.js';
 import { totalCdnSize } from '../_shared/cdn-sizes.js';
-import { CODEMIRROR_READY, isReady as cmReady, paint } from '../_shared/highlight-code.js';
+import { paint } from '../_shared/highlight-code.js';
 import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 import {
   SKILL_DOCS,
@@ -22,6 +23,7 @@ import {
 import '../media/icon.js';
 import '../helpers/format-bytes.js';
 import '../helpers/md-editor.js';
+import '../code/code.js';
 import { defineElement } from '../_shared/define.js';
 
 /**
@@ -83,7 +85,7 @@ import { defineElement } from '../_shared/define.js';
                 Copiar
               </button>
             </div>
-            <pre class="cdn__pre" data-slot="common"></pre>
+            <is-code class="cdn__pre code is-code-view" data-slot="common" readonly compact wrap line-numbers="false" lang="html"></is-code>
           </li>
           <li class="cdn__row" data-kind="single">
             <div class="cdn__row-head">
@@ -96,7 +98,7 @@ import { defineElement } from '../_shared/define.js';
                 Copiar
               </button>
             </div>
-            <pre class="cdn__pre" data-slot="single"></pre>
+            <is-code class="cdn__pre code is-code-view" data-slot="single" readonly compact wrap line-numbers="false" lang="html"></is-code>
           </li>
           <li class="cdn__row" data-kind="category">
             <div class="cdn__row-head">
@@ -109,7 +111,7 @@ import { defineElement } from '../_shared/define.js';
                 Copiar
               </button>
             </div>
-            <pre class="cdn__pre" data-slot="category-pre"></pre>
+            <is-code class="cdn__pre code is-code-view" data-slot="category-pre" readonly compact wrap line-numbers="false" lang="html"></is-code>
           </li>
           <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
             <div class="cdn__row-head">
@@ -119,7 +121,7 @@ import { defineElement } from '../_shared/define.js';
                 Copiar
               </button>
             </div>
-            <pre class="cdn__pre" data-slot="dep-pre"></pre>
+            <is-code class="cdn__pre code is-code-view" data-slot="dep-pre" readonly compact wrap line-numbers="false" lang="html"></is-code>
             <p class="cdn__dep-note" data-slot="dep-note" hidden></p>
           </li>
           <li class="cdn__row" data-kind="all">
@@ -133,7 +135,7 @@ import { defineElement } from '../_shared/define.js';
                 Copiar
               </button>
             </div>
-            <pre class="cdn__pre" data-slot="all"></pre>
+            <is-code class="cdn__pre code is-code-view" data-slot="all" readonly compact wrap line-numbers="false" lang="html"></is-code>
           </li>
         </ol>
       </div>
@@ -154,7 +156,7 @@ import { defineElement } from '../_shared/define.js';
               Copiar
             </button>
           </div>
-          <pre class="cdn__pre" data-slot="boot"></pre>
+          <is-code class="cdn__pre code is-code-view" data-slot="boot" readonly compact wrap line-numbers="false" lang="html"></is-code>
         </div>
       </div>
 
@@ -189,8 +191,15 @@ import { defineElement } from '../_shared/define.js';
 
   const OBSERVED = ['tag', 'category', 'base', 'title', 'dependencies', 'config', 'url-key'];
 
-  class IsCdnSnippet extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsCdnSnippet extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-cdn-snippet-radius',
+    'border-color': { prop: '--is-cdn-snippet-border', onlyColorValues: true },
+    'pre-bg': { prop: '--is-cdn-snippet-pre-bg', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'border-color', 'pre-bg']; }
 
     #mounted = false;
     #urls = { single: '', category: '', all: '', llmPrompt: LLM_PROMPT, boot: '' };
@@ -200,7 +209,6 @@ import { defineElement } from '../_shared/define.js';
     #resolvedRef = 'main';
     #mirrorId = readMirrorId();
     #tab = 'enlaces';
-    #waitingCm = false;
     #restoringUrl = false;
     /** @type {number} evita pintar pesos de un render obsoleto */
     #sizeGen = 0;
@@ -214,6 +222,8 @@ import { defineElement } from '../_shared/define.js';
     }
 
     connectedCallback() {
+
+      super.connectedCallback();
       this.#mounted = true;
       this.#mirrorId = readMirrorId();
       this.#restoreTabFromUrl();
@@ -234,6 +244,8 @@ import { defineElement } from '../_shared/define.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'url-key') this.#restoreTabFromUrl();
       this.#render();
@@ -351,7 +363,15 @@ import { defineElement } from '../_shared/define.js';
         if (label) label.textContent = dep.version ? `${dep.name}@${dep.version}` : dep.name;
         const pre = clone.querySelector('[data-slot="dep-pre"]');
         const snippet = this.#buildDepSnippet(dep);
-        if (pre) pre.textContent = snippet;
+        if (pre) {
+          if (pre.localName === 'is-code') {
+            pre.value = snippet;
+            pre.dataset.cmSource = snippet;
+            delete pre.dataset.cm;
+          } else {
+            pre.textContent = snippet;
+          }
+        }
         const note = clone.querySelector('[data-slot="dep-note"]');
         if (note) { note.textContent = dep.note; note.hidden = !dep.note; }
         const btn = clone.querySelector('[data-copy="dep"]');
@@ -484,11 +504,22 @@ if(!ok)throw new Error('[is-cdn] ningún espejo respondió');
       const mkJs = (url) => url ? `<script type="module" src="${escapeHtml(url)}"><\/script>` : '—';
 
       const commonSnippet = [mkCss(this.#urls.common), mkCss(this.#urls.commonPalette)].join('\n');
-      if (commonPre) commonPre.innerHTML = escapeHtml(commonSnippet);
-      if (singlePre) singlePre.innerHTML = escapeHtml(mkJs(this.#urls.single));
-      if (catPre) catPre.innerHTML = escapeHtml(mkJs(this.#urls.category));
-      if (allPre) allPre.innerHTML = escapeHtml(mkJs(this.#urls.all));
-      if (bootPre) bootPre.innerHTML = escapeHtml(this.#urls.boot);
+      const setCode = (el, text) => {
+        if (!el) return;
+        const src = text || '';
+        if (el.localName === 'is-code') {
+          if (el.value !== src) el.value = src;
+          el.dataset.cmSource = src;
+          delete el.dataset.cm;
+        } else {
+          el.textContent = src;
+        }
+      };
+      setCode(commonPre, commonSnippet);
+      setCode(singlePre, mkJs(this.#urls.single));
+      setCode(catPre, mkJs(this.#urls.category));
+      setCode(allPre, mkJs(this.#urls.all));
+      setCode(bootPre, this.#urls.boot);
 
       const singleRow = root.querySelector('[data-kind="single"]');
       if (singleRow) singleRow.hidden = !tag;
@@ -557,37 +588,11 @@ if(!ok)throw new Error('[is-cdn] ningún espejo respondió');
     }
 
     #highlight() {
-      if (!cmReady()) {
-        if (this.#waitingCm) return;
-        this.#waitingCm = true;
-        document.addEventListener(CODEMIRROR_READY, () => {
-          this.#waitingCm = false;
-          this.#highlight();
-        }, { once: true });
-        return;
-      }
-      this.#adoptCodeMirrorCss();
-      for (const pre of this.shadowRoot.querySelectorAll('.cdn__pre')) {
-        if (!pre.textContent.trim()) continue;
-        if (pre.dataset.slot === 'llm-prompt') continue;
-        pre.classList.add('code');
-        pre.dataset.cmMode = 'htmlmixed';
-        delete pre.dataset.cm;
-        delete pre.dataset.cmSource;
-        paint(pre);
-      }
-    }
-
-    #adoptCodeMirrorCss() {
-      const hrefs = [...document.querySelectorAll('link[rel="stylesheet"]')]
-        .map((l) => l.href)
-        .filter((h) => /codemirror/i.test(h));
-      for (const href of hrefs) {
-        if (this.shadowRoot.querySelector(`link[href="${href}"]`)) continue;
-        this.shadowRoot.prepend(Object.assign(document.createElement('link'), {
-          rel: 'stylesheet',
-          href,
-        }));
+      for (const ed of this.shadowRoot.querySelectorAll('is-code.cdn__pre')) {
+        if (!(ed.value || '').trim()) continue;
+        ed.dataset.cmMode = 'htmlmixed';
+        delete ed.dataset.cm;
+        void paint(ed);
       }
     }
 

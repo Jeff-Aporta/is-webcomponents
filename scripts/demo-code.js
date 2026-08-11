@@ -20,7 +20,7 @@ import '../src/components/actions/dropdown.js';
 import '../src/components/actions/copy-button.js';
 import '../src/components/navigation/tab-group.js';
 import './highlight-pre.js';
-import { ensureCodeMirror, paint } from '../src/components/_shared/highlight-code.js';
+import { paint } from '../src/components/_shared/highlight-code.js';
 import { resolveRef, jsdelivrBase } from '../src/components/_shared/cdn-ref.js';
 import { totalCdnSize } from '../src/components/_shared/cdn-sizes.js';
 import manifest from '../manifest.js';
@@ -59,7 +59,7 @@ import manifest from '../manifest.js';
     'switch', 'tag', 'textarea', 'theme-toggle', 'timeline',
     'time-clock', 'time-field', 'time-input', 'toast', 'toast-item',
     'tooltip', 'treemap', 'video', 'video-playlist', 'waterfall-chart',
-    'year-calendar',
+    'year-calendar', 'code',
   ]);
 
   /** Tamaño humano-legible: 812 → "812 B", 12800 → "12.5 KB". */
@@ -239,15 +239,14 @@ import manifest from '../manifest.js';
     return { snippet: lines.join('\n'), urls };
   };
 
-  const highlight = (pre) => {
-    if (!pre.getAttribute('data-lang')) pre.setAttribute('data-lang', 'html');
-    delete pre.dataset.cm;
-    // paintOne() prioriza dataset.cmSource sobre textContent: si queda el del
-    // render anterior, al cambiar de nivel se repinta el snippet viejo.
-    delete pre.dataset.cmSource;
-    // Si el panel se abre antes de que CodeMirror termine de bajar, pintamos
-    // en cuanto esté: `paint()` sale sin hacer nada si aún no cargó.
-    ensureCodeMirror().then(() => paint(pre)).catch(console.error);
+  const highlight = (el) => {
+    if (!el.getAttribute('lang') && !el.getAttribute('data-lang')) {
+      el.setAttribute('lang', 'html');
+      el.setAttribute('data-lang', 'html');
+    }
+    delete el.dataset.cm;
+    delete el.dataset.cmSource;
+    paint(el).catch(console.error);
   };
 
   const enhance = (demo) => {
@@ -284,10 +283,10 @@ import manifest from '../manifest.js';
         <is-copy-button class="demo-code-pop__copy" copy-label="Copiar" success-label="Copiado"
                         tooltip-placement="left"></is-copy-button>
       </div>
-      <pre class="code demo-code-pop__pre"></pre>
+      <is-code class="code demo-code-pop__pre is-code-view" readonly compact wrap line-numbers="false" lang="html"></is-code>
     `;
 
-    const pre = pop.querySelector('pre');
+    const pre = pop.querySelector('is-code');
     const copyBtn = pop.querySelector('is-copy-button');
     const sizeEl = pop.querySelector('.demo-code-pop__size');
     const levelTabs = pop.querySelector('.demo-code-pop__level');
@@ -304,9 +303,11 @@ import manifest from '../manifest.js';
       const { snippet, urls } = await buildSnippet(demo, level);
       copyBtn.setAttribute('value', snippet);
       if (!(pre.dataset.filled === '1' && pre.dataset.src === snippet)) {
-        pre.textContent = snippet;
         pre.dataset.src = snippet;
+        pre.dataset.cmSource = snippet;
+        pre.dataset.forceCm = '1';
         delete pre.dataset.cm;
+        pre.setAttribute('value', snippet);
         highlight(pre);
         pre.dataset.filled = '1';
       }

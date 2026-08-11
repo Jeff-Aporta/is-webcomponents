@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-08T13:20:20.070Z",
-  "count": 51,
+  "generatedAt": "2026-08-11T12:40:32.692Z",
+  "count": 57,
   "modules": [
     {
       "file": "adopt-css.js",
@@ -57,6 +57,87 @@
         "withAlpha",
         "getFillColors",
         "getStatusColor"
+      ]
+    },
+    {
+      "file": "code-cm.js",
+      "id": "code-cm",
+      "path": "src/components/_shared/code-cm.js",
+      "summary": "code-cm — Reusa el CDN y la carga de modos base de `highlight-code.js` (pintor de",
+      "bytes": 3059,
+      "exports": [
+        "loadCssText",
+        "adoptCodeMirrorCss",
+        "ensureCodeMirrorEditor",
+        "loadCodeMirrorMode",
+        "CODEMIRROR_CDN",
+        "CODEMIRROR_THEMES"
+      ]
+    },
+    {
+      "file": "code-format.js",
+      "id": "code-format",
+      "path": "src/components/_shared/code-format.js",
+      "summary": "code-format — No es Prettier completo (sin AST de terceros). Acepta un JSON de opciones",
+      "bytes": 5593,
+      "exports": [
+        "DEFAULT_FORMAT",
+        "normalizeFormatConfig",
+        "formatCode"
+      ]
+    },
+    {
+      "file": "code-langs.js",
+      "id": "code-langs",
+      "path": "src/components/_shared/code-langs.js",
+      "summary": "code-langs — Los modos livianos (js/ts/jsx/html/css) se resuelven con lo que ya carga",
+      "bytes": 3225,
+      "exports": [
+        "registerLanguage",
+        "resolveLanguage",
+        "listLanguages",
+        "ensureLanguage"
+      ]
+    },
+    {
+      "file": "code-model.js",
+      "id": "code-model",
+      "path": "src/components/_shared/code-model.js",
+      "summary": "code-model — Analogía con html2json / json2html: el texto plano es `value`; las",
+      "bytes": 4936,
+      "exports": [
+        "CODE_DOC_SCHEMA",
+        "normalizeMark",
+        "code2json",
+        "json2code",
+        "parseCodeDocument",
+        "rebaseMarks"
+      ]
+    },
+    {
+      "file": "code-text.js",
+      "id": "code-text",
+      "path": "src/components/_shared/code-text.js",
+      "summary": "code-text — Extraído para evitar ciclos highlight-code ↔ code ↔ code-format.",
+      "bytes": 3368,
+      "exports": [
+        "dedent",
+        "unwrapHandHighlight",
+        "prettyHtml",
+        "softFormat"
+      ]
+    },
+    {
+      "file": "code-theme.js",
+      "id": "code-theme",
+      "path": "src/components/_shared/code-theme.js",
+      "summary": "code-theme — El consumidor pasa un objeto de colores (como un theme de VS Code / CM).",
+      "bytes": 5473,
+      "exports": [
+        "THEME_PROP_MAP",
+        "BUILTIN_THEMES",
+        "applyThemeConfig",
+        "parseThemeConfig"
       ]
     },
     {
@@ -169,7 +250,7 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.js",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 7793,
+      "bytes": 8229,
       "exports": [
         "DiagramElementBase extends ElementBase \n  static get observedAttributes"
       ]
@@ -321,21 +402,21 @@
       "file": "highlight-code.js",
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.js",
-      "summary": "highlight-code — Vive en `_shared/` y NO en `scripts/` a propósito: `<is-cdn-snippet>` es un",
-      "bytes": 14508,
+      "summary": "highlight-code — se coloreaba con CodeMirror.runMode sobre `<pre class=\"code\">`.",
+      "bytes": 10912,
       "exports": [
-        "THEMES",
         "dedent",
         "unwrapHandHighlight",
         "prettyHtml",
         "softFormat",
+        "THEMES",
+        "resolveMode",
+        "modeToLang",
         "paint",
         "repaint",
         "watchDom",
         "reapplyTheme",
-        "isReady",
-        "CODEMIRROR_READY",
-        "ensureCodeMirror"
+        "isReady"
       ]
     },
     {
@@ -461,9 +542,9 @@
       "id": "modal-base",
       "path": "src/components/_shared/modal-base.js",
       "summary": "modal-base — Centraliza TODO el ciclo de vida de un modal accesible que no es nativo:",
-      "bytes": 11765,
+      "bytes": 12443,
       "exports": [
-        "ModalBase extends HTMLElement \n  static get observedAttributes"
+        "ModalBase extends withStyleAttrs"
       ]
     },
     {
@@ -497,7 +578,7 @@
       "id": "picker-element",
       "path": "src/components/_shared/picker-element.js",
       "summary": "Módulo compartido `picker-element.js`.",
-      "bytes": 18679,
+      "bytes": 19659,
       "exports": [
         "definePickerInput"
       ]
@@ -589,7 +670,7 @@
       "id": "style-attrs",
       "path": "src/components/_shared/style-attrs.js",
       "summary": "style-attrs — El problema: para cambiar el radio o el color de un componente había que",
-      "bytes": 6042,
+      "bytes": 7458,
       "exports": [
         "isCssColorValue",
         "syncStyleAttr",
@@ -597,7 +678,8 @@
         "syncPresentStyleAttrs",
         "styleAttrNames",
         "describeStyleAttrs",
-        "applyToneRamp"
+        "applyToneRamp",
+        "withStyleAttrs"
       ]
     },
     {

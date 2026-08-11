@@ -148,6 +148,8 @@ is-main.main {
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  /* Restore programático (F5): smooth hereda de html y pelea con remember-scroll. */
+  scroll-behavior: auto;
   background:
     radial-gradient(900px 420px at 12% -8%, color-mix(in srgb, var(--is-accent) 11%, transparent), transparent 60%),
     radial-gradient(700px 360px at 92% 8%, color-mix(in srgb, var(--is-bg-elev) 70%, transparent), transparent 55%),
@@ -441,7 +443,7 @@ body::-webkit-scrollbar-corner {
   z-index: auto;
 }
 /* <is-demo> reusa el chrome de .demo; el heading es su label opcional. */
-is-demo.demo { display: flex; }
+is-demo.demo { display: flex; flex-direction: column; }
 
 /* Demos de componentes anclados al viewport (is-fab, is-speed-dial, is-toast…).
    `transform` crea un containing block, asi que los hijos `position: fixed`
@@ -557,36 +559,161 @@ is-demo[contain],
   height: 1.15em;
 }
 
-.vs-page-bar {
+/* Legacy: la barra con hints ya no se monta (sustituida por .file-meta-page). */
+.vs-page-bar,
+.vs-page-hint {
+  display: none !important;
+}
+
+/* Barra única de fuentes + pesos CDN (tras el título del preview) */
+.file-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.65rem 1rem;
-  margin: 0 0 1rem;
-  padding: 0.65rem 0.85rem;
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius, 0.5em);
-  background: var(--is-bg-elev);
+  margin: 0 0 1.25rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--is-border) 80%, transparent);
+  border-radius: calc(var(--is-radius, 10px) + 2px);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--is-accent, var(--is-brand)) 7%, transparent),
+      transparent 42%
+    ),
+    color-mix(in srgb, var(--is-bg-elev, var(--is-bg-soft, var(--is-bg))) 92%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset,
+    0 8px 22px -18px rgb(0 0 0 / 45%);
+  font-size: 0.78rem;
 }
-.vs-page-hint {
+[data-theme="light"] .file-meta {
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 70%, transparent) inset,
+    0 10px 24px -18px rgb(0 0 0 / 14%);
+}
+/* Barra de página: fluye con el scroll del is-main (no sticky). */
+.file-meta-page {
+  position: static;
+}
+.file-meta__srcs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: center;
+  padding: 0.15rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--is-bg) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--is-border) 70%, transparent);
+}
+.file-meta__src-btn {
+  font-size: 0.72rem;
+  --is-button-radius: 999px;
+}
+.file-meta__mins {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.85rem;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 16rem;
+}
+.file-meta__row {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  max-width: 100%;
+}
+.file-meta__path {
+  display: inline-block;
+  max-width: min(100%, 18rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--is-border) 75%, transparent);
+  background: color-mix(in srgb, var(--is-bg) 70%, transparent);
+  color: var(--is-text-soft);
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+.file-meta__bytes {
+  color: var(--is-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
   font-size: 0.75rem;
-  color: var(--is-text-dim);
+}
+.file-meta__total {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--is-accent, var(--is-brand)) 28%, var(--is-border));
+  background: color-mix(in srgb, var(--is-accent, var(--is-brand)) 10%, transparent);
+  color: var(--is-text);
+  font-weight: 700;
+}
+.file-meta__total-label {
+  color: var(--is-text-soft);
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.62rem;
+}
+.file-meta__total-bytes {
+  color: var(--is-accent, var(--is-brand));
+  font-variant-numeric: tabular-nums;
 }
 
-/* Modal full-view de fuentes */
+@media (max-width: 720px) {
+  .file-meta {
+    gap: 0.55rem;
+    padding: 0.5rem 0.6rem;
+  }
+  .file-meta__total {
+    margin-left: 0;
+  }
+  .file-meta__path {
+    max-width: 12rem;
+  }
+}
+
+/* Modal full-page de fuentes */
 is-dialog.is-view-sources {
-  --width: min(96vw, 72rem);
-  --spacing: 0.75rem;
+  --is-dialog-width: 100%;
+  --is-dialog-spacing: 0px;
+  --spacing: 0px;
+  --width: 100%;
+}
+is-dialog.is-view-sources::part(dialog) {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  border-radius: 0;
+  box-shadow: none;
+  align-self: stretch;
+  justify-self: stretch;
 }
 is-dialog.is-view-sources::part(body) {
   display: flex;
   flex-direction: column;
   padding: 0;
   overflow: hidden;
-  max-height: calc(100vh - 7.5rem);
+  max-height: none;
+  min-height: 0;
+  height: 100%;
 }
-is-dialog.is-view-sources::part(dialog) {
-  height: min(92vh, 56rem);
+is-dialog.is-view-sources::part(footer) {
+  border-top: 1px solid var(--is-border);
 }
 .vs-header-actions {
   display: inline-flex;
@@ -608,15 +735,18 @@ is-dialog.is-view-sources::part(dialog) {
   height: 100%;
 }
 .vs-path {
+  display: block;
   margin: 0;
   padding: 0.45rem 0.85rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.72rem;
-  color: var(--is-text-soft);
-  border-bottom: 1px solid var(--is-border-soft);
+  color: var(--is-accent, var(--is-text-soft));
+  text-decoration: none;
+  border-bottom: 1px solid var(--is-border-soft, var(--is-border));
   background: var(--is-bg-soft);
   word-break: break-all;
 }
+.vs-path:hover { text-decoration: underline; }
 .vs-tabs {
   flex: 1 1 auto;
   min-height: 0;
@@ -636,7 +766,8 @@ is-dialog.is-view-sources::part(dialog) {
 }
 .vs-panel {
   box-sizing: border-box;
-  height: min(70vh, 42rem);
+  height: 100%;
+  min-height: 0;
   overflow: auto;
   padding: 0.75rem 1rem;
 }
@@ -1369,8 +1500,8 @@ table.ref.ref--derive td:nth-child(1) code {
   object-fit: cover;
   background:
     linear-gradient(135deg,
-      color-mix(in srgb, var(--is-color-brand-500) 85%, #fff),
-      var(--is-color-brand-700));
+      color-mix(in srgb, var(--is-color-brand) 85%, #fff),
+      var(--is-color-brand-stronger));
 }
 
 /* --- Preview chrome (theme + palette; hidden when ?embed=1) ---------- */
@@ -1504,7 +1635,18 @@ is-button is-icon {
   margin: 12px 0 18px;
 }
 
-.code-block > pre.code { margin: 0; }
+.code-block > pre.code,
+.code-block > is-code.code,
+.code-block > is-code.is-code-view { margin: 0; }
+
+/* Vista readonly de snippets (sustituye pre.code coloreado con runMode). */
+is-code.is-code-view,
+is-code.code[readonly] {
+  display: block;
+  width: 100%;
+  --is-code-min-height: 0;
+  --is-code-radius: var(--is-radius, 8px);
+}
 
 .code-block__copy {
   position: absolute;

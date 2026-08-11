@@ -65,7 +65,13 @@ import './button.js';
   const VALID_POSITION = ['bottom-end', 'bottom-start', 'top-end', 'top-start', 'inline'];
 
   class IsFab extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+      size: '--is-fab-size',
+      shadow: '--is-fab-shadow',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, ...IsFab.styleAttrNames]; }
 
     #root;
 

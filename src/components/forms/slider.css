@@ -15,9 +15,9 @@
 :host([hidden]) { display: none !important; }
 
 :host([color="neutral"]) { --is-slider-fill: var(--is-control-border, #59636e); }
-:host([color="success"]) { --is-slider-fill: var(--is-color-success-500, #40c057); }
-:host([color="warning"]) { --is-slider-fill: var(--is-color-warning-500, #f59f00); }
-:host([color="danger"]) { --is-slider-fill: var(--is-color-danger-500, #fa5252); }
+:host([color="success"]) { --is-slider-fill: var(--is-color-success, #40c057); }
+:host([color="warning"]) { --is-slider-fill: var(--is-color-warning, #f59f00); }
+:host([color="danger"]) { --is-slider-fill: var(--is-color-danger, #fa5252); }
 
 .form-control {
   display: flex;

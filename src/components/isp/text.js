@@ -28,6 +28,11 @@ import {
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
   class IsText extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'mix-with': { prop: '--is-text-mix-with', onlyColorValues: true },
+    };
+
     static TEMPLATE = TEMPLATE;
     static get observedAttributes() {
       return ['color', 'mix', 'mix-with', 'lines'];
@@ -51,13 +56,13 @@ import {
 
     #syncColor() {
       syncIspColor(this, {
-        colorVar: '--text-clr',
-        mixVar: '--text-mix',
-        mixWithVar: '--text-mix-with',
+        colorVar: '--is-text-color',
+        mixVar: '--is-text-mix',
+        mixWithVar: '--is-text-mix-with',
       });
       // Sin attr mix → no forzar --text-mix (el CSS solo mezcla si hay [mix]).
       if (!normalizeMix(this.getAttribute('mix'))) {
-        this.style.removeProperty('--text-mix');
+        this.style.removeProperty('--is-text-mix');
       }
       this.toggleAttribute('data-has-mix', !!normalizeMix(this.getAttribute('mix')));
     }

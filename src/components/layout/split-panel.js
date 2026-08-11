@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -70,8 +71,14 @@ import { clampTo } from '../_shared/misc-utils.js';
   const VALID_SIDE = ['start', 'end'];
 
 
-  class IsSplitPanel extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsSplitPanel extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'min-size': '--is-split-panel-min',
+    'max-size': '--is-split-panel-max',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'min-size', 'max-size']; }
 
     constructor() {
       super();
@@ -94,6 +101,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this._mounted = true;
       upgradeProperties(this, OBSERVED);
 
@@ -130,6 +138,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this._mounted || oldVal === newVal) return;
       if (name === 'orientation') this._detectSize();
       if (name === 'disabled') this._divider.tabIndex = newVal != null ? -1 : 0;

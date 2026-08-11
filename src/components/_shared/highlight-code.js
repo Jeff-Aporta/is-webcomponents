@@ -1,24 +1,23 @@
 /**
- * highlight-code.js — pintor de código con CodeMirror (runMode), compartido.
+ * highlight-code.js — monta `<is-code readonly compact>` donde antes
+ * se coloreaba con CodeMirror.runMode sobre `<pre class="code">`.
  *
- * Vive en `_shared/` y NO en `scripts/` a propósito: `<is-cdn-snippet>` es un
- * componente y necesita colorear los `<pre>` de su Shadow DOM. Un componente no
- * puede importar de `scripts/` (esbuild lo inlinearía en el bundle del CDN y
- * colapsaría `import.meta.url`, el bug documentado de `adoptCss`). Al vivir
- * aquí, tanto el componente como `scripts/highlight-pre.js` lo importan de
- * forma estática y comparten la MISMA instancia en el navegador.
+ * Vive en `_shared/` (no en `scripts/`): `<is-cdn-snippet>` y el docs lo
+ * importan. El motor CM5 sigue cargándose vía `ensureCodeMirror` porque
+ * `<is-code>` lo necesita; el pintor de docs YA NO usa runMode.
  *
- * Qué hace:
- * - Dedenta la indentación heredada del HTML fuente.
- * - Detecta modo: data-lang | heurística (html / javascript / css).
- * - Theme reactivo al `data-theme` de `<html>`:
- *     dark  -> material-darker
- *     light -> mdn-like  (alto contraste sobre fondo blanco)
- * - Re-pinta al cambiar el tema y emite `is-codemirror-theme-changed`.
+ * API pública estable:
+ * - softFormat / dedent / prettyHtml / unwrapHandHighlight
+ * - paint / repaint / watchDom / reapplyTheme / ensureCodeMirror / isReady
+ * - THEMES / CODEMIRROR_READY (compat; el theme lo aplica el editor)
  *
- * `window.CodeMirror` es un global de terceros (script clásico de jsDelivr):
- * leerlo es correcto, no es un puente nuestro.
+ * No importa `code.js` en estático (ciclo con code-cm). Se carga
+ * bajo demanda en `paint`.
  */
+
+import { dedent, unwrapHandHighlight, prettyHtml, softFormat } from './code-text.js';
+
+export { dedent, unwrapHandHighlight, prettyHtml, softFormat };
 
 const CDN = 'https://cdn.jsdelivr.net/npm/codemirror@5.65.16';
 
@@ -47,206 +46,165 @@ const loadScript = (src) => new Promise((resolve, reject) => {
   document.head.appendChild(el);
 });
 
-/** Quita indentación común heredada del markup del preview. */
-export const dedent = (text) => {
-  const normalized = String(text).replace(/\r\n/g, '\n').replace(/^\n+|\n+$/g, '');
-  const lines = normalized.split('\n');
-  const indents = lines
-    .filter((l) => l.trim().length)
-    .map((l) => {
-      const m = l.match(/^[ \t]*/) || [''];
-      return m[0].replace(/\t/g, '  ').length;
-    });
-  const min = indents.length ? Math.min(...indents) : 0;
-  return lines
-    .map((l) => {
-      const expanded = l.replace(/^\t+/, (tabs) => '  '.repeat(tabs.length));
-      const lead = (expanded.match(/^ */) || [''])[0].length;
-      return expanded.slice(Math.min(min, lead));
-    })
-    .join('\n')
-    .replace(/[ \t]+$/gm, '');
-};
-
-/**
- * La migración HTML→JSON dejó en algunos `<pre>` el coloreado a mano
- * (`<span class="tag">…`) como si fuera el código. CodeMirror lo vuelve a
- * tokenizar, marca cierres huérfanos como `cm-error` (fondo rojo) y aplana
- * la indentación. Si detectamos ese markup, lo desempaquetamos a texto plano.
- */
-const HAND_HL_OPEN = /<span\s+class="(?:tag|attr|val|str|kw|com)">/gi;
-const HAND_HL_CLOSE = /<\/span>/gi;
-const HAND_HL_PROBE = /<span\s+class="(?:tag|attr|val|str|kw|com)"/i;
-
-export const unwrapHandHighlight = (text) => {
-  const raw = String(text);
-  if (!HAND_HL_PROBE.test(raw)) return raw;
-  return raw.replace(HAND_HL_OPEN, '').replace(HAND_HL_CLOSE, '');
-};
-
-const VOID_HTML = /^(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\b/i;
-
-/** Pretty-print HTML mínimo: parte en `><` e indenta abiertos/cerrados. */
-export const prettyHtml = (text) => {
-  const lines = String(text)
-    .replace(/\r\n/g, '\n')
-    .replace(/>\s*</g, '>\n<')
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  let depth = 0;
-  const out = [];
-  for (const line of lines) {
-    const isClose = /^<\//.test(line);
-    if (isClose) depth = Math.max(0, depth - 1);
-    out.push(`${'  '.repeat(depth)}${line}`);
-    const isOpen = /^<[^/!?][^>]*>$/.test(line)
-      && !/\/>$/.test(line)
-      && !VOID_HTML.test(line.slice(1));
-    if (!isClose && isOpen) depth += 1;
-  }
-  // `<slot></slot>` vacío no merece dos líneas: el split por `><` lo separó.
-  return out.join('\n').replace(
-    /^(\s*)(<([a-zA-Z][\w:-]*)\b[^>]*>)\n\1(<\/\3>)/gm,
-    '$1$2$4',
-  );
-};
-
-/**
- * Formato ligero: si viene casi en una línea o con anidación en la misma
- * línea, inserta saltos básicos para HTML y JS sin un prettier completo.
- */
-export const softFormat = (text, mode) => {
-  let t = dedent(unwrapHandHighlight(text));
-  const compact = t.replace(/\s+/g, ' ').trim();
-  const fewLines = t.split('\n').length <= 2;
-  const inlineNest = t.split('\n').some((line) => />\s*</.test(line));
-
-  if (mode === 'htmlmixed' && t.includes('<') && (fewLines || inlineNest) && compact.length > 40) {
-    t = prettyHtml(t);
-  }
-
-  if (mode === 'javascript' && fewLines && /[{;]/.test(compact) && compact.length > 60) {
-    t = compact
-      .replace(/;\s*/g, ';\n')
-      .replace(/\{\s*/g, '{\n')
-      .replace(/\s*\}/g, '\n}')
-      .replace(/,\s*(?=[{\[])/g, ',\n');
-    // re-indent braces
-    let depth = 0;
-    t = t.split('\n').map((raw) => {
-      const line = raw.trim();
-      if (!line) return '';
-      if (line.startsWith('}') || line.startsWith(']')) depth = Math.max(0, depth - 1);
-      const out = `${'  '.repeat(depth)}${line}`;
-      if (/[{\[]$/.test(line)) depth += 1;
-      return out;
-    }).filter((l, i, arr) => l || (i > 0 && i < arr.length - 1)).join('\n');
-  }
-
-  return dedent(t);
-};
-
-const resolveMode = (el, text) => {
-  const raw = (el.getAttribute('data-lang') || el.getAttribute('data-language') || '').toLowerCase();
-  if (['js', 'javascript', 'ts', 'typescript'].includes(raw)) return 'javascript';
+/** data-lang / heurística → mode legacy (softFormat) + lang del editor. */
+export const resolveMode = (el, text) => {
+  const raw = (el.getAttribute?.('data-lang') || el.getAttribute?.('data-language') || el.dataset?.lang || '').toLowerCase();
+  if (['js', 'javascript'].includes(raw)) return 'javascript';
+  if (['ts', 'typescript'].includes(raw)) return 'typescript';
+  if (['jsx', 'tsx'].includes(raw)) return raw;
   if (raw === 'css') return 'css';
   if (['html', 'htm', 'htmlmixed', 'xml', 'svg'].includes(raw)) return 'htmlmixed';
+  if (['py', 'python'].includes(raw)) return 'python';
+  if (raw === 'json') return 'json';
 
-  const t = text.trim();
+  const t = String(text || '').trim();
   if (!t) return 'htmlmixed';
-  // CSS
-  if (/^(?:@|:root|[.#]?[a-z][\w-]*)\s*\{/i.test(t) || /:\s*[^;]+;/m.test(t) && !/[<(]/.test(t.slice(0, 40))) {
+  if (/^(?:@|:root|[.#]?[a-z][\w-]*)\s*\{/i.test(t) || (/:\s*[^;]+;/m.test(t) && !/[<(]/.test(t.slice(0, 40)))) {
     if (!/\b(?:const|let|var|function|=>)\b/.test(t) && !/^</.test(t)) return 'css';
   }
-  // HTML / markup
   if (/^</.test(t) || /<\/?[a-z][\w:-]*[\s>]/i.test(t.slice(0, 120))) return 'htmlmixed';
-  // JS default for scripts
   if (/\b(?:const|let|var|function|=>|import|export|class)\b/.test(t) || /\.\w+\s*=/.test(t)) return 'javascript';
   return 'javascript';
 };
 
-/** Lee el tema actual del documento (mirror del is-theme-toggle). */
+/** Mode legacy → lang de `<is-code>`. */
+export const modeToLang = (mode) => {
+  const m = String(mode || '').toLowerCase();
+  if (m === 'htmlmixed' || m === 'htm' || m === 'xml' || m === 'svg') return 'html';
+  if (m === 'js') return 'javascript';
+  if (m === 'ts') return 'typescript';
+  if (m === 'py') return 'python';
+  return m || 'javascript';
+};
+
 const resolveThemeId = () => {
   const t = (document.documentElement.dataset.theme || 'dark').toLowerCase();
   return THEMES[t] ? t : 'dark';
 };
 
-/** Repintado en curso: el observer ignora las mutaciones que provoca runMode. */
-let pintando = false;
+const isMountedEditor = (el) => el instanceof HTMLElement
+  && el.localName === 'is-code'
+  && el.dataset.cm === '1';
 
-const paintOne = (el) => {
-  const CM = globalThis.CodeMirror;
-  if (typeof CM?.runMode !== 'function') return;
-  if (el.classList.contains('demo-code-pop__pre') && !el.textContent.trim() && !el.dataset.forceCm) return;
-
-  const source = el.dataset.cmSource ?? el.textContent;
-  const mode = el.dataset.cmMode || resolveMode(el, source);
-  const text = softFormat(source, mode);
-  const themeId = resolveThemeId();
-  const theme = THEMES[themeId];
-
-  pintando = true;
-  try {
-    el.textContent = '';
-    CM.runMode(text, mode, el);
-  } finally {
-    pintando = false;
-  }
-  // Limpia cualquier clase cm-s-* que pudieramos haber puesto antes,
-  // para que no se acumulen los dos themes.
-  for (const t of Object.values(THEMES)) el.classList.remove(t.className);
-  el.classList.add(theme.className);
-  el.dataset.cm = '1';
-  el.dataset.cmMode = mode;
-  el.dataset.cmTheme = themeId;
-  // Guarda texto limpio para copiar / re-pintar
-  el.dataset.cmSource = text;
-};
-
-export const paint = (root = document) => {
-  if (typeof globalThis.CodeMirror?.runMode !== 'function') return;
-  let targets;
-  if (root instanceof Element && root.matches('pre.code')) {
-    targets = root.dataset.cm ? [] : [root];
-  } else {
-    const scope = root instanceof Element || root instanceof DocumentFragment ? root : document;
-    targets = [...scope.querySelectorAll('pre.code:not([data-cm])')];
-  }
-  targets.forEach(paintOne);
+let editorImport = null;
+const ensureEditorDefined = () => {
+  if (customElements.get('is-code')) return Promise.resolve();
+  editorImport ??= import('../code/code.js');
+  return editorImport;
 };
 
 /**
- * Vuelve a colorear un `<pre>` YA pintado. `paint()` se salta los `[data-cm]`
- * para no rehacer trabajo; esto es para cuando el contenido cambió y el
- * coloreado anterior ya no corresponde al texto.
+ * Crea o actualiza un `<is-code readonly compact>` a partir de un
+ * `<pre class="code">` o de un editor ya montado.
+ * @param {HTMLElement} el
  */
-export const repaint = (el) => {
-  if (!(el instanceof Element)) return;
-  delete el.dataset.cm;
-  delete el.dataset.cmSource;
-  delete el.dataset.cmMode;
-  paintOne(el);
+const paintOne = async (el) => {
+  if (!(el instanceof HTMLElement)) return;
+  if (el.classList.contains('demo-code-pop__pre')
+    && !(el.localName === 'is-code' ? el.value : el.textContent).trim()
+    && !el.dataset.forceCm) return;
+
+  await ensureEditorDefined();
+
+  const source = el.dataset.cmSource
+    ?? (isMountedEditor(el) ? el.value : el.textContent)
+    ?? '';
+  const mode = el.dataset.cmMode || resolveMode(el, source);
+  const text = softFormat(source, mode === 'typescript' ? 'javascript' : mode);
+  const lang = modeToLang(mode);
+
+  if (isMountedEditor(el) || el.localName === 'is-code') {
+    el.toggleAttribute('readonly', true);
+    el.toggleAttribute('compact', true);
+    if (!el.hasAttribute('wrap')) el.setAttribute('wrap', '');
+    if (!el.hasAttribute('line-numbers')) el.setAttribute('line-numbers', 'false');
+    el.lang = lang;
+    if (el.value !== text) el.value = text;
+    el.dataset.cm = '1';
+    el.dataset.cmSource = text;
+    el.dataset.cmMode = mode;
+    el.dataset.cmTheme = resolveThemeId();
+    el.refresh?.();
+    return;
+  }
+
+  if (el.localName !== 'pre' && !el.classList.contains('code')) return;
+
+  const ed = document.createElement('is-code');
+  ed.className = `${el.className} is-code-view`.replace(/\s+/g, ' ').trim();
+  ed.setAttribute('readonly', '');
+  ed.setAttribute('compact', '');
+  ed.setAttribute('wrap', '');
+  ed.setAttribute('line-numbers', 'false');
+  ed.setAttribute('lang', lang);
+  ed.setAttribute('value', text);
+  ed.dataset.cm = '1';
+  ed.dataset.cmSource = text;
+  ed.dataset.cmMode = mode;
+  ed.dataset.cmTheme = resolveThemeId();
+  if (el.id) ed.id = el.id;
+  if (el.dataset.codeId) ed.dataset.codeId = el.dataset.codeId;
+  if (el.hasAttribute('data-no-copy')) ed.setAttribute('data-no-copy', '');
+
+  el.replaceWith(ed);
 };
 
-/** ¿El texto visible dejó de ser el que se coloreó? */
-const desincronizado = (el) => el.dataset.cmSource !== undefined
-  && el.textContent !== el.dataset.cmSource;
+/**
+ * Monta editores readonly sobre `pre.code` pendientes (o actualiza uno).
+ * @param {ParentNode | Element} [root]
+ */
+export const paint = (root = document) => {
+  let targets;
+  if (root instanceof Element && (root.matches?.('pre.code') || root.localName === 'is-code')) {
+    targets = [root];
+  } else {
+    const scope = root instanceof Element || root instanceof DocumentFragment || root instanceof ShadowRoot
+      ? root
+      : document;
+    const list = [
+      ...scope.querySelectorAll('pre.code:not([data-cm])'),
+      ...scope.querySelectorAll('is-code.code:not([data-cm]), is-code.is-code-view:not([data-cm])'),
+    ];
+    targets = [...new Set(list)];
+  }
+  return Promise.all(targets.map((el) => paintOne(el).catch(console.error)));
+};
+
+/** Fuerza re-montar / actualizar contenido. */
+export const repaint = (el) => {
+  if (!(el instanceof Element)) return Promise.resolve();
+  delete el.dataset.cm;
+  if (el.localName === 'is-code') {
+    return paintOne(el);
+  }
+  delete el.dataset.cmSource;
+  delete el.dataset.cmMode;
+  return paintOne(el);
+};
 
 let observer = null;
 let pendientes = null;
+let pintando = false;
 
 const procesarPendientes = () => {
   const lote = pendientes;
   pendientes = null;
   if (!lote?.size) return;
-
   const pintar = () => {
-    for (const el of lote) {
-      if (!el.isConnected) continue;
-      if (!el.dataset.cm) paintOne(el);
-      else if (desincronizado(el)) repaint(el);
+    pintando = true;
+    try {
+      for (const el of lote) {
+        if (!el.isConnected) continue;
+        if (el.localName === 'is-code') {
+          if (el.dataset.cmSource !== undefined && el.value !== el.dataset.cmSource) {
+            repaint(el);
+          }
+          continue;
+        }
+        if (!el.dataset.cm) paintOne(el);
+      }
+    } finally {
+      pintando = false;
     }
   };
   if (isReady()) pintar();
@@ -259,70 +217,56 @@ const encolar = (el) => {
   pendientes.add(el);
 };
 
-/**
- * Vigila el documento y colorea SIEMPRE: los `<pre class="code">` que aparecen
- * después del arranque (previews montados desde JSON, paneles de demo) y los
- * que reescriben su texto en caliente (el taller de temas regenera el CSS en
- * cada `is-input` del picker). Sin esto, cada consumidor tenía que acordarse de
- * llamar a `paint()` y el que no lo hacía se quedaba en texto plano.
- *
- * Idempotente: el observer es uno por documento.
- */
 export const watchDom = (root = document.documentElement) => {
   if (observer || typeof MutationObserver !== 'function') return;
 
   observer = new MutationObserver((muts) => {
-    // runMode reemplaza los hijos del <pre>: sus propias mutaciones no cuentan.
     if (pintando) return;
     for (const m of muts) {
-      const desde = m.target instanceof Element ? m.target : m.target?.parentElement;
-      const propio = desde?.closest?.('pre.code');
-      if (propio) encolar(propio);
       if (m.type !== 'childList') continue;
       for (const node of m.addedNodes) {
         if (!(node instanceof Element)) continue;
-        if (node.matches('pre.code')) encolar(node);
-        for (const pre of node.querySelectorAll?.('pre.code') ?? []) encolar(pre);
+        if (node.matches?.('pre.code') || node.localName === 'is-code') encolar(node);
+        for (const pre of node.querySelectorAll?.('pre.code, is-code.code, is-code.is-code-view') ?? []) {
+          encolar(pre);
+        }
       }
     }
   });
-  observer.observe(root, { childList: true, subtree: true, characterData: true });
+  observer.observe(root, { childList: true, subtree: true });
 };
 
-/** Re-pinta los <pre> ya pintados con el theme actual. Llamalo cuando
- *  cambia document.documentElement.dataset.theme. */
+/** Compat: el theme lo aplica cada `<is-code>` vía data-theme. */
 export const reapplyTheme = () => {
-  if (typeof globalThis.CodeMirror?.runMode !== 'function') {
-    // Todavia no cargo CodeMirror: re-pintara cuando boot() termine.
-    return false;
-  }
   const target = resolveThemeId();
-  // Asegura que el CSS del theme este cargado (lazy).
-  ensureCss(THEMES[target].css);
-  const all = [...document.querySelectorAll('pre.code[data-cm]')];
-  all.forEach(paintOne);
-  document.dispatchEvent(new CustomEvent('is-codemirror-theme-changed', { detail: { theme: target, count: all.length } }));
+  const all = [
+    ...document.querySelectorAll('is-code[data-cm]'),
+    ...document.querySelectorAll('pre.code[data-cm]'),
+  ];
+  all.forEach((el) => {
+    if (el.localName === 'is-code') {
+      el.dataset.cmTheme = target;
+      el.refresh?.();
+    } else {
+      paintOne(el);
+    }
+  });
+  document.dispatchEvent(new CustomEvent('is-codemirror-theme-changed', {
+    detail: { theme: target, count: all.length },
+  }));
   return true;
 };
 
-/** ¿Está CodeMirror listo para colorear de verdad? Hacen falta las TRES
- *  cosas: el core, el addon runMode y el modo htmlmixed (los modos son
- *  scripts aparte; sin ellos runMode aplica el tema pero no tokeniza). */
 export const isReady = () => typeof globalThis.CodeMirror?.runMode === 'function'
   && !!globalThis.CodeMirror?.modes?.htmlmixed;
 
-/** Evento en `document` que anuncia que `isReady()` ya es true. Lo emite
- *  `ensureCodeMirror()`; los consumidores que no cargan CodeMirror por su
- *  cuenta (p. ej. `<is-cdn-snippet>`) solo tienen que escucharlo. */
 export const CODEMIRROR_READY = 'is-codemirror-ready';
 
 let cmPromise = null;
 
-/** Carga CodeMirror + runMode + modos + CSS de ambos themes. Idempotente. */
+/** Sigue cargando CM5: lo necesita `<is-code>` / code-cm. */
 export const ensureCodeMirror = () => {
   cmPromise ??= (async () => {
-    // Cargamos el CSS del theme actual Y el del opuesto para que el switch
-    // sea instantaneo cuando el usuario cambie el theme (solo ~1KB cada uno).
     const initial = resolveThemeId();
     ensureCss(`${CDN}/lib/codemirror.min.css`);
     ensureCss(THEMES[initial].css);
@@ -345,20 +289,11 @@ export const ensureCodeMirror = () => {
 
 let watching = false;
 
-/** Engancha el re-pintado automático al cambio de tema. Idempotente. */
 export const watchTheme = () => {
   if (watching) return;
   watching = true;
-
-  // Escucha cambios de data-theme en <html>. El <is-theme-toggle> emite
-  // 'is-theme-change' en document; ademas cubrimos el caso de quien
-  // cambie data-theme directamente (backcompat / tests).
   const onThemeChange = () => reapplyTheme();
   document.addEventListener('is-theme-change', onThemeChange);
-
-  // Algunas implementaciones (preview-chrome.js) reescriben
-  // documentElement.dataset.* directamente. Usa MutationObserver para
-  // cubrir ese caso sin obligar al consumidor a emitir el evento.
   new MutationObserver((muts) => {
     for (const m of muts) {
       if (m.type === 'attributes' && m.attributeName === 'data-theme') {

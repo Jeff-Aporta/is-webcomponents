@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { defineElement } from '../_shared/define.js';
 import { INTENT } from '../_shared/intent.js';
 import { TONE } from '../_shared/tone.js';
@@ -32,8 +33,13 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
   const VALID_ATTENTION = ['none', 'pulse', 'bounce'];
 
-  class IsBadge extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsBadge extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'pulse-color': { prop: '--is-badge-pulse-color', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'pulse-color']; }
 
     constructor() {
       super();
@@ -43,12 +49,14 @@ import { TONE } from '../_shared/tone.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'accent');
       if (!this.hasAttribute('attention')) this.setAttribute('attention', 'none');
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal) return;
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
         this.setAttribute('color', 'brand');

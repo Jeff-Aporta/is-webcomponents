@@ -267,6 +267,15 @@ const HEADER_MENU_ICONS = {
 };
 
 export class IsAgGrid extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'header-height': '--is-grid-header-h',
+    'header-bg': { prop: '--is-grid-header-bg', onlyColorValues: true },
+    'stripe-color': { prop: '--is-grid-stripe', onlyColorValues: true },
+    'row-hover': { prop: '--is-grid-row-hover', onlyColorValues: true },
+    'selected-color': { prop: '--is-grid-selected', onlyColorValues: true },
+    };
+
   static TEMPLATE = TEMPLATE;
   static get observedAttributes() {
     return [
@@ -276,6 +285,7 @@ export class IsAgGrid extends ElementBase {
       'quick-filter', 'group-by',
       'remember-state', 'storage-key',
       'toolbar', 'theme',
+      ...IsAgGrid.styleAttrNames,
     ];
   }
 

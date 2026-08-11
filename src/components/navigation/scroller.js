@@ -51,7 +51,14 @@ import { ElementBase } from '../_shared/element-base.js';
   const OBSERVED = ['orientation', 'without-scroll-buttons'];
 
   class IsScroller extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'button-size': '--is-scroller-button-size',
+    'button-bg': { prop: '--is-scroller-button-bg', onlyColorValues: true },
+    'button-color': { prop: '--is-scroller-button-text', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'button-size', 'button-bg', 'button-color']; }
 
     #scroller;
     #viewport;

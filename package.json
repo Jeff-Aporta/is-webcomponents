@@ -10,6 +10,7 @@
     "icons:download": "node scripts/download-icons.mjs"
   },
   "devDependencies": {
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.0",
+    "playwright": "^1.62.1"
   }
 }

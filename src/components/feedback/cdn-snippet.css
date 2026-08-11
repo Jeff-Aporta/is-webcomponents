@@ -8,12 +8,12 @@
 }
 
 .cdn {
-  --cdn-border: var(--is-border, color-mix(in srgb, currentColor 14%, transparent));
-  --cdn-radius: 0.85em;
-  --cdn-pre-bg: color-mix(in srgb, var(--is-bg-elev, var(--is-bg)) 88%, transparent);
-  --cdn-row-bg: color-mix(in srgb, var(--is-bg-elev, var(--is-bg)) 72%, transparent);
-  --cdn-text-dim: var(--is-text-soft, color-mix(in srgb, currentColor 60%, transparent));
-  --cdn-success: var(--is-color-success-500, #40c057);
+  --is-cdn-snippet-border: var(--is-border, color-mix(in srgb, currentColor 14%, transparent));
+  --is-cdn-snippet-radius: 0.85em;
+  --is-cdn-snippet-pre-bg: color-mix(in srgb, var(--is-bg-elev, var(--is-bg)) 88%, transparent);
+  --is-cdn-snippet-row-bg: color-mix(in srgb, var(--is-bg-elev, var(--is-bg)) 72%, transparent);
+  --is-cdn-snippet-text-dim: var(--is-text-soft, color-mix(in srgb, currentColor 60%, transparent));
+  --is-cdn-snippet-success: var(--is-color-success, #40c057);
 
   /* Mismo look del .callout--cdn de presentation.css: fondo tintado con el
      acento, borde izquierdo de 3px y radios solo a la derecha. */
@@ -21,7 +21,7 @@
   gap: 1em;
   padding: 12px 16px;
   background: color-mix(in srgb, var(--is-accent, #e03131) 7%, var(--is-bg-soft, var(--is-bg)));
-  border: 1px solid color-mix(in srgb, var(--is-accent, #e03131) 32%, var(--cdn-border));
+  border: 1px solid color-mix(in srgb, var(--is-accent, #e03131) 32%, var(--is-cdn-snippet-border));
   border-radius: var(--is-radius-sm, 6px);
 }
 
@@ -40,7 +40,7 @@
   margin: 0;
   font-size: 0.85rem;
   line-height: 1.45;
-  color: var(--cdn-text-dim);
+  color: var(--is-cdn-snippet-text-dim);
 }
 
 .cdn__hint code {
@@ -56,7 +56,7 @@
   display: inline-flex;
   gap: 0.25em;
   padding: 0.2em;
-  border: 1px solid var(--cdn-border);
+  border: 1px solid var(--is-cdn-snippet-border);
   border-radius: 999px;
   background: color-mix(in srgb, var(--is-bg) 70%, transparent);
   width: fit-content;
@@ -68,7 +68,7 @@
   border-radius: 999px;
   padding: 0.4em 0.95em;
   background: transparent;
-  color: var(--cdn-text-dim);
+  color: var(--is-cdn-snippet-text-dim);
   font: inherit;
   font-size: 0.78rem;
   font-weight: 700;
@@ -103,7 +103,7 @@
   align-items: center;
   gap: 0.35em;
   padding: 0.35em 0.8em;
-  border: 1px solid var(--cdn-border);
+  border: 1px solid var(--is-cdn-snippet-border);
   border-radius: 999px;
   background: var(--is-control-bg, transparent);
   color: var(--is-control-text, var(--is-text));
@@ -115,7 +115,7 @@
 
 .cdn__chip.is-active,
 .cdn__chip[aria-pressed="true"] {
-  border-color: color-mix(in srgb, var(--is-accent, currentColor) 45%, var(--cdn-border));
+  border-color: color-mix(in srgb, var(--is-accent, currentColor) 45%, var(--is-cdn-snippet-border));
   background: color-mix(in srgb, var(--is-accent, currentColor) 14%, transparent);
   color: var(--is-text);
 }
@@ -125,13 +125,13 @@
   gap: 0.45em;
   width: 100%;
   padding: 0.7em 0.85em;
-  border: 1px solid var(--cdn-border);
+  border: 1px solid var(--is-cdn-snippet-border);
   border-radius: 0.6em;
-  background: var(--cdn-row-bg);
+  background: var(--is-cdn-snippet-row-bg);
 }
 
 .cdn__mirror-card.is-active {
-  border-color: color-mix(in srgb, var(--is-accent, currentColor) 40%, var(--cdn-border));
+  border-color: color-mix(in srgb, var(--is-accent, currentColor) 40%, var(--is-cdn-snippet-border));
 }
 
 .cdn__mirror-head {
@@ -143,7 +143,7 @@
 
 .cdn__mirror-hint {
   font-size: 0.78rem;
-  color: var(--cdn-text-dim);
+  color: var(--is-cdn-snippet-text-dim);
   margin-right: auto;
 }
 
@@ -168,9 +168,9 @@
   display: grid;
   gap: 0.4em;
   padding: 0.7em 0.85em;
-  border: 1px solid var(--cdn-border);
+  border: 1px solid var(--is-cdn-snippet-border);
   border-radius: 0.6em;
-  background: var(--cdn-row-bg);
+  background: var(--is-cdn-snippet-row-bg);
   min-width: 0;
 }
 
@@ -218,7 +218,7 @@
   align-items: center;
   gap: 0.3em;
   padding: 0.32em 0.75em;
-  border: 1px solid var(--cdn-border);
+  border: 1px solid var(--is-cdn-snippet-border);
   border-radius: 999px;
   background: var(--is-control-bg, transparent);
   color: var(--is-control-text, var(--is-text));
@@ -238,25 +238,22 @@
   }
 
   &.is-copied {
-    background: color-mix(in srgb, var(--cdn-success) 18%, transparent);
-    border-color: color-mix(in srgb, var(--cdn-success) 55%, transparent);
-    color: var(--cdn-success);
+    background: color-mix(in srgb, var(--is-cdn-snippet-success) 18%, transparent);
+    border-color: color-mix(in srgb, var(--is-cdn-snippet-success) 55%, transparent);
+    color: var(--is-cdn-snippet-success);
   }
 }
 
 .cdn__pre {
+  display: block;
+  width: 100%;
   margin: 0;
-  padding: 0.6em 0.75em;
-  background: var(--cdn-pre-bg);
-  border: 1px solid var(--cdn-border);
+  --is-code-min-height: 0;
+  --is-code-radius: 0.45em;
+  --is-code-bg: var(--is-cdn-snippet-pre-bg);
+  border: 1px solid var(--is-cdn-snippet-border);
   border-radius: 0.45em;
-  font-family: var(--is-mono, ui-monospace, Consolas, monospace);
-  font-size: 0.82rem;
-  line-height: 1.5;
-  color: var(--is-text);
-  overflow-x: auto;
-  white-space: pre;
-  tab-size: 2;
+  overflow: hidden;
 }
 
 .cdn__md-prompt {
@@ -272,7 +269,7 @@
    theme lo pinta con fondo rojo y en documentación un cierre suelto no es un
    error que valga la pena gritar. */
 .cdn__pre.cm-s-material-darker {
-  background: var(--cdn-pre-bg);
+  background: var(--is-cdn-snippet-pre-bg);
   color: var(--is-text);
 }
 .cdn__pre .cm-tag { color: #74c0fc; }
@@ -299,20 +296,20 @@
    Accent warning + borde inline distinto para diferenciarlas de las filas
    de bundles propios. */
 .cdn__row--dep {
-  border-inline-start: 1px solid color-mix(in srgb, var(--is-color-warning-500, #f59f00) 60%, transparent);
+  border-inline-start: 1px solid color-mix(in srgb, var(--is-color-warning, #f59f00) 60%, transparent);
   padding-inline-start: 0.75em;
-  background: color-mix(in srgb, var(--is-color-warning-500, #f59f00) 6%, transparent);
+  background: color-mix(in srgb, var(--is-color-warning, #f59f00) 6%, transparent);
 }
 
 .cdn__dep-name code {
-  color: var(--is-color-warning-700, #9a4f00);
+  color: var(--is-color-warning-stronger, #9a4f00);
 }
 
 .cdn__dep-note {
   margin: 0.4em 0 0;
   font-size: 0.78rem;
   line-height: 1.45;
-  color: var(--cdn-text-dim);
+  color: var(--is-cdn-snippet-text-dim);
 }
 
 /* Bloque agentes: prompt CDN + MD (opcional vía config.docs). */
@@ -321,7 +318,7 @@
   gap: 0.65em;
   margin-top: 0.25em;
   padding-top: 0.9em;
-  border-top: 1px solid var(--cdn-border, var(--is-border-soft));
+  border-top: 1px solid var(--is-cdn-snippet-border, var(--is-border-soft));
 }
 
 .cdn__docs-title {
@@ -339,7 +336,7 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--cdn-text-dim, var(--is-text-dim));
+  color: var(--is-cdn-snippet-text-dim, var(--is-text-dim));
 }
 
 .cdn__docs {

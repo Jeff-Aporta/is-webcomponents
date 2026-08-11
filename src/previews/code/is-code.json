@@ -1,0 +1,190 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-code",
+  "category": "code",
+  "title": "<is-code>",
+  "titleHtml": true,
+  "styles": ".stack { display: grid; gap: 1rem; }\n.ed { min-height: 14rem; }\n.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\n.out { font-family: var(--is-mono, monospace); font-size: 0.75rem; white-space: pre-wrap; background: var(--is-bg-soft); border: 1px solid var(--is-border); border-radius: 8px; padding: 0.75rem; max-height: 12rem; overflow: auto; }\n.prose { line-height: 1.7; font-size: 1rem; max-width: 42rem; }\n.prose is-code { margin-inline: 0.2em; }\n.playground .stage { align-items: stretch; justify-content: stretch; display: grid; gap: 1rem; }\n.playground .stage.is-inline { align-items: center; }\n.playground .stage .pg-prose { margin: 0; line-height: 1.75; }\n.playground #pgCode[mode=\"block\"] { min-height: 12rem; width: 100%; }",
+  "storageKey": "docs-is-code",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-code>",
+      "lede": "Editor de código (CodeMirror 5) con lenguajes, temas JSON, formateo estilo Prettier, números de línea, word-wrap y anotaciones externas (highlight / tooltips). API texto ↔ JSON <code class=\"code\">is-code-doc/v1</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-code class=\"ed\" id=\"demo-basic\" lang=\"javascript\" wrap line-numbers min-height=\"14rem\" value=\"function greet(name) {&#10;  return `Hola, ${name}`;&#10;}&#10;&#10;console.log(greet('IS'));\"></is-code>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-code lang=\"javascript\" wrap line-numbers\n  value=\"function greet(name) {\\n  return `Hola, ${name}`;\\n}\"></is-code>"
+        }
+      ]
+    },
+    {
+      "id": "modes",
+      "title": "Modos block / inline",
+      "lede": "<code class=\"code\">mode=\"block\"</code> (default) ocupa el ancho del contenedor. <code class=\"code\">mode=\"inline\"</code> fluye en el texto como un chip editable — ideal para inserts en docs o labels.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\n  <p class=\"prose\">\n    Usa <is-code mode=\"inline\" lang=\"javascript\" readonly value=\"openModal()\"></is-code>\n    para disparar el diálogo, o edita\n    <is-code id=\"demo-inline-edit\" mode=\"inline\" lang=\"css\" value=\"--is-accent\"></is-code>\n    en vivo.\n  </p>\n  <is-code class=\"ed\" mode=\"block\" lang=\"javascript\" wrap line-numbers\n    value=\"export function openModal() {&#10;  dialog.show();&#10;}\"></is-code>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<p>Llama <is-code mode=\"inline\" lang=\"js\" readonly value=\"save()\"></is-code> al guardar.</p>\n<is-code mode=\"block\" lang=\"javascript\" wrap></is-code>"
+        }
+      ]
+    },
+    {
+      "id": "langs",
+      "title": "Lenguajes",
+      "lede": "Built-ins: <code class=\"code\">javascript</code>, <code class=\"code\">typescript</code>, <code class=\"code\">jsx</code>, <code class=\"code\">tsx</code>, <code class=\"code\">html</code>, <code class=\"code\">css</code>, <code class=\"code\">json</code>, <code class=\"code\">python</code> (plugin heavy), <code class=\"code\">plaintext</code>. Extensible con <code class=\"code\">registerLanguage</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <is-button id=\"lang-js\" variant=\"outlined\">JS</is-button>\n    <is-button id=\"lang-ts\" variant=\"outlined\">TS</is-button>\n    <is-button id=\"lang-html\" variant=\"outlined\">HTML</is-button>\n    <is-button id=\"lang-css\" variant=\"outlined\">CSS</is-button>\n    <is-button id=\"lang-py\" variant=\"outlined\">Python</is-button>\n  </div>\n  <is-code class=\"ed\" id=\"demo-lang\" lang=\"typescript\" wrap min-height=\"12rem\"></is-code>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-code lang=\"python\" wrap></is-code>\n<!-- python descarga mode/python bajo demanda -->"
+        }
+      ]
+    },
+    {
+      "id": "format",
+      "title": "Formateo (JSON tipo Prettier)",
+      "lede": "Atributo/propiedad <code class=\"code\">format</code> / <code class=\"code\">formatConfig</code>. Método <code class=\"code\">format()</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <is-button id=\"btn-format\" color=\"brand\">Format</is-button>\n  </div>\n  <is-code class=\"ed\" id=\"demo-format\" lang=\"javascript\" wrap\n    format='{\"tabWidth\":2,\"semi\":true,\"singleQuote\":true}'\n    value=\"const x=1;const y={a:1,b:2};function f(a,b){return a+b}\"></is-code>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-code lang=\"javascript\"\n  format='{\"tabWidth\":2,\"singleQuote\":true,\"semi\":true}'></is-code>\n\n<script type=\"module\">\n  editor.format();\n</script>"
+        }
+      ]
+    },
+    {
+      "id": "theme",
+      "title": "Temas JSON",
+      "lede": "Sin config: preset según <code class=\"code\">data-theme</code>. Con <code class=\"code\">theme-config</code>: colores por rol (keyword, string, gutter, marks…).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <is-button id=\"theme-ocean\" variant=\"outlined\">Ocean</is-button>\n    <is-button id=\"theme-reset\" variant=\"plain\">Reset preset</is-button>\n  </div>\n  <is-code class=\"ed\" id=\"demo-theme\" lang=\"css\" wrap\n    value=\".card {&#10;  color: tomato;&#10;  background: #111;&#10;}\"></is-code>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-code lang=\"css\"\n  theme-config='{\"background\":\"#0b1220\",\"keyword\":\"#7dd3fc\",\"string\":\"#86efac\"}'></is-code>"
+        }
+      ]
+    },
+    {
+      "id": "marks",
+      "title": "Highlights y tooltips",
+      "lede": "El editor no diagnostica: otro sistema aporta <code class=\"code\">marks</code> (error/warning/info o tooltip de docs). Se reutiliza <code class=\"code\">&lt;is-tooltip&gt;</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-code class=\"ed\" id=\"demo-marks\" lang=\"javascript\" wrap min-height=\"12rem\"></is-code>"
+        },
+        {
+          "kind": "code",
+          "code": "editor.setMarks([\n  { from: 9, to: 12, kind: 'tooltip', title: 'add()', body: 'Suma a + b' },\n  { from: 26, to: 27, kind: 'highlight', tone: 'warning', message: 'Prefer const' },\n]);"
+        }
+      ]
+    },
+    {
+      "id": "json-api",
+      "title": "code2json / json2code",
+      "lede": "Documento <code class=\"code\">is-code-doc/v1</code>: value + marks + format + theme. Round-trip con <code class=\"code\">getDocument()</code> / <code class=\"code\">setDocument()</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <is-button id=\"btn-to-json\" color=\"brand\">code → json</is-button>\n    <is-button id=\"btn-from-json\" variant=\"outlined\">json → code</is-button>\n  </div>\n  <is-code class=\"ed\" id=\"demo-json\" lang=\"jsx\" wrap\n    value=\"export function Hi({ name }) {&#10;  return &lt;h1&gt;Hola {name}&lt;/h1&gt;;&#10;}\"></is-code>\n  <pre class=\"out\" id=\"json-out\">(pulsa code → json)</pre>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "const doc = editor.code2json();\neditor.setDocument(doc);"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "title": "Opciones de editor",
+      "lede": "<code class=\"code\">mode</code>, <code class=\"code\">line-numbers</code>, <code class=\"code\">wrap</code>, <code class=\"code\">readonly</code>, <code class=\"code\">compact</code>, <code class=\"code\">tab-size</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stack\">\n  <is-code lang=\"html\" line-numbers=\"false\" wrap\n    value=\"&lt;section class=&quot;hero&quot;&gt;&lt;h1&gt;IS&lt;/h1&gt;&lt;/section&gt;\"></is-code>\n  <is-code lang=\"javascript\" readonly\n    value=\"// solo lectura&#10;export const VERSION = '1.0.0';\"></is-code>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-code lang=\"html\" line-numbers=\"false\" wrap></is-code>\n<is-code lang=\"javascript\" readonly></is-code>"
+        }
+      ]
+    },
+    {
+      "id": "playground",
+      "title": "Playground",
+      "lede": "Controles para probar mode, lang, readonly, wrap, line-numbers y compact.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"playground\">\n  <div class=\"stage\" id=\"pgStage\">\n    <p class=\"pg-prose\" id=\"pgProse\" hidden>\n      En el flujo:\n      <span id=\"pgInlineHost\"></span>\n      y sigue el texto.\n    </p>\n    <is-code id=\"pgCode\" mode=\"block\" lang=\"javascript\" wrap line-numbers\n      value=\"function greet(name) {&#10;  return `Hola, ${name}`;&#10;}\"></is-code>\n  </div>\n  <div class=\"controls\">\n    <h4>Configuración</h4>\n    <div class=\"ctl-row\">\n      <label for=\"pgMode\">mode</label>\n      <select id=\"pgMode\">\n        <option value=\"block\" selected>block</option>\n        <option value=\"inline\">inline</option>\n      </select>\n    </div>\n    <div class=\"ctl-row\">\n      <label for=\"pgLang\">lang</label>\n      <select id=\"pgLang\">\n        <option>javascript</option>\n        <option>typescript</option>\n        <option>html</option>\n        <option>css</option>\n        <option>json</option>\n        <option>python</option>\n        <option>plaintext</option>\n      </select>\n    </div>\n    <div class=\"ctl-row\">\n      <label>flags</label>\n      <div class=\"checks\">\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgReadonly\" /> readonly</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgWrap\" checked /> wrap</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgLines\" checked /> line-numbers</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgCompact\" /> compact</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgDisabled\" /> disabled</label>\n      </div>\n    </div>\n    <div class=\"ctl-row\">\n      <label for=\"pgValue\">value</label>\n      <textarea id=\"pgValue\" rows=\"5\" style=\"width:100%;font:inherit\"></textarea>\n    </div>\n    <div class=\"ctl-row\">\n      <label>acciones</label>\n      <div class=\"row\">\n        <is-button id=\"pgFormat\" color=\"neutral\" variant=\"outlined\" type=\"button\">format()</is-button>\n        <is-button id=\"pgFocus\" color=\"neutral\" variant=\"plain\" type=\"button\">focus()</is-button>\n      </div>\n    </div>\n    <p class=\"pg-meta\" id=\"pgMeta\" style=\"margin:0.75rem 0 0;color:var(--is-text-soft);font-size:0.8rem\"></p>\n  </div>\n</div>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Miembro",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "lang / value / document",
+              "Fuente y lenguaje"
+            ],
+            [
+              "format / theme-config",
+              "JSON de formateo y colores"
+            ],
+            [
+              "mode block|inline",
+              "Inserción en página"
+            ],
+            [
+              "line-numbers / wrap / readonly",
+              "Chrome del editor"
+            ],
+            [
+              "format()",
+              "Aplica formatConfig"
+            ],
+            [
+              "setMarks / clearMarks",
+              "Anotaciones externas"
+            ],
+            [
+              "code2json / json2code / getDocument",
+              "Modelo is-code-doc/v1"
+            ],
+            [
+              "is-ready / is-input / is-change / is-mark-activate",
+              "Eventos"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

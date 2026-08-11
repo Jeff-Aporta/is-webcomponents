@@ -29,7 +29,14 @@ import { setStringAttr } from '../_shared/reflect.js';
   const OBSERVED = ['value', 'label', 'indeterminate'];
 
   class IsProgressBar extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'track-height': '--is-progress-bar-track-height',
+    'track-color': '--is-progress-bar-track-color',
+    color: { prop: '--is-progress-bar-color', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'track-height', 'track-color', 'color']; }
 
     #track;
     #indicator;

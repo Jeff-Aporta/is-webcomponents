@@ -42,6 +42,8 @@
  * cualquier navegador con Custom Elements.
  */
 
+import { withStyleAttrs } from './style-attrs.js';
+
 import { upgradeProperties } from './upgrade-properties.js';
 import { emit } from './emit.js';
 const BASE_OBSERVED = ['open', 'label', 'without-header', 'light-dismiss'];
@@ -52,7 +54,10 @@ const FOCUSABLE_SELECTOR =
   ' select:not([disabled]), textarea:not([disabled]),' +
   ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
-export class ModalBase extends HTMLElement {
+// `withStyleAttrs` da la personalización por atributo (radio, colores,
+// duraciones) a dialog/drawer y a cualquier modal que herede de aquí, sin
+// que ModalBase tenga que extender ElementBase.
+export class ModalBase extends withStyleAttrs(HTMLElement) {
   static get observedAttributes() { return BASE_OBSERVED; }
 
   // ── Subclass hooks ──────────────────────────────────────────────────
@@ -109,6 +114,7 @@ export class ModalBase extends HTMLElement {
   }
 
   connectedCallback() {
+    super.connectedCallback();
     this.#mounted = true;
     upgradeProperties(this, this.constructor.observedAttributes);
     this.#syncLabel();
@@ -130,6 +136,7 @@ export class ModalBase extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
+    super.attributeChangedCallback(name, oldVal, newVal);
     if (!this.#mounted || oldVal === newVal) return;
     if (name === 'open') this.#onOpenAttrChanged();
     if (name === 'label') this.#syncLabel();

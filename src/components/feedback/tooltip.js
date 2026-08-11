@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import '../helpers/floating.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -45,8 +46,15 @@ import { emit } from '../_shared/emit.js';
     'show-delay', 'hide-delay', 'disabled', 'without-arrow',
   ];
 
-  class IsTooltip extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsTooltip extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'max-width': '--is-tooltip-max-width',
+    'arrow-size': '--is-tooltip-arrow-size',
+    'arrow-color': { prop: '--is-tooltip-arrow-color', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color']; }
 
     #popup;
     #target = null;
@@ -64,6 +72,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#syncPopup();
       this.#bindTarget();
@@ -80,6 +89,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     attributeChangedCallback(name) {
+      super.attributeChangedCallback(name);
       if (!this.#mounted) return;
       if (name === 'for') this.#bindTarget();
       else if (name === 'open') {
@@ -131,7 +141,7 @@ import { emit } from '../_shared/emit.js';
       this.#popup.skidding = this.skidding;
       this.#popup.arrow = !this.withoutArrow;
       this.#popup.hoverBridge = true;
-      this.#popup.style.setProperty('--arrow-color', 'var(--is-tooltip-bg, #212529)');
+      this.#popup.style.setProperty('--is-tooltip-arrow-color', 'var(--is-tooltip-bg, #212529)');
     }
 
     #bindTarget() {

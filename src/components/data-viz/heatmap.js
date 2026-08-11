@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -40,8 +41,14 @@ import { emit } from '../_shared/emit.js';
     return [0.18, 0.36, 0.55, 0.75, 0.95].map((a) => `color-mix(in srgb, ${hex} ${Math.round(a * 100)}%, var(--is-bg-elev))`);
   }
 
-  class IsHeatmap extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsHeatmap extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'text-color': { prop: '--is-heatmap-text', onlyColorValues: true },
+    'grid-color': { prop: '--is-heatmap-grid-color', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'text-color', 'grid-color']; }
 
     #ro;
     #mo;
@@ -67,6 +74,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#readJsonSlot();
       this.#mo = new MutationObserver(() => this.#readJsonSlot());
@@ -83,6 +91,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       this.#render();
     }

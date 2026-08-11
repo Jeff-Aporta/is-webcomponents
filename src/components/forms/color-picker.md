@@ -122,15 +122,15 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Token | Uso |
 | --- | --- |
-| `--is-color-picker-border-radius` | Token leído o definido por componente. |
+| `--is-picker-radius` | Token leído o definido por componente. |
 | `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-color-picker-border` | Token leído o definido por componente. |
+| `--is-picker-border` | Token leído o definido por componente. |
 | `--is-control-border` | Token leído o definido por componente. |
-| `--is-color-picker-bg` | Token leído o definido por componente. |
+| `--is-picker-bg` | Token leído o definido por componente. |
 | `--is-control-bg` | Token leído o definido por componente. |
-| `--is-color-picker-text` | Token leído o definido por componente. |
+| `--is-picker-text` | Token leído o definido por componente. |
 | `--is-control-text` | Token leído o definido por componente. |
-| `--is-color-picker-focus` | Token leído o definido por componente. |
+| `--is-picker-focus` | Token leído o definido por componente. |
 | `--is-focus` | Token leído o definido por componente. |
 | `--is-accent` | Token leído o definido por componente. |
 | `--is-sans` | Token leído o definido por componente. |

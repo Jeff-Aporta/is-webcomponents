@@ -60,6 +60,20 @@ export function resolveSourceFiles(entry) {
 }
 
 /**
+ * Rutas CDN minificadas (`dist/cdn/...`) del componente.
+ * @param {{ tag?: string, category?: string, style?: string }} entry
+ * @returns {{ js: string, css: string | null, short: string, category: string } | null}
+ */
+export function resolveCdnMinPaths(entry) {
+  if (!entry?.tag || !entry?.category) return null;
+  const short = String(entry.tag).replace(/^is-/, '');
+  const category = entry.category;
+  const js = `${category}/${short}.min.js`;
+  const css = `${category}/${short}.min.css`;
+  return { js, css, short, category };
+}
+
+/**
  * URL same-origin hacia el archivo fuente (legible, sin minify).
  * @param {string} repoPath  p.ej. `src/components/actions/button.js`
  */

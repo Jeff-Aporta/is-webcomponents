@@ -86,7 +86,14 @@ import { ElementBase } from '../_shared/element-base.js';
   }
 
   class IsDatePicker extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-datepicker-radius',
+    'border-color': { prop: '--is-datepicker-border', onlyColorValues: true },
+    bg: { prop: '--is-datepicker-bg', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'border-color', 'bg']; }
 
     #base;
     #nav;

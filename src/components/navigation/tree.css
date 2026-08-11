@@ -1,11 +1,11 @@
 :host {
   display: block;
-  --indent: 1rem;
-  --row-pad-y: 0.25rem;
-  --row-pad-x: 0.5rem;
-  --row-hover: color-mix(in srgb, var(--is-brand, dodgerblue) 8%, transparent);
-  --row-selected-bg: color-mix(in srgb, var(--is-brand, dodgerblue) 18%, transparent);
-  --row-selected-fg: var(--is-text, #e8eaf1);
+  --is-tree-indent: 1rem;
+  --is-tree-row-padding-y: 0.25rem;
+  --is-tree-row-padding-x: 0.5rem;
+  --is-tree-row-hover: color-mix(in srgb, var(--is-brand, dodgerblue) 8%, transparent);
+  --is-tree-row-selected-bg: color-mix(in srgb, var(--is-brand, dodgerblue) 18%, transparent);
+  --is-tree-row-selected-text: var(--is-text, #e8eaf1);
 }
 
 .tree {
@@ -41,21 +41,21 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: var(--row-pad-y) var(--row-pad-x);
+  padding: var(--is-tree-row-padding-y) var(--is-tree-row-padding-x);
   border-radius: 0.375rem;
   transition: background 0.1s;
 }
 
 .row:hover {
-  background: var(--row-hover);
+  background: var(--is-tree-row-hover);
 }
 
 :host([selection="none"]) ::slotted(is-tree-item) {
   /* sin highlight */
 }
 :host(:not([selection="none"])) ::slotted(is-tree-item[selected]) .row {
-  background: var(--row-selected-bg);
-  color: var(--row-selected-fg);
+  background: var(--is-tree-row-selected-bg);
+  color: var(--is-tree-row-selected-text);
 }
 
 .expand-toggle {
@@ -113,7 +113,7 @@
 }
 
 .children {
-  padding-left: var(--indent);
+  padding-left: var(--is-tree-indent);
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -124,5 +124,5 @@
 }
 
 :host([selected]) .row {
-  background: var(--row-selected-bg);
+  background: var(--is-tree-row-selected-bg);
 }

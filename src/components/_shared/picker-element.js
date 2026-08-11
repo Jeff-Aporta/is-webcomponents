@@ -1,4 +1,5 @@
 import { adoptCss } from './adopt-css.js';
+import { withStyleAttrs } from './style-attrs.js';
 import { computePosition } from './position.js';
 import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-utils.js';
 import { defineElement } from './define.js';
@@ -40,9 +41,17 @@ const PANEL_ATTRS = [
   'disable-future', 'disabled-dates', 'disabled-days', 'minutes-step', 'step',
 ];
 
-export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range = false }) {
-  class IsPickerInput extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+export function definePickerInput({
+  tag, kind, cssUrl, fieldTag, panels, range = false, styleAttrs = {},
+}) {
+  // Todos los pickers (date/time/date-time y sus rangos) comparten la
+  // personalización por atributo: se declara aquí una vez, no en cada tag.
+  const STYLE_ATTRS = { 'panel-height': '--is-clock-height', ...styleAttrs };
+
+  class IsPickerInput extends withStyleAttrs(HTMLElement) {
+    static styleAttrs = STYLE_ATTRS;
+
+    static get observedAttributes() { return [...OBSERVED, ...Object.keys(STYLE_ATTRS)]; }
 
     #base;
     #dialog;
@@ -87,6 +96,7 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#syncFields();
       this.#syncActions();
@@ -102,6 +112,7 @@ export function definePickerInput({ tag, kind, cssUrl, fieldTag, panels, range =
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'action-bar' || name === 'color') this.#syncActions();
       this.#syncFields();

@@ -26,7 +26,12 @@ import { ElementBase } from '../_shared/element-base.js';
   ];
 
   class IsDigitalClock extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'clock-height': '--is-clock-height',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'clock-height']; }
 
     #base;
 

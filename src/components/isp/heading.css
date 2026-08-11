@@ -1,15 +1,15 @@
 /* <is-heading> — títulos h1..h6 con tinte de marca (port de ISP H1..H6).
    Índice de --vars:
-     --h-clr       : color base (semántico / currentColor / CSS libre).
-     --h-mix       : % mezclado hacia --h-mix-with (sube al bajar de nivel).
-     --h-mix-with  : color destino del mix (default: texto del tema).
-     --h-size      : tamaño en em del nivel actual. */
+     --is-heading-color: color base (semántico / currentColor / CSS libre).
+     --is-heading-mix: % mezclado hacia --is-heading-mix-with (sube al bajar de nivel).
+     --is-heading-mix-with: color destino del mix (default: texto del tema).
+     --is-heading-size      : tamaño en em del nivel actual. */
 
 :host {
-  --h-clr: var(--is-accent, var(--is-color-brand, var(--is-text)));
-  --h-mix: 15%;
-  --h-mix-with: var(--is-text, currentColor);
-  --h-size: 2em;
+  --is-heading-color: var(--is-accent, var(--is-color-brand, var(--is-text)));
+  --is-heading-mix: 15%;
+  --is-heading-mix-with: var(--is-text, currentColor);
+  --is-heading-size: 2em;
   display: block;
   min-width: 0;
   max-width: 100%;
@@ -20,33 +20,33 @@
 .heading {
   margin: 0;
   font-family: var(--is-sans, inherit);
-  font-size: var(--h-size);
+  font-size: var(--is-heading-size);
   font-weight: 650;
   line-height: 1.2;
   letter-spacing: -0.01em;
   min-width: 0;
   max-width: 100%;
   /* Fallback plano: sin color-mix el título usa el color base. */
-  color: var(--h-clr);
-  color: color-mix(in srgb, var(--h-clr), var(--h-mix-with) var(--h-mix));
+  color: var(--is-heading-color);
+  color: color-mix(in srgb, var(--is-heading-color), var(--is-heading-mix-with) var(--is-heading-mix));
 }
 
-:host([level="1"]) { --h-mix: 15%; --h-size: 2em; }
-:host([level="2"]) { --h-mix: 30%; --h-size: 1.6em; }
-:host([level="3"]) { --h-mix: 45%; --h-size: 1.35em; }
-:host([level="4"]) { --h-mix: 65%; --h-size: 1.15em; }
-:host([level="5"]) { --h-mix: 80%; --h-size: 1em; }
-:host([level="6"]) { --h-mix: 90%; --h-size: 0.9em; }
+:host([level="1"]) { --is-heading-mix: 15%; --is-heading-size: 2em; }
+:host([level="2"]) { --is-heading-mix: 30%; --is-heading-size: 1.6em; }
+:host([level="3"]) { --is-heading-mix: 45%; --is-heading-size: 1.35em; }
+:host([level="4"]) { --is-heading-mix: 65%; --is-heading-size: 1.15em; }
+:host([level="5"]) { --is-heading-mix: 80%; --is-heading-size: 1em; }
+:host([level="6"]) { --is-heading-mix: 90%; --is-heading-size: 0.9em; }
 
 /* Semánticos → tokens del tema. */
 :host([color="brand"]) {
-  --h-clr: var(--is-brand-text, var(--is-accent, var(--is-color-brand, var(--is-text))));
+  --is-heading-color: var(--is-brand-text, var(--is-accent, var(--is-color-brand, var(--is-text))));
 }
-:host([color="neutral"]) { --h-clr: var(--is-text-soft, var(--is-text)); }
-:host([color="info"]) { --h-clr: var(--is-info-text, var(--is-color-info, var(--is-text))); }
-:host([color="success"]) { --h-clr: var(--is-success-text, var(--is-color-success, var(--is-text))); }
-:host([color="warning"]) { --h-clr: var(--is-warning-text, var(--is-color-warning, var(--is-text))); }
-:host([color="danger"]) { --h-clr: var(--is-danger-text, var(--is-color-danger, var(--is-text))); }
+:host([color="neutral"]) { --is-heading-color: var(--is-text-soft, var(--is-text)); }
+:host([color="info"]) { --is-heading-color: var(--is-info-text, var(--is-color-info, var(--is-text))); }
+:host([color="success"]) { --is-heading-color: var(--is-success-text, var(--is-color-success, var(--is-text))); }
+:host([color="warning"]) { --is-heading-color: var(--is-warning-text, var(--is-color-warning, var(--is-text))); }
+:host([color="danger"]) { --is-heading-color: var(--is-danger-text, var(--is-color-danger, var(--is-text))); }
 
 /* Hereda el color tipográfico del contexto (como em para tamaño). */
-:host([color="current"]) { --h-clr: currentColor; }
+:host([color="current"]) { --is-heading-color: currentColor; }

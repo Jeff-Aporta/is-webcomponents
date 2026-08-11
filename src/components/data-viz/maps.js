@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
@@ -32,8 +33,14 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 (() => {
   const OBSERVED = ['viewbox', 'zoom', 'engine', 'interactive'];
 
-  class IsMaps extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsMaps extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'grid-color': { prop: '--is-maps-grid-color', onlyColorValues: true },
+    'meridian-color': { prop: '--is-maps-meridian-color', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'grid-color', 'meridian-color']; }
     #mounted = false;
     #vp = { minLon: -180, minLat: -85, maxLon: 180, maxLat: 85 };
     #onWinPointerUp;
@@ -58,6 +65,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#readViewbox();
       this.#render();
@@ -71,6 +79,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'viewbox') this.#readViewbox();
       this.#render();

@@ -1,6 +1,15 @@
 @import url('../_shared/popover-panel.css');
 
 :host {
+  /* Perillas del componente: nombre completo `--is-dropdown-item-*` para que
+     no colisionen por herencia con las de otros componentes. */
+  --is-dropdown-item-radius: var(--is-radius-sm, 0.25em);
+  --is-dropdown-item-padding: 0.45em 0.75em;
+  --is-dropdown-item-gap: 0.5em;
+  --is-dropdown-item-text: var(--is-text, #e6e8eb);
+  --is-dropdown-item-bg-hover: var(--is-control-bg-hover, #30363d);
+  --is-dropdown-item-danger: var(--is-color-danger, #fa5252);
+
   display: block;
   position: relative;
   font-family: var(--is-font-family, system-ui, sans-serif);
@@ -15,15 +24,15 @@
   display: grid;
   grid-template-columns: auto auto 1fr auto auto;
   align-items: center;
-  gap: 0.5em;
+  gap: var(--is-dropdown-item-gap);
   width: 100%;
   box-sizing: border-box;
   margin: 0;
-  padding: 0.45em 0.75em;
+  padding: var(--is-dropdown-item-padding);
   border: 0;
-  border-radius: var(--is-radius-sm, 0.25em);
+  border-radius: var(--is-dropdown-item-radius);
   background: transparent;
-  color: var(--is-text, #e6e8eb);
+  color: var(--is-dropdown-item-text);
   font: inherit;
   text-align: start;
   cursor: pointer;
@@ -32,7 +41,7 @@
 
 .item:hover:not(.disabled),
 .item:focus-visible:not(.disabled) {
-  background: var(--is-control-bg-hover, #30363d);
+  background: var(--is-dropdown-item-bg-hover);
   outline: none;
 }
 
@@ -42,12 +51,12 @@
 }
 
 .item.danger {
-  color: var(--is-color-danger-500, #fa5252);
+  color: var(--is-dropdown-item-danger);
 }
 
 .item.danger:hover:not(.disabled),
 .item.danger:focus-visible:not(.disabled) {
-  background: color-mix(in srgb, var(--is-color-danger-500, #fa5252) 16%, transparent);
+  background: color-mix(in srgb, var(--is-dropdown-item-danger) 16%, transparent);
 }
 
 .checkmark {

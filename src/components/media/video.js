@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import '../actions/button.js';
 import '../actions/check-icon-button.js';
 import './icon.js';
@@ -137,8 +138,13 @@ import { setStringAttr } from '../_shared/reflect.js';
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
-  class IsVideo extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsVideo extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    accent: { prop: '--is-video-accent', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'accent']; }
 
     #video;
     #controls;
@@ -277,6 +283,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       // Foco propio para los atajos de teclado (como el player de YouTube).
       if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
@@ -299,6 +306,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'without-controls') this.#syncControlsVisibility();
       else this.#syncAttrs();

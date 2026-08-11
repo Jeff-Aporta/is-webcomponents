@@ -7,7 +7,7 @@
   --is-pin-text: var(--is-control-text, var(--is-text, #212529));
   --is-pin-border: var(--is-control-border, #adb5bd);
   --is-pin-focus: var(--is-focus, var(--is-accent, #339af0));
-  --is-pin-danger: var(--is-color-danger-500, #fa5252);
+  --is-pin-danger: var(--is-color-danger, #fa5252);
 }
 
 .pin {

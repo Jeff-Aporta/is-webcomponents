@@ -1,14 +1,14 @@
 /* <is-text> — texto en línea con color semántico / CSS libre / current + mix.
    Índice de --vars:
-     --text-clr       : color tipográfico resuelto.
-     --text-mix       : % hacia --text-mix-with (solo con attr mix).
-     --text-mix-with  : destino del mix (default: texto del tema).
+     --is-text-color: color tipográfico resuelto.
+     --is-text-mix    : % hacia --is-text-mix-with (solo con attr mix).
+     --is-text-mix-with: destino del mix (default: texto del tema).
      --mx-lns         : líneas del clamp (lo escribe el JS). */
 
 :host {
-  --text-mix-with: var(--is-text, currentColor);
+  --is-text-mix-with: var(--is-text, currentColor);
   display: inline;
-  color: var(--text-clr, inherit);
+  color: var(--is-text-color, inherit);
   font: inherit;
   min-width: 0;
   max-width: 100%;
@@ -19,25 +19,25 @@
 /* Con mix: atenuar / aclarar / oscurecer vía color-mix. */
 :host([mix]),
 :host([data-has-mix]) {
-  color: var(--text-clr, currentColor);
+  color: var(--is-text-color, currentColor);
   color: color-mix(
     in srgb,
-    var(--text-clr, currentColor),
-    var(--text-mix-with) var(--text-mix, 0%)
+    var(--is-text-color, currentColor),
+    var(--is-text-mix-with) var(--is-text-mix, 0%)
   );
 }
 
 /* Semánticos → tokens del tema. */
 :host([color="brand"]) {
-  --text-clr: var(--is-brand-text, var(--is-accent, var(--is-color-brand, var(--is-text))));
+  --is-text-color: var(--is-brand-text, var(--is-accent, var(--is-color-brand, var(--is-text))));
 }
-:host([color="neutral"]) { --text-clr: var(--is-text-soft, var(--is-text)); }
-:host([color="info"]) { --text-clr: var(--is-info-text, var(--is-color-info, var(--is-text))); }
-:host([color="success"]) { --text-clr: var(--is-success-text, var(--is-color-success, var(--is-text))); }
-:host([color="warning"]) { --text-clr: var(--is-warning-text, var(--is-color-warning, var(--is-text))); }
-:host([color="danger"]) { --text-clr: var(--is-danger-text, var(--is-color-danger, var(--is-text))); }
+:host([color="neutral"]) { --is-text-color: var(--is-text-soft, var(--is-text)); }
+:host([color="info"]) { --is-text-color: var(--is-info-text, var(--is-color-info, var(--is-text))); }
+:host([color="success"]) { --is-text-color: var(--is-success-text, var(--is-color-success, var(--is-text))); }
+:host([color="warning"]) { --is-text-color: var(--is-warning-text, var(--is-color-warning, var(--is-text))); }
+:host([color="danger"]) { --is-text-color: var(--is-danger-text, var(--is-color-danger, var(--is-text))); }
 
-:host([color="current"]) { --text-clr: currentColor; }
+:host([color="current"]) { --is-text-color: currentColor; }
 
 :host([lines]) {
   display: -webkit-box;

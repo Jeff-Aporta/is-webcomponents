@@ -69,7 +69,7 @@
   }
 
   .opt[data-selected] {
-    background: var(--is-color-brand-600, #c92a2a);
+    background: var(--is-color-brand-strong, #c92a2a);
     color: var(--is-on-brand, #fff);
     font-weight: 600;
   }

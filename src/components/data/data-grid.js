@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from '../_shared/grid-types.js';
 
@@ -212,8 +213,18 @@ import '../forms/checkbox.js';
     'aggregation-position', 'selectable', 'filterable',
   ];
 
-  class IsDataGrid extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsDataGrid extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-grid-radius',
+    accent: { prop: '--is-grid-accent', onlyColorValues: true },
+    'header-bg': { prop: '--is-grid-header-bg', onlyColorValues: true },
+    'row-hover': { prop: '--is-grid-row-hover', onlyColorValues: true },
+    height: '--is-grid-height',
+    padding: '--is-grid-pad',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding']; }
 
     /* DOM */
     #base; #toolbar; #quick; #viewport; #head; #groupRows; #headRow; #filterHead;
@@ -345,6 +356,7 @@ import '../forms/checkbox.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#normalize();
       this.#syncChrome();
@@ -365,6 +377,7 @@ import '../forms/checkbox.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'page-size' || name === 'pagination') this.#page = 0;
       if (name === 'editable') this.#normalize();

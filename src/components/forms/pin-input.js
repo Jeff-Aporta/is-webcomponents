@@ -45,7 +45,18 @@ import { ElementBase } from '../_shared/element-base.js';
   const OBSERVED = ['length', 'type', 'mask', 'disabled', 'invalid', 'placeholder', 'value', 'autocomplete'];
 
   class IsPinInput extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'cell-size': '--is-pin-cell-size',
+    gap: '--is-pin-gap',
+    bg: { prop: '--is-pin-bg', onlyColorValues: true },
+    'text-color': { prop: '--is-pin-text', onlyColorValues: true },
+    'border-color': { prop: '--is-pin-border', onlyColorValues: true },
+    'focus-color': { prop: '--is-pin-focus', onlyColorValues: true },
+    'danger-color': { prop: '--is-pin-danger', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'cell-size', 'gap', 'bg', 'text-color', 'border-color', 'focus-color', 'danger-color']; }
 
     #root;
     #cells;

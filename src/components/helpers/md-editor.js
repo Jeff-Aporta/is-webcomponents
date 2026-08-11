@@ -173,7 +173,12 @@ import '../media/icon.js';
   }
 
   class IsMdEditor extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'preview-max-height': '--is-md-editor-preview-max-height',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'preview-max-height']; }
 
     #preview;
     #previewBody;

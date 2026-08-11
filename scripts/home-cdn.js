@@ -6,7 +6,7 @@ const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/
 
 // dist/cdn folderizado por categoria: <categoria>/<tag>.min.js
 import manifest from '../manifest.js';
-import { ensureCodeMirror, paint } from '../src/components/_shared/highlight-code.js';
+import { paint } from '../src/components/_shared/highlight-code.js';
 const catOf = (name) => manifest.find((c) => c.tag === `is-${name}`)?.category || 'helpers';
 const cdnJs = (name) => `${CDN}/${catOf(name)}/${name}.min.js`;
 const open = String.fromCharCode(60);
@@ -307,18 +307,24 @@ let copiaCableada = false;
 export function init(raiz = document) {
   const preJs = raiz.querySelector('#cdnJsCss');
   const preB = raiz.querySelector('#cdnBundle');
-  if (preJs) preJs.textContent = jsCssSnippet;
-  if (preB) preB.textContent = bundleSnippet;
+  const setSnippet = (el, text) => {
+    if (!el) return;
+    if (el.localName === 'is-code') {
+      el.value = text;
+      el.dataset.cmSource = text;
+      delete el.dataset.cm;
+    } else {
+      el.textContent = text;
+    }
+  };
+  setSnippet(preJs, jsCssSnippet);
+  setSnippet(preB, bundleSnippet);
 
-  // Resaltado por CodeMirror. `ensureCodeMirror()` resuelve cuando el core, el
-  // addon runMode y los modos ya bajaron de jsDelivr: se acabó el sondeo por
-  // setInterval esperando a que aparezca un global.
-  ensureCodeMirror()
-    .then(() => {
-      if (preJs) paint(preJs);
-      if (preB) paint(preB);
-    })
-    .catch(console.error);
+  // Resaltado vía <is-code readonly> (paint sustituye pre.code legacy).
+  Promise.all([
+    preJs ? paint(preJs) : null,
+    preB ? paint(preB) : null,
+  ]).catch(console.error);
 
   // Tabs.
   const tabs = raiz.querySelectorAll('.home-cdn__tab');

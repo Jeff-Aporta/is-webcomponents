@@ -31,16 +31,26 @@ Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mis
 
 - `../_shared/prefs.js`
 - `../_shared/adopt-css.js`
+- `../_shared/modal-base.js` / `modal-chrome.css` (ciclo de vida de dialog/drawer)
+- Visor full-page de galería: `scripts/view-sources.js` (patrón de `is-dialog`
+  a viewport completo) — no inventar otro overlay
 
 ## Dependencias compartidas
 
 Revisar imports y `_shared/` antes de implementar. Reusar stdlib, plataforma y módulos existentes.
+
+Style-attrs de `<is-dialog>`: `width` → `--is-dialog-width`, `spacing` →
+`--is-dialog-spacing`. Padding del host = `var(--is-dialog-spacing)`.
 
 ## Patrones comunes
 
 - Importar módulo ES antes de usar tag.
 - Usar propiedades para objetos/payloads y atributos declarados para escalares.
 - Respetar contrato de eventos, parts, states y tokens.
+- **Full-page dialog:** `width="100vw"` + `spacing="0"` en el host; en light DOM
+  `::part(dialog) { width/height: 100%; align-self/justify-self: stretch;
+  border-radius: 0; box-shadow: none }`. Ver `presentation.css` + clase
+  `.is-view-sources`.
 
 ## Qué hacer
 
@@ -48,6 +58,8 @@ Revisar imports y `_shared/` antes de implementar. Reusar stdlib, plataforma y m
 - Leer callers antes de tocar helper compartido.
 - Preservar accesibilidad, validación y fallbacks.
 - Ejecutar `node scripts/docs-consistency.selfcheck.mjs`.
+- Si el dialog debe ocupar toda la pantalla, seguir el patrón view-sources
+  (no hardcodear `min(96vw)` en el consumidor).
 
 ## Qué no hacer
 
@@ -55,12 +67,19 @@ Revisar imports y `_shared/` antes de implementar. Reusar stdlib, plataforma y m
 - No crear abstracción si shared/native resuelve caso.
 - No crear size colors; usar font-size contextual y em.
 - No duplicar MD por tag multi-tag.
+- No usar `is-split-panel` con % alto como sidebar fijo de app.
+- No dejar un dialog “casi fullscreen” cuando el requisito es full page
+  (padding del host + `max-height` del panel lo dejan a medias).
 
 ## Errores conocidos y prevención
 
 Añadir tamaños rígidos u overlays custom; usar em/context y dialog/drawer.
 
 Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
+
+**Dialog fuentes no full-page** (ago/2026): `--width: min(96vw)` + panel `70vh`
+parecía grande pero no era full view. Fix: spacing 0 + stretch. Guardián:
+`tests/gallery-sources-meta.test.mjs`.
 
 ## Módulos internos
 

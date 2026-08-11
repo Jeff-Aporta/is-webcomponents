@@ -72,7 +72,7 @@
    * esa variable basta para el feedback de éxito / error. */
   .tip {
     --is-tooltip-font-size: 0.75em;
-    --max-width: 18rem;
+    --is-copy-button-max-width: 18rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -92,10 +92,10 @@
  * eso mismo. El estado del host se consulta siempre como :host([...]). */
 
 :host(:state(success)) .tip,
-:host([data-state-success]) .tip { --is-tooltip-bg: var(--is-color-success-600, #2f9e44); }
+:host([data-state-success]) .tip { --is-tooltip-bg: var(--is-color-success-strong, #2f9e44); }
 
 :host(:state(error)) .tip,
-:host([data-state-error]) .tip { --is-tooltip-bg: var(--is-color-danger-600, #e03131); }
+:host([data-state-error]) .tip { --is-tooltip-bg: var(--is-color-danger-strong, #e03131); }
 
 @keyframes is-copy-show {
   from { scale: 0.25; opacity: 0.25; }

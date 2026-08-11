@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import './check-icon-button.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -70,8 +71,15 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
   const DEG = Math.PI / 180;
 
-  class IsSpeedDial extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+  const STYLE_ATTRS = {
+    radius: '--is-speed-dial-radius',
+  };
+
+  class IsSpeedDial extends withStyleAttrs(HTMLElement) {
+    static styleAttrs = STYLE_ATTRS;
+
+    static get observedAttributes() { return [...OBSERVED, ...Object.keys(STYLE_ATTRS)]; }
 
     #mo;
     #mounted = false;
@@ -100,6 +108,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#syncDirection();
       this.#syncIcon();
@@ -128,6 +137,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal || !this.#mounted) return;
       if (name === 'direction') {
         this.#syncDirection();

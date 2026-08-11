@@ -30,6 +30,7 @@
  */
 
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import '../actions/button.js';
 import './video.js';
 import './icon.js';
@@ -168,8 +169,17 @@ import { emit } from '../_shared/emit.js';
     return attr ? attr.trim() : '';
   }
 
-  class IsVideoPlaylist extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsVideoPlaylist extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-video-playlist-radius',
+    bg: { prop: '--is-video-playlist-bg', onlyColorValues: true },
+    'border-color': { prop: '--is-video-playlist-border', onlyColorValues: true },
+    'stripe-color': { prop: '--is-video-playlist-stripe', onlyColorValues: true },
+    accent: { prop: '--is-video-playlist-accent', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'bg', 'border-color', 'stripe-color', 'accent']; }
 
     #root;
     #listEl;
@@ -231,6 +241,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#syncPlacement();
       this.#syncAccordion();
@@ -252,6 +263,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     attributeChangedCallback(name) {
+      super.attributeChangedCallback(name);
       if (!this.#mounted) return;
       if (name === 'placement') this.#syncPlacement();
       if (name === 'autoplay-next') this.#syncAutoplayUi();

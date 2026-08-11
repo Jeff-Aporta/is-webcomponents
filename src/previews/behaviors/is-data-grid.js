@@ -92,7 +92,7 @@ export async function mount(ctx) {
       // Rellena el <pre data-code-id="g-full"> con un snippet autocontenido
       // (columnas + filas + aggregation) que reproduce la tabla del #intro.
       {
-        const introCode = document.querySelector('pre.code[data-code-id="g-full"]');
+        const introCode = document.querySelector('[data-code-id="g-full"]');
         if (introCode) {
           const cols = [...baseColumns(), actionsColumn(full)];
           const sampleRows = rows.slice(0, 40).map((r) => ({
@@ -119,7 +119,8 @@ export async function mount(ctx) {
             '  </' + 'script>',
             '</' + 'is-data-grid>',
           ].join('\n');
-          introCode.textContent = code;
+          if (introCode.localName === 'is-code') introCode.value = code;
+          else introCode.textContent = code;
           paint(introCode);
         }
       }

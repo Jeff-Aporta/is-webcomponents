@@ -61,7 +61,7 @@
 :host([selected]) .option,
 :host([data-active]) .option {
   background: var(--is-accent-bg, rgb(224 49 49 / 12%));
-  color: var(--is-brand-text, var(--is-color-brand-700, #a61e1e));
+  color: var(--is-brand-text, var(--is-color-brand-stronger, #a61e1e));
 }
 
 :host([selected]) .description,

@@ -6,7 +6,7 @@
   --is-grid-row-hover: var(--is-control-bg-hover, #e9ecef);
   --is-grid-selected: var(--is-accent-bg, rgb(224 49 49 / 12%));
   --is-grid-radius: var(--is-radius, 0.625em);
-  --is-grid-accent: var(--is-color-brand-600, #c92a2a);
+  --is-grid-accent: var(--is-color-brand-strong, #c92a2a);
   --is-grid-height: 26rem;
   --is-grid-row-h: 52px;
   --is-grid-head-h: 52px;

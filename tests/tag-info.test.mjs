@@ -28,9 +28,13 @@ test('is-tag.css define los tokens de color=info', () => {
   const m = /:host\(\[\s*color\s*=\s*["']info["']\s*\]\)\s*\{([\s\S]*?)\}/m.exec(css);
   assert.ok(m, 'Debe existir el bloque :host([color="info"]) { ... }');
   const block = m[1];
-  assert.ok(/--is-color-info-100/.test(block), '--_bg debe usar --is-color-info-100');
-  assert.ok(/--is-color-info-500/.test(block), '--_border debe usar --is-color-info-500');
-  assert.ok(/--is-color-info-700/.test(block), '--_text debe usar --is-color-info-700');
+  // Vocabulario del kit: modificadores relativos, no escala numérica. La capa
+  // de tema define paler/pale/base/strong/stronger/strongest y NADA numerado
+  // (lo vigila token-vocabulary.test.mjs); pedir -100/-500/-700 aquí obligaba
+  // a mantener dos idiomas de color a la vez.
+  assert.ok(/--is-color-info-pale/.test(block), '--_bg debe usar --is-color-info-pale');
+  assert.ok(/--is-color-info/.test(block), '--_border debe usar --is-color-info');
+  assert.ok(/--is-color-info-stronger/.test(block), '--_text debe usar --is-color-info-stronger');
 });
 
 test('is-tag.css NO anida selectores con atributos del host dentro de :host', () => {
@@ -97,22 +101,23 @@ test('callout.css NO anida selectores con atributos del host dentro de :host', (
   }
 });
 
-test('Las 3 paletas definen --is-color-info-500', () => {
+test('Las 3 paletas definen --is-color-info', () => {
   const css = readFileSync(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
   for (const pal of ['insoft', 'contapyme', 'agrowin']) {
-    const re = new RegExp(`\\[data-palette=["']${pal}["']\\][\\s\\S]*?--is-color-info-500\\s*:`);
-    assert.ok(re.test(css), `La paleta "${pal}" debe definir --is-color-info-500`);
+    const re = new RegExp(`\\[data-palette=["']${pal}["']\\][\\s\\S]*?--is-color-info\\s*:`);
+    assert.ok(re.test(css), `La paleta "${pal}" debe definir --is-color-info`);
   }
 });
 
-test('Las 3 paletas definen la escala completa info-50..800', () => {
+test('Las 3 paletas definen la rampa relativa completa de info', () => {
   const css = readFileSync(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
   for (const pal of ['insoft', 'contapyme', 'agrowin']) {
     const re = new RegExp(`\\[data-palette=["']${pal}["']\\]([\\s\\S]*?)\\}`, 'm');
     const blockMatch = re.exec(css);
     assert.ok(blockMatch, `Bloque [data-palette="${pal}"] existe`);
     const block = blockMatch[1];
-    for (const step of [50, 100, 500, 600, 700, 800]) {
+    // Rampa relativa: el mismo idioma que el resto de familias del tema.
+    for (const step of ['paler', 'pale', 'strong', 'stronger', 'strongest']) {
       const ok = new RegExp(`--is-color-info-${step}\\s*:`).test(block);
       assert.ok(ok, `paleta ${pal} debe tener --is-color-info-${step}`);
     }

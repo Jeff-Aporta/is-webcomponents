@@ -65,7 +65,16 @@ import { TONE } from '../_shared/tone.js';
   };
 
   class IsCallout extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    bg: { prop: '--is-callout-bg', onlyColorValues: true },
+    'border-color': { prop: '--is-callout-border', onlyColorValues: true },
+    'text-color': { prop: '--is-callout-text', onlyColorValues: true },
+    accent: { prop: '--is-callout-accent', onlyColorValues: true },
+    spacing: '--is-callout-spacing',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing']; }
 
     #defaultIcon;
     #customIconObserver;

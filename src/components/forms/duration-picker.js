@@ -32,7 +32,13 @@ import { ElementBase } from '../_shared/element-base.js';
   const pad2 = (n) => String(n).padStart(2, '0');
 
   class IsDurationPicker extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    bg: { prop: '--is-duration-picker-bg', onlyColorValues: true },
+    'border-color': { prop: '--is-duration-picker-border', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'bg', 'border-color']; }
     #active = null;
 
     constructor() {

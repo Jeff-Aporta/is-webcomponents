@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { computePosition } from '../_shared/position.js';
 import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
@@ -39,9 +40,24 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   const SUPPORTS_POPOVER = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
 
-  const OBSERVED = ['value', 'type', 'checked', 'disabled', 'color', 'submenu-open'];
+  /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+  const STYLE_ATTRS = {
+    radius: '--is-dropdown-item-radius',
+    padding: '--is-dropdown-item-padding',
+    gap: '--is-dropdown-item-gap',
+    'text-color': { prop: '--is-dropdown-item-text', onlyColorValues: true },
+    'bg-hover': { prop: '--is-dropdown-item-bg-hover', onlyColorValues: true },
+    'danger-color': { prop: '--is-dropdown-item-danger', onlyColorValues: true },
+  };
 
-  class IsDropdownItem extends HTMLElement {
+  const OBSERVED = [
+    'value', 'type', 'checked', 'disabled', 'color', 'submenu-open',
+    ...Object.keys(STYLE_ATTRS),
+  ];
+
+  class IsDropdownItem extends withStyleAttrs(HTMLElement) {
+    static styleAttrs = STYLE_ATTRS;
+
     static get observedAttributes() { return OBSERVED; }
 
     #row;
@@ -69,6 +85,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       if (!this.hasAttribute('tabindex')) this.tabIndex = this.disabled ? -1 : 0;
       this.#render();
@@ -81,7 +98,8 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#hideSubmenuPanel();
     }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(...args) {
+      super.attributeChangedCallback(...args);
       if (this.#mounted) this.#render();
     }
 

@@ -25,7 +25,7 @@
 
   .error-text {
     font-size: 0.8em;
-    color: var(--is-danger-text, var(--is-color-danger-600, #e03131));
+    color: var(--is-danger-text, var(--is-color-danger-strong, #e03131));
     &[hidden] { display: none; }
   }
 
@@ -47,11 +47,11 @@
 
 /* ---- variant: se hereda a los <is-radio> por custom property ---------- */
 
-:host([color="brand"]) { --is-radio-accent: var(--is-accent, var(--is-color-brand-500, #339af0)); }
+:host([color="brand"]) { --is-radio-accent: var(--is-accent, var(--is-color-brand, #339af0)); }
 :host([color="neutral"]) { --is-radio-accent: var(--is-control-border, #59636e); }
-:host([color="success"]) { --is-radio-accent: var(--is-color-success-500, #40c057); }
-:host([color="warning"]) { --is-radio-accent: var(--is-color-warning-500, #f59f00); }
-:host([color="danger"]) { --is-radio-accent: var(--is-color-danger-500, #fa5252); }
+:host([color="success"]) { --is-radio-accent: var(--is-color-success, #40c057); }
+:host([color="warning"]) { --is-radio-accent: var(--is-color-warning, #f59f00); }
+:host([color="danger"]) { --is-radio-accent: var(--is-color-danger, #fa5252); }
 
 /* ---- error ------------------------------------------------------------ */
 
@@ -59,11 +59,11 @@
 :host(:state(error)) .label,
 :host([error]) .hint,
 :host(:state(error)) .hint {
-  color: var(--is-danger-text, var(--is-color-danger-600, #e03131));
+  color: var(--is-danger-text, var(--is-color-danger-strong, #e03131));
 }
 
 :host([error]),
-:host(:state(error)) { --is-radio-accent: var(--is-color-danger-500, #fa5252); }
+:host(:state(error)) { --is-radio-accent: var(--is-color-danger, #fa5252); }
 
 /* ---- disabled / readonly ---------------------------------------------- */
 

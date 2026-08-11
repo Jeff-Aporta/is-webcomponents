@@ -19,7 +19,7 @@
   --chart-text: var(--is-text, #e6e8eb);
   --chart-muted: var(--is-text-dim, #7a8390);
   --chart-surface: var(--is-bg-elev, #1c2128);
-  --grid-color: color-mix(in srgb, var(--is-border, #2a3038) 85%, transparent);
+  --is-chart-grid-color: color-mix(in srgb, var(--is-border, #2a3038) 85%, transparent);
   --chart-axis-color: color-mix(in srgb, var(--is-border, #2a3038) 100%, transparent);
 
   /* Geometría de marks — unitless (px), legibles desde JS */
@@ -82,7 +82,7 @@
 /* ---- Ejes y grid: recesivos ---- */
 
 .grid-line {
-  stroke: var(--grid-color);
+  stroke: var(--is-chart-grid-color);
   stroke-width: 1;
   shape-rendering: crispEdges;
 }

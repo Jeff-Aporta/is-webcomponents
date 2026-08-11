@@ -1,8 +1,8 @@
 :host {
   --_divider-width: var(--divider-width, 5px);
   --_divider-hit-area: var(--divider-hit-area, 12px);
-  --min: 0px;
-  --max: 100%;
+  --is-split-panel-min: 0px;
+  --is-split-panel-max: 100%;
   display: grid !important;
   grid-template-columns: 1fr var(--_divider-width) 1fr;
   grid-template-rows: minmax(0, 1fr);
@@ -54,7 +54,7 @@
     -webkit-user-select: none;
     transition: background-color 120ms ease;
     z-index: 2;
-    &:hover, &:focus-visible { background: var(--is-accent, var(--is-color-brand-500, #e03131)); }
+    &:hover, &:focus-visible { background: var(--is-accent, var(--is-color-brand, #e03131)); }
     &:focus-visible {
       outline: 2px solid var(--is-focus, #ff6b6b);
       outline-offset: 1px;
@@ -96,7 +96,7 @@
   user-select: none;
   -webkit-user-select: none;
 
-  .divider { background: var(--is-accent, var(--is-color-brand-500, #e03131)); }
+  .divider { background: var(--is-accent, var(--is-color-brand, #e03131)); }
 }
 
 :host([disabled]) .divider {

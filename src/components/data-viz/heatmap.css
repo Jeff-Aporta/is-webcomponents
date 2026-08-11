@@ -3,8 +3,8 @@
   display: block;
   font: inherit;
   color: var(--is-text);
-  --chart-text: var(--is-text);
-  --grid-color: color-mix(in srgb, var(--is-text) 12%, transparent);
+  --is-heatmap-text: var(--is-text);
+  --is-heatmap-grid-color: color-mix(in srgb, var(--is-text) 12%, transparent);
 }
 .root {
   display: grid;

@@ -3,11 +3,11 @@
 /* <is-drawer> — panel deslizante desde un borde del viewport. */
 
 :host {
-  --size: 380px;
-  --spacing: var(--is-space-l, 1rem);
-  --backdrop-color: rgba(0, 0, 0, 0.45);
-  --show-duration: 220ms;
-  --hide-duration: 180ms;
+  --is-drawer-size: 380px;
+  --is-drawer-spacing: var(--is-space-l, 1rem);
+  --is-drawer-backdrop-color: rgba(0, 0, 0, 0.45);
+  --is-drawer-show-duration: 220ms;
+  --is-drawer-hide-duration: 180ms;
 
   --_radius: calc(var(--is-radius, 0.75em));
   --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18), 8px 0 24px rgba(0, 0, 0, 0.18);
@@ -25,7 +25,7 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background: var(--backdrop-color);
+  background: var(--is-drawer-backdrop-color);
   opacity: 0;
   pointer-events: auto;
 }
@@ -48,7 +48,7 @@
    expuesta. */
 :host([placement="start"]) .drawer,
 :host([placement="end"]) .drawer {
-  width: min(var(--size), calc(100% - 2 * var(--spacing)));
+  width: min(var(--is-drawer-size), calc(100% - 2 * var(--is-drawer-spacing)));
   height: 100%;
   top: 0;
   bottom: 0;
@@ -68,7 +68,7 @@
 
 :host([placement="top"]) .drawer,
 :host([placement="bottom"]) .drawer {
-  height: min(var(--size), calc(100% - 2 * var(--spacing)));
+  height: min(var(--is-drawer-size), calc(100% - 2 * var(--is-drawer-spacing)));
   width: 100%;
   left: 0;
   right: 0;

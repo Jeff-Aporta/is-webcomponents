@@ -58,7 +58,16 @@ import { ElementBase } from '../_shared/element-base.js';
   const VALID_SELECTION = ['none', 'single', 'leaf', 'multiple'];
 
   class IsTree extends ElementBase {
-    static get observedAttributes() { return TREE_OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    indent: '--is-tree-indent',
+    'row-padding-y': '--is-tree-row-padding-y',
+    'row-padding-x': '--is-tree-row-padding-x',
+    'row-hover': { prop: '--is-tree-row-hover', onlyColorValues: true },
+    'row-selected-bg': { prop: '--is-tree-row-selected-bg', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...TREE_OBSERVED, ...IsTree.styleAttrNames]; }
 
 
     constructor() {

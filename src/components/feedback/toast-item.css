@@ -17,28 +17,28 @@
 }
 
 :host([color="brand"]) {
-  --_bg: var(--is-color-brand-50, #d0ebff);
-  --_border: var(--is-color-brand-500, #339af0);
-  --_text: var(--is-color-brand-700, #1971c2);
-  --_accent: var(--is-color-brand-500, #339af0);
+  --_bg: var(--is-color-brand-paler, #d0ebff);
+  --_border: var(--is-color-brand, #339af0);
+  --_text: var(--is-color-brand-stronger, #1971c2);
+  --_accent: var(--is-color-brand, #339af0);
 }
 :host([color="success"]) {
-  --_bg: var(--is-color-success-50, #ebfbee);
-  --_border: var(--is-color-success-500, #40c057);
-  --_text: var(--is-color-success-700, #237a35);
-  --_accent: var(--is-color-success-500, #40c057);
+  --_bg: var(--is-color-success-paler, #ebfbee);
+  --_border: var(--is-color-success, #40c057);
+  --_text: var(--is-color-success-stronger, #237a35);
+  --_accent: var(--is-color-success, #40c057);
 }
 :host([color="warning"]) {
-  --_bg: var(--is-color-warning-50, #fff9db);
-  --_border: var(--is-color-warning-500, #f59f00);
-  --_text: var(--is-color-warning-700, #9a4f00);
-  --_accent: var(--is-color-warning-500, #f59f00);
+  --_bg: var(--is-color-warning-paler, #fff9db);
+  --_border: var(--is-color-warning, #f59f00);
+  --_text: var(--is-color-warning-stronger, #9a4f00);
+  --_accent: var(--is-color-warning, #f59f00);
 }
 :host([color="danger"]) {
-  --_bg: var(--is-color-danger-50, #fff5f5);
-  --_border: var(--is-color-danger-500, #fa5252);
-  --_text: var(--is-color-danger-700, #b02525);
-  --_accent: var(--is-color-danger-500, #fa5252);
+  --_bg: var(--is-color-danger-paler, #fff5f5);
+  --_border: var(--is-color-danger, #fa5252);
+  --_text: var(--is-color-danger-stronger, #b02525);
+  --_accent: var(--is-color-danger, #fa5252);
 }
 :host([color="neutral"]) {
   --_bg: var(--is-control-bg, #f1f3f5);

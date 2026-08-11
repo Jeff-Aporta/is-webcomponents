@@ -58,8 +58,18 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
 
   class IsTextarea extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-textarea-border-radius',
+    'border-color': { prop: '--is-textarea-border', onlyColorValues: true },
+    bg: { prop: '--is-textarea-bg', onlyColorValues: true },
+    'text-color': { prop: '--is-textarea-text', onlyColorValues: true },
+    'focus-color': { prop: '--is-textarea-focus', onlyColorValues: true },
+    'danger-color': { prop: '--is-textarea-danger', onlyColorValues: true },
+    };
+
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
 
     #internals = null;
     #textarea;

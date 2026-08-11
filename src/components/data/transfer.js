@@ -77,7 +77,12 @@ import { ElementBase } from '../_shared/element-base.js';
   const TRANSFER_OBSERVED = ['source-title', 'target-title', 'searchable', 'without-buttons', 'without-headings', 'max-target'];
 
   class IsTransfer extends ElementBase {
-    static get observedAttributes() { return TRANSFER_OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'row-height': '--is-transfer-row-height',
+    };
+
+    static get observedAttributes() { return [...TRANSFER_OBSERVED, ...IsTransfer.styleAttrNames]; }
     #panelSource;
     #panelTarget;
     #searchSource;

@@ -3,6 +3,7 @@ import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { setStringAttr } from '../_shared/reflect.js';
 import { upgradeProperties } from '../_shared/upgrade-properties.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 
 /**
  * <is-button-group> — Web Component (vanilla, zero dependencies).
@@ -41,15 +42,27 @@ import { upgradeProperties } from '../_shared/upgrade-properties.js';
     <slot part="base" class="button-group" role="group"></slot>
   `;
 
+  /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+  const STYLE_ATTRS = {
+    radius: '--is-button-group-radius',
+    gap: '--is-button-group-gap',
+    padding: '--is-button-group-pad',
+    accent: { prop: '--is-button-group-accent', onlyColorValues: true },
+    'border-width': '--is-button-border-width',
+  };
+
   const OBSERVED = [
     'label', 'orientation', 'variant', 'select', 'value',
     'pill', 'stretch', 'allow-empty', 'disabled',
+    ...Object.keys(STYLE_ATTRS),
   ];
 
   const APPEARANCES = ['joined', 'segmented', 'separated'];
   const MODES = ['none', 'single', 'multiple'];
 
-  class IsButtonGroup extends HTMLElement {
+  class IsButtonGroup extends withStyleAttrs(HTMLElement) {
+    static styleAttrs = STYLE_ATTRS;
+
     static get observedAttributes() { return OBSERVED; }
 
     #slot;
@@ -69,6 +82,8 @@ import { upgradeProperties } from '../_shared/upgrade-properties.js';
     }
 
     connectedCallback() {
+      // El mixin vuelca STYLE_ATTRS antes de esto.
+      super.connectedCallback();
       this.#mounted = true;
       upgradeProperties(this, OBSERVED);
       if (Object.prototype.hasOwnProperty.call(this, 'values')) {
@@ -84,6 +99,7 @@ import { upgradeProperties } from '../_shared/upgrade-properties.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'value' || name === 'select') {
         this.#selected = this.#readSelection();

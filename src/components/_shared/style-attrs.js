@@ -149,3 +149,40 @@ export function applyToneRamp(el, color, opts = {}) {
     else el.style.removeProperty(prop);
   }
 }
+
+/**
+ * Mixin para componentes que NO extienden `ElementBase` (los que siguen
+ * heredando de `HTMLElement` directamente). Da el mismo comportamiento que
+ * `ElementBase`: volcar el mapa al conectar y mantenerlo al cambiar el
+ * atributo, sin que cada componente repita el cableado.
+ *
+ *   class IsFoo extends withStyleAttrs(HTMLElement) {
+ *     static styleAttrs = { radius: '--is-foo-radius' };
+ *     static get observedAttributes() { return [...OBSERVED, ...IsFoo.styleAttrNames]; }
+ *   }
+ *
+ * Encadena con los callbacks de la subclase: si la clase base ya definía
+ * `connectedCallback` / `attributeChangedCallback`, se llaman igual.
+ *
+ * @template {new (...args: any[]) => HTMLElement} T
+ * @param {T} Base
+ */
+export function withStyleAttrs(Base) {
+  return class StyleAttrsElement extends Base {
+    /** @type {Record<string, StyleAttrDef>} */
+    static styleAttrs = {};
+
+    static get styleAttrNames() { return styleAttrNames(this.styleAttrs); }
+
+    connectedCallback(...args) {
+      syncStyleAttrs(this, this.constructor.styleAttrs);
+      super.connectedCallback?.(...args);
+    }
+
+    attributeChangedCallback(name, oldValue, newValue, ...rest) {
+      const map = this.constructor.styleAttrs;
+      if (map && name in map) syncStyleAttrs(this, { [name]: map[name] });
+      super.attributeChangedCallback?.(name, oldValue, newValue, ...rest);
+    }
+  };
+}

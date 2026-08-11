@@ -5,8 +5,8 @@
   --is-textarea-bg: var(--is-control-bg, #f1f3f5);
   --is-textarea-text: var(--is-control-text, #212529);
   --is-textarea-focus: var(--is-focus, var(--is-accent, #339af0));
-  --is-textarea-danger: var(--is-color-danger-500, #fa5252);
-  --is-textarea-danger-text: var(--is-danger-text, var(--is-color-danger-700, #b02525));
+  --is-textarea-danger: var(--is-color-danger, #fa5252);
+  --is-textarea-danger-text: var(--is-danger-text, var(--is-color-danger-stronger, #b02525));
   --_border: var(--is-textarea-border);
   --_focus: var(--is-textarea-focus);
   display: block;

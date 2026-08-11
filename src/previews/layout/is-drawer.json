@@ -47,7 +47,7 @@
     {
       "id": "size",
       "title": "Tamaño",
-      "lede": "Ajusta <code class=\"code\">--size</code> en el host. Se aplica al ancho o alto según el placement.",
+      "lede": "Ajusta <code class=\"code\">size</code> en el host. Se aplica al ancho o alto según el placement.",
       "blocks": [
         {
           "kind": "demo",
@@ -55,11 +55,11 @@
         },
         {
           "kind": "html",
-          "html": "<is-drawer id=\"drwWide\" label=\"50%\" style=\"--size: 50%\">\r\n          <p>Este drawer ocupa siempre el 50% del viewport.</p>\r\n        </is-drawer>"
+          "html": "<is-drawer id=\"drwWide\" label=\"50%\" size=\"50%\">\r\n          <p>Este drawer ocupa siempre el 50% del viewport.</p>\r\n        </is-drawer>"
         },
         {
           "kind": "code",
-          "code": "<is-drawer style=\"--size: 50%\">…</is-drawer>"
+          "code": "<is-drawer size=\"50%\">…</is-drawer>"
         }
       ]
     },
@@ -112,11 +112,11 @@
         },
         {
           "kind": "html",
-          "html": "<is-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" style=\"--size: 280px\">\r\n          <nav style=\"display:flex;flex-direction:column;gap:.5em\">\r\n            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Productos</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>\r\n          </nav>\r\n        </is-drawer>"
+          "html": "<is-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" size=\"280px\">\r\n          <nav style=\"display:flex;flex-direction:column;gap:.5em\">\r\n            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Productos</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>\r\n          </nav>\r\n        </is-drawer>"
         },
         {
           "kind": "code",
-          "code": "<is-drawer placement=\"start\" label=\"Menú\" style=\"--size: 280px\">\n  <nav>…</nav>\n</is-drawer>"
+          "code": "<is-drawer placement=\"start\" label=\"Menú\" size=\"280px\">\n  <nav>…</nav>\n</is-drawer>"
         }
       ]
     },

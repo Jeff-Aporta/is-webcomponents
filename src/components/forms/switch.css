@@ -4,7 +4,7 @@
   --is-switch-bg: var(--is-control-bg, #f1f3f5);
   --is-switch-bg-hover: var(--is-control-bg-hover, #e9ecef);
   --is-switch-border: var(--is-control-border, #adb5bd);
-  --is-switch-accent: var(--is-accent, var(--is-color-brand-500, #339af0));
+  --is-switch-accent: var(--is-accent, var(--is-color-brand, #339af0));
   --is-switch-thumb: var(--is-on-brand, #fff);
   --is-switch-focus: var(--is-focus, var(--is-accent, #339af0));
   --is-switch-icon: var(--is-control-text, #212529);
@@ -115,18 +115,18 @@
 }
 
 :host([color="neutral"]) { --is-switch-accent: var(--is-control-border, #59636e); }
-:host([color="success"]) { --is-switch-accent: var(--is-color-success-500, #40c057); }
-:host([color="warning"]) { --is-switch-accent: var(--is-color-warning-500, #f59f00); }
-:host([color="danger"]) { --is-switch-accent: var(--is-color-danger-500, #fa5252); }
+:host([color="success"]) { --is-switch-accent: var(--is-color-success, #40c057); }
+:host([color="warning"]) { --is-switch-accent: var(--is-color-warning, #f59f00); }
+:host([color="danger"]) { --is-switch-accent: var(--is-color-danger, #fa5252); }
 
 :host([error]) {
-  --is-switch-accent: var(--is-color-danger-500, #fa5252);
-  --is-switch-border: var(--is-color-danger-500, #fa5252);
-  --is-switch-focus: var(--is-color-danger-500, #fa5252);
+  --is-switch-accent: var(--is-color-danger, #fa5252);
+  --is-switch-border: var(--is-color-danger, #fa5252);
+  --is-switch-focus: var(--is-color-danger, #fa5252);
 }
 
 :host([error]) .hint {
-  color: var(--is-danger-text, var(--is-color-danger-600, #e03131));
+  color: var(--is-danger-text, var(--is-color-danger-strong, #e03131));
 }
 
 /* Iconos y rótulos necesitan más carril del que da el tamaño por defecto. */

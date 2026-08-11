@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -67,9 +68,19 @@ const PAN_THRESHOLD_PX = 4;
 
 const VALID_VARIANT = ['backdrop', 'solid'];
 
-class IsLightbox extends HTMLElement {
+class IsLightbox extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    bg: { prop: '--is-lightbox-bg', onlyColorValues: true },
+    'text-color': { prop: '--is-lightbox-text', onlyColorValues: true },
+    'border-color': { prop: '--is-lightbox-border', onlyColorValues: true },
+    'backdrop-color': { prop: '--is-lightbox-backdrop', onlyColorValues: true },
+    'backdrop-blur': '--is-lightbox-backdrop-blur',
+    };
+
   static get observedAttributes() {
-    return ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
+    return ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions',
+      ...IsLightbox.styleAttrNames];
   }
 
   #dialog;
@@ -143,6 +154,8 @@ class IsLightbox extends HTMLElement {
   }
 
   connectedCallback() {
+
+    super.connectedCallback();
     if (this.open) this.#syncOpen();
     this.#syncDefaultActions();
   }
@@ -154,6 +167,8 @@ class IsLightbox extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
+
+    super.attributeChangedCallback(name, oldVal, newVal);
     if (oldVal === newVal) return;
     if (name === 'open') this.#syncOpen();
     else if (name === 'no-default-actions') this.#syncDefaultActions();

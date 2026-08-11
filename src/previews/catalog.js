@@ -3,6 +3,11 @@
  * tag → { json, behavior?, category }
  */
 export default {
+  "is-code": {
+    "json": "./code/is-code.json",
+    "behavior": "./behaviors/is-code.js",
+    "category": "code"
+  },
   "is-button-group": {
     "json": "./actions/is-button-group.json",
     "behavior": "./behaviors/is-button-group.js",
@@ -10,6 +15,7 @@ export default {
   },
   "is-button": {
     "json": "./actions/is-button.json",
+    "behavior": "./behaviors/is-button.js",
     "category": "actions"
   },
   "is-check-icon-button": {

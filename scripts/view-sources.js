@@ -1,25 +1,27 @@
 /**
- * view-sources.js — visor full-view de fuentes JS / CSS / MD del componente.
+ * view-sources.js — visor full-page de fuentes JS / CSS / MD del componente.
  *
- * En cada `<is-demo>` / `.demo` añade un botón que abre un `<is-dialog>` a casi
- * viewport completo con tabs (JS · CSS · MD). El contenido es el archivo del
- * repo sin minificar (local same-origin o raw.githubusercontent), pensado
- * para auditar desde la galería en GitHub Pages.
+ * En cada `<is-demo>` / `.demo` puede haber un botón que abre un `<is-dialog>`
+ * a viewport completo con tabs (JS · CSS · MD). El contenido es el archivo
+ * fuente del repo (local same-origin o raw.githubusercontent).
  *
- * Distinto de `demo-code.js` (snippet CDN del ejemplo).
+ * Distinto de `demo-code.js` (snippet CDN del ejemplo) y de `demo-file-meta.js`
+ * (barra `.file-meta` sin hints).
  */
 import '../src/components/media/icon.js';
 import '../src/components/actions/button.js';
 import '../src/components/actions/copy-button.js';
 import '../src/components/layout/dialog.js';
 import '../src/components/navigation/tab-group.js';
+import '../src/components/code/code.js';
 import './highlight-pre.js';
-import { ensureCodeMirror, paint } from '../src/components/_shared/highlight-code.js';
+import { repaint } from '../src/components/_shared/highlight-code.js';
 import components from '../manifest.js';
 import {
   resolveSourceFiles,
   fetchSourceFile,
   rawSourceUrl,
+  localSourceUrl,
 } from './component-sources.js';
 
 const DIALOG_ID = 'is-view-sources-dialog';
@@ -36,24 +38,44 @@ function entryFor(tag) {
   return components.find((c) => c.tag === tag) || null;
 }
 
+/** URL absoluta (con host) preferida para mostrar en el chrome del modal. */
+function absoluteSourceUrl(repoPath, fetchedUrl) {
+  if (fetchedUrl && /^https?:\/\//i.test(fetchedUrl)) return fetchedUrl;
+  try {
+    return new URL(localSourceUrl(repoPath), location.href).href;
+  } catch {
+    return localSourceUrl(repoPath);
+  }
+}
+
 function ensureDialog() {
   let dlg = document.getElementById(DIALOG_ID);
+  // Migrar instancia antigua (path relativo / ancho limitado).
+  if (dlg && (!(dlg.querySelector('#vsPath') instanceof HTMLAnchorElement)
+    || dlg.getAttribute('width') !== '100vw'
+    || dlg.getAttribute('spacing') !== '0')) {
+    dlg.remove();
+    dlg = null;
+  }
   if (dlg) return dlg;
 
   dlg = document.createElement('is-dialog');
   dlg.id = DIALOG_ID;
   dlg.className = 'is-view-sources';
   dlg.setAttribute('light-dismiss', '');
-  dlg.style.setProperty('--width', 'min(96vw, 72rem)');
+  dlg.setAttribute('width', '100vw');
+  dlg.setAttribute('spacing', '0');
+  dlg.style.setProperty('--is-dialog-width', '100vw');
+  dlg.style.setProperty('--is-dialog-spacing', '0px');
   dlg.innerHTML = `
     <span slot="label" class="vs-title">Fuentes</span>
     <div slot="header-actions" class="vs-header-actions">
-      <a class="vs-open" id="vsOpenRaw" href="#" target="_blank" rel="noopener noreferrer" hidden>Abrir raw</a>
+      <a class="vs-open" id="vsOpenRaw" href="#" target="_blank" rel="noopener noreferrer" hidden>Abrir</a>
       <is-copy-button id="vsCopy" copy-label="Copiar" success-label="Copiado"
                       tooltip-placement="bottom"></is-copy-button>
     </div>
     <div class="vs-body">
-      <p class="vs-path" id="vsPath" hidden></p>
+      <a class="vs-path" id="vsPath" href="#" target="_blank" rel="noopener noreferrer" hidden></a>
       <is-tab-group class="vs-tabs" id="vsTabs" active="js" activation="manual"
                     without-scroll-controls aria-label="Tipo de fuente">
         <is-tab slot="nav" panel="js">JS</is-tab>
@@ -62,7 +84,9 @@ function ensureDialog() {
         ${KINDS.map((k) => `
           <is-tab-panel name="${k}">
             <div class="vs-panel" data-kind="${k}">
-              <pre class="code vs-pre" data-lang="${LANG[k]}" data-kind="${k}"></pre>
+              <is-code class="code vs-pre is-code-view" data-lang="${LANG[k]}" data-kind="${k}"
+                readonly compact wrap line-numbers="false"
+                lang="${LANG[k] === 'markdown' ? 'plaintext' : LANG[k]}"></is-code>
               <p class="vs-empty" data-kind="${k}" hidden>No hay archivo o no se pudo cargar.</p>
             </div>
           </is-tab-panel>
@@ -83,6 +107,10 @@ function ensureDialog() {
   return dlg;
 }
 
+function panelEditor(dlg, kind) {
+  return dlg.querySelector(`.vs-pre[data-kind="${kind}"]`);
+}
+
 function syncActiveMeta(dlg, kind) {
   const tag = dlg.dataset.tag || '';
   const entry = entryFor(tag);
@@ -91,42 +119,48 @@ function syncActiveMeta(dlg, kind) {
   const pathEl = dlg.querySelector('#vsPath');
   const openEl = dlg.querySelector('#vsOpenRaw');
   const copyEl = dlg.querySelector('#vsCopy');
-  const pre = dlg.querySelector(`pre.vs-pre[data-kind="${kind}"]`);
+  const pre = panelEditor(dlg, kind);
 
   if (pathEl) {
     if (file) {
+      const url = absoluteSourceUrl(file.repoPath, pre?.dataset?.sourceUrl);
       pathEl.hidden = false;
-      pathEl.textContent = file.repoPath;
+      pathEl.textContent = url;
+      pathEl.href = url;
+      pathEl.title = url;
     } else {
       pathEl.hidden = true;
       pathEl.textContent = '';
+      pathEl.removeAttribute('href');
     }
   }
   if (openEl) {
     if (file) {
+      const url = absoluteSourceUrl(file.repoPath, pre?.dataset?.sourceUrl);
       openEl.hidden = false;
-      openEl.href = rawSourceUrl(file.repoPath);
-      openEl.title = `Abrir ${file.repoPath} en raw.githubusercontent`;
+      openEl.href = url;
+      openEl.title = url;
     } else {
       openEl.hidden = true;
       openEl.removeAttribute('href');
     }
   }
   if (copyEl && pre) {
-    const text = pre.dataset.cmSource || pre.textContent || '';
+    const text = pre.dataset.cmSource || pre.value || '';
     if (text && !pre.hasAttribute('data-vs-error')) copyEl.setAttribute('value', text);
     else copyEl.removeAttribute('value');
   }
 }
 
 async function loadKind(dlg, kind, file) {
-  const pre = dlg.querySelector(`pre.vs-pre[data-kind="${kind}"]`);
+  const pre = panelEditor(dlg, kind);
   const empty = dlg.querySelector(`.vs-empty[data-kind="${kind}"]`);
   if (!pre || !empty) return;
 
   if (!file) {
-    pre.textContent = '';
+    pre.value = '';
     delete pre.dataset.cmSource;
+    delete pre.dataset.sourceUrl;
     pre.setAttribute('data-vs-error', '1');
     pre.hidden = true;
     empty.hidden = false;
@@ -145,14 +179,16 @@ async function loadKind(dlg, kind, file) {
 
   pre.hidden = false;
   empty.hidden = true;
-  pre.textContent = 'Cargando…';
+  pre.value = 'Cargando…';
   delete pre.dataset.cm;
   delete pre.dataset.cmSource;
+  delete pre.dataset.sourceUrl;
   pre.removeAttribute('data-vs-error');
 
   const result = await pending;
   if (result.error) {
-    pre.textContent = '';
+    pre.value = '';
+    delete pre.dataset.sourceUrl;
     pre.setAttribute('data-vs-error', '1');
     pre.hidden = true;
     empty.hidden = false;
@@ -163,19 +199,20 @@ async function loadKind(dlg, kind, file) {
   pre.hidden = false;
   empty.hidden = true;
   pre.dataset.cmSource = result.text;
-  pre.textContent = result.text;
+  pre.dataset.sourceUrl = result.url || absoluteSourceUrl(file.repoPath);
+  pre.value = result.text;
   pre.setAttribute('data-lang', LANG[kind]);
+  pre.lang = LANG[kind] === 'markdown' ? 'plaintext' : LANG[kind];
 
-  // MD: mostrar literal (auditoría). softFormat(js) podría alterar el markdown.
+  // MD: literal (no softFormat) para no alterar el markdown.
   if (kind === 'md') {
     delete pre.dataset.cm;
     return;
   }
 
   delete pre.dataset.cmMode;
-  await ensureCodeMirror().catch(() => {});
   delete pre.dataset.cm;
-  paint(pre);
+  await repaint(pre);
 }
 
 /**
@@ -196,9 +233,11 @@ export async function openViewSources(tag, prefer = 'js') {
   const available = KINDS.filter((k) => files[k]);
   const start = available.includes(prefer) ? prefer : (available[0] || 'js');
 
-  // Cargar las tres en paralelo; el tab activo se pinta primero.
-  await loadKind(dlg, start, files[start]);
   if (tabs) tabs.active = start;
+  // URL absoluta con host ya visible mientras carga el contenido.
+  syncActiveMeta(dlg, start);
+
+  await loadKind(dlg, start, files[start]);
   syncActiveMeta(dlg, start);
 
   KINDS.filter((k) => k !== start).forEach((k) => {
@@ -236,31 +275,9 @@ function enhanceDemo(demo) {
   demo.append(btn);
 }
 
-function mountPageButton(tag) {
-  const host = document.querySelector('is-main.main, main.main');
-  if (!host || !entryFor(tag)) return;
-
-  let bar = host.querySelector(':scope > .vs-page-bar');
-  if (!bar) {
-    bar = document.createElement('div');
-    bar.className = 'vs-page-bar';
-    bar.innerHTML = `
-      <is-button class="vs-page-btn" color="neutral" variant="outlined" type="button">
-        <is-icon slot="start" icon="mdi:file-code-outline"></is-icon>
-        Fuentes JS · CSS · MD
-      </is-button>
-      <span class="vs-page-hint">Archivos del repo sin minificar (auditoría / GH Pages)</span>
-    `;
-    const first = host.firstElementChild;
-    if (first) host.insertBefore(bar, first);
-    else host.append(bar);
-  }
-
-  const btn = bar.querySelector('.vs-page-btn');
-  if (btn && btn.dataset.tag !== tag) {
-    btn.dataset.tag = tag;
-    btn.onclick = () => openViewSources(tag).catch(console.error);
-  }
+function mountPageButton(_tag) {
+  // La barra de página es exclusiva de `demo-file-meta.js` (sin hints).
+  document.querySelectorAll('.vs-page-bar').forEach((el) => el.remove());
 }
 
 document.addEventListener('is-demo-connected', (e) => {

@@ -20,8 +20,10 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | Publicación: solo `dist/cdn/<cat>/<tag>.min.js` | Commitear bundles huérfanos en `dist/` raíz (ej. `dist/ag-grid.js`) |
 | Commitear `tests/*.test.mjs` | Meter `tests/` entero en gitignore (solo `*.tmp` / coverage / `.cache`); inventar `.test.ts` sin pipeline TS |
 | Refactor mecánico de tokens → commit atómico + `token-vocabulary` | Dejar el rename a medias en el working tree y rebasear encima |
+| Galería: `.file-meta` (fuentes + pesos `.min`) + modal fuentes full-page con URL absoluta | `.vs-page-bar` con hints; `#vsPath` = path relativo; dialog a `96vw`/`70vh` |
+| Editor de código / snippets = `<is-code>` (`mode=block\|inline`, `readonly compact` en docs) | Tag `is-code-editor`; segundo motor CM; pintar docs con runMode suelto |
 
-Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants`.
+Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta`.
 
 ---
 
@@ -170,6 +172,24 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - Unidad más alta con valor **≥ 1** (`204800` → `200 KB`, no `0.2 MB`; desde `1 MiB` sí `MB`).
 - En captions CDN del panel Enlaces: siempre `autofit` + `sizes.json` expandido.
 
+### Galería: fuentes del módulo + pesos CDN (ago/2026)
+- Scripts: `demo-file-meta.js` (barra **única** `.file-meta-page`), `view-sources.js` (modal), `component-sources.js` (paths + fetch).
+- **Una sola vez** arriba del preview (hijo de `is-main.main`): botones JS/CSS/MD + chips `<code>` de path `.min` + `<is-format-bytes autofit>`.
+- Paths **sin** `<is-code>` (CM hacía scrollIntoView y en F5 el docs iba al final).
+- Al montar la barra: preservar scroll de `is-main` (+ re-`restoreScroll`). `<is-code>` usa `#withOuterScroll`.
+- **No** bajo cada `h2` de sección ni dentro de cada paper/`is-demo`.
+- Opt-out de página: no montar si el tag no está en manifest (o retirar el script).
+- Modal `#is-view-sources-dialog`: `<is-dialog class="is-view-sources">` full page (`width="100vw"` `spacing="0"`; CSS `::part(dialog)` stretch). Contenido en `<is-code readonly compact>`.
+- `#vsPath` = `<a>` con **URL absoluta** (`localSourceUrl` / fetch `result.url`), clickeable. Header “Abrir” igual.
+- Barra de página = solo `.file-meta-page`, **sin sticky** (scrollea con el contenido). **Sin** textos tipo “sin minificar / auditoría / GH Pages”.
+- Tag de editor: **`is-code`** (preview `component: "is-code"`). Docs categoría: `src/components/code/LLM.md`.
+- Guardián estático: `tests/gallery-sources-meta.test.mjs`. Audit Playwright opcional: `scripts/audit-file-meta.mjs`.
+
+### Roadmap LaTeX (categoría `code`, sin scaffold aún)
+- Futuro `<is-latex>` (ecuaciones + export SVG/PNG) y `<is-latex-doc>` (IDE `.tex`: TOC, BibTeX, `\ref`, autocomplete, auto-`\end{}`).
+- **Reusar** `<is-code>` + `registerLanguage` + `is-dialog` / layout; motor math por CDN. No CodeMirror 6 ni segundo editor.
+- Detalle y fases: `src/components/code/LLM.md` → sección Roadmap.
+
 ---
 
 ## DON'T
@@ -216,6 +236,13 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - **No usar `this.variant` para el tono semántico** cuando la API es `color`
   (`fab`, `dropdown-item`, `toast` → `toast-item`). `variant` = apariencia
   (filled/outlined); `color` = familia.
+- **No montar `.vs-page-bar` con hints** ni dejar comentarios de auditoría en el
+  chrome de preview. Meta = `.file-meta*`.
+- **No poner path relativo en `#vsPath`** del visor de fuentes: siempre URL con host.
+- **No dejar el modal de fuentes a tamaño “casi viewport”** (`96vw` / `70vh`): full page.
+- **No abrir la galería con `component: "is-code-editor"`** ni documentar ese tag.
+- **No inventar `.test.ts`** aquí: sin pipeline TS de producto; solo `tests/*.test.mjs`
+  (artifacts `tests/*.tmp` / `coverage` / `.cache` sí van en gitignore; la carpeta no).
 
 ---
 
@@ -338,6 +365,23 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 36. **`ISComponentPreview.on(null, …)`** → `this.on(main.querySelector('#x'), …)`
     con `#x` ausente tiraba al montar. Fix: no-op si no hay target.
     Guardián: `ux-gallery-invariants` (fuente contiene la guarda).
+
+37. **Chrome de fuentes con comentarios + path relativo + modal chico** (10-ago-2026)
+    → `.vs-page-bar` decía «Fuentes JS · CSS · MD Archivos del repo sin minificar
+    (auditoría / GH Pages)»; el usuario pidió quitar esos comentarios. `#vsPath`
+    mostraba `src/components/actions/button.js` sin host (imposible abrir el
+    archivo real en Live Server). El dialog usaba `min(96vw)` / altura limitada.
+    **Hacer:** solo `.file-meta-page`; `#vsPath` = `<a>` con URL absoluta;
+    dialog `width="100vw"` `spacing="0"` + stretch; migrar instancia DOM vieja.
+    **No hacer:** hints en chrome; `repoPath` crudo en la UI; segundo modal
+    nativo; reintroducir `.vs-page-bar` “por compatibilidad”.
+    Guardián: `tests/gallery-sources-meta.test.mjs`. Docs: `code/LLM.md`.
+
+38. **Preview vacío por tag renombrado** → bookmarks/audits con
+    `is-code-editor` tras el rename a `is-code`. Nada “falla”: la galería no
+    encuentra el componente. Fix: tag canónico `is-code` en manifest, behaviors,
+    audits y docs. Guardián: `gallery-sources-meta` (manifest no contiene
+    `is-code-editor`).
 
 ---
 

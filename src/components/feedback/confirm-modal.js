@@ -50,7 +50,15 @@ import '../actions/button.js';
   const OBSERVED = ['for', 'heading', 'message', 'open'];
 
   class IsConfirmModal extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    bg: { prop: '--is-confirm-modal-bg', onlyColorValues: true },
+    'text-color': { prop: '--is-confirm-modal-text', onlyColorValues: true },
+    'border-color': { prop: '--is-confirm-modal-border', onlyColorValues: true },
+    accent: { prop: '--is-confirm-modal-accent', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent']; }
 
     #backdrop;
     #modal;

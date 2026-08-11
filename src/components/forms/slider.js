@@ -96,8 +96,19 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
   }
 
   class IsSlider extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'track-size': '--is-slider-track-size',
+    'thumb-size': '--is-slider-thumb-size',
+    length: '--is-slider-length',
+    'rail-color': { prop: '--is-slider-rail', onlyColorValues: true },
+    'fill-color': { prop: '--is-slider-fill', onlyColorValues: true },
+    'thumb-color': { prop: '--is-slider-thumb-bg', onlyColorValues: true },
+    'focus-color': { prop: '--is-slider-focus', onlyColorValues: true },
+    };
+
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, 'track-size', 'thumb-size', 'length', 'rail-color', 'fill-color', 'thumb-color', 'focus-color']; }
 
     #internals = null;
     #base;

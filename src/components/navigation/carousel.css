@@ -1,11 +1,11 @@
 :host {
   display: block;
   position: relative;
-  --ctrl-bg: var(--is-bg-elev, #1c2128);
-  --ctrl-fg: var(--is-text, #e8eaf1);
-  --ctrl-border: var(--is-border, #2a2f3a);
-  --indicator-active: var(--is-brand, dodgerblue);
-  --indicator: var(--is-border, #2a2f3a);
+  --is-carousel-control-bg: var(--is-bg-elev, #1c2128);
+  --is-carousel-control-text: var(--is-text, #e8eaf1);
+  --is-carousel-control-border: var(--is-border, #2a2f3a);
+  --is-carousel-indicator-active: var(--is-brand, dodgerblue);
+  --is-carousel-indicator: var(--is-border, #2a2f3a);
 }
 
 .carousel {
@@ -16,7 +16,7 @@
   overflow: hidden;
   border-radius: 0.75rem;
   background: var(--is-bg-elev, #1c2128);
-  border: 1px solid var(--ctrl-border);
+  border: 1px solid var(--is-carousel-control-border);
 }
 
 .viewport {
@@ -75,13 +75,13 @@
   border-radius: 50%;
   border: 0;
   padding: 0;
-  background: var(--indicator);
+  background: var(--is-carousel-indicator);
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
 
 .indicators button[aria-selected="true"] {
-  background: var(--indicator-active);
+  background: var(--is-carousel-indicator-active);
   transform: scale(1.4);
 }
 
@@ -92,9 +92,9 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  border: 1px solid var(--ctrl-border);
-  background: var(--ctrl-bg);
-  color: var(--ctrl-fg);
+  border: 1px solid var(--is-carousel-control-border);
+  background: var(--is-carousel-control-bg);
+  color: var(--is-carousel-control-text);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -104,7 +104,7 @@
 }
 
 .ctrl:hover {
-  background: color-mix(in srgb, var(--ctrl-bg) 70%, var(--ctrl-fg) 30%);
+  background: color-mix(in srgb, var(--is-carousel-control-bg) 70%, var(--is-carousel-control-text) 30%);
 }
 
 .ctrl[hidden] {

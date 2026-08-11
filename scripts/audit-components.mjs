@@ -66,7 +66,8 @@ for (const f of walk(compRoot)) {
   // ElementBase ya trae attributeChangedCallback, y lo mismo sus derivadas
   // (ModalBase para dialog/drawer, DiagramElementBase para los diagramas):
   // ahí el componente implementa `onAttributeChanged`, no el callback nativo.
-  const extendsBase = /extends\s+(ElementBase|ModalBase|DiagramElementBase)/.test(src);
+  // `withStyleAttrs(HTMLElement)` también aporta attributeChangedCallback.
+  const extendsBase = /extends\s+(ElementBase|ModalBase|DiagramElementBase|withStyleAttrs\()/.test(src);
   if (!extendsBase) {
     const hasObserved = /static get observedAttributes/.test(src) || /static observedAttributes/.test(src);
     const hasACC = /attributeChangedCallback/.test(src);

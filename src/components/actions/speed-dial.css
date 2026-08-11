@@ -19,7 +19,7 @@
    amplificaba cualquier desalineacion). Aqui solo se le da el look de FAB
    a traves de su ::part(button). */
 .trigger {
-  --r: var(--is-radius-fab);
+  --is-speed-dial-radius: var(--is-radius-fab);
   /* El host DEBE medir lo mismo que su boton visible: is-check-icon-button
      no se dimensiona solo y el host quedaba en 33.8x45 mientras el circulo
      era 45x45, con los centros desalineados. El abanico se calcula desde el
@@ -39,7 +39,7 @@ is-check-icon-button.trigger::part(button) {
   width: 3rem;
   height: 3rem;
   border: 0;
-  border-radius: var(--r);
+  border-radius: var(--is-speed-dial-radius);
   background: var(--is-accent);
   color: var(--is-on-accent, #fff);
   box-shadow:

@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { upgradeProperties } from '../_shared/upgrade-properties.js';
 import { defineElement } from '../_shared/define.js';
 import { TONE } from '../_shared/tone.js';
@@ -68,8 +69,13 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE;
   const VALID_ORIENTATION = ['horizontal', 'vertical'];
 
-  class IsCard extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsCard extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    spacing: '--is-card-spacing',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'spacing']; }
 
     constructor() {
       super();
@@ -87,6 +93,7 @@ import { TONE } from '../_shared/tone.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this._mounted = true;
       upgradeProperties(this, OBSERVED);
       // reflejar defaults para que :host([orientation]/[appearance]) siempre matcheen
@@ -101,6 +108,7 @@ import { TONE } from '../_shared/tone.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this._mounted || oldVal === newVal) return;
       // appearance + orientation son reflected (van y vuelven vía attr)
       // y el render se hace 100% por CSS → no hace falta sincronizar nada.

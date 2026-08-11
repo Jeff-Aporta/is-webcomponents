@@ -40,8 +40,10 @@ test('is-fab: host + .fab heredan font-size (escala em)', async () => {
   );
   assert.match(
     css,
-    /--size:\s*[\d.]+em/,
-    '--size debe estar en em, no en px/rem fijos',
+    // Renombrada a `--is-fab-size`: `--size` era genérica y colisionaba por
+    // herencia con la del drawer y la de preview-component.
+    /--is-fab-size:\s*[\d.]+em/,
+    '--is-fab-size debe estar en em, no en px/rem fijos',
   );
   assert.doesNotMatch(
     css,
@@ -75,7 +77,6 @@ test('controles nativos en CSS con métricas em llevan font inherit', async () =
   /** Pares { css, controlClass } donde el control es button/input y dimensiona en em. */
   const criticos = [
     ['actions/fab.css', /\.fab\s*\{/],
-    ['feedback/tag.css', /\.remove\s*\{/],
     ['forms/pin-input.css', /\.cell\s*\{/],
     ['actions/button.css', /\.btn\s*\{/],
     ['actions/copy-button.css', /\.button\s*\{/],
@@ -88,6 +89,11 @@ test('controles nativos en CSS con métricas em llevan font inherit', async () =
   const toastJs = await read('feedback', 'toast-item.js');
   assert.match(toastJs, /<is-button[^>]*class="close"/s,
     'feedback/toast-item.js: el cierre debe ser <is-button>, no un control nativo');
+
+  // Igual el botón de quitar de is-tag.
+  const tagJs = await read('feedback', 'tag.js');
+  assert.match(tagJs, /<is-button[^>]*class="remove"/s,
+    'feedback/tag.js: el botón de quitar debe ser <is-button>');
 
   for (const [rel, bloque] of criticos) {
     const css = await read(...rel.split('/'));

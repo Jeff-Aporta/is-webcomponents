@@ -1,5 +1,5 @@
 :host {
-  --spacing: var(--is-space-l, 1rem);
+  --is-card-spacing: var(--is-space-l, 1rem);
   display: block;
   position: relative;
   overflow: hidden;
@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing);
+    gap: var(--is-card-spacing);
     & > ::slotted([slot="header"]),
     & > ::slotted([slot="footer"]) { flex: 1 1 auto; min-width: 0; }
     & > ::slotted([slot="header-actions"]),
@@ -82,20 +82,20 @@
       padding: 0;
       & ::slotted(*) { display: block; width: 100%; }
     }
-    .section-header { padding: var(--spacing) var(--spacing) 0; }
-    .section-body { padding: var(--spacing); }
-    .section-footer { padding: 0 var(--spacing) var(--spacing); }
-    .section-header:not(.is-empty) ~ .section-body { padding-top: calc(var(--spacing) * 0.65); }
-    .section-media:not(.is-empty) ~ .section-header:not(.is-empty) { padding-top: calc(var(--spacing) * 0.85); }
-    .section-media:not(.is-empty) ~ .section-body { padding-top: calc(var(--spacing) * 0.85); }
-    .section-body:has(~ .section-footer:not(.is-empty)) { padding-bottom: calc(var(--spacing) * 0.65); }
+    .section-header { padding: var(--is-card-spacing) var(--is-card-spacing) 0; }
+    .section-body { padding: var(--is-card-spacing); }
+    .section-footer { padding: 0 var(--is-card-spacing) var(--is-card-spacing); }
+    .section-header:not(.is-empty) ~ .section-body { padding-top: calc(var(--is-card-spacing) * 0.65); }
+    .section-media:not(.is-empty) ~ .section-header:not(.is-empty) { padding-top: calc(var(--is-card-spacing) * 0.85); }
+    .section-media:not(.is-empty) ~ .section-body { padding-top: calc(var(--is-card-spacing) * 0.85); }
+    .section-body:has(~ .section-footer:not(.is-empty)) { padding-bottom: calc(var(--is-card-spacing) * 0.65); }
   }
 
 :host([orientation="horizontal"]) {
     .layout {
       flex-direction: row;
-      padding: var(--spacing);
-      gap: var(--spacing);
+      padding: var(--is-card-spacing);
+      gap: var(--is-card-spacing);
       align-items: center;
     }
     .section-body { flex: 1 1 auto; min-width: 0; }

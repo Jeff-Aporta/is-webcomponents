@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { computePosition, PLACEMENTS } from '../_shared/position.js';
 import './dropdown-item.js';
 import '../layout/divider.js';
@@ -33,8 +34,16 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
   const OBSERVED = ['open', 'placement', 'distance', 'skidding'];
 
-  class IsDropdown extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+  const STYLE_ATTRS = {
+    'show-duration': '--is-dropdown-show-duration',
+    'hide-duration': '--is-dropdown-hide-duration',
+  };
+
+  class IsDropdown extends withStyleAttrs(HTMLElement) {
+    static styleAttrs = STYLE_ATTRS;
+
+    static get observedAttributes() { return [...OBSERVED, ...Object.keys(STYLE_ATTRS)]; }
 
     #dialog;
     #menu;
@@ -63,6 +72,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#bindTrigger();
       this.#syncCheckboxPad();
@@ -77,6 +87,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     attributeChangedCallback(name) {
+      super.attributeChangedCallback(name);
       if (!this.#mounted) return;
       if (name === 'open') {
         if (this.open) this.#doShow();

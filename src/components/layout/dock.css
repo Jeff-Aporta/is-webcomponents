@@ -33,7 +33,7 @@
   display: inline-flex;
 }
 .item {
-  --s: var(--scale, 1);
+  --is-dock-scale-unit: var(--scale, 1);
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -43,14 +43,14 @@
   text-decoration: none;
   color: inherit;
   transition: transform 120ms ease;
-  transform: scale(var(--s));
+  transform: scale(var(--is-dock-scale-unit));
   transform-origin: center bottom;
   cursor: pointer;
 }
 .item:focus-visible { outline: 2px solid var(--is-focus); outline-offset: 2px; }
 .item .ico {
-  width: calc(2.5rem * var(--s));
-  height: calc(2.5rem * var(--s));
+  width: calc(2.5rem * var(--is-dock-scale-unit));
+  height: calc(2.5rem * var(--is-dock-scale-unit));
   display: grid; place-items: center;
   border-radius: 14px;
   background: color-mix(in srgb, var(--is-bg-soft) 80%, transparent);

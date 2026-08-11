@@ -65,8 +65,17 @@ import { setStringAttr } from '../_shared/reflect.js';
   ];
 
   class IsCombobox extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-combobox-border-radius',
+    'border-color': { prop: '--is-combobox-border', onlyColorValues: true },
+    bg: { prop: '--is-combobox-bg', onlyColorValues: true },
+    'text-color': { prop: '--is-combobox-text', onlyColorValues: true },
+    'focus-color': { prop: '--is-combobox-focus', onlyColorValues: true },
+    };
+
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }
 
     #internals = null;
     #input;

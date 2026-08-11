@@ -3,8 +3,8 @@
   display: block;
   font: inherit;
   color: var(--is-text);
-  --grid-color: color-mix(in srgb, var(--is-text) 12%, transparent);
-  --meridian: color-mix(in srgb, var(--is-text) 18%, transparent);
+  --is-maps-grid-color: color-mix(in srgb, var(--is-text) 12%, transparent);
+  --is-maps-meridian-color: color-mix(in srgb, var(--is-text) 18%, transparent);
 }
 .root {
   position: relative;
@@ -51,8 +51,8 @@ svg.map {
       color-mix(in srgb, var(--is-accent) 6%, transparent) 0%,
       transparent 70%);
 }
-svg.map .grid { stroke: var(--grid-color); stroke-width: 0.5; stroke-dasharray: 2 3; }
-svg.map .meridian { stroke: var(--meridian); stroke-width: 0.5; }
+svg.map .grid { stroke: var(--is-maps-grid-color); stroke-width: 0.5; stroke-dasharray: 2 3; }
+svg.map .meridian { stroke: var(--is-maps-meridian-color); stroke-width: 0.5; }
 svg.map .tick { fill: var(--is-text-soft); font-size: 8px; font-family: ui-monospace, Menlo, monospace; }
 svg.map .vp-text { fill: var(--is-text-soft); font-size: 9px; font-family: ui-monospace, Menlo, monospace; }
 svg.map .marker {

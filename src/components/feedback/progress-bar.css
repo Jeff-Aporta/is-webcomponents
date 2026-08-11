@@ -1,7 +1,7 @@
 :host {
-  --track-height: 0.5em;
-  --track-color: var(--is-control-bg, #e9ecef);
-  --indicator-color: var(--is-color-brand-500, #339af0);
+  --is-progress-bar-track-height: 0.5em;
+  --is-progress-bar-track-color: var(--is-control-bg, #e9ecef);
+  --is-progress-bar-color: var(--is-color-brand, #339af0);
   display: block;
   width: 100%;
   font-family: var(--is-font-family, system-ui, sans-serif);
@@ -10,13 +10,13 @@
   .track {
     position: relative;
     width: 100%;
-    height: var(--track-height);
-    background: var(--track-color);
+    height: var(--is-progress-bar-track-height);
+    background: var(--is-progress-bar-track-color);
     border-radius: 999px;
     overflow: hidden;
     .indicator {
       height: 100%;
-      background: var(--indicator-color);
+      background: var(--is-progress-bar-color);
       border-radius: inherit;
       transition: width 200ms ease;
       min-width: 0;

@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
@@ -84,8 +85,15 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
   const VALID_PLACEMENT = ['top', 'bottom', 'start', 'end'];
   const VALID_ACTIVATION = ['auto', 'manual'];
 
-  class IsTabGroup extends HTMLElement {
-    static get observedAttributes() { return TG_OBSERVED; }
+  class IsTabGroup extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+      'track-color': { prop: '--is-tab-group-track-color', onlyColorValues: true },
+      'track-width': '--is-tab-group-track-width',
+      'indicator-color': { prop: '--is-tab-group-indicator-color', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...TG_OBSERVED, ...IsTabGroup.styleAttrNames]; }
     #mounted = false;
     #navSlot;
     #tabsWrap;
@@ -117,6 +125,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#upgradeProperties();
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'top');
@@ -133,6 +142,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'placement') {
         if (newVal && !VALID_PLACEMENT.includes(newVal)) this.setAttribute('placement', 'top');

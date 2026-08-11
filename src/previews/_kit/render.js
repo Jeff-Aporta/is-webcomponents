@@ -69,11 +69,17 @@ function renderDemoEquiv(block) {
   }
 
   if (block.equivHtml) {
-    const pre = document.createElement('pre');
-    pre.className = 'code demo-equiv__pre';
-    pre.dataset.lang = 'html';
-    pre.textContent = block.equivHtml.trim();
-    section.append(pre);
+    const ed = document.createElement('is-code');
+    ed.className = 'code demo-equiv__pre is-code-view';
+    ed.setAttribute('readonly', '');
+    ed.setAttribute('compact', '');
+    ed.setAttribute('wrap', '');
+    ed.setAttribute('line-numbers', 'false');
+    ed.setAttribute('lang', 'html');
+    ed.setAttribute('value', block.equivHtml.trim());
+    ed.dataset.cm = '1';
+    ed.dataset.cmSource = block.equivHtml.trim();
+    section.append(ed);
   }
 
   if (block.equivFlow) {
@@ -120,11 +126,20 @@ export function renderBlock(block) {
       return el;
     }
     case 'code': {
-      const pre = document.createElement('pre');
-      pre.className = 'code';
-      if (block.lang) pre.dataset.lang = block.lang;
-      pre.textContent = block.code;
-      return pre;
+      const ed = document.createElement('is-code');
+      ed.className = 'code is-code-view';
+      ed.setAttribute('readonly', '');
+      ed.setAttribute('compact', '');
+      ed.setAttribute('wrap', '');
+      ed.setAttribute('line-numbers', 'false');
+      if (block.lang) {
+        ed.setAttribute('lang', block.lang);
+        ed.dataset.lang = block.lang;
+      }
+      ed.setAttribute('value', block.code ?? '');
+      ed.dataset.cm = '1';
+      ed.dataset.cmSource = block.code ?? '';
+      return ed;
     }
     case 'html': {
       const wrap = document.createElement('div');

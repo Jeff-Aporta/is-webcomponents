@@ -114,7 +114,13 @@ import { ElementBase } from '../_shared/element-base.js';
   }
 
   class IsDateRangePicker extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    bg: { prop: '--is-daterange-bg', onlyColorValues: true },
+    'border-color': { prop: '--is-daterange-border', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'bg', 'border-color']; }
 
     #shortcuts;
     #presets;

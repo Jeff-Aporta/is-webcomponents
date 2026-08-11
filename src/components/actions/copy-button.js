@@ -1,4 +1,5 @@
 import './button.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { adoptCss } from '../_shared/adopt-css.js';
 import '../media/icon.js';
 import '../feedback/tooltip.js';
@@ -85,12 +86,18 @@ import { upgradeProperties } from '../_shared/upgrade-properties.js';
     'right', 'right-start', 'right-end',
   ];
 
-  class IsCopyButton extends HTMLElement {
+  class IsCopyButton extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'max-width': '--is-copy-button-max-width',
+    };
+
     static get observedAttributes() {
       return [
         'value', 'from', 'disabled',
         'copy-label', 'success-label', 'error-label',
-        'feedback-duration', 'tooltip', 'tooltip-placement'
+        'feedback-duration', 'tooltip', 'tooltip-placement',
+        ...IsCopyButton.styleAttrNames,
       ];
     }
 
@@ -130,6 +137,8 @@ import { upgradeProperties } from '../_shared/upgrade-properties.js';
     }
 
     connectedCallback() {
+
+      super.connectedCallback();
       this.#mounted = true;
       if (!this.hasAttribute('tooltip')) this.setAttribute('tooltip', 'full');
       if (!this.hasAttribute('tooltip-placement')) this.setAttribute('tooltip-placement', 'top');
@@ -147,6 +156,8 @@ import { upgradeProperties } from '../_shared/upgrade-properties.js';
     }
 
     attributeChangedCallback(name) {
+
+      super.attributeChangedCallback(name);
       if (!this.#mounted) return;
       if (name === 'disabled') this.#syncDisabled();
       if (name === 'tooltip-placement') this.#syncTipPlacement();

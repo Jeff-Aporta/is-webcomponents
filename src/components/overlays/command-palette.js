@@ -45,7 +45,14 @@ import { emit } from '../_shared/emit.js';
   const OBSERVED = ['hotkey', 'placeholder', 'max-results', 'empty-text'];
 
   class IsCommandPalette extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-popover-radius',
+    shadow: '--is-popover-shadow',
+    'bar-gap': '--is-surface-bar-gap',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'shadow', 'bar-gap']; }
     #commands = [];
     #results = [];
     #active = 0;

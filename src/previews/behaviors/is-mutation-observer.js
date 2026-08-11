@@ -18,12 +18,18 @@ export async function mount(ctx) {
   let childN = 0;
 
   const paintHtml = () => {
+    // `#moHtml` puede haber pasado de <pre> a <is-code> tras el primer paint.
+    const el = root.querySelector('#moHtml') || htmlPre;
     const src = prettyHtml(target.outerHTML);
-    htmlPre.textContent = src;
-    htmlPre.setAttribute('data-lang', 'html');
-    // repaint borra cm/cmSource — paint() solo reutilizaría cmSource vacío
-    // y dejaría el panel en blanco.
-    repaint(htmlPre);
+    if (el.localName === 'is-code') {
+      el.value = src;
+      el.setAttribute('data-lang', 'html');
+      el.lang = 'html';
+    } else {
+      el.textContent = src;
+      el.setAttribute('data-lang', 'html');
+    }
+    repaint(el);
     if (stamp) stamp.textContent = new Date().toLocaleTimeString();
   };
 

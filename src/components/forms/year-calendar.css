@@ -41,11 +41,11 @@
   }
 
   .year[data-current] {
-    box-shadow: inset 0 0 0 1px var(--is-color-brand-500, #e03131);
+    box-shadow: inset 0 0 0 1px var(--is-color-brand, #e03131);
   }
 
   .year[data-selected] {
-    background: var(--is-color-brand-600, #c92a2a);
+    background: var(--is-color-brand-strong, #c92a2a);
     color: var(--is-on-brand, #fff);
   }
 

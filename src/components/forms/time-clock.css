@@ -150,7 +150,7 @@
     bottom: 50%;
     width: 2px;
     height: var(--is-hand-length, 40%);
-    background: var(--is-color-brand-600, #c92a2a);
+    background: var(--is-color-brand-strong, #c92a2a);
     transform-origin: bottom center;
     transform: translateX(-50%) rotate(var(--a, 0deg));
     pointer-events: none;
@@ -172,7 +172,7 @@
     height: 2em;
     margin-left: -1em;
     border-radius: 50%;
-    background: var(--is-color-brand-600, #c92a2a);
+    background: var(--is-color-brand-strong, #c92a2a);
   }
 
   .center {
@@ -183,7 +183,7 @@
     height: 0.4em;
     margin: -0.2em 0 0 -0.2em;
     border-radius: 50%;
-    background: var(--is-color-brand-600, #c92a2a);
+    background: var(--is-color-brand-strong, #c92a2a);
   }
 }
 

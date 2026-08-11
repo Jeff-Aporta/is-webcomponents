@@ -48,7 +48,13 @@ import { ElementBase } from '../_shared/element-base.js';
   const VIEWS = ['hours', 'minutes', 'seconds'];
 
   class IsTimeClock extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    size: '--is-clock-size',
+    'face-color': { prop: '--is-clock-face', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'size', 'face-color']; }
 
     #base;
     #clock;

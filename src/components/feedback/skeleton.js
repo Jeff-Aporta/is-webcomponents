@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { defineElement } from '../_shared/define.js';
 
 /**
@@ -22,8 +23,14 @@ import { defineElement } from '../_shared/define.js';
   const OBSERVED = ['effect'];
   const VALID_EFFECT = ['none', 'sheen', 'pulse'];
 
-  class IsSkeleton extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsSkeleton extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    color: { prop: '--is-skeleton-color', onlyColorValues: true },
+    'sheen-color': { prop: '--is-skeleton-sheen', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'color', 'sheen-color']; }
 
     constructor() {
       super();
@@ -33,11 +40,13 @@ import { defineElement } from '../_shared/define.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       if (!this.hasAttribute('effect')) this.setAttribute('effect', 'sheen');
       this.setAttribute('aria-hidden', 'true');
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal) return;
       if (name === 'effect' && newVal && !VALID_EFFECT.includes(newVal)) {
         this.setAttribute('effect', 'sheen');

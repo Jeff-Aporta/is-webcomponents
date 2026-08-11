@@ -46,7 +46,13 @@ import { ElementBase } from '../_shared/element-base.js';
   const OBSERVED = ['open', 'message', 'scroll-lock'];
 
   class IsLoadingOverlay extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'backdrop-color': { prop: '--is-loading-backdrop', onlyColorValues: true },
+    'indicator-color': { prop: '--is-loading-indicator', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'backdrop-color', 'indicator-color']; }
 
     #backdrop;
     #messageEl;

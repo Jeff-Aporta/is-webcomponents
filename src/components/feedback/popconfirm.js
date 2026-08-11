@@ -56,7 +56,16 @@ import '../actions/button.js';
   ];
 
   class IsPopconfirm extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    bg: { prop: '--is-popconfirm-bg', onlyColorValues: true },
+    'text-color': { prop: '--is-popconfirm-text', onlyColorValues: true },
+    'border-color': { prop: '--is-popconfirm-border', onlyColorValues: true },
+    accent: { prop: '--is-popconfirm-accent', onlyColorValues: true },
+    'danger-color': { prop: '--is-popconfirm-danger', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent', 'danger-color']; }
 
     #pop;
     #trigger;

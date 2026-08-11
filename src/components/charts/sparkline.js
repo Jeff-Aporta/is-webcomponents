@@ -1,13 +1,21 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { pathLine, pathArea, roundedBarRect } from '../_shared/svg-chart-engine.js';
 import { defineElement } from '../_shared/define.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 (() => {
-  class IsSparkline extends HTMLElement {
+  class IsSparkline extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'line-color': { prop: '--line-color', onlyColorValues: true },
+    'line-width': '--line-width',
+    };
+
     static get observedAttributes() {
-      return ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend'];
+      return ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend',
+        ...IsSparkline.styleAttrNames];
     }
 
     #svg;
@@ -24,6 +32,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#parseValuesAttr();
       this.#ro = new ResizeObserver(() => this.#render());
@@ -37,6 +46,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
       if (name === 'values' || name === 'data') this.#parseValuesAttr();
       this.#render();

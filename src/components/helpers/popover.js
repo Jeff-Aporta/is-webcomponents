@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import './floating.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -24,7 +25,7 @@ import { emit } from '../_shared/emit.js';
  *         is-reposition { placement, x, y }, is-hover-bridge { hovering }
  * Parts: ::part(body) ::part(dialog) ::part(popup) ::part(arrow)
  *        ::part(hover-bridge) ::part(anchor)
- * CSS: --max-width --arrow-size --show-duration --hide-duration
+ * CSS: --is-popover-max-width --is-popover-arrow-size --is-popover-show-duration --is-popover-hide-duration
  *        --auto-size-available-width --auto-size-available-height
  * data-popover="close" en hijos cierra el popover.
  */
@@ -62,8 +63,16 @@ import { emit } from '../_shared/emit.js';
 
   const OBSERVED = ['for', 'open', ...POPUP_DELEGATED];
 
-  class IsPopover extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsPopover extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'max-width': '--is-popover-max-width',
+    'arrow-size': '--is-popover-arrow-size',
+    'show-duration': '--is-popover-show-duration',
+    'hide-duration': '--is-popover-hide-duration',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration']; }
 
     #popup;
     #dialog;
@@ -85,6 +94,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#mounted = true;
       this.#syncPopup();
       this.#bindAnchor();
@@ -100,6 +110,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     attributeChangedCallback(name) {
+      super.attributeChangedCallback(name);
       if (!this.#mounted) return;
       if (name === 'for') this.#bindAnchor();
       else if (name === 'open') {

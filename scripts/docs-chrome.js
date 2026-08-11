@@ -1,52 +1,57 @@
 /**
  * docs-chrome.js — piezas comunes de TODAS las páginas de componente.
  *
- * Botón de copiar (<is-copy-button>) en cada `pre.code` de la página.
+ * Botón de copiar (<is-copy-button>) en cada snippet de código de la página
+ * (`pre.code` legacy o `<is-code class="code|is-code-view">`).
  * El bloque "Consumo por CDN" es responsabilidad EXCLUSIVA de
  * <is-cdn-snippet>, que monta cdn-panel.js — aquí no se duplica ningún
  * callout CDN.
  *
- * Opt-out: data-no-copy en un <pre>.
- *
- * Es un módulo ES: el componente que necesita se importa de forma estática,
- * sin inyectar `<script>` ni buscarse a sí mismo en `document.scripts`.
+ * Opt-out: data-no-copy.
  */
 import '../src/components/actions/copy-button.js';
 
+const SNIPPET_SEL = 'pre.code, is-code.code, is-code.is-code-view';
+
+const snippetText = (el) => {
+  if (el.localName === 'is-code') {
+    return el.dataset.cmSource ?? el.value ?? '';
+  }
+  return el.dataset.cmSource ?? el.textContent ?? '';
+};
+
 /** Barra con botón de copiar sobre cada snippet. */
-const addCopy = (pre) => {
-  if (pre.dataset.copyReady || pre.hasAttribute('data-no-copy')) return;
-  // El panel del demo trae su propia barra de copiar.
-  if (pre.closest('.demo-code-pop')) return;
-  // Visor de fuentes: copy en el header del modal.
-  if (pre.classList.contains('vs-pre') || pre.closest('.is-view-sources, .vs-body')) return;
-  pre.dataset.copyReady = '1';
+const addCopy = (el) => {
+  if (el.dataset.copyReady || el.hasAttribute('data-no-copy')) return;
+  if (el.closest('.demo-code-pop')) return;
+  if (el.classList.contains('vs-pre') || el.closest('.is-view-sources, .vs-body')) return;
+  el.dataset.copyReady = '1';
 
   const wrap = document.createElement('div');
   wrap.className = 'code-block';
-  pre.replaceWith(wrap);
+  el.replaceWith(wrap);
 
   const btn = document.createElement('is-copy-button');
   btn.className = 'code-block__copy';
-  // `data-cm-source` es el texto ya dedentado por el highlighter. Sin él se
-  // copiaría la indentación heredada del markup del preview.
-  btn.setAttribute('value', pre.dataset.cmSource ?? pre.textContent);
+  btn.setAttribute('value', snippetText(el));
   btn.setAttribute('copy-label', 'Copiar');
   btn.setAttribute('success-label', 'Copiado');
   btn.setAttribute('tooltip-placement', 'left');
 
-  wrap.append(pre, btn);
+  // Mantener el valor de copia al día si el editor cambia.
+  if (el.localName === 'is-code') {
+    el.addEventListener('is-change', () => {
+      btn.setAttribute('value', el.value ?? '');
+    });
+  }
+
+  wrap.append(el, btn);
 };
 
 const boot = () => {
-  // El bloque CDN lo pinta <is-cdn-snippet> (auto-inyectado por
-  // cdn-panel.js). Aquí solo queda el botón de copiar de los <pre>.
-  document.querySelectorAll('pre.code').forEach(addCopy);
+  document.querySelectorAll(SNIPPET_SEL).forEach(addCopy);
 };
 
-// Los `<pre>` llegan con el preview, no con el HTML de la página: cada vez que
-// `<is-preview-component>` monta uno hay que barrer de nuevo. `addCopy()` es
-// idempotente (`data-copy-ready`), así que repetir el barrido no duplica nada.
 document.addEventListener('is-preview-ready', boot);
 
 if (document.readyState === 'loading') {

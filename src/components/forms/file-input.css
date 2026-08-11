@@ -42,21 +42,21 @@
   box-sizing: border-box;
 
   &:hover {
-    border-color: color-mix(in srgb, var(--is-color-brand-500, #339af0) 45%, var(--is-control-border, #dee2e6));
-    background: color-mix(in srgb, var(--is-color-brand-500, #339af0) 30%, transparent);
+    border-color: color-mix(in srgb, var(--is-color-brand, #339af0) 45%, var(--is-control-border, #dee2e6));
+    background: color-mix(in srgb, var(--is-color-brand, #339af0) 30%, transparent);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--is-focus, var(--is-color-brand-500, #339af0));
+    outline: 2px solid var(--is-focus, var(--is-color-brand, #339af0));
     outline-offset: 2px;
   }
 }
 
 :host([data-state-dragging]) .dropzone,
 :host(:state(dragging)) .dropzone {
-  border-color: var(--is-color-brand-500, #339af0);
+  border-color: var(--is-color-brand, #339af0);
   border-style: solid;
-  background: color-mix(in srgb, var(--is-color-brand-500, #339af0) 30%, transparent);
+  background: color-mix(in srgb, var(--is-color-brand, #339af0) 30%, transparent);
 }
 
 :host([disabled]) .dropzone,
@@ -80,7 +80,7 @@
   & is-icon,
   & ::slotted(is-icon) {
     font-size: 1.75em;
-    color: var(--is-color-brand-500, #339af0);
+    color: var(--is-color-brand, #339af0);
   }
 }
 
@@ -139,5 +139,5 @@
   opacity: 0.65;
   color: inherit;
 
-  &:hover { opacity: 1; color: var(--is-color-danger-500, #fa5252); }
+  &:hover { opacity: 1; color: var(--is-color-danger, #fa5252); }
 }

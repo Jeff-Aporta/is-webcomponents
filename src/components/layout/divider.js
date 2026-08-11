@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { defineElement } from '../_shared/define.js';
 
 /**
@@ -24,8 +25,15 @@ import { defineElement } from '../_shared/define.js';
     'brand', 'accent', 'success', 'warning', 'danger',
   ];
 
-  class IsDivider extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsDivider extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    color: { prop: '--is-divider-color', onlyColorValues: true },
+    spacing: '--is-divider-spacing',
+    width: '--is-divider-width',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'color', 'spacing', 'width']; }
 
     constructor() {
       super();
@@ -35,6 +43,7 @@ import { defineElement } from '../_shared/define.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
       if (!this.hasAttribute('opacity')) this.setAttribute('opacity', '20');
       if (!this.hasAttribute('color')) this.setAttribute('color', 'text');
@@ -44,6 +53,7 @@ import { defineElement } from '../_shared/define.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal) return;
       if (name === 'orientation') {
         if (newVal && !VALID_ORIENTATION.includes(newVal)) this.setAttribute('orientation', 'horizontal');

@@ -5,8 +5,8 @@
   --is-input-bg: var(--is-control-bg, #f1f3f5);
   --is-input-text: var(--is-control-text, #212529);
   --is-input-focus: var(--is-focus, var(--is-accent, #339af0));
-  --is-input-danger: var(--is-color-danger-500, #fa5252);
-  --is-input-danger-text: var(--is-danger-text, var(--is-color-danger-700, #b02525));
+  --is-input-danger: var(--is-color-danger, #fa5252);
+  --is-input-danger-text: var(--is-danger-text, var(--is-color-danger-stronger, #b02525));
   --_border: var(--is-input-border);
   --_focus: var(--is-input-focus);
   display: block;

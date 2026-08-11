@@ -39,8 +39,8 @@ is-preview-component > .toc-toggle {
 is-preview-component > .toc-toggle[hidden] { display: none; }
 
 is-preview-component > is-drawer.toc-drawer {
-  --size: min(320px, 86vw);
-  --spacing: 0.9rem;
+  --is-preview-size: min(320px, 86vw);
+  --is-preview-spacing: 0.9rem;
 }
 
 /* El aside viaja tal cual al drawer: dentro ya no es una columna con borde

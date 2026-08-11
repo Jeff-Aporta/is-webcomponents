@@ -12,6 +12,7 @@
  *   import ButtonGroupPreview from '../previews/actions/is-button-group.preview.js';
  *   el.preview = new ButtonGroupPreview();
  */
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { renderDefinition } from '../../previews/_kit/render.js';
 import './drawer.js';
 import '../actions/button.js';
@@ -35,7 +36,13 @@ TEMPLATE.innerHTML = /* html */ `
              label="Índice"></is-drawer>
 `;
 
-class IsPreviewComponent extends HTMLElement {
+class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    size: '--is-preview-size',
+    spacing: '--is-preview-spacing',
+    };
+
   /** @type {import('../../previews/_kit/types.d.ts').ISComponentPreviewLike | null} */
   #preview = null;
   /** @type {import('../../previews/_kit/types.d.ts').PreviewMountContext | null} */
@@ -48,7 +55,7 @@ class IsPreviewComponent extends HTMLElement {
   #onCompactChange = () => this.#syncLayout();
 
   static get observedAttributes() {
-    return ['storage-key'];
+    return ['storage-key', ...IsPreviewComponent.styleAttrNames];
   }
 
   constructor() {
@@ -57,6 +64,8 @@ class IsPreviewComponent extends HTMLElement {
   }
 
   connectedCallback() {
+
+    super.connectedCallback();
     if (!this.querySelector(':scope > is-split-panel')) {
       this.append(TEMPLATE.content.cloneNode(true));
     }
@@ -72,6 +81,7 @@ class IsPreviewComponent extends HTMLElement {
    * al `<is-main>` es todo lo que hace falta.
    */
   attributeChangedCallback(name, oldVal, newVal) {
+    super.attributeChangedCallback(name, oldVal, newVal);
     if (name !== 'storage-key' || oldVal === newVal || !this.#mounted) return;
     const main = this.#main();
     const def = this.#preview?.definition;

@@ -10,6 +10,7 @@
 | --- | --- | --- |
 | `actions` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) | Acciones, selección de comandos y menús interactivos. |
 | `charts` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/LLM.md) | Series, distribuciones, relaciones o jerarquías de datos. |
+| `code` | [code/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/code/LLM.md) | Edición/resaltado de código (`<is-code>`). Chrome galería: fuentes + pesos CDN. Roadmap: `<is-latex>` / `<is-latex-doc>`. |
 | `data` | [data/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data/LLM.md) | Presentación, comparación, movimiento u organización de datos estructurados. |
 | `data-viz` | [data-viz/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/data-viz/LLM.md) | Mapas y matrices de intensidad. La mayoría de gráficas vive en `charts/`, no aquí — seguir el `script` del manifest, no el nombre de la categoría. |
 | `diagrams` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. |
@@ -37,6 +38,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `actions/fab.md` | `<is-fab>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/context-menu.md` | `<is-context-menu>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/speed-dial.md` | `<is-speed-dial>`, `<is-speed-dial-action>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
+| `code/code.md` | `<is-code>` | [code/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/code/LLM.md) |
 | `charts/chart.md` | `<is-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/LLM.md) |
 | `charts/bar-chart.md` | `<is-bar-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/LLM.md) |
 | `charts/line-chart.md` | `<is-line-chart>` | [charts/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/charts/LLM.md) |
@@ -300,7 +302,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 
 45. No dar por bueno el diagnostico obvio. Aqui el sintoma era "el texto claro no se lee" y la reaccion natural fue bajar el tope de luminosidad del degradado dos veces. El `backgroundImage` computado ya decia `oklch(0.42 …)` — oscuro — mientras la pantalla mostraba rosa palido: esa contradiccion entre el valor computado y el pixel era la pista, y el culpable era otra propiedad (la sombra). Cuando el estilo computado dice una cosa y la captura otra, el problema es una capa distinta, no ese valor.
 40. Iconos con paleta propia (banderas, logos, emoji) NO deben normalizarse a `currentColor`: los paths sin `fill` heredaban el color del host y el icono salia a medio pintar. Se detecta la paleta y se respeta el SVG.
-33. `highlight-pre.js` solo recorre el documento: los `<pre>` dentro de un shadow root no se colorean ni heredan el CSS del tema de CodeMirror. Hay que llamar al pintor a mano y clonar las hojas dentro del shadow.
+33. `highlight-pre.js` / `paint()` montan `<is-code readonly compact>` (ya no `runMode` sobre `<pre>`). En shadow DOM hay que llamar a `paint` a mano (p. ej. `<is-cdn-snippet>`); el CSS del editor vive en su Shadow, no hace falta clonar hojas CM al host.
 26. Los bundles POR COMPONENTE inlineaban los componentes que importaban (21 de ellos duplicaban `icon.js`). El componente inlineado heredaba el `import.meta.url` del anfitrión, así que `adoptCss` le cargaba el CSS equivocado: `is-icon` acababa con `actions/button.min.css`, su host dejaba de ser cuadrado (15×23.3) y el icono se veía descentrado en TODOS los triggers. El build marca los imports entre componentes como externos y `tests/cdn-folders.test.mjs` verifica cada uno.
 
 46. El visor a pantalla completa es OPT-IN via `open-on-click`. Antes era opt-out (`without-viewer`), asi que 11 componentes secuestraban el clic del usuario sin que nadie lo pidiera. Un componente por defecto NO abre nada. Si no hay `open-on-click` tampoco se emite `is-open-viewer` (prometeria una apertura que no ocurre) ni se pinta `cursor: zoom-in` (insinua un clic muerto). Lo vigila `tests/viewer-opt-in.test.mjs`.

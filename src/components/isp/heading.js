@@ -14,10 +14,10 @@ import {
  *   level      1 | 2 | 3 | 4 | 5 | 6                       (default 1)
  *   color      brand | neutral | info | success | warning | danger
  *              | current | <color CSS>                     (default: acento)
- *   mix        % → `--h-mix`; ausente = default del nivel
+ *   mix        % → `--is-heading-mix`; ausente = default del nivel
  *   mix-with   text | transparent | white | black | current | <color CSS>
  *              (default: texto del tema)
- *   size       string CSS → `--h-size`; ausente = default del nivel
+ *   size       string CSS → `--is-heading-size`; ausente = default del nivel
  *
  * `current` hereda el color tipográfico del contexto (`currentColor`).
  * Cualquier otro string no semántico se usa como color CSS tal cual.
@@ -28,6 +28,13 @@ import {
   const DEFAULT_MIX = { 1: '15%', 2: '30%', 3: '45%', 4: '65%', 5: '80%', 6: '90%' };
 
   class IsHeading extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    // `color` y `mix` los resuelve #syncVars() vía syncIspColor: aquí solo
+    // se expone el destino de la mezcla, que no tenía forma de tocarse.
+    'mix-with': { prop: '--is-heading-mix-with', onlyColorValues: true },
+    };
+
     static get observedAttributes() {
       return ['level', 'color', 'mix', 'mix-with', 'size'];
     }
@@ -60,20 +67,20 @@ import {
 
     #syncVars() {
       syncIspColor(this, {
-        colorVar: '--h-clr',
-        mixVar: '--h-mix',
-        mixWithVar: '--h-mix-with',
+        colorVar: '--is-heading-color',
+        mixVar: '--is-heading-mix',
+        mixWithVar: '--is-heading-mix-with',
       });
 
       // mix: si el attr está ausente, quitar override para que gane el default del nivel.
       const mix = normalizeMix(this.getAttribute('mix'));
-      if (!mix) this.style.removeProperty('--h-mix');
+      if (!mix) this.style.removeProperty('--is-heading-mix');
 
       const size = this.getAttribute('size');
       if (size != null && String(size).trim() !== '') {
-        this.style.setProperty('--h-size', String(size).trim());
+        this.style.setProperty('--is-heading-size', String(size).trim());
       } else {
-        this.style.removeProperty('--h-size');
+        this.style.removeProperty('--is-heading-size');
       }
     }
 

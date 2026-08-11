@@ -26,7 +26,7 @@ import { defineElement } from '../_shared/define.js';
   const TAG = 'is-main';
   const DEFAULT_TTL = 3_600_000;
   const OBSERVED = ['remember-scroll', 'storage-key', 'scroll-ttl'];
-  const RESTORE_WINDOW = 2_500;
+  const RESTORE_WINDOW = 4_500;
   const RESTORE_STEP = 60;
   const USER_INTENT = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
 

@@ -46,7 +46,7 @@
   }
 
   .base[data-invalid] {
-    border-color: var(--is-color-danger-500, #e03131);
+    border-color: var(--is-color-danger, #e03131);
   }
 
   .base[data-disabled] {

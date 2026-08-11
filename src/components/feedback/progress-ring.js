@@ -31,7 +31,15 @@ import { setStringAttr } from '../_shared/reflect.js';
   const CIRC = 2 * Math.PI * 15.9155;
 
   class IsProgressRing extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'track-width': '--is-progress-ring-track-width',
+    width: '--is-progress-ring-width',
+    'track-color': { prop: '--is-progress-ring-track-color', onlyColorValues: true },
+    color: { prop: '--is-progress-ring-color', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'track-width', 'width', 'track-color', 'color']; }
 
     #wrap;
     #indicator;

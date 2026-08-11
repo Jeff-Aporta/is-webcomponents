@@ -42,7 +42,12 @@ import { ElementBase } from '../_shared/element-base.js';
   const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'color', 'half', 'format', 'show-value'];
 
   class IsGauge extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'track-color': { prop: '--is-gauge-track-color', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'track-color']; }
     #svg;
     #circle;
     #track;

@@ -3,11 +3,11 @@
 /* <is-dialog> — modal accesible. */
 
 :host {
-  --width: 500px;
-  --spacing: var(--is-space-l, 1rem);
-  --backdrop-color: rgba(0, 0, 0, 0.55);
-  --show-duration: 200ms;
-  --hide-duration: 160ms;
+  --is-dialog-width: 500px;
+  --is-dialog-spacing: var(--is-space-l, 1rem);
+  --is-dialog-backdrop-color: rgba(0, 0, 0, 0.55);
+  --is-dialog-show-duration: 200ms;
+  --is-dialog-hide-duration: 160ms;
 
   --_radius: calc(var(--is-radius, 0.75em));
   --_shadow: 0 24px 56px -16px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.12);
@@ -22,7 +22,7 @@
      translate(-50%,-50%) en CSS quedaría pisado. */
   display: grid;
   place-items: center;
-  padding: var(--spacing);
+  padding: var(--is-dialog-spacing);
   box-sizing: border-box;
 }
 
@@ -39,14 +39,14 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background: var(--backdrop-color);
+  background: var(--is-dialog-backdrop-color);
   opacity: 0;
   pointer-events: auto;
 }
 
 .dialog {
   position: relative;
-  width: min(var(--width), 100%);
+  width: min(var(--is-dialog-width), 100%);
   max-height: 100%;
   background: var(--is-bg, #fff);
   color: var(--is-text, inherit);
@@ -80,4 +80,4 @@
 .close-btn:hover { opacity: 1; }
 .close-btn is-icon { font-size: 1.25em; color: inherit; }
 
-.body.is-only { padding: var(--spacing); }
+.body.is-only { padding: var(--is-dialog-spacing); }

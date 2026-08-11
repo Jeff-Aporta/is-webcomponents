@@ -86,7 +86,12 @@ import { ElementBase } from '../_shared/element-base.js';
   ];
 
   class IsConfirmDelete extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    accent: { prop: '--is-confirm-delete-accent', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'accent']; }
 
     #dlg;
     #headingText;

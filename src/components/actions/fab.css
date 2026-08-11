@@ -2,11 +2,11 @@
   display: block;
   position: fixed;
   z-index: 100;
-  /* Escala: --size en em sobre el font-size del host. Sin inherit el
+  /* Escala: --is-fab-size en em sobre el font-size del host. Sin inherit el
      <button> interno usa el font UA y los tres demos 0.75/1/1.25em
      salen del mismo tamaño (error ago/2026). */
   font-size: inherit;
-  --size: 3.5em;
+  --is-fab-size: 3.5em;
 }
 
 :host([position="bottom-end"]) { bottom: 1.5rem; right: 1.5rem; }
@@ -19,7 +19,7 @@
 }
 
 /* El color, el foco y la conversión a <a> los pone <is-button>. Aquí solo
-   queda la geometría del fab: círculo del tamaño --size, sombra flotante y
+   queda la geometría del fab: círculo del tamaño --is-fab-size, sombra flotante y
    pulso. Se ataca por ::part(button) desde `.fab` (clase + pseudo-elemento)
    para ganar en especificidad a las reglas internas del botón. */
 .fab {
@@ -27,8 +27,8 @@
   font: inherit;
 
   &::part(button) {
-    width: var(--size);
-    height: var(--size);
+    width: var(--is-fab-size);
+    height: var(--is-fab-size);
     min-width: 0;
     padding: 0;
     gap: 0.5em;
@@ -37,8 +37,8 @@
     font-weight: 500;
     line-height: 1;
     overflow: hidden;
-    --fab-shadow: 0 4px 8px rgb(0 0 0 / 0.18), 0 8px 24px rgb(0 0 0 / 0.12);
-    box-shadow: var(--fab-shadow);
+    --is-fab-shadow: 0 4px 8px rgb(0 0 0 / 0.18), 0 8px 24px rgb(0 0 0 / 0.12);
+    box-shadow: var(--is-fab-shadow);
     transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
   }
 
@@ -63,7 +63,7 @@
   &.extended {
     &::part(button) {
       width: auto;
-      border-radius: calc(var(--size) / 2);
+      border-radius: calc(var(--is-fab-size) / 2);
       padding: 0 1.25em;
     }
 
@@ -87,15 +87,15 @@
 
 @keyframes fab-pulse {
   0% {
-    box-shadow: var(--fab-shadow),
+    box-shadow: var(--is-fab-shadow),
                 0 0 0 0 color-mix(in srgb, var(--is-brand, dodgerblue) 55%, transparent);
   }
   70% {
-    box-shadow: var(--fab-shadow),
+    box-shadow: var(--is-fab-shadow),
                 0 0 0 14px color-mix(in srgb, var(--is-brand, dodgerblue) 0%, transparent);
   }
   100% {
-    box-shadow: var(--fab-shadow),
+    box-shadow: var(--is-fab-shadow),
                 0 0 0 0 color-mix(in srgb, var(--is-brand, dodgerblue) 0%, transparent);
   }
 }

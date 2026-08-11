@@ -52,8 +52,13 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
   class IsRadioGroup extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    accent: { prop: '--is-radio-accent', onlyColorValues: true },
+    };
+
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, 'accent']; }
 
     #internals = null;
     #base;

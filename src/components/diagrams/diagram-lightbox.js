@@ -20,9 +20,10 @@ import { emit } from '../_shared/emit.js';
  * hay otro componente con la misma forma, se hace un wrapper igual sin
  * tocar el lightbox genérico.
  *
- * Atributos: kind (default "sequence"), open
+ * Atributos: kind (default "sequence"), animation (passthrough al diagrama),
+ *             open
  *             + todos los de <is-lightbox>
- * Propiedades: payload, kind, open
+ * Propiedades: payload, kind, animation, open
  *              + todas las de <is-lightbox>
  * Eventos: is-close, is-share, is-reposition
  *          + is-turtle-state { playing, idx, total, replay }
@@ -66,7 +67,7 @@ function buildViewerUrl(kind, payload) {
 
 class IsDiagramLightbox extends IsLightbox {
   static get observedAttributes() {
-    return [...super.observedAttributes, 'kind'];
+    return [...super.observedAttributes, 'kind', 'animation'];
   }
 
   #payload = null;
@@ -104,12 +105,18 @@ class IsDiagramLightbox extends IsLightbox {
   attributeChangedCallback(name, oldVal, newVal) {
     super.attributeChangedCallback?.(name, oldVal, newVal);
     if (oldVal === newVal) return;
-    if (name === 'kind') this.#mountDiagram();
+    if (name === 'kind' || name === 'animation') this.#mountDiagram();
     if (name === 'open' && this.open) this.#mountDiagram();
   }
 
   get kind() { return this.getAttribute('kind') || 'sequence'; }
   set kind(v) { this.setAttribute('kind', v); }
+
+  get animation() { return this.getAttribute('animation') || ''; }
+  set animation(v) {
+    if (v) this.setAttribute('animation', String(v));
+    else this.removeAttribute('animation');
+  }
 
   get payload() { return this.#payload; }
   set payload(v) {
@@ -237,6 +244,10 @@ class IsDiagramLightbox extends IsLightbox {
     }
     const el = document.createElement(tag);
     el.setAttribute('color', 'viewer');
+    // Propagar efectos opt-in (animation) para que la copia del visor
+    // conserve el dashed flow animado que pidió la fuente.
+    const anim = this.getAttribute('animation');
+    if (anim) el.setAttribute('animation', anim);
     el.payload = this.#basePayload;
     el.hiddenGroups = this.#hiddenGroups;
     el.addEventListener('is-turtle-state', (e) => this.#onTurtleState(e.detail));

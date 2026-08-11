@@ -1,4 +1,5 @@
 import { adoptCss } from '../_shared/adopt-css.js';
+import { withStyleAttrs } from '../_shared/style-attrs.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
 
@@ -28,8 +29,13 @@ import { emit } from '../_shared/emit.js';
 (() => {
   const OBSERVED = ['position', 'max-scale', 'range'];
 
-  class IsDock extends HTMLElement {
-    static get observedAttributes() { return OBSERVED; }
+  class IsDock extends withStyleAttrs(HTMLElement) {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    'scale-unit': '--is-dock-scale-unit',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'scale-unit']; }
     #raf = 0;
 
     constructor() {
@@ -47,6 +53,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     connectedCallback() {
+      super.connectedCallback();
       this.#syncPosition();
     }
 
@@ -55,6 +62,7 @@ import { emit } from '../_shared/emit.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (oldVal === newVal) return;
       if (name === 'position') this.#syncPosition();
     }

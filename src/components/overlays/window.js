@@ -44,7 +44,14 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     + ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
   class IsWindow extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    shadow: '--is-popover-shadow',
+    'bar-gap': '--is-surface-bar-gap',
+    'bar-padding': '--is-surface-bar-padding',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding']; }
     #onWinMove;
     #onWinUp;
     #state = 'normal';

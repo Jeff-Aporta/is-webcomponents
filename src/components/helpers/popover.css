@@ -1,9 +1,9 @@
 :host {
   display: contents;
-  --max-width: 25rem;
-  --arrow-size: 8px;
-  --show-duration: 120ms;
-  --hide-duration: 100ms;
+  --is-popover-max-width: 25rem;
+  --is-popover-arrow-size: 8px;
+  --is-popover-show-duration: 120ms;
+  --is-popover-hide-duration: 100ms;
 }
 
 :host([hidden]) {
@@ -24,7 +24,7 @@
 }
 
 .body {
-  max-width: var(--max-width);
+  max-width: var(--is-popover-max-width);
   padding: 0.85em 1em;
   border-radius: var(--is-radius, 0.5em);
   background: var(--is-bg-elev, #1c2128);

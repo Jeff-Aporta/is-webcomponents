@@ -1,7 +1,7 @@
 :host {
   /* Base soft; sheen = brillo fantasma (bajo contraste), no metal */
-  --color: var(--is-control-bg, #21262d);
-  --sheen-color: color-mix(in srgb, var(--is-text, #fff) 11%, transparent);
+  --is-skeleton-color: var(--is-control-bg, #21262d);
+  --is-skeleton-sheen: color-mix(in srgb, var(--is-text, #fff) 11%, transparent);
   display: block;
   position: relative;
   height: 1em;
@@ -18,7 +18,7 @@
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  background: var(--color);
+  background: var(--is-skeleton-color);
 }
 
 /* sheen (default): barrido ghost sobre el color base */
@@ -28,11 +28,11 @@
     105deg,
     transparent 0%,
     transparent 42%,
-    var(--sheen-color) 50%,
+    var(--is-skeleton-sheen) 50%,
     transparent 58%,
     transparent 100%
   );
-  background-color: var(--color);
+  background-color: var(--is-skeleton-color);
   background-size: 220% 100%;
   background-repeat: no-repeat;
   animation: is-skeleton-sheen 1.85s ease-in-out infinite;
@@ -44,12 +44,12 @@
    rápido. Con tres keyframes el ease-in-out se aplicaba por tramo y el pulso
    se notaba a tirones. */
 :host([effect="pulse"]) .indicator {
-  background: var(--color);
+  background: var(--is-skeleton-color);
   animation: is-skeleton-pulse 0.9s ease-in-out infinite alternate;
 }
 
 :host([effect="none"]) .indicator {
-  background: var(--color);
+  background: var(--is-skeleton-color);
   background-image: none;
   animation: none;
 }

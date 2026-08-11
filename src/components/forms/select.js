@@ -88,8 +88,18 @@ import { setStringAttr } from '../_shared/reflect.js';
   let uidSeq = 0;
 
   class IsSelect extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    radius: '--is-select-border-radius',
+    'border-color': { prop: '--is-select-border', onlyColorValues: true },
+    bg: { prop: '--is-select-bg', onlyColorValues: true },
+    'text-color': { prop: '--is-select-text', onlyColorValues: true },
+    'focus-color': { prop: '--is-select-focus', onlyColorValues: true },
+    'danger-color': { prop: '--is-select-danger', onlyColorValues: true },
+    };
+
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
 
     #internals = null;
     #base;

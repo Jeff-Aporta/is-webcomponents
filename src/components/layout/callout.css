@@ -1,20 +1,20 @@
 /* <is-callout> — superficies con borde y fondo suaves. */
 
 :host {
-  --callout-bg: var(--is-bg-elev, #f1f3f5);
-  --callout-border: var(--is-border, #dee2e6);
-  --callout-text: var(--is-text, #212529);
-  --callout-accent: var(--is-color-brand-500, #339af0);
+  --is-callout-bg: var(--is-bg-elev, #f1f3f5);
+  --is-callout-border: var(--is-border, #dee2e6);
+  --is-callout-text: var(--is-text, #212529);
+  --is-callout-accent: var(--is-color-brand, #339af0);
 
   display: block;
   box-sizing: border-box;
   font-family: var(--is-font-family, system-ui, sans-serif);
-  color: var(--callout-text);
+  color: var(--is-callout-text);
 
   /* Escala: todo en em y relativo a --spacing, que también es em. Cambiar el
      font-size del contexto (o del propio elemento) reescala el componente
      entero. Sin variantes de tamaño: el atributo `size` ya no existe. */
-  --spacing: 1em;
+  --is-callout-spacing: 1em;
   --_pad-y: 0.85em;
   --_pad-x: 1em;
   --_icon-size: 1.4em;
@@ -40,7 +40,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-  color: var(--callout-accent);
+  color: var(--is-callout-accent);
     font-size: var(--_icon-size);
     line-height: 1;
     padding-top: 0.1em;
@@ -70,71 +70,71 @@
 /* Estados del host a top-level: `&[attr]` anidado dentro de :host no
    selecciona el host de forma fiable; se usa :host([attr]). */
 :host([color="brand"]) {
-  --callout-accent: var(--is-color-brand-500, #339af0);
-  --callout-bg: var(--is-color-brand-100, #d0ebff);
-  --callout-border: var(--is-color-brand-500, #339af0);
-  --callout-text: var(--is-color-brand-700, #1971c2);
+  --is-callout-accent: var(--is-color-brand, #339af0);
+  --is-callout-bg: var(--is-color-brand-pale, #d0ebff);
+  --is-callout-border: var(--is-color-brand, #339af0);
+  --is-callout-text: var(--is-color-brand-stronger, #1971c2);
 }
 
 :host([color="neutral"]) {
-  --callout-accent: var(--is-text-muted, #495057);
-  --callout-bg: var(--is-control-bg, #f1f3f5);
-  --callout-border: var(--is-control-border, #dee2e6);
-  --callout-text: var(--is-text, #212529);
+  --is-callout-accent: var(--is-text-muted, #495057);
+  --is-callout-bg: var(--is-control-bg, #f1f3f5);
+  --is-callout-border: var(--is-control-border, #dee2e6);
+  --is-callout-text: var(--is-text, #212529);
 }
 
 :host([color="success"]) {
-  --callout-accent: var(--is-color-success-500, #40c057);
-  --callout-bg: var(--is-color-success-100, #d3f9d8);
-  --callout-border: var(--is-color-success-500, #40c057);
-  --callout-text: var(--is-color-success-700, #237a35);
+  --is-callout-accent: var(--is-color-success, #40c057);
+  --is-callout-bg: var(--is-color-success-pale, #d3f9d8);
+  --is-callout-border: var(--is-color-success, #40c057);
+  --is-callout-text: var(--is-color-success-stronger, #237a35);
 }
 
 :host([color="warning"]) {
-  --callout-accent: var(--is-color-warning-500, #f59f00);
-  --callout-bg: var(--is-color-warning-100, #fff3bf);
-  --callout-border: var(--is-color-warning-500, #f59f00);
-  --callout-text: var(--is-color-warning-700, #9a4f00);
+  --is-callout-accent: var(--is-color-warning, #f59f00);
+  --is-callout-bg: var(--is-color-warning-pale, #fff3bf);
+  --is-callout-border: var(--is-color-warning, #f59f00);
+  --is-callout-text: var(--is-color-warning-stronger, #9a4f00);
 }
 
 :host([color="danger"]) {
-  --callout-accent: var(--is-color-danger-500, #fa5252);
-  --callout-bg: var(--is-color-danger-100, #ffe3e3);
-  --callout-border: var(--is-color-danger-500, #fa5252);
-  --callout-text: var(--is-color-danger-700, #b02525);
+  --is-callout-accent: var(--is-color-danger, #fa5252);
+  --is-callout-bg: var(--is-color-danger-pale, #ffe3e3);
+  --is-callout-border: var(--is-color-danger, #fa5252);
+  --is-callout-text: var(--is-color-danger-stronger, #b02525);
 }
 
 :host([variant="filled"]) {
-  background: var(--callout-border);
+  background: var(--is-callout-border);
   color: var(--is-on-brand, #fff);
-  --callout-text: var(--is-on-brand, #fff);
-  --callout-accent: var(--is-on-brand, #fff);
+  --is-callout-text: var(--is-on-brand, #fff);
+  --is-callout-accent: var(--is-on-brand, #fff);
   border: 0;
 }
 
 :host([variant="outlined"]) {
   background: transparent;
-  color: var(--callout-text);
-  border: 1px solid var(--callout-border);
+  color: var(--is-callout-text);
+  border: 1px solid var(--is-callout-border);
 }
 
 :host([variant="filled-outlined"]), :host(:not([variant])) {
-  background: var(--callout-bg);
-  color: var(--callout-text);
-  border: 1px solid var(--callout-border);
+  background: var(--is-callout-bg);
+  color: var(--is-callout-text);
+  border: 1px solid var(--is-callout-border);
 }
 
 :host([variant="plain"]) {
   background: transparent;
-  color: var(--callout-text);
+  color: var(--is-callout-text);
   border: 0;
 }
 
 :host([variant="accent"]) {
-  background: var(--callout-bg);
-  color: var(--callout-text);
+  background: var(--is-callout-bg);
+  color: var(--is-callout-text);
   border: 0;
-  box-shadow: inset 3px 0 0 var(--callout-border);
+  box-shadow: inset 3px 0 0 var(--is-callout-border);
 }
 
 /* Cuando no hay icono (text-only), saltamos la primera columna. La

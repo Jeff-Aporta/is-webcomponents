@@ -4,8 +4,8 @@
   --is-select-bg: var(--is-control-bg, #f1f3f5);
   --is-select-text: var(--is-control-text, #212529);
   --is-select-focus: var(--is-focus, var(--is-accent, #339af0));
-  --is-select-danger: var(--is-color-danger-500, #fa5252);
-  --is-select-danger-text: var(--is-danger-text, var(--is-color-danger-600, #e03131));
+  --is-select-danger: var(--is-color-danger, #fa5252);
+  --is-select-danger-text: var(--is-danger-text, var(--is-color-danger-strong, #e03131));
   display: block;
   position: relative;
   font-family: var(--is-sans, inherit);

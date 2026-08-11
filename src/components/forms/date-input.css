@@ -144,10 +144,10 @@
   }
 
   .act.primary {
-    background: var(--is-color-brand-600, #c92a2a);
+    background: var(--is-color-brand-strong, #c92a2a);
     color: var(--is-on-brand, #fff);
     font-weight: 600;
-    &:hover { background: var(--is-color-brand-700, #b02525); }
+    &:hover { background: var(--is-color-brand-stronger, #b02525); }
   }
 
   .act:focus-visible {

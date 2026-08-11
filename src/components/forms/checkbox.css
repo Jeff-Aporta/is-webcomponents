@@ -4,7 +4,7 @@
   --is-checkbox-bg: var(--is-control-bg, #f1f3f5);
   --is-checkbox-bg-hover: var(--is-control-bg-hover, #e9ecef);
   --is-checkbox-border: var(--is-control-border, #adb5bd);
-  --is-checkbox-accent: var(--is-accent, var(--is-color-brand-500, #339af0));
+  --is-checkbox-accent: var(--is-accent, var(--is-color-brand, #339af0));
   --is-checkbox-on-accent: var(--is-on-brand, #fff);
   --is-checkbox-focus: var(--is-focus, var(--is-accent, #339af0));
   --is-checkbox-fill: var(--is-checkbox-accent);
@@ -75,18 +75,18 @@
 }
 
 :host([color="neutral"]) { --is-checkbox-accent: var(--is-control-border, #59636e); }
-:host([color="success"]) { --is-checkbox-accent: var(--is-color-success-500, #40c057); }
-:host([color="warning"]) { --is-checkbox-accent: var(--is-color-warning-500, #f59f00); }
-:host([color="danger"]) { --is-checkbox-accent: var(--is-color-danger-500, #fa5252); }
+:host([color="success"]) { --is-checkbox-accent: var(--is-color-success, #40c057); }
+:host([color="warning"]) { --is-checkbox-accent: var(--is-color-warning, #f59f00); }
+:host([color="danger"]) { --is-checkbox-accent: var(--is-color-danger, #fa5252); }
 
 :host([error]) {
-  --is-checkbox-accent: var(--is-color-danger-500, #fa5252);
-  --is-checkbox-border: var(--is-color-danger-500, #fa5252);
-  --is-checkbox-focus: var(--is-color-danger-500, #fa5252);
+  --is-checkbox-accent: var(--is-color-danger, #fa5252);
+  --is-checkbox-border: var(--is-color-danger, #fa5252);
+  --is-checkbox-focus: var(--is-color-danger, #fa5252);
 }
 
 :host([error]) .hint {
-  color: var(--is-danger-text, var(--is-color-danger-600, #e03131));
+  color: var(--is-danger-text, var(--is-color-danger-strong, #e03131));
 }
 
 /* Icono propio en el estado apagado: el control deja de ser una caja. */

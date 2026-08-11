@@ -80,6 +80,19 @@ import { ModalBase } from '../_shared/modal-base.js';
   `;
 
   class IsDialog extends ModalBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+      spacing: '--is-dialog-spacing',
+      width: '--is-dialog-width',
+      'backdrop-color': { prop: '--is-dialog-backdrop-color', onlyColorValues: true },
+      'show-duration': '--is-dialog-show-duration',
+      'hide-duration': '--is-dialog-hide-duration',
+    };
+
+    static get observedAttributes() {
+      return [...super.observedAttributes, ...IsDialog.styleAttrNames];
+    }
+
     static __TEMPLATE = TEMPLATE;
 
     get modalClass() { return '.dialog'; }
@@ -91,7 +104,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
 
     animateOpen() {
-      const dur = this.#readDur('--show-duration', 200);
+      const dur = this.#readDur('--is-dialog-show-duration', 200);
       this.$modal.animate(
         [
           { opacity: 0, transform: 'translateY(8px) scale(0.98)' },
@@ -107,7 +120,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
 
     animateClose() {
-      const dur = this.#readDur('--hide-duration', 160);
+      const dur = this.#readDur('--is-dialog-hide-duration', 160);
       this.$modal.animate(
         [
           { opacity: 1, transform: 'none' },

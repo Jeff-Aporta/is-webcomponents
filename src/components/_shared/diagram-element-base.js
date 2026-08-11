@@ -182,7 +182,9 @@ export class DiagramElementBase extends ElementBase {
 
   /** Abre (o reutiliza) un <is-diagram-lightbox> propio con `kind` fijo y
    *  le pasa el payload actual. Mismo mecanismo que hoy en cada diagrama,
-   *  parametrizado por el `kind` de `diagram-kinds.js`. */
+   *  parametrizado por el `kind` de `diagram-kinds.js`.
+   *  Pasa de largo atributos opt-in (hoy `animation`) para que la copia
+   *  montada dentro del visor conserve los efectos declarados en la fuente. */
   async openOwnViewer(kind) {
     await import('../diagrams/diagram-lightbox.js');
     let lb = this.#ownViewer;
@@ -193,6 +195,11 @@ export class DiagramElementBase extends ElementBase {
       document.body.appendChild(lb);
       this.#ownViewer = lb;
     }
+    // Re-aplicar en cada apertura: el atributo puede haber cambiado desde
+    // la última vez (o ser la primera, si el lightbox ya existía).
+    const anim = this.getAttribute('animation');
+    if (anim) lb.setAttribute('animation', anim);
+    else lb.removeAttribute('animation');
     lb.payload = this.#payload;
     lb.open = true;
   }

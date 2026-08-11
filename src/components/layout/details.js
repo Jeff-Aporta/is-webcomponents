@@ -73,7 +73,14 @@ import { TONE } from '../_shared/tone.js';
   const VALID_ICON_PLACEMENT = ['start', 'end'];
 
   class IsDetails extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    spacing: '--is-details-spacing',
+    'show-duration': '--is-details-show-duration',
+    'hide-duration': '--is-details-hide-duration',
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'spacing', 'show-duration', 'hide-duration']; }
 
     #button;
     #content;

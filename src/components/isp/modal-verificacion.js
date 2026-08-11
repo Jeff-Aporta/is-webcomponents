@@ -123,7 +123,12 @@ export function lowerCase(value) {
   const OBSERVED = ['open', 'loading', 'entity', 'icon', 'close-label', 'light-dismiss'];
 
   class IsModalVerificacion extends ElementBase {
-    static get observedAttributes() { return OBSERVED; }
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    accent: { prop: '--is-modal-verificacion-accent', onlyColorValues: true },
+    };
+
+    static get observedAttributes() { return [...OBSERVED, 'accent']; }
 
     #dlg;
     #headingText;

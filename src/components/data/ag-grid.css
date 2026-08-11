@@ -14,8 +14,8 @@
   --is-grid-row-hover: color-mix(in srgb, var(--is-accent, #1e90ff) 10%, transparent);
   --is-grid-selected: color-mix(in srgb, var(--is-accent, #1e90ff) 18%, transparent);
   --is-grid-selected-bar: var(--is-accent, #1e90ff);
-  --grid-bg: var(--is-bg-elev, #12151a);
-  --grid-border: var(--is-border, #2a3140);
+  --is-grid-bg: var(--is-bg-elev, #12151a);
+  --is-grid-border: var(--is-border, #2a3140);
 }
 
 :host([density="compact"]),
@@ -38,9 +38,9 @@
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  border: 1px solid var(--grid-border);
+  border: 1px solid var(--is-grid-border);
   border-radius: var(--is-radius, 10px);
-  background: var(--grid-bg);
+  background: var(--is-grid-bg);
   font-size: 0.875rem;
   line-height: 1.35;
   color: inherit;
@@ -62,8 +62,8 @@
   flex-wrap: wrap;
   flex: 0 0 auto;
   padding: 0.45rem 0.65rem;
-  border-bottom: 1px solid var(--grid-border);
-  background: color-mix(in srgb, var(--grid-bg) 92%, transparent);
+  border-bottom: 1px solid var(--is-grid-border);
+  background: color-mix(in srgb, var(--is-grid-bg) 92%, transparent);
 }
 
 .mim-dg__toolbar-spacer {
@@ -76,7 +76,7 @@
   align-items: center;
   gap: 0.35rem;
   padding: 2px 0.55rem;
-  border: 1px solid var(--grid-border);
+  border: 1px solid var(--is-grid-border);
   border-radius: var(--is-radius, 6px);
   background: var(--is-bg-soft, #0e1116);
   color: var(--is-text-soft, #9aa4b2);
@@ -103,7 +103,7 @@
 .mim-dg__density {
   display: inline-flex;
   gap: 2px;
-  border: 1px solid var(--grid-border);
+  border: 1px solid var(--is-grid-border);
   border-radius: 6px;
   padding: 1px;
   background: var(--is-bg-soft, #0e1116);
@@ -149,7 +149,7 @@
   gap: 0.3rem;
   height: 1.85rem;
   padding: 0 0.55rem;
-  border: 1px solid var(--grid-border);
+  border: 1px solid var(--is-grid-border);
   font: inherit;
   font-size: 0.78rem;
 }
@@ -172,8 +172,8 @@
   flex: 0 0 auto;
   min-height: 2.1rem;
   padding: 0.35rem 0.65rem;
-  border-bottom: 1px solid var(--grid-border);
-  background: color-mix(in srgb, var(--is-accent, #1e90ff) 5%, var(--grid-bg));
+  border-bottom: 1px solid var(--is-grid-border);
+  background: color-mix(in srgb, var(--is-accent, #1e90ff) 5%, var(--is-grid-bg));
 }
 
 .mim-dg__group-panel-label {
@@ -203,7 +203,7 @@
   gap: 0.25rem;
   padding: 0.12rem 0.35rem 0.12rem 0.25rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--is-accent, #1e90ff) 35%, var(--grid-border));
+  border: 1px solid color-mix(in srgb, var(--is-accent, #1e90ff) 35%, var(--is-grid-border));
   background: color-mix(in srgb, var(--is-accent, #1e90ff) 12%, transparent);
   font-size: 0.74rem;
   font-weight: 600;
@@ -282,7 +282,7 @@
   align-items: stretch;
   min-height: var(--is-grid-header-h);
   background: var(--is-grid-header-bg);
-  border-bottom: 1px solid var(--grid-border);
+  border-bottom: 1px solid var(--is-grid-border);
   backdrop-filter: blur(8px);
 }
 
@@ -303,8 +303,8 @@
   width: 100%;
   min-height: var(--is-grid-row-h);
   flex: 0 0 auto;
-  border-bottom: 1px solid color-mix(in srgb, var(--grid-border) 70%, transparent);
-  background: var(--grid-bg);
+  border-bottom: 1px solid color-mix(in srgb, var(--is-grid-border) 70%, transparent);
+  background: var(--is-grid-bg);
 }
 
 .mim-dg__row.is-odd {
@@ -326,13 +326,13 @@
 }
 
 .mim-dg__group-row {
-  background: color-mix(in srgb, var(--is-accent, #1e90ff) 7%, var(--grid-bg));
+  background: color-mix(in srgb, var(--is-accent, #1e90ff) 7%, var(--is-grid-bg));
   font-weight: 600;
   cursor: pointer;
 }
 
 .mim-dg__group-row:hover {
-  background: color-mix(in srgb, var(--is-accent, #1e90ff) 14%, var(--grid-bg));
+  background: color-mix(in srgb, var(--is-accent, #1e90ff) 14%, var(--is-grid-bg));
 }
 
 .mim-dg__group-cell {
@@ -376,7 +376,7 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0 0.65rem;
-  border-right: 1px solid color-mix(in srgb, var(--grid-border) 75%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--is-grid-border) 75%, transparent);
   min-width: 0;
   min-height: 0;
   height: 100%;
@@ -498,11 +498,11 @@
 }
 
 .is-pinned-left {
-  box-shadow: 2px 0 0 color-mix(in srgb, var(--grid-border) 80%, transparent);
+  box-shadow: 2px 0 0 color-mix(in srgb, var(--is-grid-border) 80%, transparent);
 }
 
 .is-pinned-right {
-  box-shadow: -2px 0 0 color-mix(in srgb, var(--grid-border) 80%, transparent);
+  box-shadow: -2px 0 0 color-mix(in srgb, var(--is-grid-border) 80%, transparent);
 }
 
 .mim-dg__head-cell.is-pinned {
@@ -571,8 +571,8 @@
 .mim-dg__sidebar {
   display: flex;
   flex: 0 0 auto;
-  border-left: 1px solid var(--grid-border);
-  background: color-mix(in srgb, var(--grid-bg) 96%, transparent);
+  border-left: 1px solid var(--is-grid-border);
+  background: color-mix(in srgb, var(--is-grid-bg) 96%, transparent);
 }
 
 .mim-dg__sidebar[hidden] {
@@ -612,7 +612,7 @@
   width: 14rem;
   padding: 0.65rem;
   overflow: auto;
-  border-right: 1px solid var(--grid-border);
+  border-right: 1px solid var(--is-grid-border);
 
   &[hidden] {
     display: none !important;
@@ -656,8 +656,8 @@
   gap: 0.45rem;
   flex: 0 0 auto;
   padding: 0.4rem 0.65rem;
-  border-top: 1px solid var(--grid-border);
-  background: color-mix(in srgb, var(--grid-bg) 92%, transparent);
+  border-top: 1px solid var(--is-grid-border);
+  background: color-mix(in srgb, var(--is-grid-bg) 92%, transparent);
 }
 
 .mim-dg__footer-spacer {
@@ -687,7 +687,7 @@
   font: inherit;
   padding: 2px 6px;
   border-radius: 4px;
-  border: 1px solid var(--grid-border);
+  border: 1px solid var(--is-grid-border);
   background: var(--is-bg-soft, #0e1116);
   color: var(--is-text);
 }
@@ -695,7 +695,7 @@
 .mim-dg__pager-btn {
   width: 1.6rem;
   height: 1.6rem;
-  border: 1px solid var(--grid-border);
+  border: 1px solid var(--is-grid-border);
 }
 
 .mim-dg__pager-btn:disabled {

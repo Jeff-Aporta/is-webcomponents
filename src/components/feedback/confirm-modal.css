@@ -18,15 +18,15 @@
 }
 
 .modal {
-  --bg: var(--is-bg-elev, #1c2128);
-  --fg: var(--is-text, #e8eaf1);
-  --border: var(--is-border, #2a2f3a);
-  --brand: var(--is-brand, dodgerblue);
-  --brand-fg: var(--is-brand-fg, #fff);
+  --is-confirm-modal-bg: var(--is-bg-elev, #1c2128);
+  --is-confirm-modal-text: var(--is-text, #e8eaf1);
+  --is-confirm-modal-border: var(--is-border, #2a2f3a);
+  --is-confirm-modal-accent: var(--is-brand, dodgerblue);
+  --is-confirm-modal-on-accent: var(--is-brand-fg, #fff);
 
-  background: var(--bg);
-  color: var(--fg);
-  border: 1px solid var(--border);
+  background: var(--is-confirm-modal-bg);
+  color: var(--is-confirm-modal-text);
+  border: 1px solid var(--is-confirm-modal-border);
   border-radius: 0.65rem;
   padding: 1.1rem 1.2rem;
   min-width: 280px;
@@ -61,7 +61,7 @@
 .message {
   margin-bottom: 0.9rem;
   line-height: 1.45;
-  color: var(--is-text-soft, var(--fg));
+  color: var(--is-text-soft, var(--is-confirm-modal-text));
 }
 
 .actions {

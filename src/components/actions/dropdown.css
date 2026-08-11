@@ -4,8 +4,8 @@
   display: inline-block;
   font-family: var(--is-font-family, system-ui, sans-serif);
   font-size: inherit;
-  --show-duration: 120ms;
-  --hide-duration: 100ms;
+  --is-dropdown-show-duration: 120ms;
+  --is-dropdown-hide-duration: 100ms;
 }
 
 :host([hidden]) {

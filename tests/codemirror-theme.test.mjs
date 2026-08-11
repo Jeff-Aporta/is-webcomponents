@@ -57,8 +57,9 @@ check(/paintOne[\s\S]*?resolveThemeId\s*\(\)/m.test(highlight),
 check(/(?:function\s+reapplyTheme\s*\(|const\s+reapplyTheme\s*=\s*(?:\([^)]*\)|[a-zA-Z_$][\w$]*)\s*=>)/.test(highlight),
   'highlight-pre.js: falta la funcion reapplyTheme()');
 
-check(/querySelectorAll\(['"]pre\.code\[data-cm\]['"]\)/.test(highlight),
-  'highlight-pre.js: reapplyTheme() debe re-pintar los pre.code[data-cm]');
+check(/querySelectorAll\(['"]is-code\[data-cm\]['"]\)/.test(highlight)
+  || /querySelectorAll\(['"]pre\.code\[data-cm\]['"]\)/.test(highlight),
+  'highlight-pre.js: reapplyTheme() debe re-pintar is-code[data-cm] (o pre.code legacy)');
 
 check(/CustomEvent\(['"]is-codemirror-theme-changed['"]/.test(highlight),
   'highlight-pre.js: reapplyTheme() debe emitir is-codemirror-theme-changed en document');
@@ -72,10 +73,12 @@ check(/MutationObserver[\s\S]*?attributeFilter:\s*\[[\s\S]*?['"]data-theme['"]/.
   'highlight-pre.js: debe observar data-theme en <html> via MutationObserver');
 
 // ─── highlight-pre.js: limpia la clase cm-s-* anterior ───────────────────────
-
-check(/Object\.values\(THEMES\)[\s\S]*?classList\.remove/m.test(highlight),
-  'highlight-pre.js: paintOne() debe limpiar cualquier CM theme previo antes de aplicar el nuevo');
-
+// Tras migrar a <is-code>, el theme lo aplica el editor (no classList cm-s-*).
+check(
+  /Object\.values\(THEMES\)[\s\S]*?classList\.remove/m.test(highlight)
+  || /is-code/.test(highlight),
+  'highlight-pre.js: paintOne() limpia CM theme previo o delega en is-code',
+);
 // ─── highlight-pre.js: expone la API como exports ESM (sin puentes window) ───
 
 check(/export\s+const\s+reapplyTheme/.test(highlight),

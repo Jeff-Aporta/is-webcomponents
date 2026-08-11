@@ -59,8 +59,21 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
   class IsCheckbox extends ElementBase {
+    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
+    static styleAttrs = {
+    size: '--is-checkbox-size',
+    radius: '--is-checkbox-radius',
+    bg: { prop: '--is-checkbox-bg', onlyColorValues: true },
+    'bg-hover': { prop: '--is-checkbox-bg-hover', onlyColorValues: true },
+    'border-color': { prop: '--is-checkbox-border', onlyColorValues: true },
+    accent: { prop: '--is-checkbox-accent', onlyColorValues: true },
+    'focus-color': { prop: '--is-checkbox-focus', onlyColorValues: true },
+    'mark-color': { prop: '--is-checkbox-mark', onlyColorValues: true },
+    halo: '--is-checkbox-halo',
+    };
+
     static formAssociated = true;
-    static get observedAttributes() { return OBSERVED; }
+    static get observedAttributes() { return [...OBSERVED, 'size', 'radius', 'bg', 'bg-hover', 'border-color', 'accent', 'focus-color', 'mark-color', 'halo']; }
 
     #internals = null;
     #control;
