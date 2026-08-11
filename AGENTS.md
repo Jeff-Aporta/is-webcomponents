@@ -328,6 +328,32 @@ pero el cache puede quedar pegado. Si el icono nuevo no aparece, prueba con
 `?v={timestamp}` o espera. **No** asumas que el push rompió la distribución
 solo porque el primer `Invoke-WebRequest` dio 404.
 
+### 6.14b Fijar un SHA en jsDelivr NO funciona en este repo: 403 "Package size exceeded"
+
+Consumir el kit desde un consumidor externo (los videos de `VideosYT`) apuntando
+a un commit concreto —lo natural para que un render sea reproducible— devuelve
+**403** en la mayoria de archivos:
+
+```
+Package size exceeded the configured limit of 50 MB.
+```
+
+El repo pasa de 50 MB por `dist/cdn/assets/icons` (~318k archivos), y jsDelivr
+aplica ese limite al resolver una version que aun no tiene cacheada. `@main` si
+responde 200 porque ya esta caliente de antes. Conclusion practica: **usar
+`@main`**, y asumir que un consumidor externo no puede pinear version mientras
+los iconos vivan dentro de `dist/`.
+
+Corolario que costo una tarde: con `@main` cacheado 24 h (§6.14), `all.min.js`
+servido puede ser **anterior** a que un componente existiera, asi que el
+componente nuevo no queda definido aunque su propio archivo si se sirva fresco
+(los archivos nuevos no tienen cache viejo que los tape). Sintoma exacto:
+`customElements.get('is-button')` da `true` y `customElements.get('is-code')`
+da `false`, sin un solo error en consola. **Solucion**: en el consumidor, pedir
+el componente por su ruta propia
+(`dist/cdn/<categoria>/<comp>.min.js`) ademas de `all.min.js`. No depende del
+cache del agregado y de paso carga solo lo que se usa.
+
 ### 6.15 Los 308k iconos de Iconify son 723 MB
 
 Si commiteas todas las colecciones, **inflas el repo** y rompes `git clone`.
