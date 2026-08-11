@@ -25,7 +25,7 @@ const COMPACT_QUERY = '(max-width: 900px)';
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
   <is-split-panel class="page" part="page" orientation="horizontal" position-in-pixels="220" primary="end">
-    <is-main class="main" part="main" slot="start" remember-scroll></is-main>
+    <is-main class="main" part="main" slot="start"></is-main>
     <aside class="sidebar" part="aside" slot="end"></aside>
   </is-split-panel>
   <is-button class="toc-toggle" part="toc-toggle" color="brand" variant="plain" pill type="button"
@@ -236,7 +236,10 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
       this.getAttribute('storage-key') ||
       def.storageKey ||
       `docs-${def.tag}`;
+    // remember-scroll + storage-key juntos: si el attr va en el template sin
+    // key, is-main avisa en consola en el tick 0 (antes de #paint).
     main.setAttribute('storage-key', storageKey);
+    main.toggleAttribute('remember-scroll', true);
     panel.setAttribute('storage-key', `docs-toc-${def.tag}`);
 
     if (def.styles) {

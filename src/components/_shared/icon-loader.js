@@ -55,6 +55,14 @@ const ICON_BASES = [
 const LOCAL_INDEX_PATH = (prefix) => `${prefix}.json`;
 const LOCAL_SVG_PATH = (prefix, name) => `${prefix}/${name}.svg`;
 
+/**
+ * Prefijos cuyos `.json` + SVG viven en git bajo `src/assets/icons/`
+ * (ver `.gitignore`: solo mdi/tabler). El resto puede existir en
+ * `dist/cdn/assets/icons/` tras un build local, pero pedirlos en
+ * `src/assets/` desde Pages/raw genera 404 ruidosos en consola.
+ */
+const SRC_SHIPPED_PREFIXES = new Set(['mdi', 'tabler']);
+
 /** Cache en memoria: prefix -> Set<name> | null (null = no existe indice). */
 const indexCache = new Map();
 /** Cache de base usada por coleccion: prefix -> string|null. */
@@ -63,12 +71,20 @@ const baseCache = new Map();
 const rawCache = new Map();
 const inflight = new Map();
 
-function candidateBases() {
+function candidateBases(prefix) {
   const out = [];
   for (const fn of ICON_BASES) {
     try {
       const v = fn();
-      if (v) out.push(v.endsWith('/') ? v : v + '/');
+      if (!v) continue;
+      const base = v.endsWith('/') ? v : `${v}/`;
+      // No golpear src/assets para colecciones que git no publica.
+      if (/\/src\/assets\/icons\//.test(base)
+        && prefix
+        && !SRC_SHIPPED_PREFIXES.has(prefix)) {
+        continue;
+      }
+      out.push(base);
     } catch { /* URL invalida en este contexto; probar siguiente */ }
   }
   return out;
@@ -79,7 +95,7 @@ async function fetchIndex(prefix) {
   if (inflight.has(prefix)) return inflight.get(prefix);
 
   const promise = (async () => {
-    for (const base of candidateBases()) {
+    for (const base of candidateBases(prefix)) {
       try {
         const res = await fetch(base + LOCAL_INDEX_PATH(prefix), { cache: 'default' });
         if (!res.ok) continue;
@@ -165,8 +181,8 @@ export async function resolveIconRaw(prefix, name, signal) {
 
   const known = baseCache.get(prefix);
   const bases = known
-    ? [known, ...candidateBases().filter((b) => b !== known)]
-    : candidateBases();
+    ? [known, ...candidateBases(prefix).filter((b) => b !== known)]
+    : candidateBases(prefix);
 
   for (const base of bases) {
     try {
@@ -210,10 +226,11 @@ export async function listIconFamilies() {
   return [];
 }
 
-// Precarga en background: cuando el navegador esta idle, carga las
-// colecciones mas usadas para que <is-icon> resuelva sin latencia.
+// Precarga idle: SOLO colecciones commiteadas en src/ (mdi + tabler).
+// Prefetch de lucide/heroicons/material-symbols pegaba a src/assets en Pages
+// y llenaba la consola de 404 (esos JSON están gitignoreados en fuente).
 if (typeof requestIdleCallback === 'function') {
-  ['mdi', 'tabler', 'lucide', 'heroicons', 'material-symbols'].forEach((p) => {
+  [...SRC_SHIPPED_PREFIXES].forEach((p) => {
     requestIdleCallback(() => fetchIndex(p));
   });
 }
