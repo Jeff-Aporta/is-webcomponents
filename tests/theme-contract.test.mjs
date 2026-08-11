@@ -54,15 +54,17 @@ for (const t of FIELD_TOKENS) {
   check(lightBlocks.includes(`${t}:`), `is-base.css: falta ${t} en tema light`);
 }
 
-// 9. La paleta contapyme debe usar la marca real de ISP (#1a6eb0 / #00598a)
-//    y NO dodgerblue #1e90ff, que era el valor placeholder anterior.
+// 9. ContaPyme brand canónico = CSS dodgerblue (#1E90FF).
 //    ContaPyme es la primera paleta del archivo (default); cortamos hasta insoft.
 const cp = palettes.slice(palettes.indexOf('[data-palette="contapyme"]'), palettes.indexOf('[data-palette="insoft"]'));
-check(!/dodgerblue|#1e90ff/i.test(cp), 'paleta contapyme aun usa dodgerblue/#1e90ff');
-check(/#1a6eb0/i.test(cp), 'paleta contapyme no usa el primary real #1a6eb0');
-check(/#00598a/i.test(cp), 'paleta contapyme no usa el primary oscuro real #00598a');
-check(/#00bcff/i.test(cp), 'paleta contapyme no conserva #00bcff como brand-text dark');
+check(/\bdodgerblue\b|#1e90ff/i.test(cp), 'paleta contapyme debe usar dodgerblue/#1e90ff');
+check(/--is-color-brand:\s*dodgerblue/i.test(cp), 'contapyme --is-color-brand debe ser dodgerblue');
+check(/--is-color-brand-strong:\s*dodgerblue/i.test(cp), 'contapyme --is-color-brand-strong debe ser dodgerblue (filled)');
+check(/--is-accent:\s*dodgerblue/i.test(cp), 'contapyme --is-accent debe ser dodgerblue');
+check(/#7ec8ff/i.test(cp), 'paleta contapyme debe usar #7ec8ff como brand-text dark');
 check(/:root,\s*\[data-palette="contapyme"\]/.test(palettes), 'contapyme debe aplicarse en :root como default');
+// filled usa --_tone-strong: no volver a poner strong en un azul distinto (ej. #1c7ed6).
+check(!/--is-color-brand-strong:\s*#1c7ed6/i.test(cp), 'contapyme strong no debe ser #1c7ed6 (desvía de dodgerblue en filled)');
 
 check(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`${html}\n${component}`), 'size API legacy encontrada');
 

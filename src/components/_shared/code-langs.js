@@ -45,6 +45,36 @@ export function resolveLanguage(name) {
   return LANGS.get(id) || null;
 }
 
+/**
+ * Infere lang cuando el consumidor no pasó `lang` (p. ej. snippets de demos).
+ * Sin esto, HTML cae al default `javascript` y `<` se pinta como operador.
+ * @param {string} text
+ * @returns {string} id de lenguaje registrado
+ */
+export function inferLanguage(text) {
+  const t = String(text || '').trim();
+  if (!t) return 'javascript';
+  if (/^(?:@|:root|[.#]?[a-z][\w-]*)\s*\{/i.test(t)
+    || (/:\s*[^;]+;/m.test(t) && !/[<(]/.test(t.slice(0, 40)))) {
+    if (!/\b(?:const|let|var|function|=>)\b/.test(t) && !/^</.test(t)) return 'css';
+  }
+  if (/^</.test(t) || /<\/?[a-z][\w:-]*[\s>]/i.test(t.slice(0, 120))) return 'html';
+  if (/^\{[\s\S]*\}$/.test(t) || /^\[[\s\S]*\]$/.test(t)) {
+    try {
+      JSON.parse(t);
+      return 'json';
+    } catch { /* no json */ }
+  }
+  if (/\b(?:def |class |import |from |print\()/.test(t) && !/\b(?:const|let|var|function)\b/.test(t)) {
+    return 'python';
+  }
+  if (/^(?:diff --git|Index: |--- |\+\+\+ |@@ )/.test(t) || /^[+-]{3} /m.test(t)) return 'diff';
+  if (/\b(?:const|let|var|function|=>|import|export|class)\b/.test(t) || /\.\w+\s*=/.test(t)) {
+    return 'javascript';
+  }
+  return 'javascript';
+}
+
 export function listLanguages() {
   return [...LANGS.values()].map((d) => ({
     id: d.id,

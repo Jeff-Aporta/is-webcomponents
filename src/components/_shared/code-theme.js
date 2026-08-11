@@ -89,17 +89,17 @@ export const THEME_PROP_MAP = Object.freeze({
 /** Presets alineados a material-darker / mdn-like del kit. */
 export const BUILTIN_THEMES = Object.freeze({
   dark: {
-    background: '#212121',
+    background: '#1e1e1e',
     foreground: '#eeffff',
     caret: '#FFCC00',
     selection: 'rgba(128, 203, 196, 0.28)',
-    gutterBackground: '#212121',
+    gutterBackground: '#1e1e1e',
     gutterForeground: '#546e7a',
     gutterBorder: 'transparent',
     activeLine: 'rgba(0, 0, 0, 0.22)',
     activeGutter: 'rgba(0, 0, 0, 0.22)',
     matchingBracket: '#ffeb3b',
-    comment: '#545454',
+    comment: '#697098',
     keyword: '#c792ea',
     string: '#c3e88d',
     number: '#f78c6c',

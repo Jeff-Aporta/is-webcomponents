@@ -22,8 +22,11 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | Refactor mecánico de tokens → commit atómico + `token-vocabulary` | Dejar el rename a medias en el working tree y rebasear encima |
 | Galería: `.file-meta` (fuentes + pesos `.min`) + modal fuentes full-page con URL absoluta | `.vs-page-bar` con hints; `#vsPath` = path relativo; dialog a `96vw`/`70vh` |
 | Editor de código / snippets = `<is-code>` (`mode=block\|inline`, `readonly compact` en docs) | Tag `is-code-editor`; segundo motor CM; pintar docs con runMode suelto |
+| Snippets HTML: `lang="html"` o dejar que `inferLanguage` / softFormat corran | Marcar `data-cm="1"` antes de paint; asumir default `javascript` con markup `<…>` |
+| Consumo selectivo: `loader.min.js` + `load('actions')` / tags; anti-redundancia | Volver a `load('is-button')` tras cargar la categoría; preferir `all.min.js` por defecto |
+| Docs LLM en artefactos: banner `/*! … */` + `dist/cdn/loader.md` | Minificar sin rutas MD; reinventar un segundo loader |
 
-Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta`.
+Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `cdn-loader` · `load-plan` · `code-infer-lang` · `demo-equiv`.
 
 ---
 
@@ -145,8 +148,9 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - Guía: `src/docs/preview-controller.md`.
 - Interface única: `PreviewDefinition` en `src/previews/_kit/types.d.ts` (`$schema: "is-preview/v1"`).
 - Datos: `src/previews/<cat>/<tag>.json` — sections/blocks (`demo|callout|code|html|table|lede`).
-  Cada `demo` debe llevar `equivHtml` (HTML/ARIA nativo documental) y, si hay ramas,
-  `equivFlow` (p. ej. `<is-flowchart>`). El chrome pinta la sección «HTML puro equivalente».
+  `equivHtml` / `equivNote` / `equivFlow` son opcionales en el schema pero **ya no se pintan**
+  en demos (retirado el bloque «HTML puro equivalente»).
+- Snippets `kind: "code"`: preferir `lang` explícito; si falta, `<is-code>` infiere (HTML vs JS).
 - Runtime: `JsonPreview` + `registry.js` + `catalog.js`.
 - Behavior opcional: `src/previews/behaviors/<tag>.js` exporta `mount(ctx)` / `unmount(ctx)`.
 - Galería: siempre `loadPreview(tag)` in-app. Fullscreen: `_shell.html?tag=`.
@@ -156,12 +160,23 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - **No** volver a crear `*.html` por tag. Guardián: `tests/preview-json-contract.test.mjs`.
 
 ### Apps consumidoras (CDN)
-- Bootstrap: `is-base.min.css` + `palettes.min.css` + tag/category/`all.min.js` desde **`dist/cdn/`**.
+- Bootstrap: preferí `loader.min.js` (`loadCSSBase` + `loadCSSPalettesDefault` + `load(tags|cats)`). Alternativa: `is-base.min.css` + `palettes.min.css` + tag/category/`all.min.js` desde **`dist/cdn/`**.
+- Docs loader: `src/cdn/loader.md` (+ `src/cdn/LLM.md`) · publicado `dist/cdn/loader.md` / `loader.min.js`.
+- **Anti-redundancia:** `load('actions')` cubre `is-button`; un `load('is-button')` posterior **no** re-fetch (`has` / `skipped`). Preferir categoría o tags puntuales frente a `all.min.js` (~1.8 MB resuelto).
+- Cada `.min.js` empieza con comentario `/*! IS Web Components - docs (LLM) */` y URLs raw de MD (componente, categoría, kit, loader, skill).
+- Preview «Ecosistema JS»: get started + playground del loader + catálogo `_shared/`.
 - Docs: `components/LLM.md` → categoría → módulo (raw bajo `…/main/src/components/`).
 - Dominio: `app-*`/`tk-*` traducen payload → `is-*`. CSS hermano + `IsUi.adoptCss(shadow, import.meta.url)`.
 - Tras vaciar el shadow, volver a `adoptCss` (los `<link>` se borran).
 - Forms: `.value` del WC; submit via cableado del kit (`requestSubmit`), no confiar solo en Shadow `type=submit`.
 - Shells: grid CSS / `position-in-pixels`, no `is-split-panel` al 20% como aside fijo.
+
+### `<is-code>` en demos / snippets
+- Default de `lang` sin atributo = `javascript`. Markup `<is-button…>` **sin** `lang` se pinta mal (`<` = operador cian).
+- **Hacer:** `lang="html"` en el JSON, o no marcar `data-cm` hasta que `paint` / bootstrap de `is-code` corran `inferLanguage` + `softFormat`.
+- Vista docs: `readonly` + `compact` + softFormat (pretty HTML en pocas líneas).
+- Tema propio `cm-s-is-code` + `--is-code-*` (`code-theme.js`). No depender del CSS CDN `material-darker` para tokens.
+- Guardián: `tests/code-infer-lang.test.mjs`.
 
 ### Behaviors de preview (hosts DOM)
 - Si el `mount` llama `document.getElementById('toaster').create(…)`, el host **debe existir** o crearse en el mismo `mount`. El JSON de demos a menudo solo trae botones.
@@ -243,8 +258,18 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
 - **No abrir la galería con `component: "is-code-editor"`** ni documentar ese tag.
 - **No inventar `.test.ts`** aquí: sin pipeline TS de producto; solo `tests/*.test.mjs`
   (artifacts `tests/*.tmp` / `coverage` / `.cache` sí van en gitignore; la carpeta no).
-
----
+- **No volver a pintar «HTML puro equivalente»** bajo demos (`renderDemoEquiv` /
+  `.demo-equiv`). `equivHtml` puede vivir en el JSON; el chrome **no** lo muestra.
+- **No marcar `data-cm="1"` al crear snippets** en `render.js` antes de que corra
+  `paint` / bootstrap: se salta `inferLanguage` + `softFormat` y el HTML queda
+  en una línea con coloreado JS.
+- **No asumir que `lang` default sirve para HTML.** Sin `lang` o inferencia,
+  CodeMirror trata `<` como operador (cian) — se ve “mal pintado” sin error.
+- **No re-descargar un tag ya cubierto por su categoría** vía loader: es
+  anti-patrón; el planificador debe devolver `skipped`. No “arreglar” forzando
+  `all.min.js`.
+- **No minificar sin banner MD** en `scripts/build.mjs`: cada `.min.js` lleva
+  rutas raw para LLMs; `loader.md` se copia a `dist/cdn/`.
 
 ## Errores aprendidos (no repetir)
 
@@ -383,6 +408,33 @@ Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` 
     audits y docs. Guardián: `gallery-sources-meta` (manifest no contiene
     `is-code-editor`).
 
+39. **Snippets HTML “mal pintados” (cian en tags)** (11-ago-2026)
+    → `kind: "code"` en previews creaba `<is-code>` **sin** `lang` y con
+    `data-cm="1"` prematuro. Default `lang=javascript` → `<` = operador
+    (`--is-code-operator` cian); softFormat no corría. El usuario veía tags
+    y brackets del mismo color, attrs apagados.
+    **Hacer:** `lang` explícito o `inferLanguage` en bootstrap; no pre-marcar
+    `data-cm`; softFormat en `compact`+`readonly`; tema `cm-s-is-code`.
+    **No hacer:** segundo highlighter; forzar `material-darker` CDN; asumir
+    que “ya tiene data-cm así que está pintado”.
+    Guardianes: `tests/code-infer-lang.test.mjs`, `tests/demo-equiv.test.mjs`.
+
+40. **Bloque «HTML puro equivalente» en demos** → ruido documental bajo cada
+    `is-demo` (`equivHtml` / flowchart). El usuario pidió quitarlo.
+    **Hacer:** no llamar `renderDemoEquiv`; demos = solo el componente.
+    **No hacer:** reintroducir el título/sección; exigir `equivHtml` en tests
+    de piloto. Campos opcionales en types OK; pintar = no.
+    Guardián: `tests/demo-equiv.test.mjs`.
+
+41. **Loader: recargas redundantes y docs invisibles** → pedir `actions` y
+    luego `is-button` volvía a la red; `all.min.js` por defecto hincha.
+    Minificados sin rutas MD dejaban a los LLM sin contexto.
+    **Hacer:** `planLoads` + registro `has`/`skipped`; preferir categoría/tags;
+    banner `/*! … docs (LLM) */` + copiar `loader.md` al dist.
+    **No hacer:** reinventar un segundo entry CDN; VP9/WebM para overlays;
+    OpenAI en este kit (Groq/ElevenLabs/MiniMax en otros proyectos).
+    Guardianes: `tests/load-plan.test.mjs`, `tests/cdn-loader.test.mjs`.
+
 ---
 
 ## Errores aprendidos fuera de este repo (mismo tipo de trampa)
@@ -507,6 +559,11 @@ mantenerlo aparte.
 | `url-nav.test.mjs` | Estado UI solo en `?s=`; sin params sueltos |
 | `format-bytes-autofit.test.mjs` | `autofit` + pesos en captions CDN |
 | `ux-gallery-invariants.test.mjs` | Toast host, `on(null)` seguro, cdn-sizes, no params sueltos |
+| `gallery-sources-meta.test.mjs` | `.file-meta-page`, `#vsPath` absoluto, no `is-code-editor` |
+| `cdn-loader.test.mjs` | Entry `loader.min.js`, boot galería, README pin/mirrors |
+| `load-plan.test.mjs` | Anti-redundancia categoría → tag / `all` / mismo lote |
+| `code-infer-lang.test.mjs` | HTML de demos ≠ javascript; softFormat separa tags |
+| `demo-equiv.test.mjs` | No pintar «HTML puro equivalente» / no `data-cm` prematuro |
 
 ### Cómo extender
 1. Nuevo error silencioso → test que falle si vuelve (`*.test.mjs`, no `.ts` sin toolchain).
@@ -515,6 +572,8 @@ mantenerlo aparte.
 4. Actualizar la **Carta de leyes** + bitácora de errores + esta tabla.
 5. Familia de color nueva → solo en `is-base.css`/`palettes.css`.
 6. Evento nuevo → documentar y emitir en el mismo commit.
+7. Cambio de loader / plan de carga → `load-plan` + `cdn-loader` verdes + `src/cdn/loader.md`.
+8. Cambio de coloreado `is-code` → `code-infer-lang` + no reintroducir `renderDemoEquiv`.
 7. Nuevo estado de UI en URL → key dentro de `?s=` vía `url-nav.js`, nunca param suelto + actualizar `url-nav.test.mjs`.
 8. Behavior que llama APIs sobre un nodo del demo → garantizar el nodo en `mount` + entrada en `ux-gallery-invariants` si es trampa repetible.
 

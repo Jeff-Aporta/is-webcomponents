@@ -2,7 +2,8 @@
 // + {tag}.min.css + is-base.min.css/palettes.min.css en la raiz.
 // Ademas genera bundles por categoria (categoria.min.js) y all.min.js para
 // poder cargar varios componentes con un solo <script type="module" src="..."></script>.
-import { access, readdir, mkdir, stat, rm, writeFile, readFile } from 'node:fs/promises';
+import { access, readdir, mkdir, stat, rm, writeFile, readFile, copyFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
@@ -25,7 +26,7 @@ for (const entry of await readdir(dist, { withFileTypes: true })) {
   await rm(join(dist, entry.name), { recursive: true, force: true });
 }
 
-const bundleJs = (entry, outfile, plugins = []) =>
+const bundleJs = (entry, outfile, plugins = [], bannerJs = '') =>
   build({
     entryPoints: [entry],
     outfile,
@@ -35,14 +36,41 @@ const bundleJs = (entry, outfile, plugins = []) =>
     target: 'es2020',
     legalComments: 'none',
     plugins,
+    ...(bannerJs ? { banner: { js: bannerJs } } : {}),
   });
+
+const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
+const GH_BLOB = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main';
+const CDN_SKILL = `${GH_RAW}/src/skills/is-cdn-install/SKILL.md`;
+const CDN_COMP_LLM = `${GH_RAW}/src/components/LLM.md`;
+const CDN_LOADER_MD = `${GH_RAW}/src/cdn/loader.md`;
+const CDN_LOADER_LLM = `${GH_RAW}/src/cdn/LLM.md`;
+
+/** Banner inicial de cada .min.js con rutas MD para LLMs. */
+const docsBanner = (lines) =>
+  ['/*!', ' * IS Web Components - docs (LLM)', ...lines.map((l) => ` * ${l}`), ' */'].join('\n');
+
+const componentDocsBanner = (folder, tag) => {
+  const lines = [
+    `component: ${GH_RAW}/src/components/${folder}/${tag}.md`,
+    `category: ${GH_RAW}/src/components/${folder}/LLM.md`,
+    `kit: ${CDN_COMP_LLM}`,
+    `loader: ${CDN_LOADER_MD}`,
+    `cdn-install: ${CDN_SKILL}`,
+    `blob: ${GH_BLOB}/src/components/${folder}/${tag}.js`,
+  ];
+  if (!existsSync(join(compRoot, folder, `${tag}.md`))) {
+    lines[0] = `component: (sin ${tag}.md) → ver category/kit`;
+  }
+  return docsBanner(lines);
+};
 
 // bundle:false — los .min.js de cada tag ya están compilados y minificados;
 // aquí solo generamos un archivo que los importa. Si se hiciera bundle:true
 // esbuild inlinearía todo en un único módulo y `import.meta.url` (usado por
 // adoptCss para localizar el .css hermano de cada componente) apuntaría al
 // archivo de categoría/all en vez del componente, rompiendo el CSS.
-const bundleVirtual = async (outfile, virtualEntry, sourcefile) => {
+const bundleVirtual = async (outfile, virtualEntry, sourcefile, bannerJs = '') => {
   const r = await build({
     bundle: false,
     minify: true,
@@ -51,9 +79,9 @@ const bundleVirtual = async (outfile, virtualEntry, sourcefile) => {
     legalComments: 'none',
     write: false,
     stdin: { contents: virtualEntry, resolveDir: dist, loader: 'js', sourcefile },
+    ...(bannerJs ? { banner: { js: bannerJs } } : {}),
   });
-  const fs = await import('node:fs/promises');
-  await fs.writeFile(outfile, r.outputFiles[0].text);
+  await writeFile(outfile, r.outputFiles[0].text);
 };
 
 const bundleCss = (entry, outfile) => build({ entryPoints: [entry], outfile, minify: true });
@@ -185,7 +213,7 @@ for (const inFile of entries) {
     await bundleCss(hostBaseIn, join(outDir, 'host-base.css'));
   }
 
-  await bundleJs(inFile, outJs, [externalComponents]);
+  await bundleJs(inFile, outJs, [externalComponents], componentDocsBanner(folder, tag));
 
   const hasCss = await access(cssIn).then(() => true, () => false);
   if (hasCss) await bundleCss(cssIn, outCss);
@@ -256,7 +284,14 @@ for (const [category, items] of byCategory) {
   const outName = `${category}/category.${category}.min.js`;
   await mkdir(join(dist, category), { recursive: true });
   const out = join(dist, category, `category.${category}.min.js`);
-  await bundleVirtual(out, virtualEntry, out);
+  const catBanner = docsBanner([
+    `category-bundle: ${category}`,
+    `category: ${GH_RAW}/src/components/${category}/LLM.md`,
+    `kit: ${CDN_COMP_LLM}`,
+    `loader: ${CDN_LOADER_MD}`,
+    `cdn-install: ${CDN_SKILL}`,
+  ]);
+  await bundleVirtual(out, virtualEntry, out, catBanner);
   const outStat = await stat(out);
   console.log(`  ${outName.padEnd(34)} js ${String(outStat.size).padStart(6)}  (${tags.length} comps)`);
 }
@@ -269,9 +304,63 @@ const allPaths = entries
   .sort();
 const allVirtual = `// all.min.js — todos los componentes de IS Web Components\n${allPaths.map((p) => `import './${p}.min.js';`).join('\n')}\n`;
 const allOut = join(dist, 'all.min.js');
-await bundleVirtual(allOut, allVirtual, allOut);
+const allBanner = docsBanner([
+  'bundle: all.min.js (import list — peso real = suma de .min.js hijos)',
+  `kit: ${CDN_COMP_LLM}`,
+  `loader: ${CDN_LOADER_MD}`,
+  `cdn-install: ${CDN_SKILL}`,
+  `prefer: usar loader.min.js + load(tags|cats) en vez de all`,
+]);
+await bundleVirtual(allOut, allVirtual, allOut, allBanner);
 const allStat = await stat(allOut);
 console.log(`  ${'all.min'.padEnd(18)} js ${String(allStat.size).padStart(6)}  (${allPaths.length} comps)`);
+
+// ── loader.min.js ────────────────────────────────────────────────
+// Entry liviano: manifiesto embebido + load / loadCSSBase / loadCSSPalettesDefault.
+const loaderCatalog = {
+  aliases: { charts: 'data-viz', 'data-viz': 'data-viz', dataviz: 'data-viz' },
+  categories: {},
+  tags: {},
+};
+for (const [category, items] of byCategory) {
+  const files = [];
+  for (const m of items) {
+    const file = m.tag.replace(/^is-/, '');
+    if (!tagToComponent.has(file)) continue;
+    files.push(file);
+    loaderCatalog.tags[m.tag] = { category, file };
+    loaderCatalog.tags[file] = { category, file };
+  }
+  if (files.length) loaderCatalog.categories[category] = files;
+}
+const loaderSrc = join(root, 'src', 'cdn', 'loader.js');
+const loaderOut = join(dist, 'loader.min.js');
+const loaderBanner = docsBanner([
+  `md: ${CDN_LOADER_MD}`,
+  `llm: ${CDN_LOADER_LLM}`,
+  `cdn-copy: dist/cdn/loader.md + dist/cdn/LLM.md`,
+  `kit: ${CDN_COMP_LLM}`,
+  `cdn-install: ${CDN_SKILL}`,
+]);
+await build({
+  entryPoints: [loaderSrc],
+  outfile: loaderOut,
+  bundle: true,
+  minify: true,
+  format: 'esm',
+  target: 'es2020',
+  legalComments: 'none',
+  banner: { js: loaderBanner },
+  define: {
+    __IS_LOADER_CATALOG__: JSON.stringify(loaderCatalog),
+  },
+});
+const loaderStat = await stat(loaderOut);
+console.log(`  ${'loader.min'.padEnd(18)} js ${String(loaderStat.size).padStart(6)}  (${Object.keys(loaderCatalog.categories).length} cats, ${Object.keys(loaderCatalog.tags).length / 2 | 0} tags)`);
+await copyFile(join(root, 'src', 'cdn', 'loader.md'), join(dist, 'loader.md'));
+console.log(`  ${'loader.md'.padEnd(18)} docs`);
+await copyFile(join(root, 'src', 'cdn', 'LLM.md'), join(dist, 'LLM.md'));
+console.log(`  ${'LLM.md'.padEnd(18)} docs (cdn/)`);
 
 // ── sizes.json ───────────────────────────────────────────────────
 // Mapa {ruta relativa → bytes} de todo el JS/CSS publicado. El front
@@ -302,11 +391,25 @@ await writeFile(
     '  <categoria>/<name>.min.css               — estilos del componente (junto al .min.js)',
     '  <categoria>/category.<categoria>.min.js  — todos los componentes de esa categoria',
     '  all.min.js                               — todos los componentes en un archivo',
+    '  loader.min.js                            — ISWebComponentsLoader (carga selectiva + pin/mirrors)',
+    '  loader.md                                — docs del loader (LLM)',
     '  sizes.json                               — {ruta: bytes} de todo el .min.js/.min.css publicado',
     '  assets/icons/                            — SVGs Iconify + <prefix>.json + index.json',
     '  Los tags conservan el prefijo is-* (p.ej. actions/button.min.js → <is-button>).',
     '',
-    'Uso:',
+    'Uso recomendado (loader):',
+    '  <script type="module">',
+    '    import { ISWebComponentsLoader } from ".../loader.min.js";',
+    '    // Pin opcional (SHA o branch). Sin pin → tip de main (API GitHub).',
+    '    // ISWebComponentsLoader.pin("abcdef0123…");',
+    '    ISWebComponentsLoader.configure({ mirrors: ["jsdelivr", "pages"] });',
+    '    await ISWebComponentsLoader.loadCSSBase();',
+    '    await ISWebComponentsLoader.loadCSSPalettesDefault();',
+    '    await ISWebComponentsLoader.load("is-button", "is-button-group");',
+    '    // o: load("actions", "data-viz") | load("all")',
+    '  </script>',
+    '',
+    'Uso clásico:',
     '  <link rel="stylesheet" href=".../is-base.min.css">',
     '  <script type="module" src=".../actions/button.min.js"></script>',
     '  <!-- el .min.css lo trae el propio componente -->',
@@ -374,4 +477,4 @@ try {
   // Sin src/skills/: no bloquear el build del CDN.
 }
 
-console.log(`OK dist/cdn  ${entries.length} components + is-base + ${byCategory.size} categories + all`);
+console.log(`OK dist/cdn  ${entries.length} components + is-base + ${byCategory.size} categories + all + loader`);

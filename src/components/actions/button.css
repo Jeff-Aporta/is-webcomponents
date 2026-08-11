@@ -22,7 +22,7 @@
      pasar de outlined a filled sin dejar el label ilegible. */
   --_text-hover: var(--_text);
   --_border-hover: var(--_border);
-  --_focus: var(--is-focus, var(--is-color-brand, #339af0));
+  --_focus: var(--is-focus, var(--is-color-brand, dodgerblue));
   --_height: 2.5em;
   --_hpad: 1em;
   display: inline-flex;
@@ -119,10 +119,10 @@
 :host([color="brand"]) {
   /* Solo tokens relativos (+ hex). Nunca -500/-600 aquí: el tema ya no los define
      y el fallback numérico en var() hace que token-vocabulary / el ojo vean dos idiomas. */
-  --_tone: var(--is-color-brand, #339af0);
-  --_tone-strong: var(--is-color-brand-strong, #228be6);
-  --_tone-stronger: var(--is-color-brand-stronger, #1971c2);
-  --_tone-strongest: var(--is-color-brand-strongest, #1864ab);
+  --_tone: var(--is-color-brand, dodgerblue);
+  --_tone-strong: var(--is-color-brand-strong, dodgerblue);
+  --_tone-stronger: var(--is-color-brand-stronger, color-mix(in srgb, dodgerblue 86%, black));
+  --_tone-strongest: var(--is-color-brand-strongest, color-mix(in srgb, dodgerblue 74%, black));
   --_tone-paler: var(--is-color-brand-paler, #e7f5ff);
   --_tone-pale: var(--is-color-brand-pale, #d0ebff);
   --_tone-text: var(--is-brand-text, var(--_tone-stronger));

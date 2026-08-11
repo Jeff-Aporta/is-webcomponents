@@ -96,6 +96,9 @@ Los modos pesados (python) se cargan al activar el `lang`.
 - Pesos CDN: `resolveCdnMinPaths` + `sizes.json` vía `cdn-sizes.js`.
 - Roadmap LaTeX: diseñar/aprobar antes de scaffold; reutilizar `<is-code>` +
   motor math por CDN (KaTeX preferido); categoría `code`.
+- Snippets de demos HTML: `lang="html"` en el JSON **o** dejar que bootstrap
+  llame `inferLanguage` (no pre-marcar `data-cm="1"` en `render.js`).
+- Tras tocar coloreado/formato: `node --test tests/code-infer-lang.test.mjs`.
 
 ## Qué no hacer
 
@@ -116,6 +119,10 @@ Los modos pesados (python) se cargan al activar el `lang`.
   sin reutilizar `_shared/code-*` + `<is-dialog>` / layout existente.
 - **No** escribir `.test.ts` en este repo (no hay pipeline TS de producto):
   guardianes = `tests/*.test.mjs`.
+- **No** crear snippets HTML sin lang/inferencia: el default `javascript` pinta
+  `<` como operador (cian) y “parece tema roto”.
+- **No** marcar `data-cm="1"` al construir el nodo en `render.js` antes de paint.
+- **No** reintroducir la sección «HTML puro equivalente» bajo demos.
 
 ## Errores conocidos y prevención
 
@@ -138,6 +145,9 @@ Los modos pesados (python) se cargan al activar el `lang`.
   stretch. Guardián: mismo test.
 - **Snippets docs con runMode suelto:** no pintar `<pre>` a mano si el contrato
   es `<is-code readonly compact>`.
+- **HTML coloreado como JS:** sin `lang` + `data-cm` prematuro. Fix:
+  `inferLanguage` + softFormat; no `renderDemoEquiv`. Guardián:
+  `tests/code-infer-lang.test.mjs`.
 
 - **F5 al final del docs:** CodeMirror `setValue`/`fromTextArea`/`refresh` hace
   scrollIntoView del cursor y mueve `is-main`. Fix: `#withOuterScroll` en

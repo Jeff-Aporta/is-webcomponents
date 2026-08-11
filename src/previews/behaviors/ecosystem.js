@@ -1,22 +1,197 @@
 /**
- * Preview «Ecosistema JS»: lista TODOS los módulos de `_shared/`.
+ * Preview «Ecosistema JS»: get started + playground del loader + catálogo _shared.
  * @param {import('../_kit/types.d.ts').PreviewMountContext} ctx
  * @param {import('../_kit/types.d.ts').ISComponentPreviewLike} preview
  */
 export async function mount(ctx, preview) {
   const root = ctx.main;
+  const signal = preview?.signal;
+  const opts = signal ? { signal } : undefined;
+
+  const getStarted = root.querySelector('#ecoGetStarted');
+  if (getStarted) {
+    const snip = `<script type="module">
+  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/loader.min.js';
+
+  // Pin a un commit (inmutable) o unpin() / sin pin → tip de main
+  // ISWebComponentsLoader.pin('abcdef0123456789…');
+  ISWebComponentsLoader.configure({ mirrors: ['jsdelivr', 'pages'] });
+
+  await ISWebComponentsLoader.loadCSSBase();
+  await ISWebComponentsLoader.loadCSSPalettesDefault();
+  await ISWebComponentsLoader.load('is-button', 'is-button-group');
+  // Categorías: load('actions', 'data-viz')  // alias: charts → data-viz
+  // Todo el kit: load('all')
+</script>
+
+<is-button color="brand">Hola</is-button>`;
+    getStarted.value = snip;
+    getStarted.dataset.cmSource = snip;
+  }
+
+  await mountPlayground(root, opts);
+  await mountSharedCatalog(root, preview, opts);
+}
+
+/**
+ * @param {ParentNode} root
+ * @param {AddEventListenerOptions | undefined} opts
+ */
+async function mountPlayground(root, opts) {
+  const catsEl = root.querySelector('#ecoCats');
+  const tagsEl = root.querySelector('#ecoTags');
+  const bytesEl = root.querySelector('#ecoBytes');
+  const snipEl = root.querySelector('#ecoSnippet');
+  const liveEl = root.querySelector('#ecoLive');
+  const applyBtn = root.querySelector('#ecoApply');
+  if (!catsEl || !tagsEl) return;
+
+  /** @type {Record<string, number>} */
+  let sizes = {};
+  try {
+    const url = new URL('../../../dist/cdn/sizes.json', import.meta.url);
+    const res = await fetch(url, { cache: 'no-cache', signal: opts?.signal });
+    if (res.ok) sizes = await res.json();
+  } catch {
+    /* sizes opcional en preview */
+  }
+
+  /** @type {{ categories: Record<string, string[]>, tags: Record<string, { category: string, file: string }> }} */
+  let catalog = { categories: {}, tags: {} };
+  try {
+    const { ISWebComponentsLoader } = await import('../../../dist/cdn/loader.min.js');
+    catalog = ISWebComponentsLoader.catalog;
+  } catch {
+    catsEl.innerHTML = '<p class="lede">Corré <code>npm run build</code> para generar <code>loader.min.js</code>.</p>';
+    return;
+  }
+
+  const quickTags = ['is-button', 'is-button-group', 'is-icon', 'is-input', 'is-card', 'is-toast', 'is-code'];
+  const catNames = Object.keys(catalog.categories).sort();
+
+  for (const c of catNames) {
+    const lab = document.createElement('label');
+    lab.innerHTML = `<input type="checkbox" data-kind="cat" value="${c}" /> <span>${c}</span> <code>${catalog.categories[c].length}</code>`;
+    catsEl.appendChild(lab);
+  }
+  for (const t of quickTags) {
+    if (!catalog.tags[t]) continue;
+    const lab = document.createElement('label');
+    lab.innerHTML = `<input type="checkbox" data-kind="tag" value="${t}" /> <code>${t}</code>`;
+    tagsEl.appendChild(lab);
+  }
+
+  const selected = () => {
+    const cats = [...catsEl.querySelectorAll('input:checked')].map((el) => el.value);
+    const tags = [...tagsEl.querySelectorAll('input:checked')].map((el) => el.value);
+    return { cats, tags };
+  };
+
+  const estimateBytes = ({ cats, tags }) => {
+    let total = (sizes['loader.min.js'] || 0) + (sizes['is-base.min.css'] || 0) + (sizes['palettes.min.css'] || 0);
+    const seen = new Set();
+    for (const c of cats) {
+      const key = `${c}/category.${c}.min.js`;
+      if (sizes[key]) total += sizes[key];
+      for (const file of catalog.categories[c] || []) {
+        const js = `${c}/${file}.min.js`;
+        const css = `${c}/${file}.min.css`;
+        if (!seen.has(js)) { total += sizes[js] || 0; seen.add(js); }
+        if (!seen.has(css)) { total += sizes[css] || 0; seen.add(css); }
+      }
+    }
+    for (const t of tags) {
+      const entry = catalog.tags[t];
+      if (!entry) continue;
+      if (cats.includes(entry.category)) continue;
+      const js = `${entry.category}/${entry.file}.min.js`;
+      const css = `${entry.category}/${entry.file}.min.css`;
+      if (!seen.has(js)) { total += sizes[js] || 0; seen.add(js); }
+      if (!seen.has(css)) { total += sizes[css] || 0; seen.add(css); }
+    }
+    return total;
+  };
+
+  const fmt = (n) => {
+    if (n >= 1024 * 1024) return `${(n / (1024 * 1024)).toFixed(2)} MB`;
+    if (n >= 1024) return `${(n / 1024).toFixed(1)} KB`;
+    return `${n} B`;
+  };
+
+  const paintSnippet = () => {
+    const { cats, tags } = selected();
+    const args = [...cats, ...tags].map((x) => `'${x}'`).join(', ');
+    const body = args
+      ? `await ISWebComponentsLoader.load(${args});`
+      : `await ISWebComponentsLoader.load('is-button'); // elegí arriba`;
+    const snip = `<script type="module">
+  import { ISWebComponentsLoader } from './dist/cdn/loader.min.js';
+  await ISWebComponentsLoader.loadCSSBase();
+  await ISWebComponentsLoader.loadCSSPalettesDefault();
+  ${body}
+</script>`;
+    if (snipEl) {
+      snipEl.value = snip;
+      snipEl.dataset.cmSource = snip;
+    }
+    if (bytesEl) {
+      const all = sizes['all.min.js']
+        ? Object.entries(sizes).filter(([k]) => k.endsWith('.min.js') && !k.includes('category.') && k !== 'all.min.js' && k !== 'loader.min.js').reduce((a, [, v]) => a + v, 0)
+        : 0;
+      const est = estimateBytes({ cats, tags });
+      bytesEl.innerHTML = cats.length || tags.length
+        ? `Estimado con selección: <strong>${fmt(est)}</strong>${all ? ` · vs all resuelto ≈ <strong>${fmt(all)}</strong>` : ''}`
+        : 'Seleccioná categorías o tags para estimar bytes transferidos.';
+    }
+  };
+
+  catsEl.addEventListener('change', paintSnippet, opts);
+  tagsEl.addEventListener('change', paintSnippet, opts);
+  paintSnippet();
+
+  applyBtn?.addEventListener('click', async () => {
+    const { cats, tags } = selected();
+    const ids = [...cats, ...tags];
+    if (!ids.length) {
+      if (liveEl) liveEl.textContent = 'Elegí al menos un tag o categoría.';
+      return;
+    }
+    try {
+      const { ISWebComponentsLoader } = await import('../../../dist/cdn/loader.min.js');
+      await ISWebComponentsLoader.load(...ids);
+      if (liveEl) {
+        liveEl.replaceChildren();
+        if (ids.some((id) => id === 'is-button' || id === 'actions' || catalog.tags[id]?.file === 'button')) {
+          const b = document.createElement('is-button');
+          b.setAttribute('color', 'brand');
+          b.textContent = 'Brand listo';
+          liveEl.appendChild(b);
+        }
+        const note = document.createElement('span');
+        note.textContent = ` load(${ids.map((x) => `"${x}"`).join(', ')}) OK`;
+        liveEl.appendChild(note);
+      }
+    } catch (err) {
+      if (liveEl) liveEl.textContent = String(err?.message || err);
+    }
+  }, opts);
+}
+
+/**
+ * @param {ParentNode} root
+ * @param {import('../_kit/types.d.ts').ISComponentPreviewLike} preview
+ * @param {AddEventListenerOptions | undefined} opts
+ */
+async function mountSharedCatalog(root, preview, opts) {
   const list = root.querySelector('#ecoList');
   const count = root.querySelector('#ecoCount');
   const filter = root.querySelector('#ecoFilter');
   if (!list) return;
 
-  const signal = preview?.signal;
-  const opts = signal ? { signal } : undefined;
-
   let modules = [];
   try {
     const url = new URL('../data/shared-modules.json', import.meta.url);
-    const res = await fetch(url, { cache: 'no-cache', signal });
+    const res = await fetch(url, { cache: 'no-cache', signal: preview?.signal });
     if (!res.ok) throw new Error(`${res.status}`);
     const catalog = await res.json();
     modules = catalog.modules || [];

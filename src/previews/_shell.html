@@ -3,20 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
-  <script type="module" src="../../dist/cdn/all.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Preview · IS Web Components</title>
-  <link rel="stylesheet" href="../styles/is-base.css" />
-  <link rel="stylesheet" href="../styles/palettes.css" />
-  <link rel="stylesheet" href="../styles/presentation.css" />
-  <link rel="stylesheet" href="../components/layout/preview-component.css" />
-  <script type="module" src="../../scripts/highlight-pre.js"></script>
-  <script type="module" src="../../scripts/demo-code.js"></script>
-  <script type="module" src="../../scripts/docs-chrome.js"></script>
-  <script type="module" src="../../scripts/cdn-panel.js"></script>
-  <script type="module" src="../../scripts/view-sources.js"></script>
-  <script type="module" src="../../scripts/demo-file-meta.js"></script>
-  <script type="module" src="../../scripts/preview-chrome.js"></script>
+  <script type="module">
+    import { ISWebComponentsLoader as L } from '../../dist/cdn/loader.min.js';
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.loadCSSBase();
+    await L.loadCSSPalettesDefault();
+    await L.loadPageStyles([
+      '../styles/presentation.css',
+      '../components/layout/preview-component.css',
+    ]);
+    await L.load('all');
+    await L.loadPageModules([
+      '../../scripts/highlight-pre.js',
+      '../../scripts/demo-code.js',
+      '../../scripts/docs-chrome.js',
+      '../../scripts/cdn-panel.js',
+      '../../scripts/view-sources.js',
+      '../../scripts/demo-file-meta.js',
+      '../../scripts/preview-chrome.js',
+    ]);
+  </script>
   <style>
     html, body { height: 100%; margin: 0; }
     is-preview-component { height: 100%; }

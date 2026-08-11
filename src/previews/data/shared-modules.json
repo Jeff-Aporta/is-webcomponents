@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-11T12:40:32.692Z",
-  "count": 57,
+  "generatedAt": "2026-08-11T16:00:05.329Z",
+  "count": 58,
   "modules": [
     {
       "file": "adopt-css.js",
@@ -75,11 +75,27 @@
       ]
     },
     {
+      "file": "code-diff.js",
+      "id": "code-diff",
+      "path": "src/components/_shared/code-diff.js",
+      "summary": "code-diff — Por qué existe: pintar un diff con el modo `javascript` (o cualquier otro de",
+      "bytes": 9035,
+      "exports": [
+        "DIFF_LINE_CLASS",
+        "DIFF_LINE_CLASSES",
+        "classifyDiffLine",
+        "diffLineClass",
+        "parseStatLine",
+        "formatDiff",
+        "defineDiffMode"
+      ]
+    },
+    {
       "file": "code-format.js",
       "id": "code-format",
       "path": "src/components/_shared/code-format.js",
       "summary": "code-format — No es Prettier completo (sin AST de terceros). Acepta un JSON de opciones",
-      "bytes": 5593,
+      "bytes": 5866,
       "exports": [
         "DEFAULT_FORMAT",
         "normalizeFormatConfig",
@@ -91,10 +107,11 @@
       "id": "code-langs",
       "path": "src/components/_shared/code-langs.js",
       "summary": "code-langs — Los modos livianos (js/ts/jsx/html/css) se resuelven con lo que ya carga",
-      "bytes": 3225,
+      "bytes": 5456,
       "exports": [
         "registerLanguage",
         "resolveLanguage",
+        "inferLanguage",
         "listLanguages",
         "ensureLanguage"
       ]
@@ -119,11 +136,12 @@
       "id": "code-text",
       "path": "src/components/_shared/code-text.js",
       "summary": "code-text — Extraído para evitar ciclos highlight-code ↔ code ↔ code-format.",
-      "bytes": 3368,
+      "bytes": 3736,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
         "prettyHtml",
+        "softFormatMode",
         "softFormat"
       ]
     },
@@ -132,7 +150,7 @@
       "id": "code-theme",
       "path": "src/components/_shared/code-theme.js",
       "summary": "code-theme — El consumidor pasa un objeto de colores (como un theme de VS Code / CM).",
-      "bytes": 5473,
+      "bytes": 6687,
       "exports": [
         "THEME_PROP_MAP",
         "BUILTIN_THEMES",
@@ -403,20 +421,20 @@
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.js",
       "summary": "highlight-code — se coloreaba con CodeMirror.runMode sobre `<pre class=\"code\">`.",
-      "bytes": 10912,
+      "bytes": 10586,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
         "prettyHtml",
         "softFormat",
+        "softFormatMode",
         "THEMES",
         "resolveMode",
         "modeToLang",
         "paint",
         "repaint",
         "watchDom",
-        "reapplyTheme",
-        "isReady"
+        "reapplyTheme"
       ]
     },
     {

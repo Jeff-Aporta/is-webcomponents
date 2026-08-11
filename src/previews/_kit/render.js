@@ -40,59 +40,6 @@ export function fragmentFromHtml(html) {
 }
 
 /**
- * @param {Extract<PreviewBlock, { kind: 'demo' }>} block
- * @returns {HTMLElement | null}
- */
-function renderDemoEquiv(block) {
-  if (!block.equivHtml && !block.equivFlow && !block.equivNote) return null;
-
-  const section = document.createElement('section');
-  section.className = 'demo-equiv';
-  section.setAttribute('aria-label', 'HTML puro equivalente');
-
-  const title = document.createElement('h3');
-  title.className = 'demo-equiv__title';
-  title.textContent = 'HTML puro equivalente';
-  section.append(title);
-
-  if (block.equivNote) {
-    const note = document.createElement('p');
-    note.className = 'demo-equiv__note';
-    note.innerHTML = resolveAssets(block.equivNote);
-    section.append(note);
-  } else {
-    const note = document.createElement('p');
-    note.className = 'demo-equiv__note';
-    note.textContent =
-      'Mapeo documental al HTML/ARIA nativo. No sustituye al componente del kit ni copia sus estilos.';
-    section.append(note);
-  }
-
-  if (block.equivHtml) {
-    const ed = document.createElement('is-code');
-    ed.className = 'code demo-equiv__pre is-code-view';
-    ed.setAttribute('readonly', '');
-    ed.setAttribute('compact', '');
-    ed.setAttribute('wrap', '');
-    ed.setAttribute('line-numbers', 'false');
-    ed.setAttribute('lang', 'html');
-    ed.setAttribute('value', block.equivHtml.trim());
-    ed.dataset.cm = '1';
-    ed.dataset.cmSource = block.equivHtml.trim();
-    section.append(ed);
-  }
-
-  if (block.equivFlow) {
-    const flow = document.createElement('div');
-    flow.className = 'demo-equiv__flow';
-    flow.append(fragmentFromHtml(block.equivFlow));
-    section.append(flow);
-  }
-
-  return section;
-}
-
-/**
  * @param {PreviewBlock} block
  * @returns {HTMLElement}
  */
@@ -112,11 +59,8 @@ export function renderBlock(block) {
       if (block.heading) demo.setAttribute('heading', block.heading);
       if (block.contain) demo.setAttribute('contain', '');
       if (block.noCode) demo.dataset.noCode = '';
-      if (block.equivHtml) demo.dataset.equivHtml = block.equivHtml;
       demo.append(fragmentFromHtml(block.html));
       wrap.append(demo);
-      const equiv = renderDemoEquiv(block);
-      if (equiv) wrap.append(equiv);
       return wrap;
     }
     case 'callout': {
@@ -132,13 +76,15 @@ export function renderBlock(block) {
       ed.setAttribute('compact', '');
       ed.setAttribute('wrap', '');
       ed.setAttribute('line-numbers', 'false');
+      const raw = block.code ?? '';
+      // Sin data-cm: highlight-code.paint infiere lang + softFormat.
+      // Si el JSON trae lang, lo fijamos; si no, is-code infiere al montar.
       if (block.lang) {
         ed.setAttribute('lang', block.lang);
         ed.dataset.lang = block.lang;
       }
-      ed.setAttribute('value', block.code ?? '');
-      ed.dataset.cm = '1';
-      ed.dataset.cmSource = block.code ?? '';
+      ed.setAttribute('value', raw);
+      ed.dataset.cmSource = raw;
       return ed;
     }
     case 'html': {

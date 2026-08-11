@@ -181,7 +181,7 @@ for (let i = 0; i < tags.length; i += 1) {
     const max = Math.min(handles.length, 8);
     let clicked = 0;
     for (let k = 0; k < handles.length && clicked < max; k += 1) {
-      const inChrome = await handles[k].evaluate((el) => !!el.closest('.demo-code-dd, .demo-code-pop, .demo-equiv')).catch(() => true);
+      const inChrome = await handles[k].evaluate((el) => !!el.closest('.demo-code-dd, .demo-code-pop')).catch(() => true);
       if (inChrome) continue;
       try {
         await handles[k].click({ timeout: 1500 });

@@ -35,10 +35,11 @@ import { upgradeProperties } from '../_shared/upgrade-properties.js';
 import { setStringAttr } from '../_shared/reflect.js';
 import { ensureCodeMirrorEditor, adoptCodeMirrorCss, CODEMIRROR_CDN } from '../_shared/code-cm.js';
 import {
-  ensureLanguage, listLanguages, registerLanguage, resolveLanguage,
+  ensureLanguage, listLanguages, registerLanguage, resolveLanguage, inferLanguage,
 } from '../_shared/code-langs.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from '../_shared/code-format.js';
 import { applyThemeConfig, parseThemeConfig } from '../_shared/code-theme.js';
+import { softFormat, softFormatMode } from '../_shared/code-text.js';
 import { DIFF_LINE_CLASSES } from '../_shared/code-diff.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
@@ -389,6 +390,17 @@ class IsCode extends ElementBase {
         applyThemeConfig(this, themeAttr, this.#pageTheme());
       }
 
+      // Snippets de demos suelen omitir lang → HTML se pintaba como JS.
+      if (!this.hasAttribute('lang') && this.#pendingValue != null) {
+        this.setAttribute('lang', inferLanguage(this.#pendingValue));
+      }
+
+      // Vista docs: pretty ligero antes de montar CM (saltos + indent).
+      if (this.compact && this.readonly && this.#pendingValue != null) {
+        this.#pendingValue = softFormat(this.#pendingValue, softFormatMode(this.lang));
+        this.setAttribute('value', this.#pendingValue);
+      }
+
       const CodeMirror = await ensureCodeMirrorEditor();
       // CM CSS en document no entra al shadow: hay que adoptarlo aquí.
       await adoptCodeMirrorCss(this.shadowRoot, [
@@ -663,6 +675,7 @@ export {
   IsCode,
   registerLanguage,
   listLanguages,
+  inferLanguage,
   code2json,
   json2code,
   formatCode,

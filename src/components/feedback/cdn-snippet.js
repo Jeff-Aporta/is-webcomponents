@@ -52,10 +52,10 @@ import { defineElement } from '../_shared/define.js';
       <header class="cdn__head">
         <h3 class="cdn__title">Consumo por CDN</h3>
         <p class="cdn__hint">
-          Primero el CSS común; luego el JS del componente (o el bundle de
-          categoría / <code>all.min.js</code>). Usa el tab
-          <strong>Mirrors</strong> para cambiar de espejo o copiar un boot
-          con fallback.
+          Preferí <code>loader.min.js</code> + <code>loadCSSBase()</code> /
+          <code>loadCSSPalettesDefault()</code> + <code>load(…)</code> para
+          bajar solo lo necesario. Alternativa: CSS común + tag / categoría /
+          <code>all.min.js</code>. Tab <strong>Mirrors</strong> cambia el espejo.
         </p>
       </header>
 

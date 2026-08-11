@@ -66,13 +66,22 @@ export const prettyHtml = (text) => {
  * @param {string} text
  * @param {string} mode  htmlmixed|html|javascript|…
  */
+export const softFormatMode = (langOrMode) => {
+  const m = String(langOrMode || '').toLowerCase();
+  if (['html', 'htm', 'htmlmixed', 'xml', 'svg'].includes(m)) return 'htmlmixed';
+  if (['ts', 'typescript'].includes(m)) return 'javascript';
+  if (m === 'js') return 'javascript';
+  return m || 'javascript';
+};
+
 export const softFormat = (text, mode) => {
   let t = dedent(unwrapHandHighlight(text));
   const compact = t.replace(/\s+/g, ' ').trim();
   const fewLines = t.split('\n').length <= 2;
   const inlineNest = t.split('\n').some((line) => />\s*</.test(line));
 
-  if ((mode === 'htmlmixed' || mode === 'html') && t.includes('<') && (fewLines || inlineNest) && compact.length > 40) {
+  // Snippets HTML: pretty si hay nesting o pocas líneas con tags.
+  if ((mode === 'htmlmixed' || mode === 'html') && t.includes('<') && (fewLines || inlineNest)) {
     t = prettyHtml(t);
   }
 

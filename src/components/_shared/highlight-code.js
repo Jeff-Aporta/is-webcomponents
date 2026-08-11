@@ -15,9 +15,10 @@
  * bajo demanda en `paint`.
  */
 
-import { dedent, unwrapHandHighlight, prettyHtml, softFormat } from './code-text.js';
+import { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode } from './code-text.js';
+import { inferLanguage } from './code-langs.js';
 
-export { dedent, unwrapHandHighlight, prettyHtml, softFormat };
+export { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode };
 
 const CDN = 'https://cdn.jsdelivr.net/npm/codemirror@5.65.16';
 
@@ -56,15 +57,8 @@ export const resolveMode = (el, text) => {
   if (['html', 'htm', 'htmlmixed', 'xml', 'svg'].includes(raw)) return 'htmlmixed';
   if (['py', 'python'].includes(raw)) return 'python';
   if (raw === 'json') return 'json';
-
-  const t = String(text || '').trim();
-  if (!t) return 'htmlmixed';
-  if (/^(?:@|:root|[.#]?[a-z][\w-]*)\s*\{/i.test(t) || (/:\s*[^;]+;/m.test(t) && !/[<(]/.test(t.slice(0, 40)))) {
-    if (!/\b(?:const|let|var|function|=>)\b/.test(t) && !/^</.test(t)) return 'css';
-  }
-  if (/^</.test(t) || /<\/?[a-z][\w:-]*[\s>]/i.test(t.slice(0, 120))) return 'htmlmixed';
-  if (/\b(?:const|let|var|function|=>|import|export|class)\b/.test(t) || /\.\w+\s*=/.test(t)) return 'javascript';
-  return 'javascript';
+  if (['diff', 'patch'].includes(raw)) return 'diff';
+  return softFormatMode(inferLanguage(text));
 };
 
 /** Mode legacy → lang de `<is-code>`. */

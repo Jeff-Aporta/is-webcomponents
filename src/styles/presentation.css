@@ -331,61 +331,10 @@ body::-webkit-scrollbar-corner {
 
 .demo-block > .demo {
   margin-bottom: 0;
-  border-radius: calc(var(--is-radius) + 2px) calc(var(--is-radius) + 2px) 0 0;
+  border-radius: calc(var(--is-radius) + 2px);
 }
 
-.demo-equiv {
-  margin: 0 0 8px;
-  padding: 14px 18px 16px;
-  border: 1px dashed color-mix(in srgb, var(--is-border) 80%, var(--is-accent));
-  border-top: none;
-  border-radius: 0 0 calc(var(--is-radius) + 2px) calc(var(--is-radius) + 2px);
-  background: color-mix(in srgb, var(--is-bg) 88%, var(--is-bg-elev));
-}
-
-.demo-equiv__title {
-  margin: 0 0 0.35rem;
-  font-size: 0.85rem;
-  font-weight: 650;
-  letter-spacing: 0.01em;
-  color: var(--is-text);
-}
-
-.demo-equiv__note {
-  margin: 0 0 0.75rem;
-  font-size: 0.8rem;
-  line-height: 1.45;
-  color: var(--is-text-dim);
-  max-width: 72ch;
-}
-
-.demo-equiv__pre {
-  margin: 0;
-  max-height: 22rem;
-  overflow: auto;
-}
-
-.demo-equiv__flow {
-  margin-top: 0.9rem;
-  max-width: min(100%, 22rem);
-}
-
-.demo-equiv__flow is-flowchart {
-  display: block;
-  width: 100%;
-  height: 14rem;
-  max-height: 14rem;
-  box-sizing: border-box;
-}
-
-.demo-equiv__flow:has(is-flowchart[open-on-click])::after {
-  content: 'Clic para ampliar';
-  display: block;
-  margin-top: 0.4rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.02em;
-  color: var(--is-text-dim, #7a8390);
-}
+/* .demo-equiv: retirado de demos (equivHtml queda en JSON solo como dato opcional). */
 
 .demo {
   position: relative;

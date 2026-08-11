@@ -30,7 +30,7 @@
         },
         {
           "kind": "code",
-          "code": "/* marca: sirve a dark y light por igual */\n[data-palette=\"contapyme\"] {\n  --is-color-brand: #1a6eb0;\n  --is-accent: #1a6eb0;\n  --is-accent-bg: rgb(26 110 176 / 12%);\n  --is-brand-soft: rgb(26 110 176 / 18%);\n  --is-focus: #1a6eb0;\n}\n\n/* superficies: dependen de la PAREJA (tema, paleta) */\n.theme-dark[data-palette=\"contapyme\"]  { --is-bg: #0a0e14; --is-border: #273040; }\n.theme-light[data-palette=\"contapyme\"] { --is-bg: #fff;    --is-border: #ccc; }"
+          "code": "/* marca: sirve a dark y light por igual */\n[data-palette=\"contapyme\"] {\n  --is-color-brand: dodgerblue;\n  --is-accent: dodgerblue;\n  --is-accent-bg: rgb(30 144 255 / 12%);\n  --is-brand-soft: rgb(30 144 255 / 18%);\n  --is-focus: dodgerblue;\n}\n\n/* superficies: dependen de la PAREJA (tema, paleta) */\n.theme-dark[data-palette=\"contapyme\"]  { --is-bg: #0a0e14; --is-border: #273040; }\n.theme-light[data-palette=\"contapyme\"] { --is-bg: #fff;    --is-border: #ccc; }"
         },
         {
           "kind": "html",

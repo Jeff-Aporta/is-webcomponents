@@ -121,7 +121,7 @@
   --is-scrollbar-radius: 999px;
   --is-scrollbar-track: transparent;
   --is-scrollbar-thumb: color-mix(in srgb, var(--is-control-border) 65%, transparent);
-  --is-scrollbar-thumb-hover: color-mix(in srgb, var(--is-accent, #1a6eb0) 45%, var(--is-control-border));
+  --is-scrollbar-thumb-hover: color-mix(in srgb, var(--is-accent, dodgerblue) 45%, var(--is-control-border));
 }
 
 /* color-scheme solo con clase de tema: no oscurece el canvas del browser
@@ -167,7 +167,7 @@
   --is-error-soft-active: var(--is-color-error-pale);
   --is-scrollbar-track: color-mix(in srgb, var(--is-bg-soft) 70%, transparent);
   --is-scrollbar-thumb: color-mix(in srgb, var(--is-control-border) 55%, transparent);
-  --is-scrollbar-thumb-hover: color-mix(in srgb, var(--is-accent, #1a6eb0) 40%, var(--is-control-border));
+  --is-scrollbar-thumb-hover: color-mix(in srgb, var(--is-accent, dodgerblue) 40%, var(--is-control-border));
 }
 
 /* --- Estados de campos de formulario -------------------------------

@@ -11,7 +11,7 @@
  * fallback de color u offset difiere del default.
  */
 :host {
-  --is-focus-fallback: var(--is-color-brand, #339af0);
+  --is-focus-fallback: var(--is-color-brand, dodgerblue);
   --is-focus-offset: 2px;
 }
 

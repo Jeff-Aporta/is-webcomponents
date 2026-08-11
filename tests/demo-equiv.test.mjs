@@ -1,5 +1,6 @@
 /**
- * demo-equiv.test.mjs — contrato HTML puro equivalente en demos.
+ * demo-equiv.test.mjs — el bloque «HTML puro equivalente» ya no se pinta.
+ * Los campos equiv* pueden seguir en el JSON (datos), pero render no los muestra.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -9,47 +10,24 @@ import { fileURLToPath } from 'node:url';
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-test('tipos declaran equivHtml / equivNote / equivFlow', async () => {
+test('tipos aún declaran equivHtml / equivNote / equivFlow (opcionales)', async () => {
   const src = await readFile(join(raiz, 'src/previews/_kit/types.d.ts'), 'utf8');
   assert.match(src, /equivHtml\?:/);
   assert.match(src, /equivNote\?:/);
   assert.match(src, /equivFlow\?:/);
 });
 
-test('render pinta .demo-equiv bajo el demo', async () => {
+test('render NO pinta HTML puro equivalente ni .demo-equiv', async () => {
   const src = await readFile(join(raiz, 'src/previews/_kit/render.js'), 'utf8');
-  assert.match(src, /function renderDemoEquiv/);
-  assert.match(src, /demo-equiv/);
-  assert.match(src, /HTML puro equivalente/);
+  assert.doesNotMatch(src, /HTML puro equivalente/);
+  assert.doesNotMatch(src, /renderDemoEquiv/);
+  assert.doesNotMatch(src, /demo-equiv/);
   assert.match(src, /demo-block/);
 });
 
-test('presentation.css estila la sección equivalente', async () => {
-  const src = await readFile(join(raiz, 'src/styles/presentation.css'), 'utf8');
-  assert.match(src, /\.demo-equiv\b/);
-  assert.match(src, /\.demo-equiv__pre/);
-});
-
-test('piloto actions: button-group / button / fab tienen equivHtml en cada demo', async () => {
-  for (const file of [
-    'src/previews/actions/is-button-group.json',
-    'src/previews/actions/is-button.json',
-    'src/previews/actions/is-fab.json',
-  ]) {
-    const def = JSON.parse(await readFile(join(raiz, file), 'utf8'));
-    const demos = def.sections.flatMap((s) => s.blocks.filter((b) => b.kind === 'demo'));
-    assert.ok(demos.length > 0, `${file}: sin demos`);
-    for (const [i, demo] of demos.entries()) {
-      assert.ok(
-        demo.equivHtml,
-        `${file} demo#${i} (section) sin equivHtml — cada demo debe documentar el HTML puro`,
-      );
-    }
-  }
-  const bg = JSON.parse(
-    await readFile(join(raiz, 'src/previews/actions/is-button-group.json'), 'utf8'),
-  );
-  const select = bg.sections.find((s) => s.id === 'select');
-  const demo = select.blocks.find((b) => b.kind === 'demo');
-  assert.match(demo.equivFlow || '', /is-flowchart/, 'select debe explicar ramas con flowchart');
+test('bloques code no marcan data-cm prematuro (deja paint/inferir lang)', async () => {
+  const src = await readFile(join(raiz, 'src/previews/_kit/render.js'), 'utf8');
+  const codeCase = src.slice(src.indexOf("case 'code':"), src.indexOf("case 'html':"));
+  assert.doesNotMatch(codeCase, /dataset\.cm\s*=/);
+  assert.match(codeCase, /is-code/);
 });

@@ -45,7 +45,34 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src
 
 `<ref>` preferido: **commit SHA** de `main`. `@main` solo si la app declara seguimiento continuo.
 
-## Bootstrap mínimo
+## Bootstrap mínimo (loader)
+
+```html
+<html lang="es" data-theme="dark" data-palette="contapyme">
+<head>
+  <script type="module">
+    import { ISWebComponentsLoader as L } from
+      'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/loader.min.js';
+    L.configure({ mirrors: ['jsdelivr', 'pages'] });
+    // L.pin('abcdef…'); // opcional
+    await L.loadCSSBase();
+    await L.loadCSSPalettesDefault();
+    await L.load('actions'); // categoría: no hace falta load('is-button') después
+  </script>
+</head>
+<body>
+  <is-button color="brand">Hola</is-button>
+</body>
+</html>
+```
+
+Docs del loader: [`src/cdn/loader.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md) · `dist/cdn/loader.md`.
+
+**Anti-redundancia:** `load('actions')` ya cubre `is-button`; un `load('is-button')` posterior no vuelve a la red (`has` / `skipped` en el resultado). Preferir categoría o tags puntuales frente a `all.min.js`.
+
+Cada `.min.js` empieza con un comentario `/*! … */` con URLs raw de los MD (componente, categoría, kit, loader, skill) para contexto LLM.
+
+### Bootstrap clásico (sin loader)
 
 ```html
 <html lang="es" data-theme="dark" data-palette="contapyme">
@@ -65,11 +92,14 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src
 
 ### Qué JS elegir
 
-| Necesidad | Archivo |
+| Necesidad | Archivo / API |
 | --- | --- |
-| App / preview completa | `all.min.js` |
-| Solo una categoría | `<cat>/category.<cat>.min.js` |
-| Un tag | `<cat>/<name>.min.js` (ej. `actions/button.min.js` → `<is-button>`) |
+| Selectivo (recomendado) | `loader.min.js` → `load(tags\|cats)` |
+| App / preview completa | `load('all')` o `all.min.js` |
+| Solo una categoría | `load('actions')` o `<cat>/category.<cat>.min.js` |
+| Un tag | `load('is-button')` o `actions/button.min.js` |
+
+Anti-redundancia: si ya corriste `load('actions')`, un `load('is-button')` posterior no re-fetch.
 
 ## Boot con fallback (si un espejo cae)
 
