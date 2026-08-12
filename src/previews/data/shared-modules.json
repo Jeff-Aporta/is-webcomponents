@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-11T16:00:05.329Z",
+  "generatedAt": "2026-08-12T20:53:50.501Z",
   "count": 58,
   "modules": [
     {
@@ -442,7 +442,7 @@
       "id": "icon-loader",
       "path": "src/components/_shared/icon-loader.js",
       "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component — `<iconify-icon>` ni su script de CDN. Todo el sistema de iconos vive en",
-      "bytes": 7961,
+      "bytes": 8619,
       "exports": [
         "iconSourceBase",
         "resolveIconSvg",

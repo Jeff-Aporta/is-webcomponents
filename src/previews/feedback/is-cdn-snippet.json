@@ -9,7 +9,7 @@
     {
       "id": "intro",
       "title": "<is-cdn-snippet>",
-      "lede": "Panel reusablede enlaces CDN para un componente. Pinta 3 filas base\r\n          (individual / categoría / bundle global) y, opcionalmente, una fila\r\n          adicional por cada <strong>dependencia externa</strong> que el\r\n          consumidor declare (CodeMirror, librerías externas, etc.).",
+      "lede": "Panel copy-paste vía <code>loader.min.js</code>: un\r\n          <code>&lt;script type=\"module\" src&gt;</code> + un script que hace\r\n          <code>loadCSS*</code> y <code>load(tag\\|categoría\\|all)</code>. Radio para elegir el alcance.",
       "blocks": [
         {
           "kind": "demo",

@@ -107,6 +107,36 @@ No expone.
 
 No declara integración form-associated propia en este módulo.
 
+## Agrupadores y ratio
+
+`groups[]` ya no es solo leyenda: cada grupo se dibuja como un **cajón con título**
+y las entidades de ese grupo se resuelven como un sub-diagrama propio dentro de él.
+Las entidades sin `group` se colocan sueltas, sin cajón.
+
+```json
+{
+  "erDiagram": {
+    "ratio": 1.2,
+    "groups": [
+      { "id": "patyia", "name": "PatyIA — MSSQL", "hue": 210 },
+      { "id": "clientesis", "name": "ClientesIS — PostgreSQL", "hue": 38 }
+    ],
+    "entities": [{ "id": "CONVERSACIONES", "group": "patyia", "attributes": [] }]
+  }
+}
+```
+
+| Campo | Default | Qué hace |
+| --- | --- | --- |
+| `ratio` (alias `aspectRatio`) | `1.4` | Ratio **guía** ancho/alto. El empaquetado prueba cada número de columnas y elige el reparto de cajones más cercano a ese ratio. Es una preferencia, no una restricción: nunca recorta ni deforma una caja. |
+| `groups[].name` | — | Título del cajón (y de la leyenda). |
+| `groups[].hue` | rotativo | Tinte del cajón, de su cabecera y del borde de sus entidades. |
+
+El layout coloca los cajones probando permutaciones (hasta 5 cajones) y se queda con
+la que deja más cerca los extremos de las relaciones que cruzan de un cajón a otro.
+El ruteo va de la relación más corta a la más larga y cobra peaje sobre los corredores
+ya usados, de modo que dos aristas prefieren separarse antes que solaparse.
+
 ## Comportamiento
 
 Documentación de cabecera preservada desde fuente:

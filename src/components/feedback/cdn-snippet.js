@@ -5,11 +5,6 @@ import { escapeHtml, copyText } from '../_shared/dom-utils.js';
 import {
   resolveRef,
   jsdelivrBase,
-  MIRRORS,
-  mirrorById,
-  readMirrorId,
-  writeMirrorId,
-  fallbackBases,
 } from '../_shared/cdn-ref.js';
 import { totalCdnSize } from '../_shared/cdn-sizes.js';
 import { paint } from '../_shared/highlight-code.js';
@@ -27,138 +22,83 @@ import '../code/code.js';
 import { defineElement } from '../_shared/define.js';
 
 /**
- * <is-cdn-snippet> — panel CDN + mirrors + docs para agentes (sin npm/npx).
+ * <is-cdn-snippet> — panel CDN copy-paste vía loader.min.js (sin npm/npx).
  *
- * Tabs
- *   enlaces  · snippets del espejo activo (jsDelivr / Pages)
- *   mirrors  · selector de espejo + boot con fallback encadenado
+ * Un solo bloque:
+ *   <script type="module" src="…/loader.min.js"></script>
+ *   <script type="module"> … loadCSS* + load(…) …</script>
+ *
+ * Radio de alcance (persistible con `url-key` en ?s=):
+ *   tag | category | all
  *
  * Atributos
- *   tag         string  · p. ej. "is-button"
- *   category    string  · p. ej. "actions"
- *   base        string  · override del CDN_BASE (opcional; ignora espejo)
- *   title       string  · título del panel
- *   dependencies / config · ver #parseDeps / #parseConfig
- *   url-key     string · opt-in: tab Enlaces/Mirrors en `?s=` (`{ [url-key]: … }`)
+ *   tag / category / base / title / dependencies / config / url-key
  */
 (() => {
   const CDN_BASE_DEFAULT = jsdelivrBase('main');
-
+  const SCOPES = new Set(['tag', 'category', 'all']);
   const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS, { sha: 'main', base: LLM_PROMPT_FALLBACK });
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <section class="cdn" aria-label="Enlaces CDN">
+    <section class="cdn" aria-label="Consumo por CDN">
       <header class="cdn__head">
         <h3 class="cdn__title">Consumo por CDN</h3>
         <p class="cdn__hint">
-          Preferí <code>loader.min.js</code> + <code>loadCSSBase()</code> /
-          <code>loadCSSPalettesDefault()</code> + <code>load(…)</code> para
-          bajar solo lo necesario. Alternativa: CSS común + tag / categoría /
-          <code>all.min.js</code>. Tab <strong>Mirrors</strong> cambia el espejo.
+          Estrategia única: <code>loader.min.js</code>. Pegá los dos
+          <code>&lt;script&gt;</code> en el <code>&lt;head&gt;</code>
+          (o al final del <code>&lt;body&gt;</code>). El primero carga el
+          loader; el segundo pide CSS + lo que elijas abajo.
         </p>
       </header>
 
-      <div class="cdn__tabs" role="tablist" aria-label="CDN">
-        <button type="button" class="cdn__tab is-focus-ring" role="tab" id="tab-enlaces"
-                data-tab="enlaces" aria-selected="true" aria-controls="panel-enlaces">
-          Enlaces
-        </button>
-        <button type="button" class="cdn__tab is-focus-ring" role="tab" id="tab-mirrors"
-                data-tab="mirrors" aria-selected="false" aria-controls="panel-mirrors">
-          Mirrors
-        </button>
+      <fieldset class="cdn__scope" data-slot="scope">
+        <legend class="cdn__scope-legend">Qué cargar</legend>
+        <label class="cdn__radio">
+          <input type="radio" name="cdn-scope" value="tag" checked>
+          <span>Solo el componente · <code data-slot="scope-tag-label">—</code></span>
+        </label>
+        <label class="cdn__radio">
+          <input type="radio" name="cdn-scope" value="category">
+          <span>Categoría · <code data-slot="scope-cat-label">—</code></span>
+        </label>
+        <label class="cdn__radio">
+          <input type="radio" name="cdn-scope" value="all">
+          <span>Todo el kit · <code>all</code></span>
+        </label>
+      </fieldset>
+
+      <div class="cdn__row" data-kind="loader">
+        <div class="cdn__row-head">
+          <span class="cdn__label">
+            Copy-paste · loader
+            <is-format-bytes class="cdn__size" data-slot="size-loader" autofit display="short" hidden></is-format-bytes>
+          </span>
+          <button type="button" class="cdn__copy is-focus-ring" data-copy="loader"
+                  aria-label="Copiar snippet del loader">
+            <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
+            Copiar
+          </button>
+        </div>
+        <is-code class="cdn__pre code is-code-view" data-slot="loader" readonly compact wrap
+                 line-numbers="false" lang="html"></is-code>
       </div>
 
-      <div class="cdn__panel" role="tabpanel" id="panel-enlaces" data-panel="enlaces"
-           aria-labelledby="tab-enlaces">
-        <div class="cdn__mirrors" data-slot="mirror-chips" role="group" aria-label="Espejo activo"></div>
-        <ol class="cdn__list">
-          <li class="cdn__row" data-kind="common">
-            <div class="cdn__row-head">
-              <span class="cdn__label">
-                1 · CSS común (una vez por página)
-                <is-format-bytes class="cdn__size" data-slot="size-common" autofit display="short" hidden></is-format-bytes>
-              </span>
-              <button type="button" class="cdn__copy is-focus-ring" data-copy="common" aria-label="Copiar enlaces comunes">
-                <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
-                Copiar
-              </button>
-            </div>
-            <is-code class="cdn__pre code is-code-view" data-slot="common" readonly compact wrap line-numbers="false" lang="html"></is-code>
-          </li>
-          <li class="cdn__row" data-kind="single">
-            <div class="cdn__row-head">
-              <span class="cdn__label">
-                2 · JS del componente · <code data-slot="fileTag"></code>
-                <is-format-bytes class="cdn__size" data-slot="size-single" autofit display="short" hidden></is-format-bytes>
-              </span>
-              <button type="button" class="cdn__copy is-focus-ring" data-copy="single" aria-label="Copiar enlace individual">
-                <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
-                Copiar
-              </button>
-            </div>
-            <is-code class="cdn__pre code is-code-view" data-slot="single" readonly compact wrap line-numbers="false" lang="html"></is-code>
-          </li>
-          <li class="cdn__row" data-kind="category">
-            <div class="cdn__row-head">
-              <span class="cdn__label">
-                Alternativa · categoría · <code data-slot="category"></code>
-                <is-format-bytes class="cdn__size" data-slot="size-category" autofit display="short" hidden></is-format-bytes>
-              </span>
-              <button type="button" class="cdn__copy is-focus-ring" data-copy="category" aria-label="Copiar bundle de categoría">
-                <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
-                Copiar
-              </button>
-            </div>
-            <is-code class="cdn__pre code is-code-view" data-slot="category-pre" readonly compact wrap line-numbers="false" lang="html"></is-code>
-          </li>
-          <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
-            <div class="cdn__row-head">
-              <span class="cdn__label cdn__dep-name">Dependencia · <code data-slot="dep-name"></code></span>
-              <button type="button" class="cdn__copy is-focus-ring" data-copy="dep" aria-label="Copiar enlaces de la dependencia">
-                <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
-                Copiar
-              </button>
-            </div>
-            <is-code class="cdn__pre code is-code-view" data-slot="dep-pre" readonly compact wrap line-numbers="false" lang="html"></is-code>
-            <p class="cdn__dep-note" data-slot="dep-note" hidden></p>
-          </li>
-          <li class="cdn__row" data-kind="all">
-            <div class="cdn__row-head">
-              <span class="cdn__label">
-                Alternativa · todo el kit · <code>all.min.js</code>
-                <is-format-bytes class="cdn__size" data-slot="size-all" autofit display="short" hidden></is-format-bytes>
-              </span>
-              <button type="button" class="cdn__copy is-focus-ring" data-copy="all" aria-label="Copiar bundle completo">
-                <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
-                Copiar
-              </button>
-            </div>
-            <is-code class="cdn__pre code is-code-view" data-slot="all" readonly compact wrap line-numbers="false" lang="html"></is-code>
-          </li>
-        </ol>
-      </div>
-
-      <div class="cdn__panel" role="tabpanel" id="panel-mirrors" data-panel="mirrors"
-           aria-labelledby="tab-mirrors" hidden>
-        <p class="cdn__hint">
-          Un solo espejo por página (los imports relativos entre bundles no
-          mezclan orígenes). Default: cerrar no aplica aquí — si jsDelivr
-          cae, el boot prueba Pages.
-        </p>
-        <div class="cdn__mirrors" data-slot="mirror-list"></div>
-        <div class="cdn__row" data-kind="boot">
+      <ol class="cdn__list" data-slot="deps-list">
+        <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
           <div class="cdn__row-head">
-            <span class="cdn__label">Boot con fallback · jsDelivr → Pages</span>
-            <button type="button" class="cdn__copy is-focus-ring" data-copy="boot" aria-label="Copiar boot con fallback">
+            <span class="cdn__label cdn__dep-name">Dependencia · <code data-slot="dep-name"></code></span>
+            <button type="button" class="cdn__copy is-focus-ring" data-copy="dep"
+                    aria-label="Copiar enlaces de la dependencia">
               <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
               Copiar
             </button>
           </div>
-          <is-code class="cdn__pre code is-code-view" data-slot="boot" readonly compact wrap line-numbers="false" lang="html"></is-code>
-        </div>
-      </div>
+          <is-code class="cdn__pre code is-code-view" data-slot="dep-pre" readonly compact wrap
+                   line-numbers="false" lang="html"></is-code>
+          <p class="cdn__dep-note" data-slot="dep-note" hidden></p>
+        </li>
+      </ol>
 
       <section class="cdn__agents" aria-label="Documentación para agentes">
         <header class="cdn__head">
@@ -170,47 +110,39 @@ import { defineElement } from '../_shared/define.js';
         </header>
         <div class="cdn__row" data-kind="llm-prompt">
           <div class="cdn__row-head">
-            <span class="cdn__label">Prompt · kit por CDN + referencias</span>
-            <button type="button" class="cdn__copy is-focus-ring" data-copy="llm-prompt" aria-label="Copiar prompt para agentes">
+            <span class="cdn__label">Prompt · agents</span>
+            <button type="button" class="cdn__copy is-focus-ring" data-copy="llm-prompt"
+                    aria-label="Copiar prompt para agentes">
               <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
               Copiar
             </button>
           </div>
-          <is-md-editor
-            class="cdn__md-prompt"
-            data-slot="llm-prompt"
-            label="Prompt · IS Web Components"
-            edit-block-reason="Solo lectura: revisa y copia el prompt"
-            placeholder="Cargando prompt…"
-            style="--preview-max-height: 18rem;"
-          ></is-md-editor>
+          <is-md-editor data-slot="llm-prompt" readonly compact preview="split"
+                        aria-label="Prompt para agentes"></is-md-editor>
         </div>
       </section>
     </section>
   `;
 
-  const OBSERVED = ['tag', 'category', 'base', 'title', 'dependencies', 'config', 'url-key'];
-
   class IsCdnSnippet extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `_shared/style-attrs.js`). */
     static styleAttrs = {
-    radius: '--is-cdn-snippet-radius',
-    'border-color': { prop: '--is-cdn-snippet-border', onlyColorValues: true },
-    'pre-bg': { prop: '--is-cdn-snippet-pre-bg', onlyColorValues: true },
+      radius: '--is-cdn-snippet-radius',
+      'border-color': '--is-cdn-snippet-border',
+      'pre-bg': '--is-cdn-snippet-pre-bg',
     };
 
-    static get observedAttributes() { return [...OBSERVED, 'radius', 'border-color', 'pre-bg']; }
+    static get observedAttributes() {
+      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', 'url-key', ...IsCdnSnippet.styleAttrNames];
+    }
 
     #mounted = false;
-    #urls = { single: '', category: '', all: '', llmPrompt: LLM_PROMPT, boot: '' };
+    #urls = { loader: '', llmPrompt: LLM_PROMPT, loadArg: 'all' };
     #onHighlightReady = () => this.#render();
     #deps = [];
     #docs = [];
     #resolvedRef = 'main';
-    #mirrorId = readMirrorId();
-    #tab = 'enlaces';
+    #scope = 'tag';
     #restoringUrl = false;
-    /** @type {number} evita pintar pesos de un render obsoleto */
     #sizeGen = 0;
 
     constructor() {
@@ -219,14 +151,13 @@ import { defineElement } from '../_shared/define.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       shadow.addEventListener('click', this.#onClick);
+      shadow.addEventListener('change', this.#onChange);
     }
 
     connectedCallback() {
-
       super.connectedCallback();
       this.#mounted = true;
-      this.#mirrorId = readMirrorId();
-      this.#restoreTabFromUrl();
+      this.#restoreScopeFromUrl();
       this.#render();
       void this.#ensurePromptLoaded();
       resolveRef().then((ref) => {
@@ -234,7 +165,6 @@ import { defineElement } from '../_shared/define.js';
         this.#resolvedRef = ref;
         this.#render();
       }).catch(() => { /* sin red: se queda en main */ });
-      this.shadowRoot.addEventListener('slotchange', () => this.#render());
       document.addEventListener('is-theme-change', this.#onHighlightReady);
     }
 
@@ -244,10 +174,9 @@ import { defineElement } from '../_shared/define.js';
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'url-key') this.#restoreTabFromUrl();
+      if (name === 'url-key') this.#restoreScopeFromUrl();
       this.#render();
     }
 
@@ -257,26 +186,52 @@ import { defineElement } from '../_shared/define.js';
       else this.setAttribute('url-key', String(v));
     }
 
-    #restoreTabFromUrl() {
+    #cdnBase() {
+      if (this.hasAttribute('base')) return String(this.getAttribute('base') || '').replace(/\/?$/, '/');
+      return `${jsdelivrBase(this.#resolvedRef || 'main').replace(/\/?$/, '/')}`;
+    }
+
+    #loaderHref() {
+      return `${this.#cdnBase()}loader.min.js`;
+    }
+
+    #loadArg() {
+      const tag = (this.getAttribute('tag') || '').trim();
+      const category = (this.getAttribute('category') || '').trim();
+      if (this.#scope === 'all') return 'all';
+      if (this.#scope === 'category' && category) return category;
+      if (tag) return tag;
+      if (category) return category;
+      return 'all';
+    }
+
+    #effectiveScope() {
+      const tag = (this.getAttribute('tag') || '').trim();
+      const category = (this.getAttribute('category') || '').trim();
+      if (this.#scope === 'tag' && !tag) {
+        return category ? 'category' : 'all';
+      }
+      if (this.#scope === 'category' && !category) {
+        return tag ? 'tag' : 'all';
+      }
+      return this.#scope;
+    }
+
+    #restoreScopeFromUrl() {
       const key = this.urlKey;
       if (!key) return;
       const fromUrl = readUrlNav(key);
-      if (fromUrl !== 'enlaces' && fromUrl !== 'mirrors') return;
+      if (!SCOPES.has(fromUrl)) return;
       this.#restoringUrl = true;
-      this.#tab = fromUrl;
+      this.#scope = fromUrl;
       this.#restoringUrl = false;
     }
 
-    #persistTabToUrl() {
+    #persistScopeToUrl() {
       if (this.#restoringUrl) return;
       const key = this.urlKey;
       if (!key) return;
-      writeUrlNav(key, this.#tab);
-    }
-
-    #activeBase() {
-      if (this.hasAttribute('base')) return this.getAttribute('base');
-      return mirrorById(this.#mirrorId).base(this.#resolvedRef);
+      writeUrlNav(key, this.#scope);
     }
 
     #parseConfig() {
@@ -285,9 +240,8 @@ import { defineElement } from '../_shared/define.js';
         const script = this.querySelector('script[type="application/json"][slot="config"]');
         raw = script?.textContent || '';
       }
-      /** Skills + MD del módulo/categoría: todo va al prompt único. */
       this.#docs = [...SKILL_DOCS];
-      if (!raw.trim()) return null;
+      if (!raw?.trim()) return null;
       try {
         const cfg = JSON.parse(raw) || {};
         if (Array.isArray(cfg.docs)) {
@@ -306,7 +260,6 @@ import { defineElement } from '../_shared/define.js';
       }
     }
 
-    /** Regenera el prompt único con las refs actuales (`#docs`). */
     #syncLlmPrompt() {
       this.#urls.llmPrompt = buildLlmPrompt(this.#docs, {
         sha: this.#resolvedRef || 'main',
@@ -328,7 +281,7 @@ import { defineElement } from '../_shared/define.js';
         const script = this.querySelector('script[type="application/json"][slot="deps"]');
         raw = script?.textContent || '';
       }
-      if (!raw.trim()) { this.#deps = []; return; }
+      if (!raw?.trim()) { this.#deps = []; return; }
       try {
         const data = JSON.parse(raw);
         this.#deps = Array.isArray(data)
@@ -350,12 +303,27 @@ import { defineElement } from '../_shared/define.js';
       return lines.join('\n');
     }
 
+    #buildLoaderSnippet() {
+      const href = this.#loaderHref();
+      const arg = this.#loadArg();
+      const argLit = JSON.stringify(arg);
+      return [
+        `<script type="module" src="${href}"><\/script>`,
+        `<script type="module">`,
+        `  const L = globalThis.ISWebComponentsLoader;`,
+        `  await L.loadCSSBase();`,
+        `  await L.loadCSSPalettesDefault();`,
+        `  await L.load(${argLit});`,
+        `<\/script>`,
+      ].join('\n');
+    }
+
     #renderDeps() {
       const root = this.shadowRoot;
+      const list = root.querySelector('[data-slot="deps-list"]');
       const template = root.querySelector('[data-kind="dep"][hidden]');
-      if (!template) return;
-      for (const row of root.querySelectorAll('[data-kind="dep"]:not([hidden])')) row.remove();
-      const list = root.querySelector('.cdn__list');
+      if (!list || !template) return;
+      for (const row of list.querySelectorAll('[data-kind="dep"]:not([hidden])')) row.remove();
       for (const dep of this.#deps) {
         const clone = template.cloneNode(true);
         clone.hidden = false;
@@ -363,15 +331,7 @@ import { defineElement } from '../_shared/define.js';
         if (label) label.textContent = dep.version ? `${dep.name}@${dep.version}` : dep.name;
         const pre = clone.querySelector('[data-slot="dep-pre"]');
         const snippet = this.#buildDepSnippet(dep);
-        if (pre) {
-          if (pre.localName === 'is-code') {
-            pre.value = snippet;
-            pre.dataset.cmSource = snippet;
-            delete pre.dataset.cm;
-          } else {
-            pre.textContent = snippet;
-          }
-        }
+        this.#setCode(pre, snippet);
         const note = clone.querySelector('[data-slot="dep-note"]');
         if (note) { note.textContent = dep.note; note.hidden = !dep.note; }
         const btn = clone.querySelector('[data-copy="dep"]');
@@ -380,153 +340,61 @@ import { defineElement } from '../_shared/define.js';
       }
     }
 
-    #buildBootSnippet() {
-      const bases = fallbackBases(this.#resolvedRef);
-      const tag = this.getAttribute('tag') || '';
-      const category = this.getAttribute('category') || '';
-      const fileTag = tag.replace(/^is-/, '');
-      const entry = (tag && category)
-        ? `${category}/${fileTag}.min.js`
-        : 'all.min.js';
-
-      return `<script type="module">
-/* IS WC — boot espejos: jsDelivr(pin)→Pages. Un origen gana. */
-const MIRRORS=${JSON.stringify(bases)},ENTRY=${JSON.stringify(entry)};
-const loadCss=href=>new Promise((ok,bad)=>{
-  document.head.append(Object.assign(document.createElement('link'),{
-    rel:'stylesheet',href,onload:()=>ok(),onerror:()=>bad(new Error(href)),
-  }));
-});
-let ok=false;
-for(const base of MIRRORS){
-  try{
-    await loadCss(base+'/is-base.min.css');
-    await loadCss(base+'/palettes.min.css');
-    await import(base+'/'+ENTRY);
-    ok=true;break;
-  }catch(err){console.warn('[is-cdn] espejo falló',base,err)}
-}
-if(!ok)throw new Error('[is-cdn] ningún espejo respondió');
-<\/script>`;
-    }
-
-    #buildUrls() {
-      const base = this.#activeBase() || CDN_BASE_DEFAULT;
-      const tag = this.getAttribute('tag');
-      const category = this.getAttribute('category');
-      const fileTag = (tag || '').replace(/^is-/, '');
-      this.#urls = {
-        common: `${base}/is-base.min.css`,
-        commonPalette: `${base}/palettes.min.css`,
-        single: (tag && category) ? `${base}/${category}/${fileTag}.min.js` : '',
-        category: (tag && category) ? `${base}/${category}/category.${category}.min.js` : '',
-        all: `${base}/all.min.js`,
-        llmPrompt: LLM_PROMPT,
-        boot: this.#buildBootSnippet(),
-      };
-    }
-
-    #renderMirrorChips() {
-      const root = this.shadowRoot;
-      for (const slot of root.querySelectorAll('[data-slot="mirror-chips"], [data-slot="mirror-list"]')) {
-        slot.textContent = '';
-        for (const m of MIRRORS) {
-          const base = m.base(this.#resolvedRef);
-          if (slot.dataset.slot === 'mirror-chips') {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'cdn__chip';
-            btn.dataset.mirror = m.id;
-            btn.setAttribute('aria-pressed', String(m.id === this.#mirrorId));
-            btn.innerHTML = `<span class="cdn__chip-label">${escapeHtml(m.label)}</span>`;
-            if (m.id === this.#mirrorId) btn.classList.add('is-active');
-            slot.appendChild(btn);
-          } else {
-            const row = document.createElement('div');
-            row.className = 'cdn__mirror-card';
-            row.dataset.mirror = m.id;
-            if (m.id === this.#mirrorId) row.classList.add('is-active');
-            row.innerHTML = `
-              <div class="cdn__mirror-head">
-                <strong>${escapeHtml(m.label)}</strong>
-                <span class="cdn__mirror-hint">${escapeHtml(m.hint)}</span>
-                <button type="button" class="cdn__chip" data-mirror="${escapeHtml(m.id)}"
-                        aria-pressed="${m.id === this.#mirrorId}">
-                  ${m.id === this.#mirrorId ? 'Activo' : 'Usar'}
-                </button>
-              </div>
-              <code class="cdn__mirror-base">${escapeHtml(base)}</code>
-            `;
-            slot.appendChild(row);
-          }
-        }
+    #setCode(el, text) {
+      if (!el) return;
+      const src = text || '';
+      if (el.localName === 'is-code') {
+        if (el.value !== src) el.value = src;
+        el.dataset.cmSource = src;
+        delete el.dataset.cm;
+      } else {
+        el.textContent = src;
       }
     }
 
-    #syncTabs() {
+    #syncScopeRadios() {
       const root = this.shadowRoot;
-      for (const tab of root.querySelectorAll('.cdn__tab')) {
-        const on = tab.dataset.tab === this.#tab;
-        tab.setAttribute('aria-selected', String(on));
-        tab.tabIndex = on ? 0 : -1;
-      }
-      for (const panel of root.querySelectorAll('[data-panel]')) {
-        panel.hidden = panel.dataset.panel !== this.#tab;
+      const tag = (this.getAttribute('tag') || '').trim();
+      const category = (this.getAttribute('category') || '').trim();
+      this.#scope = this.#effectiveScope();
+
+      const tagLabel = root.querySelector('[data-slot="scope-tag-label"]');
+      const catLabel = root.querySelector('[data-slot="scope-cat-label"]');
+      if (tagLabel) tagLabel.textContent = tag || '—';
+      if (catLabel) catLabel.textContent = category || '—';
+
+      for (const input of root.querySelectorAll('input[name="cdn-scope"]')) {
+        const value = input.value;
+        input.checked = value === this.#scope;
+        if (value === 'tag') input.disabled = !tag;
+        if (value === 'category') input.disabled = !category;
+        if (value === 'all') input.disabled = false;
+        input.closest('.cdn__radio')?.classList.toggle('is-disabled', input.disabled);
       }
     }
 
     #render() {
       const root = this.shadowRoot;
       if (!root) return;
-      const tag = this.getAttribute('tag') || '';
-      const category = this.getAttribute('category') || '';
-      this.#buildUrls();
-      this.#syncTabs();
-      this.#renderMirrorChips();
+
+      this.#syncScopeRadios();
+      const loadArg = this.#loadArg();
+      this.#urls = {
+        loader: this.#buildLoaderSnippet(),
+        loadArg,
+        llmPrompt: this.#urls.llmPrompt || LLM_PROMPT,
+      };
 
       const titleEl = root.querySelector('.cdn__title');
-      const fileTagEl = root.querySelector('[data-slot="fileTag"]');
-      const catLabelEl = root.querySelector('[data-slot="category"]');
-      const commonPre = root.querySelector('[data-slot="common"]');
-      const singlePre = root.querySelector('[data-slot="single"]');
-      const catPre = root.querySelector('[data-slot="category-pre"]');
-      const allPre = root.querySelector('[data-slot="all"]');
-      const llmPromptEd = root.querySelector('[data-slot="llm-prompt"]');
-      const bootPre = root.querySelector('[data-slot="boot"]');
-
       const title = this.getAttribute('title');
       if (titleEl && title) titleEl.textContent = title;
 
-      if (fileTagEl) fileTagEl.textContent = (tag && category) ? `${category}/${tag.replace(/^is-/, '')}.min.js` : '—';
-      if (catLabelEl) catLabelEl.textContent = category ? `${category}/category.${category}.min.js` : '—';
-
-      const mkCss = (url) => url ? `<link rel="stylesheet" href="${escapeHtml(url)}">` : '';
-      const mkJs = (url) => url ? `<script type="module" src="${escapeHtml(url)}"><\/script>` : '—';
-
-      const commonSnippet = [mkCss(this.#urls.common), mkCss(this.#urls.commonPalette)].join('\n');
-      const setCode = (el, text) => {
-        if (!el) return;
-        const src = text || '';
-        if (el.localName === 'is-code') {
-          if (el.value !== src) el.value = src;
-          el.dataset.cmSource = src;
-          delete el.dataset.cm;
-        } else {
-          el.textContent = src;
-        }
-      };
-      setCode(commonPre, commonSnippet);
-      setCode(singlePre, mkJs(this.#urls.single));
-      setCode(catPre, mkJs(this.#urls.category));
-      setCode(allPre, mkJs(this.#urls.all));
-      setCode(bootPre, this.#urls.boot);
-
-      const singleRow = root.querySelector('[data-kind="single"]');
-      if (singleRow) singleRow.hidden = !tag;
+      this.#setCode(root.querySelector('[data-slot="loader"]'), this.#urls.loader);
 
       const cfg = this.#parseConfig();
       if (cfg?.title && titleEl) titleEl.textContent = cfg.title;
       this.#syncLlmPrompt();
+      const llmPromptEd = root.querySelector('[data-slot="llm-prompt"]');
       if (llmPromptEd && llmPromptEd.tagName === 'IS-MD-EDITOR') {
         llmPromptEd.value = this.#urls.llmPrompt;
       }
@@ -537,53 +405,44 @@ if(!ok)throw new Error('[is-cdn] ningún espejo respondió');
       this.#highlight();
     }
 
-    /**
-     * Pinta el peso real (sizes.json) en cada caption con <is-format-bytes autofit>.
-     * category / all expanden a los .min.js que acabarán bajando.
-     * En localhost prioriza `dist/cdn/sizes.json` (build local fresco).
-     */
     #paintSizes() {
       const root = this.shadowRoot;
       if (!root) return;
-      const cdnBase = this.#activeBase() || CDN_BASE_DEFAULT;
+      const base = this.#cdnBase();
       const host = globalThis.location?.hostname || '';
       const localDev = host === 'localhost' || host === '127.0.0.1';
-      const sizeBase = localDev
-        ? `${globalThis.location.origin}/dist/cdn`
-        : cdnBase;
+      const sizeBase = localDev ? `${globalThis.location.origin}/dist/cdn/` : base;
       const gen = ++this.#sizeGen;
-      const jobs = [
-        ['size-common', [this.#urls.common, this.#urls.commonPalette].filter(Boolean)],
-        ['size-single', this.#urls.single ? [this.#urls.single] : []],
-        ['size-category', this.#urls.category ? [this.#urls.category] : []],
-        ['size-all', this.#urls.all ? [this.#urls.all] : []],
-      ];
+      const arg = this.#loadArg();
+      const tag = (this.getAttribute('tag') || '').replace(/^is-/, '');
+      const category = (this.getAttribute('category') || '').trim();
 
-      for (const [slot] of jobs) {
-        const el = root.querySelector(`[data-slot="${slot}"]`);
-        if (el) { el.removeAttribute('value'); el.hidden = true; }
+      /** URLs que acabará bajando el loader para estimar peso. */
+      let urls = [`${base}loader.min.js`, `${base}is-base.min.css`, `${base}palettes.min.css`];
+      if (arg === 'all') {
+        urls.push(`${base}all.min.js`);
+      } else if (arg === category && category) {
+        urls.push(`${base}${category}/category.${category}.min.js`);
+      } else if (tag && category) {
+        urls.push(`${base}${category}/${tag}.min.js`);
       }
 
-      Promise.all(jobs.map(async ([slot, urls]) => {
-        if (!urls.length) return [slot, null];
-        let bytes = await totalCdnSize(urls, sizeBase);
-        if (bytes == null && sizeBase !== cdnBase) {
-          bytes = await totalCdnSize(urls, cdnBase);
+      const el = root.querySelector('[data-slot="size-loader"]');
+      if (el) { el.removeAttribute('value'); el.hidden = true; }
+
+      Promise.all([
+        totalCdnSize(urls, sizeBase),
+        sizeBase !== base ? totalCdnSize(urls, base) : Promise.resolve(null),
+      ]).then(([localBytes, remoteBytes]) => {
+        if (!this.#mounted || gen !== this.#sizeGen || !el) return;
+        const bytes = localBytes ?? remoteBytes;
+        if (bytes == null || !Number.isFinite(bytes)) {
+          el.removeAttribute('value');
+          el.hidden = true;
+          return;
         }
-        return [slot, bytes];
-      })).then((rows) => {
-        if (!this.#mounted || gen !== this.#sizeGen) return;
-        for (const [slot, bytes] of rows) {
-          const el = root.querySelector(`[data-slot="${slot}"]`);
-          if (!el) continue;
-          if (bytes == null || !Number.isFinite(bytes)) {
-            el.removeAttribute('value');
-            el.hidden = true;
-            continue;
-          }
-          el.setAttribute('value', String(bytes));
-          el.hidden = false;
-        }
+        el.setAttribute('value', String(bytes));
+        el.hidden = false;
       });
     }
 
@@ -596,41 +455,24 @@ if(!ok)throw new Error('[is-cdn] ningún espejo respondió');
       }
     }
 
+    #onChange = (e) => {
+      const input = e.target.closest('input[name="cdn-scope"]');
+      if (!input || input.disabled) return;
+      if (!SCOPES.has(input.value)) return;
+      this.#scope = input.value;
+      this.#persistScopeToUrl();
+      this.#render();
+    };
+
     #onClick = async (e) => {
-      const tab = e.target.closest('.cdn__tab');
-      if (tab?.dataset.tab) {
-        this.#tab = tab.dataset.tab;
-        this.#persistTabToUrl();
-        this.#syncTabs();
-        return;
-      }
-
-      const chip = e.target.closest('[data-mirror]');
-      if (chip?.dataset.mirror) {
-        this.#mirrorId = chip.dataset.mirror;
-        writeMirrorId(this.#mirrorId);
-        this.#render();
-        return;
-      }
-
       const btn = e.target.closest('.cdn__copy');
       if (!btn) return;
       e.preventDefault();
       const kind = btn.dataset.copy;
-      const asCss = (u) => (u ? `<link rel="stylesheet" href="${u}">` : '');
-      const asJs = (u) => (u ? `<script type="module" src="${u}"><\/script>` : '');
       let text = '';
-      if (kind === 'dep') {
-        text = btn.dataset.copyValue || '';
-      } else if (kind === 'llm-prompt') {
-        text = this.#urls.llmPrompt || LLM_PROMPT;
-      } else if (kind === 'boot') {
-        text = this.#urls.boot || this.#buildBootSnippet();
-      } else if (kind === 'common') {
-        text = [asCss(this.#urls.common), asCss(this.#urls.commonPalette)].filter(Boolean).join('\n');
-      } else {
-        text = asJs(this.#urls[kind]);
-      }
+      if (kind === 'dep') text = btn.dataset.copyValue || '';
+      else if (kind === 'llm-prompt') text = this.#urls.llmPrompt || LLM_PROMPT;
+      else if (kind === 'loader') text = this.#urls.loader || this.#buildLoaderSnippet();
       if (!text) return;
       await copyText(text);
       const original = btn.innerHTML;

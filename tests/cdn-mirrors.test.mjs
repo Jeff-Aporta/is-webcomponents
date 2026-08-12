@@ -1,7 +1,7 @@
 /**
- * cdn-mirrors.test.mjs — el panel CDN expone espejos + boot con fallback.
+ * cdn-mirrors.test.mjs — espejos viven en cdn-ref; el panel CDN es loader copy-paste.
  *
- *   npm test -- tests/cdn-mirrors.test.mjs
+ *   node --test tests/cdn-mirrors.test.mjs
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -20,14 +20,22 @@ test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
   assert.match(src, /fallbackBases/);
 });
 
-test('cdn-snippet tiene tabs Enlaces / Mirrors y boot con fallback', async () => {
+test('cdn-snippet: loader src + script load; radio tag|category|all; sin tab mirrors', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.js'), 'utf8');
-  assert.match(src, /data-tab=["']mirrors["']/);
-  assert.match(src, /data-tab=["']enlaces["']/);
-  assert.match(src, /data-copy=["']boot["']/);
-  assert.match(src, /Boot con fallback/);
-  assert.match(src, /for\s*\(\s*const base of MIRRORS\s*\)/);
-  assert.match(src, /Object\.assign\(document\.createElement\('link'\)/);
+  assert.doesNotMatch(src, /data-tab=["']mirrors["']/);
+  assert.doesNotMatch(src, /data-tab=["']enlaces["']/);
+  assert.match(src, /name="cdn-scope"/);
+  assert.match(src, /value="tag"/);
+  assert.match(src, /value="category"/);
+  assert.match(src, /value="all"/);
+  assert.match(src, /#buildLoaderSnippet/);
+  assert.match(src, /loader\.min\.js/);
+  assert.match(src, /type="module" src=/);
+  assert.match(src, /ISWebComponentsLoader/);
+  assert.match(src, /loadCSSBase/);
+  assert.match(src, /loadCSSPalettesDefault/);
+  assert.match(src, /await L\.load\(/);
+  assert.match(src, /data-copy=["']loader["']/);
 });
 
 test('listSources expone ambos espejos', async () => {

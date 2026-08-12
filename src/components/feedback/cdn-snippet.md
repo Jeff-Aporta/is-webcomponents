@@ -12,21 +12,24 @@ preview: ../../previews/feedback/is-cdn-snippet.json
 
 ## Propósito
 
-Panel de consumo por CDN organizado en dos tabs — **Enlaces** (snippets del
-espejo activo) y **Mirrors** (selector de espejo + boot con fallback
-encadenado) — más una sección de prompt/docs para agentes vía
-`<is-md-editor>` (solo lectura, scroll, copiar, abrir diálogo). Sin npm/npx.
-Tools: `/is-webcomponents:build|migrate|local` (ver `src/skills/is-webcomponents/`).
+Panel de **consumo por CDN** con una sola estrategia: `loader.min.js`.
 
-Este módulo registra `<is-cdn-snippet>`.
+Muestra un bloque copy-paste de dos tags:
+
+1. `<script type="module" src="…/loader.min.js">` — carga el loader.
+2. `<script type="module">` — `loadCSSBase` + `loadCSSPalettesDefault` + `load(…)`.
+
+Radio de alcance: **componente** (`is-button`) · **categoría** (`actions`) · **todo** (`all`).
+
+Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Docs para agentes vía `<is-md-editor>`. Dependencias externas opcionales (slot `deps` / atributo `dependencies`).
 
 ## Cuándo usarlo
 
-Estado, progreso, confirmación, carga o resultado de operaciones.
+Documentar cómo pegar el kit en una app (galería, demos, README embebido).
 
 ## Cuándo no usarlo
 
-No saturar interfaz con señales redundantes o alertas sin acción.
+No como selector de espejos ni como listado de URLs sueltas de cada `.min.js`.
 
 ## Importación
 
@@ -37,131 +40,51 @@ import './cdn-snippet.js';
 ## Ejemplo mínimo
 
 ```html
-<is-cdn-snippet></is-cdn-snippet>
+<is-cdn-snippet tag="is-button" category="actions"></is-cdn-snippet>
 ```
 
 ## API
 
-### Atributos y propiedades
+### Atributos
 
-#### Atributos observados
-
-| Atributo | Tipo | Notas |
-| --- | --- | --- |
-| `tag` | string/según contrato | Fuente define default/restricción. |
-| `category` | string/según contrato | Fuente define default/restricción. |
-| `base` | string/según contrato | Fuente define default/restricción. |
-| `title` | string/según contrato | Fuente define default/restricción. |
-
-#### Propiedades públicas
-
-No expone.
-
-### Slots
-
-No expone.
-
-### Eventos
-
-No expone.
-
-### Métodos y propiedades públicas
-
-No expone.
-
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
-
-### CSS parts
-
-No expone.
-
-### Custom states
-
-No expone.
-
-### CSS custom properties
-
-| Token | Uso |
+| Atributo | Notas |
 | --- | --- |
-| `--is-sans` | Token leído o definido por componente. |
-| `--cdn-border` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--cdn-radius` | Token leído o definido por componente. |
-| `--cdn-pre-bg` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-bg` | Token leído o definido por componente. |
-| `--cdn-row-bg` | Token leído o definido por componente. |
-| `--cdn-text-dim` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
-| `--cdn-success` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-mono` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
+| `tag` | p. ej. `is-button` → `load('is-button')` |
+| `category` | p. ej. `actions` → `load('actions')` |
+| `base` | override del CDN base (opcional) |
+| `title` | título del panel |
+| `dependencies` / slot `deps` | deps externas (link/script) |
+| `config` | JSON con `docs[]` para el prompt LLM |
+| `url-key` | opt-in: persiste el radio (`tag`\|`category`\|`all`) dentro de `?s=` |
 
-### Integración con formularios
-
-No declara integración form-associated propia en este módulo.
-
-## Comportamiento
-
-Documentación de cabecera preservada desde fuente:
-
-> <is-cdn-snippet> — panel CDN + mirrors + docs para agentes (sin npm/npx).
-> Tabs
->   enlaces  · snippets del espejo activo (jsDelivr / Pages)
->   mirrors  · selector de espejo + boot con fallback encadenado
-> Atributos
->   tag         string  · p. ej. "is-button"
->   category    string  · p. ej. "actions"
->   base        string  · override del CDN_BASE (opcional; ignora espejo)
->   title       string  · título del panel
->   dependencies / config · ver #parseDeps / #parseConfig
->   url-key     string · opt-in: tab Enlaces/Mirrors en `?s=`
-> Dentro del tab "Enlaces" cada fila (CSS común, JS del componente, bundle de
-> categoría, dependencias, bundle completo) tiene su <pre> y su botón "Copiar".
-> Pensado para inyectarse al final de cada preview; el script de chrome
-> (`preview-chrome.js`) lo crea automáticamente leyendo tag+category del
-> `manifest.js` y el nombre del archivo actual.
-
-## Dependencias y componentes relacionados
-
-- [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../media/icon.js`](../media/icon.js)
-
-Tags del módulo: `<is-cdn-snippet>`.
-
-## Accesibilidad
-
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
-
-## Ejemplo avanzado
+### Snippet generado (forma canónica)
 
 ```html
-<is-cdn-snippet></is-cdn-snippet>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/loader.min.js"></script>
+<script type="module">
+  const L = globalThis.ISWebComponentsLoader;
+  await L.loadCSSBase();
+  await L.loadCSSPalettesDefault();
+  await L.load('is-button');
+</script>
 ```
 
-## Errores comunes
+## Qué hacer
 
-- Usar tag sin importar módulo primero.
-- Inventar API por similitud con otro componente.
-- Pasar objeto complejo por atributo cuando API exige propiedad/payload.
-- Copiar preview contra fuente actual; JS/CSS prevalecen.
-- Crear size color; usar font-size contextual y em.
+- Preferir siempre `loader.min.js` + `load(tag|cat|all)`.
+- Persistir alcance con `url-key` si la galería lo necesita (`cdnTab` → valores `tag`/`category`/`all`).
 
-## Reglas para LLM
+## Qué no hacer
 
-- Reusar componente y dependencias antes de implementación paralela.
-- Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- No reintroducir tab **Mirrors** ni boot multi-espejo en este panel.
+- No volver a filas separadas “CSS común / tag.min / category.min / all.min”.
+- No mezclar jsDelivr + Pages en el mismo documento (sigue valiendo en apps; el panel ya no lo configura).
 
-## Fuentes
+## Errores / prevención
 
-- [JavaScript](./cdn-snippet.js)
-- [CSS](./cdn-snippet.css)
-- [Índice de categoría](./LLM.md)
+| Trampa | Fix |
+| --- | --- |
+| Panel enseña `all.min.js` como default | Radio `tag` primero si hay `tag` |
+| `url-key` con valores `enlaces`/`mirrors` | Ya no; usar `tag`/`category`/`all` |
+
+Guardián: `tests/cdn-mirrors.test.mjs` (contrato loader copy-paste) · `tests/url-nav.test.mjs`.

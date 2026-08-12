@@ -65,19 +65,22 @@ test('is-tab-group: url-key opt-in', async () => {
   assert.match(src, /\?s=/);
 });
 
-test('boot CDN compacto con Object.assign', async () => {
+test('snippet CDN loader: script src + loadCSS/load', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.js'), 'utf8');
-  assert.match(src, /#buildBootSnippet/);
-  const boot = src.slice(src.indexOf('#buildBootSnippet'), src.indexOf('#buildUrls'));
-  assert.match(boot, /Object\.assign\(document\.createElement\('link'\)/);
-  assert.match(boot, /document\.head\.append\(Object\.assign/);
-  assert.doesNotMatch(boot, /const link = document\.createElement\('link'\)/);
+  assert.match(src, /#buildLoaderSnippet/);
+  assert.match(src, /#loaderHref/);
+  assert.match(src, /loader\.min\.js/);
+  assert.match(src, /type="module" src=/);
+  assert.match(src, /loadCSSBase/);
+  assert.match(src, /await L\.load\(/);
+  assert.doesNotMatch(src, /#buildBootSnippet/);
 });
 
-test('is-cdn-snippet puede usar url-key en tabs Enlaces/Mirrors', async () => {
+test('is-cdn-snippet url-key persiste alcance tag|category|all', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.js'), 'utf8');
   assert.match(src, /'url-key'/);
-  assert.match(src, /#persistTabToUrl|#restoreTabFromUrl/);
+  assert.match(src, /#persistScopeToUrl|#restoreScopeFromUrl/);
+  assert.match(src, /tag['"]\s*\|\s*['"]category['"]\s*\|\s*['"]all|SCOPES/);
   assert.match(src, /\?s=/);
 });
 

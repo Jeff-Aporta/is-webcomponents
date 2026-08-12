@@ -72,8 +72,9 @@ Duplicar overlays/position o emitir señales redundantes; reutilizar floating/to
 Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 
 Snippets CDN (`is-cdn-snippet`) ≠ snippets de demo (`demo-code.js`). El primero
-lista URLs; el segundo serializa el ejemplo y **debe** incluir tema/paleta
-activos. Guardián: `tests/palette-and-snippet-contract.test.mjs`.
+es **loader copy-paste** (`script src` + `load(tag|cat|all)`); el segundo
+serializa el ejemplo y **debe** incluir tema/paleta activos.
+Guardián: `tests/palette-and-snippet-contract.test.mjs` · `tests/cdn-mirrors.test.mjs`.
 
 Scripts de galería (`cdn-panel.js`): importar `dist/cdn/feedback/cdn-snippet.min.js`,
 **no** `src/…/cdn-snippet.js` (arrastra `md-editor` y cuelga el boot). Ver LLM

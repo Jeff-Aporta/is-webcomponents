@@ -21,6 +21,15 @@ const CARDS = new Set(['one', 'many', 'zeroOrOne', 'zeroOrMany']);
 const DIRECTIONS = new Set(['TB', 'BT', 'LR', 'RL']);
 const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
 
+/** Ratio guía por defecto (ancho/alto): ligeramente apaisado, cómodo en pantalla. */
+const DEFAULT_RATIO = 1.4;
+/** Aire dentro del cajón de un grupo y alto de su cabecera. */
+const CLUSTER_PAD = 20;
+const CLUSTER_HEADER = 26;
+/** Separación entre cajones y entre entidades sueltas de un mismo cajón. */
+const CLUSTER_GAP = 56;
+const NODE_GAP = 84;
+
 function asRecord(v) {
   return v && typeof v === 'object' ? v : {};
 }
@@ -86,10 +95,14 @@ export function erSpecFromPayload(payload) {
     .filter((r) => known.has(r.from) && known.has(r.to));
 
   const dir = String(src.direction ?? 'LR').toUpperCase();
+  // Ratio guía (ancho/alto) al que el empaquetado intenta acercarse. No es una
+  // restricción: si el contenido no da, se queda en el reparto más próximo.
+  const ratio = Number(src.ratio ?? src.aspectRatio);
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
     direction: DIRECTIONS.has(dir) ? dir : 'LR',
+    ratio: Number.isFinite(ratio) && ratio > 0 ? ratio : DEFAULT_RATIO,
     groups: readGroups(src),
     entities,
     relations,
@@ -153,8 +166,70 @@ function cardinalityMark(anchor, side, card) {
 const MARGIN = { top: 16, right: 20, bottom: 20, left: 20 };
 
 /**
+ * Reparte las entidades en clústeres: uno por grupo declarado, más uno suelto
+ * (sin cajón) con las que no declaran `group`.
+ */
+function buildClusters(spec) {
+  const porGrupo = new Map();
+  for (const g of spec.groups ?? []) porGrupo.set(g.id, { id: g.id, name: g.name, hue: g.hue, ids: [] });
+  const sueltas = [];
+  for (const e of spec.entities) {
+    if (e.group && porGrupo.has(e.group)) porGrupo.get(e.group).ids.push(e.id);
+    else sueltas.push(e.id);
+  }
+  const out = [...porGrupo.values()].filter((c) => c.ids.length);
+  if (sueltas.length) out.push({ id: null, name: '', hue: undefined, ids: sueltas, boxed: false });
+  for (const c of out) if (c.boxed === undefined) c.boxed = true;
+  return out;
+}
+
+/**
+ * Empaqueta cajas en filas (shelf) probando cada número de columnas y se queda
+ * con el reparto cuyo ratio ancho/alto quede más cerca del ratio guía. El ratio
+ * es una preferencia, no una restricción: nunca deforma ni recorta una caja.
+ */
+function packShelves(cajas, ratioGuia, gap) {
+  let mejor = null;
+  for (let cols = 1; cols <= cajas.length; cols++) {
+    const filas = [];
+    for (let i = 0; i < cajas.length; i += cols) filas.push(cajas.slice(i, i + cols));
+    let ancho = 0;
+    let alto = 0;
+    const pos = new Map();
+    for (const fila of filas) {
+      let x = 0;
+      const filaAlto = Math.max(...fila.map((c) => c.h));
+      for (const c of fila) {
+        pos.set(c.key, { x, y: alto });
+        x += c.w + gap;
+      }
+      ancho = Math.max(ancho, x - gap);
+      alto += filaAlto + gap;
+    }
+    alto = Math.max(0, alto - gap);
+    const ratio = alto > 0 ? ancho / alto : ratioGuia;
+    // Distancia en escala logarítmica: penaliza igual quedarse el doble de
+    // ancho que el doble de alto (en escala lineal el lado ancho pesaba más).
+    const score = Math.abs(Math.log(ratio / ratioGuia));
+    if (!mejor || score < mejor.score) mejor = { score, pos, width: ancho, height: alto };
+  }
+  return mejor ?? { pos: new Map(), width: 0, height: 0 };
+}
+
+/** Permutaciones de un array corto (se usa solo con pocos clústeres). */
+function permutaciones(arr) {
+  if (arr.length <= 1) return [arr];
+  const out = [];
+  for (let i = 0; i < arr.length; i++) {
+    const resto = [...arr.slice(0, i), ...arr.slice(i + 1)];
+    for (const p of permutaciones(resto)) out.push([arr[i], ...p]);
+  }
+  return out;
+}
+
+/**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, entities:Array, relations:Array, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
+ * @returns {{width:number, height:number, entities:Array, relations:Array, clusters:Array, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
  */
 export function computeErLayout(spec) {
   const title = spec.title ?? '';
@@ -166,55 +241,153 @@ export function computeErLayout(spec) {
   // descuadrados y el A* devuelve tramos en diagonal.
   const headerH = snapDiagramGrid(hasHeader ? (subtitle ? 54 : 36) : 0);
 
-  const sized = spec.entities.map((e) => ({ id: e.id, w: entityWidth(e), h: entityHeight(e) }));
-
-  const placed = layoutNodeLink(sized, spec.relations, {
-    direction: spec.direction,
-    // Separación holgada: con 120/56 las cajas grandes (muchos atributos) se
-    // solapaban con sus vecinas de la misma capa.
-    layerGap: 150,
-    nodeGap: 84,
-  });
-
-  const byId = new Map(placed.nodes.map((n) => [n.id, n]));
+  const sizeById = new Map(spec.entities.map((e) => [e.id, { id: e.id, w: entityWidth(e), h: entityHeight(e) }]));
   const specById = new Map(spec.entities.map((e) => [e.id, e]));
   const groupHue = new Map((spec.groups ?? []).map((g) => [g.id, g.hue]));
+
+  const clusters = buildClusters(spec);
+  const clusterDe = new Map();
+  clusters.forEach((c, i) => { for (const id of c.ids) clusterDe.set(id, i); });
+
+  // Cada clúster se resuelve como un diagrama independiente: las relaciones que
+  // cruzan de un cajón a otro no participan del capado, así que no arrastran
+  // entidades fuera de su grupo ni deforman el orden interno.
+  const ratioGuia = spec.ratio ?? DEFAULT_RATIO;
+  const cajas = clusters.map((c, i) => {
+    const propias = new Set(c.ids);
+    const interno = spec.relations.filter((r) => propias.has(r.from) && propias.has(r.to));
+    // Las entidades sin ninguna relación dentro del cajón no tienen capa que las
+    // ordene: el motor de capas las apila todas en la capa 0 y el cajón sale como
+    // una tira vertical. Se resuelven aparte, empaquetadas en rejilla por ratio.
+    const conectadas = new Set();
+    for (const r of interno) { conectadas.add(r.from); conectadas.add(r.to); }
+    const sueltas = c.ids.filter((id) => !conectadas.has(id));
+    const enGrafo = c.ids.filter((id) => conectadas.has(id));
+
+    const sub = enGrafo.length
+      ? layoutNodeLink(enGrafo.map((id) => sizeById.get(id)), interno, {
+        direction: spec.direction,
+        // Separación holgada: con 120/56 las cajas grandes (muchos atributos) se
+        // solapaban con sus vecinas de la misma capa.
+        layerGap: 150,
+        nodeGap: 84,
+      })
+      : { nodes: [], width: 0, height: 0 };
+
+    if (sueltas.length) {
+      const rejilla = packShelves(
+        sueltas.map((id) => ({ ...sizeById.get(id), key: id })),
+        ratioGuia,
+        NODE_GAP,
+      );
+      // La rejilla de sueltas se cuelga debajo del sub-grafo, dentro del mismo cajón.
+      const dy = sub.height ? sub.height + NODE_GAP : 0;
+      for (const id of sueltas) {
+        const p = rejilla.pos.get(id);
+        const s = sizeById.get(id);
+        sub.nodes.push({ id, x: p.x, y: p.y + dy, w: s.w, h: s.h, layer: 0, order: 0 });
+      }
+      sub.width = Math.max(sub.width, rejilla.width);
+      sub.height = dy + rejilla.height;
+    }
+    const padTop = c.boxed ? CLUSTER_PAD + CLUSTER_HEADER : 0;
+    const padLado = c.boxed ? CLUSTER_PAD : 0;
+    return {
+      key: i,
+      nodes: sub.nodes,
+      padTop,
+      padLado,
+      w: snapDiagramGrid(sub.width + padLado * 2),
+      h: snapDiagramGrid(sub.height + padTop + padLado),
+    };
+  });
+
+  // Orden de los cajones: se prueba cada permutación (son pocos) y gana la que
+  // deja más cerca los extremos de las relaciones que cruzan entre cajones.
+  const cruzadas = spec.relations.filter((r) => clusterDe.get(r.from) !== clusterDe.get(r.to));
+  const ordenes = cajas.length <= 5 ? permutaciones(cajas.map((_, i) => i)) : [cajas.map((_, i) => i)];
+  let mejorPack = null;
+  for (const orden of ordenes) {
+    const pack = packShelves(orden.map((i) => cajas[i]), spec.ratio ?? DEFAULT_RATIO, CLUSTER_GAP);
+    let distancia = 0;
+    for (const r of cruzadas) {
+      const a = pack.pos.get(clusterDe.get(r.from));
+      const b = pack.pos.get(clusterDe.get(r.to));
+      if (!a || !b) continue;
+      distancia += Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+    }
+    // El ratio manda sobre la distancia; la distancia solo desempata.
+    const score = pack.score * 10 + distancia / 10_000;
+    if (!mejorPack || score < mejorPack.score) mejorPack = { ...pack, score, orden };
+  }
 
   const offsetX = MARGIN.left;
   const offsetY = MARGIN.top + headerH;
 
-  const entities = placed.nodes.map((n) => {
-    const s = specById.get(n.id);
-    return {
-      id: n.id,
-      x: n.x + offsetX,
-      y: n.y + offsetY,
-      w: n.w,
-      h: n.h,
-      layer: n.layer,
-      name: s.name,
-      attributes: s.attributes,
-      group: s.group,
-      hue: s.group ? groupHue.get(s.group) : undefined,
-    };
-  });
+  const entities = [];
+  const cajones = [];
+  for (const caja of cajas) {
+    const p = mejorPack.pos.get(caja.key);
+    const cx = offsetX + p.x;
+    const cy = offsetY + p.y;
+    const c = clusters[caja.key];
+    if (c.boxed) cajones.push({ id: c.id, name: c.name, hue: c.hue, x: cx, y: cy, w: caja.w, h: caja.h });
+    for (const n of caja.nodes) {
+      const s = specById.get(n.id);
+      entities.push({
+        id: n.id,
+        x: snapDiagramGrid(cx + caja.padLado + n.x),
+        y: snapDiagramGrid(cy + caja.padTop + n.y),
+        w: n.w,
+        h: n.h,
+        layer: n.layer,
+        name: s.name,
+        attributes: s.attributes,
+        group: s.group,
+        hue: s.group ? groupHue.get(s.group) : undefined,
+      });
+    }
+  }
+  const byId = new Map(entities.map((e) => [e.id, { ...e, layer: e.layer }]));
 
   const legendGroups = spec.groups?.length ? spec.groups : undefined;
   const legendW = legendGroups
     ? Math.max(...legendGroups.map((g) => Math.ceil(g.name.length * 6) + 30))
     : 0;
 
-  const contentW = placed.width + offsetX + MARGIN.right;
+  const contentW = mejorPack.width + offsetX + MARGIN.right;
   const width = Math.max(legendGroups ? Math.max(contentW, legendW + 180) : contentW, 160);
-  const height = placed.height + offsetY + MARGIN.bottom;
+  const height = mejorPack.height + offsetY + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
   // Rejilla de costos: las cajas se bloquean para que el A* las rodee.
   const grid = makeCostGrid(width, height);
   const posById = new Map(entities.map((e) => [e.id, e]));
   for (const e of entities) blockRect(grid, e.x - 6, e.y - 6, e.w + 12, e.h + 12);
+  // La cabecera del cajón es texto: encarecerla evita que una arista la tache.
+  for (const c of cajones) applyRectCost(grid, c.x, c.y, c.w, CLUSTER_HEADER + 4, 12, true);
+  // Peaje suave dentro de cada cajón: una arista que va de un cajón a otro
+  // prefiere rodear por fuera antes que atravesar el territorio ajeno. Suave a
+  // propósito — las aristas internas del propio cajón deben seguir pudiendo pasar.
+  for (const c of cajones) applyRectCost(grid, c.x, c.y, c.w, c.h, 2, true);
 
-  const relations = spec.relations.map((r, i) => {
+  // Rutear primero lo corto deja los pasillos libres para lo largo, que es lo
+  // que de verdad necesita rodeo; al revés, las aristas largas ocupaban el
+  // centro y las cortas terminaban cruzándolas.
+  const orden = spec.relations
+    .map((r, i) => ({ r, i }))
+    .sort((a, b) => {
+      const pa = posById.get(a.r.from);
+      const qa = posById.get(a.r.to);
+      const pb = posById.get(b.r.from);
+      const qb = posById.get(b.r.to);
+      const da = Math.abs(pa.x - qa.x) + Math.abs(pa.y - qa.y);
+      const db = Math.abs(pb.x - qb.x) + Math.abs(pb.y - qb.y);
+      return da - db;
+    });
+
+  const ruteadas = new Array(spec.relations.length);
+  for (const { r, i } of orden) {
     const from = posById.get(r.from);
     const to = posById.get(r.to);
     const sides = pickSides(byId.get(r.from), byId.get(r.to), spec.direction);
@@ -234,13 +407,27 @@ export function computeErLayout(spec) {
 
     const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
 
-    const mid = points.length
+    const crudo = points.length
       ? { x: points[Math.floor(points.length / 2)].col * grid.grid, y: points[Math.floor(points.length / 2)].row * grid.grid }
       : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    // Una arista que rodea por el borde deja su punto medio pegado al canto y la
+    // etiqueta salía cortada por el viewBox; se confina al área útil del lienzo.
+    const holgura = (r.label?.length ?? 0) * 2.8 + 12;
+    const mid = {
+      x: Math.min(width - holgura, Math.max(holgura, crudo.x)),
+      y: Math.min(height - 12, Math.max(offsetY + 10, crudo.y)),
+    };
 
     if (r.label) applyRectCost(grid, mid.x - 30, mid.y - 9, 60, 18, 6, true);
 
-    return {
+    // Peaje sobre el corredor recién usado: la siguiente arista prefiere otro
+    // camino antes que correr encima de esta. No es un bloqueo — cruzarla sigue
+    // siendo posible cuando es la única salida, solo deja de ser lo barato.
+    for (const pt of points) {
+      applyRectCost(grid, pt.col * grid.grid - grid.grid, pt.row * grid.grid - grid.grid, grid.grid * 3, grid.grid * 3, 4, true);
+    }
+
+    ruteadas[i] = {
       id: r.id ?? `r${i}`,
       from: r.from,
       to: r.to,
@@ -252,13 +439,16 @@ export function computeErLayout(spec) {
       labelX: mid.x,
       labelY: mid.y,
     };
-  });
+  }
+  const relations = ruteadas;
 
   return {
     width,
     height,
     entities,
     relations,
+    clusters: cajones,
+    ratio: height > 0 ? width / height : undefined,
     groups: legendGroups,
     title: title || undefined,
     subtitle: subtitle || undefined,

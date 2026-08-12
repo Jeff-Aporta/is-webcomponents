@@ -129,6 +129,8 @@ class IsErDiagram extends DiagramElementBase {
     }
 
     if (layout.groups?.length) this.#buildLegend(layout, theme);
+    // Los cajones van primero: son el fondo sobre el que se pintan aristas y cajas.
+    this.#buildClusters(layout, theme);
     this.#buildRelations(layout, theme);
     this.#buildEntities(layout, theme);
 
@@ -148,6 +150,34 @@ class IsErDiagram extends DiagramElementBase {
     });
 
     emit(this, 'is-render', { layout, svg: this.svg });
+  }
+
+  /** Cajón por grupo: marco tenue + cabecera con el nombre del agrupador. */
+  #buildClusters(layout, theme) {
+    for (const c of layout.clusters ?? []) {
+      const color = (c.hue != null && tkHueToHex(c.hue)) || theme.accent;
+      const g = svgEl('g', { class: 'er-cluster' });
+      if (c.id) g.dataset.clusterId = c.id;
+
+      g.appendChild(svgEl('rect', {
+        x: c.x, y: c.y, width: c.w, height: c.h, rx: 12,
+        fill: c.hue != null ? `hsla(${c.hue},60%,50%,0.06)` : 'none',
+        stroke: color, 'stroke-width': 1.1, 'stroke-dasharray': '2 5',
+        class: 'er-cluster__box',
+      }));
+
+      if (c.name) {
+        const t = svgEl('text', {
+          x: c.x + 14, y: c.y + 18, fill: color,
+          'font-size': '11', 'font-weight': '700', 'letter-spacing': '0.04em',
+          'font-family': 'Tahoma,Arial,sans-serif', class: 'er-cluster__title',
+        });
+        t.textContent = c.name;
+        g.appendChild(t);
+      }
+
+      this.svg.appendChild(g);
+    }
   }
 
   #buildLegend(layout, theme) {

@@ -45,34 +45,37 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src
 
 `<ref>` preferido: **commit SHA** de `main`. `@main` solo si la app declara seguimiento continuo.
 
-## Bootstrap mínimo (loader)
+## Bootstrap mínimo (loader — preferido)
 
 ```html
 <html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
+  <script type="module"
+    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/loader.min.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from
-      'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/loader.min.js';
-    L.configure({ mirrors: ['jsdelivr', 'pages'] });
-    // L.pin('abcdef…'); // opcional
+    const L = globalThis.ISWebComponentsLoader;
     await L.loadCSSBase();
     await L.loadCSSPalettesDefault();
-    await L.load('actions'); // categoría: no hace falta load('is-button') después
+    await L.load('is-button'); // o 'actions' | 'all'
   </script>
 </head>
 <body>
-  <is-button color="brand">Hola</is-button>
+  <is-button>Hola</is-button>
 </body>
 </html>
 ```
 
-Docs del loader: [`src/cdn/loader.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md) · `dist/cdn/loader.md`.
+Alcance de `load(…)`:
 
-**Anti-redundancia:** `load('actions')` ya cubre `is-button`; un `load('is-button')` posterior no vuelve a la red (`has` / `skipped` en el resultado). Preferir categoría o tags puntuales frente a `all.min.js`.
+| Necesidad | Argumento |
+| --- | --- |
+| Un tag | `'is-button'` |
+| Una categoría | `'actions'` |
+| Kit completo | `'all'` |
 
-Cada `.min.js` empieza con un comentario `/*! … */` con URLs raw de los MD (componente, categoría, kit, loader, skill) para contexto LLM.
+La galería lo pinta en `<is-cdn-snippet>` (radio + un solo copy-paste).
 
-### Bootstrap clásico (sin loader)
+### Alternativa sin loader (legacy)
 
 ```html
 <html lang="es" data-theme="dark" data-palette="contapyme">
@@ -84,22 +87,16 @@ Cada `.min.js` empieza con un comentario `/*! … */` con URLs raw de los MD (co
   <script type="module"
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/all.min.js"></script>
 </head>
-<body>
-  <is-toast placement="bottom-end"></is-toast>
-</body>
 </html>
 ```
 
-### Qué JS elegir
+### Qué JS elegir (sin loader)
 
-| Necesidad | Archivo / API |
+| Necesidad | Archivo |
 | --- | --- |
-| Selectivo (recomendado) | `loader.min.js` → `load(tags\|cats)` |
-| App / preview completa | `load('all')` o `all.min.js` |
-| Solo una categoría | `load('actions')` o `<cat>/category.<cat>.min.js` |
-| Un tag | `load('is-button')` o `actions/button.min.js` |
-
-Anti-redundancia: si ya corriste `load('actions')`, un `load('is-button')` posterior no re-fetch.
+| App / preview completa | `all.min.js` |
+| Solo una categoría | `<cat>/category.<cat>.min.js` |
+| Un tag | `<cat>/<name>.min.js` (ej. `actions/button.min.js` → `<is-button>`) |
 
 ## Boot con fallback (si un espejo cae)
 
