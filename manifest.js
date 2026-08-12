@@ -118,6 +118,7 @@ export default [
   { tag: 'is-state-diagram', title: 'Diagrama de estados', category: 'diagrams', script: '../../components/diagrams/state-diagram.js', style: '../../components/diagrams/state-diagram.css', page: 'diagrams/is-state-diagram.json' },
   { tag: 'is-er-diagram', title: 'Diagrama entidad-relación', category: 'diagrams', script: '../../components/diagrams/er-diagram.js', style: '../../components/diagrams/er-diagram.css', page: 'diagrams/is-er-diagram.json' },
   { tag: 'is-block-diagram', title: 'Diagrama de bloques', category: 'diagrams', script: '../../components/diagrams/block-diagram.js', style: '../../components/diagrams/block-diagram.css', page: 'diagrams/is-block-diagram.json' },
+  { tag: 'is-component-diagram', title: 'Diagrama de componentes', category: 'diagrams', script: '../../components/diagrams/component-diagram.js', style: '../../components/diagrams/component-diagram.css', page: 'diagrams/is-component-diagram.json' },
   { tag: 'is-treemap', title: 'Treemap', category: 'data-viz', script: '../../components/charts/treemap.js', style: '../../components/charts/treemap.css', page: 'data-viz/is-treemap.json' },
   { tag: 'is-mindmap', title: 'Mapa mental', category: 'diagrams', script: '../../components/diagrams/mindmap.js', style: '../../components/diagrams/mindmap.css', page: 'diagrams/is-mindmap.json' },
   { tag: 'is-gantt', title: 'Diagrama de Gantt', category: 'diagrams', script: '../../components/diagrams/gantt.js', style: '../../components/diagrams/gantt.css', page: 'diagrams/is-gantt.json' },

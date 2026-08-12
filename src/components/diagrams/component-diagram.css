@@ -1,0 +1,100 @@
+@import url('../_shared/diagram-kit.css');
+
+:host {
+  width: 100%;
+  min-height: 0;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  font-family: var(--is-sans, 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:host([hidden]) { display: none; }
+
+:host([color="viewer"]) {
+  width: 100%;
+  height: 100%;
+}
+
+.wrap {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%, color-mix(in srgb, var(--is-accent, #6366f1) 6%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--is-surface-1, #0f172a) 92%, transparent) 0%, color-mix(in srgb, var(--is-surface-2, #0b1220) 92%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--is-border, #2a3038) 75%, transparent);
+  padding: 1rem 1.25rem 1.25rem;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 4%, transparent),
+    0 1px 0 color-mix(in srgb, white 2%, transparent),
+    0 12px 32px -16px rgb(0 0 0 / 35%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.wrap[data-theme="light"] {
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%, color-mix(in srgb, var(--is-accent, #6366f1) 4%, transparent), transparent 70%),
+    linear-gradient(180deg, rgb(255 255 255 / 96%) 0%, rgb(248 250 255 / 96%) 100%);
+  border-color: rgb(15 23 42 / 8%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 80%),
+    0 1px 2px rgb(15 23 42 / 4%),
+    0 12px 32px -16px rgb(15 23 42 / 12%);
+}
+
+.wrap.is-viewer {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  cursor: default;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.wrap[data-empty]::after {
+  content: 'Diagrama de componentes no disponible (payload inválido).';
+  display: block;
+  padding: 1rem;
+  font-size: 0.875em;
+  color: var(--is-text-soft, #a8b0bb);
+  font-style: italic;
+}
+
+.cd-svg {
+  display: block;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  overflow: hidden;
+}
+
+.cd-pkg,
+.cd-cmp,
+.cd-edge,
+.cd-iface {
+  transition: opacity 0.2s ease;
+}
+
+.cd-edge__path { transition: stroke-width 0.16s ease-out; }

@@ -21,6 +21,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | Commitear `tests/*.test.mjs` | Meter `tests/` entero en gitignore (solo `*.tmp` / coverage / `.cache`); inventar `.test.ts` sin pipeline TS |
 | Refactor mecánico de tokens → commit atómico + `token-vocabulary` | Dejar el rename a medias en el working tree y rebasear encima |
 | Galería: `.file-meta` (fuentes + pesos `.min`) + modal fuentes full-page con URL absoluta | `.vs-page-bar` con hints; `#vsPath` = path relativo; dialog a `96vw`/`70vh` |
+| Diagramas con grupos: cajón por grupo + `ratio` guía (`er-spec.js`) | Layout plano con todos los nodos revueltos cuando el payload declara `groups[]` |
 | Editor de código / snippets = `<is-code>` (`mode=block\|inline`, `readonly compact` en docs) | Tag `is-code-editor`; segundo motor CM; pintar docs con runMode suelto |
 | Snippets HTML: `lang="html"` o dejar que `inferLanguage` / softFormat corran | Marcar `data-cm="1"` antes de paint; asumir default `javascript` con markup `<…>` |
 | Consumo selectivo: `loader.min.js` + `load('actions')` / tags; anti-redundancia | Volver a `load('is-button')` tras cargar la categoría; preferir `all.min.js` por defecto |
@@ -28,7 +29,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | **Galería boot:** CSS en `<link>` + shell tags + `preview-component` desde `dist/cdn`; `load('all')` / page-modules en background | `await loadCSS*` + `await load('all')` en el path crítico (FOUC); `await` de `cdn-panel`/`md-editor`; asignar `.preview` antes del upgrade del CE |
 | Dev local galería: `node scripts/serve.mjs` (Cache-Control no-store) | Live Server desde carpeta padre como “servidor oficial” (más lento; OK solo para mirar) |
 
-Guardianes: `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `gallery-boot` · `cdn-loader` · `load-plan` · `code-infer-lang` · `demo-equiv`.
+Guardianes: `tests/er-clusters` · `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `gallery-boot` · `cdn-loader` · `load-plan` · `code-infer-lang` · `demo-equiv`.
 
 ---
 
@@ -649,6 +650,48 @@ mantenerlo aparte.
 9. Nuevo estado de UI en URL → key dentro de `?s=` vía `url-nav.js`, nunca param suelto + actualizar `url-nav.test.mjs`.
 10. Behavior que llama APIs sobre un nodo del demo → garantizar el nodo en `mount` + entrada en `ux-gallery-invariants` si es trampa repetible.
 11. Cambio del boot de `index.html` (orden CSS/JS, `load('all')`, preview setter) → **obligatorio** `gallery-boot` verde.
+
+### Diagramas: agrupadores, ratio y ruteo (`er-spec.js`, ago/2026)
+
+Lo aprendido montando el DER de dos bases de datos (20 tablas, 17 relaciones).
+Aplica a cualquier diagrama node-link del kit, no solo a ER.
+
+**Hacer:**
+
+- **Un grupo = un sub-diagrama.** Cada `groups[]` se resuelve con su propio
+  `layoutNodeLink` (solo con sus aristas internas) y se pinta como cajón con
+  título. Es lo que hace legible "esto es de la base A, esto de la base B".
+- **Ratio guía, no restricción.** `ratio` (default `1.4`) alimenta un
+  empaquetado que prueba cada número de columnas y se queda con el reparto de
+  score `|log(ratio/guía)|` mínimo. Nunca recorta ni deforma una caja.
+- **Escala logarítmica para comparar ratios.** Con distancia lineal, "el doble
+  de ancho" y "el doble de alto" no pesan igual y el packer se sesga a tiras.
+- **Nodos aislados aparte.** Los que no tienen aristas dentro de su grupo no
+  pasan por el motor de capas: se empaquetan en rejilla con el mismo ratio.
+- **Rutear de la arista más corta a la más larga** y cobrar peaje
+  (`applyRectCost(..., add=true)`) sobre el corredor recién usado y sobre el
+  interior de cajones ajenos. Peaje, no bloqueo: cruzar sigue siendo posible
+  cuando es la única salida, solo deja de ser lo barato.
+- **Confinar la etiqueta al lienzo** (`labelX/labelY` con `clamp`): una arista
+  que rodea por el borde deja su punto medio en el canto y el texto sale
+  cortado por el `viewBox`.
+
+**No hacer:**
+
+- **No** dejar que el motor de capas vea las aristas entre grupos: arrastra
+  entidades fuera de su cajón y los cajones acaban solapándose.
+- **No** confiar en que "todos los nodos tienen aristas". Con 14 tablas sueltas
+  el layering las apiló todas en la capa 0 y el diagrama salió como una tira
+  vertical de 4.700 px. Nada falla; solo es ilegible.
+- **No** bloquear (`blockRect`) el interior de un cajón para forzar rodeos: las
+  aristas internas de ese mismo cajón se quedan sin ruta y el A* devuelve
+  diagonales.
+- **No** dar por buena una captura sin mirarla. El bug de la tira vertical, las
+  etiquetas cortadas y el ratio desbocado pasaron los tests y el build.
+
+Guardián: `tests/er-clusters.test.mjs` — cajón por grupo, entidades dentro de su
+cajón, cajones sin solape, el ratio guía cambia la forma, sueltas en rejilla y
+etiquetas dentro del lienzo.
 
 ### Qué clase de test merece la pena aquí
 El patrón que se repite en casi todos los errores de la lista de arriba: **el artefacto se genera bien y el contenido está mal**. Build verde, navegador contento, vista que pinta — y el tema no llega, o el evento no salta, o el preview enseña de menos.
