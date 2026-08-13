@@ -403,13 +403,16 @@ export function computeSequenceLayout(spec) {
   );
   const legendW = legendColsWidths.reduce((a, b) => a + b, 0)
     + LEGEND_GAP_X * Math.max(0, legendCols - 1);
+  // baseW mide hasta el CENTRO del último actor; hay que sumarle la mitad de
+  // su caja para que la leyenda no monte encima de la etiqueta del actor.
+  const lastActorBoxHalf = boxW.length ? (boxW[boxW.length - 1] / 2) : 0;
   const baseW = snapDiagramGrid((ax[ax.length - 1] ?? 88) + rightMargin);
   // La leyenda vive a la derecha del último actor, nunca se monta encima.
   // El ancho del lienzo = lo que pide el diagrama + lo que pide la leyenda.
-  const W = legendGroups ? baseW + legendW + 32 : baseW;
+  const W = legendGroups ? baseW + lastActorBoxHalf + legendW + 32 : baseW;
   // legendX devuelve el inicio de la PRIMERA columna. Las siguientes se
   // calculan en el renderer sumando legendColsWidths[i-1] + LEGEND_GAP_X.
-  const legendX = legendGroups ? baseW + 16 : 0;
+  const legendX = legendGroups ? baseW + lastActorBoxHalf + 16 : 0;
   const legendColX = legendColsWidths;
 
   // 3) Métricas verticales (más aire bajo el subtítulo).
