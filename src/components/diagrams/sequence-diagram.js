@@ -134,7 +134,7 @@ class IsSequenceDiagram extends DiagramElementBase {
   }
 
   #buildSvg(layout, theme) {
-    const { width: W, height: H, actors, lifelines, messages, altBox, title, subtitle, titleY, subtitleY, groups, legendX } = layout;
+    const { width: W, height: H, actors, lifelines, messages, altBox, title, subtitle, titleY, subtitleY, groups, legendX, legendColX = [], legendMaxRows = 3 } = layout;
 
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -191,8 +191,22 @@ class IsSequenceDiagram extends DiagramElementBase {
 
   #buildLegend(groups, legendX, theme) {
     const g = svgEl('g', { class: 'seq-legend' });
+    // Grid de leyenda: max 3 filas por columna, tantas columnas como entren.
+    // `legendColX` (del spec) lleva el ancho de cada columna para que el item
+    // nunca se salga de su celda si el nombre es largo. `LEGEND_GAP_X` se
+    // replica aquí para el offset entre columnas — si cambia en el spec,
+    // sincronizar acá.
+    const LEGEND_GAP_X = 20;
+    const maxRows = this.layout?.legendMaxRows ?? 3;
+    const colWidths = this.layout?.legendColX ?? [];
+    const baseY = (this.layout?.subtitleY || this.layout?.titleY || 22) + 18;
+
     groups.forEach((grp, gi) => {
-      const ly = (this.layout?.subtitleY || this.layout?.titleY || 22) + 18 + gi * 16;
+      const col = Math.floor(gi / maxRows);
+      const row = gi % maxRows;
+      let cx = legendX;
+      for (let c = 0; c < col; c++) cx += (colWidths[c] ?? 0) + LEGEND_GAP_X;
+      const ly = baseY + row * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
       const clickable = this.isViewer;
@@ -204,16 +218,15 @@ class IsSequenceDiagram extends DiagramElementBase {
       if (clickable) {
         item.style.cursor = 'pointer';
         item.dataset.groupId = grp.id;
-        // Zona de click generosa sobre todo el renglón de la leyenda.
         item.appendChild(svgEl('rect', {
-          x: legendX - 2, y: ly - 8, width: grp.name.length * 6 + 26, height: 16, rx: 4, fill: 'transparent',
+          x: cx - 2, y: ly - 8, width: grp.name.length * 6 + 26, height: 16, rx: 4, fill: 'transparent',
         }));
       }
       item.appendChild(off
-        ? svgEl('circle', { cx: legendX + 5, cy: ly, r: 4.5, fill: 'none', stroke: color, 'stroke-width': 1.4 })
-        : svgEl('circle', { cx: legendX + 5, cy: ly, r: 4.5, fill: color }));
+        ? svgEl('circle', { cx: cx + 5, cy: ly, r: 4.5, fill: 'none', stroke: color, 'stroke-width': 1.4 })
+        : svgEl('circle', { cx: cx + 5, cy: ly, r: 4.5, fill: color }));
       const label = svgEl('text', {
-        x: legendX + 16, y: ly + 3.5, fill: theme.muted,
+        x: cx + 16, y: ly + 3.5, fill: theme.muted,
         'font-size': '10', 'font-family': 'Tahoma,Arial,sans-serif',
         'text-decoration': off ? 'line-through' : null,
       });

@@ -183,7 +183,6 @@ export function computeComponentLayout(spec) {
   const subtitleH = spec.subtitle ? 18 : 0;
 
   const compById = new Map(spec.components.map((c) => [c.id, c]));
-  const ifaceById = new Map(spec.interfaces.map((i) => [i.id, i]));
 
   const components = spec.components.map((c) => ({
     ...c,
@@ -196,6 +195,11 @@ export function computeComponentLayout(spec) {
     const { cx, cy } = comp ? interfaceAnchor(iface, comp) : { cx: 0, cy: 0 };
     return { ...iface, cx, cy };
   });
+
+  // Importante: este mapa se rellena DESPUÉS de calcular cx/cy de cada interfaz;
+  // si se construye sobre `spec.interfaces` (sin geometría), las aristas caen a
+  // (0, 0) y desaparecen del render sin error visible.
+  const ifaceById = new Map(interfaces.map((i) => [i.id, i]));
 
   const edges = spec.edges.map((e) => {
     // Resuelve el punto de origen: interface (lollipop) o componente (borde).

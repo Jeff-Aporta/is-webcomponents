@@ -385,10 +385,32 @@ export function computeSequenceLayout(spec) {
   // 2) Posiciones X (auto) y ancho del lienzo.
   const { x: ax, rightMargin, selfSide } = layoutActorPositions(boxW, flat);
   const legendGroups = spec.groups?.length ? spec.groups : undefined;
-  const legendW = legendGroups ? Math.max(...legendGroups.map((gp) => Math.ceil(gp.name.length * 6) + 30)) : 0;
+  // La leyenda se acomoda en grid: máximo 3 filas por columna, y tantas
+  // columnas como hagan falta para no invadir el área del último actor.
+  // Antes era una columna única apilada, y con 5+ grupos solapaba el último
+  // actor del diagrama. Ahora se reparte horizontal y se respeta el ancho
+  // del lienzo.
+  const LEGEND_MAX_ROWS = 3;
+  const LEGEND_GAP_X = 20;
+  const legendItemWidths = legendGroups
+    ? legendGroups.map((gp) => Math.ceil(gp.name.length * 6) + 30)
+    : [];
+  const legendCols = legendGroups
+    ? Math.max(1, Math.ceil(legendGroups.length / LEGEND_MAX_ROWS))
+    : 0;
+  const legendColsWidths = Array.from({ length: legendCols }, (_, c) =>
+    legendItemWidths.slice(c * LEGEND_MAX_ROWS, (c + 1) * LEGEND_MAX_ROWS).reduce((m, w) => Math.max(m, w), 0),
+  );
+  const legendW = legendColsWidths.reduce((a, b) => a + b, 0)
+    + LEGEND_GAP_X * Math.max(0, legendCols - 1);
   const baseW = snapDiagramGrid((ax[ax.length - 1] ?? 88) + rightMargin);
-  const W = legendGroups ? Math.max(baseW, legendW + 200) : baseW;
-  const legendX = legendGroups ? Math.max(8, W - legendW - 8) : 0;
+  // La leyenda vive a la derecha del último actor, nunca se monta encima.
+  // El ancho del lienzo = lo que pide el diagrama + lo que pide la leyenda.
+  const W = legendGroups ? baseW + legendW + 32 : baseW;
+  // legendX devuelve el inicio de la PRIMERA columna. Las siguientes se
+  // calculan en el renderer sumando legendColsWidths[i-1] + LEGEND_GAP_X.
+  const legendX = legendGroups ? baseW + 16 : 0;
+  const legendColX = legendColsWidths;
 
   // 3) Métricas verticales (más aire bajo el subtítulo).
   const headerCenterY = hasHeader ? 100 : 56;
@@ -498,6 +520,8 @@ export function computeSequenceLayout(spec) {
     altBox,
     groups: legendGroups,
     legendX,
+    legendColX,
+    legendMaxRows: LEGEND_MAX_ROWS,
   };
 }
 

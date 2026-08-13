@@ -465,6 +465,16 @@ export function routeSequenceHorizontal(fromX, toX, y, g) {
 /**
  * Bucle self sobre una lifeline. `side` decide a qué lado se dibuja
  * (right por defecto; left cuando el actor está pegado al borde derecho).
+ *
+ * La forma UML canónica son CUATRO segmentos (herradura cuadrada):
+ *   1. sale perpendicular hacia `side` desde la lifeline
+ *   2. sube (o baja) `loopH`
+ *   3. vuelve paralelo a la lifeline hasta la columna de la lifeline
+ *   4. baja (o sube) hasta entrar en la lifeline por arriba → arrow tip
+ *
+ * No delegamos al A*: la ruta es siempre la misma forma, y usar el router con
+ * waypoints colapsaba el tercer segmento a 1 celda (8px) — el resultado era
+ * una línea vertical con flecha, no la herradura que distingue un self-loop.
  */
 export function routeSequenceSelf(
   lifelineX,
@@ -478,22 +488,25 @@ export function routeSequenceSelf(
   const gy = snapDiagramGrid(y);
   const wCells = Math.max(2, Math.round(loopW / g.grid));
   const hCells = Math.max(2, Math.round(loopH / g.grid));
-  const start = pixelToGrid(gx, gy, g.grid);
-  const outX = start.col + side * wCells;
-  const waypoints = [
-    { col: outX, row: start.row },
-    { col: outX, row: start.row - hCells },
-  ];
-  const end = { col: start.col + side, row: start.row - hCells };
-  const points = routeOrthogonal(start, end, g, { waypoints, turnCost: 0 });
-  // El tramo de retorno entra de regreso a la lifeline → la punta apunta hacia
-  // ella: a la derecha si el bucle va a la izquierda (side=-1) y viceversa.
+  // Cuatro esquinas en píxeles. Mantenemos el cuadrilátero entero: el tercer
+  // segmento recorre TODA la anchura del bucle, no 1 celda como en la versión
+  // previa. El cuarto cierra la herradura entrando por arriba a la lifeline.
+  const start = { x: gx, y: gy };
+  const corner1 = { x: gx + side * wCells * g.grid, y: gy };
+  const corner2 = { x: gx + side * wCells * g.grid, y: gy - hCells * g.grid };
+  const corner3 = { x: gx, y: gy - hCells * g.grid };
+  const path = [
+    `M${start.x},${start.y}`,
+    `L${corner1.x},${corner1.y}`,
+    `L${corner2.x},${corner2.y}`,
+    `L${corner3.x},${corner3.y}`,
+  ].join(' ');
   return {
-    path: gridPathToSvg(points, g.grid),
-    // Punta pegada a la lifeline (no a una celda de rejilla a un lado).
+    path,
+    // Punta en la lifeline, entrando desde arriba: la flecha va hacia abajo.
     arrowTipX: gx,
-    arrowTipY: gy - hCells * g.grid,
-    arrowDir: (side === 1 ? -1 : 1),
-    points,
+    arrowTipY: gy,
+    arrowDir: 1,
+    points: [start, corner1, corner2, corner3],
   };
 }
