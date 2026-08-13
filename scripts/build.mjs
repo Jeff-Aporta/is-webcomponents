@@ -84,7 +84,11 @@ const bundleVirtual = async (outfile, virtualEntry, sourcefile, bannerJs = '') =
   await writeFile(outfile, r.outputFiles[0].text);
 };
 
-const bundleCss = (entry, outfile) => build({ entryPoints: [entry], outfile, minify: true });
+// bundle:true es obligatorio: sin él esbuild deja los `@import` literales en el
+// .min.css. `hojas.js` / adoptedStyleSheets usan replaceSync, que NO resuelve
+// @import → dialog/drawer perdían todo el chrome (padding 0 en header/body).
+const bundleCss = (entry, outfile) =>
+  build({ entryPoints: [entry], outfile, minify: true, bundle: true });
 
 async function walk(dir, out = []) {
   for (const name of await readdir(dir, { withFileTypes: true })) {
