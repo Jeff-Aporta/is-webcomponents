@@ -5,6 +5,8 @@
 :host {
   --is-drawer-size: 380px;
   --is-drawer-spacing: var(--is-space-l, 1rem);
+  /* modal-chrome.css lee --spacing; sin alias el chrome interno queda sin padding. */
+  --spacing: var(--is-drawer-spacing);
   --is-drawer-backdrop-color: rgba(0, 0, 0, 0.45);
   --is-drawer-show-duration: 220ms;
   --is-drawer-hide-duration: 180ms;
