@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-13T19:58:55.817Z",
+  "generatedAt": "2026-08-14T18:43:38.368Z",
   "count": 58,
   "modules": [
     {
@@ -95,7 +95,7 @@
       "id": "code-format",
       "path": "src/components/_shared/code-format.js",
       "summary": "code-format — No es Prettier completo (sin AST de terceros). Acepta un JSON de opciones",
-      "bytes": 5866,
+      "bytes": 6135,
       "exports": [
         "DEFAULT_FORMAT",
         "normalizeFormatConfig",
@@ -107,7 +107,7 @@
       "id": "code-langs",
       "path": "src/components/_shared/code-langs.js",
       "summary": "code-langs — Los modos livianos (js/ts/jsx/html/css) se resuelven con lo que ya carga",
-      "bytes": 5456,
+      "bytes": 5896,
       "exports": [
         "registerLanguage",
         "resolveLanguage",

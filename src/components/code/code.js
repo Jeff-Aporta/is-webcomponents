@@ -3,7 +3,7 @@
  * formateo estilo Prettier, marks (highlight/tooltip) y API code2json/json2code.
  *
  * Atributos
- *   lang              javascript | typescript | jsx | tsx | html | css | json | python | plaintext
+ *   lang              javascript | typescript | jsx | tsx | html | css | json | python | shell | curl | plaintext
  *   value             texto fuente
  *   document          JSON is-code-doc/v1 (alternativa a value; gana si ambos)
  *   format            JSON opciones tipo Prettier

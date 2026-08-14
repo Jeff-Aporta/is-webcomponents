@@ -166,6 +166,9 @@ export function formatCode(text, langId, config) {
     } catch {
       out = formatJavascript(text, cfg);
     }
+  } else if (id === 'shell' || id === 'curl' || id === 'bash' || id === 'sh' || id === 'zsh' || id === 'cli') {
+    // Un cURL no se re-indenta: las barras `\` y el orden de flags son el dato.
+    out = joinEol(String(text).replace(/\r\n/g, '\n').split('\n'), cfg);
   } else {
     out = formatJavascript(text, cfg);
   }

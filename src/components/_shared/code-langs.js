@@ -69,6 +69,7 @@ export function inferLanguage(text) {
     return 'python';
   }
   if (/^(?:diff --git|Index: |--- |\+\+\+ |@@ )/.test(t) || /^[+-]{3} /m.test(t)) return 'diff';
+  if (/^curl\b/i.test(t) || /^#!\s*\/(?:usr\/)?bin\/(?:ba)?sh\b/.test(t)) return 'shell';
   if (/\b(?:const|let|var|function|=>|import|export|class)\b/.test(t) || /\.\w+\s*=/.test(t)) {
     return 'javascript';
   }
@@ -154,6 +155,19 @@ registerLanguage({
     const CM = globalThis.CodeMirror;
     if (CM?.modes?.python) return;
     await loadCodeMirrorMode('python/python');
+  },
+});
+
+/** cURL / shell: modo CM `shell` (CDN). No re-formatear el comando. */
+registerLanguage({
+  id: 'shell',
+  aliases: ['bash', 'sh', 'zsh', 'curl', 'cli'],
+  mode: 'shell',
+  heavy: true,
+  load: async () => {
+    const CM = globalThis.CodeMirror;
+    if (CM?.modes?.shell) return;
+    await loadCodeMirrorMode('shell/shell');
   },
 });
 
