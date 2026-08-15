@@ -1,4 +1,5 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
+import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import {
   makeCostGrid, blockRect, applyRectCost, snapDiagramGrid,
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
@@ -283,7 +284,7 @@ export function computeFlowchartLayout(spec, overrides = null) {
     : 0;
 
   const contentW = placed.width + offsetX + MARGIN.right;
-  const width = Math.max(legendGroups ? Math.max(contentW, legendW + 180) : contentW, 160);
+  const width = Math.max(legendGroups ? Math.max(contentW, legendW + 180) : contentW, 160, diagramHeaderWidth(title, subtitle));
   const height = placed.height + offsetY + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 

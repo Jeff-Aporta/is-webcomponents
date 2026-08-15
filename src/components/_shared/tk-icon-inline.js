@@ -154,8 +154,11 @@ function scanIconTemplateTokens(text, onToken) {
  * @param {{x:number, y:number, size?:number, hue?:number}} opts
  * @returns {SVGGElement}
  */
+/** Icono de reemplazo cuando el pedido no existe en los assets del kit. */
+const ICONO_FALLBACK = 'mdi:shape-outline';
+
 export function svgIconGroup(iconId, opts = {}) {
-  const { x = 0, y = 0, size = 16, hue } = opts;
+  const { x = 0, y = 0, size = 16, hue, fallback = ICONO_FALLBACK } = opts;
   const NS = 'http://www.w3.org/2000/svg';
   const g = document.createElementNS(NS, 'g');
   g.setAttribute('class', 'tk-svg-icon');
@@ -168,7 +171,19 @@ export function svgIconGroup(iconId, opts = {}) {
   const prefix = path.slice(0, sep);
   const name = path.slice(sep + 1);
 
-  resolveIconRaw(prefix, name).then((raw) => {
+  // Un icono que no existe dejaba el avatar VACÍO — un hueco que se lee como
+  // error, no como ausencia. Se cae al genérico antes de rendirse.
+  const conFallback = async () => {
+    const raw = await resolveIconRaw(prefix, name);
+    if (raw) return raw;
+    if (!fallback || fallback === iconId) return null;
+    const alt = iconAssetPath(fallback);
+    const corte = alt.indexOf('/');
+    if (corte <= 0) return null;
+    return resolveIconRaw(alt.slice(0, corte), alt.slice(corte + 1));
+  };
+
+  conFallback().then((raw) => {
     if (!raw || !g.isConnected) return;
     const doc = new DOMParser().parseFromString(raw, 'image/svg+xml');
     const svg = doc.querySelector('svg');

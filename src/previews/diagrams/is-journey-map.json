@@ -1,0 +1,25 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-journey-map",
+  "category": "diagrams",
+  "title": "<is-journey-map>",
+  "titleHtml": true,
+  "storageKey": "docs-is-journey-map",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-journey-map>",
+      "lede": "Mapa de recorrido (user journey): fases, pasos y la curva de satisfacción que los atraviesa.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>No es una línea de tiempo: además del orden lleva una medida por paso y su responsable. Un paso sin puntaje se dibuja como aro punteado — es un dato que falta, no un cero.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-journey-map open-on-click>\n  <script type=\"application/json\">\n    {\n      \"journey\": {\n        \"title\": \"Recorrido de una nota de voz\",\n        \"phases\": [\n          { \"id\": \"entrada\", \"name\": \"Entrada\", \"hue\": 210 },\n          { \"id\": \"proceso\", \"name\": \"Proceso\", \"hue\": 160 },\n          { \"id\": \"salida\", \"name\": \"Salida\", \"hue\": 38 }\n        ],\n        \"steps\": [\n          { \"id\": \"graba\", \"phase\": \"entrada\", \"label\": \"Graba la nota\", \"score\": 5, \"actor\": \"Usuario\" },\n          { \"id\": \"sube\", \"phase\": \"entrada\", \"label\": \"Sube el audio\", \"score\": 4, \"actor\": \"App\" },\n          { \"id\": \"transcribe\", \"phase\": \"proceso\", \"label\": \"Transcribe\", \"score\": 3, \"actor\": \"Servicio\" },\n          { \"id\": \"clasifica\", \"phase\": \"proceso\", \"label\": \"Clasifica\", \"score\": 2, \"actor\": \"Servicio\" },\n          { \"id\": \"responde\", \"phase\": \"salida\", \"label\": \"Responde\", \"score\": 4, \"actor\": \"Asistente\" }\n        ]\n      }\n    }\n  </script>\n</is-journey-map>"
+        }
+      ]
+    }
+  ]
+}

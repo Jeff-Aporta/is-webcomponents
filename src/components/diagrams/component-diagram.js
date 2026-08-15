@@ -33,6 +33,9 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  */
 
 class IsComponentDiagram extends DiagramElementBase {
+  /** Capa superior con las etiquetas de arista (ver #buildEdges). */
+  #etiquetasEdges = null;
+
   #theme = null;
 
   constructor() {
@@ -131,9 +134,14 @@ class IsComponentDiagram extends DiagramElementBase {
     // interfaces encima. Mismo orden que PlantUML: la arista no debe tapar la
     // caja del componente.
     this.#buildPackages(layout, theme);
+    // Capa de etiquetas de arista: se crea aquí para conservar el orden, pero
+    // se rellena después de los componentes (ver #buildEdges).
+    this.#etiquetasEdges = svgEl('g', { class: 'cd-edge-labels' });
     this.#buildEdges(layout, theme);
     this.#buildInterfaces(layout, theme);
     this.#buildComponents(layout, theme);
+    // Encima de todo: una etiqueta tapada por una caja no explica nada.
+    this.svg.appendChild(this.#etiquetasEdges);
 
     emit(this, 'is-render', { layout, svg: this.svg });
   }
@@ -142,12 +150,19 @@ class IsComponentDiagram extends DiagramElementBase {
     for (const p of layout.packages) {
       const g = svgEl('g', { class: 'cd-pkg' });
       const isGreen = (p.hue != null && p.hue >= 90 && p.hue <= 160);
-      const fill = (p.hue != null && tkHueToHex(p.hue)) || (isGreen ? 'url(#cd-pkg-fill-green)' : 'url(#cd-pkg-fill)');
-      const stroke = (p.hue != null && tkHueToHex(p.hue)) || theme.accent;
+      const conHue = p.hue != null && tkHueToHex(p.hue);
+      const fill = conHue || (isGreen ? 'url(#cd-pkg-fill-green)' : 'url(#cd-pkg-fill)');
+      const stroke = conHue || theme.accent;
       g.appendChild(svgEl('path', {
         d: packageShapePath(p),
-        fill, stroke, 'stroke-width': 1.4,
-        'stroke-linejoin': 'round', filter: 'url(#cd-shadow)',
+        fill,
+        // Con `hue`, el relleno es ese color SÓLIDO y ahogaba a los componentes
+        // de dentro: el tono identifica el paquete por el borde, no tapándolo.
+        'fill-opacity': conHue ? 0.1 : null,
+        stroke,
+        'stroke-width': 1.4,
+        'stroke-linejoin': 'round',
+        filter: 'url(#cd-shadow)',
       }));
       // Etiqueta del paquete en la pestaña, en cursiva y negrita (UML).
       const tabW = Math.min(56, p.w * 0.4);
@@ -163,6 +178,21 @@ class IsComponentDiagram extends DiagramElementBase {
   }
 
   #buildEdges(layout, theme) {
+    // Varias aristas que salen del mismo componente tienen su punto medio casi
+    // en la misma banda: sin esto las etiquetas se pisan y no se lee ninguna.
+    // La banda del estereotipo de cada componente también está ocupada: una
+    // etiqueta encima de «9 endpoints» hace ilegibles las dos cosas.
+    const colocadas = layout.components.map((c) => ({ x: c.x, y: c.y, w: c.w, h: 24 }));
+    const libre = (r) => !colocadas.some((o) => r.x < o.x + o.w && r.x + r.w > o.x
+      && r.y < o.y + o.h && r.y + r.h > o.y);
+    const sinChoque = (x, y, w) => {
+      const alto = 18;
+      for (const dy of [0, -22, 22, -44, 44, -66, 66, -88, 88]) {
+        const r = { x: x - w / 2, y: y - 9 + dy, w, h: alto };
+        if (libre(r)) { colocadas.push(r); return y + dy; }
+      }
+      return y;
+    };
     for (const e of layout.edges) {
       if (!e.path) continue;
       const g = svgEl('g', { class: 'cd-edge' });
@@ -183,11 +213,14 @@ class IsComponentDiagram extends DiagramElementBase {
       g.appendChild(path);
       if (e.label) {
         const mx = (e.fromX + e.toX) / 2;
-        const my = (e.fromY + e.toY) / 2;
         const w = e.label.length * 6 + 14;
-        g.appendChild(svgEl('rect', {
+        const my = sinChoque(mx, (e.fromY + e.toY) / 2, w);
+        // La etiqueta va a la capa superior: dentro de `g` quedaba debajo de
+        // los componentes, que se dibujan después.
+        const etiqueta = svgEl('g', { class: 'cd-edge__label' });
+        etiqueta.appendChild(svgEl('rect', {
           x: mx - w / 2, y: my - 9, width: w, height: 18, rx: 9,
-          fill: 'white', stroke: theme.accent, 'stroke-width': 0.8, opacity: 0.92,
+          fill: theme.chipFillSoft ?? 'white', stroke: theme.accent, 'stroke-width': 0.8,
         }));
         const t = svgEl('text', {
           x: mx, y: my + 3.8, 'text-anchor': 'middle', fill: theme.text,
@@ -195,7 +228,8 @@ class IsComponentDiagram extends DiagramElementBase {
           'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
         });
         t.textContent = e.label;
-        g.appendChild(t);
+        etiqueta.appendChild(t);
+        this.#etiquetasEdges.appendChild(etiqueta);
       }
       this.svg.appendChild(g);
     }

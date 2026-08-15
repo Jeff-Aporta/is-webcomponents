@@ -1,9 +1,15 @@
 @import url('../_shared/popover-panel.css');
 
 :host {
-  display: inline-block;
+  /* inline-flex + indent: participa en <is-button-group> joined como un
+     is-button (el trigger hereda --_button-* / --is-button-border-radius). */
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
   font-family: var(--is-font-family, system-ui, sans-serif);
   font-size: inherit;
+  margin-inline-start: var(--_button-horizontal-indent, 0px);
+  margin-block-start: var(--_button-vertical-indent, 0px);
   --is-dropdown-show-duration: 120ms;
   --is-dropdown-hide-duration: 100ms;
 }
@@ -15,6 +21,7 @@
 .trigger-wrap {
   display: inline-flex;
   vertical-align: middle;
+  align-items: center;
 }
 
 /* Dialog viewport completo en top layer → no lo tapen secciones/overflow */

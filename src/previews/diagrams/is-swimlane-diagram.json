@@ -1,0 +1,25 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-swimlane-diagram",
+  "category": "diagrams",
+  "title": "<is-swimlane-diagram>",
+  "titleHtml": true,
+  "storageKey": "docs-is-swimlane-diagram",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-swimlane-diagram>",
+      "lede": "Diagrama de actividad con carriles: cada fila es un responsable y cada columna un momento del proceso.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Responde lo que un flujo normal no responde: <strong>quién</strong> hace cada paso. La columna se declara o se deduce por orden topológico; un enlace hacia atrás se dibuja punteado y por debajo, como reproceso.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-swimlane-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"swimlane\": {\n        \"title\": \"Publicación de instrucciones\",\n        \"lanes\": [\n          { \"id\": \"negocio\", \"name\": \"Área solicitante\", \"hue\": 210 },\n          { \"id\": \"ing\", \"name\": \"Ingeniería\", \"hue\": 160 },\n          { \"id\": \"bd\", \"name\": \"Base de datos\", \"hue\": 38 }\n        ],\n        \"steps\": [\n          { \"id\": \"pide\", \"lane\": \"negocio\", \"label\": \"Solicita ajuste\", \"kind\": \"start\" },\n          { \"id\": \"redacta\", \"lane\": \"ing\", \"label\": \"Redacta catálogo\" },\n          { \"id\": \"revisa\", \"lane\": \"negocio\", \"label\": \"¿Aprueba?\", \"kind\": \"decision\" },\n          { \"id\": \"merge\", \"lane\": \"bd\", \"label\": \"MERGE idempotente\" },\n          { \"id\": \"verifica\", \"lane\": \"ing\", \"label\": \"Verifica conteo\" },\n          { \"id\": \"cierra\", \"lane\": \"negocio\", \"label\": \"Cierra tiquete\", \"kind\": \"end\" }\n        ],\n        \"links\": [\n          { \"from\": \"pide\", \"to\": \"redacta\" },\n          { \"from\": \"redacta\", \"to\": \"revisa\" },\n          { \"from\": \"revisa\", \"to\": \"merge\", \"label\": \"sí\" },\n          { \"from\": \"revisa\", \"to\": \"redacta\", \"label\": \"ajustes\" },\n          { \"from\": \"merge\", \"to\": \"verifica\" },\n          { \"from\": \"verifica\", \"to\": \"cierra\" }\n        ]\n      }\n    }\n  </script>\n</is-swimlane-diagram>"
+        }
+      ]
+    }
+  ]
+}

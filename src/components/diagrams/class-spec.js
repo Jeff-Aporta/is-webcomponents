@@ -1,4 +1,5 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
+import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
@@ -36,8 +37,23 @@ function textWidth(text, charW) {
   return Math.ceil(richTextPlain(text).length * charW);
 }
 
+/**
+ * Miembro de una clase: cadena ya formateada, u objeto UML.
+ *
+ * Antes solo aceptaba cadena y hacía `String(raw)`: un objeto
+ * `{ name, type, visibility }` — la forma natural de escribirlo, y la que se
+ * usó en varios payloads reales — se renderizaba como `[object Object]` en el
+ * diagrama, sin ningún aviso. Ahora se compone en la notación UML
+ * `visibilidad nombre : tipo`.
+ */
 function readMember(raw) {
-  return String(raw ?? '');
+  if (raw == null) return '';
+  if (typeof raw !== 'object') return String(raw);
+  const nombre = String(raw.name ?? raw.label ?? '').trim();
+  if (!nombre) return '';
+  const visibilidad = String(raw.visibility ?? '').trim();
+  const tipo = String(raw.type ?? raw.returns ?? '').trim();
+  return `${visibilidad ? `${visibilidad} ` : ''}${nombre}${tipo ? ` : ${tipo}` : ''}`;
 }
 
 function readClass(raw, i) {
@@ -248,7 +264,7 @@ export function computeClassLayout(spec) {
     : 0;
 
   const contentW = placed.width + offsetX + MARGIN.right;
-  const width = Math.max(legendGroups ? Math.max(contentW, legendW + 180) : contentW, 160);
+  const width = Math.max(legendGroups ? Math.max(contentW, legendW + 180) : contentW, 160, diagramHeaderWidth(title, subtitle));
   const height = placed.height + offsetY + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 

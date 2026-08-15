@@ -693,6 +693,54 @@ Guardián: `tests/er-clusters.test.mjs` — cajón por grupo, entidades dentro d
 cajón, cajones sin solape, el ratio guía cambia la forma, sueltas en rejilla y
 etiquetas dentro del lienzo.
 
+### Diagramas — invariantes a respetar
+
+**Hacer:**
+
+- `<is-sequence-diagram>` lee `spec.sequence` y pinta el SVG en su shadow
+  root. Si algo espera el SVG como hijo directo de `#d`, el selector es
+  `document.querySelector('is-sequence-diagram')?.shadowRoot?.querySelector('svg')`,
+  no `document.querySelector('#d svg')`.
+- La leyenda del sequence se acomoda en grid de **máx 3 filas × N columnas**
+  (`legendMaxRows: 3`) y arranca **pasada la caja del último actor**
+  (`baseW + boxW[n-1]/2 + 16`), no en `W - legendW - 8` (eso solapaba con
+  "Clasificador" en diagramas con 5+ grupos).
+- El self-loop del sequence se traza a mano con 4 esquinas
+  (`M→out→up→back`). **No delegar al A* con waypoints**: `collapseJogs`/
+  `collapseColinear` colapsaban el tercer segmento a 1 celda y el resultado
+  era una línea vertical con banderín, no la herradura UML. La punta
+  (`arrowTip`) cae en la lifeline, el último punto del path queda por
+  encima; el `svgArrowHead` cierra la herradura con la flecha.
+- `<is-component-diagram>` (nuevo): tres primitivas — `packages` (folder
+  con pestaña), `components` (rect con estereotipo `«name»`), `interfaces`
+  (lollipop `provided` = círculo lleno, `required` = semicírculo). Las
+  posiciones son EXPLÍCITAS en el payload (mapa mental, no grafo a
+  auto-layout). Aristas: `dependency` dashed, `realization` con flecha hueca.
+- En `<is-component-diagram>`, `ifaceById` se rellena **DESPUÉS** de
+  calcular `cx`/`cy` de cada interfaz. Si se construye sobre
+  `spec.interfaces` (sin geometría), las aristas caen a `(0, 0)` sin error
+  visible y el PNG sale sin conexiones.
+
+**No hacer:**
+
+- **No** reusar el A* genérico para self-loop: la ruta es siempre la
+  misma forma (out, up, back, down). Construirla a mano en
+  `routeSequenceSelf` y dejar el A* para aristas entre lifelines.
+- **No** medir layout de leyenda sobre el centro del último actor:
+  `baseW` mide hasta el centro, hay que sumar `boxW[n-1]/2` para que la
+  leyenda quede visualmente a la derecha de la caja.
+- **No** poblar `ifaceById` antes de calcular geometría en ningún diagrama
+  cuyo render dependa de coordenadas por nodo. La regla general: el mapa
+  auxiliar se construye DESPUÉS del map que rellena la geometría.
+
+Guardianes:
+- `tests/sequence-legend-grid.test.mjs` — leyenda max 3 filas × N cols,
+  `legendX` > borde derecho del último actor.
+- `tests/sequence-self-loop.test.mjs` — 4 segmentos (M + 3 L), 4 esquinas
+  distintas, última esquina por encima de la lifeline.
+- `tests/component-diagram-ifaces.test.mjs` — interfaces con `cx`/`cy`
+  finitos, aristas con `fromX`/`toX` ≠ `(0, 0)`.
+
 ### Qué clase de test merece la pena aquí
 El patrón que se repite en casi todos los errores de la lista de arriba: **el artefacto se genera bien y el contenido está mal**. Build verde, navegador contento, vista que pinta — y el tema no llega, o el evento no salta, o el preview enseña de menos.
 

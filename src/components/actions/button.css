@@ -10,7 +10,9 @@
 :host {
   --is-button-font-family: var(--is-font-family, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
   --is-button-font-weight: 500;
-  --is-button-border-radius: 6px;
+  /* No fijar --is-button-border-radius aquí: si no, pisa el 999px de
+     <is-button-group pill> vía ::slotted (el :host gana al padre). El
+     default 6px vive como fallback en .btn y en shape/pill. */
   --is-button-border-width: 1px;
   --is-button-transition-duration: 120ms;
   --_bg: var(--is-control-bg, #f1f3f5);
@@ -48,10 +50,10 @@
     background: var(--_bg);
     color: var(--_text);
     border: var(--is-button-border-width) solid var(--_border);
-    border-start-start-radius: var(--_button-start-start-radius, var(--is-button-border-radius));
-    border-start-end-radius: var(--_button-start-end-radius, var(--is-button-border-radius));
-    border-end-start-radius: var(--_button-end-start-radius, var(--is-button-border-radius));
-    border-end-end-radius: var(--_button-end-end-radius, var(--is-button-border-radius));
+    border-start-start-radius: var(--_button-start-start-radius, var(--is-button-border-radius, 6px));
+    border-start-end-radius: var(--_button-start-end-radius, var(--is-button-border-radius, 6px));
+    border-end-start-radius: var(--_button-end-start-radius, var(--is-button-border-radius, 6px));
+    border-end-end-radius: var(--_button-end-end-radius, var(--is-button-border-radius, 6px));
     font: inherit;
     font-family: var(--is-button-font-family);
     font-weight: var(--is-button-font-weight);

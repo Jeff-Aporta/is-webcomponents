@@ -255,6 +255,22 @@ export function computeTimelineLayout(spec, opts = {}) {
     ? (orientation === 'horizontal' ? axisX0 + scale(now) : axisY0 + scale(now))
     : undefined;
 
+  // La tarjeta va CENTRADA en su punto, así que la del primer evento se sale
+  // por la izquierda del lienzo (y la del último por la derecha): el PNG salía
+  // con el texto cortado. Se corrige moviendo el eje y ensanchando, no
+  // recortando la tarjeta.
+  if (orientation === 'horizontal' && outEvents.length) {
+    const desbordeIzq = Math.max(0, MARGIN.left - Math.min(...outEvents.map((e) => e.cardX)));
+    if (desbordeIzq > 0) {
+      axisX0 += desbordeIzq;
+      for (const e of outEvents) { e.dotX += desbordeIzq; e.cardX += desbordeIzq; }
+      for (const t of ticks) t.pos += desbordeIzq;
+      width += desbordeIzq;
+    }
+    const bordeDer = Math.max(...outEvents.map((e) => e.cardX + e.cardW));
+    width = Math.max(width, bordeDer + MARGIN.right);
+  }
+
   const legendGroups = spec.groups?.length ? spec.groups : undefined;
   const legendW = legendGroups
     ? Math.max(...legendGroups.map((g) => Math.ceil(g.name.length * 6) + 30))
@@ -269,13 +285,22 @@ export function computeTimelineLayout(spec, opts = {}) {
     // Solo cuentan las tarjetas que comparten franja vertical con la leyenda.
     const legendTop = 20 + 18 - 8;
     const legendBottom = legendTop + legendGroups.length * 16;
-    const cruzan = outEvents.filter(
-      (e) => e.cardY < legendBottom && e.cardY + e.cardH > legendTop,
-    );
-    const blockingRight = cruzan.length
-      ? Math.max(...cruzan.map((e) => e.cardX + e.cardW))
-      : 0;
-    legendX = Math.max(8, width - legendW - 8, blockingRight + 12);
+    legendX = Math.max(8, width - legendW - 8);
+
+    // Ante un choque con la leyenda, el diagrama BAJA — no se estrecha ni se
+    // corre a la izquierda. Empujar la leyenda a la derecha desperdiciaba el
+    // ancho y, en horizontal, terminaba cortando la primera tarjeta.
+    const invade = (e) => e.cardY < legendBottom
+      && e.cardY + e.cardH > legendTop
+      && e.cardX + e.cardW > legendX - 12;
+    const choque = outEvents.filter(invade);
+    if (choque.length) {
+      const desplazo = Math.ceil(legendBottom - Math.min(...choque.map((e) => e.cardY)) + 12);
+      axisY0 += desplazo;
+      for (const e of outEvents) { e.dotY += desplazo; e.cardY += desplazo; }
+      if (orientation === 'vertical') for (const t of ticks) t.pos += desplazo;
+      height += desplazo;
+    }
     width = Math.max(width, legendX + legendW + 8);
   }
 

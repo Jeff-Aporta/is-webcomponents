@@ -1,0 +1,98 @@
+@import url('../_shared/diagram-kit.css');
+
+:host {
+  width: 100%;
+  min-height: 0;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  font-family: var(--is-sans, ui-sans-serif, system-ui, sans-serif);
+}
+
+:host([hidden]) { display: none; }
+
+:host([color="viewer"]) {
+  width: 100%;
+  height: 100%;
+}
+
+.wrap {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--is-border, #2a3038);
+  padding: 0.75rem;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap.is-viewer {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  cursor: default;
+}
+
+.wrap[data-empty]::after {
+  content: 'Mapa de recorrido no disponible (payload inválido).';
+  display: block;
+  padding: 1rem;
+  font-size: 0.875em;
+  color: var(--is-text-soft, #a8b0bb);
+}
+
+.slot-hidden { display: none !important; }
+
+.jn-svg {
+  display: block;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  overflow: hidden;
+}
+
+/* ── Fases, curva y pasos ── */
+
+.jn-step {
+  transition: opacity 0.18s ease;
+}
+
+.jn-step.is-dim {
+  opacity: 0.3;
+}
+
+.jn-step__dot {
+  transition: filter 0.12s ease-out;
+}
+
+.jn-step.is-active .jn-step__dot {
+  filter: brightness(1.18);
+}
+
+.jn-step.is-active .jn-step__label {
+  font-weight: 700;
+}
+
+.jn-line {
+  opacity: 0.85;
+}
+
+/* El visor es opt-in: sin `open-on-click` el componente no abre nada,
+   asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
+:host([open-on-click]) .wrap {
+  cursor: zoom-in;
+}

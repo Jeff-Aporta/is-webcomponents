@@ -193,6 +193,37 @@
 :host([pill]) ::slotted(*) { --is-button-border-radius: 999px; }
 :host([pill][variant='segmented']) ::slotted([selected]) { border-radius: 999px; }
 
+/* Pill + joined: forzar radios exteriores en --_button-* (is-button las
+ * consume sin redefinirlas). Así el extremo es pastilla aunque el hijo sea
+ * is-dropdown u otro wrapper, no solo is-button directo. */
+:host([pill][variant='joined'][orientation='horizontal']) ::slotted(:first-child:not(:last-child)) {
+  --_button-start-start-radius: 999px;
+  --_button-end-start-radius: 999px;
+}
+
+:host([pill][variant='joined'][orientation='horizontal']) ::slotted(:last-child:not(:first-child)) {
+  --_button-start-end-radius: 999px;
+  --_button-end-end-radius: 999px;
+}
+
+:host([pill][variant='joined'][orientation='horizontal']) ::slotted(:only-child),
+:host([pill][variant='joined'][orientation='vertical']) ::slotted(:only-child) {
+  --_button-start-start-radius: 999px;
+  --_button-start-end-radius: 999px;
+  --_button-end-start-radius: 999px;
+  --_button-end-end-radius: 999px;
+}
+
+:host([pill][variant='joined'][orientation='vertical']) ::slotted(:first-child:not(:last-child)) {
+  --_button-start-start-radius: 999px;
+  --_button-start-end-radius: 999px;
+}
+
+:host([pill][variant='joined'][orientation='vertical']) ::slotted(:last-child:not(:first-child)) {
+  --_button-end-start-radius: 999px;
+  --_button-end-end-radius: 999px;
+}
+
 :host([stretch]) { display: flex; width: 100%; }
 :host([stretch]) .button-group { flex-wrap: nowrap; width: 100%; }
 :host([stretch]) ::slotted(*) { flex: 1 1 0; min-width: 0; }

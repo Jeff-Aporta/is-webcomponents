@@ -25,7 +25,9 @@ function diagramLabelW(label) {
 }
 
 const DEFAULT_HUES = [239, 199, 210];
-const DEFAULT_ICONS = ['mdi:account', 'mdi:robot-outline', 'simple-icons:openai'];
+// Solo iconos presentes en `src/assets/icons`: uno inexistente deja el avatar
+// vacío (le pasó a `simple-icons:openai`, que no viaja en el kit).
+const DEFAULT_ICONS = ['mdi:account', 'mdi:robot-outline', 'mdi:server', 'mdi:database'];
 
 /** Guía editorial: `log` ≤70 caracteres visibles (`**`, `{{iconify}}` no cuentan). Sin recorte automático. */
 export const SEQUENCE_LOG_MAX_VISIBLE = 70;
@@ -59,7 +61,9 @@ function asRecord(v) {
 function readActor(raw, i) {
   // Conserva el label COMPLETO (con el sugar) para persistencia round-trip;
   // el ícono líder se extrae al avatar en computeSequenceLayout (display).
-  const rawLabel = String(raw.label ?? `Actor ${i + 1}`);
+  // `name` es alias de `label`: el resto de la categoría nombra así, y un
+  // payload con `name` acababa rotulado "Actor 3" sin ningún aviso.
+  const rawLabel = String(raw.label ?? raw.name ?? `Actor ${i + 1}`);
   const leading = extractLeadingIconToken(rawLabel);
   return {
     id: String(raw.id ?? `a${i}`),
@@ -81,6 +85,8 @@ export function sequenceThemeLight() {
     altFill: 'rgba(99,102,241,0.06)',
     altBorder: 'rgba(99,102,241,0.55)',
     chipFill: 'rgba(255,255,255,0.9)',
+    // Etiquetas que van sobre una arista: el fondo tapaba la línea.
+    chipFillSoft: 'rgba(255,255,255,0.7)',
     dotText: '#ffffff',
   };
 }
@@ -96,6 +102,7 @@ export function sequenceThemeDark() {
     altFill: 'rgba(129,140,248,0.08)',
     altBorder: 'rgba(129,140,248,0.55)',
     chipFill: 'rgba(13,27,42,0.9)',
+    chipFillSoft: 'rgba(13,27,42,0.7)',
     dotText: '#0b1f33',
   };
 }

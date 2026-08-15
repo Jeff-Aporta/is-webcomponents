@@ -182,6 +182,10 @@ export default {
     "behavior": "./behaviors/is-diagram-lightbox.js",
     "category": "diagrams"
   },
+  "is-component-diagram": {
+    "json": "./diagrams/is-component-diagram.json",
+    "category": "diagrams"
+  },
   "is-er-diagram": {
     "json": "./diagrams/is-er-diagram.json",
     "category": "diagrams"
@@ -201,6 +205,30 @@ export default {
   "is-org-chart": {
     "json": "./diagrams/is-org-chart.json",
     "behavior": "./behaviors/is-org-chart.js",
+    "category": "diagrams"
+  },
+  "is-journey-map": {
+    "json": "./diagrams/is-journey-map.json",
+    "category": "diagrams"
+  },
+  "is-quadrant-chart": {
+    "json": "./diagrams/is-quadrant-chart.json",
+    "category": "diagrams"
+  },
+  "is-sankey-diagram": {
+    "json": "./diagrams/is-sankey-diagram.json",
+    "category": "diagrams"
+  },
+  "is-swimlane-diagram": {
+    "json": "./diagrams/is-swimlane-diagram.json",
+    "category": "diagrams"
+  },
+  "is-use-case-diagram": {
+    "json": "./diagrams/is-use-case-diagram.json",
+    "category": "diagrams"
+  },
+  "is-venn-diagram": {
+    "json": "./diagrams/is-venn-diagram.json",
     "category": "diagrams"
   },
   "is-sequence-diagram": {

@@ -88,7 +88,7 @@
     {
       "id": "modifiers",
       "title": "Pill y stretch",
-      "lede": "<code class=\"code\">pill</code> redondea los extremos del grupo completo sin tocar cada botón. <code class=\"code\">stretch</code> reparte el ancho disponible en partes iguales.",
+      "lede": "<code class=\"code\">pill</code> redondea los extremos del grupo (999px en radios exteriores vía <code class=\"code\">--_button-*</code>, también si el hijo es <code class=\"code\">is-dropdown</code>). <code class=\"code\">stretch</code> reparte el ancho disponible en partes iguales.",
       "blocks": [
         {
           "kind": "demo",

@@ -231,7 +231,7 @@ class IsErDiagram extends DiagramElementBase {
         const w = r.label.length * 5.6 + pad * 2;
         g.appendChild(svgEl('rect', {
           x: r.labelX - w / 2, y: r.labelY - 8, width: w, height: 16, rx: 4,
-          fill: theme.chipFill, class: 'er-rel__chip',
+          fill: theme.chipFillSoft ?? theme.chipFill, class: 'er-rel__chip',
         }));
         const t = svgEl('text', {
           x: r.labelX, y: r.labelY + 3.5, 'text-anchor': 'middle', fill: theme.muted,

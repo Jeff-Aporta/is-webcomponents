@@ -1,4 +1,5 @@
 import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
+import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
@@ -181,7 +182,7 @@ export function computeBlockLayout(spec) {
     : 0;
 
   const contentW = spec.columns * unitW + (spec.columns - 1) * GAP + offsetX + MARGIN.right;
-  const width = Math.max(legendGroups ? Math.max(contentW, legendW + 180) : contentW, 160);
+  const width = Math.max(legendGroups ? Math.max(contentW, legendW + 180) : contentW, 160, diagramHeaderWidth(title, subtitle));
   const height = offsetY + (rowCount ? rowCount * ROW_H + (rowCount - 1) * GAP : 0) + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 

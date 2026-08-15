@@ -24,6 +24,12 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-gantt>` | [gantt.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/gantt.md) | Diagrama de Gantt |
 | `<is-timeline>` | [timeline.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/timeline.md) | Línea de tiempo |
 | `<is-org-chart>` | [org-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/org-chart.md) | Organigrama jerárquico |
+| `<is-sankey-diagram>` | [sankey-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/sankey-diagram.md) | Diagrama de Sankey |
+| `<is-quadrant-chart>` | [quadrant-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/quadrant-chart.md) | Matriz de cuadrantes |
+| `<is-venn-diagram>` | [venn-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/venn-diagram.md) | Diagrama de Venn |
+| `<is-use-case-diagram>` | [use-case-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/use-case-diagram.md) | Diagrama de casos de uso UML |
+| `<is-swimlane-diagram>` | [swimlane-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/swimlane-diagram.md) | Diagrama de carriles |
+| `<is-journey-map>` | [journey-map.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/journey-map.md) | Mapa de recorrido |
 
 ## Composición y relaciones
 
@@ -43,6 +49,8 @@ Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mis
 - `../_shared/diagram-grid.js`
 - `../_shared/tk-color.js`
 - `../_shared/path-turtle.js`
+- `../_shared/diagram-arrow.js`
+- `../_shared/svg-chart-engine.js`
 
 ## Dependencias compartidas
 
@@ -77,6 +85,34 @@ Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 ## Módulos internos
 
 No expone módulos internos documentales en esta categoría.
+
+## Legibilidad del render (aprendido exportando a PNG)
+
+Los selfchecks de geometría pasaban en verde mientras el PNG salía ilegible.
+Lo que se dibuja tiene que CABER, y eso no lo comprueba un layout correcto.
+Cubierto por `render-legibilidad.selfcheck.mjs`.
+
+- **La cabecera cuenta para el ancho.** Título y subtítulo se centran en
+  `width / 2`: con un diagrama estrecho se salen por los dos lados. Todo spec
+  con cabecera pasa por `../_shared/diagram-header.js`.
+- **La etiqueta que va sobre una arista usa `theme.chipFillSoft`** (alfa 0.7),
+  no `chipFill`. Con el fondo opaco, el chip tapa la línea que está explicando.
+- **Las etiquetas que viven fuera de la figura entran en el lienzo.** Pasó en
+  Venn (nombres de conjunto) y en Timeline (tarjeta del primer evento).
+- **Ante un choque con la leyenda, el contenido BAJA.** Empujar la leyenda a la
+  derecha desperdicia el ancho y termina cortando lo de la izquierda.
+- **Un miembro puede llegar como objeto.** `readMember` de `class-spec` acepta
+  `{ name, type, visibility }` y compone `visibilidad nombre : tipo`; antes
+  hacía `String(raw)` y pintaba `[object Object]` sin avisar.
+- **El diagrama ocupa el ancho que tiene.** El Sankey calculaba la separación
+  entre capas con una constante y dejaba media lámina vacía: ahora se reparte
+  el ancho objetivo entre las capas.
+
+**`is-org-chart` es el outlier**: no extiende `DiagramElementBase`, su slot JSON
+es el ARREGLO de nodos, sus nodos usan `name`/`title` (no `label`) y pinta las
+tarjetas en `foreignObject`, que no sobrevive a un screenshot headless. No
+usarlo donde el entregable sea una imagen exportada; `is-mindmap` con
+`layout: "tree"` cubre el caso.
 
 ## Navegación
 

@@ -46,6 +46,8 @@
  *   - sin auto-layout: la posición la pone el autor del payload.
  */
 
+import { diagramHeaderWidth } from '../_shared/diagram-header.js';
+
 const TAB_W = 56;
 const TAB_H = 14;
 const STEREO_GAP = 4;
@@ -237,7 +239,7 @@ export function computeComponentLayout(spec) {
   for (const p of spec.packages) { maxX = Math.max(maxX, p.x + p.w); maxY = Math.max(maxY, p.y + p.h); }
   for (const c of spec.components) { maxX = Math.max(maxX, c.x + c.w); maxY = Math.max(maxY, c.y + c.h); }
 
-  const width = Math.max(640, maxX + PAD * 2);
+  const width = Math.max(640, maxX + PAD * 2, diagramHeaderWidth(spec.title, spec.subtitle));
   const height = Math.max(360, titleH + subtitleH + maxY + PAD * 2);
 
   return {

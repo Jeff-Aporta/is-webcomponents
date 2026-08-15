@@ -67,12 +67,50 @@ import './component-diagram.js';
 | `layout` | solo lectura | Geometría lista para pintar. |
 | `isViewer` | solo lectura | True cuando el componente vive dentro de un lightbox. |
 
+### Slots
+
+| Slot | Uso |
+| --- | --- |
+| `default` | Payload JSON en un `<script type="application/json">`. |
+
 ### Eventos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `is-render` | sí | sí | sí | no |
 | `is-open-viewer` | sí | sí | sí | sí |
+
+### Métodos y propiedades públicas
+
+| Método | Uso |
+| --- | --- |
+| `updateComplete()` | Método público declarado. |
+
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `base` | Personalizable con `::part(base)`. |
+| `canvas` | Personalizable con `::part(canvas)`. |
+| `tooltip` | Personalizable con `::part(tooltip)`. |
+
+### Custom states
+
+No expone.
+
+### CSS custom properties
+
+| Token | Uso |
+| --- | --- |
+| `--is-sans` | Token leído o definido por componente. |
+| `--is-border` | Token leído o definido por componente. |
+| `--is-text-soft` | Token leído o definido por componente. |
+
+### Integración con formularios
+
+No declara integración form-associated propia en este módulo.
 
 ## Schema del payload
 
@@ -136,9 +174,31 @@ import './component-diagram.js';
 Preservar semántica, foco, teclado, labels y ARIA. `aria-label` se
 autogenera desde `title` o cae a "Diagrama de componentes".
 
+## Ejemplo avanzado
+
+Ver el preview de la galería, que trae paquetes, estereotipos e interfaces
+provided/required:
+[`../../previews/diagrams/is-component-diagram.json`](../../previews/diagrams/is-component-diagram.json).
+
 ## Errores comunes
 
 - Declarar `edges` que referencien componentes/interfaces inexistentes.
   El spec las descarta silenciosamente (es trazable contando nodos).
 - Olvidar `x`/`y` en un nodo: cae a `(0, 0)` y se solapa con el origen.
 - Usar este componente para clases UML: para eso es `<is-class-diagram>`.
+
+## Reglas para LLM
+
+- Reusar componente y dependencias antes de implementación paralela.
+- Mantener nombres exactos de tags y API.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
+
+## Fuentes
+
+- [JavaScript](./component-diagram.js)
+- [CSS](./component-diagram.css)
+- [Spec y layout](./component-spec.js)
+- [Índice de categoría](./LLM.md)
+- [Preview](../../previews/diagrams/is-component-diagram.json)

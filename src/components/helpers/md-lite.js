@@ -25,6 +25,10 @@ const TABLE_SEP = /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)+\|?\s*$/;
 const FENCE_LINE = /^\s*```/;
 const BLOCKQUOTE_LINE = /^\s*>/;
 const RAW_HTML_LINE = /^\s*</;
+/** Apertura de etiqueta HTML (no comentario / doctype). Captura el nombre. */
+const HTML_OPEN_TAG = /^\s*<([A-Za-z][\w:.-]*)\b[^>]*>/;
+const HTML_SELF_CLOSE = /^\s*<([A-Za-z][\w:.-]*)\b[^>]*\/>\s*$/;
+const HTML_COMMENT_OPEN = /^\s*<!--/;
 
 function isSpecialLine(line) {
   return ATX_HEADING.test(line)
@@ -34,6 +38,62 @@ function isSpecialLine(line) {
     || UL_ITEM.test(line)
     || OL_ITEM.test(line)
     || RAW_HTML_LINE.test(line);
+}
+
+/**
+ * Consume un bloque HTML embebido.
+ *
+ * Antes se cortaba en la primera línea en blanco: eso partía `<is-flowchart>`
+ * / `<is-code>` con JSON o código multilínea. Ahora, si hay etiqueta de
+ * apertura, se lee hasta el `</tag>` que cierra (con profundidad); si no,
+ * se mantiene el fallback “hasta línea vacía”.
+ */
+function consumeRawHtmlBlock(lines, start) {
+  const first = lines[start];
+
+  if (HTML_COMMENT_OPEN.test(first)) {
+    const buf = [first];
+    let i = start + 1;
+    if (!first.includes('-->')) {
+      while (i < lines.length) {
+        buf.push(lines[i]);
+        if (lines[i].includes('-->')) { i += 1; break; }
+        i += 1;
+      }
+    }
+    return { html: buf.join('\n'), next: first.includes('-->') ? start + 1 : i };
+  }
+
+  if (HTML_SELF_CLOSE.test(first)) {
+    return { html: first, next: start + 1 };
+  }
+
+  const open = first.match(HTML_OPEN_TAG);
+  if (!open) {
+    const buf = [];
+    let i = start;
+    while (i < lines.length && lines[i].trim() !== '') { buf.push(lines[i]); i += 1; }
+    return { html: buf.join('\n'), next: i };
+  }
+
+  const tag = open[1];
+  const tokenRe = new RegExp(`</?${tag}\\b[^>]*>`, 'gi');
+  const buf = [];
+  let depth = 0;
+  let i = start;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    buf.push(line);
+    for (const tok of line.match(tokenRe) || []) {
+      if (/^<\//.test(tok)) depth -= 1;
+      else if (!/\/>$/.test(tok)) depth += 1;
+    }
+    i += 1;
+    if (depth <= 0) break;
+  }
+
+  return { html: buf.join('\n'), next: i };
 }
 
 /** Formato inline: código, imagen, enlace, negrita, cursiva (en ese orden,
@@ -127,9 +187,9 @@ export function mdToHtml(src) {
     if (!line.trim()) { i += 1; continue; }
 
     if (RAW_HTML_LINE.test(line)) {
-      const buf = [];
-      while (i < lines.length && lines[i].trim() !== '') { buf.push(lines[i]); i += 1; }
-      out.push(buf.join('\n'));
+      const { html, next } = consumeRawHtmlBlock(lines, i);
+      out.push(html);
+      i = next;
       continue;
     }
 

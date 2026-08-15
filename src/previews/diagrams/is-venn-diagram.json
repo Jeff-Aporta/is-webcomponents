@@ -1,0 +1,25 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-venn-diagram",
+  "category": "diagrams",
+  "title": "<is-venn-diagram>",
+  "titleHtml": true,
+  "storageKey": "docs-is-venn-diagram",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-venn-diagram>",
+      "lede": "Diagrama de Venn de dos o tres conjuntos, con las posiciones canónicas de cualquier libro de texto.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>El relleno es translúcido: la intersección aparece por superposición, sin máscaras ni recortes, así que el orden de los conjuntos no cambia el resultado. Con cuatro conjuntos los círculos dejan de poder representar todas las regiones, y el spec corta ahí.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-venn-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"venn\": {\n        \"title\": \"Alcance del tiquete\",\n        \"sets\": [\n          { \"id\": \"pedido\", \"label\": \"Lo pedido\", \"hue\": 210 },\n          { \"id\": \"entregado\", \"label\": \"Lo entregado\", \"hue\": 160 }\n        ],\n        \"regions\": [\n          { \"sets\": [\"pedido\"], \"label\": \"Pendiente\", \"value\": 2 },\n          { \"sets\": [\"entregado\"], \"label\": \"Extra\", \"value\": 1 },\n          { \"sets\": [\"pedido\", \"entregado\"], \"label\": \"Cumplido\", \"value\": 7 }\n        ]\n      }\n    }\n  </script>\n</is-venn-diagram>"
+        }
+      ]
+    }
+  ]
+}

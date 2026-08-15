@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-14T18:43:38.368Z",
-  "count": 58,
+  "generatedAt": "2026-08-15T19:07:50.714Z",
+  "count": 59,
   "modules": [
     {
       "file": "adopt-css.js",
@@ -292,6 +292,16 @@
         "applyRectCost",
         "blockRect",
         "applyForbiddenRegions"
+      ]
+    },
+    {
+      "file": "diagram-header.js",
+      "id": "diagram-header",
+      "path": "src/components/_shared/diagram-header.js",
+      "summary": "Módulo compartido `diagram-header.js`.",
+      "bytes": 1035,
+      "exports": [
+        "diagramHeaderWidth"
       ]
     },
     {
@@ -748,7 +758,7 @@
       "id": "tk-icon-inline",
       "path": "src/components/_shared/tk-icon-inline.js",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 9438,
+      "bytes": 10366,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",

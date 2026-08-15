@@ -70,10 +70,17 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `diagrams/state-diagram.md` | `<is-state-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/er-diagram.md` | `<is-er-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/block-diagram.md` | `<is-block-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
+| `diagrams/component-diagram.md` | `<is-component-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/mindmap.md` | `<is-mindmap>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/gantt.md` | `<is-gantt>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/timeline.md` | `<is-timeline>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `diagrams/org-chart.md` | `<is-org-chart>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
+| `diagrams/sankey-diagram.md` | `<is-sankey-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
+| `diagrams/quadrant-chart.md` | `<is-quadrant-chart>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
+| `diagrams/venn-diagram.md` | `<is-venn-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
+| `diagrams/use-case-diagram.md` | `<is-use-case-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
+| `diagrams/swimlane-diagram.md` | `<is-swimlane-diagram>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
+| `diagrams/journey-map.md` | `<is-journey-map>` | [diagrams/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/LLM.md) |
 | `feedback/spinner.md` | `<is-spinner>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
 | `feedback/badge.md` | `<is-badge>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
 | `feedback/tag.md` | `<is-tag>` | [feedback/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/feedback/LLM.md) |
