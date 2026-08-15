@@ -63,11 +63,11 @@ import './code.js';
 | `document` | string (JSON) | — | Documento `is-code-doc/v1`. Si está presente al conectar, manda sobre `value`. |
 | `format` | string (JSON) | ver abajo | Opciones tipo Prettier: `tabWidth`, `useTabs`, `printWidth`, `semi`, `singleQuote`, `trailingComma`, `endOfLine`. |
 | `theme-config` | string (JSON) | preset dark/light | Colores por rol (`keyword`, `string`, `gutterForeground`, …). |
-| `line-numbers` | boolean/`false` | on | Ausente = con números. `line-numbers="false"` los oculta. |
+| `line-numbers` | boolean/`false` | on (block) | Ausente = con números en `block`. En `compact` e `inline` ausente = off. `line-numbers="false"` los oculta. |
 | `wrap` | boolean | off | Word wrap. |
 | `readonly` | boolean | off | Solo lectura (sin caret; se puede seleccionar/copiar). |
-| `compact` | boolean | off | Autofit de altura (snippets de docs / CDN). |
-| `mode` | `block` \| `inline` | `block` | Inserción en página: bloque a ancho completo o inline en el flujo de texto. En `inline` los números de línea van off salvo `line-numbers` explícito. |
+| `compact` | boolean | off | Autofit de altura (snippets de docs / CDN). Sin números salvo `line-numbers` explícito. |
+| `mode` | `block` \| `inline` | `block` | Inserción en página: bloque a ancho completo o inline en el flujo de texto. En `inline`/`compact` los números van off salvo `line-numbers` explícito. |
 | `disabled` | boolean | off | Deshabilitado (sin cursor). |
 | `autofocus` | boolean | off | Foco al montar. |
 | `tab-size` | number | `2` | Tamaño de tab visual. |
