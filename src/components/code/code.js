@@ -188,8 +188,8 @@ class IsCode extends ElementBase {
   set lang(v) { setStringAttr(this, 'lang', v || 'javascript'); }
 
   get lineNumbers() {
-    // Inline: sin números salvo que se pida explícitamente line-numbers (sin false).
-    if (this.mode === 'inline') {
+    // Inline / compact (snippets de docs): sin números salvo petición explícita.
+    if (this.mode === 'inline' || this.compact) {
       if (!this.hasAttribute('line-numbers')) return false;
       return this.getAttribute('line-numbers') !== 'false';
     }

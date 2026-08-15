@@ -101,6 +101,13 @@
   padding: 0.7rem 2.75rem 0.7rem 0.95rem;
 }
 
+/*
+ * Solo anular el margen del sizer cuando NO hay gutter.
+ * Antes también matcheaba `:not([line-numbers])` con números ON por defecto
+ * (atributo ausente = lineNumbers true) → gutter encima del texto
+ * ("Aut2tion: Bearer"). Con compact el default de números es off; si se
+ * pide `line-numbers` explícito, CodeMirror calcula el margen.
+ */
 :host([compact][line-numbers='false']) .editor-host .CodeMirror-sizer,
 :host([compact]:not([line-numbers])) .editor-host .CodeMirror-sizer {
   margin-left: 0 !important;
