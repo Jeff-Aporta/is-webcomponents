@@ -1,28 +1,15 @@
 // tests/component-diagram-ifaces.test.mjs
 //
-// Guardian del bug de ifaceById en <is-component-diagram>.
-//
-// En la primera versión, `ifaceById` se construía sobre `spec.interfaces`
-// ANTES de calcular `cx`/`cy` de cada interfaz. Las aristas buscaban
-// `.cx` y encontraban `undefined` → todas caían a (0, 0) sin error
-// visible y el PNG salía sin conexiones.
-//
-// Invariantes:
-//
-//   1. El layout devuelve interfaces con `cx` e `cy` numéricos
-//      (no undefined, no NaN).
-//   2. Las aristas resuelven fromX/toX desde las interfaces, no a (0, 0).
-//
-// Si alguien refactoriza `computeComponentLayout` y vuelve a poblar el
-// mapa antes de calcular geometría, el test detecta el bug inmediato.
+// Guardian del bug de ifaceById en <is-component-diagram> y de la
+// síntesis de lollipops: un payload con `links` y sin `interfaces`
+// tiene que salir con O/C y path, o el PNG solo enseña cajas.
 
-import { computeComponentLayout } from '../src/components/diagrams/component-spec.js';
+import { computeComponentLayout, resolveComponentSpec, LOLLI_R, LOLLI_STEM } from '../src/components/diagrams/component-spec.js';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
-// Spec mínima: 2 componentes, 2 interfaces, 1 arista entre ellas.
-const spec = {
+const declared = resolveComponentSpec({
   componentDiagram: {
     packages: [
       { id: 'p1', name: 'Pkg', x: 0, y: 0, w: 600, h: 400 },
@@ -39,11 +26,11 @@ const spec = {
       { from: 'a', fromInterface: 'i1', to: 'b', toInterface: 'i2', kind: 'dependency' },
     ],
   },
-};
+});
 
-const layout = computeComponentLayout(spec.componentDiagram);
+check(declared, 'spec declarada no debe ser null');
+const layout = computeComponentLayout(declared);
 
-// Interfaces con cx/cy numéricos.
 for (const iface of layout.interfaces) {
   check(
     typeof iface.cx === 'number' && Number.isFinite(iface.cx),
@@ -53,9 +40,16 @@ for (const iface of layout.interfaces) {
     typeof iface.cy === 'number' && Number.isFinite(iface.cy),
     `iface ${iface.id} cy debe ser número finito; salió ${iface.cy}`,
   );
+  check(
+    iface.cx + LOLLI_R <= layout.width,
+    `iface ${iface.id} cx=${iface.cx} se sale del ancho ${layout.width}`,
+  );
+  check(
+    iface.cy + LOLLI_R <= layout.height,
+    `iface ${iface.id} cy=${iface.cy} se sale del alto ${layout.height}`,
+  );
 }
 
-// Aristas con fromX/toX no en (0, 0).
 for (const e of layout.edges) {
   check(
     e.fromX !== 0 || e.fromY !== 0,
@@ -71,11 +65,49 @@ for (const e of layout.edges) {
   );
 }
 
+const synthesized = resolveComponentSpec({
+  componentDiagram: {
+    components: [
+      { id: 'gw', label: 'Gateway', x: 40, y: 80, w: 120, h: 54 },
+      { id: 'sess', label: 'Sesion', x: 280, y: 80, w: 120, h: 54 },
+    ],
+    links: [{ from: 'gw', to: 'sess' }],
+  },
+});
+
+check(synthesized, 'spec sintetizada no debe ser null');
+check(synthesized.interfaces.length >= 2, `síntesis: esperaba ≥2 interfaces, salieron ${synthesized.interfaces.length}`);
+check(synthesized.edges.length >= 1, `síntesis: esperaba ≥1 arista, salieron ${synthesized.edges.length}`);
+const req = synthesized.interfaces.find((i) => i.kind === 'required');
+const prv = synthesized.interfaces.find((i) => i.kind === 'provided');
+check(req && req.component === 'gw', 'síntesis: el origen debe exponer socket required (C)');
+check(prv && prv.component === 'sess', 'síntesis: el destino debe exponer lollipop provided (O)');
+check(synthesized.edges[0].fromInterface && synthesized.edges[0].toInterface,
+  'síntesis: la arista debe anclar en las interfaces, no en el borde crudo');
+
+const synLayout = computeComponentLayout(synthesized);
+check(synLayout.edges[0].path && synLayout.edges[0].path.startsWith('M'),
+  `síntesis: path vacío ("${synLayout.edges[0]?.path}")`);
+check(synLayout.interfaces.every((i) => i.cx > 0 && i.cy > 0),
+  'síntesis: cx/cy de lollipops deben quedar dentro del lienzo (stem + bbox)');
+check(LOLLI_STEM >= 18, `stem demasiado corto para PNG: ${LOLLI_STEM}`);
+
+const connects = resolveComponentSpec({
+  componentDiagram: {
+    components: [
+      { id: 'svc', x: 20, y: 40, w: 100, h: 48, connects: ['tabla'] },
+      { id: 'tabla', x: 260, y: 40, w: 100, h: 48 },
+    ],
+  },
+});
+check(connects.edges.length >= 1, 'connects[] en el componente debe generar arista');
+check(connects.interfaces.length >= 2, 'connects[] debe sintetizar O y C');
+
 if (failures.length) {
   console.error('component-diagram-ifaces.test.mjs: FAIL');
   for (const f of failures) console.error('  -', f);
   process.exit(1);
 }
 
-console.log(`component-diagram-ifaces.test.mjs: PASS — ${layout.interfaces.length} interfaces, ${layout.edges.length} aristas resueltas`);
+console.log(`component-diagram-ifaces.test.mjs: PASS — ${layout.interfaces.length}+${synLayout.interfaces.length} interfaces, ${layout.edges.length}+${synLayout.edges.length} aristas`);
 process.exit(0);

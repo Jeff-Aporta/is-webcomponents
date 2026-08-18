@@ -27,6 +27,7 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-sankey-diagram>` | [sankey-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/sankey-diagram.md) | Diagrama de Sankey |
 | `<is-quadrant-chart>` | [quadrant-chart.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/quadrant-chart.md) | Matriz de cuadrantes |
 | `<is-venn-diagram>` | [venn-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/venn-diagram.md) | Diagrama de Venn |
+| `<is-component-diagram>` | [component-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/component-diagram.md) | Diagrama de componentes UML (paquetes, lollipops O/C, aristas) |
 | `<is-use-case-diagram>` | [use-case-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/use-case-diagram.md) | Diagrama de casos de uso UML |
 | `<is-swimlane-diagram>` | [swimlane-diagram.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/swimlane-diagram.md) | Diagrama de carriles |
 | `<is-journey-map>` | [journey-map.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/journey-map.md) | Mapa de recorrido |
@@ -104,6 +105,10 @@ Cubierto por `render-legibilidad.selfcheck.mjs`.
 - **Un miembro puede llegar como objeto.** `readMember` de `class-spec` acepta
   `{ name, type, visibility }` y compone `visibilidad nombre : tipo`; antes
   hacía `String(raw)` y pintaba `[object Object]` sin avisar.
+- **`<is-component-diagram>` sin `edges`/`links` sale solo con cajas.** El PNG
+  de componentes necesita aristas: `links: [{ from, to }]` o `connects` en el
+  nodo. El motor sintetiza el conector UML `-(O-` (socket C + lollipop O).
+  Estilo alineado al ER: cajón `hsla(hue,60%,50%,0.06)`, dashed `2 5`, Tahoma.
 - **El diagrama ocupa el ancho que tiene.** El Sankey calculaba la separación
   entre capas con una constante y dejaba media lámina vacía: ahora se reparte
   el ancho objetivo entre las capas.

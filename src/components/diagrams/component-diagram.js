@@ -1,6 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveComponentSpec, computeComponentLayout, packageShapePath } from './component-spec.js';
+import { resolveComponentSpec, computeComponentLayout, packageShapePath, packageTabWidth, LOLLI_R } from './component-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -17,10 +17,9 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  *     entre la pestaña y el cuerpo para que se lea como dos piezas.
  *   - components: rectángulos con estereotipo `<<name>>` sobre la etiqueta.
  *     El estereotipo se pinta en cursiva; la etiqueta va en negrita debajo.
- *   - interfaces (lollipop): círculo sobre una arista corta perpendicular al
- *     lado del componente. `provided` = círculo lleno (interfaz que el
- *     componente expone), `required` = semicírculo cóncavo (interfaz que
- *     necesita de otro).
+ *   - interfaces (lollipop / socket): `provided` = círculo hueco O;
+ *     `required` = arco C abierto hacia el par. Juntos forman el conector
+ *     UML `-(O-`. Sin esto el PNG solo enseña cajas.
  *
  * Las posiciones son EXPLÍCITAS en el payload: el autor decide dónde va cada
  * nodo. Esto replica el flujo de PlantUML/Structurizr y evita el coste y la
@@ -31,6 +30,26 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  * Propiedades: payload, spec, layout, isViewer
  * Eventos: is-render, is-open-viewer
  */
+
+const FONT = 'Tahoma,Arial,sans-serif';
+
+/** Arco C abierto HACIA el par (lejos del dueño), no hacia la caja. */
+function requiredSocketPath(cx, cy, r, side) {
+  if (side === 'right') return `M${cx},${cy - r} A${r},${r} 0 0 0 ${cx},${cy + r}`;
+  if (side === 'left') return `M${cx},${cy - r} A${r},${r} 0 0 1 ${cx},${cy + r}`;
+  if (side === 'bottom') return `M${cx - r},${cy} A${r},${r} 0 0 0 ${cx + r},${cy}`;
+  return `M${cx - r},${cy} A${r},${r} 0 0 1 ${cx + r},${cy}`;
+}
+
+function stemInner(iface, r) {
+  switch (iface.side) {
+    case 'top':    return { x: iface.cx, y: iface.cy + r };
+    case 'bottom': return { x: iface.cx, y: iface.cy - r };
+    case 'left':   return { x: iface.cx + r, y: iface.cy };
+    case 'right':  return { x: iface.cx - r, y: iface.cy };
+    default:       return { x: iface.cx - r, y: iface.cy };
+  }
+}
 
 class IsComponentDiagram extends DiagramElementBase {
   /** Capa superior con las etiquetas de arista (ver #buildEdges). */
@@ -84,38 +103,10 @@ class IsComponentDiagram extends DiagramElementBase {
     this.svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
     this.svg.innerHTML = '';
 
-    const defs = svgEl('defs');
-    defs.innerHTML = `
-      <filter id="cd-shadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgb(0 0 0 / 0.18)" />
-      </filter>
-      <linearGradient id="cd-pkg-fill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgb(255 246 198 / 0.85)" />
-        <stop offset="100%" stop-color="rgb(255 234 167 / 0.85)" />
-      </linearGradient>
-      <linearGradient id="cd-pkg-fill-green" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgb(220 252 231 / 0.85)" />
-        <stop offset="100%" stop-color="rgb(187 247 208 / 0.85)" />
-      </linearGradient>
-      <linearGradient id="cd-cmp-fill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgb(255 255 255 / 0.95)" />
-        <stop offset="100%" stop-color="rgb(241 245 249 / 0.95)" />
-      </linearGradient>
-      <marker id="cd-arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
-        <path d="M0,0 L10,5 L0,10 z" fill="${theme.accent}" />
-      </marker>
-      <marker id="cd-arrowhead-realization" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="11" markerHeight="9" orient="auto-start-reverse">
-        <path d="M0,0 L10,5 L0,10 z" fill="white" stroke="${theme.accent}" stroke-width="1.4" />
-      </marker>
-    `;
-    this.svg.appendChild(defs);
-
     if (layout.title) {
       const t = svgEl('text', {
         x: W / 2, y: layout.titleY, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '14', 'font-weight': '700',
-        'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
-        'letter-spacing': '-0.01em',
+        'font-size': '13', 'font-weight': '600', 'font-family': FONT,
       });
       t.textContent = layout.title;
       this.svg.appendChild(t);
@@ -123,24 +114,19 @@ class IsComponentDiagram extends DiagramElementBase {
     if (layout.subtitle) {
       const t = svgEl('text', {
         x: W / 2, y: layout.subtitleY, 'text-anchor': 'middle', fill: theme.muted,
-        'font-size': '11.5', 'font-weight': '500',
-        'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+        'font-size': '11', 'font-family': FONT,
       });
       t.textContent = layout.subtitle;
       this.svg.appendChild(t);
     }
 
-    // Packages primero (quedan al fondo), luego edges, luego components e
-    // interfaces encima. Mismo orden que PlantUML: la arista no debe tapar la
-    // caja del componente.
+    // Paquetes (fondo) → aristas → cajas → lollipops O/C encima, para que el
+    // conector UML no quede tapado. Las etiquetas van al final.
     this.#buildPackages(layout, theme);
-    // Capa de etiquetas de arista: se crea aquí para conservar el orden, pero
-    // se rellena después de los componentes (ver #buildEdges).
     this.#etiquetasEdges = svgEl('g', { class: 'cd-edge-labels' });
     this.#buildEdges(layout, theme);
-    this.#buildInterfaces(layout, theme);
     this.#buildComponents(layout, theme);
-    // Encima de todo: una etiqueta tapada por una caja no explica nada.
+    this.#buildInterfaces(layout, theme);
     this.svg.appendChild(this.#etiquetasEdges);
 
     emit(this, 'is-render', { layout, svg: this.svg });
@@ -149,27 +135,27 @@ class IsComponentDiagram extends DiagramElementBase {
   #buildPackages(layout, theme) {
     for (const p of layout.packages) {
       const g = svgEl('g', { class: 'cd-pkg' });
-      const isGreen = (p.hue != null && p.hue >= 90 && p.hue <= 160);
-      const conHue = p.hue != null && tkHueToHex(p.hue);
-      const fill = conHue || (isGreen ? 'url(#cd-pkg-fill-green)' : 'url(#cd-pkg-fill)');
-      const stroke = conHue || theme.accent;
+      const color = (p.hue != null && tkHueToHex(p.hue)) || theme.accent;
+      // Mismo lenguaje que el cajón de grupo del `<is-er-diagram>`: el tono
+      // tiñe apenas el fondo y vive en el borde. El relleno saturado anterior
+      // convertía el paquete en un bloque de color que se comía a los
+      // componentes de dentro — que son justo lo que hay que leer.
       g.appendChild(svgEl('path', {
         d: packageShapePath(p),
-        fill,
-        // Con `hue`, el relleno es ese color SÓLIDO y ahogaba a los componentes
-        // de dentro: el tono identifica el paquete por el borde, no tapándolo.
-        'fill-opacity': conHue ? 0.1 : null,
-        stroke,
-        'stroke-width': 1.4,
+        fill: p.hue != null ? `hsla(${p.hue},60%,50%,0.06)` : 'none',
+        stroke: color,
+        'stroke-width': 1.1,
+        'stroke-dasharray': '2 5',
         'stroke-linejoin': 'round',
-        filter: 'url(#cd-shadow)',
       }));
-      // Etiqueta del paquete en la pestaña, en cursiva y negrita (UML).
-      const tabW = Math.min(56, p.w * 0.4);
+      // Etiqueta del paquete en la pestaña, en cursiva y negrita (UML), en el
+      // color del grupo: es lo que ata el paquete con sus componentes.
       const t = svgEl('text', {
-        x: p.x + tabW / 2 + 4, y: p.y + 10, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '10.5', 'font-weight': '700', 'font-style': 'italic',
-        'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+        x: p.x + packageTabWidth(p) / 2 + 4, y: p.y + 10, 'text-anchor': 'middle',
+        fill: color,
+        'font-size': '11', 'font-weight': '700', 'font-style': 'italic',
+        'letter-spacing': '0.04em',
+        'font-family': FONT,
       });
       t.textContent = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
       g.appendChild(t);
@@ -182,7 +168,10 @@ class IsComponentDiagram extends DiagramElementBase {
     // en la misma banda: sin esto las etiquetas se pisan y no se lee ninguna.
     // La banda del estereotipo de cada componente también está ocupada: una
     // etiqueta encima de «9 endpoints» hace ilegibles las dos cosas.
-    const colocadas = layout.components.map((c) => ({ x: c.x, y: c.y, w: c.w, h: 24 }));
+    // La caja ENTERA, no solo su banda superior: reservando 24 px la etiqueta
+    // se consideraba libre sobre el cuerpo del componente y acababa impresa
+    // encima del nombre.
+    const colocadas = layout.components.map((c) => ({ x: c.x, y: c.y, w: c.w, h: c.h }));
     const libre = (r) => !colocadas.some((o) => r.x < o.x + o.w && r.x + r.w > o.x
       && r.y < o.y + o.h && r.y + r.h > o.y);
     const sinChoque = (x, y, w) => {
@@ -196,36 +185,35 @@ class IsComponentDiagram extends DiagramElementBase {
     for (const e of layout.edges) {
       if (!e.path) continue;
       const g = svgEl('g', { class: 'cd-edge' });
-      const dashed = e.kind === 'dependency';
-      const useRealization = e.kind === 'realization';
-      const marker = useRealization ? 'url(#cd-arrowhead-realization)' : 'url(#cd-arrowhead)';
-      const halo = svgEl('path', {
-        d: e.path, fill: 'none', stroke: 'rgb(255 255 255 / 0.85)', 'stroke-width': 4,
-        'stroke-linejoin': 'round', 'stroke-linecap': 'round',
-      });
+      const ballSocket = Boolean(e.fromInterface && e.toInterface) || e.kind === 'assembly';
+      const dashed = !ballSocket && (e.kind === 'dependency' || e.kind === 'realization');
       const path = svgEl('path', {
-        d: e.path, fill: 'none', stroke: theme.accent, 'stroke-width': 1.6,
+        d: e.path, fill: 'none', stroke: theme.accent, 'stroke-width': 1.3,
         'stroke-linejoin': 'round', 'stroke-linecap': 'round',
-        'stroke-dasharray': dashed ? '5 4' : null,
-        'marker-end': marker,
+        'stroke-dasharray': dashed ? '6 4' : null,
+        class: 'cd-edge__path',
       });
-      g.appendChild(halo);
       g.appendChild(path);
+      if (!ballSocket) {
+        g.appendChild(svgArrowHead({
+          d: e.path,
+          tip: { x: e.toX, y: e.toY },
+          color: theme.accent,
+          className: 'cd-edge__arrow',
+        }));
+      }
       if (e.label) {
         const mx = (e.fromX + e.toX) / 2;
-        const w = e.label.length * 6 + 14;
+        const w = e.label.length * 5.6 + 8;
         const my = sinChoque(mx, (e.fromY + e.toY) / 2, w);
-        // La etiqueta va a la capa superior: dentro de `g` quedaba debajo de
-        // los componentes, que se dibujan después.
         const etiqueta = svgEl('g', { class: 'cd-edge__label' });
         etiqueta.appendChild(svgEl('rect', {
-          x: mx - w / 2, y: my - 9, width: w, height: 18, rx: 9,
-          fill: theme.chipFillSoft ?? 'white', stroke: theme.accent, 'stroke-width': 0.8,
+          x: mx - w / 2, y: my - 8, width: w, height: 16, rx: 4,
+          fill: theme.chipFillSoft ?? theme.chipFill, class: 'cd-edge__chip',
         }));
         const t = svgEl('text', {
-          x: mx, y: my + 3.8, 'text-anchor': 'middle', fill: theme.text,
-          'font-size': '10.5', 'font-weight': '600',
-          'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+          x: mx, y: my + 3.5, 'text-anchor': 'middle', fill: theme.muted,
+          'font-size': '10', 'font-family': FONT,
         });
         t.textContent = e.label;
         etiqueta.appendChild(t);
@@ -236,51 +224,47 @@ class IsComponentDiagram extends DiagramElementBase {
   }
 
   #buildInterfaces(layout, theme) {
+    const r = LOLLI_R;
     for (const iface of layout.interfaces) {
       const g = svgEl('g', { class: 'cd-iface' });
       g.dataset.ifaceId = iface.id;
-      // Línea perpendicular del círculo al componente (el "palito" del lollipop).
       const comp = layout.components.find((c) => c.id === iface.component);
       if (comp) {
-        let cx2, cy2;
+        let bx, by;
         switch (iface.side) {
-          case 'top':    cx2 = comp.x + iface.offset; cy2 = comp.y; break;
-          case 'bottom': cx2 = comp.x + iface.offset; cy2 = comp.y + comp.h; break;
-          case 'left':   cx2 = comp.x; cy2 = comp.y + iface.offset; break;
+          case 'top':    bx = comp.x + iface.offset; by = comp.y; break;
+          case 'bottom': bx = comp.x + iface.offset; by = comp.y + comp.h; break;
+          case 'left':   bx = comp.x; by = comp.y + iface.offset; break;
           case 'right':
-          default:       cx2 = comp.x + comp.w; cy2 = comp.y + iface.offset; break;
+          default:       bx = comp.x + comp.w; by = comp.y + iface.offset; break;
         }
+        const inner = stemInner(iface, r);
         g.appendChild(svgEl('line', {
-          x1: iface.cx, y1: iface.cy, x2: cx2, y2: cy2,
-          stroke: theme.accent, 'stroke-width': 1.6,
+          x1: inner.x, y1: inner.y, x2: bx, y2: by,
+          stroke: theme.accent, 'stroke-width': 1.3,
         }));
       }
-      // Provided = círculo lleno; required = semicírculo cóncavo (cup).
       if (iface.kind === 'required') {
-        // Media circunferencia abierta hacia el componente.
-        const r = 7;
-        const startAngle = iface.side === 'right' ? -Math.PI / 2 : iface.side === 'left' ? Math.PI / 2 : iface.side === 'bottom' ? 0 : Math.PI;
-        const x1 = iface.cx + r * Math.cos(startAngle);
-        const y1 = iface.cy + r * Math.sin(startAngle);
-        const x2 = iface.cx + r * Math.cos(startAngle + Math.PI);
-        const y2 = iface.cy + r * Math.sin(startAngle + Math.PI);
         g.appendChild(svgEl('path', {
-          d: `M${x1},${y1} A${r},${r} 0 1 1 ${x2},${y2}`,
-          fill: 'white', stroke: theme.accent, 'stroke-width': 1.6,
+          d: requiredSocketPath(iface.cx, iface.cy, r, iface.side),
+          fill: 'none', stroke: theme.accent, 'stroke-width': 1.3,
+          'stroke-linecap': 'round',
         }));
       } else {
         g.appendChild(svgEl('circle', {
-          cx: iface.cx, cy: iface.cy, r: 7, fill: theme.accent,
-          stroke: 'white', 'stroke-width': 1.2,
+          cx: iface.cx, cy: iface.cy, r,
+          fill: 'var(--cd-circle-fill, #ffffff)',
+          stroke: theme.accent, 'stroke-width': 1.3,
         }));
       }
-      // Etiqueta del lollipop, en cursiva como en UML.
       if (iface.name) {
+        const dx = iface.side === 'right' ? r + 5 : iface.side === 'left' ? -(r + 5) : 0;
+        const dy = iface.side === 'bottom' ? r + 12 : iface.side === 'top' ? -(r + 4) : 4;
         const t = svgEl('text', {
-          x: iface.cx, y: iface.cy + (iface.side === 'bottom' ? 22 : iface.side === 'top' ? -10 : 4),
+          x: iface.cx + dx, y: iface.cy + dy,
           'text-anchor': iface.side === 'right' ? 'start' : iface.side === 'left' ? 'end' : 'middle',
-          fill: theme.text, 'font-size': '10.5', 'font-style': 'italic',
-          'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+          fill: theme.muted, 'font-size': '10', 'font-style': 'italic',
+          'font-family': FONT,
         });
         t.textContent = `«${iface.name}»`;
         g.appendChild(t);
@@ -294,33 +278,37 @@ class IsComponentDiagram extends DiagramElementBase {
       const g = svgEl('g', { class: 'cd-cmp' });
       g.dataset.cmpId = c.id;
       const stroke = (c.hue != null && tkHueToHex(c.hue)) || theme.accent;
-      const shadow = svgEl('rect', {
-        x: c.x, y: c.y + 1.5, width: c.w, height: c.h, rx: 6,
-        fill: 'rgb(0 0 0 / 0.12)', stroke: 'none',
-        filter: 'url(#cd-shadow)',
-      });
-      const box = svgEl('rect', {
+      g.appendChild(svgEl('rect', {
         x: c.x, y: c.y, width: c.w, height: c.h, rx: 6,
-        fill: 'url(#cd-cmp-fill)', stroke, 'stroke-width': 1.6,
-      });
-      g.appendChild(shadow);
-      g.appendChild(box);
+        fill: theme.chipFill, stroke, 'stroke-width': 1.3,
+      }));
       if (c.stereotype) {
+        const headerFill = c.hue != null ? `hsla(${c.hue},65%,55%,0.22)` : theme.chipFill;
+        g.appendChild(svgEl('rect', {
+          x: c.x + 1, y: c.y + 1, width: c.w - 2, height: 15, rx: 5,
+          fill: headerFill,
+        }));
         const stereo = svgEl('text', {
           x: c.x + c.w / 2, y: c.y + 12, 'text-anchor': 'middle',
           fill: theme.muted, 'font-size': '9.5', 'font-style': 'italic',
-          'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
+          'font-family': FONT,
         });
         stereo.textContent = `«${c.stereotype}»`;
         g.appendChild(stereo);
       }
       const t = svgEl('text', {
         x: c.x + c.w / 2, y: c.labelY, 'text-anchor': 'middle',
-        fill: theme.text, 'font-size': '11.5', 'font-weight': '700',
-        'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
-        'letter-spacing': '-0.005em',
+        fill: theme.text, 'font-size': '11', 'font-weight': '700',
+        'font-family': FONT,
       });
-      t.textContent = c.name;
+      // Una línea por tspan: el nombre real de un componente rara vez cabe en
+      // el ancho de su caja (ver wrapLabel en component-spec.js).
+      const lineas = c.lines ?? [c.name];
+      lineas.forEach((linea, i) => {
+        const ts = svgEl('tspan', { x: c.x + c.w / 2, dy: i === 0 ? 0 : (c.lineHeight ?? 13) });
+        ts.textContent = linea;
+        t.appendChild(ts);
+      });
       g.appendChild(t);
       this.svg.appendChild(g);
     }

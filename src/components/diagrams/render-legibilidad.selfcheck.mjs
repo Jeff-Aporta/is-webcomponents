@@ -155,11 +155,19 @@ console.log('render-legibilidad.selfcheck (actores): OK');
 /* ── 6. Diagrama de componentes: paquete translúcido y etiquetas encima ── */
 
 const cd = readFileSync(new URL('./component-diagram.js', import.meta.url), 'utf8');
-assert.ok(/'fill-opacity': conHue \? 0\.\d+ : null/.test(cd),
+assert.ok(/hsla\(\$\{p\.hue\},60%,50%,0\.06\)/.test(cd),
   'component: el paquete con `hue` volvió al relleno sólido y ahoga a los componentes de dentro');
 assert.ok(cd.includes('this.svg.appendChild(this.#etiquetasEdges)'),
   'component: las etiquetas de arista salieron de la capa superior; las tapan las cajas');
 assert.ok(cd.includes('const sinChoque ='),
   'component: se perdió la resolución de choques entre etiquetas de arista');
+assert.ok(!cd.includes('marker-end'),
+  'component: marker SVG no rasteriza en PNG; usar svgArrowHead');
+assert.ok(cd.includes('svgArrowHead'),
+  'component: las puntas deben ser polígonos (PNG-safe)');
+assert.ok(cd.includes('requiredSocketPath'),
+  'component: falta el socket UML (arco C) de las interfaces required');
+assert.ok(cd.includes('Tahoma,Arial,sans-serif'),
+  'component: la tipografía debe coincidir con el diagrama ER');
 
 console.log('render-legibilidad.selfcheck (componentes): OK');

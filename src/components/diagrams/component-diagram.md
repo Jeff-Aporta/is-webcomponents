@@ -19,8 +19,10 @@ flujo y del bloque, este modo tiene tres primitivas declaradas:
   de UML para denotar un agrupamiento lógico / namespace).
 - **components**: rectángulos con un estereotipo `«name»` sobre la
   etiqueta, igual que el componente UML clásico.
-- **interfaces (lollipop)**: círculo (`provided`) o semicírculo (`required`)
-  sobre una arista corta perpendicular al lado del componente.
+- **interfaces (lollipop)**: círculo hueco `O` (`provided`) o arco `C`
+  (`required`) sobre un palito perpendicular al lado del componente.
+  Una arista entre componentes sin `interfaces` se completa sola a
+  conector UML `-(O-`.
 
 Las posiciones son **explícitas** en el payload. Esto replica el flujo de
 PlantUML/Structurizr: el diagrama es un mapa mental del sistema, no un
@@ -132,7 +134,10 @@ No declara integración form-associated propia en este módulo.
       stereotype?: string,    // p.ej. "component", "BD MSSQL", "Función HTTP"
       package?: string,       // id del package que lo contiene
       hue?: number,
-      x: number, y: number, w: number, h: number
+      x: number, y: number, w: number, h: number,
+      provides?: string[],    // lollipops O; si hay nombre en común, arista
+      requires?: string[],    // sockets C
+      connects?: string[]     // ids de componentes destino (alias: to, links)
     }>,
     interfaces?: Array<{
       id: string,
@@ -142,13 +147,13 @@ No declara integración form-associated propia en este módulo.
       offset: number,         // posición a lo largo del lado
       kind?: "provided" | "required"  // default "provided"
     }>,
-    edges?: Array<{
+    edges?: Array<{           // alias: links, connections, relations
       from: string,           // id de componente o de interfaz
       to: string,
       fromInterface?: string,
       toInterface?: string,
       label?: string,
-      kind?: "dependency" | "association" | "realization"
+      kind?: "dependency" | "association" | "realization" | "assembly"
     }>
   }
 }
@@ -158,9 +163,13 @@ No declara integración form-associated propia en este módulo.
 
 - Las aristas son polilíneas ortogonales simples (un quiebre). Suficiente
   para diagramas en cuadrícula; no hay A*.
-- `dependency` se dibuja con línea discontinua; `realization` con flecha
-  hueca (estilo UML).
+- Sin `interfaces` en el payload, cada `edge`/`link` componente→componente
+  sintetiza socket `C` en el origen y lollipop `O` en el destino.
+- `dependency` sin lollipops se dibuja discontinua con punta polígono
+  (PNG-safe, no `<marker>`). El conector `O–C` va en línea continua.
 - Las posiciones se declaran absolutas: el motor NO recalcula layout.
+- El estilo (cajón translúcido, dashed `2 5`, Tahoma, cajas `chipFill`)
+  sigue al `<is-er-diagram>` para que ER y componentes convivan en la ficha.
 
 ## Dependencias y componentes relacionados
 
