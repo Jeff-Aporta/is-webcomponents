@@ -178,7 +178,16 @@ class IsCode extends ElementBase {
   get cm() { return this.#cm; }
 
   get value() {
-    return this.#cm ? this.#cm.getValue() : (this.#pendingValue ?? this.getAttribute('value') ?? '');
+    if (this.#cm) {
+      const live = this.#cm.getValue();
+      if (live) return live;
+      // CM montado vacío por carrera con demo-code: no ignorar value/data-src.
+      const seed = this.#pendingValue ?? this.getAttribute('value')
+        ?? this.dataset.cmSource ?? this.dataset.src ?? '';
+      return seed;
+    }
+    return this.#pendingValue ?? this.getAttribute('value')
+      ?? this.dataset.cmSource ?? this.dataset.src ?? '';
   }
   set value(v) {
     this.#setValue(v == null ? '' : String(v), true);
@@ -357,11 +366,25 @@ class IsCode extends ElementBase {
     try { return JSON.parse(value); } catch { return null; }
   }
 
+  /** Texto semilla: attribute, dataset del highlighter o demo-code. */
+  #readSeedText() {
+    const docAttr = this.getAttribute('document');
+    if (docAttr) {
+      const doc = parseCodeDocument(docAttr);
+      if (doc?.value != null) return String(doc.value);
+    }
+    const attr = this.getAttribute('value');
+    if (attr != null && attr !== '') return attr;
+    const fromData = this.dataset.cmSource || this.dataset.src;
+    if (fromData) return fromData;
+    return this.textContent?.trim() || '';
+  }
+
   async #bootstrap() {
     if (this.#booting || this.#cm) return;
     this.#booting = true;
     try {
-      // Semilla: document attr > value attr > light DOM text
+      // Semilla: document attr > value attr > dataset > light DOM text
       const docAttr = this.getAttribute('document');
       if (docAttr) {
         const doc = parseCodeDocument(docAttr);
@@ -375,11 +398,8 @@ class IsCode extends ElementBase {
           this.#pendingValue = doc.value;
           this.#marks = (doc.marks || []).map(normalizeMark).filter(Boolean);
         }
-      } else if (this.hasAttribute('value')) {
-        this.#pendingValue = this.getAttribute('value') ?? '';
       } else {
-        const slotText = this.textContent?.trim();
-        if (slotText) this.#pendingValue = slotText;
+        this.#pendingValue = this.#readSeedText();
       }
 
       const fmtAttr = this.#parseJsonAttr(this.getAttribute('format'));
@@ -395,13 +415,20 @@ class IsCode extends ElementBase {
         this.setAttribute('lang', inferLanguage(this.#pendingValue));
       }
 
+      const CodeMirror = await ensureCodeMirrorEditor();
+
+      // El snippet del demo-code llega mientras CM cargaba (panel recién abierto).
+      // Si no re-leemos aquí, el editor queda vacío aunque value/data-src existan.
+      if (!docAttr) {
+        const late = this.#readSeedText();
+        if (late) this.#pendingValue = late;
+      }
+
       // Vista docs: pretty ligero antes de montar CM (saltos + indent).
       if (this.compact && this.readonly && this.#pendingValue != null) {
         this.#pendingValue = softFormat(this.#pendingValue, softFormatMode(this.lang));
         this.setAttribute('value', this.#pendingValue);
       }
-
-      const CodeMirror = await ensureCodeMirrorEditor();
       // CM CSS en document no entra al shadow: hay que adoptarlo aquí.
       await adoptCodeMirrorCss(this.shadowRoot, [
         `${CODEMIRROR_CDN}/lib/codemirror.min.css`,

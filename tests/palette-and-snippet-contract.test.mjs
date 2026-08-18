@@ -142,6 +142,10 @@ check(
   /currentPalette[\s\S]*contapyme|dataset\.palette\s*\|\|\s*['"]contapyme['"]/.test(demoCode),
   'demo-code.js: fallback de paleta en snippet = contapyme',
 );
+check(
+  /buildDemoSnippetStyles/.test(demoCode),
+  'demo-code.js: debe inyectar CSS de layout en snippets pegables',
+);
 
 // ─── report ─────────────────────────────────────────────────────────────────
 

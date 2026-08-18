@@ -12,6 +12,12 @@
  *
  * Override opcional: data-code="..." | data-no-code
  *
+ * No entra al snippet: botones «Ver código» / «Ver fuentes», `.demo-label`,
+ * `.demo-caption`, `.demo__heading` ni modales — solo markup replicable.
+ *
+ * Sí entra un bloque `<style>` cuando el ejemplo usa clases de layout de la
+ * galería (`.matrix`, `.demo-row`, …) o estilos del preview (`styles` en JSON).
+ *
  * Es un módulo ES: importa lo que necesita (manifest, cdn-ref, el pintor y los
  * componentes del chrome) en vez de leerlo de `window.__*`.
  */
@@ -24,6 +30,7 @@ import { paint } from '../src/components/_shared/highlight-code.js';
 import { resolveRef, jsdelivrBase } from '../src/components/_shared/cdn-ref.js';
 import { totalCdnSize } from '../src/components/_shared/cdn-sizes.js';
 import manifest from '../manifest.js';
+import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles.js';
 
 {
   /** CDN base — el snippet debe usar URLs públicas para que sea portable. */
@@ -44,7 +51,7 @@ import manifest from '../manifest.js';
   const COMPONENTS_WITH_CSS = new Set([
     'avatar', 'badge', 'block-diagram', 'button', 'button-group', 'bar-chart',
     'bubble-chart', 'card', 'chart', 'check-icon-button', 'checkbox',
-    'class-diagram', 'color-picker', 'combobox', 'copy-button', 'data-grid',
+    'class-diagram', 'color-picker', 'combobox', 'component-diagram', 'copy-button', 'data-grid',
     'date-field', 'date-input', 'date-picker', 'date-range-input',
     'date-range-picker', 'date-time-field', 'date-time-input',
     'diagram-lightbox', 'divider', 'doughnut-chart', 'dropdown',
@@ -70,12 +77,31 @@ import manifest from '../manifest.js';
 
   /** sizes.json + expansión category/all: ver `_shared/cdn-sizes.js`. */
 
+  /** UI de la galería que NO va al snippet pegable (botones, rótulos, modales). */
+  const SNIPPET_CHROME_SEL = [
+    '.demo-code-dd',
+    '.demo-code-btn',
+    '.demo-code-pop',
+    '.demo-sources-btn',
+    '.demo__heading',
+    '.demo-label',
+    '.demo-caption',
+    'dialog',
+  ].join(', ');
+
+  const isSnippetChrome = (el) => el?.nodeType === 1 && el.matches?.(SNIPPET_CHROME_SEL);
+
+  const stripSnippetChrome = (root) => {
+    root.querySelectorAll(SNIPPET_CHROME_SEL).forEach((el) => el.remove());
+    return root;
+  };
+
   /** Devuelve un Set con los nombres cortos (sin prefijo `is-`) de los
    *  componentes <is-*> que aparecen dentro del demo. */
   const collectTags = (root) => {
     const tags = new Set();
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
-      acceptNode: (n) => (n.closest?.('.demo-code-dd')
+      acceptNode: (n) => (n.closest?.(SNIPPET_CHROME_SEL)
         ? NodeFilter.FILTER_REJECT
         : NodeFilter.FILTER_ACCEPT),
     });
@@ -135,14 +161,23 @@ import manifest from '../manifest.js';
     ));
   };
 
-  /** HTML pretty del demo sin el chrome del propio botón. */
+  /** HTML pretty del demo sin chrome de la galería (botones, rótulos, modales). */
   const serializeDemoHtml = (demo) => {
-    const parts = [];
+    const wrap = document.createElement('div');
     for (const node of demo.childNodes) {
       if (node.nodeType === 1) {
-        if (node.matches('.demo-code-dd, .demo-code-btn, .demo-code-pop, dialog')) continue;
-        parts.push(node.outerHTML);
+        if (isSnippetChrome(node)) continue;
+        wrap.appendChild(node.cloneNode(true));
       } else if (node.nodeType === 3) {
+        const t = node.textContent.trim();
+        if (t) wrap.appendChild(document.createTextNode(t));
+      }
+    }
+    stripSnippetChrome(wrap);
+    const parts = [];
+    for (const node of wrap.childNodes) {
+      if (node.nodeType === 1) parts.push(node.outerHTML);
+      else if (node.nodeType === 3) {
         const t = node.textContent.trim();
         if (t) parts.push(t);
       }
@@ -233,7 +268,16 @@ import manifest from '../manifest.js';
       for (const t of tags) pushJs(`${CDN}/${catOf(t)}/${t}.min.js`);
     }
 
+    const previewStyles = demo.closest('is-preview-component')?.preview?.definition?.styles ?? '';
+    const styleCss = buildDemoSnippetStyles(inner, previewStyles);
+
     if (lines.length) lines.push('');
+    if (styleCss) {
+      lines.push('<style>');
+      lines.push(styleCss);
+      lines.push('</style>');
+      lines.push('');
+    }
     lines.push(inner);
 
     return { snippet: lines.join('\n'), urls };
@@ -283,10 +327,27 @@ import manifest from '../manifest.js';
         <is-copy-button class="demo-code-pop__copy" copy-label="Copiar" success-label="Copiado"
                         tooltip-placement="left"></is-copy-button>
       </div>
-      <is-code class="code demo-code-pop__pre is-code-view" readonly compact wrap line-numbers="false" lang="html"></is-code>
     `;
 
-    const pre = pop.querySelector('is-code');
+    /** Editor lazy: montar solo cuando el snippet existe, no al crear el dropdown. */
+    let pre = null;
+    const mountCodeEl = (snippet) => {
+      if (pre?.isConnected) return pre;
+      pre = document.createElement('is-code');
+      pre.className = 'code demo-code-pop__pre is-code-view';
+      pre.setAttribute('readonly', '');
+      pre.setAttribute('compact', '');
+      pre.setAttribute('wrap', '');
+      pre.setAttribute('line-numbers', 'false');
+      pre.setAttribute('lang', 'html');
+      pre.dataset.src = snippet;
+      pre.dataset.cmSource = snippet;
+      pre.dataset.forceCm = '1';
+      pre.setAttribute('value', snippet);
+      pop.appendChild(pre);
+      return pre;
+    };
+
     const copyBtn = pop.querySelector('is-copy-button');
     const sizeEl = pop.querySelector('.demo-code-pop__size');
     const levelTabs = pop.querySelector('.demo-code-pop__level');
@@ -302,14 +363,20 @@ import manifest from '../manifest.js';
       }
       const { snippet, urls } = await buildSnippet(demo, level);
       copyBtn.setAttribute('value', snippet);
-      if (!(pre.dataset.filled === '1' && pre.dataset.src === snippet)) {
-        pre.dataset.src = snippet;
-        pre.dataset.cmSource = snippet;
-        pre.dataset.forceCm = '1';
-        delete pre.dataset.cm;
-        pre.setAttribute('value', snippet);
-        highlight(pre);
-        pre.dataset.filled = '1';
+      await customElements.whenDefined('is-code');
+      const codeEl = pre?.isConnected ? pre : mountCodeEl(snippet);
+      const contentOk = () => (codeEl.value || codeEl.dataset.cmSource || codeEl.dataset.src || '').trim();
+      if (!(codeEl.dataset.filled === '1' && codeEl.dataset.src === snippet && contentOk())) {
+        codeEl.dataset.src = snippet;
+        codeEl.dataset.cmSource = snippet;
+        codeEl.dataset.forceCm = '1';
+        delete codeEl.dataset.cm;
+        codeEl.setAttribute('lang', 'html');
+        codeEl.setAttribute('value', snippet);
+        codeEl.value = snippet;
+        await highlight(codeEl);
+        codeEl.dataset.filled = '1';
+        requestAnimationFrame(() => codeEl.refresh?.());
       }
       sizeEl.textContent = 'calculando peso…';
       const base = await cdnBase();
@@ -320,16 +387,22 @@ import manifest from '../manifest.js';
     /** Tema/paleta del preview cambiaron → invalidar cache y, si el panel
      *  está abierto, regenerar el snippet con los attrs actuales. */
     const onContextChange = () => {
-      delete pre.dataset.filled;
-      delete pre.dataset.src;
+      if (pre) {
+        delete pre.dataset.filled;
+        delete pre.dataset.src;
+        delete pre.dataset.cmSource;
+      }
       if (panelOpen) renderSnippet().catch(console.error);
     };
 
     levelTabs.addEventListener('is-tab-show', (e) => {
       if (e.detail.name === level) return;
       level = e.detail.name;
-      delete pre.dataset.filled;
-      delete pre.dataset.src;
+      if (pre) {
+        delete pre.dataset.filled;
+        delete pre.dataset.src;
+        delete pre.dataset.cmSource;
+      }
       renderSnippet().catch(console.error);
     });
 

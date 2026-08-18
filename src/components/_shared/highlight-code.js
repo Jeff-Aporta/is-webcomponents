@@ -101,10 +101,14 @@ const paintOne = async (el) => {
   await ensureEditorDefined();
 
   const source = el.dataset.cmSource
-    ?? (isMountedEditor(el) ? el.value : el.textContent)
-    ?? '';
+    || el.dataset.src
+    || (isMountedEditor(el) ? el.value : el.textContent)
+    || '';
+  if (!source.trim() && el.classList.contains('demo-code-pop__pre')) return;
+
   const mode = el.dataset.cmMode || resolveMode(el, source);
   const text = softFormat(source, mode === 'typescript' ? 'javascript' : mode);
+  if (!text.trim() && (el.dataset.src || el.dataset.cmSource)) return;
   const lang = modeToLang(mode);
 
   if (isMountedEditor(el) || el.localName === 'is-code') {

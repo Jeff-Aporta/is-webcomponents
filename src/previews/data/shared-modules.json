@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-18T13:23:42.233Z",
+  "generatedAt": "2026-08-18T13:28:01.362Z",
   "count": 59,
   "modules": [
     {
@@ -431,7 +431,7 @@
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.js",
       "summary": "highlight-code — se coloreaba con CodeMirror.runMode sobre `<pre class=\"code\">`.",
-      "bytes": 10586,
+      "bytes": 10761,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
