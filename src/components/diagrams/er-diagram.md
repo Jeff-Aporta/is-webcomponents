@@ -152,6 +152,9 @@ Documentación de cabecera preservada desde fuente:
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
 
+Las aristas paralelas se separan unos píxeles; el trazo es un HSL oscuro del
+grupo (no negro). Las etiquetas se colocan al 50% del path y no pisan cajas.
+
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)

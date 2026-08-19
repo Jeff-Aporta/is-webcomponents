@@ -425,7 +425,7 @@ export function computeErLayout(spec) {
     // camino antes que correr encima de esta. No es un bloqueo — cruzarla sigue
     // siendo posible cuando es la única salida, solo deja de ser lo barato.
     for (const pt of points) {
-      applyRectCost(grid, pt.col * grid.grid - grid.grid, pt.row * grid.grid - grid.grid, grid.grid * 3, grid.grid * 3, 4, true);
+      applyRectCost(grid, pt.col * grid.grid - grid.grid, pt.row * grid.grid - grid.grid, grid.grid * 3, grid.grid * 3, 9, true);
     }
 
     ruteadas[i] = {
@@ -433,6 +433,7 @@ export function computeErLayout(spec) {
       from: r.from,
       to: r.to,
       label: r.label,
+      hue: from?.hue === to?.hue ? from?.hue : 200,
       identifying: r.identifying,
       path,
       fromMark: cardinalityMark(a, sides.fromSide, r.fromCard),

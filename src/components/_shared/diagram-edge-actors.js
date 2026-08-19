@@ -7,6 +7,8 @@
  * con otras chips. Se busca sitio a lo largo del path, no solo en Y.
  */
 
+import { spreadOrthogonalPaths } from './diagram-edge-spread.js';
+
 export const EDGE_ACTOR_H = 16;
 
 export function edgeActorWidth(text) {
@@ -23,6 +25,30 @@ export function parsePathPoints(d) {
     pts.push({ x: Number(m[1]), y: Number(m[2]) });
   }
   return pts;
+}
+
+/** Punto al `t` (0–1) de la longitud del polyline. */
+export function pointAtFraction(pts, t = 0.5) {
+  if (!pts?.length) return { x: 0, y: 0 };
+  if (pts.length === 1) return { x: pts[0].x, y: pts[0].y };
+  let total = 0;
+  const segs = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const len = Math.hypot(pts[i + 1].x - pts[i].x, pts[i + 1].y - pts[i].y);
+    segs.push({ a: pts[i], b: pts[i + 1], len });
+    total += len;
+  }
+  if (total < 1) return { x: pts[0].x, y: pts[0].y };
+  let walk = total * Math.min(1, Math.max(0, t));
+  for (const s of segs) {
+    if (walk <= s.len) {
+      const k = s.len ? walk / s.len : 0;
+      return { x: s.a.x + (s.b.x - s.a.x) * k, y: s.a.y + (s.b.y - s.a.y) * k };
+    }
+    walk -= s.len;
+  }
+  const last = pts[pts.length - 1];
+  return { x: last.x, y: last.y };
 }
 
 function densify(pts, step = 14) {
@@ -115,10 +141,11 @@ export function placeEdgeActors({
       { x: Number(e.toX) || 0, y: Number(e.toY) || 0 },
     ];
     const along = densify(raw.length >= 2 ? raw : ends);
-    const lo = Math.floor(along.length * 0.22);
-    const hi = Math.max(lo + 1, Math.ceil(along.length * 0.78));
-    const seeds = along.slice(lo, hi);
-    const sample = seeds.length ? seeds.filter((_, i) => i % 2 === 0) : along;
+    const mid = pointAtFraction(along.length >= 2 ? along : raw.length >= 2 ? raw : ends, 0.5);
+    const ranked = along
+      .map((p) => ({ p, d: Math.hypot(p.x - mid.x, p.y - mid.y) }))
+      .sort((a, b) => a.d - b.d);
+    const sample = ranked.length ? ranked.map((x) => x.p) : [mid];
 
     let best = null;
     search:
@@ -183,6 +210,7 @@ function edgeListOf(layout) {
 export function applyEdgeActorLayout(layout, obstacles) {
   const edges = edgeListOf(layout);
   if (!edges) return layout;
+  spreadOrthogonalPaths(edges);
   const r = placeEdgeActors({
     edges,
     obstacles: obstacles ?? [],

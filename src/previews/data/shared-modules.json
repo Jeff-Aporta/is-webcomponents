@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-19T14:24:56.317Z",
-  "count": 60,
+  "generatedAt": "2026-08-19T14:37:54.063Z",
+  "count": 61,
   "modules": [
     {
       "file": "adopt-css.js",
@@ -250,13 +250,24 @@
       "id": "diagram-edge-actors",
       "path": "src/components/_shared/diagram-edge-actors.js",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 4611,
+      "bytes": 6503,
       "exports": [
         "EDGE_ACTOR_H",
         "edgeActorWidth",
         "parsePathPoints",
+        "pointAtFraction",
         "placeEdgeActors",
         "applyEdgeActorLayout"
+      ]
+    },
+    {
+      "file": "diagram-edge-spread.js",
+      "id": "diagram-edge-spread",
+      "path": "src/components/_shared/diagram-edge-spread.js",
+      "summary": "Separa polilíneas ortogonales que corren pegadas. — El A* reutiliza el mismo corredor: varias aristas salen como una sola raya.",
+      "bytes": 3406,
+      "exports": [
+        "spreadOrthogonalPaths"
       ]
     },
     {

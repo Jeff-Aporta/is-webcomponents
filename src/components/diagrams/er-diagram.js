@@ -211,7 +211,9 @@ class IsErDiagram extends DiagramElementBase {
 
   #buildRelations(layout, theme) {
     for (const r of layout.relations) {
-      const color = theme.accent;
+      const color = (r.hue != null && tkHueToHex(r.hue, 48, 30))
+        || tkHueToHex(205, 42, 32)
+        || theme.accent;
       const g = svgEl('g', { class: 'er-rel' });
       g.dataset.relId = r.id;
 

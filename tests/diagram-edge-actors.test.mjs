@@ -1,5 +1,6 @@
 import { computeComponentLayout, resolveComponentSpec } from '../src/components/diagrams/component-spec.js';
-import { placeEdgeActors } from '../src/components/_shared/diagram-edge-actors.js';
+import { placeEdgeActors, pointAtFraction, parsePathPoints } from '../src/components/_shared/diagram-edge-actors.js';
+import { spreadOrthogonalPaths } from '../src/components/_shared/diagram-edge-spread.js';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
@@ -74,6 +75,24 @@ const chip = {
 for (const c of layout.components) {
   check(!overlap(chip, { x: c.x, y: c.y, w: c.w, h: c.h }),
     'la chip de arista no puede solapar un componente');
+}
+
+{
+  const mid = pointAtFraction([{ x: 0, y: 0 }, { x: 100, y: 0 }], 0.5);
+  check(Math.abs(mid.x - 50) < 0.5 && Math.abs(mid.y) < 0.5, `50% del path debe ser (50,0); salió (${mid.x},${mid.y})`);
+
+  const libre = [
+    { label: 'mitad', path: 'M40,40 L240,40', fromX: 40, fromY: 40, toX: 240, toY: 40 },
+  ];
+  placeEdgeActors({ edges: libre, obstacles: [], canvas: { width: 400, height: 120 } });
+  check(Math.abs(libre[0].labelX - 140) < 24, `la chip debe nacer cerca del 50% (140); x=${libre[0].labelX}`);
+
+  const a = { path: 'M20,20 L20,180 L120,180' };
+  const b = { path: 'M20,20 L20,180 L120,180' };
+  spreadOrthogonalPaths([a, b], 8);
+  const pa = parsePathPoints(a.path);
+  const pb = parsePathPoints(b.path);
+  check(Math.abs(pa[1].x - pb[1].x) >= 7, `espinas verticales deben separarse; x=${pa[1].x} y ${pb[1].x}`);
 }
 
 if (failures.length) {
