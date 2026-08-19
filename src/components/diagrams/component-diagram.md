@@ -135,6 +135,7 @@ No declara integración form-associated propia en este módulo.
       package?: string,       // id del package que lo contiene
       hue?: number,
       x: number, y: number, w: number, h: number,
+      items?: string[],       // inventario en el cuerpo (p.ej. endpoints HTTP)
       provides?: string[],    // lollipops O; si hay nombre en común, arista
       requires?: string[],    // sockets C
       connects?: string[]     // ids de componentes destino (alias: to, links)
@@ -163,6 +164,10 @@ No declara integración form-associated propia en este módulo.
 
 - Las aristas son polilíneas ortogonales simples (un quiebre). Suficiente
   para diagramas en cuadrícula; no hay A*.
+- `items` / `endpoints` se listan en el cuerpo de la caja (una línea cada
+  uno). El nombre queda arriba; sin `items` el nombre se centra.
+- Las etiquetas de arista son actores rectangulares (`placeEdgeActors`): no
+  se pisan entre sí ni a las cajas. El PNG usa `labelX`/`labelW` del layout.
 - Sin `interfaces` en el payload, cada `edge`/`link` componente→componente
   sintetiza socket `C` en el origen y lollipop `O` en el destino.
 - `dependency` sin lollipops se dibuja discontinua con punta polígono

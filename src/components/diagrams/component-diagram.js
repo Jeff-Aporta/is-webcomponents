@@ -164,24 +164,9 @@ class IsComponentDiagram extends DiagramElementBase {
   }
 
   #buildEdges(layout, theme) {
-    // Varias aristas que salen del mismo componente tienen su punto medio casi
-    // en la misma banda: sin esto las etiquetas se pisan y no se lee ninguna.
-    // La banda del estereotipo de cada componente también está ocupada: una
-    // etiqueta encima de «9 endpoints» hace ilegibles las dos cosas.
-    // La caja ENTERA, no solo su banda superior: reservando 24 px la etiqueta
-    // se consideraba libre sobre el cuerpo del componente y acababa impresa
-    // encima del nombre.
-    const colocadas = layout.components.map((c) => ({ x: c.x, y: c.y, w: c.w, h: c.h }));
-    const libre = (r) => !colocadas.some((o) => r.x < o.x + o.w && r.x + r.w > o.x
-      && r.y < o.y + o.h && r.y + r.h > o.y);
-    const sinChoque = (x, y, w) => {
-      const alto = 18;
-      for (const dy of [0, -22, 22, -44, 44, -66, 66, -88, 88]) {
-        const r = { x: x - w / 2, y: y - 9 + dy, w, h: alto };
-        if (libre(r)) { colocadas.push(r); return y + dy; }
-      }
-      return y;
-    };
+    // Varias aristas que salen del mismo componente tienen su punto medio
+    // casi en la misma banda. Las chips se colocan en el layout como actores
+    // (`placeEdgeActors`): no se pisan entre sí ni a las cajas.
     for (const e of layout.edges) {
       if (!e.path) continue;
       const g = svgEl('g', { class: 'cd-edge' });
@@ -203,9 +188,9 @@ class IsComponentDiagram extends DiagramElementBase {
         }));
       }
       if (e.label) {
-        const mx = (e.fromX + e.toX) / 2;
-        const w = e.label.length * 5.6 + 8;
-        const my = sinChoque(mx, (e.fromY + e.toY) / 2, w);
+        const mx = e.labelX ?? (e.fromX + e.toX) / 2;
+        const my = e.labelY ?? (e.fromY + e.toY) / 2;
+        const w = e.labelW ?? (e.label.length * 5.6 + 8);
         const etiqueta = svgEl('g', { class: 'cd-edge__label' });
         etiqueta.appendChild(svgEl('rect', {
           x: mx - w / 2, y: my - 8, width: w, height: 16, rx: 4,
@@ -310,6 +295,19 @@ class IsComponentDiagram extends DiagramElementBase {
         t.appendChild(ts);
       });
       g.appendChild(t);
+      const items = c.itemLines ?? [];
+      if (items.length) {
+        const it = svgEl('text', {
+          x: c.x + 10, y: c.itemsY, 'text-anchor': 'start',
+          fill: theme.muted, 'font-size': '9', 'font-family': FONT,
+        });
+        items.forEach((linea, i) => {
+          const ts = svgEl('tspan', { x: c.x + 10, dy: i === 0 ? 0 : (c.itemLineHeight ?? 11) });
+          ts.textContent = linea;
+          it.appendChild(ts);
+        });
+        g.appendChild(it);
+      }
       this.svg.appendChild(g);
     }
   }

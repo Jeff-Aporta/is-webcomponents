@@ -203,7 +203,7 @@ class IsSwimlaneDiagram extends DiagramElementBase {
       }));
 
       if (l.label) {
-        const w = l.label.length * 5.6 + 8;
+        const w = l.labelW ?? (l.label.length * 5.6 + 8);
         g.appendChild(svgEl('rect', {
           x: l.labelX - w / 2, y: l.labelY - 8, width: w, height: 15, rx: 4,
           fill: theme.chipFillSoft ?? theme.chipFill, class: 'sw-link__chip',

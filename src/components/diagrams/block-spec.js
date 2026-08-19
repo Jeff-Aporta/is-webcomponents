@@ -1,5 +1,6 @@
 import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
+import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
@@ -230,7 +231,7 @@ export function computeBlockLayout(spec) {
     };
   });
 
-  return {
+  const layout = {
     width,
     height,
     blocks,
@@ -242,6 +243,8 @@ export function computeBlockLayout(spec) {
     subtitleY,
     legendX,
   };
+  applyEdgeActorLayout(layout, blocks.map((b) => ({ x: b.x, y: b.y, w: b.w, h: b.h })));
+  return layout;
 }
 
 /** Elige los lados de anclaje según la posición relativa de los centros de los bloques. */

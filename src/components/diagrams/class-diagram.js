@@ -256,7 +256,7 @@ class IsClassDiagram extends DiagramElementBase {
 
       if (e.label) {
         const pad = 4;
-        const w = e.label.length * 5.6 + pad * 2;
+        const w = e.labelW ?? (e.label.length * 5.6 + pad * 2);
         g.appendChild(svgEl('rect', {
           x: e.labelX - w / 2, y: e.labelY - 8, width: w, height: 16, rx: 4,
           fill: theme.chipFillSoft ?? theme.chipFill, class: 'cls-rel__chip',

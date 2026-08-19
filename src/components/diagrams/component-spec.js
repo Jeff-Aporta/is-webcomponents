@@ -51,6 +51,7 @@
  */
 
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
+import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 
 const TAB_W = 56;
 const TAB_H = 14;
@@ -97,6 +98,7 @@ function readComponent(raw, i) {
     provides: asList(r.provides ?? r.expose ?? r.exposes),
     requires: asList(r.requires ?? r.consume ?? r.consumes ?? r.needs),
     connects: asList(r.connects ?? r.links ?? r.depends ?? r.uses ?? r.to),
+    items: asList(r.items ?? r.endpoints ?? r.body),
   };
 }
 
@@ -414,16 +416,24 @@ export function computeComponentLayout(spec) {
 
   const components = shiftedComps.map((c) => {
     const lines = wrapLabel(c.name, c.w);
-    // El bloque de líneas se centra en el alto libre (bajo el estereotipo),
-    // no en el alto total: si no, con dos líneas la segunda pisa el borde.
+    const itemLines = (c.items ?? []).flatMap((s) => wrapLabel(s, c.w, 9, 1));
     const topLibre = c.y + (c.stereotype ? 16 : 0);
+    // Con inventario (endpoints) el nombre ancla arriba; si no, se centra.
+    const bloqueH = lines.length * LINE_H + (itemLines.length ? 6 + itemLines.length * ITEM_H : 0);
     const centro = topLibre + (c.y + c.h - topLibre) / 2;
+    const labelY = itemLines.length
+      ? topLibre + 12
+      : centro - ((lines.length - 1) * LINE_H) / 2 + 4;
     return {
       ...c,
       stereoY: c.y + (c.stereotype ? 14 : 0),
       lines,
-      labelY: centro - ((lines.length - 1) * LINE_H) / 2 + 4,
+      itemLines,
+      itemsY: labelY + (lines.length - 1) * LINE_H + 12,
+      itemLineHeight: ITEM_H,
+      labelY,
       lineHeight: LINE_H,
+      bloqueH,
     };
   });
 
@@ -493,7 +503,7 @@ export function computeComponentLayout(spec) {
   const width = Math.max(640, maxX + PAD, diagramHeaderWidth(spec.title, spec.subtitle));
   const height = Math.max(360, maxY + PAD);
 
-  return {
+  const layout = {
     width,
     height,
     title: spec.title,
@@ -505,6 +515,8 @@ export function computeComponentLayout(spec) {
     interfaces,
     edges,
   };
+  applyEdgeActorLayout(layout, components.map((c) => ({ x: c.x, y: c.y, w: c.w, h: c.h })));
+  return layout;
 }
 
 function nearestSidePoint(comp, target, reverse = false) {
@@ -610,6 +622,7 @@ export function packageTabWidth(p) {
 }
 
 const LINE_H = 13;
+const ITEM_H = 11;
 const MAX_LINEAS = 3;
 
 /**

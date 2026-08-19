@@ -1,5 +1,6 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
+import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
 /**
@@ -287,7 +288,7 @@ export function computeSwimlaneLayout(spec) {
     };
   });
 
-  return {
+  const layout = {
     width,
     height,
     lanes,
@@ -299,4 +300,6 @@ export function computeSwimlaneLayout(spec) {
     titleY,
     subtitleY,
   };
+  applyEdgeActorLayout(layout, steps.map((s) => ({ x: s.x, y: s.y, w: s.w, h: s.h })));
+  return layout;
 }

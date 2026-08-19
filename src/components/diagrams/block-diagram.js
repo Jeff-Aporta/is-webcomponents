@@ -251,7 +251,7 @@ class IsBlockDiagram extends DiagramElementBase {
 
       if (e.label) {
         const pad = 6;
-        const w = e.label.length * 6 + pad * 2;
+        const w = e.labelW ?? (e.label.length * 6 + pad * 2);
         const chipH = 18;
         const chipY = e.labelY - chipH / 2;
         // Halo del chip para que la etiqueta flote sobre la arista.

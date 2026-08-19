@@ -1,5 +1,6 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 
 /**
  * Especificación y layout de diagramas de casos de uso (UML), sin Mermaid.
@@ -251,7 +252,7 @@ export function computeUseCaseLayout(spec) {
       from: l.from,
       to: l.to,
       kind: l.kind,
-      label: l.label,
+      label: l.label || stereotype,
       stereotype,
       path: `M${a.x},${a.y} L${b.x},${b.y}`,
       x1: a.x, y1: a.y, x2: b.x, y2: b.y,
@@ -270,7 +271,7 @@ export function computeUseCaseLayout(spec) {
   const height = originY + bodyH + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
-  return {
+  const layout = {
     width,
     height,
     actors,
@@ -284,4 +285,9 @@ export function computeUseCaseLayout(spec) {
     subtitleY,
     legendX,
   };
+  applyEdgeActorLayout(layout, [
+    ...actors.map((a) => ({ x: a.x, y: a.y, w: a.w, h: a.h })),
+    ...cases.map((c) => ({ x: c.x, y: c.y, w: c.w, h: c.h })),
+  ]);
+  return layout;
 }

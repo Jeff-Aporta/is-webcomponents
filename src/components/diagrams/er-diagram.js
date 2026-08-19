@@ -228,7 +228,7 @@ class IsErDiagram extends DiagramElementBase {
 
       if (r.label) {
         const pad = 4;
-        const w = r.label.length * 5.6 + pad * 2;
+        const w = r.labelW ?? (r.label.length * 5.6 + pad * 2);
         g.appendChild(svgEl('rect', {
           x: r.labelX - w / 2, y: r.labelY - 8, width: w, height: 16, rx: 4,
           fill: theme.chipFillSoft ?? theme.chipFill, class: 'er-rel__chip',

@@ -159,8 +159,8 @@ assert.ok(/hsla\(\$\{p\.hue\},60%,50%,0\.06\)/.test(cd),
   'component: el paquete con `hue` volvió al relleno sólido y ahoga a los componentes de dentro');
 assert.ok(cd.includes('this.svg.appendChild(this.#etiquetasEdges)'),
   'component: las etiquetas de arista salieron de la capa superior; las tapan las cajas');
-assert.ok(cd.includes('const sinChoque ='),
-  'component: se perdió la resolución de choques entre etiquetas de arista');
+assert.ok(cd.includes('e.labelX') && cd.includes('e.labelW'),
+  'component: las chips deben usar la geometría de actores (labelX/labelW), no un dy a ojo');
 assert.ok(!cd.includes('marker-end'),
   'component: marker SVG no rasteriza en PNG; usar svgArrowHead');
 assert.ok(cd.includes('svgArrowHead'),
@@ -169,5 +169,16 @@ assert.ok(cd.includes('requiredSocketPath'),
   'component: falta el socket UML (arco C) de las interfaces required');
 assert.ok(cd.includes('Tahoma,Arial,sans-serif'),
   'component: la tipografía debe coincidir con el diagrama ER');
+
+const specActors = [
+  'component-spec.js', 'flowchart-spec.js', 'block-spec.js',
+  'class-spec.js', 'state-spec.js', 'er-spec.js',
+  'swimlane-spec.js', 'use-case-spec.js',
+];
+for (const archivo of specActors) {
+  const src = readFileSync(new URL(`./${archivo}`, import.meta.url), 'utf8');
+  assert.ok(src.includes('applyEdgeActorLayout'),
+    `${archivo}: las etiquetas de arista deben colocarse como actores (applyEdgeActorLayout)`);
+}
 
 console.log('render-legibilidad.selfcheck (componentes): OK');

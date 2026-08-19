@@ -245,7 +245,7 @@ class IsUseCaseDiagram extends DiagramElementBase {
 
       const text = l.stereotype ?? l.label;
       if (text) {
-        const w = text.length * 5.4 + 8;
+        const w = l.labelW ?? (text.length * 5.4 + 8);
         g.appendChild(svgEl('rect', {
           x: l.labelX - w / 2, y: l.labelY - 8, width: w, height: 15, rx: 4,
           fill: theme.chipFillSoft ?? theme.chipFill, class: 'uc-link__chip',

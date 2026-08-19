@@ -2,6 +2,7 @@ import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layo
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 
 /**
  * Especificación y layout de diagramas entidad-relación (sin Mermaid).
@@ -442,7 +443,7 @@ export function computeErLayout(spec) {
   }
   const relations = ruteadas;
 
-  return {
+  const layout = {
     width,
     height,
     entities,
@@ -456,6 +457,8 @@ export function computeErLayout(spec) {
     subtitleY,
     legendX,
   };
+  applyEdgeActorLayout(layout, entities.map((e) => ({ x: e.x, y: e.y, w: e.w, h: e.h })));
+  return layout;
 }
 
 /** Desplaza un punto hacia afuera de la entidad, en la dirección de su lado. */
