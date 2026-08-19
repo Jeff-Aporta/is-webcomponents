@@ -43,11 +43,35 @@ function densify(pts, step = 14) {
   return out;
 }
 
-function overlap(a, b, pad = 5) {
-  return a.x - pad < b.x + b.w
-    && a.x + a.w + pad > b.x
-    && a.y - pad < b.y + b.h
-    && a.y + a.h + pad > b.y;
+function overlap(a, b, padX = 10, padY = 12) {
+  return a.x - padX < b.x + b.w
+    && a.x + a.w + padX > b.x
+    && a.y - padY < b.y + b.h
+    && a.y + a.h + padY > b.y;
+}
+
+/** Empuja en Y hasta que ningún par de actores se pise. */
+function separateActors(placed, obstacles, canvas) {
+  for (let n = 0; n < 80; n++) {
+    let moved = false;
+    for (let i = 0; i < placed.length; i++) {
+      for (let j = 0; j < placed.length; j++) {
+        if (i === j) continue;
+        if (!overlap(placed[i], placed[j])) continue;
+        placed[j].y += EDGE_ACTOR_H + 6;
+        moved = true;
+      }
+      for (const o of obstacles) {
+        if (!overlap(placed[i], o, 8, 8)) continue;
+        placed[i].y += EDGE_ACTOR_H + 4;
+        moved = true;
+      }
+      placed[i].x = Math.max(4, placed[i].x);
+      placed[i].y = Math.max(4, placed[i].y);
+    }
+    if (!moved) break;
+  }
+  void canvas;
 }
 
 function spiral() {
@@ -125,10 +149,18 @@ export function placeEdgeActors({
       }
     }
     placed.push(best);
-    e.labelX = best.x + w / 2;
-    e.labelY = best.y + h / 2;
+    e._actor = best;
     e.labelW = w;
     e.labelH = h;
+  }
+
+  separateActors(placed, obstacles, canvas);
+  for (const e of labeled) {
+    const r = e._actor;
+    delete e._actor;
+    if (!r) continue;
+    e.labelX = r.x + e.labelW / 2;
+    e.labelY = r.y + e.labelH / 2;
   }
 
   let width = canvas.width;
