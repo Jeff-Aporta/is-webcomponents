@@ -61,6 +61,37 @@ export const LOLLI_R = 8;
 /** Distancia del borde del componente al centro del círculo. */
 export const LOLLI_STEM = 22;
 
+const LINE_H = 13;
+const BUBBLE_H = 18;
+const BUBBLE_GAP = 4;
+
+/** Colores tipo Swagger/OpenAPI para el verbo HTTP. */
+export const HTTP_METHOD_BADGE = {
+  GET: { fill: '#61affe', text: '#ffffff' },
+  POST: { fill: '#49cc90', text: '#ffffff' },
+  PUT: { fill: '#fca130', text: '#ffffff' },
+  PATCH: { fill: '#50e3c2', text: '#14332c' },
+  DELETE: { fill: '#f93e3e', text: '#ffffff' },
+  QUERY: { fill: '#9012fe', text: '#ffffff' },
+  HEAD: { fill: '#9012fe', text: '#ffffff' },
+  OPTIONS: { fill: '#0d5aa7', text: '#ffffff' },
+};
+
+export function parseHttpEndpoint(raw) {
+  const s = String(raw ?? '').trim();
+  const m = /^(GET|POST|PUT|PATCH|DELETE|QUERY|HEAD|OPTIONS)\b\s*/i.exec(s);
+  if (!m) return { method: '', path: s };
+  return { method: m[1].toUpperCase(), path: s.slice(m[0].length).trim() };
+}
+
+function fittedHeight(c) {
+  const items = c.items ?? [];
+  if (!items.length) return c.h;
+  const nameN = wrapLabel(c.name, c.w).length;
+  const header = c.stereotype ? 18 : 8;
+  return header + nameN * LINE_H + 10 + items.length * (BUBBLE_H + BUBBLE_GAP) + 6;
+}
+
 function asList(v) {
   if (Array.isArray(v)) return v.map((x) => String(x).trim()).filter(Boolean);
   if (v == null || v === '') return [];
@@ -137,7 +168,7 @@ export function resolveComponentSpec(payload) {
   if (!Array.isArray(rawComponents) || !rawComponents.length) return null;
 
   const packages = (Array.isArray(src.packages) ? src.packages : []).map(readPackage);
-  const components = rawComponents.map(readComponent);
+  const components = rawComponents.map(readComponent).map((c) => ({ ...c, h: fittedHeight(c) }));
   const interfaces = (Array.isArray(src.interfaces) ? src.interfaces : []).map(readInterface);
   // `links` / `connections` / `relations`: el resto del kit y los LLM
   // usan esas claves; si solo se acepta `edges` el PNG sale sin aristas.
@@ -156,18 +187,26 @@ export function resolveComponentSpec(payload) {
   };
 }
 
-function facingSide(from, to) {
+function rankSides(from, to) {
   const dx = (to.x + to.w / 2) - (from.x + from.w / 2);
   const dy = (to.y + to.h / 2) - (from.y + from.h / 2);
-  if (Math.abs(dx) >= Math.abs(dy)) return dx >= 0 ? 'right' : 'left';
-  return dy >= 0 ? 'bottom' : 'top';
+  const lr = dx >= 0 ? ['right', 'left'] : ['left', 'right'];
+  const tb = dy >= 0 ? ['bottom', 'top'] : ['top', 'bottom'];
+  if (Math.abs(dx) >= Math.abs(dy)) return [lr[0], tb[0], tb[1], lr[1]];
+  return [tb[0], lr[0], lr[1], tb[1]];
 }
 
-function oppositeSide(side) {
-  if (side === 'right') return 'left';
-  if (side === 'left') return 'right';
-  if (side === 'top') return 'bottom';
-  return 'top';
+function takeLeastLoaded(comp, ranked, loads, cap) {
+  for (const side of ranked) {
+    if ((loads.get(`${comp.id}:${side}`) ?? 0) < cap) return side;
+  }
+  let best = ranked[0];
+  let bestN = Infinity;
+  for (const side of ranked) {
+    const n = loads.get(`${comp.id}:${side}`) ?? 0;
+    if (n < bestN) { bestN = n; best = side; }
+  }
+  return best;
 }
 
 function sideOffset(comp, side, index, total) {
@@ -261,6 +300,20 @@ function wireComponentDiagram(components, interfaces, edges) {
     });
   }
 
+  const loads = new Map();
+  const planned = [];
+  for (const e of outEdges) {
+    const fromC = byId.get(e.from);
+    const toC = byId.get(e.to);
+    if (!fromC || !toC) continue;
+    if (e.fromInterface || e.toInterface || knownIf.has(e.from) || knownIf.has(e.to)) continue;
+    const fs = takeLeastLoaded(fromC, rankSides(fromC, toC), loads, 2);
+    loads.set(`${fromC.id}:${fs}`, (loads.get(`${fromC.id}:${fs}`) ?? 0) + 1);
+    const ts = takeLeastLoaded(toC, rankSides(toC, fromC), loads, 2);
+    loads.set(`${toC.id}:${ts}`, (loads.get(`${toC.id}:${ts}`) ?? 0) + 1);
+    planned.push({ e, fs, ts, fromC, toC });
+  }
+
   const slots = new Map();
   const slotKey = (compId, side) => `${compId}:${side}`;
   const takeSlot = (comp, side) => {
@@ -270,24 +323,13 @@ function wireComponentDiagram(components, interfaces, edges) {
     return n;
   };
   const countSlots = new Map();
-  for (const e of outEdges) {
-    const fromC = byId.get(e.from);
-    const toC = byId.get(e.to);
-    if (!fromC || !toC) continue;
-    if (e.fromInterface || e.toInterface || knownIf.has(e.from) || knownIf.has(e.to)) continue;
-    const fs = facingSide(fromC, toC);
-    const ts = oppositeSide(fs);
-    countSlots.set(slotKey(fromC.id, fs), (countSlots.get(slotKey(fromC.id, fs)) ?? 0) + 1);
-    countSlots.set(slotKey(toC.id, ts), (countSlots.get(slotKey(toC.id, ts)) ?? 0) + 1);
+  for (const p of planned) {
+    countSlots.set(slotKey(p.fromC.id, p.fs), (countSlots.get(slotKey(p.fromC.id, p.fs)) ?? 0) + 1);
+    countSlots.set(slotKey(p.toC.id, p.ts), (countSlots.get(slotKey(p.toC.id, p.ts)) ?? 0) + 1);
   }
 
-  for (const e of outEdges) {
-    const fromC = byId.get(e.from);
-    const toC = byId.get(e.to);
-    if (!fromC || !toC) continue;
-    if (e.fromInterface || e.toInterface || knownIf.has(e.from) || knownIf.has(e.to)) continue;
-    const fs = facingSide(fromC, toC);
-    const ts = oppositeSide(fs);
+  for (const p of planned) {
+    const { e, fs, ts, fromC, toC } = p;
     const fi = takeSlot(fromC, fs);
     const ti = takeSlot(toC, ts);
     const req = addIface({
@@ -296,11 +338,6 @@ function wireComponentDiagram(components, interfaces, edges) {
       kind: 'required',
       side: fs,
       offset: sideOffset(fromC, fs, fi, countSlots.get(slotKey(fromC.id, fs)) || 1),
-      // Sin nombre a propósito. El par de lollipops que se genera aquí no es
-      // una interfaz con identidad —solo el conector UML de una arista sin
-      // `provides`/`requires` declarados—, y ponerle `e.label` imprimía el
-      // mismo texto tres veces: en el lollipop de salida, en el de entrada y
-      // en el chip de la arista. El chip ya lo dice una vez.
     });
     const prv = addIface({
       id: `if-${e.id}-prv`,
@@ -309,14 +346,6 @@ function wireComponentDiagram(components, interfaces, edges) {
       side: ts,
       offset: sideOffset(toC, ts, ti, countSlots.get(slotKey(toC.id, ts)) || 1),
     });
-    // Los dos lollipops del par tienen que caer en la MISMA vertical (o la
-    // misma horizontal). Cada offset se calcula contra su propia caja, así
-    // que con anchos distintos —`local.settings.json` de 160 contra
-    // `PR_GENERAL…` de 200— el centro de una no coincide con el de la otra y
-    // el conector `-(O-` sale partido en dos trozos sueltos.
-    //
-    // Solo cuando cada lado lleva un único conector: con varios hay que
-    // repartirlos, y ahí manda el reparto de slots.
     const unoSolo = (countSlots.get(slotKey(fromC.id, fs)) || 1) === 1
       && (countSlots.get(slotKey(toC.id, ts)) || 1) === 1;
     if (unoSolo) {
@@ -416,24 +445,32 @@ export function computeComponentLayout(spec) {
 
   const components = shiftedComps.map((c) => {
     const lines = wrapLabel(c.name, c.w);
-    const itemLines = (c.items ?? []).flatMap((s) => wrapLabel(s, c.w, 9, 1));
+    const parsed = (c.items ?? []).map(parseHttpEndpoint);
     const topLibre = c.y + (c.stereotype ? 16 : 0);
-    // Con inventario (endpoints) el nombre ancla arriba; si no, se centra.
-    const bloqueH = lines.length * LINE_H + (itemLines.length ? 6 + itemLines.length * ITEM_H : 0);
-    const centro = topLibre + (c.y + c.h - topLibre) / 2;
-    const labelY = itemLines.length
+    const labelY = parsed.length
       ? topLibre + 12
-      : centro - ((lines.length - 1) * LINE_H) / 2 + 4;
+      : topLibre + (c.y + c.h - topLibre) / 2 - ((lines.length - 1) * LINE_H) / 2 + 4;
+    const itemsY = labelY + (lines.length - 1) * LINE_H + 10;
+    const badgeW = 34;
+    const itemBubbles = parsed.map((ep, i) => ({
+      method: ep.method,
+      path: wrapLabel(ep.path || ep.method, c.w - (ep.method ? badgeW + 16 : 16), 9, 1)[0],
+      x: c.x + 7,
+      y: itemsY + i * (BUBBLE_H + BUBBLE_GAP) - 11,
+      w: c.w - 14,
+      h: BUBBLE_H,
+      badgeW,
+    }));
     return {
       ...c,
       stereoY: c.y + (c.stereotype ? 14 : 0),
       lines,
-      itemLines,
-      itemsY: labelY + (lines.length - 1) * LINE_H + 12,
-      itemLineHeight: ITEM_H,
+      itemLines: parsed.map((ep) => [ep.method, ep.path].filter(Boolean).join(' ')),
+      itemBubbles,
+      itemsY,
+      itemLineHeight: BUBBLE_H + BUBBLE_GAP,
       labelY,
       lineHeight: LINE_H,
-      bloqueH,
     };
   });
 
@@ -474,11 +511,19 @@ export function computeComponentLayout(spec) {
     const obstaculos = shiftedComps.filter((c) => c.id !== e.from && c.id !== e.to);
     return {
       ...e,
+      hue: compById.get(e.from)?.hue,
       fromX: fromPt?.x ?? 0, fromY: fromPt?.y ?? 0,
       toX: toPt?.x ?? 0, toY: toPt?.y ?? 0,
       path: fromPt && toPt ? buildEdgePath(fromPt, toPt, obstaculos) : '',
     };
   });
+
+  for (const p of packages) {
+    const kids = components.filter((c) => c.package === p.id);
+    if (!kids.length) continue;
+    const bottom = Math.max(...kids.map((c) => c.y + c.h));
+    p.h = Math.max(48, bottom - p.y + 16);
+  }
 
   let maxX = 0;
   let maxY = 0;
@@ -621,8 +666,6 @@ export function packageTabWidth(p) {
   return Math.max(TAB_W, Math.min(texto.length * 6.2 + 18, p.w * 0.75));
 }
 
-const LINE_H = 13;
-const ITEM_H = 11;
 const MAX_LINEAS = 3;
 
 /**

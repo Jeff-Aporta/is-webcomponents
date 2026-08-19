@@ -4,7 +4,7 @@
 // síntesis de lollipops: un payload con `links` y sin `interfaces`
 // tiene que salir con O/C y path, o el PNG solo enseña cajas.
 
-import { computeComponentLayout, resolveComponentSpec, LOLLI_R, LOLLI_STEM } from '../src/components/diagrams/component-spec.js';
+import { computeComponentLayout, resolveComponentSpec, LOLLI_R, LOLLI_STEM, parseHttpEndpoint } from '../src/components/diagrams/component-spec.js';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
@@ -102,6 +102,43 @@ const connects = resolveComponentSpec({
 });
 check(connects.edges.length >= 1, 'connects[] en el componente debe generar arista');
 check(connects.interfaces.length >= 2, 'connects[] debe sintetizar O y C');
+
+check(parseHttpEndpoint('GET /api/is-swagger').method === 'GET', 'parse GET');
+check(parseHttpEndpoint('POST /api/jwt').path === '/api/jwt', 'parse path');
+
+const fan = computeComponentLayout(resolveComponentSpec({
+  componentDiagram: {
+    components: [
+      { id: 'src', name: 'Portal', x: 40, y: 200, w: 160, h: 80 },
+      { id: 'a', name: 'A', x: 400, y: 40, w: 120, h: 48 },
+      { id: 'b', name: 'B', x: 400, y: 120, w: 120, h: 48 },
+      { id: 'c', name: 'C', x: 400, y: 200, w: 120, h: 48 },
+      { id: 'd', name: 'D', x: 400, y: 280, w: 120, h: 48 },
+      { id: 'e', name: 'E', x: 400, y: 360, w: 120, h: 48 },
+    ],
+    edges: [
+      { from: 'src', to: 'a', kind: 'dependency' },
+      { from: 'src', to: 'b', kind: 'dependency' },
+      { from: 'src', to: 'c', kind: 'dependency' },
+      { from: 'src', to: 'd', kind: 'dependency' },
+      { from: 'src', to: 'e', kind: 'dependency' },
+    ],
+  },
+}));
+const ladosSrc = new Set(fan.interfaces.filter((i) => i.component === 'src').map((i) => i.side));
+check(ladosSrc.size >= 3, `5 aristas deben usar ≥3 laterales del origen; usaron ${[...ladosSrc].join(',')}`);
+
+const fit = computeComponentLayout(resolveComponentSpec({
+  componentDiagram: {
+    components: [{
+      id: 'sys', name: 'system', stereotype: '9 endpoints', x: 20, y: 40, w: 280, h: 400,
+      items: ['GET /a', 'PUT /a', 'GET /b', 'PUT /b', 'GET /c', 'PUT /c', 'GET /d', 'PUT /d', 'GET /e'],
+    }],
+  },
+}));
+check(fit.components[0].h < 280, `fit-h: system no puede quedar a ${fit.components[0].h}px con 9 burbujas`);
+check((fit.components[0].itemBubbles ?? []).length === 9, 'cada endpoint es una burbuja');
+check(fit.components[0].itemBubbles[0].method === 'GET', 'la burbuja conserva el verbo HTTP');
 
 if (failures.length) {
   console.error('component-diagram-ifaces.test.mjs: FAIL');

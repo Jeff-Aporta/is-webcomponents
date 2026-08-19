@@ -164,8 +164,11 @@ No declara integración form-associated propia en este módulo.
 
 - Las aristas son polilíneas ortogonales simples (un quiebre). Suficiente
   para diagramas en cuadrícula; no hay A*.
-- `items` / `endpoints` se listan en el cuerpo de la caja (una línea cada
-  uno). El nombre queda arriba; sin `items` el nombre se centra.
+- `items` / `endpoints` se pintan como burbujas apiladas; el verbo HTTP
+  (`GET`/`POST`/…) es un chip de color estilo Swagger. El alto de la caja
+  se ajusta al contenido (`fit-h`).
+- Las aristas sintetizadas se reparteen por los **cuatro lados** (tope 2
+  conectores por lateral) para no atascar un solo pasillo.
 - Las etiquetas de arista son actores rectangulares (`placeEdgeActors`): no
   se pisan entre sí ni a las cajas. El PNG usa `labelX`/`labelW` del layout.
 - Sin `interfaces` en el payload, cada `edge`/`link` componente→componente

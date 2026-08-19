@@ -1,6 +1,6 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveComponentSpec, computeComponentLayout, packageShapePath, packageTabWidth, LOLLI_R } from './component-spec.js';
+import { resolveComponentSpec, computeComponentLayout, packageShapePath, packageTabWidth, LOLLI_R, HTTP_METHOD_BADGE } from './component-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -169,11 +169,14 @@ class IsComponentDiagram extends DiagramElementBase {
     // (`placeEdgeActors`): no se pisan entre sí ni a las cajas.
     for (const e of layout.edges) {
       if (!e.path) continue;
+      const color = (e.hue != null && tkHueToHex(e.hue, 48, 30))
+        || tkHueToHex(205, 42, 32)
+        || theme.accent;
       const g = svgEl('g', { class: 'cd-edge' });
       const ballSocket = Boolean(e.fromInterface && e.toInterface) || e.kind === 'assembly';
       const dashed = !ballSocket && (e.kind === 'dependency' || e.kind === 'realization');
       const path = svgEl('path', {
-        d: e.path, fill: 'none', stroke: theme.accent, 'stroke-width': 1.3,
+        d: e.path, fill: 'none', stroke: color, 'stroke-width': 1.35,
         'stroke-linejoin': 'round', 'stroke-linecap': 'round',
         'stroke-dasharray': dashed ? '6 4' : null,
         class: 'cd-edge__path',
@@ -183,7 +186,7 @@ class IsComponentDiagram extends DiagramElementBase {
         g.appendChild(svgArrowHead({
           d: e.path,
           tip: { x: e.toX, y: e.toY },
-          color: theme.accent,
+          color,
           className: 'cd-edge__arrow',
         }));
       }
@@ -295,18 +298,33 @@ class IsComponentDiagram extends DiagramElementBase {
         t.appendChild(ts);
       });
       g.appendChild(t);
-      const items = c.itemLines ?? [];
-      if (items.length) {
-        const it = svgEl('text', {
-          x: c.x + 10, y: c.itemsY, 'text-anchor': 'start',
-          fill: theme.muted, 'font-size': '9', 'font-family': FONT,
+      for (const b of c.itemBubbles ?? []) {
+        g.appendChild(svgEl('rect', {
+          x: b.x, y: b.y, width: b.w, height: b.h, rx: 4,
+          fill: theme.chipFillSoft ?? theme.chipFill, stroke: theme.border ?? 'rgba(0,0,0,0.08)',
+          'stroke-width': 0.6,
+        }));
+        let textX = b.x + 6;
+        if (b.method) {
+          const badge = HTTP_METHOD_BADGE[b.method] ?? { fill: '#6b7280', text: '#fff' };
+          g.appendChild(svgEl('rect', {
+            x: b.x + 3, y: b.y + 2.5, width: b.badgeW, height: b.h - 5, rx: 3,
+            fill: badge.fill,
+          }));
+          const mt = svgEl('text', {
+            x: b.x + 3 + b.badgeW / 2, y: b.y + b.h / 2 + 3.2, 'text-anchor': 'middle',
+            fill: badge.text, 'font-size': '7.5', 'font-weight': '700', 'font-family': FONT,
+          });
+          mt.textContent = b.method;
+          g.appendChild(mt);
+          textX = b.x + 8 + b.badgeW;
+        }
+        const pt = svgEl('text', {
+          x: textX, y: b.y + b.h / 2 + 3.4, 'text-anchor': 'start',
+          fill: theme.text, 'font-size': '9', 'font-family': FONT,
         });
-        items.forEach((linea, i) => {
-          const ts = svgEl('tspan', { x: c.x + 10, dy: i === 0 ? 0 : (c.itemLineHeight ?? 11) });
-          ts.textContent = linea;
-          it.appendChild(ts);
-        });
-        g.appendChild(it);
+        pt.textContent = b.path;
+        g.appendChild(pt);
       }
       this.svg.appendChild(g);
     }
