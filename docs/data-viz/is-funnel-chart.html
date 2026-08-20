@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Funnel Chart · IS Web Components</title>
+  <meta name="description" content="Documentación de is-funnel-chart.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/data-viz/is-funnel-chart.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-funnel-chart");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-funnel-chart" data-category="data-viz">
+    <h1>Funnel Chart</h1>
+    <section id="intro">
+<p class="lede">Embudo para seguir la conversión entre etapas de un proceso.</p>
+<div class="demo"><is-funnel-chart open-on-click>
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Visitas", "Registros", "Cotizaciones", "Cierres"],
+                  "datasets": [{ "label": "Conversión", "data": [4200, 1800, 640, 210] }]
+                }
+              }
+            </script>
+          </is-funnel-chart></div>
+</section>
+  </article>
+</body>
+</html>
