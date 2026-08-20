@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IsUi · IS Web Components</title>
+  <meta name="description" content="Utilidad IsUi: html, adoptCss y define para apps consumidoras del kit.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/helpers/is-ui.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-ui" data-category="helpers">
+    <h1>IsUi (módulo · no es un tag)</h1>
+    <p class="lede">Utilidad IsUi: html, adoptCss y define para apps consumidoras del kit.</p>
+<section id="intro">
+<h2>IsUi (módulo · no es un tag)</h2>
+<p class="lede">Utilidad de render para apps consumidoras. Tras cargar el CDN queda en
+          <code class="code">globalThis.IsUi</code> (alias <code class="code">Ui</code>).
+          No reinventes botones ni tablas: monta <code class="code">is-*</code> con
+          <code class="code">html</code> + CSS hermano vía <code class="code">adoptCss</code>.</p>
+<div class="demo"><span class="demo-label">// Disponible tras all.min.js</span>
+          <div class="ui-stage" id="introStage">
+            <div class="ui-stage__meta">Cargando IsUi…</div>
+          </div></div>
+</section>
+<section id="html">
+<h2>IsUi.html</h2>
+<p class="lede">Plantilla etiquetada → <code class="code">DocumentFragment</code>. Soporta valores, eventos y nodos hijos.</p>
+<div class="demo"><div class="ui-stage" id="htmlStage"></div></div>
+<pre><code>const { html } = IsUi;
+host.append(html`
+  &lt;is-button color=&quot;brand&quot; onclick=${() =&gt; IsUi.toast?.() || console.log('ok')}&gt;
+    Guardar
+  &lt;/is-button&gt;
+`);</code></pre>
+</section>
+<section id="define">
+<h2>IsUi.define + adoptCss</h2>
+<p class="lede">Registra un custom element de dominio. El CSS va en archivo hermano
+          (aquí se usa <code class="code">IsUi.css</code> solo para el demo en página).</p>
+<div class="demo"><span class="demo-label">// demo-card registrado en esta página</span>
+          <div class="ui-stage">
+            <demo-card data-tone="brand">
+              <strong>app-*</strong> traduce datos → <code>is-*</code>
+            </demo-card>
+          </div></div>
+<pre><code>import { html, adoptCss, define } from '…/helpers/ui.min.js';
+
+class AppPanel extends HTMLElement {
+  #root = this.attachShadow({ mode: 'open' });
+  connectedCallback() {
+    this.#root.append(html`&lt;is-button color=&quot;brand&quot;&gt;Acción&lt;/is-button&gt;`);
+    adoptCss(this.#root, import.meta.url); // → AppPanel.css hermano
+  }
+}
+define('app-panel', AppPanel);</code></pre>
+</section>
+<section id="cdn">
+<h2>CDN</h2>
+<p class="lede">Tag del catálogo: <code class="code">is-ui</code> (módulo). Artefacto:
+          <code class="code">dist/cdn/helpers/ui.min.js</code>. También va dentro de
+          <code class="code">all.min.js</code>.</p>
+<pre><code>&lt;script type=&quot;module&quot;
+  src=&quot;https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js&quot;&gt;
+&lt;/script&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia rápida</h2>
+</section>
+  </article>
+</body>
+</html>
