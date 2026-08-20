@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Command Palette · IS Web Components</title>
+  <meta name="description" content="Documentación de is-command-palette.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/overlays/is-command-palette.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-command-palette");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-command-palette" data-category="overlays">
+    <h1>Command Palette</h1>
+    <section id="intro">
+<p class="lede">Paleta modal al estilo <kbd>⌘K</kbd> / <kbd>Ctrl</kbd>+<kbd>K</kbd>. Búsqueda difusa sobre una lista de comandos configurada vía JSON.</p>
+</section>
+<section id="demo">
+<h2>Pruébalo</h2>
+<div class="demo"><div class="hero-cmd">
+            <div>
+              <h3>Busca un comando</h3>
+              <p style="color:var(--is-text-soft)">Pulsa <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd>, o:</p>
+              <button class="trigger-btn" id="openBtn">Abrir paleta</button>
+            </div>
+          </div>
+          <is-command-palette id="cmd" placeholder="Buscar comando…">
+            <script type="application/json">
+              [
+                { "id": "new",          "title": "Nuevo documento", "group": "Archivo",    "icon": "mdi:file-plus-outline",    "hint": "Crear archivo en blanco", "keywords": ["crear", "blank"], "keys": ["Ctrl", "N"] },
+                { "id": "open",         "title": "Abrir…",          "group": "Archivo",    "icon": "mdi:folder-open-outline", "hint": "Abrir archivo existente", "keys": ["Ctrl", "O"] },
+                { "id": "save",         "title": "Guardar",         "group": "Archivo",    "icon": "mdi:content-save-outline", "hint": "Guardar el archivo actual", "keys": ["Ctrl", "S"] },
+                { "id": "export-pdf",   "title": "Exportar PDF",    "group": "Archivo",    "icon": "mdi:file-pdf-box",        "hint": "PDF listo para enviar" },
+                { "id": "duplicate",    "title": "Duplicar",        "group": "Edición",    "icon": "mdi:content-duplicate",   "hint": "Clonar y abrir nueva pestaña", "keys": ["Ctrl", "D"] },
+                { "id": "rename",       "title": "Renombrar",       "group": "Edición",    "icon": "mdi:rename-box",         "hint": "Cambiar el nombre del archivo", "keys": ["F2"] },
+                { "id": "find",         "title": "Buscar en archivo", "group": "Edición",  "icon": "mdi:magnify",            "hint": "Abre el editor de búsqueda", "keys": ["Ctrl", "F"] },
+                { "id": "palette",      "title": "Cambiar paleta",  "group": "Apariencia", "icon": "mdi:palette-swatch-outline", "hint": "Cambiar tema de marca" },
+                { "id": "toggle-theme", "title": "Tema claro/oscuro", "group": "Apariencia", "icon": "mdi:theme-light-dark", "hint": "Alternar modo claro y oscuro", "keys": ["Ctrl", "Shift", "L"] },
+                { "id": "logout",       "title": "Cerrar sesión",   "group": "Sesión",     "icon": "mdi:logout",             "hint": "Salir de la cuenta actual" }
+              ]
+            </script>
+          </is-command-palette></div>
+</section>
+<section id="api">
+<h2>API</h2>
+<pre><code>const cm = document.querySelector('is-command-palette');
+cm.open();
+cm.close();
+cm.toggle();
+
+cm.addEventListener('is-select', e =&gt; console.log(e.detail.command.title));
+cm.addEventListener('is-open',   () =&gt; ...);
+cm.addEventListener('is-close',  () =&gt; ...);
+
+// Atributos
+// hotkey        &quot;mod+k&quot; (default), &quot;ctrl+k&quot;, &quot;cmd+k&quot;, &quot;mod+/&quot;, &quot;&quot; (desactivado)
+// placeholder   texto del input
+// max-results   tope de resultados (default 12)
+// empty-text    texto cuando no hay resultados
+
+// Comandos vía &lt;script type=&quot;application/json&quot;&gt;:
+// { id, title, group, icon, hint, keys?/shortcut?, keywords?, disabled? }
+// keys: string | string[]  → chips &lt;kbd&gt; a la derecha de cada fila
+// Footer: atajos ↑↓/↵/Esc van embebidos; slot=&quot;footer&quot; suma contenido extra</code></pre>
+</section>
+  </article>
+</body>
+</html>
