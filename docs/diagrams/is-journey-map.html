@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa de recorrido · IS Web Components</title>
+  <meta name="description" content="Documentación de is-journey-map.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-journey-map.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-journey-map");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-journey-map" data-category="diagrams">
+    <h1>Mapa de recorrido</h1>
+    <section id="intro">
+<p class="lede">Mapa de recorrido (user journey): fases, pasos y la curva de satisfacción que los atraviesa.</p>
+<div class="demo"><p>No es una línea de tiempo: además del orden lleva una medida por paso y su responsable. Un paso sin puntaje se dibuja como aro punteado — es un dato que falta, no un cero.</p></div>
+<div class="demo"><is-journey-map open-on-click>
+  <script type="application/json">
+    {
+      "journey": {
+        "title": "Recorrido de una nota de voz",
+        "phases": [
+          { "id": "entrada", "name": "Entrada", "hue": 210 },
+          { "id": "proceso", "name": "Proceso", "hue": 160 },
+          { "id": "salida", "name": "Salida", "hue": 38 }
+        ],
+        "steps": [
+          { "id": "graba", "phase": "entrada", "label": "Graba la nota", "score": 5, "actor": "Usuario" },
+          { "id": "sube", "phase": "entrada", "label": "Sube el audio", "score": 4, "actor": "App" },
+          { "id": "transcribe", "phase": "proceso", "label": "Transcribe", "score": 3, "actor": "Servicio" },
+          { "id": "clasifica", "phase": "proceso", "label": "Clasifica", "score": 2, "actor": "Servicio" },
+          { "id": "responde", "phase": "salida", "label": "Responde", "score": 4, "actor": "Asistente" }
+        ]
+      }
+    }
+  </script>
+</is-journey-map></div>
+</section>
+  </article>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrama de Gantt · IS Web Components</title>
+  <meta name="description" content="Documentación de is-gantt.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-gantt.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-gantt");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-gantt" data-category="diagrams">
+    <h1>Diagrama de Gantt</h1>
+    <section id="intro">
+<p class="lede">Diagrama de Gantt en SVG, sin Mermaid. Una fila por tarea, en el
+          orden que la declares; el componente calcula la escala de tiempo,
+          dibuja las barras y rutea las flechas de dependencia rodeando las
+          demás barras.</p>
+<div class="demo"><p>
+          Comparte motor con <code>&lt;is-flowchart&gt;</code> y
+          <code>&lt;is-sequence-diagram&gt;</code>: mismo esquema JSON, mismo
+          visor a pantalla completa y la misma animación tortuga, que aquí
+          recorre las flechas de dependencia en orden.
+        </p></div>
+<div class="demo"><is-gantt open-on-click>
+            <script type="application/json">
+              {
+                "gantt": {
+                  "title": "Cierre contable",
+                  "groups": [
+                    { "id": "g1", "name": "Preparación", "hue": 239 },
+                    { "id": "g2", "name": "Revisión", "hue": 199 }
+                  ],
+                  "tasks": [
+                    { "id": "t1", "label": "Conciliar bancos", "start": "2026-01-05", "duration": "3d", "group": "g1", "progress": 100 },
+                    { "id": "t2", "label": "Depreciaciones", "start": "2026-01-08", "end": "2026-01-12", "group": "g1", "after": ["t1"], "progress": 60 },
+                    { "id": "t3", "label": "Provisiones", "start": "2026-01-08", "duration": "5d", "group": "g1", "after": ["t1"] },
+                    { "id": "t4", "label": "Revisión contador", "start": "2026-01-13", "duration": "4d", "group": "g2", "after": ["t2", "t3"] },
+                    { "id": "m1", "label": "Cierre", "start": "2026-01-20", "milestone": true, "after": ["t4"] }
+                  ]
+                }
+              }
+            </script>
+          </is-gantt></div>
+</section>
+<section id="hitos">
+<h2>Hitos y progreso</h2>
+<div class="demo"><p>
+          <code>milestone: true</code> dibuja un rombo en vez de una barra.
+          <code>progress</code> (0-100) pinta una barra interna más oscura
+          sobre la fracción completada.
+        </p></div>
+<div class="demo"><is-gantt open-on-click>
+            <script type="application/json">
+              {
+                "gantt": {
+                  "tasks": [
+                    { "id": "a", "label": "Desarrollo", "start": "2026-02-01", "duration": "10d", "progress": 80 },
+                    { "id": "b", "label": "QA", "start": "2026-02-08", "duration": "5d", "after": ["a"], "progress": 30 },
+                    { "id": "m", "label": "Entrega", "start": "2026-02-16", "milestone": true, "after": ["b"] }
+                  ]
+                }
+              }
+            </script>
+          </is-gantt></div>
+</section>
+<section id="api">
+<h2>Referencia</h2>
+<div class="demo"><h3>Atributos</h3></div>
+<div class="demo"><h3>Esquema del JSON</h3></div>
+<div class="demo"><h3>Propiedades y eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
