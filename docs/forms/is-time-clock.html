@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Time Clock · IS Web Components</title>
+  <meta name="description" content="Documentación de is-time-clock.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-time-clock.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-digital-clock", "is-time-clock");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-time-clock" data-category="forms">
+    <h1>Time Clock</h1>
+    <section id="intro">
+<p class="lede">Reloj analógico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos.</p>
+<div class="demo"><is-time-clock id="tc" value="09:30" ampm locale="en-US"></is-time-clock>
+          <is-time-clock value="14:15" hour24 locale="es"></is-time-clock></div>
+<div class="demo"><p class="lede" id="log" style="font-family:var(--is-mono);font-size:.85em"></p></div>
+</section>
+<section id="digital">
+<p class="lede">Lista (DigitalClock) o columnas (MultiSectionDigitalClock). <code>step</code> controla el intervalo de la lista; <code>minutes-step</code> el de las columnas.</p>
+<div class="demo"><div>
+            <div class="demo-label">lista · step=30</div>
+            <is-digital-clock id="dc" value="09:30" locale="es" step="30"></is-digital-clock>
+          </div>
+          <div>
+            <div class="demo-label">columnas · ampm</div>
+            <is-digital-clock layout="sections" value="09:30" ampm locale="en-US"></is-digital-clock>
+          </div>
+          <div>
+            <div class="demo-label">columnas · 24 h + segundos</div>
+            <is-digital-clock layout="sections" value="14:15:00" hour24 seconds locale="es"></is-digital-clock>
+          </div></div>
+</section>
+<section id="limits">
+<h2>Límites</h2>
+<div class="demo"><is-time-clock value="10:00" ampm min-time="08:00" max-time="18:00" locale="en-US"></is-time-clock>
+          <is-digital-clock layout="sections" value="10:00" hour24 min-time="08:00" max-time="18:00" skip-disabled locale="es"></is-digital-clock></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">Eventos: <code>is-change { value }</code>, <code>is-view-change</code> (reloj).</p>
+</section>
+  </article>
+</body>
+</html>
