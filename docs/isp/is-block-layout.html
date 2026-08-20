@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Block Layout · IS Web Components</title>
+  <meta name="description" content="Documentación de is-block-layout.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/isp/is-block-layout.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-block-layout", "is-button", "is-heading");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-block-layout" data-category="isp">
+    <h1>Block Layout</h1>
+    <section id="intro">
+<p class="lede">Caja de bloque que mide su propio ancho y publica el breakpoint como
+          <code class="code">data-sizew</code>, banderas <code class="code">data-szw-*</code> y las custom properties
+          <code class="code">--clientw</code> / <code class="code">--lerpw</code>. Port del <code class="code">BlockLayout.svelte</code> de ISP.</p>
+<div class="demo"><is-block-layout id="bl-intro" style="border:1px solid var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px">
+            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>
+            <p>sizew actual: <strong id="bl-out">—</strong></p>
+          </is-block-layout></div>
+</section>
+<section id="examples">
+<h2>Breakpoint como atributo y como variable</h2>
+<div class="demo"><p>El atributo <code class="code">data-sizew</code> se puede estilar desde el light DOM, y
+          <code class="code">--lerpw</code> se puede interpolar con <code class="code">calc()</code>.</p></div>
+<div class="demo"><is-block-layout class="bl-demo" style="border:1px dashed var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px">
+            <p class="bl-title">Título que crece con el ancho del contenedor</p>
+          </is-block-layout></div>
+<pre><code>&lt;is-block-layout&gt;…&lt;/is-block-layout&gt;
+
+/* light DOM */
+is-block-layout[data-szw-lg] .bl-title { font-weight: 700; }
+.bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); }</code></pre>
+<div class="demo"><is-heading level="2">Inline y scroll</is-heading></div>
+<div class="demo"><is-block-layout inline style="border:1px solid var(--is-border);padding:0.5rem 1rem">inline</is-block-layout>
+          <is-block-layout inline style="border:1px solid var(--is-border);padding:0.5rem 1rem">otro inline</is-block-layout></div>
+<div class="demo"><is-block-layout cscroll style="border:1px solid var(--is-border);padding:1rem;max-height:6rem;width:100%">
+            <p>Con <code class="code">cscroll</code> la caja hace scroll con el scrollbar del tema.</p>
+            <p>Línea 2</p><p>Línea 3</p><p>Línea 4</p><p>Línea 5</p><p>Línea 6</p>
+          </is-block-layout></div>
+</section>
+<section id="json">
+<h2>json2html · html2json</h2>
+<p class="lede">El cuerpo se define en JSON compacto <code class="code">[tag, attrs?, …hijos]</code>
+          (mismo codec que <code class="code">&lt;is-form&gt;</code>).</p>
+<div class="demo"><is-block-layout id="blJson" style="border:1px solid var(--is-border);padding:1rem;min-height:6rem"></is-block-layout>
+          <div style="display:flex;gap:0.5rem;margin:0.75rem 0">
+            <is-button id="blBtnToJson" variant="outlined" color="neutral">html2json()</is-button>
+            <is-button id="blBtnFromJson" color="brand">fromJSON(body)</is-button>
+          </div>
+          <pre id="blJsonOut" style="margin:0;padding:0.65rem 0.75rem;border:1px solid var(--is-border);border-radius:0.5rem;background:var(--is-bg-elev);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.75rem;white-space:pre-wrap;max-height:12rem;overflow:auto"></pre></div>
+<pre><code>block.fromJSON({
+  body: [
+    ['p', 'Hola desde JSON'],
+    ['is-text', { color: 'neutral' }, 'secundario'],
+  ],
+});
+block.html2json();</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
