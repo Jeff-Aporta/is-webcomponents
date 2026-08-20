@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrama de Venn · IS Web Components</title>
+  <meta name="description" content="Documentación de is-venn-diagram.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-venn-diagram.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-venn-diagram");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-venn-diagram" data-category="diagrams">
+    <h1>Diagrama de Venn</h1>
+    <section id="intro">
+<p class="lede">Diagrama de Venn de dos o tres conjuntos, con las posiciones canónicas de cualquier libro de texto.</p>
+<div class="demo"><p>El relleno es translúcido: la intersección aparece por superposición, sin máscaras ni recortes, así que el orden de los conjuntos no cambia el resultado. Con cuatro conjuntos los círculos dejan de poder representar todas las regiones, y el spec corta ahí.</p></div>
+<div class="demo"><is-venn-diagram open-on-click>
+  <script type="application/json">
+    {
+      "venn": {
+        "title": "Alcance del tiquete",
+        "sets": [
+          { "id": "pedido", "label": "Lo pedido", "hue": 210 },
+          { "id": "entregado", "label": "Lo entregado", "hue": 160 }
+        ],
+        "regions": [
+          { "sets": ["pedido"], "label": "Pendiente", "value": 2 },
+          { "sets": ["entregado"], "label": "Extra", "value": 1 },
+          { "sets": ["pedido", "entregado"], "label": "Cumplido", "value": 7 }
+        ]
+      }
+    }
+  </script>
+</is-venn-diagram></div>
+</section>
+  </article>
+</body>
+</html>
