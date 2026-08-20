@@ -8,7 +8,6 @@ import {
 } from '../_shared/cdn-ref.js';
 import { totalCdnSize } from '../_shared/cdn-sizes.js';
 import { paint } from '../_shared/highlight-code.js';
-import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 import {
   SKILL_DOCS,
   LLM_PROMPT_FALLBACK,
@@ -28,15 +27,9 @@ import { defineElement } from '../_shared/define.js';
  *   <script type="module" src="…/loader.min.js"></script>
  *   <script type="module"> … loadCSS* + load(…) …</script>
  *
- * Radio de alcance (persistible con `url-key` en ?s=):
- *   tag | category | all
- *
- * Atributos
- *   tag / category / base / title / dependencies / config / url-key
+ *   tag / category / base / title / dependencies / config
  */
 (() => {
-  const CDN_BASE_DEFAULT = jsdelivrBase('main');
-  const SCOPES = new Set(['tag', 'category', 'all']);
   const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS, { sha: 'main', base: LLM_PROMPT_FALLBACK });
 
   const TEMPLATE = document.createElement('template');
@@ -48,25 +41,9 @@ import { defineElement } from '../_shared/define.js';
           Estrategia única: <code>loader.min.js</code>. Pegá los dos
           <code>&lt;script&gt;</code> en el <code>&lt;head&gt;</code>
           (o al final del <code>&lt;body&gt;</code>). El primero carga el
-          loader; el segundo pide CSS + lo que elijas abajo.
+          loader; el segundo pide CSS + el componente de <code>tag</code>.
         </p>
       </header>
-
-      <fieldset class="cdn__scope" data-slot="scope">
-        <legend class="cdn__scope-legend">Qué cargar</legend>
-        <label class="cdn__radio">
-          <input type="radio" name="cdn-scope" value="tag" checked>
-          <span>Solo el componente · <code data-slot="scope-tag-label">—</code></span>
-        </label>
-        <label class="cdn__radio">
-          <input type="radio" name="cdn-scope" value="category">
-          <span>Categoría · <code data-slot="scope-cat-label">—</code></span>
-        </label>
-        <label class="cdn__radio">
-          <input type="radio" name="cdn-scope" value="all">
-          <span>Todo el kit · <code>all</code></span>
-        </label>
-      </fieldset>
 
       <div class="cdn__row" data-kind="loader">
         <div class="cdn__row-head">
@@ -132,17 +109,15 @@ import { defineElement } from '../_shared/define.js';
     };
 
     static get observedAttributes() {
-      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', 'url-key', ...IsCdnSnippet.styleAttrNames];
+      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', ...IsCdnSnippet.styleAttrNames];
     }
 
     #mounted = false;
-    #urls = { loader: '', llmPrompt: LLM_PROMPT, loadArg: 'all' };
+    #urls = { loader: '', llmPrompt: LLM_PROMPT, loadArg: '' };
     #onHighlightReady = () => this.#render();
     #deps = [];
     #docs = [];
     #resolvedRef = 'main';
-    #scope = 'tag';
-    #restoringUrl = false;
     #sizeGen = 0;
 
     constructor() {
@@ -151,13 +126,11 @@ import { defineElement } from '../_shared/define.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       shadow.addEventListener('click', this.#onClick);
-      shadow.addEventListener('change', this.#onChange);
     }
 
     connectedCallback() {
       super.connectedCallback();
       this.#mounted = true;
-      this.#restoreScopeFromUrl();
       this.#render();
       void this.#ensurePromptLoaded();
       resolveRef().then((ref) => {
@@ -176,14 +149,7 @@ import { defineElement } from '../_shared/define.js';
     attributeChangedCallback(name, oldVal, newVal) {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'url-key') this.#restoreScopeFromUrl();
       this.#render();
-    }
-
-    get urlKey() { return (this.getAttribute('url-key') || '').trim(); }
-    set urlKey(v) {
-      if (v == null || v === '') this.removeAttribute('url-key');
-      else this.setAttribute('url-key', String(v));
     }
 
     #cdnBase() {
@@ -197,41 +163,9 @@ import { defineElement } from '../_shared/define.js';
 
     #loadArg() {
       const tag = (this.getAttribute('tag') || '').trim();
-      const category = (this.getAttribute('category') || '').trim();
-      if (this.#scope === 'all') return 'all';
-      if (this.#scope === 'category' && category) return category;
       if (tag) return tag;
-      if (category) return category;
-      return 'all';
-    }
-
-    #effectiveScope() {
-      const tag = (this.getAttribute('tag') || '').trim();
       const category = (this.getAttribute('category') || '').trim();
-      if (this.#scope === 'tag' && !tag) {
-        return category ? 'category' : 'all';
-      }
-      if (this.#scope === 'category' && !category) {
-        return tag ? 'tag' : 'all';
-      }
-      return this.#scope;
-    }
-
-    #restoreScopeFromUrl() {
-      const key = this.urlKey;
-      if (!key) return;
-      const fromUrl = readUrlNav(key);
-      if (!SCOPES.has(fromUrl)) return;
-      this.#restoringUrl = true;
-      this.#scope = fromUrl;
-      this.#restoringUrl = false;
-    }
-
-    #persistScopeToUrl() {
-      if (this.#restoringUrl) return;
-      const key = this.urlKey;
-      if (!key) return;
-      writeUrlNav(key, this.#scope);
+      return category || '';
     }
 
     #parseConfig() {
@@ -306,16 +240,16 @@ import { defineElement } from '../_shared/define.js';
     #buildLoaderSnippet() {
       const href = this.#loaderHref();
       const arg = this.#loadArg();
-      const argLit = JSON.stringify(arg);
+      const loadLine = arg ? `  await L.load(${JSON.stringify(arg)});` : '';
       return [
         `<script type="module" src="${href}"><\/script>`,
         `<script type="module">`,
         `  const L = globalThis.ISWebComponentsLoader;`,
         `  await L.loadCSSBase();`,
         `  await L.loadCSSPalettesDefault();`,
-        `  await L.load(${argLit});`,
+        loadLine,
         `<\/script>`,
-      ].join('\n');
+      ].filter(Boolean).join('\n');
     }
 
     #renderDeps() {
@@ -352,32 +286,10 @@ import { defineElement } from '../_shared/define.js';
       }
     }
 
-    #syncScopeRadios() {
-      const root = this.shadowRoot;
-      const tag = (this.getAttribute('tag') || '').trim();
-      const category = (this.getAttribute('category') || '').trim();
-      this.#scope = this.#effectiveScope();
-
-      const tagLabel = root.querySelector('[data-slot="scope-tag-label"]');
-      const catLabel = root.querySelector('[data-slot="scope-cat-label"]');
-      if (tagLabel) tagLabel.textContent = tag || '—';
-      if (catLabel) catLabel.textContent = category || '—';
-
-      for (const input of root.querySelectorAll('input[name="cdn-scope"]')) {
-        const value = input.value;
-        input.checked = value === this.#scope;
-        if (value === 'tag') input.disabled = !tag;
-        if (value === 'category') input.disabled = !category;
-        if (value === 'all') input.disabled = false;
-        input.closest('.cdn__radio')?.classList.toggle('is-disabled', input.disabled);
-      }
-    }
-
     #render() {
       const root = this.shadowRoot;
       if (!root) return;
 
-      this.#syncScopeRadios();
       const loadArg = this.#loadArg();
       this.#urls = {
         loader: this.#buildLoaderSnippet(),
@@ -413,19 +325,11 @@ import { defineElement } from '../_shared/define.js';
       const localDev = host === 'localhost' || host === '127.0.0.1';
       const sizeBase = localDev ? `${globalThis.location.origin}/dist/cdn/` : base;
       const gen = ++this.#sizeGen;
-      const arg = this.#loadArg();
       const tag = (this.getAttribute('tag') || '').replace(/^is-/, '');
       const category = (this.getAttribute('category') || '').trim();
 
-      /** URLs que acabará bajando el loader para estimar peso. */
-      let urls = [`${base}loader.min.js`, `${base}is-base.min.css`, `${base}palettes.min.css`];
-      if (arg === 'all') {
-        urls.push(`${base}all.min.js`);
-      } else if (arg === category && category) {
-        urls.push(`${base}${category}/category.${category}.min.js`);
-      } else if (tag && category) {
-        urls.push(`${base}${category}/${tag}.min.js`);
-      }
+      const urls = [`${base}loader.min.js`, `${base}is-base.min.css`, `${base}palettes.min.css`];
+      if (tag && category) urls.push(`${base}${category}/${tag}.min.js`);
 
       const el = root.querySelector('[data-slot="size-loader"]');
       if (el) { el.removeAttribute('value'); el.hidden = true; }
@@ -454,15 +358,6 @@ import { defineElement } from '../_shared/define.js';
         void paint(ed);
       }
     }
-
-    #onChange = (e) => {
-      const input = e.target.closest('input[name="cdn-scope"]');
-      if (!input || input.disabled) return;
-      if (!SCOPES.has(input.value)) return;
-      this.#scope = input.value;
-      this.#persistScopeToUrl();
-      this.#render();
-    };
 
     #onClick = async (e) => {
       const btn = e.target.closest('.cdn__copy');
