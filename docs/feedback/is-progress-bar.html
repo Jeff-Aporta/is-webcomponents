@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Progress Bar · IS Web Components</title>
+  <meta name="description" content="Documentación de is-progress-bar.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/feedback/is-progress-bar.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-icon", "is-progress-bar");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-progress-bar" data-category="feedback">
+    <h1>Progress Bar</h1>
+    <section id="intro">
+<h2>Progress Bar</h2>
+<p class="lede"><code class="code">&lt;is-progress-bar&gt;</code></p>
+<div class="demo"><p class="lede">Barra de progreso determinada (<code class="code">value</code> 0–100) o indeterminada.</p></div>
+<div class="demo"><div class="pb-demo">
+            <is-progress-bar value="65" label="Subiendo archivo"></is-progress-bar>
+          </div></div>
+</section>
+<section id="interactive">
+<h2>Contador interactivo</h2>
+<p class="lede">Cada clic avanza el progreso; Reset vuelve a 0. El <code class="code">value</code>
+          y la etiqueta se actualizan en vivo.</p>
+<div class="demo"><div class="pb-demo">
+            <div class="pb-meta">
+              <span id="pbStatus">Listo para empezar</span>
+              <strong><span id="pbPct">0</span>%</strong>
+            </div>
+            <is-progress-bar id="pbLive" value="0" label="Progreso 0%"></is-progress-bar>
+            <div class="pb-actions">
+              <is-button id="pbPlus" color="brand">
+                <is-icon slot="start" icon="mdi:plus"></is-icon>
+                +10
+              </is-button>
+              <is-button id="pbMinus" variant="outlined">
+                <is-icon slot="start" icon="mdi:minus"></is-icon>
+                −10
+              </is-button>
+              <is-button id="pbReset" variant="plain">
+                <is-icon slot="start" icon="mdi:restart"></is-icon>
+                Reset
+              </is-button>
+            </div>
+          </div></div>
+<pre><code>let value = 0;
+const bar = document.querySelector('#pbLive');
+
+document.querySelector('#pbPlus').addEventListener('click', () =&gt; {
+  value = Math.min(100, value + 10);
+  bar.value = value;
+  bar.label = `Progreso ${value}%`;
+});
+
+document.querySelector('#pbReset').addEventListener('click', () =&gt; {
+  value = 0;
+  bar.value = 0;
+});</code></pre>
+</section>
+<section id="states">
+<h2>Estados</h2>
+<div class="demo"><div class="pb-demo">
+            <is-progress-bar value="30" label="30%"></is-progress-bar>
+            <is-progress-bar value="100" label="Completado"
+              style="--indicator-color: var(--is-color-success)"></is-progress-bar>
+            <is-progress-bar indeterminate label="Procesando"></is-progress-bar>
+          </div></div>
+<pre><code>&lt;is-progress-bar value=&quot;65&quot; label=&quot;Carga&quot;&gt;&lt;/is-progress-bar&gt;
+&lt;is-progress-bar indeterminate label=&quot;Procesando&quot;&gt;&lt;/is-progress-bar&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
