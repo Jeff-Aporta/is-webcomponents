@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Breadcrumb · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-breadcrumb e is-breadcrumb-item de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/navigation/is-breadcrumb.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-breadcrumb", "is-breadcrumb-item", "is-icon");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-breadcrumb" data-category="navigation">
+    <h1>Breadcrumb</h1>
+    <p class="lede">Documentación y demos de is-breadcrumb e is-breadcrumb-item de InSoft.</p>
+<section id="intro">
+<p class="lede">Migas de pan accesibles con marcado <code class="code">&lt;nav&gt;</code>,
+          ARIA roles y separador automático entre items.</p>
+<div class="demo"><is-breadcrumb label="Catálogo">
+            <is-breadcrumb-item href="/">Catálogo</is-breadcrumb-item>
+            <is-breadcrumb-item href="/ropa">Ropa</is-breadcrumb-item>
+            <is-breadcrumb-item href="/ropa/mujer">Mujer</is-breadcrumb-item>
+            <is-breadcrumb-item href="">Camisetas</is-breadcrumb-item>
+          </is-breadcrumb></div>
+<pre><code>&lt;is-breadcrumb label=&quot;Catálogo&quot;&gt;
+  &lt;is-breadcrumb-item href=&quot;/&quot;&gt;Catálogo&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item href=&quot;/ropa&quot;&gt;Ropa&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item href=&quot;/ropa/mujer&quot;&gt;Mujer&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item href=&quot;&quot;&gt;Camisetas&lt;/is-breadcrumb-item&gt;
+&lt;/is-breadcrumb&gt;</code></pre>
+</section>
+<section id="spa">
+<h2>SPAs — eventos de click</h2>
+<p class="lede">Sin <code class="code">href</code>, los items se renderizan como texto sin enlace. Conecta tú los handlers.</p>
+<div class="demo"><is-breadcrumb id="bcSpa" label="Navegación SPA">
+            <is-breadcrumb-item>Inicio</is-breadcrumb-item>
+            <is-breadcrumb-item>Productos</is-breadcrumb-item>
+            <is-breadcrumb-item>Detalle</is-breadcrumb-item>
+          </is-breadcrumb>
+          <p id="bcLog">Última navegación: ninguna</p></div>
+<pre><code>bc.addEventListener('click', (e) =&gt; {
+  const item = e.target.closest('is-breadcrumb-item');
+  if (item) console.log('item click', item.textContent.trim());
+});</code></pre>
+</section>
+<section id="icons">
+<h2>Iconos en items</h2>
+<p class="lede">Usa el atributo <code class="code">icon</code> o el slot <code class="code">start</code>.</p>
+<div class="demo"><div class="demo-stack">
+          <is-breadcrumb label="Inicio">
+            <is-breadcrumb-item href="/" icon="mdi:home">Inicio</is-breadcrumb-item>
+            <is-breadcrumb-item href="/articulos" icon="mdi:newspaper-variant">Artículos</is-breadcrumb-item>
+            <is-breadcrumb-item href="" icon="mdi:airplane">Viajes</is-breadcrumb-item>
+          </is-breadcrumb>
+
+          <is-breadcrumb label="App">
+            <is-breadcrumb-item href="/dashboard">
+              <is-icon slot="start" icon="mdi:view-dashboard" aria-hidden="true"></is-icon>
+              Dashboard
+            </is-breadcrumb-item>
+            <is-breadcrumb-item href="/users">
+              <is-icon slot="start" icon="mdi:account-group" aria-hidden="true"></is-icon>
+              Usuarios
+            </is-breadcrumb-item>
+            <is-breadcrumb-item href="">
+              <is-icon slot="start" icon="mdi:account" aria-hidden="true"></is-icon>
+              Perfil
+            </is-breadcrumb-item>
+          </is-breadcrumb>
+        </div></div>
+<pre><code>&lt;is-breadcrumb-item icon=&quot;mdi:home&quot;&gt;Inicio&lt;/is-breadcrumb-item&gt;
+&lt;is-breadcrumb-item&gt;
+  &lt;is-icon slot=&quot;start&quot; icon=&quot;mdi:home&quot;&gt;&lt;/is-icon&gt;
+  Inicio
+&lt;/is-breadcrumb-item&gt;</code></pre>
+</section>
+<section id="separator">
+<h2>Separador custom</h2>
+<p class="lede">Cambia el slot <code class="code">separator</code> de cada item — o sólo el último que se ignora.</p>
+<div class="demo"><is-breadcrumb label="Slash">
+            <is-breadcrumb-item href="/home">
+              <span slot="separator">/</span>
+              Inicio
+            </is-breadcrumb-item>
+            <is-breadcrumb-item href="/docs">
+              <span slot="separator">/</span>
+              Docs
+            </is-breadcrumb-item>
+            <is-breadcrumb-item href="">
+              <span slot="separator">/</span>
+              Guía
+            </is-breadcrumb-item>
+          </is-breadcrumb></div>
+<pre><code>&lt;is-breadcrumb-item href=&quot;/home&quot;&gt;
+  &lt;span slot=&quot;separator&quot;&gt;/&lt;/span&gt;
+  Inicio
+&lt;/is-breadcrumb-item&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia completa — &amp;lt;is-breadcrumb&amp;gt;</h2>
+<div class="demo"><h3>Atributos</h3></div>
+<div class="demo"><h3>Slots</h3></div>
+<div class="demo"><h3>CSS Parts</h3></div>
+<div class="demo"><h2>Referencia completa — <code class="code">&lt;is-breadcrumb-item&gt;</code></h2></div>
+<div class="demo"><h3>Atributos</h3></div>
+<div class="demo"><h3>Slots</h3></div>
+<div class="demo"><h3>CSS Parts</h3></div>
+</section>
+  </article>
+</body>
+</html>
