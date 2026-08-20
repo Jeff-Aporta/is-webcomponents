@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrama de estados · IS Web Components</title>
+  <meta name="description" content="Documentación de is-state-diagram.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-state-diagram.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-state-diagram");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-state-diagram" data-category="diagrams">
+    <h1>Diagrama de estados</h1>
+    <section id="intro">
+<p class="lede">Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y
+          transiciones; el componente decide las capas, reduce los cruces y
+          rutea las flechas rodeando los estados.</p>
+<div class="demo"><p>
+          Comparte motor con <code>&lt;is-flowchart&gt;</code>: mismo esquema
+          JSON, mismo visor a pantalla completa y la misma animación tortuga,
+          que aquí recorre las transiciones en orden.
+        </p></div>
+<div class="demo"><is-state-diagram open-on-click>
+            <script type="application/json">
+              {
+                "stateDiagram": {
+                  "title": "Ciclo de vida de la factura",
+                  "direction": "TB",
+                  "groups": [
+                    { "id": "g-flujo", "name": "Flujo", "hue": 239 },
+                    { "id": "g-cierre", "name": "Cierre", "hue": 38 }
+                  ],
+                  "states": [
+                    { "id": "inicio", "kind": "start", "group": "g-flujo" },
+                    { "id": "borrador", "label": "Borrador", "group": "g-flujo",
+                      "desc": "Editable por el usuario; sin CUFE asignado." },
+                    { "id": "decision", "label": "¿Datos válidos?", "kind": "choice", "group": "g-flujo" },
+                    { "id": "emitida", "label": "Emitida", "group": "g-cierre",
+                      "desc": "Enviada y aceptada por la **DIAN**." },
+                    { "id": "anulada", "label": "Anulada", "group": "g-cierre" },
+                    { "id": "fin", "kind": "end", "group": "g-cierre" }
+                  ],
+                  "transitions": [
+                    { "from": "inicio", "to": "borrador" },
+                    { "from": "borrador", "to": "decision", "label": "validar" },
+                    { "from": "decision", "to": "borrador", "label": "no" },
+                    { "from": "decision", "to": "emitida", "label": "sí" },
+                    { "from": "emitida", "to": "anulada", "label": "anular" },
+                    { "from": "anulada", "to": "fin" },
+                    { "from": "emitida", "to": "fin" }
+                  ]
+                }
+              }
+            </script>
+          </is-state-diagram></div>
+</section>
+<section id="tipos">
+<h2>Tipos de estado</h2>
+<div class="demo"><p>
+          <code>kind</code> acepta <code>start</code> (círculo negro relleno),
+          <code>end</code> (círculo relleno dentro de un anillo),
+          <code>normal</code> (rectángulo redondeado, por defecto) y
+          <code>choice</code> (rombo de decisión).
+        </p></div>
+<div class="demo"><is-state-diagram open-on-click>
+            <script type="application/json">
+              {
+                "stateDiagram": {
+                  "direction": "LR",
+                  "states": [
+                    { "id": "a", "kind": "start" },
+                    { "id": "b", "label": "Procesando" },
+                    { "id": "c", "label": "¿Ok?", "kind": "choice" },
+                    { "id": "d", "label": "Rechazado" },
+                    { "id": "e", "kind": "end" }
+                  ],
+                  "transitions": [
+                    { "from": "a", "to": "b" },
+                    { "from": "b", "to": "c" },
+                    { "from": "c", "to": "d", "label": "no" },
+                    { "from": "c", "to": "e", "label": "sí" }
+                  ]
+                }
+              }
+            </script>
+          </is-state-diagram></div>
+</section>
+<section id="ciclos">
+<h2>Ciclos y auto-transiciones</h2>
+<div class="demo"><p>
+          El motor detecta las transiciones que vuelven atrás y las rutea por
+          un lado, en vez de colgarse intentando ordenar un grafo cíclico. Una
+          transición de un estado a sí mismo también se dibuja sin romper el
+          layout.
+        </p></div>
+<div class="demo"><is-state-diagram open-on-click>
+            <script type="application/json">
+              {
+                "stateDiagram": {
+                  "direction": "TB",
+                  "states": [
+                    { "id": "s1", "kind": "start" },
+                    { "id": "s2", "label": "Revisión" },
+                    { "id": "s3", "label": "Aprobación" },
+                    { "id": "s4", "kind": "end" }
+                  ],
+                  "transitions": [
+                    { "from": "s1", "to": "s2" },
+                    { "from": "s2", "to": "s3", "label": "enviar" },
+                    { "from": "s3", "to": "s2", "label": "rechazar" },
+                    { "from": "s2", "to": "s2", "label": "reintento" },
+                    { "from": "s3", "to": "s4", "label": "aprobar" }
+                  ]
+                }
+              }
+            </script>
+          </is-state-diagram></div>
+</section>
+<section id="api">
+<h2>Referencia</h2>
+<div class="demo"><h3>Atributos</h3></div>
+<div class="demo"><h3>Esquema del JSON</h3></div>
+<div class="demo"><h3>Propiedades y eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
