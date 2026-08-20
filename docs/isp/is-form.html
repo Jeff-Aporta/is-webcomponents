@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form · IS Web Components</title>
+  <meta name="description" content="Ficha ISP — cuerpo en JSON compacto (json2html / html2json).">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/isp/is-form.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-form");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-form" data-category="isp">
+    <h1>Form</h1>
+    <p class="lede">Ficha ISP — cuerpo en JSON compacto (json2html / html2json).</p>
+<section id="intro">
+<p class="lede">Ficha con Aceptar / Cancelar. El cuerpo se define en JSON compacto
+          (<code class="code">[tag, attrs?, …hijos]</code>) vía
+          <code class="code">json2html</code> / <code class="code">html2json</code>.</p>
+<aside class="callout">Lenguaje de definición = JSON. En BD se guarda el HTML como JSON;
+          en runtime: <code class="code">form.fromJSON({ body, values })</code>.</aside>
+<div class="demo"><div class="f-frame">
+            <is-form id="fDemo"></is-form>
+          </div>
+          <div class="f-json-row">
+            <is-button id="fBtnToJson" variant="outlined" color="neutral">html2json / toJSON</is-button>
+            <is-button id="fBtnSet" variant="outlined" color="neutral">setValues(demo)</is-button>
+          </div>
+          <pre class="f-json-out" id="fJsonOut"></pre>
+          <p id="fLog">Última acción: <code class="code">—</code></p></div>
+<pre><code>form.fromJSON({
+  mode: 'edit',
+  body: [
+    ['h3', { slot: 'header' }, 'Curso'],
+    ['div', { slot: 'content', style: 'display:flex;flex-direction:column;gap:0.75rem;padding:0.5rem' },
+      ['is-input', { name: 'icurso', label: 'Código', required: true, 'full-width': true }],
+      ['is-input', { name: 'ncurso', label: 'Nombre', 'full-width': true }],
+      ['is-switch', { name: 'activo' }, 'Activo'],
+    ],
+  ],
+  values: { icurso: 'C001', ncurso: 'Nómina', activo: true },
+});
+
+form.html2json(); // solo el light DOM
+form.toJSON();    // chrome + body + values</code></pre>
+</section>
+<section id="roundtrip">
+<h2>Round-trip JSON</h2>
+<p class="lede">Pulsa <code class="code">html2json</code>, edita mentalmente el JSON de BD, y vuelve a montar.</p>
+<div class="demo"><div class="f-frame" style="height:20rem">
+            <is-form id="fRound" submit-label="Guardar"></is-form>
+          </div>
+          <div class="f-json-row">
+            <is-button id="fBtnRemount" color="brand">fromJSON(body)</is-button>
+          </div>
+          <pre class="f-json-out" id="fBodyOut"></pre></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>

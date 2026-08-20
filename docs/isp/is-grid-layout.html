@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grid Layout · IS Web Components</title>
+  <meta name="description" content="Documentación de is-grid-layout.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/isp/is-grid-layout.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-card", "is-grid-layout", "is-input", "is-tag", "is-text");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-grid-layout" data-category="isp">
+    <h1>Grid Layout</h1>
+    <section id="intro">
+<p class="lede">Grid declarativo. Port del <code class="code">GridLayout.svelte</code> de ISP:
+          <code class="code">cells</code> acepta un número o una track list CSS cruda.</p>
+<div class="demo"><is-grid-layout cells="3" gap="0.5rem" style="width:100%">
+            <is-card>1</is-card><is-card>2</is-card><is-card>3</is-card>
+            <is-card>4</is-card><is-card>5</is-card><is-card>6</is-card>
+          </is-grid-layout></div>
+</section>
+<section id="examples">
+<h2>cells-fit · track list · direction</h2>
+<div class="demo"><p>Con <code class="code">cells-fit</code> las celdas son <code class="code">max-content</code> en vez de <code class="code">minmax(0, 1fr)</code>.</p></div>
+<div class="demo"><is-grid-layout cells="3" cells-fit gap="0.5rem" justify="start" style="width:100%">
+            <is-tag>corto</is-tag><is-tag>un poco más largo</is-tag><is-tag>x</is-tag>
+          </is-grid-layout></div>
+<div class="demo"><is-grid-layout cells="12rem 1fr" gap="0.75rem" items="center" style="width:100%">
+            <is-text color="neutral">Etiqueta</is-text>
+            <is-input placeholder="valor"></is-input>
+            <is-text color="neutral">Otra</is-text>
+            <is-input placeholder="valor"></is-input>
+          </is-grid-layout></div>
+<div class="demo"><is-grid-layout direction="row" cells="2" gap="0.5rem" style="width:100%">
+            <is-card>fila 1 · col 1</is-card>
+            <is-card>fila 2 · col 1</is-card>
+            <is-card>fila 1 · col 2</is-card>
+            <is-card>fila 2 · col 2</is-card>
+          </is-grid-layout></div>
+<pre><code>&lt;is-grid-layout cells=&quot;3&quot; gap=&quot;0.5rem&quot;&gt;…&lt;/is-grid-layout&gt;
+&lt;is-grid-layout cells=&quot;12rem 1fr&quot; items=&quot;center&quot;&gt;…&lt;/is-grid-layout&gt;
+&lt;is-grid-layout direction=&quot;row&quot; cells=&quot;2&quot;&gt;…&lt;/is-grid-layout&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
