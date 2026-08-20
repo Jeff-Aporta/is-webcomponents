@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tab Group · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-tab-group / is-tab / is-tab-panel de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/navigation/is-tab-group.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-flowchart", "is-icon", "is-tab", "is-tab-group", "is-tab-panel");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-tab-group" data-category="navigation">
+    <h1>Tab Group</h1>
+    <p class="lede">Documentación y demos de is-tab-group / is-tab / is-tab-panel de InSoft.</p>
+<section id="intro">
+<p class="lede">Tabs accesibles con navegación por teclado (←/→), activación automática o
+          manual, indicator animado, placements (top/bottom/start/end), scroll horizontal
+          automático y soporte para tabs cerrables.</p>
+<div class="demo"><is-tab-group active="general">
+            <is-tab slot="nav" panel="general">General</is-tab>
+            <is-tab slot="nav" panel="custom">Custom</is-tab>
+            <is-tab slot="nav" panel="advanced">Avanzado</is-tab>
+            <is-tab slot="nav" panel="disabled" disabled>Deshabilitado</is-tab>
+
+            <is-tab-panel name="general">Panel General: configuración por defecto del sistema.</is-tab-panel>
+            <is-tab-panel name="custom">Panel Custom: ajustes personalizables.</is-tab-panel>
+            <is-tab-panel name="advanced">Panel Avanzado: opciones experimentales.</is-tab-panel>
+            <is-tab-panel name="disabled">No accesible.</is-tab-panel>
+          </is-tab-group></div>
+<pre><code>&lt;is-tab-group active=&quot;general&quot;&gt;
+  &lt;is-tab slot=&quot;nav&quot; panel=&quot;general&quot;&gt;General&lt;/is-tab&gt;
+  &lt;is-tab-panel name=&quot;general&quot;&gt;Contenido del panel.&lt;/is-tab-panel&gt;
+  …
+&lt;/is-tab-group&gt;</code></pre>
+</section>
+<section id="placements">
+<h2>Placements</h2>
+<p class="lede">Posiciona los tabs en cualquiera de los cuatro lados.</p>
+<div class="demo"><div class="demo-stack">
+          <div>
+            <h4>top (default)</h4>
+            <is-tab-group active="a1" style="min-height:140px">
+              <is-tab slot="nav" panel="a1">Uno</is-tab>
+              <is-tab slot="nav" panel="a2">Dos</is-tab>
+              <is-tab slot="nav" panel="a3">Tres</is-tab>
+              <is-tab-panel name="a1">Uno.</is-tab-panel>
+              <is-tab-panel name="a2">Dos.</is-tab-panel>
+              <is-tab-panel name="a3">Tres.</is-tab-panel>
+            </is-tab-group>
+          </div>
+
+          <div>
+            <h4>bottom</h4>
+            <is-tab-group active="b1" placement="bottom" style="min-height:140px">
+              <is-tab slot="nav" panel="b1">Uno</is-tab>
+              <is-tab slot="nav" panel="b2">Dos</is-tab>
+              <is-tab slot="nav" panel="b3">Tres</is-tab>
+              <is-tab-panel name="b1">Uno.</is-tab-panel>
+              <is-tab-panel name="b2">Dos.</is-tab-panel>
+              <is-tab-panel name="b3">Tres.</is-tab-panel>
+            </is-tab-group>
+          </div>
+
+          <div>
+            <h4>start</h4>
+            <is-tab-group active="c1" placement="start" style="min-height:140px">
+              <is-tab slot="nav" panel="c1">Uno</is-tab>
+              <is-tab slot="nav" panel="c2">Dos</is-tab>
+              <is-tab slot="nav" panel="c3">Tres</is-tab>
+              <is-tab-panel name="c1">Uno.</is-tab-panel>
+              <is-tab-panel name="c2">Dos.</is-tab-panel>
+              <is-tab-panel name="c3">Tres.</is-tab-panel>
+            </is-tab-group>
+          </div>
+
+          <div>
+            <h4>end</h4>
+            <is-tab-group active="d1" placement="end" style="min-height:140px">
+              <is-tab slot="nav" panel="d1">Uno</is-tab>
+              <is-tab slot="nav" panel="d2">Dos</is-tab>
+              <is-tab slot="nav" panel="d3">Tres</is-tab>
+              <is-tab-panel name="d1">Uno.</is-tab-panel>
+              <is-tab-panel name="d2">Dos.</is-tab-panel>
+              <is-tab-panel name="d3">Tres.</is-tab-panel>
+            </is-tab-group>
+          </div>
+        </div></div>
+</section>
+<section id="icons">
+<h2>Tabs con icono</h2>
+<p class="lede">Usa los slots <code class="code">start</code> y <code class="code">end</code> para iconos.</p>
+<div class="demo"><is-tab-group active="home">
+            <is-tab slot="nav" panel="home">
+              <is-icon slot="start" icon="mdi:home" aria-hidden="true"></is-icon>
+              Inicio
+            </is-tab>
+            <is-tab slot="nav" panel="users">
+              <is-icon slot="start" icon="mdi:account-group" aria-hidden="true"></is-icon>
+              Usuarios
+            </is-tab>
+            <is-tab slot="nav" panel="settings">
+              <is-icon slot="start" icon="mdi:cog" aria-hidden="true"></is-icon>
+              Configuración
+            </is-tab>
+            <is-tab-panel name="home">Bienvenido.</is-tab-panel>
+            <is-tab-panel name="users">Listado de usuarios.</is-tab-panel>
+            <is-tab-panel name="settings">Preferencias de la app.</is-tab-panel>
+          </is-tab-group></div>
+</section>
+<section id="activation">
+<h2>Activación manual vs automática</h2>
+<p class="lede">Con <code class="code">activation="manual"</code>, las flechas cambian foco sin mostrar
+          el panel hasta pulsar Space/Enter.</p>
+<div class="demo"><is-tab-group active="x1" activation="manual">
+            <is-tab slot="nav" panel="x1">Uno</is-tab>
+            <is-tab slot="nav" panel="x2">Dos</is-tab>
+            <is-tab slot="nav" panel="x3">Tres</is-tab>
+            <is-tab-panel name="x1">Panel Uno.</is-tab-panel>
+            <is-tab-panel name="x2">Panel Dos.</is-tab-panel>
+            <is-tab-panel name="x3">Panel Tres.</is-tab-panel>
+          </is-tab-group></div>
+<pre><code>&lt;is-tab-group activation=&quot;manual&quot;&gt;…&lt;/is-tab-group&gt;</code></pre>
+</section>
+<section id="closable">
+<h2>Tabs cerrables</h2>
+<p class="lede">Con el atributo <code class="code">closable</code>, el tab muestra una X. El evento <code class="code">is-tab-close</code> burbujea.</p>
+<div class="demo"><is-tab-group id="closable" active="t1">
+            <is-tab slot="nav" panel="t1">General</is-tab>
+            <is-tab slot="nav" panel="t2" closable>Cerrable</is-tab>
+            <is-tab slot="nav" panel="t3">Avanzado</is-tab>
+            <is-tab-panel name="t1">General.</is-tab-panel>
+            <is-tab-panel name="t2">Cerrable.</is-tab-panel>
+            <is-tab-panel name="t3">Avanzado.</is-tab-panel>
+          </is-tab-group>
+          <is-button id="restoreTab" disabled>Restaurar tab</is-button></div>
+<pre><code>group.addEventListener('is-tab-close', (e) =&gt; {
+  const t = e.detail.tab;
+  t.remove();
+  const panel = group.querySelector(\`is-tab-panel[name=&quot;\${e.detail.name}&quot;]\`);
+  if (panel) panel.remove();
+});</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<div class="demo"><h3><code class="code">&lt;is-tab-group&gt;</code></h3></div>
+<div class="demo"><h3><code class="code">&lt;is-tab&gt;</code></h3></div>
+<div class="demo"><h3><code class="code">&lt;is-tab-panel&gt;</code></h3></div>
+<div class="demo"><h3>Eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
