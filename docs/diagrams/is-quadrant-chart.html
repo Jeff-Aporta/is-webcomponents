@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matriz de cuadrantes · IS Web Components</title>
+  <meta name="description" content="Documentación de is-quadrant-chart.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-quadrant-chart.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-quadrant-chart");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-quadrant-chart" data-category="diagrams">
+    <h1>Matriz de cuadrantes</h1>
+    <section id="intro">
+<p class="lede">Matriz 2×2 en SVG: dos ejes continuos, cuatro cuadrantes nombrados y los puntos ubicados en 0..1.</p>
+<div class="demo"><p>Es el diagrama de priorización de siempre (impacto/esfuerzo, costo/calidad). Las etiquetas que caen juntas se apilan solas para no encimarse.</p></div>
+<div class="demo"><is-quadrant-chart open-on-click>
+  <script type="application/json">
+    {
+      "quadrant": {
+        "title": "Modelos por etapa",
+        "xAxis": { "left": "Menor costo", "right": "Mayor costo" },
+        "yAxis": { "bottom": "Menor calidad", "top": "Mayor calidad" },
+        "quadrants": {
+          "topLeft": "Elegir",
+          "topRight": "Justificar",
+          "bottomLeft": "Descartar",
+          "bottomRight": "Evitar"
+        },
+        "groups": [
+          { "id": "g-chat", "name": "Conversación", "hue": 210 },
+          { "id": "g-ops", "name": "Operativo", "hue": 160 }
+        ],
+        "points": [
+          { "id": "p1", "label": "Modelo rápido", "x": 0.24, "y": 0.72, "group": "g-ops" },
+          { "id": "p2", "label": "Modelo razonador", "x": 0.78, "y": 0.86, "group": "g-chat" },
+          { "id": "p3", "label": "Modelo mínimo", "x": 0.18, "y": 0.3, "group": "g-ops" },
+          { "id": "p4", "label": "Modelo heredado", "x": 0.66, "y": 0.28, "group": "g-chat" }
+        ]
+      }
+    }
+  </script>
+</is-quadrant-chart></div>
+</section>
+  </article>
+</body>
+</html>

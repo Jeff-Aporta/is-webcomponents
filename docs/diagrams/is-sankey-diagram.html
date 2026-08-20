@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrama de Sankey · IS Web Components</title>
+  <meta name="description" content="Documentación de is-sankey-diagram.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-sankey-diagram.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-sankey-diagram");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-sankey-diagram" data-category="diagrams">
+    <h1>Diagrama de Sankey</h1>
+    <section id="intro">
+<p class="lede">Diagrama de Sankey en SVG, sin Mermaid. El grosor de cada banda es el dato: los flujos se ven en proporción, no en anécdota.</p>
+<div class="demo"><p>Las capas se deducen del grafo (camino más largo desde las fuentes) y la altura de cada nodo es el mayor de lo que entra o lo que sale. Un enlace sin valor positivo no se dibuja.</p></div>
+<div class="demo"><is-sankey-diagram open-on-click>
+  <script type="application/json">
+    {
+      "sankey": {
+        "title": "Reparto del esfuerzo del tiquete",
+        "unit": "min",
+        "groups": [
+          { "id": "g-analisis", "name": "Análisis", "hue": 210 },
+          { "id": "g-entrega", "name": "Entrega", "hue": 160 }
+        ],
+        "nodes": [
+          { "id": "total", "label": "Tiquete", "hue": 210 },
+          { "id": "redaccion", "label": "Redacción", "group": "g-analisis", "hue": 239 },
+          { "id": "codigo", "label": "Código", "group": "g-entrega", "hue": 160 },
+          { "id": "pruebas", "label": "Pruebas", "group": "g-entrega", "hue": 38 },
+          { "id": "cierre", "label": "Cierre y evidencia", "hue": 280 }
+        ],
+        "links": [
+          { "from": "total", "to": "redaccion", "value": 38 },
+          { "from": "total", "to": "codigo", "value": 25 },
+          { "from": "total", "to": "pruebas", "value": 20 },
+          { "from": "redaccion", "to": "cierre", "value": 10 },
+          { "from": "codigo", "to": "cierre", "value": 8 }
+        ]
+      }
+    }
+  </script>
+</is-sankey-diagram></div>
+</section>
+  </article>
+</body>
+</html>
