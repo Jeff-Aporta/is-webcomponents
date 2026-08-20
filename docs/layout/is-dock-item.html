@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dock Item · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-dock-item de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/layout/is-dock-item.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-dock", "is-dock-item");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-dock-item" data-category="layout">
+    <h1>Dock Item</h1>
+    <p class="lede">Documentación y demos de is-dock-item de InSoft.</p>
+<section id="intro">
+<p class="lede">Icono de un <code class="code">&lt;is-dock&gt;</code>, con su etiqueta y estado activo.</p>
+<div class="demo"><div class="dock-stage">
+            <is-dock>
+              <is-dock-item icon="mdi:home" label="Inicio" active></is-dock-item>
+              <is-dock-item icon="mdi:chart-box" label="Reportes"></is-dock-item>
+              <is-dock-item icon="mdi:cog" label="Ajustes"></is-dock-item>
+            </is-dock>
+          </div></div>
+<pre><code>&lt;div class=&quot;dock-stage&quot;&gt;
+  &lt;is-dock&gt;
+    &lt;is-dock-item icon=&quot;mdi:home&quot; label=&quot;Inicio&quot; active&gt;&lt;/is-dock-item&gt;
+    &lt;is-dock-item icon=&quot;mdi:chart-box&quot; label=&quot;Reportes&quot;&gt;&lt;/is-dock-item&gt;
+    &lt;is-dock-item icon=&quot;mdi:cog&quot; label=&quot;Ajustes&quot;&gt;&lt;/is-dock-item&gt;
+  &lt;/is-dock&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">&lt;is-dock&gt; — Barra tipo macOS. Los hijos se redimensionan al pasar el puntero cerca, simulando la lupa del Dock. &lt;is-dock&gt; &lt;is-dock-item label="Inicio"     icon="mdi:home"&gt;&lt;/is-dock-item&gt; &lt;is-dock-item label="Buscar"     icon="mdi:magnify"&gt;&lt;/is-dock-item&gt; ... &lt;/is-dock&gt; Atributos position    bottom (default) | top | left | right max-scale   factor máximo de magnificación (default 1.6) range       píxeles: la magnificación cae a 0 a esta distancia del item bajo el cursor (default 110) Custom states: hovering Eventos: is-select   detail: { item } is-dock-item acepta: icon, label, href, active (booleano, marca el ítem activo)</p>
+<div class="demo"><p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/layout/dock.js</code>.
+        </p></div>
+</section>
+  </article>
+</body>
+</html>
