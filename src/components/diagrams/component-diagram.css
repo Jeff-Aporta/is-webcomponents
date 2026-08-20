@@ -63,8 +63,8 @@
   overflow: visible;
 }
 
-.wrap[data-theme="dark"] .cd-svg { --cd-circle-fill: #10141a; }
-.wrap[data-theme="light"] .cd-svg { --cd-circle-fill: #ffffff; }
+.wrap[data-theme="dark"] .cd-svg { --cd-circle-fill: #10141a; --cd-title-fill: #10141a; }
+.wrap[data-theme="light"] .cd-svg { --cd-circle-fill: #ffffff; --cd-title-fill: #ffffff; }
 
 .cd-pkg,
 .cd-cmp,

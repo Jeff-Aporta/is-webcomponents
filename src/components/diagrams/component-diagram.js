@@ -3,6 +3,7 @@ import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveComponentSpec, computeComponentLayout, packageShapePath, packageTabWidth, LOLLI_R, HTTP_METHOD_BADGE } from './component-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
@@ -21,24 +22,22 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  *     `required` = arco C abierto hacia el par. Juntos forman el conector
  *     UML `-(O-`. Sin esto el PNG solo enseña cajas.
  *
- * Las posiciones son EXPLÍCITAS en el payload: el autor decide dónde va cada
- * nodo. Esto replica el flujo de PlantUML/Structurizr y evita el coste y la
- * fragilidad de un auto-layout para diagramas que son, por naturaleza,
- * mapas mentales del sistema.
+ * Las posiciones del payload son semilla. El empaque (`pack` / `triptych`)
+ * dispersa cajas con distancia mínima (`min-gap` o `layout.minGap`).
  *
- * Atributos: color (inline | viewer), open-on-click
- * Propiedades: payload, spec, layout, isViewer
+ * Atributos: color (inline | viewer), open-on-click, min-gap
+ * Propiedades: payload, spec, layout, isViewer, minGap
  * Eventos: is-render, is-open-viewer
  */
 
 const FONT = 'Tahoma,Arial,sans-serif';
 
-/** Arco C abierto HACIA el par (lejos del dueño), no hacia la caja. */
+/** Arco C. `side` nombra abertura: right abre a +X, bottom abre a +Y (hacia el O). */
 function requiredSocketPath(cx, cy, r, side) {
   if (side === 'right') return `M${cx},${cy - r} A${r},${r} 0 0 0 ${cx},${cy + r}`;
   if (side === 'left') return `M${cx},${cy - r} A${r},${r} 0 0 1 ${cx},${cy + r}`;
-  if (side === 'bottom') return `M${cx - r},${cy} A${r},${r} 0 0 0 ${cx + r},${cy}`;
-  return `M${cx - r},${cy} A${r},${r} 0 0 1 ${cx + r},${cy}`;
+  if (side === 'bottom') return `M${cx - r},${cy} A${r},${r} 0 0 1 ${cx + r},${cy}`;
+  return `M${cx - r},${cy} A${r},${r} 0 0 0 ${cx + r},${cy}`;
 }
 
 function stemInner(iface, r) {
@@ -52,6 +51,10 @@ function stemInner(iface, r) {
 }
 
 class IsComponentDiagram extends DiagramElementBase {
+  static get observedAttributes() {
+    return [...DiagramElementBase.observedAttributes, 'min-gap'];
+  }
+
   /** Capa superior con las etiquetas de arista (ver #buildEdges). */
   #etiquetasEdges = null;
 
@@ -75,8 +78,18 @@ class IsComponentDiagram extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
+  get minGap() {
+    const n = Number(this.getAttribute('min-gap'));
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+
+  set minGap(v) {
+    if (v == null || v === '') this.removeAttribute('min-gap');
+    else this.setAttribute('min-gap', String(v));
+  }
+
   renderDiagram() {
-    const spec = resolveComponentSpec(this.payload ?? {});
+    const spec = resolveComponentSpec(this.payload ?? {}, { minGap: this.minGap });
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -123,9 +136,9 @@ class IsComponentDiagram extends DiagramElementBase {
     // Paquetes (fondo) → aristas → cajas → lollipops O/C encima, para que el
     // conector UML no quede tapado. Las etiquetas van al final.
     this.#buildPackages(layout, theme);
+    this.#buildComponents(layout, theme);
     this.#etiquetasEdges = svgEl('g', { class: 'cd-edge-labels' });
     this.#buildEdges(layout, theme);
-    this.#buildComponents(layout, theme);
     this.#buildInterfaces(layout, theme);
     this.svg.appendChild(this.#etiquetasEdges);
 
@@ -146,18 +159,30 @@ class IsComponentDiagram extends DiagramElementBase {
         stroke: color,
         'stroke-width': 1.1,
         'stroke-dasharray': '2 5',
-        'stroke-linejoin': 'round',
+        'stroke-linejoin': 'miter',
       }));
       // Etiqueta del paquete en la pestaña, en cursiva y negrita (UML), en el
       // color del grupo: es lo que ata el paquete con sus componentes.
+      // Título del grupo: caja sólida para que las aristas no lo tapen.
+      const tb = p.titleBox;
+      const label = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
+      if (tb) {
+        g.appendChild(svgEl('rect', {
+          x: tb.x, y: tb.y, width: tb.w, height: tb.h, rx: 4,
+          fill: 'var(--cd-title-fill, #ffffff)',
+          stroke: color,
+          'stroke-width': 0.8,
+        }));
+      }
       const t = svgEl('text', {
-        x: p.x + packageTabWidth(p) / 2 + 4, y: p.y + 10, 'text-anchor': 'middle',
+        x: (tb?.x ?? p.x) + 8, y: (tb?.y ?? p.y) + (tb ? tb.h * 0.7 : 10),
+        'text-anchor': 'start',
         fill: color,
         'font-size': '11', 'font-weight': '700', 'font-style': 'italic',
         'letter-spacing': '0.04em',
         'font-family': FONT,
       });
-      t.textContent = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
+      t.textContent = label;
       g.appendChild(t);
       this.svg.appendChild(g);
     }
@@ -169,9 +194,7 @@ class IsComponentDiagram extends DiagramElementBase {
     // (`placeEdgeActors`): no se pisan entre sí ni a las cajas.
     for (const e of layout.edges) {
       if (!e.path) continue;
-      const color = (e.hue != null && tkHueToHex(e.hue, 48, 30))
-        || tkHueToHex(205, 42, 32)
-        || theme.accent;
+      const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'cd-edge' });
       const ballSocket = Boolean(e.fromInterface && e.toInterface) || e.kind === 'assembly';
       const dashed = !ballSocket && (e.kind === 'dependency' || e.kind === 'realization');
@@ -195,12 +218,13 @@ class IsComponentDiagram extends DiagramElementBase {
         const my = e.labelY ?? (e.fromY + e.toY) / 2;
         const w = e.labelW ?? (e.label.length * 5.6 + 8);
         const etiqueta = svgEl('g', { class: 'cd-edge__label' });
+        const hue = e.hue ?? 205;
         etiqueta.appendChild(svgEl('rect', {
           x: mx - w / 2, y: my - 8, width: w, height: 16, rx: 4,
-          fill: theme.chipFillSoft ?? theme.chipFill, class: 'cd-edge__chip',
+          fill: edgeChipFill(hue), class: 'cd-edge__chip',
         }));
         const t = svgEl('text', {
-          x: mx, y: my + 3.5, 'text-anchor': 'middle', fill: theme.muted,
+          x: mx, y: my + 3.5, 'text-anchor': 'middle', fill: edgeChipText(hue, theme.muted),
           'font-size': '10', 'font-family': FONT,
         });
         t.textContent = e.label;
@@ -216,8 +240,9 @@ class IsComponentDiagram extends DiagramElementBase {
     for (const iface of layout.interfaces) {
       const g = svgEl('g', { class: 'cd-iface' });
       g.dataset.ifaceId = iface.id;
+      const stroke = (iface.hue != null && tkHueToHex(iface.hue, 48, 30)) || theme.accent;
       const comp = layout.components.find((c) => c.id === iface.component);
-      if (comp) {
+      if (comp && !iface.docked) {
         let bx, by;
         switch (iface.side) {
           case 'top':    bx = comp.x + iface.offset; by = comp.y; break;
@@ -229,20 +254,20 @@ class IsComponentDiagram extends DiagramElementBase {
         const inner = stemInner(iface, r);
         g.appendChild(svgEl('line', {
           x1: inner.x, y1: inner.y, x2: bx, y2: by,
-          stroke: theme.accent, 'stroke-width': 1.3,
+          stroke, 'stroke-width': 1.3,
         }));
       }
       if (iface.kind === 'required') {
         g.appendChild(svgEl('path', {
           d: requiredSocketPath(iface.cx, iface.cy, r, iface.side),
-          fill: 'none', stroke: theme.accent, 'stroke-width': 1.3,
+          fill: 'none', stroke, 'stroke-width': 1.3,
           'stroke-linecap': 'round',
         }));
       } else {
         g.appendChild(svgEl('circle', {
           cx: iface.cx, cy: iface.cy, r,
           fill: 'var(--cd-circle-fill, #ffffff)',
-          stroke: theme.accent, 'stroke-width': 1.3,
+          stroke, 'stroke-width': 1.3,
         }));
       }
       if (iface.name) {

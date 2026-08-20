@@ -4,6 +4,7 @@ import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './block-sp
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -218,7 +219,7 @@ class IsBlockDiagram extends DiagramElementBase {
     const dark = this.wrap.dataset.theme === 'dark';
     const haloColor = dark ? 'rgb(0 0 0 / 0.45)' : 'rgb(15 23 42 / 0.18)';
     for (const e of layout.edges) {
-      const color = theme.accent;
+      const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'block-edge' });
       g.dataset.edgeId = e.id;
 
@@ -261,11 +262,11 @@ class IsBlockDiagram extends DiagramElementBase {
         }));
         g.appendChild(svgEl('rect', {
           x: e.labelX - w / 2, y: chipY, width: w, height: chipH, rx: chipH / 2,
-          fill: theme.chipFill, stroke: color, 'stroke-width': 0.8, 'stroke-opacity': 0.4,
+          fill: edgeChipFill(e.hue), stroke: color, 'stroke-width': 0.8, 'stroke-opacity': 0.4,
           class: 'block-edge__chip',
         }));
         const t = svgEl('text', {
-          x: e.labelX, y: e.labelY + 3.8, 'text-anchor': 'middle', fill: theme.text,
+          x: e.labelX, y: e.labelY + 3.8, 'text-anchor': 'middle', fill: edgeChipText(e.hue, theme.text),
           'font-size': '10.5', 'font-weight': '600',
           'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
           'letter-spacing': '0.01em',

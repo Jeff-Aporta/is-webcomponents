@@ -200,6 +200,12 @@ export class DiagramElementBase extends ElementBase {
     const anim = this.getAttribute('animation');
     if (anim) lb.setAttribute('animation', anim);
     else lb.removeAttribute('animation');
+    for (const name of this.constructor.observedAttributes ?? []) {
+      if (name === 'color' || name === 'animation') continue;
+      const v = this.getAttribute(name);
+      if (v != null) lb.setAttribute(name, v);
+      else lb.removeAttribute(name);
+    }
     lb.payload = this.#payload;
     lb.open = true;
   }

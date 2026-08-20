@@ -4,6 +4,7 @@ import { resolveClassSpec, computeClassLayout } from './class-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { defineElement } from '../_shared/define.js';
@@ -220,7 +221,7 @@ class IsClassDiagram extends DiagramElementBase {
 
   #buildEdges(layout, theme) {
     for (const e of layout.edges) {
-      const color = (e.hue != null && tkHueToHex(e.hue)) || theme.accent;
+      const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'cls-rel' });
       g.dataset.edgeId = e.id;
 
@@ -259,10 +260,10 @@ class IsClassDiagram extends DiagramElementBase {
         const w = e.labelW ?? (e.label.length * 5.6 + pad * 2);
         g.appendChild(svgEl('rect', {
           x: e.labelX - w / 2, y: e.labelY - 8, width: w, height: 16, rx: 4,
-          fill: theme.chipFillSoft ?? theme.chipFill, class: 'cls-rel__chip',
+          fill: edgeChipFill(e.hue), class: 'cls-rel__chip',
         }));
         const t = svgEl('text', {
-          x: e.labelX, y: e.labelY + 3.5, 'text-anchor': 'middle', fill: theme.muted,
+          x: e.labelX, y: e.labelY + 3.5, 'text-anchor': 'middle', fill: edgeChipText(e.hue, theme.muted),
           'font-size': '10', 'font-family': 'Consolas,Menlo,monospace',
         });
         t.textContent = e.label;
