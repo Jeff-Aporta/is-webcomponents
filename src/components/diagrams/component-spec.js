@@ -11,10 +11,9 @@
  *     perpendicular al lado del componente. Una arista componente→componente
  *     sin interfaces se completa sola a conector UML `-(O-`.
  *
- * Las posiciones son EXPLICITAS: el usuario declara x/y/w/h de cada package y
- * cada component, igual que en composicion/diagrama-secuencia.html. Esto
- * replica el flujo de trabajo de PlantUML/Structurizr, donde el diagrama es
- * un mapa mental del sistema, no un grafo que el motor dibuja.
+ * Las posiciones del payload son la semilla. Si hay paquetes, el motor
+ * reordena columnas (corredor entre ellas) para que las aristas no atraviesen
+ * cajas. El contorno del paquete es la unión ortogonal de sus hijos.
  *
  * Las aristas (`edges`) conectan interfaces (no componentes) para mantener
  * la semántica UML: "componente A expone interfaz I → componente B la
@@ -52,14 +51,19 @@
 
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
+import { packDiagram, layoutPackageOutlines, outlineToPath, routeAvoidingBoxes, pathIllegal, pathHasDiagonal, segsFromPath, resolvePackingGaps, inflateBox, inflateTitleObstacle, COL_GUTTER, PKG_CORRIDOR, ROW_GAP, EDGE_CLEARANCE, TITLE_CLEARANCE } from './component-pack.js';
+import { parsePathPoints } from '../_shared/diagram-edge-actors.js';
+import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 
 const TAB_W = 56;
 const TAB_H = 14;
 const STEREO_GAP = 4;
 /** Radio del lollipop / socket. Visible en PNG a tamaño ficha. */
 export const LOLLI_R = 8;
-/** Distancia del borde del componente al centro del círculo. */
-export const LOLLI_STEM = 22;
+/** Distancia borde → centro O. C acopla al O, no al origen. */
+export const LOLLI_STEM = 18;
+/** Aire boca-C vs borde-O. 1 px: enchufe junto, sin anidar. */
+export const LOLLI_GAP = 1;
 
 const LINE_H = 13;
 const BUBBLE_H = 18;
@@ -156,12 +160,29 @@ function readEdge(raw, i) {
     fromInterface: String(r.fromInterface ?? r.fromIf ?? '') || undefined,
     toInterface: String(r.toInterface ?? r.toIf ?? '') || undefined,
     label: String(r.label ?? r.name ?? '').trim() || undefined,
+    hue: r.hue != null ? Number(r.hue) : undefined,
     kind: ['dependency', 'association', 'realization', 'assembly'].includes(kind) ? kind : 'dependency',
   };
 }
 
+function readLayout(raw) {
+  const r = asRecord(raw);
+  const mode = ['pack', 'triptych', 'manual'].includes(String(r.mode)) ? String(r.mode) : 'pack';
+  return {
+    mode,
+    ungroup: asList(r.ungroup),
+    sources: asList(r.sources),
+    sourceSides: asRecord(r.sourceSides),
+    sourceGap: r.sourceGap != null ? Number(r.sourceGap) : undefined,
+    colGutter: r.colGutter != null ? Number(r.colGutter) : undefined,
+    pkgCorridor: r.pkgCorridor != null ? Number(r.pkgCorridor) : undefined,
+    rowGap: r.rowGap != null ? Number(r.rowGap) : undefined,
+    minGap: r.minGap != null ? Number(r.minGap) : undefined,
+  };
+}
+
 /** payload → spec normalizada, o null si no hay componentes. */
-export function resolveComponentSpec(payload) {
+export function resolveComponentSpec(payload, host = {}) {
   const p = asRecord(payload);
   const src = asRecord(p.componentDiagram ?? p);
   const rawComponents = src.components ?? [];
@@ -170,16 +191,18 @@ export function resolveComponentSpec(payload) {
   const packages = (Array.isArray(src.packages) ? src.packages : []).map(readPackage);
   const components = rawComponents.map(readComponent).map((c) => ({ ...c, h: fittedHeight(c) }));
   const interfaces = (Array.isArray(src.interfaces) ? src.interfaces : []).map(readInterface);
-  // `links` / `connections` / `relations`: el resto del kit y los LLM
-  // usan esas claves; si solo se acepta `edges` el PNG sale sin aristas.
   const rawEdges = src.edges ?? src.links ?? src.connections ?? src.relations;
   const edges = (Array.isArray(rawEdges) ? rawEdges : []).map(readEdge);
+  const layout = readLayout(src.layout);
+  if (layout.minGap == null && host.minGap != null) layout.minGap = Number(host.minGap);
+  if (layout.mode !== 'manual') packDiagram(packages, components, edges, layout);
 
   const wired = wireComponentDiagram(components, interfaces, edges);
 
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
+    layout,
     packages,
     components: wired.components,
     interfaces: wired.interfaces,
@@ -187,16 +210,57 @@ export function resolveComponentSpec(payload) {
   };
 }
 
+function boundsOfComps(comps) {
+  const x = Math.min(...comps.map((c) => c.x));
+  const y = Math.min(...comps.map((c) => c.y));
+  return {
+    x,
+    y,
+    w: Math.max(...comps.map((c) => c.x + c.w)) - x,
+    h: Math.max(...comps.map((c) => c.y + c.h)) - y,
+  };
+}
+
+/** Cara del rectángulo que mira al destino (o al origen). */
 function rankSides(from, to) {
   const dx = (to.x + to.w / 2) - (from.x + from.w / 2);
   const dy = (to.y + to.h / 2) - (from.y + from.h / 2);
   const lr = dx >= 0 ? ['right', 'left'] : ['left', 'right'];
   const tb = dy >= 0 ? ['bottom', 'top'] : ['top', 'bottom'];
-  if (Math.abs(dx) >= Math.abs(dy)) return [lr[0], tb[0], tb[1], lr[1]];
-  return [tb[0], lr[0], lr[1], tb[1]];
+  const sameColumn = Math.abs(dx) < Math.max(from.w, to.w) * 0.6;
+  if (sameColumn) return [tb[0], lr[0], lr[1], tb[1]];
+  return [lr[0], tb[0], tb[1], lr[1]];
 }
 
-function takeLeastLoaded(comp, ranked, loads, cap) {
+/**
+ * Lados del destino desde el más exterior del clúster: así las llegadas
+ * no se acumulan todas a la izquierda.
+ * El borde superior del paquete es el título: no aparcar el O ahí.
+ */
+function outerSides(comp, cluster, sibs = []) {
+  const cx = comp.x + comp.w / 2;
+  const cy = comp.y + comp.h / 2;
+  const dx = cx - (cluster.x + cluster.w / 2);
+  const dy = cy - (cluster.y + cluster.h / 2);
+  let ranked;
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    ranked = dx >= 0
+      ? ['right', 'top', 'bottom', 'left']
+      : ['left', 'top', 'bottom', 'right'];
+  } else {
+    ranked = dy >= 0
+      ? ['bottom', 'left', 'right', 'top']
+      : ['top', 'left', 'right', 'bottom'];
+  }
+  const topY = sibs.length ? Math.min(...sibs.map((c) => c.y)) : null;
+  if (topY != null && comp.y <= topY + 8) {
+    ranked = ranked.filter((s) => s !== 'top').concat(['top']);
+  }
+  return ranked;
+}
+
+/** Round-robin: cap 1 fuerza a rotar de lado antes de repetir. */
+function takeLeastLoaded(comp, ranked, loads, cap = 1) {
   for (const side of ranked) {
     if ((loads.get(`${comp.id}:${side}`) ?? 0) < cap) return side;
   }
@@ -301,15 +365,41 @@ function wireComponentDiagram(components, interfaces, edges) {
   }
 
   const loads = new Map();
-  const planned = [];
+  const pending = [];
   for (const e of outEdges) {
     const fromC = byId.get(e.from);
     const toC = byId.get(e.to);
     if (!fromC || !toC) continue;
     if (e.fromInterface || e.toInterface || knownIf.has(e.from) || knownIf.has(e.to)) continue;
-    const fs = takeLeastLoaded(fromC, rankSides(fromC, toC), loads, 2);
+    pending.push({ e, fromC, toC });
+  }
+  pending.sort((a, b) => {
+    const aa = Math.atan2(
+      (a.toC.y + a.toC.h / 2) - (a.fromC.y + a.fromC.h / 2),
+      (a.toC.x + a.toC.w / 2) - (a.fromC.x + a.fromC.w / 2),
+    );
+    const bb = Math.atan2(
+      (b.toC.y + b.toC.h / 2) - (b.fromC.y + b.fromC.h / 2),
+      (b.toC.x + b.toC.w / 2) - (b.fromC.x + b.fromC.w / 2),
+    );
+    return aa - bb || String(a.e.id).localeCompare(String(b.e.id));
+  });
+
+  const clusterOf = (comp) => {
+    const sibs = comp.package
+      ? components.filter((c) => c.package === comp.package)
+      : [comp];
+    return sibs.length > 1 ? boundsOfComps(sibs) : { x: comp.x, y: comp.y, w: comp.w, h: comp.h };
+  };
+
+  const planned = [];
+  for (const item of pending) {
+    const { e, fromC, toC } = item;
+    const fs = takeLeastLoaded(fromC, rankSides(fromC, toC), loads, 1);
     loads.set(`${fromC.id}:${fs}`, (loads.get(`${fromC.id}:${fs}`) ?? 0) + 1);
-    const ts = takeLeastLoaded(toC, rankSides(toC, fromC), loads, 2);
+    const ts = takeLeastLoaded(toC, outerSides(toC, clusterOf(toC), toC.package
+      ? components.filter((c) => c.package === toC.package)
+      : []), loads, 1);
     loads.set(`${toC.id}:${ts}`, (loads.get(`${toC.id}:${ts}`) ?? 0) + 1);
     planned.push({ e, fs, ts, fromC, toC });
   }
@@ -348,16 +438,18 @@ function wireComponentDiagram(components, interfaces, edges) {
     });
     const unoSolo = (countSlots.get(slotKey(fromC.id, fs)) || 1) === 1
       && (countSlots.get(slotKey(toC.id, ts)) || 1) === 1;
-    if (unoSolo) {
-      const horizontal = fs === 'top' || fs === 'bottom';
-      const desde = horizontal ? [fromC.x, fromC.x + fromC.w] : [fromC.y, fromC.y + fromC.h];
-      const hasta = horizontal ? [toC.x, toC.x + toC.w] : [toC.y, toC.y + toC.h];
+    const sameAxisTB = (fs === 'top' || fs === 'bottom') && (ts === 'top' || ts === 'bottom');
+    const sameAxisLR = (fs === 'left' || fs === 'right') && (ts === 'left' || ts === 'right');
+    if (unoSolo && (sameAxisTB || sameAxisLR)) {
+      const alongX = sameAxisTB;
+      const desde = alongX ? [fromC.x, fromC.x + fromC.w] : [fromC.y, fromC.y + fromC.h];
+      const hasta = alongX ? [toC.x, toC.x + toC.w] : [toC.y, toC.y + toC.h];
       const a = Math.max(desde[0], hasta[0]);
       const b = Math.min(desde[1], hasta[1]);
       if (b > a) {
         const centro = (a + b) / 2;
-        req.offset = centro - (horizontal ? fromC.x : fromC.y);
-        prv.offset = centro - (horizontal ? toC.x : toC.y);
+        req.offset = centro - (alongX ? fromC.x : fromC.y);
+        prv.offset = centro - (alongX ? toC.x : toC.y);
       }
     }
     e.fromInterface = req.id;
@@ -386,7 +478,62 @@ function interfaceAnchor(iface, comp) {
   }
 }
 
-/** Punto de la arista: borde exterior del O / abertura de la C, no el centro. */
+/** Punto de la arista: dorso de la C, alineado al centro del O. */
+function ifaceLineEnd(iface) {
+  const r = LOLLI_R;
+  if (iface.kind === 'required' && iface.docked) {
+    switch (iface.side) {
+      case 'right':  return { x: iface.cx - r, y: iface.cy };
+      case 'left':   return { x: iface.cx + r, y: iface.cy };
+      case 'bottom': return { x: iface.cx, y: iface.cy - r };
+      default:       return { x: iface.cx, y: iface.cy + r };
+    }
+  }
+  return ifaceOuterPoint(iface);
+}
+
+function componentSidePoint(comp, side, offset) {
+  switch (side) {
+    case 'top':    return { x: comp.x + offset, y: comp.y };
+    case 'bottom': return { x: comp.x + offset, y: comp.y + comp.h };
+    case 'left':   return { x: comp.x, y: comp.y + offset };
+    default:       return { x: comp.x + comp.w, y: comp.y + offset };
+  }
+}
+
+function oppositeDrawSide(side) {
+  if (side === 'left') return 'right';
+  if (side === 'right') return 'left';
+  if (side === 'top') return 'bottom';
+  return 'top';
+}
+
+/** C al dorso del O: centros a 2R+GAP. Abertura de C mira al O. */
+function dockRequiredToProvided(req, prv) {
+  const d = LOLLI_R + LOLLI_GAP;
+  req.attachSide = req.side;
+  req.docked = true;
+  req.side = oppositeDrawSide(prv.side);
+  switch (prv.side) {
+    case 'left':
+      req.cx = prv.cx - d;
+      req.cy = prv.cy;
+      break;
+    case 'right':
+      req.cx = prv.cx + d;
+      req.cy = prv.cy;
+      break;
+    case 'top':
+      req.cx = prv.cx;
+      req.cy = prv.cy - d;
+      break;
+    default:
+      req.cx = prv.cx;
+      req.cy = prv.cy + d;
+      break;
+  }
+}
+
 function ifaceOuterPoint(iface) {
   const r = LOLLI_R;
   switch (iface.side) {
@@ -485,65 +632,209 @@ export function computeComponentLayout(spec) {
   // (0, 0) y desaparecen del render sin error visible.
   const ifaceById = new Map(interfaces.map((i) => [i.id, i]));
 
-  const pointOf = (iface) => iface ? ifaceOuterPoint(iface) : null;
+  for (const e of spec.edges) {
+    if (!e.fromInterface || !e.toInterface) continue;
+    const req = ifaceById.get(e.fromInterface);
+    const prv = ifaceById.get(e.toInterface);
+    if (req?.kind === 'required' && prv?.kind === 'provided') {
+      dockRequiredToProvided(req, prv);
+    }
+  }
 
+  const pointOf = (iface) => (iface ? ifaceLineEnd(iface) : null);
+
+  assignEdgeHues(spec.edges);
   const edges = spec.edges.map((e) => {
+    const hue = e.hue;
+    const req = e.fromInterface ? ifaceById.get(e.fromInterface) : null;
+    const prv = e.toInterface ? ifaceById.get(e.toInterface) : null;
+    if (req) req.hue = hue;
+    if (prv) prv.hue = hue;
+
     let fromPt = null;
-    if (e.fromInterface && ifaceById.has(e.fromInterface)) {
-      fromPt = pointOf(ifaceById.get(e.fromInterface));
-    } else if (ifaceById.has(e.from)) {
-      fromPt = pointOf(ifaceById.get(e.from));
-    } else if (compById.has(e.from)) {
-      fromPt = nearestSidePoint(compById.get(e.from), e.toInterface
-        ? ifaceById.get(e.toInterface)
-        : (compById.get(e.to) ? nearestSidePoint(compById.get(e.to), compById.get(e.from), true) : null));
-    }
-
     let toPt = null;
-    if (e.toInterface && ifaceById.has(e.toInterface)) {
-      toPt = pointOf(ifaceById.get(e.toInterface));
-    } else if (ifaceById.has(e.to)) {
-      toPt = pointOf(ifaceById.get(e.to));
-    } else if (compById.has(e.to)) {
-      toPt = nearestSidePoint(compById.get(e.to), fromPt);
+    if (req?.docked && compById.has(e.from)) {
+      fromPt = componentSidePoint(compById.get(e.from), req.attachSide, req.offset);
+      toPt = ifaceLineEnd(req);
+    } else {
+      if (e.fromInterface && ifaceById.has(e.fromInterface)) {
+        fromPt = pointOf(ifaceById.get(e.fromInterface));
+      } else if (ifaceById.has(e.from)) {
+        fromPt = pointOf(ifaceById.get(e.from));
+      } else if (compById.has(e.from)) {
+        fromPt = nearestSidePoint(compById.get(e.from), e.toInterface
+          ? ifaceById.get(e.toInterface)
+          : (compById.get(e.to) ? nearestSidePoint(compById.get(e.to), compById.get(e.from), true) : null));
+      }
+
+      if (e.toInterface && ifaceById.has(e.toInterface)) {
+        toPt = pointOf(ifaceById.get(e.toInterface));
+      } else if (ifaceById.has(e.to)) {
+        toPt = pointOf(ifaceById.get(e.to));
+      } else if (compById.has(e.to)) {
+        toPt = nearestSidePoint(compById.get(e.to), fromPt);
+      }
     }
 
-    const obstaculos = shiftedComps.filter((c) => c.id !== e.from && c.id !== e.to);
     return {
       ...e,
-      hue: compById.get(e.from)?.hue,
+      hue,
       fromX: fromPt?.x ?? 0, fromY: fromPt?.y ?? 0,
       toX: toPt?.x ?? 0, toY: toPt?.y ?? 0,
-      path: fromPt && toPt ? buildEdgePath(fromPt, toPt, obstaculos) : '',
+      path: '',
+      _fromPt: fromPt,
+      _toPt: toPt,
+      _fromSide: req?.attachSide ?? req?.side,
+      _toSide: prv?.side,
     };
   });
 
-  for (const p of packages) {
-    const kids = components.filter((c) => c.package === p.id);
-    if (!kids.length) continue;
-    const bottom = Math.max(...kids.map((c) => c.y + c.h));
-    p.h = Math.max(48, bottom - p.y + 16);
+  const ranked = edges
+    .map((e, i) => ({ e, i, mid: (e.fromY + e.toY) / 2 }))
+    .sort((a, b) => a.mid - b.mid || a.i - b.i);
+  const usedSegs = [];
+  const sourceSet = new Set(spec.layout?.sources ?? []);
+  const titleBoxes = packages.map((p) => packageTitleBox(p, shiftedComps));
+  const titleObst = titleBoxes.map((tb, i) => {
+    const kids = shiftedComps.filter((c) => c.package === packages[i].id);
+    const yClip = kids.length ? Math.min(...kids.map((c) => c.y)) - 8 : undefined;
+    return inflateTitleObstacle(tb, TITLE_CLEARANCE, yClip);
+  });
+  const frame = {
+    x: Math.min(...shiftedComps.map((c) => c.x)),
+    y: Math.min(...shiftedComps.map((c) => c.y)),
+    w: Math.max(...shiftedComps.map((c) => c.x + c.w)) - Math.min(...shiftedComps.map((c) => c.x)),
+    h: Math.max(...shiftedComps.map((c) => c.y + c.h)) - Math.min(...shiftedComps.map((c) => c.y)),
+  };
+  ranked.forEach((item, rank) => {
+    const e = item.e;
+    const fromPt = e._fromPt;
+    const toPt = e._toPt;
+    const fromSide = e._fromSide;
+    const toSide = e._toSide;
+    delete e._fromPt;
+    delete e._toPt;
+    delete e._fromSide;
+    delete e._toSide;
+    if (!fromPt || !toPt) return;
+    const obstaculos = [
+      ...shiftedComps.filter((c) => c.id !== e.from && c.id !== e.to),
+      ...titleObst,
+    ];
+    const fromBox = compById.get(e.from);
+    const toBox = compById.get(e.to);
+    const wrapBoxes = obstaculos.filter((c) => !sourceSet.has(c.id));
+    e.path = routeAvoidingBoxes(fromPt, toPt, obstaculos, rank, ranked.length, {
+      fromSide, toSide, fromBox, toBox, clearance: EDGE_CLEARANCE, usedSegs, frame, wrapBoxes,
+    }) ?? '';
+    const pts = parsePathPoints(e.path);
+    if (pts.length) usedSegs.push(...segsFromPath(pts));
+  });
+
+  const mustRelax = edges.some((e) => {
+    const pts = parsePathPoints(e.path);
+    return !e.path || pts.length < 2 || pathHasDiagonal(pts)
+      || pathIllegal(pts, [...shiftedComps, ...titleObst], e.from, e.to, EDGE_CLEARANCE);
+  });
+  const relaxN = spec._relax ?? 0;
+  if (mustRelax && relaxN < 3) {
+    spec._relax = relaxN + 1;
+    const b = spec._relax;
+    const gaps = resolvePackingGaps(spec.layout ?? {});
+    packDiagram(spec.packages, spec.components, spec.edges, {
+      ...spec.layout,
+      colGutter: gaps.colGutter + b * 8,
+      pkgCorridor: gaps.pkgCorridor + b * 10,
+      sourceGap: gaps.sourceGap + b * 8,
+      rowGap: gaps.rowGap + b * 8,
+    });
+    return computeComponentLayout(spec);
   }
 
-  let maxX = 0;
-  let maxY = 0;
-  for (const p of packages) { maxX = Math.max(maxX, p.x + p.w + 4); maxY = Math.max(maxY, p.y + p.h + 4); }
-  for (const c of components) { maxX = Math.max(maxX, c.x + c.w); maxY = Math.max(maxY, c.y + c.h); }
-  for (const i of interfaces) {
-    maxX = Math.max(maxX, i.cx + LOLLI_R + 8);
-    maxY = Math.max(maxY, i.cy + LOLLI_R + 8);
-    if (i.name) {
-      const lw = (i.name.length + 4) * 6;
-      if (i.side === 'right') maxX = Math.max(maxX, i.cx + LOLLI_R + lw);
-      if (i.side === 'left') { /* ya entra por ox */ }
-      if (i.side === 'bottom') maxY = Math.max(maxY, i.cy + LOLLI_R + 18);
-      if (i.side === 'top') { /* ya entra por oy */ }
+  layoutPackageOutlines(packages, components, { pad: 14, tabH: TAB_H + 4 });
+  for (const p of packages) p.titleBox = packageTitleBox(p, components);
+
+  const hit = (box, x, y) => {
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+    box.minX = Math.min(box.minX, x);
+    box.minY = Math.min(box.minY, y);
+    box.maxX = Math.max(box.maxX, x);
+    box.maxY = Math.max(box.maxY, y);
+  };
+  const extent = () => {
+    const box = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
+    for (const p of packages) {
+      hit(box, p.x, p.y);
+      hit(box, p.x + p.w + 4, p.y + p.h + 4);
+      for (const q of p.outline ?? []) hit(box, q.x, q.y);
+      if (p.titleBox) {
+        hit(box, p.titleBox.x, p.titleBox.y);
+        hit(box, p.titleBox.x + p.titleBox.w, p.titleBox.y + p.titleBox.h);
+      }
     }
+    for (const c of components) {
+      hit(box, c.x, c.y);
+      hit(box, c.x + c.w, c.y + c.h);
+    }
+    for (const i of interfaces) {
+      hit(box, i.cx - LOLLI_R - 8, i.cy - LOLLI_R - 8);
+      hit(box, i.cx + LOLLI_R + 8, i.cy + LOLLI_R + 8);
+      if (i.name) {
+        const lw = (i.name.length + 4) * 6;
+        if (i.side === 'right') hit(box, i.cx + LOLLI_R + lw, i.cy);
+        if (i.side === 'bottom') hit(box, i.cx, i.cy + LOLLI_R + 18);
+      }
+    }
+    for (const e of edges) {
+      hit(box, e.fromX, e.fromY);
+      hit(box, e.toX, e.toY);
+      for (const pt of parsePathPoints(e.path)) hit(box, pt.x, pt.y);
+    }
+    return box;
+  };
+  let box = extent();
+  const dx = Number.isFinite(box.minX) ? Math.max(0, PAD - box.minX) : 0;
+  const dy = Number.isFinite(box.minY) ? Math.max(0, titleH + subtitleH + PAD - box.minY) : 0;
+  if (dx || dy) {
+    for (const p of packages) {
+      p.x += dx;
+      p.y += dy;
+      for (const q of p.outline ?? []) {
+        q.x += dx;
+        q.y += dy;
+      }
+    }
+    for (const c of components) {
+      c.x += dx;
+      c.y += dy;
+      if (c.stereoY != null) c.stereoY += dy;
+      if (c.labelY != null) c.labelY += dy;
+      if (c.itemsY != null) c.itemsY += dy;
+      for (const b of c.itemBubbles ?? []) {
+        b.x += dx;
+        b.y += dy;
+      }
+    }
+    for (const i of interfaces) {
+      i.cx += dx;
+      i.cy += dy;
+    }
+    for (const e of edges) {
+      e.fromX += dx;
+      e.fromY += dy;
+      e.toX += dx;
+      e.toY += dy;
+      const pts = parsePathPoints(e.path);
+      if (pts.length) {
+        e.path = `M${pts[0].x + dx},${pts[0].y + dy} ` + pts.slice(1).map((pt) => `L${pt.x + dx},${pt.y + dy}`).join(' ');
+      }
+    }
+    for (const p of packages) p.titleBox = packageTitleBox(p, components);
+    box = extent();
   }
-  for (const e of edges) {
-    maxX = Math.max(maxX, e.fromX, e.toX);
-    maxY = Math.max(maxY, e.fromY, e.toY);
-  }
+  for (const p of packages) p.titleBox = packageTitleBox(p, components);
+  const maxX = Number.isFinite(box.maxX) ? box.maxX : 0;
+  const maxY = Number.isFinite(box.maxY) ? box.maxY : 0;
 
   const width = Math.max(640, maxX + PAD, diagramHeaderWidth(spec.title, spec.subtitle));
   const height = Math.max(360, maxY + PAD);
@@ -560,7 +851,15 @@ export function computeComponentLayout(spec) {
     interfaces,
     edges,
   };
-  applyEdgeActorLayout(layout, components.map((c) => ({ x: c.x, y: c.y, w: c.w, h: c.h })));
+  applyEdgeActorLayout(layout, [
+    ...components.map((c) => ({ x: c.x, y: c.y, w: c.w, h: c.h })),
+    ...packages.map((p) => {
+      if (!p.titleBox) return null;
+      const kids = components.filter((c) => c.package === p.id);
+      const yClip = kids.length ? Math.min(...kids.map((c) => c.y)) - 8 : undefined;
+      return inflateTitleObstacle(p.titleBox, TITLE_CLEARANCE, yClip);
+    }).filter(Boolean),
+  ], { glue: true, spread: false });
   return layout;
 }
 
@@ -581,89 +880,45 @@ function nearestSidePoint(comp, target, reverse = false) {
   return componentAnchorPoint(comp, dy >= 0 ? 'bottom' : 'top');
 }
 
-/** ¿El segmento recto (horizontal o vertical) corta la caja? */
-function segmentoCortaCaja(x1, y1, x2, y2, c) {
-  const M = 6; // margen: rozar el borde ya se lee como "la atraviesa"
-  const [xa, xb] = x1 <= x2 ? [x1, x2] : [x2, x1];
-  const [ya, yb] = y1 <= y2 ? [y1, y2] : [y2, y1];
-  return xa <= c.x + c.w + M && xb >= c.x - M && ya <= c.y + c.h + M && yb >= c.y - M;
+export function packageTitleText(p) {
+  return p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : String(p.name ?? '');
 }
 
-/** ¿Alguna caja ajena se cruza en la polilínea? */
-function rutaChoca(puntos, obstaculos) {
-  for (let i = 0; i < puntos.length - 1; i++) {
-    const [a, b] = [puntos[i], puntos[i + 1]];
-    for (const c of obstaculos) {
-      if (segmentoCortaCaja(a.x, a.y, b.x, b.y, c)) return true;
-    }
-  }
-  return false;
+/** Ancho de tinta del título (cursiva 11px; 6.2 recortaba y las aristas lo cruzaban). */
+export function packageTitleInkWidth(p) {
+  return Math.max(TAB_W, packageTitleText(p).length * 7.4 + 24);
 }
 
-const comoPath = (pts) => `M${pts[0].x},${pts[0].y} ` + pts.slice(1).map((p) => `L${p.x},${p.y}`).join(' ');
+const OUTLINE_PAD = 14;
+const OUTLINE_TAB = TAB_H + 4;
 
-/**
- * Traza una polilínea ortogonal que no atraviese componentes ajenos.
- *
- * Antes salía siempre por el punto medio en X. En un layout de tres columnas
- * eso basta casi siempre, pero cuando origen y destino comparten fila y hay
- * una caja en medio —`Azure Functions → Canal SignalR` con `payload` entre
- * los dos— la recta pasaba por encima de esa caja y el diagrama mostraba una
- * conexión que no existe.
- *
- * No es un router A*: se prueban unas pocas rutas candidatas en orden de
- * preferencia y gana la primera limpia. Con diagramas de cuadrícula —que es
- * para lo que está pensado este motor— sobra, y si ninguna sirve se cae a la
- * de siempre en vez de inventar un trazado peor.
- */
-function buildEdgePath(from, to, obstaculos = []) {
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const recto = [from, to];
-  if (Math.abs(dx) < 1 || Math.abs(dy) < 1) {
-    if (!rutaChoca(recto, obstaculos)) return comoPath(recto);
-    // Comparten fila (o columna) con algo en medio: se rodea por un carril
-    // desplazado, por arriba o por abajo, el que quede libre antes.
-    const alineadoEnY = Math.abs(dy) < 1;
-    for (const d of [-46, 46, -78, 78, -112, 112]) {
-      const ruta = alineadoEnY
-        ? [from, { x: from.x + Math.sign(dx || 1) * 26, y: from.y },
-           { x: from.x + Math.sign(dx || 1) * 26, y: from.y + d },
-           { x: to.x - Math.sign(dx || 1) * 26, y: to.y + d },
-           { x: to.x - Math.sign(dx || 1) * 26, y: to.y }, to]
-        : [from, { x: from.x + d, y: from.y },
-           { x: from.x + d, y: to.y }, to];
-      if (!rutaChoca(ruta, obstaculos)) return comoPath(ruta);
-    }
-    return comoPath(recto);
+/** Caja del rótulo = pestaña del paquete. Las aristas la rodean. */
+export function packageTitleBox(p, components = []) {
+  const w = packageTitleInkWidth(p);
+  const h = OUTLINE_TAB + 6;
+  const kids = components.filter((c) => c.package === p.id);
+  if (!kids.length) {
+    return { id: `${p.id}::title`, x: p.x, y: p.y, w, h };
   }
-
-  const candidatas = [
-    // L por el punto medio en X (la de siempre).
-    [from, { x: (from.x + to.x) / 2, y: from.y }, { x: (from.x + to.x) / 2, y: to.y }, to],
-    // L por el punto medio en Y.
-    [from, { x: from.x, y: (from.y + to.y) / 2 }, { x: to.x, y: (from.y + to.y) / 2 }, to],
-    // Salir del origen y girar pegado al destino, y su simétrica.
-    [from, { x: to.x, y: from.y }, to],
-    [from, { x: from.x, y: to.y }, to],
-  ];
-  for (const ruta of candidatas) {
-    if (!rutaChoca(ruta, obstaculos)) return comoPath(ruta);
-  }
-  return comoPath(candidatas[0]);
+  const x0 = Math.min(...kids.map((c) => c.x));
+  const y0 = Math.min(...kids.map((c) => c.y));
+  return {
+    id: `${p.id}::title`,
+    x: x0 - OUTLINE_PAD,
+    y: y0 - OUTLINE_PAD - OUTLINE_TAB,
+    w,
+    h,
+  };
 }
 
 /**
  * Ancho de la pestaña del paquete.
  *
  * Va con el nombre y no fijo: `min(56, w*0.4)` recortaba «Servicio» y
- * «Consulta» a media palabra, y el diagrama pasaba a identificar sus paquetes
- * por un rótulo cortado. El techo sigue existiendo (75% del cuerpo) para que
- * la pestaña no se coma la caja entera.
+ * «Consulta» a media palabra. El título largo es obstáculo de aristas.
  */
 export function packageTabWidth(p) {
-  const texto = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : String(p.name ?? '');
-  return Math.max(TAB_W, Math.min(texto.length * 6.2 + 18, p.w * 0.75));
+  return packageTitleInkWidth(p);
 }
 
 const MAX_LINEAS = 3;
@@ -703,17 +958,11 @@ export function wrapLabel(texto, ancho, fontPx = 11.5, maxLineas = MAX_LINEAS) {
   return cortadas;
 }
 
-/** Forma UML de paquete: rectángulo grande con pestaña arriba a la izquierda. */
+/** Forma UML de paquete: unión ortogonal de hijos (ángulos rectos) o rectángulo. */
 export function packageShapePath(p) {
+  if (p.outline?.length >= 4) return outlineToPath(p.outline);
   const { x, y, w, h } = p;
   const tabW = packageTabWidth(p);
   const tabH = TAB_H;
-  return `M${x + tabW},${y}
-          L${x + w},${y} Q${x + w + 4},${y} ${x + w + 4},${y + 4}
-          L${x + w + 4},${y + h} Q${x + w + 4},${y + h + 4} ${x + w},${y + h + 4}
-          L${x + 4},${y + h + 4} Q${x},${y + h + 4} ${x},${y + h}
-          L${x},${y + tabH}
-          L${x + tabW},${y + tabH}
-          Q${x + tabW + 4},${y + tabH} ${x + tabW + 4},${y + tabH - 4}
-          L${x + tabW + 4},${y + 4} Q${x + tabW + 4},${y} ${x + tabW},${y} Z`;
+  return `M${x + tabW},${y} L${x + w},${y} L${x + w},${y + h} L${x},${y + h} L${x},${y + tabH} L${x + tabW},${y + tabH} Z`;
 }
