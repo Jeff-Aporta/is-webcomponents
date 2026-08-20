@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radar Chart · IS Web Components</title>
+  <meta name="description" content="Documentación de is-radar-chart.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/data-viz/is-radar-chart.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-radar-chart");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-radar-chart" data-category="data-viz">
+    <h1>Radar Chart</h1>
+    <section id="intro">
+<h2>Radar Chart</h2>
+<p class="lede"><code class="code">&lt;is-radar-chart&gt;</code></p>
+<div class="demo"><p class="lede">
+          Compara varias variables a la vez sobre una rejilla radial. Ideal para perfiles
+          (habilidades, atributos de producto, métricas de rendimiento).
+        </p></div>
+<div class="demo"><is-radar-chart open-on-click label="Employee Skills">
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Communication", "Technical", "Leadership", "Creativity", "Teamwork", "Problem Solving"],
+                  "datasets": [
+                    {
+                      "label": "Alice",
+                      "data": [85, 92, 70, 88, 95, 78],
+                      "fill": true,
+                      "backgroundColor": "color-mix(in srgb, crimson 38%, transparent)",
+                      "borderColor": "crimson"
+                    },
+                    {
+                      "label": "Bob",
+                      "data": [72, 78, 90, 65, 80, 88],
+                      "fill": true,
+                      "backgroundColor": "color-mix(in srgb, #339af0 38%, transparent)",
+                      "borderColor": "#339af0"
+                    }
+                  ]
+                }
+              }
+            </script>
+          </is-radar-chart></div>
+</section>
+<section id="json">
+<h2>Datos con JSON</h2>
+<p class="lede">Coloca un <code class="code">&lt;script type="application/json"&gt;</code> hijo.
+          Cada valor de <code class="code">data</code> mapea a una etiqueta del eje radial
+          (formato Chart.js).</p>
+<div class="demo"><is-radar-chart open-on-click label="Feature Comparison">
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Speed", "Reliability", "Ease of Use", "Features", "Support"],
+                  "datasets": [{ "label": "Product A", "data": [85, 90, 75, 80, 70], "fill": true }]
+                }
+              }
+            </script>
+          </is-radar-chart></div>
+<pre><code>&lt;is-radar-chart label=&quot;Feature Comparison&quot;&gt;
+  &lt;script type=&quot;application/json&quot;&gt;
+    {
+      &quot;data&quot;: {
+        &quot;labels&quot;: [&quot;Speed&quot;, &quot;Reliability&quot;, &quot;Ease of Use&quot;, &quot;Features&quot;, &quot;Support&quot;],
+        &quot;datasets&quot;: [{ &quot;label&quot;: &quot;Product A&quot;, &quot;data&quot;: [85, 90, 75, 80, 70], &quot;fill&quot;: true }]
+      }
+    }
+  &lt;/script&gt;
+&lt;/is-radar-chart&gt;</code></pre>
+</section>
+<section id="js">
+<h2>Datos con JavaScript</h2>
+<p class="lede">Asigna <code class="code">config</code>; el chart se re-renderiza solo.</p>
+<div class="demo"><is-radar-chart open-on-click id="radarJs" label="Feature Comparison"></is-radar-chart></div>
+<pre><code>const chart = document.querySelector('#radarJs');
+chart.config = {
+  data: {
+    labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support'],
+    datasets: [{ label: 'Product A', data: [85, 90, 75, 80, 70], fill: true }],
+  },
+};</code></pre>
+</section>
+<section id="multi">
+<h2>Múltiples datasets</h2>
+<p class="lede">Superpone perfiles para compararlos directamente.</p>
+<div class="demo"><is-radar-chart open-on-click id="radarMulti" label="Product Comparison"></is-radar-chart></div>
+<pre><code>chart.config = {
+  data: {
+    labels: ['Speed', 'Reliability', 'Ease of Use', 'Features', 'Support', 'Value'],
+    datasets: [
+      { label: 'Nimbus', data: [85, 90, 75, 80, 70, 88], fill: true },
+      { label: 'Atlas', data: [70, 80, 90, 85, 92, 75], fill: true },
+    ],
+  },
+};</code></pre>
+</section>
+<section id="options">
+<h2>Leyenda y features</h2>
+<div class="demo"><is-radar-chart open-on-click label="Clases" legend-position="end">
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Strength", "Agility", "Intelligence", "Wisdom", "Charisma"],
+                  "datasets": [
+                    { "label": "Warrior", "data": [95, 70, 50, 60, 65], "fill": true },
+                    { "label": "Mage", "data": [40, 55, 95, 90, 70], "fill": true }
+                  ]
+                }
+              }
+            </script>
+          </is-radar-chart></div>
+<pre><code>&lt;is-radar-chart legend-position=&quot;end&quot;&gt;…&lt;/is-radar-chart&gt;
+&lt;is-radar-chart without-legend without-animation&gt;…&lt;/is-radar-chart&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
