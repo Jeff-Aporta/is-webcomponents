@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrama de secuencia · IS Web Components</title>
+  <meta name="description" content="Documentación de is-sequence-diagram.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-sequence-diagram.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-diagram-lightbox", "is-sequence-diagram");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-sequence-diagram" data-category="diagrams">
+    <h1>Diagrama de secuencia</h1>
+    <section id="intro">
+<p class="lede">Diagrama de secuencia en SVG, sin Mermaid. La configuración es un JSON
+          con actores, mensajes y grupos; el layout (posiciones, ruteo ortogonal
+          de las flechas y colocación de etiquetas) se calcula solo.</p>
+<div class="demo"><p>
+          Haz clic en el diagrama para abrir el visor a pantalla completa, con
+          controles de la animación tortuga, tooltips por paso y leyenda de
+          grupos que puedes encender y apagar.
+        </p></div>
+<div class="demo"><is-sequence-diagram open-on-click>
+            <script type="application/json">
+              { "preset": "tk1437191" }
+            </script>
+          </is-sequence-diagram></div>
+</section>
+<section id="json">
+<h2>json</h2>
+<div class="demo"><h3>Configuración por JSON</h3></div>
+<div class="demo"><p>
+          Mismo esquema del proyecto original. <code class="code">actors</code> define
+          las lifelines, <code class="code">messages</code> los pasos y
+          <code class="code">groups</code> el color por tono HSL (0–360).
+        </p></div>
+<div class="demo"><is-sequence-diagram open-on-click>
+            <script type="application/json">
+              {
+                "sequence": {
+                  "title": "Facturación electrónica",
+                  "subtitle": "emisión · validación DIAN · acuse",
+                  "groups": [
+                    { "id": "g-emision", "name": "Emisión", "hue": 239 },
+                    { "id": "g-dian", "name": "Validación DIAN", "hue": 199 },
+                    { "id": "g-acuse", "name": "Acuse", "hue": 38 }
+                  ],
+                  "actors": [
+                    { "id": "E", "label": "{{iconify: {icon: \"mdi:store\", hue: 239}}} Empresa", "kind": "actor" },
+                    { "id": "C", "label": "{{iconify: {icon: \"mdi:file-document-outline\", hue: 199}}} ContaPyme", "kind": "participant" },
+                    { "id": "D", "label": "{{iconify: {icon: \"mdi:bank-outline\", hue: 38}}} DIAN", "kind": "participant" }
+                  ],
+                  "messages": [
+                    { "id": "s1", "group": "g-emision", "from": "E", "to": "C", "label": "Registra la venta", "step": 1,
+                      "log": "La empresa registra la venta", "desc": "El documento se arma con los datos del tercero y los ítems facturados." },
+                    { "id": "s2", "group": "g-emision", "from": "C", "to": "C", "kind": "self", "label": "Genera XML · firma", "step": 2,
+                      "log": "Genera el XML y lo firma", "desc": "Se construye el **XML UBL** y se aplica la **firma digital** del emisor." },
+                    { "id": "s3", "group": "g-dian", "from": "C", "to": "D", "label": "Envía documento", "step": 3,
+                      "log": "Envía el documento a la DIAN" },
+                    { "id": "s4", "group": "g-dian", "from": "D", "to": "C", "kind": "async", "label": "CUFE · estado", "step": 4,
+                      "log": "La DIAN responde con CUFE y estado" },
+                    { "id": "s5", "group": "g-acuse", "from": "C", "to": "E", "kind": "async", "label": "Factura validada", "step": 5,
+                      "log": "La factura queda validada" }
+                  ]
+                }
+              }
+            </script>
+          </is-sequence-diagram></div>
+</section>
+<section id="alt">
+<h2>alt</h2>
+<div class="demo"><h3>Ramas <code class="code">alt</code></h3></div>
+<div class="demo"><p>
+          Con <code class="code">alt.branches</code> el diagrama encierra los pasos
+          condicionales en una caja punteada y rotula cada rama.
+        </p></div>
+<div class="demo"><is-sequence-diagram open-on-click>
+            <script type="application/json">
+              {
+                "sequence": {
+                  "title": "Resolución del modelo por turno",
+                  "subtitle": "Clasificación operativa → MODELO en BD → respuesta final",
+                  "groups": [
+                    { "id": "g-clasif", "name": "Clasificación", "hue": 215 },
+                    { "id": "g-modelo", "name": "Resolución de modelo", "hue": 210 },
+                    { "id": "g-branch1", "name": "MODELO en fila", "hue": 160 },
+                    { "id": "g-branch2", "name": "Fallback", "hue": 38 },
+                    { "id": "g-epilogo", "name": "Registro", "hue": 280 }
+                  ],
+                  "actors": [
+                    { "id": "U", "label": "Usuario", "kind": "actor", "icon": "mdi:account", "hue": 215 },
+                    { "id": "P", "label": "PatyIA", "kind": "participant", "icon": "mdi:robot-outline", "hue": 210 },
+                    { "id": "O", "label": "OpenAI", "kind": "participant", "icon": "simple-icons:openai", "hue": 160 }
+                  ],
+                  "preamble": [
+                    { "id": "m1", "from": "U", "to": "P", "label": "Mensaje del usuario", "step": 1, "group": "g-clasif" },
+                    { "id": "m2", "from": "P", "to": "O", "label": "clasificar · PR_TIPO_CONSULTAS · gpt-4.1-nano", "step": 2, "group": "g-clasif" },
+                    { "id": "m3", "from": "O", "to": "P", "label": "tipo_consulta (JSON)", "kind": "async", "step": 3, "group": "g-clasif" },
+                    { "id": "m4", "from": "P", "to": "P", "label": "resolverPorTipo · MODELO en BD", "kind": "self", "step": 4, "group": "g-modelo" }
+                  ],
+                  "alt": {
+                    "branches": [
+                      { "condition": "MODELO en fila",
+                        "messages": [{ "id": "m5", "from": "P", "to": "O", "label": "responses.create(MODELO)", "step": 5, "group": "g-branch1" }] },
+                      { "condition": "fallback system-prompts",
+                        "messages": [{ "id": "m6", "from": "P", "to": "O", "label": "responses.create(modeloConversacion)", "step": 6, "group": "g-branch2" }] }
+                    ]
+                  },
+                  "epilogue": [
+                    { "id": "m7", "from": "O", "to": "P", "label": "respuesta", "kind": "async", "step": 7, "group": "g-epilogo" },
+                    { "id": "m8", "from": "P", "to": "P", "label": "log turno · modelo + tokens + costo", "kind": "self", "step": 8, "group": "g-epilogo" }
+                  ]
+                }
+              }
+            </script>
+          </is-sequence-diagram></div>
+</section>
+<section id="viewer">
+<h2>viewer</h2>
+<div class="demo"><h3>Visor a pantalla completa</h3></div>
+<div class="demo"><p>
+          El visor se abre solo al hacer clic. También puedes montarlo tú mismo
+          con <code class="code">&lt;is-diagram-lightbox&gt;</code> y controlarlo por
+          propiedades.
+        </p>
+        <p>
+          <button type="button" id="openViewer" class="demo-btn">Abrir el visor</button>
+        </p>
+        <is-diagram-lightbox id="lb" kind="sequence"></is-diagram-lightbox></div>
+</section>
+<section id="api">
+<h2>api</h2>
+<div class="demo"><h3>Referencia</h3></div>
+<div class="demo"><h4>Atributos</h4></div>
+<div class="demo"><h4>Propiedades</h4></div>
+<div class="demo"><h4>Eventos</h4></div>
+<div class="demo"><h4>Esquema del JSON</h4></div>
+</section>
+  </article>
+</body>
+</html>
