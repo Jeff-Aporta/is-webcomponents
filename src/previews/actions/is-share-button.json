@@ -1,0 +1,31 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-share-button",
+  "category": "actions",
+  "title": "<is-share-button>",
+  "titleHtml": true,
+  "description": "Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.",
+  "storageKey": "docs-is-share-button",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-share-button>",
+      "lede": "Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-share-button share-title=\"IS Web Components\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></is-share-button>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-share-button share-title=\"IS Web Components\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></is-share-button>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
+        }
+      ]
+    }
+  ]
+}
