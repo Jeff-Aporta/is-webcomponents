@@ -1,0 +1,11 @@
+:host {
+  display: grid;
+  gap: 0.35em;
+  font: inherit;
+  color: inherit;
+}
+
+:host([listening]) .listen { color: var(--is-color-danger, #e03131); }
+
+.bar { display: flex; gap: 0.15em; }
+.out { margin: 0; min-height: 1.2em; color: var(--is-text-soft, inherit); }

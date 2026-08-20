@@ -1,0 +1,31 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-speech",
+  "category": "media",
+  "title": "<is-speech>",
+  "titleHtml": true,
+  "description": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.",
+  "storageKey": "docs-is-speech",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-speech>",
+      "lede": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></is-speech>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></is-speech>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
+        }
+      ]
+    }
+  ]
+}
