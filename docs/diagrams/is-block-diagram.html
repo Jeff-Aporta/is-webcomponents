@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrama de bloques · IS Web Components</title>
+  <meta name="description" content="Documentación de is-block-diagram.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-block-diagram.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-block-diagram");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-block-diagram" data-category="diagrams">
+    <h1>Diagrama de bloques</h1>
+    <section id="intro">
+<p class="lede">Diagrama de bloques en SVG, sin Mermaid. A diferencia de
+          <code>&lt;is-flowchart&gt;</code>, los bloques no se organizan en capas: se
+          ubican en una rejilla de <code>columns</code> columnas fijas, fluyendo de
+          izquierda a derecha y bajando de fila cuando no caben.</p>
+<div class="demo"><p>
+          Las flechas entre bloques siguen ruteando con el mismo A* sobre la rejilla
+          de costos que el resto de los diagramas, así que rodean las cajas en vez
+          de atravesarlas.
+        </p></div>
+<div class="demo"><is-block-diagram open-on-click>
+            <script type="application/json">
+              {
+                "blockDiagram": {
+                  "title": "Arquitectura de la plataforma",
+                  "subtitle": "Tres capas: presentación, integración y persistencia",
+                  "columns": 3,
+                  "groups": [
+                    { "id": "g1", "name": "Frontend", "hue": 239 },
+                    { "id": "g2", "name": "Backend", "hue": 199 },
+                    { "id": "g3", "name": "Datos", "hue": 160 }
+                  ],
+                  "blocks": [
+                    { "id": "ui", "label": "Portal web", "group": "g1", "span": 2, "icon": "mdi:monitor" },
+                    { "id": "app", "label": "App móvil", "group": "g1", "icon": "mdi:cellphone" },
+                    { "id": "api", "label": "API", "group": "g2", "span": 3, "shape": "round", "icon": "mdi:api" },
+                    { "id": "db", "label": "Base de datos", "group": "g3", "icon": "mdi:database" },
+                    { "id": "cache", "label": "Caché", "group": "g3", "icon": "mdi:memory" },
+                    { "id": "cola", "label": "Cola de eventos", "group": "g3", "icon": "mdi:tray-full" }
+                  ],
+                  "edges": [
+                    { "from": "ui", "to": "api", "label": "HTTPS" },
+                    { "from": "app", "to": "api", "label": "HTTPS" },
+                    { "from": "api", "to": "db" },
+                    { "from": "api", "to": "cache" },
+                    { "from": "api", "to": "cola" }
+                  ]
+                }
+              }
+            </script>
+          </is-block-diagram></div>
+</section>
+<section id="span">
+<h2>Span y formas</h2>
+<div class="demo"><p>
+          <code>span</code> hace que un bloque ocupe N columnas (por defecto 1) y
+          <code>shape</code> admite <code>rect</code> (por defecto) o <code>round</code>.
+        </p></div>
+<div class="demo"><is-block-diagram open-on-click>
+            <script type="application/json">
+              {
+                "blockDiagram": {
+                  "columns": 4,
+                  "blocks": [
+                    { "id": "a", "label": "1 col", "icon": "mdi:cube-outline" },
+                    { "id": "b", "label": "1 col", "shape": "round", "icon": "mdi:circle-outline" },
+                    { "id": "c", "label": "2 columnas", "span": 2, "icon": "mdi:rectangle-outline" }
+                  ]
+                }
+              }
+            </script>
+          </is-block-diagram></div>
+</section>
+<section id="api">
+<h2>Referencia</h2>
+<div class="demo"><h3>Atributos</h3></div>
+<div class="demo"><h3>Esquema del JSON</h3></div>
+<div class="demo"><h3>Propiedades y eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
