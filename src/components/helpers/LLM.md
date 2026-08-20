@@ -20,6 +20,8 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-format-number>` | [format-number.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-number.md) | Formato de número (alias) |
 | `<is-format-bytes>` | [format-bytes.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format-bytes.md) | Formato de bytes (alias) |
 | `<is-observer>` | [observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/observer.md) | Observer unificado (intersection/mutation/resize) |
+| `<is-wake-lock>` | [wake-lock.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/wake-lock.md) | Screen Wake Lock (pantalla encendida) |
+| `<is-offscreen-canvas>` | [offscreen-canvas.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/offscreen-canvas.md) | OffscreenCanvas + Worker opcional |
 | `<is-intersection-observer>` | [intersection-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/intersection-observer.md) | Observador de intersección (alias) |
 | `<is-mutation-observer>` | [mutation-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/mutation-observer.md) | Observador de mutación (alias) |
 | `<is-resize-observer>` | [resize-observer.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/resize-observer.md) | Resize Observer (alias) |

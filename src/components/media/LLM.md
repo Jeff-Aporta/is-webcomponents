@@ -2,8 +2,8 @@
 
 ## Propósito
 
-Iconos, identidad visual, reproducción de video, edición de imagen y
-generación de códigos (barras y QR).
+Iconos, identidad visual, reproducción de video, edición de imagen,
+generación de códigos (barras y QR) y APIs nativas de captura (voz, cámara, escáner).
 
 ## Qué componente elegir
 
@@ -16,8 +16,11 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-icon>` | [icon.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/icon.md) | Icon |
 | `<is-avatar>` | [avatar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/avatar.md) | Avatar |
 | `<is-video>` | [video.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/video.md) | Video |
+| `<is-speech>` | [speech.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/speech.md) | Dictado y TTS (Web Speech) |
+| `<is-media-recorder>` | [media-recorder.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/media-recorder.md) | Cámara / mic / pantalla + MediaRecorder |
 | `<is-video-playlist>` | [video-playlist.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/video-playlist.md) | Video Playlist |
 | `<is-barcode>` | [barcode.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/barcode.md) | Códigos de barras EAN13 / Code128 en SVG |
+| `<is-barcode-scanner>` | [barcode-scanner.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/barcode-scanner.md) | Escaneo QR/EAN (BarcodeDetector) |
 | `<is-qrcode>` | [qrcode.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/qrcode.md) | Códigos QR en SVG |
 | `<is-image-editor>` | [image-editor.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/image-editor.md) | Recorte, zoom y rotación de imagen |
 

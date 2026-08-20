@@ -31,6 +31,10 @@ export default {
     "json": "./actions/is-copy-button.json",
     "category": "actions"
   },
+  "is-share-button": {
+    "json": "./actions/is-share-button.json",
+    "category": "actions"
+  },
   "is-dropdown-item": {
     "json": "./actions/is-dropdown-item.json",
     "category": "actions"
@@ -507,6 +511,14 @@ export default {
     "behavior": "./behaviors/is-observer.js",
     "category": "helpers"
   },
+  "is-wake-lock": {
+    "json": "./helpers/is-wake-lock.json",
+    "category": "helpers"
+  },
+  "is-offscreen-canvas": {
+    "json": "./helpers/is-offscreen-canvas.json",
+    "category": "helpers"
+  },
   "is-popover": {
     "json": "./helpers/is-popover.json",
     "category": "helpers"
@@ -647,6 +659,10 @@ export default {
     "json": "./media/is-barcode.json",
     "category": "media"
   },
+  "is-barcode-scanner": {
+    "json": "./media/is-barcode-scanner.json",
+    "category": "media"
+  },
   "is-icon": {
     "json": "./media/is-icon.json",
     "behavior": "./behaviors/is-icon.js",
@@ -669,6 +685,14 @@ export default {
   "is-video": {
     "json": "./media/is-video.json",
     "behavior": "./behaviors/is-video.js",
+    "category": "media"
+  },
+  "is-speech": {
+    "json": "./media/is-speech.json",
+    "category": "media"
+  },
+  "is-media-recorder": {
+    "json": "./media/is-media-recorder.json",
     "category": "media"
   },
   "is-breadcrumb-item": {

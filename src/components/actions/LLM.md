@@ -15,6 +15,7 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | `<is-button>` | [button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/button.md) | Button |
 | `<is-button-group>` | [button-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/button-group.md) | Button Group |
 | `<is-copy-button>` | [copy-button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/copy-button.md) | Copy Button |
+| `<is-share-button>` | [share-button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/share-button.md) | Web Share (nativo; fallback copiar) |
 | `<is-check-icon-button>` | [check-icon-button.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/check-icon-button.md) | Check Icon Button |
 | `<is-dropdown>` | [dropdown.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/dropdown.md) | Dropdown |
 | `<is-dropdown-item>` | [dropdown-item.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/dropdown-item.md) | Dropdown Item |
@@ -32,6 +33,7 @@ Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mis
 - `../helpers/floating.js`
 - `../_shared/adopt-css.js`
 - `../_shared/position.js`
+- `../_shared/web-share.js`
 
 ## Dependencias compartidas
 

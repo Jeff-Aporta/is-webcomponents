@@ -32,6 +32,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `actions/button.md` | `<is-button>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/button-group.md` | `<is-button-group>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/copy-button.md` | `<is-copy-button>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
+| `actions/share-button.md` | `<is-share-button>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/check-icon-button.md` | `<is-check-icon-button>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/dropdown.md` | `<is-dropdown>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
 | `actions/dropdown-item.md` | `<is-dropdown-item>` | [actions/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/actions/LLM.md) |
@@ -135,6 +136,8 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `helpers/ui.md` | `is-ui` · `IsUi` (módulo) | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/format.md` | `<is-format>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/observer.md` | `<is-observer>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
+| `helpers/wake-lock.md` | `<is-wake-lock>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
+| `helpers/offscreen-canvas.md` | `<is-offscreen-canvas>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/relative-time.md` | `<is-relative-time>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/format-date.md` | `<is-format-date>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
 | `helpers/format-number.md` | `<is-format-number>` | [helpers/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/LLM.md) |
@@ -170,8 +173,11 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `media/icon.md` | `<is-icon>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/avatar.md` | `<is-avatar>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/video.md` | `<is-video>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
+| `media/speech.md` | `<is-speech>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
+| `media/media-recorder.md` | `<is-media-recorder>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/video-playlist.md` | `<is-video-playlist>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/barcode.md` | `<is-barcode>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
+| `media/barcode-scanner.md` | `<is-barcode-scanner>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/image-editor.md` | `<is-image-editor>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `media/qrcode.md` | `<is-qrcode>` | [media/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/LLM.md) |
 | `navigation/breadcrumb.md` | `<is-breadcrumb>` | [navigation/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/navigation/LLM.md) |
