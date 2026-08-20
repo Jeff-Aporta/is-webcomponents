@@ -1,0 +1,31 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-media-recorder",
+  "category": "media",
+  "title": "<is-media-recorder>",
+  "titleHtml": true,
+  "description": "Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.",
+  "storageKey": "docs-is-media-recorder",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-media-recorder>",
+      "lede": "Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-media-recorder source=\"mic\"></is-media-recorder>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-media-recorder source=\"mic\"></is-media-recorder>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
+        }
+      ]
+    }
+  ]
+}

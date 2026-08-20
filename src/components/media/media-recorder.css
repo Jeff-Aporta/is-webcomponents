@@ -1,0 +1,17 @@
+:host {
+  display: grid;
+  gap: 0.5em;
+  font: inherit;
+  max-width: 28rem;
+}
+
+.preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--is-bg-elev, #111);
+  border-radius: var(--is-radius, 0.5em);
+  object-fit: cover;
+}
+
+.row { display: flex; align-items: center; gap: 0.75em; }
+.dl { font-size: 0.85em; }
