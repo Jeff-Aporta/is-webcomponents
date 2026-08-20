@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooltip · IS Web Components</title>
+  <meta name="description" content="Documentación de is-tooltip.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/feedback/is-tooltip.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-flowchart", "is-tooltip");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-tooltip" data-category="feedback">
+    <h1>Tooltip</h1>
+    <section id="intro">
+<p class="lede">Tip breve anclado con <code class="code">for</code>. Depende de <code class="code">is-popover</code>.</p>
+<div class="demo"><is-button id="tip-target">Hover Me</is-button>
+          <is-tooltip for="tip-target">This is a tooltip</is-tooltip></div>
+<pre><code>&lt;is-button id=&quot;tip-target&quot;&gt;Hover Me&lt;/is-button&gt;
+&lt;is-tooltip for=&quot;tip-target&quot;&gt;This is a tooltip&lt;/is-tooltip&gt;</code></pre>
+</section>
+<section id="placement">
+<h2>Placement</h2>
+<div class="demo"><is-button id="t-top">top</is-button>
+          <is-tooltip for="t-top" placement="top">top</is-tooltip>
+          <is-button id="t-right">right</is-button>
+          <is-tooltip for="t-right" placement="right">right</is-tooltip>
+          <is-button id="t-bottom">bottom</is-button>
+          <is-tooltip for="t-bottom" placement="bottom">bottom</is-tooltip>
+          <is-button id="t-left">left</is-button>
+          <is-tooltip for="t-left" placement="left">left</is-tooltip></div>
+</section>
+<section id="trigger">
+<h2>Trigger click / manual</h2>
+<p class="lede">Clic fuera o <code class="code">Escape</code> cierra el tip.</p>
+<div class="demo"><is-button id="t-click">Click to Toggle</is-button>
+          <is-tooltip for="t-click" trigger="click">Click nuevamente o fuera para cerrar</is-tooltip>
+          <is-button id="t-manual-btn">Toggle Manually</is-button>
+          <is-tooltip id="t-manual" for="t-manual-btn" trigger="manual">Manual tooltip</is-tooltip></div>
+</section>
+<section id="html">
+<h2>Contenido HTML largo</h2>
+<p class="lede">El slot acepta markup. Útil para tips densos; preferir
+          <code class="code">trigger="click"</code> si hay enlaces o texto seleccionable.</p>
+<div class="demo"><is-button id="t-html" color="brand">Auditoría · tip largo</is-button>
+          <is-tooltip
+            for="t-html"
+            trigger="click"
+            placement="bottom-start"
+            style="--max-width: 22rem"
+          >
+            <p><strong>Resumen de cumplimiento</strong></p>
+            <p>
+              Este tip muestra contenido enriquecido para revisar wrapping,
+              contraste y dismiss al clic fuera.
+            </p>
+            <ul>
+              <li>Tokens <code>--is-*</code> y tipografía del tema</li>
+              <li>Máximo ancho vía <code>--max-width</code></li>
+              <li>Enlace de ejemplo:
+                <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tooltip_role" target="_blank" rel="noopener">ARIA tooltip</a>
+              </li>
+            </ul>
+            <p>Última revisión: sprint actual · owner: Design System</p>
+          </is-tooltip></div>
+<pre><code>&lt;is-tooltip for=&quot;t-html&quot; trigger=&quot;click&quot; style=&quot;--max-width:22rem&quot;&gt;
+  &lt;p&gt;&lt;strong&gt;Resumen&lt;/strong&gt;&lt;/p&gt;
+  &lt;ul&gt;&lt;li&gt;…&lt;/li&gt;&lt;/ul&gt;
+&lt;/is-tooltip&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
