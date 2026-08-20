@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Button · IS Web Components</title>
+  <meta name="description" content="Documentación y playground del componente is-button de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/actions/is-button.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-flowchart", "is-icon");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-button" data-category="actions">
+    <h1>Button</h1>
+    <p class="lede">Documentación y playground del componente is-button de InSoft.</p>
+<section id="intro">
+<p class="lede">Componente InSoft accesible y personalizable, escrito con JavaScript nativo,
+          Shadow DOM y sin frameworks.</p>
+<div class="demo"><span class="demo-label">// El caso más simple</span>
+          <div class="demo-row">
+            <is-button>Hola mundo</is-button>
+            <is-button color="brand">Guardar</is-button>
+            <is-button color="success" variant="outlined">
+              <is-icon slot="start" icon="mdi:check"></is-icon>
+              Aprobado
+            </is-button>
+          </div></div>
+</section>
+<section id="variants">
+<h2>Variantes</h2>
+<p class="lede">El atributo <code class="code">color</code> define el color semántico.
+          Default: <code class="code">brand</code>. <code class="code">info</code> y
+          <code class="code">error</code> existen aparte a propósito:
+          <code class="code">danger</code> es la acción destructiva («Eliminar») y
+          <code class="code">error</code> el estado de fallo («Error al guardar»).</p>
+<div class="demo"><h3>Matriz color × appearance</h3></div>
+<div class="demo"><div class="matrix">
+            <div></div>
+            <div class="cell-label">filled</div>
+            <div class="cell-label">outlined</div>
+            <div class="cell-label">plain</div>
+
+            <div class="row-label">brand</div>
+            <div class="demo-cell"><is-button color="brand">Brand</is-button></div>
+            <div class="demo-cell"><is-button color="brand" variant="outlined">Brand</is-button></div>
+            <div class="demo-cell"><is-button color="brand" variant="plain">Brand</is-button></div>
+
+            <div class="row-label">neutral</div>
+            <div class="demo-cell"><is-button color="neutral">Neutral</is-button></div>
+            <div class="demo-cell"><is-button color="neutral" variant="outlined">Neutral</is-button></div>
+            <div class="demo-cell"><is-button color="neutral" variant="plain">Neutral</is-button></div>
+
+            <div class="row-label">success</div>
+            <div class="demo-cell"><is-button color="success">Success</is-button></div>
+            <div class="demo-cell"><is-button color="success" variant="outlined">Success</is-button></div>
+            <div class="demo-cell"><is-button color="success" variant="plain">Success</is-button></div>
+
+            <div class="row-label">warning</div>
+            <div class="demo-cell"><is-button color="warning">Warning</is-button></div>
+            <div class="demo-cell"><is-button color="warning" variant="outlined">Warning</is-button></div>
+            <div class="demo-cell"><is-button color="warning" variant="plain">Warning</is-button></div>
+
+            <div class="row-label">danger</div>
+            <div class="demo-cell"><is-button color="danger">Danger</is-button></div>
+            <div class="demo-cell"><is-button color="danger" variant="outlined">Danger</is-button></div>
+            <div class="demo-cell"><is-button color="danger" variant="plain">Danger</is-button></div>
+
+            <div class="row-label">info</div>
+            <div class="demo-cell"><is-button color="info">Info</is-button></div>
+            <div class="demo-cell"><is-button color="info" variant="outlined">Info</is-button></div>
+            <div class="demo-cell"><is-button color="info" variant="plain">Info</is-button></div>
+
+            <div class="row-label">error</div>
+            <div class="demo-cell"><is-button color="error">Error</is-button></div>
+            <div class="demo-cell"><is-button color="error" variant="outlined">Error</is-button></div>
+            <div class="demo-cell"><is-button color="error" variant="plain">Error</is-button></div>
+          </div></div>
+<pre><code>&lt;is-button color=&quot;success&quot;&gt;Aprobado&lt;/is-button&gt;
+&lt;is-button color=&quot;danger&quot; variant=&quot;outlined&quot;&gt;Eliminar&lt;/is-button&gt;</code></pre>
+</section>
+<section id="appearances">
+<h2>Apariencias (vista detallada)</h2>
+<p class="lede">Cuatro niveles de énfasis visual. Úsalos para jerarquizar acciones.</p>
+<div class="demo"><h4>filled — acción principal</h4></div>
+<div class="demo"><div class="demo-row">
+            <is-button color="brand" variant="filled">Primario</is-button>
+            <is-button color="success" variant="filled">Confirmar</is-button>
+            <is-button color="warning" variant="filled">Atención</is-button>
+            <is-button color="danger"  variant="filled">Eliminar</is-button>
+            <is-button color="info"    variant="filled">Detalles</is-button>
+            <is-button color="error"   variant="filled">Reintentar</is-button>
+            <is-button color="neutral" variant="filled">Secundario</is-button>
+          </div></div>
+<div class="demo"><h4>outlined — acción secundaria</h4></div>
+<div class="demo"><div class="demo-row">
+            <is-button color="brand" variant="outlined">Primario</is-button>
+            <is-button color="success" variant="outlined">Confirmar</is-button>
+            <is-button color="warning" variant="outlined">Atención</is-button>
+            <is-button color="danger"  variant="outlined">Eliminar</is-button>
+            <is-button color="info"    variant="outlined">Detalles</is-button>
+            <is-button color="error"   variant="outlined">Reintentar</is-button>
+            <is-button color="neutral" variant="outlined">Secundario</is-button>
+          </div></div>
+<div class="demo"><h4>plain — acción terciaria / contextual</h4></div>
+<div class="demo"><div class="demo-row">
+            <is-button color="brand" variant="plain">Primario</is-button>
+            <is-button color="success" variant="plain">Confirmar</is-button>
+            <is-button color="warning" variant="plain">Atención</is-button>
+            <is-button color="danger"  variant="plain">Eliminar</is-button>
+            <is-button color="info"    variant="plain">Detalles</is-button>
+            <is-button color="error"   variant="plain">Reintentar</is-button>
+            <is-button color="neutral" variant="plain">Secundario</is-button>
+          </div></div>
+<div class="demo"><h4>ghost — outlined en reposo, filled al pasar el mouse</h4>
+        <p class="lede">
+          Pasa el mouse por encima: el borde se rellena. Util cuando la accion
+          debe ser discreta hasta que el usuario la apunta.
+        </p></div>
+<div class="demo"><div class="demo-row">
+            <is-button color="brand" variant="ghost">Primario</is-button>
+            <is-button color="success" variant="ghost">Confirmar</is-button>
+            <is-button color="warning" variant="ghost">Atención</is-button>
+            <is-button color="danger"  variant="ghost">Eliminar</is-button>
+            <is-button color="info"    variant="ghost">Detalles</is-button>
+            <is-button color="error"   variant="ghost">Reintentar</is-button>
+            <is-button color="neutral" variant="ghost">Secundario</is-button>
+          </div></div>
+</section>
+<section id="sizes">
+<h2>Escala por contexto</h2>
+<p class="lede">El componente usa unidades <code class="code">em</code>. Cambia <code class="code">font-size</code> en cualquier ancestro para escalarlo completo.</p>
+<div class="demo"><div class="demo-row" style="align-items: flex-end;">
+            <span style="font-size: .8125rem"><is-button>Compacto</is-button></span>
+            <span style="font-size: 1rem"><is-button>Normal</is-button></span>
+            <span style="font-size: 1.25rem"><is-button>Grande</is-button></span>
+
+            <span style="font-size: .8125rem"><is-button color="brand" variant="outlined">Compacto</is-button></span>
+            <span style="font-size: 1rem"><is-button color="brand" variant="outlined">Normal</is-button></span>
+            <span style="font-size: 1.25rem"><is-button color="brand" variant="outlined">Grande</is-button></span>
+          </div></div>
+<pre><code>&lt;div style=&quot;font-size: 1.25rem&quot;&gt;
+  &lt;is-button color=&quot;brand&quot;&gt;Grande&lt;/is-button&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section id="icons">
+<h2>Con iconos</h2>
+<p class="lede">Slots <code class="code">start</code> y <code class="code">end</code> para iconos.
+          Cuando el botón contiene un solo SVG sin texto, se vuelve "icon-only" automáticamente.</p>
+<div class="demo"><h4>Icono al inicio (start)</h4></div>
+<div class="demo"><div class="demo-row">
+            <is-button color="brand">
+              <is-icon icon="mdi:content-save-outline"></is-icon>
+              Guardar cambios
+            </is-button>
+            <is-button color="success">
+              <is-icon icon="mdi:check"></is-icon>
+              Aprobar
+            </is-button>
+            <is-button color="danger" variant="outlined">
+              <is-icon icon="mdi:trash-can-outline"></is-icon>
+              Eliminar
+            </is-button>
+            <is-button color="neutral" variant="plain">
+              <is-icon icon="mdi:pencil-outline"></is-icon>
+              Editar
+            </is-button>
+          </div></div>
+<div class="demo"><h4>Icono al final (end)</h4></div>
+<div class="demo"><div class="demo-row">
+            <is-button color="brand" variant="outlined">
+              Continuar
+              <is-icon icon="mdi:arrow-right"></is-icon>
+            </is-button>
+            <is-button color="neutral" variant="plain">
+              Descargar reporte
+              <is-icon icon="mdi:download"></is-icon>
+            </is-button>
+          </div></div>
+<div class="demo"><h4>Ambos lados</h4></div>
+<div class="demo"><div class="demo-row">
+            <is-button color="brand">
+              <is-icon icon="mdi:bell-outline"></is-icon>
+              Notificaciones
+              <is-icon icon="mdi:arrow-right"></is-icon>
+            </is-button>
+          </div></div>
+<pre><code>&lt;is-button color=&quot;brand&quot;&gt;
+  &lt;svg slot=&quot;start&quot; viewBox=&quot;0 0 16 16&quot;&gt;...&lt;/svg&gt;
+  Guardar
+&lt;/is-button&gt;</code></pre>
+</section>
+<section id="icon-only">
+<h2>Solo icono</h2>
+<p class="lede">Cuando el botón tiene un solo elemento hijo y nada de texto,
+          el custom element aplica automáticamente el state <code class="code">:state(icon-button)</code>
+          y se vuelve cuadrado.</p>
+<div class="demo"><div class="demo-row">
+            <is-button color="neutral" variant="outlined" title="Ajustes">
+              <is-icon icon="mdi:cog-outline"></is-icon>
+            </is-button>
+            <is-button color="brand">
+              <is-icon icon="mdi:plus"></is-icon>
+            </is-button>
+            <is-button color="success">
+              <is-icon icon="mdi:check"></is-icon>
+            </is-button>
+            <is-button color="warning">
+              <is-icon icon="mdi:bell-outline"></is-icon>
+            </is-button>
+            <is-button color="danger">
+              <is-icon icon="mdi:trash-can-outline"></is-icon>
+            </is-button>
+            <is-button color="neutral" variant="plain">
+              <is-icon icon="mdi:magnify"></is-icon>
+            </is-button>
+            <is-button color="neutral" variant="plain" pill title="Me gusta">
+              <is-icon icon="mdi:heart-outline"></is-icon>
+            </is-button>
+            <is-button color="neutral" variant="plain" pill title="Perfil">
+              <is-icon icon="mdi:account"></is-icon>
+            </is-button>
+          </div>
+
+          <div class="demo-row" style="margin-top: 1em; align-items: flex-end;">
+            <span style="font-size: .8125rem"><is-button color="brand" variant="outlined">
+              <is-icon icon="mdi:pencil-outline"></is-icon>
+            </is-button></span>
+            <span style="font-size: 1rem"><is-button color="brand" variant="outlined">
+              <is-icon icon="mdi:pencil-outline"></is-icon>
+            </is-button></span>
+            <span style="font-size: 1.25rem"><is-button color="brand" variant="outlined">
+              <is-icon icon="mdi:pencil-outline"></is-icon>
+            </is-button></span>
+          </div></div>
+<aside class="callout"><strong>Tip:</strong> usa siempre <code class="code">title="..."</code> en icon-only para accesibilidad (label del tooltip + nombre accesible).</aside>
+</section>
+<section id="pill">
+<h2>Pill</h2>
+<p class="lede"><code class="code">pill</code> aplica <code class="code">border-radius: 999px</code>.</p>
+<div class="demo"><div class="demo-row">
+            <is-button pill color="brand">Pill brand</is-button>
+            <is-button pill color="success" variant="outlined">Pill outlined</is-button>
+            <is-button pill color="neutral" variant="plain">Pill plain</is-button>
+            <is-button pill color="brand">
+              <is-icon icon="mdi:plus"></is-icon>
+              Crear nuevo
+            </is-button>
+          </div></div>
+</section>
+<section id="caret">
+<h2>Con caret</h2>
+<p class="lede">Útil para menús desplegables o acciones que revelan algo.</p>
+<div class="demo"><div class="demo-row">
+            <is-button with-caret color="brand">Acciones</is-button>
+            <is-button with-caret color="neutral" variant="outlined">Filtros</is-button>
+            <is-button with-caret color="neutral" variant="plain">Ordenar por</is-button>
+            <span style="font-size: .8125rem"><is-button with-caret color="success">Aplicar</is-button></span>
+            <span style="font-size: 1.25rem"><is-button with-caret>Más opciones</is-button></span>
+          </div></div>
+</section>
+<section id="loading">
+<h2>Loading</h2>
+<p class="lede"><code class="code">loading</code> deshabilita la interacción, oculta label/iconos/caret
+          y muestra un spinner. Aplica <code class="code">aria-busy="true"</code>.</p>
+<div class="demo"><div class="demo-row">
+            <is-button loading color="brand">Guardando…</is-button>
+            <is-button loading color="success" variant="outlined">Enviando</is-button>
+            <is-button loading color="neutral" variant="plain">Cargando</is-button>
+            <is-button loading color="danger">
+              <is-icon icon="mdi:trash-can-outline"></is-icon>
+              Eliminando
+            </is-button>
+            <span style="font-size: 1.25rem"><is-button loading color="brand" pill>Procesando</is-button></span>
+          </div></div>
+<div class="demo"><h4>Demo interactivo</h4></div>
+<div class="demo"><is-button id="loadingDemo" color="brand">Iniciar carga</is-button></div>
+<pre><code>btn.toggleAttribute('loading');
+btn.toggleAttribute('loading');  // o false</code></pre>
+</section>
+<section id="disabled">
+<h2>Disabled</h2>
+<p class="lede">El botón se atenúa, no recibe eventos y se quita del tab order.</p>
+<div class="demo"><div class="demo-row">
+            <is-button disabled>Default</is-button>
+            <is-button disabled color="brand">Brand</is-button>
+            <is-button disabled color="success" variant="outlined">Outlined</is-button>
+            <is-button disabled color="danger" variant="plain">Plain</is-button>
+            <is-button disabled with-caret>Con caret</is-button>
+            <is-button disabled>
+              <is-icon icon="mdi:content-save-outline"></is-icon>
+              Con icono
+            </is-button>
+            <is-button disabled pill color="success">Pill disabled</is-button>
+          </div></div>
+</section>
+<section id="link">
+<h2>Como enlace</h2>
+<p class="lede">Con <code class="code">href</code> el botón se renderiza como <code class="code">&lt;a&gt;</code>.
+          Conserva variant, appearance, pill y demás atributos.
+          y soporta <code class="code">target</code>, <code class="code">rel</code> y <code class="code">download</code>.</p>
+<div class="demo"><div class="demo-row">
+            <is-button href="https://www.youtube.com/@JeffAporta" target="_blank" rel="noopener" color="brand">
+              Jeff Aporta en YouTube
+              <is-icon icon="mdi:youtube"></is-icon>
+            </is-button>
+            <is-button href="#intro" variant="outlined">Volver al inicio</is-button>
+            <is-button href="data:text/plain;charset=utf-8,Hola%20mundo" download="hola.txt" variant="plain">
+              <is-icon icon="mdi:download"></is-icon>
+              Descargar hola.txt
+            </is-button>
+            <span style="font-size: .8125rem"><is-button href="https://github.com" target="_blank" rel="noopener" pill>
+              <is-icon icon="mdi:link-variant"></is-icon>
+            </is-button></span>
+          </div></div>
+<pre><code>&lt;is-button href=&quot;https://www.youtube.com/@JeffAporta&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;
+  Jeff Aporta en YouTube
+&lt;/is-button&gt;</code></pre>
+<aside class="callout"><strong>Nota:</strong> cuando hay <code class="code">href</code>, el componente aplica el state <code class="code">:state(link)</code> que puedes usar en CSS para overrides específicos.</aside>
+</section>
+<section id="form">
+<h2>En formularios</h2>
+<p class="lede">El componente es <strong>form-associated</strong>:
+          <code class="code">type="submit"</code> envía el form, <code class="code">type="reset"</code> lo resetea,
+          <code class="code">name</code>/<code class="code">value</code> viajan con los datos,
+          y se asocia a un <code class="code">&lt;form&gt;</code> con <code class="code">form="id"</code>.</p>
+<div class="demo"><form id="demoForm" style="display: grid; gap: 12px; max-width: 480px;">
+            <label style="display: grid; gap: 4px; font-size: 0.85rem;">
+              <span>Email</span>
+              <input class="demo-native-field" type="email" name="email" required
+                     placeholder="tu@empresa.com" />
+            </label>
+            <label style="display: grid; gap: 4px; font-size: 0.85rem;">
+              <span>Comentario</span>
+              <textarea class="demo-native-field" name="comment" rows="3"
+                        placeholder="Escribe un comentario…"></textarea>
+            </label>
+
+            <div class="demo-row" style="margin-top: 8px;">
+              <is-button type="submit" color="brand" name="action" value="save">Guardar</is-button>
+              <is-button type="submit" color="success" variant="outlined" name="action" value="publish">Publicar</is-button>
+              <is-button type="reset" variant="plain">Limpiar</is-button>
+            </div>
+
+            <div id="formOut" class="log" aria-live="polite"></div>
+          </form></div>
+<pre><code>&lt;is-button type=&quot;submit&quot; color=&quot;brand&quot; name=&quot;action&quot; value=&quot;save&quot;&gt;Guardar&lt;/is-button&gt;</code></pre>
+</section>
+<section id="anatomy">
+<h2>Anatomía</h2>
+<p class="lede">El shadow DOM expone CSS parts para que puedas estilizar piezas individuales sin re-implementar el componente.</p>
+<div class="demo"><div class="anatomy">
+          <is-button id="anatomyBtn" color="brand" pill>
+            <is-icon icon="mdi:content-save-outline"></is-icon>
+            Guardar cambios
+            <is-icon icon="mdi:arrow-right"></is-icon>
+          </is-button>
+        </div>
+
+        <h4>Estructura interna del Shadow DOM</h4></div>
+<pre><code>&lt;button part=&quot;button&quot; class=&quot;btn&quot;&gt;
+  &lt;span part=&quot;start&quot; class=&quot;btn__prefix&quot;&gt;
+    &lt;slot name=&quot;start&quot;&gt;&lt;/slot&gt;
+  &lt;/span&gt;
+  &lt;span part=&quot;label&quot; class=&quot;btn__label&quot;&gt;
+    &lt;slot&gt;&lt;/slot&gt;
+  &lt;/span&gt;
+  &lt;span part=&quot;end&quot; class=&quot;btn__suffix&quot;&gt;
+    &lt;slot name=&quot;end&quot;&gt;&lt;/slot&gt;
+  &lt;/span&gt;
+  &lt;span part=&quot;caret&quot; class=&quot;btn__caret&quot;&gt;...&lt;/span&gt;
+  &lt;span part=&quot;spinner&quot; class=&quot;btn__spinner&quot;&gt;...&lt;/span&gt;
+&lt;/button&gt;</code></pre>
+</section>
+<section id="states">
+<h2>Custom States</h2>
+<p class="lede">El componente expone cuatro <a href="https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_State_API" target="_blank" rel="noopener">custom states</a>
+          para CSS condicional desde fuera del shadow.</p>
+<div class="demo"><h4>Ejemplo de uso</h4></div>
+<pre><code>/* afecta solo cuando está loading */
+is-button:state(loading) {
+  --is-button-border-radius: 999px;
+}
+
+/* afecta solo cuando es link */
+is-button:state(link)::part(button) {
+  text-decoration: underline;
+}
+
+/* afecta solo cuando es icon-only */
+is-button:state(icon-button) {
+  --_hpad: 0;
+}</code></pre>
+</section>
+<section id="parts">
+<h2>CSS Parts</h2>
+<p class="lede">Pseudo-elementos estilizables desde fuera del shadow DOM.</p>
+<div class="demo"><h4>Override del spinner</h4>
+        <style>
+          #customSpinnerBtn::part(spinner) svg {
+            stroke: #ff6b6b;
+            stroke-width: 3;
+          }
+          #customSpinnerBtn::part(spinner) svg circle {
+            stroke-dasharray: 12 6;
+          }
+        </style></div>
+<div class="demo"><is-button id="customSpinnerBtn" loading color="danger">Cargando con spinner custom</is-button></div>
+<pre><code>is-button:state(loading)::part(spinner) svg {
+  stroke: var(--is-color-danger);
+  stroke-width: 3;
+}</code></pre>
+</section>
+<section id="theming">
+<h2>Theming (CSS custom properties)</h2>
+<p class="lede">Todas las decisiones de color y tamaño pasan por variables. Puedes reasignarlas
+          en <code class="code">:root</code>, en un <code class="code">is-button</code> concreto, o en un grupo.</p>
+<div class="demo"><h4>Tokens de color (paleta)</h4></div>
+<pre><code>--is-color-brand      --is-color-neutral    --is-color-success
+--is-color-warning    --is-color-danger     --is-color-info      --is-color-error
+
+/* cada familia acepta cinco modificadores relativos, sin escala numérica */
+--is-color-brand-paler   /* pastel de fondo */
+--is-color-brand-pale    /* pastel activo */
+--is-color-brand-strong  /* relleno */
+--is-color-brand-stronger/* hover del relleno */
+--is-color-brand-strongest/* active del relleno */</code></pre>
+<div class="demo"><h4>Tokens del botón</h4></div>
+<pre><code>--is-button-font-family
+--is-button-font-weight
+--is-button-border-radius   /* respeta pill si está presente */
+--is-button-border-width
+--is-button-transition-duration</code></pre>
+<div class="demo"><h4>Demo en vivo — cambia tokens a un botón individual</h4></div>
+<div class="demo"><div class="demo-row" style="align-items: flex-end;">
+            <is-button id="themed1" color="#ae3ec9" color-hover="#862e9c" color-active="#5f1f70" radius="0" pill>Themed 1</is-button>
+            <is-button id="themed2" color="#0ca678" color-hover="#087f5b" radius="18px" pill>Themed 2</is-button>
+            <is-button id="themed3" color="#d9480f" color-hover="#a03406" border-width="2px" pill>Themed 3</is-button>
+          </div></div>
+</section>
+<section id="methods">
+<h2>API JavaScript</h2>
+<p class="lede">Como cualquier custom element, accedes a la instancia con <code class="code">document.querySelector('is-button')</code>.</p>
+<div class="demo"><h4>Métodos</h4></div>
+<div class="demo"><h4>Propiedades de validación (de ElementInternals)</h4></div>
+<pre><code>btn.validity            // ValidityState
+btn.validationMessage    // string
+btn.willValidate         // boolean</code></pre>
+<div class="demo"><h4>Demo</h4></div>
+<div class="demo"><is-button id="apiBtn" color="brand">Hazme click</is-button>
+          <div class="demo-row" style="margin-top: 12px;">
+            <button id="apiFocus" type="button" class="theme-toggle" style="position: static;">focus()</button>
+            <button id="apiClick" type="button" class="theme-toggle" style="position: static;">click()</button>
+            <button id="apiLoad"  type="button" class="theme-toggle" style="position: static;">toggle loading</button>
+            <button id="apiDis"   type="button" class="theme-toggle" style="position: static;">toggle disabled</button>
+            <button id="apiError" type="button" class="theme-toggle" style="position: static;">setCustomValidity</button>
+          </div></div>
+<pre><code>const btn = document.querySelector('#apiBtn');
+btn.click();
+btn.setFocus({ preventScroll: true });
+btn.toggleAttribute('loading');
+btn.setCustomValidity('Revisa los campos');</code></pre>
+</section>
+<section id="events">
+<h2>Eventos</h2>
+<p class="lede">Burbujean y son <code class="code">composed: true</code>, así que puedes escucharlos
+          a nivel de document o de cualquier ancestro.</p>
+<div class="demo"><h4>Demo en vivo</h4></div>
+<div class="demo"><div class="demo-row">
+            <is-button id="evtBtn" color="brand">Probar eventos</is-button>
+            <is-button id="evtBtn2" color="success" variant="outlined">Segundo botón</is-button>
+          </div>
+          <div id="evtLog" class="log" aria-live="polite"></div></div>
+</section>
+<section id="playground">
+<h2>Playground</h2>
+<p class="lede">Modifica las opciones y observa el resultado al instante.</p>
+<div class="demo"><div class="playground">
+          <div class="stage">
+            <is-button id="pgBtn" color="brand">Hola mundo</is-button>
+          </div>
+
+          <div class="controls">
+            <h4>Configuración</h4>
+
+            <div class="ctl-row">
+              <label for="pgColor">color</label>
+              <select id="pgColor">
+                <option selected>brand</option>
+                <option>neutral</option>
+                <option>success</option>
+                <option>warning</option>
+                <option>danger</option>
+                <option>info</option>
+                <option>error</option>
+              </select>
+            </div>
+            <div class="ctl-row">
+              <label for="pgVariant">variant</label>
+              <select id="pgVariant">
+                <option selected>filled</option>
+                <option>outlined</option>
+                <option>plain</option>
+                <option>ghost</option>
+                <option>soft</option>
+                <option>text</option>
+              </select>
+            </div>
+            <div class="ctl-row">
+              <label for="pgText">texto</label>
+              <input id="pgText" type="text" value="Hola mundo" />
+            </div>
+            <div class="ctl-row">
+              <label for="pgStart">icono start</label>
+              <select id="pgStart">
+                <option value="">(ninguno)</option>
+                <option value="i-floppy">floppy</option>
+                <option value="i-edit">edit</option>
+                <option value="i-trash">trash</option>
+                <option value="i-bell">bell</option>
+                <option value="i-check">check</option>
+                <option value="i-gear">gear</option>
+                <option value="i-search">search</option>
+              </select>
+            </div>
+            <div class="ctl-row">
+              <label for="pgEnd">icono end</label>
+              <select id="pgEnd">
+                <option value="">(ninguno)</option>
+                <option value="i-arrow-r">arrow-right</option>
+                <option value="i-download">download</option>
+                <option value="i-link">link</option>
+              </select>
+            </div>
+            <div class="ctl-row">
+              <label>flags</label>
+              <div class="checks">
+                <label class="chip"><input type="checkbox" id="pgPill" /> pill</label>
+                <label class="chip"><input type="checkbox" id="pgCaret" /> caret</label>
+                <label class="chip"><input type="checkbox" id="pgLoading" /> loading</label>
+                <label class="chip"><input type="checkbox" id="pgDisabled" /> disabled</label>
+              </div>
+            </div>
+            <div class="ctl-row">
+              <label for="pgHref">href (opcional)</label>
+              <input id="pgHref" type="text" placeholder="https://..." />
+            </div>
+          </div>
+        </div>
+
+        <h4>HTML generado</h4>
+        <pre id="pgOut" class="code" data-lang="html">&lt;is-button color="brand"&gt;Hola mundo&lt;/is-button&gt;</pre></div>
+<aside class="callout">Los controles escriben atributos reales: <code>color</code> (familia) y <code>variant</code> (apariencia). Iconos vía <code>&lt;is-icon slot="start|end"&gt;</code>.</aside>
+</section>
+<section id="reference">
+<h2>Referencia completa</h2>
+<div class="demo"><h3>Atributos / propiedades</h3></div>
+<div class="demo"><h3>Slots</h3></div>
+<div class="demo"><h3>CSS Parts</h3></div>
+<div class="demo"><h3>Custom States</h3></div>
+</section>
+  </article>
+</body>
+</html>
