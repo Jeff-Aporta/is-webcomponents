@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carousel · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-carousel / is-carousel-item de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/navigation/is-carousel.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-carousel", "is-carousel-item", "is-flowchart");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-carousel" data-category="navigation">
+    <h1>Carousel</h1>
+    <p class="lede">Documentación y demos de is-carousel / is-carousel-item de InSoft.</p>
+<section id="intro">
+<p class="lede">Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,
+          indicadores, scroll-snap y soporte para swipe en touch.</p>
+<div class="demo"><is-carousel id="c1" loop>
+            <is-carousel-item><div class="slide s1">Slide 1</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">Slide 2</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">Slide 3</div></is-carousel-item>
+            <is-carousel-item><div class="slide s4">Slide 4</div></is-carousel-item>
+            <is-carousel-item><div class="slide s5">Slide 5</div></is-carousel-item>
+          </is-carousel>
+          <p id="c1Log" class="lede">Slide: <code class="code">0</code></p></div>
+<pre><code>&lt;is-carousel loop&gt;
+  &lt;is-carousel-item&gt;Slide 1&lt;/is-carousel-item&gt;
+  &lt;is-carousel-item&gt;Slide 2&lt;/is-carousel-item&gt;
+  …
+&lt;/is-carousel&gt;</code></pre>
+</section>
+<section id="autoplay">
+<h2>Autoplay</h2>
+<p class="lede">Con <code class="code">autoplay="2000"</code> avanza cada 2 segundos. Se pausa al hover.</p>
+<div class="demo"><is-carousel autoplay="2000" loop>
+            <is-carousel-item><div class="slide s1">Auto 1</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">Auto 2</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">Auto 3</div></is-carousel-item>
+            <is-carousel-item><div class="slide s4">Auto 4</div></is-carousel-item>
+          </is-carousel></div>
+</section>
+<section id="per-page">
+<h2>Múltiples slides por página</h2>
+<p class="lede">Con <code class="code">slides-per-page="3"</code>.</p>
+<div class="demo"><is-carousel slides-per-page="3" loop>
+            <is-carousel-item><div class="slide s1">A</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">B</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">C</div></is-carousel-item>
+            <is-carousel-item><div class="slide s4">D</div></is-carousel-item>
+            <is-carousel-item><div class="slide s5">E</div></is-carousel-item>
+            <is-carousel-item><div class="slide s1">F</div></is-carousel-item>
+          </is-carousel></div>
+</section>
+<section id="vertical">
+<h2>Vertical</h2>
+<p class="lede">Con <code class="code">vertical</code>.</p>
+<div class="demo"><is-carousel vertical style="max-width: 320px;">
+            <is-carousel-item><div class="slide s1">Top</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">Middle</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">Bottom</div></is-carousel-item>
+          </is-carousel></div>
+</section>
+<section id="ratio">
+<h2>Aspect ratio personalizado</h2>
+<p class="lede">Con <code class="code">aspect-ratio="4/3"</code> o cualquier valor CSS.</p>
+<div class="demo"><is-carousel aspect-ratio="4/3">
+            <is-carousel-item><div class="slide s1">4:3 #1</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">4:3 #2</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">4:3 #3</div></is-carousel-item>
+          </is-carousel></div>
+</section>
+<section id="plain">
+<h2>Sin indicadores ni controles</h2>
+<p class="lede">Con <code class="code">without-indicators without-controls</code> solo swipe.</p>
+<div class="demo"><is-carousel without-indicators without-controls style="max-width: 320px;">
+            <is-carousel-item><div class="slide s1">A</div></is-carousel-item>
+            <is-carousel-item><div class="slide s2">B</div></is-carousel-item>
+            <is-carousel-item><div class="slide s3">C</div></is-carousel-item>
+          </is-carousel></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<div class="demo"><h3><code class="code">&lt;is-carousel&gt;</code></h3></div>
+<div class="demo"><h3>API</h3></div>
+<pre><code>carousel.next();        // Avanza
+carousel.prev();        // Retrocede
+carousel.pause();       // Pausa autoplay
+carousel.play();        // Reanuda autoplay
+carousel.active = 2;    // Salta a slide
+carousel.getViewport(); // Devuelve el viewport del scroll</code></pre>
+<div class="demo"><h3>Eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
