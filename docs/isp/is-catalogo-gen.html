@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo Gen · IS Web Components</title>
+  <meta name="description" content="Catálogo CRUD genérico ISP con controller JSON.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/isp/is-catalogo-gen.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-catalogo-gen");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-catalogo-gen" data-category="isp">
+    <h1>Catálogo Gen</h1>
+    <p class="lede">Catálogo CRUD genérico ISP con controller JSON.</p>
+<section id="intro">
+<p class="lede">Catálogo CRUD (port ISP <code class="code">CatalogoGen</code>). El <code class="code">controller</code>
+          se genera con <code class="code">createCatalogController(json)</code>: listado, columnas y
+          acciones (crear / modificar / visualizar / verificar / duplicar / recodificar / eliminar / consolidar).</p>
+<aside class="callout">Selecciona una fila: la toolbar habilita acciones que requieren selección
+          <strong>sin parpadear</strong> (el grid pinta la selección in-place).
+          En demos se usa <code class="code">mock</code>; en producción pasa <code class="code">server</code> + <code class="code">endpoints</code>.</aside>
+<div class="demo"><is-catalogo-gen id="catDemo" style="height: 30rem;"></is-catalogo-gen>
+          <p id="catLog">Última acción: <code class="code">—</code></p></div>
+<pre><code>import { createCatalogController } from './isp/controller-from-config.min.js';
+
+cat.controller = createCatalogController({
+  entrie: 'Curso',
+  primaryKeys: ['icurso'],
+  columns: [
+    { field: 'icurso', header: 'Código' },
+    { field: 'ncurso', header: 'Nombre' },
+  ],
+  // actions: true  → todas (default)
+  // actions: ['crear','modificar','eliminar']
+  mock: [
+    { icurso: 'C001', ncurso: 'Contabilidad básica' },
+  ],
+  // server: {
+  //   useLocal: false,
+  //   local:  { host: 'localhost', port: 20040, https: false },
+  //   remote: { host: '….azurewebsites.net', port: 443, https: true },
+  // },
+  // endpoints: { recurso: 'curso', recursos: 'cursos' },
+  // token: () =&gt; sessionStorage.getItem('token'),
+});</code></pre>
+</section>
+<section id="config">
+<h2>JSON de configuración</h2>
+</section>
+  </article>
+</body>
+</html>
