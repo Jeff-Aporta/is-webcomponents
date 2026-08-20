@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barcode · IS Web Components</title>
+  <meta name="description" content="Documentación de is-barcode.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/media/is-barcode.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-barcode", "is-button");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-barcode" data-category="media">
+    <h1>Barcode</h1>
+    <section id="intro">
+<p class="lede">Genera códigos de barras en SVG puro. Soporta <code>EAN-13</code> (productos) y <code>Code 128</code> (alfanumérico). QR queda como siguiente paso vía lib externa.</p>
+</section>
+<section id="ean">
+<h2>EAN-13 (productos)</h2>
+<div class="demo"><p>
+          Pasás 12 dígitos y el componente calcula el 13º (dígito verificador) con el
+          algoritmo GS1: se suman los dígitos en posición impar ×1 y los de posición par ×3,
+          y el verificador es lo que falta para llegar a la siguiente decena.
+          <b>Lo que un lector devuelve son los 13 dígitos</b>, no los 12 que escribiste.
+        </p></div>
+<div class="demo"><div class="bc-check">
+            <div class="bc-case">
+              <is-barcode type="ean13" value="770123456789" height="70"></is-barcode>
+              <dl>
+                <dt>value=</dt><dd><code class="code">770123456789</code></dd>
+                <dt>Un lector devuelve</dt><dd><b class="bc-out">7701234567897</b></dd>
+                <dt>Prefijo GS1</dt><dd>770 · Colombia</dd>
+              </dl>
+            </div>
+
+            <div class="bc-case">
+              <is-barcode type="ean13" value="750103131130" height="70"></is-barcode>
+              <dl>
+                <dt>value=</dt><dd><code class="code">750103131130</code></dd>
+                <dt>Un lector devuelve</dt><dd><b class="bc-out">7501031311309</b></dd>
+                <dt>Prefijo GS1</dt><dd>750 · México</dd>
+              </dl>
+            </div>
+
+            <div class="bc-case">
+              <is-barcode type="ean13" value="400638133393" height="70"></is-barcode>
+              <dl>
+                <dt>value=</dt><dd><code class="code">400638133393</code></dd>
+                <dt>Un lector devuelve</dt><dd><b class="bc-out">4006381333931</b></dd>
+                <dt>Prefijo GS1</dt><dd>400 · Alemania</dd>
+              </dl>
+            </div>
+          </div></div>
+<div class="demo"><div class="bc-verify"></div>
+<div class="demo"><h3>Compruébalo con un decodificador gratuito</h3></div>
+<div class="demo"><p>
+            No hace falta un lector físico: el decodificador web de
+            <a href="https://zxing.org/w/decode.jspx" target="_blank" rel="noopener">ZXing</a>
+            (gratuito, sin registro) acepta una imagen y devuelve el contenido leído.
+          </p>
+          <ol>
+            <li>Descargá el PNG de un código con el botón de abajo (o tomá un pantallazo del código).</li>
+            <li>Abrí <code class="code">zxing.org/w/decode.jspx</code> y subilo en <i>Choose File → Submit</i>.</li>
+            <li>ZXing responde <code class="code">Format: EAN_13</code> y <code class="code">Parsed Result</code>
+              con los 13 dígitos: tienen que ser exactamente los de la columna
+              <i>«Un lector devuelve»</i>.</li>
+          </ol>
+          <div class="bc-verify__actions">
+            <is-button id="bcPng" color="brand" variant="filled">Descargar PNG del primer código</is-button>
+            <is-button id="bcCopy" color="neutral" variant="outlined">Copiar valor esperado</is-button>
+            <span id="bcMsg" class="bc-msg" role="status"></span>
+          </div>
+        </div></div>
+</section>
+<section id="c128">
+<h2>Code 128 (general)</h2>
+<div class="demo"><div class="bc-row"><is-barcode type="code128" value="INSOFT-2026-001"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="LOTE-7782-A"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="CEDULA 1234567890"></is-barcode></div></div>
+</section>
+<section id="style">
+<h2>Personalización</h2>
+<div class="demo"><div class="bc-row"><is-barcode type="ean13" value="770123456789" height="80"></is-barcode></div>
+          <div class="bc-row"><is-barcode type="code128" value="DEMO-INSOFT" fg="var(--is-accent)" show-text></is-barcode></div></div>
+</section>
+<section id="api">
+<h2>API</h2>
+<pre><code>// Atributos
+// value        texto a codificar (requerido)
+// type         ean13 | code128 (default code128)
+// height       alto en píxeles (default 60)
+// fg           color de barras
+// bg           fondo (default transparent)
+// show-text    imprime el texto debajo
+// quiet        zonas de silencio EAN13 en módulos (default 9)
+
+// API JS
+// Acceso al SVG: bar.shadowRoot.querySelector('svg')</code></pre>
+</section>
+  </article>
+</body>
+</html>
