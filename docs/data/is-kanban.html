@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kanban · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-kanban / is-kanban-column / is-kanban-card de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/data/is-kanban.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-icon", "is-kanban", "is-kanban-card", "is-kanban-column");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-kanban" data-category="data">
+    <h1>Kanban</h1>
+    <p class="lede">Documentación y demos de is-kanban / is-kanban-column / is-kanban-card de InSoft.</p>
+<section id="intro">
+<p class="lede">Tablero kanban con columnas y tarjetas. Cada columna tiene un accent
+          color, badge automático con el conteo, slots de header-actions y
+          cards con cover, heading, meta, tag y footer.</p>
+<div class="demo"><is-kanban id="kb1">
+            <is-kanban-column title="Pending" accent="dodgerblue">
+              <is-kanban-card heading="Diseñar landing" meta="Asignado a Ana" tag="Design" tag-color="brand">
+                Maquetar la nueva landing con el sistema de paneles.
+              </is-kanban-card>
+              <is-kanban-card heading="Investigar SSO" meta="Asignado a Diego" tag="R&amp;D" tag-color="warning">
+                Contactar con Auth0 y Okta para comparar planes.
+              </is-kanban-card>
+              <is-kanban-card heading="Newsletter mensual" meta="Pendiente de copy" tag="Marketing" tag-color="neutral">
+                Preparar el email de finales de mes.
+              </is-kanban-card>
+            </is-kanban-column>
+            <is-kanban-column title="In progress" accent="var(--is-warning, #ffa800)">
+              <is-kanban-card heading="Implementar /api/v2" meta="Backend ⋅ 70%" tag="Backend" tag-color="warning">
+                <span slot="footer">
+                  <is-icon icon="mdi:clock-outline"></is-icon>
+                  <span>3 días</span>
+                </span>
+              </is-kanban-card>
+              <is-kanban-card heading="Bug: scrollspy" meta="Frontend" tag="Frontend" tag-color="brand">
+                El observer no se desconecta al cambiar de pestaña.
+              </is-kanban-card>
+            </is-kanban-column>
+            <is-kanban-column title="QA" accent="var(--is-success, #0bb783)">
+              <is-kanban-card heading="Refactor pagination" meta="PR #429" tag="Refactor" tag-color="success">
+                Sustituir el paginador custom por is-pagination.
+              </is-kanban-card>
+            </is-kanban-column>
+            <is-kanban-column title="Done" accent="var(--is-success, #0bb783)">
+              <is-kanban-card heading="Calendar widget" tag="UI" tag-color="success">Componente terminado y desplegado.</is-kanban-card>
+            </is-kanban-column>
+          </is-kanban>
+          <p id="kLog">Click sobre una card: <code class="code">—</code></p></div>
+<pre><code>&lt;is-kanban&gt;
+  &lt;is-kanban-column title=&quot;Pending&quot; accent=&quot;dodgerblue&quot;&gt;
+    &lt;is-kanban-card heading=&quot;Diseñar landing&quot; tag=&quot;Design&quot;&gt;…&lt;/is-kanban-card&gt;
+  &lt;/is-kanban-column&gt;
+&lt;/is-kanban&gt;</code></pre>
+</section>
+<section id="cover">
+<h2>Con cover</h2>
+<p class="lede">Atributo <code class="code">cover</code> muestra una imagen de cabecera.</p>
+<div class="demo"><is-kanban>
+            <is-kanban-column title="Features" accent="dodgerblue">
+              <is-kanban-card heading="Versión 2.0" tag="Release" tag-color="brand" cover="https://picsum.photos/id/1015/600/300">
+                Lanzamiento de la nueva versión con is-stepper.
+              </is-kanban-card>
+              <is-kanban-card heading="Componentes nuevos" tag="Component" tag-color="success" cover="https://picsum.photos/id/1025/600/300">
+                8 componentes añadidos en la fase 8.
+              </is-kanban-card>
+            </is-kanban-column>
+          </is-kanban></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<div class="demo"><h3><code class="code">&lt;is-kanban-column&gt;</code></h3></div>
+<div class="demo"><h3><code class="code">&lt;is-kanban-card&gt;</code></h3></div>
+<div class="demo"><h3>Eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
