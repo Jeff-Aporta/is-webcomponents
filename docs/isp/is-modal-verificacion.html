@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modal Verificación · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-modal-verificacion de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/isp/is-modal-verificacion.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-icon", "is-modal-verificacion");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-modal-verificacion" data-category="isp">
+    <h1>Modal Verificación</h1>
+    <p class="lede">Documentación y demos de is-modal-verificacion de InSoft.</p>
+<section id="intro">
+<p class="lede">Al abrirse ejecuta <code class="code">controller.actVerificar(record)</code>
+          y pinta los mensajes devueltos coloreados por severidad, con contadores
+          de infos, warnings y errores.</p>
+<div class="demo"><is-button id="mvBtn" color="brand">
+            <is-icon slot="start" icon="mdi:check"></is-icon>
+            Verificar tercero
+          </is-button>
+          <is-modal-verificacion id="mvDemo" entity="tercero"></is-modal-verificacion></div>
+<pre><code>const modal = document.querySelector('is-modal-verificacion');
+modal.controller = {
+  entrie: 'tercero',
+  async actVerificar(record) {
+    return { mensajes: [
+      { itdmensaje: 'info', mensaje: 'NIT válido.' },
+      { itdmensaje: 'warning', mensaje: 'Sin correo registrado.' },
+    ] };
+  },
+};
+modal.record = { nit: '900123456' };
+modal.show();</code></pre>
+</section>
+<section id="api">
+<h2>API rápida</h2>
+<p class="lede">Propiedades JS: <code class="code">controller</code>, <code class="code">record</code>,
+          <code class="code">onError</code>. Métodos: <code class="code">show()</code>,
+          <code class="code">hide()</code>, <code class="code">verify()</code>.</p>
+</section>
+  </article>
+</body>
+</html>
