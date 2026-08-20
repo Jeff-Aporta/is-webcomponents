@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Text · IS Web Components</title>
+  <meta name="description" content="Documentación de is-text.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/isp/is-text.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-text");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-text" data-category="isp">
+    <h1>Text</h1>
+    <section id="intro">
+<p class="lede">Color semántico, <code class="code">current</code>, CSS libre y <code class="code">mix</code>. Playground abajo.</p>
+<div class="demo"><div class="tx-pg" id="txPlayground">
+            <div class="tx-stage" style="color:#2f9e44">
+              <is-text id="txLive">Texto de ejemplo para probar color y clamp.</is-text>
+            </div>
+            <div class="tx-controls">
+              <label class="tx-field">color
+                <select id="txColorMode">
+                  <option value="" selected>(hereda)</option>
+                  <option value="brand">brand</option>
+                  <option value="neutral">neutral</option>
+                  <option value="info">info</option>
+                  <option value="success">success</option>
+                  <option value="warning">warning</option>
+                  <option value="danger">danger</option>
+                  <option value="current">current</option>
+                  <option value="css">CSS libre…</option>
+                </select>
+              </label>
+              <label class="tx-field">color CSS
+                <input id="txColorCss" type="text" value="#e8590c" disabled />
+              </label>
+              <label class="tx-field">
+                <span><input id="txMixOn" type="checkbox" /> usar mix</span>
+              </label>
+              <label class="tx-field">mix (%)
+                <div class="tx-range-row">
+                  <input id="txMix" type="range" min="0" max="100" step="1" value="40" disabled />
+                  <span class="tx-range-val" id="txMixVal">off</span>
+                </div>
+              </label>
+              <label class="tx-field">mix-with
+                <select id="txMixWith">
+                  <option value="" selected>text (default)</option>
+                  <option value="transparent">transparent</option>
+                  <option value="white">white</option>
+                  <option value="black">black</option>
+                  <option value="current">current</option>
+                </select>
+              </label>
+              <label class="tx-field">lines
+                <div class="tx-range-row">
+                  <input id="txLines" type="range" min="0" max="6" step="1" value="0" />
+                  <span class="tx-range-val" id="txLinesVal">0</span>
+                </div>
+              </label>
+              <label class="tx-field">texto
+                <textarea id="txText" rows="2">Texto de ejemplo para probar color y clamp. Puedes alargar este párrafo para ver el ellipsis.</textarea>
+              </label>
+            </div>
+            <p class="tx-caption">Props: <code>color</code>, <code>mix</code>, <code>mix-with</code>, <code>lines</code></p>
+            <pre class="tx-snippet" id="txSnippet"></pre>
+          </div></div>
+</section>
+<section id="color">
+<h2>color</h2>
+<div class="demo"><div class="tx-stack">
+            <div class="tx-ex"><is-text color="brand">brand</is-text><p class="tx-caption"><code>color="brand"</code></p></div>
+            <div class="tx-ex"><is-text color="neutral">neutral</is-text><p class="tx-caption"><code>color="neutral"</code></p></div>
+            <div class="tx-ex"><is-text color="info">info</is-text><p class="tx-caption"><code>color="info"</code></p></div>
+            <div class="tx-ex"><is-text color="success">success</is-text><p class="tx-caption"><code>color="success"</code></p></div>
+            <div class="tx-ex"><is-text color="warning">warning</is-text><p class="tx-caption"><code>color="warning"</code></p></div>
+            <div class="tx-ex"><is-text color="danger">danger</is-text><p class="tx-caption"><code>color="danger"</code></p></div>
+            <div class="tx-ex" style="color:#7048e8"><is-text color="current">current (hereda)</is-text><p class="tx-caption"><code>color="current"</code></p></div>
+            <div class="tx-ex"><is-text color="#e8590c">#e8590c</is-text><p class="tx-caption"><code>color="#e8590c"</code></p></div>
+            <div class="tx-ex"><is-text color="tomato" mix="55%" mix-with="transparent">tomato · mix transparent</is-text><p class="tx-caption"><code>color="tomato"</code> · <code>mix="55%"</code> · <code>mix-with="transparent"</code></p></div>
+          </div></div>
+</section>
+<section id="lines">
+<h2>lines</h2>
+<p class="lede">Prop <code class="code">lines</code> — clamp con ellipsis.</p>
+<div class="demo"><div class="tx-stack" style="max-width:22rem">
+            <div class="tx-ex">
+              <is-text lines="1">Una sola línea: este párrafo se corta con puntos suspensivos en cuanto no cabe en el ancho disponible del contenedor.</is-text>
+              <p class="tx-caption"><code>lines="1"</code></p>
+            </div>
+            <div class="tx-ex">
+              <is-text lines="2">Dos líneas: este párrafo se recorta al llegar a la segunda línea, y el resto del contenido desaparece con la elipsis al final.</is-text>
+              <p class="tx-caption"><code>lines="2"</code></p>
+            </div>
+            <div class="tx-ex">
+              <is-text lines="3">Tres líneas: el mismo párrafo, ahora con más aire. El clamp usa <code>--mx-lns</code>, que escribe el JS a partir del atributo <code>lines</code>.</is-text>
+              <p class="tx-caption"><code>lines="3"</code></p>
+            </div>
+          </div></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
