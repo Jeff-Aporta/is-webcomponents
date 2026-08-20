@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Combobox · IS Web Components</title>
+  <meta name="description" content="Documentación de is-combobox.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-combobox.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-combobox", "is-option");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-combobox" data-category="forms">
+    <h1>Combobox</h1>
+    <section id="intro">
+<p class="lede">Input + listbox filtrable con teclado y opciones <code>is-option</code>.</p>
+<div class="demo"><is-combobox label="Ciudad" hint="Escribe para filtrar" placeholder="Buscar…" clearable name="city" style="max-width:20rem">
+            <is-option value="bog">Bogotá</is-option>
+            <is-option value="med">Medellín</is-option>
+            <is-option value="cal">Cali</is-option>
+            <is-option value="barr">Barranquilla</is-option>
+            <is-option value="buc">Bucaramanga</is-option>
+          </is-combobox></div>
+</section>
+<section id="examples">
+<h2>Con valor inicial</h2>
+<div class="demo"><is-combobox label="País" value="co" required style="max-width:20rem">
+            <option value="co">Colombia</option>
+            <option value="mx">México</option>
+            <option value="es">España</option>
+          </is-combobox></div>
+<pre><code>&lt;is-combobox label=&quot;Ciudad&quot; clearable&gt;
+  &lt;is-option value=&quot;bog&quot;&gt;Bogotá&lt;/is-option&gt;
+  &lt;is-option value=&quot;med&quot;&gt;Medellín&lt;/is-option&gt;
+&lt;/is-combobox&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">Eventos: <code>is-change</code>, <code>is-input</code>, <code>is-show</code>, <code>is-hide</code>. Teclado: ↑↓ Enter Esc.</p>
+</section>
+  </article>
+</body>
+</html>
