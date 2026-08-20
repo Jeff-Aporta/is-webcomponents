@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lightbox · IS Web Components</title>
+  <meta name="description" content="Documentación de is-lightbox.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/helpers/is-lightbox.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-icon", "is-lightbox");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-lightbox" data-category="helpers">
+    <h1>Lightbox</h1>
+    <section id="intro">
+<p class="lede">Visor a pantalla completa, genérico: lo que metas en el slot default se
+          monta dentro de un <code class="code">&lt;dialog&gt;</code> top-layer
+          con zoom anclado al cursor y pan. Por defecto usa <code class="code">variant="backdrop"</code>
+          (20% oscuro + blur 2px). La barra por defecto trae cerrar,
+          reset de zoom y compartir enlace; usa el slot <code class="code">toolbar</code>
+          para añadir tus propios controles sin tocar el componente.</p>
+<div class="demo"><div class="grid">
+            <button type="button" id="open1" class="demo-btn">Abrir · backdrop (default)</button>
+            <button type="button" id="open1-solid" class="demo-btn">Abrir · solid</button>
+          </div>
+          <is-lightbox id="lb1">
+            <svg viewBox="0 0 320 200" width="640" height="400" aria-label="Plano de un piso">
+              <rect width="320" height="200" fill="#0b1220"/>
+              <rect x="20" y="20" width="120" height="80" fill="#1e3a8a"/>
+              <rect x="160" y="20" width="140" height="80" fill="#15803d"/>
+              <rect x="20" y="120" width="280" height="60" fill="#b45309"/>
+              <text x="160" y="180" text-anchor="middle" font-size="14" fill="#e6e8eb">Plano</text>
+            </svg>
+          </is-lightbox>
+          <is-lightbox id="lb1-solid" variant="solid">
+            <svg viewBox="0 0 320 200" width="640" height="400" aria-label="Plano de un piso">
+              <rect width="320" height="200" fill="#0b1220"/>
+              <rect x="20" y="20" width="120" height="80" fill="#1e3a8a"/>
+              <rect x="160" y="20" width="140" height="80" fill="#15803d"/>
+              <rect x="20" y="120" width="280" height="60" fill="#b45309"/>
+              <text x="160" y="180" text-anchor="middle" font-size="14" fill="#e6e8eb">Plano</text>
+            </svg>
+          </is-lightbox></div>
+<pre><code>&lt;!-- default: backdrop 20% + blur 2px --&gt;
+&lt;is-lightbox id=&quot;lb&quot;&gt;…&lt;/is-lightbox&gt;
+
+&lt;!-- lienzo opaco a pantalla completa --&gt;
+&lt;is-lightbox variant=&quot;solid&quot;&gt;…&lt;/is-lightbox&gt;</code></pre>
+</section>
+<section id="variants">
+<h2>Variantes de backdrop</h2>
+<p class="lede"><code class="code">backdrop</code> (default) deja ver la página con oscuridad 20% y blur 2px. <code class="code">solid</code> pinta el dialog opaco como antes.</p>
+<div class="demo"><div class="grid">
+            <button type="button" id="open-v-backdrop" class="demo-btn">variant=backdrop</button>
+            <button type="button" id="open-v-solid" class="demo-btn">variant=solid</button>
+          </div>
+          <is-lightbox id="lb-v-backdrop">
+            <article style="padding:1.25rem 1.5rem;max-width:22rem;border:1px solid var(--is-border);border-radius:var(--is-radius);background:var(--is-bg-elev);box-shadow:0 12px 40px rgb(0 0 0 / 25%)">
+              <h3 style="margin:0 0 .5rem">Backdrop</h3>
+              <p style="margin:0;color:var(--is-text-soft)">Página visible detrás · <code>rgb(0 0 0 / 20%)</code> + <code>blur(2px)</code>.</p>
+            </article>
+          </is-lightbox>
+          <is-lightbox id="lb-v-solid" variant="solid">
+            <article style="padding:1.25rem 1.5rem;max-width:22rem;border:1px solid var(--is-border);border-radius:var(--is-radius);background:var(--is-bg-elev)">
+              <h3 style="margin:0 0 .5rem">Solid</h3>
+              <p style="margin:0;color:var(--is-text-soft)">Lienzo opaco a pantalla completa (sin ver la página).</p>
+            </article>
+          </is-lightbox></div>
+<pre><code>&lt;is-lightbox&gt;…&lt;/is-lightbox&gt;
+&lt;is-lightbox variant=&quot;solid&quot;&gt;…&lt;/is-lightbox&gt;</code></pre>
+</section>
+<section id="gallery">
+<h2>Galería con contenido propio</h2>
+<div class="demo"><p class="empty-note">
+          Cada tarjeta es contenido que el visor recibe como slot. Distintos
+          tipos (svg, html, video) comparten la misma API.
+        </p></div>
+<div class="demo"><figure>
+            <div class="lb-target" data-tone="brand" data-lb-target="svg-1">SVG · 640×400</div>
+            <figcaption>Vector dentro del lightbox.</figcaption>
+          </figure>
+          <figure>
+            <div class="lb-target" data-tone="success" data-lb-target="svg-2">SVG · 800×300</div>
+            <figcaption>Otro SVG, misma API.</figcaption>
+          </figure>
+          <figure>
+            <div class="lb-target" data-tone="warning" data-lb-target="html-1">HTML card</div>
+            <figcaption>HTML arbitrario.</figcaption>
+          </figure></div>
+<div class="demo"><is-lightbox id="lb-gallery">
+          <template data-tpl="svg-1">
+            <svg viewBox="0 0 800 400" width="800" height="400" aria-label="Banner">
+              <defs>
+                <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#1e3a8a"/>
+                  <stop offset="100%" stop-color="#22c55e"/>
+                </linearGradient>
+              </defs>
+              <rect width="800" height="400" fill="url(#g1)"/>
+              <text x="400" y="220" text-anchor="middle" font-size="56" fill="#fff" font-weight="700">Banner</text>
+            </svg>
+          </template>
+          <template data-tpl="svg-2">
+            <svg viewBox="0 0 800 300" width="800" height="300" aria-label="Plot">
+              <rect width="800" height="300" fill="#0b1220"/>
+              <polyline points="0,250 100,180 200,210 300,140 400,160 500,90 600,120 700,60 800,80"
+                fill="none" stroke="#22c55e" stroke-width="4"/>
+            </svg>
+          </template>
+          <template data-tpl="html-1">
+            <article style="padding:1.5rem;max-width:30rem;border:1px solid var(--is-border);border-radius:var(--is-radius);background:var(--is-bg-elev)"></div>
+<div class="demo"><h3 style="margin-top:0">Tarjeta arbitraria</h3></div>
+<div class="demo"><p>El lightbox acepta cualquier HTML en su slot default. Puedes pasar
+                 una card, un formulario, lo que necesites.</p>
+              <is-button>Acción</is-button>
+            </article>
+          </template>
+        </is-lightbox></div>
+</section>
+<section id="toolbar-slot">
+<h2>Toolbar personalizada (slot)</h2>
+<div class="demo"><p class="empty-note">
+          Si pones algo en el slot <code class="code">toolbar</code>, esos
+          elementos aparecen en la cabecera y los botones por defecto que ya no
+          aportan (zoom-in/out/reset y share) se ocultan automáticamente.
+        </p></div>
+<div class="demo"><button type="button" id="open-tb" class="demo-btn">Abrir visor con toolbar custom</button>
+          <is-lightbox id="lb-tb">
+            <div slot="toolbar" style="display:flex;align-items:center;gap:.35rem">
+              <button type="button" class="lb-btn" id="tb-rotate" title="Rotar 90°" aria-label="Rotar 90°">
+                <is-icon icon="mdi:rotate-right"></is-icon>
+              </button>
+              <button type="button" class="lb-btn" id="tb-download" title="Descargar" aria-label="Descargar">
+                <is-icon icon="mdi:download"></is-icon>
+              </button>
+              <button type="button" class="lb-btn" id="tb-info" title="Info" aria-label="Información">
+                <is-icon icon="mdi:information-outline"></is-icon>
+              </button>
+            </div>
+            <svg viewBox="0 0 600 400" width="600" height="400" id="tb-svg">
+              <rect width="600" height="400" fill="#0f172a"/>
+              <circle cx="300" cy="200" r="120" fill="#38bdf8"/>
+            </svg>
+          </is-lightbox></div>
+<pre><code>&lt;is-lightbox&gt;
+  &lt;div slot=&quot;toolbar&quot;&gt;
+    &lt;button&gt;Rotar&lt;/button&gt;
+    &lt;button&gt;Descargar&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;svg&gt;…&lt;/svg&gt;
+&lt;/is-lightbox&gt;</code></pre>
+</section>
+<section id="video">
+<h2>Contenido vivo: video</h2>
+<div class="demo"><p class="empty-note">
+          Si el contenido es interactivo (video, mapa, canvas) el visor lo monta
+          sin más. El zoom + pan se aplica sobre el envoltorio, no sobre el
+          medio, así que el video sigue siendo operable.
+        </p></div>
+<div class="demo"><button type="button" id="open-vid" class="demo-btn">Ver video en pantalla completa</button>
+          <is-lightbox id="lb-vid">
+            <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+              controls playsinline style="max-width:90vw;max-height:80vh"></video>
+          </is-lightbox></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<div class="demo"><p class="empty-note">
+          El antiguo <code class="code">&lt;is-diagram-lightbox&gt;</code> es
+          ahora una variante de este lightbox con la toolbar de la animación
+          tortuga (play/pause/prev/next/ring), el editor de código JSON y el
+          enlace compartible con el payload del diagrama codificado en <code class="code">?d=</code>.
+        </p></div>
+</section>
+  </article>
+</body>
+</html>
