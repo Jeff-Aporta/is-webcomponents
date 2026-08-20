@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jeff-aporta.github.io/is-webcomponents/sitemap.xml
