@@ -121,8 +121,10 @@ Los modos pesados (python) se cargan al activar el `lang`.
   guardianes = `tests/*.test.mjs`.
 - **No** crear snippets HTML sin lang/inferencia: el default `javascript` pinta
   `<` como operador (cian) y “parece tema roto”.
-- **No** marcar `data-cm="1"` al construir el nodo en `render.js` antes de paint.
-- **No** reintroducir la sección «HTML puro equivalente» bajo demos.
+- **No** declarar el visor listo porque `value` / `data-cm="1"` existen: CM
+  puede estar vacío. Siempre asignar `el.value = text` en `paintOne`;
+  `refresh()` tras `is-after-show` / `is-tab-show`.
+- **No** omitir `is-tab-group` del chrome de galería (`GALLERY_CHROME_TAGS`).
 
 ## Errores conocidos y prevención
 
@@ -154,6 +156,11 @@ Los modos pesados (python) se cargan al activar el `lang`.
   `<is-code>`; paths de file-meta sin CM; `scroll-behavior: auto` en
   `is-main.main`; re-`restoreScroll` al montar la barra. Guardián:
   `tests/gallery-sources-meta.test.mjs`.
+
+- **Visor de fuentes en blanco con texto en el atributo:** getter devolvía seed
+  si CM `getValue()` era `''`; `paintOne` saltaba el setter; CM medía 0 px en
+  panel `hidden`. Fix: `show()` antes de cargar; `refreshEditor`; seed →
+  `setValue` si el lienzo está vacío. Ver LLM.md error **#44**.
 
 ## Roadmap (no implementar sin diseño aprobado)
 

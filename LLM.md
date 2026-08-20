@@ -8,7 +8,7 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 
 | Hacer | No hacer |
 | --- | --- |
-| Fuente bajo `src/` (`components`, `styles`, `previews`, `skills`, `assets`, `docs`) | Recrear esas carpetas en la raíz |
+| Fuente bajo `src/` (`components`, `styles`, `previews`, `skills`, `assets`, `docs`) | Recrear `components/` `styles/` `previews/` `skills/` en la raíz. `docs/` raíz = HTML SEO generado (`npm run docs`), no clonar `src/docs` |
 | Consumir por CDN (`dist/cdn/`) + MD raw bajo `…/main/src/components/` | `npx skills add` / npm del kit (aún no hay paquete); artefactos sueltos en `dist/*.js` |
 | Wrappers `app-*`/`tk-*` = datos → `is-*` + `.css` hermano + `IsUi.adoptCss` | CSS gigante en string dentro del `.ts`; reinventar button/dialog/table/toast/icon |
 | Preview: JSON `is-preview/v1` + `<is-preview-component>` + `behaviors/<tag>.js` opcional | HTML por tag; lógica en `eval` / strings de listeners; iframe legado |
@@ -16,28 +16,28 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | Enums/API solo del MD / `VALID_*` del `.js` | Inventar `variant="ghost"` / colores / eventos “porque se parece a otro DS” |
 | Tema: `data-theme` + `data-palette`; default paleta `contapyme` | `prefers-color-scheme`; `color-scheme` en `:root`; default `insoft` |
 | Estado de UI en URL: **solo** `?s=<b64url JSON>` (`url-key` = key dentro de `s`) | Query params sueltos (`?docs=`, `?cdnTab=`, `?theme=`) para nav de tabs/espejos |
-| Pesos de archivo: `<is-format-bytes autofit>` | Inventar `0.2 MB` / formateadores paralelos; sumar solo el literal de `all.min.js` |
-| Publicación: solo `dist/cdn/<cat>/<tag>.min.js` | Commitear bundles huérfanos en `dist/` raíz (ej. `dist/ag-grid.js`) |
+| Pesos de archivo: `<is-format-bytes autofit>` | Inventar `0.2 MB`; inventar un `all.min.js` “de peso” |
+| Publicación: solo `dist/cdn/<cat>/<tag>.min.js` (+ `loader.min.js`) | Emitir o commitear `all.min.js` / `category.*.min.js`; bundles huérfanos en `dist/` raíz |
 | Commitear `tests/*.test.mjs` | Meter `tests/` entero en gitignore (solo `*.tmp` / coverage / `.cache`); inventar `.test.ts` sin pipeline TS |
 | Refactor mecánico de tokens → commit atómico + `token-vocabulary` | Dejar el rename a medias en el working tree y rebasear encima |
 | Galería: `.file-meta` (fuentes + pesos `.min`) + modal fuentes full-page con URL absoluta | `.vs-page-bar` con hints; `#vsPath` = path relativo; dialog a `96vw`/`70vh` |
 | Diagramas con grupos: cajón por grupo + `ratio` guía (`er-spec.js`) | Layout plano con todos los nodos revueltos cuando el payload declara `groups[]` |
 | Editor de código / snippets = `<is-code>` (`mode=block\|inline`, `readonly compact` en docs) | Tag `is-code-editor`; segundo motor CM; pintar docs con runMode suelto |
 | Snippets HTML: `lang="html"` o dejar que `inferLanguage` / softFormat corran | Marcar `data-cm="1"` antes de paint; asumir default `javascript` con markup `<…>` |
-| Consumo selectivo: `loader.min.js` + `load('actions')` / tags; anti-redundancia | Volver a `load('is-button')` tras cargar la categoría; preferir `all.min.js` por defecto |
+| Consumo selectivo: `loader.min.js` + `L.load(tags\|cats)`; anti-redundancia | Volver a `load('is-button')` tras la categoría; publicar o documentar `all.min.js` / bundles de categoría |
 | Docs LLM en artefactos: banner `/*! … */` + `dist/cdn/loader.md` | Minificar sin rutas MD; reinventar un segundo loader |
-| **Galería boot:** CSS en `<link>` + shell tags + `preview-component` desde `dist/cdn`; `load('all')` / page-modules en background | `await loadCSS*` + `await load('all')` en el path crítico (FOUC); `await` de `cdn-panel`/`md-editor`; asignar `.preview` antes del upgrade del CE |
+| **Galería boot:** CSS en `<link>` + shell tags + `preview-component` desde `dist/cdn`; deps de preview on-demand (`GALLERY_CHROME_TAGS` + tags del JSON) | `await loadCSS*` en path crítico; `await load('all')` en el shell; `await` de `cdn-panel`/`md-editor`; asignar `.preview` antes del upgrade del CE |
 | Dev local galería: `node scripts/serve.mjs` (Cache-Control no-store) | Live Server desde carpeta padre como “servidor oficial” (más lento; OK solo para mirar) |
 
-Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `gallery-boot` · `cdn-loader` · `load-plan` · `code-infer-lang` · `demo-equiv`.
+Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `gallery-boot` · `cdn-loader` · `cdn-folders` · `load-plan` · `code-infer-lang` · `demo-equiv`.
 
 ---
 
 ## Proyecto
 
 - Web Components vanilla (`is-*`), shadow DOM, tokens `--is-*`.
-- **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/assets`, `src/docs`. En la raíz solo quedan `scripts/`, `dist/`, `tests/`, `manifest.js`, `index.html`, `robots.txt`, `sitemap.xml`, docs de agente (`LLM.md`, `AGENTS.md`, `README.md`).
-- Guardián: `tests/src-layout.test.mjs` — falla si reaparecen `components/` / `styles/` / `previews/` / `skills/` / `docs/` en la raíz.
+- **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/assets`, `src/docs`. En la raíz: `scripts/`, `dist/`, `tests/`, `docs/` (**HTML SEO** generado, no agent-docs), `manifest.js`, `index.html`, `robots.txt`, `sitemap.xml`, `LLM.md`, `AGENTS.md`, `README.md`.
+- Guardián: `tests/src-layout.test.mjs` — falla si reaparecen `components/` / `styles/` / `previews/` / `skills/` en la raíz. **`docs/` raíz está permitida** (páginas planas por tag). `src/docs/` sigue siendo notas de agente.
 - **Previews = JSON homogéneo**, no HTML por tag:
   - Archivo: `src/previews/<cat>/<tag>.json` con `$schema: "is-preview/v1"` (misma interface para todos).
   - Chrome: `<is-preview-component>` (galería in-app + `_shell.html?tag=` fullscreen).
@@ -54,7 +54,7 @@ Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` 
 - Tema/paleta por URL: `?s=<b64url({ theme, palette, embed?, component?, … })>`. **`prefers-color-scheme` NO se usa**.
 - **Un solo query de estado: `s`.** Tabs (`url-key="docs"`), espejo CDN (`cdnTab`), componente de galería, etc. viven **dentro** del JSON de `?s=`. Módulo: `src/components/_shared/url-nav.js` (`readUrlNav` / `writeUrlNav`). La galería al cambiar `component` **mergea** el resto de keys (no borra `docs`/`cdnTab`).
 - **No** añadir `?docs=api` ni `?cdnTab=enlaces`: eso se limpia al escribir y está prohibido en la carta.
-- Pesos CDN: `sizes.json` + `cdn-sizes.js` (expande `all.min.js` / `category.*.min.js` a los `.min.js` reales). UI: `<is-format-bytes autofit>`.
+- Pesos CDN: `sizes.json` + `cdn-sizes.js` (suma `.min.js` reales). **No existen** `all.min.js` / `category.*.min.js` en dist. UI: `<is-format-bytes autofit>`.
 - QA UX de demos: `node scripts/ux-audit.mjs` (Playwright; report en `.tmp/ux-audit/`, ignorado). Artefactos locales `.tmp/` no se commitean.
 - **Paleta default = `contapyme`**. Marca tipográfica `InSoft`; id de paleta `insoft` en minúsculas (API).
 
@@ -164,9 +164,9 @@ Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` 
 - **No** volver a crear `*.html` por tag. Guardián: `tests/preview-json-contract.test.mjs`.
 
 ### Apps consumidoras (CDN)
-- Bootstrap: preferí `loader.min.js` (`loadCSSBase` + `loadCSSPalettesDefault` + `load(tags|cats)`). Alternativa: `is-base.min.css` + `palettes.min.css` + tag/category/`all.min.js` desde **`dist/cdn/`**.
+- Bootstrap: **solo** `loader.min.js` + `L.load(tags de la vista)` (o categoría, que **expande a tags**). CSS: `loadCSSBase` + `loadCSSPalettesDefault` o `<link>` a `is-base.min.css` / `palettes.min.css`.
 - Docs loader: `src/cdn/loader.md` (+ `src/cdn/LLM.md`) · publicado `dist/cdn/loader.md` / `loader.min.js`.
-- **Anti-redundancia:** `load('actions')` cubre `is-button`; un `load('is-button')` posterior **no** re-fetch (`has` / `skipped`). Preferir categoría o tags puntuales frente a `all.min.js` (~1.8 MB resuelto).
+- **Anti-redundancia:** `load('actions')` cubre `is-button`; un `load('is-button')` posterior **no** re-fetch (`has` / `skipped`). **No** hay archivo `all.min.js`; `load('all')` (si se usa) son jobs por tag.
 - Cada `.min.js` empieza con comentario `/*! IS Web Components - docs (LLM) */` y URLs raw de MD (componente, categoría, kit, loader, skill).
 - Preview «Ecosistema JS»: get started + playground del loader + catálogo `_shared/`.
 - Docs: `components/LLM.md` → categoría → módulo (raw bajo `…/main/src/components/`).
@@ -199,6 +199,7 @@ Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` 
 - **No** bajo cada `h2` de sección ni dentro de cada paper/`is-demo`.
 - Opt-out de página: no montar si el tag no está en manifest (o retirar el script).
 - Modal `#is-view-sources-dialog`: `<is-dialog class="is-view-sources">` full page (`width="100vw"` `spacing="0"`; CSS `::part(dialog)` stretch). Contenido en `<is-code readonly compact>`.
+- **Pintar de verdad:** `value`/`data-cm-source` llenos **no** equivalen a CM visible. Abrir el dialog **antes** de `loadKind`; `refreshEditor` en `is-after-show` y `is-tab-show`; `paintOne` siempre hace `el.value = text`; si `#cm.getValue()` está vacío, volcar el seed. Chrome: `GALLERY_CHROME_TAGS` incluye `is-tab-group`.
 - `#vsPath` = `<a>` con **URL absoluta** (`localSourceUrl` / fetch `result.url`), clickeable. Header “Abrir” igual.
 - Barra de página = solo `.file-meta-page`, **sin sticky** (scrollea con el contenido). **Sin** textos tipo “sin minificar / auditoría / GH Pages”.
 - Tag de editor: **`is-code`** (preview `component: "is-code"`). Docs categoría: `src/components/code/LLM.md`.
@@ -234,7 +235,7 @@ Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` 
 - **No crear query params sueltos para estado de UI** (`?docs=`, `?cdnTab=`, `?theme=` live). Todo va en `?s=`. `url-key` es la **clave dentro** del JSON, no el nombre del param.
 - **No formatear pesos como `0.2 MB`.** Usar `<is-format-bytes autofit>` (o la misma regla ≥ 1 unidad).
 - **No asumir que `#toaster` / `#grid` existen** en el JSON de demos. El behavior los crea o falla el UX en silencio/`TypeError`.
-- **No sumar solo el byte-size del literal `all.min.js` / `category.*.min.js`.** Son import lists (~250 B); el peso real está en `sizes.json` expandido (`cdn-sizes.js`).
+- **No sumar un archivo `all.min.js` / `category.*.min.js`.** Ya no se emiten. `load('all')` / categoría = jobs por tag (`load-plan.js`). Pesos = `sizes.json` de los `.min.js` reales.
 - **No commitear `.tmp/` ni reports de `ux-audit`.** Sí commitear `scripts/ux-audit.mjs` y `tests/*.test.mjs`.
 - **No poner CSS de dominio como string gigante en el `.ts`.** Archivo `.css` hermano + `adoptCss(shadow, import.meta.url)`. Tras `innerHTML = ''` del shadow, volver a llamar `adoptCss`.
 - **No asumir que `type="submit"` en `<is-button>` envía un `<form>` light-DOM.** El `<button>` real está en Shadow DOM; usar `requestSubmit` cableado en el kit o `onclick` que dispare submit del form.
@@ -270,30 +271,32 @@ Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` 
 - **No asumir que `lang` default sirve para HTML.** Sin `lang` o inferencia,
   CodeMirror trata `<` como operador (cian) — se ve “mal pintado” sin error.
 - **No re-descargar un tag ya cubierto por su categoría** vía loader: es
-  anti-patrón; el planificador debe devolver `skipped`. No “arreglar” forzando
-  `all.min.js`.
+  anti-patrón; el planificador debe devolver `skipped`. **No** emitir ni
+  documentar `all.min.js` / `category.*.min.js`. `load('all')` (API) = jobs por tag.
 - **No minificar sin banner MD** en `scripts/build.mjs`: cada `.min.js` lleva
   rutas raw para LLMs; `loader.md` se copia a `dist/cdn/`.
 - **No reimportar `src/components/layout/preview-component.js` en la galería
-  Pages** después de `load('all')`: re-arrastra `icon-loader` desde fuente y
-  404-ea `src/assets/icons/{lucide,heroicons,material-symbols}.json`.
+  Pages** tras cargar layout/preview desde `dist/cdn`: re-arrastra `icon-loader`
+  desde fuente y 404-ea JSON de iconos gitignoreados.
 - **No hacer el primer paint de la galería depender de `await L.loadCSS*` /
-  `await L.load('all')` / `await L.loadPageModules(...)`.** CSS = `<link>` (y
-  crítico inline). Shell = tags mínimos + `import('./dist/cdn/layout/preview-component.min.js')`.
-  `load('all')` y scripts de chrome van **después**, sin bloquear `dataset.kitShell`.
+  `await L.load('all')` / `await L.loadPageModules(...)`.** CSS = `<link>`.
+  Shell = tags mínimos + `import('./dist/cdn/layout/preview-component.min.js')`.
+  Resto on-demand (`ensurePreviewDeps` / `GALLERY_CHROME_TAGS`), sin bloquear `kitShell`.
 - **No poner `cdn-panel.js` (ni nada que importe `cdn-snippet` desde `src/`) en el
   path crítico del boot.** `cdn-snippet` → `md-editor` cuelga el `Promise.all`
   varios segundos. El panel se carga en background; el CE ya viene de
   `dist/cdn/feedback/cdn-snippet.min.js` o de `L.load('feedback')`.
 - **No asignar `previewHost.preview = …` antes de que el tag esté defined.**
   Top-level await del `<head>` **no** bloquea el módulo del `<body>`: el body
-  puede correr mientras `load('all')` sigue. Eso crea una **own property** que
+  puede correr mientras el loader sigue. Eso crea una **own property** que
   tapa el setter de `<is-preview-component>` → main vacío, demos invisibles,
   sin error de consola. Siempre `whenDefined` + `delete host.preview` (own) antes
   de asignar (`setHostPreview` en `index.html`).
 - **No asumir que `is-preview-component` está en el catálogo del loader.** No está
-  en `categories.layout`; solo entra vía `all.min.js` o import directo de
+  en `categories.layout`; entra por `import` de
   `dist/cdn/layout/preview-component.min.js`.
+- **No declarar listo el visor de fuentes porque `value` / `data-cm-source` tienen texto.**
+  El getter de `is-code` puede devolver el seed con CodeMirror vacío. Ver error **#44**.
 
 ## Errores aprendidos (no repetir)
 
@@ -507,6 +510,22 @@ Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` 
     inventar un segundo bootstrap distinto de este contrato.
     Guardián: `tests/gallery-boot.test.mjs` (+ `cdn-loader` coherente).
 
+44. **Visor de fuentes “vacío” con el archivo ya en el DOM** (20-ago-2026)
+    → En Pages, `#is-view-sources-dialog` tenía JS/CSS/MD en `value` y
+    `data-cm-source` (Copiar/Abrir iban bien) y el editor se veía en blanco.
+    **Causa:** (1) getter de `is-code` devolvía el seed si `#cm.getValue()` era
+    `''` → `paintOne` hacía `if (el.value !== text)` y **no** llamaba setter;
+    (2) CM montaba con el panel `hidden` / dialog aún sin layout → altura 0 y
+    sin `refresh` al mostrar o al cambiar de tab; (3) chrome lazy sin
+    `is-tab-group` en `GALLERY_CHROME_TAGS`.
+    **Hacer:** `dlg.show()` antes de `loadKind`; `refreshEditor` en
+    `is-after-show` y `is-tab-show`; `paintOne` siempre `el.value = text`; si
+    CM listo y `getValue()` vacío, `setValue(seed)`; chrome incluye
+    `is-tab-group`.
+    **No hacer:** fiarse del inspector (`value` lleno ≠ lienzo CM); pintar CM
+    solo en paneles `hidden` sin refresh al mostrar; omitir tabs del chrome.
+    Guardián: `tests/gallery-sources-meta.test.mjs`. Docs: `code/LLM.md`.
+
 ---
 
 ## Errores aprendidos fuera de este repo (mismo tipo de trampa)
@@ -599,7 +618,8 @@ mantenerlo aparte.
 - Síntoma de que falta el modo: `runMode` corre sin lanzar, pero produce **0 tokens** (`conTema > 0`, `conTokens === 0`).
 - Síntoma de que falta el core: `ReferenceError: CodeMirror is not defined` dentro de `paint()`.
 - Los `<is-cdn-snippet>` **auto-inyectados** se crean *después* del evento `load`, así que un reintento enganchado a `load` nunca dispara. Hace falta un reintento acotado que espere a que existan pintor + core + modo.
-- El **contenido** del snippet de demo (markup) no es responsabilidad de CodeMirror: lo sella `demo-code.js` con tema/paleta. Ver sección «Snippets de demo» arriba.
+- Síntoma de que CM montó vacío con seed en el atributo: inspector lleno,
+  lienzo en blanco. No tratar `el.value` como prueba de pintado. Ver error **#44**.
 
 ---
 
@@ -632,7 +652,8 @@ mantenerlo aparte.
 | `url-nav.test.mjs` | Estado UI solo en `?s=`; sin params sueltos |
 | `format-bytes-autofit.test.mjs` | `autofit` + pesos en captions CDN |
 | `ux-gallery-invariants.test.mjs` | Toast host, `on(null)` seguro, cdn-sizes, no params sueltos |
-| `gallery-sources-meta.test.mjs` | `.file-meta-page`, `#vsPath` absoluto, no `is-code-editor` |
+| `gallery-sources-meta.test.mjs` | `.file-meta-page`, `#vsPath` absoluto, visor CM (`refreshEditor`, seed vacío) |
+| `cdn-folders.test.mjs` | Sin `all.min.js` ni `category.*.min.js` en `dist/cdn/` |
 | `gallery-boot.test.mjs` | FOUC: CSS `<link>`; shell sin `await all`; `setHostPreview`; cdn-panel vía dist |
 | `cdn-loader.test.mjs` | Entry `loader.min.js`, banner MD, sin `all.min` suelto en head |
 | `load-plan.test.mjs` | Anti-redundancia categoría → tag / `all` / mismo lote |
@@ -650,7 +671,8 @@ mantenerlo aparte.
 8. Cambio de coloreado `is-code` → `code-infer-lang` + no reintroducir `renderDemoEquiv`.
 9. Nuevo estado de UI en URL → key dentro de `?s=` vía `url-nav.js`, nunca param suelto + actualizar `url-nav.test.mjs`.
 10. Behavior que llama APIs sobre un nodo del demo → garantizar el nodo en `mount` + entrada en `ux-gallery-invariants` si es trampa repetible.
-11. Cambio del boot de `index.html` (orden CSS/JS, `load('all')`, preview setter) → **obligatorio** `gallery-boot` verde.
+11. Cambio del boot de `index.html` (orden CSS/JS, loader, preview setter) → **obligatorio** `gallery-boot` verde.
+12. Visor de fuentes / `is-code` en dialog → `gallery-sources-meta` verde (no basta `value` en el DOM).
 
 ### Diagramas: agrupadores, ratio y ruteo (`er-spec.js`, ago/2026)
 

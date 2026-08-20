@@ -36,6 +36,7 @@ c:\ContaPyme\Personal\apps\AppWebcomponents\
 │   ├── assets/icons/           # SVGs Iconify (+ .json índices)
 │   ├── skills/is-webcomponents/
 │   └── docs/
+├── docs/                       # HTML SEO por tag (generado; NO src/docs)
 ├── scripts/                    # build, serve, preview-chrome, …
 ├── dist/cdn/                   # artefactos CDN (jsDelivr / Pages)
 ├── tests/                      # *.test.mjs (commiteados; no ignorar la carpeta)
@@ -46,7 +47,8 @@ c:\ContaPyme\Personal\apps\AppWebcomponents\
 └── package.json
 ```
 
-**NO** vuelvas a crear `components/`, `styles/`, `previews/`, `skills/` o `docs/` en la raíz.
+**NO** vuelvas a crear `components/`, `styles/`, `previews/` o `skills/` en la raíz.
+`docs/` en la raíz **sí** existe: HTML SEO generado (`npm run docs` / build). No es `src/docs`.
 
 `src/docs/`, `.superpowers/`, `.impeccable/` y partes de `dist/` **se regeneran o son notas
 personales, no los toques a menos que sea explícito.**
@@ -60,8 +62,9 @@ npm install
 # levantar dev server (puerto 8391)
 node scripts/serve.mjs
 
-# build para CDN (genera dist/cdn/{tag}.min.js + .min.css + is-base.min.css + bundles por categoría + all.min.js)
+# build para CDN (tag.min.js + CSS + loader.min.js; SIN all.min.js ni category.*.min.js)
 npm run build
+npm run docs   # HTML plano en docs/<cat>/<tag>.html + sitemap
 
 # descargar iconos de Iconify (~300 MB si haces TODAS las colecciones, ~5 MB si solo mdi + tabler)
 node scripts/download-icons.mjs --only=mdi --only=tabler   # re-entrar varias veces si quieres más sets
@@ -103,13 +106,14 @@ en `src/`. Las profundidades **no son iguales**:
 <!-- src/previews/actions/is-button.html (categoría = profundidad 2) -->
 <script src="../../../scripts/preview-boot.js"></script>
 <link rel="stylesheet" href="../../styles/is-base.css" />
-<script type="module" src="../../../dist/cdn/all.min.js"></script>
+<script type="module" src="../../../dist/cdn/loader.min.js"></script>
+<!-- L.load(['is-button']) — no all.min.js -->
 <!-- manifest script: ../../components/actions/button.js → src/components/... -->
 
 <!-- src/previews/home.html (profundidad 1) -->
 <script src="../../scripts/preview-boot.js"></script>
 <link rel="stylesheet" href="../styles/is-base.css" />
-<script type="module" src="../../dist/cdn/all.min.js"></script>
+<script type="module" src="../../dist/cdn/loader.min.js"></script>
 ```
 
 > Si usas `../../dist` desde una categoría, resuelve a `src/dist` (404) y la
@@ -142,7 +146,8 @@ directamente en light DOM** — es API interna del componente.
 
 ### 4.5 Estilo de commits
 
-Conventional commits en español, scope corto, mensajes concisos:
+Conventional commits en español. Autor **solo Jeff-Aporta**. **Nunca**
+`Co-authored-by` ni firmas de herramienta.
 
 ```
 feat(icons): 13k iconos locales + loader local-first
@@ -220,7 +225,18 @@ de la API), la salta. Si solo faltan algunos iconos, los baja sueltos.
   `tests/dist-cdn-layout.test.mjs`.
 - **LLM.md sin carta/DO/DON'T:** `tests/llm-contract.test.mjs` exige secciones
   y que los guardianes citados existan en disco.
-- Detalle completo: `LLM.md` → Carta de leyes + errores 24–30.
+- Detalle completo: `LLM.md` → Carta de leyes + errores 24–44.
+
+### 6.0c Visor de fuentes vacío + CDN sin all.min (2026-08-20)
+
+- **Inspector lleno, lienzo CM en blanco:** `value`/`data-cm-source` no prueban
+  pintado. `paintOne` debe asignar `el.value` siempre; `refresh` al abrir el
+  dialog y al cambiar tab; chrome con `is-tab-group`. LLM.md **#44**.
+  Guardián: `tests/gallery-sources-meta.test.mjs`.
+- **`all.min.js` / `category.*.min.js`:** no se emiten. Categoría = jobs por
+  tag. **No** marcar la categoría como cubierta antes de empujar jobs.
+  Guardianes: `cdn-folders`, `load-plan`.
+- Commits: único autor Jeff-Aporta; sin `Co-authored-by`.
 
 ### 6.0 Paleta / canvas / snippets (2026-08)
 

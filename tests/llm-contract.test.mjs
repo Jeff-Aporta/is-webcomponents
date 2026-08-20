@@ -60,6 +60,8 @@ const requiredPhrases = [
   ['Galería boot:', 'carta: boot galería anti-FOUC'],
   ['setHostPreview', 'own-property preview'],
   ['gallery-boot', 'guardián gallery-boot'],
+  ['refreshEditor', 'visor fuentes: refresh CM'],
+  ['GALLERY_CHROME_TAGS', 'chrome galería incluye tabs'],
 ];
 
 for (const [needle, label] of requiredPhrases) {
@@ -91,6 +93,8 @@ const guardians = [
   'code-infer-lang.test.mjs',
   'demo-equiv.test.mjs',
   'gallery-boot.test.mjs',
+  'gallery-sources-meta.test.mjs',
+  'cdn-folders.test.mjs',
 ];
 
 for (const file of guardians) {
@@ -102,10 +106,12 @@ for (const file of guardians) {
   }
 }
 
-// Errores 24–43 = preview / dist / color / em / url / toast / pesos / ux /
-// file-meta / is-code / snippets / demo-equiv / loader / Pages icons / FOUC boot
+// Errores 24–44 = preview / dist / color / em / url / toast / pesos / ux /
+// file-meta / is-code / snippets / demo-equiv / loader / Pages icons / FOUC /
+// visor CM vacío
 for (const n of [
   24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43,
+  44,
 ]) {
   if (!llm.includes(`${n}. **`)) {
     failures.push(`bitácora de errores: falta entrada ${n}`);

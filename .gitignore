@@ -18,6 +18,10 @@ src/assets/icons/.state/
 tests/*.tmp
 tests/coverage/
 tests/.cache/
+tests/_author-index.json
+
+# Salidas de scripts / auditorías locales
+logs/
 
 # Iconos descargados: commiteamos solo las dos colecciones mas usadas del repo
 # (mdi y tabler). El resto se regenera bajo demanda con `node scripts/download-icons.mjs`.

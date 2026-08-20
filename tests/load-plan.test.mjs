@@ -30,7 +30,7 @@ const catalog = {
 test('categoría expande a tags individuales y cubre hijos del mismo lote', () => {
   const reg = createRegistry();
   const { jobs, skipped } = planLoads(['actions', 'is-button'], reg, catalog);
-  assert.equal(jobs.length, 2);
+  assert.equal(jobs.length, 2, 'categoría no puede quedar cubierta antes de empujar jobs');
   assert.ok(jobs.every((j) => j.kind === 'tag'));
   assert.deepEqual(skipped, ['is-button']);
 });

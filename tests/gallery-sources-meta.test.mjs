@@ -65,6 +65,18 @@ test('view-sources: path absoluto, full-page, sin vs-page-bar con hints', () => 
   assert.doesNotMatch(code, /['"]vs-page-hint['"]/);
 });
 
+test('view-sources: chrome de galería incluye is-tab-group', () => {
+  const src = read('src/cdn/collect-is-tags.js');
+  assert.match(src, /GALLERY_CHROME_TAGS/);
+  assert.match(src, /is-tab-group/);
+});
+
+test('highlight-code: paintOne asigna value siempre (no fiarse del getter)', () => {
+  const src = read('src/components/_shared/highlight-code.js');
+  assert.match(src, /el\.value = text/);
+  assert.doesNotMatch(src, /if \(el\.value !== text\) el\.value = text/);
+});
+
 test('demo-file-meta: una sola barra de página (no h2 / no demos / sin is-code en paths)', () => {
   const src = read('scripts/demo-file-meta.js');
   assert.match(src, /file-meta-page/);

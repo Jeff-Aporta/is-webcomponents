@@ -29,7 +29,9 @@ Publicado: `dist/cdn/loader.min.js` · `dist/cdn/loader.md`.
 ## Qué no hacer
 
 - **No** re-cargar un tag ya cubierto por su categoría (`actions` → `is-button`).
-- **No** default a `load('all')` “por comodidad” (cada tag.min.js, ~MB resuelto).
+- **No** default a `load('all')` “por comodidad” (expande a cada tag.min.js).
+- **No** volver a emitir `all.min.js` ni `category.*.min.js` (`tests/cdn-folders.test.mjs`).
+- **No** marcar `coveredTag` por categoría **antes** de empujar los jobs del lote (`planLoads(['actions'])` quedaría en 0 jobs).
 - **No** inventar un segundo entry aparte de `src/cdn/loader.js` + `load-plan.js`.
 - **No** quitar el banner MD ni dejar de copiar `loader.md` al dist.
 - **No** mezclar espejos (jsDelivr + Pages) en la misma página.
@@ -42,7 +44,8 @@ Publicado: `dist/cdn/loader.min.js` · `dist/cdn/loader.md`.
 
 | Trampa | Síntoma | Guardián |
 | --- | --- | --- |
-| Carga redundante tag tras categoría | Doble red, Custom Elements ya definidos | `tests/load-plan.test.mjs` |
+| Carga categoría sin jobs | `planLoads(['actions'])` = [] | `tests/load-plan.test.mjs` |
+| Emitir `all.min.js` / category bundles | Artefacto prohibido en dist | `tests/cdn-folders.test.mjs` |
 | Galería con `all.min` suelto en head | Bundle enorme | `tests/cdn-loader.test.mjs` |
 | Sin `loader.md` en dist | LLM sin contexto del entry | `tests/cdn-loader.test.mjs` |
 | FOUC + demos vacíos (boot serial / own `.preview`) | Blanco, tags crudos, main vacío | `tests/gallery-boot.test.mjs` · LLM #43 |
