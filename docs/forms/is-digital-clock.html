@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital Clock · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-digital-clock de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-digital-clock.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-digital-clock");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-digital-clock" data-category="forms">
+    <h1>Digital Clock</h1>
+    <p class="lede">Documentación y demos de is-digital-clock de InSoft.</p>
+<section id="intro">
+<p class="lede">Reloj digital: muestra la hora en formato numérico y admite selección por teclado.</p>
+<div class="demo"><is-digital-clock value="14:30"></is-digital-clock></div>
+<pre><code>&lt;is-digital-clock value=&quot;14:30&quot;&gt;&lt;/is-digital-clock&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">&lt;is-digital-clock&gt; — Selector de hora en lista (MUI DigitalClock) o en columnas de horas / minutos / segundos / AM-PM (MultiSectionDigitalClock). Atributos: value (HH:mm[:ss]), layout (list|sections), step (minutos en lista), minutes-step, seconds, ampm, hour24, min-time, max-time, skip-disabled, locale, disabled, readonly Events: is-change { value }</p>
+<div class="demo"><p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/forms/digital-clock.js</code>.
+        </p></div>
+</section>
+  </article>
+</body>
+</html>

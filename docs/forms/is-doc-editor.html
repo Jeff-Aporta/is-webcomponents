@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Editor · IS Web Components</title>
+  <meta name="description" content="Documentación de is-doc-editor.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-doc-editor.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-doc-editor");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-doc-editor" data-category="forms">
+    <h1>Document Editor</h1>
+    <section id="intro">
+<p class="lede">Editor por bloques tipo Notion. Escribe <kbd class="ic">/</kbd> al inicio de una línea para cambiar el tipo. <kbd class="ic">Enter</kbd> crea otro bloque, <kbd class="ic">Backspace</kbd> sobre texto vacío elimina.</p>
+</section>
+<section id="basico">
+<h2>Básico</h2>
+<div class="demo"><is-doc-editor id="doc" placeholder="Escribe algo…">
+            <script type="application/json">
+              [
+                { "type": "heading-1", "text": "Bitácora de julio" },
+                { "type": "paragraph", "text": "Resumen del cierre mensual. Edita lo que necesites." },
+                { "type": "heading-2", "text": "Por hacer" },
+                { "type": "todo", "text": "Cruzar facturas con el banco", "checked": true },
+                { "type": "todo", "text": "Revisar depreciaciones" },
+                { "type": "todo", "text": "Pasar al board de cierre" },
+                { "type": "divider" },
+                { "type": "heading-2", "text": "Notas" },
+                { "type": "bullet-list", "text": "Cartera con morosidad al alza" },
+                { "type": "bullet-list", "text": "Inventario estable, revisar lento" },
+                { "type": "quote",     "text": "Lo importante se hizo; lo urgente se va acumulando." },
+                { "type": "code",      "text": "SELECT sum(saldo) FROM cartera WHERE vencida = true;" }
+              ]
+            </script>
+          </is-doc-editor></div>
+</section>
+<section id="json">
+<h2>JSON actual</h2>
+<div class="demo"><pre class="code output" id="out" data-lang="javascript"></pre></div>
+</section>
+<section id="api">
+<h2>API</h2>
+<pre><code>const doc = document.querySelector('is-doc-editor');
+doc.value;          // string JSON
+doc.blocks;         // array vivo
+doc.addBlock('paragraph');
+doc.removeBlock(id);
+doc.updateBlock(id, { text: '…' });
+doc.addEventListener('is-change', e =&gt; console.log(e.detail.blocks));
+
+// Atajos en bloques
+// Enter          crear bloque del mismo tipo
+// Backspace      eliminar bloque si está vacío
+// &quot;/&quot; inicio     abre menú de tipos (heading-1..3, list, todo, quote, code, divider)
+// Shift+Enter    salto de línea dentro del bloque</code></pre>
+</section>
+  </article>
+</body>
+</html>
