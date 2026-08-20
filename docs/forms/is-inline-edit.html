@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inline Edit · IS Web Components</title>
+  <meta name="description" content="Documentación de is-inline-edit.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-inline-edit.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-flowchart", "is-icon", "is-inline-edit");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-inline-edit" data-category="forms">
+    <h1>Inline Edit</h1>
+    <section id="intro">
+<p class="lede">Texto plano que se vuelve editable al clic. Enter guarda y sale. Esc cancela y revierte. Blur guarda por defecto; usá <code class="code">cancel-on-blur</code> para invertirlo.</p>
+</section>
+<section id="texto">
+<h2>Texto</h2>
+<div class="demo"><div class="ie-row">
+            <span class="label">Nombre</span>
+            <is-inline-edit id="ie1" value="Carolina Méndez" placeholder="Sin nombre"></is-inline-edit>
+          </div>
+          <div class="ie-row">
+            <span class="label">Email</span>
+            <is-inline-edit id="ie2" value="caro@empresa.co"></is-inline-edit>
+          </div>
+          <div class="ie-row">
+            <span class="label">Vacío</span>
+            <is-inline-edit placeholder="Clic para escribir"></is-inline-edit>
+          </div></div>
+</section>
+<section id="textarea">
+<h2>Multilínea</h2>
+<div class="demo"><is-inline-edit mode="textarea" rows="3" value="Acá podés tipear varias líneas. Enter adentro inserta un salto de línea; afuera del área Enter sigue guardando." style="--is-inline-edit-min-h: 4.5rem; width: 100%;"></is-inline-edit></div>
+</section>
+<section id="contenido">
+<h2>Slot display (HTML personalizado)</h2>
+<div class="demo"><p>Si el slot <code class="code">display</code> tiene contenido, ése se muestra en lectura; al editar vuelve al editor interno.</p></div>
+<div class="demo"><is-inline-edit value="InSoft" style="font-size:1.15rem; font-weight:600;">
+            <span slot="display"><is-icon icon="mdi:office-building" style="vertical-align:middle"></is-icon> InSoft S.A.</span>
+          </is-inline-edit></div>
+</section>
+<section id="api">
+<h2>API JS</h2>
+<pre><code>const ie = document.querySelector('is-inline-edit');
+ie.value              // string actual
+ie.editing            // boolean
+ie.edit()             // entra en modo edición (programáticamente)
+ie.save()             // guarda y sale
+ie.cancel()           // revierte y sale
+ie.addEventListener('is-save',   e =&gt; console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));
+ie.addEventListener('is-cancel', e =&gt; ...);
+ie.addEventListener('is-edit',   () =&gt; ...);
+
+// form-associated
+// &lt;form&gt;&lt;is-inline-edit name=&quot;label&quot;&gt;&lt;/is-inline-edit&gt;&lt;/form&gt;
+new FormData(form).get('label')  // = ie.value</code></pre>
+</section>
+  </article>
+</body>
+</html>
