@@ -1,6 +1,7 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
+import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import {
   makeCostGrid, blockRect, applyRectCost, snapDiagramGrid,
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
@@ -352,6 +353,7 @@ export function computeFlowchartLayout(spec, overrides = null) {
     };
   });
 
+  assignEdgeHues(routed);
   const layout = {
     width,
     height,

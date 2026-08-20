@@ -4,6 +4,7 @@ import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H } 
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { defineElement } from '../_shared/define.js';
@@ -211,9 +212,7 @@ class IsErDiagram extends DiagramElementBase {
 
   #buildRelations(layout, theme) {
     for (const r of layout.relations) {
-      const color = (r.hue != null && tkHueToHex(r.hue, 48, 30))
-        || tkHueToHex(205, 42, 32)
-        || theme.accent;
+      const color = edgeStrokeHex(r.hue, theme.accent);
       const g = svgEl('g', { class: 'er-rel' });
       g.dataset.relId = r.id;
 
@@ -233,10 +232,10 @@ class IsErDiagram extends DiagramElementBase {
         const w = r.labelW ?? (r.label.length * 5.6 + pad * 2);
         g.appendChild(svgEl('rect', {
           x: r.labelX - w / 2, y: r.labelY - 8, width: w, height: 16, rx: 4,
-          fill: theme.chipFillSoft ?? theme.chipFill, class: 'er-rel__chip',
+          fill: edgeChipFill(r.hue), class: 'er-rel__chip',
         }));
         const t = svgEl('text', {
-          x: r.labelX, y: r.labelY + 3.5, 'text-anchor': 'middle', fill: theme.muted,
+          x: r.labelX, y: r.labelY + 3.5, 'text-anchor': 'middle', fill: edgeChipText(r.hue, theme.muted),
           'font-size': '10', 'font-family': 'Consolas,Menlo,monospace',
         });
         t.textContent = r.label;

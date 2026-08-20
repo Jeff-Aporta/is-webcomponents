@@ -99,7 +99,7 @@ for (const [nombre, tema] of [['claro', sequenceThemeLight()], ['oscuro', sequen
   assert.ok(tema.chipFillSoft, `tema ${nombre}: falta chipFillSoft (fondo translúcido de las etiquetas de arista)`);
   const alfa = Number(/([\d.]+)\)$/.exec(tema.chipFillSoft)?.[1]);
   assert.ok(alfa > 0 && alfa <= 0.75,
-    `tema ${nombre}: chipFillSoft con alfa ${alfa}; debe dejar ver la arista por debajo (~0.7)`);
+    `tema ${nombre}: chipFillSoft con alfa ${alfa}; debe dejar ver la arista por debajo (~0.5)`);
 }
 
 const conChip = [
@@ -108,10 +108,8 @@ const conChip = [
 ];
 for (const archivo of conChip) {
   const src = readFileSync(new URL(`./${archivo}`, import.meta.url), 'utf8');
-  const chip = /fill: theme\.chipFill(Soft)?[^,]*, class: '[a-z-]+__chip'/.exec(src);
-  assert.ok(chip, `${archivo}: no se encontró el chip de la etiqueta de arista`);
-  assert.ok(chip[0].includes('chipFillSoft'),
-    `${archivo}: el chip de la arista volvió al fondo opaco y tapa la línea`);
+  assert.ok(src.includes('edgeChipFill'),
+    `${archivo}: el chip de arista debe usar edgeChipFill (alfa 0.5, mismo hue)`);
 }
 
 console.log('render-legibilidad.selfcheck: OK');

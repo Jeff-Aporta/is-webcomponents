@@ -3,6 +3,7 @@ import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayF
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
+import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 
 /**
  * Especificación y layout de diagramas entidad-relación (sin Mermaid).
@@ -442,7 +443,7 @@ export function computeErLayout(spec) {
       labelY: mid.y,
     };
   }
-  const relations = ruteadas;
+  const relations = assignEdgeHues(ruteadas);
 
   const layout = {
     width,

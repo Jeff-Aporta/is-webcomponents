@@ -1,6 +1,7 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
+import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
@@ -255,6 +256,7 @@ export function computeStateLayout(spec) {
     };
   });
 
+  assignEdgeHues(routed);
   const layout = {
     width,
     height,

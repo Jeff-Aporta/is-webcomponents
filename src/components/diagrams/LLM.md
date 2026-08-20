@@ -96,8 +96,11 @@ Cubierto por `render-legibilidad.selfcheck.mjs`.
 - **La cabecera cuenta para el ancho.** Título y subtítulo se centran en
   `width / 2`: con un diagrama estrecho se salen por los dos lados. Todo spec
   con cabecera pasa por `../_shared/diagram-header.js`.
-- **La etiqueta que va sobre una arista usa `theme.chipFillSoft`** (alfa 0.7),
-  no `chipFill`. Con el fondo opaco, el chip tapa la línea que está explicando.
+- **Las etiquetas de arista usan `edgeChipFill` / `edgeChipText`** (hue propio,
+  alfa 0.5). Cada arista recibe un hue distinto vía `assignEdgeHues`.
+- **`<is-component-diagram>`:** `layout.mode` = `pack` | `triptych` | `manual`.
+  `minGap` (attr `min-gap`), `ungroup`, `sources`, `sourceSides`,
+  `sourceGap`, `colGutter`, `pkgCorridor`, `rowGap`.
 - **Las etiquetas que viven fuera de la figura entran en el lienzo.** Pasó en
   Venn (nombres de conjunto) y en Timeline (tarjeta del primer evento).
 - **Ante un choque con la leyenda, el contenido BAJA.** Empujar la leyenda a la

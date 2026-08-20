@@ -5,6 +5,7 @@ import { expandSequencePayloadForJson } from './sequence-spec.js';
 import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { sharePayload } from '../_shared/web-share.js';
 
 /**
  * <is-diagram-lightbox> — colore del lightbox para diagramas.
@@ -67,7 +68,7 @@ function buildViewerUrl(kind, payload) {
 
 class IsDiagramLightbox extends IsLightbox {
   static get observedAttributes() {
-    return [...super.observedAttributes, 'kind', 'animation'];
+    return [...super.observedAttributes, 'kind', 'animation', 'min-gap'];
   }
 
   #payload = null;
@@ -248,6 +249,8 @@ class IsDiagramLightbox extends IsLightbox {
     // conserve el dashed flow animado que pidió la fuente.
     const anim = this.getAttribute('animation');
     if (anim) el.setAttribute('animation', anim);
+    const minGap = this.getAttribute('min-gap');
+    if (minGap) el.setAttribute('min-gap', minGap);
     el.payload = this.#basePayload;
     el.hiddenGroups = this.#hiddenGroups;
     el.addEventListener('is-turtle-state', (e) => this.#onTurtleState(e.detail));
@@ -316,19 +319,18 @@ class IsDiagramLightbox extends IsLightbox {
     this.#mountDiagram();
   }
 
-  #shareDiagram() {
+  async #shareDiagram() {
     let url;
     try { url = buildViewerUrl(this.kind, this.#basePayload); }
     catch { return; }
-    const done = () => {
-      const t = this.shadowRoot.querySelector('.lb-toast');
-      if (!t) return;
+    const how = await sharePayload({ title: document.title, url, text: url });
+    if (how === 'abort') return;
+    const t = this.shadowRoot.querySelector('.lb-toast');
+    if (t) {
       t.hidden = false;
       setTimeout(() => { t.hidden = true; }, 1800);
-    };
-    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url).then(done).catch(done);
-    else done();
-    emit(this, 'is-share', { url });
+    }
+    emit(this, 'is-share', { url, how });
   }
 }
 

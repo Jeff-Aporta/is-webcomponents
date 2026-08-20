@@ -4,6 +4,7 @@ import { resolveFlowchartSpec, computeFlowchartLayout, shapePath } from './flowc
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -243,7 +244,7 @@ class IsFlowchart extends DiagramElementBase {
   #buildEdges(layout, theme) {
     const flowAnim = this.hasAnimation('flow');
     for (const e of layout.edges) {
-      const color = (e.hue != null && tkHueToHex(e.hue)) || theme.accent;
+      const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'flow-edge' });
       g.dataset.edgeId = e.id;
 
@@ -285,10 +286,10 @@ class IsFlowchart extends DiagramElementBase {
         const w = e.labelW ?? (e.label.length * 5.6 + pad * 2);
         g.appendChild(svgEl('rect', {
           x: e.labelX - w / 2, y: e.labelY - 8, width: w, height: 16, rx: 4,
-          fill: theme.chipFillSoft ?? theme.chipFill, class: 'flow-edge__chip',
+          fill: edgeChipFill(e.hue), class: 'flow-edge__chip',
         }));
         const t = svgEl('text', {
-          x: e.labelX, y: e.labelY + 3.5, 'text-anchor': 'middle', fill: theme.muted,
+          x: e.labelX, y: e.labelY + 3.5, 'text-anchor': 'middle', fill: edgeChipText(e.hue, theme.muted),
           'font-size': '10', 'font-family': 'Consolas,Menlo,monospace',
         });
         t.textContent = e.label;

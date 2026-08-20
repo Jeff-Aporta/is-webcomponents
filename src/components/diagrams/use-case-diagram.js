@@ -3,6 +3,7 @@ import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveUseCaseSpec, computeUseCaseLayout } from './use-case-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { defineElement } from '../_shared/define.js';
@@ -224,7 +225,7 @@ class IsUseCaseDiagram extends DiagramElementBase {
 
   #buildLinks(layout, theme) {
     for (const l of layout.links) {
-      const color = (l.hue != null && tkHueToHex(l.hue)) || theme.accent;
+      const color = edgeStrokeHex(l.hue, theme.accent);
       const dashed = l.kind === 'include' || l.kind === 'extend';
       const g = svgEl('g', { class: `uc-link uc-link--${l.kind}` });
       g.dataset.linkId = l.id;
@@ -248,10 +249,10 @@ class IsUseCaseDiagram extends DiagramElementBase {
         const w = l.labelW ?? (text.length * 5.4 + 8);
         g.appendChild(svgEl('rect', {
           x: l.labelX - w / 2, y: l.labelY - 8, width: w, height: 15, rx: 4,
-          fill: theme.chipFillSoft ?? theme.chipFill, class: 'uc-link__chip',
+          fill: edgeChipFill(l.hue), class: 'uc-link__chip',
         }));
         const t = svgEl('text', {
-          x: l.labelX, y: l.labelY + 3, 'text-anchor': 'middle', fill: theme.muted,
+          x: l.labelX, y: l.labelY + 3, 'text-anchor': 'middle', fill: edgeChipText(l.hue, theme.muted),
           'font-size': '9.5', 'font-family': 'Consolas,Menlo,monospace',
         });
         t.textContent = text;

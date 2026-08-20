@@ -86,7 +86,7 @@ export function sequenceThemeLight() {
     altBorder: 'rgba(99,102,241,0.55)',
     chipFill: 'rgba(255,255,255,0.9)',
     // Etiquetas que van sobre una arista: el fondo tapaba la línea.
-    chipFillSoft: 'rgba(255,255,255,0.7)',
+    chipFillSoft: 'rgba(255,255,255,0.5)',
     dotText: '#ffffff',
   };
 }
@@ -102,7 +102,7 @@ export function sequenceThemeDark() {
     altFill: 'rgba(129,140,248,0.08)',
     altBorder: 'rgba(129,140,248,0.55)',
     chipFill: 'rgba(13,27,42,0.9)',
-    chipFillSoft: 'rgba(13,27,42,0.7)',
+    chipFillSoft: 'rgba(13,27,42,0.5)',
     dotText: '#0b1f33',
   };
 }

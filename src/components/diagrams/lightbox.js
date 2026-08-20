@@ -3,6 +3,7 @@ import { withStyleAttrs } from '../_shared/style-attrs.js';
 import '../media/icon.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { sharePayload } from '../_shared/web-share.js';
 
 /**
  * <is-lightbox> — visor a pantalla completa para cualquier contenido.
@@ -278,17 +279,14 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
 
   async #share() {
     const url = window.location.href;
-    const done = () => {
-      const t = this.shadowRoot.querySelector('.lb-toast');
-      if (!t) return;
+    const how = await sharePayload({ title: document.title, url, text: url });
+    if (how === 'abort') return;
+    const t = this.shadowRoot.querySelector('.lb-toast');
+    if (t) {
       t.hidden = false;
       setTimeout(() => { t.hidden = true; }, 1800);
-    };
-    try {
-      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(url);
-    } catch { /* noop */ }
-    done();
-    emit(this, 'is-share', { url });
+    }
+    emit(this, 'is-share', { url, how });
   }
 
   /* ── zoom / pan ── */
