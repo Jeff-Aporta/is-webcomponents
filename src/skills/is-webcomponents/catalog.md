@@ -29,6 +29,7 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `actions/button.md` | `<is-button>` |
 | `actions/button-group.md` | `<is-button-group>` |
 | `actions/copy-button.md` | `<is-copy-button>` |
+| `actions/share-button.md` | `<is-share-button>` |
 | `actions/check-icon-button.md` | `<is-check-icon-button>` |
 | `actions/dropdown.md` | `<is-dropdown>` |
 | `actions/dropdown-item.md` | `<is-dropdown-item>` |
@@ -135,6 +136,8 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `helpers/resize-observer.md` | `<is-resize-observer>` |
 | `helpers/md-render.md` | `<is-md-render>` |
 | `helpers/md-editor.md` | `<is-md-editor>` |
+| `helpers/wake-lock.md` | `<is-wake-lock>` |
+| `helpers/offscreen-canvas.md` | `<is-offscreen-canvas>` |
 
 ### isp
 | Doc | Tags |
@@ -170,6 +173,12 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `media/avatar.md` | `<is-avatar>` |
 | `media/video.md` | `<is-video>` |
 | `media/video-playlist.md` | `<is-video-playlist>` |
+| `media/speech.md` | `<is-speech>` |
+| `media/media-recorder.md` | `<is-media-recorder>` |
+| `media/barcode.md` | `<is-barcode>` |
+| `media/barcode-scanner.md` | `<is-barcode-scanner>` |
+| `media/qrcode.md` | `<is-qrcode>` |
+| `media/image-editor.md` | `<is-image-editor>` |
 
 ### navigation
 | Doc | Tags |

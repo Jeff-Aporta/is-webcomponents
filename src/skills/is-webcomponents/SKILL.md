@@ -2,7 +2,7 @@
 name: is-webcomponents
 description: >-
   Obliga a reusar el kit is-* (Jeff-Aporta/is-webcomponents) al fundar o extender
-  apps de web components sin framework. Usar cuando hay CDN all.min.js / is-base /
+  apps de web components sin framework. Usar cuando hay CDN loader.min.js / is-base /
   palettes, tags is-button is-dialog is-data-grid is-chart is-icon, apps tipo
   frontend-webcomponents / tk-*, migraciones desde React/MUI/Svelte, o cuando se
   pueda reinventar UI que ya existe en el catálogo LLM.md del kit.
@@ -74,22 +74,23 @@ refrescarlo). Excepción: apps que declaran seguimiento continuo
 ```html
 <html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/is-base.min.css">
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/palettes.min.css">
   <script type="module"
-    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/all.min.js"></script>
+    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    await L.loadCSSBase();
+    await L.loadCSSPalettesDefault();
+    await L.load("is-toast");
+  </script>
 </head>
 <body>
-  <!-- shell de la app -->
   <is-toast placement="bottom-end"></is-toast>
 </body>
 </html>
 ```
 
-- En snippets solo van `is-base.min.css` + `palettes.min.css` + JS. El CSS de cada componente lo carga el propio `is-*` vía shadow/`adoptCss`.
-- Preferir `all.min.js` en previews/apps pequeñas. Bundles por categoría: `dist/cdn/<cat>/category.<cat>.min.js`.
+- CSS de documento: `loadCSSBase` + `loadCSSPalettesDefault`. El CSS de cada `is-*` lo carga el propio tag.
+- Cargar solo los tags de la vista. `load('actions')` expande a cada `.min.js` de la categoría (no hay bundle). `load('all')` pide todos los tags, no un archivo único.
 - Tema: `data-theme` / `data-palette` en `<html>`. Tokens: `--is-text`, `--is-bg`, `--is-border`, `--is-accent`, etc.
 - Si la app prefiere no depender de red: usar [`/is-webcomponents:local`](tools/local.md) (vendoriza JS+CSS, boot local-first con fallback a CDN).
 

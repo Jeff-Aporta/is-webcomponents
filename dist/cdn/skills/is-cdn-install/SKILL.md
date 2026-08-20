@@ -4,7 +4,7 @@ description: >-
   Instala y consume el kit IS Web Components solo por CDN (jsDelivr / GitHub Pages),
   sin npm ni npx. Cubre bootstrap (is-base + palettes + .min.js), espejos, pin por
   SHA, boot con fallback, y lectura de docs vía is-cdn-snippet. Usar cuando el
-  usuario pida instalar is-*, enlaces CDN, all.min.js, category.*.min.js,
+  usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
 
@@ -73,30 +73,9 @@ Alcance de `load(…)`:
 | Una categoría | `'actions'` |
 | Kit completo | `'all'` |
 
-La galería lo pinta en `<is-cdn-snippet>` (radio + un solo copy-paste).
+La galería lo pinta en `<is-cdn-snippet>` (copy-paste del loader + `L.load(tag)`).
 
-### Alternativa sin loader (legacy)
-
-```html
-<html lang="es" data-theme="dark" data-palette="contapyme">
-<head>
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/is-base.min.css">
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/palettes.min.css">
-  <script type="module"
-    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/all.min.js"></script>
-</head>
-</html>
-```
-
-### Qué JS elegir (sin loader)
-
-| Necesidad | Archivo |
-| --- | --- |
-| App / preview completa | `all.min.js` |
-| Solo una categoría | `<cat>/category.<cat>.min.js` |
-| Un tag | `<cat>/<name>.min.js` (ej. `actions/button.min.js` → `<is-button>`) |
+`load('all')` / `load('actions')` expanden a cada `<cat>/<file>.min.js`. No se publican `all.min.js` ni `category.*.min.js`.
 
 ## Boot con fallback (si un espejo cae)
 
@@ -132,7 +111,7 @@ async function boot(files) {
 }
 await boot({
   css: ["is-base.min.css", "palettes.min.css"],
-  js: ["all.min.js"],
+  js: ["loader.min.js"],
 });
 </script>
 ```
@@ -141,9 +120,8 @@ await boot({
 
 En la demo del kit, cada preview monta el panel **Consumo por CDN**:
 
-- Tab **Enlaces**: CSS común + JS del tag / categoría / `all.min.js` del espejo activo.
-- Tab **Mirrors**: cambiar espejo + copiar boot con fallback.
-- Bloque **Para agentes / LLM**: prompt + enlaces MD (módulo, categoría, índice, **esta skill**).
+- Copy-paste: `loader.min.js` + `L.loadCSS*` + `L.load(tag)`.
+- Bloque **Para agentes / LLM**: prompt + enlaces MD.
 
 Al instalar en otra app, **copia los mismos URLs** que muestra el panel (no inventes rutas).
 
@@ -161,8 +139,8 @@ No inventar props/eventos que no estén en el MD.
 
 - [ ] Solo CDN (sin npm del kit)
 - [ ] Un solo espejo / un solo `base` en la página
-- [ ] `is-base.min.css` + `palettes.min.css` en `<head>`
-- [ ] JS: tag **o** category **o** `all.min.js`
+- [ ] `loader.min.js` + `L.loadCSSBase` + `L.loadCSSPalettesDefault` + `L.load(tags…)`
+- [ ] JS: solo los tags de la vista (no `all.min.js`)
 - [ ] `data-theme` + `data-palette` en `<html>`
 - [ ] Pin `@<sha>` (o `@main` justificado, o copia local vía `/is-webcomponents:local`)
 - [ ] Skill + MD del módulo leídos antes de componer UI

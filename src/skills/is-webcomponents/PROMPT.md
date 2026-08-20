@@ -121,11 +121,13 @@ Utiliza siempre **jsDelivr** con un SHA fijo (pinned commit) para garantizar ver
 Sustituye `{{SHA}}` por el tip de `main` (referencia: `ca31ad04be5bba79c8ef4652b7540058169ca891`).
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/is-base.min.css">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/palettes.min.css">
-
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/all.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/loader.min.js"></script>
+<script type="module">
+  const L = globalThis.ISWebComponentsLoader;
+  await L.loadCSSBase();
+  await L.loadCSSPalettesDefault();
+  await L.load("is-button");
+</script>
 ```
 
 Utiliza un único origen CDN durante toda la aplicación.
@@ -157,20 +159,19 @@ const css=u=>new Promise((ok,err)=>{
 
 for(const base of MIRRORS){
  try{
-  await css(`${base}/is-base.min.css`);
-  await css(`${base}/palettes.min.css`);
-  await import(`${base}/all.min.js`);
+  await import(`${base}/loader.min.js`);
+  const L = globalThis.ISWebComponentsLoader;
+  await L.loadCSSBase();
+  await L.loadCSSPalettesDefault();
+  await L.load("is-button");
   break;
  }catch{}
 }
 </script>
 ```
 
-Los snippets CDN únicamente deben cargar:
-
-- `is-base.min.css`
-- `palettes.min.css`
-- `all.min.js` (o `category.*.min.js` / el `.min.js` del tag)
+Los snippets CDN únicamente deben usar `loader.min.js` + `L.load(tags…)`.
+No hay `all.min.js` ni `category.*.min.js` publicados.
 
 No cargues manualmente los CSS individuales de cada componente; estos se resuelven automáticamente mediante `import.meta.url`.
 
