@@ -128,9 +128,16 @@
 
   .row {
     display: grid;
-    grid-template-columns: 2.5em 1fr;
+    grid-template-columns: 2.5em 1fr auto;
     align-items: center;
     gap: 0.5em;
+  }
+
+  .eyedropper::part(button) {
+    width: 2.35em;
+    min-height: 2.35em;
+    height: 2.35em;
+    padding: 0;
   }
 
   .native {

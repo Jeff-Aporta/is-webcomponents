@@ -54,6 +54,10 @@ import { computePosition } from '../_shared/position.js';
           <input part="input" class="native" type="color" aria-label="Color" />
           <is-input part="hex-input" class="hex" type="text" spellcheck="false" autocomplete="off"
             maxlength="7" aria-label="Código hexadecimal"></is-input>
+          <is-button part="eyedropper" class="eyedropper" variant="plain" type="button" hidden
+            aria-label="Cuentagotas (EyeDropper)" title="Cuentagotas">
+            <is-icon icon="mdi:eyedropper"></is-icon>
+          </is-button>
         </div>
         <div class="swatches" role="group" aria-label="Colores predefinidos"></div>
       </div>
@@ -96,6 +100,7 @@ import { computePosition } from '../_shared/position.js';
     #panel;
     #native;
     #hexInput;
+    #dropper;
     #swatchesEl;
 
     #open = false;
@@ -121,6 +126,7 @@ import { computePosition } from '../_shared/position.js';
       this.#panel = shadow.querySelector('.panel');
       this.#native = shadow.querySelector('.native');
       this.#hexInput = shadow.querySelector('.hex');
+      this.#dropper = shadow.querySelector('.eyedropper');
       this.#swatchesEl = shadow.querySelector('.swatches');
 
       this.#internals = attachFormInternals(this);
@@ -132,6 +138,7 @@ import { computePosition } from '../_shared/position.js';
       this.#hexInput.addEventListener('input', this.#onHexInput);
       this.#hexInput.addEventListener('change', this.#onHexChange);
       this.#hexInput.addEventListener('keydown', this.#onHexKey);
+      this.#dropper.addEventListener('click', this.#onEyedrop);
       this.#swatchesEl.addEventListener('click', this.#onSwatchClick);
       this.#dialog.addEventListener('click', this.#onDialogClick);
       this.#dialog.addEventListener('cancel', this.#onDialogCancel);
@@ -150,6 +157,7 @@ import { computePosition } from '../_shared/position.js';
       this.#renderSwatches();
       this.#sync();
       this.#syncDisabled();
+      this.#dropper.hidden = typeof window.EyeDropper !== 'function';
       addEventListener('resize', this.#onReposition, { passive: true });
       addEventListener('scroll', this.#onReposition, true);
     }
@@ -277,6 +285,7 @@ import { computePosition } from '../_shared/position.js';
       this.#trigger.disabled = disabled;
       this.#native.disabled = disabled;
       this.#hexInput.disabled = disabled;
+      this.#dropper.disabled = disabled;
       setCustomState(this.#internals, 'disabled', disabled);
       if (disabled) this.hide();
     }
@@ -381,6 +390,16 @@ import { computePosition } from '../_shared/position.js';
       if (e.key !== 'ArrowDown' || this.#open) return;
       e.preventDefault();
       this.show();
+    };
+
+    #onEyedrop = async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (this.#isDisabled || typeof window.EyeDropper !== 'function') return;
+      try {
+        const result = await new window.EyeDropper().open();
+        this.#setValue(result.sRGBHex, true);
+      } catch { /* usuario canceló */ }
     };
 
     #onNativeInput = () => this.#setValue(this.#native.value, false);

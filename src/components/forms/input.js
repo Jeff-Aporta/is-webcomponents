@@ -7,6 +7,7 @@ import '../actions/button.js';
 import '../actions/check-icon-button.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { isOtpAutocomplete, listenWebOtp } from '../_shared/web-otp.js';
 import { ElementBase } from '../_shared/element-base.js';
 import { upgradeProperties } from '../_shared/upgrade-properties.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
@@ -149,6 +150,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     #hasHint = false;
     #touched = false;
     #typingTimer = null;
+    #otpAbort = null;
 
     constructor() {
       super();
@@ -200,6 +202,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#syncNative();
       this.#syncDisabled();
       this.#update();
+      this.#listenOtp();
     }
 
     onDisconnected() {
@@ -208,6 +211,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
         clearTimeout(this.#typingTimer);
         this.#typingTimer = null;
       }
+      this.#otpAbort?.abort();
+      this.#otpAbort = null;
     }
 
     onAttributeChanged(name, oldVal, newVal) {
@@ -222,10 +227,25 @@ import { hasSlotted } from '../_shared/dom-utils.js';
         this.#syncSlots();
       } else if (name === 'error' || name === 'error-text' || name === 'show-count') {
         this.#syncSupport();
+      } else if (name === 'autocomplete') {
+        this.#syncNative();
+        this.#listenOtp();
       } else {
         this.#syncNative();
         this.#update();
       }
+    }
+
+    #listenOtp() {
+      this.#otpAbort?.abort();
+      this.#otpAbort = null;
+      const ac = String(this.getAttribute('autocomplete') || '');
+      if (!isOtpAutocomplete(ac)) return;
+      this.#otpAbort = new AbortController();
+      listenWebOtp(this.#otpAbort.signal, (code) => {
+        this.value = code;
+        emit(this, 'is-otp', { code });
+      });
     }
 
     // ---- propiedades ----------------------------------------------------

@@ -127,6 +127,7 @@ import './input.js';
 | `is-input` | sí | sí | sí | no |
 | `is-change` | sí | sí | sí | no |
 | `is-typing-end` | `{ value }` | sí | sí | no |
+| `is-otp` | `{ code }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -227,11 +228,15 @@ Documentación de cabecera preservada desde fuente:
 > Custom states: blank, disabled, readonly, focused, invalid, password-visible
 > Eventos: is-input, is-change (bubbles + composed) y los nativos input/change
 > Tokens: --is-field-width, --is-field-label-width, --is-input-*
+>
+> Web OTP: si `autocomplete` es `one-time-code` u `otp`, `navigator.credentials.get({ otp })`
+> rellena `value` y emite `is-otp`. El SMS debe incluir el origen (HTTPS).
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
+- [`../_shared/web-otp.js`](../_shared/web-otp.js)
 - [`../media/icon.js`](../media/icon.js)
 
 Tags del módulo: `<is-input>`.

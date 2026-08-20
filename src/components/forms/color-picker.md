@@ -110,6 +110,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `panel` | Personalizable con `::part(panel)`. |
 | `input` | Personalizable con `::part(input)`. |
 | `hex-input` | Personalizable con `::part(hex-input)`. |
+| `eyedropper` | Botón EyeDropper (oculto si la API no existe). |
 
 ### Custom states
 
@@ -160,6 +161,9 @@ Documentación de cabecera preservada desde fuente:
 > Slots: label, hint
 > Parts: base, trigger, swatch, panel, input, hex-input, label, hint
 > Events: is-input { value }, is-change { value }
+>
+> EyeDropper: botón `::part(eyedropper)` llama `new EyeDropper().open()` y escribe `sRGBHex`.
+> Si `EyeDropper` no está en `window`, el botón queda `hidden`.
 
 ## Dependencias y componentes relacionados
 

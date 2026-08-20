@@ -1,6 +1,7 @@
 import { adoptCss } from '../_shared/adopt-css.js';
 import { defineElement } from '../_shared/define.js';
 import { emit } from '../_shared/emit.js';
+import { isOtpAutocomplete, listenWebOtp } from '../_shared/web-otp.js';
 import { ElementBase } from '../_shared/element-base.js';
 
 /**
@@ -65,6 +66,7 @@ import { ElementBase } from '../_shared/element-base.js';
     #onPaste;
     #onHiddenInput;
     #onSlotClick;
+    #otpAbort = null;
 
     constructor() {
       super();
@@ -93,17 +95,23 @@ import { ElementBase } from '../_shared/element-base.js';
       this.#onPaste = (e) => this.#handlePaste(e);
       this.addEventListener('paste', this.#onPaste);
       this.#syncState();
+      this.#listenOtp();
     }
 
     onDisconnected() {
       this.removeEventListener('paste', this.#onPaste);
+      this.#otpAbort?.abort();
+      this.#otpAbort = null;
     }
 
     onAttributeChanged(name, oldVal, newVal) {
       if (name === 'length' || name === 'type' || name === 'placeholder' || name === 'mask') {
         this.#render();
       }
-      if (name === 'disabled' || name === 'invalid' || name === 'autocomplete') this.#syncState();
+      if (name === 'disabled' || name === 'invalid' || name === 'autocomplete') {
+        this.#syncState();
+        if (name === 'autocomplete') this.#listenOtp();
+      }
       if (name === 'value') {
         this.#setValue(this.getAttribute('value') || '');
       }
@@ -126,6 +134,19 @@ import { ElementBase } from '../_shared/element-base.js';
     }
 
     // ---- private ----
+
+    #listenOtp() {
+      this.#otpAbort?.abort();
+      this.#otpAbort = null;
+      const ac = this.getAttribute('autocomplete') || 'one-time-code';
+      if (!isOtpAutocomplete(ac)) return;
+      this.#otpAbort = new AbortController();
+      listenWebOtp(this.#otpAbort.signal, (code) => {
+        this.#setValue(code);
+        this.#afterChange(this.#length() - 1);
+        emit(this, 'is-otp', { code });
+      });
+    }
 
     #length() {
       const v = parseInt(this.getAttribute('length') || '6', 10);

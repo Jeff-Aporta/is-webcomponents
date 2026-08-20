@@ -72,6 +72,7 @@ No expone.
 | `is-pin-change` | sí | sí | sí | no |
 | `is-pin-complete` | sí | sí | sí | no |
 | `is-pin-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `is-otp` | `{ code }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -140,10 +141,13 @@ Documentación de cabecera preservada desde fuente:
 >   .value         string
 >   .reset()       void
 >   .focus()       void
+>
+> Web OTP: con `autocomplete` `one-time-code` (default) rellena las casillas y emite `is-otp`.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
+- [`../_shared/web-otp.js`](../_shared/web-otp.js)
 
 Tags del módulo: `<is-pin-input>`.
 
