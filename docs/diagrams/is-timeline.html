@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Línea de tiempo · IS Web Components</title>
+  <meta name="description" content="Documentación de is-timeline.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-timeline.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-timeline");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-timeline" data-category="diagrams">
+    <h1>Línea de tiempo</h1>
+    <section id="intro">
+<p class="lede">Línea de tiempo de hitos en SVG, sin Mermaid. Declaras eventos con
+          fecha; el componente los reparte a lo largo de un eje y separa los
+          que caen demasiado cerca en el tiempo para que no se encimen.</p>
+<div class="demo"><is-timeline open-on-click>
+            <script type="application/json">
+              {
+                "timeline": {
+                  "title": "Hitos 2026",
+                  "orientation": "horizontal",
+                  "groups": [
+                    { "id": "g1", "name": "Producto", "hue": 199 },
+                    { "id": "g2", "name": "Cumplimiento", "hue": 38 }
+                  ],
+                  "events": [
+                    { "id": "e1", "date": "2026-01-15", "label": "Kickoff", "group": "g1" },
+                    { "id": "e2", "date": "2026-03-01", "label": "Lanzamiento beta", "group": "g1", "desc": "Primera versión abierta a un grupo piloto de contadores." },
+                    { "id": "e3", "date": "2026-03-04", "label": "Hotfix", "group": "g1" },
+                    { "id": "e4", "date": "2026-06-01", "label": "Cierre fiscal", "group": "g2" },
+                    { "id": "e5", "date": "2026-09-15", "label": "Renovación DIAN", "group": "g2" }
+                  ]
+                }
+              }
+            </script>
+          </is-timeline></div>
+</section>
+<section id="vertical">
+<h2>Orientación vertical</h2>
+<div class="demo"><p>
+          <code>orientation: "vertical"</code> pone el eje a la izquierda y
+          apila los eventos a la derecha, en orden cronológico.
+        </p></div>
+<div class="demo"><is-timeline open-on-click>
+            <script type="application/json">
+              {
+                "timeline": {
+                  "orientation": "vertical",
+                  "events": [
+                    { "id": "v1", "date": "2026-01-05", "label": "Constitución" },
+                    { "id": "v2", "date": "2026-02-10", "label": "Primer cliente" },
+                    { "id": "v3", "date": "2026-05-20", "label": "Serie A" },
+                    { "id": "v4", "date": "2026-11-01", "label": "Expansión regional" }
+                  ]
+                }
+              }
+            </script>
+          </is-timeline></div>
+</section>
+<section id="api">
+<h2>Referencia</h2>
+<div class="demo"><h3>Atributos</h3></div>
+<div class="demo"><h3>Esquema del JSON</h3></div>
+<div class="demo"><h3>Propiedades y eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
