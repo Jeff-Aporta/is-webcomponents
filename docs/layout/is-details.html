@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Details · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-details de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/layout/is-details.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-badge", "is-button", "is-details", "is-flowchart", "is-icon");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-details" data-category="layout">
+    <h1>Details</h1>
+    <p class="lede">Documentación y demos del componente is-details de InSoft.</p>
+<section id="intro">
+<p class="lede">Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente
+          accesible al <code class="code">&lt;details&gt;</code> nativo, con apariencias,
+          iconos, animaciones y comportamiento de accordion opcional.</p>
+<div class="demo"><span class="demo-label">caso mínimo</span>
+          <is-details summary="¿Qué es InSoft?">
+            InSoft es un ERP modular para empresas medianas que necesitan integrar
+            contabilidad, inventario, facturación y CRM en una sola plataforma.
+          </is-details></div>
+<pre><code>&lt;is-details summary=&quot;¿Qué es InSoft?&quot;&gt;
+  InSoft es un ERP modular…
+&lt;/is-details&gt;</code></pre>
+</section>
+<section id="appearances">
+<h2>Apariencias</h2>
+<p class="lede">El atributo <code class="code">appearance</code> ajusta el fondo y borde.
+          Default: <code class="code">outlined</code>.</p>
+<div class="demo"><div class="demo-stack">
+          <is-details variant="outlined" summary="outlined">Borde 1px, fondo transparente.</is-details>
+          <is-details variant="filled" summary="filled">Fondo elevado, sin borde.</is-details>
+          <is-details variant="filled-outlined" summary="filled-outlined">Fondo + borde.</is-details>
+          <is-details variant="plain" summary="plain">Sin fondo ni borde, solo espaciado.</is-details>
+        </div></div>
+<pre><code>&lt;is-details variant=&quot;filled&quot; summary=&quot;…&quot;&gt;…&lt;/is-details&gt;</code></pre>
+</section>
+<section id="icon-placement">
+<h2>Posición del icono</h2>
+<p class="lede"><code class="code">icon-placement</code>: <code class="code">start</code> o
+          <code class="code">end</code>. Default: <code class="code">end</code>.</p>
+<div class="demo"><div class="demo-stack">
+          <is-details icon-placement="end" summary="icono al final (default)">Contenido que se revela al hacer click.</is-details>
+          <is-details icon-placement="start" summary="icono al inicio">El chevron rota 180° al expandir y se ubica a la izquierda.</is-details>
+        </div></div>
+<pre><code>&lt;is-details icon-placement=&quot;start&quot; summary=&quot;…&quot;&gt;…&lt;/is-details&gt;</code></pre>
+</section>
+<section id="custom-icons">
+<h2>Iconos custom</h2>
+<p class="lede">Slots <code class="code">expand-icon</code> y <code class="code">collapse-icon</code>
+          para reemplazar el chevron por defecto.</p>
+<div class="demo"><div class="demo-stack">
+          <is-details summary="Resumen con icono plus/minus">
+            <is-icon slot="expand-icon" icon="mdi:plus" aria-hidden="true"></is-icon>
+            <is-icon slot="collapse-icon" icon="mdi:minus" aria-hidden="true"></is-icon>
+            Al expandirse se muestra un signo menos; al colapsarse, un más.
+          </is-details>
+
+          <is-details summary="Pregunta frecuente" icon-placement="start">
+            <is-icon slot="expand-icon" icon="mdi:help-circle-outline" aria-hidden="true"></is-icon>
+            <is-icon slot="collapse-icon" icon="mdi:help-circle" aria-hidden="true"></is-icon>
+            Cambia el icono según el estado.
+          </is-details>
+        </div></div>
+<pre><code>&lt;is-details summary=&quot;…&quot;&gt;
+  &lt;is-icon slot=&quot;expand-icon&quot; icon=&quot;mdi:plus&quot;&gt;&lt;/is-icon&gt;
+  &lt;is-icon slot=&quot;collapse-icon&quot; icon=&quot;mdi:minus&quot;&gt;&lt;/is-icon&gt;
+  Contenido…
+&lt;/is-details&gt;</code></pre>
+</section>
+<section id="rich-summary">
+<h2>Summary rico (slot)</h2>
+<p class="lede">En lugar del atributo <code class="code">summary</code>, usa el slot
+          <code class="code">summary</code> para contenido rico (iconos, badges, etc.).</p>
+<div class="demo"><div class="demo-stack">
+          <is-details>
+            <div slot="summary">
+              <strong>Pedido #A-10293</strong>
+              <is-badge color="success" variant="filled" style="margin-left:.5em">Enviado</is-badge>
+            </div>
+            Cliente: Distribuidora del Norte · Total: $1.245,00 · 3 ítems.
+          </is-details>
+        </div></div>
+<pre><code>&lt;is-details&gt;
+  &lt;div slot=&quot;summary&quot;&gt;
+    &lt;strong&gt;Pedido #A-10293&lt;/strong&gt;
+    &lt;is-badge color=&quot;success&quot;&gt;Enviado&lt;/is-badge&gt;
+  &lt;/div&gt;
+  Cliente: …
+&lt;/is-details&gt;</code></pre>
+</section>
+<section id="accordion">
+<h2>Accordion (varios name)</h2>
+<p class="lede">Cuando varios <code class="code">is-details</code> comparten el atributo
+          <code class="code">name</code>, abrir uno cierra los demás.</p>
+<div class="demo"><div class="demo-stack">
+          <is-details name="faq" summary="¿Cómo cambio de plan?">
+            Ve a Configuración → Plan y elige el nuevo plan. El cambio se aplica al final del ciclo.
+          </is-details>
+          <is-details name="faq" summary="¿Puedo exportar mis datos?">
+            Sí. En Configuración → Datos encontrarás exports en CSV, JSON y Excel.
+          </is-details>
+          <is-details name="faq" summary="¿Cómo cancelo la cuenta?">
+            Puedes cancelar desde Configuración → Plan → Cancelar. Mantienes acceso hasta el fin del ciclo.
+          </is-details>
+        </div></div>
+<pre><code>&lt;is-details name=&quot;faq&quot; summary=&quot;…&quot;&gt;…&lt;/is-details&gt;
+&lt;is-details name=&quot;faq&quot; summary=&quot;…&quot;&gt;…&lt;/is-details&gt;</code></pre>
+</section>
+<section id="states">
+<h2>Estados</h2>
+<p class="lede"><code class="code">open</code> para abrir por defecto; <code class="code">disabled</code>
+          bloquea la interacción.</p>
+<div class="demo"><div class="demo-stack">
+          <is-details open summary="Empieza abierto por defecto">
+            El atributo <code class="code">open</code> lo deja expandido desde el primer render.
+          </is-details>
+          <is-details disabled summary="Bloqueado (no se puede expandir)">
+            El atributo <code class="code">disabled</code> desactiva el toggle.
+          </is-details>
+        </div></div>
+<pre><code>&lt;is-details open summary=&quot;…&quot;&gt;…&lt;/is-details&gt;
+&lt;is-details disabled summary=&quot;…&quot;&gt;…&lt;/is-details&gt;</code></pre>
+</section>
+<section id="methods">
+<h2>API JavaScript</h2>
+<p class="lede">Métodos: <code class="code">show()</code>, <code class="code">hide()</code>,
+          <code class="code">toggle()</code>. Propiedades: <code class="code">open</code>,
+          <code class="code">summary</code>, <code class="code">name</code>.</p>
+<div class="demo"><is-details id="apiDetails" summary="Demo controlada">
+            Esto lo abro y cierro desde los botones de abajo.
+          </is-details>
+          <div class="card-row-actions" style="margin-top:.5em">
+            <is-button id="btnOpen">show()</is-button>
+            <is-button id="btnClose">hide()</is-button>
+            <is-button id="btnToggle" variant="outlined">toggle()</is-button>
+          </div></div>
+<pre><code>&lt;is-details id=&quot;apiDetails&quot; summary=&quot;Demo&quot;&gt;…&lt;/is-details&gt;
+&lt;script&gt;
+  document.getElementById('btnOpen').onclick  = () =&gt; document.getElementById('apiDetails').show();
+  document.getElementById('btnClose').onclick = () =&gt; document.getElementById('apiDetails').hide();
+  document.getElementById('btnToggle').onclick = () =&gt; document.getElementById('apiDetails').toggle();
+&lt;/script&gt;</code></pre>
+</section>
+<section id="events">
+<h2>Eventos</h2>
+<p class="lede">Burbujean y son <code class="code">composed: true</code>: <code class="code">is-show</code>,
+          <code class="code">is-after-show</code>, <code class="code">is-hide</code>,
+          <code class="code">is-after-hide</code>.</p>
+<div class="demo"><is-details id="evtDetails" summary="Pulsa y mira la consola">
+            El evento <code class="code">is-after-show</code> se dispara tras la animación de apertura.
+          </is-details>
+          <div id="evtLog" class="callout" style="margin-top:.5em">Log:</div></div>
+<pre><code>document.getElementById('evtDetails').addEventListener('is-after-show', () =&gt; {
+  console.log('abierto');
+});</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia completa</h2>
+<div class="demo"><h3>Atributos / propiedades</h3></div>
+<div class="demo"><h3>Slots</h3></div>
+<div class="demo"><h3>Métodos</h3></div>
+<div class="demo"><h3>Eventos</h3></div>
+<div class="demo"><h3>CSS Parts</h3></div>
+<div class="demo"><h3>CSS custom properties</h3></div>
+</section>
+  </article>
+</body>
+</html>
