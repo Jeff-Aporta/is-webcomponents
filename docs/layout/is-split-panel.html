@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel dividido · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-split-panel de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/layout/is-split-panel.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-flowchart", "is-split-panel");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-split-panel" data-category="layout">
+    <h1>Panel dividido</h1>
+    <p class="lede">Documentación y demos del componente is-split-panel de InSoft.</p>
+<section id="intro">
+<p class="lede">Dos paneles adyacentes separados por un divisor arrastrable.
+          Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.</p>
+<aside class="callout"><strong>Persistencia:</strong> con <code class="code">storage-key="mi-panel"</code> el tamaño se guarda en
+          <code class="code">localStorage['is-webcomponents']</code> como JSON compartido por todos los WC:
+          <code class="code">{ "is-split-panel": { "mi-panel": { "positionInPixels": 240 } } }</code>.
+          Sin <code class="code">storage-key</code> no escribe nada.</aside>
+<div class="demo"><div class="split-stage">
+          <is-split-panel id="introSplit" storage-key="demo-intro" style="height: 100%;">
+            <div slot="start" class="panel-demo">
+              <h4>Start</h4>
+              <p>Arrastra el divisor →</p>
+            </div>
+            <div slot="end" class="panel-demo panel-demo--alt">
+              <h4>End</h4>
+              <p>← Arrastra el divisor</p>
+            </div>
+          </is-split-panel>
+        </div></div>
+<pre><code>&lt;is-split-panel&gt;
+  &lt;div slot=&quot;start&quot;&gt;Start&lt;/div&gt;
+  &lt;div slot=&quot;end&quot;&gt;End&lt;/div&gt;
+&lt;/is-split-panel&gt;</code></pre>
+</section>
+<section id="horizontal">
+<h2>Horizontal</h2>
+<p class="lede">Por defecto <code class="code">orientation="horizontal"</code>: el divisor se mueve en X.</p>
+<div class="demo"><div class="split-stage">
+          <is-split-panel style="height: 100%;">
+            <div slot="start" class="panel-demo">
+              <h4>Panel A</h4>
+              <p>50% al cargar</p>
+            </div>
+            <div slot="end" class="panel-demo panel-demo--alt">
+              <h4>Panel B</h4>
+              <p>50% al cargar</p>
+            </div>
+          </is-split-panel>
+        </div></div>
+<pre><code>&lt;is-split-panel orientation=&quot;horizontal&quot;&gt;
+  ...
+&lt;/is-split-panel&gt;</code></pre>
+</section>
+<section id="vertical">
+<h2>Vertical</h2>
+<p class="lede">Con <code class="code">orientation="vertical"</code> el divisor se mueve en Y.
+          Ideal para listas en la parte superior y detalles abajo.</p>
+<div class="demo"><div class="split-stage split-stage--square">
+          <is-split-panel orientation="vertical" style="height: 100%;">
+            <div slot="start" class="panel-demo">
+              <h4>Top</h4>
+              <p>Lista</p>
+            </div>
+            <div slot="end" class="panel-demo panel-demo--alt">
+              <h4>Bottom</h4>
+              <p>Detalle</p>
+            </div>
+          </is-split-panel>
+        </div></div>
+<pre><code>&lt;is-split-panel orientation=&quot;vertical&quot;&gt;
+  &lt;div slot=&quot;start&quot;&gt;Top&lt;/div&gt;
+  &lt;div slot=&quot;end&quot;&gt;Bottom&lt;/div&gt;
+&lt;/is-split-panel&gt;</code></pre>
+</section>
+<section id="primary-end">
+<h2>Primary end</h2>
+<p class="lede">Con <code class="code">primary="end"</code> el panel final mantiene su tamaño cuando el host cambia de dimensión;
+          el inicial crece/se encoge. Por defecto (<code class="code">primary="start"</code>) es al revés.</p>
+<div class="demo"><div class="split-stage">
+          <is-split-panel primary="end" style="height: 100%;">
+            <div slot="start" class="panel-demo">
+              <h4>Crece/se encoge</h4>
+              <p>Resize the window</p>
+            </div>
+            <div slot="end" class="panel-demo panel-demo--alt">
+              <h4>Mantiene tamaño</h4>
+              <p>200px aprox</p>
+            </div>
+          </is-split-panel>
+        </div></div>
+<pre><code>&lt;is-split-panel primary=&quot;end&quot; position-in-pixels=&quot;240&quot;&gt;
+  ...
+&lt;/is-split-panel&gt;</code></pre>
+</section>
+<section id="snap">
+<h2>Snap</h2>
+<p class="lede"><code class="code">snap</code> define puntos de anclaje. Acepta px y %. El <code class="code">snap-threshold</code> (default 12px) es la ventana de tolerancia.</p>
+<div class="demo"><div class="split-stage">
+          <is-split-panel snap="25% 50% 75%" style="height: 100%;">
+            <div slot="start" class="panel-demo">
+              <h4>Snap 25 / 50 / 75</h4>
+              <p>Intenta posicionarte cerca</p>
+            </div>
+            <div slot="end" class="panel-demo panel-demo--alt">
+              <h4>End</h4>
+              <p>El divisor "salta"</p>
+            </div>
+          </is-split-panel>
+        </div></div>
+<pre><code>&lt;is-split-panel
+  snap=&quot;25% 50% 75%&quot;
+  snap-threshold=&quot;12&quot;&gt;
+  ...
+&lt;/is-split-panel&gt;</code></pre>
+</section>
+<section id="disabled">
+<h2>Disabled</h2>
+<p class="lede"><code class="code">disabled</code> bloquea drag y teclado. El divisor deja de ser focoable.</p>
+<div class="demo"><div class="split-stage">
+          <is-split-panel disabled style="height: 100%;">
+            <div slot="start" class="panel-demo">
+              <h4>Bloqueado</h4>
+              <p>Drag deshabilitado</p>
+            </div>
+            <div slot="end" class="panel-demo panel-demo--alt">
+              <h4>Bloqueado</h4>
+              <p>Drag deshabilitado</p>
+            </div>
+          </is-split-panel>
+        </div></div>
+<pre><code>&lt;is-split-panel disabled&gt;
+  ...
+&lt;/is-split-panel&gt;</code></pre>
+</section>
+<section id="keyboard">
+<h2>Teclado</h2>
+<p class="lede">Foco en el divisor (Tab) y luego:
+          <code class="code">←/→</code> mueve 1%, <code class="code">Shift</code> ×10.
+          <code class="code">Home</code>/<code class="code">End</code> salta a los extremos.
+          <code class="code">Enter</code> colapsa y restaura el panel primario.</p>
+<div class="demo"><div class="split-stage">
+          <is-split-panel id="kbdSplit" style="height: 100%;">
+            <div slot="start" class="panel-demo">
+              <h4>Foco aquí y prueba:</h4>
+              <p>← → Home End Enter</p>
+            </div>
+            <div slot="end" class="panel-demo panel-demo--alt">
+              <h4>End</h4>
+              <p>id="kbdSplit"</p>
+            </div>
+          </is-split-panel>
+        </div></div>
+</section>
+<section id="methods">
+<h2>API JavaScript</h2>
+<p class="lede">Como cualquier custom element, accedes con <code class="code">document.querySelector('is-split-panel')</code>.</p>
+<div class="demo"><h4>Demo en vivo</h4></div>
+<div class="demo"><div class="split-stage" style="height: 180px;">
+            <is-split-panel id="apiSplit" style="height: 100%;">
+              <div slot="start" class="panel-demo"><h4>Start</h4><p>Pos: <span id="apiPos">50</span>%</p></div>
+              <div slot="end" class="panel-demo panel-demo--alt"><h4>End</h4></div>
+            </is-split-panel>
+          </div>
+
+          <div class="demo-row" style="margin-top: 12px;">
+            <is-button id="apiPosBtn" color="neutral" variant="outlined">position += 10</is-button>
+            <is-button id="apiEnd" color="neutral" variant="outlined">primary=end</is-button>
+            <is-button id="apiStart" color="neutral" variant="outlined">primary=start</is-button>
+            <is-button id="apiVertical" color="neutral" variant="outlined">toggle orientation</is-button>
+            <is-button id="apiDisabled" color="neutral" variant="outlined">toggle disabled</is-button>
+          </div></div>
+<pre><code>const sp = document.getElementById('apiSplit');
+sp.position += 10;             // asignar valor
+sp.primary = 'end';           // o 'start'
+sp.toggleAttribute('disabled');
+sp.addEventListener('reposition', e =&gt; this.log(e.detail));</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia completa</h2>
+<div class="demo"><h3>Atributos / propiedades</h3></div>
+<div class="demo"><h3>Slots</h3></div>
+<div class="demo"><h3>CSS Parts</h3></div>
+<div class="demo"><h3>CSS custom properties</h3></div>
+<div class="demo"><h3>Eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
