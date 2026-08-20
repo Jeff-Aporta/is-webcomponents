@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Theme Toggle · IS Web Components</title>
+  <meta name="description" content="Documentación de is-theme-toggle.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/feedback/is-theme-toggle.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-flowchart", "is-theme-toggle");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-theme-toggle" data-category="feedback">
+    <h1>Theme Toggle</h1>
+    <section id="intro">
+<p class="lede">Alterna el tema del contenedor más cercano
+          (<code class="code">[container-theme]</code> / <code class="code">.container-theme</code>
+          / <code class="code">.theme-dark|.theme-light</code> / <code class="code">[data-theme]</code>;
+          si no hay, <code class="code">&lt;html&gt;</code>).
+          Compone <code class="code">is-check-icon-button</code> (noche ↔ sol).
+          Emite <code class="code">theme-toggle</code> con <code class="code">detail.theme</code> y
+          <code class="code">detail.container</code>.</p>
+<div class="demo"><is-theme-toggle dark></is-theme-toggle>
+          <span class="demo-label" style="margin-left:.75rem">afecta al documento (html)</span></div>
+</section>
+<section id="scoped">
+<h2>Contenedores anidados</h2>
+<p class="lede">Cada caja es un <code class="code">.container-theme</code> independiente.
+          El toggle usa <code class="code">closest()</code> y solo cambia esa caja.</p>
+<div class="demo"><div class="theme-boxes">
+            <div class="container-theme theme-dark" data-theme="dark" data-palette="contapyme">
+              <div class="container-theme__head">
+                <span class="container-theme__title">Panel oscuro</span>
+                <is-theme-toggle dark></is-theme-toggle>
+              </div>
+              <p class="container-theme__hint">Tokens <code>--is-*</code> locales a este nodo.</p>
+              <span class="container-theme__chip">chip de control</span>
+            </div>
+            <div class="container-theme theme-light" data-theme="light" data-palette="contapyme">
+              <div class="container-theme__head">
+                <span class="container-theme__title">Panel claro</span>
+                <is-theme-toggle></is-theme-toggle>
+              </div>
+              <p class="container-theme__hint">Su propio tema; no toca el documento ni el otro panel.</p>
+              <span class="container-theme__chip">chip de control</span>
+            </div>
+          </div></div>
+<pre><code>&lt;div class=&quot;container-theme theme-dark&quot; data-theme=&quot;dark&quot;&gt;
+  &lt;is-theme-toggle dark&gt;&lt;/is-theme-toggle&gt;
+  …
+&lt;/div&gt;
+
+&lt;div class=&quot;container-theme theme-light&quot; data-theme=&quot;light&quot;&gt;
+  &lt;is-theme-toggle&gt;&lt;/is-theme-toggle&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
