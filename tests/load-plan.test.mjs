@@ -27,15 +27,15 @@ const catalog = {
   },
 };
 
-test('categoría cubre tags hijos en el mismo lote', () => {
+test('categoría expande a tags individuales y cubre hijos del mismo lote', () => {
   const reg = createRegistry();
   const { jobs, skipped } = planLoads(['actions', 'is-button'], reg, catalog);
-  assert.equal(jobs.length, 1);
-  assert.equal(jobs[0].kind, 'category');
+  assert.equal(jobs.length, 2);
+  assert.ok(jobs.every((j) => j.kind === 'tag'));
   assert.deepEqual(skipped, ['is-button']);
 });
 
-test('tras commit de categoría, load de tag no genera job', () => {
+test('tras commit de categoría (todos sus tags), load de tag no genera job', () => {
   const reg = createRegistry();
   const first = planLoads(['actions'], reg, catalog);
   commitLoads(first.jobs, reg, catalog);

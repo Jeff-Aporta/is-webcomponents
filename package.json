@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "docs": "node scripts/build-docs.mjs",
     "dev": "node scripts/serve.mjs",
     "icons:download": "node scripts/download-icons.mjs"
   },

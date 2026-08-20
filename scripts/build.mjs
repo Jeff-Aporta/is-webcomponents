@@ -1,8 +1,6 @@
-// build.mjs — CDN artifacts folderizados: dist/cdn/{categoria}/{tag}.min.js
-// + {tag}.min.css + is-base.min.css/palettes.min.css en la raiz.
-// Ademas genera bundles por categoria (categoria.min.js) y all.min.js para
-// poder cargar varios componentes con un solo <script type="module" src="..."></script>.
-import { access, readdir, mkdir, stat, rm, writeFile, readFile, copyFile } from 'node:fs/promises';
+// build.mjs — CDN folderizado: dist/cdn/{categoria}/{tag}.min.js + .min.css
+// + is-base/palettes + loader.min.js. Sin all.min.js ni category.*.min.js.
+import { access, readdir, mkdir, stat, rm, writeFile, readFile, copyFile, unlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -65,28 +63,6 @@ const componentDocsBanner = (folder, tag) => {
   return docsBanner(lines);
 };
 
-// bundle:false — los .min.js de cada tag ya están compilados y minificados;
-// aquí solo generamos un archivo que los importa. Si se hiciera bundle:true
-// esbuild inlinearía todo en un único módulo y `import.meta.url` (usado por
-// adoptCss para localizar el .css hermano de cada componente) apuntaría al
-// archivo de categoría/all en vez del componente, rompiendo el CSS.
-const bundleVirtual = async (outfile, virtualEntry, sourcefile, bannerJs = '') => {
-  const r = await build({
-    bundle: false,
-    minify: true,
-    format: 'esm',
-    target: 'es2020',
-    legalComments: 'none',
-    write: false,
-    stdin: { contents: virtualEntry, resolveDir: dist, loader: 'js', sourcefile },
-    ...(bannerJs ? { banner: { js: bannerJs } } : {}),
-  });
-  await writeFile(outfile, r.outputFiles[0].text);
-};
-
-// bundle:true es obligatorio: sin él esbuild deja los `@import` literales en el
-// .min.css. `hojas.js` / adoptedStyleSheets usan replaceSync, que NO resuelve
-// @import → dialog/drawer perdían todo el chrome (padding 0 en header/body).
 const bundleCss = (entry, outfile) =>
   build({ entryPoints: [entry], outfile, minify: true, bundle: true });
 
@@ -271,53 +247,10 @@ await bundleCss(palettesIn, palettesOut);
 const palettesStat = await stat(palettesOut);
 console.log(`  ${'palettes'.padEnd(18)} css ${String(palettesStat.size).padStart(6)}`);
 
-// ── Bundles por categoria ────────────────────────────────────────
-// Cada categoria exporta TODOS los modulos <tag>.min.js que pertenezcan
-// a la misma, lo que activa el side effect de `customElements.define`
-// y deja el componente listo para usar.
-
-const entriesImport = (tags) =>
-  tags.map((t) => `import './${t}.min.js';`).join('\n');
-
-for (const [category, items] of byCategory) {
-  const tags = items.map((m) => m.tag.replace(/^is-/, '')).filter((t) => tagToComponent.has(t));
-  if (!tags.length) continue;
-  // El bundle vive DENTRO de la carpeta de la categoria: los imports
-  // relativos './<tag>.min.js' resuelven a sus hermanos.
-  const virtualEntry = `// categoria: ${category}\n${entriesImport(tags)}\n`;
-  const outName = `${category}/category.${category}.min.js`;
-  await mkdir(join(dist, category), { recursive: true });
-  const out = join(dist, category, `category.${category}.min.js`);
-  const catBanner = docsBanner([
-    `category-bundle: ${category}`,
-    `category: ${GH_RAW}/src/components/${category}/LLM.md`,
-    `kit: ${CDN_COMP_LLM}`,
-    `loader: ${CDN_LOADER_MD}`,
-    `cdn-install: ${CDN_SKILL}`,
-  ]);
-  await bundleVirtual(out, virtualEntry, out, catBanner);
-  const outStat = await stat(out);
-  console.log(`  ${outName.padEnd(34)} js ${String(outStat.size).padStart(6)}  (${tags.length} comps)`);
+try { await unlink(join(dist, 'all.min.js')); } catch { /* leftover */ }
+for (const [category] of byCategory) {
+  try { await unlink(join(dist, category, `category.${category}.min.js`)); } catch { /* leftover */ }
 }
-
-// ── Bundle all ───────────────────────────────────────────────────
-// Re-importa cada <categoria>/<tag>.min.js desde la raiz de dist/cdn.
-// Los CSS los carga cada componente en su shadow (adoptCss).
-const allPaths = entries
-  .map((e) => `${folderFor(e)}/${basename(e).replace(/\.js$/, '')}`)
-  .sort();
-const allVirtual = `// all.min.js — todos los componentes de IS Web Components\n${allPaths.map((p) => `import './${p}.min.js';`).join('\n')}\n`;
-const allOut = join(dist, 'all.min.js');
-const allBanner = docsBanner([
-  'bundle: all.min.js (import list — peso real = suma de .min.js hijos)',
-  `kit: ${CDN_COMP_LLM}`,
-  `loader: ${CDN_LOADER_MD}`,
-  `cdn-install: ${CDN_SKILL}`,
-  `prefer: usar loader.min.js + load(tags|cats) en vez de all`,
-]);
-await bundleVirtual(allOut, allVirtual, allOut, allBanner);
-const allStat = await stat(allOut);
-console.log(`  ${'all.min'.padEnd(18)} js ${String(allStat.size).padStart(6)}  (${allPaths.length} comps)`);
 
 // ── loader.min.js ────────────────────────────────────────────────
 // Entry liviano: manifiesto embebido + load / loadCSSBase / loadCSSPalettesDefault.
@@ -393,8 +326,6 @@ await writeFile(
     '  palettes.min.css                         — paletas de marca',
     '  <categoria>/<name>.min.js                — componente individual (carga su .min.css hermano en el shadow)',
     '  <categoria>/<name>.min.css               — estilos del componente (junto al .min.js)',
-    '  <categoria>/category.<categoria>.min.js  — todos los componentes de esa categoria',
-    '  all.min.js                               — todos los componentes en un archivo',
     '  loader.min.js                            — ISWebComponentsLoader (carga selectiva + pin/mirrors)',
     '  loader.md                                — docs del loader (LLM)',
     '  sizes.json                               — {ruta: bytes} de todo el .min.js/.min.css publicado',
@@ -410,15 +341,8 @@ await writeFile(
     '    await ISWebComponentsLoader.loadCSSBase();',
     '    await ISWebComponentsLoader.loadCSSPalettesDefault();',
     '    await ISWebComponentsLoader.load("is-button", "is-button-group");',
-    '    // o: load("actions", "data-viz") | load("all")',
+    '    // o: load("actions") expande a cada tag.min.js (sin bundle de categoría)',
     '  </script>',
-    '',
-    'Uso clásico:',
-    '  <link rel="stylesheet" href=".../is-base.min.css">',
-    '  <script type="module" src=".../actions/button.min.js"></script>',
-    '  <!-- el .min.css lo trae el propio componente -->',
-    '  <script type="module" src=".../actions/category.actions.min.js"></script>',
-    '  <script type="module" src=".../all.min.js"></script>',
     '',
     'Docs / skills:',
     '  src/components/**/LLM.md, **/*.md           — docs LLM de componentes (fuente)',
@@ -481,4 +405,7 @@ try {
   // Sin src/skills/: no bloquear el build del CDN.
 }
 
-console.log(`OK dist/cdn  ${entries.length} components + is-base + ${byCategory.size} categories + all + loader`);
+const { buildDocsHtml } = await import('./build-docs.mjs');
+await buildDocsHtml();
+
+console.log(`OK dist/cdn  ${entries.length} components + is-base + loader + docs HTML`);

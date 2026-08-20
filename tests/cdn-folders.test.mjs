@@ -1,13 +1,10 @@
 // tests/cdn-folders.test.mjs
 //
 // dist/cdn está folderizado por categoría. Verifica que:
-//   - La raíz solo contiene all.min.js, is-base.min.css, palettes.min.css,
-//     sizes.json, versions.json,
-//     README.txt, assets/ y las carpetas de categoría (nada plano).
+//   - La raíz: loader.min.js, CSS base, sizes, README, assets, skills, LLM.md.
 //   - Cada componente del manifest existe en <categoria>/<tag>.min.js.
 //   - Cada carpeta con componentes trae su scrollbars.css (lo pide adoptCss).
-//   - Cada categoría trae su category.<categoria>.min.js.
-//   - all.min.js importa rutas folderizadas, no planas.
+//   - No hay all.min.js ni category.<cat>.min.js.
 //
 // Uso:  node tests/cdn-folders.test.mjs
 
@@ -30,10 +27,9 @@ if (!existsSync(dist)) {
 // sizes.json y versions.json son metadatos del bundle, no componentes: viven
 // en la raíz a propósito porque describen TODO el árbol publicado.
 const ROOT_ALLOWED = new Set([
-  'all.min.js', 'is-base.min.css', 'palettes.min.css', 'README.txt', 'assets',
+  'loader.min.js', 'loader.md', 'LLM.md',
+  'is-base.min.css', 'palettes.min.css', 'README.txt', 'assets',
   'sizes.json', 'versions.json',
-  // `_headers` es configuración de Cloudflare Pages (fuerza text/plain en
-  // /llm/*) y `llm/` son los .md publicados: ninguno es un componente.
   '_headers', 'llm',
 ]);
 
@@ -43,7 +39,7 @@ for (const name of rootEntries) {
   const full = join(dist, name);
   if (statSync(full).isDirectory()) {
     // `assets/` y `llm/` no son categorías de componentes.
-    if (name !== 'assets' && name !== 'llm') categories.push(name);
+    if (name !== 'assets' && name !== 'llm' && name !== 'skills') categories.push(name);
     continue;
   }
   check(ROOT_ALLOWED.has(name),
@@ -88,8 +84,8 @@ for (const cat of categories) {
   const hasComponents = files.some((f) => f.endsWith('.min.js') && !f.startsWith('category.'));
   if (!hasComponents) continue;
   if (manifestCategories.has(cat)) {
-    check(files.includes(`category.${cat}.min.js`),
-      `falta dist/cdn/${cat}/category.${cat}.min.js`);
+    check(!files.some((f) => f.startsWith('category.') && f.endsWith('.min.js')),
+      `no debe existir dist/cdn/${cat}/category.${cat}.min.js — usar loader + tags`);
   }
   check(files.includes('scrollbars.css'),
     `falta dist/cdn/${cat}/scrollbars.css — adoptCss lo busca junto al módulo`);
@@ -132,12 +128,8 @@ for (const src of walkSrc(compRoot)) {
   }
 }
 
-// all.min.js referencia rutas folderizadas.
-const all = readFileSync(join(dist, 'all.min.js'), 'utf8');
-check(/import"\.\/[a-z-]+\/[a-z0-9-]+\.min\.js"/.test(all),
-  'all.min.js debe importar rutas <categoria>/<tag>.min.js');
-check(!/import"\.\/[a-z0-9-]+\.min\.js"/.test(all),
-  'all.min.js no debe importar rutas planas ./<tag>.min.js');
+check(!existsSync(join(dist, 'all.min.js')),
+  'no debe existir dist/cdn/all.min.js — usar loader.min.js');
 
 if (failures.length) {
   console.log('FAIL:');

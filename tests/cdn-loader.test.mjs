@@ -54,7 +54,7 @@ test('min.js de componente lleva banner de docs MD', () => {
 test('index.html arranca con loader (sin all.min suelto; CSS estático)', () => {
   assert.match(indexHtml, /loader\.min\.js/);
   assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/is-base\.css"/);
-  assert.match(indexHtml, /L\.load\(['"]all['"]\)/);
+  assert.doesNotMatch(indexHtml, /L\.load\(['"]all['"]\)/);
   assert.doesNotMatch(indexHtml, /<script type="module" src="dist\/cdn\/all\.min\.js"/);
   // Detalle del orden await/shell → tests/gallery-boot.test.mjs (error #43)
 });

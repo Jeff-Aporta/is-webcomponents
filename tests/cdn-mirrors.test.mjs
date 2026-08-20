@@ -20,14 +20,12 @@ test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
   assert.match(src, /fallbackBases/);
 });
 
-test('cdn-snippet: loader src + script load; radio tag|category|all; sin tab mirrors', async () => {
+test('cdn-snippet: loader src + script load; sin radios category/all', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.js'), 'utf8');
   assert.doesNotMatch(src, /data-tab=["']mirrors["']/);
-  assert.doesNotMatch(src, /data-tab=["']enlaces["']/);
-  assert.match(src, /name="cdn-scope"/);
-  assert.match(src, /value="tag"/);
-  assert.match(src, /value="category"/);
-  assert.match(src, /value="all"/);
+  assert.doesNotMatch(src, /name="cdn-scope"/);
+  assert.doesNotMatch(src, /value="category"/);
+  assert.doesNotMatch(src, /all\.min\.js/);
   assert.match(src, /#buildLoaderSnippet/);
   assert.match(src, /loader\.min\.js/);
   assert.match(src, /type="module" src=/);

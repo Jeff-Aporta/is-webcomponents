@@ -27,13 +27,15 @@ const mustExist = [
   'dist/cdn',
   'manifest.js',
   'index.html',
+  'robots.txt',
+  'sitemap.xml',
 ];
 
 for (const rel of mustExist) {
   if (!existsSync(join(root, rel))) failures.push(`falta ${rel}`);
 }
 
-const forbiddenAtRoot = ['components', 'styles', 'previews', 'skills', 'docs'];
+const forbiddenAtRoot = ['components', 'styles', 'previews', 'skills'];
 for (const name of forbiddenAtRoot) {
   if (existsSync(join(root, name))) {
     failures.push(`NO debe existir ${name}/ en la raíz — vive en src/${name}/`);
@@ -70,10 +72,10 @@ const shellBody = readFileSync(shell, 'utf8');
 if (!/src=["']\.\.\/\.\.\/scripts\//.test(shellBody)) {
   failures.push('_shell.html: scripts debe ser ../../scripts/');
 }
-if (!/src=["']\.\.\/\.\.\/dist\//.test(shellBody)) {
+if (!/from\s+['"]\.\.\/\.\.\/dist\//.test(shellBody) && !/src=["']\.\.\/\.\.\/dist\//.test(shellBody)) {
   failures.push('_shell.html: dist debe ser ../../dist/');
 }
-if (!/href=["']\.\.\/styles\//.test(shellBody)) {
+if (!/\.\.\/styles\//.test(shellBody)) {
   failures.push('_shell.html: styles debe ser ../styles/ (src/styles)');
 }
 
