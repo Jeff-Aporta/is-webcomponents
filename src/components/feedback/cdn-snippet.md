@@ -19,7 +19,7 @@ Muestra un bloque copy-paste de dos tags:
 1. `<script type="module" src="…/loader.min.js">` — carga el loader.
 2. `<script type="module">` — `loadCSSBase` + `loadCSSPalettesDefault` + `load(…)`.
 
-Radio de alcance: **componente** (`is-button`) · **categoría** (`actions`) · **todo** (`all`).
+Radio de alcance: **no**. Solo el tag de `tag="is-…"`. `load('actions')` / `load('all')` siguen existiendo en el loader (expansión a `.min.js` por tag), pero el panel no los promociona.
 
 Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Docs para agentes vía `<is-md-editor>`. Dependencias externas opcionales (slot `deps` / atributo `dependencies`).
 
@@ -72,7 +72,7 @@ import './cdn-snippet.js';
 ## Qué hacer
 
 - Preferir siempre `loader.min.js` + `load(tag|cat|all)`.
-- Persistir alcance con `url-key` si la galería lo necesita (`cdnTab` → valores `tag`/`category`/`all`).
+- No persistir radios tag/category/all: el snippet es el tag del panel.
 
 ## Qué no hacer
 
@@ -84,7 +84,7 @@ import './cdn-snippet.js';
 
 | Trampa | Fix |
 | --- | --- |
-| Panel enseña `all.min.js` como default | Radio `tag` primero si hay `tag` |
-| `url-key` con valores `enlaces`/`mirrors` | Ya no; usar `tag`/`category`/`all` |
+| Panel enseña `all.min.js` | Solo `loader.min.js` + `L.load(tag)` |
+| Radios category/all | No; el loader puede expandir categoría si se llama a mano |
 
 Guardián: `tests/cdn-mirrors.test.mjs` (contrato loader copy-paste) · `tests/url-nav.test.mjs`.

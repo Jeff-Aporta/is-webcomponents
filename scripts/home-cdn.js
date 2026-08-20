@@ -31,11 +31,13 @@ const buildJsCssSnippet = () => [
 ].join('\n');
 
 const buildBundleSnippet = () => [
-  `${open}!-- Todos los componentes en un solo archivo --${close}`,
-  `${open}script type="module" src="${CDN}/all.min.js"${close}${open}${slash}script${close}`,
-  '',
-  `${open}!-- O una categoría completa (actions, forms, charts, ...) --${close}`,
-  `${open}script type="module" src="${CDN}/actions/category.actions.min.js"${close}${open}${slash}script${close}`,
+  `${open}script type="module" src="${CDN}/loader.min.js"${close}${open}${slash}script${close}`,
+  `${open}script type="module"${close}`,
+  `  const L = globalThis.ISWebComponentsLoader;`,
+  `  await L.loadCSSBase();`,
+  `  await L.loadCSSPalettesDefault();`,
+  `  await L.load("is-button");`,
+  `${open}${slash}script${close}`,
   '',
   `${open}is-button color="brand"${close}Hola mundo${open}${slash}is-button${close}`,
 ].join('\n');

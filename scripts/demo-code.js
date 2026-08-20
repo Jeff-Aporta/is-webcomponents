@@ -24,7 +24,6 @@
 import '../src/components/media/icon.js';
 import '../src/components/actions/dropdown.js';
 import '../src/components/actions/copy-button.js';
-import '../src/components/navigation/tab-group.js';
 import './highlight-pre.js';
 import { paint } from '../src/components/_shared/highlight-code.js';
 import { resolveRef, jsdelivrBase } from '../src/components/_shared/cdn-ref.js';
@@ -209,31 +208,13 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     return out.join('\n');
   };
 
-  /** Niveles de minimalidad del snippet, del más al menos granular. */
-  const LEVELS = ['component', 'category', 'all'];
-  const DEFAULT_LEVEL = 'all';
-
-  /** Cuántos <script> emite cada nivel para los tags de un demo. Es lo único
-   *  que los diferencia ahora que el CSS no se enlaza: sirve de badge en los
-   *  tabs para que se vea el trade-off (menos archivos ↔ más peso). */
-  const levelScriptCount = (tags, level) => {
-    if (level === 'all') return 1;
-    if (level === 'category') return new Set(tags.map(catOf)).size;
-    return tags.length;
-  };
-
-  // dist/cdn folderizado: cada componente vive en <categoria>/<tag>.min.js.
   const catOf = (t) => {
     const entry = manifest.find((c) => c.tag === `is-${t}` || c.tag === t);
     return entry?.category || 'helpers';
   };
 
-  /** Fragmento mínimo: dependencias del CDN arriba, markup del ejemplo debajo.
-   *  `level` controla cuánto se agrupan los `<script>`/`<link>` de los
-   *  componentes detectados: "component" (uno por tag, default), "category"
-   *  (un bundle por categoría única) o "all" (el bundle global). Devuelve
-   *  también `urls`: las direcciones usadas, para poder sumar su peso. */
-  const buildSnippet = async (demo, level = DEFAULT_LEVEL) => {
+  /** Fragmento mínimo: loader + L.load(tags del demo) + markup. */
+  const buildSnippet = async (demo) => {
     const raw = demo.getAttribute('data-code');
     const inner = raw != null && raw !== ''
       ? withSnippetContext(raw.trim())
@@ -244,29 +225,18 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     const cssTags = tags.filter((t) => COMPONENTS_WITH_CSS.has(t));
 
     const lines = [];
-    const urls = [];
-    const pushCss = (href) => { lines.push(`<link rel="stylesheet" href="${href}">`); urls.push(href); };
-    const pushJs = (src) => { lines.push(`<script type="module" src="${src}"><\/script>`); urls.push(src); };
-
-    pushCss(`${CDN}/is-base.min.css`);
-    // Sólo hay un palettes.min.css con las 3 paletas juntas (no hay archivo
-    // por paleta), así que siempre se referencia entero.
-    pushCss(`${CDN}/palettes.min.css`);
-
-    // El .min.css de cada componente NO se enlaza: adoptCss() lo carga solo
-    // en el shadow leyendo la ruta hermana del .min.js. Igual pesa, así que
-    // entra en el cálculo aunque no aparezca en el snippet.
+    const urls = [`${CDN}/loader.min.js`, `${CDN}/is-base.min.css`, `${CDN}/palettes.min.css`];
     for (const t of cssTags) urls.push(`${CDN}/${catOf(t)}/${t}.min.css`);
+    for (const t of tags) urls.push(`${CDN}/${catOf(t)}/${t}.min.js`);
 
-    if (level === 'all') {
-      pushJs(`${CDN}/all.min.js`);
-    } else if (level === 'category') {
-      const cats = [...new Set(tags.map(catOf))].sort();
-      for (const c of cats) pushJs(`${CDN}/${c}/category.${c}.min.js`);
-    } else {
-      // Los módulos ya son diferidos: no hace falta `defer` ni ponerlos al final.
-      for (const t of tags) pushJs(`${CDN}/${catOf(t)}/${t}.min.js`);
-    }
+    const args = tags.map((t) => JSON.stringify(`is-${t}`)).join(', ');
+    lines.push(`<script type="module" src="${CDN}/loader.min.js"><\/script>`);
+    lines.push('<script type="module">');
+    lines.push('  const L = globalThis.ISWebComponentsLoader;');
+    lines.push('  await L.loadCSSBase();');
+    lines.push('  await L.loadCSSPalettesDefault();');
+    if (args) lines.push(`  await L.load(${args});`);
+    lines.push('<\/script>');
 
     const previewStyles = demo.closest('is-preview-component')?.preview?.definition?.styles ?? '';
     const styleCss = buildDemoSnippetStyles(inner, previewStyles);
@@ -318,10 +288,7 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     pop.innerHTML = `
       <div class="demo-code-pop__bar">
         <div class="demo-code-pop__meta">
-          <is-tab-group class="demo-code-pop__level" active="${DEFAULT_LEVEL}" activation="manual"
-                         without-scroll-controls aria-label="Nivel de agrupado">
-            ${LEVELS.map((id) => `<is-tab slot="nav" panel="${id}">${id}<span slot="end" class="demo-code-pop__count" data-level="${id}"></span></is-tab>`).join('')}
-          </is-tab-group>
+          <span class="demo-code-pop__hint">loader.min.js</span>
           <span class="demo-code-pop__size" aria-live="polite"></span>
         </div>
         <is-copy-button class="demo-code-pop__copy" copy-label="Copiar" success-label="Copiado"
@@ -350,18 +317,10 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
 
     const copyBtn = pop.querySelector('is-copy-button');
     const sizeEl = pop.querySelector('.demo-code-pop__size');
-    const levelTabs = pop.querySelector('.demo-code-pop__level');
-    let level = DEFAULT_LEVEL;
     let panelOpen = false;
 
     const renderSnippet = async () => {
-      const tags = collectTags(demo);
-      for (const el of pop.querySelectorAll('.demo-code-pop__count')) {
-        const n = levelScriptCount(tags, el.dataset.level);
-        el.textContent = n;
-        el.title = `${n} ${n === 1 ? 'script' : 'scripts'}`;
-      }
-      const { snippet, urls } = await buildSnippet(demo, level);
+      const { snippet, urls } = await buildSnippet(demo);
       copyBtn.setAttribute('value', snippet);
       await customElements.whenDefined('is-code');
       const codeEl = pre?.isConnected ? pre : mountCodeEl(snippet);
@@ -394,17 +353,6 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
       }
       if (panelOpen) renderSnippet().catch(console.error);
     };
-
-    levelTabs.addEventListener('is-tab-show', (e) => {
-      if (e.detail.name === level) return;
-      level = e.detail.name;
-      if (pre) {
-        delete pre.dataset.filled;
-        delete pre.dataset.src;
-        delete pre.dataset.cmSource;
-      }
-      renderSnippet().catch(console.error);
-    });
 
     // El snippet se calcula al abrir: el demo puede haber cambiado por JS.
     dd.addEventListener('is-show', () => {
