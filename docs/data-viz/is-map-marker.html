@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Map Marker · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-map-marker de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/data-viz/is-map-marker.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-map-marker", "is-maps");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-map-marker" data-category="data-viz">
+    <h1>Map Marker</h1>
+    <p class="lede">Documentación y demos de is-map-marker de InSoft.</p>
+<section id="intro">
+<p class="lede">Marcador posicionado por longitud y latitud dentro de un <code class="code">&lt;is-maps&gt;</code>.</p>
+<div class="demo"><is-maps viewbox="-80,-5,-66,13" style="height:320px">
+            <is-map-marker lon="-74.07" lat="4.71" label="Bogotá"></is-map-marker>
+            <is-map-marker lon="-75.56" lat="6.25" label="Medellín"></is-map-marker>
+            <is-map-marker lon="-76.53" lat="3.45" label="Cali"></is-map-marker>
+          </is-maps></div>
+<pre><code>&lt;is-maps viewbox=&quot;-80,-5,-66,13&quot; style=&quot;height:320px&quot;&gt;
+  &lt;is-map-marker lon=&quot;-74.07&quot; lat=&quot;4.71&quot; label=&quot;Bogotá&quot;&gt;&lt;/is-map-marker&gt;
+  &lt;is-map-marker lon=&quot;-75.56&quot; lat=&quot;6.25&quot; label=&quot;Medellín&quot;&gt;&lt;/is-map-marker&gt;
+  &lt;is-map-marker lon=&quot;-76.53&quot; lat=&quot;3.45&quot; label=&quot;Cali&quot;&gt;&lt;/is-map-marker&gt;
+&lt;/is-maps&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">&lt;is-maps&gt; — Visualizador geográfico. Modo nativo (default): lienzo SVG que mapea coordenadas (lat, lon) a un viewport interno mediante una proyección equirectangular. Permite marcadores, zoom y pan, todo sin dependencias externas. Modo tile: atributo `engine="tile"` y un `&lt;script type="application/json"&gt;` con `{ tileUrl, attribution, zoom, center }` para apuntar a un proveedor (OpenStreetMap, etc.) embebido vía iframe (no requiere libs en este bundle). Atributos viewbox       cuadro inicial: "minLon,minLat,maxLon,maxLat" (default mundo) zoom          zoom inicial 1..n para vista controlada por JS engine        svg | tile interactive   boolean — false desactiva pan/zoom (mostrar) Marcadores &lt;is-map-marker lat="4.6" lon="-74.0" label="Bogotá"&gt; &lt;span slot="popup"&gt;Capital de Colombia&lt;/span&gt; &lt;/is-map-marker&gt; Eventos is-viewport   detail: { minLon, minLat, maxLon, maxLat } is-marker-click  detail: { marker }</p>
+<div class="demo"><p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/data-viz/maps.js</code>.
+        </p></div>
+</section>
+  </article>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maps · IS Web Components</title>
+  <meta name="description" content="Documentación de is-maps.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/data-viz/is-maps.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-map-marker", "is-maps");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-maps" data-category="data-viz">
+    <h1>Maps</h1>
+    <section id="intro">
+<p class="lede">Modo nativo (default): lienzo SVG con proyección equirectangular, sin dependencias externas. Modo <code class="ic">engine="tile"</code>: iframe al proveedor de tiles (OpenStreetMap, etc.).</p>
+</section>
+<section id="bogota">
+<h2>Colombia</h2>
+<div class="demo"><is-maps id="m1" viewbox="-79,-5,-66,13" interactive>
+            <is-map-marker lat="4.7110"  lon="-74.0721"  label="Bogotá"></is-map-marker>
+            <is-map-marker lat="6.2442"  lon="-75.5812"  label="Medellín"></is-map-marker>
+            <is-map-marker lat="3.4516"  lon="-76.5320"  label="Cali"></is-map-marker>
+            <is-map-marker lat="10.9685" lon="-74.7813"  label="Barranquilla"></is-map-marker>
+            <is-map-marker lat="11.2408" lon="-74.2110"  label="Santa Marta"></is-map-marker>
+            <is-map-marker lat="7.1193"  lon="-73.1227"  label="Bucaramanga"></is-map-marker>
+            <is-map-marker lat="4.8144"  lon="-75.6945"  label="Pereira"></is-map-marker>
+          </is-maps></div>
+</section>
+<section id="tile">
+<h2>Modo tile (OpenStreetMap embebido)</h2>
+<div class="demo"><is-maps engine="tile" interactive="false">
+            <script type="application/json">
+              {
+                "tileUrl": "https://www.openstreetmap.org/export/embed.html",
+                "zoom": 4,
+                "bbox": "-79,-5,-66,13",
+                "center": "-72.5,4",
+                "attribution": "© OpenStreetMap contributors"
+              }
+            </script>
+          </is-maps></div>
+</section>
+<section id="api">
+<h2>API</h2>
+<pre><code>// Modo nativo (SVG)
+const m = document.querySelector('is-maps');
+// Atributos
+// viewbox     &quot;minLon,minLat,maxLon,maxLat&quot;  viewport inicial
+// interactive boolean — habilita pan/zoom con mouse/touch
+//
+// Marcadores
+//   &lt;is-map-marker lat=&quot;4.6&quot; lon=&quot;-74.0&quot; label=&quot;Bogotá&quot;&gt;&lt;/is-map-marker&gt;
+//
+// Modo tile
+//   &lt;is-maps engine=&quot;tile&quot;&gt;
+//     &lt;script type=&quot;application/json&quot;&gt;
+//       { &quot;tileUrl&quot;: &quot;...&quot;, &quot;zoom&quot;: 4, &quot;bbox&quot;: &quot;...&quot;, &quot;center&quot;: &quot;...&quot;,
+//         &quot;attribution&quot;: &quot;...&quot; }
+//     &lt;/script&gt;
+//   &lt;/is-maps&gt;
+//
+// Eventos
+m.addEventListener('is-viewport',     e =&gt; console.log(e.detail));
+m.addEventListener('is-marker-click', e =&gt; console.log(e.detail.marker));</code></pre>
+</section>
+  </article>
+</body>
+</html>
