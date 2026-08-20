@@ -1,0 +1,16 @@
+:host {
+  display: grid;
+  gap: 0.5em;
+  font: inherit;
+  max-width: 22rem;
+}
+
+.preview {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--is-bg-elev, #111);
+  border-radius: var(--is-radius, 0.5em);
+  object-fit: cover;
+}
+
+.hint { margin: 0; font-size: 0.8em; color: var(--is-text-soft, inherit); }

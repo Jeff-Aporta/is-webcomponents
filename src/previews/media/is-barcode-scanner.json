@@ -1,0 +1,31 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-barcode-scanner",
+  "category": "media",
+  "title": "<is-barcode-scanner>",
+  "titleHtml": true,
+  "description": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `is-barcode` / `is-qrcode`.",
+  "storageKey": "docs-is-barcode-scanner",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-barcode-scanner>",
+      "lede": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `is-barcode` / `is-qrcode`.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-barcode-scanner formats=\"qr_code,ean_13\"></is-barcode-scanner>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-barcode-scanner formats=\"qr_code,ean_13\"></is-barcode-scanner>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
+        }
+      ]
+    }
+  ]
+}
