@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa mental · IS Web Components</title>
+  <meta name="description" content="Documentación de is-mindmap.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-mindmap.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-mindmap");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-mindmap" data-category="diagrams">
+    <h1>Mapa mental</h1>
+    <section id="intro">
+<p class="lede">Mapa mental en SVG, sin Mermaid. Declaras ideas con un `parent`
+          opcional y el componente arma el árbol, reparte las ramas y las une
+          con curvas suaves coloreadas por rama.</p>
+<div class="demo"><p>
+          Cada nodo hereda el tono de su ancestro de nivel 1, salvo que fije el
+          suyo propio, así cada rama se lee de un solo color de punta a punta.
+        </p></div>
+<div class="demo"><is-mindmap open-on-click>
+            <script type="application/json">
+              {
+                "mindmap": {
+                  "title": "ContaPyme",
+                  "layout": "radial",
+                  "nodes": [
+                    { "id": "root", "label": "ContaPyme", "icon": "mdi:star", "hue": 210 },
+                    { "id": "a", "parent": "root", "label": "Contabilidad", "hue": 239 },
+                    { "id": "a1", "parent": "a", "label": "Plan de cuentas" },
+                    { "id": "a2", "parent": "a", "label": "Comprobantes" },
+                    { "id": "a3", "parent": "a", "label": "Estados financieros" },
+                    { "id": "b", "parent": "root", "label": "Facturación", "hue": 199 },
+                    { "id": "b1", "parent": "b", "label": "Electrónica DIAN" },
+                    { "id": "b2", "parent": "b", "label": "Recurrente" },
+                    { "id": "c", "parent": "root", "label": "Inventario", "hue": 38 },
+                    { "id": "c1", "parent": "c", "label": "Bodegas" },
+                    { "id": "c2", "parent": "c", "label": "Kardex" },
+                    { "id": "d", "parent": "root", "label": "Nómina", "hue": 280 },
+                    { "id": "d1", "parent": "d", "label": "Liquidación" },
+                    { "id": "d2", "parent": "d", "label": "Seguridad social" }
+                  ]
+                }
+              }
+            </script>
+          </is-mindmap></div>
+</section>
+<section id="layout-tree">
+<h2>Layout tree</h2>
+<div class="demo"><p>
+          <code>layout: "tree"</code> reemplaza los anillos concéntricos por un
+          árbol horizontal (izquierda → derecha), útil cuando las ramas tienen
+          textos largos.
+        </p></div>
+<div class="demo"><is-mindmap open-on-click>
+            <script type="application/json">
+              {
+                "mindmap": {
+                  "layout": "tree",
+                  "nodes": [
+                    { "id": "root", "label": "Cierre de mes", "hue": 210 },
+                    { "id": "a", "parent": "root", "label": "Conciliaciones", "hue": 239 },
+                    { "id": "a1", "parent": "a", "label": "Bancos" },
+                    { "id": "a2", "parent": "a", "label": "Cartera" },
+                    { "id": "b", "parent": "root", "label": "Impuestos", "hue": 38 },
+                    { "id": "b1", "parent": "b", "label": "Retenciones" },
+                    { "id": "b2", "parent": "b", "label": "IVA" }
+                  ]
+                }
+              }
+            </script>
+          </is-mindmap></div>
+</section>
+<section id="api">
+<h2>Referencia</h2>
+<div class="demo"><h3>Atributos</h3></div>
+<div class="demo"><h3>Esquema del JSON</h3></div>
+<div class="demo"><h3>Propiedades y eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
