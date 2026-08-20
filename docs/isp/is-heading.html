@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heading · IS Web Components</title>
+  <meta name="description" content="Documentación de is-heading.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/isp/is-heading.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-heading");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-heading" data-category="isp">
+    <h1>Heading</h1>
+    <section id="intro">
+<p class="lede">Niveles tipográficos con color semántico, CSS libre o <code class="code">current</code>. <code class="code">mix</code> / <code class="code">mix-with</code> atenúan hacia texto, transparente, blanco o negro.</p>
+<div class="demo"><div class="hd-pg" id="hdPlayground">
+            <div class="hd-stage" style="color:#339af0">
+              <is-heading id="hdLive" level="2">Título de ejemplo</is-heading>
+            </div>
+            <div class="hd-controls">
+              <label class="hd-field">level
+                <div class="hd-range-row">
+                  <input id="hdLevel" type="range" min="1" max="6" step="1" value="2" />
+                  <span class="hd-range-val" id="hdLevelVal">2</span>
+                </div>
+              </label>
+              <label class="hd-field">color
+                <select id="hdColorMode">
+                  <option value="" selected>(acento / default)</option>
+                  <option value="brand">brand</option>
+                  <option value="neutral">neutral</option>
+                  <option value="info">info</option>
+                  <option value="success">success</option>
+                  <option value="warning">warning</option>
+                  <option value="danger">danger</option>
+                  <option value="current">current</option>
+                  <option value="css">CSS libre…</option>
+                </select>
+              </label>
+              <label class="hd-field">color CSS
+                <input id="hdColorCss" type="text" value="#e8590c" disabled />
+              </label>
+              <label class="hd-field">mix (%)
+                <div class="hd-range-row">
+                  <input id="hdMix" type="range" min="0" max="100" step="1" value="30" />
+                  <span class="hd-range-val" id="hdMixVal">30%</span>
+                </div>
+              </label>
+              <label class="hd-field">
+                <span><input id="hdMixDefault" type="checkbox" /> usar default mix</span>
+              </label>
+              <label class="hd-field">mix-with
+                <select id="hdMixWith">
+                  <option value="" selected>text (default)</option>
+                  <option value="transparent">transparent</option>
+                  <option value="white">white</option>
+                  <option value="black">black</option>
+                  <option value="current">current</option>
+                </select>
+              </label>
+              <label class="hd-field">size
+                <input id="hdSize" type="text" placeholder="(default nivel)" value="" />
+              </label>
+              <label class="hd-field">texto
+                <input id="hdText" type="text" value="Título de ejemplo" />
+              </label>
+            </div>
+            <p class="hd-caption">Props: <code>level</code>, <code>color</code>, <code>mix</code>, <code>mix-with</code>, <code>size</code></p>
+            <pre class="hd-snippet" id="hdSnippet"></pre>
+          </div></div>
+</section>
+<section id="levels">
+<h2>Niveles</h2>
+<p class="lede">Sin <code class="code">mix</code> cada nivel usa su default (15 · 30 · 45 · 65 · 80 · 90 %).</p>
+<div class="demo"><div class="hd-stack">
+            <div class="hd-ex">
+              <is-heading level="1">Nivel 1</is-heading>
+              <p class="hd-caption"><code>level="1"</code> · (default mix)</p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="2">Nivel 2</is-heading>
+              <p class="hd-caption"><code>level="2"</code> · (default mix)</p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3">Nivel 3</is-heading>
+              <p class="hd-caption"><code>level="3"</code> · (default mix)</p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="4">Nivel 4</is-heading>
+              <p class="hd-caption"><code>level="4"</code> · (default mix)</p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="5">Nivel 5</is-heading>
+              <p class="hd-caption"><code>level="5"</code> · (default mix)</p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="6">Nivel 6</is-heading>
+              <p class="hd-caption"><code>level="6"</code> · (default mix)</p>
+            </div>
+          </div></div>
+</section>
+<section id="color">
+<h2>color</h2>
+<p class="lede">Prop <code class="code">color</code> — tinte semántico del acento base.</p>
+<div class="demo"><div class="hd-stack">
+            <div class="hd-ex">
+              <is-heading level="3" color="brand">brand</is-heading>
+              <p class="hd-caption"><code>color="brand"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3" color="neutral">neutral</is-heading>
+              <p class="hd-caption"><code>color="neutral"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3" color="info">info</is-heading>
+              <p class="hd-caption"><code>color="info"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3" color="success">success</is-heading>
+              <p class="hd-caption"><code>color="success"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3" color="warning">warning</is-heading>
+              <p class="hd-caption"><code>color="warning"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3" color="danger">danger</is-heading>
+              <p class="hd-caption"><code>color="danger"</code></p>
+            </div>
+          </div></div>
+</section>
+<section id="css-current">
+<h2>CSS libre y current</h2>
+<p class="lede">Si no es semántico, <code class="code">color</code> es un color CSS. <code class="code">current</code> hereda el color tipográfico del contexto.</p>
+<div class="demo"><div class="hd-stack">
+            <div class="hd-ex" style="color:#339af0">
+              <is-heading level="3" color="current">current (hereda azul del padre)</is-heading>
+              <p class="hd-caption"><code>color="current"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3" color="#e8590c">Naranja CSS</is-heading>
+              <p class="hd-caption"><code>color="#e8590c"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3" color="oklch(0.65 0.2 250)" mix="0%">oklch sin mix</is-heading>
+              <p class="hd-caption"><code>color="oklch(…)"</code> · <code>mix="0%"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="3" color="#e8590c" mix="50%" mix-with="transparent">50% transparent</is-heading>
+              <p class="hd-caption"><code>mix="50%"</code> · <code>mix-with="transparent"</code></p>
+            </div>
+          </div></div>
+</section>
+<section id="mix">
+<h2>mix</h2>
+<p class="lede">Prop <code class="code">mix</code> (antes <code class="code">style="--h-mix"</code>). Porcentaje de
+          <code class="code">--is-text</code> mezclado sobre el acento.</p>
+<div class="demo"><div class="hd-stack">
+            <div class="hd-ex">
+              <is-heading level="2">Sin override</is-heading>
+              <p class="hd-caption">sin <code>mix</code> · (default mix)</p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="2" mix="0%">Solo acento</is-heading>
+              <p class="hd-caption"><code>mix="0%"</code> · sin mezcla con texto</p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="2" mix="50%">Mitad</is-heading>
+              <p class="hd-caption"><code>mix="50%"</code></p>
+            </div>
+            <div class="hd-ex">
+              <is-heading level="2" mix="100%">Todo texto</is-heading>
+              <p class="hd-caption"><code>mix="100%"</code> · color de texto</p>
+            </div>
+          </div></div>
+<pre><code>&lt;is-heading level=&quot;2&quot;&gt;(default mix)&lt;/is-heading&gt;
+&lt;is-heading level=&quot;2&quot; mix=&quot;0%&quot;&gt;Solo acento&lt;/is-heading&gt;
+&lt;is-heading level=&quot;2&quot; mix=&quot;100%&quot;&gt;Todo texto&lt;/is-heading&gt;
+&lt;is-heading level=&quot;3&quot; color=&quot;success&quot; size=&quot;1.8em&quot;&gt;Custom size&lt;/is-heading&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
