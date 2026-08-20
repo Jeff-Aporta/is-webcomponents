@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-19T14:46:02.503Z",
-  "count": 61,
+  "generatedAt": "2026-08-20T18:26:06.792Z",
+  "count": 64,
   "modules": [
     {
       "file": "adopt-css.js",
@@ -250,7 +250,7 @@
       "id": "diagram-edge-actors",
       "path": "src/components/_shared/diagram-edge-actors.js",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 6503,
+      "bytes": 6691,
       "exports": [
         "EDGE_ACTOR_H",
         "edgeActorWidth",
@@ -268,6 +268,20 @@
       "bytes": 3406,
       "exports": [
         "spreadOrthogonalPaths"
+      ]
+    },
+    {
+      "file": "diagram-edge-style.js",
+      "id": "diagram-edge-style",
+      "path": "src/components/_shared/diagram-edge-style.js",
+      "summary": "Módulo compartido `diagram-edge-style.js`.",
+      "bytes": 662,
+      "exports": [
+        "EDGE_HUES",
+        "assignEdgeHues",
+        "edgeStrokeHex",
+        "edgeChipFill",
+        "edgeChipText"
       ]
     },
     {
@@ -293,7 +307,7 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.js",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 8229,
+      "bytes": 8490,
       "exports": [
         "DiagramElementBase extends ElementBase \n  static get observedAttributes"
       ]
@@ -456,7 +470,7 @@
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.js",
       "summary": "highlight-code — se coloreaba con CodeMirror.runMode sobre `<pre class=\"code\">`.",
-      "bytes": 10761,
+      "bytes": 10831,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -873,6 +887,27 @@
         "patchUrlState",
         "readUrlNav",
         "writeUrlNav"
+      ]
+    },
+    {
+      "file": "web-otp.js",
+      "id": "web-otp",
+      "path": "src/components/_shared/web-otp.js",
+      "summary": "Web OTP API: el SMS con el origen rellena el código. AbortError = timeout/cancel.",
+      "bytes": 625,
+      "exports": [
+        "isOtpAutocomplete",
+        "listenWebOtp"
+      ]
+    },
+    {
+      "file": "web-share.js",
+      "id": "web-share",
+      "path": "src/components/_shared/web-share.js",
+      "summary": "Web Share: share nativo, si no copia URL/texto. AbortError = el usuario canceló.",
+      "bytes": 926,
+      "exports": [
+        "sharePayload"
       ]
     }
   ]

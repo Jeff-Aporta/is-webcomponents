@@ -1,6 +1,7 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
+import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 
 /**
  * Especificación y layout de diagramas de casos de uso (UML), sin Mermaid.
@@ -271,6 +272,7 @@ export function computeUseCaseLayout(spec) {
   const height = originY + bodyH + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
+  assignEdgeHues(links);
   const layout = {
     width,
     height,

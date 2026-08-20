@@ -13,11 +13,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>Las posiciones son explícitas en el payload, como en PlantUML o Structurizr: el diagrama es un mapa del sistema, no un grafo que el motor acomoda.</p>"
+          "html": "<p>El empaque dispersa las cajas. Ajusta la distancia mínima con <code>min-gap</code> (px) o con <code>layout.minGap</code> en el JSON. Valores por eje: <code>rowGap</code>, <code>colGutter</code>, <code>pkgCorridor</code>.</p>"
         },
         {
           "kind": "demo",
-          "html": "<is-component-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"componentDiagram\": {\n        \"title\": \"Servicio de voz\",\n        \"packages\": [\n          { \"id\": \"pkg-api\", \"label\": \"API\", \"hue\": 210, \"x\": 36, \"y\": 56, \"w\": 540, \"h\": 220 }\n        ],\n        \"components\": [\n          { \"id\": \"gw\", \"label\": \"Gateway\", \"stereotype\": \"worker\", \"hue\": 210, \"x\": 56, \"y\": 100, \"w\": 140, \"h\": 56 },\n          { \"id\": \"sess\", \"label\": \"Sesion\", \"stereotype\": \"module\", \"hue\": 210, \"x\": 300, \"y\": 100, \"w\": 140, \"h\": 56 },\n          { \"id\": \"db\", \"label\": \"D1\", \"stereotype\": \"db\", \"hue\": 150, \"x\": 300, \"y\": 188, \"w\": 140, \"h\": 50 }\n        ],\n        \"links\": [\n          { \"from\": \"gw\", \"to\": \"sess\" },\n          { \"from\": \"sess\", \"to\": \"db\" }\n        ]\n      }\n    }\n  </script>\n</is-component-diagram>"
+          "html": "<is-component-diagram min-gap=\"64\" open-on-click>\n  <script type=\"application/json\">\n    {\n      \"componentDiagram\": {\n        \"title\": \"Servicio de voz\",\n        \"packages\": [\n          { \"id\": \"pkg-api\", \"label\": \"API\", \"hue\": 210, \"x\": 36, \"y\": 56, \"w\": 540, \"h\": 220 }\n        ],\n        \"components\": [\n          { \"id\": \"gw\", \"label\": \"Gateway\", \"stereotype\": \"worker\", \"hue\": 210, \"x\": 56, \"y\": 100, \"w\": 140, \"h\": 56 },\n          { \"id\": \"sess\", \"label\": \"Sesion\", \"stereotype\": \"module\", \"hue\": 210, \"x\": 300, \"y\": 100, \"w\": 140, \"h\": 56 },\n          { \"id\": \"db\", \"label\": \"D1\", \"stereotype\": \"db\", \"hue\": 150, \"x\": 300, \"y\": 188, \"w\": 140, \"h\": 50 }\n        ],\n        \"links\": [\n          { \"from\": \"gw\", \"to\": \"sess\" },\n          { \"from\": \"sess\", \"to\": \"db\" }\n        ]\n      }\n    }\n  </script>\n</is-component-diagram>"
         }
       ]
     }
