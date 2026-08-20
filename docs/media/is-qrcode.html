@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Code · IS Web Components</title>
+  <meta name="description" content="Documentación de is-qrcode.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/media/is-qrcode.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-qrcode");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-qrcode" data-category="media">
+    <h1>QR Code</h1>
+    <section id="intro">
+<p class="lede">QR en SVG. Carga bajo demanda la lib <code>qrcode-generator</code> (MIT, esm.sh) — sin esa red no funciona.</p>
+</section>
+<section id="basico">
+<h2>Básico</h2>
+<div class="demo"><div class="qr-row">
+            <is-qrcode id="qr1" value="https://is-webcomponents" level="M" cell="6"></is-qrcode>
+            <is-qrcode value="mailto:hola@empresa.co" level="Q" cell="6"></is-qrcode>
+            <is-qrcode value="WIFI:T:WPA;S:InSoft;P:clave123;;" level="H" cell="6"></is-qrcode>
+          </div></div>
+</section>
+<section id="estilo">
+<h2>Personalizar</h2>
+<div class="demo"><div class="qr-row">
+            <is-qrcode value="https://insoft.co" fg="var(--is-accent)" bg="var(--is-bg-soft)" cell="8"></is-qrcode>
+            <is-qrcode value="https://contapyme.co" fg="var(--is-success, #16a34a)" cell="8"></is-qrcode>
+          </div></div>
+</section>
+<section id="export">
+<h2>Exportar a PNG</h2>
+<pre><code>const qr = document.querySelector('is-qrcode');
+const dataURL = await qr.dataURL('image/png');
+// descargar, pegar en input[type=file], etc.</code></pre>
+</section>
+<section id="api">
+<h2>API</h2>
+<pre><code>// Atributos
+// value        texto a codificar (requerido)
+// level        L | M | Q | H   (default L)
+// cell         tamaño en píxeles de cada módulo (default 4)
+// margin       módulos de zona de silencio (default 2)
+// fg, bg       colores
+
+// API JS
+qr.svg;        // nodo SVG
+qr.dataURL('image/png').then(url =&gt; /* … */);
+
+// Dependencias
+// Carga qrcode-generator@1.4.4 desde esm.sh. Si tu build no tiene
+// red, vendelo o usa otro loader.</code></pre>
+</section>
+  </article>
+</body>
+</html>
