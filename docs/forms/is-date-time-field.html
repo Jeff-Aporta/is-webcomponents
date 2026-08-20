@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Date Time Field · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-date-time-field de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-date-time-field.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-date-time-field");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-date-time-field" data-category="forms">
+    <h1>Date Time Field</h1>
+    <p class="lede">Documentación y demos de is-date-time-field de InSoft.</p>
+<section id="intro">
+<p class="lede">Campo combinado de fecha y hora en un solo control.</p>
+<div class="demo"><is-date-time-field label="Inicio del turno" value="2026-08-01T08:30" style="max-width:320px"></is-date-time-field></div>
+<pre><code>&lt;is-date-time-field label=&quot;Inicio del turno&quot; value=&quot;2026-08-01T08:30&quot; style=&quot;max-width:320px&quot;&gt;&lt;/is-date-time-field&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">&lt;is-date-time-field&gt; — Campo de fecha y hora por secciones (MUI DateTimeField). El valor es `yyyy-mm-ddTHH:mm[:ss]`. Atributos: label, hint, name, value, min, max, required, disabled, readonly, clearable, locale, ampm, hour24, seconds, invalid Slots: start, end Events: is-change, is-input</p>
+<div class="demo"><p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/forms/date-time-field.js</code>.
+        </p></div>
+</section>
+  </article>
+</body>
+</html>
