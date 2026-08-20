@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Breadcrumb Item · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-breadcrumb-item de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/navigation/is-breadcrumb-item.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-breadcrumb", "is-breadcrumb-item", "is-flowchart", "is-icon");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-breadcrumb-item" data-category="navigation">
+    <h1>Breadcrumb Item</h1>
+    <p class="lede">Documentación y demos de is-breadcrumb-item de InSoft.</p>
+<section id="intro">
+<p class="lede">Cada eslabón de un <code class="code">&lt;is-breadcrumb&gt;</code>. Puede ser enlace (<code class="code">href</code>) o texto plano cuando es la página actual.</p>
+<div class="demo"><is-breadcrumb>
+            <is-breadcrumb-item href="#"><is-icon slot="start" icon="mdi:home"></is-icon>Inicio</is-breadcrumb-item>
+            <is-breadcrumb-item href="#">Contabilidad</is-breadcrumb-item>
+            <is-breadcrumb-item href="#">Comprobantes</is-breadcrumb-item>
+            <is-breadcrumb-item>Detalle</is-breadcrumb-item>
+          </is-breadcrumb></div>
+<pre><code>&lt;is-breadcrumb&gt;
+  &lt;is-breadcrumb-item href=&quot;#&quot;&gt;&lt;is-icon slot=&quot;start&quot; icon=&quot;mdi:home&quot;&gt;&lt;/is-icon&gt;Inicio&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item href=&quot;#&quot;&gt;Contabilidad&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item href=&quot;#&quot;&gt;Comprobantes&lt;/is-breadcrumb-item&gt;
+  &lt;is-breadcrumb-item&gt;Detalle&lt;/is-breadcrumb-item&gt;
+&lt;/is-breadcrumb&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">&lt;is-breadcrumb-item&gt; — un paso individual dentro de un &lt;is-breadcrumb&gt;. Si tiene `href` (incluido `href=""`), el item se renderiza como &lt;a href&gt;. Con `href=""` se marca como current page (aria-current="page", CSS [current]). Si no tiene href, se renderiza como &lt;span&gt; (SPAs: el desarrollador maneja eventos). Atributos href    string  — opcional: el item se vuelve enlace. "" = current page. target  string  — opcional. rel     string  — opcional. icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start. Slots (default)  texto del item. start      icono propio al inicio (gana sobre icon). end        icono propio al final. separator  override del separador (chevron-right por default). CSS Parts: ::part(label) ::part(separator) ::part(start) ::part(end)</p>
+<div class="demo"><p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/navigation/breadcrumb-item.js</code>.
+        </p></div>
+</section>
+  </article>
+</body>
+</html>

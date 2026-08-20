@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Speech · IS Web Components</title>
+  <meta name="description" content="Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/media/is-speech.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-speech");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-speech" data-category="media">
+    <h1>Speech</h1>
+    <p class="lede">Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.</p>
+<section id="intro">
+<p class="lede">Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.</p>
+<div class="demo"><is-speech lang="es-ES" text="Hola, esto es texto a voz."></is-speech></div>
+<pre><code>&lt;is-speech lang=&quot;es-ES&quot; text=&quot;Hola, esto es texto a voz.&quot;&gt;&lt;/is-speech&gt;</code></pre>
+<aside class="callout"><strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario.</aside>
+</section>
+  </article>
+</body>
+</html>
