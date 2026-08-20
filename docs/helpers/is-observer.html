@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Observer · IS Web Components</title>
+  <meta name="description" content="Documentación de is-observer.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/helpers/is-observer.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-icon", "is-observer");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-observer" data-category="helpers">
+    <h1>Observer</h1>
+    <section id="intro">
+<p class="lede">Un solo componente para <code class="code">IntersectionObserver</code>,
+          <code class="code">MutationObserver</code> y <code class="code">ResizeObserver</code>
+          vía <code class="code">type</code>. Los alias históricos
+          (<code class="code">&lt;is-intersection-observer&gt;</code>, etc.) siguen válidos.</p>
+<aside class="callout">El host usa <code class="code">display: contents</code>: no ocupa caja propia.
+          Los hijos directos son lo observado (intersection / resize) o el subárbol a vigilar (mutation).</aside>
+<div class="demo"><ul class="obs-uses">
+            <li>
+              <is-icon icon="mdi:eye-outline" aria-hidden="true"></is-icon>
+              <span><strong>intersection</strong> — ¿está visible en el viewport / un scroller?</span>
+            </li>
+            <li>
+              <is-icon icon="mdi:file-tree-outline" aria-hidden="true"></is-icon>
+              <span><strong>mutation</strong> — ¿cambió el DOM (hijos / atributos / texto)?</span>
+            </li>
+            <li>
+              <is-icon icon="mdi:arrow-expand-all" aria-hidden="true"></is-icon>
+              <span><strong>resize</strong> — ¿cambió el tamaño del hijo?</span>
+            </li>
+          </ul></div>
+</section>
+<section id="intersection">
+<h2>type=&quot;intersection&quot;</h2>
+<p class="lede">Haz scroll en el panel. Las tarjetas arrancan atenuadas; al entrar (≥&nbsp;40&nbsp;% visible)
+          reciben <code class="code">is-in</code>, se iluminan y el badge pasa a «en vista».</p>
+<div class="demo"><span class="demo-label">root = #obsScroller · threshold = 0.4 · intersect-class = is-in</span>
+          <div id="obsScroller" class="obs-scroller">
+            <div class="obs-spacer">↓ baja para revelar las tarjetas ↓</div>
+            <is-observer id="io" type="intersection" root="#obsScroller" intersect-class="is-in" threshold="0.4">
+              <article class="obs-card" data-label="A">
+                <span>Tarjeta A — fade al entrar</span>
+                <span class="obs-badge" data-badge>fuera</span>
+              </article>
+              <article class="obs-card" data-label="B">
+                <span>Tarjeta B</span>
+                <span class="obs-badge" data-badge>fuera</span>
+              </article>
+              <article class="obs-card" data-label="C">
+                <span>Tarjeta C</span>
+                <span class="obs-badge" data-badge>fuera</span>
+              </article>
+            </is-observer>
+            <div class="obs-spacer">fin del scroll</div>
+          </div>
+          <div class="log" id="ioLog" aria-live="polite" style="margin-top:12px">
+            <div class="row hint">Eventos <code class="code">is-intersect</code> al entrar/salir.</div>
+          </div></div>
+<pre><code>&lt;is-observer type=&quot;intersection&quot; root=&quot;#scroller&quot; intersect-class=&quot;is-in&quot; threshold=&quot;0.4&quot;&gt;
+  &lt;article class=&quot;obs-card&quot;&gt;…&lt;/article&gt;
+&lt;/is-observer&gt;</code></pre>
+</section>
+<section id="mutation">
+<h2>type=&quot;mutation&quot;</h2>
+<p class="lede">El nodo de la izquierda es el subárbol observado. Cada botón dispara una mutación
+          concreta; el log muestra <code class="code">is-mutate</code>.</p>
+<div class="demo"><span class="demo-label">child-list + attr=&quot;data-tag&quot;</span>
+          <div class="obs-panel">
+            <div class="obs-panel__title">Nodo observado</div>
+            <is-observer id="mo" type="mutation" attr="data-tag" child-list>
+              <div id="moTarget" class="obs-target" data-tag="init">Contenido editable</div>
+            </is-observer>
+            <div class="obs-actions">
+              <is-button id="moAdd" color="brand" variant="outlined" type="button">
+                <is-icon slot="start" icon="mdi:plus"></is-icon>
+                Añadir hijo
+              </is-button>
+              <is-button id="moAttr" color="neutral" variant="outlined" type="button">
+                <is-icon slot="start" icon="mdi:tag-plus-outline"></is-icon>
+                Cambiar data-tag
+              </is-button>
+              <is-button id="moReset" color="neutral" variant="plain" type="button">
+                Reset
+              </is-button>
+            </div>
+            <p class="obs-hint" id="moExplain">Pulsa un botón para mutar el DOM y ver el evento.</p>
+          </div>
+          <div class="log" id="moLog" aria-live="polite" style="margin-top:12px">
+            <div class="row hint">Las mutaciones aparecen aquí.</div>
+          </div></div>
+<pre><code>&lt;is-observer type=&quot;mutation&quot; attr=&quot;data-tag&quot; child-list&gt;
+  &lt;div id=&quot;target&quot; data-tag=&quot;init&quot;&gt;…&lt;/div&gt;
+&lt;/is-observer&gt;</code></pre>
+</section>
+<section id="resize">
+<h2>type=&quot;resize&quot;</h2>
+<p class="lede">Arrastra la esquina inferior derecha del cuadro (CSS <code class="code">resize: both</code>).
+          El tamaño en vivo y el log se actualizan con <code class="code">is-resize</code>.</p>
+<div class="demo"><span class="demo-label">ResizeObserver sobre el hijo</span>
+          <div class="obs-resize-wrap">
+            <is-observer id="ro" type="resize">
+              <div id="roBox" class="obs-resize-box">
+                Arrastra la esquina ↘ para redimensionar.
+              </div>
+            </is-observer>
+            <p class="obs-hint">
+              Tamaño actual:
+              <span class="obs-size" id="roSize">— × —</span>
+            </p>
+          </div>
+          <div class="log" id="roLog" aria-live="polite" style="margin-top:12px">
+            <div class="row hint">Cada resize emite <code class="code">is-resize</code>.</div>
+          </div></div>
+<pre><code>&lt;is-observer type=&quot;resize&quot;&gt;
+  &lt;div style=&quot;resize:both; overflow:auto&quot;&gt;…&lt;/div&gt;
+&lt;/is-observer&gt;</code></pre>
+</section>
+<section id="api">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
