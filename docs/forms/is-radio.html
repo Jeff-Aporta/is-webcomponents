@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radio · IS Web Components</title>
+  <meta name="description" content="Documentación de is-radio.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-radio.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-radio", "is-radio-group");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-radio" data-category="forms">
+    <h1> + </h1>
+    <section id="intro">
+<h2> + </h2>
+<p class="lede">Paridad funcional con el
+          <a href="https://mui.com/material-ui/react-radio-button/" target="_blank" rel="noreferrer">Radio Group de MUI</a>:
+          color por <code class="code">variant</code>, posición de etiqueta, estado de error, solo lectura y
+          navegación por teclado según el patrón ARIA <em>radiogroup</em>.
+          El grupo es el elemento <em>form-associated</em>: publica el valor, valida y gobierna el teclado.
+          Los <code class="code">is-radio</code> son las opciones y solo avisan al grupo cuando se eligen.</p>
+<div class="demo"><is-radio-group id="plan" name="plan" value="pro" label="Plan" hint="Flechas para navegar, Espacio para elegir">
+            <is-radio value="free">Gratis</is-radio>
+            <is-radio value="pro">Profesional</is-radio>
+            <is-radio value="empresa">Empresa</is-radio>
+            <is-radio value="legacy" disabled>Heredado (no disponible)</is-radio>
+          </is-radio-group></div>
+<div class="demo"><div class="log" id="rgLog" aria-live="polite" style="margin-top:12px"><div class="row hint">Elige una opción para ver el evento.</div></div></div>
+<pre><code>&lt;is-radio-group name=&quot;plan&quot; value=&quot;pro&quot; label=&quot;Plan&quot;&gt;
+  &lt;is-radio value=&quot;free&quot;&gt;Gratis&lt;/is-radio&gt;
+  &lt;is-radio value=&quot;pro&quot;&gt;Profesional&lt;/is-radio&gt;
+  &lt;is-radio value=&quot;legacy&quot; disabled&gt;Heredado&lt;/is-radio&gt;
+&lt;/is-radio-group&gt;</code></pre>
+</section>
+<section id="color">
+<h2>Color</h2>
+<p class="lede"><code class="code">variant</code> (equivalente a <code class="code">color</code> en MUI) se pone en el grupo y
+          lo heredan todos los radios. Un <code class="code">is-radio</code> con <code class="code">variant</code>
+          propio sobrescribe al del grupo.</p>
+<div class="demo"><div class="stack">
+            <is-radio-group row value="a" label="brand (default)">
+              <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
+            </is-radio-group>
+            <is-radio-group row color="neutral" value="a" label="neutral">
+              <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
+            </is-radio-group>
+            <is-radio-group row color="success" value="a" label="success">
+              <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
+            </is-radio-group>
+            <is-radio-group row color="warning" value="a" label="warning">
+              <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
+            </is-radio-group>
+            <is-radio-group row color="danger" value="a" label="danger">
+              <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
+            </is-radio-group>
+            <is-radio-group row color="success" value="c" label="El radio manda sobre el grupo">
+              <is-radio value="c">Hereda success</is-radio>
+              <is-radio value="d" color="danger">variant="danger"</is-radio>
+            </is-radio-group>
+          </div></div>
+<pre><code>&lt;is-radio-group color=&quot;success&quot; row&gt;
+  &lt;is-radio value=&quot;c&quot;&gt;Hereda success&lt;/is-radio&gt;
+  &lt;is-radio value=&quot;d&quot; color=&quot;danger&quot;&gt;Se sale del grupo&lt;/is-radio&gt;
+&lt;/is-radio-group&gt;</code></pre>
+</section>
+<section id="placement">
+<h2>Posición de la etiqueta</h2>
+<p class="lede"><code class="code">label-placement</code> (<code class="code">labelPlacement</code> de
+          <em>FormControlLabel</em>): <code class="code">end</code> (default), <code class="code">start</code>,
+          <code class="code">top</code> y <code class="code">bottom</code>. Se puede fijar en el grupo para todos
+          los hijos o en cada radio.</p>
+<div class="demo"><div class="spread">
+            <is-radio-group label-placement="top" row value="t" label="top">
+              <is-radio value="t">Top</is-radio><is-radio value="t2">Otro</is-radio>
+            </is-radio-group>
+            <is-radio-group label-placement="start" value="s" label="start">
+              <is-radio value="s">Start</is-radio><is-radio value="s2">Otro</is-radio>
+            </is-radio-group>
+            <is-radio-group label-placement="bottom" row value="b" label="bottom">
+              <is-radio value="b">Bottom</is-radio><is-radio value="b2">Otro</is-radio>
+            </is-radio-group>
+            <is-radio-group label-placement="end" value="e" label="end (default)">
+              <is-radio value="e">End</is-radio><is-radio value="e2">Otro</is-radio>
+            </is-radio-group>
+          </div></div>
+<pre><code>&lt;is-radio-group label-placement=&quot;top&quot; row&gt;…&lt;/is-radio-group&gt;
+&lt;is-radio value=&quot;x&quot; label-placement=&quot;start&quot;&gt;Solo este&lt;/is-radio&gt;</code></pre>
+</section>
+<section id="description">
+<h2>Contenido rico</h2>
+<p class="lede">El slot <code class="code">description</code> añade texto secundario bajo la etiqueta, con el color
+          atenuado del tema. No entra en el <code class="code">value</code> implícito.</p>
+<div class="demo"><is-radio-group name="soporte" value="std" label="Nivel de soporte">
+            <is-radio value="std">
+              Estándar
+              <span slot="description">Respuesta en 48 h laborables. Incluido en todos los planes.</span>
+            </is-radio>
+            <is-radio value="prio">
+              Prioritario
+              <span slot="description">Respuesta en 4 h y canal directo con ingeniería.</span>
+            </is-radio>
+            <is-radio value="ded" disabled>
+              Dedicado
+              <span slot="description">Solo para contratos anuales.</span>
+            </is-radio>
+          </is-radio-group></div>
+<pre><code>&lt;is-radio value=&quot;prio&quot;&gt;
+  Prioritario
+  &lt;span slot=&quot;description&quot;&gt;Respuesta en 4 h&lt;/span&gt;
+&lt;/is-radio&gt;</code></pre>
+</section>
+<section id="orientation">
+<h2>Orientación</h2>
+<p class="lede"><code class="code">orientation="vertical"</code> es el default.
+          <code class="code">row</code> es el alias booleano de <code class="code">orientation="horizontal"</code>
+          (el nombre que usa MUI); si pones ambos, gana <code class="code">orientation</code>.</p>
+<div class="demo"><div class="stack">
+            <is-radio-group name="envio" value="normal" row label="row">
+              <is-radio value="normal">Normal</is-radio>
+              <is-radio value="express">Express</is-radio>
+              <is-radio value="recoger">Recoger en tienda</is-radio>
+            </is-radio-group>
+            <is-radio-group name="envio2" value="normal" orientation="horizontal" label='orientation="horizontal"'>
+              <is-radio value="normal">Normal</is-radio>
+              <is-radio value="express">Express</is-radio>
+            </is-radio-group>
+          </div></div>
+<pre><code>&lt;is-radio-group row&gt;…&lt;/is-radio-group&gt;
+&lt;is-radio-group orientation=&quot;horizontal&quot;&gt;…&lt;/is-radio-group&gt;</code></pre>
+</section>
+<section id="error">
+<h2>Error</h2>
+<p class="lede"><code class="code">error</code> tiñe de peligro la etiqueta, el hint y los controles.
+          <code class="code">error-text</code> escribe el mensaje (el <em>FormHelperText</em> con error de MUI),
+          sustituye al <code class="code">hint</code> y activa el estado de error por sí solo.
+          Es presentacional: no altera <code class="code">checkValidity()</code>, solo marca
+          <code class="code">aria-invalid</code>.</p>
+<div class="demo"><div class="stack">
+            <is-radio-group id="errDemo" name="acepta" label="Condiciones" hint="Elige una opción"
+              error-text="Debes elegir una opción para continuar">
+              <is-radio value="si">Acepto</is-radio>
+              <is-radio value="no">No acepto</is-radio>
+            </is-radio-group>
+            <is-radio-group error value="a" row label="Solo el booleano" hint="El hint también se tiñe">
+              <is-radio value="a">Uno</is-radio><is-radio value="b">Dos</is-radio>
+            </is-radio-group>
+          </div></div>
+<div class="demo"><div class="demo-row" style="gap:.5rem;margin-top:12px">
+          <is-button variant="outlined" id="btnError">Alternar error</is-button>
+        </div></div>
+<pre><code>&lt;is-radio-group error error-text=&quot;Debes elegir una opción&quot;&gt;…&lt;/is-radio-group&gt;
+grupo.errorText = '';   // limpia mensaje y estado</code></pre>
+</section>
+<section id="readonly">
+<h2>Solo lectura y deshabilitado</h2>
+<p class="lede"><code class="code">readonly</code> bloquea el cambio pero mantiene el valor en el
+          <code class="code">FormData</code> y el foco navegable: las flechas mueven el foco sin cambiar la
+          selección. <code class="code">disabled</code> saca el grupo del formulario y del orden de tabulación.
+          Los dos se propagan a todos los radios sin tocarlos uno a uno.</p>
+<div class="demo"><div class="stack">
+            <is-radio-group name="tema" value="auto" readonly row label="readonly" hint="Prueba a moverte con las flechas">
+              <is-radio value="claro">Claro</is-radio>
+              <is-radio value="oscuro">Oscuro</is-radio>
+              <is-radio value="auto">Automático</is-radio>
+            </is-radio-group>
+            <is-radio-group name="tema2" value="auto" disabled row label="disabled">
+              <is-radio value="claro">Claro</is-radio>
+              <is-radio value="oscuro">Oscuro</is-radio>
+              <is-radio value="auto">Automático</is-radio>
+            </is-radio-group>
+            <is-radio-group value="a" row label="Radio suelto deshabilitado">
+              <is-radio value="a">Disponible</is-radio>
+              <is-radio value="b" disabled>No disponible</is-radio>
+              <is-radio value="c">Disponible</is-radio>
+            </is-radio-group>
+          </div></div>
+<pre><code>&lt;is-radio-group readonly value=&quot;auto&quot;&gt;…&lt;/is-radio-group&gt;</code></pre>
+</section>
+<section id="form">
+<h2>En un formulario</h2>
+<p class="lede">El grupo publica una entrada <code class="code">name=value</code> y, con
+          <code class="code">required</code>, bloquea el envío mientras no haya selección.
+          <code class="code">reset()</code> vuelve al <code class="code">value</code> inicial.</p>
+<div class="demo"><form id="demoForm">
+            <div class="demo-row" style="flex-direction:column;align-items:flex-start;gap:.9rem">
+              <is-radio-group name="pago" required label="Forma de pago" hint="Obligatorio">
+                <is-radio value="tarjeta">Tarjeta</is-radio>
+                <is-radio value="transferencia">Transferencia</is-radio>
+                <is-radio value="efectivo">Efectivo</is-radio>
+              </is-radio-group>
+              <div class="demo-row" style="gap:.5rem">
+                <is-button color="brand" id="btnSend">Enviar</is-button>
+                <is-button variant="outlined" id="btnReset">Reset</is-button>
+              </div>
+            </div>
+          </form></div>
+<div class="demo"><div class="log" id="formLog" aria-live="polite" style="margin-top:12px"><div class="row hint">Envía sin elegir nada para ver la validación.</div></div></div>
+</section>
+<section id="keyboard">
+<h2>Teclado</h2>
+<p class="lede">Patrón ARIA <em>radiogroup</em>: el grupo entero ocupa una sola parada de tabulación
+          (<em>roving tabindex</em>). Solo el radio seleccionado —o el primero habilitado si no hay
+          selección— tiene <code class="code">tabindex="0"</code>.</p>
+<div class="demo"><p class="lede">
+          Las flechas mueven foco y selección a la vez, saltando los deshabilitados. Con
+          <code class="code">readonly</code> mueven solo el foco.
+        </p></div>
+<div class="demo"><is-radio-group value="b" label="Prueba el teclado" hint="Los pares están deshabilitados">
+            <is-radio value="a" disabled>Uno (disabled)</is-radio>
+            <is-radio value="b">Dos</is-radio>
+            <is-radio value="c" disabled>Tres (disabled)</is-radio>
+            <is-radio value="d">Cuatro</is-radio>
+            <is-radio value="e">Cinco</is-radio>
+          </is-radio-group></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">Los tokens <code class="code">--is-radio-*</code> se heredan: ponlos en el grupo (o en cualquier
+          ancestro) para tematizar todas sus opciones de golpe. Un <code class="code">is-radio</code> suelto
+          (sin grupo) se marca solo, útil para maquetas; el valor de formulario siempre lo publica el grupo, así
+          nunca hay dos radios marcados con el mismo <code class="code">name</code>.</p>
+</section>
+  </article>
+</body>
+</html>
