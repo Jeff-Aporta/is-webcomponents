@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrama de clases · IS Web Components</title>
+  <meta name="description" content="Documentación de is-class-diagram.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/diagrams/is-class-diagram.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-class-diagram");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-class-diagram" data-category="diagrams">
+    <h1>Diagrama de clases</h1>
+    <section id="intro">
+<p class="lede">Diagrama de clases UML en SVG, sin Mermaid. Tú declaras clases y
+          relaciones; el componente decide las capas, dibuja los tres
+          compartimentos clásicos (nombre, atributos, métodos) y rutea las
+          relaciones rodeando las cajas.</p>
+<div class="demo"><p>
+          Comparte motor con <code>&lt;is-flowchart&gt;</code>: mismo esquema
+          JSON, mismo visor a pantalla completa y la misma animación tortuga,
+          que aquí recorre las relaciones en orden.
+        </p></div>
+<div class="demo"><is-class-diagram open-on-click>
+            <script type="application/json">
+              {
+                "classDiagram": {
+                  "title": "Dominio de facturación",
+                  "direction": "TB",
+                  "groups": [
+                    { "id": "g-dominio", "name": "Dominio", "hue": 239 },
+                    { "id": "g-terceros", "name": "Terceros", "hue": 199 }
+                  ],
+                  "classes": [
+                    { "id": "Factura", "name": "Factura", "stereotype": "<<entity>>", "group": "g-dominio",
+                      "attributes": ["+numero: string", "-total: number", "-fecha: date", "-cufe: string"],
+                      "methods": ["+anular(): void", "+totalizar(): number"] },
+                    { "id": "Item", "name": "ItemFactura", "group": "g-dominio",
+                      "attributes": ["+cantidad: number", "-precio: number"],
+                      "methods": ["+subtotal(): number"] },
+                    { "id": "Pago", "name": "Pago", "group": "g-dominio",
+                      "attributes": ["-valor: number"],
+                      "methods": ["+registrar(): void"] },
+                    { "id": "Cliente", "name": "Cliente", "stereotype": "<<entity>>", "group": "g-terceros",
+                      "attributes": ["+nit: string", "+razonSocial: string"] },
+                    { "id": "Tercero", "name": "Tercero", "group": "g-terceros",
+                      "attributes": ["#id: string"] }
+                  ],
+                  "relations": [
+                    { "from": "Factura", "to": "Item", "kind": "composition", "label": "1..*" },
+                    { "from": "Factura", "to": "Cliente", "kind": "association", "label": "1" },
+                    { "from": "Factura", "to": "Pago", "kind": "dependency" },
+                    { "from": "Cliente", "to": "Tercero", "kind": "inheritance" }
+                  ]
+                }
+              }
+            </script>
+          </is-class-diagram></div>
+</section>
+<section id="relaciones">
+<h2>Tipos de relación</h2>
+<div class="demo"><p>
+          <code>kind</code> acepta <code>association</code> (línea con flecha
+          abierta), <code>inheritance</code> (triángulo hueco en el destino),
+          <code>composition</code> (diamante relleno en el origen),
+          <code>aggregation</code> (diamante hueco en el origen),
+          <code>dependency</code> (línea punteada) y <code>realization</code>
+          (punteada con triángulo hueco).
+        </p></div>
+<div class="demo"><is-class-diagram open-on-click>
+            <script type="application/json">
+              {
+                "classDiagram": {
+                  "direction": "LR",
+                  "classes": [
+                    { "id": "A", "name": "A" },
+                    { "id": "B", "name": "B" },
+                    { "id": "C", "name": "C" },
+                    { "id": "D", "name": "D" },
+                    { "id": "E", "name": "E" },
+                    { "id": "F", "name": "F" }
+                  ],
+                  "relations": [
+                    { "from": "A", "to": "B", "kind": "association", "label": "association" },
+                    { "from": "B", "to": "C", "kind": "inheritance", "label": "inheritance" },
+                    { "from": "C", "to": "D", "kind": "composition", "label": "composition" },
+                    { "from": "D", "to": "E", "kind": "aggregation", "label": "aggregation" },
+                    { "from": "E", "to": "F", "kind": "dependency", "label": "dependency" }
+                  ]
+                }
+              }
+            </script>
+          </is-class-diagram></div>
+</section>
+<section id="compartimentos">
+<h2>Compartimentos</h2>
+<div class="demo"><p>
+          La caja crece con el número de atributos y métodos. Los
+          compartimentos vacíos (sin atributos, sin métodos) se omiten junto
+          con su línea divisoria.
+        </p></div>
+<div class="demo"><is-class-diagram open-on-click>
+            <script type="application/json">
+              {
+                "classDiagram": {
+                  "direction": "LR",
+                  "classes": [
+                    { "id": "Vacia", "name": "SoloNombre" },
+                    { "id": "ConAttr", "name": "ConAtributos", "attributes": ["+a: string", "+b: number"] },
+                    { "id": "Completa", "name": "Completa", "stereotype": "<<value>>",
+                      "attributes": ["+a: string", "+b: number", "-c: boolean"],
+                      "methods": ["+hacer(): void"] }
+                  ],
+                  "relations": [
+                    { "from": "Vacia", "to": "ConAttr", "kind": "association" },
+                    { "from": "ConAttr", "to": "Completa", "kind": "association" }
+                  ]
+                }
+              }
+            </script>
+          </is-class-diagram></div>
+</section>
+<section id="api">
+<h2>Referencia</h2>
+<div class="demo"><h3>Atributos</h3></div>
+<div class="demo"><h3>Esquema del JSON</h3></div>
+<div class="demo"><h3>Propiedades y eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
