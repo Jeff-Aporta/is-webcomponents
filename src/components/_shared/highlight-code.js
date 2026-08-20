@@ -117,7 +117,8 @@ const paintOne = async (el) => {
     if (!el.hasAttribute('wrap')) el.setAttribute('wrap', '');
     if (!el.hasAttribute('line-numbers')) el.setAttribute('line-numbers', 'false');
     el.lang = lang;
-    if (el.value !== text) el.value = text;
+    // Siempre asignar: el getter de is-code puede devolver el seed aunque CM esté vacío.
+    el.value = text;
     el.dataset.cm = '1';
     el.dataset.cmSource = text;
     el.dataset.cmMode = mode;

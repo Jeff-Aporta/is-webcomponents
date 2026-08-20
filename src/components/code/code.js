@@ -469,6 +469,10 @@ class IsCode extends ElementBase {
       wrapper.addEventListener('mouseout', (e) => this.#onMarkOut(e));
 
       this.#ready = true;
+      const seed = this.getAttribute('value') || this.dataset.cmSource || this.dataset.src || '';
+      if (seed && !this.#cm.getValue()) {
+        this.#withOuterScroll(() => this.#cm.setValue(seed));
+      }
       this.#pendingValue = null;
       this.#paintMarks();
       this.#syncLineClasses();

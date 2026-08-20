@@ -88,12 +88,10 @@ test('await crítico del head = shell tags + preview dist (no all, no pageModule
 
 test('load(all) y loadPageModules viven fuera del path crítico (fire-and-forget)', () => {
   const boot = headBootModule(indexHtml);
-  assert.match(boot, /L\.load\s*\(\s*['"]all['"]\s*\)/);
+  assert.doesNotMatch(boot, /L\.load\s*\(\s*['"]all['"]\s*\)/);
   assert.match(boot, /loadPageModules\s*\(/);
-  // Tras kitShell: sin await delante de load(all) / loadPageModules
   const afterShell = boot.split(/dataset\.kitShell\s*=\s*['"]1['"]/)[1] ?? '';
   assert.ok(afterShell.length > 20, 'boot truncado tras kitShell');
-  assert.doesNotMatch(afterShell, /await\s+L\.load\s*\(\s*['"]all['"]/);
   assert.doesNotMatch(afterShell, /await\s+L\.loadPageModules\s*\(/);
 });
 

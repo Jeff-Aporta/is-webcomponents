@@ -54,6 +54,9 @@ test('view-sources: path absoluto, full-page, sin vs-page-bar con hints', () => 
   assert.match(src, /setAttribute\(\s*['"]width['"]\s*,\s*['"]100vw['"]\s*\)/);
   assert.match(src, /setAttribute\(\s*['"]spacing['"]\s*,\s*['"]0['"]\s*\)/);
   assert.match(src, /is-view-sources/);
+  assert.match(src, /is-after-show/);
+  assert.match(src, /function refreshEditor/);
+  assert.match(src, /whenDefined\(['"]is-code['"]\)/);
 
   // mountPageButton solo limpia legacy; no recrea hints en UI.
   assert.match(src, /querySelectorAll\(['"]\.vs-page-bar['"]\)/);
@@ -81,6 +84,7 @@ test('is-code preserva scroll del is-main (evita F5 al final)', () => {
   const src = read('src/components/code/code.js');
   assert.match(src, /#withOuterScroll/);
   assert.match(src, /closest\?\.\(['"]is-main, \.main['"]\)|closest\?\.\(['"]is-main/);
+  assert.match(src, /!this\.#cm\.getValue\(\)/);
 });
 
 test('is-main: restore window amplio + scroll-behavior auto en CSS', () => {

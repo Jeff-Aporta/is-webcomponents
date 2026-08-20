@@ -101,10 +101,25 @@ function ensureDialog() {
   const tabs = dlg.querySelector('#vsTabs');
   tabs?.addEventListener('is-tab-show', (e) => {
     const kind = e.detail?.name;
-    if (KINDS.includes(kind)) syncActiveMeta(dlg, kind);
+    if (KINDS.includes(kind)) {
+      syncActiveMeta(dlg, kind);
+      refreshEditor(panelEditor(dlg, kind));
+    }
+  });
+  dlg.addEventListener('is-after-show', () => {
+    const kind = tabs?.active || 'js';
+    refreshEditor(panelEditor(dlg, kind));
   });
 
   return dlg;
+}
+
+function refreshEditor(pre) {
+  if (!pre || typeof pre.refresh !== 'function') return;
+  requestAnimationFrame(() => {
+    pre.refresh();
+    requestAnimationFrame(() => pre.refresh());
+  });
 }
 
 function panelEditor(dlg, kind) {
@@ -237,16 +252,20 @@ export async function openViewSources(tag, prefer = 'js') {
   // URL absoluta con host ya visible mientras carga el contenido.
   syncActiveMeta(dlg, start);
 
+  dlg.show();
+  await customElements.whenDefined('is-code');
   await loadKind(dlg, start, files[start]);
   syncActiveMeta(dlg, start);
+  refreshEditor(panelEditor(dlg, start));
 
   KINDS.filter((k) => k !== start).forEach((k) => {
     loadKind(dlg, k, files[k]).then(() => {
-      if ((tabs?.active || start) === k) syncActiveMeta(dlg, k);
+      if ((tabs?.active || start) === k) {
+        syncActiveMeta(dlg, k);
+        refreshEditor(panelEditor(dlg, k));
+      }
     });
   });
-
-  dlg.show();
 }
 
 function enhanceDemo(demo) {

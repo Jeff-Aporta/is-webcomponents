@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IS Web Components</title>
   <meta name="description" content="Galería de Web Components ContaPyme / InSoft.">
+  <meta name="author" content="Jeff-Aporta">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="IS Web Components">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:url" content="https://jeff-aporta.github.io/is-webcomponents/">
+  <meta property="og:title" content="IS Web Components">
+  <meta property="og:description" content="Galería de Web Components ContaPyme / InSoft.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "IS Web Components",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cualquiera con navegador moderno",
+    "url": "https://jeff-aporta.github.io/is-webcomponents/",
+    "description": "Galería de Web Components vanilla de InSoft (is-*): catálogo, previews y consumo por CDN.",
+    "author": { "@type": "Person", "name": "Jeff-Aporta" },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <script>
     /* Locale por defecto: sistema → es (misma regla que resolveLocale del kit). */
     (function () {
@@ -73,11 +95,6 @@
       'scripts/view-sources.js',
       'scripts/demo-file-meta.js',
     ]).catch((err) => console.warn('[gallery] page modules', err));
-
-    L.load('layout', 'actions', 'feedback', 'media', 'code')
-      .catch((err) => console.warn('[gallery] shell cats', err))
-      .then(() => L.load('all'))
-      .catch((err) => console.warn('[gallery] load(all)', err));
   </script>
 </head>
 <body>
@@ -133,6 +150,7 @@
   <script type="module">
     import components from './manifest.js';
     import { hasControlledPreview, hasCachedPreview, loadPreview } from './src/previews/registry.js';
+    import { collectIsTags, GALLERY_CHROME_TAGS } from './src/cdn/collect-is-tags.js';
 
     const root = document.documentElement;
     const themeToggle = document.getElementById('themeToggle');
@@ -350,24 +368,17 @@
       previewHost.preview = value;
     }
 
-    /** Páginas sueltas del nav que meten muchos is-* en el JSON. */
-    const FULL_KIT_PAGES = new Set(['home', 'theming', 'ecosystem']);
-
     /**
-     * Asegura el CE del preview actual. El shell ya trae layout/actions/…;
-     * el resto llega con `load('all')` en background o aquí on-demand.
+     * Tags del preview + chrome de demos (dropdown/copy/code/cdn-snippet…).
+     * Sin all.min.js: cada vista pide solo lo que pinta.
      */
-    async function ensurePreviewDeps(tag) {
+    async function ensurePreviewDeps(tag, preview) {
       await customElements.whenDefined('is-preview-component');
       const L = globalThis.ISWebComponentsLoader;
       if (!L) return;
-      if (FULL_KIT_PAGES.has(tag)) {
-        if (!L.has('all')) await L.load('all');
-        return;
-      }
-      if (!tag.startsWith('is-')) return;
-      if (!L.has(tag)) await L.load(tag);
-      if (!customElements.get(tag)) {
+      const tags = [...new Set([...GALLERY_CHROME_TAGS, ...collectIsTags(preview.definition ?? preview)])];
+      if (tags.length) await L.load(...tags);
+      if (tag.startsWith('is-') && !customElements.get(tag)) {
         await customElements.whenDefined(tag);
       }
     }
@@ -376,16 +387,13 @@
       const tag = component.tag;
 
       if (hasControlledPreview(tag)) {
-        await ensurePreviewDeps(tag);
         frame.hidden = true;
         frame.removeAttribute('src');
         previewHost.hidden = false;
-        // Sin caché el fetch del JSON (no-store) deja la vista anterior colgada.
-        // Con caché el await es inmediato: no vaciar para no parpadear.
         if (!hasCachedPreview(tag)) setHostPreview(null);
         const preview = await loadPreview(tag);
         if (component.tag !== tag) return;
-        // Por si el upgrade llegó entre el null y el load (own property otra vez).
+        await ensurePreviewDeps(tag, preview);
         await customElements.whenDefined('is-preview-component');
         setHostPreview(preview);
         return;
