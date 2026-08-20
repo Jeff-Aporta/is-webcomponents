@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transfer Item · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-transfer-item de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/data/is-transfer-item.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-transfer", "is-transfer-item");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-transfer-item" data-category="data">
+    <h1>Transfer Item</h1>
+    <p class="lede">Documentación y demos de is-transfer-item de InSoft.</p>
+<section id="intro">
+<p class="lede">Elemento movible entre las dos listas de un <code class="code">&lt;is-transfer&gt;</code>.</p>
+<div class="demo"><is-transfer>
+            <is-transfer-item value="a">Cuentas por cobrar</is-transfer-item>
+            <is-transfer-item value="b" selected>Cuentas por pagar</is-transfer-item>
+            <is-transfer-item value="c">Inventario</is-transfer-item>
+          </is-transfer></div>
+<pre><code>&lt;is-transfer&gt;
+  &lt;is-transfer-item value=&quot;a&quot;&gt;Cuentas por cobrar&lt;/is-transfer-item&gt;
+  &lt;is-transfer-item value=&quot;b&quot; selected&gt;Cuentas por pagar&lt;/is-transfer-item&gt;
+  &lt;is-transfer-item value=&quot;c&quot;&gt;Inventario&lt;/is-transfer-item&gt;
+&lt;/is-transfer&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">&lt;is-transfer&gt; — Doble lista de selección (vanilla, zero dependencies). Mueve elementos entre una lista de origen y una lista de destino. &lt;is-transfer id="t1"&gt; &lt;is-transfer-item value="a"&gt;Alpha&lt;/is-transfer-item&gt; &lt;is-transfer-item value="b" selected&gt;Beta&lt;/is-transfer-item&gt; &lt;/is-transfer&gt; Atributos &lt;is-transfer&gt; source-title       string target-title       string searchable         boolean without-buttons    boolean  — sin botones prev/next without-headings   boolean max-target         number   — máximo de items en target. Atributos &lt;is-transfer-item&gt; value        string disabled     boolean Slots &lt;is-transfer-item&gt; (default)   label. Eventos is-transfer-change  detail: { item, source, target, values }</p>
+<div class="demo"><p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/data/transfer.js</code>.
+        </p></div>
+</section>
+  </article>
+</body>
+</html>
