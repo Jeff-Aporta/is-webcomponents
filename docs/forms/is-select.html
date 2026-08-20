@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Select · IS Web Components</title>
+  <meta name="description" content="Documentación de is-select.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-select.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-flowchart", "is-icon", "is-option", "is-select");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-select" data-category="forms">
+    <h1>Select</h1>
+    <section id="intro">
+<p class="lede">Select form-associated con paridad funcional con el
+          <a href="https://mui.com/material-ui/react-select/" target="_blank" rel="noreferrer">Select de MUI</a>:
+          variants, error, selección múltiple con chips o checkmarks, agrupación, opciones ricas y typeahead.
+          El listbox vive en un <code class="code">&lt;dialog&gt;</code> del top layer, así que nunca lo recorta
+          el <code class="code">overflow</code> de un ancestro.</p>
+<div class="demo"><is-select id="sel" label="Ciudad" hint="Una sola opción" placeholder="Elige una ciudad…" name="city" clearable style="max-width:20rem">
+            <is-option value="bog">Bogotá</is-option>
+            <is-option value="med">Medellín</is-option>
+            <is-option value="cal">Cali</is-option>
+            <is-option value="barr">Barranquilla</is-option>
+            <is-option value="buc" disabled>Bucaramanga (no disponible)</is-option>
+            <is-option value="cta">Cartagena</is-option>
+          </is-select></div>
+<div class="demo"><p class="lede" id="log-single">value: —</p></div>
+<pre><code>&lt;is-select label=&quot;Ciudad&quot; name=&quot;city&quot; placeholder=&quot;Elige una ciudad…&quot; clearable&gt;
+  &lt;is-option value=&quot;bog&quot;&gt;Bogotá&lt;/is-option&gt;
+  &lt;is-option value=&quot;med&quot;&gt;Medellín&lt;/is-option&gt;
+&lt;/is-select&gt;</code></pre>
+</section>
+<section id="appearance">
+<h2>Appearance</h2>
+<p class="lede"><code class="code">appearance</code> equivale a las <em>variants</em> de MUI:
+          <code class="code">outlined</code> (default), <code class="code">filled</code> y
+          <code class="code">underlined</code> (el <em>standard</em> de MUI).</p>
+<div class="demo"><div class="stack">
+            <is-select label="outlined (default)" value="a">
+              <is-option value="a">Opción A</is-option>
+              <is-option value="b">Opción B</is-option>
+            </is-select>
+            <is-select variant="filled" label="filled" value="a">
+              <is-option value="a">Opción A</is-option>
+              <is-option value="b">Opción B</is-option>
+            </is-select>
+            <is-select variant="underlined" label="underlined" value="a">
+              <is-option value="a">Opción A</is-option>
+              <is-option value="b">Opción B</is-option>
+            </is-select>
+          </div></div>
+<pre><code>&lt;is-select variant=&quot;filled&quot; label=&quot;filled&quot;&gt;…&lt;/is-select&gt;
+&lt;is-select variant=&quot;underlined&quot; label=&quot;underlined&quot;&gt;…&lt;/is-select&gt;</code></pre>
+</section>
+<section id="labels">
+<h2>Label, hint y error</h2>
+<p class="lede"><code class="code">label</code>, <code class="code">hint</code> y <code class="code">placeholder</code>
+          aceptan texto o los slots homónimos. Con <code class="code">error</code> el borde y la etiqueta pasan a
+          color de peligro y <code class="code">error-text</code> sustituye al <code class="code">hint</code>.</p>
+<div class="demo"><div class="stack">
+            <is-select label="Con hint" hint="Texto de ayuda" placeholder="Sin selección…">
+              <is-option value="a">Opción A</is-option>
+              <is-option value="b">Opción B</is-option>
+            </is-select>
+            <is-select label="Con error" hint="Este hint queda oculto" error error-text="Selecciona un valor válido" placeholder="Sin selección…">
+              <is-option value="a">Opción A</is-option>
+              <is-option value="b">Opción B</is-option>
+            </is-select>
+            <is-select variant="filled" label="Error + filled" error error-text="Campo obligatorio" placeholder="Sin selección…">
+              <is-option value="a">Opción A</is-option>
+              <is-option value="b">Opción B</is-option>
+            </is-select>
+          </div></div>
+<pre><code>&lt;is-select label=&quot;Con error&quot; error error-text=&quot;Selecciona un valor válido&quot;&gt;
+  &lt;is-option value=&quot;a&quot;&gt;Opción A&lt;/is-option&gt;
+&lt;/is-select&gt;</code></pre>
+</section>
+<section id="width">
+<h2>Ancho</h2>
+<p class="lede"><code class="code">full-width</code> estira el control al 100 % del contenedor.
+          <code class="code">auto-width</code> hace que el listbox se ajuste a su contenido en lugar de al ancho
+          del trigger (el <code class="code">autoWidth</code> de MUI); se mantiene dentro del viewport.</p>
+<div class="demo"><div style="display:flex;gap:1rem;max-width:32rem">
+            <is-select label="normal" placeholder="Ancho por defecto…">
+              <is-option value="a">Opción A</is-option>
+              <is-option value="b">Opción B</is-option>
+            </is-select>
+            <is-select full-width label="full-width" placeholder="Ocupa el resto…">
+              <is-option value="a">Opción A</is-option>
+              <is-option value="b">Opción B</is-option>
+            </is-select>
+          </div>
+          <div style="max-width:11rem;margin-top:1rem">
+            <is-select auto-width label="auto-width" placeholder="Estrecho…">
+              <is-option value="a">Contenido bastante más ancho que el trigger</is-option>
+              <is-option value="b">Corto</is-option>
+              <is-option value="c">Otra opción de longitud considerable</is-option>
+            </is-select>
+          </div></div>
+<pre><code>&lt;is-select full-width label=&quot;full-width&quot;&gt;…&lt;/is-select&gt;
+&lt;is-select auto-width label=&quot;auto-width&quot;&gt;…&lt;/is-select&gt;</code></pre>
+</section>
+<section id="max-visible">
+<h2>Alto del listbox</h2>
+<p class="lede"><code class="code">max-visible</code> fija el alto máximo del listbox en número de opciones antes de
+          hacer scroll. Admite decimales (<code class="code">4.5</code>) para dejar media fila a la vista y
+          sugerir que hay más.</p>
+<div class="demo"><is-select max-visible="4.5" label="max-visible 4.5" placeholder="20 opciones…" style="max-width:18rem">
+            <is-option value="1">Opción 01</is-option>
+            <is-option value="2">Opción 02</is-option>
+            <is-option value="3">Opción 03</is-option>
+            <is-option value="4">Opción 04</is-option>
+            <is-option value="5">Opción 05</is-option>
+            <is-option value="6">Opción 06</is-option>
+            <is-option value="7">Opción 07</is-option>
+            <is-option value="8">Opción 08</is-option>
+            <is-option value="9">Opción 09</is-option>
+            <is-option value="10">Opción 10</is-option>
+            <is-option value="11">Opción 11</is-option>
+            <is-option value="12">Opción 12</is-option>
+          </is-select></div>
+<pre><code>&lt;is-select max-visible=&quot;4.5&quot;&gt;…&lt;/is-select&gt;</code></pre>
+</section>
+<section id="multiple">
+<h2>Selección múltiple</h2>
+<p class="lede">Con <code class="code">multiple</code>, <code class="code">value</code> es una lista separada por comas
+          y en un <code class="code">&lt;form&gt;</code> se envía una entrada de FormData por valor.
+          <code class="code">selection-display</code> decide cómo se pinta la selección en el trigger:
+          <code class="code">tags</code> (default), <code class="code">text</code> o <code class="code">count</code>.</p>
+<div class="demo"><div class="stack" style="max-width:24rem">
+            <is-select id="multi" label="tags (default)" hint="Chips con botón de quitar" placeholder="Selecciona…" name="stack" multiple clearable value="js,css">
+              <is-option value="js">JavaScript</is-option>
+              <is-option value="ts">TypeScript</is-option>
+              <is-option value="css">CSS</is-option>
+              <is-option value="html">HTML</is-option>
+              <is-option value="svelte">Svelte</is-option>
+              <is-option value="wc">Web Components</is-option>
+            </is-select>
+            <is-select label="text" selection-display="text" placeholder="Selecciona…" multiple value="js,css,html">
+              <is-option value="js">JavaScript</is-option>
+              <is-option value="ts">TypeScript</is-option>
+              <is-option value="css">CSS</is-option>
+              <is-option value="html">HTML</is-option>
+            </is-select>
+            <is-select label="count" selection-display="count" placeholder="Selecciona…" multiple value="js,css,html">
+              <is-option value="js">JavaScript</is-option>
+              <is-option value="ts">TypeScript</is-option>
+              <is-option value="css">CSS</is-option>
+              <is-option value="html">HTML</is-option>
+            </is-select>
+            <is-select label="limit-tags 2" limit-tags="2" placeholder="Selecciona…" multiple value="js,ts,css,html">
+              <is-option value="js">JavaScript</is-option>
+              <is-option value="ts">TypeScript</is-option>
+              <is-option value="css">CSS</is-option>
+              <is-option value="html">HTML</is-option>
+            </is-select>
+          </div></div>
+<div class="demo"><p class="lede" id="log-multi">values: —</p></div>
+<pre><code>&lt;is-select multiple label=&quot;Tecnologías&quot; value=&quot;js,css&quot;&gt;…&lt;/is-select&gt;
+&lt;is-select multiple selection-display=&quot;count&quot;&gt;…&lt;/is-select&gt;
+&lt;is-select multiple limit-tags=&quot;2&quot;&gt;…&lt;/is-select&gt;</code></pre>
+</section>
+<section id="checkmarks">
+<h2>Checkmarks</h2>
+<p class="lede"><code class="code">checkmarks</code> dibuja una casilla a la izquierda de cada opción del listbox, marcada
+          cuando la opción está seleccionada. Solo aplica en <code class="code">multiple</code>.</p>
+<div class="demo"><is-select label="Personas" checkmarks multiple selection-display="text" placeholder="Selecciona…" value="oliver,april" style="max-width:22rem">
+            <is-option value="oliver">Oliver Hansen</is-option>
+            <is-option value="van">Van Henry</is-option>
+            <is-option value="april">April Tucker</is-option>
+            <is-option value="ralph">Ralph Hubbard</is-option>
+            <is-option value="omar">Omar Alexander</is-option>
+            <is-option value="carlos">Carlos Abbott</is-option>
+          </is-select></div>
+<pre><code>&lt;is-select multiple checkmarks selection-display=&quot;text&quot;&gt;
+  &lt;is-option value=&quot;oliver&quot;&gt;Oliver Hansen&lt;/is-option&gt;
+&lt;/is-select&gt;</code></pre>
+</section>
+<section id="groups">
+<h2>Agrupación</h2>
+<p class="lede">El atributo <code class="code">group</code> de <code class="code">is-option</code> agrupa las opciones bajo
+          una cabecera no seleccionable (<code class="code">role="group"</code> +
+          <code class="code">aria-labelledby</code>). Las opciones se reordenan por grupo respetando el orden de
+          aparición; las que no tienen <code class="code">group</code> quedan arriba.</p>
+<div class="demo"><is-select label="Categoría" placeholder="Elige una…" style="max-width:20rem">
+            <is-option value="todas">Todas</is-option>
+            <is-option value="op1" group="Categoría 1">Opción 1</is-option>
+            <is-option value="op2" group="Categoría 1">Opción 2</is-option>
+            <is-option value="op3" group="Categoría 2">Opción 3</is-option>
+            <is-option value="op4" group="Categoría 2">Opción 4</is-option>
+          </is-select></div>
+<pre><code>&lt;is-select label=&quot;Categoría&quot;&gt;
+  &lt;is-option value=&quot;todas&quot;&gt;Todas&lt;/is-option&gt;
+  &lt;is-option value=&quot;op1&quot; group=&quot;Categoría 1&quot;&gt;Opción 1&lt;/is-option&gt;
+  &lt;is-option value=&quot;op3&quot; group=&quot;Categoría 2&quot;&gt;Opción 3&lt;/is-option&gt;
+&lt;/is-select&gt;</code></pre>
+</section>
+<section id="rich">
+<h2>Opciones ricas</h2>
+<p class="lede"><code class="code">is-option</code> acepta un slot <code class="code">start</code> (icono o avatar) y un slot
+          <code class="code">description</code> (texto secundario). El texto del slot por defecto sigue siendo la
+          etiqueta: lo de los slots con nombre no cuenta como tal.</p>
+<div class="demo"><is-select label="Destino" placeholder="Elige un destino…" max-visible="4" style="max-width:24rem">
+            <is-option value="drive">
+              <is-icon slot="start" icon="mdi:google-drive"></is-icon>
+              Google Drive
+              <span slot="description">Sincroniza con tu cuenta corporativa</span>
+            </is-option>
+            <is-option value="s3">
+              <is-icon slot="start" icon="mdi:aws"></is-icon>
+              Amazon S3
+              <span slot="description">Bucket privado, cifrado en reposo</span>
+            </is-option>
+            <is-option value="ftp" disabled>
+              <is-icon slot="start" icon="mdi:server-network"></is-icon>
+              FTP
+              <span slot="description">Deshabilitado por política de seguridad</span>
+            </is-option>
+            <is-option value="local">
+              <is-icon slot="start" icon="mdi:folder"></is-icon>
+              Carpeta local
+              <span slot="description">Solo en este equipo</span>
+            </is-option>
+          </is-select></div>
+<pre><code>&lt;is-option value=&quot;drive&quot;&gt;
+  &lt;is-icon slot=&quot;start&quot; icon=&quot;mdi:google-drive&quot;&gt;&lt;/is-icon&gt;
+  Google Drive
+  &lt;span slot=&quot;description&quot;&gt;Sincroniza con tu cuenta corporativa&lt;/span&gt;
+&lt;/is-option&gt;</code></pre>
+</section>
+<section id="form">
+<h2>Dentro de un formulario</h2>
+<p class="lede">Form-associated: participa en <code class="code">FormData</code>, en el reset y en la validación nativa
+          (<code class="code">required</code> → <code class="code">valueMissing</code>).</p>
+<div class="demo"><form id="demo-form" style="display:flex;flex-direction:column;gap:0.75rem;max-width:22rem">
+            <is-select label="País" name="country" required placeholder="Obligatorio…">
+              <is-option value="co">Colombia</is-option>
+              <is-option value="mx">México</is-option>
+              <is-option value="es">España</is-option>
+            </is-select>
+            <is-select label="Etiquetas" name="tags" multiple placeholder="Opcional…">
+              <is-option value="urgente">Urgente</is-option>
+              <is-option value="revisar">Revisar</is-option>
+              <is-option value="archivado">Archivado</is-option>
+            </is-select>
+            <div style="display:flex;gap:0.5rem">
+              <button type="submit">Enviar</button>
+              <button type="reset">Reset</button>
+            </div>
+          </form></div>
+<div class="demo"><p class="lede" id="log-form">FormData: —</p></div>
+<pre><code>&lt;is-select label=&quot;Etiquetas&quot; name=&quot;tags&quot; multiple&gt;
+  &lt;is-option value=&quot;urgente&quot;&gt;Urgente&lt;/is-option&gt;
+&lt;/is-select&gt;</code></pre>
+</section>
+<section id="states">
+<h2>Estados</h2>
+<p class="lede"><code class="code">disabled</code>, <code class="code">clearable</code> y el slot
+          <code class="code">start</code> del propio select para un adorno fijo en el trigger.</p>
+<div class="demo"><div class="grid">
+            <is-select label="Deshabilitado" disabled value="a">
+              <is-option value="a">Opción A</is-option>
+            </is-select>
+            <is-select label="Con slot start" placeholder="Buscar…">
+              <is-icon slot="start" icon="mdi:magnify"></is-icon>
+              <is-option value="1">Uno</is-option>
+              <is-option value="2">Dos</is-option>
+            </is-select>
+            <is-select label="Clearable" clearable value="1">
+              <is-option value="1">Uno</is-option>
+              <is-option value="2">Dos</is-option>
+            </is-select>
+          </div></div>
+</section>
+<section id="keyboard">
+<h2>Teclado</h2>
+</section>
+<section id="reference">
+<h2>Referencia — is-select</h2>
+<div class="demo"><h2>Referencia — is-option</h2></div>
+</section>
+  </article>
+</body>
+</html>
