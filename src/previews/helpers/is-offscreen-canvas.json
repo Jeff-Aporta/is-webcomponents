@@ -1,0 +1,31 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-offscreen-canvas",
+  "category": "helpers",
+  "title": "<is-offscreen-canvas>",
+  "titleHtml": true,
+  "description": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).",
+  "storageKey": "docs-is-offscreen-canvas",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-offscreen-canvas>",
+      "lede": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-offscreen-canvas width=\"320\" height=\"120\"></is-offscreen-canvas>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-offscreen-canvas width=\"320\" height=\"120\"></is-offscreen-canvas>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
+        }
+      ]
+    }
+  ]
+}
