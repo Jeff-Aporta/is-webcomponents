@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Code · IS Web Components</title>
+  <meta name="description" content="Documentación de is-code.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/code/is-code.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-code");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-code" data-category="code">
+    <h1>Code</h1>
+    <section id="intro">
+<p class="lede">Editor de código (CodeMirror 5) con lenguajes, temas JSON, formateo estilo Prettier, números de línea, word-wrap y anotaciones externas (highlight / tooltips). API texto ↔ JSON <code class="code">is-code-doc/v1</code>.</p>
+<div class="demo"><is-code class="ed" id="demo-basic" lang="javascript" wrap line-numbers min-height="14rem" value="function greet(name) {&#10;  return `Hola, ${name}`;&#10;}&#10;&#10;console.log(greet('IS'));"></is-code></div>
+<pre><code>&lt;is-code lang=&quot;javascript&quot; wrap line-numbers
+  value=&quot;function greet(name) {\n  return `Hola, ${name}`;\n}&quot;&gt;&lt;/is-code&gt;</code></pre>
+</section>
+<section id="modes">
+<h2>Modos block / inline</h2>
+<p class="lede"><code class="code">mode="block"</code> (default) ocupa el ancho del contenedor. <code class="code">mode="inline"</code> fluye en el texto como un chip editable — ideal para inserts en docs o labels.</p>
+<div class="demo"><div class="stack">
+  <p class="prose">
+    Usa <is-code mode="inline" lang="javascript" readonly value="openModal()"></is-code>
+    para disparar el diálogo, o edita
+    <is-code id="demo-inline-edit" mode="inline" lang="css" value="--is-accent"></is-code>
+    en vivo.
+  </p>
+  <is-code class="ed" mode="block" lang="javascript" wrap line-numbers
+    value="export function openModal() {&#10;  dialog.show();&#10;}"></is-code>
+</div></div>
+<pre><code>&lt;p&gt;Llama &lt;is-code mode=&quot;inline&quot; lang=&quot;js&quot; readonly value=&quot;save()&quot;&gt;&lt;/is-code&gt; al guardar.&lt;/p&gt;
+&lt;is-code mode=&quot;block&quot; lang=&quot;javascript&quot; wrap&gt;&lt;/is-code&gt;</code></pre>
+</section>
+<section id="langs">
+<h2>Lenguajes</h2>
+<p class="lede">Built-ins: <code class="code">javascript</code>, <code class="code">typescript</code>, <code class="code">jsx</code>, <code class="code">tsx</code>, <code class="code">html</code>, <code class="code">css</code>, <code class="code">json</code>, <code class="code">python</code> (plugin heavy), <code class="code">diff</code>, <code class="code">commit</code>, <code class="code">plaintext</code>. Extensible con <code class="code">registerLanguage</code>.</p>
+<div class="demo"><div class="stack">
+  <div class="row">
+    <is-button id="lang-js" variant="outlined">JS</is-button>
+    <is-button id="lang-ts" variant="outlined">TS</is-button>
+    <is-button id="lang-html" variant="outlined">HTML</is-button>
+    <is-button id="lang-css" variant="outlined">CSS</is-button>
+    <is-button id="lang-py" variant="outlined">Python</is-button>
+  </div>
+  <is-code class="ed" id="demo-lang" lang="typescript" wrap min-height="12rem"></is-code>
+</div></div>
+<pre><code>&lt;is-code lang=&quot;python&quot; wrap&gt;&lt;/is-code&gt;
+&lt;!-- python descarga mode/python bajo demanda --&gt;</code></pre>
+</section>
+<section id="diff">
+<h2>Diff y resumen de commit</h2>
+<p class="lede"><code class="code">lang="diff"</code> y <code class="code">lang="commit"</code> comparten un modo propio del kit. Pintar un diff con un modo de lenguaje sale mal siempre: el <code class="code">+</code> de la primera columna no es código, es una marca de línea, y un tokenizador de JS lo lee como operador y descoloca el resto. Aquí se clasifica por línea entera, con banda de fondo en las que entran y salen. <code class="code">format()</code> no re-indenta nada — solo alinea la rejilla del <code class="code">--stat</code>.</p>
+<div class="demo"><div class="stack">
+  <is-code class="ed" id="demo-diff" lang="diff" readonly line-numbers min-height="16rem" value="commit 7839bd7  ·  aislamiento del dueño de conversación&#10;&#10;diff --git a/src/lib/filter/conversacion-list-owner.ts b/src/lib/filter/conversacion-list-owner.ts&#10;--- /dev/null&#10;+++ b/src/lib/filter/conversacion-list-owner.ts&#10;@@ -0,0 +1,12 @@&#10;+/** Dueño de conversación solo desde sesión o query auditado. */&#10;+import type { IIssListFilter } from &quot;./parse&quot;;&#10;+&#10;+const OWNER_EQ_KEYS = [&quot;itercero&quot;, &quot;icontacto&quot;] as const;&#10;+&#10;+export function stripOwnerFromListEq(eq) {&#10;   if (!eq) return undefined;&#10;   const rest = { ...eq };&#10;-  return eq;&#10;+  for (const k of OWNER_EQ_KEYS) delete rest[k];&#10;+  return Object.keys(rest).length ? rest : undefined;&#10; }"></is-code>
+</div></div>
+<div class="demo"><div class="stack">
+  <div class="row">
+    <is-button id="diff-format" variant="outlined">format() — alinear rejilla</is-button>
+  </div>
+  <is-code class="ed" id="demo-diff-stat" lang="commit" line-numbers min-height="12rem" value="// Lote de alineación de permisos — resumen de 8 archivos&#10;src/models-controllers/Ctrl_Auth.ts | 344 + (commit a06e10f, reescrito)&#10;src/lib/storage/UlChatMode.ts | 62 +++++ (commit dcd0b2a)&#10;src/health/perms-open.test.ts | 50 +++ (commit dcd0b2a)&#10;src/lib/filter/conversacion-list-owner.ts | 24 ++ (commit 7839bd7)&#10;src/health/match-branch.test.ts | 4 ++ -- (commit 6c88bb8)&#10;src/models-controllers/_Types.ts | 2 +- (commit 39e911b)&#10;&#10;8 files changed, 486 insertions(+), 12 deletions(-)"></is-code>
+</div></div>
+<pre><code>&lt;is-code lang=&quot;diff&quot; readonly line-numbers
+  value=&quot;@@ -1,2 +1,3 @@\n-const a = 0;\n+const a = 1;&quot;&gt;&lt;/is-code&gt;
+
+&lt;!-- format() alinea ruta | contador | barra del --stat --&gt;
+&lt;is-code lang=&quot;commit&quot; value=&quot;src/app.js | 12 ++++----&quot;&gt;&lt;/is-code&gt;</code></pre>
+</section>
+<section id="format">
+<h2>Formateo (JSON tipo Prettier)</h2>
+<p class="lede">Atributo/propiedad <code class="code">format</code> / <code class="code">formatConfig</code>. Método <code class="code">format()</code>.</p>
+<div class="demo"><div class="stack">
+  <div class="row">
+    <is-button id="btn-format" color="brand">Format</is-button>
+  </div>
+  <is-code class="ed" id="demo-format" lang="javascript" wrap
+    format='{"tabWidth":2,"semi":true,"singleQuote":true}'
+    value="const x=1;const y={a:1,b:2};function f(a,b){return a+b}"></is-code>
+</div></div>
+<pre><code>&lt;is-code lang=&quot;javascript&quot;
+  format='{&quot;tabWidth&quot;:2,&quot;singleQuote&quot;:true,&quot;semi&quot;:true}'&gt;&lt;/is-code&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  editor.format();
+&lt;/script&gt;</code></pre>
+</section>
+<section id="theme">
+<h2>Temas JSON</h2>
+<p class="lede">Sin config: preset según <code class="code">data-theme</code>. Con <code class="code">theme-config</code>: colores por rol (keyword, string, gutter, marks…).</p>
+<div class="demo"><div class="stack">
+  <div class="row">
+    <is-button id="theme-ocean" variant="outlined">Ocean</is-button>
+    <is-button id="theme-reset" variant="plain">Reset preset</is-button>
+  </div>
+  <is-code class="ed" id="demo-theme" lang="css" wrap
+    value=".card {&#10;  color: tomato;&#10;  background: #111;&#10;}"></is-code>
+</div></div>
+<pre><code>&lt;is-code lang=&quot;css&quot;
+  theme-config='{&quot;background&quot;:&quot;#0b1220&quot;,&quot;keyword&quot;:&quot;#7dd3fc&quot;,&quot;string&quot;:&quot;#86efac&quot;}'&gt;&lt;/is-code&gt;</code></pre>
+</section>
+<section id="marks">
+<h2>Highlights y tooltips</h2>
+<p class="lede">El editor no diagnostica: otro sistema aporta <code class="code">marks</code> (error/warning/info o tooltip de docs). Se reutiliza <code class="code">&lt;is-tooltip&gt;</code>.</p>
+<div class="demo"><is-code class="ed" id="demo-marks" lang="javascript" wrap min-height="12rem"></is-code></div>
+<pre><code>editor.setMarks([
+  { from: 9, to: 12, kind: 'tooltip', title: 'add()', body: 'Suma a + b' },
+  { from: 26, to: 27, kind: 'highlight', tone: 'warning', message: 'Prefer const' },
+]);</code></pre>
+</section>
+<section id="json-api">
+<h2>code2json / json2code</h2>
+<p class="lede">Documento <code class="code">is-code-doc/v1</code>: value + marks + format + theme. Round-trip con <code class="code">getDocument()</code> / <code class="code">setDocument()</code>.</p>
+<div class="demo"><div class="stack">
+  <div class="row">
+    <is-button id="btn-to-json" color="brand">code → json</is-button>
+    <is-button id="btn-from-json" variant="outlined">json → code</is-button>
+  </div>
+  <is-code class="ed" id="demo-json" lang="jsx" wrap
+    value="export function Hi({ name }) {&#10;  return &lt;h1&gt;Hola {name}&lt;/h1&gt;;&#10;}"></is-code>
+  <pre class="out" id="json-out">(pulsa code → json)</pre>
+</div></div>
+<pre><code>const doc = editor.code2json();
+editor.setDocument(doc);</code></pre>
+</section>
+<section id="options">
+<h2>Opciones de editor</h2>
+<p class="lede"><code class="code">mode</code>, <code class="code">line-numbers</code>, <code class="code">wrap</code>, <code class="code">readonly</code>, <code class="code">compact</code>, <code class="code">tab-size</code>.</p>
+<div class="demo"><div class="stack">
+  <is-code lang="html" line-numbers="false" wrap
+    value="&lt;section class=&quot;hero&quot;&gt;&lt;h1&gt;IS&lt;/h1&gt;&lt;/section&gt;"></is-code>
+  <is-code lang="javascript" readonly
+    value="// solo lectura&#10;export const VERSION = '1.0.0';"></is-code>
+</div></div>
+<pre><code>&lt;is-code lang=&quot;html&quot; line-numbers=&quot;false&quot; wrap&gt;&lt;/is-code&gt;
+&lt;is-code lang=&quot;javascript&quot; readonly&gt;&lt;/is-code&gt;</code></pre>
+</section>
+<section id="playground">
+<h2>Playground</h2>
+<p class="lede">Controles para probar mode, lang, readonly, wrap, line-numbers y compact.</p>
+<div class="demo"><div class="playground">
+  <div class="stage" id="pgStage">
+    <p class="pg-prose" id="pgProse" hidden>
+      En el flujo:
+      <span id="pgInlineHost"></span>
+      y sigue el texto.
+    </p>
+    <is-code id="pgCode" mode="block" lang="javascript" wrap line-numbers
+      value="function greet(name) {&#10;  return `Hola, ${name}`;&#10;}"></is-code>
+  </div>
+  <div class="controls">
+    <h4>Configuración</h4>
+    <div class="ctl-row">
+      <label for="pgMode">mode</label>
+      <select id="pgMode">
+        <option value="block" selected>block</option>
+        <option value="inline">inline</option>
+      </select>
+    </div>
+    <div class="ctl-row">
+      <label for="pgLang">lang</label>
+      <select id="pgLang">
+        <option>javascript</option>
+        <option>typescript</option>
+        <option>html</option>
+        <option>css</option>
+        <option>json</option>
+        <option>python</option>
+        <option>plaintext</option>
+      </select>
+    </div>
+    <div class="ctl-row">
+      <label>flags</label>
+      <div class="checks">
+        <label class="chip"><input type="checkbox" id="pgReadonly" /> readonly</label>
+        <label class="chip"><input type="checkbox" id="pgWrap" checked /> wrap</label>
+        <label class="chip"><input type="checkbox" id="pgLines" checked /> line-numbers</label>
+        <label class="chip"><input type="checkbox" id="pgCompact" /> compact</label>
+        <label class="chip"><input type="checkbox" id="pgDisabled" /> disabled</label>
+      </div>
+    </div>
+    <div class="ctl-row">
+      <label for="pgValue">value</label>
+      <textarea id="pgValue" rows="5" style="width:100%;font:inherit"></textarea>
+    </div>
+    <div class="ctl-row">
+      <label>acciones</label>
+      <div class="row">
+        <is-button id="pgFormat" color="neutral" variant="outlined" type="button">format()</is-button>
+        <is-button id="pgFocus" color="neutral" variant="plain" type="button">focus()</is-button>
+      </div>
+    </div>
+    <p class="pg-meta" id="pgMeta" style="margin:0.75rem 0 0;color:var(--is-text-soft);font-size:0.8rem"></p>
+  </div>
+</div></div>
+</section>
+<section id="api">
+<h2>API</h2>
+</section>
+  </article>
+</body>
+</html>
