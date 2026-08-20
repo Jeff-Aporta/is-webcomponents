@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scroller · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-scroller de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/navigation/is-scroller.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-card", "is-scroller");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-scroller" data-category="navigation">
+    <h1>Scroller</h1>
+    <p class="lede">Documentación y demos de is-scroller de InSoft.</p>
+<section id="intro">
+<p class="lede">Wrapper que añade scroll horizontal (o vertical) con botones prev/next
+          automáticos cuando el contenido del slot desborda. Ideal para
+          listas de pills, carruseles de chips, drawers inline, etc.</p>
+<div class="demo"><is-scroller id="sc1" style="max-width: 480px;">
+            <is-button>Pills 1</is-button>
+            <is-button>Pills 2</is-button>
+            <is-button>Pills 3</is-button>
+            <is-button>Pills 4</is-button>
+            <is-button>Pills 5</is-button>
+            <is-button>Pills 6</is-button>
+            <is-button>Pills 7</is-button>
+            <is-button>Pills 8</is-button>
+            <is-button>Pills 9</is-button>
+            <is-button>Pills 10</is-button>
+            <is-button>Pills 11</is-button>
+            <is-button>Pills 12</is-button>
+          </is-scroller></div>
+<pre><code>&lt;is-scroller&gt;
+  &lt;is-button&gt;Pills 1&lt;/is-button&gt;
+  &lt;is-button&gt;Pills 2&lt;/is-button&gt;
+  …
+&lt;/is-scroller&gt;</code></pre>
+</section>
+<section id="cards">
+<h2>Con cards</h2>
+<p class="lede">Funciona con cualquier hijo: cards, avatares, breadcrumbs, etc.</p>
+<div class="demo"><is-scroller orientation="horizontal" style="max-width: 640px;">
+            <is-card style="min-width:240px" header="Inbox">
+              <p>3 mensajes sin leer.</p>
+            </is-card>
+            <is-card style="min-width:240px" header="Calendar">
+              <p>2 reuniones hoy.</p>
+            </is-card>
+            <is-card style="min-width:240px" header="Tasks">
+              <p>5 tareas pendientes.</p>
+            </is-card>
+            <is-card style="min-width:240px" header="Notes">
+              <p>1 nota actualizada.</p>
+            </is-card>
+            <is-card style="min-width:240px" header="Files">
+              <p>12 archivos recientes.</p>
+            </is-card>
+          </is-scroller></div>
+</section>
+<section id="vertical">
+<h2>Vertical</h2>
+<p class="lede">Con <code class="code">orientation="vertical"</code> el scroll es en columna.</p>
+<div class="demo"><is-scroller orientation="vertical" style="height: 200px; max-width: 480px;">
+            <p>Elemento 1</p>
+            <p>Elemento 2</p>
+            <p>Elemento 3</p>
+            <p>Elemento 4</p>
+            <p>Elemento 5</p>
+            <p>Elemento 6</p>
+            <p>Elemento 7</p>
+            <p>Elemento 8</p>
+            <p>Elemento 9</p>
+            <p>Elemento 10</p>
+          </is-scroller></div>
+</section>
+<section id="both">
+<h2>Bidimensional</h2>
+<p class="lede">Con <code class="code">orientation="both"</code>.</p>
+<div class="demo"><is-scroller orientation="both" style="height: 180px;">
+            <div style="min-width:600px;display:grid;grid-template-columns:repeat(6,1fr);gap:0.5rem">
+              <is-button>1</is-button><is-button>2</is-button><is-button>3</is-button>
+              <is-button>4</is-button><is-button>5</is-button><is-button>6</is-button>
+              <is-button>7</is-button><is-button>8</is-button><is-button>9</is-button>
+              <is-button>10</is-button><is-button>11</is-button><is-button>12</is-button>
+            </div>
+          </is-scroller></div>
+</section>
+<section id="plain">
+<h2>Sin botones</h2>
+<p class="lede">Con <code class="code">without-scroll-buttons</code> solo se queda el scrollbar nativo.</p>
+<div class="demo"><is-scroller without-scroll-buttons style="max-width: 480px;">
+            <is-button>1</is-button>
+            <is-button>2</is-button>
+            <is-button>3</is-button>
+            <is-button>4</is-button>
+            <is-button>5</is-button>
+            <is-button>6</is-button>
+            <is-button>7</is-button>
+            <is-button>8</is-button>
+            <is-button>9</is-button>
+            <is-button>10</is-button>
+          </is-scroller></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<div class="demo"><h3><code class="code">&lt;is-scroller&gt;</code></h3></div>
+<div class="demo"><h3>Slots</h3></div>
+<div class="demo"><h3>Eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
