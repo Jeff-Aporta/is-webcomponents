@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Floating Action Button · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-fab (Floating Action Button) de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/actions/is-fab.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-fab", "is-flowchart");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-fab" data-category="actions">
+    <h1>Floating Action Button</h1>
+    <p class="lede">Documentación y demos de is-fab (Floating Action Button) de InSoft.</p>
+<section id="intro">
+<p class="lede">Floating Action Button: botón circular principal que se posiciona de
+          forma fija en la ventana. Soporta variantes, tamaños, etiquetas
+          extendidas, pulso de atención y posicionamiento en cualquier esquina.</p>
+<div class="demo"><div class="fab-stage">
+            <is-fab id="fb1" icon="mdi:plus" position="bottom-end" label="Crear"></is-fab>
+          </div>
+          <p>Click: <span id="fbLog">0</span></p></div>
+<pre><code>&lt;is-fab icon=&quot;mdi:plus&quot; label=&quot;Crear&quot;&gt;&lt;/is-fab&gt;</code></pre>
+</section>
+<section id="sizes">
+<h2>Escala</h2>
+<p class="lede">No hay atributo <code class="code">size</code>: el componente se mide entero en
+          <code class="code">em</code>, así que su tamaño sale del
+          <code class="code">font-size</code> del contexto. Para hacerlo más grande o más
+          pequeño se cambia el font-size, y todo (icono, padding, radio) escala con él.</p>
+<div class="demo"><div class="fab-row">
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:0.75em" position="inline" label="Notificación"></is-fab>
+              <code class="code">0.75em</code>
+            </span>
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:1em" position="inline" label="Notificación"></is-fab>
+              <code class="code">1em</code>
+            </span>
+            <span class="fab-row__item">
+              <is-fab icon="mdi:bell" style="font-size:1.25em" position="inline" label="Notificación"></is-fab>
+              <code class="code">1.25em</code>
+            </span>
+          </div></div>
+<pre><code>&lt;is-fab icon=&quot;mdi:bell&quot; style=&quot;font-size: 0.75em&quot;&gt;&lt;/is-fab&gt;
+&lt;is-fab icon=&quot;mdi:bell&quot; style=&quot;font-size: 1.25em&quot;&gt;&lt;/is-fab&gt;</code></pre>
+</section>
+<section id="variants">
+<h2>Color</h2>
+<p class="lede"><code class="code">color</code> define el color semántico:
+          brand, neutral, danger, success, warning. Es una dimensión distinta de
+          <code class="code">variant</code>, que gobierna la presentación
+          (filled, outlined, plain…).</p>
+<div class="demo"><is-fab icon="mdi:plus" color="brand" position="inline" label="brand"></is-fab>
+          <is-fab icon="mdi:pencil" color="neutral" position="inline" label="neutral"></is-fab>
+          <is-fab icon="mdi:trash-can" color="danger" position="inline" label="danger"></is-fab>
+          <is-fab icon="mdi:check" color="success" position="inline" label="success"></is-fab>
+          <is-fab icon="mdi:alert" color="warning" position="inline" label="warning"></is-fab></div>
+</section>
+<section id="extended">
+<h2>Extendido</h2>
+<p class="lede">Con <code class="code">extended</code> el FAB tiene label al lado del icono.</p>
+<div class="demo"><is-fab icon="mdi:plus" extended label="Nuevo proyecto" position="inline"></is-fab>
+          <is-fab icon="mdi:share" color="neutral" extended label="Compartir" position="inline"></is-fab>
+          <is-fab icon="mdi:download" color="success" extended label="Descargar" position="inline"></is-fab></div>
+</section>
+<section id="positions">
+<h2>Posiciones</h2>
+<p class="lede">bottom-end (default), bottom-start, top-end, top-start.</p>
+<div class="demo"><div class="fab-stage">
+            <is-fab icon="mdi:plus" position="top-start" label="top-start"></is-fab>
+            <is-fab icon="mdi:pencil" position="top-end" label="top-end"></is-fab>
+            <is-fab icon="mdi:share" position="bottom-start" label="bottom-start"></is-fab>
+            <is-fab icon="mdi:check" color="success" position="bottom-end" label="bottom-end"></is-fab>
+          </div></div>
+</section>
+<section id="pulse">
+<h2>Pulso</h2>
+<p class="lede">Con <code class="code">pulse</code> el FAB anima un anillo de atención cada 2s.</p>
+<div class="demo"><is-fab icon="mdi:bell" pulse color="warning" position="inline" label="Notificaciones"></is-fab>
+          <is-fab icon="mdi:message" pulse color="brand" position="inline" label="Mensajes"></is-fab></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<div class="demo"><h3><code class="code">&lt;is-fab&gt;</code></h3></div>
+<div class="demo"><h3>Eventos</h3></div>
+</section>
+  </article>
+</body>
+</html>
