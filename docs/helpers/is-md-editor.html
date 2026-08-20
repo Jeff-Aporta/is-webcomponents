@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editor Markdown · IS Web Components</title>
+  <meta name="description" content="Documentación de is-md-editor.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/helpers/is-md-editor.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-md-editor", "is-md-render");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-md-editor" data-category="helpers">
+    <h1>Editor Markdown</h1>
+    <section id="intro">
+<p class="lede">Vista previa MD/HTML + chips <code class="code">{{variable}}</code>. Clic abre diálogo fullscreen.
+          Toolbar completa (disabled en solo lectura). Footer: meta + Descargar (siempre).</p>
+<div class="demo"><is-md-editor label="Prompt del sistema" placeholder="Sin contenido. Haz clic para editar…">
+  <script type="text/markdown">
+# Instrucción
+
+Eres un asistente que responde en **español** con tono profesional.
+
+- Usa `{{tono}}` como guía de estilo
+- Cita fuentes cuando aplique
+
+> Nunca inventes datos financieros.
+  </script>
+</is-md-editor></div>
+</section>
+<section id="readonly-cdn">
+<h2>Solo lectura</h2>
+<p class="lede">Toolbar visible pero disabled. Footer con caracteres/bytes y <strong>Descargar</strong>. Cerrar = X del header.</p>
+<div class="demo"><is-md-editor label="Snippet CDN" filename="cdn-snippet.md" edit-block-reason="Generado; no editable">
+  <textarea hidden data-md-source>
+```html
+<script type="module" src="https://cdn.jsdelivr.net/gh/user/repo/dist/cdn/all.min.js"></script>
+```
+
+Pégalo antes de cerrar `</body>`.
+  </textarea>
+</is-md-editor></div>
+</section>
+<section id="editable">
+<h2>Editable</h2>
+<p class="lede">Con <code class="code">can-edit</code>: herramientas activas, Descartar/Guardar.</p>
+<div class="demo"><is-md-editor can-edit label="Plantilla de correo" filename="plantilla.md">
+  <script type="text/markdown">
+Hola {{nombre_cliente}},
+
+Gracias por confiar en {{empresa}}. Tu próxima cita es el {{fecha_cita}}.
+
+Un saludo,
+{{firma}}
+  </script>
+</is-md-editor></div>
+</section>
+<section id="api">
+<h2>API HTTP vs actions</h2>
+<p class="lede">Prioridad: <code class="code">actions</code> (callbacks JS) → <code class="code">api</code>/<code class="code">src</code> (fetch) → solo eventos locales. Tipos en <code class="code">md-editor-api.d.ts</code>.</p>
+<pre><code>// A) Custom actions (sin app URL)
+el.actions = {
+  load: async () =&gt; ({ content: await store.get('doc'), filename: 'doc.md' }),
+  persist: async (doc) =&gt; { await store.put(doc); return doc; },
+};
+await el.load();
+
+// B) Endpoints HTTP
+el.api = {
+  baseUrl: 'https://api.ejemplo.com',
+  endpoints: { get: '/docs/1', put: '/docs/1' },
+  token: () =&gt; localStorage.getItem('token'),
+};
+await el.load();
+
+// Atajo GET:
+// &lt;is-md-editor src=&quot;/api/docs/1&quot; can-edit&gt;&lt;/is-md-editor&gt;</code></pre>
+</section>
+<section id="vs-render">
+<h2>vs </h2>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
