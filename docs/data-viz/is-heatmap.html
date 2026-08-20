@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heatmap · IS Web Components</title>
+  <meta name="description" content="Documentación de is-heatmap.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/data-viz/is-heatmap.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-heatmap");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-heatmap" data-category="data-viz">
+    <h1>Heatmap</h1>
+    <section id="intro">
+<p class="lede">Matriz coloreada por valor. Útil para visualizar correlaciones, frecuencias a lo largo de día × semana, o calor por hora × servidor.</p>
+</section>
+<section id="actividad">
+<h2>Actividad por hora y día</h2>
+<div class="demo"><is-heatmap x-label="Hora" y-label="Día" color="brand">
+            <script type="application/json">
+              {
+                "xLabels": ["0","2","4","6","8","10","12","14","16","18","20","22"],
+                "yLabels": ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],
+                "data": [
+                  [12, 8, 4, 6, 22, 48, 71, 80, 65, 42, 30, 22],
+                  [10, 6, 3, 5, 28, 52, 75, 82, 70, 50, 35, 25],
+                  [15, 9, 5, 7, 30, 55, 78, 86, 72, 48, 32, 24],
+                  [11, 7, 4, 6, 25, 49, 70, 79, 66, 44, 31, 20],
+                  [14, 8, 4, 7, 32, 58, 80, 88, 73, 47, 30, 21],
+                  [22, 16, 8, 5, 7, 11, 18, 16, 12, 10, 14, 18],
+                  [18, 12, 6, 4, 5, 9, 14, 13, 10, 9, 12, 16]
+                ]
+              }
+            </script>
+          </is-heatmap></div>
+</section>
+<section id="divergente">
+<h2>Divergente</h2>
+<div class="demo"><is-heatmap x-label="Mes" y-label="Categoría" color="red-blue" show-values>
+            <script type="application/json">
+              {
+                "xLabels": ["Ene","Feb","Mar","Abr","May","Jun"],
+                "yLabels": ["Ingresos","Costos","Utilidad","Impuestos","Nómina","Inversión"],
+                "data": [
+                  [ 22, 14, -8,  30,  41,  18],
+                  [-12,-10,  4, -14, -22, -16],
+                  [ 35, 28,-12,  44,  63,  34],
+                  [ -8,  6,  3,  -9,  -6,  -2],
+                  [-18,-22, -6, -25, -34, -19],
+                  [ 12, 18,  3,  22,  28,  14]
+                ]
+              }
+            </script>
+          </is-heatmap></div>
+</section>
+<section id="api">
+<h2>API</h2>
+<pre><code>// Datos vía JSON o config
+chart.config = {
+  xLabels: [...],
+  yLabels: [...],
+  data: [[v, v, ...], ...]
+};
+
+// o por puntos
+chart.config = { xLabels, yLabels, points: [{ x, y, v }, ...] };
+
+chart.addEventListener('is-cell-hover', e =&gt; {
+  console.log(`${e.detail.x} · ${e.detail.y} = ${e.detail.value}`);
+});
+
+// Atributos:
+// x-label, y-label     títulos de eje
+// color                brand | neutral | success | warning | danger | red-blue
+// cell-radius          esquina (default 2)
+// show-values          boolean, imprime el número dentro de cada celda
+// legend-position      top | bottom | start | end | none</code></pre>
+</section>
+<section id="log">
+<h2>Bitácora</h2>
+<div class="demo"><pre class="log" id="log"></pre></div>
+</section>
+  </article>
+</body>
+</html>
