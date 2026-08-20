@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Progress Ring · IS Web Components</title>
+  <meta name="description" content="Documentación de is-progress-ring.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/feedback/is-progress-ring.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-progress-ring");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-progress-ring" data-category="feedback">
+    <h1>Progress Ring</h1>
+    <section id="intro">
+<h2>Progress Ring</h2>
+<p class="lede"><code class="code">&lt;is-progress-ring&gt;</code></p>
+<div class="demo"><p class="lede">
+          Anillo SVG de progreso. La caja es <code class="code">1em × 1em</code>:
+          escala solo con <code class="code">font-size</code> del contexto (o del propio host).
+          El centro muestra un valor corto; el detalle va fuera del anillo.
+        </p></div>
+<div class="demo"><div class="ring-row">
+            <div class="ring-card" style="font-size: 5rem">
+              <is-progress-ring value="75" label="75%"></is-progress-ring>
+              <p class="ring-card__title">Completado</p>
+              <p class="ring-card__cap">value 75</p>
+            </div>
+            <div class="ring-card" style="font-size: 5rem">
+              <is-progress-ring value="40" label="40%"></is-progress-ring>
+              <p class="ring-card__title">En curso</p>
+              <p class="ring-card__cap">value 40</p>
+            </div>
+            <div class="ring-card" style="font-size: 5rem">
+              <is-progress-ring
+                value="100"
+                label="100%"
+                style="--indicator-color: var(--is-color-success)"
+              ></is-progress-ring>
+              <p class="ring-card__title">Completo</p>
+              <p class="ring-card__cap">success</p>
+            </div>
+          </div></div>
+</section>
+<section id="scale">
+<h2>Escala por font-size</h2>
+<p class="lede">Mismo componente; solo cambia el tamaño tipográfico del contenedor.</p>
+<div class="demo"><div class="ring-row">
+            <div class="ring-card" style="font-size: 2rem">
+              <is-progress-ring value="60" label="60%"></is-progress-ring>
+              <p class="ring-card__cap">2rem</p>
+            </div>
+            <div class="ring-card" style="font-size: 3.5rem">
+              <is-progress-ring value="60" label="60%"></is-progress-ring>
+              <p class="ring-card__cap">3.5rem</p>
+            </div>
+            <div class="ring-card" style="font-size: 5.5rem">
+              <is-progress-ring
+                value="60"
+                label="60%"
+                style="--indicator-color: var(--is-color-success)"
+              ></is-progress-ring>
+              <p class="ring-card__cap">5.5rem</p>
+            </div>
+            <div class="ring-card" style="font-size: 7rem">
+              <is-progress-ring
+                value="60"
+                label="60%"
+                style="--track-width: 2; --indicator-width: 4.5"
+              ></is-progress-ring>
+              <p class="ring-card__cap">7rem · stroke</p>
+            </div>
+          </div></div>
+<pre><code>&lt;span style=&quot;font-size:4rem&quot;&gt;
+  &lt;is-progress-ring value=&quot;75&quot; label=&quot;75%&quot;&gt;&lt;/is-progress-ring&gt;
+&lt;/span&gt;</code></pre>
+</section>
+<section id="inline">
+<h2>Inline en UI</h2>
+<p class="lede">El anillo lleva el %, el contexto narrativo queda al lado.</p>
+<div class="demo"><div class="demo-stack" style="gap:0.75rem">
+            <div class="ring-inline" style="font-size:2.25rem">
+              <is-progress-ring value="35" label="35%"></is-progress-ring>
+              <div class="ring-inline__copy">
+                <strong>Descargando paquete</strong>
+                <span>35% · ~2 min restantes</span>
+              </div>
+            </div>
+            <div class="ring-inline" style="font-size:2.25rem">
+              <is-progress-ring
+                value="90"
+                label="90%"
+                style="--indicator-color: var(--is-color-warning)"
+              ></is-progress-ring>
+              <div class="ring-inline__copy">
+                <strong>Sincronizando</strong>
+                <span>90% · casi listo</span>
+              </div>
+            </div>
+          </div></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
