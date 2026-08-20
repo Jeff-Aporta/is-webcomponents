@@ -41,6 +41,7 @@ c:\ContaPyme\Personal\apps\AppWebcomponents\
 ├── tests/                      # *.test.mjs (commiteados; no ignorar la carpeta)
 ├── manifest.js                 # SINGLE SOURCE OF TRUTH
 ├── index.html
+├── robots.txt · sitemap.xml    # crawl Pages; Allow: / (sin Disallow)
 ├── LLM.md · AGENTS.md · README.md
 └── package.json
 ```

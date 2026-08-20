@@ -21,10 +21,8 @@ test('is-cdn-snippet pinta pesos con is-format-bytes autofit', () => {
   assert.match(src, /helpers\/format-bytes\.js/);
   assert.match(src, /totalCdnSize/);
   assert.match(src, /#paintSizes/);
-  assert.match(src, /data-slot="size-common"/);
-  assert.match(src, /data-slot="size-single"/);
-  assert.match(src, /data-slot="size-category"/);
-  assert.match(src, /data-slot="size-all"/);
+  assert.match(src, /data-slot="size-loader"/);
+  assert.doesNotMatch(src, /data-slot="size-all"/);
   assert.match(src, /<is-format-bytes[^>]*autofit/);
 });
 

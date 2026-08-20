@@ -3,7 +3,7 @@
 ## Propósito
 
 Entry liviano de consumo CDN (`loader.min.js`) + planificador anti-redundante.
-No es un componente `is-*`: es el bootstrap recomendado frente a `all.min.js`.
+No es un componente `is-*`: es el bootstrap. No se publica `all.min.js`.
 
 ## Leer primero
 
@@ -29,7 +29,7 @@ Publicado: `dist/cdn/loader.min.js` · `dist/cdn/loader.md`.
 ## Qué no hacer
 
 - **No** re-cargar un tag ya cubierto por su categoría (`actions` → `is-button`).
-- **No** default a `all.min.js` “por comodidad” (~MB de JS resuelto).
+- **No** default a `load('all')` “por comodidad” (cada tag.min.js, ~MB resuelto).
 - **No** inventar un segundo entry aparte de `src/cdn/loader.js` + `load-plan.js`.
 - **No** quitar el banner MD ni dejar de copiar `loader.md` al dist.
 - **No** mezclar espejos (jsDelivr + Pages) en la misma página.

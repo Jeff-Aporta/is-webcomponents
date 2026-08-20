@@ -69,6 +69,7 @@ for (const [needle, label] of requiredPhrases) {
 /** Guardianes que la Carta / Testing deben citar y que deben existir en disco. */
 const guardians = [
   'src-layout.test.mjs',
+  'robots-sitemap.test.mjs',
   'helpers-homogeneity.test.mjs',
   'preview-json-contract.test.mjs',
   'preview-controller.test.mjs',

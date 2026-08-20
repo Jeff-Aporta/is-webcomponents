@@ -29,14 +29,14 @@ Reglas del proyecto. Lo de abajo se respeta. Lo que rompe esto se revierte.
 | **Galería boot:** CSS en `<link>` + shell tags + `preview-component` desde `dist/cdn`; `load('all')` / page-modules en background | `await loadCSS*` + `await load('all')` en el path crítico (FOUC); `await` de `cdn-panel`/`md-editor`; asignar `.preview` antes del upgrade del CE |
 | Dev local galería: `node scripts/serve.mjs` (Cache-Control no-store) | Live Server desde carpeta padre como “servidor oficial” (más lento; OK solo para mirar) |
 
-Guardianes: `tests/er-clusters` · `tests/src-layout` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `gallery-boot` · `cdn-loader` · `load-plan` · `code-infer-lang` · `demo-equiv`.
+Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` · `helpers-homogeneity` · `preview-controller` · `preview-json-contract` · `preview-paths` · `dist-cdn-layout` · `attr-enums` · `token-vocabulary` · `button-events` · `button-color-appearance` · `palette-and-snippet-contract` · `llm-contract` · `url-nav` · `format-bytes-autofit` · `ux-gallery-invariants` · `gallery-sources-meta` · `gallery-boot` · `cdn-loader` · `load-plan` · `code-infer-lang` · `demo-equiv`.
 
 ---
 
 ## Proyecto
 
 - Web Components vanilla (`is-*`), shadow DOM, tokens `--is-*`.
-- **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/assets`, `src/docs`. En la raíz solo quedan `scripts/`, `dist/`, `tests/`, `manifest.js`, `index.html`, docs de agente (`LLM.md`, `AGENTS.md`, `README.md`).
+- **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/assets`, `src/docs`. En la raíz solo quedan `scripts/`, `dist/`, `tests/`, `manifest.js`, `index.html`, `robots.txt`, `sitemap.xml`, docs de agente (`LLM.md`, `AGENTS.md`, `README.md`).
 - Guardián: `tests/src-layout.test.mjs` — falla si reaparecen `components/` / `styles/` / `previews/` / `skills/` / `docs/` en la raíz.
 - **Previews = JSON homogéneo**, no HTML por tag:
   - Archivo: `src/previews/<cat>/<tag>.json` con `$schema: "is-preview/v1"` (misma interface para todos).
@@ -615,6 +615,7 @@ mantenerlo aparte.
 | --- | --- |
 | `llm-contract.test.mjs` | Secciones DO/DON'T/errores de este LLM.md + guardianes en disco |
 | `src-layout.test.mjs` | Fuente en `src/`; sin carpetas raíz prohibidas |
+| `robots-sitemap.test.mjs` | `robots.txt` Allow `/` + sitemap de GitHub Pages |
 | `dist-cdn-layout.test.mjs` | Solo `cdn/` bajo `dist/` (nada tipo `dist/ag-grid.js`) |
 | `preview-json-contract.test.mjs` | Todos los JSON `is-preview/v1` + catalog ↔ manifest; cero HTML residual |
 | `preview-controller.test.mjs` | Kit JsonPreview + shell único `_shell.html` |
