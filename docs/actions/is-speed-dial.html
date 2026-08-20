@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Speed Dial · IS Web Components</title>
+  <meta name="description" content="Documentación de is-speed-dial.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/actions/is-speed-dial.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-flowchart", "is-speed-dial", "is-speed-dial-action");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-speed-dial" data-category="actions">
+    <h1>Speed Dial</h1>
+    <section id="intro">
+<p class="lede">FAB que al clic despliega un puñado de acciones rápidas. Apunta arriba por defecto; cambiá la dirección con el atributo <code class="code">direction</code>.</p>
+</section>
+<section id="up">
+<h2>Dirección: arriba</h2>
+<div class="demo"><div class="stage">
+            <is-speed-dial id="dial1">
+              <is-speed-dial-action icon="mdi:content-copy" label="Copiar">Copiar</is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:share-variant" label="Compartir">Compartir</is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:download" label="Descargar">Descargar</is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:pencil" label="Editar">Editar</is-speed-dial-action>
+            </is-speed-dial>
+          </div></div>
+</section>
+<section id="dirs">
+<h2>Otras direcciones</h2>
+<div class="demo"><div class="row-2">
+            <div class="stage" style="align-items:start">
+              <is-speed-dial direction="left" icon="mdi:cog" label="Ajustes">
+                <is-speed-dial-action icon="mdi:brush" label="Tema">Tema</is-speed-dial-action>
+                <is-speed-dial-action icon="mdi:translate" label="Idioma">Idioma</is-speed-dial-action>
+              </is-speed-dial>
+            </div>
+            <div class="stage" style="align-items:start">
+              <is-speed-dial direction="right" icon="mdi:dots-vertical" label="Más">
+                <is-speed-dial-action icon="mdi:share-variant" label="Compartir">Compartir</is-speed-dial-action>
+                <is-speed-dial-action icon="mdi:link-variant" label="Copiar enlace">Copiar enlace</is-speed-dial-action>
+              </is-speed-dial>
+            </div>
+          </div></div>
+</section>
+<section id="radial">
+<h2>Radial</h2>
+<p class="lede"><code class="code">direction="radial"</code> reparte las acciones en un abanico
+          alrededor del trigger. El ángulo inicial y la amplitud del arco se calculan
+          según el espacio libre dentro del contenedor, y cuando el arco no alcanza para
+          todas las acciones se abren <strong>anillos concéntricos</strong> con los
+          elementos desfasados medio paso (distribución en panal).</p>
+<div class="demo"><div class="radial-stage">
+            <is-speed-dial direction="radial" icon="mdi:plus" label="Crear" open
+                           data-wrapper=".radial-stage">
+              <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:calendar" label="Evento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:account" label="Contacto"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:tag" label="Etiqueta"></is-speed-dial-action>
+            </is-speed-dial>
+          </div></div>
+<div class="demo"><div class="radial-stage">
+            <is-speed-dial direction="radial" icon="mdi:cog" label="Ajustes" open
+                           data-arc="180" data-start-angle="-90" data-sweep="counter-clockwise"
+                           data-wrapper=".radial-stage">
+              <is-speed-dial-action icon="mdi:brush" label="Tema"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:translate" label="Idioma"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:bell" label="Avisos"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:shield" label="Privacidad"></is-speed-dial-action>
+            </is-speed-dial>
+          </div></div>
+<div class="demo"><div class="radial-stage radial-stage--tall">
+            <is-speed-dial direction="radial" icon="mdi:apps" label="Todo" open
+                           data-wrapper=".radial-stage--tall">
+              <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:calendar" label="Evento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:account" label="Contacto"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:tag" label="Etiqueta"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:chart-bar" label="Reporte"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:email" label="Correo"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:map-marker" label="Ubicación"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:music" label="Audio"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:video" label="Video"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:code-tags" label="Código"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:folder" label="Carpeta"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:star" label="Favorito"></is-speed-dial-action>
+            </is-speed-dial>
+          </div></div>
+<div class="demo"><p class="lede">
+          Pega el dial contra una esquina y el abanico se recorta y se gira solo hacia
+          donde hay sitio:
+        </p></div>
+<div class="demo"><div class="radial-stage radial-stage--corner">
+            <is-speed-dial direction="radial" icon="mdi:plus" label="Crear" open
+                           data-wrapper=".radial-stage--corner">
+              <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
+              <is-speed-dial-action icon="mdi:calendar" label="Evento"></is-speed-dial-action>
+            </is-speed-dial>
+          </div></div>
+<pre><code>&lt;is-speed-dial direction=&quot;radial&quot; data-arc=&quot;180&quot; data-start-angle=&quot;-90&quot;
+               data-sweep=&quot;counter-clockwise&quot; data-wrapper=&quot;.mi-lienzo&quot;&gt;
+  &lt;is-speed-dial-action icon=&quot;mdi:brush&quot; label=&quot;Tema&quot;&gt;&lt;/is-speed-dial-action&gt;
+&lt;/is-speed-dial&gt;</code></pre>
+</section>
+<section id="api">
+<h2>API</h2>
+<pre><code>const dial = document.querySelector('is-speed-dial');
+dial.open();         // abre
+dial.close();        // cierra
+dial.toggle();       // alterna
+dial.isOpen;         // boolean
+dial.addEventListener('is-select', e =&gt; console.log(e.detail.action.getAttribute('label')));
+dial.addEventListener('is-toggle', e =&gt; console.log('open=', e.detail.open));
+
+// Acciones: cada &lt;is-speed-dial-action&gt; emite is-select en el padre.
+// Si tiene href, no se cierra el dial al elegir.
+&lt;is-speed-dial-action icon=&quot;…&quot; label=&quot;…&quot; color=&quot;brand|neutral|success|warning|danger&quot; href=&quot;…&quot;&gt;Texto&lt;/is-speed-dial-action&gt;</code></pre>
+</section>
+<section id="log">
+<h2>Bitácora de eventos</h2>
+<p class="lede">Cada interacción con los diales de arriba aparece aquí. Sirve para ver
+          qué evento emite el componente y con qué detalle.</p>
+</section>
+  </article>
+</body>
+</html>
