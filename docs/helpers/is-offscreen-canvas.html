@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offscreen Canvas · IS Web Components</title>
+  <meta name="description" content="Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/helpers/is-offscreen-canvas.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-offscreen-canvas");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-offscreen-canvas" data-category="helpers">
+    <h1>Offscreen Canvas</h1>
+    <p class="lede">Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).</p>
+<section id="intro">
+<p class="lede">Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).</p>
+<div class="demo"><is-offscreen-canvas width="320" height="120"></is-offscreen-canvas></div>
+<pre><code>&lt;is-offscreen-canvas width=&quot;320&quot; height=&quot;120&quot;&gt;&lt;/is-offscreen-canvas&gt;</code></pre>
+<aside class="callout"><strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario.</aside>
+</section>
+  </article>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tiempo relativo · IS Web Components</title>
+  <meta name="description" content="Documentación de is-relative-time.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/helpers/is-relative-time.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-format", "is-relative-time");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-relative-time" data-category="helpers">
+    <h1>Tiempo relativo</h1>
+    <section id="intro">
+<p class="lede">Fechas relativas con <code class="code">Intl.RelativeTimeFormat</code> (nativo).
+          Locale por defecto: <code class="code">html lang</code> (sistema al boot) → <strong>es</strong>.
+          Alias de <code class="code">&lt;is-format type="relative"&gt;</code>.</p>
+<div class="demo"><span class="demo-label">sync · refresca cada ~30s · locale del sistema</span>
+          <p style="margin:0;font-size:1.15rem">Actualizado <is-relative-time id="live" sync></is-relative-time></p></div>
+</section>
+<section id="formats">
+<h2>Formatos</h2>
+<p class="lede">Mismos offsets relativos; cambia solo <code class="code">format</code> / <code class="code">numeric</code>.</p>
+<div class="demo"><div class="format-grid format-grid--cards">
+            <div class="format-grid__row">
+              <code class="format-grid__tag">long</code>
+              <is-relative-time class="format-grid__value" data-rt-offset="-86400" format="long"></is-relative-time>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">short</code>
+              <is-relative-time class="format-grid__value" data-rt-offset="-3600" format="short"></is-relative-time>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">narrow</code>
+              <is-relative-time class="format-grid__value" data-rt-offset="-120" format="narrow"></is-relative-time>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">numeric=always</code>
+              <is-relative-time class="format-grid__value" data-rt-offset="0" numeric="always"></is-relative-time>
+            </div>
+            <div class="format-grid__row">
+              <code class="format-grid__tag">en 3 días</code>
+              <is-relative-time class="format-grid__value" data-rt-offset="259200" format="long"></is-relative-time>
+            </div>
+          </div></div>
+<pre><code>&lt;is-relative-time date=&quot;2026-07-30T10:00:00&quot; format=&quot;short&quot; sync&gt;&lt;/is-relative-time&gt;
+&lt;is-relative-time date=&quot;…&quot; locale=&quot;en&quot; numeric=&quot;always&quot;&gt;&lt;/is-relative-time&gt;</code></pre>
+</section>
+<section id="locales">
+<h2>Locales (Intl nativo)</h2>
+<p class="lede">Se filtran con <code class="code">Intl.RelativeTimeFormat.supportedLocalesOf()</code>.
+          Cada tarjeta muestra el mismo instante relativo en ese locale. Como mínimo
+          verás <strong>es</strong> y <strong>en</strong> en cualquier motor moderno.</p>
+<div class="demo"><p class="demo-caption" id="localeCaption">Cargando locales…</p>
+          <div class="demo-locale-grid" id="localeGrid"></div>
+          <label class="demo-caption" style="display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap">
+            Probar locale
+            <input id="localeProbe" type="text" value="es-CO" list="localeHints"
+              style="font:inherit;padding:.35em .6em;border:1px solid var(--is-border);border-radius:var(--is-radius-sm);background:var(--is-control-bg);color:var(--is-text);max-width:10rem" />
+            <datalist id="localeHints"></datalist>
+            <span id="localeProbeOut"></span>
+          </label></div>
+<pre><code>&lt;is-relative-time date=&quot;…&quot; locale=&quot;es&quot;&gt;&lt;/is-relative-time&gt;
+&lt;is-relative-time date=&quot;…&quot; locale=&quot;en&quot;&gt;&lt;/is-relative-time&gt;
+&lt;is-relative-time date=&quot;…&quot; locale=&quot;ja&quot; format=&quot;short&quot;&gt;&lt;/is-relative-time&gt;</code></pre>
+</section>
+<section id="alias">
+<h2>Equivalente unificado</h2>
+<div class="demo"><p style="margin:0">
+            <is-format type="relative" data-rt-offset="-7200" style="short"></is-format>
+          </p></div>
+<pre><code>&lt;is-format type=&quot;relative&quot; date=&quot;…&quot; style=&quot;short&quot; locale=&quot;en&quot;&gt;&lt;/is-format&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
