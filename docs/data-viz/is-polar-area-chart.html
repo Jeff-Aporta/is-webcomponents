@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Polar Area Chart · IS Web Components</title>
+  <meta name="description" content="Documentación de is-polar-area-chart.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/data-viz/is-polar-area-chart.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-polar-area-chart");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-polar-area-chart" data-category="data-viz">
+    <h1>Polar Area Chart</h1>
+    <section id="intro">
+<p class="lede">Chart.js <code class="code">polarArea</code> themed. Ángulos iguales por categoría;
+          el <strong>radio</strong> refleja la magnitud (a diferencia de un pie, donde el tamaño
+          es el ángulo). Ideal para comparar escalas en el mismo “reloj”.</p>
+<div class="demo"><is-polar-area-chart open-on-click label="Mix energético (GW)">
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Solar", "Eólica", "Hidro", "Nuclear", "Gas", "Carbón"],
+                  "datasets": [{ "label": "GW instalados", "data": [85, 72, 110, 95, 58, 40] }]
+                }
+              }
+            </script>
+          </is-polar-area-chart></div>
+</section>
+<section id="datos">
+<h2>Datos</h2>
+<p class="lede">JSON hijo <code class="code">application/json</code> o propiedad <code class="code">config</code>. El <code class="code">type</code> queda fijo en <code class="code">polarArea</code>.</p>
+<div class="demo"><is-polar-area-chart open-on-click label="Canales de tráfico">
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Orgánico", "Directo", "Social", "Email", "Paid"],
+                  "datasets": [{ "label": "Sesiones", "data": [4200, 3100, 1800, 950, 2400] }]
+                }
+              }
+            </script>
+          </is-polar-area-chart></div>
+<pre><code>&lt;is-polar-area-chart label=&quot;Canales de tráfico&quot;&gt;
+  &lt;script type=&quot;application/json&quot;&gt;
+    {
+      &quot;data&quot;: {
+        &quot;labels&quot;: [&quot;Orgánico&quot;, &quot;Directo&quot;, &quot;Social&quot;, &quot;Email&quot;, &quot;Paid&quot;],
+        &quot;datasets&quot;: [{ &quot;label&quot;: &quot;Sesiones&quot;, &quot;data&quot;: [4200, 3100, 1800, 950, 2400] }]
+      }
+    }
+  &lt;/script&gt;
+&lt;/is-polar-area-chart&gt;</code></pre>
+</section>
+<section id="opciones">
+<h2>Opciones</h2>
+<p class="lede">Misma API de presentación que <code class="code">is-chart</code>: leyenda, animación, título.</p>
+<div class="demo"><span class="demo-label">legend-position="end"</span></div>
+<div class="demo"><is-polar-area-chart open-on-click label="NPS por segmento" legend-position="end">
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Promotores", "Pasivos", "Detractores"],
+                  "datasets": [{ "label": "%", "data": [62, 24, 14] }]
+                }
+              }
+            </script>
+          </is-polar-area-chart></div>
+<div class="demo"><span class="demo-label">without-legend</span></div>
+<div class="demo"><is-polar-area-chart open-on-click without-legend>
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["A", "B", "C", "D"],
+                  "datasets": [{ "data": [40, 55, 30, 70] }]
+                }
+              }
+            </script>
+          </is-polar-area-chart></div>
+<div class="demo"><span class="demo-label">without-animation</span></div>
+<div class="demo"><is-polar-area-chart open-on-click label="Sin animación" without-animation>
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Q1", "Q2", "Q3", "Q4"],
+                  "datasets": [{ "label": "Score", "data": [78, 82, 75, 90] }]
+                }
+              }
+            </script>
+          </is-polar-area-chart></div>
+<pre><code>&lt;is-polar-area-chart legend-position=&quot;end&quot; label=&quot;NPS&quot;&gt;…&lt;/is-polar-area-chart&gt;
+&lt;is-polar-area-chart without-legend&gt;…&lt;/is-polar-area-chart&gt;
+&lt;is-polar-area-chart without-animation&gt;…&lt;/is-polar-area-chart&gt;</code></pre>
+</section>
+<section id="tema">
+<h2>Tema · CSS variables</h2>
+<p class="lede">Colores por sector vía <code class="code">--fill-color-1..6</code> y
+          <code class="code">--border-color-1..6</code> en el host (o un ancestro).</p>
+<div class="demo"><is-polar-area-chart open-on-click class="polar-theme-demo" label="Paleta custom">
+            <script type="application/json">
+              {
+                "data": {
+                  "labels": ["Alpha", "Beta", "Gamma", "Delta", "Epsilon"],
+                  "datasets": [{ "label": "Índice", "data": [65, 88, 42, 70, 55] }]
+                }
+              }
+            </script>
+          </is-polar-area-chart></div>
+<pre><code>is-polar-area-chart.mi-tema {
+  --fill-color-1: color-mix(in srgb, #38bdf8 72%, transparent);
+  --fill-color-2: color-mix(in srgb, #a78bfa 72%, transparent);
+  --border-color-1: #38bdf8;
+  --border-color-2: #a78bfa;
+}</code></pre>
+</section>
+<section id="referencia">
+<h2>Referencia</h2>
+<p class="lede">Wrapper tipado de <code class="code">is-chart</code>. Hereda atributos, props y tokens.</p>
+</section>
+  </article>
+</body>
+</html>
