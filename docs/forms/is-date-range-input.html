@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Date Range Input · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de is-date-range-input de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/forms/is-date-range-input.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-date-range-input");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-date-range-input" data-category="forms">
+    <h1>Date Range Input</h1>
+    <p class="lede">Documentación y demos de is-date-range-input de InSoft.</p>
+<section id="intro">
+<p class="lede">Entrada de rango de fechas: una sola caja para inicio y fin.</p>
+<div class="demo"><is-date-range-input label="Periodo" start="2026-08-01" end="2026-08-31" style="max-width:360px"></is-date-range-input></div>
+<pre><code>&lt;is-date-range-input label=&quot;Periodo&quot; start=&quot;2026-08-01&quot; end=&quot;2026-08-31&quot; style=&quot;max-width:360px&quot;&gt;&lt;/is-date-range-input&gt;</code></pre>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+<p class="lede">&lt;is-date-range-input&gt; — Dos campos (inicio y fin) con el calendario de rango en el panel (MUI DateRangePicker). El valor es `inicio/fin`. Atributos: start-label, end-label, hint, name, value, min, max, required, disabled, readonly, clearable, locale, calendars, shortcuts, color, action-bar, placement, close-on-select Events: is-change, is-show, is-hide Methods: show(), hide()</p>
+<div class="demo"><p class="lede">
+          API declarada en el módulo fuente
+          <code class="code">components/forms/date-range-input.js</code>.
+        </p></div>
+</section>
+  </article>
+</body>
+</html>
