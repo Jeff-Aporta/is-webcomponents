@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copy Button · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-copy-button de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/actions/is-copy-button.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-copy-button", "is-flowchart", "is-icon");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-copy-button" data-category="actions">
+    <h1>Copy Button</h1>
+    <p class="lede">Documentación y demos del componente is-copy-button de InSoft.</p>
+<section id="intro">
+<p class="lede">Copia texto al portapapeles con feedback de éxito/error.</p>
+<div class="demo"><div class="copy-showcase">
+            <div class="copy-field">
+              <span class="copy-field__label">Endpoint de la API</span>
+              <div class="copy-field__row">
+                <code class="copy-field__value" id="cbValue">https://api.insoft.com.co/v1</code>
+                <is-copy-button from="cbValue" copy-label="Copiar" success-label="¡Copiado!"></is-copy-button>
+              </div>
+            </div>
+
+            <div class="copy-proof">
+              <label class="copy-proof__label" for="cbPaste">Pega aquí para comprobarlo</label>
+              <input id="cbPaste" class="from-input" type="text" placeholder="Ctrl+V / Cmd+V">
+            </div>
+          </div></div>
+<aside class="callout"><strong>Requiere contexto seguro.</strong>
+          <code class="code">clipboard.writeText()</code> necesita HTTPS o localhost.</aside>
+<pre><code>&lt;code id=&quot;cbValue&quot;&gt;https://api.insoft.com.co/v1&lt;/code&gt;
+&lt;is-copy-button from=&quot;cbValue&quot; copy-label=&quot;Copiar&quot; success-label=&quot;¡Copiado!&quot;&gt;&lt;/is-copy-button&gt;</code></pre>
+</section>
+<section id="from">
+<h2>Copiar desde otros elementos</h2>
+<p class="lede">Usa <code class="code">from</code> para apuntar a un <code class="code">id</code>.
+          Si hay <code class="code">value</code> y <code class="code">from</code>, gana <code class="code">from</code>.</p>
+<div class="demo"><div class="cluster">
+            <span id="my-phone">+57 300 123 4567</span>
+            <is-copy-button from="my-phone"></is-copy-button>
+          </div>
+          <div class="cluster">
+            <input id="my-input" class="from-input" type="text" value="Texto del usuario" />
+            <is-copy-button from="my-input.value"></is-copy-button>
+          </div>
+          <div class="cluster">
+            <a id="my-link" href="https://insoft.com.co">Sitio InSoft</a>
+            <is-copy-button from="my-link[href]"></is-copy-button>
+          </div></div>
+<pre><code>&lt;span id=&quot;my-phone&quot;&gt;+57 300 123 4567&lt;/span&gt;
+&lt;is-copy-button from=&quot;my-phone&quot;&gt;&lt;/is-copy-button&gt;
+
+&lt;is-copy-button from=&quot;my-input.value&quot;&gt;&lt;/is-copy-button&gt;
+&lt;is-copy-button from=&quot;my-link[href]&quot;&gt;&lt;/is-copy-button&gt;</code></pre>
+</section>
+<section id="labels">
+<h2>Labels custom</h2>
+<div class="demo"><is-copy-button
+            value="Labels custom"
+            copy-label="Clic para copiar"
+            success-label="¡Listo!"
+            error-label="Tu navegador no lo soporta"
+          ></is-copy-button></div>
+</section>
+<section id="icons">
+<h2>Iconos custom</h2>
+<div class="demo"><is-copy-button value="Iconos custom">
+            <is-icon slot="copy-icon" icon="mdi:clipboard-outline"></is-icon>
+            <is-icon slot="success-icon" icon="mdi:thumb-up"></is-icon>
+            <is-icon slot="error-icon" icon="mdi:close-circle"></is-icon>
+          </is-copy-button></div>
+</section>
+<section id="trigger">
+<h2>Trigger custom</h2>
+<p class="lede">Slot default: mete un <code class="code">is-button</code> u otro control.</p>
+<div class="demo"><is-copy-button value="Desde un botón custom">
+            <is-button variant="outlined" style="font-size:.8125rem">
+              <is-icon slot="start" icon="mdi:content-copy"></is-icon>
+              Copiar al portapapeles
+            </is-button>
+          </is-copy-button></div>
+</section>
+<section id="disabled">
+<h2>Disabled</h2>
+<div class="demo"><is-copy-button value="No se puede copiar" disabled></is-copy-button></div>
+</section>
+<section id="errors">
+<h2>Manejo de errores</h2>
+<p class="lede">Sin <code class="code">value</code> ni <code class="code">from</code> válido → <code class="code">is-error</code>.</p>
+<div class="demo"><is-copy-button id="errBtn"></is-copy-button>
+          <span class="card-meta" id="errLog">Haz clic para forzar error.</span></div>
+</section>
+<section id="duration">
+<h2>Feedback duration</h2>
+<div class="demo"><is-copy-button value="Rápido" feedback-duration="250" copy-label="250ms"></is-copy-button>
+          <is-copy-button value="Lento" feedback-duration="3000" copy-label="3s"></is-copy-button></div>
+</section>
+<section id="tooltip-mode">
+<h2>Tooltip mode</h2>
+<div class="demo"><is-copy-button value="full" tooltip="full" copy-label="full"></is-copy-button>
+          <is-copy-button value="copy" tooltip="copy" copy-label="copy (solo feedback)"></is-copy-button>
+          <is-copy-button value="none" tooltip="none" copy-label="none"></is-copy-button></div>
+</section>
+<section id="placement">
+<h2>Tooltip placement</h2>
+<p class="lede">El tooltip es un <code class="code">is-tooltip</code> interno, así que acepta los
+          doce placements de <code class="code">is-popover</code> y hace flip solo si no cabe
+          en la dirección pedida.</p>
+<div class="demo"><div class="placements">
+            <span class="placement-cell">
+              <is-copy-button value="top" tooltip-placement="top" copy-label="top"></is-copy-button>
+              <small class="placement-cell__name">top</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="top-start" tooltip-placement="top-start" copy-label="top-start"></is-copy-button>
+              <small class="placement-cell__name">top-start</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="top-end" tooltip-placement="top-end" copy-label="top-end"></is-copy-button>
+              <small class="placement-cell__name">top-end</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="right" tooltip-placement="right" copy-label="right"></is-copy-button>
+              <small class="placement-cell__name">right</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="right-start" tooltip-placement="right-start" copy-label="right-start"></is-copy-button>
+              <small class="placement-cell__name">right-start</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="right-end" tooltip-placement="right-end" copy-label="right-end"></is-copy-button>
+              <small class="placement-cell__name">right-end</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="bottom" tooltip-placement="bottom" copy-label="bottom"></is-copy-button>
+              <small class="placement-cell__name">bottom</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="bottom-start" tooltip-placement="bottom-start" copy-label="bottom-start"></is-copy-button>
+              <small class="placement-cell__name">bottom-start</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="bottom-end" tooltip-placement="bottom-end" copy-label="bottom-end"></is-copy-button>
+              <small class="placement-cell__name">bottom-end</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="left" tooltip-placement="left" copy-label="left"></is-copy-button>
+              <small class="placement-cell__name">left</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="left-start" tooltip-placement="left-start" copy-label="left-start"></is-copy-button>
+              <small class="placement-cell__name">left-start</small>
+            </span>
+            <span class="placement-cell">
+              <is-copy-button value="left-end" tooltip-placement="left-end" copy-label="left-end"></is-copy-button>
+              <small class="placement-cell__name">left-end</small>
+            </span>
+          </div></div>
+<pre><code>&lt;is-copy-button value=&quot;…&quot; tooltip-placement=&quot;bottom-start&quot;&gt;&lt;/is-copy-button&gt;</code></pre>
+</section>
+<section id="api">
+<h2>API live</h2>
+<div class="demo"><is-copy-button id="apiCopy" value="hola-is-copy"></is-copy-button></div>
+<div class="demo"><div class="log" id="apiLog"><div class="row"><span class="hint">Eventos is-copy / is-error aparecerán aquí.</span></div></div></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
