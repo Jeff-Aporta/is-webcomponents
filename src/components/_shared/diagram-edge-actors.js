@@ -69,7 +69,7 @@ function densify(pts, step = 14) {
   return out;
 }
 
-function overlap(a, b, padX = 10, padY = 12) {
+function overlap(a, b, padX = 4, padY = 6) {
   return a.x - padX < b.x + b.w
     && a.x + a.w + padX > b.x
     && a.y - padY < b.y + b.h
@@ -100,9 +100,9 @@ function separateActors(placed, obstacles, canvas) {
   void canvas;
 }
 
-function spiral() {
+function spiral(maxR = 16) {
   const out = [{ dx: 0, dy: 0 }];
-  for (let r = 1; r <= 16; r++) {
+  for (let r = 1; r <= maxR; r++) {
     for (let dx = -r; dx <= r; dx++) {
       out.push({ dx: dx * 12, dy: -r * 12 });
       out.push({ dx: dx * 12, dy: r * 12 });
@@ -115,7 +115,8 @@ function spiral() {
   return out;
 }
 
-const SPIRAL = spiral();
+const SPIRAL = spiral(16);
+const SPIRAL_GLUE = spiral(2);
 
 /**
  * Coloca chips de `edges[].label` como actores.
@@ -126,6 +127,7 @@ export function placeEdgeActors({
   edges = [],
   obstacles = [],
   canvas = { width: 800, height: 600 },
+  glue = false,
 } = {}) {
   const placed = [];
   const labeled = edges
@@ -146,11 +148,12 @@ export function placeEdgeActors({
       .map((p) => ({ p, d: Math.hypot(p.x - mid.x, p.y - mid.y) }))
       .sort((a, b) => a.d - b.d);
     const sample = ranked.length ? ranked.map((x) => x.p) : [mid];
+    const offsets = glue ? SPIRAL_GLUE : SPIRAL;
 
     let best = null;
     search:
     for (const p of sample) {
-      for (const s of SPIRAL) {
+      for (const s of offsets) {
         const rect = {
           x: p.x + s.dx - w / 2,
           y: p.y + s.dy - h / 2,
@@ -181,7 +184,7 @@ export function placeEdgeActors({
     e.labelH = h;
   }
 
-  separateActors(placed, obstacles, canvas);
+  if (!glue) separateActors(placed, obstacles, canvas);
   for (const e of labeled) {
     const r = e._actor;
     delete e._actor;
@@ -207,14 +210,15 @@ function edgeListOf(layout) {
 }
 
 /** Aplica actores al layout y agranda el lienzo si hace falta. */
-export function applyEdgeActorLayout(layout, obstacles) {
+export function applyEdgeActorLayout(layout, obstacles, opts = {}) {
   const edges = edgeListOf(layout);
   if (!edges) return layout;
-  spreadOrthogonalPaths(edges);
+  if (opts.spread !== false) spreadOrthogonalPaths(edges);
   const r = placeEdgeActors({
     edges,
     obstacles: obstacles ?? [],
     canvas: { width: layout.width, height: layout.height },
+    glue: opts.glue !== false,
   });
   layout.width = r.width;
   layout.height = r.height;

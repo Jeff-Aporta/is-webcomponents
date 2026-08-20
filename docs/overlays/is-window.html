@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Window · IS Web Components</title>
+  <meta name="description" content="Documentación de is-window.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/overlays/is-window.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-window");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-window" data-category="overlays">
+    <h1>Window</h1>
+    <section id="intro">
+<p class="lede">Ventana flotante con botones minimizar/maximizar/cerrar y drag del header. La esquina inferior derecha redimensiona cuando tiene el atributo <code>resizable</code>.</p>
+</section>
+<section id="basico">
+<h2>Escritorio</h2>
+<div class="demo"><div class="desk">
+            <note>Arrastra el header · doble-click maximiza · esquina redimensiona · doble-click en minimizada restaura</note>
+            <is-window
+              title="Editor — reporte mensual.txt"
+              x="40" y="40"
+              width="22rem" height="14rem"
+              minimizable maximizable closable resizable>
+              <p>Diseño minimalista del reporte mensual: KPIs arriba, treemap al medio, tabla abajo. Prueba a arrastrarlo y maximizarlo.</p>
+            </is-window>
+            <is-window
+              title="Clientes"
+              x="360" y="100"
+              width="18rem" height="12rem"
+              minimizable maximizable closable>
+              <ul style="margin:0; padding-left: 1.25rem; font-size:.85rem; color:var(--is-text-soft)">
+                <li>InSoft S.A. — contacto@ins.co</li>
+                <li>ContaPyme — hola@conta.co</li>
+                <li>AgroWin — soporte@agro.co</li>
+              </ul>
+            </is-window>
+          </div></div>
+</section>
+<section id="api">
+<h2>API</h2>
+<pre><code>const w = document.querySelector('is-window');
+w.minimize(); w.restore(); w.maximize(); w.unmaximize(); w.close();
+
+w.addEventListener('is-minimize',  () =&gt; /* guardó última posición y se fue al dock */);
+w.addEventListener('is-restore',   () =&gt; /* volvió a su posición anterior */);
+w.addEventListener('is-maximize',  () =&gt; /* ocupa toda la pantalla */);
+w.addEventListener('is-close',     () =&gt; /* se eliminó del DOM */);
+
+// Atributos
+// title, x, y, width, height
+// maximizable, minimizable, closable, resizable
+// default    normal | maximized | minimized
+// dock       bottom-right (default) | bottom | top | none
+
+// z-index se autoeleva al hacer click (sigue el foco del usuario)</code></pre>
+</section>
+  </article>
+</body>
+</html>
