@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check Icon Button · IS Web Components</title>
+  <meta name="description" content="Documentación y demos del componente is-check-icon-button de InSoft.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/actions/is-check-icon-button.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-button", "is-check-icon-button");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-check-icon-button" data-category="actions">
+    <h1>Check Icon Button</h1>
+    <p class="lede">Documentación y demos del componente is-check-icon-button de InSoft.</p>
+<section id="intro">
+<p class="lede">Botón icon-only con dos estados mutuamente excluyentes: muestra un solo icono
+          según <code class="code">checked</code>. Lo usan <code class="code">is-video</code>
+          (play/pausa, mute) e <code class="code">is-theme-toggle</code>.</p>
+<div class="demo"><div class="stack">
+            <span class="demo-label">caso mínimo</span>
+            <div class="cluster">
+              <is-check-icon-button
+                id="demoPlay"
+                icon="mdi:play"
+                checked-icon="mdi:pause"
+                label="Reproducir"
+                checked-label="Pausar"
+              ></is-check-icon-button>
+              <span class="card-meta" id="playState">estado: paused</span>
+            </div>
+          </div></div>
+<aside class="callout"><strong>Los dos labels son obligatorios.</strong>
+          El icono cambia pero el botón es el mismo nodo: sin
+          <code class="code">label</code> y <code class="code">checked-label</code>
+          un lector de pantalla anuncia lo mismo en ambos estados.</aside>
+<pre><code>&lt;is-check-icon-button
+  icon=&quot;mdi:play&quot;
+  checked-icon=&quot;mdi:pause&quot;
+  label=&quot;Reproducir&quot;
+  checked-label=&quot;Pausar&quot;
+&gt;&lt;/is-check-icon-button&gt;</code></pre>
+</section>
+<section id="pairs">
+<h2>Pares de iconos</h2>
+<p class="lede">Cualquier par que represente dos estados opuestos. El componente no asume
+          semántica: tú eliges los iconos y los labels.</p>
+<div class="demo"><div class="cluster" style="gap: 1.25rem;">
+            <is-check-icon-button icon="mdi:play" checked-icon="mdi:pause"
+              label="Reproducir" checked-label="Pausar"></is-check-icon-button>
+            <is-check-icon-button icon="mdi:volume-high" checked-icon="mdi:volume-off"
+              label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
+            <is-check-icon-button icon="mdi:weather-night" checked-icon="mdi:weather-sunny"
+              label="Cambiar a tema oscuro" checked-label="Cambiar a tema claro" checked></is-check-icon-button>
+            <is-check-icon-button icon="mdi:heart-outline" checked-icon="mdi:heart"
+              label="Añadir a favoritos" checked-label="Quitar de favoritos"></is-check-icon-button>
+            <is-check-icon-button icon="mdi:bookmark-outline" checked-icon="mdi:bookmark"
+              label="Guardar" checked-label="Quitar de guardados"></is-check-icon-button>
+            <is-check-icon-button icon="mdi:eye-off-outline" checked-icon="mdi:eye"
+              label="Mostrar contraseña" checked-label="Ocultar contraseña"></is-check-icon-button>
+          </div></div>
+</section>
+<section id="appearance">
+<h2>Appearance</h2>
+<p class="lede"><code class="code">appearance="plain"</code> lo compacta y hereda el color del
+          contenedor: es la variante para chrome oscura sobre vídeo o imágenes.</p>
+<div class="demo"><div class="stack">
+            <span class="demo-label">default · sobre superficie normal</span>
+            <div class="cluster">
+              <is-check-icon-button icon="mdi:play" checked-icon="mdi:pause"
+                label="Reproducir" checked-label="Pausar"></is-check-icon-button>
+              <is-check-icon-button icon="mdi:volume-high" checked-icon="mdi:volume-off"
+                label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
+            </div>
+
+            <span class="demo-label">appearance="plain" · sobre chrome de vídeo</span>
+            <div class="player-bar">
+              <is-check-icon-button variant="plain" icon="mdi:play" checked-icon="mdi:pause"
+                label="Reproducir" checked-label="Pausar"></is-check-icon-button>
+              <span>0:42</span>
+              <span class="track"><i></i></span>
+              <span>3:15</span>
+              <is-check-icon-button variant="plain" icon="mdi:volume-high" checked-icon="mdi:volume-off"
+                label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
+              <is-check-icon-button variant="plain" icon="mdi:fullscreen" checked-icon="mdi:fullscreen-exit"
+                label="Pantalla completa" checked-label="Salir de pantalla completa"></is-check-icon-button>
+            </div>
+          </div></div>
+<pre><code>&lt;is-check-icon-button variant=&quot;plain&quot; icon=&quot;mdi:volume-high&quot; checked-icon=&quot;mdi:volume-off&quot;
+  label=&quot;Silenciar&quot; checked-label=&quot;Activar sonido&quot;&gt;&lt;/is-check-icon-button&gt;</code></pre>
+</section>
+<section id="states">
+<h2>Estados</h2>
+<div class="demo"><div class="state-grid">
+            <div>
+              <span class="demo-label">unchecked</span>
+              <is-check-icon-button icon="mdi:heart-outline" checked-icon="mdi:heart"
+                label="Añadir a favoritos" checked-label="Quitar de favoritos"></is-check-icon-button>
+            </div>
+            <div>
+              <span class="demo-label">checked</span>
+              <is-check-icon-button icon="mdi:heart-outline" checked-icon="mdi:heart"
+                label="Añadir a favoritos" checked-label="Quitar de favoritos" checked></is-check-icon-button>
+            </div>
+            <div>
+              <span class="demo-label">disabled</span>
+              <is-check-icon-button icon="mdi:heart-outline" checked-icon="mdi:heart"
+                label="Añadir a favoritos" checked-label="Quitar de favoritos" disabled></is-check-icon-button>
+            </div>
+            <div>
+              <span class="demo-label">disabled + checked</span>
+              <is-check-icon-button icon="mdi:heart-outline" checked-icon="mdi:heart"
+                label="Añadir a favoritos" checked-label="Quitar de favoritos" disabled checked></is-check-icon-button>
+            </div>
+          </div></div>
+</section>
+<section id="keyboard">
+<h2>Teclado</h2>
+<p class="lede">Deshabilitado pasa a <code class="code">tabindex="-1"</code> y no responde a teclado ni a puntero.</p>
+</section>
+<section id="api">
+<h2>API live</h2>
+<div class="demo"><div class="stack">
+            <div class="cluster">
+              <is-check-icon-button id="apiBtn" icon="mdi:microphone" checked-icon="mdi:microphone-off"
+                label="Silenciar micrófono" checked-label="Activar micrófono"></is-check-icon-button>
+              <is-button id="apiToggle" variant="outlined">toggle()</is-button>
+              <is-button id="apiForce" variant="outlined">toggle(true)</is-button>
+              <is-button id="apiDisable" variant="outlined">Toggle disabled</is-button>
+            </div>
+          </div></div>
+<div class="demo"><div class="log" id="apiLog"><div class="row"><span class="hint">Eventos is-change aparecerán aquí.</span></div></div></div>
+</section>
+<section id="reference">
+<h2>Referencia</h2>
+</section>
+  </article>
+</body>
+</html>
