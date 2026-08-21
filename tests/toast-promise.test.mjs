@@ -20,6 +20,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
 const toastJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast.js'), 'utf8');
+const toastItemJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast-item.js'), 'utf8');
 const toastCss = await readFile(join(root, 'src', 'components', 'feedback', 'toast-item.css'), 'utf8');
 const preview = await readFile(join(root, 'src', 'previews', 'feedback', 'is-toast.json'), 'utf8');
 
@@ -78,6 +79,15 @@ check(/btn-promise-dynamic/.test(preview),
 
 check(/toaster\.promise\(/.test(preview),
   'preview: debe llamar a toaster.promise() en el código demo');
+
+check(/slot name="caption"/.test(toastItemJs),
+  'toast-item: slot caption bajo el título');
+check(/#copyPayload\(/.test(toastItemJs) && /is-after-show/.test(toastItemJs),
+  'toast-item: is-after-show lleva { color, message, caption, log }');
+check(/caption/.test(toastJs) && /item\.log = options\.log/.test(toastJs),
+  'toast.create: options.caption y options.log');
+check(/:host\(:has\(\[slot="caption"\]\)\)/.test(toastCss),
+  'toast-item.css: caption visible solo si hay slot');
 
 // El demo usa función como callback success/error (mensaje dinámico).
 check(/success:\s*\(data\)/.test(preview) || /async \(data\)/.test(preview),

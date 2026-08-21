@@ -16,8 +16,10 @@ import { normalizeIntent } from '../_shared/intent.js';
  *
  * Métodos
  *   create(message, options?) → Promise<is-toast-item>
- *     options: { color, icon, duration, allowHtml } — sin size
+ *     options: { color, icon, duration, allowHtml, caption, log } — sin size
  *     color: brand | success | warning | danger | neutral
+ *     caption: texto menor bajo el título (slot caption)
+ *     log: payload de consola; viaja en is-after-show, no se pinta
  *     duration default 5000; 0 = hasta dismiss
  *
  * Estáticos (paridad con ISP `overlays/Toaster.svelte`)
@@ -86,7 +88,7 @@ import { normalizeIntent } from '../_shared/intent.js';
 
     /**
      * @param {string} message
-     * @param {{ color?: string, icon?: string|boolean, duration?: number, allowHtml?: boolean }} [options]
+     * @param {{ color?: string, icon?: string|boolean, duration?: number, allowHtml?: boolean, caption?: string, log?: unknown }} [options]
      * @returns {Promise<HTMLElement>}
      */
     async create(message, options = {}) {
@@ -97,12 +99,7 @@ import { normalizeIntent } from '../_shared/intent.js';
 
       const duration = options.duration != null ? Number(options.duration) : 5000;
       item.duration = Number.isFinite(duration) ? Math.max(0, duration) : 5000;
-
-      if (options.allowHtml) {
-        item.innerHTML = String(message ?? '');
-      } else {
-        item.textContent = String(message ?? '');
-      }
+      this.#writeCopy(item, message, options);
 
       const iconOpt = options.icon;
       if (iconOpt !== false && iconOpt !== null) {
@@ -167,16 +164,28 @@ import { normalizeIntent } from '../_shared/intent.js';
       return { message: String(cb ?? fallback), options: {} };
     }
 
+    #writeCopy(item, message, options = {}) {
+      for (const n of [...item.childNodes]) {
+        if (n.nodeType === Node.TEXT_NODE || (n instanceof HTMLElement && n.slot !== 'icon')) n.remove();
+      }
+      if (options.allowHtml) item.insertAdjacentHTML('afterbegin', String(message ?? ''));
+      else item.insertBefore(document.createTextNode(String(message ?? '')), item.firstChild);
+      item.log = options.log;
+      const caption = String(options.caption ?? '').trim();
+      if (caption) {
+        const el = document.createElement('span');
+        el.slot = 'caption';
+        el.textContent = caption;
+        item.appendChild(el);
+      }
+    }
+
     /** Actualiza un toast vivo: mensaje, color, icono y relanza el timer. */
     #update(item, message, options = {}) {
       if (!item?.isConnected) return;
       const color = normalizeIntent(options.color ?? options.variant ?? item.color, 'neutral');
       item.color = color;
-      // Reemplazar texto conservando el slot icon.
-      for (const n of [...item.childNodes]) {
-        if (n.nodeType === Node.TEXT_NODE || (n instanceof HTMLElement && n.slot !== 'icon')) n.remove();
-      }
-      item.appendChild(document.createTextNode(String(message ?? '')));
+      this.#writeCopy(item, message, options);
       const iconEl = item.querySelector('is-icon[slot="icon"]');
       if (iconEl) {
         iconEl.removeAttribute('data-loading');
@@ -207,7 +216,8 @@ import { normalizeIntent } from '../_shared/intent.js';
     }
 
     static error(message, duration = 5000) {
-      return IsToast.host().create(message, { variant: 'danger', duration });
+      const extra = duration && typeof duration === 'object' ? duration : { duration };
+      return IsToast.host().create(message, { variant: 'danger', ...extra });
     }
 
     static success(message, duration = 3000) {

@@ -66,15 +66,16 @@ import './toast-item.js';
 
 | Slot | Uso |
 | --- | --- |
+| `default` | Título. |
 | `icon` | Contenido proyectado. |
 | `start` | Contenido proyectado. |
-| `default` | Contenido proyectado. |
+| `caption` | Texto menor bajo el título. |
 
 ### Eventos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-after-show` | no | sí | sí | no |
+| `is-after-show` | `{ color, message, caption, log }` | sí | sí | no |
 | `is-after-hide` | no | sí | sí | no |
 
 ### Métodos y propiedades públicas
@@ -93,6 +94,8 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `base` | Personalizable con `::part(base)`. |
 | `icon` | Personalizable con `::part(icon)`. |
 | `message` | Personalizable con `::part(message)`. |
+| `title` | Personalizable con `::part(title)`. |
+| `caption` | Personalizable con `::part(caption)`. |
 | `close-button` | Personalizable con `::part(close-button)`. |
 | `progress` | Personalizable con `::part(progress)`. |
 
@@ -141,10 +144,10 @@ Documentación de cabecera preservada desde fuente:
 >   color   brand | success | warning | danger | neutral (default brand)
 >   duration  number ms (default 5000; 0 = hasta dismiss). Reflect.
 >   open      boolean — visible
-> Slots: default, icon | start
+> Slots: default (título), caption, icon | start
 > Métodos: show(), hide()
-> Eventos (bubbles, composed): is-after-show, is-after-hide
-> CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(close-button) ::part(progress)
+> Eventos (bubbles, composed): is-after-show { color, message, caption, log }, is-after-hide
+> CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(title) ::part(caption) ::part(close-button) ::part(progress)
 
 ## Dependencias y componentes relacionados
 

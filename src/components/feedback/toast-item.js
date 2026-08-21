@@ -15,13 +15,18 @@ import '../actions/button.js';
  *   duration  number ms (default 5000; 0 = hasta dismiss). Reflect.
  *   open      boolean — visible
  *
- * Slots: default, icon | start
+ * Slots: default (título), caption (detalle), icon | start
  *
  * Métodos: show(), hide()
  *
- * Eventos (bubbles, composed): is-after-show, is-after-hide
+ * Eventos (bubbles, composed):
+ *   is-after-show  detail { color, message, caption, log }
+ *   is-after-hide
  *
- * CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(close-button) ::part(progress)
+ * CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(title) ::part(caption) ::part(close-button) ::part(progress)
+ *
+ * `log` es JS-only (no atributo): create() lo deja en el ítem para que la app
+ * imprima el Error/HTTP en consola al abrir, sin pintarlo en el toast.
  */
 
 (() => {
@@ -31,7 +36,10 @@ import '../actions/button.js';
       <span part="icon" class="icon">
         <slot name="icon"><slot name="start"></slot></slot>
       </span>
-      <div part="message" class="message"><slot></slot></div>
+      <div part="message" class="message">
+        <div part="title" class="title"><slot></slot></div>
+        <div part="caption" class="caption"><slot name="caption"></slot></div>
+      </div>
       <is-button
         class="close"
         variant="text"
@@ -132,6 +140,20 @@ import '../actions/button.js';
     get open() { return this.hasAttribute('open'); }
     set open(v) { this.toggleAttribute('open', !!v); }
 
+    /** Detalle de consola: no se refleja. Lo rellena `<is-toast>.create({ log })`. */
+    log = undefined;
+
+    #copyPayload() {
+      const cap = this.querySelector('[slot="caption"]');
+      const message = [...this.childNodes]
+        .filter((n) => n.nodeType === Node.TEXT_NODE || (n instanceof Element && !n.slot))
+        .map((n) => n.textContent)
+        .join('')
+        .trim();
+      const caption = String(cap?.textContent ?? '').trim();
+      return { color: this.color, message, caption: caption || undefined, log: this.log };
+    }
+
     /** Relanza el countdown con la duración actual (usado por toast.promise). */
     restartTimer() {
       if (this.hasAttribute('open')) this.#restartCountdown();
@@ -145,7 +167,7 @@ import '../actions/button.js';
       this.hidden = false;
       if (!this.hasAttribute('open')) this.setAttribute('open', '');
       this.#restartCountdown();
-      emit(this, 'is-after-show');
+      emit(this, 'is-after-show', this.#copyPayload());
       this.#showing = false;
       return this;
     }

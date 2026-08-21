@@ -109,9 +109,10 @@ Documentación de cabecera preservada desde fuente:
 >              bottom-start | bottom-center | bottom-end  (default bottom-end)
 > Métodos
 >   create(message, options?) → Promise<is-toast-item>
->     options: { color, icon, duration, allowHtml } — sin size
+>     options: { color, icon, duration, allowHtml, caption, log } — sin size
 >     color: brand | success | warning | danger | neutral
 >     duration default 5000; 0 = hasta dismiss
+>     caption: detalle bajo el título; log: payload de is-after-show (consola)
 > CSS Parts: ::part(stack)
 > Escucha is-after-hide de los ítems y los elimina del DOM.
 
