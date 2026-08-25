@@ -1,4 +1,8 @@
-/* <is-callout> — superficies con borde y fondo suaves. */
+/* <is-callout> — superficies con borde y fondo suaves.
+ *
+ * Borde/fondo/radius van en `.callout` (part=base), no en :host: el border
+ * del host en shadow DOM pinta esquinas cuadradas encima del radius.
+ */
 
 :host {
   --is-callout-bg: var(--is-bg-elev, #1c2128);
@@ -8,8 +12,6 @@
 
   display: block;
   box-sizing: border-box;
-  overflow: hidden;
-  border-radius: var(--_radius, var(--is-radius, 0.625em));
   font-family: var(--is-font-family, system-ui, sans-serif);
   color: var(--is-callout-text);
 
@@ -22,46 +24,48 @@
   --_icon-size: 1.4em;
   --_gap: 0.65em;
   --_radius: var(--is-radius, 0.625em);
-
-  /* ----- base layout ----- */
-  .callout {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: start;
-    gap: var(--_gap);
-    padding: var(--_pad-y) var(--_pad-x);
-    line-height: 1.45;
 }
 
-  .icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.callout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: var(--_gap);
+  padding: var(--_pad-y) var(--_pad-x);
+  line-height: 1.45;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: var(--_radius, var(--is-radius, 0.625em));
+  color: inherit;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--is-callout-accent);
-    font-size: var(--_icon-size);
-    line-height: 1;
-    padding-top: 0.1em;
+  font-size: var(--_icon-size);
+  line-height: 1;
+  padding-top: 0.1em;
 }
-  .icon ::slotted(is-icon) {
-    font-size: inherit;
+.icon ::slotted(is-icon) {
+  font-size: inherit;
   color: inherit;
 }
-  .icon .default-icon[hidden] { display: none !important; }
+.icon .default-icon[hidden] { display: none !important; }
 
-  .message {
-    min-width: 0;
+.message {
+  min-width: 0;
   color: inherit;
 }
-  .message ::slotted(*) { margin: 0; }
-  .message ::slotted(* + *) { margin-top: 0.4em; }
-  .message ::slotted(p:first-child) { margin-top: 0; }
-  .message ::slotted(p:last-child) { margin-bottom: 0; }
-  .message ::slotted(:is(h1, h2, h3, h4, h5, h6):first-child) {
-    margin: 0 0 0.2em;
-    font-size: 1.05em;
-    font-weight: 650;
-}
-
+.message ::slotted(*) { margin: 0; }
+.message ::slotted(* + *) { margin-top: 0.4em; }
+.message ::slotted(p:first-child) { margin-top: 0; }
+.message ::slotted(p:last-child) { margin-bottom: 0; }
+.message ::slotted(:is(h1, h2, h3, h4, h5, h6):first-child) {
+  margin: 0 0 0.2em;
+  font-size: 1.05em;
+  font-weight: 650;
 }
 
 /* Estados del host a top-level: `&[attr]` anidado dentro de :host no
@@ -104,7 +108,7 @@
   --is-callout-text: var(--is-danger-text, #ffb4b4);
 }
 
-:host([variant="filled"]) {
+:host([variant="filled"]) .callout {
   background: var(--is-callout-border);
   color: var(--is-on-brand, #fff);
   --is-callout-text: var(--is-on-brand, #fff);
@@ -112,25 +116,26 @@
   border: 0;
 }
 
-:host([variant="outlined"]) {
+:host([variant="outlined"]) .callout {
   background: transparent;
   color: var(--is-callout-text);
   border: 1px solid var(--is-callout-border);
 }
 
-:host([variant="filled-outlined"]), :host(:not([variant])) {
+:host([variant="filled-outlined"]) .callout,
+:host(:not([variant])) .callout {
   background: var(--is-callout-bg);
   color: var(--is-callout-text);
   border: 1px solid var(--is-callout-border);
 }
 
-:host([variant="plain"]) {
+:host([variant="plain"]) .callout {
   background: transparent;
   color: var(--is-callout-text);
   border: 0;
 }
 
-:host([variant="accent"]) {
+:host([variant="accent"]) .callout {
   background: var(--is-callout-bg);
   color: var(--is-callout-text);
   border: 0;
