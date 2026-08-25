@@ -1,15 +1,35 @@
 /**
  * Contenedor de tema del kit — misma cascada que is-theme-toggle.
- * [container-theme] | .container-theme | .theme-* | [data-theme] → <html>
+ * Atraviesa Shadow DOM (Element.closest se corta en el shadow root).
  */
 
 export const THEME_SCOPE =
   '[container-theme], .container-theme, .theme-dark, .theme-light, [data-theme]';
 
-/** @param {Element | null | undefined} from */
+/**
+ * Sube desde `from` atravesando hosts de shadow hasta hallar un ancestro
+ * que matchee THEME_SCOPE. Nunca devuelve `from` (aunque tenga data-theme).
+ * @param {Element | null | undefined} from
+ * @returns {Element}
+ */
 export function findThemeContainer(from) {
-  const el = from && typeof from.closest === 'function' ? from.closest(THEME_SCOPE) : null;
-  return el || document.documentElement;
+  let node = from && from.nodeType === 1 ? from : null;
+  while (node) {
+    const parent = node.parentElement;
+    if (parent) {
+      const hit = parent.closest(THEME_SCOPE);
+      if (hit) return hit;
+    }
+    const root = node.getRootNode?.();
+    if (root instanceof ShadowRoot && root.host) {
+      // El host puede llevar data-theme / .theme-*; comprobarlo y seguir subiendo.
+      if (root.host.matches(THEME_SCOPE)) return root.host;
+      node = root.host;
+      continue;
+    }
+    break;
+  }
+  return document.documentElement;
 }
 
 /** @param {Element | null | undefined} el */
@@ -22,12 +42,17 @@ export function readTheme(el) {
 }
 
 /**
- * Observa class/data-theme del contenedor. Devuelve disconnect().
+ * Observa class/data-theme del contenedor + `is-theme-change` (composed).
  * @param {Element} container
  * @param {() => void} onChange
+ * @returns {() => void}
  */
 export function watchThemeContainer(container, onChange) {
   const obs = new MutationObserver(onChange);
   obs.observe(container, { attributes: true, attributeFilter: ['class', 'data-theme'] });
-  return () => obs.disconnect();
+  document.addEventListener('is-theme-change', onChange);
+  return () => {
+    obs.disconnect();
+    document.removeEventListener('is-theme-change', onChange);
+  };
 }

@@ -134,12 +134,15 @@ import {
     #sync() {
       if (!this.#img) return;
       const theme = this.activeTheme;
-      this.setAttribute('data-theme', theme);
+      // data-active-theme (NO data-theme): data-theme entraría en THEME_SCOPE
+      // y closest() devolvería este host → el switch deja de seguir a <html>.
+      this.setAttribute('data-active-theme', theme);
 
       const dark = this.srcDark;
       const light = this.srcLight;
       const src = theme === 'light' ? light || dark : dark || light;
-      if (src && this.#img.getAttribute('src') !== src) this.#img.src = src;
+      // Forzar src: getAttribute vs .src (absoluto) puede no coincidir.
+      if (src) this.#img.src = src;
 
       this.#img.alt = this.alt;
       const loading = this.getAttribute('loading');

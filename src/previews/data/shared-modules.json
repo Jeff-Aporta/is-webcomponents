@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T17:17:36.108Z",
+  "generatedAt": "2026-08-25T17:25:09.347Z",
   "count": 66,
   "modules": [
     {
@@ -786,8 +786,8 @@
       "file": "theme-scope.js",
       "id": "theme-scope",
       "path": "src/components/_shared/theme-scope.js",
-      "summary": "Contenedor de tema del kit — misma cascada que is-theme-toggle. — [container-theme] | .container-theme | .theme-* | [data-theme] → <html>",
-      "bytes": 1195,
+      "summary": "Contenedor de tema del kit — misma cascada que is-theme-toggle. — Atraviesa Shadow DOM (Element.closest se corta en el shadow root).",
+      "bytes": 1937,
       "exports": [
         "THEME_SCOPE",
         "findThemeContainer",
