@@ -659,6 +659,10 @@ export default {
     "json": "./media/is-avatar.json",
     "category": "media"
   },
+  "is-theme-img": {
+    "json": "./media/is-theme-img.json",
+    "category": "media"
+  },
   "is-barcode": {
     "json": "./media/is-barcode.json",
     "category": "media"

@@ -35,6 +35,7 @@ const CATALOG = {
   // media
   'is-icon':              'media/icon',
   'is-avatar':            'media/avatar',
+  'is-theme-img':         'media/theme-img',
   'is-video':             'media/video',
   'is-video-playlist':    'media/video-playlist',
   'is-barcode':           'media/barcode',

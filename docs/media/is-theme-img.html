@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Theme Img · IS Web Components</title>
+  <meta name="description" content="Documentación de is-theme-img.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/docs/media/is-theme-img.html">
+  <link rel="stylesheet" href="../../src/styles/is-base.css">
+  <link rel="stylesheet" href="../../src/styles/palettes.css">
+  <link rel="stylesheet" href="../../src/styles/presentation.css">
+  <script type="module" src="../../dist/cdn/loader.min.js"></script>
+  <script type="module">
+    const L = globalThis.ISWebComponentsLoader;
+    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
+    await L.load("is-theme-img");
+  </script>
+</head>
+<body>
+  <article class="docs-page" data-tag="is-theme-img" data-category="media">
+    <h1>Theme Img</h1>
+    <section id="intro">
+<p class="lede">Una sola imagen dark↔light según el tema del contenedor. Caja <code class="code">1em × 1em</code>; escala con <code class="code">font-size</code>.</p>
+<div class="demo"><div class="demo-row" style="align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:3rem">
+            <is-theme-img
+              src-dark="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg"
+              src-light="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg"
+              alt="Demo"
+              shape="circle"
+            ></is-theme-img>
+            <span style="font-size:0.35em;opacity:.7">cambia el theme-toggle del chrome</span>
+          </div></div>
+<pre><code>&lt;span style=&quot;font-size:2rem&quot;&gt;
+  &lt;is-theme-img
+    src-dark=&quot;./logo-dark.svg&quot;
+    src-light=&quot;./logo-light.svg&quot;
+    alt=&quot;Marca&quot;
+    shape=&quot;circle&quot;
+  &gt;&lt;/is-theme-img&gt;
+&lt;/span&gt;</code></pre>
+</section>
+  </article>
+</body>
+</html>

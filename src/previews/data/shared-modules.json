@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-25T17:06:42.446Z",
-  "count": 65,
+  "generatedAt": "2026-08-25T17:17:36.108Z",
+  "count": 66,
   "modules": [
     {
       "file": "adopt-css.js",
@@ -780,6 +780,19 @@
         "pathArc",
         "roundedBarRect",
         "measureText"
+      ]
+    },
+    {
+      "file": "theme-scope.js",
+      "id": "theme-scope",
+      "path": "src/components/_shared/theme-scope.js",
+      "summary": "Contenedor de tema del kit — misma cascada que is-theme-toggle. — [container-theme] | .container-theme | .theme-* | [data-theme] → <html>",
+      "bytes": 1195,
+      "exports": [
+        "THEME_SCOPE",
+        "findThemeContainer",
+        "readTheme",
+        "watchThemeContainer"
       ]
     },
     {

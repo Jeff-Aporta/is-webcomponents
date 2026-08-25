@@ -23,6 +23,7 @@ export default [
   { tag: 'is-dropdown-item', title: 'Dropdown Item', category: 'actions', script: '../../components/actions/dropdown-item.js', style: '../../components/actions/dropdown-item.css', page: 'actions/is-dropdown-item.json' },
   { tag: 'is-icon', title: 'Icon', category: 'media', script: '../../components/media/icon.js', style: '../../components/media/icon.css', page: 'media/is-icon.json' },
   { tag: 'is-avatar', title: 'Avatar', category: 'media', script: '../../components/media/avatar.js', style: '../../components/media/avatar.css', page: 'media/is-avatar.json' },
+  { tag: 'is-theme-img', title: 'Theme Img', category: 'media', script: '../../components/media/theme-img.js', style: '../../components/media/theme-img.css', page: 'media/is-theme-img.json' },
   { tag: 'is-video', title: 'Video', category: 'media', script: '../../components/media/video.js', style: '../../components/media/video.css', page: 'media/is-video.json' },
   { tag: 'is-speech', title: 'Speech', category: 'media', script: '../../components/media/speech.js', style: '../../components/media/speech.css', page: 'media/is-speech.json' },
   { tag: 'is-media-recorder', title: 'Media Recorder', category: 'media', script: '../../components/media/media-recorder.js', style: '../../components/media/media-recorder.css', page: 'media/is-media-recorder.json' },

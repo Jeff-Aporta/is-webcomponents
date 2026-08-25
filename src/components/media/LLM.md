@@ -15,6 +15,7 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 | --- | --- | --- |
 | `<is-icon>` | [icon.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/icon.md) | Icon |
 | `<is-avatar>` | [avatar.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/avatar.md) | Avatar |
+| `<is-theme-img>` | [theme-img.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/theme-img.md) | Imagen dark↔light (logos); escala con font-size |
 | `<is-video>` | [video.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/video.md) | Video |
 | `<is-speech>` | [speech.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/speech.md) | Dictado y TTS (Web Speech) |
 | `<is-media-recorder>` | [media-recorder.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/media/media-recorder.md) | Cámara / mic / pantalla + MediaRecorder |
