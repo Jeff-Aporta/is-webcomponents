@@ -63,6 +63,7 @@ import './md-editor.js';
 | `src` | string | Atajo GET: equivale a `api.endpoints.get`. |
 | `filename` | string | Nombre de archivo en el header del diálogo. |
 | `fullscreen-scope` | `global` \| `local` | Ámbito del diálogo fullscreen. |
+| `fill` | boolean | El preview estira al 100% del alto del padre (paneles flex / splits). |
 
 #### Propiedades públicas
 

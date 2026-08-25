@@ -13,6 +13,27 @@
   --_radius: var(--is-radius, 0.625em);
 }
 
+/* Rellena el alto del padre (splits, paneles flex). Sin esto el preview
+   se queda en ~16em y el hueco vacío debajo da mala UX. */
+:host([fill]) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+}
+
+:host([fill]) .preview {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  height: auto;
+}
+
+:host([fill]) .dlg {
+  flex: none;
+}
+
 .preview {
   position: relative;
   display: flex;

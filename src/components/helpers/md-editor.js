@@ -31,6 +31,9 @@ import '../media/icon.js';
  * Footer: meta (chars, bytes, updatedAt, updatedBy) + Descargar (siempre) +
  * Descartar/Guardar si editable. Sin btn Cerrar en footer (usar X del header).
  *
+ * `fill`: el preview ocupa todo el alto del host (padre flex/split). Sin él,
+ * max-height ~16em y queda hueco vacío debajo en paneles altos.
+ *
  * Persistencia (elige una):
  *   - `api` / `src` → HTTP via md-editor-api.js
  *   - `.actions` → callbacks custom (load/persist/delete) sin app URL
