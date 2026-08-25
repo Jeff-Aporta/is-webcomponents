@@ -37,6 +37,7 @@ import './prefs-clear.js';
 
 ```html
 <is-prefs-clear></is-prefs-clear>
+<!-- Solo icono. Con etiqueta: <is-prefs-clear>Limpiar memoria UI</is-prefs-clear> -->
 ```
 
 ## Atributos
@@ -46,6 +47,7 @@ import './prefs-clear.js';
 | `confirm` | boolean | `false` = no pide confirmación (default true) |
 | `reload` | boolean | `false` = no recarga tras limpiar (default true) |
 | `variant` / `color` / `shape` | string | Se reenvían al `is-button` interno |
+| `title` / `aria-label` | string | Tooltip y nombre accesible (default “Limpiar memoria UI”) |
 
 ## Eventos
 

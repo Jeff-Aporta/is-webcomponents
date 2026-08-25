@@ -16,6 +16,7 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
  *   confirm   boolean — pide window.confirm antes (default true)
  *   reload    boolean — recarga la página tras limpiar (default true)
  *   variant / color / shape — se reenvían al is-button interno
+ *   Sin hijos en el slot → solo icono (aria-label / title dan el nombre).
  *
  * Events
  *   is-prefs-clear  detail: { tags: string[], reloaded: boolean }
@@ -24,15 +25,15 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-button part="button" type="button" color="neutral" variant="plain">
+    <is-button part="button" type="button" color="neutral" variant="plain" aria-label="Limpiar memoria UI">
       <is-icon slot="start" icon="mdi:broom" aria-hidden="true"></is-icon>
-      <slot>Limpiar memoria UI</slot>
+      <slot></slot>
     </is-button>
   `;
 
   class IsPrefsClear extends HTMLElement {
     static get observedAttributes() {
-      return ['confirm', 'reload', 'variant', 'color', 'shape', 'disabled', 'title'];
+      return ['confirm', 'reload', 'variant', 'color', 'shape', 'disabled', 'title', 'aria-label'];
     }
 
     #btn;
@@ -84,9 +85,12 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
 
     #syncAttrs() {
       if (!this.#btn) return;
-      for (const a of ['variant', 'color', 'shape', 'disabled', 'title']) {
+      for (const a of ['variant', 'color', 'shape', 'disabled', 'title', 'aria-label']) {
         if (this.hasAttribute(a)) this.#btn.setAttribute(a, this.getAttribute(a));
         else if (a === 'disabled' || a === 'title') this.#btn.removeAttribute(a);
+        else if (a === 'aria-label' && !this.hasAttribute(a)) {
+          this.#btn.setAttribute('aria-label', 'Limpiar memoria UI');
+        }
       }
     }
 
