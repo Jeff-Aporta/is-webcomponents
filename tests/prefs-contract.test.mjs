@@ -29,16 +29,19 @@ const prefsPath = join(root, 'src', 'components', '_shared', 'prefs.js');
 const agGridPath = join(root, 'src', 'components', 'data', 'ag-grid.js');
 const agGridMdPath = join(root, 'src', 'components', 'data', 'ag-grid.md');
 const mainPath = join(root, 'src', 'components', 'layout', 'main.js');
+const scrollMemoryPath = join(root, 'src', 'components', '_shared', 'scroll-memory.js');
 const splitPath = join(root, 'src', 'components', 'layout', 'split-panel.js');
 const dataLlm = join(root, 'src', 'components', 'data', 'LLM.md');
 
 check(existsSync(prefsPath), 'falta components/_shared/prefs.js');
+check(existsSync(scrollMemoryPath), 'falta components/_shared/scroll-memory.js');
 check(existsSync(agGridPath), 'falta components/data/ag-grid.js');
 check(existsSync(agGridMdPath), 'falta components/data/ag-grid.md — documentar el tag para LLM');
 
 const prefs = readFileSync(prefsPath, 'utf8');
 const agGrid = readFileSync(agGridPath, 'utf8');
 const mainSrc = readFileSync(mainPath, 'utf8');
+const scrollMemorySrc = readFileSync(scrollMemoryPath, 'utf8');
 const splitSrc = readFileSync(splitPath, 'utf8');
 
 // ── 1. prefs.js: raíz y API ─────────────────────────────────────────────
@@ -67,7 +70,7 @@ check(
 // ── 2. Consumidores importan prefs ──────────────────────────────────────
 for (const [label, src] of [
   ['ag-grid.js', agGrid],
-  ['main.js', mainSrc],
+  ['scroll-memory.js', scrollMemorySrc],
   ['split-panel.js', splitSrc],
 ]) {
   check(
@@ -75,6 +78,10 @@ for (const [label, src] of [
     `${label}: debe importar _shared/prefs.js (no reinventar store)`,
   );
 }
+check(
+  /from\s+['"][^'"]*scroll-memory\.js['"]/.test(mainSrc),
+  'main.js: debe delegar scroll a _shared/scroll-memory.js',
+);
 
 // ── 3. ag-grid: API de persistencia + UI columnas ───────────────────────
 check(agGrid.includes('replaceComponentPrefs'), 'ag-grid.js: guardar snapshot con replaceComponentPrefs');

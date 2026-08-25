@@ -134,7 +134,9 @@ Guardianes: `tests/er-clusters` · `tests/src-layout` · `tests/robots-sitemap` 
 - Un solo JSON: `localStorage['is-webcomponents'][tag][storage-key]`.
 - Opt-in del consumidor (`remember-state` / `remember-scroll` + `storage-key`).
 - Snapshot de grid → `replaceComponentPrefs`. Patch layout → `setComponentPrefs`. Reset → `removeComponentPrefs`.
-- Docs: `src/components/data/ag-grid.md`. Test: `tests/prefs-contract.test.mjs`.
+- Scroll compartido: `_shared/scroll-memory.js` → `is-main` (policy `reload`) y block/flex/grid vía `BreakpointHost` (policy `always`).
+- Geometría en layouts: `getWidth()`, `getHeight()`, `rect()` / `getRect()`, CSS `--clientw` / `--clienth`.
+- Docs: `src/components/data/ag-grid.md`, `isp/block-layout.md`. Tests: `prefs-contract`, `main-scroll`, `layout-geometry-scroll`.
 
 ### Layout `src/` (post-move)
 - Build: `compRoot = src/components`, estilos en `src/styles`, iconos en `src/assets/icons`.

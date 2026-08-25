@@ -103,6 +103,9 @@ para el `overflow: auto`.
 | --- | --- | --- |
 | `inline` | boolean | `display: inline-block`. |
 | `cscroll` | boolean | `overflow: auto`. |
+| `remember-scroll` | boolean | Opt-in memoria de scroll (requiere `storage-key`). |
+| `storage-key` | string | Clave bajo `is-webcomponents[is-block-layout]`. |
+| `scroll-ttl` | number | ms de validez (default 1h). |
 
 #### Atributos reflejados (salida)
 
@@ -117,9 +120,11 @@ para el `overflow: auto`.
 | --- | --- | --- |
 | `inline` | lectura/escritura | Refleja el atributo. |
 | `cscroll` | lectura/escritura | Refleja el atributo. |
+| `rememberScroll` / `storageKey` / `scrollTtl` | lectura/escritura | Memoria de scroll. |
 | `sizew` | solo lectura | Breakpoint actual. |
 | `boolszw` | solo lectura | Objeto `{ xs, sm, md, lg, xl }` de booleanos. |
 | `clientWidthMeasured` | solo lectura | Último ancho medido. |
+| `clientHeightMeasured` | solo lectura | Último alto medido. |
 
 ### Slots
 
@@ -131,14 +136,17 @@ para el `overflow: auto`.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sí | sí | no |
+| `is-breakpoint` | `{ width, height, sizew, boolszw, lerpw }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
 | Método | Uso |
 | --- | --- |
 | `lerpw(b0 = 'sm', b1 = 'xl')` | Progreso lineal (sin recortar) del ancho entre dos anclas. |
-| `measureWidth()` | Fuerza una medición inmediata. |
+| `measureSize()` / `measureWidth()` | Fuerza una medición inmediata. |
+| `getWidth()` / `getHeight()` | Dimensiones medidas del host (px). |
+| `rect()` / `getRect()` | `{ x, y, width, height, top, left, right, bottom }` en viewport. |
+| `saveScroll()` / `restoreScroll()` / `clearRememberedScroll()` / `scrollToTop()` | Memoria de scroll (si está habilitada). |
 
 ### CSS parts
 
@@ -155,6 +163,7 @@ No expone custom states.
 | Token | Uso |
 | --- | --- |
 | `--clientw` | Escrita por el componente: ancho en px sin unidad. |
+| `--clienth` | Escrita por el componente: alto en px sin unidad. |
 | `--lerpw` | Escrita por el componente: `lerpw('sm','xl')`. |
 
 

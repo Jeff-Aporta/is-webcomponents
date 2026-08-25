@@ -23,15 +23,20 @@ import { setStringAttr } from '../_shared/reflect.js';
  *   items        align-items
  *   inline       boolean  → display: inline-grid
  *   cscroll      boolean  → overflow: auto
+ *   remember-scroll, storage-key, scroll-ttl  → memoria de scroll (BreakpointHost)
  *
  * Eventos: `is-breakpoint` (ver block-layout.js).
+ * Geometría: getWidth(), getHeight(), rect() / getRect().
  */
 
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
-  const OBSERVED = ['cells', 'cells-fit', 'direction', 'gap', 'justify', 'items', 'inline', 'cscroll'];
+  const OBSERVED = [
+    'cells', 'cells-fit', 'direction', 'gap', 'justify', 'items', 'inline', 'cscroll',
+    ...BreakpointHost.scrollMemoryAttrs,
+  ];
 
   const IS_NUMBER = /^\d+(\.\d+)?$/;
 
@@ -52,7 +57,8 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#syncVars();
     }
 
-    onAttributeChanged(name) {
+    onAttributeChanged(name, prev, next) {
+      super.onAttributeChanged(name, prev, next);
       if (name === 'cells' || name === 'cells-fit' || name === 'gap') this.#syncVars();
     }
 

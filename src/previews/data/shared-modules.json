@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-20T22:48:31.867Z",
-  "count": 64,
+  "generatedAt": "2026-08-25T15:19:25.055Z",
+  "count": 65,
   "modules": [
     {
       "file": "adopt-css.js",
@@ -730,6 +730,18 @@
         "FALLBACK_LOCALE",
         "resolveLocale",
         "applyDocumentLocaleFromSystem"
+      ]
+    },
+    {
+      "file": "scroll-memory.js",
+      "id": "scroll-memory",
+      "path": "src/components/_shared/scroll-memory.js",
+      "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
+      "bytes": 7341,
+      "exports": [
+        "SCROLL_MEMORY_ATTRS",
+        "ScrollMemory",
+        "bindScrollMemoryApi"
       ]
     },
     {

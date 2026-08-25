@@ -8,6 +8,11 @@ import {
   hostToJson,
   json2html,
 } from '../_shared/json-html.js';
+import {
+  SCROLL_MEMORY_ATTRS,
+  ScrollMemory,
+  bindScrollMemoryApi,
+} from '../_shared/scroll-memory.js';
 
 /**
  * <is-block-layout> — port de ISP `layout/BlockLayout.svelte`.
@@ -15,9 +20,11 @@ import {
  * Cuerpo vía JSON compacto (mismo codec que `<is-form>`):
  *   block.json2html(body) / block.html2json() / toJSON() / fromJSON()
  *
- * Breakpoints: data-sizew, data-szw-*, --clientw, --lerpw, evento is-breakpoint.
+ * Breakpoints: data-sizew, data-szw-*, --clientw, --clienth, --lerpw, evento is-breakpoint.
+ * Geometría API: getWidth(), getHeight(), rect() / getRect().
+ * Scroll memory (opt-in): remember-scroll + storage-key (+ cscroll para overflow).
  *
- * Atributos: inline, cscroll
+ * Atributos: inline, cscroll, remember-scroll, storage-key, scroll-ttl
  */
 
 export const BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl'];
@@ -48,27 +55,54 @@ export function lerpFor(width, b0 = 'sm', b1 = 'xl') {
   return w1 === w0 ? 0 : (width - w0) / (w1 - w0);
 }
 
+export { SCROLL_MEMORY_ATTRS };
+
 /**
- * Base compartida: observa el ancho propio y publica el breakpoint.
+ * Base compartida: observa el tamaño propio y publica el breakpoint.
  * No llama a `adoptCss` — cada subclase adopta SU css hermano.
+ *
+ * Geometría y memoria de scroll viven aquí para que block/flex/grid las hereden.
  */
 export class BreakpointHost extends ElementBase {
   #ro = null;
   #width = -1;
+  #height = -1;
+  #scroll = null;
+
+  /** Subclases deben concatenar esto a su observedAttributes. */
+  static get scrollMemoryAttrs() { return SCROLL_MEMORY_ATTRS; }
 
   onConnected() {
-    this.#ro = new ResizeObserver(() => this.measureWidth());
+    this.#ro = new ResizeObserver(() => this.measureSize());
     this.#ro.observe(this);
-    this.measureWidth();
+    this.measureSize();
+    if (!this.#scroll) {
+      this.#scroll = new ScrollMemory(this, {
+        tag: this.localName || 'is-layout',
+        restorePolicy: 'always',
+      });
+      bindScrollMemoryApi(this, this.#scroll);
+    }
+    this.#scroll.connect();
   }
 
   onDisconnected() {
+    this.#scroll?.disconnect();
     this.#ro?.disconnect();
     this.#ro = null;
     this.#width = -1;
+    this.#height = -1;
+  }
+
+  onAttributeChanged(name, prev, next) {
+    if (SCROLL_MEMORY_ATTRS.includes(name)) {
+      this.#scroll?.onAttributeChanged(name, prev, next);
+    }
   }
 
   get clientWidthMeasured() { return Math.max(0, this.#width); }
+
+  get clientHeightMeasured() { return Math.max(0, this.#height); }
 
   get sizew() { return sizewFor(this.clientWidthMeasured); }
 
@@ -76,10 +110,41 @@ export class BreakpointHost extends ElementBase {
 
   lerpw(b0 = 'sm', b1 = 'xl') { return lerpFor(this.clientWidthMeasured, b0, b1); }
 
-  measureWidth() {
+  /** Ancho del host en px (medido; cae a clientWidth si aún no hay RO). */
+  getWidth() {
+    return this.#width >= 0 ? Math.max(0, this.#width) : Math.max(0, this.clientWidth);
+  }
+
+  /** Alto del host en px (medido; cae a clientHeight si aún no hay RO). */
+  getHeight() {
+    return this.#height >= 0 ? Math.max(0, this.#height) : Math.max(0, this.clientHeight);
+  }
+
+  /**
+   * Rectángulo del host en viewport (DOMRect-like plano).
+   * @returns {{ x: number, y: number, width: number, height: number, top: number, left: number, right: number, bottom: number }}
+   */
+  rect() {
+    const r = this.getBoundingClientRect();
+    return {
+      x: r.x, y: r.y, width: r.width, height: r.height,
+      top: r.top, left: r.left, right: r.right, bottom: r.bottom,
+    };
+  }
+
+  /** Alias de `rect()`. */
+  getRect() { return this.rect(); }
+
+  /** @deprecated usar measureSize — se mantiene por compat. */
+  measureWidth() { this.measureSize(); }
+
+  measureSize() {
     const width = this.clientWidth;
-    if (width === this.#width) return;
+    const height = this.clientHeight;
+    const same = width === this.#width && height === this.#height;
     this.#width = width;
+    this.#height = height;
+    if (same) return;
 
     const sizew = sizewFor(width);
     const boolszw = flagsFor(sizew);
@@ -89,9 +154,13 @@ export class BreakpointHost extends ElementBase {
 
     const lerpw = lerpFor(width);
     this.style.setProperty('--clientw', String(width));
+    this.style.setProperty('--clienth', String(height));
     this.style.setProperty('--lerpw', String(Math.round(lerpw * 1e4) / 1e4));
 
-    emit(this, 'is-breakpoint', { width, sizew, boolszw, lerpw: (b0, b1) => lerpFor(width, b0, b1) });
+    emit(this, 'is-breakpoint', {
+      width, height, sizew, boolszw,
+      lerpw: (b0, b1) => lerpFor(width, b0, b1),
+    });
   }
 }
 
@@ -101,7 +170,9 @@ export class BreakpointHost extends ElementBase {
 
   class IsBlockLayout extends BreakpointHost {
     static TEMPLATE = TEMPLATE;
-    static get observedAttributes() { return ['inline', 'cscroll']; }
+    static get observedAttributes() {
+      return ['inline', 'cscroll', ...SCROLL_MEMORY_ATTRS];
+    }
 
     static json2html = json2html;
     static html2json = html2json;

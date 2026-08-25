@@ -60,3 +60,6 @@
 :host([align="center"]) { align-items: center; }
 :host([align="stretch"]) { align-items: stretch; }
 :host([align="baseline"]) { align-items: baseline; }
+
+/* Misma semántica que block/grid: overflow auto + scrollbar del kit. */
+:host([cscroll]) { overflow: auto; min-height: 0; }

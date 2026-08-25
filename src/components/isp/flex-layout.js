@@ -24,9 +24,12 @@ import { defineElement } from '../_shared/define.js';
  *   items        alias de `align` (ISP aceptaba ambos; `align` gana)
  *   grow         boolean  → flex: 1 1 auto
  *   inline       boolean  → display: inline-flex
+ *   cscroll      boolean  → overflow: auto (habilita remember-scroll)
+ *   remember-scroll, storage-key, scroll-ttl  → memoria de scroll (BreakpointHost)
  *   width, height, min-width, min-height, max-width, max-height   string CSS
  *
  * Eventos: `is-breakpoint` (ver block-layout.js).
+ * Geometría: getWidth(), getHeight(), rect() / getRect().
  */
 
 (() => {
@@ -46,7 +49,8 @@ import { defineElement } from '../_shared/define.js';
 
   const OBSERVED = [
     ...Object.keys(SIZE_VARS),
-    'direction', 'wrap', 'justify', 'align', 'items', 'grow', 'inline',
+    'direction', 'wrap', 'justify', 'align', 'items', 'grow', 'inline', 'cscroll',
+    ...BreakpointHost.scrollMemoryAttrs,
   ];
 
   class IsFlexLayout extends BreakpointHost {
@@ -66,7 +70,8 @@ import { defineElement } from '../_shared/define.js';
       this.#syncVars();
     }
 
-    onAttributeChanged(name) {
+    onAttributeChanged(name, prev, next) {
+      super.onAttributeChanged(name, prev, next);
       if (name in SIZE_VARS) this.#syncVars();
     }
 
@@ -93,6 +98,9 @@ import { defineElement } from '../_shared/define.js';
 
     get inline() { return this.hasAttribute('inline'); }
     set inline(v) { this.setBooleanAttr('inline', v); }
+
+    get cscroll() { return this.hasAttribute('cscroll'); }
+    set cscroll(v) { this.setBooleanAttr('cscroll', v); }
   }
 
   defineElement('is-flex-layout', IsFlexLayout, 'IsFlexLayout');

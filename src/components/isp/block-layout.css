@@ -1,6 +1,7 @@
-/* <is-block-layout> — caja de bloque que mide su propio ancho.
+/* <is-block-layout> — caja de bloque que mide su propio tamaño.
    Índice de --vars publicadas por el JS (solo lectura desde CSS):
      --clientw : ancho del host en px, sin unidad.
+     --clienth : alto del host en px, sin unidad.
      --lerpw   : progreso 0→1 entre los breakpoints sm y xl. */
 
 :host {
