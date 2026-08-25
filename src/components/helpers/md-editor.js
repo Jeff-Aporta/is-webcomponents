@@ -79,7 +79,7 @@ import '../media/icon.js';
       <p class="preview-empty" part="preview-empty" hidden></p>
       <is-copy-button class="copy" part="copy" tooltip="full" copy-label="Copiar" success-label="Copiado"></is-copy-button>
     </div>
-    <is-dialog class="dlg" part="dialog" light-dismiss>
+    <is-dialog class="dlg" part="dialog" light-dismiss backdrop-variant="basic">
       <div slot="label" class="dlg-label-wrap">
         <span class="dlg-label" part="dialog-label"></span>
         <span class="dlg-filename" part="dialog-filename"></span>
@@ -253,6 +253,7 @@ import '../media/icon.js';
       this.#dlg.addEventListener('is-hide', () => this.#commitIfEditable());
       this.#dlg.addEventListener('is-after-hide', () => {
         if (this.hasAttribute('open')) this.removeAttribute('open');
+        this.#leaveTopLayer();
         emit(this, 'is-close', {});
       });
 
@@ -406,6 +407,7 @@ import '../media/icon.js';
 
     open() {
       if (this.#dlg.open) return;
+      this.#enterTopLayer();
       this.#dlg.show();
     }
 
@@ -413,6 +415,7 @@ import '../media/icon.js';
       if (!this.#dlg.open) return;
       if (this.canEdit) this.#commitDraft('is-change');
       this.#dlg.hide();
+      this.#leaveTopLayer();
     }
 
     /**
@@ -586,12 +589,31 @@ import '../media/icon.js';
       this.#dlg.style.position = local ? 'absolute' : '';
       this.#releaseScopeAnchor();
       if (!local) return;
+      this.#leaveTopLayer();
       const scope = this.closest('[data-md-editor-scope]');
       if (scope) this.#claimScopeAnchor(scope);
       else if (getComputedStyle(this).position === 'static') {
         this.style.position = 'relative';
         this.dataset.mdEditorAutoRelative = '1';
       }
+    }
+
+    /** Top layer escapa containing blocks (overflow/filter/transform en padres). */
+    #enterTopLayer() {
+      if (this.fullscreenScope === 'local') return;
+      if (typeof this.#dlg.showPopover !== 'function') return;
+      try {
+        if (!this.#dlg.hasAttribute('popover')) this.#dlg.setAttribute('popover', 'manual');
+        if (!this.#dlg.matches(':popover-open')) this.#dlg.showPopover();
+      } catch { /* popover no disponible o ya abierto */ }
+    }
+
+    #leaveTopLayer() {
+      if (typeof this.#dlg.hidePopover !== 'function') return;
+      try {
+        if (this.#dlg.matches(':popover-open')) this.#dlg.hidePopover();
+      } catch { /* ignore */ }
+      this.#dlg.removeAttribute('popover');
     }
 
     #claimScopeAnchor(scope) {

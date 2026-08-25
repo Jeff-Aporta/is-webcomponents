@@ -54,21 +54,31 @@
 
 .dlg { --width: min(96vw, 56rem); }
 
-/* Fullscreen del editor: por defecto ("global", sin atributo o
-   fullscreen-scope="global") el diálogo cubre el viewport completo. El
-   host de <is-dialog> (`.dlg`) ya es `position:fixed; inset:0` en su
-   propio :host, así que sólo hace falta que el panel interno (parte
-   `dialog`) deje de encogerse al ancho/alto de su contenido: se usa
-   ::part() porque tiene más especificidad que el `.dialog{}` interno
-   (clase + pseudo-elemento vs. sólo clase) y así no hace falta !important. */
-.dlg::part(dialog) {
-  width: 100vw;
-  height: 100dvh;
+/* Fullscreen global: is-dialog ya es host grid `fixed; inset:0` con
+   `place-items:center` y padding. El panel interno es `position:relative`
+   (ya no fixed+translate). Forzar 100vw/100dvh + top/left rompía el layout:
+   si un ancestro atrapa `fixed` (overflow/filter/transform), el origen queda
+   en el editor y se ve el desfase top/left con el chrome detrás.
+   Aquí el host estira el panel al 100% y el JS sube el diálogo al top layer
+   (popover) en modo global para escapar containing blocks. */
+.dlg {
+  padding: 0;
+  align-items: stretch;
+  justify-items: stretch;
+  /* Gana al UA de [popover]: fit-content + margin:auto encogen el host. */
+  width: 100%;
+  height: 100%;
   max-width: none;
   max-height: none;
-  top: 0;
-  left: 0;
-  transform: none;
+  margin: 0;
+  inset: 0;
+  box-sizing: border-box;
+}
+.dlg::part(dialog) {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
   border-radius: 0;
 }
 .dlg::part(body) {
@@ -76,27 +86,16 @@
   box-sizing: border-box;
 }
 
-/* fullscreen-scope="local": el diálogo se ancla al contenedor posicionado
-   más cercano (el propio host, o un ancestro con [data-md-editor-scope])
-   en vez de al viewport. `#applyFullscreenScope()` en el JS cambia
-   `.dlg.style.position` a "absolute" (gana por especificidad inline sobre
-   cualquier regla, incluido el `:host{position:fixed}` propio de
-   <is-dialog>) y fuerza `position:relative` en el contenedor elegido. Eso
-   sólo reposiciona el HOST de <is-dialog>: la parte `dialog` interna sigue
-   con `position:fixed; top:50%; left:50%; transform:translate(-50%,-50%)`
-   fijada al viewport (fixed no hereda el "absolute" del host como
-   containing block), así que hay que forzarla aquí también a
-   `absolute; inset:0` para que realmente quede dentro del contenedor. */
+/* fullscreen-scope="local": host absolute en el contenedor posicionado;
+   panel y backdrop absolutos inset 0 (no 100vw). */
 :host([fullscreen-scope="local"]) .dlg::part(dialog) {
   position: absolute;
   inset: 0;
-  top: 0;
-  left: 0;
-  transform: none;
   width: 100%;
   height: 100%;
   max-width: none;
   max-height: none;
+  border-radius: 0;
 }
 :host([fullscreen-scope="local"]) .dlg::part(body) {
   height: 100%;
