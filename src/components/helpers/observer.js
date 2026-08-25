@@ -118,9 +118,26 @@ class ObserverElement extends HTMLElement {
     this.#observer = null;
   }
 
+  /** Root del IO: closest (ancestro) → getRootNode (shadow) → document. */
+  #resolveIntersectionRoot() {
+    const rootSel = (this.getAttribute('root') || '').trim();
+    if (!rootSel) return null;
+    try {
+      const viaClosest = this.closest(rootSel);
+      if (viaClosest) return viaClosest;
+    } catch {
+      /* selector inválido para closest */
+    }
+    const scope = this.getRootNode();
+    if (scope instanceof Document || scope instanceof ShadowRoot) {
+      const viaScope = scope.querySelector(rootSel);
+      if (viaScope) return viaScope;
+    }
+    return document.querySelector(rootSel);
+  }
+
   #setupIntersection() {
-    const rootSel = this.getAttribute('root');
-    const root = rootSel ? document.querySelector(rootSel) : null;
+    const root = this.#resolveIntersectionRoot();
     const margin = this.getAttribute('root-margin') || '0px';
     const threshRaw = this.getAttribute('threshold');
     const threshold = threshRaw != null && threshRaw !== '' ? parseFloat(threshRaw) : 0;

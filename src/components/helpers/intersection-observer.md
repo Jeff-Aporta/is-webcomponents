@@ -105,7 +105,7 @@ Documentación de cabecera preservada desde fuente:
 >   disabled         boolean
 >   intersect-class  string — clase a togglear en el hijo
 >   once             boolean — deja de observar tras primera intersección
->   root             string — selector del root (default viewport)
+>   root             string — selector del root (closest → shadow → document; default viewport)
 >   root-margin      string
 >   threshold        number 0–1
 > Eventos
