@@ -21,7 +21,7 @@
         },
         {
           "kind": "html",
-          "html": "<is-dialog id=\"dlgStandard\" label=\"Diálogo estándar\">\r\n          <p>Esto es un diálogo estándar. Puedes poner cualquier contenido aquí.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" variant=\"outlined\">Cancelar</is-button>\r\n            <is-button data-dialog=\"close\" color=\"brand\">Aceptar</is-button>\r\n          </div>\r\n        </is-dialog>"
+          "html": "<is-dialog id=\"dlgStandard\" label=\"Diálogo estándar\" backdrop-variant=\"basic\">\r\n          <p>Esto es un diálogo estándar. Puedes poner cualquier contenido aquí.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" variant=\"outlined\">Cancelar</is-button>\r\n            <is-button data-dialog=\"close\" color=\"brand\">Aceptar</is-button>\r\n          </div>\r\n        </is-dialog>"
         },
         {
           "kind": "code",

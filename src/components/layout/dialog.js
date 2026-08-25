@@ -19,6 +19,9 @@ import { ModalBase } from '../_shared/modal-base.js';
  *   label             string  — título en el header (a11y).
  *   without-header    boolean — oculta el header y el botón de cerrar.
  *   light-dismiss     boolean — cierra al hacer click fuera del diálogo.
+ *   backdrop-variant  none | basic — tratamiento del fondo (default: none).
+ *                     none  → sin oscuridad ni blur (sigue capturando clics si light-dismiss).
+ *                     basic → oscuridad + blur. Otros looks: style/class del consumidor.
  *
  * Slots
  *   (default)        contenido principal (body).
@@ -37,14 +40,15 @@ import { ModalBase } from '../_shared/modal-base.js';
  *   is-after-hide  detail: {} — tras la animación de cierre.
  *
  * CSS Parts
- *   dialog, header, title, close-button, header-actions, body, footer
+ *   dialog, header, title, close-button, header-actions, body, footer, backdrop
  *
  * CSS custom properties
  *   --width          ancho preferido (default 500px)
  *   --spacing        padding interno (default var(--is-space-l, 1rem))
  *   --show-duration  duración de la animación de apertura
  *   --hide-duration  duración de la animación de cierre
- *   --backdrop-color color del backdrop
+ *   --backdrop-color color del backdrop (override fino; basic ya trae uno)
+ *   --backdrop-blur  radio de blur cuando variant=basic (default 8px)
  */
 
 (() => {
@@ -79,6 +83,9 @@ import { ModalBase } from '../_shared/modal-base.js';
     </div>
   `;
 
+  /** Valores oficiales del componente. Cualquier otro → se trata como none. */
+  const BACKDROP_VARIANTS = new Set(['none', 'basic']);
+
   class IsDialog extends ModalBase {
     /** Personalización por atributo (ver `_shared/style-attrs.js`). */
     static styleAttrs = {
@@ -90,7 +97,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     };
 
     static get observedAttributes() {
-      return [...super.observedAttributes, ...IsDialog.styleAttrNames];
+      return [...super.observedAttributes, 'backdrop-variant', ...IsDialog.styleAttrNames];
     }
 
     static __TEMPLATE = TEMPLATE;
@@ -101,6 +108,39 @@ import { ModalBase } from '../_shared/modal-base.js';
     constructor() {
       super();
       adoptCss(this.shadowRoot, import.meta.url);
+    }
+
+    /** none | basic. Ausente o inválido → none. */
+    get backdropVariant() {
+      const v = (this.getAttribute('backdrop-variant') || 'none').trim().toLowerCase();
+      return BACKDROP_VARIANTS.has(v) ? v : 'none';
+    }
+    set backdropVariant(v) {
+      const next = String(v ?? 'none').trim().toLowerCase();
+      if (!next || next === 'none') this.removeAttribute('backdrop-variant');
+      else this.setAttribute('backdrop-variant', BACKDROP_VARIANTS.has(next) ? next : 'none');
+    }
+
+    /** Serializa attrs públicos (útil en demos / JSON de preview). */
+    toJSON() {
+      return {
+        open: this.open,
+        label: this.label,
+        withoutHeader: this.withoutHeader,
+        lightDismiss: this.lightDismiss,
+        backdropVariant: this.backdropVariant,
+      };
+    }
+
+    /** Aplica un plain object (mismo shape que toJSON / demos JSON). */
+    fromJSON(json) {
+      if (!json || typeof json !== 'object') return this;
+      if (json.open != null) this.open = !!json.open;
+      if (json.label != null) this.label = String(json.label);
+      if (json.withoutHeader != null) this.withoutHeader = !!json.withoutHeader;
+      if (json.lightDismiss != null) this.lightDismiss = !!json.lightDismiss;
+      if (json.backdropVariant != null) this.backdropVariant = json.backdropVariant;
+      return this;
     }
 
     animateOpen() {

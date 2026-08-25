@@ -56,6 +56,7 @@ Contenido.
 | `label` | string/según contrato | Fuente define default/restricción. |
 | `without-header` | boolean | Fuente define default/restricción. |
 | `light-dismiss` | boolean | Fuente define default/restricción. |
+| `backdrop-variant` | `none` \| `basic` | Default `none` (sin oscuridad ni blur). `basic` = oscuridad + blur. Otros looks vía style/class. |
 
 #### Propiedades públicas
 
@@ -65,6 +66,7 @@ Contenido.
 | `label` | lectura/escritura | Declarada por clase. |
 | `withoutHeader` | lectura/escritura | Declarada por clase. |
 | `lightDismiss` | lectura/escritura | Declarada por clase. |
+| `backdropVariant` | lectura/escritura | `none` \| `basic`. |
 
 ### Slots
 

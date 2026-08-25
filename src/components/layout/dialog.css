@@ -7,7 +7,9 @@
   --is-dialog-spacing: var(--is-space-l, 1rem);
   /* modal-chrome.css lee --spacing; sin este alias header/body/footer quedan sin padding. */
   --spacing: var(--is-dialog-spacing);
-  --is-dialog-backdrop-color: rgba(0, 0, 0, 0.55);
+  /* Default backdrop-variant=none: sin oscuridad. basic pisa el color. */
+  --is-dialog-backdrop-color: transparent;
+  --is-dialog-backdrop-blur: 0px;
   --is-dialog-show-duration: 200ms;
   --is-dialog-hide-duration: 160ms;
 
@@ -38,10 +40,18 @@
 :host(:not([data-state])) .dialog { visibility: hidden; }
 :host(:not([data-state])) .backdrop { visibility: hidden; }
 
+/* Variante oficial: oscuridad + blur. Override fino vía --is-dialog-backdrop-*. */
+:host([backdrop-variant="basic"]) {
+  --is-dialog-backdrop-color: rgba(0, 0, 0, 0.55);
+  --is-dialog-backdrop-blur: 8px;
+}
+
 .backdrop {
   position: fixed;
   inset: 0;
   background: var(--is-dialog-backdrop-color);
+  backdrop-filter: blur(var(--is-dialog-backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--is-dialog-backdrop-blur));
   opacity: 0;
   pointer-events: auto;
 }
