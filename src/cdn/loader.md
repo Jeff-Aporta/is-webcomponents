@@ -29,6 +29,47 @@ await L.load('is-button', 'is-button-group');
 // o: L.load('actions') | L.load('all')
 ```
 
+## Sheet cache (apps)
+
+Evita flicker de CSS en ShadowRoot: Cache Storage + `adoptedStyleSheets`.
+
+```js
+L.sheets.install({ cacheName: 'mi-app-sheets-v1' });
+await L.sheets.warmFromCache();
+await L.sheets.warmFromManifest('./dist/cdn/hojas-manifest.json', {
+  base: './dist/cdn/',
+});
+await L.load('is-button');
+```
+
+API: `install`, `get`, `warm(hrefs)`, `warmFromCache`, `warmFromManifest(url, { base, key })`.
+
+## App components (`registerApp`)
+
+Registra tags propios (fuera del catálogo del kit). `load` / `ensure` los tratan igual que los `is-*` y calientan el CSS hermano si sheet-cache está activo.
+
+```js
+L.registerApp(
+  {
+    'paty-shell': './dist/cdn/all.min.js',
+    'mi-widget': { href: './widgets/mi-widget.js', css: './widgets/mi-widget.css' },
+  },
+  { cacheName: 'mi-app-sheets-v1' },
+);
+
+await L.load('is-button', 'paty-shell');
+await L.ensure('is-code'); // lazy: load + whenDefined
+```
+
+## Ensure (lazy)
+
+```js
+await L.ensure('is-code');           // catálogo del kit
+await L.ensure('mi-widget');         // registerApp
+await L.ensure('is-code', { href }); // href explícito
+L.isReady('is-code');                // sync
+```
+
 ## Anti-redundancia
 
 Registro **persistente** en la página:

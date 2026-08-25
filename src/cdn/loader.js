@@ -3,6 +3,8 @@
  *
  * - loadCSSBase / loadCSSPalettesDefault / load(tags|cats|all)
  * - pin(ref) / unpin() / configure({ ref, mirrors })
+ * - sheets.install / warm* — Cache Storage + adoptedStyleSheets (apps)
+ * - registerApp / ensure — tags de app + lazy ensure de custom elements
  * - Fallbacks entre espejos (jsDelivr → Pages)
  * - Registro persistente: si ya cargaste `actions`, `load('is-button')` no re-fetch
  * - loadPageStyles / loadPageModules para la galería
@@ -27,10 +29,13 @@ import {
   isTagCovered,
   tagKey,
 } from './load-plan.js';
+import { installSheetCache, getSheetCache, createSheetCache } from './sheet-cache.js';
+import { ensureElement, isElementReady } from './ensure-element.js';
 
 /** @typedef {{ category: string, file: string }} TagEntry */
 /** @typedef {{ categories: Record<string, string[]>, tags: Record<string, TagEntry>, aliases: Record<string, string> }} Catalog */
 /** @typedef {{ id: string, label?: string, hint?: string, pin?: boolean, base: (ref?: string) => string }} Mirror */
+/** @typedef {{ href: string, css?: string | string[] }} AppComponentEntry */
 
 /** @type {Catalog} */
 const CATALOG = __IS_LOADER_CATALOG__;
@@ -46,6 +51,10 @@ const state = {
 
 /** Registro de lo ya cargado en esta página (anti-redundancia). */
 const registry = createRegistry();
+
+/** Tags de la app consumidora (fuera del catálogo del kit). */
+/** @type {Map<string, AppComponentEntry>} */
+const appComponents = new Map();
 
 /** @type {Set<string>} */
 const cssDone = new Set();
@@ -204,11 +213,58 @@ function normalizeMirrors(input) {
   return out.length ? out : DEFAULT_MIRRORS.map((m) => ({ ...m }));
 }
 
+/** @param {string} id */
+function normTag(id) {
+  return String(id || '').trim().toLowerCase();
+}
+
+/** @param {AppComponentEntry} entry */
+async function warmEntryCss(entry) {
+  const sheets = getSheetCache();
+  if (!sheets?.calentar) return;
+  const list = [];
+  if (entry.css) {
+    const css = Array.isArray(entry.css) ? entry.css : [entry.css];
+    list.push(...css);
+  } else if (entry.href) {
+    list.push(entry.href.replace(/\.min\.js$/i, '.min.css').replace(/\.js$/i, '.css'));
+  }
+  if (list.length) await sheets.calentar(list);
+}
+
 export const ISWebComponentsLoader = {
   get catalog() { return CATALOG; },
   get repo() { return GH_REPO; },
   get mirrors() { return state.mirrors.slice(); },
   get selfBase() { return SELF_BASE; },
+
+  /** API de caché de hojas (adoptedStyleSheets + Cache Storage). */
+  sheets: {
+    /** @param {{ cacheName?: string }} [opts] */
+    install(opts = {}) {
+      return installSheetCache(opts);
+    },
+    get() {
+      return getSheetCache();
+    },
+    /** @param {string[]} hrefs */
+    warm(hrefs) {
+      const s = getSheetCache() || installSheetCache();
+      return s ? s.calentar(hrefs) : Promise.resolve();
+    },
+    warmFromCache() {
+      const s = getSheetCache() || installSheetCache();
+      return s ? s.calentarDesdeCache() : Promise.resolve();
+    },
+    /**
+     * @param {string} url
+     * @param {{ base?: string, key?: string }} [opts]
+     */
+    warmFromManifest(url, opts = {}) {
+      const s = getSheetCache() || installSheetCache();
+      return s ? s.calentarDesdeManifiesto(url, opts) : Promise.resolve();
+    },
+  },
 
   async baseUrl() {
     const bases = await cdnBases();
@@ -250,16 +306,52 @@ export const ISWebComponentsLoader = {
   },
 
   /**
-   * ¿Ya está cubierto (por tag, su categoría, o `all`)?
+   * Registra tags de la app (fuera del catálogo del kit). Luego `load('mi-tag')`
+   * importa su `href` y calienta CSS vía sheet-cache si está instalado.
+   *
+   * @param {Record<string, string | AppComponentEntry>} map
+   * @param {{ cacheName?: string, installSheets?: boolean }} [opts]
+   */
+  registerApp(map, opts = {}) {
+    if (opts.installSheets !== false) {
+      installSheetCache({ cacheName: opts.cacheName || 'is-sheets-v1' });
+    } else if (opts.cacheName) {
+      installSheetCache({ cacheName: opts.cacheName });
+    }
+    const baseDoc = typeof location !== 'undefined' ? location.href : SELF_BASE;
+    for (const [raw, value] of Object.entries(map || {})) {
+      const tag = normTag(raw);
+      if (!tag) continue;
+      const entry = typeof value === 'string'
+        ? { href: new URL(value, baseDoc).href }
+        : {
+            href: new URL(value.href, baseDoc).href,
+            css: value.css
+              ? (Array.isArray(value.css) ? value.css : [value.css]).map((c) => new URL(c, baseDoc).href)
+              : undefined,
+          };
+      appComponents.set(tag, entry);
+    }
+    return this;
+  },
+
+  /** Tags registrados por la app. */
+  getAppComponents() {
+    return Object.fromEntries([...appComponents.entries()].map(([k, v]) => [k, { ...v }]));
+  },
+
+  /**
+   * ¿Ya está cubierto (por tag, su categoría, `all`, o app registry cargado)?
    * @param {string} id
    */
   has(id) {
     if (id === 'all' || id === '*') return registry.all;
-    const raw = String(id || '').trim().toLowerCase();
+    const raw = normTag(id);
     const aliased = CATALOG.aliases[raw] || raw;
     if (CATALOG.categories[aliased]) {
       return registry.all || registry.cats.has(aliased);
     }
+    if (appComponents.has(raw) && registry.tags.has(raw)) return true;
     const tag = resolveTagId(id, CATALOG);
     return tag ? isTagCovered(tag, registry) : false;
   },
@@ -270,6 +362,7 @@ export const ISWebComponentsLoader = {
       all: registry.all,
       categories: [...registry.cats].sort(),
       tags: [...registry.tags].sort(),
+      app: [...appComponents.keys()].filter((t) => registry.tags.has(t)).sort(),
     };
   },
 
@@ -312,7 +405,7 @@ export const ISWebComponentsLoader = {
   },
 
   /**
-   * Carga tags/categorías/`all` sin re-fetch si ya están cubiertos.
+   * Carga tags/categorías/`all` (kit) y tags registrados con `registerApp`.
    * @param {...(string | Record<string, unknown>)} args
    * @returns {Promise<{ loaded: string[], skipped: string[] }>}
    */
@@ -320,14 +413,78 @@ export const ISWebComponentsLoader = {
     const { ids } = parseArgs(args);
     if (!ids.length) return { loaded: [], skipped: [] };
 
-    const { jobs, skipped } = planLoads(ids, registry, CATALOG);
-    await Promise.all(jobs.map((j) => importCdn(j.path)));
-    commitLoads(jobs, registry, CATALOG);
-    return {
-      loaded: jobs.map((j) => j.path),
-      skipped,
-    };
+    /** @type {string[]} */
+    const kitIds = [];
+    /** @type {string[]} */
+    const appIds = [];
+    /** @type {string[]} */
+    const skipped = [];
+
+    for (const id of ids) {
+      const raw = normTag(id);
+      if (appComponents.has(raw)) {
+        if (registry.tags.has(raw)) skipped.push(raw);
+        else appIds.push(raw);
+        continue;
+      }
+      kitIds.push(id);
+    }
+
+    /** @type {string[]} */
+    const loaded = [];
+
+    if (kitIds.length) {
+      const planned = planLoads(kitIds, registry, CATALOG);
+      skipped.push(...planned.skipped);
+      await Promise.all(planned.jobs.map((j) => importCdn(j.path)));
+      commitLoads(planned.jobs, registry, CATALOG);
+      loaded.push(...planned.jobs.map((j) => j.path));
+    }
+
+    for (const tag of appIds) {
+      const entry = appComponents.get(tag);
+      if (!entry) continue;
+      await warmEntryCss(entry);
+      await importOnce(entry.href);
+      registry.tags.add(tag);
+      loaded.push(entry.href);
+    }
+
+    return { loaded, skipped };
   },
+
+  /**
+   * Asegura que el custom element esté definido: load(tag) si hace falta + whenDefined.
+   * @param {string} tag
+   * @param {{ href?: string }} [opts]
+   */
+  async ensure(tag, opts = {}) {
+    const name = normTag(tag);
+    if (isElementReady(name)) return true;
+
+    if (appComponents.has(name) || resolveTagId(tag, CATALOG) || CATALOG.categories[CATALOG.aliases[name] || name]) {
+      return ensureElement(name, {
+        load: async () => {
+          await this.load(tag);
+        },
+        href: opts.href,
+      });
+    }
+
+    if (opts.href) {
+      return ensureElement(name, { href: opts.href });
+    }
+
+    try {
+      await this.load(tag);
+      await customElements.whenDefined(name);
+      return isElementReady(name);
+    } catch {
+      return false;
+    }
+  },
+
+  isReady: isElementReady,
 };
 
 if (typeof globalThis !== 'undefined') {
@@ -336,3 +493,5 @@ if (typeof globalThis !== 'undefined') {
 
 export default ISWebComponentsLoader;
 export { planLoads, commitLoads, createRegistry, tagKey };
+export { installSheetCache, getSheetCache, createSheetCache };
+export { ensureElement, isElementReady };
