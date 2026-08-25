@@ -63,12 +63,12 @@
 }
 
 /* surfaces / bg: azul desaturado sobre el primary de marca — c * 0.25.
- * Lienzo predominante ≈ #10151C (medido en consola ContaPyme dark). soft/elev
- * quedan un peldaño por encima para tarjetas, no para paneles a pantalla completa. */
+ * Lienzo predominante = #10151C (ContaPyme dark). soft/elev un peldaño arriba
+ * para tarjetas/chips, no para paneles a pantalla completa. */
 .theme-dark:not([data-palette]),
 .theme-dark[data-palette="contapyme"] {
   --is-contapyme-surface: oklch(from dodgerblue l calc(c * 0.25) h);
-  --is-bg: color-mix(in srgb, var(--is-contapyme-surface) 5%, #10151c);
+  --is-bg: #10151c;
   --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 5.5%, #121820);
   --is-bg-elev: color-mix(in srgb, var(--is-contapyme-surface) 6.5%, #161c26);
   --is-border: color-mix(in srgb, var(--is-contapyme-surface) 10%, #273040);
