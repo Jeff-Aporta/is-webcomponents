@@ -12,7 +12,7 @@ Elegir módulo mínimo que cubra necesidad. Abrir referencia específica; no inf
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `is-ui` · `IsUi` (módulo) | [ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) | Plantilla `html` / CSS / `define` para apps |
+| módulo `response-cache` | [response-cache.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/response-cache.md) | IndexedDB SWR (`createResponseCache`) |
 | `<is-popover>` | [popover.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/popover.md) | Popover |
 | `<is-format>` | [format.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/format.md) | Formato unificado (date/number/bytes/relative) |
 | `<is-relative-time>` | [relative-time.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/relative-time.md) | Tiempo relativo (alias) |

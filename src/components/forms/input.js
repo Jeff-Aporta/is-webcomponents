@@ -36,7 +36,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  * Parts: form-control, label, base, start, prefix, input, clear, toggle, suffix, end,
  *        support, hint, error-text, count
  * Custom states: blank, disabled, readonly, focused, invalid, password-visible
- * Eventos: is-input, is-change, is-typing-end (bubbles + composed) y los
+ * Eventos: is-input, is-change, is-typing-end, is-enter (bubbles + composed) y los
  *          nativos input/change
  * Tokens: --is-field-width, --is-field-label-width, --is-input-*
  */
@@ -179,6 +179,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
       this.#input.addEventListener('input', this.#onInput);
       this.#input.addEventListener('change', this.#onChange);
+      this.#input.addEventListener('keydown', this.#onKeydown);
       this.#input.addEventListener('focus', this.#onFocus);
       this.#input.addEventListener('blur', this.#onBlur);
       this.#clearBtn.addEventListener('click', this.#onClear);
@@ -536,6 +537,12 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
       emit(this, 'is-change', { value: this.#value });
+    };
+
+    #onKeydown = (e) => {
+      if (e.key !== 'Enter') return;
+      this.#value = this.#input.value;
+      emit(this, 'is-enter', { value: this.#value });
     };
 
     #onFocus = () => { setCustomState(this.#internals, 'focused', true); };
