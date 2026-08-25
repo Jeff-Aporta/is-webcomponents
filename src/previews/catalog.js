@@ -293,6 +293,10 @@ export default {
     "json": "./feedback/is-theme-toggle.json",
     "category": "feedback"
   },
+  "is-prefs-clear": {
+    "json": "./feedback/is-prefs-clear.json",
+    "category": "feedback"
+  },
   "is-toast-item": {
     "json": "./feedback/is-toast-item.json",
     "category": "feedback"

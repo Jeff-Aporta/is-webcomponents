@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-prefs-clear",
+  "category": "feedback",
+  "title": "<is-prefs-clear>",
+  "titleHtml": true,
+  "storageKey": "docs-is-prefs-clear",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-prefs-clear>",
+      "lede": "Borra <code>localStorage['is-webcomponents']</code> (splits, scrolls, grids) para auditar la carga inicial limpia.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-prefs-clear reload=\"false\"></is-prefs-clear>\n<span class=\"demo-label\" style=\"margin-left:.75rem\">en el preview no recarga la página</span>"
+        }
+      ]
+    }
+  ]
+}

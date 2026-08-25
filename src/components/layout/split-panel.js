@@ -26,7 +26,7 @@ import { clampTo } from '../_shared/misc-utils.js';
  *   disabled            boolean  (reflect)
  *   snap                string  (espacio-sep "100px 50%")
  *   snap-threshold      number  (default 12)  — px ventana de snap
- *   storage-key         string  — id único; persiste tamaño en localStorage (`is-components`)
+ *   storage-key         string  — id único; persiste tamaño en localStorage (`is-webcomponents`)
  *
  * Slots
  *   start     contenido del panel inicial
@@ -39,8 +39,8 @@ import { clampTo } from '../_shared/misc-utils.js';
  * CSS custom properties
  *   --divider-width    5px
  *   --divider-hit-area 12px
- *   --min              0
- *   --max              100%
+ *   --is-split-panel-min   0px   (atributo min-size)
+ *   --is-split-panel-max   100%  (atributo max-size)
  *
  * Eventos
  *   reposition  CustomEvent<number> bubbles+composed — detail = nueva posición (%)
@@ -179,7 +179,7 @@ import { clampTo } from '../_shared/misc-utils.js';
       this._syncDividerAria();
     }
 
-    /** Id único para persistir en localStorage (`is-components`). Vacío = no persiste. */
+    /** Id único para persistir en localStorage (`is-webcomponents`). Vacío = no persiste. */
     get storageKey() {
       return (this.getAttribute('storage-key') || '').trim();
     }
@@ -271,12 +271,33 @@ import { clampTo } from '../_shared/misc-utils.js';
 
     /** aplica px → cache + attr + position% (sin pisar cache en attributeChanged) */
     _syncPositionFromPixels(px) {
-      this._cachedPositionInPixels = px;
-      this.setAttribute('position-in-pixels', String(px));
+      const bounded = this._clampPrimaryPixels(px);
+      this._cachedPositionInPixels = bounded;
+      this.setAttribute('position-in-pixels', String(Math.round(bounded)));
       if (!(this._size > 0)) return;
       this._fromPixels = true;
-      try { this.position = this._pixelsToPercentage(px); }
+      try { this.position = this._pixelsToPercentage(bounded); }
       finally { this._fromPixels = false; }
+    }
+
+    /** min-size / max-size del markup → px con el tamaño actual. */
+    _parseSizeAttr(raw, fallbackPct) {
+      const s = String(raw ?? '').trim();
+      if (!s) return this._size * (fallbackPct / 100);
+      if (s.endsWith('%')) return this._size * (parseFloat(s) / 100);
+      const n = parseFloat(s);
+      return Number.isFinite(n) ? n : this._size * (fallbackPct / 100);
+    }
+
+    /**
+     * Evita el caso minmax(min%, pxPequeño): si el px guardado es menor que
+     * min-size, CSS deja la pista en el valor pequeño y la UX inicial se rompe.
+     */
+    _clampPrimaryPixels(px) {
+      if (!(this._size > 0) || !Number.isFinite(px)) return px;
+      const minPx = this._parseSizeAttr(this.getAttribute('min-size'), 0);
+      const maxPx = this._parseSizeAttr(this.getAttribute('max-size'), 100);
+      return clampTo(px, Math.max(0, minPx), Math.min(this._size, maxPx));
     }
 
     _detectSize() {
@@ -348,10 +369,12 @@ import { clampTo } from '../_shared/misc-utils.js';
         : pxAttr;
 
       if (Number.isFinite(px)) {
-        primaryTrack = `minmax(var(--min, 0px), min(${Math.max(0, px)}px, var(--max, 100%)))`;
+        const bounded = this._clampPrimaryPixels(px);
+        this._cachedPositionInPixels = bounded;
+        primaryTrack = `minmax(0px, min(max(${Math.max(0, bounded)}px, var(--is-split-panel-min, 0px)), var(--is-split-panel-max, 100%)))`;
       } else {
         const pct = this.position;
-        primaryTrack = `clampTo(0%, clampTo(var(--min), ${pct}% - var(--_divider-width) / 2, var(--max)), calc(100% - var(--_divider-width)))`;
+        primaryTrack = `clamp(0%, clamp(var(--is-split-panel-min, 0%), ${pct}% - var(--_divider-width) / 2, var(--is-split-panel-max, 100%)), calc(100% - var(--_divider-width)))`;
       }
 
       const template = this.primary === 'end'
@@ -400,6 +423,7 @@ import { clampTo } from '../_shared/misc-utils.js';
       if (this.primary === 'end') px = this._size - px;
       px = clampTo(px, 0, this._size);
       px = this._applySnap(px);
+      px = this._clampPrimaryPixels(px);
       this._syncPositionFromPixels(px);
       this._updateStyles();
       this._syncDividerAria();

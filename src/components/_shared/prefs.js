@@ -96,6 +96,28 @@ export function removeComponentPrefs(tag, key) {
   writeRoot(root);
 }
 
+/** Snapshot del root (solo lectura; para auditoría). */
+export function peekComponentPrefsRoot() {
+  return readRoot();
+}
+
+/**
+ * Limpia TODA la memoria de componentes (`is-webcomponents` + legacy).
+ * Splits, scrolls, grids, etc. Vuelve a los defaults del markup.
+ * @returns {{ cleared: boolean, tags: string[] }}
+ */
+export function clearAllComponentPrefs() {
+  const before = readRoot();
+  const tags = Object.keys(before || {});
+  try {
+    localStorage.removeItem(ROOT_KEY);
+    localStorage.removeItem(LEGACY_ROOT_KEY);
+  } catch {
+    /* quota / private */
+  }
+  return { cleared: true, tags };
+}
+
 export function getPrefsRootKey() {
   return ROOT_KEY;
 }

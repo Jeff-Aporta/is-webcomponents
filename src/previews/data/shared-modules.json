@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T16:29:57.400Z",
+  "generatedAt": "2026-08-25T17:06:42.446Z",
   "count": 65,
   "modules": [
     {
@@ -677,12 +677,14 @@
       "id": "prefs",
       "path": "src/components/_shared/prefs.js",
       "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"is-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
-      "bytes": 3221,
+      "bytes": 3829,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
         "replaceComponentPrefs",
         "removeComponentPrefs",
+        "peekComponentPrefsRoot",
+        "clearAllComponentPrefs",
         "getPrefsRootKey",
         "getLegacyPrefsRootKey"
       ]

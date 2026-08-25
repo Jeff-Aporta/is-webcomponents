@@ -34,6 +34,7 @@ export default [
   { tag: 'is-progress-bar', title: 'Progress Bar', category: 'feedback', script: '../../components/feedback/progress-bar.js', style: '../../components/feedback/progress-bar.css', page: 'feedback/is-progress-bar.json' },
   { tag: 'is-progress-ring', title: 'Progress Ring', category: 'feedback', script: '../../components/feedback/progress-ring.js', style: '../../components/feedback/progress-ring.css', page: 'feedback/is-progress-ring.json' },
   { tag: 'is-theme-toggle', title: 'Theme Toggle', category: 'feedback', script: '../../components/feedback/theme-toggle.js', style: '../../components/feedback/theme-toggle.css', page: 'feedback/is-theme-toggle.json' },
+  { tag: 'is-prefs-clear', title: 'Prefs Clear', category: 'feedback', script: '../../components/feedback/prefs-clear.js', style: '../../components/feedback/prefs-clear.css', page: 'feedback/is-prefs-clear.json' },
   { tag: 'is-toast', title: 'Toast', category: 'feedback', script: '../../components/feedback/toast.js', style: '../../components/feedback/toast.css', page: 'feedback/is-toast.json' },
   { tag: 'is-toast-item', title: 'Toast Item', category: 'feedback', script: '../../components/feedback/toast-item.js', style: '../../components/feedback/toast-item.css', page: 'feedback/is-toast-item.json' },
   { tag: 'is-tooltip', title: 'Tooltip', category: 'feedback', script: '../../components/feedback/tooltip.js', style: '../../components/feedback/tooltip.css', page: 'feedback/is-tooltip.json' },

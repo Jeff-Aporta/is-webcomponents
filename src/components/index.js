@@ -48,6 +48,7 @@ const CATALOG = {
   'is-progress-bar':      'feedback/progress-bar',
   'is-progress-ring':     'feedback/progress-ring',
   'is-theme-toggle':      'feedback/theme-toggle',
+  'is-prefs-clear':       'feedback/prefs-clear',
   'is-toast':             'feedback/toast',
   'is-toast-item':        'feedback/toast-item',
   'is-tooltip':           'feedback/tooltip',

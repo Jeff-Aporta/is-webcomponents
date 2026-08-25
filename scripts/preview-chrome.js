@@ -10,6 +10,7 @@
  * página lo carga por su cuenta, igual que este módulo.
  */
 import '../src/components/feedback/theme-toggle.js';
+import '../src/components/feedback/prefs-clear.js';
 import '../src/components/actions/button.js';
 import '../src/components/actions/button-group.js';
 import '../src/components/media/icon.js';
@@ -106,6 +107,12 @@ function mount() {
     </label>
     <is-button-group class="preview-chrome__actions" pill aria-label="Acciones de la vista">
       <is-theme-toggle id="previewTheme"></is-theme-toggle>
+      <is-prefs-clear
+        id="previewPrefsClear"
+        color="neutral"
+        variant="plain"
+        title="Limpiar memoria UI (splits, scrolls…)"
+      ></is-prefs-clear>
       <is-button
         id="previewSave"
         class="preview-chrome__save"
