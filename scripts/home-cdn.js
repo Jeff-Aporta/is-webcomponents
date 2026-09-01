@@ -5,7 +5,7 @@
 const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
 
 // dist/cdn folderizado por categoria: <categoria>/<tag>.min.js
-import manifest from '../manifest.js';
+import manifest from '../src/manifest.js';
 import { paint } from '../src/components/_shared/highlight-code.js';
 const catOf = (name) => manifest.find((c) => c.tag === `is-${name}`)?.category || 'helpers';
 const cdnJs = (name) => `${CDN}/${catOf(name)}/${name}.min.js`;
@@ -31,7 +31,7 @@ const buildJsCssSnippet = () => [
 ].join('\n');
 
 const buildBundleSnippet = () => [
-  `${open}script type="module" src="${CDN}/loader.min.js"${close}${open}${slash}script${close}`,
+  `${open}script type="module" src="${CDN}/core/loader.min.js"${close}${open}${slash}script${close}`,
   `${open}script type="module"${close}`,
   `  const L = globalThis.ISWebComponentsLoader;`,
   `  await L.loadCSSBase();`,
@@ -79,7 +79,7 @@ const buildDemoHtml = (variant) => {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IS Web Components · demo CDN</title>
-  <link rel="stylesheet" href="${CDN}/is-base.min.css">
+  <link rel="stylesheet" href="${CDN}/core/is-base.min.css">
   <style>
     :root { color-scheme: dark; }
     body {

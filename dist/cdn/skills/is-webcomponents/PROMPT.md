@@ -1,4 +1,4 @@
-# IS Web Components (Instrucciones para LLM)
+﻿# IS Web Components (Instrucciones para LLM)
 
 Utiliza **IS Web Components** exclusivamente mediante **CDN** (o copia local vía `/is-webcomponents:local`).
 
@@ -121,7 +121,7 @@ Utiliza siempre **jsDelivr** con un SHA fijo (pinned commit) para garantizar ver
 Sustituye `{{SHA}}` por el tip de `main` (referencia: `ca31ad04be5bba79c8ef4652b7540058169ca891`).
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.js"></script>
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
@@ -159,7 +159,7 @@ const css=u=>new Promise((ok,err)=>{
 
 for(const base of MIRRORS){
  try{
-  await import(`${base}/loader.min.js`);
+  await import(`${base}/core/loader.min.js`);
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
   await L.loadCSSPalettesDefault();

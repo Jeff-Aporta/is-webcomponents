@@ -76,7 +76,7 @@ pasar `toolbar-tools="false"` y **no** activar `quick-filter` /
 - Preservar accesibilidad, validación y fallbacks.
 - Ejecutar `node scripts/docs-consistency.selfcheck.mjs`.
 - Tras añadir API a data-grid: actualizar `data-grid.md` + test de
-  invariante (`tests/data-grid-toolbar.test.mjs`) + build CDN + push.
+  invariante (`tests/data-grid-toolbar.test.ts`) + build CDN + push.
 
 ## Qué no hacer
 

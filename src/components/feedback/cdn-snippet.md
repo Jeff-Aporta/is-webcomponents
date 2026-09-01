@@ -1,4 +1,4 @@
----
+﻿---
 tag: is-cdn-snippet
 tags:
   - is-cdn-snippet
@@ -60,7 +60,7 @@ import './cdn-snippet.js';
 ### Snippet generado (forma canónica)
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js"></script>
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
@@ -87,4 +87,4 @@ import './cdn-snippet.js';
 | Panel enseña `all.min.js` | Solo `loader.min.js` + `L.load(tag)` |
 | Radios category/all | No; el loader puede expandir categoría si se llama a mano |
 
-Guardián: `tests/cdn-mirrors.test.mjs` (contrato loader copy-paste) · `tests/url-nav.test.mjs`.
+Guardián: `tests/cdn-mirrors.test.ts` (contrato loader copy-paste) · `tests/url-nav.test.ts`.

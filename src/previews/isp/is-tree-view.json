@@ -1,0 +1,32 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-tree-view",
+  "category": "isp",
+  "title": "<is-tree-view>",
+  "titleHtml": true,
+  "description": "Árbol editable ISP (port TreeRowView): drag, historial y ficha.",
+  "storageKey": "docs-is-tree-view",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-tree-view>",
+      "lede": "Port de <code class=\"code\">TreeRowView</code> (ClientesIS). No es <code class=\"code\">&lt;is-tree&gt;</code>:\n          este sí muta, arrastra y guarda historial. El consumidor pasa <code class=\"code\">list</code> +\n          <code class=\"code\">customs</code> (mapeo <code class=\"code\">iplan</code> ↔ <code class=\"code\">flatPath</code>).",
+      "blocks": [
+        {
+          "kind": "callout",
+          "html": "Toolbar: agregar raíz, expandir/colapsar, deshacer / proteger / rehacer.\n          Hover en una fila muestra mover / agregar hijo. Doble clic abre el drawer."
+        },
+        {
+          "kind": "demo",
+          "html": "<is-tree-view id=\"tvDemo\" label-field=\"titulo\" style=\"height: 28rem;\"></is-tree-view>\n          <p id=\"tvLog\">Última acción: <code class=\"code\">—</code></p>"
+        },
+        {
+          "kind": "code",
+          "code": "import { TreeCustomsBase } from './isp/tree-view.min.js';\n\nclass PlanCustoms extends TreeCustomsBase {\n  entrie = 'contenido';\n  entries = 'Plan de contenidos';\n  getFlatPath = (r) => String(r.iplan ?? '').trim();\n  setFlatPath = (r, fp) => { r.iplan = fp; };\n  levelName = ({ depth }) => depth === 0 ? 'Módulo' : 'Lección';\n}\n\ntv.customs = new PlanCustoms();\ntv.list = [\n  { iplan: '1', titulo: 'Módulo 1' },\n  { iplan: '1.1', titulo: 'Introducción' },\n];",
+          "lang": "js"
+        }
+      ]
+    }
+  ]
+}

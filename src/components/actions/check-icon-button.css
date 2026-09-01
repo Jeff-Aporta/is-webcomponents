@@ -1,3 +1,4 @@
+@import url('../_shared/focus-ring.css');
 :host {
   display: inline-grid;
   place-items: center;
@@ -77,8 +78,6 @@ is-button.btn {
     background: var(--is-control-bg-active, color-mix(in srgb, currentColor 18%, transparent));
   }
 }
-
-@import url('../_shared/focus-ring.css');
 
 :host(:focus-visible) {
   outline: 2px solid var(--is-focus, var(--is-focus-fallback));

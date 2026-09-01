@@ -92,13 +92,13 @@ Los modos pesados (python) se cargan al activar el `lang`.
 - Ejecutar `node scripts/docs-consistency.selfcheck.mjs`.
 - Chrome de galería: cablear `view-sources.js` + `demo-file-meta.js` en
   `index.html` y `src/previews/_shell.html`.
-- Al tocar fuentes/meta: correr `node --test tests/gallery-sources-meta.test.mjs`.
-- Pesos CDN: `resolveCdnMinPaths` + `sizes.json` vía `cdn-sizes.js`.
+- Al tocar fuentes/meta: correr `node --test tests/gallery-sources-meta.test.ts`.
+- Paths CDN en galería: `resolveCdnMinPaths` + chips de path `.min` (sin mapa de bytes en dist).
 - Roadmap LaTeX: diseñar/aprobar antes de scaffold; reutilizar `<is-code>` +
   motor math por CDN (KaTeX preferido); categoría `code`.
 - Snippets de demos HTML: `lang="html"` en el JSON **o** dejar que bootstrap
   llame `inferLanguage` (no pre-marcar `data-cm="1"` en `render.js`).
-- Tras tocar coloreado/formato: `node --test tests/code-infer-lang.test.mjs`.
+- Tras tocar coloreado/formato: `node --test tests/code-infer-lang.test.ts`.
 
 ## Qué no hacer
 
@@ -138,7 +138,7 @@ Los modos pesados (python) se cargan al activar el `lang`.
 - **Barra legacy `.vs-page-bar`:** convivía con `.file-meta-page` y mostraba
   comentarios (“Archivos del repo sin minificar…”). Fix: solo `.file-meta*`;
   `mountPageButton` solo elimina `.vs-page-bar`; CSS `display: none` de
-  seguridad. Guardián: `tests/gallery-sources-meta.test.mjs`.
+  seguridad. Guardián: `tests/gallery-sources-meta.test.ts`.
 - **`#vsPath` relativo:** el usuario no podía copiar/abrir la URL real del
   Live Server. Fix: `absoluteSourceUrl` + `localSourceUrl(...).href` +
   `<a id="vsPath">`. Guardián: mismo test.
@@ -149,13 +149,13 @@ Los modos pesados (python) se cargan al activar el `lang`.
   es `<is-code readonly compact>`.
 - **HTML coloreado como JS:** sin `lang` + `data-cm` prematuro. Fix:
   `inferLanguage` + softFormat; no `renderDemoEquiv`. Guardián:
-  `tests/code-infer-lang.test.mjs`.
+  `tests/code-infer-lang.test.ts`.
 
 - **F5 al final del docs:** CodeMirror `setValue`/`fromTextArea`/`refresh` hace
   scrollIntoView del cursor y mueve `is-main`. Fix: `#withOuterScroll` en
   `<is-code>`; paths de file-meta sin CM; `scroll-behavior: auto` en
   `is-main.main`; re-`restoreScroll` al montar la barra. Guardián:
-  `tests/gallery-sources-meta.test.mjs`.
+  `tests/gallery-sources-meta.test.ts`.
 
 - **Visor de fuentes en blanco con texto en el atributo:** getter devolvía seed
   si CM `getValue()` era `''`; `paintOne` saltaba el setter; CM medía 0 px en

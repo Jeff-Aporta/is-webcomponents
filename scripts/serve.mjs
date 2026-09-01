@@ -11,7 +11,7 @@
 
 import { createServer } from 'node:http';
 import { createReadStream } from 'node:fs';
-import { stat } from 'node:fs/promises';
+import { stat, readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
 
 const ROOT = join(import.meta.dirname, '..');
@@ -39,6 +39,14 @@ async function resolveFile(urlPath) {
   const target = join(ROOT, rel);
   const info = await stat(target).catch(() => null);
   if (info?.isFile()) return target;
+  // Fuente en TypeScript: el navegador pide `./foo.js` porque es lo que exige el
+  // resolutor de modulos, pero en disco el fichero es `foo.ts`. Se sirve el
+  // `.ts` transpilado al vuelo; un gemelo `.js` en `src/` seria justo lo que se
+  // quiere evitar.
+  if (/\.js$/.test(target)) {
+    const ts = target.replace(/\.js$/, '.ts');
+    if ((await stat(ts).catch(() => null))?.isFile()) return ts;
+  }
   if (info?.isDirectory()) {
     const index = join(target, 'index.html');
     return (await stat(index).catch(() => null))?.isFile() ? index : null;
@@ -51,6 +59,28 @@ createServer(async (req, res) => {
   if (!file) {
     res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
     res.end('404');
+    return;
+  }
+  // Un `.ts` no lo entiende el navegador: se transpila en memoria y se sirve
+  // como JavaScript. Sin bundle ni minificar — en desarrollo interesa que lo
+  // servido se parezca al fuente, y el sourcemap inline deja depurar el .ts.
+  if (extname(file).toLowerCase() === '.ts') {
+    try {
+      const { transform } = await import('esbuild');
+      const salida = await transform(await readFile(file, 'utf8'), {
+        loader: 'ts', format: 'esm', target: 'es2020',
+        sourcefile: file, sourcemap: 'inline',
+      });
+      res.writeHead(200, {
+        'content-type': 'text/javascript; charset=utf-8',
+        'cache-control': 'no-store',
+      });
+      res.end(salida.code);
+    } catch (e) {
+      res.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
+      res.end(`error transpilando ${file}
+${e?.message ?? e}`);
+    }
     return;
   }
   res.writeHead(200, {

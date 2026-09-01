@@ -106,7 +106,7 @@ Documentación de cabecera preservada desde fuente:
 > iconos propio y se inyecta INLINE en el Shadow DOM, para que
 > `currentColor` del contexto se propague al fill del path.
 > Bases que prueba, en orden (ver _shared/icon-loader.js):
->   1. dist/cdn/assets/icons/ relativo al modulo (bundle CDN).
+>   1. dist/assets/icons/ relativo al modulo (bundle CDN).
 >   2. assets/icons/ en la raiz del repo (codigo fuente).
 >   3. GitHub Pages del proyecto.
 >   4. jsDelivr sobre el repo.

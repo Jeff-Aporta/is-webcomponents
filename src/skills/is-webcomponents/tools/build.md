@@ -1,4 +1,4 @@
-# `/is-webcomponents:build`
+﻿# `/is-webcomponents:build`
 
 Fundar una app nueva o extender una existente reusando el kit `is-*` por
 CDN (o por copia local si la app ya corrió [`/is-webcomponents:local`](local.md)).
@@ -20,8 +20,8 @@ CDN (o por copia local si la app ya corrió [`/is-webcomponents:local`](local.md
    ```html
    <html lang="es" data-theme="dark" data-palette="contapyme">
    <head>
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/is-base.min.css">
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/palettes.min.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/is-base.min.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/palettes.min.css">
      <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/all.min.js"></script>
    </head>
    <body>

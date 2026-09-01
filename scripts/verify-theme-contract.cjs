@@ -24,7 +24,7 @@ assert(styles.includes('--is-bg:'), 'missing generic --is-* surface tokens');
 assert(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`${html}\n${component}`), 'size API remains');
 assert(!/\b(?:height|padding(?:-inline)?|gap):\s*\d+(?:\.\d+)?px/.test(component), 'component geometry must use em');
 const manifestPath = path.join(root, 'manifest.js');
-const generatorPath = path.join(root, 'scripts', 'generate-templates.mjs');
+const generatorPath = path.join(root, 'scripts', 'generate-templates.ts');
 const previewPath = path.join(root, 'src', 'previews', 'actions', 'is-button.html');
 const systemPath = path.join(root, 'src', 'styles', 'is-base.css');
 const shellPath = path.join(root, 'src', 'styles', 'shell.css');

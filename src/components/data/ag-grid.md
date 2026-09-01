@@ -300,7 +300,7 @@ para poder restaurarlas por teclado.
 ## Checker
 
 ```bash
-node tests/prefs-contract.test.mjs
+node tests/prefs-contract.test.ts
 node scripts/docs-consistency.selfcheck.mjs
 ```
 

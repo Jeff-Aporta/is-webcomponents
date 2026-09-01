@@ -5,8 +5,8 @@
 **Goal:** Entry liviano `loader.min.js` + Ecosistema JS como get-started.
 
 ## Done
-- [x] `src/cdn/loader.js` + build embebido → `dist/cdn/loader.min.js` (~19 KB)
+- [x] `src/cdn/loader.ts` + build embebido → `dist/cdn/loader.min.js` (~19 KB)
 - [x] API: `load`, `loadCSSBase`, `loadCSSPalettesDefault`
-- [x] Tests `tests/cdn-loader.test.mjs`
+- [x] Tests `tests/cdn-loader.test.ts`
 - [x] Preview Ecosistema: get started + playground + `_shared`
 - [x] README CDN + hint `is-cdn-snippet` + LLM.md

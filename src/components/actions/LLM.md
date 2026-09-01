@@ -83,7 +83,7 @@ no heredaba font-size del host.
 - Documentar escala em sin demo que cambie `font-size` en el host.
 - Mezclar `variant` (apariencia) con `color` (tono) en el JS tras un rename.
 
-Guardián: `tests/em-scale-font-inherit.test.mjs`.
+Guardián: `tests/em-scale-font-inherit.test.ts`.
 
 ### Context menu y scroll
 
@@ -99,7 +99,7 @@ contenedor (containing block con `transform` en demos).
 - Reposicionar el panel en cada scroll (“perseguir” el cursor/ancla).
 - Bloquear scroll por defecto (rompe páginas largas).
 
-Guardián: `tests/context-menu-scroll.test.mjs`.
+Guardián: `tests/context-menu-scroll.test.ts`.
 
 ### Color × appearance (`is-button`)
 
@@ -114,7 +114,7 @@ Guardián: `tests/context-menu-scroll.test.mjs`.
 - Pedir `--is-color-*-600` / `-500` (el tema ya no los define → filled/outlined transparentes sin error).
 - Hex de marca distinto en filled vs outlined (filled azul / outlined rojo).
 
-Guardián: `tests/button-color-appearance.test.mjs`. Detalle: `LLM.md` error **30**.
+Guardián: `tests/button-color-appearance.test.ts`. Detalle: `LLM.md` error **30**.
 
 ## Módulos internos
 

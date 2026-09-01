@@ -53,10 +53,10 @@
       visibility: hidden;
     }
   </style>
-  <link rel="icon" href="src/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/loader.min.js';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 
@@ -148,9 +148,9 @@
              label="Componentes"></is-drawer>
 
   <script type="module">
-    import components from './manifest.js';
-    import { hasControlledPreview, hasCachedPreview, loadPreview } from './src/previews/registry.js';
-    import { collectIsTags, GALLERY_CHROME_TAGS } from './src/cdn/collect-is-tags.js';
+    import components from './src/manifest.js';
+    import { hasControlledPreview, hasCachedPreview, loadPreview } from './src/previews/registry.ts';
+    import { collectIsTags, GALLERY_CHROME_TAGS } from './src/cdn/collect-is-tags.ts';
 
     const root = document.documentElement;
     const themeToggle = document.getElementById('themeToggle');

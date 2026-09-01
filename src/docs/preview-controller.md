@@ -13,8 +13,8 @@ Toda la documentación/demo vive en JSON con interface compartida
 | `src/previews/_kit/types.d.ts` | Interface canónica |
 | `src/previews/<cat>/<tag>.json` | Datos del preview (sections/blocks) |
 | `src/previews/behaviors/<tag>.js` | `mount`/`unmount` opcionales (sin eval) |
-| `src/previews/catalog.js` | AUTO: `tag → { json, behavior? }` |
-| `src/previews/registry.js` | `loadPreview(tag)` → `JsonPreview` |
+| `src/previews/catalog.ts` | AUTO: `tag → { json, behavior? }` |
+| `src/previews/registry.ts` | `loadPreview(tag)` → `JsonPreview` |
 | `src/components/layout/preview-component.js` | Shell split + TOC |
 | `src/previews/_shell.html` | **Único** HTML: fullscreen `?tag=` |
 
@@ -69,7 +69,7 @@ markup donde va texto no da error: se lee literal en pantalla.
 omitirlo: `resolveMode()` deduce el modo del texto. Lo que **no** vale es
 mentirlo — `lang: "html"` sobre JavaScript hace que CodeMirror tokenice como
 htmlmixed, que no produce ni un token, y el bloque sale sin una gota de color.
-`tests/preview-blocks.test.mjs` vigila las tres cosas.
+`tests/preview-blocks.test.ts` vigila las tres cosas.
 
 ## El contenido llega después: `is-preview-ready`
 
@@ -91,7 +91,7 @@ handlers son idempotentes); y el tag sale de `detail.tag`, nunca de la ruta —
 `location.pathname` es `index.html` o `_shell.html`, no hay una página por
 componente. Así se perdió el panel «Consumo por CDN» de todos los componentes.
 
-`tests/preview-ready-hooks.test.mjs` verifica el emisor, los cuatro oyentes y
+`tests/preview-ready-hooks.test.ts` verifica el emisor, los cuatro oyentes y
 que las dos páginas carguen `cdn-panel.js`.
 
 ## Páginas completas (el home)
@@ -124,7 +124,7 @@ titular del home, que se pinta con `background-clip: text` sobre un degradado de
 ## Migración / regenerar catalog
 
 ```bash
-node scripts/migrate-previews-to-json.mjs   # solo si reaparecen HTML
+node scripts/migrate-previews-to-json.ts   # solo si reaparecen HTML
 # catalog.js se regenera ahí; si solo añades un JSON a mano, añade la entrada en catalog.js
 ```
 
@@ -134,14 +134,14 @@ node scripts/migrate-previews-to-json.mjs   # solo si reaparecen HTML
 
 ## Tests
 
-- `tests/preview-json-contract.test.mjs` — todos los JSON + catalog ↔ manifest
-- `tests/preview-controller.test.mjs` — kit + un solo HTML
-- `tests/preview-paths.test.mjs` — refs de `_shell.html`
-- `tests/home-invariants.test.mjs` — estructura del home: envoltorios, ids que
+- `tests/preview-json-contract.test.ts` — todos los JSON + catalog ↔ manifest
+- `tests/preview-controller.test.ts` — kit + un solo HTML
+- `tests/preview-paths.test.ts` — refs de `_shell.html`
+- `tests/home-invariants.test.ts` — estructura del home: envoltorios, ids que
   consulta el behavior y que el behavior compile
-- `tests/preview-blocks.test.mjs` — texto vs markup en `code` y `columns`, y
+- `tests/preview-blocks.test.ts` — texto vs markup en `code` y `columns`, y
   `lang` coherente con el código
-- `tests/preview-ready-hooks.test.mjs` — quién emite y quién escucha
+- `tests/preview-ready-hooks.test.ts` — quién emite y quién escucha
   `is-preview-ready`
 
 Tras tocar el kit hay que reconstruir `dist/`: `all.min.js` importa

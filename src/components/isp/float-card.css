@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.panel {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  max-width: min(100%, 18rem);
+  padding: 0.1rem 0.2rem;
+  background: var(--is-bg-elev, var(--is-bg));
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius-sm, 0.35rem);
+  box-shadow: var(--is-shadow, 0 4px 16px color-mix(in srgb, #000 18%, transparent));
+  pointer-events: none;
+  overflow: visible;
+  opacity: 0;
+  visibility: hidden;
+  transform-origin: top right;
+}
+
+.panel > ::slotted([slot='float']) {
+  pointer-events: auto;
+}
+
+:host([open]) .panel,
+:host([locked]) .panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+}
+
+:host([open]) .panel > ::slotted([slot='float']),
+:host([locked]) .panel > ::slotted([slot='float']) {
+  pointer-events: auto;
+}

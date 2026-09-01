@@ -20,15 +20,15 @@ Fuente de verdad en código: `src/components/_shared/cdn-ref.js` (`MIRRORS`, `re
 
 ```
 dist/cdn/
-  is-base.min.css
-  palettes.min.css
-  all.min.js
-  sizes.json
+  core/
+    loader.min.js
+    is-base.min.css
+    palettes.min.css
   skills/<name>/SKILL.md    ← skills para agentes
   <categoria>/<name>.min.js|.min.css
-  <categoria>/category.<categoria>.min.js
-  assets/icons/…
 ```
+
+Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`).
 
 ## Skills en CDN
 

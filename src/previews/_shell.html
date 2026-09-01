@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Preview · IS Web Components</title>
   <script type="module">
-    import { ISWebComponentsLoader as L } from '../../dist/cdn/loader.min.js';
+    import { ISWebComponentsLoader as L } from '../../dist/cdn/core/loader.min.js';
     import { GALLERY_CHROME_TAGS } from '../../src/cdn/collect-is-tags.js';
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
     await L.loadCSSBase();

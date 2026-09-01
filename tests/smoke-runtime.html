@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <title>smoke</title>
 <!--
-  Página que usa tests/smoke-runtime.test.mjs. NO es una preview: monta cada
+  Página que usa tests/smoke-runtime.test.ts. NO es una preview: monta cada
   componente del manifest en un DOM real (Chrome headless) y anota los errores.
 
   Los tests del repo son análisis estático; esto cubre lo que aquel no ve:
@@ -20,7 +20,7 @@ addEventListener('error', (e) => errores.push('window.error: ' + (e.message || e
 addEventListener('unhandledrejection', (e) => errores.push('unhandledrejection: ' + e.reason));
 
 const BASE = new URLSearchParams(location.search).get('base') || '../src/';
-const manifest = (await import('../manifest.js')).default;
+const manifest = (await import('../src/manifest.js')).default;
 const host = document.getElementById('host');
 const filas = [];
 

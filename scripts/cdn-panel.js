@@ -4,7 +4,7 @@
  *
  * El panel lo pinta `<is-cdn-snippet>`; aquí solo se resuelve QUÉ componente
  * se está viendo y de dónde salen sus enlaces de documentación. Vive en
- * `scripts/` porque necesita el `manifest.js` del repo, y un componente del
+ * `scripts/` porque necesita el `src/manifest.js` del repo, y un componente del
  * kit no puede importarlo (acabaría dentro del bundle del CDN).
  *
  * Esto era parte de `preview-chrome.js` y sacaba el tag del nombre del archivo
@@ -14,7 +14,7 @@
  * Ahora el tag lo trae el propio preview montado, en `is-preview-ready`.
  */
 import '../dist/cdn/feedback/cdn-snippet.min.js';
-import components from '../manifest.js';
+import components from '../src/manifest.js';
 
 /**
  * Enlaces a los LLM.md del REPO tal cual, sin copia en dist. Se usa
@@ -31,13 +31,9 @@ import components from '../manifest.js';
  * entre `components/charts/` y `components/data-viz/`, así que componer
  * `components/<categoria>/LLM.md` daba rutas inexistentes.
  *
- * El "índice global" apunta a `components/LLM.md`, NO al `LLM.md` de la raíz:
- * son documentos distintos con audiencias distintas. El de la raíz son
- * convenciones internas del repo (cómo se construye, qué bugs ya se
- * cometieron) — nada de eso sirve para CONSUMIR un componente. `components/
- * LLM.md` es el catálogo real: tabla de categorías con sus LLM.md y el
- * inventario completo de tags. Confundirlos manda a un LLM consumidor a leer
- * notas de desarrollo del repo en vez de la documentación de la API.
+ * El "índice global" apunta a `components/LLM.md`, NO a `AGENTS.md` de la raíz:
+ * son documentos distintos. `AGENTS.md` = convenciones internas del repo;
+ * `components/LLM.md` = catálogo para consumir componentes.
  */
 const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src';
 

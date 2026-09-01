@@ -27,9 +27,8 @@ import '../src/components/actions/copy-button.js';
 import './highlight-pre.js';
 import { paint } from '../src/components/_shared/highlight-code.js';
 import { resolveRef, jsdelivrBase } from '../src/components/_shared/cdn-ref.js';
-import { totalCdnSize } from '../src/components/_shared/cdn-sizes.js';
-import manifest from '../manifest.js';
-import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles.js';
+import manifest from '../src/manifest.js';
+import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles.ts';
 
 {
   /** CDN base — el snippet debe usar URLs públicas para que sea portable. */
@@ -67,14 +66,6 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     'tooltip', 'treemap', 'video', 'video-playlist', 'waterfall-chart',
     'year-calendar', 'code',
   ]);
-
-  /** Tamaño humano-legible: 812 → "812 B", 12800 → "12.5 KB". */
-  const humanSize = (bytes) => {
-    if (bytes < 1024) return `${bytes} B`;
-    return `${(bytes / 1024).toFixed(1)} KB`;
-  };
-
-  /** sizes.json + expansión category/all: ver `_shared/cdn-sizes.js`. */
 
   /** UI de la galería que NO va al snippet pegable (botones, rótulos, modales). */
   const SNIPPET_CHROME_SEL = [
@@ -225,12 +216,12 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     const cssTags = tags.filter((t) => COMPONENTS_WITH_CSS.has(t));
 
     const lines = [];
-    const urls = [`${CDN}/loader.min.js`, `${CDN}/is-base.min.css`, `${CDN}/palettes.min.css`];
+    const urls = [`${CDN}/core/loader.min.js`, `${CDN}/core/is-base.min.css`, `${CDN}/core/palettes.min.css`];
     for (const t of cssTags) urls.push(`${CDN}/${catOf(t)}/${t}.min.css`);
     for (const t of tags) urls.push(`${CDN}/${catOf(t)}/${t}.min.js`);
 
     const args = tags.map((t) => JSON.stringify(`is-${t}`)).join(', ');
-    lines.push(`<script type="module" src="${CDN}/loader.min.js"><\/script>`);
+    lines.push(`<script type="module" src="${CDN}/core/loader.min.js"><\/script>`);
     lines.push('<script type="module">');
     lines.push('  const L = globalThis.ISWebComponentsLoader;');
     lines.push('  await L.loadCSSBase();');
@@ -289,7 +280,6 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
       <div class="demo-code-pop__bar">
         <div class="demo-code-pop__meta">
           <span class="demo-code-pop__hint">loader.min.js</span>
-          <span class="demo-code-pop__size" aria-live="polite"></span>
         </div>
         <is-copy-button class="demo-code-pop__copy" copy-label="Copiar" success-label="Copiado"
                         tooltip-placement="left"></is-copy-button>
@@ -316,11 +306,10 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     };
 
     const copyBtn = pop.querySelector('is-copy-button');
-    const sizeEl = pop.querySelector('.demo-code-pop__size');
     let panelOpen = false;
 
     const renderSnippet = async () => {
-      const { snippet, urls } = await buildSnippet(demo);
+      const { snippet } = await buildSnippet(demo);
       copyBtn.setAttribute('value', snippet);
       await customElements.whenDefined('is-code');
       const codeEl = pre?.isConnected ? pre : mountCodeEl(snippet);
@@ -337,10 +326,6 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
         codeEl.dataset.filled = '1';
         requestAnimationFrame(() => codeEl.refresh?.());
       }
-      sizeEl.textContent = 'calculando peso…';
-      const base = await cdnBase();
-      const bytes = await totalCdnSize(urls, base);
-      sizeEl.textContent = bytes == null ? '' : `≈ ${humanSize(bytes)}`;
     };
 
     /** Tema/paleta del preview cambiaron → invalidar cache y, si el panel

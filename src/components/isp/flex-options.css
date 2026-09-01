@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+:host([compact]) .toolbar {
+  flex-wrap: nowrap;
+}

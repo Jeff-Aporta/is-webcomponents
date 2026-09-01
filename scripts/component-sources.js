@@ -26,13 +26,18 @@ export function resolveSourceFiles(entry) {
   const scriptPath = manifestToComponentsPath(entry.script);
   if (!scriptPath.endsWith('.js')) return {};
 
+  // El manifiesto nombra el modulo con `.js` —es un especificador, no un
+  // fichero— pero en el repositorio el fuente es TypeScript. Para enlazar al
+  // codigo hay que traducir la extension; el `.min.js` publicado no se toca.
+  const fuenteRel = scriptPath.replace(/\.js$/, '.ts');
+
   /** @type {{ js?: SourceFile, css?: SourceFile, md?: SourceFile }} */
   const out = {
     js: {
       kind: 'js',
-      label: 'JS',
-      repoPath: `src/${scriptPath}`,
-      fileName: scriptPath.split('/').pop() || 'module.js',
+      label: 'TS',
+      repoPath: `src/${fuenteRel}`,
+      fileName: fuenteRel.split('/').pop() || 'module.ts',
     },
   };
 

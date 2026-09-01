@@ -1,4 +1,4 @@
----
+﻿---
 name: is-webcomponents
 description: >-
   Obliga a reusar el kit is-* (Jeff-Aporta/is-webcomponents) al fundar o extender
@@ -75,7 +75,7 @@ refrescarlo). Excepción: apps que declaran seguimiento continuo
 <html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
   <script type="module"
-    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/loader.min.js"></script>
+    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.js"></script>
   <script type="module">
     const L = globalThis.ISWebComponentsLoader;
     await L.loadCSSBase();
@@ -161,7 +161,7 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/s
 
 ## Kit: carta de leyes
 
-Antes de cambiar el repo del kit, leer la raíz [`LLM.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/LLM.md) (Carta de leyes / DO / DON'T / errores). Guardianes: `node tests/llm-contract.test.mjs` y el resto de `tests/*.test.mjs`.
+Antes de cambiar el repo del kit, leer la raíz [`LLM.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/LLM.md) (Carta de leyes / DO / DON'T / errores). Guardianes: `node tests/llm-contract.test.ts` y el resto de `tests/*.test.mjs`.
 
 ## Checklist pre-entrega
 

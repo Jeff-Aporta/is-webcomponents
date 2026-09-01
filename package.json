@@ -6,12 +6,14 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "docs": "node scripts/build-docs.mjs",
     "dev": "node scripts/serve.mjs",
-    "icons:download": "node scripts/download-icons.mjs"
+    "icons:download": "node scripts/download-icons.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --import ./scripts/ts-resolve-hook.ts --test tests/*.test.ts"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",
-    "playwright": "^1.62.1"
+    "playwright": "^1.62.1",
+    "typescript": "^5.9.0"
   }
 }

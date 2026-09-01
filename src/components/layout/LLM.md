@@ -33,7 +33,7 @@ Módulos multi-tag se documentan juntos. Parent/child mantienen contrato del mis
 `dist/cdn/layout/preview-component.min.js` y entra en `all.min.js`, pero **no**
 figura en `categories.layout` del loader — `L.load('is-preview-component')` no
 resuelve. La galería lo importa desde `dist/cdn/…` (nunca desde `src/`: Pages
-404 lucide). Ver LLM raíz error **#42–#43** y `tests/gallery-boot.test.mjs`.
+404 lucide). Ver LLM raíz error **#42–#43** y `tests/gallery-boot.test.ts`.
 
 ## Reusar antes de crear
 
@@ -89,10 +89,10 @@ Fuente manda sobre preview. Ruta preview viene de `manifest.js.page`.
 
 **Dialog fuentes no full-page** (ago/2026): `--width: min(96vw)` + panel `70vh`
 parecía grande pero no era full view. Fix: spacing 0 + stretch. Guardián:
-`tests/gallery-sources-meta.test.mjs`.
+`tests/gallery-sources-meta.test.ts`.
 
 **Boot galería FOUC / demos vacíos** (ago/2026): ver LLM raíz error **#43**.
-Guardián: `tests/gallery-boot.test.mjs`.
+Guardián: `tests/gallery-boot.test.ts`.
 
 ## Módulos internos
 

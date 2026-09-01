@@ -12,19 +12,44 @@ const dist = join(root, 'dist', 'cdn');
 const compRoot = join(root, 'src', 'components');
 
 // Índice de utilidades _shared para el preview «Ecosistema JS».
-await import('./gen-shared-index.mjs');
+await import('./gen-shared-index.ts');
 
-// Limpieza selectiva: se borran los artefactos de codigo pero NO
-// dist/cdn/assets/. Ahi viven ~317k SVG que no cambian entre builds; borrarlos
-// y recopiarlos en cada corrida hace el build lento y, sobre todo, dispara los
-// file watchers del editor (Live Server recarga en bucle mientras se compila).
+// ─────────────────────── PROTOCOLO DE CONSTRUCCION ───────────────────────
+//
+//   En dist/cdn/ se borra TODO en cada build. Los assets estáticos (iconos,
+//   favicon, etc.) viven en dist/assets/, hermano de dist/cdn/, y NO se tocan.
+//
+// Todo lo de dist/cdn/ (los .min.js, .min.css, loader, skills, docs) es
+// GENERADO: se reconstruye entero en cada corrida.
+//
+// `dist/assets/` es FUENTE versionada: ~317k SVG y material del kit. No se
+// genera desde `src/` — `src/assets/` se eliminó para no duplicar.
+//
+// Consecuencias practicas:
+//   - `npm run icons:download` escribe en dist/assets/icons/.
+//   - Mas abajo se VERIFICA que el set siga entero (MIN_ICONOS); no se copia.
+//   - Quien anada material nuevo al kit lo pone en dist/assets/, no en src.
+//
+// Los assets fuera de dist/cdn/ evitan mezclar material estático con bundles CDN.
+const PRESERVAR = new Set();
+
+/**
+ * Minimo de ficheros que debe tener dist/assets/icons/.
+ *
+ * Es un canario, no una cifra exacta: el set solo crece al bajar colecciones
+ * nuevas. Quedar por debajo significa que alguien borro material publicado,
+ * no que falte generarlo. Subir este numero solo tras un `icons:download` que
+ * anada colecciones de verdad.
+ */
+const MIN_ICONOS = 317_000;
+
 await mkdir(dist, { recursive: true });
 for (const entry of await readdir(dist, { withFileTypes: true })) {
-  if (entry.name === 'assets') continue;
+  if (PRESERVAR.has(entry.name)) continue;
   await rm(join(dist, entry.name), { recursive: true, force: true });
 }
 
-const bundleJs = (entry, outfile, plugins = [], bannerJs = '') =>
+const bundleJs = (entry, outfile, plugins = [], bannerJs = '', define = undefined) =>
   build({
     entryPoints: [entry],
     outfile,
@@ -34,8 +59,26 @@ const bundleJs = (entry, outfile, plugins = [], bannerJs = '') =>
     target: 'es2020',
     legalComments: 'none',
     plugins,
+    ...(define ? { define } : {}),
     ...(bannerJs ? { banner: { js: bannerJs } } : {}),
   });
+
+// El CSS de cada componente viaja DENTRO de su .min.js, no como fetch aparte.
+// El href del .css hermano solo se conocia tras ejecutar el .js, asi que esas
+// peticiones eran cascada pura y no se paralelizaban con nada: para pintar un
+// <is-tree-view> eran 24 de 38. `define` sustituye el identificador por el
+// literal ya minificado; `adoptCss` lo adopta con replaceSync.
+//
+// Se sigue emitiendo el .min.css hermano: lo consumen el sheet-cache del
+// loader, quien enlace la hoja a mano y el propio src/ sin empaquetar.
+const defineCss = async (cssFile) => {
+  try {
+    const texto = await readFile(cssFile, 'utf8');
+    return { __IS_COMPONENT_CSS__: JSON.stringify(texto) };
+  } catch {
+    return undefined;
+  }
+};
 
 const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
 const GH_BLOB = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main';
@@ -72,7 +115,9 @@ async function walk(dir, out = []) {
     if (name.isDirectory()) {
       if (name.name === '_shared') continue;
       await walk(p, out);
-    } else if (/\.js$/.test(name.name) && name.name !== 'index.js') {
+    } else if (/\.(ts|js)$/.test(name.name) && !/^index\.(ts|js)$/.test(name.name)
+               && !name.name.endsWith('.d.ts')
+               && !name.name.includes('.selfcheck.')) {
       out.push(p);
     }
   }
@@ -82,7 +127,7 @@ async function walk(dir, out = []) {
 const entries = (await walk(compRoot)).sort();
 
 // Componentes por categoria segun manifest.js (single source of truth).
-const manifestMod = await import('../manifest.js');
+const manifestMod = await import('../src/manifest.js');
 const manifest = manifestMod.default;
 const byCategory = new Map();
 for (const m of manifest) {
@@ -93,7 +138,11 @@ for (const m of manifest) {
 // Mapa tag → componente
 const tagToComponent = new Map();
 for (const e of entries) {
-  const tag = basename(e).replace(/\.js$/, '');
+  // `.ts` ademas de `.js`: sin esto un componente migrado se registraba con el
+  // tag «dropdown.ts» y los que lo importaban dejaban de reconocerlo, asi que
+  // esbuild lo inlineaba en vez de dejarlo externo — y adoptCss del componente
+  // inlineado se rompe.
+  const tag = basename(e).replace(/\.(ts|js)$/, '');
   tagToComponent.set(tag, e);
 }
 
@@ -118,13 +167,24 @@ const folderFor = (file) => {
 const externalComponents = {
   name: 'external-components',
   setup(pluginBuild) {
-    pluginBuild.onResolve({ filter: /\.js$/ }, (args) => {
+    pluginBuild.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
       if (args.kind === 'entry-point') return null;
       const abs = resolve(args.resolveDir, args.path);
+      // `base-sheets` lleva host-base + scrollbars incrustados y vale para toda
+      // la pagina: externo, para que sea UNA peticion y UNA CSSStyleSheet
+      // compartida en vez de 1,4 KB duplicados en los 150 bundles. Mismo
+      // criterio que `decors`.
+      if (basename(abs).replace(/\.(ts|js)$/, '') === 'base-sheets') {
+        return { path: '../_shared/base-sheets.min.js', external: true };
+      }
       if (!abs.startsWith(compRoot)) return null;
-      // Los helpers de _shared no registran custom elements: se inlinean.
+      // `decors` es la excepcion al inlinado de _shared: lleva el runtime de
+      // decoradores de esbuild (~2 KB) y con 155 componentes serian ~310 KB
+      // duplicados en el CDN. Va externo, como los componentes entre si.
+
+      // Los demas helpers de _shared no registran custom elements: se inlinean.
       if (abs.includes(`${sep}_shared${sep}`)) return null;
-      const tag = basename(abs).replace(/\.js$/, '');
+      const tag = basename(abs).replace(/\.(ts|js)$/, '');
       if (!tagToComponent.has(tag)) return null;
       return { path: `../${folderFor(abs)}/${tag}.min.js`, external: true };
     });
@@ -165,6 +225,27 @@ for (const name of sharedImports) {
   console.log(`  ${('_shared/' + name).padEnd(28)} css (destino de @import)`);
 }
 
+// base-sheets: host-base + scrollbars incrustados, externo y compartido por
+// toda la pagina. Sustituye a los dos <link> que adoptCss ponia en CADA
+// instancia de CADA componente (10 de las 38 peticiones de un <is-tree-view>).
+{
+  const coreRoot = join(root, 'src', 'core');
+  const outBase = join(dist, '_shared', 'base-sheets.min.js');
+  await mkdir(join(dist, '_shared'), { recursive: true });
+  // Se minifican a un temporal para incrustar exactamente lo que se publicaria.
+  const tmpBase = join(dist, '_shared', '_tmp-host-base.css');
+  const tmpScroll = join(dist, '_shared', '_tmp-scrollbars.css');
+  await bundleCss(join(compRoot, '_shared', 'host-base.css'), tmpBase);
+  await bundleCss(join(compRoot, '_shared', 'scrollbars.css'), tmpScroll);
+  await bundleJs(join(coreRoot, 'base-sheets.ts'), outBase, [], '', {
+    __IS_HOST_BASE_CSS__: JSON.stringify(await readFile(tmpBase, 'utf8')),
+    __IS_SCROLLBARS_CSS__: JSON.stringify(await readFile(tmpScroll, 'utf8')),
+  });
+  await unlink(tmpBase).catch(() => {});
+  await unlink(tmpScroll).catch(() => {});
+  console.log(`  ${'_shared/base-sheets.min.js'.padEnd(28)} js  (hojas base compartidas)`);
+}
+
 for (const raw of localPartials) {
   const { from, to } = JSON.parse(raw);
   await mkdir(join(dist, dirname(to)), { recursive: true });
@@ -172,16 +253,40 @@ for (const raw of localPartials) {
   console.log(`  ${to.padEnd(28)} css (parcial de carpeta)`);
 }
 
+// `src/core/` se publica en las DOS formas, y no es redundancia:
+//   .js  para quien lo ejecute (lo importan los componentes minificados).
+//   .ts  para quien lo extienda — otro proyecto que escriba sus propios `is-*`
+//        lo trae por vendor y necesita los decoradores expresados y los tipos.
+// Regla corta: `.js` lo que se ejecuta, `.ts` lo que se extiende.
+{
+  const coreRoot = join(root, 'src', 'core');
+  if (existsSync(coreRoot)) {
+    const outCore = join(dist, 'core');
+    await mkdir(outCore, { recursive: true });
+    for (const f of await readdir(coreRoot)) {
+      if (!f.endsWith('.ts')) continue;
+      await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')));
+      await copyFile(join(coreRoot, f), join(outCore, f));
+    }
+    // `adoptCss` resuelve `./host-base.css` y `./scrollbars.css` contra la URL
+    // de su propio modulo. Con el core inlineado eso cae en la carpeta del
+    // componente; emitirlas tambien aqui cubre el consumo directo del core.
+    await bundleCss(join(compRoot, '_shared', 'scrollbars.css'), join(outCore, 'scrollbars.css'));
+    await bundleCss(join(compRoot, '_shared', 'host-base.css'), join(outCore, 'host-base.css'));
+    console.log('  core/                     .js + .ts (base para extender)');
+  }
+}
+
 const scrollbarsIn = join(compRoot, '_shared', 'scrollbars.css');
 const hostBaseIn = join(compRoot, '_shared', 'host-base.css');
 const emittedFolders = new Set();
 
 for (const inFile of entries) {
-  const tag = basename(inFile).replace(/\.js$/, '');
+  const tag = basename(inFile).replace(/\.(ts|js)$/, '');
   const folder = folderFor(inFile);
   const outDir = join(dist, folder);
   await mkdir(outDir, { recursive: true });
-  const cssIn = inFile.replace(/\.js$/i, '.css');
+  const cssIn = inFile.replace(/\.(ts|js)$/i, '.css');
   const outJs = join(outDir, `${tag}.min.js`);
   const outCss = join(outDir, `${tag}.min.css`);
 
@@ -193,10 +298,18 @@ for (const inFile of entries) {
     await bundleCss(hostBaseIn, join(outDir, 'host-base.css'));
   }
 
-  await bundleJs(inFile, outJs, [externalComponents], componentDocsBanner(folder, tag));
-
+  // El CSS va primero: lo que se incrusta en el JS es el .min.css YA aplanado
+  // (sin @import, que replaceSync descartaria) y minificado, no la fuente.
   const hasCss = await access(cssIn).then(() => true, () => false);
   if (hasCss) await bundleCss(cssIn, outCss);
+
+  await bundleJs(
+    inFile,
+    outJs,
+    [externalComponents],
+    componentDocsBanner(folder, tag),
+    hasCss ? await defineCss(outCss) : undefined,
+  );
 
   const [jsIn, jsOut] = await Promise.all([stat(inFile), stat(outJs)]);
   const cssSize = hasCss ? String((await stat(outCss)).size) : '—';
@@ -213,7 +326,7 @@ for (const inFile of entries) {
 {
   const { readFile: rf, writeFile: wf } = await import('node:fs/promises');
   const dirs = (await readdir(dist, { withFileTypes: true }))
-    .filter((d) => d.isDirectory() && d.name !== 'assets')
+    .filter((d) => d.isDirectory())
     .map((d) => d.name);
   let arreglados = 0;
   for (const dir of dirs) {
@@ -235,14 +348,17 @@ for (const inFile of entries) {
   if (arreglados) console.log(`  @import hermanos reescritos a .min.css en ${arreglados} archivos`);
 }
 
+const coreDist = join(dist, 'core');
+
 const baseIn = join(root, 'src', 'styles', 'is-base.css');
-const baseOut = join(dist, 'is-base.min.css');
+const baseOut = join(coreDist, 'is-base.min.css');
+await mkdir(coreDist, { recursive: true });
 await bundleCss(baseIn, baseOut);
 const baseStat = await stat(baseOut);
 console.log(`  ${'is-base'.padEnd(18)} css ${String(baseStat.size).padStart(6)}`);
 
 const palettesIn = join(root, 'src', 'styles', 'palettes.css');
-const palettesOut = join(dist, 'palettes.min.css');
+const palettesOut = join(coreDist, 'palettes.min.css');
 await bundleCss(palettesIn, palettesOut);
 const palettesStat = await stat(palettesOut);
 console.log(`  ${'palettes'.padEnd(18)} css ${String(palettesStat.size).padStart(6)}`);
@@ -270,12 +386,12 @@ for (const [category, items] of byCategory) {
   }
   if (files.length) loaderCatalog.categories[category] = files;
 }
-const loaderSrc = join(root, 'src', 'cdn', 'loader.js');
-const loaderOut = join(dist, 'loader.min.js');
+const loaderSrc = join(root, 'src', 'cdn', 'loader.ts');
+const loaderOut = join(coreDist, 'loader.min.js');
 const loaderBanner = docsBanner([
   `md: ${CDN_LOADER_MD}`,
   `llm: ${CDN_LOADER_LLM}`,
-  `cdn-copy: dist/cdn/loader.md + dist/cdn/LLM.md`,
+  `cdn-copy: dist/cdn/core/loader.md + dist/cdn/LLM.md`,
   `kit: ${CDN_COMP_LLM}`,
   `cdn-install: ${CDN_SKILL}`,
 ]);
@@ -294,97 +410,42 @@ await build({
 });
 const loaderStat = await stat(loaderOut);
 console.log(`  ${'loader.min'.padEnd(18)} js ${String(loaderStat.size).padStart(6)}  (${Object.keys(loaderCatalog.categories).length} cats, ${Object.keys(loaderCatalog.tags).length / 2 | 0} tags)`);
-await copyFile(join(root, 'src', 'cdn', 'loader.md'), join(dist, 'loader.md'));
+await copyFile(join(root, 'src', 'cdn', 'loader.md'), join(coreDist, 'loader.md'));
 console.log(`  ${'loader.md'.padEnd(18)} docs`);
 await copyFile(join(root, 'src', 'cdn', 'LLM.md'), join(dist, 'LLM.md'));
 console.log(`  ${'LLM.md'.padEnd(18)} docs (cdn/)`);
 
-// ── sizes.json ───────────────────────────────────────────────────
-// Mapa {ruta relativa → bytes} de todo el JS/CSS publicado. El front
-// (demo-code.js, is-cdn-snippet) lo consulta UNA vez por el CDN para
-// sumar el peso de un snippet: pedir un HEAD por archivo era lento y
-// jsDelivr no siempre devuelve Content-Length.
-const sizes = {};
-const walkSizes = async (dir, prefix = '') => {
-  for (const entry of await readdir(dir, { withFileTypes: true })) {
-    if (entry.name.startsWith('.') || entry.name === 'assets') continue;
-    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
-    if (entry.isDirectory()) { await walkSizes(join(dir, entry.name), rel); continue; }
-    if (!/\.min\.(js|css)$/i.test(entry.name)) continue;
-    sizes[rel] = (await stat(join(dir, entry.name))).size;
-  }
-};
-await walkSizes(dist);
-await writeFile(join(dist, 'sizes.json'), `${JSON.stringify(sizes, null, 0)}\n`);
-console.log(`  ${'sizes.json'.padEnd(18)}    ${String(Object.keys(sizes).length).padStart(6)} archivos medidos`);
-
-await writeFile(
-  join(dist, 'README.txt'),
-  [
-    'CDN artifacts (folderizados por categoria)',
-    '  is-base.min.css                          — themes + brand palettes (link in the host app)',
-    '  palettes.min.css                         — paletas de marca',
-    '  <categoria>/<name>.min.js                — componente individual (carga su .min.css hermano en el shadow)',
-    '  <categoria>/<name>.min.css               — estilos del componente (junto al .min.js)',
-    '  loader.min.js                            — ISWebComponentsLoader (carga selectiva + pin/mirrors)',
-    '  loader.md                                — docs del loader (LLM)',
-    '  sizes.json                               — {ruta: bytes} de todo el .min.js/.min.css publicado',
-    '  assets/icons/                            — SVGs Iconify + <prefix>.json + index.json',
-    '  Los tags conservan el prefijo is-* (p.ej. actions/button.min.js → <is-button>).',
-    '',
-    'Uso recomendado (loader):',
-    '  <script type="module">',
-    '    import { ISWebComponentsLoader } from ".../loader.min.js";',
-    '    // Pin opcional (SHA o branch). Sin pin → tip de main (API GitHub).',
-    '    // ISWebComponentsLoader.pin("abcdef0123…");',
-    '    ISWebComponentsLoader.configure({ mirrors: ["jsdelivr", "pages"] });',
-    '    await ISWebComponentsLoader.loadCSSBase();',
-    '    await ISWebComponentsLoader.loadCSSPalettesDefault();',
-    '    await ISWebComponentsLoader.load("is-button", "is-button-group");',
-    '    // o: load("actions") expande a cada tag.min.js (sin bundle de categoría)',
-    '  </script>',
-    '',
-    'Docs / skills:',
-    '  src/components/**/LLM.md, **/*.md           — docs LLM de componentes (fuente)',
-    '  dist/cdn/skills/<name>/SKILL.md             — skills para agentes (copiado en build)',
-    '  npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install',
-    '  npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents',
-    '',
-  ].join('\n'),
-);
-
-// ── Iconos locales ───────────────────────────────────────────────
-// Si existen assets/icons/{prefix}/{name}.svg (generados por
-// scripts/download-icons.mjs), los copiamos junto al bundle para que
-// <is-icon> pueda servirlos directamente desde el CDN jsDelivr sin
-// depender del script iconify-icon de Iconify.
-const iconsSrc = join(root, 'src', 'assets', 'icons');
-const iconsOut = join(dist, 'assets', 'icons');
-try {
-  await access(iconsSrc);
-  await mkdir(iconsOut, { recursive: true });
-  // Copia INCREMENTAL: solo los archivos que faltan o cambiaron de tamano.
-  // Un `rm -rf` + copia completa reescribia 317k archivos en cada build.
-  const { copyFile } = await import('node:fs/promises');
-  let copied = 0;
-  let kept = 0;
-  const copy = async (srcDir, dstDir) => {
-    await mkdir(dstDir, { recursive: true });
-    for (const entry of await readdir(srcDir, { withFileTypes: true })) {
-      if (entry.name.startsWith('.')) continue; // omite .state y dotfiles
-      const sp = join(srcDir, entry.name);
-      const dp = join(dstDir, entry.name);
-      if (entry.isDirectory()) { await copy(sp, dp); continue; }
-      const [src, dst] = await Promise.all([stat(sp), stat(dp).catch(() => null)]);
-      if (dst && dst.size === src.size && dst.mtimeMs >= src.mtimeMs) { kept += 1; continue; }
-      await copyFile(sp, dp);
-      copied += 1;
+// ── Iconos: dist/assets/ no se toca en el build ───────────────────
+// `dist/assets/` es la unica copia del material del kit. No se genera desde
+// `src/` — `src/assets/` ya no existe. El borrado de arriba solo afecta
+// dist/cdn/; los assets viven al lado, en dist/assets/.
+//
+// Aqui solo se verifica que siga entero.
+const iconsOut = join(root, 'dist', 'assets', 'icons');
+{
+  const contar = async (dir) => {
+    let n = 0;
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      if (e.name.startsWith('.')) continue;
+      n += e.isDirectory() ? await contar(join(dir, e.name)) : 1;
     }
+    return n;
   };
-  await copy(iconsSrc, iconsOut);
-  console.log(`  assets/icons         ${String(copied).padStart(6)} copiados, ${kept} ya al dia en dist/cdn/assets/icons/`);
-} catch {
-  // No hay assets/icons/ todavia; ignorar.
+  try {
+    const n = await contar(iconsOut);
+    if (n < MIN_ICONOS) {
+      console.error(`
+ERROR assets/icons: ${n} ficheros, se esperaban >= ${MIN_ICONOS}.`);
+      console.error('dist/assets/ es la unica copia y el build NUNCA la borra.');
+      console.error('Si falta, recuperala con `git checkout -- dist/assets` o `npm run icons:download`.');
+      process.exit(1);
+    }
+    console.log(`  assets/icons         ${n} preservados (no se regeneran: unica copia)`);
+  } catch {
+    console.error('\nERROR: falta dist/assets/icons/. Es la unica copia del set de iconos.');
+    console.error('Recuperala con `git checkout -- dist/assets` antes de volver a construir.');
+    process.exit(1);
+  }
 }
 
 // ── Skills para agentes (Cursor / Claude / LLM) ──────────────────
@@ -405,7 +466,7 @@ try {
   // Sin src/skills/: no bloquear el build del CDN.
 }
 
-const { buildDocsHtml } = await import('./build-docs.mjs');
-await buildDocsHtml();
-
-console.log(`OK dist/cdn  ${entries.length} components + is-base + loader + docs HTML`);
+// El HTML plano por componente se retiro el 31-ago-2026: la galeria es una SPA
+// y nadie llegaba a esas 177 paginas. Para agentes el canal es `src/skills/`,
+// que este mismo build publica en `dist/cdn/skills/`.
+console.log(`OK dist/cdn  ${entries.length} components + is-base + loader`);

@@ -16,7 +16,7 @@ import '../src/components/navigation/tab-group.js';
 import '../src/components/code/code.js';
 import './highlight-pre.js';
 import { repaint } from '../src/components/_shared/highlight-code.js';
-import components from '../manifest.js';
+import components from '../src/manifest.js';
 import {
   resolveSourceFiles,
   fetchSourceFile,

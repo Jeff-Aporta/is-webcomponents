@@ -29,13 +29,13 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 | Ruta | Contenido |
 |------|-----------|
 | `src/components/` | Fuentes por categoría (`actions`, `feedback`, `helpers`, …) |
-| `docs/` | HTML plano generado por componente (SEO; `npm run docs`) |
 | `src/styles/` | Tokens (`is-base.css`) y shell |
 | `src/assets/` | Iconos Iconify y favicon |
 | `src/skills/is-webcomponents/` | Guía para agentes IDE (CDN-first) — **solo fuente**, no en `dist/` |
 | `src/components/**/*.md` | Docs LLM por módulo / categoría — raw bajo `…/main/src/components/` |
-| `manifest.js` | Índice de la galería |
-| `robots.txt` · `sitemap.xml` | Crawl de GitHub Pages (`Allow: /`) |
+| `src/manifest.js` | Índice de la galería |
+| `AGENTS.md` | Carta de leyes + guía para agentes (único diario en raíz) |
+| `robots.txt` | Crawl de GitHub Pages (`Allow: /`) |
 | `scripts/` · `dist/cdn/` · `tests/` | Build, CDN, invariantes (`*.test.mjs` commiteados) |
 
 ## Agentes / LLM (CDN)
@@ -49,7 +49,7 @@ Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, 
 Antes de inventar API: lee src/components/LLM.md, el LLM.md de la categoría y el MD del módulo.
 ```
 
-Docs raw: [índice](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/LLM.md) · guía agentes en `src/skills/is-webcomponents/SKILL.md`.
+Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/LLM.md) · [AGENTS.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/AGENTS.md) · skill en `src/skills/is-webcomponents/SKILL.md`.
 
 ## Licencia
 

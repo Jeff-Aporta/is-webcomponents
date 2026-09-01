@@ -1,4 +1,4 @@
-# Intención → componente is-*
+﻿# Intención → componente is-*
 
 Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
 
@@ -37,7 +37,8 @@ Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
 | Icono | `is-icon` | Iconify script / img SVG |
 | Formato fecha/número/bytes | `is-format-*` / `is-relative-time` | Intl wrappers propios |
 | Form ContaPyme | `is-form` (+ json2html/html2json) | form React |
-| Layout ISP | `is-flex-layout` / `is-grid-layout` / `is-block-layout` | CSS grid ad-hoc sin necesidad |
+| Toolbar de acciones ISP | `is-flex-options` | flex de botones nativos / reinventar FlexOptions |
+| Tools hover ancladas | `is-float-card` | `display:none` + recrear DOM; `is-floating` interno; `is-popover` (es click) |
 | Título / texto ISP | `is-heading` / `is-text` | typography casera en apps ISP |
 | Superficie contenido | `is-card` | card div |
 | Colapsable | `is-details` | accordion casero |
@@ -89,8 +90,8 @@ Referencia real: wrappers de dominio tipo `tk-badges` → `is-tag`, `tk-chart` �
 ## CDN y tema
 
 ```html
-<link rel="stylesheet" href="…/dist/cdn/is-base.min.css">
-<link rel="stylesheet" href="…/dist/cdn/palettes.min.css">
+<link rel="stylesheet" href="…/dist/cdn/core/is-base.min.css">
+<link rel="stylesheet" href="…/dist/cdn/core/palettes.min.css">
 <script type="module" src="…/dist/cdn/all.min.js"></script>
 ```
 

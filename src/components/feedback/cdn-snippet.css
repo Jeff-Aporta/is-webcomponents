@@ -146,16 +146,6 @@
   color: color-mix(in srgb, var(--is-accent, currentColor) 60%, var(--is-text));
 }
 
-.cdn__size {
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  color: color-mix(in srgb, var(--is-text) 55%, transparent);
-}
-
-.cdn__size[hidden] {
-  display: none !important;
-}
-
 .cdn__copy {
   appearance: none;
   display: inline-flex;

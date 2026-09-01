@@ -146,12 +146,16 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `isp/block-layout.md` | `<is-block-layout>` |
 | `isp/confirm-delete.md` | `<is-confirm-delete>` |
 | `isp/flex-layout.md` | `<is-flex-layout>` |
+| `isp/flex-options.md` | `<is-flex-options>` |
+| `isp/float-card.md` | `<is-float-card>` |
 | `isp/form.md` | `<is-form>` |
 | `isp/modal-verificacion.md` | `<is-modal-verificacion>` |
 | `isp/grid-layout.md` | `<is-grid-layout>` |
 | `isp/heading.md` | `<is-heading>` |
 | `isp/loading-overlay.md` | `<is-loading-overlay>` |
 | `isp/text.md` | `<is-text>` |
+| `isp/tree-view.md` | `<is-tree-view>` |
+| `isp/tree-view-roles.md` | Roles 3D del árbol (`topology` / `containment` / `mobility`) |
 
 ### layout
 | Doc | Tags |

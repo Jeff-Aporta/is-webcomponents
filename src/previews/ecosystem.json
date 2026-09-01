@@ -25,11 +25,11 @@
     {
       "id": "playground",
       "title": "Playground del loader",
-      "lede": "Elegí categorías o tags, mirá el peso estimado (<code>sizes.json</code>) y copiá el snippet. El live demo aplica <code>load()</code> sobre esta misma página.",
+      "lede": "Elegí categorías o tags y copiá el snippet. El live demo aplica <code>load()</code> sobre esta misma página.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"eco-grid\">\n            <div>\n              <p class=\"eco-count\">Categorías</p>\n              <div class=\"eco-pick\" id=\"ecoCats\"></div>\n            </div>\n            <div>\n              <p class=\"eco-count\">Tags (acciones rápidas)</p>\n              <div class=\"eco-pick\" id=\"ecoTags\"></div>\n            </div>\n          </div>\n          <p class=\"eco-bytes\" id=\"ecoBytes\">Seleccioná algo para estimar bytes.</p>\n          <div class=\"eco-snippet-wrap\">\n            <is-code id=\"ecoSnippet\" language=\"html\" readonly compact></is-code>\n          </div>\n          <div class=\"eco-live\" id=\"ecoLive\" aria-live=\"polite\"></div>\n          <is-button id=\"ecoApply\" color=\"brand\">Aplicar load()</is-button>"
+          "html": "<div class=\"eco-grid\">\n            <div>\n              <p class=\"eco-count\">Categorías</p>\n              <div class=\"eco-pick\" id=\"ecoCats\"></div>\n            </div>\n            <div>\n              <p class=\"eco-count\">Tags (acciones rápidas)</p>\n              <div class=\"eco-pick\" id=\"ecoTags\"></div>\n            </div>\n          </div>\n          <div class=\"eco-snippet-wrap\">\n            <is-code id=\"ecoSnippet\" language=\"html\" readonly compact></is-code>\n          </div>\n          <div class=\"eco-live\" id=\"ecoLive\" aria-live=\"polite\"></div>\n          <is-button id=\"ecoApply\" color=\"brand\">Aplicar load()</is-button>"
         }
       ]
     },

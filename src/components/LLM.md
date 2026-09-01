@@ -152,12 +152,15 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 | `isp/block-layout.md` | `<is-block-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/confirm-delete.md` | `<is-confirm-delete>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/flex-layout.md` | `<is-flex-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
+| `isp/flex-options.md` | `<is-flex-options>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
+| `isp/float-card.md` | `<is-float-card>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/form.md` | `<is-form>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/modal-verificacion.md` | `<is-modal-verificacion>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/grid-layout.md` | `<is-grid-layout>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/heading.md` | `<is-heading>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/loading-overlay.md` | `<is-loading-overlay>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/text.md` | `<is-text>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
+| `isp/tree-view.md` | `<is-tree-view>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/btn-ref.md` | `<is-btn-ref>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `isp/catalogo-gen.md` | `<is-catalogo-gen>` | [isp/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/LLM.md) |
 | `layout/split-panel.md` | `<is-split-panel>` | [layout/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/layout/LLM.md) |
@@ -208,7 +211,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - Charts: [`_shared/svg-chart-engine.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/svg-chart-engine.js), [`_shared/chart-palette.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/chart-palette.js), marks.
 - Diagramas: specs/layout/turtle/edit/kind registry existentes.
 - Grid: [`_shared/grid-data.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/grid-data.js), [`_shared/grid-types.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/grid-types.js), [`_shared/grid-ui.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/grid-ui.js).
-- Iconos: [`_shared/icon-loader.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/icon-loader.js) — resuelve el SVG desde `assets/icons/` / `dist/cdn/assets/icons/`. Preferencias: [`_shared/prefs.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/prefs.js).
+- Iconos: [`_shared/icon-loader.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/icon-loader.js) — resuelve el SVG desde `assets/icons/` / `dist/assets/icons/`. Preferencias: [`_shared/prefs.js`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/_shared/prefs.js).
 
 ## Qué hacer
 
@@ -223,16 +226,16 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 - El bloque "Consumo por CDN" lo pinta SOLO `<is-cdn-snippet>` (auto-inyectado por `preview-chrome.js`); nunca duplicar un callout CDN a mano ni desde otros scripts.
 - `dist/cdn` está folderizado por categoría: `dist/cdn/<categoria>/<tag>.min.js` (+ `.min.css` + `scrollbars.css` hermanos), `dist/cdn/<categoria>/category.<categoria>.min.js` y `dist/cdn/all.min.js` en la raíz. Cualquier URL de CDN nueva deriva la categoría del manifest, nunca se arma plana.
 - Medir progreso de scroll SIEMPRE con el rect del contenido relativo al del scroller. `is-main` es el contenedor scrolleable: su propio `getBoundingClientRect()` no cambia al scrollear.
-- Iconos: SIEMPRE `<is-icon icon="prefix:name">`. El sistema de iconos es propio (231 familias / 317.522 SVG en `assets/icons/`, publicados en `dist/cdn/assets/icons/`) y `is-icon` inyecta el SVG inline para que `currentColor` funcione.
+- Iconos: SIEMPRE `<is-icon icon="prefix:name">`. El sistema de iconos es propio (231 familias / 317.522 SVG en `assets/icons/`, publicados en `dist/assets/icons/`) y `is-icon` inyecta el SVG inline para que `currentColor` funcione.
 - Las bases de iconos se derivan de `import.meta.url`, no de `location.pathname`: asi el bundle publicado encuentra sus assets sin importar la profundidad de la pagina que lo embebe.
-- Verificar higiene con `node scripts/audit-components.mjs` (también corre como test).
+- Verificar higiene con `node scripts/audit-components.ts` (también corre como test).
 - En los previews, cargar SIEMPRE `dist/cdn/all.min.js` (un solo archivo cacheado) en vez de módulos sueltos de `src/components/`.
 - Un componente que importa a otro debe REFERENCIARLO en el bundle, nunca inlinearlo: el inlineado pierde su `import.meta.url` y con él su CSS.
 - `color` y `variant` son DIMENSIONES DISTINTAS: `color` es el color semantico (brand, neutral, info, success, warning, danger) y `variant` la presentacion (filled, outlined, plain, soft, ghost...). Nunca meter color en `variant`.
 - Sin atributo `size`: todo se mide en `em` y la escala sale del `font-size` del contexto. Los demos deben ensenarlo con `style="font-size: …em"`.
 - Configuracion declarativa de componentes: `data-*` como `data-theme`/`data-palette` (p. ej. `data-wrapper`, `data-layout`, `data-arc`), no atributos sueltos ad-hoc.
 - Un overlay que el JS coloca con `left`/`top`/`transform` DEBE ser `position: absolute|fixed` en su CSS: si no, el transform lo mueve pero el elemento sigue ocupando espacio y desplaza el layout.
-- Todo `@import` de un CSS de componente tiene que existir tambien en `dist/` y con el nombre publicado. `tests/css-imports.test.mjs` lo verifica.
+- Todo `@import` de un CSS de componente tiene que existir tambien en `dist/` y con el nombre publicado. `tests/css-imports.test.ts` lo verifica.
 - Texto con degradado (`background-clip: text`): SIEMPRE un color plano de fallback antes, y el degradado dentro de `@supports`. Y comprobar el contraste en los DOS temas, no solo en el que estas mirando.
 - Contraste: calcularlo (ratio WCAG) en vez de juzgarlo a ojo; el minimo para texto grande es 3:1 y conviene apuntar a 4.5:1.
 - Para QA visual, usar el navegador de verdad: captura de pantalla y medicion por CDP. Varias veces los numeros decian que algo estaba bien y la captura mostro lo contrario (y al reves).
@@ -282,17 +285,17 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 11. Extractor confundió `if/for` con métodos: excluir keywords y validar tablas.
 12. Extractor aceptó separadores/rangos como tokens CSS: exigir identificador completo y no terminar en guion.
 13. `hasAttribute` no prueba tipo booleano: marcar boolean solo con setter toggle o contrato explícito.
-14. Listeners globales en constructor fugaron en 11 componentes: `tests/component-audit.test.mjs` (via `scripts/audit-components.mjs`) lo detecta.
+14. Listeners globales en constructor fugaron en 11 componentes: `tests/component-audit.test.ts` (via `scripts/audit-components.ts`) lo detecta.
 15. `&[attr]` dentro de `:host` no matchea el host: colores de tag/callout/card/details no aplicaban; el audit y el patrón `:host([attr])` lo previenen.
 16. Bundles de categoría con esbuild `bundle:true` colapsaban `import.meta.url` y cada componente buscaba un CSS inexistente: los bundles (`category.*.min.js`, `all.min.js`) solo re-importan los `.min.js` individuales (`bundle:false`).
 17. Componentes con preview pero sin entrada en manifest (is-format, is-observer, is-scrollspy, is-cdn-snippet) quedaban fuera del nav y de los tests: registrar SIEMPRE en manifest.
 18. El callout CDN inyectado por docs-chrome duplicaba a `<is-cdn-snippet>`: un solo dueño del bloque CDN.
-19. `dist/cdn` plano acumuló ~200 archivos en un nivel: build folderizado por categoría + `tests/cdn-folders.test.mjs` que falla si reaparece un artefacto plano en la raíz.
+19. `dist/cdn` plano acumuló ~200 archivos en un nivel: build folderizado por categoría + `tests/cdn-folders.test.ts` que falla si reaparece un artefacto plano en la raíz.
 20. El parallax del home medía `main.getBoundingClientRect()` siendo `main` el scroller: progreso congelado y componentes sin reaccionar al scroll. Medir el contenido contra el viewport del scroller.
 21. `run-all.mjs` filtraba por substring `cdn-` y saltaba tests que no necesitaban servidor: lista explícita `NEEDS_SERVER`.
-22. `<iconify-icon>` (script de terceros) convivía con `is-icon` y duplicaba el sistema de iconos: eliminado de componentes, diagramas y CSS; `tests/no-iconify.test.mjs` impide que vuelva.
+22. `<iconify-icon>` (script de terceros) convivía con `is-icon` y duplicaba el sistema de iconos: eliminado de componentes, diagramas y CSS; `tests/no-iconify.test.ts` impide que vuelva.
 23. El favicon y algunos demos pegaban a `api.iconify.design` en runtime: ahora usan `assets/favicon.svg` y los assets propios.
-24. El build hacía `rm -rf dist/cdn` y recopiaba los ~317k iconos en CADA corrida. Eso disparaba el watcher de Live Server y la página recargaba en bucle (el fetch de index.html aparecía cancelado en DevTools). Ahora la limpieza preserva `dist/cdn/assets/` y la copia es incremental; además `.vscode/settings.json` excluye esas rutas del watcher.
+24. El build hacía `rm -rf dist/cdn` y recopiaba los ~317k iconos en CADA corrida. Eso disparaba el watcher de Live Server y la página recargaba en bucle (el fetch de index.html aparecía cancelado en DevTools). Ahora la limpieza preserva `dist/assets/` y la copia es incremental; además `.vscode/settings.json` excluye esas rutas del watcher.
 25. Cada preview cargaba entre 6 y 15 módulos sueltos de `src/components/`. Ahora todas cargan el único `dist/cdn/all.min.js`, que el navegador cachea entre páginas: cambiar de demo ya no pide archivos nuevos.
 27. Un abanico radial no basta con no colisionar: tambien debe estar CONTENIDO. Limitar solo el radio base dejaba que los anillos (`base + n*(item+gap)`) se salieran del area. Los anillos se recortan al wrapper y, si no caben todas, se pasa a un grid dentro del wrapper (`data-packed`), contenido por construccion.
 28. Al posicionar un contenedor midiendo su PROPIO rect, el delta converge a 0 en la segunda pasada (te mides contra lo que acabas de mover). Medir siempre contra un origen estable.
@@ -309,16 +312,16 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 41. `@import url('../_shared/x.css')` dentro de un CSS de componente lo resuelve EL NAVEGADOR contra la ruta del .css PUBLICADO, no el bundler. Si el archivo no se emite en dist, el import da 404 en silencio: charts y los 9 diagramas se quedaron sin `diagram-kit.css` (y sin `.dg-tooltip { position: absolute }`), asi que el tooltip pasaba a ocupar sitio en el flujo y al hacer hover comprimia el grafico. En dev no se veia porque ahi la ruta al fuente si existe.
 42. Los @import a hermanos hay que reescribirlos al nombre publicado: en fuente es `./chart.css` pero en dist es `chart.min.css`. Los 10 charts tipados importaban una ruta inexistente y perdian la hoja base entera.
 
-43. `text-shadow` + `background-clip: text` + relleno transparente = la sombra se ve A TRAVES del glifo. La sombra se pinta debajo del texto, pero un glifo con `-webkit-text-fill-color: transparent` no tapa nada, asi que la sombra queda visible dentro de la letra. `.home-title` heredaba una sombra blanca al 70% en tema claro: el degradado era correcto y oscuro (`oklch(0.42 …)`, 8:1 sobre blanco) pero las letras se veian palidas y el degradado solo asomaba en el borde. Todo selector que recorte texto debe declarar `text-shadow: none`. Lo vigila `tests/gradient-text.test.mjs`.
+43. `text-shadow` + `background-clip: text` + relleno transparente = la sombra se ve A TRAVES del glifo. La sombra se pinta debajo del texto, pero un glifo con `-webkit-text-fill-color: transparent` no tapa nada, asi que la sombra queda visible dentro de la letra. `.home-title` heredaba una sombra blanca al 70% en tema claro: el degradado era correcto y oscuro (`oklch(0.42 …)`, 8:1 sobre blanco) pero las letras se veian palidas y el degradado solo asomaba en el borde. Todo selector que recorte texto debe declarar `text-shadow: none`. Lo vigila `tests/gradient-text.test.ts`.
 
 44. `background-clip: text` solo pinta dentro de la caja del elemento: los descendentes que sobresalen de la caja se quedan SIN degradado. Con un `line-height` ajustado (1.02 sobre 60px) la "p" de "rapido" caia fuera por ~10px. Se agranda la caja pintada con `padding-block` y se compensa con `margin-block` negativo para no mover el layout. Medir con `getClientRects()` del elemento contra los del `Range` de su contenido: si `cajaBottom - glifoBottom` es negativo, hay recorte.
 
 45. No dar por bueno el diagnostico obvio. Aqui el sintoma era "el texto claro no se lee" y la reaccion natural fue bajar el tope de luminosidad del degradado dos veces. El `backgroundImage` computado ya decia `oklch(0.42 …)` — oscuro — mientras la pantalla mostraba rosa palido: esa contradiccion entre el valor computado y el pixel era la pista, y el culpable era otra propiedad (la sombra). Cuando el estilo computado dice una cosa y la captura otra, el problema es una capa distinta, no ese valor.
 40. Iconos con paleta propia (banderas, logos, emoji) NO deben normalizarse a `currentColor`: los paths sin `fill` heredaban el color del host y el icono salia a medio pintar. Se detecta la paleta y se respeta el SVG.
 33. `highlight-pre.js` / `paint()` montan `<is-code readonly compact>` (ya no `runMode` sobre `<pre>`). En shadow DOM hay que llamar a `paint` a mano (p. ej. `<is-cdn-snippet>`); el CSS del editor vive en su Shadow, no hace falta clonar hojas CM al host.
-26. Los bundles POR COMPONENTE inlineaban los componentes que importaban (21 de ellos duplicaban `icon.js`). El componente inlineado heredaba el `import.meta.url` del anfitrión, así que `adoptCss` le cargaba el CSS equivocado: `is-icon` acababa con `actions/button.min.css`, su host dejaba de ser cuadrado (15×23.3) y el icono se veía descentrado en TODOS los triggers. El build marca los imports entre componentes como externos y `tests/cdn-folders.test.mjs` verifica cada uno.
+26. Los bundles POR COMPONENTE inlineaban los componentes que importaban (21 de ellos duplicaban `icon.js`). El componente inlineado heredaba el `import.meta.url` del anfitrión, así que `adoptCss` le cargaba el CSS equivocado: `is-icon` acababa con `actions/button.min.css`, su host dejaba de ser cuadrado (15×23.3) y el icono se veía descentrado en TODOS los triggers. El build marca los imports entre componentes como externos y `tests/cdn-folders.test.ts` verifica cada uno.
 
-46. El visor a pantalla completa es OPT-IN via `open-on-click`. Antes era opt-out (`without-viewer`), asi que 11 componentes secuestraban el clic del usuario sin que nadie lo pidiera. Un componente por defecto NO abre nada. Si no hay `open-on-click` tampoco se emite `is-open-viewer` (prometeria una apertura que no ocurre) ni se pinta `cursor: zoom-in` (insinua un clic muerto). Lo vigila `tests/viewer-opt-in.test.mjs`.
+46. El visor a pantalla completa es OPT-IN via `open-on-click`. Antes era opt-out (`without-viewer`), asi que 11 componentes secuestraban el clic del usuario sin que nadie lo pidiera. Un componente por defecto NO abre nada. Si no hay `open-on-click` tampoco se emite `is-open-viewer` (prometeria una apertura que no ocurre) ni se pinta `cursor: zoom-in` (insinua un clic muerto). Lo vigila `tests/viewer-opt-in.test.ts`.
 
 47. Hit-test de hover por PROXIMIDAD A UN PUNTO deja zonas muertas en marks grandes. Cada hit se registraba como centroide + radio (`marks-radial.js`: radio = medio grosor del anillo), asi que el borde de un sector ancho de doughnut quedaba fuera del alcance aun estando claramente dentro de la figura. Primero manda la geometria real (`e.target.closest('.mark')`, sin retargeting porque el listener vive en el mismo shadow root); la proximidad queda de respaldo, que para line/scatter SI es el modelo correcto. Verificado: en un punto a 344px del centroide, el modelo viejo daba `marcaActiva: false` y el nuevo `true`.
 
@@ -328,7 +331,7 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 
 50. `padding` no encoge a un hijo `position: absolute; inset: 0`: su bloque contenedor es la caja de PADDING del ancestro posicionado, asi que el inset cubre tambien el padding. Para dar aire al escenario del visor hay que mover el `inset` (`3.4rem 0 1rem 0`), no anadir padding.
 
-51. Las dos familias de CSS muerto (`&[attr]` bajo `:host {}` y `mi-tag .algo` en una hoja adoptada por `mi-tag`) no las detecta el navegador: la hoja carga, no hay error en consola y el componente sale sin estilar. Por eso ya se colaron varias veces. Las vigila `tests/shadow-css-scope.test.mjs`, que deriva los tags de cada módulo de sus `customElements.define` y falla citando `archivo:línea`. Si aparece, se corrige la regla — no se relaja el test.
+51. Las dos familias de CSS muerto (`&[attr]` bajo `:host {}` y `mi-tag .algo` en una hoja adoptada por `mi-tag`) no las detecta el navegador: la hoja carga, no hay error en consola y el componente sale sin estilar. Por eso ya se colaron varias veces. Las vigila `tests/shadow-css-scope.test.ts`, que deriva los tags de cada módulo de sus `customElements.define` y falla citando `archivo:línea`. Si aparece, se corrige la regla — no se relaja el test.
 
 52. El CDN es jsDelivr sobre el repo (`cdn.jsdelivr.net/gh/<user>/<repo>@<ref>/dist/cdn`): publica cualquier ruta del árbol sin build ni despliegue aparte. Se probó Cloudflare Pages y se descartó: exigía un workflow, un proyecto que mantener, y su límite de 20.000 archivos por deployment chocaba con los ~317k SVGs de `assets/icons`.
 
@@ -351,8 +354,8 @@ Un documento corresponde a pareja JS/CSS; módulos multi-tag aparecen una vez.
 
 ## Verificación
 
-    node scripts/audit-components.mjs
-    node tests/run-all.mjs
+    node scripts/audit-components.ts
+    node tests/run-all.ts
     node scripts/docs-consistency.selfcheck.mjs
 
 Salida base: `docs consistency self-check: PASS (104 modules, 112 tags, 10 categories)`.

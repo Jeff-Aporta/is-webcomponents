@@ -17,8 +17,11 @@ inferir API desde nombre.
 | --- | --- | --- |
 | `<is-block-layout>` | [block-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/block-layout.md) | Bloque que mide su propio ancho y publica el breakpoint |
 | `<is-flex-layout>` | [flex-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/flex-layout.md) | Contenedor flex declarativo |
+| `<is-flex-options>` | [flex-options.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/flex-options.md) | Toolbar de acciones (port FlexOptions) |
+| `<is-float-card>` | [float-card.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/float-card.md) | Panel flotante anclado (port FloatingComponent) |
 | `<is-grid-layout>` | [grid-layout.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/grid-layout.md) | Rejilla declarativa por `cells` |
 | `<is-text>` | [text.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/text.md) | Texto con color semántico y line-clamp |
+| `<is-tree-view>` | [tree-view.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/tree-view.md) | Árbol editable (drag, historial, ficha). Roles: [tree-view-roles.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/tree-view-roles.md) |
 | `<is-heading>` | [heading.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/heading.md) | Títulos h1..h6 tintados por la paleta |
 | `<is-accordion-group>` | [accordion-group.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/accordion-group.md) | Acordeón declarativo |
 | `<is-confirm-delete>` | [confirm-delete.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/isp/confirm-delete.md) | Confirmación destructiva "escribe para confirmar" |
@@ -64,7 +67,7 @@ módulos existentes.
 - Fallbacks de custom properties siempre a tokens del tema (`--is-text`,
   `--is-accent`, …), nunca a un color literal.
 - Verificar contra ISP con `data-palette="contapyme"`.
-- Ejecutar `node scripts/audit-components.mjs` y `node tests/run-all.mjs`.
+- Ejecutar `node scripts/audit-components.ts` y `node tests/run-all.ts`.
 
 ## Qué no hacer
 

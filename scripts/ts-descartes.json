@@ -1,0 +1,16 @@
+[
+  "src/components/_shared/json-html.ts::appendJson::json",
+  "src/components/_shared/tree-layout.ts::<anonima>::e",
+  "src/components/_shared/tree-layout.ts::computeExtent::entry",
+  "src/components/data/ag-grid.ts::<anonima>::e",
+  "src/components/data/data-grid.ts::appendContent::content",
+  "src/components/diagrams/class-spec.ts::readMember::raw",
+  "src/components/diagrams/flowchart-spec.ts::<anonima>::w",
+  "src/components/diagrams/lightbox.ts::<anonima>::e",
+  "src/components/diagrams/sequence-parity.selfcheck.ts::diff::a",
+  "src/components/diagrams/sequence-parity.selfcheck.ts::diff::b",
+  "src/components/diagrams/timeline-spec.ts::<anonima>::e",
+  "src/components/layout/dock.ts::#updateMagnification::e",
+  "src/components/media/video.ts::<anonima>::e",
+  "src/components/overlays/command-palette.ts::#onKey::e"
+]

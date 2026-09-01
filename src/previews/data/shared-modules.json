@@ -1,24 +1,13 @@
 {
-  "generatedAt": "2026-08-25T18:20:06.457Z",
-  "count": 66,
+  "generatedAt": "2026-09-01T05:49:43.426Z",
+  "count": 59,
   "modules": [
     {
-      "file": "adopt-css.js",
-      "id": "adopt-css",
-      "path": "src/components/_shared/adopt-css.js",
-      "summary": "Href del `.css` hermano de un módulo JS. — Conserva el sufijo `.min`: `foo.min.js` → `foo.min.css`, `foo.js` → `foo.css`.",
-      "bytes": 993,
-      "exports": [
-        "siblingCssHref",
-        "adoptCss"
-      ]
-    },
-    {
-      "file": "cdn-ref.js",
+      "file": "cdn-ref.ts",
       "id": "cdn-ref",
-      "path": "src/components/_shared/cdn-ref.js",
+      "path": "src/components/_shared/cdn-ref.ts",
       "summary": "cdn-ref — Primario: jsDelivr (`@<sha>` inmutable). Espejo: GitHub Pages (tip",
-      "bytes": 2574,
+      "bytes": 2711,
       "exports": [
         "GH_REPO",
         "resolveRef",
@@ -33,23 +22,11 @@
       ]
     },
     {
-      "file": "cdn-sizes.js",
-      "id": "cdn-sizes",
-      "path": "src/components/_shared/cdn-sizes.js",
-      "summary": "Pesos CDN desde `sizes.json` (emitido por el build). — Expande `all.min.js` / `category.*.min.js` a los `.min.js` reales que se bajan.",
-      "bytes": 2172,
-      "exports": [
-        "loadCdnSizes",
-        "pathFromCdnUrl",
-        "totalCdnSize"
-      ]
-    },
-    {
-      "file": "chart-palette.js",
+      "file": "chart-palette.ts",
       "id": "chart-palette",
-      "path": "src/components/_shared/chart-palette.js",
-      "summary": "Módulo compartido `chart-palette.js`.",
-      "bytes": 2544,
+      "path": "src/components/_shared/chart-palette.ts",
+      "summary": "Módulo compartido `chart-palette.ts`.",
+      "bytes": 2568,
       "exports": [
         "resolvePaletteKey",
         "resolveMode",
@@ -60,11 +37,11 @@
       ]
     },
     {
-      "file": "code-cm.js",
+      "file": "code-cm.ts",
       "id": "code-cm",
-      "path": "src/components/_shared/code-cm.js",
+      "path": "src/components/_shared/code-cm.ts",
       "summary": "code-cm — Reusa el CDN y la carga de modos base de `highlight-code.js` (pintor de",
-      "bytes": 3059,
+      "bytes": 3096,
       "exports": [
         "loadCssText",
         "adoptCodeMirrorCss",
@@ -75,11 +52,11 @@
       ]
     },
     {
-      "file": "code-diff.js",
+      "file": "code-diff.ts",
       "id": "code-diff",
-      "path": "src/components/_shared/code-diff.js",
+      "path": "src/components/_shared/code-diff.ts",
       "summary": "code-diff — Por qué existe: pintar un diff con el modo `javascript` (o cualquier otro de",
-      "bytes": 9035,
+      "bytes": 9082,
       "exports": [
         "DIFF_LINE_CLASS",
         "DIFF_LINE_CLASSES",
@@ -91,11 +68,11 @@
       ]
     },
     {
-      "file": "code-format.js",
+      "file": "code-format.ts",
       "id": "code-format",
-      "path": "src/components/_shared/code-format.js",
+      "path": "src/components/_shared/code-format.ts",
       "summary": "code-format — No es Prettier completo (sin AST de terceros). Acepta un JSON de opciones",
-      "bytes": 6135,
+      "bytes": 6259,
       "exports": [
         "DEFAULT_FORMAT",
         "normalizeFormatConfig",
@@ -103,11 +80,11 @@
       ]
     },
     {
-      "file": "code-langs.js",
+      "file": "code-langs.ts",
       "id": "code-langs",
-      "path": "src/components/_shared/code-langs.js",
+      "path": "src/components/_shared/code-langs.ts",
       "summary": "code-langs — Los modos livianos (js/ts/jsx/html/css) se resuelven con lo que ya carga",
-      "bytes": 5896,
+      "bytes": 5944,
       "exports": [
         "registerLanguage",
         "resolveLanguage",
@@ -117,11 +94,11 @@
       ]
     },
     {
-      "file": "code-model.js",
+      "file": "code-model.ts",
       "id": "code-model",
-      "path": "src/components/_shared/code-model.js",
+      "path": "src/components/_shared/code-model.ts",
       "summary": "code-model — Analogía con html2json / json2html: el texto plano es `value`; las",
-      "bytes": 4936,
+      "bytes": 5040,
       "exports": [
         "CODE_DOC_SCHEMA",
         "normalizeMark",
@@ -132,11 +109,11 @@
       ]
     },
     {
-      "file": "code-text.js",
+      "file": "code-text.ts",
       "id": "code-text",
-      "path": "src/components/_shared/code-text.js",
+      "path": "src/components/_shared/code-text.ts",
       "summary": "code-text — Extraído para evitar ciclos highlight-code ↔ code ↔ code-format.",
-      "bytes": 3736,
+      "bytes": 3870,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -146,11 +123,11 @@
       ]
     },
     {
-      "file": "code-theme.js",
+      "file": "code-theme.ts",
       "id": "code-theme",
-      "path": "src/components/_shared/code-theme.js",
+      "path": "src/components/_shared/code-theme.ts",
       "summary": "code-theme — El consumidor pasa un objeto de colores (como un theme de VS Code / CM).",
-      "bytes": 6687,
+      "bytes": 7087,
       "exports": [
         "THEME_PROP_MAP",
         "BUILTIN_THEMES",
@@ -159,32 +136,32 @@
       ]
     },
     {
-      "file": "date-field-core.js",
+      "file": "date-field-core.ts",
       "id": "date-field-core",
-      "path": "src/components/_shared/date-field-core.js",
+      "path": "src/components/_shared/date-field-core.ts",
       "summary": "Motor de campos de fecha/hora editables por secciones (MUI Fields). — Cada sección (día, mes, año, hora…) es un `role=\"spinbutton\"`: flechas para",
-      "bytes": 12904,
+      "bytes": 13026,
       "exports": [
         "sectionLayout",
         "SectionField"
       ]
     },
     {
-      "file": "date-field-element.js",
+      "file": "date-field-element.ts",
       "id": "date-field-element",
-      "path": "src/components/_shared/date-field-element.js",
-      "summary": "Módulo compartido `date-field-element.js`.",
-      "bytes": 10586,
+      "path": "src/components/_shared/date-field-element.ts",
+      "summary": "Módulo compartido `date-field-element.ts`.",
+      "bytes": 11128,
       "exports": [
         "defineDateField"
       ]
     },
     {
-      "file": "date-utils.js",
+      "file": "date-utils.ts",
       "id": "date-utils",
-      "path": "src/components/_shared/date-utils.js",
+      "path": "src/components/_shared/date-utils.ts",
       "summary": "Utilidades de fecha y hora para los componentes de calendario y reloj. — Todo se mueve en ISO local (`yyyy-mm-dd`, `HH:mm[:ss]`): son cadenas",
-      "bytes": 6102,
+      "bytes": 6174,
       "exports": [
         "ISO_DATE",
         "ISO_TIME",
@@ -201,22 +178,11 @@
       ]
     },
     {
-      "file": "define.js",
-      "id": "define",
-      "path": "src/components/_shared/define.js",
-      "summary": "define — Centraliza el bloque que se repetía al final de ~110 componentes:",
-      "bytes": 1952,
-      "exports": [
-        "defineElement",
-        "globalNameFor"
-      ]
-    },
-    {
-      "file": "diagram-arrow.js",
+      "file": "diagram-arrow.ts",
       "id": "diagram-arrow",
-      "path": "src/components/_shared/diagram-arrow.js",
+      "path": "src/components/_shared/diagram-arrow.ts",
       "summary": "Puntas de flecha para diagramas. — El problema que resuelve: cada diagrama dibujaba su cabeza asumiendo que la",
-      "bytes": 3923,
+      "bytes": 3931,
       "exports": [
         "pathPoints",
         "pathEndDirection",
@@ -226,11 +192,11 @@
       ]
     },
     {
-      "file": "diagram-astar.js",
+      "file": "diagram-astar.ts",
       "id": "diagram-astar",
-      "path": "src/components/_shared/diagram-astar.js",
+      "path": "src/components/_shared/diagram-astar.ts",
       "summary": "Rutas ortogonales en rejilla — A* ponderado reutilizable (secuencia, flujo, ER).",
-      "bytes": 19619,
+      "bytes": 19699,
       "exports": [
         "routeOrthogonal",
         "countTurns",
@@ -246,11 +212,11 @@
       ]
     },
     {
-      "file": "diagram-edge-actors.js",
+      "file": "diagram-edge-actors.ts",
       "id": "diagram-edge-actors",
-      "path": "src/components/_shared/diagram-edge-actors.js",
+      "path": "src/components/_shared/diagram-edge-actors.ts",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 6691,
+      "bytes": 6731,
       "exports": [
         "EDGE_ACTOR_H",
         "edgeActorWidth",
@@ -261,20 +227,20 @@
       ]
     },
     {
-      "file": "diagram-edge-spread.js",
+      "file": "diagram-edge-spread.ts",
       "id": "diagram-edge-spread",
-      "path": "src/components/_shared/diagram-edge-spread.js",
+      "path": "src/components/_shared/diagram-edge-spread.ts",
       "summary": "Separa polilíneas ortogonales que corren pegadas. — El A* reutiliza el mismo corredor: varias aristas salen como una sola raya.",
-      "bytes": 3406,
+      "bytes": 3446,
       "exports": [
         "spreadOrthogonalPaths"
       ]
     },
     {
-      "file": "diagram-edge-style.js",
+      "file": "diagram-edge-style.ts",
       "id": "diagram-edge-style",
-      "path": "src/components/_shared/diagram-edge-style.js",
-      "summary": "Módulo compartido `diagram-edge-style.js`.",
+      "path": "src/components/_shared/diagram-edge-style.ts",
+      "summary": "Módulo compartido `diagram-edge-style.ts`.",
       "bytes": 662,
       "exports": [
         "EDGE_HUES",
@@ -285,11 +251,11 @@
       ]
     },
     {
-      "file": "diagram-edit.js",
+      "file": "diagram-edit.ts",
       "id": "diagram-edit",
-      "path": "src/components/_shared/diagram-edit.js",
+      "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 9931,
+      "bytes": 10044,
       "exports": [
         "loadOverrides",
         "saveOverrides",
@@ -303,21 +269,21 @@
       ]
     },
     {
-      "file": "diagram-element-base.js",
+      "file": "diagram-element-base.ts",
       "id": "diagram-element-base",
-      "path": "src/components/_shared/diagram-element-base.js",
+      "path": "src/components/_shared/diagram-element-base.ts",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 8490,
+      "bytes": 8788,
       "exports": [
-        "DiagramElementBase extends ElementBase \n  static get observedAttributes"
+        "DiagramElementBase extends ElementBase \r\n  static get observedAttributes"
       ]
     },
     {
-      "file": "diagram-grid.js",
+      "file": "diagram-grid.ts",
       "id": "diagram-grid",
-      "path": "src/components/_shared/diagram-grid.js",
+      "path": "src/components/_shared/diagram-grid.ts",
       "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
-      "bytes": 11247,
+      "bytes": 11391,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",
@@ -334,21 +300,21 @@
       ]
     },
     {
-      "file": "diagram-header.js",
+      "file": "diagram-header.ts",
       "id": "diagram-header",
-      "path": "src/components/_shared/diagram-header.js",
-      "summary": "Módulo compartido `diagram-header.js`.",
-      "bytes": 1035,
+      "path": "src/components/_shared/diagram-header.ts",
+      "summary": "Módulo compartido `diagram-header.ts`.",
+      "bytes": 1155,
       "exports": [
         "diagramHeaderWidth"
       ]
     },
     {
-      "file": "dom-utils.js",
+      "file": "dom-utils.ts",
       "id": "dom-utils",
-      "path": "src/components/_shared/dom-utils.js",
+      "path": "src/components/_shared/dom-utils.ts",
       "summary": "dom-utils — Sustituye copias dispersas en is-checkbox, is-switch, is-input,",
-      "bytes": 2820,
+      "bytes": 2957,
       "exports": [
         "hasSlotted",
         "assignedNodes",
@@ -358,32 +324,11 @@
       ]
     },
     {
-      "file": "element-base.js",
-      "id": "element-base",
-      "path": "src/components/_shared/element-base.js",
-      "summary": "element-base — Centraliza el patrón repetido en ~50 componentes:",
-      "bytes": 6388,
-      "exports": [
-        "ElementBase extends HTMLElement"
-      ]
-    },
-    {
-      "file": "emit.js",
-      "id": "emit",
-      "path": "src/components/_shared/emit.js",
-      "summary": "emit — Todos los eventos del kit (`is-change`, `is-open`, `is-remove`, …) cruzan",
-      "bytes": 1771,
-      "exports": [
-        "emit",
-        "emitCancelable"
-      ]
-    },
-    {
-      "file": "form-associated.js",
+      "file": "form-associated.ts",
       "id": "form-associated",
-      "path": "src/components/_shared/form-associated.js",
+      "path": "src/components/_shared/form-associated.ts",
       "summary": "Utilidades mínimas para form-associated custom elements. — No es un mixin de clase: cada CE llama helpers sobre su ElementInternals.",
-      "bytes": 1540,
+      "bytes": 1806,
       "exports": [
         "attachFormInternals",
         "setCustomState",
@@ -393,11 +338,11 @@
       ]
     },
     {
-      "file": "form-control-mixin.js",
+      "file": "form-control-mixin.ts",
       "id": "form-control-mixin",
-      "path": "src/components/_shared/form-control-mixin.js",
+      "path": "src/components/_shared/form-control-mixin.ts",
       "summary": "form-control-mixin — Muchos componentes de formulario (checkbox, input, select, etc.) repiten",
-      "bytes": 6920,
+      "bytes": 6954,
       "exports": [
         "formControlTemplate",
         "getFormControlTemplate",
@@ -406,11 +351,11 @@
       ]
     },
     {
-      "file": "grid-data.js",
+      "file": "grid-data.ts",
       "id": "grid-data",
-      "path": "src/components/_shared/grid-data.js",
+      "path": "src/components/_shared/grid-data.ts",
       "summary": "Pipeline de datos del data grid: normalización de columnas, obtención y — formateo de valores, filtrado, ordenación, agrupación (row grouping y tree",
-      "bytes": 14724,
+      "bytes": 14756,
       "exports": [
         "normalizeColumns",
         "resolveWidths",
@@ -427,11 +372,11 @@
       ]
     },
     {
-      "file": "grid-types.js",
+      "file": "grid-types.ts",
       "id": "grid-types",
-      "path": "src/components/_shared/grid-types.js",
+      "path": "src/components/_shared/grid-types.ts",
       "summary": "Tipos de columna del data grid: alineación por defecto, comparador, — formateo y operadores de filtro. Réplica de los tipos nativos de MUI X",
-      "bytes": 11548,
+      "bytes": 17997,
       "exports": [
         "LOGIC",
         "stringComparator",
@@ -448,11 +393,11 @@
       ]
     },
     {
-      "file": "grid-ui.js",
+      "file": "grid-ui.ts",
       "id": "grid-ui",
-      "path": "src/components/_shared/grid-ui.js",
+      "path": "src/components/_shared/grid-ui.ts",
       "summary": "Popovers del data grid: menú de columna, panel de columnas, panel de filtros, — menús de densidad y exportación.",
-      "bytes": 11136,
+      "bytes": 11186,
       "exports": [
         "createPopover",
         "showPopover",
@@ -466,11 +411,11 @@
       ]
     },
     {
-      "file": "highlight-code.js",
+      "file": "highlight-code.ts",
       "id": "highlight-code",
-      "path": "src/components/_shared/highlight-code.js",
+      "path": "src/components/_shared/highlight-code.ts",
       "summary": "highlight-code — se coloreaba con CodeMirror.runMode sobre `<pre class=\"code\">`.",
-      "bytes": 10831,
+      "bytes": 10904,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -487,27 +432,25 @@
       ]
     },
     {
-      "file": "icon-loader.js",
+      "file": "icon-loader.ts",
       "id": "icon-loader",
-      "path": "src/components/_shared/icon-loader.js",
+      "path": "src/components/_shared/icon-loader.ts",
       "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component — `<iconify-icon>` ni su script de CDN. Todo el sistema de iconos vive en",
-      "bytes": 8619,
+      "bytes": 5998,
       "exports": [
+        "hasIconLocal",
         "iconSourceBase",
         "resolveIconSvg",
-        "hasIconLocalSync",
-        "hasIconLocal",
         "resolveIconRaw",
-        "clearRawCache",
         "listIconFamilies"
       ]
     },
     {
-      "file": "intent.js",
+      "file": "intent.ts",
       "id": "intent",
-      "path": "src/components/_shared/intent.js",
+      "path": "src/components/_shared/intent.ts",
       "summary": "intent — Un \"intent\" describe EL SIGNIFICADO del color que aplica el componente,",
-      "bytes": 1605,
+      "bytes": 1888,
       "exports": [
         "INTENT",
         "DEFAULT_INTENT",
@@ -516,11 +459,11 @@
       ]
     },
     {
-      "file": "isp-color.js",
+      "file": "isp-color.ts",
       "id": "isp-color",
-      "path": "src/components/_shared/isp-color.js",
+      "path": "src/components/_shared/isp-color.ts",
       "summary": "isp-color — Orden de resolución del atributo `color`:",
-      "bytes": 4225,
+      "bytes": 4317,
       "exports": [
         "SEMANTIC_COLORS",
         "normalizeMix",
@@ -531,11 +474,11 @@
       ]
     },
     {
-      "file": "isp-record-utils.js",
+      "file": "isp-record-utils.ts",
       "id": "isp-record-utils",
-      "path": "src/components/_shared/isp-record-utils.js",
+      "path": "src/components/_shared/isp-record-utils.ts",
       "summary": "Helpers de registro planos / TObject-like (ispgen) para componentes ISP. — No depende de `@ingenieria_insoft/ispgen`.",
-      "bytes": 3824,
+      "bytes": 4036,
       "exports": [
         "isPresent",
         "asStr",
@@ -549,11 +492,11 @@
       ]
     },
     {
-      "file": "json-html.js",
+      "file": "json-html.ts",
       "id": "json-html",
-      "path": "src/components/_shared/json-html.js",
+      "path": "src/components/_shared/json-html.ts",
       "summary": "Codec compacto HTML ↔ JSON (lenguaje de definición del kit). — Node     = string | [tag, attrs?, ...children]",
-      "bytes": 7622,
+      "bytes": 7723,
       "exports": [
         "json2html",
         "html2json",
@@ -563,11 +506,11 @@
       ]
     },
     {
-      "file": "lane-layout.js",
+      "file": "lane-layout.ts",
       "id": "lane-layout",
-      "path": "src/components/_shared/lane-layout.js",
+      "path": "src/components/_shared/lane-layout.ts",
       "summary": "Motor de layout puro (sin DOM) para diagramas de línea de tiempo (Gantt, — timeline). Resuelve fechas, escalas de tiempo, marcas de eje \"agradables\"",
-      "bytes": 9630,
+      "bytes": 9693,
       "exports": [
         "parseDate",
         "addDuration",
@@ -578,11 +521,11 @@
       ]
     },
     {
-      "file": "llm-agent-prompt.js",
+      "file": "llm-agent-prompt.ts",
       "id": "llm-agent-prompt",
-      "path": "src/components/_shared/llm-agent-prompt.js",
+      "path": "src/components/_shared/llm-agent-prompt.ts",
       "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `src/skills/is-webcomponents/PROMPT.md`",
-      "bytes": 4225,
+      "bytes": 4233,
       "exports": [
         "SKILL_DOCS",
         "LLM_PROMPT_FALLBACK",
@@ -592,11 +535,11 @@
       ]
     },
     {
-      "file": "misc-utils.js",
+      "file": "misc-utils.ts",
       "id": "misc-utils",
-      "path": "src/components/_shared/misc-utils.js",
+      "path": "src/components/_shared/misc-utils.ts",
       "summary": "misc-utils — Sustituye copias dispersas en is-slider, is-rating, is-split-panel,",
-      "bytes": 2067,
+      "bytes": 2139,
       "exports": [
         "tidy",
         "tidyToStep",
@@ -605,21 +548,21 @@
       ]
     },
     {
-      "file": "modal-base.js",
+      "file": "modal-base.ts",
       "id": "modal-base",
-      "path": "src/components/_shared/modal-base.js",
+      "path": "src/components/_shared/modal-base.ts",
       "summary": "modal-base — Centraliza TODO el ciclo de vida de un modal accesible que no es nativo:",
-      "bytes": 12443,
+      "bytes": 12861,
       "exports": [
         "ModalBase extends withStyleAttrs"
       ]
     },
     {
-      "file": "node-link-layout.js",
+      "file": "node-link-layout.ts",
       "id": "node-link-layout",
-      "path": "src/components/_shared/node-link-layout.js",
+      "path": "src/components/_shared/node-link-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para diagramas de nodos y — enlaces (flowchart, class, state, ER, C4, architecture, block).",
-      "bytes": 11550,
+      "bytes": 11647,
       "exports": [
         "assignLayers",
         "orderLayers",
@@ -629,11 +572,11 @@
       ]
     },
     {
-      "file": "path-turtle.js",
+      "file": "path-turtle.ts",
       "id": "path-turtle",
-      "path": "src/components/_shared/path-turtle.js",
-      "summary": "Módulo compartido `path-turtle.js`.",
-      "bytes": 10278,
+      "path": "src/components/_shared/path-turtle.ts",
+      "summary": "Módulo compartido `path-turtle.ts`.",
+      "bytes": 10323,
       "exports": [
         "PathTurtle",
         "TURTLE_AUTO_GAP",
@@ -641,31 +584,31 @@
       ]
     },
     {
-      "file": "picker-element.js",
+      "file": "picker-element.ts",
       "id": "picker-element",
-      "path": "src/components/_shared/picker-element.js",
-      "summary": "Módulo compartido `picker-element.js`.",
-      "bytes": 19659,
+      "path": "src/components/_shared/picker-element.ts",
+      "summary": "Módulo compartido `picker-element.ts`.",
+      "bytes": 19980,
       "exports": [
         "definePickerInput"
       ]
     },
     {
-      "file": "popup-dismiss.js",
+      "file": "popup-dismiss.ts",
       "id": "popup-dismiss",
-      "path": "src/components/_shared/popup-dismiss.js",
+      "path": "src/components/_shared/popup-dismiss.ts",
       "summary": "popup-dismiss — Todo panel flotante del kit (is-dropdown, is-context-menu, y cualquiera que",
-      "bytes": 5559,
+      "bytes": 5572,
       "exports": [
         "createPopupDismiss"
       ]
     },
     {
-      "file": "position.js",
+      "file": "position.ts",
       "id": "position",
-      "path": "src/components/_shared/position.js",
+      "path": "src/components/_shared/position.ts",
       "summary": "Motor de posicionamiento anclado (flip / shift / arrow). — Sin dependencias — usa getBoundingClientRect + flip/shift.",
-      "bytes": 13253,
+      "bytes": 13343,
       "exports": [
         "PLACEMENTS",
         "computePosition",
@@ -673,9 +616,9 @@
       ]
     },
     {
-      "file": "prefs.js",
+      "file": "prefs.ts",
       "id": "prefs",
-      "path": "src/components/_shared/prefs.js",
+      "path": "src/components/_shared/prefs.ts",
       "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"is-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
       "bytes": 3829,
       "exports": [
@@ -690,11 +633,11 @@
       ]
     },
     {
-      "file": "prompt-md.js",
+      "file": "prompt-md.ts",
       "id": "prompt-md",
-      "path": "src/components/_shared/prompt-md.js",
-      "summary": "Módulo compartido `prompt-md.js`.",
-      "bytes": 9849,
+      "path": "src/components/_shared/prompt-md.ts",
+      "summary": "Módulo compartido `prompt-md.ts`.",
+      "bytes": 9998,
       "exports": [
         "PROMPT_VAR_PATTERN",
         "MALFORMED_PROMPT_VAR_PATTERN",
@@ -711,11 +654,11 @@
       ]
     },
     {
-      "file": "reflect.js",
+      "file": "reflect.ts",
       "id": "reflect",
-      "path": "src/components/_shared/reflect.js",
+      "path": "src/components/_shared/reflect.ts",
       "summary": "reflect — El kit escribía la MISMA operación de siete maneras distintas repartidas",
-      "bytes": 2700,
+      "bytes": 2777,
       "exports": [
         "setStringAttr",
         "setOptionalAttr",
@@ -723,11 +666,11 @@
       ]
     },
     {
-      "file": "resolve-locale.js",
+      "file": "resolve-locale.ts",
       "id": "resolve-locale",
-      "path": "src/components/_shared/resolve-locale.js",
+      "path": "src/components/_shared/resolve-locale.ts",
       "summary": "resolve-locale — Orden (sin attr `locale`):",
-      "bytes": 1652,
+      "bytes": 1679,
       "exports": [
         "FALLBACK_LOCALE",
         "resolveLocale",
@@ -735,11 +678,11 @@
       ]
     },
     {
-      "file": "scroll-memory.js",
+      "file": "scroll-memory.ts",
       "id": "scroll-memory",
-      "path": "src/components/_shared/scroll-memory.js",
+      "path": "src/components/_shared/scroll-memory.ts",
       "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
-      "bytes": 7341,
+      "bytes": 7349,
       "exports": [
         "SCROLL_MEMORY_ATTRS",
         "ScrollMemory",
@@ -747,28 +690,11 @@
       ]
     },
     {
-      "file": "style-attrs.js",
-      "id": "style-attrs",
-      "path": "src/components/_shared/style-attrs.js",
-      "summary": "style-attrs — El problema: para cambiar el radio o el color de un componente había que",
-      "bytes": 7458,
-      "exports": [
-        "isCssColorValue",
-        "syncStyleAttr",
-        "syncStyleAttrs",
-        "syncPresentStyleAttrs",
-        "styleAttrNames",
-        "describeStyleAttrs",
-        "applyToneRamp",
-        "withStyleAttrs"
-      ]
-    },
-    {
-      "file": "svg-chart-engine.js",
+      "file": "svg-chart-engine.ts",
       "id": "svg-chart-engine",
-      "path": "src/components/_shared/svg-chart-engine.js",
-      "summary": "Módulo compartido `svg-chart-engine.js`.",
-      "bytes": 5599,
+      "path": "src/components/_shared/svg-chart-engine.ts",
+      "summary": "Módulo compartido `svg-chart-engine.ts`.",
+      "bytes": 5743,
       "exports": [
         "svgEl",
         "scaleLinear",
@@ -783,11 +709,11 @@
       ]
     },
     {
-      "file": "theme-scope.js",
+      "file": "theme-scope.ts",
       "id": "theme-scope",
-      "path": "src/components/_shared/theme-scope.js",
+      "path": "src/components/_shared/theme-scope.ts",
       "summary": "Contenedor de tema del kit — misma cascada que is-theme-toggle. — Atraviesa Shadow DOM (Element.closest se corta en el shadow root).",
-      "bytes": 1937,
+      "bytes": 2089,
       "exports": [
         "THEME_SCOPE",
         "findThemeContainer",
@@ -796,22 +722,22 @@
       ]
     },
     {
-      "file": "tk-color.js",
+      "file": "tk-color.ts",
       "id": "tk-color",
-      "path": "src/components/_shared/tk-color.js",
+      "path": "src/components/_shared/tk-color.ts",
       "summary": "Contraste de fuente por luminancia OKLCH — todo en JS (sin CSS), para que el — flujo lo resuelva antes de pintar. Equivale a:",
-      "bytes": 2225,
+      "bytes": 2316,
       "exports": [
         "oklchLightness",
         "contrastFontColor"
       ]
     },
     {
-      "file": "tk-hue.js",
+      "file": "tk-hue.ts",
       "id": "tk-hue",
-      "path": "src/components/_shared/tk-hue.js",
+      "path": "src/components/_shared/tk-hue.ts",
       "summary": "Tono HSL en BD (0–360) → CSS/hex solo al renderizar.",
-      "bytes": 1132,
+      "bytes": 1234,
       "exports": [
         "normalizeTkHue",
         "tkHueToCss",
@@ -820,11 +746,11 @@
       ]
     },
     {
-      "file": "tk-icon-inline.js",
+      "file": "tk-icon-inline.ts",
       "id": "tk-icon-inline",
-      "path": "src/components/_shared/tk-icon-inline.js",
+      "path": "src/components/_shared/tk-icon-inline.ts",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 10366,
+      "bytes": 10432,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",
@@ -841,21 +767,21 @@
       ]
     },
     {
-      "file": "tk-inline-md.js",
+      "file": "tk-inline-md.ts",
       "id": "tk-inline-md",
-      "path": "src/components/_shared/tk-inline-md.js",
-      "summary": "Módulo compartido `tk-inline-md.js`.",
-      "bytes": 851,
+      "path": "src/components/_shared/tk-inline-md.ts",
+      "summary": "Módulo compartido `tk-inline-md.ts`.",
+      "bytes": 859,
       "exports": [
         "inlineMdWeb"
       ]
     },
     {
-      "file": "tk-rich-text.js",
+      "file": "tk-rich-text.ts",
       "id": "tk-rich-text",
-      "path": "src/components/_shared/tk-rich-text.js",
-      "summary": "Módulo compartido `tk-rich-text.js`.",
-      "bytes": 1433,
+      "path": "src/components/_shared/tk-rich-text.ts",
+      "summary": "Módulo compartido `tk-rich-text.ts`.",
+      "bytes": 1441,
       "exports": [
         "splitRichTextSegments",
         "richTextInline",
@@ -864,11 +790,11 @@
       ]
     },
     {
-      "file": "tone.js",
+      "file": "tone.ts",
       "id": "tone",
-      "path": "src/components/_shared/tone.js",
+      "path": "src/components/_shared/tone.ts",
       "summary": "tone — Un \"tone\" describe EL GRADO DE PESO VISUAL: outlined (sin relleno, sólo",
-      "bytes": 1474,
+      "bytes": 1730,
       "exports": [
         "TONE",
         "DEFAULT_TONE",
@@ -877,11 +803,11 @@
       ]
     },
     {
-      "file": "tree-layout.js",
+      "file": "tree-layout.ts",
       "id": "tree-layout",
-      "path": "src/components/_shared/tree-layout.js",
+      "path": "src/components/_shared/tree-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
-      "bytes": 13831,
+      "bytes": 13935,
       "exports": [
         "buildTree",
         "layoutTree",
@@ -890,21 +816,11 @@
       ]
     },
     {
-      "file": "upgrade-properties.js",
-      "id": "upgrade-properties",
-      "path": "src/components/_shared/upgrade-properties.js",
-      "summary": "upgradeProperties(host, props) — Aplica el patrón canónico de \"upgrade\" para custom elements:",
-      "bytes": 1673,
-      "exports": [
-        "upgradeProperties"
-      ]
-    },
-    {
-      "file": "url-nav.js",
+      "file": "url-nav.ts",
       "id": "url-nav",
-      "path": "src/components/_shared/url-nav.js",
+      "path": "src/components/_shared/url-nav.ts",
       "summary": "url-nav — Opt-in: el consumidor pasa una key (`url-key=\"docs\"`). Sin key no se lee",
-      "bytes": 4082,
+      "bytes": 4226,
       "exports": [
         "URL_STATE_RESERVED",
         "b64urlEncode",
@@ -917,20 +833,20 @@
       ]
     },
     {
-      "file": "web-otp.js",
+      "file": "web-otp.ts",
       "id": "web-otp",
-      "path": "src/components/_shared/web-otp.js",
+      "path": "src/components/_shared/web-otp.ts",
       "summary": "Web OTP API: el SMS con el origen rellena el código. AbortError = timeout/cancel.",
-      "bytes": 625,
+      "bytes": 662,
       "exports": [
         "isOtpAutocomplete",
         "listenWebOtp"
       ]
     },
     {
-      "file": "web-share.js",
+      "file": "web-share.ts",
       "id": "web-share",
-      "path": "src/components/_shared/web-share.js",
+      "path": "src/components/_shared/web-share.ts",
       "summary": "Web Share: share nativo, si no copia URL/texto. AbortError = el usuario canceló.",
       "bytes": 926,
       "exports": [

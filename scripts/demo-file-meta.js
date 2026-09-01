@@ -8,56 +8,17 @@
 import '../src/components/media/icon.js';
 import '../src/components/actions/button.js';
 import '../src/components/helpers/format-bytes.js';
-import components from '../manifest.js';
-import { loadCdnSizes } from '../src/components/_shared/cdn-sizes.js';
+import components from '../src/manifest.js';
 import { resolveCdnMinPaths, resolveSourceFiles } from './component-sources.js';
 import { openViewSources } from './view-sources.js';
 
 /** @type {string | null} */
 let currentTag = null;
 
-/** @type {Promise<{ base: string, sizes: Record<string, number> } | null> | null} */
-let sizesPromise = null;
-
 function entryFor(tag) {
   return components.find((c) => c.tag === tag) || null;
 }
 
-const sizeBases = () => {
-  const list = [];
-  try {
-    list.push(new URL('../dist/cdn', import.meta.url).href.replace(/\/$/, ''));
-  } catch { /* ignore */ }
-  try {
-    list.push(new URL('dist/cdn', document.baseURI || location.href).href.replace(/\/$/, ''));
-  } catch { /* ignore */ }
-  return [...new Set(list.filter(Boolean))];
-};
-
-const loadSizes = () => {
-  sizesPromise ??= (async () => {
-    for (const base of sizeBases()) {
-      const sizes = await loadCdnSizes(base);
-      if (sizes && Object.keys(sizes).length) return { base, sizes };
-    }
-    return null;
-  })();
-  return sizesPromise;
-};
-
-/**
- * @param {string} path
- * @param {Record<string, number>} sizes
- */
-const bytesOf = (path, sizes) => {
-  const n = sizes?.[path];
-  return typeof n === 'number' && Number.isFinite(n) ? n : null;
-};
-
-/**
- * Chip monospacio del path CDN (sin `<is-code>`: evita CM + scrollIntoView en F5).
- * @param {string} path
- */
 const makePathCode = (path) => {
   const el = document.createElement('code');
   el.className = 'file-meta__path';
@@ -183,51 +144,7 @@ export function buildFileMeta(tag, opts = {}) {
 
   root.append(mins);
 
-  void paintMinSizes(root, paths);
   return root;
-}
-
-/**
- * @param {HTMLElement} root
- * @param {{ js: string, css: string | null }} paths
- */
-async function paintMinSizes(root, paths) {
-  const pack = await loadSizes();
-  const sizes = pack?.sizes || {};
-  const jsB = bytesOf(paths.js, sizes);
-  const cssB = paths.css ? bytesOf(paths.css, sizes) : null;
-
-  for (const row of root.querySelectorAll('.file-meta__row')) {
-    const path = row.dataset.path || '';
-    const fmt = row.querySelector('is-format-bytes');
-    if (!fmt) continue;
-    const bytes = path === paths.js ? jsB : path === paths.css ? cssB : bytesOf(path, sizes);
-    if (path === paths.css) {
-      row.hidden = bytes == null;
-    }
-    if (bytes == null) {
-      fmt.hidden = true;
-      fmt.removeAttribute('value');
-    } else {
-      fmt.hidden = false;
-      fmt.setAttribute('value', String(bytes));
-    }
-  }
-
-  const totalEl = root.querySelector('.file-meta__total-bytes');
-  const sum = [jsB, cssB].filter((n) => n != null).reduce((a, b) => a + /** @type {number} */ (b), 0);
-  if (totalEl) {
-    const wrap = totalEl.closest('.file-meta__total');
-    if (!sum) {
-      totalEl.hidden = true;
-      totalEl.removeAttribute('value');
-      wrap?.setAttribute('hidden', '');
-    } else {
-      totalEl.hidden = false;
-      totalEl.setAttribute('value', String(sum));
-      wrap?.removeAttribute('hidden');
-    }
-  }
 }
 
 /**

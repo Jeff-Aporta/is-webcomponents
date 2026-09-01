@@ -1,4 +1,4 @@
----
+﻿---
 name: is-cdn-install
 description: >-
   Instala y consume el kit IS Web Components solo por CDN (jsDelivr / GitHub Pages),
@@ -51,7 +51,7 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src
 <html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
   <script type="module"
-    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/loader.min.js"></script>
+    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js"></script>
   <script type="module">
     const L = globalThis.ISWebComponentsLoader;
     await L.loadCSSBase();

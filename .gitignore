@@ -1,4 +1,5 @@
 node_modules/
+package-lock.json
 .DS_Store
 Thumbs.db
 *.log
@@ -10,8 +11,10 @@ Thumbs.db
 dist/**/*.map
 .impeccable/
 
-# Estado parcial de descarga de iconos (se regenera con scripts/download-icons.mjs)
-src/assets/icons/.state/
+# Estado parcial de descarga de iconos (se regenera con scripts/download-icons.mjs).
+# Vive junto al material publicado desde que `src/assets/` desaparecio: son ~731
+# ficheros de reanudacion, no material que se sirva.
+dist/cdn/assets/icons/.state/
 
 # Tests locales: el repo commitea los .test.mjs pero ignora artefactos
 # generados (snapshots, reports, node:test --test-reporter outputs).
@@ -20,25 +23,21 @@ tests/coverage/
 tests/.cache/
 tests/_author-index.json
 
-# Salidas de scripts / auditorías locales
-logs/
-
-# Iconos descargados: commiteamos solo las dos colecciones mas usadas del repo
-# (mdi y tabler). El resto se regenera bajo demanda con `node scripts/download-icons.mjs`.
-src/assets/icons/*
-!src/assets/icons/mdi/
-!src/assets/icons/tabler/
-!src/assets/icons/mdi.json
-!src/assets/icons/tabler.json
-!src/assets/icons/manifest.json
-
-# dist/cdn/assets/ NO se ignora: GitHub Pages sirve el sistema de iconos desde
-# ahi (is-icon resuelve dist/cdn/src/assets/icons/<prefix>/<name>.svg). La regla
-# `src/assets/icons/*` de arriba esta anclada a la raiz y no alcanza esta ruta.
-
-# Scratch local (fuentes vendorizadas, tarballs de terceros).
-tmp/
+# Scratch local: logs de build, reports, vendor, fixtures de demo. Ej.: `npm run build > .tmp/build.log`
+# (un `.log` suelto en la raíz ensucia el árbol aunque esté ignorado).
 .tmp/
 
-scripts/tmp-is-code-audit/
+# `dist/cdn/assets/` NO se ignora, y es deliberado: desde el 31-ago-2026 es la
+# UNICA copia del material del kit. `src/assets/` se elimino para no mantener el
+# mismo set por duplicado, asi que esto ya no es un artefacto regenerable por
+# copia — es fuente. Si se ignorase, GitHub Pages y jsDelivr se quedarian sin
+# iconos y no habria de donde recuperarlos salvo un `icons:download` de horas.
+#
+# Por eso `npm run build` borra todo `dist/cdn/` MENOS `assets/`, y verifica que
+# el set siga entero (MIN_ICONOS) en vez de recopiarlo.
+
+# Herramientas y estado local: no se necesitan en otra maquina.
+# `.superpowers/` guarda informes de sesion; `.wrangler/` es cache del CLI.
+.superpowers/
+.wrangler/
 

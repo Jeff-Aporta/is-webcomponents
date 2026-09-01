@@ -1,0 +1,39 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-flex-options",
+  "category": "isp",
+  "title": "<is-flex-options>",
+  "titleHtml": true,
+  "description": "Toolbar de acciones ISP pintada con is-button / is-dropdown.",
+  "storageKey": "docs-is-flex-options",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-flex-options>",
+      "lede": "Port de <code class=\"code\">FlexOptions</code>. El consumidor pasa <code class=\"code\">actions</code> / <code class=\"code\">more</code>; el tag pinta el kit.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-flex-options id=\"foDemo\"></is-flex-options>"
+        },
+        {
+          "kind": "code",
+          "code": "el.actions = [\n  { icon: 'mdi:plus', title: 'Agregar', onClick: () => {} },\n  { icon: 'mdi:pencil', title: 'Editar', onClick: () => {} },\n];",
+          "lang": "js"
+        }
+      ]
+    },
+    {
+      "id": "compact",
+      "title": "compact",
+      "lede": "Solo iconos, para tools de hover.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-flex-options id=\"foCompact\" compact></is-flex-options>"
+        }
+      ]
+    }
+  ]
+}
