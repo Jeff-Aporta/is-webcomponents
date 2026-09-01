@@ -52,7 +52,7 @@ import {
       this.#syncVars();
     }
 
-    onAttributeChanged(name, _oldVal, newVal) {
+    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
       if (name === 'level') {
         if (newVal && !LEVELS.includes(newVal)) { this.setAttribute('level', '1'); return; }
         this.#render();

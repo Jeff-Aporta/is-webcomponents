@@ -62,7 +62,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#renderInteractive();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'href' || name === 'target' || name === 'rel') {
         this.#renderInteractive();
       }

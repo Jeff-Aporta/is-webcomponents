@@ -190,7 +190,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'value') {
         if (this.#writingValue) return;
         this.#readValueAttr(false);

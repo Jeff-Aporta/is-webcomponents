@@ -92,7 +92,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#viewport.removeEventListener('scroll', this.#onScroll);
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'orientation') this.#syncOrientation();
       if (name === 'without-scroll-buttons') this.#syncOverflow();
     }

@@ -93,7 +93,7 @@ import { getValues, setValues } from './form-json.js';
       this.#cancelBtn.removeEventListener('click', this.#onCancel);
     }
 
-    onAttributeChanged(name, _oldVal, newVal) {
+    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
       if (name === 'mode') {
         if (newVal && !VALID_MODE.includes(newVal)) { this.setAttribute('mode', 'edit'); return; }
         this.#syncMode();

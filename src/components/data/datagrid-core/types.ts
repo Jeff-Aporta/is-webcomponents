@@ -176,7 +176,17 @@ export interface ColumnDef {
   colId?: string;
   /** Etiqueta de la cabecera; por defecto, `field`. */
   headerName?: string;
-  type?: ColumnTypeName;
+  /** Alias corto que usan los previews. */
+  header?: string;
+  /** Alias de ISP. */
+  caption?: string;
+  /**
+   * `currency` y `dateTime` no estan en `ColumnType` pero el motor los trata
+   * por paridad con ISP: el primero comparte el filtro numerico y el segundo
+   * el de fecha (ver `defaultFilterFor`). Dejarlos fuera del tipo convertia
+   * esas dos ramas en codigo inalcanzable segun el compilador.
+   */
+  type?: ColumnTypeName | 'currency' | 'dateTime';
   width?: number;
   minWidth?: number;
   maxWidth?: number;
@@ -210,7 +220,7 @@ export interface ColumnState {
   colId: string;
   field: string;
   headerName: string;
-  type: ColumnTypeName;
+  type: ColumnTypeName | 'currency' | 'dateTime';
   width: number;
   minWidth: number;
   maxWidth: number;

@@ -64,7 +64,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#slot.removeEventListener('slotchange', this.#onSlotChange);
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'multiple' && !this.multiple) this.#enforceSingle();
     }
 

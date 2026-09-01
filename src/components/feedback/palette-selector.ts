@@ -154,7 +154,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.#syncTriggerVisibility();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'palettes') {
         this.#parsePalettes();
         this.#render();

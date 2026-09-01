@@ -76,7 +76,7 @@ export function parseLooseDate(raw: string|number|null|undefined) {
       this.#render();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#render();
     }
 

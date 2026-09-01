@@ -89,7 +89,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#render();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'view') emit(this, 'is-view-change', { view: this.view });
       this.#render();
     }

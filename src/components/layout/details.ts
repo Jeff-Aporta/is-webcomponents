@@ -124,7 +124,7 @@ import { TONE } from '../_shared/tone.js';
       // nada que limpiar
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'variant' && newVal && !VALID_VARIANT.includes(newVal)) {
         this.setAttribute('variant', 'outlined');
         return;

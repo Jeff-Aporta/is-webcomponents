@@ -114,7 +114,7 @@ export function registerRteCommand(name: string, def) {
       if (this.hasAttribute('autofocus')) this.focus();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'toolbar') this.#buildToolbar();
       if (name === 'value') this.#sync();
       if (name === 'readonly') this.#syncReadonly();

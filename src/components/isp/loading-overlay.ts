@@ -87,7 +87,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#releaseScroll();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'open') this.#syncOpen();
       else if (name === 'message') this.#syncMessage();
     }

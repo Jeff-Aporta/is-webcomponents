@@ -133,7 +133,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#lastWidth = -1;
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'value') {
         this.#value = newVal ?? '';
         this.#syncNative();

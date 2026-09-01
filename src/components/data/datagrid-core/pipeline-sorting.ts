@@ -14,6 +14,7 @@
 
 import { ColumnType } from './types.js';
 import { getCellValue } from './value-formatter.js';
+import type { SortDirName, ColumnState, RowNode, SortModel } from './types.js';
 
 /**
  * @param {unknown} a
@@ -36,16 +37,18 @@ function defaultCompare(a: unknown, b: unknown, type: string) {
 }
 
 /**
- * @param {import('../types.js').RowNode[]} rows
- * @param {import('../types.js').SortModel} sortModel
- * @param {Map<string, import('../types.js').ColumnState>} colById
- * @returns {import('../types.js').RowNode[]}
+ * @param {RowNode[]} rows
+ * @param {SortModel} sortModel
+ * @param {Map<string, ColumnState>} colById
+ * @returns {RowNode[]}
  */
-export function sortRows(rows: import('../types.js').RowNode[], sortModel: import('../types.js').SortModel, colById: Map<string, import('../types.js').ColumnState>) {
+export function sortRows(rows: RowNode[], sortModel: SortModel, colById: Map<string, ColumnState>) {
   if (!sortModel.length) return rows;
   const active = sortModel
     .map((s) => ({ col: colById.get(s.colId), dir: s.dir }))
-    .filter((s) => Boolean(s.col));
+    // El predicado estrecha `col`: sin el, `filter` deja el `undefined` dentro
+    // y cada uso de `col` mas abajo hay que volver a comprobarlo.
+    .filter((s): s is { col: ColumnState; dir: SortDirName } => s.col != null);
   if (!active.length) return rows;
   // copia indexada para orden estable
   const indexed = rows.map((node, i) => ({ node, i }));
@@ -67,14 +70,16 @@ export function sortRows(rows: import('../types.js').RowNode[], sortModel: impor
  * Alterna el sort de una columna: none → asc → desc → none.
  * `additive=true` para multi-sort (preserva el resto del SortModel).
  *
- * @param {import('../types.js').SortModel} model
+ * @param {SortModel} model
  * @param {string} colId
  * @param {boolean} additive
- * @returns {import('../types.js').SortModel}
+ * @returns {SortModel}
  */
-export function cycleSort(model: import('../types.js').SortModel, colId: string, additive: boolean) {
+export function cycleSort(model: SortModel, colId: string, additive: boolean): SortModel {
   const existing = model.find((s) => s.colId === colId);
   const next = additive ? model.filter((s) => s.colId !== colId) : [];
+  // Sin el retorno declarado, `dir` se infiere como `string` y el resultado no
+  // encaja en `SortModel`, que solo admite 'asc' | 'desc'.
   if (!existing) return [...next, { colId, dir: 'asc' }];
   if (existing.dir === 'asc') return [...next, { colId, dir: 'desc' }];
   return next; // desc → quitar

@@ -12,19 +12,32 @@
 
 import { SelectionMode, HeaderCheckboxState } from './types.js';
 import type { RowNode } from './types.js';
+import type { SelectionModeName } from './types.js';
 
 /**
- * @param {Set<string>} selection
- * @param {string} rowId
- * @param {keyof typeof SelectionMode} mode
- * @param {{additive?: boolean, range?: boolean, rangeFrom?: string, orderedIds?: string[]}} [opts]
- * @returns {Set<string>}
+ * Alterna la seleccion de una fila segun el modo.
+ *
+ * `mode` son los *valores* de `SelectionMode` (`'none'`, `'single'`…), no sus
+ * claves. El JSDoc decia `keyof typeof SelectionMode` —o sea `'NONE'`,
+ * `'SINGLE'`…— mientras el cuerpo comparaba contra `SelectionMode.NONE`.
+ * Cualquiera que se fiara del tipo declarado pasaba `'NONE'` y la seleccion
+ * seguia activa sin dar error.
  */
-export function toggleRowSelection(selection: Set<string>, rowId: string, mode: keyof typeof SelectionMode, opts = {}) {
+export function toggleRowSelection(
+  selection: Set<string>,
+  rowId: string,
+  mode: SelectionModeName,
+  opts: {
+    additive?: boolean;
+    range?: boolean;
+    rangeFrom?: string;
+    orderedIds?: string[];
+  } = {},
+): Set<string> {
   if (mode === SelectionMode.NONE) return selection;
 
   if (mode === SelectionMode.SINGLE) {
-    const next = new Set();
+    const next = new Set<string>();
     if (!selection.has(rowId)) next.add(rowId);
     return next;
   }

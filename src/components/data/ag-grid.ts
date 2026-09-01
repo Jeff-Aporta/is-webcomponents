@@ -125,6 +125,7 @@ import {
   createServerSideDatasource,
   createFakeLista,
 } from './datagrid-core/index.js';
+import type { ColumnDef, GridApi, RowData } from './datagrid-core/types.js';
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
   <style>
@@ -287,12 +288,18 @@ export class IsAgGrid extends ElementBase {
     ];
   }
 
-  #api = null;
+  /**
+   * El motor. Es `null` hasta que `connectedCallback` lo crea, y todo el
+   * fachada publica lo comprueba antes de usarlo (`#api?.` o un `return`
+   * temprano); sin el tipo, el campo quedaba en `never[]` y sus 40 metodos
+   * no existian para el compilador.
+   */
+  #api: GridApi | null = null;
   /** true si filas/columnas llegaron por `api.setRows/setColumns` antes del init. */
   #externalData = false;
-  #rawRows = [];
-  #rawColumns = [];
-  #getRowId = null;
+  #rawRows: RowData[] = [];
+  #rawColumns: ColumnDef[] = [];
+  #getRowId: ((row: RowData, index: number) => string) | null = null;
   #pageSize = DEFAULT_PAGE_SIZE;
   #pageSizeOptions = [25, 50, 100, 200];
   #showToolbar = true;
@@ -301,7 +308,8 @@ export class IsAgGrid extends ElementBase {
   #density = Density.NORMAL;
   #isPaginated = false;
   #page = 0;
-  #currentFilter = null; // { colId, op, value } (legacy)
+  /** Forma legada `{ colId, op, value }`. */
+  #currentFilter: Record<string, unknown> | null = null;
   #currentSelectionMode = SelectionMode.NONE;
   #viewport!: HTMLElement;
   #headerRow!: HTMLElement;
@@ -313,13 +321,13 @@ export class IsAgGrid extends ElementBase {
   #toolbar!: HTMLElement;
   #groupPanel!: HTMLElement;
   #groupChips!: HTMLElement;
-  #headerMenuEl;
-  #filterPopoverEl;
+  #headerMenuEl!: HTMLElement;
+  #filterPopoverEl!: HTMLElement;
   #scrollTop = 0;
-  #lastRangeFrom = null;
+  #lastRangeFrom: string | null = null;
   #focusRow = -1;
-  #ro;
-  #unsubscribe = null;
+  #ro!: ResizeObserver;
+  #unsubscribe: (() => void) | null = null;
   #stateLoaded = false;
 
   constructor() {
@@ -528,7 +536,7 @@ export class IsAgGrid extends ElementBase {
     this.#unsubscribe?.();
   }
 
-  async onAttributeChanged(name, _oldVal, newVal) {
+  async onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
     if (name === 'rows' || name === 'columns' || name === 'get-row-id') {
       await this.#readData();
       this.#initModel();
@@ -1129,7 +1137,7 @@ export class IsAgGrid extends ElementBase {
     return '<div class="mim-dg__menu-sep"></div>';
   }
 
-  #menuCallbacks = new Map();
+  #menuCallbacks = new Map<string, () => void>();
   #menuCbCounter = 0;
   #registerMenuCallback(fn) {
     const id = `cb${this.#menuCbCounter++}`;

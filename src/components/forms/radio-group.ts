@@ -102,7 +102,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       this.#sync();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'label' || name === 'hint' || name === 'error-text') this.#syncMeta();
       if (name !== 'label' && name !== 'hint') this.#sync();
     }

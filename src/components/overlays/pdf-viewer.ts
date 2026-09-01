@@ -69,7 +69,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       this.#iframe.addEventListener('error', () => emit(this, 'is-error'));
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 

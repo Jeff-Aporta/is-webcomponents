@@ -40,7 +40,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#syncLabel();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'label') this.#syncLabel();
     }
 

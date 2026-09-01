@@ -121,7 +121,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#sync();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'hint') {
         this.#syncSlots();
         return;

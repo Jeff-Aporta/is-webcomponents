@@ -142,7 +142,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#unbindTrigger();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'for') { this.#unbindTrigger(); this.#bindTrigger(); }
       else if (name === 'open') { if (this.open) this.#showUI(); else this.#hideUI(); }
       else if (name === 'message') this.#syncMessage();

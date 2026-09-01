@@ -58,8 +58,20 @@ export function rowWindow(rowCount: number, rowHeight: number, scrollTop: number
  * @param {ColumnState[]} right
  * @returns {ColLayout}
  */
-export function columnLayout(center: ColumnState[], left: ColumnState[], right: ColumnState[]) {
-  const positions = [];
+export interface ColLayout {
+  /** Desplazamiento en px de cada columna central, desde su inicio. */
+  positions: number[];
+  totalWidth: number;
+  leftWidth: number;
+  rightWidth: number;
+}
+
+export function columnLayout(
+  center: ColumnState[],
+  left: ColumnState[],
+  right: ColumnState[],
+): ColLayout {
+  const positions: number[] = [];
   let x = 0;
   for (const c of center) { positions.push(x); x += c.width; }
   const totalWidth = x;
@@ -81,7 +93,7 @@ export function colWindow(layout: ColLayout, scrollLeft: number, viewportWidth: 
   const { positions, totalWidth } = layout;
   if (!positions.length) return { start: 0, end: 0 };
   let start = 0;
-  while (start < positions.length - 1 && positions[start + 1] <= scrollLeft) start++;
+  while (start < positions.length - 1 && positions[start + 1]! <= scrollLeft) start++;
   let end = start;
   const right = scrollLeft + viewportWidth;
   while (end < positions.length && positions[end] < right) end++;

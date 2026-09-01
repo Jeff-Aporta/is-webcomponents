@@ -57,7 +57,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#render();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#render();
     }
 

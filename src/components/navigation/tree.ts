@@ -82,7 +82,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#syncRoots();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'selection') {
         if (newVal && !VALID_SELECTION.includes(newVal)) this.setAttribute('selection', 'single');
       }
@@ -271,7 +271,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#sync();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 

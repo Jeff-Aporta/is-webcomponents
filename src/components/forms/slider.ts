@@ -171,7 +171,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#endDrag();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'value') {
         this.#values = this.#normalize(this.#readAttrValues());
       } else if (name === 'disabled' || name === 'readonly') {

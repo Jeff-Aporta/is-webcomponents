@@ -159,7 +159,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#pause('lifecycle');
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'active') this.#goTo(this.active, true);
       if (name === 'autoplay') this.#play();
       if (name === 'without-controls' || name === 'without-indicators' || name === 'vertical' || name === 'slides-per-page' || name === 'aspect-ratio') this.#sync();

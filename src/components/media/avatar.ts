@@ -68,7 +68,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#syncView();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'image') this.#imgFailed = false;
       this.#syncView();
     }

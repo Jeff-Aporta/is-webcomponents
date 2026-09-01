@@ -141,7 +141,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'open') this.#syncOpen();
       else if (name === 'disabled') this.#syncDisabled();
       else if (name === 'value') {

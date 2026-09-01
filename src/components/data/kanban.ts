@@ -136,7 +136,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#bindDrop();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 
@@ -236,7 +236,7 @@ import { ElementBase } from '../../core/element-base.js';
       });
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#sync();
     }
 

@@ -19,7 +19,7 @@ tanda, para que quien retome no tenga que volver a medirlo.
 
 ## Pendiente
 
-**Errores de `tsc`: 10 033.** Sintaxis limpia (0 errores de parseo), así que
+**Errores de `tsc`: 9 475.** Sintaxis limpia (0 errores de parseo), así que
 todos son de tipo y ninguno impide ejecutar: Node y esbuild borran los tipos sin
 consultarlos.
 
@@ -34,15 +34,42 @@ Por concentración:
 | Fichero | Errores |
 |---|---|
 | `components/data/data-grid.ts` | 534 |
-| `components/data/ag-grid.ts` | 328 |
-| `components/diagrams/component-pack.ts` | 266 |
+| `components/data/ag-grid.ts` | 208 |
+| `components/diagrams/component-pack.ts` | 157 |
 | `previews/behaviors/icon-explorer.ts` | 218 |
 | `previews/behaviors/is-data-grid.ts` | 210 |
-| `components/diagrams/component-spec.ts` | 177 |
+| `components/diagrams/component-spec.ts` | 103 |
 
-En `datagrid-core/` quedan 70, repartidos entre `pipeline-grouping` (25),
-`pipeline-filtering` (16) y `selection` (11); los contratos (`types.ts`,
-`grid-model.ts`, `column-groups.ts`, `server-datasource.ts`) ya están cerrados.
+**`datagrid-core/` está en cero** (eran 205). Tipar sus contratos destapó tres
+mentiras que el `any` sostenía:
+
+- `toggleRowSelection` declaraba `keyof typeof SelectionMode` —`'NONE'`,
+  `'SINGLE'`— mientras el cuerpo comparaba contra los *valores* (`'none'`).
+  Quien se fiara del tipo pasaba `'NONE'` y la selección seguía activa sin
+  error.
+- `ColumnDef.type` no admitía `currency` ni `dateTime`, que el motor sí trata
+  por paridad con ISP: dos ramas de `defaultFilterFor` eran inalcanzables.
+- `toTime(v: string)` cuando el cuerpo hace `v instanceof Date`.
+
+También estaban rotos los `import('../types.js')` de los tres `pipeline-*`:
+apuntaban a `data/types.js`, que no existe (el módulo es hermano, no del padre).
+
+Dos arreglos de una línea con mucho alcance:
+
+- `ag-grid.ts` declaraba `#api = null`, lo que deja el campo en `never` y hace
+  desaparecer los 40 métodos del motor. Tiparlo quitó **120 errores**.
+- Los 52 componentes que sobrescriben `onAttributeChanged` repetían la firma sin
+  anotar, perdiendo la que `ElementBase` ya declara. Restaurarla quitó **280**.
+
+Los diagramas de componentes no tenían **ningún** tipo declarado: `component-pack`
+y `component-spec` se pasaban cajas, paquetes y aristas sin que nadie hubiera
+escrito qué son. `_shared/diagram-tipos.ts` recoge esas formas —sacadas de cómo
+se usan, no de una API ideal—: `component-pack` 266 → 157 y `component-spec`
+177 → 103.
+
+Escribir el contrato es la parte fácil; la útil es que el compilador te corrija.
+`sourceSides` estaba declarado como lista y el lector lo produce con `asRecord`,
+o sea un mapa. Lo dijo `tsc` en la primera pasada.
 
 Por causa:
 

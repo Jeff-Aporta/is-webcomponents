@@ -6,6 +6,8 @@
  * (ángulos rectos) de sus hijos, no un rectángulo vacío.
  */
 
+import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.js';
+
 export const COL_GUTTER = 52;
 export const PKG_CORRIDOR = 72;
 export const PKG_PAD = 16;
@@ -19,7 +21,12 @@ export const EDGE_CLEARANCE = 14;
 /** Aire extra alrededor del título de paquete: 14 px no basta, se lee mal. */
 export const TITLE_CLEARANCE = 22;
 
-export function packDiagram(packages, components, edges = [], opts = {}) {
+export function packDiagram(
+  packages: Paquete[],
+  components: Componente[],
+  edges: readonly Arista[] = [],
+  opts: OpcionesEmpaque = {},
+): void {
   if (opts.mode === 'manual') return;
   const ungroup = new Set(opts.ungroup ?? []);
   if (ungroup.size) {
@@ -44,10 +51,10 @@ export function packDiagram(packages, components, edges = [], opts = {}) {
  * Distancia mínima entre cajas. `minGap` es el piso; row/col/corredor
  * concretos ganan si son más grandes.
  */
-export function resolvePackingGaps(opts = {}) {
+export function resolvePackingGaps(opts: OpcionesEmpaque = {}) {
   const raw = Number(opts.minGap);
   const floor = Number.isFinite(raw) && raw > 0 ? raw : 0;
-  const pick = (v, fallback) => {
+  const pick = (v: unknown, fallback: number): number => {
     const n = Number(v);
     if (Number.isFinite(n) && n >= 0) return Math.max(n, floor);
     return floor > 0 ? floor : fallback;
@@ -60,8 +67,14 @@ export function resolvePackingGaps(opts = {}) {
   };
 }
 
-function packPackageColumns(packages, components, gut = COL_GUTTER, corridor = PKG_CORRIDOR, rowGap = ROW_GAP) {
-  const kidsOf = (p) => components.filter((c) => c.package === p.id);
+function packPackageColumns(
+  packages: Paquete[],
+  components: Componente[],
+  gut: number = COL_GUTTER,
+  corridor: number = PKG_CORRIDOR,
+  rowGap: number = ROW_GAP,
+): void {
+  const kidsOf = (p: Paquete) => components.filter((c) => c.package === p.id);
   const sorted = packages.filter((p) => kidsOf(p).length).sort((a, b) => a.x - b.x || a.y - b.y);
   if (!sorted.length) return;
   const pkgCols = [];
@@ -86,7 +99,7 @@ function packPackageColumns(packages, components, gut = COL_GUTTER, corridor = P
   }
 }
 
-function inferSources(components, edges) {
+function inferSources(components: readonly Componente[], edges: readonly Arista[]) {
   const out = new Map();
   const inn = new Map();
   for (const c of components) {
@@ -100,7 +113,7 @@ function inferSources(components, edges) {
   return components.filter((c) => out.get(c.id) > 0 && inn.get(c.id) === 0);
 }
 
-function boundsOf(items) {
+function boundsOf(items: readonly Caja[]) {
   const x = Math.min(...items.map((c) => c.x));
   const y = Math.min(...items.map((c) => c.y));
   return {
@@ -115,7 +128,12 @@ function boundsOf(items) {
  * Cada origen (consumidor) en un lado distinto del clúster destino:
  * left / top / bottom / right. Evita un solo corredor saturado.
  */
-function packTriptych(packages, components, edges, opts) {
+function packTriptych(
+  packages: Paquete[],
+  components: Componente[],
+  edges: readonly Arista[],
+  opts: OpcionesEmpaque,
+): void {
   const listed = opts.sources?.length
     ? opts.sources.map((id) => components.find((c) => c.id === id)).filter(Boolean)
     : inferSources(components, edges);
@@ -160,7 +178,12 @@ function packTriptych(packages, components, edges, opts) {
   }
 }
 
-function packPackage(pkg, kids, gut = COL_GUTTER, rowGap: number = ROW_GAP) {
+function packPackage(
+  pkg: Paquete,
+  kids: Componente[],
+  gut: number = COL_GUTTER,
+  rowGap: number = ROW_GAP,
+): void {
   if (!kids.length) return;
   const cols = clusterColumns(kids);
   let x = pkg.x + PKG_PAD;
@@ -183,7 +206,7 @@ function packPackage(pkg, kids, gut = COL_GUTTER, rowGap: number = ROW_GAP) {
   pkg.h = Math.max(48, maxBottom + PKG_PAD - pkg.y);
 }
 
-function clusterColumns(kids) {
+function clusterColumns(kids: readonly Componente[]) {
   const sorted = kids.slice().sort((a, b) => a.x - b.x);
   const cols = [];
   for (const k of sorted) {
@@ -194,25 +217,25 @@ function clusterColumns(kids) {
   return cols;
 }
 
-function xOverlap(a, b) {
+function xOverlap(a: Caja, b: Caja): boolean {
   return Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
 }
 
 /** Unión de rectángulos → polígono ortogonal (CCW). */
-export function orthogonalUnion(rects) {
+export function orthogonalUnion(rects: readonly Caja[]) {
   const g = occupyRects(rects, false);
   if (!g) return [];
   return occupyOutline(g.xs, g.ys, g.occ);
 }
 
 /** Cuadrícula orto-convexa: envuelve todos los rects (rellena huecos del grupo). */
-export function orthogonalWrap(rects) {
+export function orthogonalWrap(rects: readonly Caja[]) {
   const g = occupyRects(rects, true);
   if (!g) return [];
   return occupyOutline(g.xs, g.ys, g.occ);
 }
 
-export function pointInOrtho(pts, x, y: number) {
+export function pointInOrtho(pts: readonly Punto[], x: number, y: number): boolean {
   if (!pts || pts.length < 4) return false;
   let n = 0;
   const m = pts.length;
@@ -228,7 +251,7 @@ export function pointInOrtho(pts, x, y: number) {
   return n % 2 === 1;
 }
 
-export function orthoPolysOverlap(a, b) {
+export function orthoPolysOverlap(a: readonly Punto[], b: readonly Punto[]): boolean {
   if (!a?.length || !b?.length) return false;
   const xs = [...new Set([...a, ...b].map((p) => p.x))].sort((u, v) => u - v);
   const ys = [...new Set([...a, ...b].map((p) => p.y))].sort((u, v) => u - v);
@@ -242,7 +265,7 @@ export function orthoPolysOverlap(a, b) {
   return false;
 }
 
-function occupyRects(rects, convex) {
+function occupyRects(rects: readonly Caja[], convex: boolean) {
   if (!rects?.length) return null;
   const xs = [...new Set(rects.flatMap((r) => [r.x, r.x + r.w]))].sort((a, b) => a - b);
   const ys = [...new Set(rects.flatMap((r) => [r.y, r.y + r.h]))].sort((a, b) => a - b);
@@ -263,7 +286,7 @@ function occupyRects(rects, convex) {
   return { xs, ys, occ };
 }
 
-function fillOrthoConvex(occ) {
+function fillOrthoConvex(occ: boolean[][]): void {
   const col = occ.length;
   const row = occ[0]?.length ?? 0;
   for (let j = 0; j < row; j++) {
@@ -290,7 +313,7 @@ function fillOrthoConvex(occ) {
   }
 }
 
-function occupyOutline(xs, ys, occ) {
+function occupyOutline(xs: readonly number[], ys: readonly number[], occ: readonly boolean[][]) {
   const col = occ.length;
   const row = occ[0]?.length ?? 0;
   const h = Array.from({ length: col }, () => Array(row + 1).fill(0));
@@ -307,13 +330,19 @@ function occupyOutline(xs, ys, occ) {
   return walkOutline(xs, ys, h, v);
 }
 
-function distToRect(x, y, r) {
+function distToRect(x: number, y: number, r: Caja): number {
   const dx = x < r.x ? r.x - x : x > r.x + r.w ? x - (r.x + r.w) : 0;
   const dy = y < r.y ? r.y - y : y > r.y + r.h ? y - (r.y + r.h) : 0;
   return Math.hypot(dx, dy);
 }
 
-function cellInConvex(xs, ys, occ, x, y) {
+function cellInConvex(
+  xs: readonly number[],
+  ys: readonly number[],
+  occ: readonly boolean[][],
+  x: number,
+  y: number,
+): boolean {
   for (let i = 0; i < occ.length; i++) {
     if (x < xs[i] || x >= xs[i + 1]) continue;
     for (let j = 0; j < occ[i].length; j++) {
@@ -324,10 +353,10 @@ function cellInConvex(xs, ys, occ, x, y) {
   return false;
 }
 
-function connectIslands(occ, blocked) {
+function connectIslands(occ: boolean[][], blocked: readonly boolean[][]): void {
   const col = occ.length;
   const row = occ[0]?.length ?? 0;
-  const key = (i, j) => `${i},${j}`;
+  const key = (i: number, j: number) => `${i},${j}`;
   const seen = new Set();
   const islands = [];
   const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
@@ -355,7 +384,7 @@ function connectIslands(occ, blocked) {
   if (islands.length <= 1) return;
   islands.sort((a, b) => b.length - a.length);
   const main = new Set(islands[0].map(([i, j]) => key(i, j)));
-  const passable = (i, j) => occ[i][j] || !blocked[i][j];
+  const passable = (i: number, j: number) => occ[i]![j] || !blocked[i]![j];
   for (let s = 1; s < islands.length; s++) {
     const start = islands[s][0];
     const q = [start];
@@ -389,7 +418,11 @@ function connectIslands(occ, blocked) {
  * Contornos de paquete: cuadrícula que envuelve a todos los hijos.
  * Celdas en conflicto van al paquete del hijo más cercano (tocan, no solapan).
  */
-export function layoutPackageOutlines(packages, components, opts = {}) {
+export function layoutPackageOutlines(
+  packages: readonly Paquete[],
+  components: readonly Componente[],
+  opts: OpcionesEmpaque = {},
+) {
   const pad = opts.pad ?? 12;
   const tabH = opts.tabH ?? 18;
   const groups = packages.map((p) => {
@@ -452,7 +485,12 @@ export function layoutPackageOutlines(packages, components, opts = {}) {
   }
 }
 
-function walkOutline(xs, ys, h, v) {
+function walkOutline(
+  xs: readonly number[],
+  ys: readonly number[],
+  h: readonly boolean[][],
+  v: readonly boolean[][],
+): Punto[] {
   let i0 = -1;
   let j0 = -1;
   for (let j = 0; j < h[0].length; j++) {
@@ -509,7 +547,7 @@ function walkOutline(xs, ys, h, v) {
   return simplifyOrtho(pts);
 }
 
-function simplifyOrtho(pts) {
+function simplifyOrtho(pts: readonly Punto[]): Punto[] {
   if (pts.length < 2) return pts;
   const out = [pts[0]];
   for (let k = 1; k < pts.length; k++) {
@@ -527,17 +565,17 @@ function simplifyOrtho(pts) {
   return out;
 }
 
-export function outlineToPath(pts) {
+export function outlineToPath(pts: readonly Punto[]): string {
   if (!pts?.length) return '';
   return `M${pts[0].x},${pts[0].y} ` + pts.slice(1).map((p) => `L${p.x},${p.y}`).join(' ') + ' Z';
 }
 
-export function inflateBox(c, pad: number) {
+export function inflateBox(c: Caja, pad: number): Caja {
   return { ...c, x: c.x - pad, y: c.y - pad, w: c.w + 2 * pad, h: c.h + 2 * pad };
 }
 
 /** Título: aire a los lados y arriba. Abajo no, se come la primera fila. */
-export function inflateTitleObstacle(tb, pad: number, yClip: number) {
+export function inflateTitleObstacle(tb: Caja, pad: number, yClip: number): Caja {
   const x = tb.x - pad;
   const y = tb.y - pad;
   const w = tb.w + 2 * pad;
@@ -550,14 +588,14 @@ export function segmentoEsDiagonal(x1: number, y1: number, x2: number, y2: numbe
   return Math.abs(x1 - x2) >= 0.6 && Math.abs(y1 - y2) >= 0.6;
 }
 
-export function pathHasDiagonal(pts) {
+export function pathHasDiagonal(pts: readonly Punto[]): boolean {
   for (let i = 0; i < pts.length - 1; i++) {
     if (segmentoEsDiagonal(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y)) return true;
   }
   return false;
 }
 
-export function segmentoCortaCaja(x1: number, y1: number, x2: number, y2: number, c) {
+export function segmentoCortaCaja(x1: number, y1: number, x2: number, y2: number, c: Caja): boolean {
   if (segmentoEsDiagonal(x1, y1, x2, y2)) return true;
   const left = c.x;
   const right = c.x + c.w;
@@ -583,7 +621,7 @@ export function segmentoCortaCaja(x1: number, y1: number, x2: number, y2: number
   return false;
 }
 
-export function rutaChoca(puntos, obstaculos) {
+export function rutaChoca(puntos: readonly Punto[], obstaculos: readonly Caja[]): boolean {
   for (let i = 0; i < puntos.length - 1; i++) {
     const a = puntos[i];
     const b = puntos[i + 1];
@@ -594,7 +632,7 @@ export function rutaChoca(puntos, obstaculos) {
   return false;
 }
 
-function verticalGaps(obstaculos, xMin, xMax) {
+function verticalGaps(obstaculos: readonly Caja[], xMin: number, xMax: number) {
   const spans = obstaculos
     .map((c) => ({ a: c.x, b: c.x + c.w }))
     .filter((s) => s.b > xMin && s.a < xMax)
@@ -614,7 +652,7 @@ function verticalGaps(obstaculos, xMin, xMax) {
   return gaps;
 }
 
-function nearestGap(gaps, x) {
+function nearestGap(gaps: readonly { x: number }[], x: number) {
   let best = gaps[0];
   let bestD = Infinity;
   for (const g of gaps) {
@@ -632,7 +670,7 @@ function laneInGap(gap, rank: number, total: number) {
 const comoPath = (pts) => `M${pts[0].x},${pts[0].y} ` + pts.slice(1).map((p) => `L${p.x},${p.y}`).join(' ');
 
 /** Cuánto se sale el path del marco (margen). */
-export function boundsOverflow(pts, frame, margin = 36) {
+export function boundsOverflow(pts: readonly Punto[], frame: Caja, margin = 36): boolean {
   if (!frame || !pts?.length) return 0;
   const x0 = frame.x - margin;
   const y0 = frame.y - margin;
@@ -648,7 +686,7 @@ export function boundsOverflow(pts, frame, margin = 36) {
   return n;
 }
 
-function outward(p, side, d) {
+function outward(p: Punto, side: Lado, d: number): Punto {
   if (!side) return { x: p.x, y: p.y };
   if (side === 'left') return { x: p.x - d, y: p.y };
   if (side === 'right') return { x: p.x + d, y: p.y };
@@ -656,7 +694,7 @@ function outward(p, side, d) {
   return { x: p.x, y: p.y + d };
 }
 
-function alongSide(p, side, d) {
+function alongSide(p: Punto, side: Lado, d: number): Punto {
   if (!side || !d) return { x: p.x, y: p.y };
   if (side === 'left' || side === 'right') return { x: p.x, y: p.y + d };
   return { x: p.x + d, y: p.y };

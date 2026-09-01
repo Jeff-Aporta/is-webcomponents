@@ -139,7 +139,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#render();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'value') {
         this.#value = this.#coerce(Number(newVal ?? 0));
         this.#render();

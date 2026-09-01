@@ -19,6 +19,7 @@
 
 import { AggFunc } from './types.js';
 import { getCellValue, formatValue } from './value-formatter.js';
+import type { ColumnState, DisplayRow, RowNode } from './types.js';
 
 /**
  * @param {string} fn
@@ -29,7 +30,9 @@ function applyAgg(fn: string, values: unknown[]) {
   if (fn === AggFunc.COUNT) return values.length;
   if (fn === AggFunc.FIRST) return values.length ? values[0] : null;
   if (fn === AggFunc.LAST) return values.length ? values[values.length - 1] : null;
-  const nums = values.filter((v) => typeof v === 'number' && !Number.isNaN(v));
+  // El guardia va como predicado: sin el, `filter` deja `unknown[]` y las
+  // cuatro agregaciones de abajo no pueden sumar ni comparar.
+  const nums = values.filter((v): v is number => typeof v === 'number' && !Number.isNaN(v));
   if (!nums.length) return null;
   if (fn === AggFunc.SUM) return nums.reduce((a, b) => a + b, 0);
   if (fn === AggFunc.AVG) return nums.reduce((a, b) => a + b, 0) / nums.length;
@@ -39,12 +42,12 @@ function applyAgg(fn: string, values: unknown[]) {
 }
 
 /**
- * @param {import('../types.js').RowNode[]} leaves
- * @param {Map<string, import('../types.js').ColumnState>} colById
+ * @param {RowNode[]} leaves
+ * @param {Map<string, ColumnState>} colById
  * @returns {Record<string, unknown>}
  */
-function aggregateGroup(leaves: import('../types.js').RowNode[], colById: Map<string, import('../types.js').ColumnState>) {
-  const agg = {};
+function aggregateGroup(leaves: RowNode[], colById: Map<string, ColumnState>): Record<string, unknown> {
+  const agg: Record<string, unknown> = {};
   for (const col of colById.values()) {
     if (!col.aggFunc) continue;
     agg[col.colId] = applyAgg(col.aggFunc, leaves.map((n) => getCellValue(col, n)));
@@ -53,12 +56,19 @@ function aggregateGroup(leaves: import('../types.js').RowNode[], colById: Map<st
 }
 
 /**
- * @param {import('../types.js').RowNode[]} leaves
- * @param {import('../types.js').ColumnState} col
- * @returns {Array<{value: unknown, label: string, leaves: import('../types.js').RowNode[]}>}
+ * @param {RowNode[]} leaves
+ * @param {ColumnState} col
+ * @returns {Array<{value: unknown, label: string, leaves: RowNode[]}>}
  */
-function groupLevel(leaves: import('../types.js').RowNode[], col: import('../types.js').ColumnState) {
-  const map = new Map();
+/** Un valor distinto de la columna, con las hojas que lo comparten. */
+interface Cubo {
+  value: unknown;
+  label: string;
+  leaves: RowNode[];
+}
+
+function groupLevel(leaves: RowNode[], col: ColumnState): Cubo[] {
+  const map = new Map<string, Cubo>();
   for (const node of leaves) {
     const value = getCellValue(col, node);
     const key = String(value ?? '');
@@ -73,19 +83,25 @@ function groupLevel(leaves: import('../types.js').RowNode[], col: import('../typ
 }
 
 /**
- * @param {import('../types.js').RowNode[]} leaves
+ * @param {RowNode[]} leaves
  * @param {string[]} rowGroupCols
- * @param {Map<string, import('../types.js').ColumnState>} colById
+ * @param {Map<string, ColumnState>} colById
  * @param {Set<string>} expandedGroups
- * @returns {import('../types.js').DisplayRow[]}
+ * @returns {DisplayRow[]}
  */
-export function buildDisplayRows(leaves: import('../types.js').RowNode[], rowGroupCols: string[], colById: Map<string, import('../types.js').ColumnState>, expandedGroups: Set<string>) {
+export function buildDisplayRows(
+  leaves: RowNode[],
+  rowGroupCols: string[],
+  colById: Map<string, ColumnState>,
+  expandedGroups: Set<string>,
+): DisplayRow[] {
   if (!rowGroupCols.length) {
     return leaves.map((node) => ({ kind: 'leaf', level: 0, node }));
   }
-  const out = [];
-  const walk = (rows, depth: number, prefix) => {
+  const out: DisplayRow[] = [];
+  const walk = (rows: RowNode[], depth: number, prefix: string): void => {
     const colId = rowGroupCols[depth];
+    if (colId == null) return;
     const col = colById.get(colId);
     if (!col) return;
     for (const g of groupLevel(rows, col)) {
@@ -115,16 +131,22 @@ export function buildDisplayRows(leaves: import('../types.js').RowNode[], rowGro
 
 /**
  * Ids de todos los grupos (todos los niveles) — para expandAllGroups.
- * @param {import('../types.js').RowNode[]} leaves
+ * @param {RowNode[]} leaves
  * @param {string[]} rowGroupCols
- * @param {Map<string, import('../types.js').ColumnState>} colById
+ * @param {Map<string, ColumnState>} colById
  * @returns {string[]}
  */
-export function collectGroupIds(leaves: import('../types.js').RowNode[], rowGroupCols: string[], colById: Map<string, import('../types.js').ColumnState>) {
+export function collectGroupIds(
+  leaves: RowNode[],
+  rowGroupCols: string[],
+  colById: Map<string, ColumnState>,
+): string[] {
   if (!rowGroupCols.length) return [];
-  const ids = [];
-  const walk = (rows, depth: number, prefix) => {
-    const col = colById.get(rowGroupCols[depth]);
+  const ids: string[] = [];
+  const walk = (rows: RowNode[], depth: number, prefix: string): void => {
+    const colId = rowGroupCols[depth];
+    if (colId == null) return;
+    const col = colById.get(colId);
     if (!col) return;
     for (const g of groupLevel(rows, col)) {
       const id = prefix ? `${prefix}|${col.colId}=${String(g.value ?? '')}` : `${col.colId}=${String(g.value ?? '')}`;

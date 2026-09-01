@@ -119,7 +119,7 @@ import '../actions/button.js';
       this.#dismiss.detach();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'for') {
         this.#unbindTrigger();
         this.#bindTrigger();

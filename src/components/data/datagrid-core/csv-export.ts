@@ -9,19 +9,19 @@ import type { ColumnState, RowNode } from './types.js';
  * Sin DOM. Compatible con el rowsToCsv del mimicus-react core (mismo contrato).
  */
 
-function escapeCsv(value: string, sep) {
+function escapeCsv(value: string, sep: string): string {
   if (value.includes(sep) || value.includes('"') || value.includes('\n') || value.includes('\r')) {
     return `"${value.replace(/"/g, '""')}"`;
   }
   return value;
 }
 
-/**
- * @typedef {Object} CsvOptions
- * @property {string} [separator]   default ','
- * @property {boolean} [onlySelected]
- * @property {Set<string>} [selection]
- */
+export interface CsvOptions {
+  /** Separador de campos; por defecto, `,`. */
+  separator?: string;
+  onlySelected?: boolean;
+  selection?: Set<string>;
+}
 
 /**
  * Construye el contenido CSV de las columnas visibles y las filas dadas.
@@ -31,11 +31,11 @@ function escapeCsv(value: string, sep) {
  * @param {CsvOptions} [opts]
  * @returns {string}
  */
-export function rowsToCsv(columns: ColumnState[], rows: RowNode[], opts: CsvOptions = {}) {
+export function rowsToCsv(columns: ColumnState[], rows: RowNode[], opts: CsvOptions = {}): string {
   const sep = opts.separator ?? ',';
   const cols = columns.filter((c) => !c.hide);
   const src = opts.onlySelected && opts.selection
-    ? rows.filter((r) => opts.selection.has(r.id))
+    ? rows.filter((r) => opts.selection!.has(r.id))
     : rows;
   const head = cols.map((c) => escapeCsv(c.headerName, sep)).join(sep);
   const body = src.map((node) =>
@@ -70,7 +70,7 @@ function cellText(col: ColumnState, node: RowNode) {
   return v == null ? '' : String(v);
 }
 
-function getCellValue(col, node) {
+function getCellValue(col: ColumnState, node: RowNode): unknown {
   const def = col.def;
   if (typeof def.valueGetter === 'function') return def.valueGetter(node.data);
   return node.data?.[col.field];

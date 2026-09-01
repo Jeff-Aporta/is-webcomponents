@@ -102,7 +102,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#otpAbort = null;
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'length' || name === 'type' || name === 'placeholder' || name === 'mask') {
         this.#render();
       }

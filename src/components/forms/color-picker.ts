@@ -165,7 +165,7 @@ import { computePosition } from '../_shared/position.js';
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'value') {
         if (this.#writingValue) return;
         const norm = normalizeHex(newVal) || DEFAULT_VALUE;

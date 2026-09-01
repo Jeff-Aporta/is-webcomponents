@@ -14,14 +14,15 @@
  */
 
 import { cellText, getCellValue } from './value-formatter.js';
+import type { ColumnFilter, ColumnState, DateFilter, FilterModel, NumberFilter, RowNode, TextFilter } from './types.js';
 
-function toNum(v) {
+function toNum(v: unknown): number | null {
   if (v == null || v === '') return null;
   const n = Number(v);
   return Number.isFinite(n) ? n : null;
 }
 
-function toTime(v: string) {
+function toTime(v: unknown): number | null {
   if (v == null || v === '') return null;
   const t = v instanceof Date ? v.getTime() : new Date(String(v)).getTime();
   return Number.isNaN(t) ? null : t;
@@ -29,10 +30,10 @@ function toTime(v: string) {
 
 /**
  * @param {string} raw
- * @param {import('../types.js').TextFilter} f
+ * @param {TextFilter} f
  * @returns {boolean}
  */
-function matchText(raw: string, f: import('../types.js').TextFilter) {
+function matchText(raw: string, f: TextFilter) {
   const hay = raw.toLowerCase();
   const needle = (f.value ?? '').toLowerCase();
   switch (f.op) {
@@ -50,10 +51,10 @@ function matchText(raw: string, f: import('../types.js').TextFilter) {
 
 /**
  * @param {unknown} value
- * @param {import('../types.js').NumberFilter} f
+ * @param {NumberFilter} f
  * @returns {boolean}
  */
-function matchNumber(value: unknown, f: import('../types.js').NumberFilter) {
+function matchNumber(value: unknown, f: NumberFilter) {
   const n = toNum(value);
   if (f.op === 'blank') return n === null;
   if (f.op === 'notBlank') return n !== null;
@@ -74,10 +75,10 @@ function matchNumber(value: unknown, f: import('../types.js').NumberFilter) {
 
 /**
  * @param {unknown} value
- * @param {import('../types.js').DateFilter} f
+ * @param {DateFilter} f
  * @returns {boolean}
  */
-function matchDate(value: unknown, f: import('../types.js').DateFilter) {
+function matchDate(value: unknown, f: DateFilter) {
   const t = toTime(value);
   if (t === null) return false;
   const a = toTime(f.value);
@@ -94,12 +95,12 @@ function matchDate(value: unknown, f: import('../types.js').DateFilter) {
 }
 
 /**
- * @param {import('../types.js').ColumnState} col
- * @param {import('../types.js').RowNode} node
- * @param {import('../types.js').ColumnFilter} f
+ * @param {ColumnState} col
+ * @param {RowNode} node
+ * @param {ColumnFilter} f
  * @returns {boolean}
  */
-function matchOne(col: import('../types.js').ColumnState, node: import('../types.js').RowNode, f: import('../types.js').ColumnFilter) {
+function matchOne(col: ColumnState, node: RowNode, f: ColumnFilter) {
   if (f.type === 'set') return f.values.length === 0 || f.values.includes(cellText(col, node));
   if (f.type === 'text') return matchText(cellText(col, node), f);
   if (f.type === 'number') return matchNumber(getCellValue(col, node), f);
@@ -108,14 +109,14 @@ function matchOne(col: import('../types.js').ColumnState, node: import('../types
 }
 
 /**
- * @param {import('../types.js').RowNode[]} rows
- * @param {import('../types.js').FilterModel} filterModel
+ * @param {RowNode[]} rows
+ * @param {FilterModel} filterModel
  * @param {string} quickFilter
- * @param {import('../types.js').ColumnState[]} columns
- * @param {Map<string, import('../types.js').ColumnState>} colById
- * @returns {import('../types.js').RowNode[]}
+ * @param {ColumnState[]} columns
+ * @param {Map<string, ColumnState>} colById
+ * @returns {RowNode[]}
  */
-export function filterRows(rows: import('../types.js').RowNode[], filterModel: import('../types.js').FilterModel, quickFilter: string, columns: import('../types.js').ColumnState[], colById: Map<string, import('../types.js').ColumnState>) {
+export function filterRows(rows: RowNode[], filterModel: FilterModel, quickFilter: string, columns: ColumnState[], colById: Map<string, ColumnState>) {
   const entries = Object.entries(filterModel);
   const q = quickFilter.trim().toLowerCase();
   if (!entries.length && !q) return rows;
@@ -135,12 +136,12 @@ export function filterRows(rows: import('../types.js').RowNode[], filterModel: i
 
 /**
  * Valores únicos de una columna (para set filter).
- * @param {import('../types.js').RowNode[]} rows
- * @param {import('../types.js').ColumnState} col
+ * @param {RowNode[]} rows
+ * @param {ColumnState} col
  * @returns {string[]}
  */
-export function uniqueValues(rows: import('../types.js').RowNode[], col: import('../types.js').ColumnState) {
-  const set = new Set();
+export function uniqueValues(rows: RowNode[], col: ColumnState): string[] {
+  const set = new Set<string>();
   for (const node of rows) set.add(cellText(col, node));
   return [...set].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 }

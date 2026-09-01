@@ -109,7 +109,7 @@ import { ElementBase } from '../../core/element-base.js';
       document.removeEventListener('keydown', this.#hotkeyHandler);
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'hotkey') this.#bindHotkey();
       if (name === 'placeholder') this.#input.placeholder = newVal || '';
       if (name === 'empty-text') this.#empty.textContent = newVal || '';

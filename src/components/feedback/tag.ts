@@ -66,7 +66,7 @@ import { TONE } from '../_shared/tone.js';
       this.#syncRemove();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
         this.setAttribute('color', 'neutral');
       }

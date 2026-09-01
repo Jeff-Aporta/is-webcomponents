@@ -13,7 +13,7 @@
  */
 
 import { cellText } from './value-formatter.js';
-import type { ColumnDef, ColumnState, RowNode } from './types.js';
+import type { AlignName, ColumnDef, ColumnState, RowNode } from './types.js';
 import {
   ColumnType,
   PinSide,
@@ -54,7 +54,7 @@ function filterTypeOf(def: ColumnDef) {
  * @param {string} [type]
  * @returns {'left'|'center'|'right'}
  */
-function defaultAlignFor(type: string) {
+function defaultAlignFor(type: string | undefined): AlignName {
   if (type === ColumnType.NUMBER || type === 'currency') return 'right';
   if (type === ColumnType.BOOLEAN) return 'center';
   return 'left';

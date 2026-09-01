@@ -47,7 +47,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.scrollToSelection();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       this.#render();
       if (name === 'value') this.scrollToSelection();
     }

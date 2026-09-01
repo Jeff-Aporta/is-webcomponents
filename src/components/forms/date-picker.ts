@@ -151,7 +151,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#render();
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'value' || name === 'mode') this.#parseValueAttr();
       if (name === 'view') emit(this, 'is-view-change', { view: this.view });
       if (name === 'month' && newVal && newVal !== monthKey(this.#view)) {

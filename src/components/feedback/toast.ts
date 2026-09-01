@@ -71,7 +71,7 @@ import { normalizeIntent } from '../_shared/intent.js';
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'bottom-end');
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal)) {
         this.setAttribute('placement', 'bottom-end');
       }

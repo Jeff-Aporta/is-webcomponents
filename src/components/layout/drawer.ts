@@ -108,7 +108,7 @@ import { ModalBase } from '../_shared/modal-base.js';
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'end');
     }
 
-    onAttributeChanged(name, _oldVal, newVal) {
+    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
       if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal)) {
         this.setAttribute('placement', 'end');
       }

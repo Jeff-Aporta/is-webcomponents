@@ -110,7 +110,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#setState('blank', this.#files.length === 0);
     }
 
-    onAttributeChanged(name, oldVal, newVal) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'disabled') this.#syncDisabled();
       else if (name === 'required') this.#syncRequired();
       else if (name === 'label' || name === 'hint') this.#syncSlots();

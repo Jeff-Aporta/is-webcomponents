@@ -54,6 +54,9 @@ import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { packDiagram, layoutPackageOutlines, outlineToPath, routeAvoidingBoxes, pathIllegal, pathHasDiagonal, segsFromPath, resolvePackingGaps, inflateBox, inflateTitleObstacle, COL_GUTTER, PKG_CORRIDOR, ROW_GAP, EDGE_CLEARANCE, TITLE_CLEARANCE } from './component-pack.js';
 import { parsePathPoints } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import type {
+  Arista, Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto,
+} from '../_shared/diagram-tipos.js';
 
 const TAB_W = 56;
 const TAB_H = 14;
@@ -81,14 +84,14 @@ export const HTTP_METHOD_BADGE = {
   OPTIONS: { fill: '#0d5aa7', text: '#ffffff' },
 };
 
-export function parseHttpEndpoint(raw) {
+export function parseHttpEndpoint(raw: unknown) {
   const s = String(raw ?? '').trim();
   const m = /^(GET|POST|PUT|PATCH|DELETE|QUERY|HEAD|OPTIONS)\b\s*/i.exec(s);
   if (!m) return { method: '', path: s };
   return { method: m[1].toUpperCase(), path: s.slice(m[0].length).trim() };
 }
 
-function fittedHeight(c) {
+function fittedHeight(c: Componente): number {
   const items = c.items ?? [];
   if (!items.length) return c.h;
   const nameN = wrapLabel(c.name, c.w).length;
@@ -96,15 +99,17 @@ function fittedHeight(c) {
   return header + nameN * LINE_H + 10 + items.length * (BUBBLE_H + BUBBLE_GAP) + 6;
 }
 
-function asList(v: string) {
+function asList(v: unknown): unknown[] {
   if (Array.isArray(v)) return v.map((x: string) => String(x).trim()).filter(Boolean);
   if (v == null || v === '') return [];
   return [String(v).trim()].filter(Boolean);
 }
 
-function asRecord(v) { return v && typeof v === 'object' ? v : {}; }
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
+}
 
-function readPackage(raw, i: number) {
+function readPackage(raw: unknown, i: number): Paquete {
   const r = asRecord(raw);
   return {
     id: String(r.id ?? `pkg-${i}`),
@@ -118,7 +123,7 @@ function readPackage(raw, i: number) {
   };
 }
 
-function readComponent(raw, i: number) {
+function readComponent(raw: unknown, i: number): Componente {
   const r = asRecord(raw);
   return {
     id: String(r.id ?? `cmp-${i}`),
@@ -137,20 +142,27 @@ function readComponent(raw, i: number) {
   };
 }
 
-function readInterface(raw, i) {
+/** Guardia de lado: el unico sitio donde se valida contra los cuatro. */
+function esLado(v: unknown): v is Lado {
+  return v === 'top' || v === 'right' || v === 'bottom' || v === 'left';
+}
+
+function readInterface(raw: unknown, i: number): InterfazUml {
   const r = asRecord(raw);
   const kind = String(r.kind ?? 'provided').toLowerCase();
   return {
     id: String(r.id ?? `if-${i}`),
     component: String(r.component ?? ''),
     name: String(r.name ?? '').trim() || undefined,
-    side: ['top', 'right', 'bottom', 'left'].includes(String(r.side)) ? String(r.side) : 'right',
+    // El `includes` no estrecha el `String(...)` de dentro: se calcula una vez
+    // y se afirma, que es donde de verdad se comprobo.
+    side: esLado(r.side) ? r.side : 'right',
     offset: Number(r.offset ?? 30),
     kind: kind === 'required' ? 'required' : 'provided',
   };
 }
 
-function readEdge(raw, i) {
+function readEdge(raw: unknown, i: number) {
   const r = asRecord(raw);
   const kind = String(r.kind ?? 'dependency').toLowerCase();
   return {
@@ -165,7 +177,7 @@ function readEdge(raw, i) {
   };
 }
 
-function readLayout(raw) {
+function readLayout(raw: unknown): OpcionesEmpaque {
   const r = asRecord(raw);
   const mode = ['pack', 'triptych', 'manual'].includes(String(r.mode)) ? String(r.mode) : 'pack';
   return {
@@ -182,7 +194,7 @@ function readLayout(raw) {
 }
 
 /** payload → spec normalizada, o null si no hay componentes. */
-export function resolveComponentSpec(payload, host = {}) {
+export function resolveComponentSpec(payload: unknown, host: Record<string, unknown> = {}) {
   const p = asRecord(payload);
   const src = asRecord(p.componentDiagram ?? p);
   const rawComponents = src.components ?? [];
@@ -210,7 +222,7 @@ export function resolveComponentSpec(payload, host = {}) {
   };
 }
 
-function boundsOfComps(comps) {
+function boundsOfComps(comps: readonly Caja[]) {
   const x = Math.min(...comps.map((c) => c.x));
   const y = Math.min(...comps.map((c) => c.y));
   return {
@@ -222,11 +234,13 @@ function boundsOfComps(comps) {
 }
 
 /** Cara del rectángulo que mira al destino (o al origen). */
-function rankSides(from, to) {
+function rankSides(from: Caja, to: Caja): Lado[] {
   const dx = (to.x + to.w / 2) - (from.x + from.w / 2);
   const dy = (to.y + to.h / 2) - (from.y + from.h / 2);
-  const lr = dx >= 0 ? ['right', 'left'] : ['left', 'right'];
-  const tb = dy >= 0 ? ['bottom', 'top'] : ['top', 'bottom'];
+  // `as const` fija los literales: sin el, TypeScript los ensancha a `string[]`
+  // y el retorno deja de encajar en `Lado[]`.
+  const lr = dx >= 0 ? (['right', 'left'] as const) : (['left', 'right'] as const);
+  const tb = dy >= 0 ? (['bottom', 'top'] as const) : (['top', 'bottom'] as const);
   const sameColumn = Math.abs(dx) < Math.max(from.w, to.w) * 0.6;
   if (sameColumn) return [tb[0], lr[0], lr[1], tb[1]];
   return [lr[0], tb[0], tb[1], lr[1]];
@@ -237,12 +251,13 @@ function rankSides(from, to) {
  * no se acumulan todas a la izquierda.
  * El borde superior del paquete es el título: no aparcar el O ahí.
  */
-function outerSides(comp, cluster, sibs = []) {
+function outerSides(comp: Componente, cluster: Caja, sibs: readonly Componente[] = []): Lado[] {
   const cx = comp.x + comp.w / 2;
   const cy = comp.y + comp.h / 2;
   const dx = cx - (cluster.x + cluster.w / 2);
   const dy = cy - (cluster.y + cluster.h / 2);
-  let ranked;
+  // Anotado: sin el, la primera asignacion fija `string[]` y el retorno falla.
+  let ranked: Lado[];
   if (Math.abs(dx) >= Math.abs(dy)) {
     ranked = dx >= 0
       ? ['right', 'top', 'bottom', 'left']
@@ -254,13 +269,18 @@ function outerSides(comp, cluster, sibs = []) {
   }
   const topY = sibs.length ? Math.min(...sibs.map((c) => c.y)) : null;
   if (topY != null && comp.y <= topY + 8) {
-    ranked = ranked.filter((s) => s !== 'top').concat(['top']);
+    ranked = ranked.filter((s) => s !== 'top').concat(['top' as const]);
   }
   return ranked;
 }
 
 /** Round-robin: cap 1 fuerza a rotar de lado antes de repetir. */
-function takeLeastLoaded(comp, ranked, loads, cap = 1) {
+function takeLeastLoaded(
+  comp: Componente,
+  ranked: readonly Lado[],
+  loads: Map<string, number>,
+  cap = 1,
+): Lado | null {
   for (const side of ranked) {
     if ((loads.get(`${comp.id}:${side}`) ?? 0) < cap) return side;
   }
@@ -273,7 +293,7 @@ function takeLeastLoaded(comp, ranked, loads, cap = 1) {
   return best;
 }
 
-function sideOffset(comp, side, index: number, total: number) {
+function sideOffset(comp: Componente, side: Lado, index: number, total: number): number {
   const t = (index + 1) / (total + 1);
   if (side === 'top' || side === 'bottom') return Math.max(12, Math.min(comp.w - 12, comp.w * t));
   return Math.max(12, Math.min(comp.h - 12, comp.h * t));
@@ -286,15 +306,19 @@ function sideOffset(comp, side, index: number, total: number) {
  *   3. Arista componente→componente sin interfaz → socket (C) en el origen
  *      y lollipop (O) en el destino. Sin esto el PNG solo enseña cajas.
  */
-function wireComponentDiagram(components, interfaces, edges) {
+function wireComponentDiagram(
+  components: Componente[],
+  interfaces: InterfazUml[],
+  edges: Arista[],
+) {
   const known = new Set(components.map((c) => c.id));
   const byId = new Map(components.map((c) => [c.id, c]));
   const ifaces = interfaces.slice();
   const knownIf = new Set(ifaces.map((i) => i.id));
-  const outEdges = [];
-  const seenPair = new Set();
+  const outEdges: Arista[] = [];
+  const seenPair = new Set<string>();
 
-  const pushEdge = (e) => {
+  const pushEdge = (e: Arista): void => {
     const key = `${e.from}|${e.to}|${e.fromInterface ?? ''}|${e.toInterface ?? ''}`;
     if (seenPair.has(key)) return;
     seenPair.add(key);
@@ -465,7 +489,7 @@ function wireComponentDiagram(components, interfaces, edges) {
   return { components, interfaces: ifaces, edges: safeEdges };
 }
 
-function interfaceAnchor(iface, comp) {
+function interfaceAnchor(iface: InterfazUml, comp: Componente): Punto {
   // El lollipop asoma perpendicular al lado; el centro queda a LOLLI_STEM
   // del borde para que el O y la C se lean en el PNG (14 px se perdía).
   const stem = LOLLI_STEM;
@@ -479,7 +503,7 @@ function interfaceAnchor(iface, comp) {
 }
 
 /** Punto de la arista: dorso de la C, alineado al centro del O. */
-function ifaceLineEnd(iface) {
+function ifaceLineEnd(iface: InterfazUml): Punto {
   const r = LOLLI_R;
   if (iface.kind === 'required' && iface.docked) {
     switch (iface.side) {
@@ -492,7 +516,7 @@ function ifaceLineEnd(iface) {
   return ifaceOuterPoint(iface);
 }
 
-function componentSidePoint(comp, side, offset) {
+function componentSidePoint(comp: Componente, side: Lado, offset: number): Punto {
   switch (side) {
     case 'top':    return { x: comp.x + offset, y: comp.y };
     case 'bottom': return { x: comp.x + offset, y: comp.y + comp.h };
@@ -501,7 +525,7 @@ function componentSidePoint(comp, side, offset) {
   }
 }
 
-function oppositeDrawSide(side) {
+function oppositeDrawSide(side: Lado): Lado {
   if (side === 'left') return 'right';
   if (side === 'right') return 'left';
   if (side === 'top') return 'bottom';
