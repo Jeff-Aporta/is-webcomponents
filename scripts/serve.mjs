@@ -6,7 +6,12 @@
  * heurísticamente y una recarga normal sigue ejecutando el JS anterior, así que
  * los cambios en src/components/ parecen no aplicarse.
  *
- *   node serve.mjs [puerto]
+ *   node serve.mjs [puerto]                # raíz = este repo
+ *   SERVE_ROOT=C:\ruta\workspace node serve.mjs 5505
+ *        # raíz = el workspace padre (modo Live Server): sirve /apps/<repo>/…
+ *        # igual que Live Server pero con transpilado TS + mapeo .js→.ts, que
+ *        # Live Server NO hace (sirve .ts como video/mp2t y los specifiers
+ *        # .js→.ts dan 404: la galería se queda en loading eterno).
  */
 
 import { createServer } from 'node:http';
@@ -14,7 +19,9 @@ import { createReadStream } from 'node:fs';
 import { stat, readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
 
-const ROOT = join(import.meta.dirname, '..');
+const ROOT = process.env.SERVE_ROOT
+  ? join(process.env.SERVE_ROOT)
+  : join(import.meta.dirname, '..');
 const PORT = Number(process.argv[2]) || 8391;
 
 const TYPES = {
@@ -89,5 +96,5 @@ ${e?.message ?? e}`);
   });
   createReadStream(file).pipe(res);
 }).listen(PORT, () => {
-  console.log(`previews en http://localhost:${PORT}/src/previews/ (sin caché)`);
+  console.log(`IS Web Components en http://localhost:${PORT}/ (sin caché, raíz ${ROOT})`);
 });
