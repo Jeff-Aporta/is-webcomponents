@@ -2,6 +2,7 @@ import { adoptCss, defineElement } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import { escapeHtml, copyText } from '../_shared/dom-utils.js';
+import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 
 import {
   resolveRef,
@@ -26,9 +27,18 @@ import '../code/code.js';
  *   <script type="module"> … loadCSS* + load(…) …</script>
  *
  *   tag / category / base / title / dependencies / config
+ *
+ * Alcance de la carga (radio tag | category | all): el fieldset aparece cuando
+ * el host trae tag y/o category; las opciones cuyo atributo falte quedan
+ * deshabilitadas. Con `url-key` el alcance se persiste dentro de ?s= (b64url
+ * JSON, mismo contrato de url-nav.js que usa <is-tab-group>) y sobrevive al
+ * F5; sin url-key el snippet arranca en tag (o category si no hay tag).
  */
 (() => {
   const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS, { sha: 'main', base: LLM_PROMPT_FALLBACK });
+
+  /** Opciones del radio de alcance: componente | categoría | kit completo. */
+  const SCOPES = ['tag', 'category', 'all'];
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -55,6 +65,13 @@ import '../code/code.js';
         <is-code class="cdn__pre code is-code-view" data-slot="loader" readonly compact wrap
                  line-numbers="false" lang="html"></is-code>
       </div>
+
+      <fieldset class="cdn__scope" data-slot="scope" hidden>
+        <legend class="cdn__scope-legend">Alcance de la carga</legend>
+        <label class="cdn__radio"><input type="radio" name="cdn-scope" value="tag"><span>Cargar solo este componente (<code data-slot="scope-tag"></code>)</span></label>
+        <label class="cdn__radio"><input type="radio" name="cdn-scope" value="category"><span>Cargar la categoría completa (<code data-slot="scope-cat"></code>)</span></label>
+        <label class="cdn__radio"><input type="radio" name="cdn-scope" value="all"><span>Cargar todo el kit (<code>all</code>)</span></label>
+      </fieldset>
 
       <ol class="cdn__list" data-slot="deps-list">
         <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
@@ -104,7 +121,7 @@ import '../code/code.js';
     };
 
     static get observedAttributes(): string[] {
-      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', ...IsCdnSnippet.styleAttrNames];
+      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', 'url-key', ...IsCdnSnippet.styleAttrNames];
     }
 
     #mounted = false;
@@ -113,18 +130,25 @@ import '../code/code.js';
     #deps = [];
     #docs: { label: string; url: string; }[] = [];
     #resolvedRef = 'main';
+    /** Alcance elegido (radio o ?s=); null = automático según atributos. */
+    #scope: string | null = null;
 
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
+      shadow.querySelector<HTMLElement>('[data-slot="scope"]')
+        ?.addEventListener('change', this.#onScopeChange);
       shadow.addEventListener('click', this.#onClick);
     }
 
     connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
+      // url-key opt-in: restaurar el alcance persistido en ?s= ANTES del
+      // primer render, para que el snippet arranque con la elección recordada.
+      if (this.#urlKey) this.#restoreScopeFromUrl();
       this.#render();
       void this.#ensurePromptLoaded();
       resolveRef().then((ref) => {
@@ -143,6 +167,9 @@ import '../code/code.js';
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
+      // La key puede llegar tras el mount (cdn-panel la setea al crear el
+      // elemento): adoptar el alcance persistido al aparecer.
+      if (name === 'url-key') this.#restoreScopeFromUrl();
       this.#render();
     }
 
@@ -155,11 +182,95 @@ import '../code/code.js';
       return `${this.#cdnBase()}core/loader.min.js`;
     }
 
+    /** Key del estado en ?s= (url-nav). Vacío = sin persistencia. */
+    get #urlKey() {
+      return (this.getAttribute('url-key') || '').trim();
+    }
+
+    /** ¿El host trae tag y/o category? Sin ambos el radio no tiene sentido. */
+    #hasScopeTargets() {
+      return !!(this.getAttribute('tag') || '').trim()
+        || !!(this.getAttribute('category') || '').trim();
+    }
+
+    /** Alcance automático (cuando no se eligió radio ni ?s=). */
+    #defaultScope() {
+      if ((this.getAttribute('tag') || '').trim()) return 'tag';
+      if ((this.getAttribute('category') || '').trim()) return 'category';
+      return 'all';
+    }
+
     #loadArg() {
       const tag = (this.getAttribute('tag') || '').trim();
-      if (tag) return tag;
       const category = (this.getAttribute('category') || '').trim();
-      return category || '';
+      const scope = this.#scope || this.#defaultScope();
+      if (scope === 'tag') return tag || category || '';
+      if (scope === 'category') return category || '';
+      if (scope === 'all') {
+        // Sin tag, sin category y sin url-key el elemento nunca mostró radios:
+        // conservar el comportamiento histórico (sin línea load) en lugar de
+        // lanzar L.load('all') por sorpresa.
+        if (!tag && !category && !this.#urlKey) return '';
+        return 'all';
+      }
+      return tag || category || '';
+    }
+
+    /** Sincroniza el fieldset: oculto sin tag/category; radio activo marcado y
+     *  las opciones cuyo atributo falte deshabilitadas. */
+    #syncScopeUi() {
+      const fieldset = this.shadowRoot?.querySelector<HTMLFieldSetElement>('[data-slot="scope"]');
+      if (!fieldset) return;
+      const tag = (this.getAttribute('tag') || '').trim();
+      const category = (this.getAttribute('category') || '').trim();
+      // Sin tag ni category el alcance no tiene sentido: ocultar el fieldset.
+      fieldset.hidden = !this.#hasScopeTargets();
+      const scope = this.#scope || this.#defaultScope();
+      const tagCode = fieldset.querySelector<HTMLElement>('[data-slot="scope-tag"]');
+      if (tagCode) tagCode.textContent = tag || '(sin tag)';
+      const catCode = fieldset.querySelector<HTMLElement>('[data-slot="scope-cat"]');
+      if (catCode) catCode.textContent = category || '(sin categoría)';
+      for (const label of fieldset.querySelectorAll<HTMLLabelElement>('label.cdn__radio')) {
+        const input = label.querySelector<HTMLInputElement>('input[name="cdn-scope"]');
+        if (!input) continue;
+        const available = input.value === 'all'
+          || (input.value === 'tag' && !!tag)
+          || (input.value === 'category' && !!category);
+        input.disabled = !available;
+        label.classList.toggle('is-disabled', !available);
+        input.checked = input.value === scope;
+      }
+    }
+
+    #onScopeChange = (e: Event) => {
+      const input = e.target as HTMLInputElement;
+      if (!input || !input.matches?.('input[name="cdn-scope"]')) return;
+      const value = input.value;
+      if (!SCOPES.includes(value) || input.disabled) return;
+      this.#scope = value;
+      if (this.#urlKey) this.#persistScopeToUrl(value);
+      this.#render();
+    };
+
+    /** url-key opt-in: adopta el alcance persistido en ?s= si la opción existe
+     *  y no está deshabilitada (su atributo está presente). */
+    #restoreScopeFromUrl() {
+      const key = this.#urlKey;
+      if (!key) return;
+      const fromUrl = readUrlNav(key);
+      if (!fromUrl || !SCOPES.includes(fromUrl)) return;
+      const tag = (this.getAttribute('tag') || '').trim();
+      const category = (this.getAttribute('category') || '').trim();
+      if (fromUrl === 'tag' && !tag) return;
+      if (fromUrl === 'category' && !category) return;
+      this.#scope = fromUrl;
+    }
+
+    /** url-key opt-in: escribe el alcance dentro de ?s= (b64url JSON). */
+    #persistScopeToUrl(scope: string) {
+      const key = this.#urlKey;
+      if (!key) return;
+      writeUrlNav(key, scope);
     }
 
     #parseConfig() {
@@ -307,6 +418,7 @@ import '../code/code.js';
 
       this.#parseDeps();
       this.#renderDeps();
+      this.#syncScopeUi();
       this.#highlight();
     }
 

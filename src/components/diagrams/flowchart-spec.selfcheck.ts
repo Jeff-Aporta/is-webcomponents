@@ -1,5 +1,6 @@
 import assert from 'node:assert';
 import { resolveFlowchartSpec, computeFlowchartLayout } from './flowchart-spec.js';
+import { pathPoints as parsePathPoints } from '../_shared/diagram-arrow.js';
 
 /**
  * Regresión: ninguna arista debe contener un segmento en diagonal.
@@ -10,17 +11,9 @@ import { resolveFlowchartSpec, computeFlowchartLayout } from './flowchart-spec.j
  * donde arrancó la ruta, y un `stepOut` insuficiente frente a la cuantización
  * de 8px) producía "torcidos" en diagonal — visibles primero en ER, pero
  * latentes en cualquier diagrama que usa este mismo ruteo. Este check parsea
- * el SVG real (respeta los comandos M/L, no una extracción ciega de números)
- * y falla si aparece cualquier segmento no horizontal/vertical.
+ * el SVG real (M/L/H/V) y falla si aparece cualquier segmento no
+ * horizontal/vertical.
  */
-
-function parsePathPoints(d) {
-  const tokens = d.match(/[ML]\s*-?\d+(?:\.\d+)?[\s,]+-?\d+(?:\.\d+)?/g) || [];
-  return tokens.map((t) => {
-    const n = t.match(/-?\d+(?:\.\d+)?/g).map(Number);
-    return { x: n[0], y: n[1] };
-  });
-}
 
 function assertNoDiagonals(path, label) {
   const pts = parsePathPoints(path);

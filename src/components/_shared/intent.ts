@@ -5,7 +5,7 @@
  * no su apariencia. Ejemplos: success (verde), warning (amarillo), danger
  * (rojo), brand (color de marca), neutral (gris, sin tinte).
  *
- * Default: 'brand' (no 'neutral'). Convención 2026-08 — ver AGENTS.md §6.16.
+ * Default: 'brand' (no 'neutral'). Convención 2026-08 — ver LLM.md §6.16.
  *
  * Compartido por: is-button, is-tag, is-badge, is-callout, is-toast,
  * is-toast-item, is-stat, is-fab, is-checkbox, is-radio, is-radio-group,

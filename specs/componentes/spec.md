@@ -2,7 +2,7 @@
 
 Forma de los custom elements, `_shared/` y convenciones de API.
 
-Diario: [`AGENTS.md`](../../AGENTS.md) (carta, DO/DON'T, enums).
+Diario: [`AGENTS.md`](../../LLM.md) (carta, DO/DON'T, enums).
 
 ## Contexto
 

@@ -1,6 +1,6 @@
 # Lessons — índice
 
-El diario completo vive en [`AGENTS.md`](../../AGENTS.md) (carta, errores #24–#44, entorno local).
+El diario completo vive en [`AGENTS.md`](../../LLM.md) (carta, errores #24–#44, entorno local).
 
 | Síntoma | Dónde | Guardián |
 |---|---|---|

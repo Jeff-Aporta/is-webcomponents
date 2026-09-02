@@ -12,6 +12,7 @@
  * Playwright: reusa el de Personal/apps/src/screenshot/node_modules.
  */
 import { mkdir, writeFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -34,7 +35,12 @@ const ONLY = (arg('only', '') || '').split(',').map((s) => s.trim()).filter(Bool
 const LIMIT = Number(arg('limit', '0')) || 0;
 const START_SERVER = !has('no-server');
 
-const pwPath = join(root, '..', 'src', 'screenshot', 'node_modules', 'playwright');
+// Playwright: primero el del repo (devDependency propia); el viejo helper de
+// Personal/apps/src/screenshot ya no existe en esta máquina.
+const pwPath = [
+  join(root, 'node_modules', 'playwright'),
+  join(root, '..', 'src', 'screenshot', 'node_modules', 'playwright'),
+].find((p) => existsSync(p)) ?? join(root, 'node_modules', 'playwright');
 const { chromium } = require(pwPath);
 
 const b64url = (obj) => Buffer.from(JSON.stringify(obj), 'utf8').toString('base64url');

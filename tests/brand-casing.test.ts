@@ -22,7 +22,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 
 const DIRS = ['previews', 'components', 'scripts', 'styles', 'tests'];
-const FILES = ['index.html', 'AGENTS.md', 'README.md', 'LLM.md'];
+const FILES = ['index.html', 'LLM.md', 'README.md', 'LLM.md'];
 const EXT = /\.(html|md|js|mjs|css)$/;
 
 async function walk(dir, out = []) {

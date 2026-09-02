@@ -20,12 +20,21 @@ test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
   assert.match(src, /fallbackBases/);
 });
 
-test('cdn-snippet: loader src + script load; sin radios category/all', async () => {
+test('cdn-snippet: loader copy-paste; alcance tag|category|all vía L.load (sin mirrors ni all.min)', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
+  // Espejos y all.min siguen fuera del panel: todo pasa por core/loader.min.js.
   assert.doesNotMatch(src, /data-tab=["']mirrors["']/);
-  assert.doesNotMatch(src, /name="cdn-scope"/);
-  assert.doesNotMatch(src, /value="category"/);
   assert.doesNotMatch(src, /all\.min\.js/);
+  // El alcance (tag|category|all) son radios del fieldset .cdn__scope; su
+  // argumento lo expande el LOADER (L.load('is-button') / 'actions' / 'all'),
+  // nunca bundles sueltos category.*.min.js / all.min.js.
+  assert.match(src, /name="cdn-scope"/);
+  assert.match(src, /value="tag"/);
+  assert.match(src, /value="category"/);
+  assert.match(src, /value="all"/);
+  assert.match(src, /SCOPES\s*=\s*\[/);
+  assert.match(src, /#persistScopeToUrl|#restoreScopeFromUrl/);
+  assert.match(src, /'url-key'/);
   assert.match(src, /#buildLoaderSnippet/);
   assert.match(src, /loader\.min\.js/);
   assert.match(src, /type="module" src=/);

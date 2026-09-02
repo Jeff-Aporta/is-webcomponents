@@ -3,8 +3,8 @@ import assert from 'node:assert';
 import { resolvePaletteKey, resolveMode } from './chart-palette.js';
 
 assert.strictEqual(resolvePaletteKey('contapyme'), 'contapyme');
-assert.strictEqual(resolvePaletteKey('nonexistent'), 'insoft');
-assert.strictEqual(resolvePaletteKey(null), 'insoft');
+assert.strictEqual(resolvePaletteKey('nonexistent'), 'contapyme');
+assert.strictEqual(resolvePaletteKey(null), 'contapyme');
 assert.strictEqual(resolveMode(true), 'light');
 assert.strictEqual(resolveMode(false), 'dark');
 

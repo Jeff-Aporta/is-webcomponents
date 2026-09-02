@@ -13,7 +13,7 @@ import { TONE } from '../_shared/tone.js';
  *
  * Atributos
  *   color     brand | neutral | success | warning | danger
- *               (default 'neutral', reflected)
+ *               (default 'brand', reflected)
  *   variant  accent | filled | outlined | filled-outlined | plain
  *               (default 'filled-outlined', reflected)
  *   icon        nombre Iconify para mostrar a la izquierda (ej. "mdi:bell").

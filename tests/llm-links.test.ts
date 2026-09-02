@@ -43,7 +43,7 @@ for (const c of manifest) {
 if (!existsSync(join(root, 'src', 'components', 'LLM.md'))) {
   failures.push('falta src/components/LLM.md (índice global del catálogo)');
 }
-if (!existsSync(join(root, 'AGENTS.md'))) failures.push('falta AGENTS.md en la raíz del repo');
+if (!existsSync(join(root, 'LLM.md'))) failures.push('falta LLM.md en la raíz del repo');
 
 // 3) cdn-panel.js —dueño del panel «Consumo por CDN»— no debe volver a componer
 //    la ruta desde la categoría ni apuntar a previews/LLM.md.

@@ -100,8 +100,9 @@ test('is-code preserva scroll del is-main (evita F5 al final)', () => {
 });
 
 test('is-main: restore window amplio + scroll-behavior auto en CSS', () => {
-  const main = read('src/components/layout/main.ts');
-  assert.match(main, /RESTORE_WINDOW\s*=\s*4_?500/);
+  // RESTORE_WINDOW vive en _shared/scroll-memory.ts (refactor desde main.ts).
+  const memory = read('src/components/_shared/scroll-memory.ts');
+  assert.match(memory, /RESTORE_WINDOW\s*=\s*4_?500/);
   const css = read('src/styles/presentation.css');
   assert.match(css, /is-main\.main\s*\{[\s\S]*?scroll-behavior:\s*auto/);
 });

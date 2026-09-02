@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-01T05:49:43.426Z",
-  "count": 59,
+  "generatedAt": "2026-09-02T18:57:53.442Z",
+  "count": 60,
   "modules": [
     {
       "file": "cdn-ref.ts",
@@ -216,11 +216,11 @@
       "id": "diagram-edge-actors",
       "path": "src/components/_shared/diagram-edge-actors.ts",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 6731,
+      "bytes": 6723,
       "exports": [
         "EDGE_ACTOR_H",
+        "parsePathPoints  from",
         "edgeActorWidth",
-        "parsePathPoints",
         "pointAtFraction",
         "placeEdgeActors",
         "applyEdgeActorLayout"
@@ -231,7 +231,7 @@
       "id": "diagram-edge-spread",
       "path": "src/components/_shared/diagram-edge-spread.ts",
       "summary": "Separa polilíneas ortogonales que corren pegadas. — El A* reutiliza el mismo corredor: varias aristas salen como una sola raya.",
-      "bytes": 3446,
+      "bytes": 4046,
       "exports": [
         "spreadOrthogonalPaths"
       ]
@@ -308,6 +308,14 @@
       "exports": [
         "diagramHeaderWidth"
       ]
+    },
+    {
+      "file": "diagram-tipos.ts",
+      "id": "diagram-tipos",
+      "path": "src/components/_shared/diagram-tipos.ts",
+      "summary": "diagram-tipos — POR QUÉ AQUÍ. `component-pack.ts` y `component-spec.ts` se pasan los mismos",
+      "bytes": 4455,
+      "exports": []
     },
     {
       "file": "dom-utils.ts",
@@ -436,12 +444,13 @@
       "id": "icon-loader",
       "path": "src/components/_shared/icon-loader.ts",
       "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component — `<iconify-icon>` ni su script de CDN. Todo el sistema de iconos vive en",
-      "bytes": 5998,
+      "bytes": 6632,
       "exports": [
         "hasIconLocal",
         "iconSourceBase",
         "resolveIconSvg",
         "resolveIconRaw",
+        "clearRawCache",
         "listIconFamilies"
       ]
     },
@@ -450,7 +459,7 @@
       "id": "intent",
       "path": "src/components/_shared/intent.ts",
       "summary": "intent — Un \"intent\" describe EL SIGNIFICADO del color que aplica el componente,",
-      "bytes": 1888,
+      "bytes": 1885,
       "exports": [
         "INTENT",
         "DEFAULT_INTENT",

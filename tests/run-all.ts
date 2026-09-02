@@ -1,28 +1,26 @@
-// tests/run-all.mjs
+// tests/run-all.ts
 //
 // Lanza todos los tests en secuencia y resume. Cada test se ejecuta como
 // subproceso para que los fallos no contaminen al runner.
 //
-// Tests que NO requieren servidor:
-//   - icon-references.test.ts
-//   - manifest-paths.test.ts
-//   - preview-paths.test.ts
-//   - theme-contract.test.ts
-//   - palette-and-snippet-contract.test.ts
+// Los tests ahora son *.test.ts (migración .js→.ts) e importan fuentes TS
+// con extensión .js (ts-resolve-hook), así que cada subproceso arranca con
+// `--import <abs>/scripts/ts-resolve-hook.ts`.
 //
 // Tests que SI requieren servidor (PORT=8391 con node scripts/serve.mjs):
 //   - cdn-icons.test.ts
 //
 // Uso:
-//   node tests/run-all.mjs              # solo los tests sin servidor
-//   PORT=8391 node tests/run-all.mjs    # todos, requiere server arriba
+//   node tests/run-all.ts               # solo los tests sin servidor
+//   PORT=8391 node tests/run-all.ts     # todos, requiere server arriba
 
 import { spawn } from 'node:child_process';
 import { readdir } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
+const root = join(here, '..');
 const ALL = process.env.PORT != null;
 // Tests que necesitan el dev server levantado (hacen fetch a localhost).
 // Antes se filtraba por el prefijo `cdn-`, lo que también excluía tests
@@ -30,8 +28,12 @@ const ALL = process.env.PORT != null;
 const NEEDS_SERVER = new Set(['cdn-icons.test.ts']);
 const only = (f) => (ALL ? true : !NEEDS_SERVER.has(f));
 
-const files = (await readdir(here)).filter((f) => f.endsWith('.test.mjs') && only(f)).sort();
+const files = (await readdir(here)).filter((f) => f.endsWith('.test.ts') && only(f)).sort();
 console.log(`corriendo ${files.length} tests${ALL ? ' (con servidor)' : ' (sin servidor)'}\n`);
+
+// Hook de resolución TS del repo (ruta absoluta: el runner puede lanzarse
+// desde cualquier cwd). Node exige file:// para --import en Windows.
+const hook = pathToFileURL(join(root, 'scripts', 'ts-resolve-hook.ts')).href;
 
 let pass = 0;
 let fail = 0;
@@ -40,7 +42,7 @@ const failed = [];
 for (const f of files) {
   const start = Date.now();
   const code = await new Promise((resolve) => {
-    const child = spawn(process.execPath, [join(here, f)], {
+    const child = spawn(process.execPath, ['--import', hook, join(here, f)], {
       stdio: 'inherit',
       env: process.env,
     });

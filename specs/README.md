@@ -1,6 +1,6 @@
 # Specs IS Web Components (SDD)
 
-Contrato vigente del kit. **No sustituye** [`AGENTS.md`](../AGENTS.md): el spec dice qué debe pasar; el diario dice qué pasó y por qué.
+Contrato vigente del kit. **No sustituye** [`AGENTS.md`](../LLM.md): el spec dice qué debe pasar; el diario dice qué pasó y por qué.
 
 Cómo se trabaja: [flujo-sdd.md](flujo-sdd.md) — spec → tasks → ejecución → gate.
 

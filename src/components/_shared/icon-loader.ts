@@ -14,11 +14,12 @@
  * codigo fuente los encuentra en la raiz del repo.
  *
  * API:
- *   resolveIconSvg(prefix, name) -> Promise<string|null>  URL del SVG
- *   resolveIconRaw(prefix, name) -> Promise<string|null>  texto del SVG
- *   hasIconLocal(prefix, name)   -> Promise<boolean>
- *   listIconFamilies()           -> Promise<Array<{prefix, count}>>
- *   iconSourceBase(prefix)       -> string|null
+ *   resolveIconSvg(prefix, name)     -> Promise<string|null>  URL del SVG
+ *   resolveIconRaw(prefix, name, signal) -> Promise<string|null>  texto del SVG
+ *   clearRawCache()                  -> void  vacia el cache de SVGs
+ *   hasIconLocal(prefix, name)       -> Promise<boolean>
+ *   listIconFamilies()               -> Promise<Array<{prefix, count}>>
+ *   iconSourceBase(prefix)           -> string|null
  */
 
 /**
@@ -35,7 +36,7 @@
 const ICON_BASES = [
   // Bundle publicado: dist/cdn/<categoria>/*.min.js → dist/assets/icons/
   () => {
-    if (!/\/dist\/cdn\//.test(import.meta.url)) return null;
+    if (!import.meta.url.includes('/dist/cdn/')) return null;
     return new URL('../../assets/icons/', import.meta.url).href;
   },
   // Dev (Live Server / serve.mjs): src/components/_shared → dist/assets/.
@@ -143,20 +144,30 @@ export async function resolveIconSvg(prefix, name) {
   return base + LOCAL_SVG_PATH(prefix, name);
 }
 
-export async function resolveIconRaw(prefix, name) {
+export async function resolveIconRaw(prefix, name, signal) {
   const key = `${prefix}:${name}`;
   if (rawCache.has(key)) return rawCache.get(key);
+  // Resuelve primero si el icono existe y desde que base (loadIndex/baseCache),
+  // igual que resolveIconSvg; el fetch del SVG respeta la senal de abort para
+  // que <is-icon> pueda cancelar renders obsoletos.
   const url = await resolveIconSvg(prefix, name);
   if (!url) return null;
+  const base = baseCache.get(prefix) ?? '';
   try {
-    const res = await fetch(url, { cache: 'default' });
+    const res = await fetch(base + LOCAL_SVG_PATH(prefix, name), { signal, cache: 'default' });
     if (!res.ok) return null;
-    const svg = await res.text();
-    rawCache.set(key, svg);
-    return svg;
-  } catch {
+    const text = await res.text();
+    rawCache.set(key, text);
+    return text;
+  } catch (err) {
+    if (err?.name === 'AbortError') throw err; // propagar la cancelacion
     return null;
   }
+}
+
+/** Vacia el cache en memoria de SVGs (util para tests y para liberar memoria). */
+export function clearRawCache() {
+  rawCache.clear();
 }
 
 export async function listIconFamilies() {

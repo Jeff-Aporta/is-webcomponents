@@ -6,16 +6,11 @@
  * un poco a cada lado, para poder seguir cada línea.
  */
 
-function parsePathPoints(d: string) {
-  if (!d) return [];
-  const pts = [];
-  const re = /[ML]\s*([\d.-]+)[,\s]+([\d.-]+)/gi;
-  let m;
-  while ((m = re.exec(String(d)))) {
-    pts.push({ x: Number(m[1]), y: Number(m[2]) });
-  }
-  return pts;
-}
+// El parser de puntos es el de diagram-arrow (M/L/H/V, may/min). El parser
+// local antiguo solo entendía M/L: una path ortogonal con H/V (codos y
+// reprocesos de swimlane) se colapsaba a su primer punto cuando había ≥2
+// aristas etiquetadas y las líneas desaparecían del render.
+import { pathPoints as parsePathPoints } from './diagram-arrow.js';
 
 function rangesOverlap(a0: number, a1: number, b0: number, b1: number, min = 12) {
   return Math.min(a1, b1) - Math.max(a0, b0) > min;
@@ -23,7 +18,19 @@ function rangesOverlap(a0: number, a1: number, b0: number, b1: number, min = 12)
 
 function toPath(pts) {
   if (!pts.length) return '';
-  return pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+  // Se conservan los comandos ortogonales (H/V) cuando el tramo sigue alineado
+  // al eje: la geometría emitida por los specs (elbowPath/returnPath de
+  // swimlane) usa H/V y hay selfchecks que lo exigen; L solo cuando el
+  // desplazamiento del spread descuadró el tramo.
+  let d = `M${pts[0].x},${pts[0].y}`;
+  for (let i = 1; i < pts.length; i++) {
+    const a = pts[i - 1];
+    const b = pts[i];
+    if (Math.abs(a.y - b.y) < 1e-6) d += ` H${b.x}`;
+    else if (Math.abs(a.x - b.x) < 1e-6) d += ` V${b.y}`;
+    else d += ` L${b.x},${b.y}`;
+  }
+  return d;
 }
 
 function collectRuns(items, vertical) {

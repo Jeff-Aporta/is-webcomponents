@@ -153,7 +153,7 @@ const manifestCategoryByTag = new Map(
   manifest.map((m) => [m.tag.replace(/^is-/, ''), m.category]),
 );
 const folderFor = (file) => {
-  const tag = basename(file).replace(/\.js$/, '');
+  const tag = basename(file).replace(/\.(ts|js)$/, '');
   if (manifestCategoryByTag.has(tag)) return manifestCategoryByTag.get(tag);
   return relative(compRoot, file).split(/[\\/]/)[0];
 };
@@ -203,7 +203,7 @@ const sharedImports = new Set();
 // publicado: hay que emitirlos por carpeta o dan 404 en silencio.
 const localPartials = new Set();
 for (const file of entries) {
-  const cssFile = file.replace(/\.js$/i, '.css');
+  const cssFile = file.replace(/\.(ts|js)$/i, '.css');
   let css = '';
   try { css = await readFile(cssFile, 'utf8'); } catch { continue; }
   for (const m of css.matchAll(/@import\s+(?:url\(\s*)?['"]\.\.\/_shared\/([\w.-]+\.css)['"]/g)) {
@@ -283,6 +283,10 @@ const emittedFolders = new Set();
 
 for (const inFile of entries) {
   const tag = basename(inFile).replace(/\.(ts|js)$/, '');
+  // Carpeta FISICA en src/components (charts/, data/, …): el .md y el LLM.md
+  // viven ahi y el banner de docs debe enlazar a la fuente, no a la carpeta de
+  // publicacion (que para chart/bar-chart es data-viz/ segun el manifest).
+  const srcFolder = relative(compRoot, inFile).split(/[\\/]/)[0];
   const folder = folderFor(inFile);
   const outDir = join(dist, folder);
   await mkdir(outDir, { recursive: true });
@@ -307,7 +311,7 @@ for (const inFile of entries) {
     inFile,
     outJs,
     [externalComponents],
-    componentDocsBanner(folder, tag),
+    componentDocsBanner(srcFolder, tag),
     hasCss ? await defineCss(outCss) : undefined,
   );
 

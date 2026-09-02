@@ -2,7 +2,7 @@
 
 Empaquetado esbuild, layout `dist/cdn/` y loader de consumo.
 
-Diario: [`AGENTS.md`](../../AGENTS.md) (publicación, loader).
+Diario: [`AGENTS.md`](../../LLM.md) (publicación, loader).
 
 ## Contexto
 

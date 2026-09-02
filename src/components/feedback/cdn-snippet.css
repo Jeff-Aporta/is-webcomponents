@@ -63,6 +63,8 @@
   min-width: 0;
 }
 
+.cdn__scope[hidden] { display: none; }
+
 .cdn__scope-legend {
   padding: 0 0.35em;
   font-size: 0.72rem;

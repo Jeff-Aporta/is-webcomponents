@@ -24,7 +24,9 @@ import assert from 'node:assert/strict';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const assetsIcons = join(root, 'src', 'assets', 'icons');
+// Los iconos viven SOLO en dist/assets/icons (src/assets/ se elimino en el
+// refactor de layout CDN; ver el doc-block de _shared/icon-loader.ts).
+const assetsIcons = join(root, 'dist', 'assets', 'icons');
 
 const iconJs = await readFile(join(root, 'src/components/media/icon.ts'), 'utf8');
 const iconCss = await readFile(join(root, 'src/components/media/icon.css'), 'utf8');

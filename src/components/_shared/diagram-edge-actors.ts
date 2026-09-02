@@ -8,23 +8,16 @@
  */
 
 import { spreadOrthogonalPaths } from './diagram-edge-spread.js';
+import { pathPoints as parsePathPoints } from './diagram-arrow.js';
 
 export const EDGE_ACTOR_H = 16;
 
+// API pública conservada: parsePathPoints era export de este módulo y la usan
+// specs (component-spec) y utilidades. Ahora delega en diagram-arrow (H/V-aware).
+export { pathPoints as parsePathPoints } from './diagram-arrow.js';
+
 export function edgeActorWidth(text: number) {
   return Math.max(28, String(text ?? '').length * 5.6 + 10);
-}
-
-/** Vértices de un `d` ortogonal `M x,y L x,y …`. */
-export function parsePathPoints(d: string) {
-  if (!d) return [];
-  const pts = [];
-  const re = /[ML]\s*([\d.-]+)[,\s]+([\d.-]+)/gi;
-  let m;
-  while ((m = re.exec(String(d)))) {
-    pts.push({ x: Number(m[1]), y: Number(m[2]) });
-  }
-  return pts;
 }
 
 /** Punto al `t` (0–1) de la longitud del polyline. */

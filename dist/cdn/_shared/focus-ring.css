@@ -1,0 +1,1 @@
+:host{--is-focus-fallback: var(--is-color-brand, dodgerblue);--is-focus-offset: 2px}.is-focus-ring:focus-visible{outline:2px solid var(--is-focus, var(--is-focus-fallback));outline-offset:var(--is-focus-offset)}

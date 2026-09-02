@@ -27,7 +27,7 @@ const mustExist = [
   'scripts/build.mjs',
   'dist/cdn',
   'src/manifest.js',
-  'AGENTS.md',
+  'LLM.md',
   'index.html',
   'robots.txt',
   // `sitemap.xml` se retiro el 31-ago-2026 junto con `docs/`: con una sola URL

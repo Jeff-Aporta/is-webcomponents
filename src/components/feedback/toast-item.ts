@@ -9,7 +9,7 @@ import '../actions/button.js';
  * Ítem individual de toast con countdown y cierre.
  *
  * Atributos
- *   color   brand | success | warning | danger | neutral (default neutral)
+ *   color   brand | success | warning | danger | neutral (default brand)
  *   duration  number ms (default 5000; 0 = hasta dismiss). Reflect.
  *   open      boolean — visible
  *

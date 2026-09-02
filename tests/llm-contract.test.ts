@@ -1,6 +1,6 @@
 // tests/llm-contract.test.ts
 //
-// AGENTS.md es la carta de leyes del kit. Si alguien borra secciones DO/DON'T,
+// LLM.md es la carta de leyes del kit. Si alguien borra secciones DO/DON'T,
 // la bitácora de errores o deja de citar guardianes que sí existen (o cita
 // archivos fantasma), este test falla.
 //
@@ -15,11 +15,11 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const docPath = join(root, 'AGENTS.md');
+const docPath = join(root, 'LLM.md');
 const failures = [];
 
 if (!existsSync(docPath)) {
-  console.error('llm-contract.test.ts: FAIL — falta AGENTS.md en la raíz');
+  console.error('llm-contract.test.ts: FAIL — falta LLM.md en la raíz');
   process.exit(1);
 }
 
@@ -105,7 +105,7 @@ for (const file of guardians) {
   if (!onDisk) failures.push(`guardián citado no existe en disco: tests/${file}`);
   const short = file.replace('.test.mjs', '');
   if (file !== 'llm-contract.test.ts' && !llm.includes(short) && !llm.includes(file)) {
-    failures.push(`AGENTS.md no cita el guardián ${file}`);
+    failures.push(`LLM.md no cita el guardián ${file}`);
   }
 }
 
@@ -138,5 +138,5 @@ if (failures.length) {
 }
 
 console.log(
-  `llm-contract.test.ts: PASS — AGENTS.md con carta/DO/DON'T/errores + ${guardians.length} guardianes en disco`,
+  `llm-contract.test.ts: PASS — LLM.md con carta/DO/DON'T/errores + ${guardians.length} guardianes en disco`,
 );

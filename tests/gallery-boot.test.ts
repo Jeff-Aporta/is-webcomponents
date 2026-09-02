@@ -119,7 +119,7 @@ test('cdn-panel importa cdn-snippet desde dist/cdn (no src/)', () => {
   assert.doesNotMatch(cdnPanel, /src\/components\/feedback\/cdn-snippet\.js/);
 });
 
-test('head arranca con loader.min.js (no all.min suelto)', () => {
-  assert.match(indexHtml, /dist\/cdn\/loader\.min\.js/);
+test('head arranca con loader.min.js desde core/ (no all.min suelto)', () => {
+  assert.match(indexHtml, /dist\/cdn\/(?:core\/)?loader\.min\.js/);
   assert.doesNotMatch(indexHtml, /<script\s+type="module"\s+src="dist\/cdn\/all\.min\.js"/);
 });

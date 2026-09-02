@@ -103,8 +103,8 @@ for (const [nombre, tema] of [['claro', sequenceThemeLight()], ['oscuro', sequen
 }
 
 const conChip = [
-  'class-diagram.js', 'er-diagram.js', 'flowchart.js',
-  'state-diagram.js', 'swimlane-diagram.js', 'use-case-diagram.js',
+  'class-diagram.ts', 'er-diagram.ts', 'flowchart.ts',
+  'state-diagram.ts', 'swimlane-diagram.ts', 'use-case-diagram.ts',
 ];
 for (const archivo of conChip) {
   const src = readFileSync(new URL(`./${archivo}`, import.meta.url), 'utf8');
@@ -138,8 +138,9 @@ for (const actor of sec.actors) {
 
 // Todos los iconos por defecto tienen que EXISTIR en los assets del kit: uno
 // inexistente deja el avatar vacío (le pasó a simple-icons:openai).
+// Los iconos viven en dist/assets/icons (src/assets ya no existe).
 const { readdirSync, existsSync } = await import('node:fs');
-const raizIconos = new URL('../../assets/icons/', import.meta.url);
+const raizIconos = new URL('../../../dist/assets/icons/', import.meta.url);
 for (const actor of sec.actors) {
   const [prefijo, nombre] = actor.icon.split(':');
   const ruta = new URL(`${prefijo}/${nombre}.svg`, raizIconos);
@@ -152,7 +153,7 @@ console.log('render-legibilidad.selfcheck (actores): OK');
 
 /* ── 6. Diagrama de componentes: paquete translúcido y etiquetas encima ── */
 
-const cd = readFileSync(new URL('./component-diagram.js', import.meta.url), 'utf8');
+const cd = readFileSync(new URL('./component-diagram.ts', import.meta.url), 'utf8');
 assert.ok(/hsla\(\$\{p\.hue\},60%,50%,0\.06\)/.test(cd),
   'component: el paquete con `hue` volvió al relleno sólido y ahoga a los componentes de dentro');
 assert.ok(cd.includes('this.svg.appendChild(this.#etiquetasEdges)'),
@@ -169,9 +170,9 @@ assert.ok(cd.includes('Tahoma,Arial,sans-serif'),
   'component: la tipografía debe coincidir con el diagrama ER');
 
 const specActors = [
-  'component-spec.js', 'flowchart-spec.js', 'block-spec.js',
-  'class-spec.js', 'state-spec.js', 'er-spec.js',
-  'swimlane-spec.js', 'use-case-spec.js',
+  'component-spec.ts', 'flowchart-spec.ts', 'block-spec.ts',
+  'class-spec.ts', 'state-spec.ts', 'er-spec.ts',
+  'swimlane-spec.ts', 'use-case-spec.ts',
 ];
 for (const archivo of specActors) {
   const src = readFileSync(new URL(`./${archivo}`, import.meta.url), 'utf8');

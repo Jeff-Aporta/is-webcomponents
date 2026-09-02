@@ -16,7 +16,7 @@ import { ElementBase } from '../../core/element-base.js';
  *   trend       string (e.g. "+12.5%" o "-3.2%")
  *   trend-direction up | down | flat   (auto-detect si trend empieza con + o -)
  *   icon        string (iconify id)
- *   color     brand | neutral | success | warning | danger (default 'neutral')
+ *   color     brand | neutral | success | warning | danger (default 'brand')
  *
  * Slots
  *   label       override del label

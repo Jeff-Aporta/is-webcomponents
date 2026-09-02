@@ -20,7 +20,7 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 | Estilos / tokens | `src/styles/` (`--is-*`) |
 | Artefactos CDN | `dist/cdn/` (generado; no editar a mano) |
 | Contrato SDD | `specs/` (esta carpeta) |
-| Diario operativo | [`AGENTS.md`](../AGENTS.md) |
+| Diario operativo | [`AGENTS.md`](../LLM.md) |
 | Docs por tag (agentes) | `src/components/**/*.md` |
 
 ## C-3 Layout `src/`
