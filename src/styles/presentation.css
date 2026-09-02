@@ -1113,34 +1113,6 @@ pre.code {
   border-left: 1px solid color-mix(in srgb, var(--is-accent) 35%, var(--is-border));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
 }
-/* CodeMirror runMode tokens — specificity > theme CDN (carga async) */
-pre.code.cm-s-material-darker {
-  background: var(--is-code-bg) !important;
-  color: var(--is-code-text);
-}
-pre.code.cm-s-material-darker span {
-  font-family: inherit;
-  font-size: inherit;
-}
-pre.code.cm-s-material-darker .cm-tag { color: #74c0fc !important; }
-pre.code.cm-s-material-darker .cm-attribute { color: #ffe066 !important; }
-pre.code.cm-s-material-darker .cm-string { color: #b2f2bb !important; }
-pre.code.cm-s-material-darker .cm-comment { color: #868e96 !important; font-style: italic; }
-pre.code.cm-s-material-darker .cm-keyword { color: #e599f7 !important; }
-pre.code.cm-s-material-darker .cm-def,
-pre.code.cm-s-material-darker .cm-variable { color: #ffc078 !important; }
-pre.code.cm-s-material-darker .cm-number { color: #ffc078 !important; }
-pre.code.cm-s-material-darker .cm-bracket { color: #868e96 !important; }
-pre.code.cm-s-material-darker .cm-atom { color: #ff8787 !important; }
-/* CodeMirror marca cierres “huérfanos” (p. ej. tras markup de color a mano
-   heredado) como cm-error con fondo rojo del theme. En docs no es un error
-   útil: se neutraliza para no pintar bloques rojos sobre </tag>. */
-pre.code .cm-error {
-  background: transparent !important;
-  color: inherit !important;
-}
-pre.code.cm-s-material-darker .cm-error { color: #74c0fc !important; }
-pre.code.cm-s-mdn-like .cm-error { color: #ca0809 !important; background: transparent !important; }
 code.code { padding: 0.15em 0.4em; font-size: 0.86em; }
 /* inline code dentro de callout: mismos tokens que pre.code */
 .callout code.code .tag { color: #74c0fc; }

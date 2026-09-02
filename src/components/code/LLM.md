@@ -28,7 +28,7 @@ Elegir el módulo mínimo. Abrir el MD del módulo; no inferir API por el nombre
 
 | Tags | Documento | Uso principal |
 | --- | --- | --- |
-| `<is-code>` | [code.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/code/code.md) | Editor CodeMirror 5: langs, theme JSON, format, marks, code↔json. `mode=block\|inline`. Snippets docs = `readonly compact`. |
+| `<is-code>` | [code.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/code/code.md) | Editor con motor NATIVO de resaltado (sin CodeMirror): langs, theme JSON, format, marks, code↔json. `mode=block\|inline`. Snippets docs = `readonly compact`. |
 
 **Nombre canónico:** el tag es **`is-code`**. El preview es `?s=` con
 `{"component":"is-code"}`. **No** existe `is-code-editor` (rename histórico).
@@ -36,8 +36,8 @@ Elegir el módulo mínimo. Abrir el MD del módulo; no inferir API por el nombre
 ## Composición y relaciones
 
 - Tooltips de documentación de marks: `<is-tooltip>` (feedback).
-- Carga CM compartida con el pintor de docs: `_shared/highlight-code.js` +
-  `_shared/code-cm.js`.
+- Resaltado nativo compartido con el pintor de docs: `_shared/highlight-code.js`
+  + `_shared/code-highlight.ts` (motor de tokens).
 - Plugins de lenguaje: `_shared/code-langs.js` (`registerLanguage`).
 - Formato: `_shared/code-format.js`. Tema: `_shared/code-theme.js`.
 - Documento: `_shared/code-model.js` (`is-code-doc/v1`).
@@ -51,7 +51,7 @@ Elegir el módulo mínimo. Abrir el MD del módulo; no inferir API por el nombre
 
 ## Reusar antes de crear
 
-- `_shared/code-cm.js`, `code-langs.js`, `code-format.js`, `code-theme.js`, `code-model.js`
+- `_shared/code-highlight.ts`, `code-langs.js`, `code-format.js`, `code-theme.js`, `code-model.js`
 - `_shared/highlight-code.js`
 - `_shared/adopt-css.js`, `_shared/form-associated.js`, `_shared/element-base.js`
 - `<is-tooltip>` para tips anclados
@@ -63,10 +63,11 @@ Elegir el módulo mínimo. Abrir el MD del módulo; no inferir API por el nombre
 - Para langs nuevos (p. ej. `latex` cuando exista): `registerLanguage`, no un
   segundo editor
 
-## Dependencias compartidas
+## Motor y dependencias
 
-CodeMirror **5.65.16** por CDN (jsDelivr). No CodeMirror 6. No npm del kit.
-Los modos pesados (python) se cargan al activar el `lang`.
+El motor de resaltado es nativo (`_shared/code-highlight.ts`): sin CDN ni
+dependencias externas. CodeMirror (ni 5 ni 6) no se usa — si algo lo menciona,
+es como histórico o para decir que no se carga. No npm del kit.
 
 ## Patrones comunes
 
@@ -79,7 +80,9 @@ Los modos pesados (python) se cargan al activar el `lang`.
   del preview (fuentes + pesos). Sin hints literales (“sin minificar”, etc.).
   **No** repetir bajo cada `h2` ni dentro de cada paper/`is-demo`.
 - Paths CDN en `.file-meta`: `<code class="file-meta__path">` (no `<is-code>` —
-  evita que CodeMirror haga scrollIntoView y mande el F5 al final del docs).
+  con CodeMirror, su scrollIntoView movía `is-main` y mandaba el F5 al final
+  del docs. El editor nativo no hace scrollIntoView: `#onEditScroll` solo
+  aplica un `translate` al `<pre>` sincronizado).
 - `#vsPath` del modal de fuentes = **URL absoluta con host** (`<a class="vs-path">`),
   no el `repoPath` relativo (`src/components/...`).
 - Modal de fuentes = **full page** (`100%` viewport, sin radius/sombra; migrar
@@ -97,12 +100,13 @@ Los modos pesados (python) se cargan al activar el `lang`.
 - Roadmap LaTeX: diseñar/aprobar antes de scaffold; reutilizar `<is-code>` +
   motor math por CDN (KaTeX preferido); categoría `code`.
 - Snippets de demos HTML: `lang="html"` en el JSON **o** dejar que bootstrap
-  llame `inferLanguage` (no pre-marcar `data-cm="1"` en `render.js`).
+  llame `inferLanguage` (el `data-cm` pre-marcado era de la era CodeMirror: ya
+  no se usa, no marcarlo).
 - Tras tocar coloreado/formato: `node --test tests/code-infer-lang.test.ts`.
 
 ## Qué no hacer
 
-- No usar CodeMirror 6 ni `@codemirror/*`.
+- No reintroducir CodeMirror (ni 5 ni 6): el motor de resaltado es nativo.
 - No inventar API de marks distinta a `is-code-doc/v1`.
 - No reimplementar tooltips: usar `<is-tooltip>`.
 - No meter Prettier/ESLint como dependencia npm del componente.
@@ -121,8 +125,8 @@ Los modos pesados (python) se cargan al activar el `lang`.
   guardianes = `tests/*.test.mjs`.
 - **No** crear snippets HTML sin lang/inferencia: el default `javascript` pinta
   `<` como operador (cian) y “parece tema roto”.
-- **No** declarar el visor listo porque `value` / `data-cm="1"` existen: CM
-  puede estar vacío. Siempre asignar `el.value = text` en `paintOne`;
+- **No** declarar el visor listo porque `value` existe: el bootstrap puede no
+  haber pintado aún. Siempre asignar `el.value = text` en `paintOne`;
   `refresh()` tras `is-after-show` / `is-tab-show`.
 - **No** omitir `is-tab-group` del chrome de galería (`GALLERY_CHROME_TAGS`).
 
@@ -145,22 +149,25 @@ Los modos pesados (python) se cargan al activar el `lang`.
 - **Modal fuentes no full-page:** `--width: min(96vw)` + panel `70vh` dejaba
   chrome a medias. Fix: `width="100vw"` `spacing="0"` + `::part(dialog)`
   stretch. Guardián: mismo test.
-- **Snippets docs con runMode suelto:** no pintar `<pre>` a mano si el contrato
-  es `<is-code readonly compact>`.
-- **HTML coloreado como JS:** sin `lang` + `data-cm` prematuro. Fix:
+- **Snippets docs con runMode suelto (era CodeMirror):** no pintar `<pre>` a
+  mano si el contrato es `<is-code readonly compact>`.
+- **HTML coloreado como JS:** sin `lang` + `data-cm` prematuro (marca de la era
+  CodeMirror). Fix:
   `inferLanguage` + softFormat; no `renderDemoEquiv`. Guardián:
   `tests/code-infer-lang.test.ts`.
 
-- **F5 al final del docs:** CodeMirror `setValue`/`fromTextArea`/`refresh` hace
-  scrollIntoView del cursor y mueve `is-main`. Fix: `#withOuterScroll` en
-  `<is-code>`; paths de file-meta sin CM; `scroll-behavior: auto` en
-  `is-main.main`; re-`restoreScroll` al montar la barra. Guardián:
+- **F5 al final del docs (histórico — resuelto por la migración nativa):** con
+  CodeMirror, `setValue`/`fromTextArea`/`refresh` hacían scrollIntoView del
+  cursor y movían `is-main`. Sin CM no hay `setValue`/`refresh` que lo
+  disparen: el editor nativo nunca hace scrollIntoView (`#onEditScroll` solo
+  sincroniza el `<pre>` con un `translate`). Guardián:
   `tests/gallery-sources-meta.test.ts`.
 
-- **Visor de fuentes en blanco con texto en el atributo:** getter devolvía seed
-  si CM `getValue()` era `''`; `paintOne` saltaba el setter; CM medía 0 px en
-  panel `hidden`. Fix: `show()` antes de cargar; `refreshEditor`; seed →
-  `setValue` si el lienzo está vacío. Ver LLM.md error **#44**.
+- **Visor de fuentes en blanco con texto en el atributo (histórico, era
+  CodeMirror):** el getter devolvía la semilla si CM `getValue()` era `''`,
+  `paintOne` saltaba el setter y CM medía 0 px en panel `hidden`. Con el editor
+  nativo el texto del atributo se pinta siempre y `refresh()` repinta el `<pre>`
+  sin scrollIntoView. Ver LLM.md error **#44**.
 
 ## Roadmap (no implementar sin diseño aprobado)
 

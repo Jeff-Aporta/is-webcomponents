@@ -15,7 +15,8 @@
  * documento al repintar.
  *
  * El color lo pone el CSS del componente mapeando `.tok-*` a las custom
- * properties --is-code-* (code-theme.js), igual que hacía con .cm-*.
+ * properties --is-code-* (code-theme.js), el mismo rol que jugaban los .cm-*
+ * en la era CodeMirror.
  */
 
 const LANG_IDS = new Set([

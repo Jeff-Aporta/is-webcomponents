@@ -61,14 +61,14 @@ markup donde va texto no da error: se lee literal en pantalla.
 
 | Campo | Se pinta con | Qué admite |
 | --- | --- | --- |
-| `code` (kind `code`) | `pre.textContent` | Solo el código. El color lo pone CodeMirror |
+| `code` (kind `code`) | `pre.textContent` | Solo el código. El color lo pone `<is-code>` con su motor nativo |
 | `columns[]` (kind `table`) | `th.textContent` | Solo la etiqueta de la columna |
 | `rows[][]`, `html`, `lede` | `innerHTML` | Markup y entidades (`&lt;`) |
 
 `lang` es opcional y solo vale `html | js | css` (y sus alias). Si sobra, mejor
 omitirlo: `resolveMode()` deduce el modo del texto. Lo que **no** vale es
-mentirlo — `lang: "html"` sobre JavaScript hace que CodeMirror tokenice como
-htmlmixed, que no produce ni un token, y el bloque sale sin una gota de color.
+mentirlo — `lang: "html"` sobre JavaScript hace que el resaltado nativo
+tokenice mal y el bloque salga sin color o con tokens equivocados.
 `tests/preview-blocks.test.ts` vigila las tres cosas.
 
 ## El contenido llega después: `is-preview-ready`

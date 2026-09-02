@@ -17,7 +17,8 @@ números de línea, word-wrap, temas por JSON, formateo estilo Prettier,
 anotaciones externas (highlight de error/advertencia y tooltips de
 documentación) y API bidireccional texto ↔ JSON (`code2json` / `json2code`).
 
-Motor: **CodeMirror 5.65.16** (CDN). El kit no usa CodeMirror 6.
+Motor: resaltado NATIVO (`_shared/code-highlight.ts`) y editor nativo; sin
+CodeMirror ni CDN.
 
 Este módulo registra `<is-code>`.
 
@@ -72,7 +73,7 @@ import './code.js';
 | `autofocus` | boolean | off | Foco al montar. |
 | `tab-size` | number | `2` | Tamaño de tab visual. |
 | `name` | string | — | Nombre form-associated. |
-| `placeholder` | string | — | Placeholder CM. |
+| `placeholder` | string | — | Placeholder del editor nativo. |
 | `min-height` | CSS length | `12rem` | → `--is-code-min-height`. |
 | `radius` | CSS | — | Style-attr → `--is-code-radius`. |
 
@@ -89,8 +90,8 @@ import './code.js';
 | `themeConfig` | rw | object \| null | Tema JSON. |
 | `marks` | rw | array | Anotaciones actuales. |
 | `document` | rw | object | `getDocument()` / `setDocument()`. |
-| `ready` | ro | boolean | CodeMirror montado. |
-| `cm` | ro | CodeMirror \| null | Instancia (escape hatch). |
+| `ready` | ro | boolean | Editor listo (bootstrap nativo completado). |
+| `cm` | ro | `null` (era `CodeMirror \| null`) | Legacy: siempre `null` desde la migración nativa; se conserva por compat de API. |
 
 ### Slots
 
@@ -116,7 +117,7 @@ No proyecta light DOM (el texto inicial se lee una vez como semilla si no hay
 | `getDocument()` / `setDocument(doc)` | Round-trip `is-code-doc/v1`. |
 | `code2json(opts?)` / `json2code(doc)` | Conversores texto ↔ JSON. |
 | `setMarks(list)` / `clearMarks()` | Anotaciones externas. |
-| `focus()` / `refresh()` | Foco y relayout CM. |
+| `focus()` / `refresh()` | Foco y resincronización nativa (`refresh()` no hace scrollIntoView). |
 | `IsCode.registerLanguage(def)` | Plugin de lenguaje. |
 | `IsCode.listLanguages()` | Idiomas registrados. |
 
@@ -125,7 +126,7 @@ No proyecta light DOM (el texto inicial se lee una vez como semilla si no hay
 | Part | Elemento |
 | --- | --- |
 | `root` | Contenedor. |
-| `editor` | Host del wrapper CodeMirror. |
+| `editor` | Host del editor (`.editor-host`). |
 | `tooltip` | `<is-tooltip>` de documentación. |
 | `seed` | `<textarea>` semilla (oculto). |
 
@@ -160,8 +161,8 @@ Form-associated (`ElementInternals`). Participa en submit/reset vía `name` +
 
 `lang="diff"` (alias `patch`, `udiff`) y `lang="commit"` (alias `git-log`,
 `git-show`, `commit-resume`) comparten el modo `is-diff`, definido dentro del
-kit — no se descarga de la CDN de CodeMirror, así que el bloque colorea igual
-aunque el modo remoto no llegue.
+kit. Los bloques colorean igual en todos los lados porque todos usan el mismo
+motor nativo de resaltado.
 
 Por qué un modo propio y no `javascript`: el `+` y el `-` de la primera columna
 no son código, son marcas de línea. Un tokenizador de lenguaje los lee como
@@ -207,9 +208,9 @@ contaminan entre sí, y las líneas que no son `--stat` quedan intactas.
 
 ## Comportamiento
 
-- Los modos livianos (js/ts/jsx/html/css/json) reusan la carga de
-  `highlight-code` / `code-cm`.
-- `python` es plugin **heavy**: descarga `mode/python` al primer uso.
+- Todos los langs usan el motor nativo compartido con el pintor de docs
+  (`highlight-code` / `code-highlight`): no hay modos CDN que descargar.
+- `python` lo tokeniza el motor nativo como plaintext (sin descargas).
 - Los marks que intersectan una edición del usuario se descartan; el sistema
   externo debe reaplicar diagnósticos.
 - Sin `theme-config`, el preset sigue `data-theme` del documento
@@ -247,7 +248,7 @@ Documento JSON (`is-code-doc/v1`):
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/code-cm.js`](../_shared/code-cm.js)
+- [`../_shared/code-highlight.ts`](../_shared/code-highlight.ts) — motor nativo de resaltado (tokens)
 - [`../_shared/code-langs.js`](../_shared/code-langs.js)
 - [`../_shared/code-format.js`](../_shared/code-format.js)
 - [`../_shared/code-theme.js`](../_shared/code-theme.js)
@@ -257,18 +258,17 @@ Documento JSON (`is-code-doc/v1`):
 
 Tags del módulo: `<is-code>`.
 
-CDN CodeMirror 5 (peer, no empaquetado):
-
-- `https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js`
-- modos / addons bajo el mismo scope
+Sin dependencias externas: el resaltado y el editor son nativos; no hay que
+cargar CodeMirror ni ningún CSS/JS de CDN.
 
 Los snippets de la galería (`pre.code`, CDN, «Ver código») se montan como
-`<is-code readonly compact>` vía `highlight-code.js` — no hace falta
-pintar con `runMode` a mano.
+`<is-code readonly compact>` vía `highlight-code.js` — los colorea el motor
+nativo, igual que cualquier otro snippet.
 
 ## Accesibilidad
 
-El área editable es el CodeMirror (textarea subyacente + rol de código).
+El área editable es un `<textarea>` transparente sobre el `<pre>` resaltado
+(`.ic-edit`), con rol de código.
 Soporta navegación por teclado del editor. Los marks exponen `title` nativo
 y tooltip IS al hover. Respetar `disabled` / `readonly` (`aria-readonly`).
 Con `readonly` no hay caret ni línea activa; se puede seleccionar y copiar.
@@ -295,11 +295,13 @@ Con `readonly` no hay caret ni línea activa; se puede seleccionar y copiar.
 
 ## Errores comunes
 
-- Esperar CodeMirror 6 / `@codemirror/*`: el kit fija CM5.
+- No reintroducir CodeMirror (ni 5 ni 6 / `@codemirror/*`): el resaltado y el
+  editor son nativos.
 - Pasar `theme-config` malformado: se ignora y queda el preset.
 - Confiar en que los marks sobrevivan a ediciones locales: se rebasan o
   invalidan; reaplicar desde el analizador externo.
-- Usar el tag sin red (CM se carga de jsDelivr).
+- Creer que el tag necesita red o CDN: no — resaltado y editor son nativos, no
+  se carga nada externo.
 
 ## Reglas para LLM
 

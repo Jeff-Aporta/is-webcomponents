@@ -3,7 +3,7 @@
  *
  * Analogía con html2json / json2html: el texto plano es `value`; las
  * anotaciones externas (highlights de error, tooltips de docs) viven en
- * `marks[]` con offsets UTF-16 (igual que CodeMirror / JS String).
+ * `marks[]` con offsets UTF-16 (igual que JS String).
  *
  * Schema: `is-code-doc/v1`
  *

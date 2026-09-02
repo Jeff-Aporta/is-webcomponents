@@ -1,7 +1,8 @@
 // tests/preview-blocks.test.ts
 //
 // Los bloques de un preview guardan TEXTO donde el render pinta texto:
-//   - `kind: 'code'`  → `pre.textContent = block.code`, y colorea CodeMirror.
+//   - `kind: 'code'`  → `pre.textContent = block.code`, y lo colorea
+//     `<is-code>` (motor nativo) al montarse sobre el pre.
 //   - `kind: 'table'` → `th.textContent = columna`.
 // Cualquier markup en esos campos se lee literal en pantalla.
 //
@@ -86,7 +87,7 @@ for (const archivo of jsons(previews)) {
         codigo++;
         const texto = String(b.code ?? '');
         if (MARKUP_DE_COLOR.test(texto)) {
-          failures.push(`${donde}: markup de coloreado dentro del código (colorea CodeMirror, no el JSON)`);
+          failures.push(`${donde}: markup de coloreado dentro del código (lo pinta <is-code> desde el texto; el JSON no debe traer spans)`);
         }
         if (texto.includes('\r')) {
           failures.push(`${donde}: el código trae CR; los saltos van con \\n`);

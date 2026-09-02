@@ -365,9 +365,6 @@ ${moduleTags}
   <script type="module" src="../../components/layout/main.js"></script>
   <script type="module" src="../../components/layout/scrollspy.js"></script>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-darker.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
   <script src="../../scripts/highlight-pre.js" defer></script>
   <script src="../../scripts/demo-code.js" defer></script>
   <script src="../../scripts/docs-chrome.js" defer></script>

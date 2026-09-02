@@ -12,13 +12,13 @@ import { diffLineClass } from './code-diff.js';
  * @typedef {object} CodeLangDef
  * @property {string} id
  * @property {string[]} [aliases]
- * @property {string | object} mode  modo CM o spec `{ name, … }`
- * @property {boolean} [heavy]
- * @property {() => Promise<void>} [load]
+ * @property {boolean} [heavy]   legacy de la era CodeMirror (ya no se lee)
+ * @property {() => Promise<void>} [load]  legacy (ya no se lee)
  * @property {(line: string) => (string | null)} [lineClass]
- *   Clase de fondo por línea. El tokenizador de CM colorea texto, no filas
- *   enteras; los lenguajes cuyo significado vive en la línea completa (un diff:
- *   esta fila entra, esta sale) la usan para pedir la banda de color.
+ *   Clase de fondo por línea. El tokenizador pinta texto, no filas enteras;
+ *   los lenguajes cuyo significado vive en la línea completa (un diff: esta
+ *   fila entra, esta sale) la piden para la banda. El motor nativo la aplica
+ *   por su cuenta (code-highlight); se conserva en el registro informativo.
  */
 
 /** @type {Map<string, CodeLangDef>} */
@@ -92,76 +92,57 @@ export function ensureLanguage(name) {
   return { id: def.id, def };
 }
 
-// —— Built-ins (no pesados: ya vienen con highlight-code / code-cm) ——
+// —— Built-ins (motor nativo code-highlight; sin modos CM) ——
 
 registerLanguage({
   id: 'javascript',
   aliases: ['js', 'mjs', 'cjs'],
-  mode: 'javascript',
-  heavy: false,
 });
 
 registerLanguage({
   id: 'typescript',
   aliases: ['ts', 'mts', 'cts'],
-  mode: { name: 'javascript', typescript: true },
-  heavy: false,
 });
 
 registerLanguage({
   id: 'jsx',
   aliases: ['react'],
-  mode: { name: 'javascript', jsx: true },
-  heavy: false,
 });
 
 registerLanguage({
   id: 'tsx',
   aliases: [],
-  mode: { name: 'javascript', typescript: true, jsx: true },
-  heavy: false,
 });
 
 registerLanguage({
   id: 'html',
   aliases: ['htm', 'htmlmixed'],
-  mode: 'htmlmixed',
-  heavy: false,
 });
 
 registerLanguage({
   id: 'css',
   aliases: ['scss', 'less'],
-  mode: 'css',
-  heavy: false,
 });
 
 registerLanguage({
   id: 'json',
   aliases: [],
-  mode: { name: 'javascript', json: true },
-  heavy: false,
 });
 
 registerLanguage({
   id: 'python',
   aliases: ['py'],
-  // El motor nativo tokeniza python como plaintext (sin modos CDN).
-  heavy: false,
 });
 
 /** cURL / shell: tokenizer nativo del motor (code-highlight). */
 registerLanguage({
   id: 'shell',
   aliases: ['bash', 'sh', 'zsh', 'curl', 'cli'],
-  heavy: false,
 });
 
 registerLanguage({
   id: 'plaintext',
   aliases: ['text', 'plain', 'txt'],
-  mode: 'null',
-  heavy: false,
 });
 
 // —— Diff y resumen de commit ——
@@ -171,15 +152,11 @@ registerLanguage({
 registerLanguage({
   id: 'diff',
   aliases: ['patch', 'udiff', 'unified-diff'],
-  mode: 'is-diff',
-  heavy: false,
   lineClass: diffLineClass,
 });
 
 registerLanguage({
   id: 'commit',
   aliases: ['commit-resume', 'resumen-commit', 'git', 'git-log', 'gitlog', 'git-show'],
-  mode: 'is-diff',
-  heavy: false,
   lineClass: diffLineClass,
 });

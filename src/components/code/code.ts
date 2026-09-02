@@ -37,11 +37,10 @@ import {
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from '../_shared/code-format.js';
 import { applyThemeConfig, parseThemeConfig } from '../_shared/code-theme.js';
 import { softFormat, softFormatMode } from '../_shared/code-text.js';
-import { DIFF_LINE_CLASSES } from '../_shared/code-diff.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
 } from '../_shared/code-model.js';
-import { tokenizeCode, lineToHtml } from '../_shared/code-highlight.js';
+import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '../_shared/code-highlight.js';
 import '../feedback/tooltip.js';
 
 const TEMPLATE = document.createElement('template');
@@ -65,6 +64,20 @@ const PROP_UPGRADE = [
   'mode', 'tab-size', 'name', 'placeholder', 'min-height', 'marks',
 ];
 
+/** Rango [from,to) del texto viejo reemplazado por `insertedLen` caracteres. */
+function editRange(oldText: string, newText: string) {
+  const min = Math.min(oldText.length, newText.length);
+  let from = 0;
+  while (from < min && oldText[from] === newText[from]) from++;
+  let o = oldText.length;
+  let n = newText.length;
+  while (o > from && n > from && oldText[o - 1] === newText[n - 1]) {
+    o--;
+    n--;
+  }
+  return [from, o, n - from];
+}
+
 class IsCode extends ElementBase {
   static styleAttrs = {
     radius: '--is-code-radius',
@@ -83,7 +96,6 @@ class IsCode extends ElementBase {
   #textarea = null;
   #host = null;
   #tooltip = null;
-  #cm = null;           // legacy: siempre null (motor propio desde la migración)
   #native = false;
   #nativeRoot = null;
   #nativeText = null;
@@ -92,12 +104,12 @@ class IsCode extends ElementBase {
   #activeLine = -1;
   #ready = false;
   #marks = [];
-  /** @type {Map<string, object>} */
-  #cmMarks = new Map();
   #formatConfig = { ...DEFAULT_FORMAT };
   #themeConfig = null;
   #pendingValue = null;
   #booting = false;
+  #markBound = false;
+  #currentTip = null;
   #onThemeChange = () => this.#syncThemeFromPage();
   #hideTipTimer = 0;
 
@@ -118,8 +130,7 @@ class IsCode extends ElementBase {
     this.#syncLayoutDom();
     if (this.#themeConfig) applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
     document.addEventListener('is-theme-change', this.#onThemeChange);
-    if (!this.#cm && !this.#booting) this.#bootstrap();
-    else requestAnimationFrame(() => this.#cm?.refresh());
+    if (!this.#booting) this.#bootstrap();
   }
 
   onDisconnected() {
@@ -129,10 +140,7 @@ class IsCode extends ElementBase {
     // Conservar instancia al mover en el DOM; destruir solo si el documento
     // ya no contiene el nodo (descarte real).
     queueMicrotask(() => {
-      if (!this.isConnected) {
-        if (this.#cm) this.#destroyCm();
-        if (this.#native) this.#destroyNative();
-      }
+      if (!this.isConnected && this.#native) this.#destroyNative();
     });
   }
 
@@ -181,20 +189,14 @@ class IsCode extends ElementBase {
   // —— public API ——
 
   get ready() { return this.#ready; }
-  get cm() { return this.#cm; }
+  /** Legacy (escape hatch de la era CodeMirror): siempre null — motor nativo. */
+  get cm() { return null; }
 
   get value() {
-    if (this.#native) return this.#nativeText ?? '';
-    if (this.#cm) {
-      const live = this.#cm.getValue();
-      if (live) return live;
-      // CM montado vacío por carrera con demo-code: no ignorar value/data-src.
-      const seed = this.#pendingValue ?? this.getAttribute('value')
-        ?? this.dataset.cmSource ?? this.dataset.src ?? '';
-      return seed;
-    }
-    return this.#pendingValue ?? this.getAttribute('value')
-      ?? this.dataset.cmSource ?? this.dataset.src ?? '';
+    // Motor nativo: el texto vive en #nativeText; antes del bootstrap se cae a
+    // la semilla (dataset legacy data-cm-source / data-src de la galería).
+    return this.#nativeText ?? this.#pendingValue
+      ?? this.getAttribute('value') ?? this.dataset.cmSource ?? this.dataset.src ?? '';
   }
   set value(v) {
     this.#setValue(v == null ? '' : String(v), true);
@@ -329,43 +331,17 @@ class IsCode extends ElementBase {
   }
 
   focus() {
-    if (this.#editing) {
-      this.#ta?.focus();
-      return;
-    }
-    if (this.#native) return; // readonly nativo: sin caret editable
-    this.#cm?.focus();
+    if (this.#editing) this.#ta?.focus();
+    // readonly nativo: sin caret editable (no hay nada que enfocar).
   }
 
   refresh() {
-    if (this.#native) {
-      // Sin scrollIntoView ni mediciones de CM: solo resincroniza el
-      // transform del <pre> (por si cambió fuente/tamaño del contenedor).
-      if (this.#editing) this.#onEditScroll();
-      return;
-    }
-    this.#withOuterScroll(() => this.#cm?.refresh());
+    // Sin scrollIntoView ni mediciones de CM: solo resincroniza el transform
+    // del <pre> del editor (por si cambió fuente/tamaño del contenedor).
+    if (this.#editing) this.#onEditScroll();
   }
 
   // —— private ——
-
-  /**
-   * CodeMirror (setValue / fromTextArea / refresh) hace scrollIntoView del
-   * cursor y mueve el `is-main` ancestro → en F5 el docs acaba al final.
-   */
-  #withOuterScroll(fn) {
-    const scroller = this.closest?.('is-main, .main');
-    const top = scroller ? scroller.scrollTop : null;
-    const left = scroller ? scroller.scrollLeft : null;
-    try {
-      return fn();
-    } finally {
-      if (scroller && top != null) {
-        scroller.scrollTop = top;
-        if (left != null) scroller.scrollLeft = left;
-      }
-    }
-  }
 
   #pageTheme() {
     return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
@@ -399,7 +375,7 @@ class IsCode extends ElementBase {
   }
 
   async #bootstrap() {
-    if (this.#booting || this.#cm || this.#native) return;
+    if (this.#booting || this.#native) return;
     this.#booting = true;
     try {
       // Semilla: document attr > value attr > dataset > light DOM text
@@ -447,30 +423,19 @@ class IsCode extends ElementBase {
       // Motor PROPIO (code-highlight) en todos los modos: CodeMirror ya no se
       // carga ni se monta. readonly/disabled → vista estática; si no, editor
       // nativo con textarea + resaltado sincronizado.
+      this.#bindMarkEvents();
       if (this.readonly || this.disabled) {
         this.#bootNative();
       } else {
         this.#bootEditable();
       }
       return;
-
-      emit(this, 'is-ready', { lang: this.lang, value: this.value });
     } catch (err) {
       console.error('[is-code] bootstrap', err);
       emit(this, 'is-error', { error: String(err?.message || err) });
     } finally {
       this.#booting = false;
     }
-  }
-
-  #destroyCm() {
-    if (!this.#cm) return;
-    try {
-      this.#cm.toTextArea();
-    } catch { /* ignore */ }
-    this.#cm = null;
-    this.#ready = false;
-    this.#cmMarks.clear();
   }
 
   /* ── Ruta nativa (readonly) — motor code-highlight, sin CodeMirror ── */
@@ -491,16 +456,87 @@ class IsCode extends ElementBase {
     emit(this, 'is-ready', { lang: this.lang, value: this.value });
   }
 
-  /** Pinta `text` (tokenizado) dentro de un <pre> y devuelve las líneas. */
+  /** Pinta `text` (tokenizado + marcas) dentro de un <pre> y devuelve las líneas. */
   #paintLines(pre, text, withNumbers) {
-    const { lines } = tokenizeCode(text, this.lang, null);
+    const src = String(text ?? '').replace(/\r\n/g, '\n');
+    const { lines } = tokenizeCode(src, this.lang, null);
+    const marks = this.#markSpansFor(src);
     let html = '';
+    let abs = 0;
     for (const ln of lines) {
       const cls = ln.lineClass ? `ic-line ${ln.lineClass}` : 'ic-line';
-      html += `<div class="${cls}">${lineToHtml(ln.tokens)}</div>`;
+      html += `<div class="${cls}">${this.#lineHtmlWithMarks(ln, abs, marks)}</div>`;
+      abs += ln.raw.length + 1; // + salto de línea
     }
     pre.innerHTML = html;
     return { lines, html, withNumbers };
+  }
+
+  /** Marcas normalizadas al largo real del texto (recorte + orden). */
+  #markSpansFor(text) {
+    const len = text.length;
+    return this.#marks
+      .map((m) => ({ ...m, from: Math.min(m.from, len), to: Math.min(m.to, len) }))
+      .filter((m) => m.to > m.from)
+      .sort((a, b) => a.from - b.from || a.to - b.to);
+  }
+
+  /**
+   * HTML de una línea con las marcas que la cortan. Las marcas se aplican por
+   * tramos (pueden partir un token por la mitad); si los tokens no reconstruyen
+   * el texto original se pinta la línea sin marcas (nunca offsets desfasados).
+   */
+  #lineHtmlWithMarks(ln, lineStart, marks) {
+    const lineEnd = lineStart + ln.raw.length;
+    const act = marks.filter((m) => m.to > lineStart && m.from < lineEnd);
+    if (!act.length || tokensToText(ln.tokens) !== ln.raw) return lineToHtml(ln.tokens) || ' ';
+    let html = '';
+    for (const t of ln.tokens) {
+      const tStart = lineStart;
+      const tEnd = tStart + t.text.length;
+      lineStart = tEnd; // siguiente token
+      if (!t.text) continue;
+      const cuts = [tStart];
+      for (const m of act) {
+        if (m.from > tStart && m.from < tEnd) cuts.push(m.from);
+        if (m.to > tStart && m.to < tEnd) cuts.push(m.to);
+      }
+      cuts.push(tEnd);
+      const pts = [...new Set(cuts)].sort((a, b) => a - b);
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = pts[i];
+        const b = pts[i + 1];
+        const piece = t.text.slice(a - tStart, b - tStart);
+        const cls = tokenClass(t.type);
+        const inner = cls ? `<span class="${cls}">${escapeHtml(piece)}</span>` : escapeHtml(piece);
+        const mark = act.find((m) => m.from <= a && m.to >= b);
+        html += mark ? this.#markWrap(mark, inner) : inner;
+      }
+    }
+    return html || ' ';
+  }
+
+  /** Envuelve un tramo pintado con la clase/attrs de la marca. */
+  #markWrap(mark, inner) {
+    const cls = [
+      'is-code-mark',
+      `is-code-mark--${mark.kind}`,
+      `is-code-mark--${mark.tone || 'neutral'}`,
+      mark.className || '',
+    ].filter(Boolean).join(' ');
+    const title = mark.message || mark.title || '';
+    return `<span class="${cls}" data-mark-id="${escapeHtml(mark.id)}"${title ? ` title="${escapeHtml(title)}"` : ''}>${inner}</span>`;
+  }
+
+  /**
+   * Delega hover/leave de marcas (los spans se repintan: la delegación vive en
+   * el host y sobrevive a los repintes). Idempotente por instancia.
+   */
+  #bindMarkEvents() {
+    if (this.#markBound) return;
+    this.#markBound = true;
+    this.#host.addEventListener('pointerover', (e) => this.#onMarkHover(e));
+    this.#host.addEventListener('pointerout', (e) => this.#onMarkOut(e));
   }
 
   /** Construye (o reconstruye) el gutter de números para `count` líneas. */
@@ -546,6 +582,9 @@ class IsCode extends ElementBase {
   #onEditInput = () => {
     const v = this.#ta?.value ?? '';
     if (v === this.#nativeText) { this.#emitCursor(); return; }
+    // Las marcas se re-anclan al texto editado: lo anterior a la edición se
+    // conserva, lo posterior se desplaza, lo que corta la edición se descarta.
+    this.#marks = rebaseMarks(this.#marks, ...editRange(this.#nativeText ?? '', v));
     this.#nativeText = v;
     this.setAttribute('value', v);
     setFormValue(this.#internals, v);
@@ -583,6 +622,11 @@ class IsCode extends ElementBase {
     const lineStart = before.lastIndexOf('\n') + 1;
     emit(this, 'is-cursor', { line, ch: before.length - lineStart, index: ta.selectionStart });
     this.#paintActiveLine(line);
+    // En el editor el <pre> vive bajo el textarea (sin hover): el tooltip de
+    // las marcas se abre cuando el caret está dentro de su rango.
+    const mark = this.#markAt(ta.selectionStart);
+    if (mark) this.#openMarkTip(mark, null);
+    else this.#scheduleTipClose();
   }
 
   #paintActiveLine(line: number) {
@@ -680,9 +724,8 @@ class IsCode extends ElementBase {
       } else {
         this.#renderNative();
       }
-    } else if (this.#cm) {
-      this.#cm.setValue(next);
     } else {
+      // Antes del bootstrap: se guarda la semilla; #boot* pinta al montar.
       this.#pendingValue = next;
       if (this.#textarea) this.#textarea.value = next;
     }
@@ -692,11 +735,8 @@ class IsCode extends ElementBase {
   }
 
   #applyLang() {
-    if (this.#native) {
-      if (this.#editing) this.#paintEdit();
-      else this.#renderNative();
-      return;
-    }
+    if (this.#editing) this.#paintEdit();
+    else if (this.#native) this.#renderNative();
   }
 
   #applyOptions() {
@@ -724,28 +764,9 @@ class IsCode extends ElementBase {
       this.#syncReadonlyDom();
       return;
     }
-    if (!this.#cm) {
-      this.#syncReadonlyDom();
-      this.#syncLayoutDom();
-      return;
-    }
-    this.#cm.setOption('lineNumbers', this.lineNumbers);
-    this.#cm.setOption('lineWrapping', this.wrap || this.mode === 'inline');
-    this.#cm.setOption('readOnly', this.disabled ? 'nocursor' : this.readonly);
-    this.#cm.setOption('cursorBlinkRate', this.readonly || this.disabled ? -1 : 530);
-    this.#cm.setOption(
-      'styleActiveLine',
-      this.mode === 'inline' ? false : (!this.readonly && !this.disabled),
-    );
-    this.#cm.setOption('autoCloseBrackets', !this.readonly && !this.disabled);
-    this.#cm.setOption('tabSize', this.tabSize);
-    this.#cm.setOption('indentUnit', this.#formatConfig.tabWidth || this.tabSize);
-    this.#cm.setOption('indentWithTabs', !!this.#formatConfig.useTabs);
-    this.#cm.setOption('scrollbarStyle', this.mode === 'inline' ? 'null' : 'native');
-    if (this.placeholder) this.#cm.setOption('placeholder', this.placeholder);
+    // Pre-bootstrap: sin vista aún, solo sincronizar estados declarativos.
     this.#syncReadonlyDom();
     this.#syncLayoutDom();
-    requestAnimationFrame(() => this.#cm?.refresh());
   }
 
   #syncLayoutDom() {
@@ -766,61 +787,15 @@ class IsCode extends ElementBase {
   }
 
   /**
-   * Pinta la banda de fondo de cada línea para los lenguajes que la piden
-   * (`CodeLangDef.lineClass`). El motor nativo ya colorea la banda por línea
-   * (tokenizeCode devuelve lineClass); este helper queda solo como respaldo
-   * legacy para instancias CM que ya no se crean.
+   * Repinta el contenido para reflejar las marcas (bandas/underline + spans
+   * con data-mark-id para el tooltip). Antes del bootstrap no hay vista: los
+   * #boot* pintan ya con #marks.
    */
-  #syncLineClasses() {
-    const cm = this.#cm;
-    if (!cm) return;
-    const lineClass = resolveLanguage(this.lang)?.lineClass;
-    cm.operation(() => {
-      cm.eachLine((handle) => {
-        for (const cls of DIFF_LINE_CLASSES) cm.removeLineClass(handle, 'background', cls);
-        const cls = lineClass ? lineClass(handle.text) : null;
-        if (cls) cm.addLineClass(handle, 'background', cls);
-      });
-    });
-  }
-
-  #onCursor() {
-    if (!this.#cm) return;
-    const pos = this.#cm.getCursor();
-    const index = this.#cm.indexFromPos(pos);
-    emit(this, 'is-cursor', { line: pos.line, ch: pos.ch, index });
-  }
-
   #paintMarks() {
-    if (!this.#cm) return;
-    for (const handle of this.#cmMarks.values()) {
-      try { handle.clear(); } catch { /* ignore */ }
-    }
-    this.#cmMarks.clear();
-
-    for (const mark of this.#marks) {
-      const from = this.#cm.posFromIndex(mark.from);
-      const to = this.#cm.posFromIndex(mark.to);
-      const tone = mark.tone || 'neutral';
-      const cls = [
-        'is-code-mark',
-        `is-code-mark--${mark.kind}`,
-        `is-code-mark--${tone}`,
-        mark.className || '',
-      ].filter(Boolean).join(' ');
-
-      const handle = this.#cm.markText(from, to, {
-        className: cls,
-        attributes: {
-          'data-mark-id': mark.id,
-          'data-mark-kind': mark.kind,
-          title: mark.message || mark.title || '',
-        },
-        inclusiveLeft: false,
-        inclusiveRight: false,
-      });
-      this.#cmMarks.set(mark.id, handle);
-    }
+    if (!this.#native) return;
+    this.#bindMarkEvents();
+    if (this.#editing) this.#paintEdit();
+    else this.#renderNative();
   }
 
   #markFromEvent(e) {
@@ -830,12 +805,19 @@ class IsCode extends ElementBase {
     return this.#marks.find((m) => m.id === id) || null;
   }
 
-  #onMarkHover(e) {
-    const mark = this.#markFromEvent(e);
-    if (!mark) return;
-    if (mark.kind !== 'tooltip' && mark.kind !== 'message' && !mark.message && !mark.body) {
-      return;
-    }
+  /** Marca "legible" (tooltip/message o con texto) que cubre un índice. */
+  #markAt(index) {
+    return this.#marks.find((m) => index >= m.from && index < m.to
+      && (m.kind === 'tooltip' || m.kind === 'message' || m.message || m.body)) || null;
+  }
+
+  /**
+   * Abre el tooltip de una marca y emite is-mark-activate (enter) la primera
+   * vez que esa marca queda activa. `targetEl` llega del hover (readonly);
+   * en editable el ancla es el span de la marca dentro del <pre> (el hover no
+   * existe: el textarea tapa el pre), así que el tooltip se abre por caret.
+   */
+  #openMarkTip(mark, targetEl) {
     clearTimeout(this.#hideTipTimer);
     const title = mark.title || (mark.tone && mark.tone !== 'neutral' ? mark.tone : '');
     const body = mark.body || mark.message || '';
@@ -851,22 +833,45 @@ class IsCode extends ElementBase {
       span.textContent = body;
       this.#tooltip.append(span);
     }
-    // Anclar al target hover
-    const target = e.target.closest('[data-mark-id]') || e.target;
-    if (!target.id) target.id = `is-code-mark-${mark.id}`;
-    this.#tooltip.setAttribute('for', target.id);
+    const escId = typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(mark.id) : mark.id;
+    const anchor = targetEl
+      ?? this.#nativeRoot?.querySelector<HTMLElement>(`[data-mark-id="${escId}"]`)
+      ?? this.#host;
+    if (!anchor.id) anchor.id = `is-code-mark-${mark.id}`;
+    this.#tooltip.setAttribute('for', anchor.id);
     this.#tooltip.open = true;
-    emit(this, 'is-mark-activate', { mark: { ...mark }, phase: 'enter' });
+    if (this.#currentTip !== mark.id) {
+      this.#currentTip = mark.id;
+      emit(this, 'is-mark-activate', { mark: { ...mark }, phase: 'enter' });
+    }
   }
 
-  #onMarkOut(e) {
-    const mark = this.#markFromEvent(e);
-    if (!mark) return;
+  /** Cierra el tooltip actual (retardo anti-parpadeo) y emite leave. */
+  #scheduleTipClose() {
     clearTimeout(this.#hideTipTimer);
     this.#hideTipTimer = window.setTimeout(() => {
       this.#tooltip.open = false;
+      if (this.#currentTip) {
+        const mark = this.#marks.find((m) => m.id === this.#currentTip);
+        if (mark) emit(this, 'is-mark-activate', { mark: { ...mark }, phase: 'leave' });
+      }
+      this.#currentTip = null;
     }, 120);
-    emit(this, 'is-mark-activate', { mark: { ...mark }, phase: 'leave' });
+  }
+
+  #onMarkHover(e) {
+    const mark = this.#markFromEvent(e);
+    if (!mark) return;
+    if (mark.kind !== 'tooltip' && mark.kind !== 'message' && !mark.message && !mark.body) {
+      return;
+    }
+    const target = e.target.closest?.('[data-mark-id]') || e.target;
+    this.#openMarkTip(mark, target);
+  }
+
+  #onMarkOut(e) {
+    if (!this.#markFromEvent(e)) return;
+    this.#scheduleTipClose();
   }
 }
 

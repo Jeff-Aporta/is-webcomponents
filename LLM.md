@@ -1,4 +1,4 @@
-﻿# AGENTS.md — Cerebro de agentes para IS Web Components
+# AGENTS.md — Cerebro de agentes para IS Web Components
 
 > **Lee este archivo ANTES de tocar nada.** Resume lo que ya descubrimos a base
 > de errores. Si haces algo que está en "Errores a NO repetir" y lo rompes de
@@ -384,7 +384,7 @@ Guardianes: `tests/specs-sdd` · `tests/er-clusters` · `tests/src-layout` · `t
 - Default de `lang` sin atributo = `javascript`. Markup `<is-button…>` **sin** `lang` se pinta mal (`<` = operador cian).
 - **Hacer:** `lang="html"` en el JSON, o no marcar `data-cm` hasta que `paint` / bootstrap de `is-code` corran `inferLanguage` + `softFormat`.
 - Vista docs: `readonly` + `compact` + softFormat (pretty HTML en pocas líneas).
-- Tema propio `cm-s-is-code` + `--is-code-*` (`code-theme.js`). No depender del CSS CDN `material-darker` para tokens.
+- Tema propio: custom properties `--is-code-*` (`code-theme.js`) → tokens `.tok-*` nativos. No depender de CSS CDN (era CM: `cm-s-is-code`/`material-darker`).
 - Guardián: `tests/code-infer-lang.test.ts`.
 
 ### Behaviors de preview (hosts DOM)
@@ -646,8 +646,8 @@ Guardianes: `tests/specs-sdd` · `tests/er-clusters` · `tests/src-layout` · `t
     (`--is-code-operator` cian); softFormat no corría. El usuario veía tags
     y brackets del mismo color, attrs apagados.
     **Hacer:** `lang` explícito o `inferLanguage` en bootstrap; no pre-marcar
-    `data-cm`; softFormat en `compact`+`readonly`; tema `cm-s-is-code`.
-    **No hacer:** segundo highlighter; forzar `material-darker` CDN; asumir
+    `data-cm`; softFormat en `compact`+`readonly`; tema nativo `--is-code-*`.
+    **No hacer:** segundo highlighter; reintroducir CM ni `material-darker` CDN; asumir
     que “ya tiene data-cm así que está pintado”.
     Guardianes: `tests/code-infer-lang.test.ts`, `tests/demo-equiv.test.ts`.
 
@@ -817,14 +817,12 @@ mantenerlo aparte.
 
 ---
 
-## CodeMirror en los snippets
+## Resaltado nativo de snippets (era CodeMirror)
 
-- El coloreado necesita **tres** cosas cargadas: el pintor, el core de CodeMirror y **el modo** (`htmlmixed` y sus dependencias `xml`/`javascript`/`css`, que son scripts aparte del core).
-- Síntoma de que falta el modo: `runMode` corre sin lanzar, pero produce **0 tokens** (`conTema > 0`, `conTokens === 0`).
-- Síntoma de que falta el core: `ReferenceError: CodeMirror is not defined` dentro de `paint()`.
-- Los `<is-cdn-snippet>` **auto-inyectados** se crean *después* del evento `load`, así que un reintento enganchado a `load` nunca dispara. Hace falta un reintento acotado que espere a que existan pintor + core + modo.
-- Síntoma de que CM montó vacío con seed en el atributo: inspector lleno,
-  lienzo en blanco. No tratar `el.value` como prueba de pintado. Ver error **#44**.
+- El coloreado de snippets/docs lo hace **`<is-code>` con su motor nativo** (`_shared/code-highlight.ts` → tokens `.tok-*`). `paint()` de `_shared/highlight-code.ts` monta `<is-code readonly compact>`; no hay core de CodeMirror, ni modos, ni CDN que cargar.
+- Histórico (era CodeMirror): `runMode` sin el modo cargado producía 0 tokens (`conTema > 0`, `conTokens === 0`); faltaba el core → `ReferenceError: CodeMirror is not defined` dentro de `paint()`. Esos síntomas ya no aplican: no queda CM.
+- Los `<is-cdn-snippet>` **auto-inyectados** se crean *después* del evento `load`: el observer/encolado de `highlight-code` los pilla (paint idempotente por el marcador `data-cm`).
+- El valor semilla vive en el atributo `value`/dataset; el bootstrap nativo pinta siempre (no hay "CM montado vacío"). Ver error **#44** (histórico).
 
 ---
 
@@ -1364,46 +1362,33 @@ se rellenaran con `col-N` autogenerados.
 
 ## 8.5 Highlighter de `<pre class="code">` (scripts/highlight-pre.js)
 
-Esta rutina pinta con CodeMirror todos los `<pre class="code">` de los previews.
-**El theme de CodeMirror es reactivo al `data-theme` de `<html>`**, no fijo:
+Esta rutina monta `<is-code readonly compact>` sobre cada `<pre class="code">`
+de los previews (`paint()` de `_shared/highlight-code.ts`). **El theme lo
+resuelve el propio `<is-code>` con su motor nativo** (custom properties
+`--is-code-*` vía `code-theme.ts`), reactivo al `data-theme` de `<html>`:
+no hay themes de CodeMirror (`cm-s-*`) ni CSS de CDN que cargar.
 
-| Tema de la app | Theme de CodeMirror aplicado | CSS cargada |
-|---|---|---|
-| `dark`  | `material-darker` (negro, texto claro) | `theme/material-darker.min.css` |
-| `light` | `mdn-like` (blanco, alto contraste) | `theme/mdn-like.min.css` |
+El switch ocurre dentro de `<is-code>`:
 
-El switch ocurre:
-
-1. En el boot: lee `document.documentElement.dataset.theme` y elige el theme
-   correspondiente. Ademas carga el CSS del **otro** theme para que el cambio
-   en vivo sea instantáneo (solo ~1 KB extra cada uno).
-2. En tiempo de ejecución: escucha `document` para:
+1. En el bootstrap: `#pageTheme()` lee `document.documentElement.dataset.theme`
+   y `#syncThemeFromPage()` aplica el preset (dark/light).
+2. En tiempo de ejecución: `<is-code>` escucha en `document`:
    - `is-theme-change` (el evento que emite `<is-theme-toggle>` al alternar).
-   - `MutationObserver` sobre `data-theme` en `<html>` (por si alguien lo
-     cambia directamente sin pasar por el toggle).
+   - (La clase `cm-s-*` previa se limpiaba en la era CM; hoy no hay clases de
+     theme que rotar: solo cambian las custom properties.)
 
-Al disparar, llama `reapplyTheme()` que:
+No queda `reapplyTheme()`, ni `is-codemirror-theme-changed`, ni
+`window.__isReapplyCodeTheme()`: se eliminaron con CodeMirror.
 
-- Re-pinta los `<pre.code[data-cm]>` ya pintados con el nuevo theme.
-- Limpia la clase `cm-s-*` anterior antes de aplicar la nueva (no se
-  acumulan).
-- Emite `is-codemirror-theme-changed` en `document` para que otros modulos
-  globales puedan reaccionar.
+**Errores a NO repetir (históricos de la era CodeMirror):**
 
-Tambien expone `window.__isReapplyCodeTheme()` para re-pintar manualmente
-(test, hot-reload, integraciones).
+- ❌ **NO** reintroduzcas themes CM (`cm-s-material-darker`, `cm-s-mdn-like`)
+  ni su CSS de CDN: el motor es nativo (`.tok-*` ↔ `--is-code-*`).
+- ❌ **NO** cargues CodeMirror (core/modos/runMode) para colorear `<pre>`.
+- ❌ **NO** asumas que `pre.code` llega pintado: `paint()` lo convierte a
+  `<is-code>` (marcador `data-cm` = ya montado, para no repintar en bucle).
 
-**Errores a NO repetir:**
-
-- ❌ **NO** hardcodees la clase `cm-s-material-darker` en `paintOne()`.
-  Debes aplicar la que devuelve `resolveThemeId()` para cada `<pre>`.
-- ❌ **NO** te olvides de `ensureCss(THEMES[target].css)` dentro de
-  `reapplyTheme()` si el CSS del theme destino no se cargo en el boot
-  (defensa por si alguien borra la precarga del boot).
-- ❌ **NO** asumas que el selector `pre.code` te los da ya pintados.
-  Usa `pre.code[data-cm]` para re-pintar solo los que ya pasaron por CM.
-
-El test `tests/codemirror-theme.test.ts` protege este contrato.
+El test `tests/code-theme-native.test.ts` protege este contrato.
 
 ## 9. Reglas de oro (resumen ejecutivo)
 
@@ -1421,11 +1406,9 @@ El test `tests/codemirror-theme.test.ts` protege este contrato.
 - Si vas a tocar `manifest.js`, **corre `tests/manifest-paths.test.ts`**.
 - Si vas a tocar `styles/is-base.css` o `palettes.css`, **corre
   `tests/theme-contract.test.ts`**.
-- Si vas a tocar `scripts/highlight-pre.js` (theme de CodeMirror en
-  `<pre class="code">`), **corre `tests/codemirror-theme.test.ts`**. Cuando
-  el documento está en `data-theme="light"` el highlighter **NO** debe
-  aplicar `cm-s-material-darker` (eso da texto blanco sobre fondo gris y
-  es ilegible). Aplica `cm-s-mdn-like` por defecto.
+- Si vas a tocar `scripts/highlight-pre.js` (pinta `<pre class="code">` con
+  `<is-code>` nativo), **corre `tests/code-theme-native.test.ts`**: no debe
+  quedar carga de CodeMirror ni themes `cm-s-*`; el tema lo aplica `<is-code>`.
 - Si vas a crear un componente nuevo, **asegúrate de que su preview existe
   en `src/previews/<category>/` con paths styles `../../` y scripts/dist
   `../../../`**.

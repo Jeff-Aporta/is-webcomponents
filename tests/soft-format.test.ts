@@ -1,6 +1,7 @@
 /**
  * softFormat / unwrapHandHighlight — indentación de snippets y limpieza del
- * coloreado a mano que CodeMirror marcaba como cm-error (fondo rojo).
+ * coloreado a mano (la era CodeMirror lo marcaba como .cm-error con fondo
+ * rojo; hoy los tramos manuales se quitan ANTES de pintar con el motor nativo).
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -45,10 +46,11 @@ test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
   assert.match(out, /^\s+<slot name="start">/m);
 });
 
-test('presentation.css neutraliza el fondo rojo de cm-error', () => {
+test('sin cm-error en el docs: el rojo de CodeMirror ya no existe (motor nativo)', () => {
   const css = readFileSync(join(root, 'src/styles/presentation.css'), 'utf8');
-  assert.match(css, /pre\.code\s+\.cm-error/);
-  assert.match(css, /background:\s*transparent\s*!important/);
+  // El docs ya no estiliza tramos .cm-error (no hay runMode); el coloreado a
+  // mano se limpia con unwrapHandHighlight/softFormat antes de montar <is-code>.
+  assert.doesNotMatch(css, /\.cm-error/);
 });
 
 test('el highlighter vigila el DOM: nada se queda sin colorear', () => {

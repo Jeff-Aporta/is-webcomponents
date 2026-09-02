@@ -1,16 +1,18 @@
 /**
- * code-diff.js — modo CodeMirror 5 para diffs unificados y resúmenes de commit.
+ * code-diff.js — clasificador y alineador de diffs unificados y resúmenes de
+ * commit para el motor nativo de `<is-code>`.
  *
- * Por qué existe: pintar un diff con el modo `javascript` (o cualquier otro de
- * lenguaje) sale mal siempre, y de forma engañosa. El `+` y el `-` de la primera
+ * Por qué existe: pintar un diff con el tokenizador de lenguaje (javascript u
+ * otro) sale mal siempre, y de forma engañosa. El `+` y el `-` de la primera
  * columna no son parte del código: son marcas de línea. Un tokenizador de JS los
  * lee como operadores, arrastra el resto de la línea a un estado sintáctico que
  * no existe, y el resultado es un bloque coloreado casi al azar donde lo único
  * que el lector necesita —qué se añadió y qué se quitó— es justo lo que no se ve.
  *
- * Este modo trabaja por LÍNEA, no por expresión: clasifica cada línea entera por
- * su primer carácter y no intenta entender el lenguaje de dentro. Cubre las tres
- * formas en que git presenta un cambio:
+ * Este módulo trabaja por LÍNEA, no por expresión: clasifica cada línea entera por
+ * su primer carácter y no intenta entender el lenguaje de dentro (de eso se
+ * encarga `code-highlight` al pintar). Cubre las tres formas en que git presenta
+ * un cambio:
  *
  *   1. diff unificado      `@@ -1,4 +1,6 @@`, `+añadido`, `-quitado`
  *   2. cabecera de commit  `commit <sha>`, `Author:`, `Merge:`
@@ -72,21 +74,7 @@ export function classifyDiffLine(line: string) {
   return 'context';
 }
 
-/** Estilo CM (sin el prefijo `cm-`) por clase de línea. */
-const STYLE = Object.freeze({
-  commit: 'is-diff-commit',
-  header: 'is-diff-header',
-  file: 'is-diff-file',
-  hunk: 'is-diff-hunk',
-  add: 'is-diff-add',
-  del: 'is-diff-del',
-  comment: 'is-diff-comment',
-  note: 'is-diff-note',
-  context: null,
-});
-
-/**
- * Clase de fondo para una línea, o `null` si la línea no lleva banda.
+/** Clase de fondo para una línea, o `null` si la línea no lleva banda.
  * La usa `<is-code>` vía `CodeLangDef.lineClass`.
  * @param {string} line
  */
@@ -97,39 +85,6 @@ export function diffLineClass(line: string) {
   if (kind === 'hunk') return DIFF_LINE_CLASS.hunk;
   if (kind === 'file') return DIFF_LINE_CLASS.file;
   if (kind === 'commit') return DIFF_LINE_CLASS.commit;
-  return null;
-}
-
-/**
- * Tokeniza dentro de una línea de `--stat`: ` src/app.js | 12 ++++----`.
- * Devuelve el estilo del tramo consumido.
- * @param {any} stream
- */
-function tokenStat(stream: any) {
-  if (stream.eatSpace()) return null;
-  if (stream.match(/^\([^)]*\)/)) return STYLE.note;
-  const ch = stream.peek();
-  if (ch === '+') { stream.eatWhile('+'); return STYLE.add; }
-  if (ch === '-') { stream.eatWhile('-'); return STYLE.del; }
-  if (ch === '|') { stream.next(); return 'is-diff-punct'; }
-  if (/\d/.test(ch)) { stream.eatWhile(/\d/); return 'is-diff-num'; }
-  // El nombre de archivo llega hasta la barra vertical.
-  while (!stream.eol() && !/[|+\-\s(]/.test(stream.peek())) stream.next();
-  if (stream.current()) return 'is-diff-path';
-  stream.next();
-  return null;
-}
-
-/**
- * Tokeniza el total: ` 2 files changed, 8 insertions(+), 4 deletions(-)`.
- * @param {any} stream
- */
-function tokenTotal(stream: any) {
-  if (stream.eatSpace()) return null;
-  if (stream.match(/^\d+\s+insertions?\(\+\)/i)) return STYLE.add;
-  if (stream.match(/^\d+\s+deletions?\(-\)/i)) return STYLE.del;
-  if (stream.match(/^\d+\s+files?\s+changed/i)) return 'is-diff-num';
-  stream.next();
   return null;
 }
 
@@ -195,35 +150,4 @@ export function formatDiff(text: string, cfg = {}) {
   volcar();
 
   return out.join(eol);
-}
-
-/**
- * Registra el modo `is-diff` en la instancia global de CodeMirror.
- * Idempotente: repetir la llamada no redefine el modo ni lanza.
- * @param {any} CodeMirror
- */
-export function defineDiffMode(CodeMirror: any) {
-  const CM = CodeMirror || globalThis.CodeMirror;
-  if (!CM?.defineMode) throw new Error('[code-diff] CodeMirror no disponible');
-  if (CM.modes?.['is-diff']) return CM;
-
-  CM.defineMode('is-diff', () => ({
-    startState: () => ({ kind: 'context' }),
-    token(stream, state) {
-      if (stream.sol()) state.kind = classifyDiffLine(stream.string);
-
-      if (state.kind === 'stat') return tokenStat(stream);
-      if (state.kind === 'total') return tokenTotal(stream);
-
-      // El resto se pinta de una pieza: la línea entera es el token.
-      stream.skipToEnd();
-      return STYLE[state.kind] ?? null;
-    },
-    // Sin sangrado automático: un diff no se re-indenta, sus columnas son datos.
-    indent: () => 0,
-    lineComment: null,
-  }));
-
-  CM.defineMIME?.('text/x-diff', 'is-diff');
-  return CM;
 }

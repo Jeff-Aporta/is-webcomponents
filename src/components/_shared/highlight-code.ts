@@ -1,51 +1,24 @@
 /**
- * highlight-code.js — monta `<is-code readonly compact>` donde antes
- * se coloreaba con CodeMirror.runMode sobre `<pre class="code">`.
+ * highlight-code.js — monta `<is-code readonly compact>` sobre los
+ * `<pre class="code">` de la documentación (antes se coloreaban con
+ * CodeMirror.runMode; hoy el resaltado lo hace el motor nativo del propio
+ * `<is-code>`).
  *
  * Vive en `_shared/` (no en `scripts/`): `<is-cdn-snippet>` y el docs lo
- * importan. El motor CM5 sigue cargándose vía `ensureCodeMirror` porque
- * `<is-code>` lo necesita; el pintor de docs YA NO usa runMode.
+ * importan. No carga CodeMirror ni ningún CDN.
  *
  * API pública estable:
  * - softFormat / dedent / prettyHtml / unwrapHandHighlight
- * - paint / repaint / watchDom / reapplyTheme / ensureCodeMirror / isReady
- * - THEMES / CODEMIRROR_READY (compat; el theme lo aplica el editor)
+ * - paint / repaint / watchDom
  *
- * No importa `code.js` en estático (ciclo con code-cm). Se carga
- * bajo demanda en `paint`.
+ * No importa `code.js` en estático (ciclo con el bootstrap de <is-code>). Se
+ * carga bajo demanda en `paint`.
  */
 
 import { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode } from './code-text.js';
 import { inferLanguage } from './code-langs.js';
 
 export { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode };
-
-const CDN = 'https://cdn.jsdelivr.net/npm/codemirror@5.65.16';
-
-export const THEMES = {
-  dark: { id: 'material-darker', css: `${CDN}/theme/material-darker.min.css`, className: 'cm-s-material-darker' },
-  light: { id: 'mdn-like', css: `${CDN}/theme/mdn-like.min.css`, className: 'cm-s-mdn-like' },
-};
-
-const ensureCss = (href) => {
-  if ([...document.querySelectorAll<HTMLElement>('link[rel="stylesheet"]')].some((l) => l.href === href || l.getAttribute('href') === href)) return;
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = href;
-  document.head.appendChild(link);
-};
-
-const loadScript = (src: string) => new Promise((resolve, reject) => {
-  if ([...document.scripts].some((s) => s.src === src || s.getAttribute('src') === src)) {
-    resolve();
-    return;
-  }
-  const el = document.createElement('script');
-  el.src = src;
-  el.onload = () => resolve();
-  el.onerror = () => reject(new Error(`Failed to load ${src}`));
-  document.head.appendChild(el);
-});
 
 /** data-lang / heurística → mode legacy (softFormat) + lang del editor. */
 export const resolveMode = (el, text) => {
@@ -69,11 +42,6 @@ export const modeToLang = (mode) => {
   if (m === 'ts') return 'typescript';
   if (m === 'py') return 'python';
   return m || 'javascript';
-};
-
-const resolveThemeId = () => {
-  const t = (document.documentElement.dataset.theme || 'dark').toLowerCase();
-  return THEMES[t] ? t : 'dark';
 };
 
 const isMountedEditor = (el) => el instanceof HTMLElement
@@ -117,12 +85,12 @@ const paintOne = async (el) => {
     if (!el.hasAttribute('wrap')) el.setAttribute('wrap', '');
     if (!el.hasAttribute('line-numbers')) el.setAttribute('line-numbers', 'false');
     el.lang = lang;
-    // Siempre asignar: el getter de is-code puede devolver el seed aunque CM esté vacío.
+    // Siempre asignar: el getter de is-code puede devolver el seed aunque la
+    // vista aún no esté montada.
     el.value = text;
     el.dataset.cm = '1';
     el.dataset.cmSource = text;
     el.dataset.cmMode = mode;
-    el.dataset.cmTheme = resolveThemeId();
     el.refresh?.();
     return;
   }
@@ -140,7 +108,6 @@ const paintOne = async (el) => {
   ed.dataset.cm = '1';
   ed.dataset.cmSource = text;
   ed.dataset.cmMode = mode;
-  ed.dataset.cmTheme = resolveThemeId();
   if (el.id) ed.id = el.id;
   if (el.dataset.codeId) ed.dataset.codeId = el.dataset.codeId;
   if (el.hasAttribute('data-no-copy')) ed.setAttribute('data-no-copy', '');
@@ -206,8 +173,8 @@ const procesarPendientes = () => {
       pintando = false;
     }
   };
-  // Sin puerta de CodeMirror: <is-code> read-only pinta con el motor nativo;
-  // si la instancia es editable, su propio bootstrap carga CM cuando hace falta.
+  // Sin puertas ni CDN: <is-code> pinta con su motor nativo (read-only y
+  // editable) y se re-pinta solo cuando su fuente cambia.
   pintar();
 };
 
@@ -236,70 +203,3 @@ export const watchDom = (root = document.documentElement) => {
   observer.observe(root, { childList: true, subtree: true });
 };
 
-/** Compat: el theme lo aplica cada `<is-code>` vía data-theme. */
-export const reapplyTheme = () => {
-  const target = resolveThemeId();
-  const all = [
-    ...document.querySelectorAll<HTMLElement>('is-code[data-cm]'),
-    ...document.querySelectorAll<HTMLElement>('pre.code[data-cm]'),
-  ];
-  all.forEach((el) => {
-    if (el.localName === 'is-code') {
-      el.dataset.cmTheme = target;
-      el.refresh?.();
-    } else {
-      paintOne(el);
-    }
-  });
-  document.dispatchEvent(new CustomEvent('is-codemirror-theme-changed', {
-    detail: { theme: target, count: all.length },
-  }));
-  return true;
-};
-
-export const isReady = () => typeof globalThis.CodeMirror?.runMode === 'function'
-  && !!globalThis.CodeMirror?.modes?.htmlmixed;
-
-export const CODEMIRROR_READY = 'is-codemirror-ready';
-
-let cmPromise = null;
-
-/** Sigue cargando CM5: lo necesita `<is-code>` / code-cm. */
-export const ensureCodeMirror = () => {
-  cmPromise ??= (async () => {
-    const initial = resolveThemeId();
-    ensureCss(`${CDN}/lib/codemirror.min.css`);
-    ensureCss(THEMES[initial].css);
-    ensureCss(THEMES[initial === 'dark' ? 'light' : 'dark'].css);
-
-    if (!globalThis.CodeMirror) await loadScript(`${CDN}/lib/codemirror.min.js`);
-    const CM = () => globalThis.CodeMirror;
-    if (typeof CM()?.runMode !== 'function') {
-      await loadScript(`${CDN}/addon/runmode/runmode.min.js`);
-    }
-    if (!CM()?.modes?.xml) await loadScript(`${CDN}/mode/xml/xml.min.js`);
-    if (!CM()?.modes?.javascript) await loadScript(`${CDN}/mode/javascript/javascript.min.js`);
-    if (!CM()?.modes?.css) await loadScript(`${CDN}/mode/css/css.min.js`);
-    if (!CM()?.modes?.htmlmixed) await loadScript(`${CDN}/mode/htmlmixed/htmlmixed.min.js`);
-
-    document.dispatchEvent(new CustomEvent(CODEMIRROR_READY));
-  })();
-  return cmPromise;
-};
-
-let watching = false;
-
-export const watchTheme = () => {
-  if (watching) return;
-  watching = true;
-  const onThemeChange = () => reapplyTheme();
-  document.addEventListener('is-theme-change', onThemeChange);
-  new MutationObserver((muts) => {
-    for (const m of muts) {
-      if (m.type === 'attributes' && m.attributeName === 'data-theme') {
-        onThemeChange();
-        break;
-      }
-    }
-  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-};

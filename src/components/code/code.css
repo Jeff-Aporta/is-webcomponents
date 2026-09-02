@@ -1,5 +1,5 @@
 /**
- * is-code.css — superficie del editor + theme `cm-s-is-code`.
+ * is-code.css — superficie del editor + motor nativo (tokens .tok-*).
  * Los colores salen de --is-code-* (code-theme.js / theme-config JSON).
  */
 
@@ -70,11 +70,6 @@
   cursor: default;
 }
 
-:host([readonly]) .editor-host .CodeMirror-cursor,
-:host([data-readonly]) .editor-host .CodeMirror-cursor {
-  display: none;
-}
-
 :host([compact]) {
   --is-code-min-height: 0;
   --is-code-font-size: 0.8125rem;
@@ -84,33 +79,6 @@
 
 :host([compact]) .editor-host {
   min-height: 0;
-}
-
-:host([compact]) .editor-host .CodeMirror {
-  height: auto;
-  min-height: 0;
-}
-
-:host([compact]) .editor-host .CodeMirror-scroll {
-  min-height: 0;
-  overflow-x: auto;
-  overflow-y: hidden !important;
-}
-
-:host([compact]) .editor-host .CodeMirror-lines {
-  padding: 0.7rem 2.75rem 0.7rem 0.95rem;
-}
-
-/*
- * Solo anular el margen del sizer cuando NO hay gutter.
- * Antes también matcheaba `:not([line-numbers])` con números ON por defecto
- * (atributo ausente = lineNumbers true) → gutter encima del texto
- * ("Aut2tion: Bearer"). Con compact el default de números es off; si se
- * pide `line-numbers` explícito, CodeMirror calcula el margen.
- */
-:host([compact][line-numbers='false']) .editor-host .CodeMirror-sizer,
-:host([compact]:not([line-numbers])) .editor-host .CodeMirror-sizer {
-  margin-left: 0 !important;
 }
 
 /* —— mode=inline: fluye en el texto como un chip de código —— */
@@ -145,39 +113,6 @@
   min-height: 0;
   width: auto;
   max-width: 100%;
-}
-
-:host([mode="inline"]) .editor-host .CodeMirror,
-:host([data-inline]) .editor-host .CodeMirror {
-  height: auto !important;
-  min-height: 0;
-  width: auto;
-  max-width: 100%;
-}
-
-:host([mode="inline"]) .editor-host .CodeMirror-scroll,
-:host([data-inline]) .editor-host .CodeMirror-scroll {
-  min-height: 0;
-  overflow: hidden !important;
-}
-
-:host([mode="inline"]) .editor-host .CodeMirror-sizer,
-:host([data-inline]) .editor-host .CodeMirror-sizer {
-  min-height: 0 !important;
-}
-
-:host([mode="inline"]) .editor-host .CodeMirror-gutters,
-:host([data-inline]) .editor-host .CodeMirror-gutters,
-:host([mode="inline"]) .editor-host .CodeMirror-gutter,
-:host([data-inline]) .editor-host .CodeMirror-gutter {
-  display: none !important;
-  width: 0 !important;
-  border: 0 !important;
-}
-
-:host([mode="inline"]) .editor-host .CodeMirror-linenumber,
-:host([data-inline]) .editor-host .CodeMirror-linenumber {
-  display: none !important;
 }
 
 :host([mode="inline"]:focus-within),
@@ -218,133 +153,6 @@
   min-height: var(--is-code-min-height);
   display: flex;
   flex-direction: column;
-}
-
-/* —— CodeMirror shell —— */
-.editor-host .CodeMirror {
-  flex: 1 1 auto;
-  height: auto;
-  min-height: var(--is-code-min-height);
-  background: transparent;
-  color: var(--is-code-fg);
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  border: 0;
-  border-radius: inherit;
-}
-
-.editor-host .CodeMirror-scroll {
-  min-height: var(--is-code-min-height);
-}
-
-.editor-host .CodeMirror-gutters {
-  background: var(--is-code-gutter-bg);
-  border-right: 1px solid var(--is-code-gutter-border);
-  color: var(--is-code-gutter-fg);
-}
-
-.editor-host .CodeMirror-linenumber {
-  color: var(--is-code-gutter-fg);
-  padding: 0 8px 0 12px;
-}
-
-.editor-host .CodeMirror-cursor {
-  border-left: 2px solid var(--is-code-caret);
-}
-
-.editor-host .CodeMirror-selected {
-  background: var(--is-code-selection) !important;
-}
-
-.editor-host .CodeMirror-focused .CodeMirror-selected {
-  background: var(--is-code-selection) !important;
-}
-
-.editor-host .CodeMirror-line::selection,
-.editor-host .CodeMirror-line > span::selection,
-.editor-host .CodeMirror-line > span > span::selection {
-  background: var(--is-code-selection);
-}
-
-.editor-host .CodeMirror-activeline-background {
-  background: var(--is-code-active-line);
-}
-
-.editor-host .CodeMirror-activeline-gutter {
-  background: var(--is-code-active-gutter);
-}
-
-.editor-host .CodeMirror-matchingbracket {
-  color: var(--is-code-matching-bracket) !important;
-  text-decoration: underline;
-}
-
-.editor-host .CodeMirror-placeholder {
-  color: color-mix(in srgb, var(--is-code-fg) 45%, transparent);
-}
-
-/* —— Token colors (cm-s-is-code) —— */
-.cm-s-is-code .cm-comment { color: var(--is-code-comment); font-style: italic; }
-.cm-s-is-code .cm-keyword { color: var(--is-code-keyword); font-weight: 500; }
-.cm-s-is-code .cm-string,
-.cm-s-is-code .cm-string-2 { color: var(--is-code-string); }
-.cm-s-is-code .cm-number { color: var(--is-code-number); }
-.cm-s-is-code .cm-operator { color: var(--is-code-operator); }
-.cm-s-is-code .cm-punctuation { color: var(--is-code-punctuation); }
-.cm-s-is-code .cm-def { color: var(--is-code-definition); }
-.cm-s-is-code .cm-variable { color: var(--is-code-variable); }
-.cm-s-is-code .cm-variable-2 { color: var(--is-code-variable); }
-.cm-s-is-code .cm-variable-3,
-.cm-s-is-code .cm-type { color: var(--is-code-type); }
-.cm-s-is-code .cm-property { color: var(--is-code-property); }
-.cm-s-is-code .cm-tag { color: var(--is-code-tag); font-weight: 600; }
-.cm-s-is-code .cm-attribute { color: var(--is-code-attribute); }
-.cm-s-is-code .cm-atom { color: var(--is-code-atom); }
-.cm-s-is-code .cm-meta { color: var(--is-code-meta); }
-.cm-s-is-code .cm-qualifier { color: var(--is-code-qualifier); }
-.cm-s-is-code .cm-builtin { color: var(--is-code-builtin); }
-.cm-s-is-code .cm-bracket { color: var(--is-code-punctuation); }
-.cm-s-is-code .cm-header { color: var(--is-code-keyword); font-weight: 600; }
-.cm-s-is-code .cm-link { color: var(--is-code-function); text-decoration: underline; }
-.cm-s-is-code .cm-error { color: #ff5370; }
-
-/* function-ish */
-.cm-s-is-code span.cm-variable.cm-def,
-.cm-s-is-code .cm-callee { color: var(--is-code-function); }
-
-/* —— Diff / resumen de commit (lang="diff" · lang="commit") ——
-   Dos capas: el token da el color del texto y la clase de línea da la banda de
-   fondo. La banda es la que hace legible el bloque de un vistazo; el color de
-   texto solo no basta cuando hay muchas líneas seguidas. */
-.cm-s-is-code {
-  & .cm-is-diff-add { color: var(--is-code-diff-added); }
-  & .cm-is-diff-del { color: var(--is-code-diff-removed); }
-  & .cm-is-diff-hunk { color: var(--is-code-diff-hunk); font-weight: 600; }
-  & .cm-is-diff-file { color: var(--is-code-diff-file); font-weight: 600; }
-  & .cm-is-diff-commit { color: var(--is-code-diff-commit); font-weight: 600; }
-  & .cm-is-diff-header { color: var(--is-code-comment); }
-  & .cm-is-diff-comment { color: var(--is-code-comment); font-style: italic; }
-  & .cm-is-diff-note { color: var(--is-code-diff-note); font-style: italic; }
-  & .cm-is-diff-path { color: var(--is-code-diff-path); }
-  & .cm-is-diff-num { color: var(--is-code-number); }
-  & .cm-is-diff-punct { color: var(--is-code-punctuation); }
-
-  & .is-diff-line-add { background: var(--is-code-diff-added-band); }
-  & .is-diff-line-del { background: var(--is-code-diff-removed-band); }
-  & .is-diff-line-hunk { background: var(--is-code-diff-hunk-band); }
-
-  & .is-diff-line-file,
-  & .is-diff-line-commit { background: transparent; }
-}
-
-/* La línea activa comparte elemento con la banda, y su regla vive más arriba en
-   la hoja: sin esto el realce de cursor pisa el color de la fila, que en un
-   diff no es decoración sino el dato. La banda gana. */
-.editor-host .CodeMirror-activeline-background {
-  &.is-diff-line-add { background: var(--is-code-diff-added-band); }
-  &.is-diff-line-del { background: var(--is-code-diff-removed-band); }
-  &.is-diff-line-hunk { background: var(--is-code-diff-hunk-band); }
 }
 
 /* —— External marks (errors / warnings / tooltips) —— */
@@ -389,9 +197,9 @@
   font-size: 0.8rem;
 }
 
-/* ── Vista NATIVA (motor code-highlight, sin CodeMirror) ──
-   Los tokens .tok-* consumen las MISMAS custom properties --is-code-* que
-   los .cm-* (code-theme.js / theme-config). */
+/* ── Vista NATIVA (motor nativo code-highlight) ──
+   Los tokens .tok-* consumen las MISMAS custom properties --is-code-* de la
+   paleta (code-theme.js / theme-config). */
 .editor-host .ic-scroll {
   flex: 1 1 auto;
   min-height: var(--is-code-min-height, 12rem);
@@ -449,7 +257,7 @@
   min-width: 100%;
 }
 
-/* Tokens nativos → mismas variables que los .cm-* */
+/* Tokens nativos → mismas variables de paleta --is-code-* */
 .tok-comment   { color: var(--is-code-comment); font-style: italic; }
 .tok-keyword   { color: var(--is-code-keyword); font-weight: 500; }
 .tok-string    { color: var(--is-code-string); }

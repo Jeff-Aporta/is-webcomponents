@@ -1,4 +1,4 @@
-// tests/cdn-snippet.test.mjs
+// tests/deps-snippet.test.ts
 //
 // Verifica el componente <is-cdn-snippet>:
 //   - Existe el manifest, el script y el preview.
@@ -6,11 +6,11 @@
 //   - El componente parsea el slot "deps" con <script type="application/json">.
 //   - El componente parsea el atributo "dependencies" (JSON string).
 //   - El componente pinta N filas dep en el orden dado.
-//   - El preview demuestra CodeMirror como dependencia (la categoría puede
-//     ser documentation, según lo que pidió el usuario).
+//   - El preview demuestra dayjs como dependencia externa de ejemplo (el caso
+//     de uso real que antes ilustraba CodeMirror, ya sin CM en el kit).
 //   - El CSS marca las filas dep con un accent distinguible.
 //
-// Uso:  node tests/cdn-snippet.test.mjs
+// Uso:  node tests/deps-snippet.test.ts
 
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
@@ -84,7 +84,7 @@ check(/(border-inline-start|::before).*(warning|accent)/.test(csCss) ||
       /cdn__dep-name::before/.test(csCss),
   'cdn-snippet.css: la fila dep debe tener borde/accent visualmente distinto');
 
-// ─── preview: demuestra deps con CodeMirror ────────────────────────────────
+// ─── preview: demuestra deps con dayjs (antes CodeMirror) ───────────────────
 
 check(/<is-cdn-snippet/.test(prev),
   'preview: debe usar <is-cdn-snippet>');
@@ -92,22 +92,22 @@ check(/<is-cdn-snippet/.test(prev),
 check(/slot=["']deps["']/.test(prev),
   'preview: debe demostrar el slot="deps" con un <script type="application/json">');
 
-check(/CodeMirror/.test(prev),
-  'preview: debe demostrar CodeMirror como dependencia (caso de uso real)');
+check(/dayjs/.test(prev),
+  'preview: debe demostrar una dependencia externa real (dayjs)');
 
-check(/"name"\s*:\s*"CodeMirror"/.test(prev),
-  'preview: el array de deps debe incluir CodeMirror como name');
+check(/"name"\s*:\s*"dayjs"/.test(prev),
+  'preview: el array de deps debe incluir dayjs como name');
 
 check(/"version"/.test(prev),
   'preview: el array de deps debe incluir un campo version');
 
-// El usuario dijo que la categoría puede ser "documentation" para el caso
-// de preview con CodeMirror. Lo verificamos como recomendación (no obligatorio).
-// Esto es una sugerencia del usuario, no un check estricto.
+// El kit ya no depende de CodeMirror: el preview no debe sugerirlo como dep.
+check(!/CodeMirror|material-darker|jsdelivr\.net\/npm\/codemirror/.test(prev),
+  'preview: no debe mostrar CodeMirror (ni sus themes) como dependencia');
 
-// Demuestra N deps (múltiples filas).
-check(/"CodeMirror theme/.test(prev) || /material-darker/.test(prev),
-  'preview: debe demostrar el caso de múltiples dependencias (e.g. CodeMirror + theme)');
+// Demuestra N deps (múltiples filas: dayjs + su plugin).
+check(/"name"\s*:\s*"(?:dayjs|dayjs\/[a-z-]+)"/.test(prev),
+  'preview: debe demostrar el caso de múltiples dependencias (dayjs + plugin)');
 
 if (failures.length) {
   console.log('FAIL:');

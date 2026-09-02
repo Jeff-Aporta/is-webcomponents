@@ -2,7 +2,7 @@
 //
 // Guardián de `lang="diff"` / `lang="commit"` en <is-code>.
 //
-// El fallo que motivó el modo: pintar un diff con un modo de lenguaje real
+// El fallo que motivó el módulo: pintar un diff con un modo de lenguaje real
 // (javascript) lee el `+` de la primera columna como operador y descoloca el
 // resto de la línea. Las reglas de abajo fijan lo que NO puede volver a pasar:
 //
@@ -10,10 +10,12 @@
 //   2. `--- a/x` y `+++ b/x` son CABECERAS DE ARCHIVO, aunque empiecen por -/+.
 //      (esta es la que se rompe sola si alguien reordena las comprobaciones)
 //   3. `+// nota` es una línea añadida, no un comentario suelto.
-//   4. Las líneas de `--stat` se tokenizan por dentro: la barra `++--` lleva
-//      verde y rojo en el mismo renglón.
+//   4. Las líneas `--stat`/`total` se reconocen (para `format()`) aunque no se
+//      tokenicen por tramos: el motor nativo banda la línea y `format()` alinea.
 //   5. `format()` deja el bloque `--stat` en rejilla alineada.
-//   6. Cada estilo que emite el modo tiene su regla CSS y su token de tema.
+//   6. Cada banda que emite el clasificador tiene su regla CSS nativa
+//      (`.is-diff-line-*`) y su token de tema; NO se registran modos de
+//      CodeMirror (`defineMode`/`defineDiffMode` desaparecieron).
 //
 // Uso:  node tests/code-diff-lang.test.ts
 
@@ -26,7 +28,7 @@ const root = dirname(here);
 
 const {
   classifyDiffLine, diffLineClass, parseStatLine, formatDiff,
-  DIFF_LINE_CLASS, DIFF_LINE_CLASSES, defineDiffMode,
+  DIFF_LINE_CLASS, DIFF_LINE_CLASSES,
 } = await import(`file:///${join(root, 'src/components/_shared/code-diff.ts').replace(/\\/g, '/')}`);
 
 const failures = [];
@@ -61,7 +63,7 @@ eq(classifyDiffLine('// src/lib/filter/x.ts . commit 7839bd7 (extracto)'), 'comm
 eq(classifyDiffLine('# Resultado: el lote toca 12 archivos'), 'comment', '`#` suelto es comentario');
 eq(classifyDiffLine('(commit 8936adb)'), 'note', 'anotacion suelta entre parentesis');
 
-// —— 4. Líneas de --stat ——
+// —— 4. Líneas de --stat (reconocidas para alinear; sin tokenizado CM) ——
 eq(classifyDiffLine(' src/app.js | 12 ++++----'), 'stat', 'linea de --stat');
 eq(classifyDiffLine('| 2 +-'), 'stat', 'barra huerfana sigue siendo --stat');
 eq(classifyDiffLine(' 2 files changed, 8 insertions(+), 4 deletions(-)'), 'total', 'linea de total');
@@ -95,16 +97,11 @@ ok(
   'dos tablas separadas por prosa se alinean por separado, no entre si',
 );
 
-// —— 6. Estilos emitidos ⇄ CSS ⇄ tema ——
+// —— 6. Bandas nativas ⇄ CSS ⇄ tema (sin modos de CodeMirror) ——
 const css = await readFile(join(root, 'src/components/code/code.css'), 'utf8');
 const theme = await readFile(join(root, 'src/components/_shared/code-theme.ts'), 'utf8');
 const src = await readFile(join(root, 'src/components/_shared/code-diff.ts'), 'utf8');
 
-const estilos = [...src.matchAll(/'(is-diff-[a-z-]+)'/g)].map((m) => m[1]);
-const tokens = [...new Set(estilos)].filter((s) => !DIFF_LINE_CLASSES.includes(s));
-for (const t of tokens) {
-  ok(css.includes(`.cm-${t}`), `falta regla CSS para el token \`.cm-${t}\``);
-}
 for (const cls of DIFF_LINE_CLASSES) {
   ok(css.includes(`.${cls}`), `falta regla CSS para la banda \`.${cls}\``);
 }
@@ -115,62 +112,10 @@ for (const varName of ['--is-code-diff-added', '--is-code-diff-removed', '--is-c
 ok(/diffAdded:\s*'#/.test(theme) && /light:[\s\S]*diffAdded:\s*'#/.test(theme),
   'los presets dark y light deben definir los colores de diff');
 
-// —— El modo se registra sin CodeMirror real ——
-const fake = { modes: {}, defineMode(name, fn) { this.modes[name] = fn; }, defineMIME() {} };
-defineDiffMode(fake);
-ok(typeof fake.modes['is-diff'] === 'function', 'defineDiffMode registra el modo `is-diff`');
-const antes = fake.modes['is-diff'];
-defineDiffMode(fake);
-ok(fake.modes['is-diff'] === antes, 'defineDiffMode es idempotente (no redefine el modo)');
-
-// —— Tokenización real dentro de una línea de --stat ——
-const mode = fake.modes['is-diff']();
-function tokenize(line) {
-  const state = mode.startState();
-  const salida = [];
-  let pos = 0;
-  const stream = {
-    string: line,
-    get pos() { return pos; },
-    set pos(v) { pos = v; },
-    sol: () => pos === 0,
-    eol: () => pos >= line.length,
-    peek: () => line[pos],
-    next: () => line[pos++],
-    skipToEnd() { pos = line.length; },
-    current: () => line.slice(inicio, pos),
-    eatSpace() { const p = pos; while (/\s/.test(line[pos])) pos++; return pos > p; },
-    eatWhile(m) {
-      const p = pos;
-      const test = typeof m === 'string' ? (c) => c === m : (c) => m.test(c);
-      while (pos < line.length && test(line[pos])) pos++;
-      return pos > p;
-    },
-    match(re) {
-      const m2 = line.slice(pos).match(re);
-      if (m2) { pos += m2[0].length; return m2; }
-      return null;
-    },
-  };
-  let inicio = 0;
-  let guard = 0;
-  while (pos < line.length && guard++ < 200) {
-    inicio = pos;
-    const style = mode.token(stream, state);
-    if (pos === inicio) pos++;
-    salida.push(style);
-  }
-  return salida;
-}
-
-const estilosStat = tokenize(' src/app.js | 12 ++++----');
-ok(estilosStat.includes('is-diff-add'), 'la barra `++++` de un --stat lleva el estilo de añadido');
-ok(estilosStat.includes('is-diff-del'), 'la barra `----` de un --stat lleva el estilo de borrado');
-ok(estilosStat.includes('is-diff-path'), 'la ruta de un --stat lleva su propio estilo');
-
-const estilosTotal = tokenize(' 2 files changed, 8 insertions(+), 4 deletions(-)');
-ok(estilosTotal.includes('is-diff-add'), '`insertions(+)` lleva el estilo de añadido');
-ok(estilosTotal.includes('is-diff-del'), '`deletions(-)` lleva el estilo de borrado');
+// El motor nativo banda por línea (tokenizeCode → lineClass) y no registra
+// modos en CodeMirror: no debe quedar API CM en el módulo.
+ok(!/defineMode|defineDiffMode|globalThis\.CodeMirror/.test(src),
+  'code-diff.ts no debe registrar modos de CodeMirror (defineDiffMode eliminado)');
 
 if (failures.length) {
   console.log('\nFAIL:');
@@ -178,4 +123,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`code-diff-lang.test.ts: PASS — ${checks} comprobaciones, diff/commit coloreado y alineado`);
+console.log(`code-diff-lang.test.ts: PASS — ${checks} comprobaciones, diff/commit clasificado, bandeado y alineado (nativo)`);

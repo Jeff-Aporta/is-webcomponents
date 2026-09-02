@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-02T21:16:03.052Z",
+  "generatedAt": "2026-09-02T21:41:52.092Z",
   "count": 60,
   "modules": [
     {
@@ -40,16 +40,15 @@
       "file": "code-diff.ts",
       "id": "code-diff",
       "path": "src/components/_shared/code-diff.ts",
-      "summary": "code-diff — Por qué existe: pintar un diff con el modo `javascript` (o cualquier otro de",
-      "bytes": 9082,
+      "summary": "code-diff — commit para el motor nativo de `<is-code>`.",
+      "bytes": 6640,
       "exports": [
         "DIFF_LINE_CLASS",
         "DIFF_LINE_CLASSES",
         "classifyDiffLine",
         "diffLineClass",
         "parseStatLine",
-        "formatDiff",
-        "defineDiffMode"
+        "formatDiff"
       ]
     },
     {
@@ -69,7 +68,7 @@
       "id": "code-highlight",
       "path": "src/components/_shared/code-highlight.ts",
       "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
-      "bytes": 17310,
+      "bytes": 17342,
       "exports": [
         "normalizeLang",
         "emptyState",
@@ -86,7 +85,7 @@
       "id": "code-langs",
       "path": "src/components/_shared/code-langs.ts",
       "summary": "code-langs — El resaltado lo hace el motor NATIVO (code-highlight): aquí solo vive el",
-      "bytes": 5314,
+      "bytes": 4792,
       "exports": [
         "registerLanguage",
         "resolveLanguage",
@@ -100,7 +99,7 @@
       "id": "code-model",
       "path": "src/components/_shared/code-model.ts",
       "summary": "code-model — Analogía con html2json / json2html: el texto plano es `value`; las",
-      "bytes": 5040,
+      "bytes": 5027,
       "exports": [
         "CODE_DOC_SCHEMA",
         "normalizeMark",
@@ -129,7 +128,7 @@
       "id": "code-theme",
       "path": "src/components/_shared/code-theme.ts",
       "summary": "code-theme — El consumidor pasa un objeto de colores (como un theme de VS Code / CM).",
-      "bytes": 7087,
+      "bytes": 7084,
       "exports": [
         "THEME_PROP_MAP",
         "BUILTIN_THEMES",
@@ -424,21 +423,19 @@
       "file": "highlight-code.ts",
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.ts",
-      "summary": "highlight-code — se coloreaba con CodeMirror.runMode sobre `<pre class=\"code\">`.",
-      "bytes": 10989,
+      "summary": "highlight-code — `<pre class=\"code\">` de la documentación (antes se coloreaban con",
+      "bytes": 7241,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
         "prettyHtml",
         "softFormat",
         "softFormatMode",
-        "THEMES",
         "resolveMode",
         "modeToLang",
         "paint",
         "repaint",
-        "watchDom",
-        "reapplyTheme"
+        "watchDom"
       ]
     },
     {

@@ -3,7 +3,7 @@
  *
  * El consumidor pasa un objeto de colores (como un theme de VS Code / CM).
  * Se escriben como custom properties en el host; el CSS del componente las
- * mapea a `.cm-s-is-code` (theme propio, sin depender de sheets de CM).
+ * consume directo (tokens `.tok-*` nativos, sin sheets de terceros).
  */
 
 /** Mapa de roles del tema del editor a color CSS. Claves libres: cada preset

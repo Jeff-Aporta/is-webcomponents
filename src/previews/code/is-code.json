@@ -11,7 +11,7 @@
     {
       "id": "intro",
       "title": "<is-code>",
-      "lede": "Editor de código (CodeMirror 5) con lenguajes, temas JSON, formateo estilo Prettier, números de línea, word-wrap y anotaciones externas (highlight / tooltips). API texto ↔ JSON <code class=\"code\">is-code-doc/v1</code>.",
+      "lede": "Editor de código con motor NATIVO de resaltado y editor integrado (sin CodeMirror): lenguajes, temas JSON, formateo estilo Prettier, números de línea, word-wrap y anotaciones externas (highlight / tooltips). API texto ↔ JSON <code class=\"code\">is-code-doc/v1</code>.",
       "blocks": [
         {
           "kind": "demo",
@@ -49,7 +49,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-code lang=\"python\" wrap></is-code>\n<!-- python descarga mode/python bajo demanda -->"
+          "code": "<is-code lang=\"python\" wrap></is-code>\n<!-- python: el motor nativo lo tokeniza como plaintext, sin descargas -->"
         }
       ]
     },
