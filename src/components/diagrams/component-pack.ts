@@ -149,7 +149,9 @@ function packTriptych(
   const order = ['left', 'top', 'bottom', 'right'];
   const bySide = { left: [], top: [], bottom: [], right: [] };
   listed.forEach((s, i: number) => {
-    const side = opts.sourceSides?.[s.id] || order[i % 3];
+    // i % 4: con i % 3 la cuarta fuente volvía a 'left' y 'right' nunca se
+    // usaba en automático (left se saturaba con ≥4 consumidores).
+    const side = opts.sourceSides?.[s.id] || order[i % 4];
     bySide[side].push(s);
   });
   let y = bbox.y;

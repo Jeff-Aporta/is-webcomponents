@@ -424,7 +424,7 @@ function wireComponentDiagram(
   const planned = [];
   for (const item of pending) {
     const { e, fromC, toC } = item;
-    const fs = takeLeastLoaded(fromC, rankSides(fromC, toC), loads, 1);
+    const fs = takeLeastLoaded(fromC, rankSides(fromC, toC), loads, 2);
     loads.set(`${fromC.id}:${fs}`, (loads.get(`${fromC.id}:${fs}`) ?? 0) + 1);
     // Lado del destino: si es un componente SOLO (sin hermanos de paquete que
     // definan un clúster), outerSides veía dx=dy=0 y elegía SIEMPRE 'right' —
@@ -437,7 +437,7 @@ function wireComponentDiagram(
       toC,
       isLone ? rankSides(toC, fromC) : outerSides(toC, toCluster, toSibs),
       loads,
-      1,
+      2,
     );
     loads.set(`${toC.id}:${ts}`, (loads.get(`${toC.id}:${ts}`) ?? 0) + 1);
     planned.push({ e, fs, ts, fromC, toC });
@@ -642,7 +642,9 @@ export function computeComponentLayout(spec) {
       method: ep.method,
       path: wrapLabel(ep.path || ep.method, c.w - (ep.method ? badgeW + 16 : 16), 9, 1)[0],
       x: c.x + 7,
-      y: itemsY + i * (BUBBLE_H + BUBBLE_GAP) - 11,
+      // Sin el -11 anterior: itemsY ya baja 10px de la baseline del nombre y
+      // el -11 levantaba la primera burbuja hasta pisar ~3-4px del rótulo.
+      y: itemsY + i * (BUBBLE_H + BUBBLE_GAP),
       w: c.w - 14,
       h: BUBBLE_H,
       badgeW,
@@ -840,6 +842,10 @@ export function computeComponentLayout(spec) {
         const lw = (i.name.length + 4) * 6;
         if (i.side === 'right') hit(box, i.cx + LOLLI_R + lw, i.cy);
         if (i.side === 'bottom') hit(box, i.cx, i.cy + LOLLI_R + 18);
+        // Nombres a izquierda/arriba también ocupan lienzo: sin estas cajas el
+        // rótulo de una interfaz del borde se recortaba en el PNG.
+        if (i.side === 'left') hit(box, i.cx - LOLLI_R - lw, i.cy);
+        if (i.side === 'top') hit(box, i.cx, i.cy - LOLLI_R - 18);
       }
     }
     for (const e of edges) {

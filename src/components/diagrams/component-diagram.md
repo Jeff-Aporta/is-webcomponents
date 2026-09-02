@@ -25,7 +25,10 @@ flujo y del bloque, este modo tiene tres primitivas declaradas:
   conector UML `-(O-`.
 
 Las posiciones del payload son la **semilla**. En `pack` / `triptych` el
-motor dispersa cajas con una distancia mínima configurable (`min-gap`).
+motor reorganiza **paquetes con hijos** (y en `triptych`, los `sources`
+declarados); `min-gap` es el piso de esas separaciones. Los componentes
+**libres** (sin `package`) conservan su posición del payload: para rejilla
+automática mételos en paquetes, o usa `manual` y colócalos tú.
 `manual` deja x/y tal cual.
 
 Este módulo registra `<is-component-diagram>`.
@@ -188,10 +191,11 @@ No declara integración form-associated propia en este módulo.
   sintetiza socket `C` en el origen y lollipop `O` en el destino.
 - `dependency` sin lollipops se dibuja discontinua con punta polígono
   (PNG-safe, no `<marker>`). El conector `O–C` va en línea continua.
-- El empaque (`pack` / `triptych`) dispersa cajas: `min-gap` (attr) o
-  `layout.minGap` es la distancia mínima (default 64). `rowGap` /
-  `colGutter` / `pkgCorridor` / `sourceGap` afinan un eje si son mayores
-  que ese piso. `manual` no mueve x/y.
+- El empaque (`pack` / `triptych`) reorganiza paquetes con hijos (y en
+  `triptych`, los `sources`): `min-gap` (attr) o `layout.minGap` es el piso
+  de separación (default 64). `rowGap` / `colGutter` / `pkgCorridor` /
+  `sourceGap` afinan un eje si son mayores que ese piso. Los componentes
+  libres conservan su posición semilla. `manual` no mueve x/y.
 - El título del paquete (`«estereotipo» nombre`) es una caja: las aristas
   la rodean. Sin eso el rótulo queda ilegible.
 - El estilo (cajón translúcido, dashed `2 5`, Tahoma, cajas `chipFill`)

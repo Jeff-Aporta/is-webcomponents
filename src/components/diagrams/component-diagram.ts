@@ -131,8 +131,8 @@ class IsComponentDiagram extends DiagramElementBase {
       this.svg.appendChild(t);
     }
 
-    // Paquetes (fondo) → aristas → cajas → lollipops O/C encima, para que el
-    // conector UML no quede tapado. Las etiquetas van al final.
+    // Paquetes (fondo) → cajas → aristas → lollipops O/C → etiquetas encima,
+    // para que el conector UML no quede tapado por las cajas.
     this.#buildPackages(layout, theme);
     this.#buildComponents(layout, theme);
     this.#etiquetasEdges = svgEl('g', { class: 'cd-edge-labels' });
