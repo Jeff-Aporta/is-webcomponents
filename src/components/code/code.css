@@ -388,3 +388,82 @@
   font-family: var(--is-sans, system-ui, sans-serif);
   font-size: 0.8rem;
 }
+
+/* ── Vista NATIVA (readonly, motor code-highlight, sin CodeMirror) ──
+   Los tokens .tok-* consumen las MISMAS custom properties --is-code-* que
+   los .cm-* (code-theme.js / theme-config). El shell .CodeMirror-* de arriba
+   solo sigue vivo para el modo editable (fase de migración). */
+.editor-host .ic-scroll {
+  flex: 1 1 auto;
+  min-height: var(--is-code-min-height, 12rem);
+  display: flex;
+  align-items: flex-start;
+  overflow: auto;
+}
+
+:host([compact]) .editor-host .ic-scroll {
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.editor-host .ic-native {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0.7rem 0.95rem;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  white-space: pre;
+  tab-size: 2;
+  min-width: max-content;
+}
+
+.editor-host .ic-gutter {
+  flex: 0 0 auto;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  padding: 0.7rem 0;
+  text-align: right;
+  color: var(--is-code-gutter-fg);
+  background: var(--is-code-gutter-bg);
+  border-right: 1px solid var(--is-code-gutter-border);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.editor-host .ic-ln {
+  display: block;
+  padding: 0 8px 0 12px;
+}
+
+.editor-host .ic-line {
+  line-height: inherit;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Tokens nativos → mismas variables que los .cm-* */
+.tok-comment   { color: var(--is-code-comment); font-style: italic; }
+.tok-keyword   { color: var(--is-code-keyword); font-weight: 500; }
+.tok-string    { color: var(--is-code-string); }
+.tok-number    { color: var(--is-code-number); }
+.tok-operator  { color: var(--is-code-operator); }
+.tok-punctuation { color: var(--is-code-punctuation); }
+.tok-tag       { color: var(--is-code-tag); font-weight: 600; }
+.tok-attribute { color: var(--is-code-attribute); }
+.tok-property  { color: var(--is-code-property); }
+.tok-function  { color: var(--is-code-function); }
+.tok-variable  { color: var(--is-code-variable); }
+.tok-atom      { color: var(--is-code-atom); }
+.tok-builtin   { color: var(--is-code-builtin); }
+.tok-type      { color: var(--is-code-type); }
+.tok-meta      { color: var(--is-code-meta); }
+
+/* Bandas de diff en la vista nativa (la clase va en el div de línea). */
+.editor-host .ic-line.is-diff-line-add { background: var(--is-code-diff-added-band); }
+.editor-host .ic-line.is-diff-line-del { background: var(--is-code-diff-removed-band); }
+.editor-host .ic-line.is-diff-line-hunk { background: var(--is-code-diff-hunk-band); }
+.editor-host .ic-line.is-diff-line-file,
+.editor-host .ic-line.is-diff-line-commit { background: transparent; }

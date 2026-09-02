@@ -206,8 +206,9 @@ const procesarPendientes = () => {
       pintando = false;
     }
   };
-  if (isReady()) pintar();
-  else ensureCodeMirror().then(pintar).catch(console.error);
+  // Sin puerta de CodeMirror: <is-code> read-only pinta con el motor nativo;
+  // si la instancia es editable, su propio bootstrap carga CM cuando hace falta.
+  pintar();
 };
 
 const encolar = (el) => {

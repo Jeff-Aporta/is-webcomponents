@@ -4,19 +4,21 @@
  * La lógica vive en `components/_shared/highlight-code.js` para que
  * `<is-cdn-snippet>` (un componente, que NO puede importar de `scripts/`)
  * pueda usarla con un import estático. Aquí solo queda el arranque de la
- * página: cargar CodeMirror, pintar y escuchar los cambios de tema.
+ * página: pintar (montando `<is-code readonly compact>`) y escuchar el tema.
+ *
+ * El motor ya NO carga CodeMirror para el docs: `<is-code>` pinta read-only
+ * con su motor nativo (code-highlight) y resuelve el tema con las variables
+ * --is-code-* (applyThemeConfig reacciona a is-theme-change). CodeMirror solo
+ * se descarga cuando existe una instancia EDITABLE de <is-code>.
  *
  * Ya no hay puentes en `window`: quien necesite pintar importa `paint`.
  */
 import {
-  ensureCodeMirror,
-  isReady,
   paint,
-  reapplyTheme,
   repaint,
   softFormat,
+  reapplyTheme,
   watchDom,
-  watchTheme,
 } from '../src/components/_shared/highlight-code.js';
 
 export { paint, repaint, softFormat, reapplyTheme };
@@ -24,38 +26,29 @@ export { paint, repaint, softFormat, reapplyTheme };
 /**
  * El docs ya no es HTML estático: `<is-preview-component>` monta cada preview
  * cuando su JSON termina de bajar, así que el barrido del arranque solo
- * alcanza a los `<pre>` que existieran en ese instante. Con CodeMirror en
- * caché ese barrido gana la carrera y el código se queda sin colorear.
+ * alcanza a los `<pre>` que existieran en ese instante.
  *
- * Cuando CodeMirror ya está listo se pinta en el MISMO turno: el botón de
- * copiar de `docs-chrome.js` escucha el mismo evento después de este listener
- * y lee `data-cm-source`, el texto ya dedentado.
+ * Se pinta en el MISMO turno: el botón de copiar de `docs-chrome.js` escucha
+ * el mismo evento después de este listener y lee `data-cm-source` (nombre
+ * legacy; el texto ya dedentado).
  */
-const repintar = () => {
-  if (isReady()) {
-    paint();
-    return;
-  }
-  ensureCodeMirror().then(() => paint()).catch(console.error);
-};
+const repintar = () => paint();
 
 document.addEventListener('is-preview-ready', repintar);
 
-// El observer se engancha ANTES de que CodeMirror baje: así los `<pre>` que
-// aparezcan mientras carga quedan encolados y ninguno se pierde.
+// El observer se engancha desde el arranque: los `<pre>`/`<is-code>` que
+// aparezcan después quedan encolados y ninguno se pierde.
 watchDom();
 
-const boot = async () => {
-  await ensureCodeMirror();
+const boot = () => {
   paint();
-  watchTheme();
 };
 
 // Los módulos son diferidos: el DOM ya está parseado al ejecutarse. Aun así
 // mantenemos la guarda por si alguien importa este módulo desde un script
 // clásico inyectado antes de tiempo.
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => { boot().catch(console.error); }, { once: true });
+  document.addEventListener('DOMContentLoaded', () => boot(), { once: true });
 } else {
-  boot().catch(console.error);
+  boot();
 }
