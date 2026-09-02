@@ -74,7 +74,9 @@ const previewsDir = join(root, 'src', 'previews');
 const previews = await walk(previewsDir);
 const candidates = [];
 for (const f of previews) {
-  const body = await readFile(f, 'utf8');
+  let body = await readFile(f, 'utf8');
+  // En los JSON las comillas del markup van escapadas (icon=\\"mdi:..\\").
+  if (f.endsWith('.json')) body = body.replace(/\\"/g, '"');
   let count = 0;
   let m;
   ICON_RE.lastIndex = 0;
