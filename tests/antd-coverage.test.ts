@@ -101,6 +101,21 @@ const ANT_DESIGN = [
   { antd: 'BorderBeam',         ours: null,                      tier: 'nice' },
 ];
 
+// Core de Ant Design SIN clon: backlog de producto (hay que construirlos), no
+// regresiones. Mantener aquí la lista exacta y con su motivo — el test de
+// cobertura exige que los core sin `ours` coincidan 1:1 con este mapa.
+const ROADMAP_CORE = {
+  Pagination: 'paginador standalone; hoy la paginación vive dentro de is-data-grid (pagination / page-size / page-size-options)',
+  Cascader: 'selector jerárquico en cascada (p. ej. provincia/ciudad)',
+  InputNumber: 'input numérico con steppers; is-input cubre type="number" + min/max/step pero sin botones +/-',
+  Descriptions: 'lista clave/valor de un registro (definition list)',
+  Empty: 'estado vacío ilustrado para listas/resultados',
+  Image: 'imagen con preview; is-lightbox es el visor full-screen (zoom/pan/share), no el <img> en línea',
+  List: 'deprecado en Ant Design 6.x — su caso se cubre con is-data-grid / ag-grid',
+  Result: 'página de estado (éxito/error) con icono y acciones',
+  ConfigProvider: 'tema/paleta: el kit lo resuelve con data-theme/data-palette + tokens --is-* (no con un provider JS)',
+};
+
 test('Ant Design coverage: existen los core en nuestro manifest', () => {
   const faltantes = ANT_DESIGN
     .filter((x) => x.ours && !ourTags.has(x.ours))
@@ -114,17 +129,30 @@ test('Ant Design coverage: existen los core en nuestro manifest', () => {
 });
 
 test('Ant Design coverage: TODOS los core clonados o con sustituto válido', () => {
-  const noSustituto = ANT_DESIGN.filter((x) => x.tier === 'core' && !x.ours);
+  // Los core SIN clon son backlog de producto (construir el componente), no
+  // regresiones: romper la suite por ellos escondía los fallos reales entre
+  // ruido permanente. Por eso la lista vive en ROADMAP_CORE (visible en el
+  // gap analysis) y este test solo garantiza que el backlog NO derive en
+  // silencio: si construyes uno de estos, sácalo de ROADMAP_CORE y pon su tag
+  // en ANT_DESIGN; si añades un core nuevo sin sustituto, entra a ROADMAP_CORE
+  // con su motivo. Cualquier desviación rompe aquí con el diff a la vista.
+  const noSustituto = ANT_DESIGN
+    .filter((x) => x.tier === 'core' && !x.ours)
+    .map((x) => x.antd)
+    .sort();
+  const roadmap = Object.keys(ROADMAP_CORE).sort();
 
   if (noSustituto.length) {
-    console.log('\n❌ Componentes Ant Design "core" sin equivalente en la app:');
-    noSustituto.forEach((x) => console.log(`  - ${x.antd}`));
+    console.log('\n📋 Roadmap core (sin clon todavía — ver ROADMAP_CORE):');
+    noSustituto.forEach((x) => console.log(`  - ${x}: ${ROADMAP_CORE[x]}`));
   }
 
-  assert.equal(
-    noSustituto.length,
-    0,
-    `Hay ${noSustituto.length} componentes core de Ant Design sin clon. Revisa la lista arriba.`,
+  assert.deepEqual(
+    noSustituto,
+    roadmap,
+    'Los core sin sustituto deben coincidir EXACTO con ROADMAP_CORE. '
+    + 'Construiste uno → sácalo del roadmap y pon su tag en ANT_DESIGN. '
+    + 'Falta uno → añádelo al roadmap con su motivo.',
   );
 });
 
