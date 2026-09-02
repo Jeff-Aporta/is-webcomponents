@@ -161,8 +161,13 @@ export function placeEdgeActors({
       }
     }
     if (!best) {
+      // Fallback: la chip no cabe junto al path (diagrama apretado). Se cuelga
+      // bajo el lienzo, pero su X sale del punto medio REAL del path: usar
+      // (fromX+toX)/2 aquí producía NaN — la mayoría de specs no publican
+      // fromX/toX, solo component-spec — y el lienzo explotaba a "0 0 NaN h".
+      const fallbackX = Number.isFinite(mid.x) ? mid.x : (Number(e.fromX) + Number(e.toX)) / 2;
       best = {
-        x: Math.max(4, (Number(e.fromX) + Number(e.toX)) / 2 - w / 2),
+        x: Math.max(4, fallbackX - w / 2),
         y: canvas.height + 8 + placed.length * (h + 6),
         w,
         h,

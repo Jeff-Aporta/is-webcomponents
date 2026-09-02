@@ -190,8 +190,14 @@ export function computeQuadrantLayout(spec) {
   const maxLabel = Math.max(...points.map((pt) => Math.ceil(richTextPlain(pt.label).length * 5.6)), 0);
   const legendX = legendGroups ? Math.max(plot.x + plot.w + 24, width - legendW - 8) : 0;
 
+  // La etiqueta de un punto ancla a la IZQUIERDA en `cx + r + 5` (ver el
+  // renderer): el punto más a la derecha (cx = plot.x + plot.w) necesita TODO
+  // su ancho por delante, no media etiqueta. Media etiqueta recortaba los
+  // rótulos largos del borde derecho en el PNG.
+  const width2 = Math.max(width, plot.x + plot.w + DOT_R + 5 + maxLabel);
+
   return {
-    width: Math.max(width, plot.x + plot.w + maxLabel / 2 + 24),
+    width: width2,
     height,
     plot,
     points,

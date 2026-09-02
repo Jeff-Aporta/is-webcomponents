@@ -19,9 +19,10 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * pasar el cursor sobre la tarjeta, encima del `title` nativo del navegador.
  *
  * Atributos
- *   direction   down (default) | up | right
- *   node-width, node-height  (default 200x80)
- *   gap         espacio entre nodos (default 24)
+ *   direction   down (default) | up | right — POR IMPLEMENTAR: el layout es
+ *               top-down (los valores up/right no cambian nada hoy)
+ *   node-width, node-height  (default 200x78)
+ *   gap         espacio entre nodos (default 28)
  *   color       inline (default) | viewer — lo fija el visor, no a mano
  *   open-on-click  clic en el fondo (fuera de una tarjeta) abre <is-diagram-lightbox>
  *
@@ -39,6 +40,14 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 (() => {
   const OBSERVED = ['direction', 'node-width', 'node-height', 'gap', 'color'];
   const MOVE_MS = 300;
+
+  /** Iniciales del avatar por defecto (se perdió en la migración a TS y las
+   *  tarjetas sin `photo` tiraban ReferenceError en cada render). */
+  function initialsOf(name) {
+    const words = String(name ?? '').trim().split(/\s+/).filter(Boolean);
+    const ini = words.slice(0, 2).map((w) => w[0] ?? '').join('').toUpperCase();
+    return ini || '?';
+  }
 
   class IsOrgChart extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
@@ -169,11 +178,15 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 
       if (this.#root && visible.has(this.#root)) place(this.#root, 0);
 
-      // Normalizar a coordenadas positivas
+      // Normalizar a coordenadas positivas. Las tarjetas se anclan por su
+      // ESQUINA izquierda (tx = cx - nodeW/2): si el centro de la hoja más a la
+      // izquierda caía en 60, su caja empezaba en 60 - nodeW/2 y el viewBox
+      // (que arranca en 0) recortaba ~nodeW/2 - 60 px de texto. La base debe
+      // dejar media tarjeta de margen, no el centro pegado al borde.
       const offsets = [...layout.values()].map((p) => p.x);
       const min = offsets.length ? Math.min(...offsets) : 0;
       const max = offsets.length ? Math.max(...offsets) : 0;
-      const baseX = 60 - min;
+      const baseX = 60 + nodeW / 2 - min;
 
       this.#reconcileEdges(layout, baseX, nodeH, visible);
       this.#reconcileNodes(layout, baseX, nodeW, nodeH, visible);
@@ -286,7 +299,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       const collapsed = this.#collapsed.has(id);
       const detail = node.detail || node.tooltip || '';
       entry.wrap.innerHTML = `
-        ${node.photo ? `<img class="photo" src="${node.photo}" alt="">` : `<span class="photo photo--fallback">${initialsOf(node.name || node.id)}</span>`}
+        ${node.photo ? `<img class="photo" src="${node.photo}" alt="">` : `<span class="photo photo--fallback">${escapeHtml(initialsOf(node.name || node.id))}</span>`}
         <div class="meta">
           <b class="name">${escapeHtml(node.name || node.id)}</b>
           <small class="title">${escapeHtml(node.title || '')}</small>

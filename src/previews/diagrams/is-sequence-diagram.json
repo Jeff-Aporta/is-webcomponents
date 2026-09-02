@@ -93,7 +93,7 @@
           ],
           "rows": [
             [
-              "<code class=\"code\">variant</code>",
+              "<code class=\"code\">color</code>",
               "<code class=\"code\">inline</code> · <code class=\"code\">viewer</code>",
               "inline (default) es estático y abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación."
             ],

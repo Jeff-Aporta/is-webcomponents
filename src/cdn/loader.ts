@@ -435,7 +435,10 @@ export const ISWebComponentsLoader = {
    * @returns {Promise<{ loaded: string[], skipped: string[] }>}
    */
   async load(...args) {
-    const { ids } = parseArgs(args);
+    // parseArgs es rest: pasar `args` suelto (no el array como único argumento)
+    // o `ids` sale siempre vacío y load() no carga nada (regresión del paso a
+    // TS: `parseArgs(args)` con firma `(...args)` → ids=[] en silencio).
+    const { ids } = parseArgs(...args);
     if (!ids.length) return { loaded: [], skipped: [] };
 
     /** @type {string[]} */

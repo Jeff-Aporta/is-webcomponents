@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
@@ -245,7 +245,7 @@ class IsTimeline extends DiagramElementBase {
     if (this.isViewer) {
       const item = e.composedPath().find((x) => x?.dataset?.groupId);
       if (item) {
-        emit(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
       }
       return;
     }

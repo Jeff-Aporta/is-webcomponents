@@ -202,7 +202,12 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
 
   const packages = (Array.isArray(src.packages) ? src.packages : []).map(readPackage);
   const components = rawComponents.map(readComponent).map((c) => ({ ...c, h: fittedHeight(c) }));
-  const interfaces = (Array.isArray(src.interfaces) ? src.interfaces : []).map(readInterface);
+  const compIds = new Set(components.map((c) => c.id));
+  // Interfaces huérfanas (component inexistente): se descartan como las aristas
+  // colgantes; si no, caían a cx/cy=(0,0) y se dibujaban sueltas en la esquina.
+  const interfaces = (Array.isArray(src.interfaces) ? src.interfaces : [])
+    .map(readInterface)
+    .filter((i) => compIds.has(i.component));
   const rawEdges = src.edges ?? src.links ?? src.connections ?? src.relations;
   const edges = (Array.isArray(rawEdges) ? rawEdges : []).map(readEdge);
   const layout = readLayout(src.layout);
@@ -421,9 +426,19 @@ function wireComponentDiagram(
     const { e, fromC, toC } = item;
     const fs = takeLeastLoaded(fromC, rankSides(fromC, toC), loads, 1);
     loads.set(`${fromC.id}:${fs}`, (loads.get(`${fromC.id}:${fs}`) ?? 0) + 1);
-    const ts = takeLeastLoaded(toC, outerSides(toC, clusterOf(toC), toC.package
-      ? components.filter((c) => c.package === toC.package)
-      : []), loads, 1);
+    // Lado del destino: si es un componente SOLO (sin hermanos de paquete que
+    // definan un clúster), outerSides veía dx=dy=0 y elegía SIEMPRE 'right' —
+    // el conector -(O- caía en el lado lejano y el cable daba un rodeo enorme.
+    // Para un destino único el lado que mira al origen es el correcto.
+    const toSibs = toC.package ? components.filter((c) => c.package === toC.package) : [];
+    const toCluster = clusterOf(toC);
+    const isLone = toCluster.w <= toC.w && toCluster.h <= toC.h;
+    const ts = takeLeastLoaded(
+      toC,
+      isLone ? rankSides(toC, fromC) : outerSides(toC, toCluster, toSibs),
+      loads,
+      1,
+    );
     loads.set(`${toC.id}:${ts}`, (loads.get(`${toC.id}:${ts}`) ?? 0) + 1);
     planned.push({ e, fs, ts, fromC, toC });
   }
@@ -667,9 +682,14 @@ export function computeComponentLayout(spec) {
 
   const pointOf = (iface) => (iface ? ifaceLineEnd(iface) : null);
 
+  // `hue` declarado por arista en el payload se honra; si no viene, la paleta
+  // ciclada de assignEdgeHues le asigna uno. Antes se pisaba SIEMPRE después
+  // de leerlo (lectura muerta).
+  const userHue = new Map();
+  for (const e of spec.edges) userHue.set(e, e.hue);
   assignEdgeHues(spec.edges);
   const edges = spec.edges.map((e) => {
-    const hue = e.hue;
+    const hue = userHue.get(e) ?? e.hue;
     const req = e.fromInterface ? ifaceById.get(e.fromInterface) : null;
     const prv = e.toInterface ? ifaceById.get(e.toInterface) : null;
     if (req) req.hue = hue;
@@ -741,9 +761,22 @@ export function computeComponentLayout(spec) {
     delete e._fromSide;
     delete e._toSide;
     if (!fromPt || !toPt) return;
+    // Los anillos O/C de interfaces AJENAS son obstáculos: sin ellos el router
+    // no los veía y un cable podía atravesar el disco del lollipop de otro
+    // componente (o del propio, en el rodeo del lado lejano).
+    const ringObst = interfaces
+      .filter((i) => i.id !== e.fromInterface && i.id !== e.toInterface && i.cx > 0)
+      .map((i) => ({
+        id: `ring-${i.id}`,
+        x: i.cx - LOLLI_R - 2,
+        y: i.cy - LOLLI_R - 2,
+        w: LOLLI_R * 2 + 4,
+        h: LOLLI_R * 2 + 4,
+      }));
     const obstaculos = [
       ...shiftedComps.filter((c) => c.id !== e.from && c.id !== e.to),
       ...titleObst,
+      ...ringObst,
     ];
     const fromBox = compById.get(e.from);
     const toBox = compById.get(e.to);

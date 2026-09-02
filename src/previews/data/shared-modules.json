@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-02T18:57:53.442Z",
+  "generatedAt": "2026-09-02T20:06:01.861Z",
   "count": 60,
   "modules": [
     {
@@ -216,7 +216,7 @@
       "id": "diagram-edge-actors",
       "path": "src/components/_shared/diagram-edge-actors.ts",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 6723,
+      "bytes": 7108,
       "exports": [
         "EDGE_ACTOR_H",
         "parsePathPoints  from",

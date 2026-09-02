@@ -194,7 +194,6 @@ export function mountFileMeta(tag, _scope = document) {
 document.addEventListener('is-preview-ready', (e) => {
   const { tag } = e.detail ?? {};
   if (typeof tag !== 'string') return;
-  sizesPromise = null; // re-leer sizes si el build local cambió
   mountFileMeta(tag);
 });
 

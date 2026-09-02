@@ -25,7 +25,9 @@ async function walk(dir) {
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) out.push(...await walk(p));
-    else if (e.isFile() && e.name.endsWith('.html')) out.push(p);
+    // Previews JSON (is-preview/v1): el markup de los demos viaja en strings
+    // HTML dentro del JSON (desde el folderize no hay .html por tag).
+    else if (e.isFile() && e.name.endsWith('.json')) out.push(p);
   }
   return out;
 }

@@ -57,10 +57,10 @@ import './org-chart.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `direction` | `down` \| `up` \| `right` | Sentido del crecimiento, default `down`. |
+| `direction` | `down` (solo) | Sentido de crecimiento. El layout es **top-down**; `up`/`right` se aceptan pero aún no cambian el render. |
 | `node-width` | number | Ancho de tarjeta en px, default `200`. |
-| `node-height` | number | Alto de tarjeta en px, default `80`. |
-| `gap` | number | Separación entre nodos en px, default `24`. |
+| `node-height` | number | Alto de tarjeta en px, default `78`. |
+| `gap` | number | Separación entre nodos en px, default `28`. |
 | `color` | `inline` \| `viewer` | Modo de render; lo fija el visor, no se escribe a mano. |
 | `open-on-click` | boolean | Clic en el fondo abre el visor. No es atributo observado: se lee en cada clic. |
 

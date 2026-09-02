@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveGanttSpec, computeGanttLayout } from './gantt-spec.js';
 import { shapePath } from './flowchart-spec.js';
@@ -285,7 +285,7 @@ class IsGantt extends DiagramElementBase {
     if (this.isViewer) {
       const item = e.composedPath().find((x) => x?.dataset?.groupId);
       if (item) {
-        emit(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
       }
       return;
     }

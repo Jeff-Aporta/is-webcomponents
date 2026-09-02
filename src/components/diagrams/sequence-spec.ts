@@ -14,6 +14,7 @@ import {
 } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
 const ICON_INLINE_W = 16;
@@ -111,15 +112,20 @@ function readMessage(raw, fallbackStep) {
   const log = normalizeSequenceLog(raw.log);
   const description = normalizeSequenceDesc(raw.desc ?? raw.description);
   const group = String(raw.group ?? '') || undefined;
+  const from = String(raw.from ?? '');
+  const to = String(raw.to ?? '');
   return {
     id: String(raw.id ?? `m${fallbackStep}`),
-    from: String(raw.from ?? ''),
-    to: String(raw.to ?? ''),
+    from,
+    to,
     label: String(raw.label ?? ''),
     log,
     description,
     group,
-    kind: raw.kind ?? 'sync',
+    // Sin kind explícito, un mensaje de un actor a SÍ MISMO es un self-loop
+    // (contrato del schema); el fallback 'sync' genérico dibujaba un stub
+    // degenerado que cruzaba la lifeline hacia atrás.
+    kind: raw.kind ?? (from && from === to ? 'self' : 'sync'),
     step: Number(raw.step ?? fallbackStep),
   };
 }
@@ -223,10 +229,11 @@ export function sequenceSpecToJson(spec) {
 
   if (spec.messages?.length) {
     seq.messages = spec.messages.map(sequenceMessageToJson);
-    return seq;
+  } else if (spec.preamble?.length) {
+    seq.preamble = spec.preamble.map(sequenceMessageToJson);
   }
-
-  if (spec.preamble?.length) seq.preamble = spec.preamble.map(sequenceMessageToJson);
+  // alt/epilogue conviven con `messages` (render mixto): el early-return de
+  // antes descartaba las ramas al serializar un payload mixto desde el visor.
   if (spec.alt?.branches?.length) {
     seq.alt = {
       branches: spec.alt.branches.map((b) => ({
@@ -317,7 +324,16 @@ function layoutActorPositions(boxW, flat) {
   const selfSide = new Array(n).fill(1);
   if (n <= 1) {
     const x0 = snapDiagramGrid(48 + (boxW[0] ?? 88) / 2);
-    return { x: [x0], rightMargin: Math.max((boxW[0] ?? 88) / 2 + 12, 24), selfSide };
+    // Actor único: su self-loop va a la derecha (selfSide=1) y no hay huecos
+    // entre columnas que lo reserven; el margen derecho debe crecer con el
+    // bucle + su etiqueta o ambos se recortan del lienzo.
+    let rightMargin = Math.max((boxW[0] ?? 88) / 2 + 12, 24);
+    for (const f of flat) {
+      if (f.kind === 'self') {
+        rightMargin = Math.max(rightMargin, LOOP_W + 12 + f.labelW + 8);
+      }
+    }
+    return { x: [x0], rightMargin, selfSide };
   }
 
   // Espacio que reclama a su derecha el self-loop de cada actor.
@@ -377,17 +393,34 @@ export function computeSequenceLayout(spec) {
 
   // 1) Aplanar mensajes en orden de render (preamble/messages → alt → epilogue).
   const flat = [];
+  const warnedActors = new Set();
   const toFlat = (m, branch, branchFirst = false) => {
-    const kind = m.kind ?? (m.from === m.to ? 'self' : 'sync');
-    const fromIdx = idx.get(m.from) ?? 0;
+    // from === to SIEMPRE es self (lo pinte como lo pinte el kind): un mensaje
+    // de un actor a sí mismo no puede ser una línea horizontal a la lifeline.
+    const kind = m.from === m.to ? 'self' : (m.kind ?? 'sync');
+    const fromIdx = idx.get(m.from);
     const toIdx = idx.get(m.to) ?? fromIdx;
+    // Actor inexistente: hoy se degradaba en silencio a "actor 0" (o a un
+    // stub A→A) y el diagrama mentía. Avisar, no callar.
+    if (fromIdx === undefined || toIdx === undefined) {
+      const missing = !idx.has(m.from) ? m.from : m.to;
+      if (missing && !warnedActors.has(missing)) {
+        warnedActors.add(missing);
+        console.warn(`[is-sequence-diagram] actor "${missing}" no declarado; se ignora el mensaje "${m.id}"`);
+      }
+      return null;
+    }
     return { m, kind, fromIdx, toIdx, labelW: diagramLabelW(m.label), branch, branchFirst };
   };
-  (spec.messages ?? spec.preamble ?? []).forEach((m) => flat.push(toFlat(m)));
+  const pushFlat = (m, b, first) => {
+    const f = toFlat(m, b, first);
+    if (f) flat.push(f);
+  };
+  (spec.messages ?? spec.preamble ?? []).forEach((m) => pushFlat(m));
   const altStart = flat.length;
-  spec.alt?.branches?.forEach((b) => b.messages.forEach((m, mi) => flat.push(toFlat(m, b.condition, mi === 0))));
+  spec.alt?.branches?.forEach((b) => b.messages.forEach((m, mi) => pushFlat(m, b.condition, mi === 0)));
   const altEnd = flat.length;
-  (spec.epilogue ?? []).forEach((m) => flat.push(toFlat(m)));
+  (spec.epilogue ?? []).forEach((m) => pushFlat(m));
 
   // 2) Posiciones X (auto) y ancho del lienzo.
   const { x: ax, rightMargin, selfSide } = layoutActorPositions(boxW, flat);
@@ -416,7 +449,13 @@ export function computeSequenceLayout(spec) {
   const baseW = snapDiagramGrid((ax[ax.length - 1] ?? 88) + rightMargin);
   // La leyenda vive a la derecha del último actor, nunca se monta encima.
   // El ancho del lienzo = lo que pide el diagrama + lo que pide la leyenda.
-  const W = legendGroups ? baseW + lastActorBoxHalf + legendW + 32 : baseW;
+  // El título/subtítulo se centran en width/2: si el contenido es más
+  // estrecho que el texto (actor único, pocos mensajes), la cabecera se salía
+  // por los dos lados del PNG — se ensancha con lo que pida la cabecera.
+  const W = Math.max(
+    legendGroups ? baseW + lastActorBoxHalf + legendW + 32 : baseW,
+    diagramHeaderWidth(title, subtitle),
+  );
   // legendX devuelve el inicio de la PRIMERA columna. Las siguientes se
   // calculan en el renderer sumando legendColsWidths[i-1] + LEGEND_GAP_X.
   const legendX = legendGroups ? baseW + lastActorBoxHalf + 16 : 0;

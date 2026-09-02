@@ -1,4 +1,4 @@
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveUseCaseSpec, computeUseCaseLayout } from './use-case-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
@@ -310,7 +310,7 @@ class IsUseCaseDiagram extends DiagramElementBase {
   #onClick = (e: PointerEvent) => {
     if (this.isViewer) {
       const item = e.composedPath().find((x) => x?.dataset?.groupId);
-      if (item) emit(this, 'is-toggle-group', { id: item.dataset.groupId });
+      if (item) emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
