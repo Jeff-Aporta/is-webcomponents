@@ -216,8 +216,15 @@ export function computeTimelineLayout(spec: object, opts = {}) {
   const outEvents = events.map((e) => {
     const lane = laneOf.get(e.id) ?? 0;
     const hue = e.hue ?? (e.group ? groupHue.get(e.group) : undefined);
+    const d = new Date(e.ms);
+    // La fecha del evento, formateada, para pintarla en la tarjeta: el dato
+    // temporal del componente no se veía en ningún sitio (los ticks del eje
+    // están comprimidos y no llevan texto).
+    const dateText = Number.isFinite(e.ms)
+      ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+      : undefined;
     const base = {
-      id: e.id, label: e.label, desc: e.description, hue, group: e.group, ms: e.ms,
+      id: e.id, label: e.label, desc: e.description, hue, group: e.group, ms: e.ms, dateText,
     };
     if (orientation === 'horizontal') {
       const side = lane % 2 === 0 ? -1 : 1; // -1 arriba, 1 abajo

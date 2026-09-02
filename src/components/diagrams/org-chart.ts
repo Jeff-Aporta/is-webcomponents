@@ -153,8 +153,9 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       }
 
       // Layout por niveles (Reingold-Tilford simplificado: anchura fija por hoja).
-      // Cada hoja reclama su propio carril horizontal (LEAF_W); cada padre se
-      // centra sobre el punto medio de sus hijos.
+      // Cada hoja reclama su propio carril (LEAF_W); cada padre se centra sobre
+      // el punto medio de sus hijos. El layout se guarda en ejes "hoja/depth"
+      // y se traduce a píxeles según `direction` (down | right | up).
       const layout = new Map();
       const LEAF_W = nodeW + gap;
       const LEAF_H = nodeH + 48;
@@ -163,9 +164,9 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       const place = (id, depth: number) => {
         const kids = (this.#children.get(id) || []).filter((k) => visible.has(k));
         if (!kids.length || this.#collapsed.has(id)) {
-          const x = leafIndex * LEAF_W;
+          const lane = leafIndex * LEAF_W;
           leafIndex += 1;
-          layout.set(id, { x, y: depth * LEAF_H });
+          layout.set(id, { x: lane, y: depth * LEAF_H });
           return layout.get(id);
         }
         const childPos = kids.map((k) => place(k, depth + 1));
@@ -178,28 +179,45 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 
       if (this.#root && visible.has(this.#root)) place(this.#root, 0);
 
-      // Normalizar a coordenadas positivas. Las tarjetas se anclan por su
-      // ESQUINA izquierda (tx = cx - nodeW/2): si el centro de la hoja más a la
-      // izquierda caía en 60, su caja empezaba en 60 - nodeW/2 y el viewBox
-      // (que arranca en 0) recortaba ~nodeW/2 - 60 px de texto. La base debe
-      // dejar media tarjeta de margen, no el centro pegado al borde.
-      const offsets = [...layout.values()].map((p) => p.x);
-      const min = offsets.length ? Math.min(...offsets) : 0;
-      const max = offsets.length ? Math.max(...offsets) : 0;
-      const baseX = 60 + nodeW / 2 - min;
+      // Traducir carriles/profundidades a coordenadas TOP-LEFT según la
+      // dirección pedida: down (default) | right | up. Las tarjetas se anclan
+      // por su esquina (el <g> se traduce a tx/ty), así que aquí NO se suma
+      // nodeW/2 — el margen izquierdo de 60 ya deja sitio a la primera tarjeta.
+      const dir = String(this.getAttribute('direction') || 'down');
+      const horizontal = dir === 'right';
+      const verticalFlip = dir === 'up';
+      const vals = [...layout.values()];
+      const minLane = vals.length ? Math.min(...vals.map((p) => p.x / LEAF_W)) : 0;
+      const depthCount = vals.length ? Math.max(...vals.map((p) => Math.round(p.y / LEAF_H))) + 1 : 1;
+      const laneSep = horizontal ? nodeH + gap : nodeW + gap;   // carriles
+      const depthSep = horizontal ? nodeW + 48 : nodeH + 48;    // niveles
+      const next = new Map();
+      for (const [id, p] of layout) {
+        const lane = p.x / LEAF_W - minLane;
+        const depth = Math.round(p.y / LEAF_H);
+        const x = horizontal
+          ? 60 + depth * depthSep
+          : 60 + lane * laneSep;
+        const y = horizontal
+          ? 60 + lane * laneSep
+          : (verticalFlip ? (depthCount - 1 - depth) * depthSep : depth * depthSep);
+        next.set(id, { x, y, lane, depth });
+      }
 
-      this.#reconcileEdges(layout, baseX, nodeH, visible);
-      this.#reconcileNodes(layout, baseX, nodeW, nodeH, visible);
+      this.#reconcileEdges(next, nodeW, nodeH, visible, horizontal);
+      this.#reconcileNodes(next, nodeW, nodeH, visible);
 
-      const maxY = offsets.length ? Math.max(...[...layout.values()].map((p) => p.y)) : 0;
-      const contentW = Math.max(320, baseX + max + nodeW / 2 + 60);
+      const maxX = vals.length ? Math.max(...[...next.values()].map((p) => p.x)) : 0;
+      const maxY = vals.length ? Math.max(...[...next.values()].map((p) => p.y)) : 0;
+      const contentW = Math.max(320, maxX + nodeW + 60);
       const contentH = Math.max(240, maxY + nodeH + 60);
       this.#svg.setAttribute('viewBox', `0 0 ${contentW} ${contentH}`);
+      this.#lastPos = next;
     }
 
     /** Aristas: se re-derivan por clave `parent->hijo`, reconciliando en vez de
      *  recrear, así el CSS `transition: d` las anima cuando cambian de forma. */
-    #reconcileEdges(layout, baseX, nodeH, visible) {
+    #reconcileEdges(layout, nodeW, nodeH, visible, horizontal) {
       const seen = new Set();
       for (const [id, pos] of layout) {
         const parent = this.#nodes.get(id)?.parent;
@@ -207,11 +225,23 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
         const key = `${parent}>${id}`;
         seen.add(key);
         const p = layout.get(parent);
-        const x1 = baseX + p.x;
-        const y1 = p.y + nodeH;
-        const x2 = baseX + pos.x;
-        const y2 = pos.y;
-        const d = `M ${x1} ${y1} C ${x1} ${(y1 + y2) / 2} ${x2} ${(y1 + y2) / 2} ${x2} ${y2}`;
+        let d;
+        if (horizontal) {
+          // Derecha: sale del borde derecho del padre y entra por la izquierda.
+          const x1 = p.x + nodeW;
+          const y1 = p.y + nodeH / 2;
+          const x2 = pos.x;
+          const y2 = pos.y + nodeH / 2;
+          d = `M ${x1} ${y1} C ${(x1 + x2) / 2} ${y1} ${(x1 + x2) / 2} ${y2} ${x2} ${y2}`;
+        } else {
+          // Vertical (down/up): sale del borde inferior del padre y entra por
+          // arriba del hijo (las coordenadas ya vienen volteadas para `up`).
+          const x1 = p.x + nodeW / 2;
+          const y1 = p.y + nodeH;
+          const x2 = pos.x + nodeW / 2;
+          const y2 = pos.y;
+          d = `M ${x1} ${y1} C ${x1} ${(y1 + y2) / 2} ${x2} ${(y1 + y2) / 2} ${x2} ${y2}`;
+        }
         let path = this.#edgeEls.get(key);
         if (!path) {
           path = svgEl('path', { class: 'edge', fill: 'none', d });
@@ -234,25 +264,20 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 
     /** Nodos: se reconcilian por id y se anima `transform` (CSS transition)
      *  para que expandir/plegar reacomode las tarjetas en vez de saltar. */
-    #reconcileNodes(layout, baseX, nodeW: number, nodeH, visible) {
+    #reconcileNodes(layout, nodeW: number, nodeH, visible) {
       const seen = new Set();
-      const nextPos = new Map();
       for (const [id, pos] of layout) {
-        const cx = baseX + pos.x;
-        const cy = pos.y;
-        nextPos.set(id, { cx, cy });
         seen.add(id);
-        const tx = cx - nodeW / 2;
-        const ty = cy;
-
+        const tx = pos.x;
+        const ty = pos.y;
         let entry = this.#nodeEls.get(id);
         if (!entry) {
           entry = this.#createNodeEl(id, nodeW, nodeH);
           this.#svg.appendChild(entry.g);
           this.#nodeEls.set(id, entry);
           const anchor = this.#lastPos.get(this.#nodes.get(id)?.parent);
-          const startTx = (anchor ? anchor.cx : cx) - nodeW / 2;
-          const startTy = anchor ? anchor.cy : cy;
+          const startTx = anchor ? anchor.x : tx;
+          const startTy = anchor ? anchor.y : ty;
           entry.g.style.opacity = '0';
           entry.g.setAttribute('transform', `translate(${startTx}, ${startTy})`);
           // Reflow forzado: sin esto el navegador colapsa el estado inicial
@@ -272,14 +297,12 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
         if (seen.has(id)) continue;
         const node = this.#nodes.get(id);
         const anchor = this.#lastPos.get(node?.parent) || this.#lastPos.get(id);
-        if (anchor) entry.g.setAttribute('transform', `translate(${anchor.cx - nodeW / 2}, ${anchor.cy})`);
+        if (anchor) entry.g.setAttribute('transform', `translate(${anchor.x}, ${anchor.y})`);
         entry.g.style.opacity = '0';
         this.#nodeEls.delete(id);
         const g = entry.g;
         setTimeout(() => g.remove(), MOVE_MS);
       }
-
-      this.#lastPos = nextPos;
     }
 
     #createNodeEl(id, nodeW, nodeH) {

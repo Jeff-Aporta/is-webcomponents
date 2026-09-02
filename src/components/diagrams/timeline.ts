@@ -197,11 +197,30 @@ class IsTimeline extends DiagramElementBase {
       div.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
       div.className = 'tl-event-label';
       Object.assign(div.style, {
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        width: '100%', height: '100%', fontSize: '10.5px', fontWeight: '600',
-        fontFamily: 'Tahoma,Arial,sans-serif', color: theme.text, lineHeight: '1.2', textAlign: 'center',
+        display: 'flex', flexDirection: 'column', justifyContent: 'center',
+        width: '100%', height: '100%', fontFamily: 'Tahoma,Arial,sans-serif',
+        color: theme.text, textAlign: 'center', overflow: 'hidden',
       });
-      div.innerHTML = inlineMdWeb(e.label);
+      // La fecha del evento va en una línea corta arriba de la tarjeta (solo si
+      // el label no la incluye ya: payloads antiguos la llevaban incrustada).
+      const showDate = e.dateText && !/^\s*\d{4}-\d{2}-\d{2}/.test(e.label || '');
+      if (showDate) {
+        const d = document.createElement('div');
+        d.textContent = e.dateText;
+        Object.assign(d.style, {
+          flex: '0 0 auto', fontSize: '9px', lineHeight: '11px', color: theme.muted,
+          fontWeight: '600', letterSpacing: '0.02em', whiteSpace: 'nowrap',
+        });
+        div.appendChild(d);
+      }
+      const body = document.createElement('div');
+      body.style.cssText = [
+        'flex:1 1 auto', 'min-height:0', 'display:flex', 'align-items:center',
+        'justify-content:center', `font-size:${showDate ? '9.5' : '10.5'}px`, 'font-weight:600',
+        'line-height:1.15', 'overflow:hidden',
+      ].join(';');
+      body.innerHTML = inlineMdWeb(e.label);
+      div.appendChild(body);
       fo.appendChild(div);
       g.appendChild(fo);
 

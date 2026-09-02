@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-02T20:06:01.861Z",
+  "generatedAt": "2026-09-02T20:19:07.777Z",
   "count": 60,
   "modules": [
     {
@@ -816,7 +816,7 @@
       "id": "tree-layout",
       "path": "src/components/_shared/tree-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
-      "bytes": 13935,
+      "bytes": 14378,
       "exports": [
         "buildTree",
         "layoutTree",

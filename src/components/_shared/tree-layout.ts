@@ -280,7 +280,12 @@ export function layoutRadialTree(root, opts = {}) {
     radiusAtDepth[d] = r;
   }
 
-  const cx = Math.max(radiusStep, radiusAtDepth[maxDepth] + 60);
+  // El lienzo parte del centro del anillo MÁS externo + la mitad de la DIAGONAL
+  // del nodo más grande: antes solo sumaba 60 px al centro del anillo y un nodo
+  // largo del anillo exterior (o de cualquier anillo) se salía del viewBox por
+  // el lado que apuntara (p. ej. hojas ~150 px en ángulo π quedaban a x negativa).
+  const maxDiagHalf = entries.reduce((m: number, e) => Math.max(m, Math.hypot(e.w, e.h) / 2), 0);
+  const cx = Math.max(radiusStep, radiusAtDepth[maxDepth] + maxDiagHalf + 48);
   const cy = cx;
 
   const outNodes = entries.map((e) => {
