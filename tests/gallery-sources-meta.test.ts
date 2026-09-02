@@ -96,7 +96,12 @@ test('is-code preserva scroll del is-main (evita F5 al final)', () => {
   const src = read('src/components/code/code.ts');
   assert.match(src, /#withOuterScroll/);
   assert.match(src, /closest\?\.\(['"]is-main, \.main['"]\)|closest\?\.\(['"]is-main/);
-  assert.match(src, /!this\.#cm\.getValue\(\)/);
+  // Motor nativo: ningún path llama scrollIntoView (el que movía el is-main al
+  // final en F5) y el scroll de edición queda local (textarea .ic-input con
+  // translate del <pre>), nunca sobre el ancestro is-main/.main.
+  assert.match(src, /#onEditScroll/);
+  assert.match(src, /if \(this\.#native\) return;/);
+  assert.doesNotMatch(src, /\.scrollIntoView\(/);
 });
 
 test('is-main: restore window amplio + scroll-behavior auto en CSS', () => {

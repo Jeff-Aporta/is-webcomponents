@@ -1,6 +1,7 @@
 /**
- * <is-code> — Editor de código (CodeMirror 5) con langs, temas JSON,
- * formateo estilo Prettier, marks (highlight/tooltip) y API code2json/json2code.
+ * <is-code> — Editor de código con motor NATIVO (code-highlight, sin
+ * CodeMirror): langs, temas JSON, formateo estilo Prettier, marks y API
+ * code2json/json2code.
  *
  * Atributos
  *   lang              javascript | typescript | jsx | tsx | html | css | json | python | shell | curl | plaintext
@@ -30,9 +31,8 @@ import {
 } from '../_shared/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
-import { ensureCodeMirrorEditor, adoptCodeMirrorCss, CODEMIRROR_CDN } from '../_shared/code-cm.js';
 import {
-  ensureLanguage, listLanguages, registerLanguage, resolveLanguage, inferLanguage,
+  listLanguages, registerLanguage, resolveLanguage, inferLanguage,
 } from '../_shared/code-langs.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from '../_shared/code-format.js';
 import { applyThemeConfig, parseThemeConfig } from '../_shared/code-theme.js';
@@ -83,12 +83,14 @@ class IsCode extends ElementBase {
   #textarea = null;
   #host = null;
   #tooltip = null;
-  #cm = null;
+  #cm = null;           // legacy: siempre null (motor propio desde la migración)
   #native = false;
   #nativeRoot = null;
   #nativeText = null;
+  #editing = false;
+  #ta = null;
+  #activeLine = -1;
   #ready = false;
-  #suppress = false;
   #marks = [];
   /** @type {Map<string, object>} */
   #cmMarks = new Map();
@@ -327,12 +329,21 @@ class IsCode extends ElementBase {
   }
 
   focus() {
+    if (this.#editing) {
+      this.#ta?.focus();
+      return;
+    }
     if (this.#native) return; // readonly nativo: sin caret editable
     this.#cm?.focus();
   }
 
   refresh() {
-    if (this.#native) return; // sin scrollIntoView ni mediciones de CM
+    if (this.#native) {
+      // Sin scrollIntoView ni mediciones de CM: solo resincroniza el
+      // transform del <pre> (por si cambió fuente/tamaño del contenedor).
+      if (this.#editing) this.#onEditScroll();
+      return;
+    }
     this.#withOuterScroll(() => this.#cm?.refresh());
   }
 
@@ -422,81 +433,26 @@ class IsCode extends ElementBase {
         this.setAttribute('lang', inferLanguage(this.#pendingValue));
       }
 
-      // Ruta NATIVA: readonly (docs/snippets/demos) se pinta con el motor
-      // propio code-highlight, sin cargar CodeMirror. El modo editable sigue
-      // en CM en esta fase de migración (se elimina en la siguiente).
-      if (this.readonly && !this.disabled) {
-        this.#bootNative();
-        return;
-      }
-
-      const CodeMirror = await ensureCodeMirrorEditor();
-
-      // El snippet del demo-code llega mientras CM cargaba (panel recién abierto).
-      // Si no re-leemos aquí, el editor queda vacío aunque value/data-src existan.
+      // Re-leer la semilla tardía (demo-code pudo llegar mientras cargaba).
       if (!docAttr) {
         const late = this.#readSeedText();
         if (late) this.#pendingValue = late;
       }
-
-      // Vista docs: pretty ligero antes de montar CM (saltos + indent).
+      // Vista docs: pretty ligero antes de montar (saltos + indent).
       if (this.compact && this.readonly && this.#pendingValue != null) {
         this.#pendingValue = softFormat(this.#pendingValue, softFormatMode(this.lang));
         this.setAttribute('value', this.#pendingValue);
       }
-      // CM CSS en document no entra al shadow: hay que adoptarlo aquí.
-      await adoptCodeMirrorCss(this.shadowRoot!, [
-        `${CODEMIRROR_CDN}/lib/codemirror.min.css`,
-      ]);
-      const { mode: cmMode } = await ensureLanguage(this.lang);
 
-      this.#textarea.value = this.#pendingValue ?? '';
-      this.#withOuterScroll(() => {
-        this.#cm = CodeMirror.fromTextArea(this.#textarea, {
-          mode: cmMode,
-          theme: 'is-code',
-          lineNumbers: this.lineNumbers,
-          lineWrapping: this.wrap || this.mode === 'inline',
-          // readonly: se puede seleccionar/copiar. disabled: sin cursor.
-          readOnly: this.disabled ? 'nocursor' : this.readonly,
-          cursorBlinkRate: this.readonly || this.disabled ? -1 : 530,
-          tabSize: this.tabSize,
-          indentWithTabs: !!this.#formatConfig.useTabs,
-          indentUnit: this.#formatConfig.tabWidth || this.tabSize,
-          styleActiveLine: this.mode === 'inline' ? false : (!this.readonly && !this.disabled),
-          matchBrackets: true,
-          autoCloseBrackets: !this.readonly && !this.disabled,
-          placeholder: this.placeholder || undefined,
-          viewportMargin: Infinity,
-          scrollbarStyle: this.mode === 'inline' ? 'null' : 'native',
-        });
-      });
-
-      // Mover el wrapper al host del shadow (fromTextArea inserta junto al textarea).
-      const wrapper = this.#cm.getWrapperElement();
-      this.#host.append(wrapper);
-      this.#syncReadonlyDom();
-      this.#syncLayoutDom();
-
-      this.#cm.on('change', (cm, change) => this.#onCmChange(cm, change));
-      this.#cm.on('cursorActivity', () => this.#onCursor());
-      wrapper.addEventListener('mouseover', (e: Event) => this.#onMarkHover(e));
-      wrapper.addEventListener('mouseout', (e: Event) => this.#onMarkOut(e));
-
-      this.#ready = true;
-      const seed = this.getAttribute('value') || this.dataset.cmSource || this.dataset.src || '';
-      if (seed && !this.#cm.getValue()) {
-        this.#withOuterScroll(() => this.#cm.setValue(seed));
+      // Motor PROPIO (code-highlight) en todos los modos: CodeMirror ya no se
+      // carga ni se monta. readonly/disabled → vista estática; si no, editor
+      // nativo con textarea + resaltado sincronizado.
+      if (this.readonly || this.disabled) {
+        this.#bootNative();
+      } else {
+        this.#bootEditable();
       }
-      this.#pendingValue = null;
-      this.#paintMarks();
-      this.#syncLineClasses();
-      setFormValue(this.#internals, this.value);
-      setCustomState(this.#internals, 'blank', !this.value);
-      if (this.autofocus) this.#cm.focus();
-
-      // CM mide mal si el host aún no tiene layout
-      requestAnimationFrame(() => this.#withOuterScroll(() => this.#cm?.refresh()));
+      return;
 
       emit(this, 'is-ready', { lang: this.lang, value: this.value });
     } catch (err) {
@@ -521,7 +477,9 @@ class IsCode extends ElementBase {
 
   #bootNative() {
     this.#native = true;
-    this.#nativeText = this.#pendingValue ?? this.#readSeedText() ?? '';
+    this.#nativeText = this.#nativeText != null
+      ? this.#nativeText
+      : (this.#pendingValue ?? this.#readSeedText() ?? '');
     this.#pendingValue = null;
     this.#textarea.value = this.#nativeText;
     this.#renderNative();
@@ -533,31 +491,43 @@ class IsCode extends ElementBase {
     emit(this, 'is-ready', { lang: this.lang, value: this.value });
   }
 
-  /** Pinta el contenido nativo: gutter (opcional) + líneas tokenizadas. */
-  #renderNative() {
-    if (!this.#native) return;
-    const text = this.#nativeText ?? '';
+  /** Pinta `text` (tokenizado) dentro de un <pre> y devuelve las líneas. */
+  #paintLines(pre, text, withNumbers) {
     const { lines } = tokenizeCode(text, this.lang, null);
-    const withNumbers = this.lineNumbers && this.mode !== 'inline';
-    const scroll = document.createElement('div');
-    scroll.className = 'ic-scroll';
-    const pre = document.createElement('pre');
-    pre.className = 'ic-native';
-    pre.setAttribute('aria-label', 'Código');
     let html = '';
     for (const ln of lines) {
       const cls = ln.lineClass ? `ic-line ${ln.lineClass}` : 'ic-line';
       html += `<div class="${cls}">${lineToHtml(ln.tokens)}</div>`;
     }
     pre.innerHTML = html;
+    return { lines, html, withNumbers };
+  }
+
+  /** Construye (o reconstruye) el gutter de números para `count` líneas. */
+  #buildGutter(container, lines) {
+    const withNumbers = this.lineNumbers && this.mode !== 'inline';
+    const old = container.querySelector<HTMLElement>('.ic-gutter');
+    old?.remove();
+    if (!withNumbers) return;
+    const gutter = document.createElement('div');
+    gutter.className = 'ic-gutter';
+    gutter.setAttribute('aria-hidden', 'true');
+    gutter.innerHTML = lines.map((_, i) => `<span class="ic-ln">${i + 1}</span>`).join('');
+    container.prepend(gutter);
+  }
+
+  /** Pinta el contenido nativo (readonly): gutter (opcional) + líneas. */
+  #renderNative() {
+    if (!this.#native) return;
+    const text = this.#nativeText ?? '';
+    const scroll = document.createElement('div');
+    scroll.className = 'ic-scroll';
+    const pre = document.createElement('pre');
+    pre.className = 'ic-native';
+    pre.setAttribute('aria-label', 'Código');
+    const { lines } = this.#paintLines(pre, text, true);
     scroll.append(pre);
-    if (withNumbers) {
-      const gutter = document.createElement('div');
-      gutter.className = 'ic-gutter';
-      gutter.setAttribute('aria-hidden', 'true');
-      gutter.innerHTML = lines.map((_, i) => `<span class="ic-ln">${i + 1}</span>`).join('');
-      scroll.prepend(gutter);
-    }
+    this.#buildGutter(scroll, lines);
     this.#host.innerHTML = '';
     this.#host.append(scroll);
     this.#nativeRoot = pre;
@@ -565,8 +535,135 @@ class IsCode extends ElementBase {
 
   #destroyNative() {
     this.#native = false;
+    this.#editing = false;
     this.#nativeRoot = null;
     this.#nativeText = null;
+    this.#ta = null;
+  }
+
+  /* ── Editor editable nativo (textarea + resaltado sincronizado) ── */
+
+  #onEditInput = () => {
+    const v = this.#ta?.value ?? '';
+    if (v === this.#nativeText) { this.#emitCursor(); return; }
+    this.#nativeText = v;
+    this.setAttribute('value', v);
+    setFormValue(this.#internals, v);
+    setCustomState(this.#internals, 'blank', !v);
+    this.#paintEdit();
+    emit(this, 'is-input', { value: v });
+    emit(this, 'is-change', { value: v });
+    this.#emitCursor();
+  };
+
+  #onEditScroll = () => {
+    const ta = this.#ta;
+    const pre = this.#nativeRoot;
+    if (!ta || !pre) return;
+    pre.style.transform = `translate(${-ta.scrollLeft}px, ${-ta.scrollTop}px)`;
+  };
+
+  #onEditSelect = () => this.#emitCursor();
+
+  #onEditKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Tab' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      const ta = this.#ta!;
+      const indent = ' '.repeat(this.tabSize);
+      ta.setRangeText(indent, ta.selectionStart, ta.selectionEnd, 'end');
+      this.#onEditInput();
+    }
+  };
+
+  #emitCursor() {
+    const ta = this.#ta;
+    if (!ta) return;
+    const before = ta.value.slice(0, ta.selectionStart);
+    const line = before.split('\n').length - 1;
+    const lineStart = before.lastIndexOf('\n') + 1;
+    emit(this, 'is-cursor', { line, ch: before.length - lineStart, index: ta.selectionStart });
+    this.#paintActiveLine(line);
+  }
+
+  #paintActiveLine(line: number) {
+    const pre = this.#nativeRoot;
+    if (!pre || this.mode === 'inline') return;
+    const lines = pre.querySelectorAll<HTMLElement>('.ic-line');
+    if (this.#activeLine >= 0 && this.#activeLine < lines.length) {
+      lines[this.#activeLine].classList.remove('ic-line--active');
+    }
+    const host = this.shadowRoot;
+    host?.querySelectorAll<HTMLElement>('.ic-ln--active').forEach((n) => n.classList.remove('ic-ln--active'));
+    if (line >= 0 && line < lines.length) {
+      lines[line].classList.add('ic-line--active');
+      host?.querySelectorAll<HTMLElement>('.ic-ln')[line]?.classList.add('ic-ln--active');
+    }
+    this.#activeLine = line;
+  }
+
+  /** Re-resalta el <pre> del editor (sin tocar el textarea). */
+  #paintEdit() {
+    const pre = this.#nativeRoot;
+    const ta = this.#ta;
+    if (!pre || !ta) return;
+    const scroll = this.#host.querySelector<HTMLElement>('.ic-scroll') ?? pre.parentElement;
+    const { lines } = this.#paintLines(pre, this.#nativeText ?? '', true);
+    if (scroll) this.#buildGutter(scroll, lines);
+    this.#paintActiveLine(-1);
+    this.#onEditScroll();
+    this.#paintActiveLine(ta.value.slice(0, ta.selectionStart).split('\n').length - 1);
+  }
+
+  #bootEditable() {
+    this.#native = true;
+    this.#editing = true;
+    this.#nativeText = this.#nativeText != null
+      ? this.#nativeText
+      : (this.#pendingValue ?? this.#readSeedText() ?? '');
+    this.#pendingValue = null;
+    this.#textarea.value = this.#nativeText;
+
+    const scroll = document.createElement('div');
+    scroll.className = 'ic-scroll';
+    const edit = document.createElement('div');
+    edit.className = 'ic-edit';
+    const pre = document.createElement('pre');
+    pre.className = 'ic-native';
+    pre.setAttribute('aria-label', 'Código');
+    pre.setAttribute('aria-hidden', 'true');
+    const ta = document.createElement('textarea');
+    ta.className = 'ic-input';
+    ta.spellcheck = false;
+    ta.autocapitalize = 'off';
+    ta.autocomplete = 'off';
+    ta.wrap = this.wrap || this.mode === 'inline' ? 'soft' : 'off';
+    ta.placeholder = this.placeholder || '';
+    ta.value = this.#nativeText;
+    edit.append(pre, ta);
+    scroll.append(edit);
+
+    const { lines } = this.#paintLines(pre, this.#nativeText, true);
+    this.#buildGutter(scroll, lines);
+
+    ta.addEventListener('input', this.#onEditInput);
+    ta.addEventListener('scroll', this.#onEditScroll, { passive: true });
+    ta.addEventListener('keyup', this.#onEditSelect);
+    ta.addEventListener('click', this.#onEditSelect);
+    ta.addEventListener('keydown', this.#onEditKeydown);
+
+    this.#host.innerHTML = '';
+    this.#host.append(scroll);
+    this.#nativeRoot = pre;
+    this.#ta = ta;
+
+    this.#syncReadonlyDom();
+    this.#syncLayoutDom();
+    this.#ready = true;
+    setFormValue(this.#internals, this.#nativeText);
+    setCustomState(this.#internals, 'blank', !this.#nativeText);
+    if (this.autofocus) ta.focus();
+    requestAnimationFrame(() => this.#paintActiveLine(0));
+    emit(this, 'is-ready', { lang: this.lang, value: this.value });
   }
 
   #setValue(text: string, reflect) {
@@ -577,19 +674,14 @@ class IsCode extends ElementBase {
         return;
       }
       this.#nativeText = next;
-      this.#renderNative();
-    } else if (this.#cm) {
-      if (this.#cm.getValue() === next) {
-        if (reflect) this.setAttribute('value', next);
-        return;
+      if (this.#ta) {
+        this.#ta.value = next;
+        this.#paintEdit();
+      } else {
+        this.#renderNative();
       }
-      this.#suppress = true;
-      this.#withOuterScroll(() => {
-        const cursor = this.#cm.getCursor();
-        this.#cm.setValue(next);
-        try { this.#cm.setCursor(cursor); } catch { /* ignore */ }
-      });
-      this.#suppress = false;
+    } else if (this.#cm) {
+      this.#cm.setValue(next);
     } else {
       this.#pendingValue = next;
       if (this.#textarea) this.#textarea.value = next;
@@ -599,21 +691,35 @@ class IsCode extends ElementBase {
     setCustomState(this.#internals, 'blank', !next);
   }
 
-  async #applyLang() {
+  #applyLang() {
     if (this.#native) {
-      this.#renderNative();
+      if (this.#editing) this.#paintEdit();
+      else this.#renderNative();
       return;
     }
-    if (!this.#cm) return;
-    const { mode } = await ensureLanguage(this.lang);
-    this.#cm.setOption('mode', mode);
-    this.#syncLineClasses();
   }
 
   #applyOptions() {
     if (this.#native) {
-      // Cambios de forma en la vista nativa: re-render (line-numbers/mode/…).
-      this.#renderNative();
+      const wantsReadonly = this.readonly || this.disabled;
+      if (wantsReadonly !== !this.#editing) {
+        // cambio de modo en caliente: reconstruir la vista conservando el texto
+        if (wantsReadonly) {
+          this.#editing = false;
+          this.#bootNative();
+        } else {
+          this.#editing = true;
+          this.#bootEditable();
+        }
+        return;
+      }
+      if (this.#editing) {
+        this.#ta!.wrap = this.wrap || this.mode === 'inline' ? 'soft' : 'off';
+        this.#ta!.placeholder = this.placeholder || '';
+        this.#paintEdit();
+      } else {
+        this.#renderNative();
+      }
       this.#syncLayoutDom();
       this.#syncReadonlyDom();
       return;
@@ -659,32 +765,11 @@ class IsCode extends ElementBase {
     else this.removeAttribute('aria-disabled');
   }
 
-  #onCmChange(cm, change) {
-    if (this.#suppress) return;
-    const value = cm.getValue();
-    this.setAttribute('value', value);
-    setFormValue(this.#internals, value);
-    setCustomState(this.#internals, 'blank', !value);
-    this.#syncLineClasses();
-
-    if (change && change.origin !== 'setValue') {
-      const from = cm.indexFromPos(change.from);
-      const to = from + (change.removed?.join('\n').length || 0);
-      const inserted = change.text.join('\n').length;
-      this.#marks = rebaseMarks(this.#marks, from, to, inserted);
-      this.#paintMarks();
-    }
-
-    emit(this, 'is-input', { value, change });
-    // change “commit” al blur lo emite el host; aquí también is-change para parity con inputs
-    emit(this, 'is-change', { value });
-  }
-
   /**
    * Pinta la banda de fondo de cada línea para los lenguajes que la piden
-   * (`CodeLangDef.lineClass`). CM colorea tokens, no filas: sin esto un diff
-   * queda con el texto verde/rojo pero sin el bloque de color que es lo que
-   * deja ver de un vistazo el tamaño del cambio.
+   * (`CodeLangDef.lineClass`). El motor nativo ya colorea la banda por línea
+   * (tokenizeCode devuelve lineClass); este helper queda solo como respaldo
+   * legacy para instancias CM que ya no se crean.
    */
   #syncLineClasses() {
     const cm = this.#cm;

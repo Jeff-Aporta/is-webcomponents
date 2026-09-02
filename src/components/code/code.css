@@ -389,16 +389,21 @@
   font-size: 0.8rem;
 }
 
-/* ── Vista NATIVA (readonly, motor code-highlight, sin CodeMirror) ──
+/* ── Vista NATIVA (motor code-highlight, sin CodeMirror) ──
    Los tokens .tok-* consumen las MISMAS custom properties --is-code-* que
-   los .cm-* (code-theme.js / theme-config). El shell .CodeMirror-* de arriba
-   solo sigue vivo para el modo editable (fase de migración). */
+   los .cm-* (code-theme.js / theme-config). */
 .editor-host .ic-scroll {
   flex: 1 1 auto;
   min-height: var(--is-code-min-height, 12rem);
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   overflow: auto;
+}
+
+/* El gutter pega arriba (números alineados con su línea) aunque el
+   contenedor sea más alto que el contenido. */
+.editor-host .ic-gutter {
+  align-self: flex-start;
 }
 
 :host([compact]) .editor-host .ic-scroll {
@@ -467,3 +472,73 @@
 .editor-host .ic-line.is-diff-line-hunk { background: var(--is-code-diff-hunk-band); }
 .editor-host .ic-line.is-diff-line-file,
 .editor-host .ic-line.is-diff-line-commit { background: transparent; }
+
+/* ── Editor editable nativo: textarea invisible sobre <pre> resaltado ──
+   pre y textarea son absolute; si el wrapper colapsa (inline/compact sin
+   min-height) el <pre> queda recortado. Por eso: stretch al alto del
+   contenedor + min-height de una línea + padding como respaldo. */
+.editor-host .ic-edit {
+  position: relative;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 0;
+  min-height: calc(var(--is-code-line-height) * 1em + 1.4rem);
+  overflow: hidden;
+}
+
+.editor-host .ic-edit .ic-native {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: max-content;
+  margin: 0;
+  padding: 0.7rem 0.95rem;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  white-space: pre;
+  tab-size: 2;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.editor-host .ic-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0.7rem 0.95rem;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  background: transparent;
+  caret-color: var(--is-code-caret);
+  border: 0;
+  outline: 0;
+  resize: none;
+  white-space: pre;
+  tab-size: 2;
+  overflow: auto;
+}
+
+/* El texto del textarea es transparente (lo pinta el <pre> de debajo). */
+.editor-host .ic-input { color: transparent; }
+.editor-host .ic-input::selection { background: var(--is-code-selection); }
+.editor-host .ic-input::placeholder {
+  color: color-mix(in srgb, var(--is-code-fg) 48%, transparent);
+  opacity: 1;
+}
+
+/* En inline el host es inline-flex con ancho intrínseco: un <pre> absolute no
+   alimenta ese ancho (chip de 2px). El <pre> vuelve al flujo para dar tamaño
+   al chip y el textarea queda encima (inset 0). */
+:host([mode="inline"]) .editor-host .ic-edit .ic-native,
+:host([data-inline]) .editor-host .ic-edit .ic-native {
+  position: static;
+  min-width: 0;
+}
+
+/* Línea activa (cursor) en el editor nativo. */
+.editor-host .ic-line--active { background: var(--is-code-active-line); }
+.editor-host .ic-ln--active { background: var(--is-code-active-gutter); }

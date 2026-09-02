@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-02T20:19:07.777Z",
+  "generatedAt": "2026-09-02T21:16:03.052Z",
   "count": 60,
   "modules": [
     {
@@ -37,21 +37,6 @@
       ]
     },
     {
-      "file": "code-cm.ts",
-      "id": "code-cm",
-      "path": "src/components/_shared/code-cm.ts",
-      "summary": "code-cm — Reusa el CDN y la carga de modos base de `highlight-code.js` (pintor de",
-      "bytes": 3096,
-      "exports": [
-        "loadCssText",
-        "adoptCodeMirrorCss",
-        "ensureCodeMirrorEditor",
-        "loadCodeMirrorMode",
-        "CODEMIRROR_CDN",
-        "CODEMIRROR_THEMES"
-      ]
-    },
-    {
       "file": "code-diff.ts",
       "id": "code-diff",
       "path": "src/components/_shared/code-diff.ts",
@@ -80,11 +65,28 @@
       ]
     },
     {
+      "file": "code-highlight.ts",
+      "id": "code-highlight",
+      "path": "src/components/_shared/code-highlight.ts",
+      "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
+      "bytes": 17310,
+      "exports": [
+        "normalizeLang",
+        "emptyState",
+        "diffLineClass",
+        "tokenizeCode",
+        "tokenClass",
+        "escapeHtml",
+        "lineToHtml",
+        "tokensToText"
+      ]
+    },
+    {
       "file": "code-langs.ts",
       "id": "code-langs",
       "path": "src/components/_shared/code-langs.ts",
-      "summary": "code-langs — Los modos livianos (js/ts/jsx/html/css) se resuelven con lo que ya carga",
-      "bytes": 5944,
+      "summary": "code-langs — El resaltado lo hace el motor NATIVO (code-highlight): aquí solo vive el",
+      "bytes": 5314,
       "exports": [
         "registerLanguage",
         "resolveLanguage",
@@ -423,7 +425,7 @@
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.ts",
       "summary": "highlight-code — se coloreaba con CodeMirror.runMode sobre `<pre class=\"code\">`.",
-      "bytes": 10904,
+      "bytes": 10989,
       "exports": [
         "dedent",
         "unwrapHandHighlight",

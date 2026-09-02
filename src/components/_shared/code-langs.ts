@@ -1,13 +1,12 @@
 /**
  * code-langs.js — registro de lenguajes para `<is-code>`.
  *
- * Los modos livianos (js/ts/jsx/html/css) se resuelven con lo que ya carga
- * `ensureCodeMirror`. Los pesados (python) se piden bajo demanda vía
- * `loadCodeMirrorMode`. El sistema queda abierto: `registerLanguage()`.
+ * El resaltado lo hace el motor NATIVO (code-highlight): aquí solo vive el
+ * registro de ids/alias, la inferencia por texto y las clases de línea.
+ * Ya no se descarga ningún modo de CodeMirror desde CDN.
  */
 
-import { loadCodeMirrorMode, ensureCodeMirrorEditor } from './code-cm.js';
-import { defineDiffMode, diffLineClass } from './code-diff.js';
+import { diffLineClass } from './code-diff.js';
 
 /**
  * @typedef {object} CodeLangDef
@@ -84,15 +83,13 @@ export function listLanguages() {
   }));
 }
 
-/** Asegura el modo CM del lenguaje y devuelve el mode spec para fromTextArea. */
-export async function ensureLanguage(name) {
-  await ensureCodeMirrorEditor();
+/** Devuelve el id y la definición del lenguaje (sin cargar modos CDN). */
+export function ensureLanguage(name) {
   const def = resolveLanguage(name);
   if (!def) {
-    return { mode: 'null', id: 'plaintext', def: null };
+    return { id: 'plaintext', def: null };
   }
-  if (typeof def.load === 'function') await def.load();
-  return { mode: def.mode, id: def.id, def };
+  return { id: def.id, def };
 }
 
 // —— Built-ins (no pesados: ya vienen con highlight-code / code-cm) ——
@@ -149,26 +146,15 @@ registerLanguage({
 registerLanguage({
   id: 'python',
   aliases: ['py'],
-  mode: 'python',
-  heavy: true,
-  load: async () => {
-    const CM = globalThis.CodeMirror;
-    if (CM?.modes?.python) return;
-    await loadCodeMirrorMode('python/python');
-  },
+  // El motor nativo tokeniza python como plaintext (sin modos CDN).
+  heavy: false,
 });
 
-/** cURL / shell: modo CM `shell` (CDN). No re-formatear el comando. */
+/** cURL / shell: tokenizer nativo del motor (code-highlight). */
 registerLanguage({
   id: 'shell',
   aliases: ['bash', 'sh', 'zsh', 'curl', 'cli'],
-  mode: 'shell',
-  heavy: true,
-  load: async () => {
-    const CM = globalThis.CodeMirror;
-    if (CM?.modes?.shell) return;
-    await loadCodeMirrorMode('shell/shell');
-  },
+  heavy: false,
 });
 
 registerLanguage({
@@ -179,8 +165,8 @@ registerLanguage({
 });
 
 // —— Diff y resumen de commit ——
-// El modo se define en el propio kit (no se baja de la CDN de CM): son ~40
-// líneas y así el bloque colorea igual aunque el modo remoto no llegue.
+// El motor nativo banda las líneas (code-highlight.diffLineClass); la clase de
+// línea se conserva en el registro para quien la pida vía resolveLanguage.
 
 registerLanguage({
   id: 'diff',
@@ -188,7 +174,6 @@ registerLanguage({
   mode: 'is-diff',
   heavy: false,
   lineClass: diffLineClass,
-  load: async () => { defineDiffMode(globalThis.CodeMirror); },
 });
 
 registerLanguage({
@@ -197,5 +182,4 @@ registerLanguage({
   mode: 'is-diff',
   heavy: false,
   lineClass: diffLineClass,
-  load: async () => { defineDiffMode(globalThis.CodeMirror); },
 });
