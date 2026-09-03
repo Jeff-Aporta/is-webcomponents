@@ -35,14 +35,7 @@ function pagina(): Page {
   assert.ok(ctx, 'contexto no disponible');
   return ctx.page;
 }
-
-interface Hallazgo {
-  vista: string;
-  tipo: string;
-  texto: string;
-  captura: string;
-}
-
+export type Hallazgo = { vista: string; tipo: string; texto: string; captura: string; };
 test('barrido: ninguna vista del catalogo debe producir errores ni peligros', { timeout: 900000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();

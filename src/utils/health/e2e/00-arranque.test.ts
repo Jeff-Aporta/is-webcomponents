@@ -33,28 +33,9 @@ function pagina(): Page {
   assert.ok(ctx, 'contexto no disponible');
   return ctx.page;
 }
-
-interface EstadoHome {
-  categorias: string[];
-  items: number;
-  kitShell: string;
-  hostTexto: number;
-}
-
-interface EstadoDocs {
-  current: string;
-  isCodeDefined: boolean;
-  isCodeEnHost: boolean;
-  demos: number;
-  texto: number;
-}
-
-interface EstadoNav {
-  current: string;
-  texto: number;
-  svg: number;
-}
-
+export type EstadoHome = { categorias: string[]; items: number; kitShell: string; hostTexto: number; };
+export type EstadoDocs = { current: string; isCodeDefined: boolean; isCodeEnHost: boolean; demos: number; texto: number; };
+export type EstadoNav = { current: string; texto: number; svg: number; };
 test('la galeria sin estado monta el catalogo (categorias) y el home', { timeout: 150000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E (MINIMAX_API_KEY)');
   const page = pagina();

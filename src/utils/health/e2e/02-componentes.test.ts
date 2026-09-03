@@ -45,16 +45,7 @@ const VISTAS: Array<[string, { svg: boolean } | null]> = [
   ['is-bar-chart', { svg: true }],
   ['is-split-panel', null],
 ];
-
-interface EstadoVista {
-  definido: boolean;
-  instancias: number;
-  texto: number;
-  svg: number;
-  canvas: number;
-  demos: number;
-}
-
+export type EstadoVista = { definido: boolean; instancias: number; texto: number; svg: number; canvas: number; demos: number; };
 test('cada vista representativa monta contenido real con su componente definido', { timeout: 600000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();

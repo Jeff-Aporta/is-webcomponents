@@ -42,31 +42,9 @@ function pagina(): Page {
   assert.ok(ctx, 'contexto no disponible');
   return ctx.page;
 }
-
-interface EstadoPintado {
-  total: number;
-  conShadow: number;
-  pintados: number;
-  readonly: number;
-  editables: number;
-  inline: number;
-  tokens: number;
-}
-
-interface EstadoEscrituraAntes {
-  value: string;
-  lineas: number;
-  gutter: number;
-}
-
-interface EstadoEscrituraDespues {
-  evs: ContadoresEventos;
-  valueOk: boolean;
-  lineas: number;
-  gutter: number;
-  activa: number;
-}
-
+export type EstadoPintado = { total: number; conShadow: number; pintados: number; readonly: number; editables: number; inline: number; tokens: number; };
+export type EstadoEscrituraAntes = { value: string; lineas: number; gutter: number; };
+export type EstadoEscrituraDespues = { evs: ContadoresEventos; valueOk: boolean; lineas: number; gutter: number; activa: number; };
 test('sin CodeMirror: sin nodos .CodeMirror, sin global y sin recursos cm-*', { timeout: 240000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
@@ -175,18 +153,8 @@ test('escribir en el editor editable emite is-input/is-change/is-cursor y repint
   t.diagnostic(`editor: ${JSON.stringify(despues.evs)} eventos; ${despues.lineas} lineas; gutter ${despues.gutter}`);
   await evidencia(page, '01c-editor-escritura');
 });
-
-interface EstadoMarks {
-  n: number;
-  value: string;
-}
-
-interface EstadoTip {
-  open: boolean;
-  texto: string;
-  phases: FasesMarks;
-}
-
+export type EstadoMarks = { n: number; value: string; };
+export type EstadoTip = { open: boolean; texto: string; phases: FasesMarks; };
 test('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
