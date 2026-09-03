@@ -1,4 +1,4 @@
-﻿// 00-arranque.test.ts: arranque de la galeria is-webcomponents, deep link por
+// 00-arranque.test.ts: arranque de la galeria is-webcomponents, deep link por
 // componente y navegacion por el nav. Port del esquema de PatyIA 00-sesion
 // sin login/ISS: aqui el "estado" es el tag del componente (?s={component}).
 import test, { before, after } from 'node:test';
@@ -9,6 +9,7 @@ import {
   abrirGaleria,
   clicTagNav,
   esperarMs,
+  esperarTexto,
   esperarContenido,
   arbolTexto,
   evidencia,
@@ -40,6 +41,8 @@ test('la galeria sin estado monta el catalogo (categorias) y el home', { timeout
   if (!DISPONIBLE) return t.skip('faltan variables E2E (MINIMAX_API_KEY)');
   const page = pagina();
   await abrirGaleria(page, null, { ms: 4000 });
+  // El nav se construye tras el shell: esperar a que existan las categorías.
+  await esperarTexto(page, '#shellNav', 'Código', { ms: 30000 }).catch(() => {});
   const r = (await page.evaluate(() => {
     const nav = document.getElementById('shellNav');
     return {
@@ -50,7 +53,7 @@ test('la galeria sin estado monta el catalogo (categorias) y el home', { timeout
     };
   })) as EstadoHome;
   assert.equal(r.kitShell, '1', 'el shell del kit debe quedar listo');
-  for (const cat of ['Diagramas', 'CÃ³digo', 'Datos', 'GrÃ¡ficos', 'Formularios']) {
+  for (const cat of ['Diagramas', 'Código', 'Datos', 'Gráficos', 'Formularios']) {
     assert.ok(r.categorias.includes(cat), `categoria ${cat} en el nav`);
   }
   assert.ok(r.items > 150, `el nav debe listar el catalogo (${r.items} items)`);

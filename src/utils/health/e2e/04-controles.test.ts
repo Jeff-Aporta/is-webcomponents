@@ -3,7 +3,7 @@
 // `controls` y, por cada tag: abre la vista, localiza los paneles
 // <is-preview-controls>, manipula cada control (select/boolean/text/number/
 // range/color/json) y verifica que el host del componente reacciona
-// (prop/attr) â€” el cambio SIEMPRE viaja JSON -> prop/attr, nunca otro sistema.
+// (prop/attr) — el cambio SIEMPRE viaja JSON -> prop/attr, nunca otro sistema.
 // Filtro opcional: E2E_TAGS=is-button,is-code (coma separada).
 import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -40,7 +40,7 @@ function pagina(): Page {
 
 const previewsDir = join(repoDir, 'src', 'previews');
 export type TagConControles = { tag: string; cat: string; nControles: number; nPaneles: number; };
-/** DocumentaciÃ³n .md del componente (si existe) para verificar objetivos. */
+/** Documentación .md del componente (si existe) para verificar objetivos. */
 function mdDelComponente(tag: string, cat: string): string | null {
   const base = tag.replace(/^is-/, '');
   const candidatos = [
@@ -91,7 +91,7 @@ function listarTagsConControles(): TagConControles[] {
             out.push({ tag: def.tag, cat, nControles, nPaneles });
           }
         } catch {
-          /* JSON invÃ¡lido: lo reporta preview-json-contract */
+          /* JSON inválido: lo reporta preview-json-contract */
         }
       }
     }
@@ -145,9 +145,9 @@ function nuevoValor(c: ControlVivo): { v: unknown; esperado: unknown } {
 }
 
 /**
- * En la pÃ¡gina: manipula el control del panel (input + eventos reales) y
- * verifica que el host reaccionÃ³ (prop/attr). Devuelve {ok, actual} o null si
- * no se pudo resolver el host. Toda la lÃ³gica vive DENTRO del evaluate.
+ * En la página: manipula el control del panel (input + eventos reales) y
+ * verifica que el host reaccionó (prop/attr). Devuelve {ok, actual} o null si
+ * no se pudo resolver el host. Toda la lógica vive DENTRO del evaluate.
  */
 async function manipularYVerificar(
   page: Page,
@@ -175,7 +175,7 @@ async function manipularYVerificar(
       entrada.dispatchEvent(new Event(evento, { bubbles: true }));
     }
 
-    // 2) resolver el host (misma lÃ³gica que system/controles)
+    // 2) resolver el host (misma lógica que system/controles)
     const target = panel.dataset.target ?? '';
     const caja = panel.closest('.demo-block');
     const raiz = (caja?.querySelector('is-demo') ?? caja) as ParentNode | null;
@@ -216,8 +216,8 @@ test('controles data-driven: cada control del panel reacciona en el host', { tim
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   const tags = listarTagsConControles();
-  t.diagnostic(`tags con controles JSON: ${tags.map((x) => x.tag).join(', ') || '(ninguno aÃºn)'}`);
-  if (tags.length === 0) return t.skip('ningÃºn preview declara controles todavÃ­a');
+  t.diagnostic(`tags con controles JSON: ${tags.map((x) => x.tag).join(', ') || '(ninguno aún)'}`);
+  if (tags.length === 0) return t.skip('ningún preview declara controles todavía');
   const fallos: Fallo[] = [];
   for (const { tag, cat, nPaneles } of tags) {
     const marcador = ctx!.consola.length;
@@ -251,14 +251,14 @@ test('controles data-driven: cada control del panel reacciona en el host', { tim
           fallos.push({
             tag,
             control: `${c.control}:${c.prop}`,
-            detalle: `esperado ${JSON.stringify(esperado)} Â· obtenido ${JSON.stringify(res.actual)}`,
+            detalle: `esperado ${JSON.stringify(esperado)} · obtenido ${JSON.stringify(res.actual)}`,
           });
         }
         await esperarMs(80);
       }
     }
     // Objetivos documentados: si el componente tiene .md, cada prop controlada
-    // debe estar documentada (verificaciÃ³n por testing de la documentaciÃ³n).
+    // debe estar documentada (verificación por testing de la documentación).
     const md = mdDelComponente(tag, cat);
     if (md) {
       const sinDoc = [...propsEjercitados].filter((prop) => !md.includes(prop.toLowerCase()));
@@ -266,7 +266,7 @@ test('controles data-driven: cada control del panel reacciona en el host', { tim
         t.diagnostic(`md ${tag}: sin documentar ${sinDoc.join(', ')}`);
       }
     } else {
-      t.diagnostic(`sin .md para ${tag} (${cat}): se omite la verificaciÃ³n documental`);
+      t.diagnostic(`sin .md para ${tag} (${cat}): se omite la verificación documental`);
     }
     const problemas = problemasDeConsola(ctx!.consola.slice(marcador));
     if (problemas.length) {

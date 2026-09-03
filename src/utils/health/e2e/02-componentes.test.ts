@@ -54,7 +54,7 @@ test('cada vista representativa monta contenido real con su componente definido'
     try {
       await abrirGaleria(page, tag, { ms: 5000 });
     } catch (e) {
-      fallos.push(`${tag}: no monto preview â€” ${String(e instanceof Error ? e.message : e).slice(0, 200)}`);
+      fallos.push(`${tag}: no monto preview — ${String(e instanceof Error ? e.message : e).slice(0, 200)}`);
       continue;
     }
     await esperarMs(2000);

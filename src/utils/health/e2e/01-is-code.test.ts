@@ -1,4 +1,4 @@
-﻿// 01-is-code.test.ts: ataque en profundidad al docs de <is-code> tras la
+// 01-is-code.test.ts: ataque en profundidad al docs de <is-code> tras la
 // migracion a motor nativo (sin CodeMirror). Verifica en el navegador real:
 //   - cero rastro de CodeMirror (nodos, global, recursos, tags)
 //   - read-only/editable/inline pintan con el motor nativo (.ic-* / .tok-*)
@@ -19,7 +19,7 @@ import {
   evidencia,
 } from './lib/harness.ts';
 import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from './lib/tipos.d.ts';
-import { cargarToon, textoDe } from '../../system/toons.js';
+import { cargarToon, textoDe } from '../../system/toons.ts';
 
 // Textos de test SIEMPRE desde los toons (src/utils/system/toons/*.json).
 const TOON_CODE = cargarToon('is-code');
