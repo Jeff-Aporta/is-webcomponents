@@ -481,4 +481,23 @@ try {
 // El HTML plano por componente se retiro el 31-ago-2026: la galeria es una SPA
 // y nadie llegaba a esas 177 paginas. Para agentes el canal es `src/skills/`,
 // que este mismo build publica en `dist/cdn/skills/`.
-console.log(`OK dist/cdn  ${entries.length} components + is-base + loader`);
+
+// ── gallery-app.min.js ───────────────────────────────────────────
+// Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.
+// El entry vive en src/gallery/app.ts; el runtime solo carga dist/.
+const galleryOut = join(root, 'dist', 'gallery-app.min.js');
+await build({
+  entryPoints: [join(root, 'src', 'gallery', 'app.ts')],
+  outfile: galleryOut,
+  bundle: true,
+  minify: true,
+  format: 'esm',
+  target: 'es2020',
+  legalComments: 'none',
+  // load-json.ts tiene imports dinamicos node:* solo para tests; el browser usa fetch.
+  external: ['node:fs', 'node:url'],
+});
+const galleryStat = await stat(galleryOut);
+console.log(`  ${'gallery-app'.padEnd(18)} js ${String(galleryStat.size).padStart(6)}  (SPA → dist/)`);
+
+console.log(`OK dist/cdn  ${entries.length} components + is-base + loader + gallery-app`);

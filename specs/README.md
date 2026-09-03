@@ -14,15 +14,15 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 | Constitution | [constitution.md](constitution.md) | ¿Qué no se negocia? |
 | Constraints | [constraints.md](constraints.md) | ¿Qué está prohibido? |
 | Spec | [galeria/spec.md](galeria/spec.md) | ¿Cómo funciona la galería y los previews? |
-| Spec | [cdn/spec.md](cdn/spec.md) | ¿Cómo se publica por CDN? |
-| Spec | [componentes/spec.md](componentes/spec.md) | ¿Qué forma tiene un `is-*`? |
-| Spec | [iconos/spec.md](iconos/spec.md) | ¿Cómo se resuelven los iconos? |
-| Spec | [documentacion/spec.md](documentacion/spec.md) | ¿Cómo se documenta para agentes? |
-| Spec | [testing/spec.md](testing/spec.md) | ¿Qué hace verde el gate? |
+| Spec | [cdn.md](cdn.md) | ¿Cómo se publica por CDN? |
+| Spec | [componentes.md](componentes.md) | ¿Qué forma tiene un `is-*`? |
+| Spec | [iconos.md](iconos.md) | ¿Cómo se resuelven los iconos? |
+| Spec | [documentacion.md](documentacion.md) | ¿Cómo se documenta para agentes? |
+| Spec | [testing.md](testing.md) | ¿Qué hace verde el gate? |
 | Spec | [typescript/spec.md](typescript/spec.md) | ¿Cómo se tipa el kit? |
-| Plantillas | [plantillas/](plantillas/) | `spec.template.md`, `tasks.template.md` |
-| ADR | [adr/README.md](adr/README.md) | Decisiones cerradas |
-| Lesson | [lessons/README.md](lessons/README.md) | Índice del diario |
+| Plantillas | [plantillas/](plantillas) | `spec.template.md`, `tasks.template.md` |
+| ADR | [adr.md](adr.md) | Decisiones cerradas |
+| Lesson | [lessons.md](lessons.md) | Índice del diario |
 
 ## Cómo leer
 

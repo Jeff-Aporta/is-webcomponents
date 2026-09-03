@@ -23,6 +23,8 @@ test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () =
   assert.match(code, /\bpin\s*\(/);
   assert.match(code, /\bunpin\s*\(/);
   assert.match(code, /configure\s*\(/);
+  assert.match(code, /\bhost\b/);
+  assert.match(code, /\bwithQuery\b|searchParams|query\.v/);
   assert.match(code, /\bhas\s*\(/);
   assert.match(code, /getLoaded/);
   assert.match(code, /planLoads/);
@@ -51,9 +53,9 @@ test('min.js de componente lleva banner de docs MD', () => {
   assert.match(btn, /is-cdn-install\/SKILL\.md/);
 });
 
-test('index.html arranca con loader (sin all.min suelto; CSS estático)', () => {
+test('index.html arranca con loader (sin all.min suelto; CSS dist)', () => {
   assert.match(indexHtml, /loader\.min\.js/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/is-base\.css"/);
+  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css"/);
   assert.doesNotMatch(indexHtml, /L\.load\(['"]all['"]\)/);
   assert.doesNotMatch(indexHtml, /<script type="module" src="dist\/cdn\/all\.min\.js"/);
   // Detalle del orden await/shell → tests/gallery-boot.test.ts (error #43)
@@ -77,4 +79,14 @@ test('LLM.md documenta pin y mirrors (sin README.txt)', () => {
   assert.match(llm, /pin\(/);
   assert.match(llm, /mirrors|jsDelivr|Pages/i);
   assert.ok(!existsSync(join(root, 'dist', 'cdn', 'README.txt')), 'README.txt retirado — solo LLM.md');
+});
+
+test('configure acepta host + v/query (cache-bust)', () => {
+  const code = readFileSync(src, 'utf8');
+  assert.match(code, /host\?:/);
+  assert.match(code, /query\?:/);
+  assert.match(code, /\bv\?:/);
+  assert.match(code, /githack/);
+  assert.match(code, /state\.host/);
+  assert.match(code, /state\.query/);
 });

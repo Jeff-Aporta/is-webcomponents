@@ -730,6 +730,42 @@ Guardianes: `tests/specs-sdd` · `tests/er-clusters` · `tests/src-layout` · `t
     solo en paneles `hidden` sin refresh al mostrar; omitir tabs del chrome.
     Guardián: `tests/gallery-sources-meta.test.ts`. Docs: `code/AGENTS.md`.
 
+45. **Mojibake UTF-8 en literales de la suite e2e por PowerShell** (3-sep-2026)
+    → `00-arranque.test.ts` asertaba `'CÃ³digo'` y `'GrÃ¡ficos'` (ó→Ã³, á→Ã¡)
+    contra el nav: el test fallaba aunque la galería mostraba «Código». Los
+    literales se corrompieron al re-escribir el `.ts` desde PowerShell
+    (`Set-Content` / redirección `>` re-encodan a UTF-16/ANSI o corrompen
+    UTF-8). El intento de “normalizar” con un hashtable de PowerShell con
+    claves acentuadas ni siquiera parseó (ParserError). La misma trampa dejó
+    mojibake en el harness HTML de PatyIA (`src/js/components/index.html`:
+    `â€”`, `producciÃ³n`).
+    **Hacer:** editar/reescribir `.ts`/`.html` con acentos desde Node
+    (`writeFileSync(p, s, 'utf8')`) o la herramienta de edición; escanear
+    restos con un script Node que busque `Ã|Â|â€`; revisar el `git diff` para
+    confirmar que solo cambian los acentos.
+    **No hacer:** `Set-Content`, redirección `>` ni `Out-File` sin
+    `-Encoding utf8` sobre contenido acentuado; hashtables PowerShell con
+    claves acentuadas; asumir que el mojibake vive en un solo archivo (afectó
+    4 archivos de la suite y el harness de PatyIA). Hermana de #29 (UTF-16).
+    Guardián: `npm run test:e2e` (00 monta el nav y aserta «Código»);
+    suite 14/14 y unit 237/237 el 3-sep-2026.
+
+46. **`--experimental-strip-types` NO remapea specifiers `.js`→`.ts`** (3-sep-2026)
+    → `01-is-code.test.ts` importaba `'../../system/toons.js'`; solo existe
+    `toons.ts`, así que **el archivo entero moría al cargar** con
+    `ERR_MODULE_NOT_FOUND` (no era un caso de test). En la suite e2e —que corre
+    con `node --experimental-strip-types`— un specifier `.js` no se reescribe a
+    `.ts`; eso solo lo hace `tsc` con `moduleResolution: bundler` (y el hook
+    `ts-resolve-hook.ts` de los unit tests).
+    **Hacer:** importar fuentes TS del kit desde la suite con specifier `.ts`
+    explícito (`'../../system/toons.ts'`), igual que ya se importan
+    `./lib/harness.ts` y `./lib/tipos.d.ts` (tsconfig permite
+    `allowImportingTsExtensions` con `noEmit`).
+    **No hacer:** specifier `.js` hacia fuentes `.ts` del kit en código que
+    corre bajo strip-types; dar por bueno un import solo porque `tsc` lo acepta.
+    Guardián: `npm run test:e2e` (01-is-code carga y pasa 6/6; suite 14/14 el
+    3-sep-2026).
+
 ---
 
 ## Errores aprendidos fuera de este repo (mismo tipo de trampa)

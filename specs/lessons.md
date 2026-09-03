@@ -1,6 +1,6 @@
 # Lessons — índice
 
-El diario completo vive en [`AGENTS.md`](../../LLM.md) (carta, errores #24–#44, entorno local).
+El diario completo vive en [`AGENTS.md`](../LLM.md) (carta, errores #24–#46, entorno local).
 
 | Síntoma | Dónde | Guardián |
 |---|---|---|
@@ -13,5 +13,7 @@ El diario completo vive en [`AGENTS.md`](../../LLM.md) (carta, errores #24–#44
 | `all.min.js` / load redundante | AGENTS.md carta | `tests/load-plan.test.ts` |
 | FOUC galería / boot | AGENTS.md #43 | `tests/gallery-boot.test.ts` |
 | Spec sin guardián | specs/README | `tests/specs-sdd.test.ts` |
+| Mojibake UTF-8 (PowerShell) en literales de la suite | AGENTS.md #45 | `npm run test:e2e` (00 nav «Código») |
+| Specifier `.js` a fuente `.ts` del kit en e2e | AGENTS.md #46 | `npm run test:e2e` (01 carga) |
 
 Al cerrar un incidente nuevo: fila aquí + entrada en `AGENTS.md`.

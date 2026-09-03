@@ -1,6 +1,9 @@
 // tests/specs-sdd.test.ts
 //
 // Meta-guardián: estructura de specs/ SDD (mapa, enlaces, dominios citados).
+// Layout-agnóstico: admite dominios como carpeta (`<dominio>/spec.md`) o como archivo
+// plano en la raíz (`specs/<dominio>.md`, sin carpeta) — la regla es que NO hay
+// carpetas de un solo archivo.
 // Uso: node tests/specs-sdd.test.ts
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -17,8 +20,8 @@ const OBLIGATORIOS = [
   'flujo-sdd.md',
   'constitution.md',
   'constraints.md',
-  'adr/README.md',
-  'lessons/README.md',
+  'adr.md',
+  'lessons.md',
   'plantillas/spec.template.md',
   'plantillas/tasks.template.md',
 ];
@@ -42,6 +45,15 @@ for (const rel of OBLIGATORIOS) {
 const sueltos = readdirSync(SPECS).filter((n) => n.startsWith('spec-') && n.endsWith('.md'));
 if (sueltos.length) failures.push(`spec-*.md sueltos en specs/: ${sueltos.join(', ')}`);
 
+// Carpeta de un solo archivo = violación de la convención.
+for (const n of readdirSync(SPECS)) {
+  const p = join(SPECS, n);
+  if (!statSync(p).isDirectory()) continue;
+  const mds = readdirSync(p).filter((f) => f.endsWith('.md'));
+  const sub = readdirSync(p).filter((f) => statSync(join(p, f)).isDirectory());
+  if (sub.length === 0 && mds.length === 1) failures.push(`carpeta de un solo archivo: ${n}`);
+}
+
 for (const archivo of archivosMd(SPECS)) {
   const rel = relative(SPECS, archivo);
   if (rel.split(/[\\/]/)[0] === 'plantillas') continue;
@@ -54,23 +66,30 @@ for (const archivo of archivosMd(SPECS)) {
   }
 }
 
+// Dominios: carpeta con spec.md, o MD plano de la raíz que no sea estructural.
+const ESTRUCTURALES = new Set([
+  'README.md', 'flujo-sdd.md', 'constitution.md', 'constraints.md', 'adr.md', 'lessons.md', 'plantillas',
+]);
+const dominios = [];
+for (const n of readdirSync(SPECS)) {
+  const p = join(SPECS, n);
+  if (statSync(p).isDirectory() && existsSync(join(p, 'spec.md'))) dominios.push(`${n}/spec.md`);
+  else if (n.endsWith('.md') && !ESTRUCTURALES.has(n)) dominios.push(n);
+}
+
+if (dominios.length === 0) failures.push('ningún dominio de spec bajo specs/');
+
 const readme = readFileSync(join(SPECS, 'README.md'), 'utf8');
-const dominios = readdirSync(SPECS).filter(
-  (n) => statSync(join(SPECS, n)).isDirectory() && existsSync(join(SPECS, n, 'spec.md')),
-);
-
-if (dominios.length === 0) failures.push('ningún dominio con spec.md bajo specs/');
-
 for (const d of dominios) {
-  if (!readme.includes(`${d}/spec.md`)) failures.push(`README no enlaza ${d}/spec.md`);
-  const spec = readFileSync(join(SPECS, d, 'spec.md'), 'utf8');
+  if (!readme.includes(d)) failures.push(`README no enlaza ${d}`);
+  const spec = readFileSync(join(SPECS, ...d.split('/')), 'utf8');
   const citados = [...spec.matchAll(/`tests\/([a-z0-9-]+\.test\.ts)`/gi)].map((m) => m[1]);
   if (citados.length === 0) {
-    failures.push(`${d}/spec.md no cita ningún tests/*.test.ts`);
+    failures.push(`${d} no cita ningún tests/*.test.ts`);
     continue;
   }
   for (const file of citados) {
-    if (!existsSync(join(TESTS, file))) failures.push(`${d}/spec.md cita tests/${file} inexistente`);
+    if (!existsSync(join(TESTS, file))) failures.push(`${d} cita tests/${file} inexistente`);
   }
 }
 

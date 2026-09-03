@@ -21,13 +21,43 @@ Skill de instalación: [`src/skills/is-cdn-install/SKILL.md`](../skills/is-cdn-i
 import { ISWebComponentsLoader as L } from
   'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js';
 
-L.configure({ mirrors: ['jsdelivr', 'pages'] });
+L.configure({
+  mirrors: ['jsdelivr', 'pages'],
+  // host: 'https://raw.githack.com/Jeff-Aporta/is-webcomponents/main/dist/cdn',
+  // v: 2, // → ?v=2 en cada asset (rompe caché de CDN/navegador)
+});
 // L.pin('abcdef…');  // opcional; sin pin → tip SHA de main
 await L.loadCSSBase();
 await L.loadCSSPalettesDefault();
 await L.load('is-button', 'is-button-group');
 // o: L.load('actions') | L.load('all')
 ```
+
+### Host y cache-bust (consumidor)
+
+El consumidor fija de dónde salen los `is-*` y cómo invalidar caché, sin tocar el kit:
+
+```js
+const KIT = 'https://raw.githack.com/Jeff-Aporta/is-webcomponents/main/dist/cdn';
+import { ISWebComponentsLoader as L } from `${KIT}/core/loader.min.js`;
+
+L.configure({
+  host: KIT,          // raíz dist/cdn/ (manda sobre preferSelf)
+  v: 2,               // atajo → ?v=2 en cada .js/.css del kit
+  // query: 'v=2&t=…' // o { v: '2', t: '…' }
+  preferSelf: false,
+  mirrors: ['githack', 'pages'], // githack = tip GitHub con MIME JS
+});
+
+await L.load('is-dropdown');
+```
+
+| Opción | Efecto |
+| --- | --- |
+| `host` | URL absoluta a `dist/cdn/`. Primera base de carga |
+| `v` | Escribe `query.v` (p. ej. `2` → `?v=2`) |
+| `query` | Mapa o string de search params en cada asset |
+| `mirrors: ['githack']` | Tip `raw.githack.com` (útil si jsDelivr `@main` está frío) |
 
 ## Sheet cache (apps)
 
@@ -91,10 +121,10 @@ API:
 | --- | --- |
 | `pin(ref)` | Fija branch o SHA (jsDelivr `@ref`) |
 | `unpin()` | Tip de `main` vía API GitHub |
-| `configure({ mirrors, preferSelf, ref })` | Orden de espejos / self local |
+| `configure({ mirrors, preferSelf, ref, host, v, query })` | Espejos / self / host / bust |
 | `listBases()` / `fallbackBases()` | Bases que se probarán |
 
-Orden por defecto: `self` (si `preferSelf`) → jsDelivr → Pages. Un fallo en un espejo prueba el siguiente.
+Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) → mirrors. Un fallo en un espejo prueba el siguiente.
 
 ## CSS
 

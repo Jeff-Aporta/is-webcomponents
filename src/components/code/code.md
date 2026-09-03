@@ -312,7 +312,7 @@ Con `readonly` no hay caret ni línea activa; se puede seleccionar y copiar.
 
 ## Fuentes
 
-- [JavaScript](./code.js)
+- [JavaScript](code.md)
 - [CSS](./code.css)
 - [Índice de categoría](./LLM.md)
 - [Preview](../../previews/code/is-code.json)

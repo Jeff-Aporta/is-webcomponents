@@ -11,6 +11,16 @@ import catalog from './catalog.js';
 import { JsonPreview } from './_kit/JsonPreview.js';
 import { loadDefinitionJson } from './_kit/load-json.js';
 
+function previewsBase(): URL {
+  // Consumo: gallery-app.min.js en dist/ → ../src/previews/
+  // Fuente: registry.ts en src/previews/ → ./ (mismo directorio)
+  const here = import.meta.url;
+  if (/\/dist\//.test(here) || /gallery-app\.min\.js/.test(here)) {
+    return new URL('../src/previews/', here);
+  }
+  return new URL('./', here); // registry vive en src/previews/
+}
+
 /** @type {Map<string, import('./_kit/types.d.ts').PreviewDefinition>} */
 const definitionCache = new Map();
 
@@ -50,7 +60,7 @@ export async function loadPreview(tag: string) {
 
   let definition = definitionCache.get(tag);
   if (!definition) {
-    const jsonUrl = new URL(entry.json, import.meta.url);
+    const jsonUrl = new URL(entry.json, previewsBase());
     definition = await loadDefinitionJson(jsonUrl);
     definitionCache.set(tag, definition);
   }
@@ -64,7 +74,7 @@ export async function loadPreview(tag: string) {
       behavior = behaviorCache.get(behKey);
     } else {
       try {
-        behavior = await import(new URL(behPath, import.meta.url).href);
+        behavior = await import(new URL(behPath, previewsBase()).href);
         behaviorCache.set(behKey, behavior);
       } catch (err) {
         console.warn(`[registry] behavior missing for ${tag}:`, err.message);

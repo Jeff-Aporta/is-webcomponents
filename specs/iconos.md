@@ -2,7 +2,7 @@
 
 Resolución de `<is-icon>` y corpus local Iconify.
 
-Diario: [`AGENTS.md`](../../LLM.md) §5 y §9.
+Diario: [`AGENTS.md`](../LLM.md) §5 y §9.
 
 ## Contexto
 

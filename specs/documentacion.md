@@ -10,9 +10,9 @@ Humanos y agentes consumen el kit vía galería, CDN y markdown raw en GitHub. L
 
 | Capa | Archivo | Rol |
 |---|---|---|
-| Carta + diario | [`AGENTS.md`](../../LLM.md) | DO/DON'T, errores, guardianes, operativa |
-| SDD | [`specs/README.md`](../README.md) | Contrato por dominio |
-| Índice tags | [`src/components/LLM.md`](../../src/components/LLM.md) | Mapa categorías → MD |
+| Carta + diario | [`AGENTS.md`](../LLM.md) | DO/DON'T, errores, guardianes, operativa |
+| SDD | [`specs/README.md`](README.md) | Contrato por dominio |
+| Índice tags | [`src/components/LLM.md`](../src/components/LLM.md) | Mapa categorías → MD |
 | Por tag | `src/components/<cat>/<tag>.md` | API del componente |
 | Skills | `src/skills/is-webcomponents/` | Prompt + catálogo |
 

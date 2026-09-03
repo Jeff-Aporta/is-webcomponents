@@ -2,11 +2,11 @@
 
 Forma de los custom elements, `_shared/` y convenciones de API.
 
-Diario: [`AGENTS.md`](../../LLM.md) (carta, DO/DON'T, enums).
+Diario: [`AGENTS.md`](../LLM.md) (carta, DO/DON'T, enums).
 
 ## Contexto
 
-Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build salen de [`manifest.js`](../../src/manifest.js).
+Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build salen de [`manifest.js`](../src/manifest.js).
 
 ## S-K1 Nomenclatura y categorías
 

@@ -4,7 +4,7 @@ Guardianes en `tests/*.test.ts` y runner local.
 
 ## Contexto
 
-Todo el kit es TypeScript (ver [typescript/spec.md](../typescript/spec.md)), pero no hay Vitest ni build de tests: guardianes en Node que leen el árbol y fallan con exit ≠ 0. Node 22 borra los tipos al cargar, así que `.test.ts` se ejecuta directo.
+Todo el kit es TypeScript (ver [typescript/spec.md](typescript/spec.md)), pero no hay Vitest ni build de tests: guardianes en Node que leen el árbol y fallan con exit ≠ 0. Node 22 borra los tipos al cargar, así que `.test.ts` se ejecuta directo.
 
 ## S-T1 Ubicación
 

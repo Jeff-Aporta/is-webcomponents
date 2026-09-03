@@ -12,10 +12,47 @@ import { ENV } from './lib/env.ts';
 import { descargarConfigE2E } from './lib/vendor-e2e-config.ts';
 
 const e2eDir = dirname(fileURLToPath(import.meta.url));
+
+/** `--only=dropdown` o `--only=is-dropdown,is-button` → filtro de archivos/tags. */
+function parseOnly(argv: string[]): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--only' && argv[i + 1]) {
+      out.push(...String(argv[++i]).split(',').map((s) => s.trim()).filter(Boolean));
+    } else if (a.startsWith('--only=')) {
+      out.push(...a.slice('--only='.length).split(',').map((s) => s.trim()).filter(Boolean));
+    }
+  }
+  return out;
+}
+
+const only = parseOnly(process.argv.slice(2));
+if (only.length) {
+  process.env.E2E_ONLY = only.join(',');
+  // Compat con suites que ya leen E2E_TAGS
+  if (!process.env.E2E_TAGS) process.env.E2E_TAGS = only.map((t) => (t.startsWith('is-') ? t : `is-${t}`)).join(',');
+  console.log(`[e2e] --only → E2E_ONLY/E2E_TAGS=${process.env.E2E_TAGS}`);
+}
+
 const archivos = readdirSync(e2eDir)
   .filter((f) => f.endsWith('.test.ts'))
+  .filter((f) => {
+    if (!only.length) return true;
+    // Archivo dedicado (05-dropdown) o nombre que mencione el tag/slug
+    const base = f.toLowerCase();
+    return only.some((t) => {
+      const slug = t.replace(/^is-/, '').toLowerCase();
+      return base.includes(slug) || base.includes(t.toLowerCase());
+    });
+  })
   .sort()
   .map((f) => join(e2eDir, f));
+
+if (only.length && archivos.length === 0) {
+  console.error(`[e2e] --only=${only.join(',')} no matcheo ningun *.test.ts en ${e2eDir}`);
+  process.exit(1);
+}
 
 const autoserve = process.env.E2E_AUTOSERVE !== '0' && !process.env.E2E_BASE_URL;
 let servidor: ServidorE2E | null = null;

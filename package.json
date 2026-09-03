@@ -10,7 +10,8 @@
     "icons:download": "node scripts/download-icons.ts",
     "typecheck": "tsc -p tsconfig.json",
     "test": "node --import ./scripts/ts-resolve-hook.ts --test tests/*.test.ts",
-    "test:e2e": "node --experimental-strip-types src/utils/health/e2e/run.ts"
+    "test:e2e": "node --experimental-strip-types src/utils/health/e2e/run.ts",
+    "audit": "python -B ../../../RAG/auditor/auditor.py audit is-webcomponents"
   },
   "devDependencies": {
     "@browserbasehq/stagehand": "^4.0.2",

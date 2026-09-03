@@ -47,11 +47,15 @@ const CDN_ROOT = /\/core\/$/i.test(SELF_BASE)
   ? new URL('../', SELF_BASE).href.replace(/\/?$/, '/')
   : SELF_BASE;
 
-/** @type {{ ref: string | null, mirrors: Mirror[], preferSelf: boolean }} */
+/** @type {{ ref: string | null, mirrors: Mirror[], preferSelf: boolean, host: string | null, query: Record<string, string> }} */
 const state = {
   ref: null,
   mirrors: DEFAULT_MIRRORS.map((m) => ({ ...m })),
   preferSelf: true,
+  /** Raíz `dist/cdn/` forzada por el consumidor (githack, local, SHA…). */
+  host: null,
+  /** Query de cache-bust en cada asset (`?v=2`). */
+  query: /** @type {Record<string, string>} */ ({}),
 };
 
 /** Registro de lo ya cargado en esta página (anti-redundancia). */
@@ -69,6 +73,58 @@ const jsDone = new Map();
 const slash = (u) => (u.endsWith('/') ? u : `${u}/`);
 
 /**
+ * @param {unknown} input
+ * @returns {Record<string, string>}
+ */
+function normalizeQuery(input: unknown): Record<string, string> {
+  if (input == null || input === '') return {};
+  if (typeof input === 'string') {
+    const q = input.replace(/^\?/, '');
+    /** @type {Record<string, string>} */
+    const out = {};
+    for (const part of q.split('&')) {
+      if (!part) continue;
+      const eq = part.indexOf('=');
+      const k = eq < 0 ? part : part.slice(0, eq);
+      const val = eq < 0 ? '' : part.slice(eq + 1);
+      if (!k) continue;
+      try {
+        out[decodeURIComponent(k)] = decodeURIComponent(val);
+      } catch {
+        out[k] = val;
+      }
+    }
+    return out;
+  }
+  if (typeof input === 'object' && !Array.isArray(input)) {
+    /** @type {Record<string, string>} */
+    const out = {};
+    for (const [k, val] of Object.entries(/** @type {Record<string, unknown>} */ (input))) {
+      if (val == null || val === '') continue;
+      out[k] = String(val);
+    }
+    return out;
+  }
+  return {};
+}
+
+/** Añade `state.query` (`v`, etc.) sin pisar params ya presentes en el href. */
+function withQuery(href: string): string {
+  const entries = Object.entries(state.query);
+  if (!entries.length) return href;
+  const u = new URL(href);
+  for (const [k, val] of entries) {
+    if (!u.searchParams.has(k)) u.searchParams.set(k, val);
+  }
+  return u.href;
+}
+
+/** @param {string} base @param {string} rel */
+function assetHref(base: string, rel: string): string {
+  return withQuery(new URL(rel.replace(/^\//, ''), slash(base)).href);
+}
+
+/**
  * Bases del entry + CSS base (misma carpeta que loader.min.js).
  * @param {string} [forcedRef]
  */
@@ -80,11 +136,25 @@ async function coreAssetBases(forcedRef?: string) {
     const n = slash(b);
     if (!out.includes(n)) out.push(n);
   };
-  push(SELF_BASE);
-  for (const m of state.mirrors) {
-    try { push(new URL('core/', m.base(ref)).href); } catch { /* mirror malo */ }
+  // host = raíz dist/cdn → CSS en raíz y alias en core/
+  if (state.host) {
+    push(state.host);
+    push(new URL('core/', state.host).href);
+  } else {
+    push(SELF_BASE);
   }
-  if (out.length <= 1) push(new URL('core/', jsdelivrBase(ref)).href);
+  for (const m of state.mirrors) {
+    try {
+      const root = m.base(ref);
+      push(root);
+      push(new URL('core/', root).href);
+    } catch { /* mirror malo */ }
+  }
+  if (out.length <= 1) {
+    const root = jsdelivrBase(ref);
+    push(root);
+    push(new URL('core/', root).href);
+  }
   return out;
 }
 
@@ -100,7 +170,9 @@ async function cdnBases(forcedRef?: string) {
     const n = slash(b);
     if (!out.includes(n)) out.push(n);
   };
-  if (state.preferSelf) push(CDN_ROOT);
+  // host del consumidor manda: evita quedarse en un jsDelivr @main cacheado.
+  if (state.host) push(state.host);
+  else if (state.preferSelf) push(CDN_ROOT);
   for (const m of state.mirrors) {
     try { push(m.base(ref)); } catch { /* mirror malo */ }
   }
@@ -145,7 +217,7 @@ async function injectCdnStylesheet(rel: string) {
   /** @type {Error | null} */
   let last = null;
   for (const base of bases) {
-    const href = new URL(rel.replace(/^\//, ''), base).href;
+    const href = assetHref(base, rel);
     try {
       await injectStylesheet(href);
       return href;
@@ -182,7 +254,7 @@ async function importCdn(rel: string) {
   /** @type {Error | null} */
   let last = null;
   for (const base of bases) {
-    const href = new URL(rel.replace(/^\//, ''), base).href;
+    const href = assetHref(base, rel);
     try {
       await importOnce(href);
       return href;
@@ -225,6 +297,14 @@ function normalizeMirrors(input: string | Mirror | (string | Mirror)[]) {
         out.push({ id: 'jsdelivr', label: 'jsDelivr', pin: true, base: (ref = 'main') => jsdelivrBase(ref) });
       } else if (item === 'pages') {
         out.push({ id: 'pages', label: 'GitHub Pages', pin: false, base: () => pagesBase() });
+      } else if (item === 'githack') {
+        // Tip de GitHub con MIME JS (evita caché vieja de jsDelivr @main).
+        out.push({
+          id: 'githack',
+          label: 'raw.githack',
+          pin: false,
+          base: () => `https://raw.githack.com/${GH_REPO}/main/dist/cdn`,
+        });
       } else if (/^https?:\/\//i.test(item)) {
         const base = slash(item);
         out.push({ id: base, label: base, pin: false, base: () => base });
@@ -262,6 +342,10 @@ export const ISWebComponentsLoader = {
   get repo() { return GH_REPO; },
   get mirrors() { return state.mirrors.slice(); },
   get selfBase() { return SELF_BASE; },
+  /** Raíz CDN forzada por `configure({ host })`, o null. */
+  get host() { return state.host; },
+  /** Query de bust activa (`{ v: '2' }` → `?v=2`). */
+  get query() { return { ...state.query }; },
 
   /** API de caché de hojas (adoptedStyleSheets + Cache Storage). */
   sheets: {
@@ -297,12 +381,30 @@ export const ISWebComponentsLoader = {
   },
 
   /**
-   * @param {{ ref?: string | null, mirrors?: string | Mirror | (string | Mirror)[], preferSelf?: boolean }} opts
+   * @param {{
+   *   ref?: string | null,
+   *   mirrors?: string | Mirror | (string | Mirror)[],
+   *   preferSelf?: boolean,
+   *   host?: string | null,
+   *   query?: string | Record<string, string> | null,
+   *   v?: string | number | null,
+   * }} opts
    */
   configure(opts = {}) {
     if ('ref' in opts) state.ref = opts.ref == null || opts.ref === '' ? null : String(opts.ref);
     if ('mirrors' in opts && opts.mirrors != null) state.mirrors = normalizeMirrors(opts.mirrors);
     if (typeof opts.preferSelf === 'boolean') state.preferSelf = opts.preferSelf;
+    if ('host' in opts) {
+      state.host = opts.host == null || opts.host === '' ? null : slash(String(opts.host));
+    }
+    if ('query' in opts) {
+      state.query = opts.query == null ? {} : normalizeQuery(opts.query);
+    }
+    // Atajo cache-bust: L.configure({ v: 2 }) → ?v=2 en cada asset.
+    if ('v' in opts) {
+      if (opts.v == null || opts.v === '') delete state.query.v;
+      else state.query = { ...state.query, v: String(opts.v) };
+    }
     return this;
   },
 

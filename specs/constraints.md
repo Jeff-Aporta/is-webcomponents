@@ -1,6 +1,6 @@
 # Constraints — IS Web Components
 
-Errores ya pagados. Detalle: `AGENTS.md` (carta, errores #24–#44, entorno local).
+Errores ya pagados. Detalle: `AGENTS.md` (carta, errores #24–#46, entorno local).
 
 ## Proceso
 
@@ -8,6 +8,18 @@ Errores ya pagados. Detalle: `AGENTS.md` (carta, errores #24–#44, entorno loca
 - No cerrar un cambio sin `node tests/run-all.ts` verde (al menos tests sin servidor).
 - No aflojar un guardián para “que pase”: se arregla código o spec.
 - No commitear `tests/` entero en gitignore — solo `*.tmp`, `coverage/`, `.cache/`.
+
+## E2E (suite Stagehand)
+
+- No importar fuentes `.ts` del kit desde la suite e2e con specifier `.js`:
+  usar `.ts` explícito (`'../../system/toons.ts'`). Causa: la suite corre con
+  `--experimental-strip-types`, que NO remapea `.js`→`.ts`, y el archivo muere
+  con `ERR_MODULE_NOT_FOUND` al cargar (mató `01-is-code`, AGENTS #46).
+- No re-escribir `.ts`/`.html` con literales acentuados desde PowerShell
+  (`Set-Content`, redirección `>` u `Out-File` sin `-Encoding utf8`): re-encoda
+  y corrompe UTF-8 (`ó`→`Ã³`); editar desde Node `writeFileSync(p, s, 'utf8')`
+  o la herramienta de edición. Causa: literales del nav en `00-arranque` y el
+  harness HTML de PatyIA quedaron con mojibake (AGENTS #45).
 
 ## Repo y paths
 

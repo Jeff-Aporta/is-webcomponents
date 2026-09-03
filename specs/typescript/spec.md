@@ -167,5 +167,5 @@ falla la heurística, que es información que merece conservarse.
 
 ## Fuera de alcance
 
-- El pipeline de `dist/cdn/` (ver [`cdn/spec.md`](../cdn/spec.md)).
+- El pipeline de `dist/cdn/` (ver [`cdn/spec.md`](../cdn.md)).
 - Migrar `scripts/build.mjs` y `scripts/serve.mjs`.
