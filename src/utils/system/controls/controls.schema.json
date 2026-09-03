@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "iswc://system/controls.schema.json",
+  "title": "Controles de demo (playground JSON-driven)",
+  "description": "Los controles de cada demo viven SIEMPRE en el JSON del preview (is-preview/v1): un bloque kind=demo|html puede declarar `controls` para que el sistema monte un panel tipo Storybook y aplique cada cambio al componente vía JSON -> prop/attr. Nunca otro sistema.",
+  "type": "object",
+  "required": ["target", "controls"],
+  "properties": {
+    "target": {
+      "type": "string",
+      "description": "Selector CSS del host dentro del demo. Si se omite, el sistema apunta al primer elemento is-* del demo."
+    },
+    "group": {
+      "type": "string",
+      "description": "Grupo del panel (p. ej. 'Apariencia'). Default: sin grupo."
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/control" }
+    }
+  },
+  "definitions": {
+    "control": {
+      "type": "object",
+      "required": ["control", "prop", "label"],
+      "properties": {
+        "control": {
+          "type": "string",
+          "enum": ["text", "color", "number", "select", "boolean", "range", "json"]
+        },
+        "prop": {
+          "type": "string",
+          "description": "Propiedad del componente que se manipula. Con prefijo 'attr:' se aplica como atributo (reflejado)."
+        },
+        "label": { "type": "string" },
+        "group": { "type": "string" },
+        "default": { "description": "Valor inicial opcional del control." },
+        "options": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "required": ["value", "label"],
+                "properties": {
+                  "value": {},
+                  "label": { "type": "string" }
+                }
+              }
+            ]
+          },
+          "description": "Opciones para control=select."
+        },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "step": { "type": "number" },
+        "placeholder": { "type": "string" },
+        "esquema": {
+          "description": "Esquema/placeholder opcional para control=json (cómo editar el objeto)."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

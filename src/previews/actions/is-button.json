@@ -53,7 +53,13 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <is-button color=\"brand\" variant=\"filled\">Primario</is-button>\r\n            <is-button color=\"success\" variant=\"filled\">Confirmar</is-button>\r\n            <is-button color=\"warning\" variant=\"filled\">Atención</is-button>\r\n            <is-button color=\"danger\"  variant=\"filled\">Eliminar</is-button>\r\n            <is-button color=\"info\"    variant=\"filled\">Detalles</is-button>\r\n            <is-button color=\"error\"   variant=\"filled\">Reintentar</is-button>\r\n            <is-button color=\"neutral\" variant=\"filled\">Secundario</is-button>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <is-button id=\"btn-play\" color=\"brand\" variant=\"filled\">Primario</is-button>\r\n            <is-button color=\"success\" variant=\"filled\">Confirmar</is-button>\r\n            <is-button color=\"warning\" variant=\"filled\">Atención</is-button>\r\n            <is-button color=\"danger\"  variant=\"filled\">Eliminar</is-button>\r\n            <is-button color=\"info\"    variant=\"filled\">Detalles</is-button>\r\n            <is-button color=\"error\"   variant=\"filled\">Reintentar</is-button>\r\n            <is-button color=\"neutral\" variant=\"filled\">Secundario</is-button>\r\n          </div>",
+          "target": "#btn-play",
+          "controls": [
+            { "control": "select", "prop": "variant", "label": "Variante", "group": "Apariencia", "options": ["filled", "outlined", "plain", "ghost"] },
+            { "control": "select", "prop": "color", "label": "Color", "group": "Apariencia", "options": ["brand", "success", "warning", "danger", "info", "error", "neutral"] },
+            { "control": "boolean", "prop": "attr:disabled", "label": "Deshabilitado", "group": "Estado" }
+          ],
           "equivNote": "Equivalente nativo generico de is-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
         },

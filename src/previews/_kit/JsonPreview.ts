@@ -1,23 +1,37 @@
 /**
  * Preview respaldado solo por PreviewDefinition (JSON) + behavior opcional.
  * Sin HTML por componente: el chrome lo pinta <is-preview-component>.
- *
- * @typedef {import('./types.d.ts').PreviewDefinition} PreviewDefinition
- * @typedef {import('./types.d.ts').PreviewMountContext} PreviewMountContext
- * @typedef {import('./types.d.ts').PreviewBehaviorModule} PreviewBehaviorModule
+ * Tipado estructural local (el _kit usa JSDoc; aqui TS estricto y limpio).
  */
 import { ISComponentPreview } from './ISComponentPreview.js';
+import { montarControles } from '../../utils/system/controles.js';
+
+/** Forma mínima de la definición (is-preview/v1). */
+interface DefinicionPreview {
+  tag: string;
+  category?: string;
+  $schema?: string;
+  sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }>;
+}
+
+/** Contexto de montaje (main/root pintados por el chrome). */
+interface CtxMontaje {
+  main?: HTMLElement | null;
+  root?: HTMLElement | null;
+  aside?: HTMLElement | null;
+}
+
+/** Módulo de comportamiento opcional (behaviors/<tag>.js). */
+interface ModuloBehavior {
+  mount?(ctx: CtxMontaje, preview: unknown): unknown;
+  unmount?(ctx: CtxMontaje, preview: unknown): void;
+}
 
 export class JsonPreview extends ISComponentPreview {
-  /** @type {PreviewBehaviorModule | null} */
-  #behavior;
+  #behavior: ModuloBehavior | null = null;
 
-  /**
-   * @param {PreviewDefinition} definition
-   * @param {PreviewBehaviorModule | null} [behavior]
-   */
-  constructor(definition, behavior = null) {
-    const normalized = {
+  constructor(definition: DefinicionPreview, behavior: ModuloBehavior | null = null) {
+    const normalized: DefinicionPreview = {
       ...definition,
       category: definition.category ?? '',
       $schema: definition.$schema || 'is-preview/v1',
@@ -29,13 +43,19 @@ export class JsonPreview extends ISComponentPreview {
     this.#behavior = behavior;
   }
 
-  /** @param {PreviewMountContext} ctx */
-  async mount(ctx) {
+  async mount(ctx: CtxMontaje): Promise<void> {
     if (this.#behavior?.mount) await this.#behavior.mount(ctx, this);
+    // Playground JSON-driven: paneles de controles de los bloques demo/html
+    // que declaren `controls` (se aplican vía JSON -> prop/attr del host).
+    const definition = (this as unknown as { definition: DefinicionPreview }).definition;
+    try {
+      await montarControles(definition, ctx);
+    } catch (e) {
+      console.warn(`[preview] ${definition.tag}: controles no montados`, e);
+    }
   }
 
-  /** @param {PreviewMountContext} ctx */
-  unmount(ctx) {
+  unmount(ctx: CtxMontaje): void {
     try {
       this.#behavior?.unmount?.(ctx, this);
     } finally {
