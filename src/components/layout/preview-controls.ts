@@ -218,7 +218,16 @@ class IsPreviewControls extends HTMLElement {
         const ta = document.createElement('textarea');
         ta.placeholder = c.placeholder ?? '{ ... }';
         ta.value = typeof v === 'string' ? v : JSON.stringify(v ?? '', null, 2);
-        ta.addEventListener('input', () => this.#emitir(c, ta.value));
+        ta.addEventListener('input', () => {
+          const txt = ta.value;
+          let val: unknown = txt;
+          try {
+            val = JSON.parse(txt);
+          } catch {
+            /* valor libre mientras se edita */
+          }
+          this.#emitir(c, val);
+        });
         return ta;
       }
       case 'range': {
