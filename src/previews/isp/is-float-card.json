@@ -16,19 +16,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"fc-demo\">\n            <is-float-card id=\"fcDemo\" horizontal=\"right\" vertical=\"center\">\n              <span>Lección — hover aquí</span>\n              <is-flex-options id=\"fcOpts\" slot=\"float\" compact></is-flex-options>\n            </is-float-card>\n          </div>",
-          "controls": [
-            {
-              "control": "text",
-              "prop": "attr:horizontal",
-              "label": "horizontal"
-            },
-            {
-              "control": "text",
-              "prop": "attr:vertical",
-              "label": "vertical"
-            }
-          ]
+          "html": "<div class=\"fc-demo\">\n            <is-float-card id=\"fcDemo\" horizontal=\"right\" vertical=\"center\">\n              <span>Lección — hover aquí</span>\n              <is-flex-options id=\"fcOpts\" slot=\"float\" compact></is-flex-options>\n            </is-float-card>\n          </div>"
         },
         {
           "kind": "code",

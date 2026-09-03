@@ -15,14 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-flex-options id=\"foDemo\"></is-flex-options>",
-          "controls": [
-            {
-              "control": "boolean",
-              "prop": "attr:compact",
-              "label": "compact"
-            }
-          ]
+          "html": "<is-flex-options id=\"foDemo\"></is-flex-options>"
         },
         {
           "kind": "code",
