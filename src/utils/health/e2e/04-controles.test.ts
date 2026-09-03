@@ -5,7 +5,7 @@
 // range/color/json) y verifica que el host del componente reacciona
 // (prop/attr) — el cambio SIEMPRE viaja JSON -> prop/attr, nunca otro sistema.
 // Filtro opcional: E2E_TAGS=is-button,is-code (coma separada).
-import test, { before, after } from 'node:test';
+import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -17,12 +17,14 @@ import {
   evidencia,
   problemasDeConsola,
   faltanRequisitos,
+  crearTestE2E,
 } from './lib/harness.ts';
 import { repoDir } from './lib/env.ts';
 import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
+const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
 
 before(async () => {
   if (!DISPONIBLE) return;
@@ -212,7 +214,7 @@ async function manipularYVerificar(
   }, { idx: panelIdx, control: c.control, prop: c.prop, vRaw: v, esp: esperado })) as { ok: boolean; actual: unknown } | null;
 }
 export type Fallo = { tag: string; control: string; detalle: string; };
-test('controles data-driven: cada control del panel reacciona en el host', { timeout: 1200000 }, async (t) => {
+testE2E('controles data-driven: cada control del panel reacciona en el host', { timeout: 1200000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   const tags = listarTagsConControles();

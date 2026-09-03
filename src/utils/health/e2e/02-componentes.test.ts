@@ -2,7 +2,7 @@
 // Para cada tag: el preview controlado monta contenido real (no placeholder),
 // el componente esta definido y el docs usa instancias del kit. Las vistas
 // pesadas (diagramas/graficos) exigen ademas senal de render (svg/canvas).
-import test, { before, after } from 'node:test';
+import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
 import {
@@ -11,11 +11,13 @@ import {
   esperarMs,
   evidencia,
   faltanRequisitos,
+  crearTestE2E,
 } from './lib/harness.ts';
 import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
+const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
 
 before(async () => {
   if (!DISPONIBLE) return;
@@ -46,7 +48,7 @@ const VISTAS: Array<[string, { svg: boolean } | null]> = [
   ['is-split-panel', null],
 ];
 export type EstadoVista = { definido: boolean; instancias: number; texto: number; svg: number; canvas: number; demos: number; };
-test('cada vista representativa monta contenido real con su componente definido', { timeout: 600000 }, async (t) => {
+testE2E('cada vista representativa monta contenido real con su componente definido', { timeout: 600000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   const fallos: string[] = [];

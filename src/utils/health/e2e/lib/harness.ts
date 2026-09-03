@@ -7,16 +7,57 @@ import { localBrowser, Stagehand } from '@browserbasehq/stagehand';
 import type { Page, Locator, StagehandCreateOptions } from '@browserbasehq/stagehand';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import test from 'node:test';
+import type { TestContext } from 'node:test';
 import { ENV, e2eDir, faltanRequisitos } from './env.ts';
 import { crearGeneradorMiniMax } from './minimax.ts';
 import { estadoDe } from './estados.ts';
 import { levantarServidor, type ServidorE2E } from './server.ts';
+import { titulo, marcar, tituloDe, lineaDe, EMOJIS } from './e2e-config.ts';
+import type { EstadoE2E } from './e2e-config.ts';
 import type {
   CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,
 } from './tipos.d.ts';
 
-export { ENV, e2eDir, faltanRequisitos };
-export type { Page, Locator };
+export { ENV, e2eDir, faltanRequisitos, titulo, marcar, tituloDe, lineaDe, EMOJIS };
+export type { Page, Locator, EstadoE2E };
+
+/**
+ * Wrapper de `node:test` que aplica la NORMA de título de pestaña a cada test:
+ *   ▶️ <nombre>      al arrancar
+ *   ✅ <nombre>      al pasar
+ *   ❌ <nombre>      al fallar (y re-lanza el error)
+ * Cada suite lo crea con `crearTestE2E(() => ctx?.page ?? null)` y reemplaza
+ * `test(` por `testE2E(`. Así todos los e2e informan el paso y su estado en vivo.
+ */
+export function crearTestE2E(obtenerPagina: () => Page | null) {
+  return (
+    nombre: string,
+    opciones: { timeout?: number } | ((t: TestContext) => void | Promise<void>),
+    fn?: (t: TestContext) => void | Promise<void>,
+  ): void => {
+    let cuerpo: (t: TestContext) => void | Promise<void>;
+    let opts: { timeout?: number };
+    if (typeof opciones === 'function') {
+      cuerpo = opciones;
+      opts = {};
+    } else {
+      opts = opciones ?? {};
+      cuerpo = fn as (t: TestContext) => void | Promise<void>;
+    }
+    test(nombre, { timeout: opts.timeout }, async (t: TestContext) => {
+      const p = obtenerPagina() as unknown as { evaluate?: (fn: (t: string) => void, arg: string) => Promise<unknown> } | null;
+      await titulo(p, 'run', nombre);
+      try {
+        await cuerpo(t);
+        await titulo(p, 'success', nombre);
+      } catch (e) {
+        await titulo(p, 'error', nombre);
+        throw e;
+      }
+    });
+  };
+}
 
 // -- servidor controlado -----------------------------------------------------
 // Los tests SIEMPRE levantan su propio servidor (puerto indicado por

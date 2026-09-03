@@ -4,7 +4,7 @@
 // rastro de CodeMirror. Cada hallazgo se reporta con la vista, el texto y una
 // captura como evidencia. Este test queda ROJO mientras existan problemas
 // reales en la galeria/componentes.
-import test, { before, after } from 'node:test';
+import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
 import {
@@ -16,11 +16,13 @@ import {
   rastroCodeMirror,
   faltanRequisitos,
   ENV,
+  crearTestE2E,
 } from './lib/harness.ts';
 import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
+const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
 
 before(async () => {
   if (!DISPONIBLE) return;
@@ -36,7 +38,7 @@ function pagina(): Page {
   return ctx.page;
 }
 export type Hallazgo = { vista: string; tipo: string; texto: string; captura: string; };
-test('barrido: ninguna vista del catalogo debe producir errores ni peligros', { timeout: 900000 }, async (t) => {
+testE2E('barrido: ninguna vista del catalogo debe producir errores ni peligros', { timeout: 900000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   const hallazgos: Hallazgo[] = [];
@@ -85,7 +87,7 @@ test('barrido: ninguna vista del catalogo debe producir errores ni peligros', { 
   );
 });
 
-test('sin rastro de CodeMirror tras el barrido (motor nativo)', { timeout: 60000 }, async (t) => {
+testE2E('sin rastro de CodeMirror tras el barrido (motor nativo)', { timeout: 60000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   const rastro = await rastroCodeMirror(page);

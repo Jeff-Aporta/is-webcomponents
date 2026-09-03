@@ -1,7 +1,7 @@
 // 00-arranque.test.ts: arranque de la galeria is-webcomponents, deep link por
 // componente y navegacion por el nav. Port del esquema de PatyIA 00-sesion
 // sin login/ISS: aqui el "estado" es el tag del componente (?s={component}).
-import test, { before, after } from 'node:test';
+import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
 import {
@@ -15,11 +15,13 @@ import {
   evidencia,
   problemasDeConsola,
   faltanRequisitos,
+  crearTestE2E,
 } from './lib/harness.ts';
 import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
+const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
 
 before(async () => {
   if (!DISPONIBLE) return;
@@ -37,7 +39,7 @@ function pagina(): Page {
 export type EstadoHome = { categorias: string[]; items: number; kitShell: string; hostTexto: number; };
 export type EstadoDocs = { current: string; isCodeDefined: boolean; isCodeEnHost: boolean; demos: number; texto: number; };
 export type EstadoNav = { current: string; texto: number; svg: number; };
-test('la galeria sin estado monta el catalogo (categorias) y el home', { timeout: 150000 }, async (t) => {
+testE2E('la galeria sin estado monta el catalogo (categorias) y el home', { timeout: 150000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E (MINIMAX_API_KEY)');
   const page = pagina();
   await abrirGaleria(page, null, { ms: 4000 });
@@ -61,7 +63,7 @@ test('la galeria sin estado monta el catalogo (categorias) y el home', { timeout
   await evidencia(page, '00a-home');
 });
 
-test('deep link ?s={component:is-code} abre el docs del componente', { timeout: 180000 }, async (t) => {
+testE2E('deep link ?s={component:is-code} abre el docs del componente', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   await abrirGaleria(page, 'is-code', { ms: 5000 });
@@ -86,7 +88,7 @@ test('deep link ?s={component:is-code} abre el docs del componente', { timeout: 
   await evidencia(page, '00b-deep-link-is-code');
 });
 
-test('navegar por el nav (is-code â†’ is-component-diagram) cambia el preview', { timeout: 200000 }, async (t) => {
+testE2E('navegar por el nav (is-code â†’ is-component-diagram) cambia el preview', { timeout: 200000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   await abrirGaleria(page, 'is-code', { ms: 4000 });
@@ -108,7 +110,7 @@ test('navegar por el nav (is-code â†’ is-component-diagram) cambia el previ
   await evidencia(page, '00c-nav-a-diagrama');
 });
 
-test('sin errores de consola en arranque/navegacion', { timeout: 30000 }, async (t) => {
+testE2E('sin errores de consola en arranque/navegacion', { timeout: 30000 }, async (t) => {
   // Detector centralizado en 03-problemas.test.ts; aqui solo se informa.
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const problemas = problemasDeConsola(ctx!.consola);

@@ -6,7 +6,7 @@
 //     repinta (valor, lineas, linea activa)
 //   - las marks se pintan nativas y el tooltip se abre por caret
 //   - el tema reacciona a data-theme/is-theme-change sin recargar nada de CM
-import test, { before, after } from 'node:test';
+import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
 import {
@@ -17,6 +17,7 @@ import {
   problemasDeConsola,
   faltanRequisitos,
   evidencia,
+  crearTestE2E,
 } from './lib/harness.ts';
 import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from './lib/tipos.d.ts';
 import { cargarToon, textoDe } from '../../system/toons.ts';
@@ -28,6 +29,7 @@ const TITULO_TOOLTIP = textoDe(TOON_CODE, 'tooltipMarks') || 'add(a, b)';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
+const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
 
 before(async () => {
   if (!DISPONIBLE) return;
@@ -45,7 +47,7 @@ function pagina(): Page {
 export type EstadoPintado = { total: number; conShadow: number; pintados: number; readonly: number; editables: number; inline: number; tokens: number; };
 export type EstadoEscrituraAntes = { value: string; lineas: number; gutter: number; };
 export type EstadoEscrituraDespues = { evs: ContadoresEventos; valueOk: boolean; lineas: number; gutter: number; activa: number; };
-test('sin CodeMirror: sin nodos .CodeMirror, sin global y sin recursos cm-*', { timeout: 240000 }, async (t) => {
+testE2E('sin CodeMirror: sin nodos .CodeMirror, sin global y sin recursos cm-*', { timeout: 240000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   await abrirGaleria(page, 'is-code', { ms: 6000 });
@@ -57,7 +59,7 @@ test('sin CodeMirror: sin nodos .CodeMirror, sin global y sin recursos cm-*', { 
   await evidencia(page, '01a-sin-codemirror');
 });
 
-test('read-only e inline pintan con el motor nativo (nada vacio)', { timeout: 180000 }, async (t) => {
+testE2E('read-only e inline pintan con el motor nativo (nada vacio)', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   await abrirGaleria(page, 'is-code', { ms: 6000 });
@@ -93,7 +95,7 @@ test('read-only e inline pintan con el motor nativo (nada vacio)', { timeout: 18
   await evidencia(page, '01b-nativo-pintado');
 });
 
-test('escribir en el editor editable emite is-input/is-change/is-cursor y repinta', { timeout: 180000 }, async (t) => {
+testE2E('escribir en el editor editable emite is-input/is-change/is-cursor y repinta', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   await abrirGaleria(page, 'is-code', { ms: 6000 });
@@ -155,7 +157,7 @@ test('escribir en el editor editable emite is-input/is-change/is-cursor y repint
 });
 export type EstadoMarks = { n: number; value: string; };
 export type EstadoTip = { open: boolean; texto: string; phases: FasesMarks; };
-test('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 180000 }, async (t) => {
+testE2E('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   await abrirGaleria(page, 'is-code', { ms: 6000 });
@@ -205,7 +207,7 @@ test('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 180
   await evidencia(page, '01d-marks-tooltip');
 });
 
-test('tema reactivo: data-theme + is-theme-change repinta sin CodeMirror', { timeout: 180000 }, async (t) => {
+testE2E('tema reactivo: data-theme + is-theme-change repinta sin CodeMirror', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   await abrirGaleria(page, 'is-code', { ms: 5000 });
@@ -229,7 +231,7 @@ test('tema reactivo: data-theme + is-theme-change repinta sin CodeMirror', { tim
   await evidencia(page, '01e-tema-reactivo');
 });
 
-test('sin errores de consola en la profundidad de is-code', { timeout: 30000 }, async (t) => {
+testE2E('sin errores de consola en la profundidad de is-code', { timeout: 30000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const problemas = problemasDeConsola(ctx!.consola);
   const unicos = [...new Set(problemas.map((p) => p.texto))];

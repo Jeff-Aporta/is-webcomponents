@@ -9,6 +9,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { levantarServidor, type ServidorE2E } from './lib/server.ts';
 import { ENV } from './lib/env.ts';
+import { descargarConfigE2E } from './lib/vendor-e2e-config.ts';
 
 const e2eDir = dirname(fileURLToPath(import.meta.url));
 const archivos = readdirSync(e2eDir)
@@ -55,6 +56,10 @@ const apagarSync = (): void => { void apagar(); };
 process.once('exit', apagarSync);
 process.once('SIGINT', () => { apagarSync(); process.exit(130); });
 process.once('SIGTERM', () => { apagarSync(); process.exit(143); });
+
+// La config E2E estándar (título de pestaña) se refresca ANTES de correr:
+// vendor DL con timestamp — nunca vuelve a una versión más vieja que la local.
+await descargarConfigE2E();
 
 const child = spawn(
   process.execPath,
