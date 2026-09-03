@@ -192,10 +192,31 @@ export function atributosDeclarados(Clase: object): string[] {
   return [...vistos];
 }
 
+/**
+ * Dispara los `addInitializer` de `@attr*` sin conectar el elemento al DOM.
+ *
+ * Los decoradores solo conocen la clase al construir una instancia. El browser,
+ * en cambio, lee `observedAttributes` **una sola vez** en
+ * `customElements.define`. Si el REGISTRO aún está vacío, congela `[]` y
+ * atributos como `open` nunca disparan `attributeChangedCallback` (dropdown
+ * que marca `open` pero no abre el panel).
+ *
+ * `defineElement` llama esto justo antes del `define`.
+ */
+export function materializarAtributos(Clase: CustomElementConstructor): void {
+  if (REGISTRO.has(Clase)) return;
+  try {
+    new Clase();
+  } catch {
+    /* constructor exigente: observedAttributes quedará incompleto */
+  }
+}
+
 /** Registra el atributo en la clase donde se declara el campo. */
 function registrar(ctx: { metadata?: object; addInitializer(fn: () => void): void }, attr: string): void {
   // `addInitializer` con `this` de instancia es lo único que da acceso al
   // constructor real; el contexto de decorador no lo expone directamente.
+  // Debe correr ANTES de customElements.define → ver materializarAtributos.
   ctx.addInitializer(function (this: object) {
     const Clase = (this as { constructor: object }).constructor;
     let set = REGISTRO.get(Clase);

@@ -26,7 +26,7 @@ export {
 
 export {
   attrBool, attrStr, attrEnum, attrNum,
-  atributosDeclarados, aAtributo,
+  atributosDeclarados, materializarAtributos, aAtributo,
   withStyleAttrs, syncStyleAttrs, syncStyleAttr, syncPresentStyleAttrs,
   styleAttrNames, describeStyleAttrs, isCssColorValue, applyToneRamp,
 } from './attrs.js';

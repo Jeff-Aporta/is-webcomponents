@@ -13,6 +13,7 @@
  */
 
 import { sheetsBase, soportaHojasAdoptadas } from './base-sheets.js';
+import { materializarAtributos } from './attrs.js';
 
 /* ─────────────────────────────── registro ─────────────────────────────── */
 
@@ -44,7 +45,11 @@ export function defineElement<T extends CustomElementConstructor>(
   ctor: T,
   globalName?: string | true,
 ): T {
-  if (!customElements.get(tag)) customElements.define(tag, ctor);
+  // Antes del define: materializa @attr* para que observedAttributes no quede [].
+  if (!customElements.get(tag)) {
+    materializarAtributos(ctor);
+    customElements.define(tag, ctor);
+  }
   const name = globalName === true ? globalNameFor(tag) : globalName;
   if (name && typeof window !== 'undefined') {
     (window as unknown as Record<string, unknown>)[name] = ctor;
