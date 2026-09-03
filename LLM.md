@@ -35,8 +35,7 @@ c:\ContaPyme\Personal\apps\AppWebcomponents\
 │   ├── styles/                 # is-base, palettes, presentation, shell
 │   ├── assets/icons/           # SVGs Iconify (+ .json índices)
 │   ├── skills/is-webcomponents/
-│   └── docs/
-├── docs/                       # HTML SEO por tag (generado; NO src/docs)
+│   └── utils/                  # health/e2e (Stagehand) + system (toons, dev)
 ├── scripts/                    # build, serve, preview-chrome, …
 ├── dist/cdn/                   # artefactos CDN (jsDelivr / Pages)
 ├── tests/                      # *.test.mjs (commiteados; no ignorar la carpeta)
@@ -239,8 +238,8 @@ Guardianes: `tests/specs-sdd` · `tests/er-clusters` · `tests/src-layout` · `t
 ## Proyecto
 
 - Web Components vanilla (`is-*`), shadow DOM, tokens `--is-*`.
-- **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/manifest.js`, `src/docs`. En la raíz: `scripts/`, `dist/`, `tests/`, `specs/` (**contrato SDD**), `index.html`, `robots.txt`, `AGENTS.md`, `README.md`.
-- Guardián: `tests/src-layout.test.ts` — falla si reaparecen `components/` / `styles/` / `previews/` / `skills/` en la raíz. **`docs/` raíz está permitida** (páginas planas por tag). `src/docs/` sigue siendo notas de agente.
+- **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/utils` (health/e2e + system), `src/manifest.js`. En la raíz: `scripts/`, `dist/`, `tests/`, `specs/` (**contrato SDD**), `index.html`, `robots.txt`, `AGENTS.md`, `README.md`.
+- Guardián: `tests/src-layout.test.ts` — falla si reaparecen `components/` / `styles/` / `previews/` / `skills/` en la raíz. **No hay carpetas `docs/` ni `src/docs/`** (se eliminaron los planes/specs de superpowers el 03-sep-2026; las lecciones viven en `LLM.md`).
 - **Previews = JSON homogéneo**, no HTML por tag:
   - Archivo: `src/previews/<cat>/<tag>.json` con `$schema: "is-preview/v1"` (misma interface para todos).
   - Chrome: `<is-preview-component>` (galería in-app + `_shell.html?tag=` fullscreen).

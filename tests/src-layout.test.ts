@@ -19,7 +19,7 @@ const mustExist = [
   'src/styles',
   'src/previews',
   'src/skills',
-  'src/docs',
+  'src/utils/health/e2e',
   // `src/assets/` se consolidó en `dist/assets/` (fuera de dist/cdn/).
   'dist/assets/icons',
   'src/components/LLM.md',
