@@ -15,7 +15,54 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <span class=\"demo-label\">caso mínimo</span>\r\n            <div class=\"cluster\">\r\n              <is-check-icon-button\r\n                id=\"demoPlay\"\r\n                icon=\"mdi:play\"\r\n                checked-icon=\"mdi:pause\"\r\n                label=\"Reproducir\"\r\n                checked-label=\"Pausar\"\r\n              ></is-check-icon-button>\r\n              <span class=\"card-meta\" id=\"playState\">estado: paused</span>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <span class=\"demo-label\">caso mínimo</span>\r\n            <div class=\"cluster\">\r\n              <is-check-icon-button\r\n                id=\"demoPlay\"\r\n                icon=\"mdi:play\"\r\n                checked-icon=\"mdi:pause\"\r\n                label=\"Reproducir\"\r\n                checked-label=\"Pausar\"\r\n              ></is-check-icon-button>\r\n              <span class=\"card-meta\" id=\"playState\">estado: paused</span>\r\n            </div>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:checked-icon",
+              "label": "checked-icon",
+              "options": [
+                "mdi:pause",
+                "mdi:volume-off",
+                "mdi:weather-sunny",
+                "mdi:heart",
+                "mdi:bookmark",
+                "mdi:eye",
+                "mdi:fullscreen-exit",
+                "mdi:microphone-off"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Reproducir",
+                "Silenciar",
+                "Cambiar a tema oscuro",
+                "Añadir a favoritos",
+                "Guardar",
+                "Mostrar contraseña",
+                "Pantalla completa",
+                "Silenciar micrófono"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:checked",
+              "label": "checked"
+            },
+            {
+              "control": "text",
+              "prop": "attr:variant",
+              "label": "variant"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
+          ]
         },
         {
           "kind": "callout",

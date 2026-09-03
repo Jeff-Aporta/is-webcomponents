@@ -15,7 +15,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"sd-stage\">\r\n            <is-speed-dial direction=\"up\" open>\r\n              <is-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></is-speed-dial-action>\r\n            </is-speed-dial>\r\n          </div>"
+          "html": "<div class=\"sd-stage\">\r\n            <is-speed-dial direction=\"up\" open>\r\n              <is-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></is-speed-dial-action>\r\n            </is-speed-dial>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Documento",
+                "Imagen",
+                "Enlace"
+              ]
+            }
+          ]
         },
         {
           "kind": "code",

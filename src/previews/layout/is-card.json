@@ -14,7 +14,21 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-card>Hola mundo</is-card>"
+          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-card>Hola mundo</is-card>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "outlined",
+                "filled",
+                "filled-outlined",
+                "plain",
+                "accent"
+              ]
+            }
+          ]
         },
         {
           "kind": "code",

@@ -15,7 +15,110 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-textarea id=\"demo\" label=\"Descripción\" hint=\"Máximo 200 caracteres\" maxlength=\"200\" show-count rows=\"4\" placeholder=\"Cuéntanos…\" name=\"descripcion\"></is-textarea>"
+          "html": "<is-textarea id=\"demo\" label=\"Descripción\" hint=\"Máximo 200 caracteres\" maxlength=\"200\" show-count rows=\"4\" placeholder=\"Cuéntanos…\" name=\"descripcion\"></is-textarea>",
+          "controls": [
+            {
+              "control": "number",
+              "prop": "attr:maxlength",
+              "label": "maxlength",
+              "min": 0,
+              "max": 500,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:show-count",
+              "label": "show-count"
+            },
+            {
+              "control": "number",
+              "prop": "attr:rows",
+              "label": "rows",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "filled",
+                "underlined"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:autosize",
+              "label": "autosize"
+            },
+            {
+              "control": "number",
+              "prop": "attr:min-rows",
+              "label": "min-rows",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:max-rows",
+              "label": "max-rows",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:resize",
+              "label": "resize",
+              "options": [
+                "auto",
+                "none",
+                "both"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:alias",
+              "label": "alias"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:de",
+              "label": "de"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:error",
+              "label": "error"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:full-width",
+              "label": "full-width"
+            },
+            {
+              "control": "text",
+              "prop": "attr:label-placement",
+              "label": "label-placement"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:readonly",
+              "label": "readonly"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
+          ]
         },
         {
           "kind": "html",

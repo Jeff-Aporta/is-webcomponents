@@ -13,7 +13,32 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-tag>General</is-tag>\r\n            <is-tag color=\"brand\">InSoft</is-tag>\r\n            <is-tag color=\"neutral\">Neutral</is-tag>\r\n            <is-tag color=\"info\">Info</is-tag>\r\n            <is-tag color=\"success\">Success</is-tag>\r\n            <is-tag color=\"warning\">Warning</is-tag>\r\n            <is-tag color=\"danger\">Danger</is-tag>\r\n            <is-tag with-remove id=\"rmTag\">Removible</is-tag>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-tag>General</is-tag>\r\n            <is-tag color=\"brand\">InSoft</is-tag>\r\n            <is-tag color=\"neutral\">Neutral</is-tag>\r\n            <is-tag color=\"info\">Info</is-tag>\r\n            <is-tag color=\"success\">Success</is-tag>\r\n            <is-tag color=\"warning\">Warning</is-tag>\r\n            <is-tag color=\"danger\">Danger</is-tag>\r\n            <is-tag with-remove id=\"rmTag\">Removible</is-tag>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "neutral",
+                "info",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:with-remove",
+              "label": "with-remove"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:pill",
+              "label": "pill"
+            }
+          ]
         }
       ]
     },

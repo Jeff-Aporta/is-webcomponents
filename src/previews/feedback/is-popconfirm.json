@@ -14,7 +14,29 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"btnDelete\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Borrar elemento\r\n          </is-button>\r\n          <is-popconfirm for=\"btnDelete\" message=\"¿Seguro que quieres borrarlo? Esta acción no se puede deshacer.\" placement=\"bottom-end\">\r\n            <is-button slot=\"confirm\" color=\"danger\">Sí, borrar</is-button>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n          </is-popconfirm>\r\n          <p id=\"pcLog\">Última acción: <code class=\"code\">—</code></p>"
+          "html": "<is-button id=\"btnDelete\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Borrar elemento\r\n          </is-button>\r\n          <is-popconfirm for=\"btnDelete\" message=\"¿Seguro que quieres borrarlo? Esta acción no se puede deshacer.\" placement=\"bottom-end\">\r\n            <is-button slot=\"confirm\" color=\"danger\">Sí, borrar</is-button>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n          </is-popconfirm>\r\n          <p id=\"pcLog\">Última acción: <code class=\"code\">—</code></p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "bottom-end",
+                "top",
+                "top-start",
+                "top-end",
+                "bottom",
+                "bottom-start",
+                "start",
+                "end"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:hide-arrow",
+              "label": "hide-arrow"
+            }
+          ]
         },
         {
           "kind": "code",

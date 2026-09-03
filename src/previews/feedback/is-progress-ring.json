@@ -18,7 +18,35 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"ring-row\">\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring value=\"75\" label=\"75%\"></is-progress-ring>\r\n              <p class=\"ring-card__title\">Completado</p>\r\n              <p class=\"ring-card__cap\">value 75</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring value=\"40\" label=\"40%\"></is-progress-ring>\r\n              <p class=\"ring-card__title\">En curso</p>\r\n              <p class=\"ring-card__cap\">value 40</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring\r\n                value=\"100\"\r\n                label=\"100%\"\r\n                style=\"--indicator-color: var(--is-color-success)\"\r\n              ></is-progress-ring>\r\n              <p class=\"ring-card__title\">Completo</p>\r\n              <p class=\"ring-card__cap\">success</p>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"ring-row\">\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring value=\"75\" label=\"75%\"></is-progress-ring>\r\n              <p class=\"ring-card__title\">Completado</p>\r\n              <p class=\"ring-card__cap\">value 75</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring value=\"40\" label=\"40%\"></is-progress-ring>\r\n              <p class=\"ring-card__title\">En curso</p>\r\n              <p class=\"ring-card__cap\">value 40</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <is-progress-ring\r\n                value=\"100\"\r\n                label=\"100%\"\r\n                style=\"--indicator-color: var(--is-color-success)\"\r\n              ></is-progress-ring>\r\n              <p class=\"ring-card__title\">Completo</p>\r\n              <p class=\"ring-card__cap\">success</p>\r\n            </div>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "75",
+                "40",
+                "100",
+                "60",
+                "35",
+                "90"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "75%",
+                "40%",
+                "100%",
+                "60%",
+                "35%",
+                "90%"
+              ]
+            }
+          ]
         }
       ]
     },

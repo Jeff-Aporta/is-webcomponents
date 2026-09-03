@@ -14,7 +14,23 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <is-icon icon=\"mdi:home\"></is-icon>\r\n            <is-icon icon=\"mdi:check-circle\" style=\"color:var(--is-accent)\"></is-icon>\r\n            <is-icon icon=\"mdi:star\" label=\"Favorito\"></is-icon>\r\n            <is-icon icon=\"mdi:cog-outline\"></is-icon>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <is-icon icon=\"mdi:home\"></is-icon>\r\n            <is-icon icon=\"mdi:check-circle\" style=\"color:var(--is-accent)\"></is-icon>\r\n            <is-icon icon=\"mdi:star\" label=\"Favorito\"></is-icon>\r\n            <is-icon icon=\"mdi:cog-outline\"></is-icon>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Favorito",
+                "Corazón"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            }
+          ]
         }
       ]
     },

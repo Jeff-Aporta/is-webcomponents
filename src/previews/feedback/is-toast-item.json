@@ -14,7 +14,31 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-toast-item color=\"success\" open duration=\"0\">\r\n            <is-icon slot=\"icon\" icon=\"mdi:check-circle\"></is-icon>\r\n            Guardado correctamente\r\n          </is-toast-item>\r\n          <is-toast-item color=\"danger\" open duration=\"0\">\r\n            <is-icon slot=\"icon\" icon=\"mdi:alert-circle\"></is-icon>\r\n            No se pudo guardar\r\n          </is-toast-item>"
+          "html": "<is-toast-item color=\"success\" open duration=\"0\">\r\n            <is-icon slot=\"icon\" icon=\"mdi:check-circle\"></is-icon>\r\n            Guardado correctamente\r\n          </is-toast-item>\r\n          <is-toast-item color=\"danger\" open duration=\"0\">\r\n            <is-icon slot=\"icon\" icon=\"mdi:alert-circle\"></is-icon>\r\n            No se pudo guardar\r\n          </is-toast-item>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "success",
+                "danger"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:open",
+              "label": "open"
+            },
+            {
+              "control": "number",
+              "prop": "attr:duration",
+              "label": "duration",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            }
+          ]
         },
         {
           "kind": "code",

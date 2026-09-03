@@ -17,7 +17,19 @@
         },
         {
           "kind": "demo",
-          "html": "<is-skeleton style=\"height:.875rem;margin-bottom:.5rem\"></is-skeleton>\r\n          <is-skeleton style=\"height:.875rem;width:80%;margin-bottom:.5rem\"></is-skeleton>\r\n          <is-skeleton style=\"height:4rem;border-radius:8px\"></is-skeleton>"
+          "html": "<is-skeleton style=\"height:.875rem;margin-bottom:.5rem\"></is-skeleton>\r\n          <is-skeleton style=\"height:.875rem;width:80%;margin-bottom:.5rem\"></is-skeleton>\r\n          <is-skeleton style=\"height:4rem;border-radius:8px\"></is-skeleton>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:effect",
+              "label": "effect",
+              "options": [
+                "sheen",
+                "pulse",
+                "none"
+              ]
+            }
+          ]
         }
       ]
     },

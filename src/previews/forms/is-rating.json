@@ -15,7 +15,108 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-rating id=\"demo\" label=\"Satisfacción\" value=\"3\" name=\"rating\"></is-rating>"
+          "html": "<is-rating id=\"demo\" label=\"Satisfacción\" value=\"3\" name=\"rating\"></is-rating>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "3",
+                "2",
+                "7",
+                "3.5",
+                "2.75",
+                "4.3",
+                "2.5",
+                "4",
+                "3.7",
+                "4.28",
+                "2.1"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:max",
+              "label": "max",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:show-label",
+              "label": "show-label"
+            },
+            {
+              "control": "select",
+              "prop": "attr:label-format",
+              "label": "label-format",
+              "options": [
+                "{v} / {max}",
+                "{v} de {max} estrellas"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:precision",
+              "label": "precision",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:allow-half",
+              "label": "allow-half"
+            },
+            {
+              "control": "select",
+              "prop": "attr:empty-icon",
+              "label": "empty-icon",
+              "options": [
+                "tabler:heart",
+                "tabler:thumb-up",
+                "tabler:circle"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "danger",
+                "neutral",
+                "success",
+                "warning"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:highlight-selected-only",
+              "label": "highlight-selected-only"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:readonly",
+              "label": "readonly"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:clearable",
+              "label": "clearable"
+            }
+          ]
         },
         {
           "kind": "html",

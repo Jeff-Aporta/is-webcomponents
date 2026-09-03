@@ -15,7 +15,42 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-dropdown id=\"dd\">\r\n            <is-button slot=\"trigger\" with-caret>Options</is-button>\r\n            <is-dropdown-item value=\"edit\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:pencil\"></is-icon>\r\n              Edit\r\n            </is-dropdown-item>\r\n            <is-dropdown-item value=\"dup\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:content-copy\"></is-icon>\r\n              Duplicate\r\n            </is-dropdown-item>\r\n            <is-divider></is-divider>\r\n            <is-dropdown-item value=\"delete\" color=\"danger\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:delete\"></is-icon>\r\n              Delete\r\n            </is-dropdown-item>\r\n          </is-dropdown>\r\n          <p id=\"log\" class=\"lede\">selección: —</p>"
+          "html": "<is-dropdown id=\"dd\">\r\n            <is-button slot=\"trigger\" with-caret>Options</is-button>\r\n            <is-dropdown-item value=\"edit\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:pencil\"></is-icon>\r\n              Edit\r\n            </is-dropdown-item>\r\n            <is-dropdown-item value=\"dup\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:content-copy\"></is-icon>\r\n              Duplicate\r\n            </is-dropdown-item>\r\n            <is-divider></is-divider>\r\n            <is-dropdown-item value=\"delete\" color=\"danger\">\r\n              <is-icon slot=\"icon\" icon=\"mdi:delete\"></is-icon>\r\n              Delete\r\n            </is-dropdown-item>\r\n          </is-dropdown>\r\n          <p id=\"log\" class=\"lede\">selección: —</p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "edit",
+                "dup",
+                "delete",
+                "canvas",
+                "grid",
+                "prefs",
+                "new",
+                "open",
+                "pdf",
+                "docx",
+                "csv"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:color",
+              "label": "color"
+            },
+            {
+              "control": "text",
+              "prop": "attr:type",
+              "label": "type"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:checked",
+              "label": "checked"
+            }
+          ]
         },
         {
           "kind": "code",

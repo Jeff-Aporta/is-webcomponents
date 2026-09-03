@@ -14,7 +14,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"btnDelete\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Eliminar cuenta\r\n          </is-button>\r\n          <is-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"Se borrarán todos tus datos. Esta acción no se puede deshacer.\">\r\n            <is-button slot=\"confirm\" color=\"danger\">Sí, eliminar</is-button>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n          </is-confirm-modal>\r\n          <p id=\"cmLog\">Última acción: <code class=\"code\">—</code></p>"
+          "html": "<is-button id=\"btnDelete\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Eliminar cuenta\r\n          </is-button>\r\n          <is-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"Se borrarán todos tus datos. Esta acción no se puede deshacer.\">\r\n            <is-button slot=\"confirm\" color=\"danger\">Sí, eliminar</is-button>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n          </is-confirm-modal>\r\n          <p id=\"cmLog\">Última acción: <code class=\"code\">—</code></p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:heading",
+              "label": "heading",
+              "options": [
+                "Eliminar cuenta",
+                "Publicar a producción"
+              ]
+            }
+          ]
         },
         {
           "kind": "code",

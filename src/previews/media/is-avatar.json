@@ -14,7 +14,78 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <is-avatar initials=\"JD\" label=\"Juan Díaz\"></is-avatar>\r\n            <is-avatar image=\"https://i.pravatar.cc/80?u=1\" label=\"Usuario demo\"></is-avatar>\r\n            <is-avatar label=\"Sin foto\"></is-avatar>\r\n            <is-avatar image=\"https://invalid.example/no.jpg\" initials=\"FB\" label=\"Imagen rota → iniciales\"></is-avatar>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <is-avatar initials=\"JD\" label=\"Juan Díaz\"></is-avatar>\r\n            <is-avatar image=\"https://i.pravatar.cc/80?u=1\" label=\"Usuario demo\"></is-avatar>\r\n            <is-avatar label=\"Sin foto\"></is-avatar>\r\n            <is-avatar image=\"https://invalid.example/no.jpg\" initials=\"FB\" label=\"Imagen rota → iniciales\"></is-avatar>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:initials",
+              "label": "initials",
+              "options": [
+                "JD",
+                "FB",
+                "AN",
+                "BE",
+                "CA",
+                "XS",
+                "SM",
+                "MD",
+                "LG",
+                "XL",
+                "XXL",
+                "NS",
+                "+5",
+                "MR",
+                "OK",
+                "ER"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Juan Díaz",
+                "Usuario demo",
+                "Sin foto",
+                "Imagen rota → iniciales",
+                "Ana",
+                "Sin datos",
+                "Bea",
+                "Caro",
+                "XS",
+                "SM",
+                "MD",
+                "LG",
+                "XL",
+                "XXL",
+                "Foto",
+                "Sin foto, iniciales",
+                "Solo icono",
+                "Carol",
+                "5 más",
+                "Lucía",
+                "Marcos",
+                "Sara",
+                "Usuario",
+                "Bot",
+                "Soporte",
+                "Comunidad",
+                "Imagen correcta",
+                "Error fallback",
+                "Sin iniciales"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:shape",
+              "label": "shape",
+              "options": [
+                "circle",
+                "square",
+                "rounded"
+              ]
+            }
+          ]
         }
       ]
     },
