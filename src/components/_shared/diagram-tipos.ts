@@ -17,12 +17,7 @@
  */
 
 /** Rectángulo colocado. La unidad de todo el layout. */
-export interface Caja {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
+export type Caja = { x: number; y: number; w: number; h: number; };
 
 /** Un componente del diagrama. */
 export interface Componente extends Caja {

@@ -7,25 +7,13 @@ import { ISComponentPreview } from './ISComponentPreview.js';
 import { montarControles } from '../../utils/system/controles.js';
 
 /** Forma mínima de la definición (is-preview/v1). */
-interface DefinicionPreview {
-  tag: string;
-  category?: string;
-  $schema?: string;
-  sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }>;
-}
+type DefinicionPreview = { tag: string; category?: string; $schema?: string; sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }>; };
 
 /** Contexto de montaje (main/root pintados por el chrome). */
-interface CtxMontaje {
-  main?: HTMLElement | null;
-  root?: HTMLElement | null;
-  aside?: HTMLElement | null;
-}
+type CtxMontaje = { main?: HTMLElement | null; root?: HTMLElement | null; aside?: HTMLElement | null; };
 
 /** Módulo de comportamiento opcional (behaviors/<tag>.js). */
-interface ModuloBehavior {
-  mount?(ctx: CtxMontaje, preview: unknown): unknown;
-  unmount?(ctx: CtxMontaje, preview: unknown): void;
-}
+type ModuloBehavior = { mount?(ctx: CtxMontaje, preview: unknown): unknown; unmount?(ctx: CtxMontaje, preview: unknown): void; };
 
 export class JsonPreview extends ISComponentPreview {
   #behavior: ModuloBehavior | null = null;

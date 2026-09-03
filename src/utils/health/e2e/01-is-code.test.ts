@@ -19,6 +19,12 @@ import {
   evidencia,
 } from './lib/harness.ts';
 import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from './lib/tipos.ts';
+import { cargarToon, textoDe } from '../../system/toons.js';
+
+// Textos de test SIEMPRE desde los toons (src/utils/system/toons/*.json).
+const TOON_CODE = cargarToon('is-code');
+const TEXTO_ESCRITURA = textoDe(TOON_CODE, 'escribirEnEditor') || '// e2e nativo';
+const TITULO_TOOLTIP = textoDe(TOON_CODE, 'tooltipMarks') || 'add(a, b)';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -138,28 +144,28 @@ test('escribir en el editor editable emite is-input/is-change/is-cursor y repint
   // expone page.keyboard: se inserta en el caret con setRangeText y se
   // dispara el evento `input` real (el mismo camino que pisa el teclado:
   // el handler nativo lee ta.value y repinta/emite).
-  await page.evaluate(() => {
+  await page.evaluate((texto: string) => {
     const h = window.__edE2E;
     const ta = h?.shadowRoot.querySelector<HTMLTextAreaElement>('textarea.ic-input');
     if (!h || !ta) return;
     ta.focus();
     ta.setSelectionRange(ta.value.length, ta.value.length);
-    ta.setRangeText('// e2e nativo', ta.selectionStart, ta.selectionEnd, 'end');
+    ta.setRangeText(texto, ta.selectionStart, ta.selectionEnd, 'end');
     ta.dispatchEvent(new Event('input', { bubbles: true }));
-  });
+  }, TEXTO_ESCRITURA);
   await esperarMs(700);
-  const despues = (await page.evaluate(() => {
+  const despues = (await page.evaluate((texto: string) => {
     const h = window.__edE2E;
     if (!h) return null;
     const ta = h.shadowRoot.querySelector<HTMLTextAreaElement>('textarea.ic-input');
     return {
       evs: window.__evs ?? { input: 0, change: 0, cursor: 0 },
-      valueOk: !!ta && ta.value.includes('// e2e nativo'),
+      valueOk: !!ta && ta.value.includes(texto),
       lineas: h.shadowRoot.querySelectorAll('.ic-line').length,
       gutter: h.shadowRoot.querySelectorAll('.ic-ln').length,
       activa: h.shadowRoot.querySelectorAll('.ic-line--active').length,
     };
-  })) as EstadoEscrituraDespues | null;
+  }, TEXTO_ESCRITURA)) as EstadoEscrituraDespues | null;
   assert.ok(despues, 'el editor debe seguir presente tras escribir');
   assert.ok(despues.valueOk, 'el valor del editor debe contener lo tecleado');
   assert.ok(despues.evs.input >= 1 && despues.evs.change >= 1, `is-input/is-change disparados (${JSON.stringify(despues.evs)})`);
@@ -226,6 +232,7 @@ test('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 180
   })) as EstadoTip | null;
   assert.ok(tip, 'tooltip presente');
   assert.ok(tip.open, 'el tooltip debe abrirse con el caret dentro de la mark');
+  assert.ok(tip.texto.startsWith(TITULO_TOOLTIP), `el tooltip muestra el texto del toon "${TITULO_TOOLTIP}" (${tip.texto})`);
   assert.ok(tip.phases.includes('enter:tip-add'), `is-mark-activate enter:tip-add (${tip.phases.join(',')})`);
   await evidencia(page, '01d-marks-tooltip');
 });

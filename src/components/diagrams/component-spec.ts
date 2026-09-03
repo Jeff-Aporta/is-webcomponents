@@ -280,12 +280,7 @@ function outerSides(comp: Componente, cluster: Caja, sibs: readonly Componente[]
 }
 
 /** Round-robin: cap 1 fuerza a rotar de lado antes de repetir. */
-function takeLeastLoaded(
-  comp: Componente,
-  ranked: readonly Lado[],
-  loads: Map<string, number>,
-  cap = 1,
-): Lado | null {
+function takeLeastLoaded(comp: Componente, ranked: readonly Lado[], loads: Map<string, number>, cap = 1): Lado | null {
   for (const side of ranked) {
     if ((loads.get(`${comp.id}:${side}`) ?? 0) < cap) return side;
   }
@@ -311,11 +306,7 @@ function sideOffset(comp: Componente, side: Lado, index: number, total: number):
  *   3. Arista componente→componente sin interfaz → socket (C) en el origen
  *      y lollipop (O) en el destino. Sin esto el PNG solo enseña cajas.
  */
-function wireComponentDiagram(
-  components: Componente[],
-  interfaces: InterfazUml[],
-  edges: Arista[],
-) {
+function wireComponentDiagram(components: Componente[], interfaces: InterfazUml[], edges: Arista[]) {
   const known = new Set(components.map((c) => c.id));
   const byId = new Map(components.map((c) => [c.id, c]));
   const ifaces = interfaces.slice();

@@ -67,7 +67,9 @@ export interface ConfigE2E {
 
 export const ENV: ConfigE2E = {
   baseUrl: o('E2E_BASE_URL', 'http://127.0.0.1:8391/index.html').replace(/\/+$/, ''),
-  headless: o('E2E_HEADLESS', 'true').toLowerCase() !== 'false',
+  // Navegador VISIBLE por defecto cuando corres en una terminal (puedes seguir
+  // en vivo lo que hace el e2e). E2E_HEADLESS=true lo oculta (CI/automático).
+  headless: o('E2E_HEADLESS', process.stdout.isTTY ? 'false' : 'true').toLowerCase() !== 'false',
   escritura: o('E2E_WRITE', '').toLowerCase() === '1' || o('E2E_WRITE', '').toLowerCase() === 'true',
   estricto: o('E2E_STRICT', '').toLowerCase() === '1' || o('E2E_STRICT', '').toLowerCase() === 'true',
   minimaxKey: o('MINIMAX_API_KEY', ''),

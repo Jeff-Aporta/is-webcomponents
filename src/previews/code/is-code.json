@@ -15,7 +15,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-code class=\"ed\" id=\"demo-basic\" lang=\"javascript\" wrap line-numbers min-height=\"14rem\" value=\"function greet(name) {&#10;  return `Hola, ${name}`;&#10;}&#10;&#10;console.log(greet('IS'));\"></is-code>"
+          "html": "<is-code class=\"ed\" id=\"demo-basic\" lang=\"javascript\" wrap line-numbers min-height=\"14rem\" value=\"function greet(name) {&#10;  return `Hola, ${name}`;&#10;}&#10;&#10;console.log(greet('IS'));\"></is-code>",
+          "target": "#demo-basic",
+          "controls": [
+            { "control": "select", "prop": "attr:lang", "label": "Lenguaje", "group": "Motor", "options": ["javascript", "typescript", "html", "css", "json", "python", "shell", "plaintext"] },
+            { "control": "boolean", "prop": "attr:wrap", "label": "Wrap", "group": "Editor" },
+            { "control": "boolean", "prop": "attr:readonly", "label": "Solo lectura", "group": "Editor" },
+            { "control": "number", "prop": "attr:tab-size", "label": "Tab (espacios)", "group": "Editor", "min": 1, "max": 8, "step": 1 }
+          ]
         },
         {
           "kind": "code",

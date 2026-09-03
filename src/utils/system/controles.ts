@@ -13,7 +13,7 @@ export type TipoControl = 'text' | 'color' | 'number' | 'select' | 'boolean' | '
 export type OpcionSelect = string | { value: string | number | boolean; label: string };
 
 /** Definición JSON de un control (espejo de controls.schema.json). */
-export interface ControlDef {
+export type ControlDef = {
   control: TipoControl;
   /** Propiedad del host; prefijo `attr:` aplica como atributo reflejado. */
   prop: string;
@@ -25,16 +25,16 @@ export interface ControlDef {
   max?: number;
   step?: number;
   placeholder?: string;
-}
+};
 
 /** `controls` que puede declarar un bloque demo/html del preview. */
-export interface ControlesDeDemo {
+export type ControlesDeDemo = {
   /** Selector CSS del host dentro del demo (default: primer is-* del demo). */
   target?: string;
   /** Grupo por defecto de todos los controles del bloque. */
   group?: string;
   controls: ControlDef[];
-}
+};
 
 /** Bloque de preview que puede llevar controles (kind demo|html). */
 export type BloqueConControles = { kind: 'demo' | 'html'; html?: string } & ControlesDeDemo;
@@ -61,7 +61,12 @@ function opcionesDe(def: ControlDef): Array<{ value: unknown; label: string }> {
  */
 export function leerValor(el: Element, def: ControlDef): unknown {
   const attr = nombreAtributo(def.prop);
-  if (attr) return el.getAttribute(attr);
+  if (attr) {
+    const attrV = el.getAttribute(attr);
+    // Atributos booleanos: el estado es presencia (no el string vacío).
+    if (def.control === 'boolean') return attrV !== null;
+    return attrV ?? def.default ?? null;
+  }
   const prop = def.prop.replace(/^prop:/, '');
   const host = el as unknown as Record<string, unknown>;
   if (prop in el || prop in host) {
@@ -121,24 +126,15 @@ export function valorInicial(el: Element, def: ControlDef): unknown {
 }
 
 /** Formas estructurales mínimas del definition/context (sin acoplar _kit). */
-export interface PreviewDefinitionShallow {
-  tag: string;
-  sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }>;
-}
-export interface PreviewMountCtxShallow {
-  main?: HTMLElement | null;
-  root?: HTMLElement | null;
-}
+export type PreviewDefinitionShallow = { tag: string; sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }> };
+export type PreviewMountCtxShallow = { main?: HTMLElement | null; root?: HTMLElement | null };
 
 /**
  * Monta los paneles de controles de todos los bloques demo/html con
  * `controls` del definition, dentro de ctx.main (que la dist ya pintó).
  * Cada panel escucha `is-controls-change` y aplica el valor al host.
  */
-export async function montarControles(
-  definition: PreviewDefinitionShallow,
-  ctx: PreviewMountCtxShallow,
-): Promise<void> {
+export async function montarControles(definition: PreviewDefinitionShallow, ctx: PreviewMountCtxShallow): Promise<void> {
   const main = ctx.main ?? ctx.root;
   if (!main || typeof main.querySelector !== 'function') return;
   const { definePreviewControls } = await import('../../components/layout/preview-controls.js');
@@ -170,13 +166,7 @@ export async function montarControles(
   }
 }
 
-async function montarPanel(
-  contenedor: HTMLElement,
-  _seccion: HTMLElement,
-  defs: ControlDef[],
-  targetSel: string,
-  grupo: string,
-): Promise<void> {
+async function montarPanel(contenedor: HTMLElement, _seccion: HTMLElement, defs: ControlDef[], targetSel: string, grupo: string): Promise<void> {
   const isDemo = contenedor.querySelector<HTMLElement>('is-demo');
   const raiz = (isDemo ?? contenedor) as ParentNode;
   let host: Element | null = null;

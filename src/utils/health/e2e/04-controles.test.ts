@@ -198,7 +198,7 @@ async function manipularYVerificar(
     const ok = ((): boolean => {
       const attrMode = prop.startsWith('attr:');
       if (typeof esp === 'boolean') {
-        if (attrMode) return actual !== null && actual !== undefined;
+        if (attrMode) return (actual !== null && actual !== undefined) === esp;
         return Boolean(actual) === esp;
       }
       if (typeof esp === 'number') return Number(actual) === esp;

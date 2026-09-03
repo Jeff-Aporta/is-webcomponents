@@ -30,7 +30,9 @@ cp src/utils/health/e2e/.env.example src/utils/health/e2e/.env   # completar MIN
 npm run test:e2e                                                  # headless; levanta y apaga su propio servidor
 ```
 
-Para ver Chrome en pantalla (depurar): `E2E_HEADLESS=false npm run test:e2e`.
+Para ver Chrome en pantalla y **seguir manualmente** cada paso (depurar):
+`E2E_HEADLESS=false npm run test:e2e` (en terminal es el default). Para silenciar
+las ventanas (CI/automático): `E2E_HEADLESS=true npm run test:e2e`.
 Para apuntar a un host ya levantado (`node scripts/serve.mjs 8391`):
 
 ```bash
@@ -50,7 +52,7 @@ node --experimental-strip-types --test --test-concurrency=1 src/utils/health/e2e
 | `E2E_AUTOSERVE` | `0` apaga el servidor automático y usa `E2E_BASE_URL` |
 | `E2E_BASE_URL` | URL de la galería (default: la del autoservidor, `/index.html`) |
 | `E2E_PORT` / `E2E_HOST` | **Puerto controlado del autoservidor**: `0` (default) = puerto libre aleatorio (nunca colisiona). Para fijar uno indica `E2E_PORT`; si está ocupado el arranque falla con aviso claro |
-| `E2E_HEADLESS` | `false` abre Chrome visible |
+| `E2E_HEADLESS` | `false` abre Chrome visible para **seguir en vivo** lo que hace el e2e. Por defecto es visible si corres en una terminal y headless en CI/automático (`E2E_HEADLESS=true`) |
 | `MINIMAX_API_KEY` | Key MiniMax para `act`/`extract`/`observe` de Stagehand |
 | `E2E_MINIMAX_MODEL` | `MiniMax-M3` (fijo, como el auditor) |
 | `E2E_SWEEP` | Tags del barrido de `03-problemas` (coma separada; 12 por defecto) |
