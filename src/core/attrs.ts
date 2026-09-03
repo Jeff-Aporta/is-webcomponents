@@ -183,6 +183,14 @@ export function aAtributo(nombre: string): string {
 
 const REGISTRO = new WeakMap<object, Set<string>>();
 
+/**
+ * Nombres empujados por `@attr*` mientras se evalúa el cuerpo de la clase.
+ *
+ * El decorador no recibe la clase: solo puede encolar aquí. `defineElement`
+ * vacía la cola en el REGISTRO de ese `ctor` justo antes del `define`.
+ */
+const PENDIENTES: string[] = [];
+
 /** Atributos declarados con estos decoradores en la clase y sus ancestros. */
 export function atributosDeclarados(Clase: object): string[] {
   const vistos = new Set<string>();
@@ -193,30 +201,29 @@ export function atributosDeclarados(Clase: object): string[] {
 }
 
 /**
- * Dispara los `addInitializer` de `@attr*` sin conectar el elemento al DOM.
+ * Vuelca la cola de `@attr*` al REGISTRO del `ctor` antes de `customElements.define`.
  *
- * Los decoradores solo conocen la clase al construir una instancia. El browser,
- * en cambio, lee `observedAttributes` **una sola vez** en
- * `customElements.define`. Si el REGISTRO aún está vacío, congela `[]` y
- * atributos como `open` nunca disparan `attributeChangedCallback` (dropdown
- * que marca `open` pero no abre el panel).
+ * El browser congela `observedAttributes` en el `define`. Si el REGISTRO está
+ * vacío en ese instante, congela `[]` y attrs como `open` nunca disparan
+ * `attributeChangedCallback` (is-dropdown marcaba `open` sin abrir el panel).
  *
- * `defineElement` llama esto justo antes del `define`.
+ * No se puede hacer `new Clase()` aquí: antes del define el browser lanza
+ * `Illegal constructor` y un try/catch dejaba el REGISTRO vacío igual.
+ * La cola se llena en tiempo de decoración (evaluación de la clase).
  */
 export function materializarAtributos(Clase: CustomElementConstructor): void {
-  if (REGISTRO.has(Clase)) return;
-  try {
-    new Clase();
-  } catch {
-    /* constructor exigente: observedAttributes quedará incompleto */
-  }
+  if (!PENDIENTES.length) return;
+  let set = REGISTRO.get(Clase);
+  if (!set) REGISTRO.set(Clase, (set = new Set()));
+  for (const a of PENDIENTES) set.add(a);
+  PENDIENTES.length = 0;
 }
 
 /** Registra el atributo en la clase donde se declara el campo. */
 function registrar(ctx: { metadata?: object; addInitializer(fn: () => void): void }, attr: string): void {
-  // `addInitializer` con `this` de instancia es lo único que da acceso al
-  // constructor real; el contexto de decorador no lo expone directamente.
-  // Debe correr ANTES de customElements.define → ver materializarAtributos.
+  // Cola de evaluación: disponible en materializarAtributos sin construir.
+  PENDIENTES.push(attr);
+  // Refuerzo en instancia (herencia / lecturas tardías de atributosDeclarados).
   ctx.addInitializer(function (this: object) {
     const Clase = (this as { constructor: object }).constructor;
     let set = REGISTRO.get(Clase);
