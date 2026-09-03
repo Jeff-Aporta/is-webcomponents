@@ -66,7 +66,9 @@
  * Lienzo predominante = #10151C (ContaPyme dark). soft/elev un peldaño arriba
  * para tarjetas/chips, no para paneles a pantalla completa. */
 .theme-dark:not([data-palette]),
-.theme-dark[data-palette="contapyme"] {
+.theme-dark[data-palette="contapyme"],
+[data-theme="dark"]:not([data-palette]),
+[data-theme="dark"][data-palette="contapyme"] {
   --is-contapyme-surface: oklch(from dodgerblue l calc(c * 0.25) h);
   --is-bg: #10151c;
   --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 5.5%, #121820);
@@ -82,7 +84,11 @@
 }
 
 .theme-light:not([data-palette]),
-.theme-light[data-palette="contapyme"] {
+.theme-light[data-palette="contapyme"],
+:root[data-theme="light"]:not([data-palette]),
+:root[data-theme="light"][data-palette="contapyme"],
+[data-theme="light"]:not([data-palette]),
+[data-theme="light"][data-palette="contapyme"] {
   --is-contapyme-surface: oklch(from dodgerblue l calc(c * 0.25) h);
   --is-bg: #fff;
   --is-bg-soft: color-mix(in srgb, var(--is-contapyme-surface) 4%, #f6f8fa);
@@ -131,7 +137,8 @@
 }
 
 /* surfaces: neutro gris (sin tint de marca) */
-.theme-dark[data-palette="insoft"] {
+.theme-dark[data-palette="insoft"],
+[data-theme="dark"][data-palette="insoft"] {
   --is-bg: #0b0d10;
   --is-bg-soft: #14181d;
   --is-bg-elev: #1c2128;
@@ -144,7 +151,9 @@
   --is-control-border: #59636e;
   --is-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
 }
-.theme-light[data-palette="insoft"] {
+.theme-light[data-palette="insoft"],
+:root[data-theme="light"][data-palette="insoft"],
+[data-theme="light"][data-palette="insoft"] {
   --is-bg: #fff;
   --is-bg-soft: #f6f8fa;
   --is-bg-elev: #fff;
@@ -185,7 +194,8 @@
 }
 
 /* surfaces / bg: oliva desaturado 70% (marca yellowgreen intacta) — c * 0.3 */
-.theme-dark[data-palette="agrowin"] {
+.theme-dark[data-palette="agrowin"],
+[data-theme="dark"][data-palette="agrowin"] {
   --is-bg: color-mix(in srgb, oklch(from #2f4a08 l calc(c * 0.3) h) 22%, #050505);
   --is-bg-soft: color-mix(in srgb, oklch(from #3a5c0c l calc(c * 0.3) h) 18%, #0a0a0a);
   --is-bg-elev: color-mix(in srgb, oklch(from #456e10 l calc(c * 0.3) h) 16%, #101010);
@@ -198,7 +208,9 @@
   --is-control-border: color-mix(in srgb, oklch(from #6b9a28 l calc(c * 0.3) h) 20%, #3a3a3a);
   --is-shadow: 0 1px 0 rgb(255 255 255 / 2%), 0 8px 24px color-mix(in srgb, oklch(from #1a2e04 l calc(c * 0.3) h) 35%, rgb(0 0 0 / 40%));
 }
-.theme-light[data-palette="agrowin"] {
+.theme-light[data-palette="agrowin"],
+:root[data-theme="light"][data-palette="agrowin"],
+[data-theme="light"][data-palette="agrowin"] {
   --is-agrowin-surface: oklch(from #9acd32 l calc(c * 0.3) h);
   --is-bg: color-mix(in srgb, var(--is-agrowin-surface) 1%, #fefefe);
   --is-bg-soft: color-mix(in srgb, var(--is-agrowin-surface) 2%, #fbfbfb);
@@ -214,7 +226,9 @@
 }
 
 /* ─── Light: brand-text + brand-soft usando los pastel de cada paleta ── */
-.theme-light {
+.theme-light,
+:root[data-theme="light"],
+[data-theme="light"] {
   --is-brand-text: var(--is-color-brand-stronger);
   --is-brand-soft: var(--is-color-brand-paler);
   --is-brand-soft-active: var(--is-color-brand-pale);

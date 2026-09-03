@@ -99,6 +99,17 @@ test('theme-toggle expone forceSync() publico para re-sincronizar desde fuera', 
 // El evento ya no se dispara a mano sobre `document`: `emit()` sale con
 // bubbles + composed, así que un solo `is-theme-change` desde el host llega
 // igual a los listeners globales. Disparar los dos los invocaba dos veces.
+test('theme-toggle resuelve el contenedor atravesando Shadow DOM', () => {
+  assert.ok(
+    /from '\.\.\/_shared\/theme-scope\.js'/.test(themeToggleSrc),
+    'debe importar findThemeContainer de theme-scope (closest se corta en el shadow)',
+  );
+  assert.ok(
+    /findThemeContainer\(this\)/.test(themeToggleSrc),
+    'themeContainer debe usar findThemeContainer(this)',
+  );
+});
+
 test('theme-toggle emite `is-theme-change` y llega a document', () => {
   assert.ok(
     /emit\(this, ['"]is-theme-change['"]/.test(themeToggleSrc),

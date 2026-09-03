@@ -31,6 +31,10 @@ const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
 check(styles.includes('.theme-light'), 'missing .theme-light');
 check(styles.includes('.theme-dark'), 'missing .theme-dark');
+check(
+  /\[data-theme=["']light["']\]/.test(isBase) && /\[data-theme=["']light["']\]/.test(palettes),
+  'is-base.css y palettes.css deben reaccionar a [data-theme=light], no solo a .theme-light',
+);
 for (const p of ['insoft', 'contapyme', 'agrowin']) {
   check(styles.includes(`[data-palette="${p}"]`), `missing ${p} palette`);
 }

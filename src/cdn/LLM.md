@@ -23,6 +23,8 @@ Artefactos folderizados por categoría. **No** hay `README.txt`: este archivo es
 | --- | --- |
 | `core/is-base.min.css` | Themes + paletas de marca (link en la app host) |
 | `core/palettes.min.css` | Paletas de marca |
+| `is-base.min.css` | Alias estable (= `core/…`) para `<link>` pre-folderizado |
+| `palettes.min.css` | Alias estable (= `core/…`) |
 | `core/loader.min.js` | `ISWebComponentsLoader` (carga selectiva + pin/mirrors) |
 | `core/loader.md` | Docs del loader (API) |
 | `<categoria>/<name>.min.js` | Componente individual (carga su `.min.css` hermano en el shadow) |

@@ -15,8 +15,10 @@
  *
  * Esta hoja SOLO declara tokens (variables). No pinta el canvas de la página
  * (`html`/`body`): cada app define su `background`. Tampoco fuerza
- * `color-scheme` en `:root` — solo en `.theme-dark` / `.theme-light`, para
- * que cargar el CDN no oscurezca una app clara por defecto.
+ * `color-scheme` en `:root` — solo en `.theme-dark` / `.theme-light` (y el
+ * `[data-theme]` gemelo), para que cargar el CDN no oscurezca una app clara
+ * por defecto. Los tokens también siguen `data-theme`: `<is-theme-toggle>`
+ * escribe ambos, pero un consumer que solo mute el atributo debe reaccionar.
  */
 
 :root,
@@ -127,11 +129,14 @@
 /* color-scheme solo con clase de tema: no oscurece el canvas del browser
    al cargar is-base.min.css sin más. La app (o un wrapper con .theme-*)
    es quien activa el esquema. */
-.theme-dark {
+.theme-dark,
+[data-theme="dark"] {
   color-scheme: dark;
 }
 
-.theme-light {
+.theme-light,
+:root[data-theme="light"],
+[data-theme="light"] {
   color-scheme: light;
   --is-bg: #fff;
   --is-bg-soft: #f6f8fa;
@@ -192,7 +197,9 @@
   --is-bg-readonly: #1a1f26;
 }
 
-.theme-light {
+.theme-light,
+:root[data-theme="light"],
+[data-theme="light"] {
   --is-b-required: #888;
   --is-b-optional: #80c080;
   --is-b-readonly: #8884;
@@ -201,7 +208,9 @@
 
 /* Light: brand-text + brand-soft pasteles (sin palettes.css quedan como
    los tokens neutros de fallback definidos en :root/.theme-dark). */
-.theme-light {
+.theme-light,
+:root[data-theme="light"],
+[data-theme="light"] {
   --is-brand-text: var(--is-color-brand-stronger, #a61e1e);
   --is-brand-soft: var(--is-color-brand-paler, #fff1f1);
   --is-brand-soft-active: var(--is-color-brand-pale, #ffd9d9);

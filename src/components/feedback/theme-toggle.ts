@@ -1,5 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../actions/check-icon-button.js';
+import { findThemeContainer } from '../_shared/theme-scope.js';
 
 /**
  * <is-theme-toggle> — Web Component (vanilla).
@@ -86,9 +87,9 @@ import '../actions/check-icon-button.js';
     get dark() { return this.hasAttribute('dark'); }
     set dark(v) { this.toggleAttribute('dark', !!v); }
 
-    /** Contenedor de tema más cercano en el tree. */
+    /** Contenedor de tema más cercano; atraviesa Shadow DOM (closest no). */
     get themeContainer() {
-      return this.closest(SCOPE) || document.documentElement;
+      return findThemeContainer(this) || this.closest(SCOPE) || document.documentElement;
     }
 
     #syncFromScope() {

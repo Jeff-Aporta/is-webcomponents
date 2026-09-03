@@ -367,6 +367,11 @@ await bundleCss(palettesIn, palettesOut);
 const palettesStat = await stat(palettesOut);
 console.log(`  ${'palettes'.padEnd(18)} css ${String(palettesStat.size).padStart(6)}`);
 
+// Alias en la raíz de dist/cdn: el path pre-folderizado sigue vivo en apps
+// (PatyIA, snippets). Sin esto jsDelivr sirve 404 y no hay tokens ni tema.
+await copyFile(baseOut, join(dist, 'is-base.min.css'));
+await copyFile(palettesOut, join(dist, 'palettes.min.css'));
+
 try { await unlink(join(dist, 'all.min.js')); } catch { /* leftover */ }
 for (const [category] of byCategory) {
   try { await unlink(join(dist, category, `category.${category}.min.js`)); } catch { /* leftover */ }
