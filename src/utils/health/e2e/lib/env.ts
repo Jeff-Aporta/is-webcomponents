@@ -1,5 +1,8 @@
-// env.ts: carga la configuracion E2E desde el entorno y .env locales (sin dependencias).
-// Orden de prioridad: variables ya presentes en process.env > .env de la raiz del repo > e2e/.env.
+// env.ts: configuración E2E de is-webcomponents SIN .env.
+// Los secretos se leen SIEMPRE de rutas fijas:
+//   - MiniMax:  C:\ContaPyme\Personal\secrets.json  -> Values.MINIMAX_API_KEY_50USD
+// Base URL / modelo / host de MiniMax no son secretos y quedan quemados como
+// constantes (se pueden sobreescribir por entorno solo para infraestructura).
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,63 +20,64 @@ function subirHastaPackageJson(inicio: string): string {
   return inicio;
 }
 
-const repoDir: string = subirHastaPackageJson(e2eDir);
-
-function leerEnvFile(archivo: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  if (!existsSync(archivo)) return out;
-  for (const linea of readFileSync(archivo, 'utf8').split(/\r?\n/)) {
-    const limpia = linea.trim();
-    if (!limpia || limpia.startsWith('#')) continue;
-    const i = limpia.indexOf('=');
-    if (i <= 0) continue;
-    const k = limpia.slice(0, i).trim();
-    let v: string = limpia.slice(i + 1).trim();
-    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
-      v = v.slice(1, -1);
-    }
-    if (k && !(k in process.env)) out[k] = v;
-  }
-  return out;
+function subir(inicio: string, niveles: number): string {
+  let d = inicio;
+  for (let i = 0; i < niveles; i++) d = path.resolve(d, '..');
+  return d;
 }
 
-const archivo: Record<string, string> = leerEnvFile(path.join(repoDir, '.env'));
-const archivoE2e: Record<string, string> = leerEnvFile(path.join(e2eDir, '.env'));
+const repoDir: string = subirHastaPackageJson(e2eDir);
+// Raíz del workspace: C:\ContaPyme (repo en ...\Personal\apps\is-webcomponents)
+const workspaceDir: string = subir(repoDir, 3);
+
+/** Ruta fija del archivo de secretos del workspace. */
+export const SECRETOS_PATH = path.join(workspaceDir, 'Personal', 'secrets.json');
 
 function o(clave: string, defecto: string): string {
-  const v = process.env[clave] ?? archivo[clave] ?? archivoE2e[clave];
+  const v = process.env[clave];
   return v === undefined ? defecto : String(v);
 }
 
-export interface ConfigE2E {
-  baseUrl: string;
-  headless: boolean;
-  escritura: boolean;
-  estricto: boolean;
-  minimaxKey: string;
-  minimaxModelo: string;
-  minimaxUrl: string;
-  artefactos: string;
-  asentarseMs: number;
-  esperaMs: number;
-  navegador: string;
-  sweep: string[];
-  /** Puerto del autoservidor. 0 = puerto libre aleatorio (default). Para fijar
-   *  uno concreto (p. ej. compartir con CI) usa E2E_PORT: si está ocupado el
-   *  arranque falla con aviso claro, nunca colisiona con otro servicio. */
-  puerto: number;
-  host: string;
+/** Lee un archivo JSON y devuelve {} si no existe o es inválido. */
+function leerJson(ruta: string): Record<string, unknown> {
+  try {
+    if (!existsSync(ruta)) return {};
+    return JSON.parse(readFileSync(ruta, 'utf8')) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
 }
 
+function valorEn(objeto: unknown, ...claves: string[]): unknown {
+  let actual: unknown = objeto;
+  for (const c of claves) {
+    if (!actual || typeof actual !== 'object') return undefined;
+    actual = (actual as Record<string, unknown>)[c];
+  }
+  return actual;
+}
+
+function strValor(objeto: unknown, ...claves: string[]): string {
+  const v = valorEn(objeto, ...claves);
+  return typeof v === 'string' ? v : '';
+}
+
+// Secretos desde rutas fijas (nunca .env ni variables sueltas).
+const secrets = leerJson(SECRETOS_PATH);
+const MINIMAX_KEY = strValor(secrets, 'Values', 'MINIMAX_API_KEY_50USD');
+
+export type ConfigE2E = { baseUrl: string; headless: boolean; escritura: boolean; estricto: boolean; minimaxKey: string; minimaxModelo: string; minimaxUrl: string; artefactos: string; asentarseMs: number; esperaMs: number; navegador: string; sweep: string[]; puerto: number; host: string };
+
 export const ENV: ConfigE2E = {
+  // Base URL quemada (no secreta): la del autoservidor o un host local.
   baseUrl: o('E2E_BASE_URL', 'http://127.0.0.1:8391/index.html').replace(/\/+$/, ''),
-  // Navegador VISIBLE por defecto cuando corres en una terminal (puedes seguir
-  // en vivo lo que hace el e2e). E2E_HEADLESS=true lo oculta (CI/automático).
+  // Navegador VISIBLE por defecto al correr en terminal (sigue en vivo el e2e).
   headless: o('E2E_HEADLESS', process.stdout.isTTY ? 'false' : 'true').toLowerCase() !== 'false',
-  escritura: o('E2E_WRITE', '').toLowerCase() === '1' || o('E2E_WRITE', '').toLowerCase() === 'true',
-  estricto: o('E2E_STRICT', '').toLowerCase() === '1' || o('E2E_STRICT', '').toLowerCase() === 'true',
-  minimaxKey: o('MINIMAX_API_KEY', ''),
-  minimaxModelo: o('E2E_MINIMAX_MODEL', 'MiniMax-M3'),
+  escritura: o('E2E_WRITE', 'false').toLowerCase() === '1' || o('E2E_WRITE', 'false').toLowerCase() === 'true',
+  estricto: o('E2E_STRICT', 'false').toLowerCase() === '1' || o('E2E_STRICT', 'false').toLowerCase() === 'true',
+  minimaxKey: MINIMAX_KEY,
+  // Modelo y URL de MiniMax quemados (no comprometen seguridad).
+  minimaxModelo: 'MiniMax-M3',
   minimaxUrl: o('E2E_MINIMAX_URL', 'https://api.minimax.io/v1'),
   artefactos: o('E2E_ARTIFACTS', path.join(e2eDir, '.artifacts')),
   asentarseMs: Number(o('E2E_SETTLE_MS', '1500')),
@@ -88,7 +92,9 @@ export const ENV: ConfigE2E = {
 
 export function faltanRequisitos(): string[] {
   const faltan: string[] = [];
-  if (!ENV.minimaxKey) faltan.push('MINIMAX_API_KEY (MiniMax para el modelo de Stagehand)');
+  if (!MINIMAX_KEY) {
+    faltan.push(`MINIMAX_API_KEY_50USD en ${SECRETOS_PATH} (Values.MINIMAX_API_KEY_50USD)`);
+  }
   return faltan;
 }
 

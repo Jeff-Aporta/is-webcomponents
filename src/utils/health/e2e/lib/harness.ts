@@ -1,7 +1,7 @@
-// harness.ts: arranque y utilidades compartidas de los tests E2E de
+﻿// harness.ts: arranque y utilidades compartidas de los tests E2E de
 // is-webcomponents con Stagehand. Port del esquema de
 // PatyIA/app/src/utils/health/e2e/lib/harness.ts adaptado a la galeria:
-// sin login ni ISS — el "estado" es el tag del componente (deep link ?s=).
+// sin login ni ISS â€” el "estado" es el tag del componente (deep link ?s=).
 // TODO el codigo esta fuertemente tipado (tsc strict).
 import { localBrowser, Stagehand } from '@browserbasehq/stagehand';
 import type { Page, Locator, StagehandCreateOptions } from '@browserbasehq/stagehand';
@@ -13,7 +13,7 @@ import { estadoDe } from './estados.ts';
 import { levantarServidor, type ServidorE2E } from './server.ts';
 import type {
   CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,
-} from './tipos.ts';
+} from './tipos.d.ts';
 
 export { ENV, e2eDir, faltanRequisitos };
 export type { Page, Locator };
@@ -43,7 +43,7 @@ export function baseUrlResuelta(): string {
  * Garantiza un servidor para la sesion de tests:
  *  - si hay E2E_BASE_URL externa, se usa tal cual (sin levantar nada);
  *  - si no, levanta el autoservidor en E2E_PORT (0 = libre) y lo apaga con
- *    `apagarServidor()` / hooks de proceso. Si el puerto indicado está
+ *    `apagarServidor()` / hooks de proceso. Si el puerto indicado estÃ¡
  *    ocupado, falla con aviso claro (nunca se apropia del puerto de otro).
  */
 export async function asegurarServidor(): Promise<string> {
@@ -71,7 +71,7 @@ export async function asegurarServidor(): Promise<string> {
       const err = e as NodeJS.ErrnoException;
       if (err?.code === 'EADDRINUSE') {
         throw new Error(
-          `E2E: el puerto ${ENV.puerto} ya está en uso (otro servicio). ` +
+          `E2E: el puerto ${ENV.puerto} ya estÃ¡ en uso (otro servicio). ` +
           `Indica otro puerto con E2E_PORT (p. ej. 8450) o apunta a un host ya ` +
           `levantado con E2E_AUTOSERVE=0 E2E_BASE_URL=http://127.0.0.1:<puerto>/index.html`,
         );
@@ -82,7 +82,7 @@ export async function asegurarServidor(): Promise<string> {
   return promesaBase;
 }
 
-/** Apaga el autoservidor si este proceso lo levantó (idempotente). */
+/** Apaga el autoservidor si este proceso lo levantÃ³ (idempotente). */
 export async function apagarServidor(): Promise<void> {
   if (servidor) {
     const s = servidor;
@@ -348,7 +348,7 @@ export async function evidencia(page: Page, nombre: string): Promise<{ png: stri
 // -- galeria: contenido ------------------------------------------------------
 
 /**
- * ¿La galeria tiene contenido montado para el preview actual? El preview de
+ * Â¿La galeria tiene contenido montado para el preview actual? El preview de
  * un componente controlado monta en light DOM dentro de #previewHost
  * (is-split-panel.page > is-main.main > section.section ...). El home monta
  * su propia pagina (idem). Un host vacio o con solo el placeholder = no listo.
@@ -389,7 +389,7 @@ export async function arrancar({ etiqueta = 'e2e' }: { etiqueta?: string } = {})
     );
   }
   // Servidor controlado primero: url base resuelta antes de navegar y fallo
-  // temprano si el puerto indicado está ocupado.
+  // temprano si el puerto indicado estÃ¡ ocupado.
   await asegurarServidor();
   const browser = await localBrowser.launch({
     headless: ENV.headless,
@@ -422,7 +422,7 @@ export async function arrancar({ etiqueta = 'e2e' }: { etiqueta?: string } = {})
     } catch {
       /* ignore */
     }
-    // Siempre apagar el servidor que este proceso levantó (idempotente).
+    // Siempre apagar el servidor que este proceso levantÃ³ (idempotente).
     await apagarServidor();
   };
 

@@ -1,4 +1,4 @@
-// 01-is-code.test.ts: ataque en profundidad al docs de <is-code> tras la
+﻿// 01-is-code.test.ts: ataque en profundidad al docs de <is-code> tras la
 // migracion a motor nativo (sin CodeMirror). Verifica en el navegador real:
 //   - cero rastro de CodeMirror (nodos, global, recursos, tags)
 //   - read-only/editable/inline pintan con el motor nativo (.ic-* / .tok-*)
@@ -18,7 +18,7 @@ import {
   faltanRequisitos,
   evidencia,
 } from './lib/harness.ts';
-import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from './lib/tipos.ts';
+import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from './lib/tipos.d.ts';
 import { cargarToon, textoDe } from '../../system/toons.js';
 
 // Textos de test SIEMPRE desde los toons (src/utils/system/toons/*.json).
@@ -170,7 +170,7 @@ test('escribir en el editor editable emite is-input/is-change/is-cursor y repint
   assert.ok(despues.valueOk, 'el valor del editor debe contener lo tecleado');
   assert.ok(despues.evs.input >= 1 && despues.evs.change >= 1, `is-input/is-change disparados (${JSON.stringify(despues.evs)})`);
   assert.ok(despues.evs.cursor >= 1, 'is-cursor debe dispararse');
-  assert.ok(despues.lineas >= antes!.lineas, `repintado: lineas ${antes!.lineas} → ${despues.lineas}`);
+  assert.ok(despues.lineas >= antes!.lineas, `repintado: lineas ${antes!.lineas} â†’ ${despues.lineas}`);
   assert.ok(despues.activa >= 0, 'linea activa presente');
   t.diagnostic(`editor: ${JSON.stringify(despues.evs)} eventos; ${despues.lineas} lineas; gutter ${despues.gutter}`);
   await evidencia(page, '01c-editor-escritura');
@@ -255,7 +255,7 @@ test('tema reactivo: data-theme + is-theme-change repinta sin CodeMirror', { tim
     return h ? getComputedStyle(h).getPropertyValue('--is-code-bg').trim() : '';
   });
   assert.ok(base && luz, 'debe existir --is-code-bg en el host');
-  assert.notEqual(base, luz, `el tema debe repintar el fondo (${base} → ${luz})`);
+  assert.notEqual(base, luz, `el tema debe repintar el fondo (${base} â†’ ${luz})`);
   const rastro: RastroCodeMirror = await rastroCodeMirror(page);
   assert.equal(rastro.total, 0, 'el cambio de tema no debe cargar nada de CodeMirror');
   await evidencia(page, '01e-tema-reactivo');

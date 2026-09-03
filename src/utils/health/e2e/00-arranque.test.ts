@@ -1,4 +1,4 @@
-// 00-arranque.test.ts: arranque de la galeria is-webcomponents, deep link por
+﻿// 00-arranque.test.ts: arranque de la galeria is-webcomponents, deep link por
 // componente y navegacion por el nav. Port del esquema de PatyIA 00-sesion
 // sin login/ISS: aqui el "estado" es el tag del componente (?s={component}).
 import test, { before, after } from 'node:test';
@@ -15,7 +15,7 @@ import {
   problemasDeConsola,
   faltanRequisitos,
 } from './lib/harness.ts';
-import type { CtxE2E } from './lib/tipos.ts';
+import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -69,7 +69,7 @@ test('la galeria sin estado monta el catalogo (categorias) y el home', { timeout
     };
   })) as EstadoHome;
   assert.equal(r.kitShell, '1', 'el shell del kit debe quedar listo');
-  for (const cat of ['Diagramas', 'Código', 'Datos', 'Gráficos', 'Formularios']) {
+  for (const cat of ['Diagramas', 'CÃ³digo', 'Datos', 'GrÃ¡ficos', 'Formularios']) {
     assert.ok(r.categorias.includes(cat), `categoria ${cat} en el nav`);
   }
   assert.ok(r.items > 150, `el nav debe listar el catalogo (${r.items} items)`);
@@ -102,7 +102,7 @@ test('deep link ?s={component:is-code} abre el docs del componente', { timeout: 
   await evidencia(page, '00b-deep-link-is-code');
 });
 
-test('navegar por el nav (is-code → is-component-diagram) cambia el preview', { timeout: 200000 }, async (t) => {
+test('navegar por el nav (is-code â†’ is-component-diagram) cambia el preview', { timeout: 200000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
   await abrirGaleria(page, 'is-code', { ms: 4000 });

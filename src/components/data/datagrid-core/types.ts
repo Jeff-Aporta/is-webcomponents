@@ -106,10 +106,10 @@ export type NumberFilterOp =
   | 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte' | 'inRange' | 'blank' | 'notBlank';
 export type DateFilterOp = 'eq' | 'before' | 'after' | 'inRange';
 
-export interface TextFilter { type: 'text'; op: TextFilterOp; value: string }
-export interface NumberFilter { type: 'number'; op: NumberFilterOp; value: number | null; to?: number | null }
-export interface DateFilter { type: 'date'; op: DateFilterOp; value: string; to?: string }
-export interface SetFilter { type: 'set'; values: string[] }
+export type TextFilter = { type: 'text'; op: TextFilterOp; value: string; };
+export type NumberFilter = { type: 'number'; op: NumberFilterOp; value: number | null; to?: number | null; };
+export type DateFilter = { type: 'date'; op: DateFilterOp; value: string; to?: string; };
+export type SetFilter = { type: 'set'; values: string[]; };
 
 /** Discriminada por `type`: estrechar por ahí antes de leer `op`/`values`. */
 export type ColumnFilter = TextFilter | NumberFilter | DateFilter | SetFilter;
@@ -137,31 +137,9 @@ export type FilterTypeName = (typeof FilterType)[keyof typeof FilterType];
  */
 export type RowData = Record<string, unknown>;
 
-export interface RowNode {
-  id: string;
-  index: number;
-  data: RowData;
-}
-
-export interface GroupRow {
-  kind: 'group';
-  id: string;
-  colId: string;
-  field: string;
-  value: unknown;
-  label: string;
-  level: number;
-  count: number;
-  expanded: boolean;
-  agg: Record<string, unknown>;
-  leafIds: string[];
-}
-
-export interface LeafRow {
-  kind: 'leaf';
-  level: number;
-  node: RowNode;
-}
+export type RowNode = { id: string; index: number; data: RowData; };
+export type GroupRow = { kind: 'group'; id: string; colId: string; field: string; value: unknown; label: string; level: number; count: number; expanded: boolean; agg: Record<string, unknown>; leafIds: string[]; };
+export type LeafRow = { kind: 'leaf'; level: number; node: RowNode; };
 
 /** Discriminada por `kind`. */
 export type DisplayRow = GroupRow | LeafRow;
@@ -169,7 +147,7 @@ export type DisplayRow = GroupRow | LeafRow;
 /* ── Columnas ─────────────────────────────────────────────────────────── */
 
 /** Definición de columna provista por el consumidor. */
-export interface ColumnDef {
+export type ColumnDef = {
   /** Nombre del campo en `row.data`. */
   field: string;
   /** Id estable; por defecto, `field`. */
@@ -213,36 +191,17 @@ export interface ColumnDef {
   headerClass?: string;
   /** Edición por prompt al hacer clic (legado). */
   editable?: boolean;
-}
+};
 
 /** Estado resuelto de una columna: lo que gestiona el motor. */
-export interface ColumnState {
-  colId: string;
-  field: string;
-  headerName: string;
-  type: ColumnTypeName | 'currency' | 'dateTime';
-  width: number;
-  minWidth: number;
-  maxWidth: number;
-  flex?: number;
-  sortable: boolean;
-  resizable: boolean;
-  filterType: FilterTypeName | null;
-  pinned: PinSideName | null;
-  hide: boolean;
-  align: AlignName;
-  enableRowGroup: boolean;
-  aggFunc: AggFuncName | null;
-  checkboxSelection: boolean;
-  def: ColumnDef;
-}
+export type ColumnState = { colId: string; field: string; headerName: string; type: ColumnTypeName | 'currency' | 'dateTime'; width: number; minWidth: number; maxWidth: number; flex?: number; sortable: boolean; resizable: boolean; filterType: FilterTypeName | null; pinned: PinSideName | null; hide: boolean; align: AlignName; enableRowGroup: boolean; aggFunc: AggFuncName | null; checkboxSelection: boolean; def: ColumnDef; };
 
-export interface SortModelItem { colId: string; dir: SortDirName }
+export type SortModelItem = { colId: string; dir: SortDirName };
 export type SortModel = SortModelItem[];
 
 /* ── Motor ────────────────────────────────────────────────────────────── */
 
-export interface GridOptions {
+export type GridOptions = {
   columns: ColumnDef[];
   rows: RowData[];
   getRowId?: (row: RowData, index: number) => string;
@@ -257,10 +216,10 @@ export interface GridOptions {
   rowGroupCols?: string[];
   /** -1 = todos los niveles, 0 = ninguno, N = N niveles. */
   groupDefaultExpanded?: number;
-}
+};
 
 /** Snapshot derivado tras el pipeline filtrar → ordenar → agrupar → paginar. */
-export interface GridState {
+export type GridState = {
   columns: ColumnState[];
   sortModel: SortModel;
   filterModel: FilterModel;
@@ -281,7 +240,7 @@ export interface GridState {
   /** Vista renderizable de la página actual. */
   pageDisplayRows: DisplayRow[];
   totalRows: number;
-}
+};
 
 export type GridListener = (state: GridState, reason?: string) => void;
 
@@ -289,7 +248,7 @@ export type GridListener = (state: GridState, reason?: string) => void;
  * Store observable del motor. `createGridModel` la devuelve y es todo lo que
  * la capa de render necesita: no se accede al estado interno por fuera.
  */
-export interface GridApi {
+export type GridApi = {
   getState(): GridState;
   /** Devuelve la funcion para darse de baja. */
   subscribe(fn: GridListener): () => void;
@@ -324,4 +283,4 @@ export interface GridApi {
 
   serializeState(): string;
   loadState(json: string): void;
-}
+};

@@ -5,9 +5,7 @@ Thumbs.db
 *.log
 .env
 .env.*
-!.env.example
-# E2E (src/utils/health/e2e): .env local con la key y artefactos de evidencia.
-src/utils/health/e2e/.env
+# E2E: artefactos de evidencia (secretos SIEMPRE desde rutas fijas, sin .env).
 src/utils/health/e2e/.artifacts/
 .gitsecret/
 .vscode/

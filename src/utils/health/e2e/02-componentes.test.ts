@@ -1,4 +1,4 @@
-// 02-componentes.test.ts: visita representativa por categorias del catalogo.
+﻿// 02-componentes.test.ts: visita representativa por categorias del catalogo.
 // Para cada tag: el preview controlado monta contenido real (no placeholder),
 // el componente esta definido y el docs usa instancias del kit. Las vistas
 // pesadas (diagramas/graficos) exigen ademas senal de render (svg/canvas).
@@ -12,7 +12,7 @@ import {
   evidencia,
   faltanRequisitos,
 } from './lib/harness.ts';
-import type { CtxE2E } from './lib/tipos.ts';
+import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -63,7 +63,7 @@ test('cada vista representativa monta contenido real con su componente definido'
     try {
       await abrirGaleria(page, tag, { ms: 5000 });
     } catch (e) {
-      fallos.push(`${tag}: no monto preview — ${String(e instanceof Error ? e.message : e).slice(0, 200)}`);
+      fallos.push(`${tag}: no monto preview â€” ${String(e instanceof Error ? e.message : e).slice(0, 200)}`);
       continue;
     }
     await esperarMs(2000);
