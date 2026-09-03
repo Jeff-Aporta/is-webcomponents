@@ -16,36 +16,31 @@
           "kind": "demo",
           "html": "<is-tab-group active=\"general\">\r\n            <is-tab slot=\"nav\" panel=\"general\">General</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"custom\">Custom</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"advanced\">Avanzado</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"disabled\" disabled>Deshabilitado</is-tab>\r\n\r\n            <is-tab-panel name=\"general\">Panel General: configuración por defecto del sistema.</is-tab-panel>\r\n            <is-tab-panel name=\"custom\">Panel Custom: ajustes personalizables.</is-tab-panel>\r\n            <is-tab-panel name=\"advanced\">Panel Avanzado: opciones experimentales.</is-tab-panel>\r\n            <is-tab-panel name=\"disabled\">No accesible.</is-tab-panel>\r\n          </is-tab-group>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:active",
-                "label": "active",
-                "options": [
-                  "general",
-                  "a1",
-                  "b1",
-                  "c1",
-                  "d1",
-                  "home",
-                  "x1",
-                  "t1"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:placement",
-                "label": "placement",
-                "options": [
-                  "bottom",
-                  "start",
-                  "end"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:activation",
-                "label": "activation"
-              }
+            {
+              "control": "select",
+              "prop": "attr:active",
+              "label": "active",
+              "options": [
+                "general",
+                "a1",
+                "b1",
+                "c1",
+                "d1",
+                "home",
+                "x1",
+                "t1"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "bottom",
+                "start",
+                "end"
+              ]
+            }
           ],
           "equivNote": "activation define teclado; closable añade cierre de pestaña.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
