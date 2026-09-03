@@ -20,7 +20,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-image-editor id=\"editor1\" src=\"https://picsum.photos/id/1015/1600/1000\" aspect=\"16/10\">\r\n            <div slot=\"toolbar\">\r\n              <button data-action=\"zoom-out\">−</button>\r\n              <button data-action=\"zoom-in\">+</button>\r\n              <button data-action=\"rotate-ccw\">↺</button>\r\n              <button data-action=\"rotate\">↻</button>\r\n              <button data-action=\"reset\">Reset</button>\r\n              <button data-action=\"crop\">Recortar</button>\r\n            </div>\r\n          </is-image-editor>\r\n          <img id=\"crop1\" class=\"crop-out\" alt=\"Recorte resultante\" hidden\r\n               src=\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect width='1' height='1' fill='transparent'/></svg>\">\r\n          <pre class=\"log\" id=\"log\">— logs aquí —</pre>"
+          "html": "<is-image-editor id=\"editor1\" src=\"https://picsum.photos/id/1015/1600/1000\" aspect=\"16/10\">\r\n            <div slot=\"toolbar\">\r\n              <button data-action=\"zoom-out\">−</button>\r\n              <button data-action=\"zoom-in\">+</button>\r\n              <button data-action=\"rotate-ccw\">↺</button>\r\n              <button data-action=\"rotate\">↻</button>\r\n              <button data-action=\"reset\">Reset</button>\r\n              <button data-action=\"crop\">Recortar</button>\r\n            </div>\r\n          </is-image-editor>\r\n          <img id=\"crop1\" class=\"crop-out\" alt=\"Recorte resultante\" hidden\r\n               src=\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect width='1' height='1' fill='transparent'/></svg>\">\r\n          <pre class=\"log\" id=\"log\">— logs aquí —</pre>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:aspect",
+              "label": "aspect"
+            }
+          ]
         }
       ]
     },

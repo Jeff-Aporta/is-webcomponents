@@ -13,7 +13,76 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-picker id=\"dp\" value=\"2026-07-30\" locale=\"es\"></is-date-picker>"
+          "html": "<is-date-picker id=\"dp\" value=\"2026-07-30\" locale=\"es\"></is-date-picker>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "2026-07-30",
+                "2026-07-01",
+                "2026-07-15"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:locale",
+              "label": "locale",
+              "options": [
+                "es",
+                "en-US"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:min",
+              "label": "min"
+            },
+            {
+              "control": "text",
+              "prop": "attr:max",
+              "label": "max"
+            },
+            {
+              "control": "text",
+              "prop": "attr:open-to",
+              "label": "open-to"
+            },
+            {
+              "control": "text",
+              "prop": "attr:view",
+              "label": "view"
+            },
+            {
+              "control": "number",
+              "prop": "attr:first-day-of-week",
+              "label": "first-day-of-week",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:show-outside-days",
+              "label": "show-outside-days"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:fixed-weeks",
+              "label": "fixed-weeks"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:show-week-numbers",
+              "label": "show-week-numbers"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disable-past",
+              "label": "disable-past"
+            }
+          ]
         },
         {
           "kind": "html",

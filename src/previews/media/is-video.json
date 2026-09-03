@@ -14,7 +14,29 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></is-video>"
+          "html": "<is-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></is-video>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:controls",
+              "label": "controls"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:playsinline",
+              "label": "playsinline"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:muted",
+              "label": "muted"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:loop",
+              "label": "loop"
+            }
+          ]
         },
         {
           "kind": "html",

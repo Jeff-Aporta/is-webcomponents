@@ -17,7 +17,14 @@
         },
         {
           "kind": "demo",
-          "html": "<is-venn-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"venn\": {\n        \"title\": \"Alcance del tiquete\",\n        \"sets\": [\n          { \"id\": \"pedido\", \"label\": \"Lo pedido\", \"hue\": 210 },\n          { \"id\": \"entregado\", \"label\": \"Lo entregado\", \"hue\": 160 }\n        ],\n        \"regions\": [\n          { \"sets\": [\"pedido\"], \"label\": \"Pendiente\", \"value\": 2 },\n          { \"sets\": [\"entregado\"], \"label\": \"Extra\", \"value\": 1 },\n          { \"sets\": [\"pedido\", \"entregado\"], \"label\": \"Cumplido\", \"value\": 7 }\n        ]\n      }\n    }\n  </script>\n</is-venn-diagram>"
+          "html": "<is-venn-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"venn\": {\n        \"title\": \"Alcance del tiquete\",\n        \"sets\": [\n          { \"id\": \"pedido\", \"label\": \"Lo pedido\", \"hue\": 210 },\n          { \"id\": \"entregado\", \"label\": \"Lo entregado\", \"hue\": 160 }\n        ],\n        \"regions\": [\n          { \"sets\": [\"pedido\"], \"label\": \"Pendiente\", \"value\": 2 },\n          { \"sets\": [\"entregado\"], \"label\": \"Extra\", \"value\": 1 },\n          { \"sets\": [\"pedido\", \"entregado\"], \"label\": \"Cumplido\", \"value\": 7 }\n        ]\n      }\n    }\n  </script>\n</is-venn-diagram>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

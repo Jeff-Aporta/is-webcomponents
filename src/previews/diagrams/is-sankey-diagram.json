@@ -17,7 +17,14 @@
         },
         {
           "kind": "demo",
-          "html": "<is-sankey-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"sankey\": {\n        \"title\": \"Reparto del esfuerzo del tiquete\",\n        \"unit\": \"min\",\n        \"groups\": [\n          { \"id\": \"g-analisis\", \"name\": \"Análisis\", \"hue\": 210 },\n          { \"id\": \"g-entrega\", \"name\": \"Entrega\", \"hue\": 160 }\n        ],\n        \"nodes\": [\n          { \"id\": \"total\", \"label\": \"Tiquete\", \"hue\": 210 },\n          { \"id\": \"redaccion\", \"label\": \"Redacción\", \"group\": \"g-analisis\", \"hue\": 239 },\n          { \"id\": \"codigo\", \"label\": \"Código\", \"group\": \"g-entrega\", \"hue\": 160 },\n          { \"id\": \"pruebas\", \"label\": \"Pruebas\", \"group\": \"g-entrega\", \"hue\": 38 },\n          { \"id\": \"cierre\", \"label\": \"Cierre y evidencia\", \"hue\": 280 }\n        ],\n        \"links\": [\n          { \"from\": \"total\", \"to\": \"redaccion\", \"value\": 38 },\n          { \"from\": \"total\", \"to\": \"codigo\", \"value\": 25 },\n          { \"from\": \"total\", \"to\": \"pruebas\", \"value\": 20 },\n          { \"from\": \"redaccion\", \"to\": \"cierre\", \"value\": 10 },\n          { \"from\": \"codigo\", \"to\": \"cierre\", \"value\": 8 }\n        ]\n      }\n    }\n  </script>\n</is-sankey-diagram>"
+          "html": "<is-sankey-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"sankey\": {\n        \"title\": \"Reparto del esfuerzo del tiquete\",\n        \"unit\": \"min\",\n        \"groups\": [\n          { \"id\": \"g-analisis\", \"name\": \"Análisis\", \"hue\": 210 },\n          { \"id\": \"g-entrega\", \"name\": \"Entrega\", \"hue\": 160 }\n        ],\n        \"nodes\": [\n          { \"id\": \"total\", \"label\": \"Tiquete\", \"hue\": 210 },\n          { \"id\": \"redaccion\", \"label\": \"Redacción\", \"group\": \"g-analisis\", \"hue\": 239 },\n          { \"id\": \"codigo\", \"label\": \"Código\", \"group\": \"g-entrega\", \"hue\": 160 },\n          { \"id\": \"pruebas\", \"label\": \"Pruebas\", \"group\": \"g-entrega\", \"hue\": 38 },\n          { \"id\": \"cierre\", \"label\": \"Cierre y evidencia\", \"hue\": 280 }\n        ],\n        \"links\": [\n          { \"from\": \"total\", \"to\": \"redaccion\", \"value\": 38 },\n          { \"from\": \"total\", \"to\": \"codigo\", \"value\": 25 },\n          { \"from\": \"total\", \"to\": \"pruebas\", \"value\": 20 },\n          { \"from\": \"redaccion\", \"to\": \"cierre\", \"value\": 10 },\n          { \"from\": \"codigo\", \"to\": \"cierre\", \"value\": 8 }\n        ]\n      }\n    }\n  </script>\n</is-sankey-diagram>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

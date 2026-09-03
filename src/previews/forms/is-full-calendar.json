@@ -20,7 +20,33 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-full-calendar id=\"cal\" first-day=\"1\" hours-start=\"8\" hours-end=\"20\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"events\": [\r\n                  { \"id\": \"e1\", \"title\": \"Sprint planning\",      \"date\": \"2026-08-03\", \"start\": \"09:00\", \"end\": \"10:30\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e2\", \"title\": \"Demo interna\",         \"date\": \"2026-08-03\", \"start\": \"15:00\", \"end\": \"16:00\", \"color\": \"var(--is-success, #16a34a)\" },\r\n                  { \"id\": \"e3\", \"title\": \"Cierre mensual\",       \"date\": \"2026-08-04\", \"start\": \"14:00\", \"end\": \"17:00\", \"color\": \"var(--is-danger, #dc2626)\" },\r\n                  { \"id\": \"e4\", \"title\": \"Standup\",              \"date\": \"2026-08-04\", \"start\": \"09:15\", \"end\": \"09:30\", \"color\": \"var(--is-warning, #d97706)\" },\r\n                  { \"id\": \"e5\", \"title\": \"1:1 con Sofía\",        \"date\": \"2026-08-05\", \"start\": \"11:00\", \"end\": \"11:30\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e6\", \"title\": \"Lanzamiento v8\",       \"date\": \"2026-08-12\", \"start\": \"10:00\", \"end\": \"12:00\", \"color\": \"var(--is-success, #16a34a)\" },\r\n                  { \"id\": \"e7\", \"title\": \"Sprint review\",        \"date\": \"2026-08-14\", \"start\": \"15:00\", \"end\": \"17:00\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e8\", \"title\": \"Onboarding (4 pasos)\",\"date\": \"2026-08-18\", \"start\": \"08:00\", \"end\": \"12:00\", \"color\": \"var(--is-warning, #d97706)\" },\r\n                  { \"id\": \"e9\", \"title\": \"Sprint retrospective\", \"date\": \"2026-08-21\", \"start\": \"16:00\", \"end\": \"17:30\", \"color\": \"var(--is-accent)\" }\r\n                ]\r\n              }\r\n            </script>\r\n          </is-full-calendar>"
+          "html": "<is-full-calendar id=\"cal\" first-day=\"1\" hours-start=\"8\" hours-end=\"20\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"events\": [\r\n                  { \"id\": \"e1\", \"title\": \"Sprint planning\",      \"date\": \"2026-08-03\", \"start\": \"09:00\", \"end\": \"10:30\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e2\", \"title\": \"Demo interna\",         \"date\": \"2026-08-03\", \"start\": \"15:00\", \"end\": \"16:00\", \"color\": \"var(--is-success, #16a34a)\" },\r\n                  { \"id\": \"e3\", \"title\": \"Cierre mensual\",       \"date\": \"2026-08-04\", \"start\": \"14:00\", \"end\": \"17:00\", \"color\": \"var(--is-danger, #dc2626)\" },\r\n                  { \"id\": \"e4\", \"title\": \"Standup\",              \"date\": \"2026-08-04\", \"start\": \"09:15\", \"end\": \"09:30\", \"color\": \"var(--is-warning, #d97706)\" },\r\n                  { \"id\": \"e5\", \"title\": \"1:1 con Sofía\",        \"date\": \"2026-08-05\", \"start\": \"11:00\", \"end\": \"11:30\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e6\", \"title\": \"Lanzamiento v8\",       \"date\": \"2026-08-12\", \"start\": \"10:00\", \"end\": \"12:00\", \"color\": \"var(--is-success, #16a34a)\" },\r\n                  { \"id\": \"e7\", \"title\": \"Sprint review\",        \"date\": \"2026-08-14\", \"start\": \"15:00\", \"end\": \"17:00\", \"color\": \"var(--is-accent)\" },\r\n                  { \"id\": \"e8\", \"title\": \"Onboarding (4 pasos)\",\"date\": \"2026-08-18\", \"start\": \"08:00\", \"end\": \"12:00\", \"color\": \"var(--is-warning, #d97706)\" },\r\n                  { \"id\": \"e9\", \"title\": \"Sprint retrospective\", \"date\": \"2026-08-21\", \"start\": \"16:00\", \"end\": \"17:30\", \"color\": \"var(--is-accent)\" }\r\n                ]\r\n              }\r\n            </script>\r\n          </is-full-calendar>",
+          "controls": [
+            {
+              "control": "number",
+              "prop": "attr:first-day",
+              "label": "first-day",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:hours-start",
+              "label": "hours-start",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:hours-end",
+              "label": "hours-end",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            }
+          ]
         }
       ]
     },

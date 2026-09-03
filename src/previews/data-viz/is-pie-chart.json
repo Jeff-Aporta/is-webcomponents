@@ -13,7 +13,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-pie-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Alquiler\",\"Comida\",\"Transporte\",\"Ahorro\"],\"datasets\":[{\"label\":\"Presupuesto\",\"data\":[35,25,15,25]}]}}\r\n            </script>\r\n          </is-pie-chart>"
+          "html": "<is-pie-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Alquiler\",\"Comida\",\"Transporte\",\"Ahorro\"],\"datasets\":[{\"label\":\"Presupuesto\",\"data\":[35,25,15,25]}]}}\r\n            </script>\r\n          </is-pie-chart>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

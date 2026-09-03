@@ -15,7 +15,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"mvBtn\" color=\"brand\">\r\n            <is-icon slot=\"start\" icon=\"mdi:check\"></is-icon>\r\n            Verificar tercero\r\n          </is-button>\r\n          <is-modal-verificacion id=\"mvDemo\" entity=\"tercero\"></is-modal-verificacion>"
+          "html": "<is-button id=\"mvBtn\" color=\"brand\">\r\n            <is-icon slot=\"start\" icon=\"mdi:check\"></is-icon>\r\n            Verificar tercero\r\n          </is-button>\r\n          <is-modal-verificacion id=\"mvDemo\" entity=\"tercero\"></is-modal-verificacion>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:entity",
+              "label": "entity"
+            }
+          ]
         },
         {
           "kind": "code",

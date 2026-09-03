@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></is-speech>"
+          "html": "<is-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></is-speech>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:lang",
+              "label": "lang"
+            }
+          ]
         },
         {
           "kind": "code",

@@ -14,7 +14,24 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></is-date-range-input>"
+          "html": "<is-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></is-date-range-input>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label"
+            },
+            {
+              "control": "text",
+              "prop": "attr:start",
+              "label": "start"
+            },
+            {
+              "control": "text",
+              "prop": "attr:end",
+              "label": "end"
+            }
+          ]
         },
         {
           "kind": "code",

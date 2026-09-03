@@ -14,7 +14,25 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-offscreen-canvas width=\"320\" height=\"120\"></is-offscreen-canvas>"
+          "html": "<is-offscreen-canvas width=\"320\" height=\"120\"></is-offscreen-canvas>",
+          "controls": [
+            {
+              "control": "number",
+              "prop": "attr:width",
+              "label": "width",
+              "min": 0,
+              "max": 320,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:height",
+              "label": "height",
+              "min": 0,
+              "max": 120,
+              "step": 1
+            }
+          ]
         },
         {
           "kind": "code",

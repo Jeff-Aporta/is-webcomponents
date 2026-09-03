@@ -20,7 +20,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"mention-wrap\">\r\n            <label for=\"cmt\" style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)\">Comentario</label>\r\n            <is-mention id=\"cmt\" trigger=\"@#\" placeholder=\"Escribe @ o # para autocompletar…\">\r\n              <script type=\"application/json\">\r\n                {\r\n                  \"@\": [\"Ana Ramírez\", \"Pedro Castaño\", \"Sofía Velez\", \"Jorge Arias\", \"Lina Mora\", \"Camilo Pérez\", \"Valentina López\"],\r\n                  \"#\": [\"urgente\", \"bug\", \"idea\", \"blocked\", \"wip\", \"ready-to-ship\", \"tech-debt\"]\r\n                }\r\n              </script>\r\n            </is-mention>\r\n          </div>"
+          "html": "<div class=\"mention-wrap\">\r\n            <label for=\"cmt\" style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)\">Comentario</label>\r\n            <is-mention id=\"cmt\" trigger=\"@#\" placeholder=\"Escribe @ o # para autocompletar…\">\r\n              <script type=\"application/json\">\r\n                {\r\n                  \"@\": [\"Ana Ramírez\", \"Pedro Castaño\", \"Sofía Velez\", \"Jorge Arias\", \"Lina Mora\", \"Camilo Pérez\", \"Valentina López\"],\r\n                  \"#\": [\"urgente\", \"bug\", \"idea\", \"blocked\", \"wip\", \"ready-to-ship\", \"tech-debt\"]\r\n                }\r\n              </script>\r\n            </is-mention>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:trigger",
+              "label": "trigger",
+              "options": [
+                "@#",
+                "@"
+              ]
+            }
+          ]
         }
       ]
     },

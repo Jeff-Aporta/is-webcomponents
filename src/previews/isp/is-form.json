@@ -20,7 +20,14 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"f-frame\">\n            <is-form id=\"fDemo\"></is-form>\n          </div>\n          <div class=\"f-json-row\">\n            <is-button id=\"fBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json / toJSON</is-button>\n            <is-button id=\"fBtnSet\" variant=\"outlined\" color=\"neutral\">setValues(demo)</is-button>\n          </div>\n          <pre class=\"f-json-out\" id=\"fJsonOut\"></pre>\n          <p id=\"fLog\">Última acción: <code class=\"code\">—</code></p>"
+          "html": "<div class=\"f-frame\">\n            <is-form id=\"fDemo\"></is-form>\n          </div>\n          <div class=\"f-json-row\">\n            <is-button id=\"fBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json / toJSON</is-button>\n            <is-button id=\"fBtnSet\" variant=\"outlined\" color=\"neutral\">setValues(demo)</is-button>\n          </div>\n          <pre class=\"f-json-out\" id=\"fJsonOut\"></pre>\n          <p id=\"fLog\">Última acción: <code class=\"code\">—</code></p>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:submit-label",
+              "label": "submit-label"
+            }
+          ]
         },
         {
           "kind": "code",
@@ -46,14 +53,35 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["API", "Notas"],
+          "columns": [
+            "API",
+            "Notas"
+          ],
           "rows": [
-            ["<code>json2html(body)</code>", "monta light DOM desde JSON compacto"],
-            ["<code>html2json()</code>", "serializa light DOM"],
-            ["<code>toJSON()</code>", "<code>{ mode, body, values, … }</code>"],
-            ["<code>fromJSON(json)</code>", "chrome + body + values"],
-            ["<code>getValues</code> / <code>setValues</code>", "mapa de controles con <code>name</code>"],
-            ["<code>IsForm.json2html</code> / <code>html2json</code>", "estáticos (mismo codec global)"]
+            [
+              "<code>json2html(body)</code>",
+              "monta light DOM desde JSON compacto"
+            ],
+            [
+              "<code>html2json()</code>",
+              "serializa light DOM"
+            ],
+            [
+              "<code>toJSON()</code>",
+              "<code>{ mode, body, values, … }</code>"
+            ],
+            [
+              "<code>fromJSON(json)</code>",
+              "chrome + body + values"
+            ],
+            [
+              "<code>getValues</code> / <code>setValues</code>",
+              "mapa de controles con <code>name</code>"
+            ],
+            [
+              "<code>IsForm.json2html</code> / <code>html2json</code>",
+              "estáticos (mismo codec global)"
+            ]
           ]
         }
       ]

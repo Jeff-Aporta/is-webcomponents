@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-accordion-group id=\"agDemo\">\r\n            <is-details summary=\"Datos básicos\" open>Nombre, documento y régimen.</is-details>\r\n            <is-details summary=\"Contacto\">Teléfono, correo y dirección.</is-details>\r\n            <is-details summary=\"Contabilidad\">Cuentas por defecto y retenciones.</is-details>\r\n          </is-accordion-group>\r\n          <p id=\"agLog\">Abiertos: <code class=\"code\">1</code></p>"
+          "html": "<is-accordion-group id=\"agDemo\">\r\n            <is-details summary=\"Datos básicos\" open>Nombre, documento y régimen.</is-details>\r\n            <is-details summary=\"Contacto\">Teléfono, correo y dirección.</is-details>\r\n            <is-details summary=\"Contabilidad\">Cuentas por defecto y retenciones.</is-details>\r\n          </is-accordion-group>\r\n          <p id=\"agLog\">Abiertos: <code class=\"code\">1</code></p>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:multiple",
+              "label": "multiple"
+            }
+          ]
         },
         {
           "kind": "code",

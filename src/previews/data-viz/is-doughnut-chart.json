@@ -13,7 +13,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-doughnut-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Dev\",\"Diseño\",\"QA\",\"Reuniones\"],\"datasets\":[{\"label\":\"Horas\",\"data\":[35,20,15,18]}]}}\r\n            </script>\r\n          </is-doughnut-chart>"
+          "html": "<is-doughnut-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Dev\",\"Diseño\",\"QA\",\"Reuniones\"],\"datasets\":[{\"label\":\"Horas\",\"data\":[35,20,15,18]}]}}\r\n            </script>\r\n          </is-doughnut-chart>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

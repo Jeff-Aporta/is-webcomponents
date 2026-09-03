@@ -14,7 +14,45 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-pin-input id=\"otp1\" length=\"6\"></is-pin-input>\r\n          <p>Valor: <code class=\"code\" id=\"otp1Val\">—</code></p>"
+          "html": "<is-pin-input id=\"otp1\" length=\"6\"></is-pin-input>\r\n          <p>Valor: <code class=\"code\" id=\"otp1Val\">—</code></p>",
+          "controls": [
+            {
+              "control": "number",
+              "prop": "attr:length",
+              "label": "length",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "placeholder"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:mask",
+              "label": "mask"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "number",
+              "prop": "attr:value",
+              "label": "value",
+              "min": 0,
+              "max": 123456,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:invalid",
+              "label": "invalid"
+            }
+          ]
         },
         {
           "kind": "code",

@@ -13,7 +13,117 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">vista rápida</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">#,##0.00</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">yyyy-mm-dd</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-08-01\" pattern=\"yyyy-mm-dd\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00%</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" pattern=\"0.00%\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">title case</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"hola mundo contapyme\" case=\"title\"></is-format>\n            </div>\n          </div>"
+          "html": "<span class=\"demo-label\">vista rápida</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">#,##0.00</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">yyyy-mm-dd</code>\n              <is-format class=\"format-grid__value\" type=\"date\" value=\"2026-08-01\" pattern=\"yyyy-mm-dd\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00%</code>\n              <is-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" pattern=\"0.00%\"></is-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">title case</code>\n              <is-format class=\"format-grid__value\" type=\"text\" value=\"hola mundo contapyme\" case=\"title\"></is-format>\n            </div>\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:type",
+              "label": "type",
+              "options": [
+                "number",
+                "date",
+                "text",
+                "bytes",
+                "relative"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:pattern",
+              "label": "pattern",
+              "options": [
+                "#,##0.00",
+                "yyyy-mm-dd",
+                "0.00%",
+                "General",
+                "0",
+                "0.00",
+                "#,##0",
+                "0%",
+                "0.00E+00",
+                "$#,##0.00",
+                "Accounting",
+                "# ?/?",
+                "# ??/??",
+                "dd/mm/yyyy",
+                "d-mmm-yyyy",
+                "mmmm yyyy",
+                "h:mm AM/PM",
+                "h:mm:ss",
+                "yyyy-mm-dd hh:mm:ss",
+                "@"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:case",
+              "label": "case",
+              "options": [
+                "title",
+                "upper",
+                "lower"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:currency",
+              "label": "currency",
+              "options": [
+                "USD",
+                "EUR"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:truncate",
+              "label": "truncate",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:pad-start",
+              "label": "pad-start",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:pad-length",
+              "label": "pad-length",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:format",
+              "label": "format",
+              "options": [
+                "currency",
+                "percent",
+                "scientific",
+                "compact",
+                "integer"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:display",
+              "label": "display"
+            },
+            {
+              "control": "select",
+              "prop": "attr:date",
+              "label": "date",
+              "options": [
+                "2020-01-01T12:00:00",
+                "2099-01-01T12:00:00"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -91,22 +201,82 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Aplica a", "Descripción"],
+          "columns": [
+            "Atributo",
+            "Aplica a",
+            "Descripción"
+          ],
           "rows": [
-            ["<code>type</code>", "todos", "<code>date | number | bytes | relative | text</code>"],
-            ["<code>value</code>", "todos", "dato a formatear (string | number)"],
-            ["<code>pattern</code>", "number, date, text", "código Excel-like: <code>#,##0.00</code>, <code>0.00%</code>, <code>yyyy-mm-dd</code>, <code>@</code>, <code>Accounting</code>, <code># ?/?</code>…"],
-            ["<code>format</code>", "number", "<code>decimal | currency | percent | unit | scientific | compact | integer | accounting</code>"],
-            ["<code>currency</code>", "number", "ISO 4217 cuando currency/accounting / patrones <code>$</code>"],
-            ["<code>locale</code>", "todos", "BCP 47; cae al <code>lang</code> del documento"],
-            ["<code>case</code>", "text", "<code>upper | lower | title | capitalize</code>"],
-            ["<code>truncate</code>", "text", "máximo de caracteres (añade …)"],
-            ["<code>pad-start</code> / <code>pad-end</code> + <code>pad-length</code>", "text", "relleno tipo Excel personalizado"],
-            ["<code>date</code>", "relative", "ISO o timestamp; en relative también vale <code>value</code>"],
-            ["<code>unit</code> / <code>display</code> / <code>autofit</code>", "bytes", "unidad de entrada, short|long, autofit"],
-            ["<code>style</code> / <code>numeric</code> / <code>sync</code>", "relative", "long|short|narrow · always|auto · re-render 30s"],
-            ["<code>weekday era year month day hour minute second hour-format</code>", "date", "opciones de <code>Intl.DateTimeFormat</code> (si no hay <code>pattern</code>)"],
-            ["<code>minimum-fraction-digits</code> / <code>maximum-fraction-digits</code>", "number", "decimales Intl (si no hay <code>pattern</code>)"]
+            [
+              "<code>type</code>",
+              "todos",
+              "<code>date | number | bytes | relative | text</code>"
+            ],
+            [
+              "<code>value</code>",
+              "todos",
+              "dato a formatear (string | number)"
+            ],
+            [
+              "<code>pattern</code>",
+              "number, date, text",
+              "código Excel-like: <code>#,##0.00</code>, <code>0.00%</code>, <code>yyyy-mm-dd</code>, <code>@</code>, <code>Accounting</code>, <code># ?/?</code>…"
+            ],
+            [
+              "<code>format</code>",
+              "number",
+              "<code>decimal | currency | percent | unit | scientific | compact | integer | accounting</code>"
+            ],
+            [
+              "<code>currency</code>",
+              "number",
+              "ISO 4217 cuando currency/accounting / patrones <code>$</code>"
+            ],
+            [
+              "<code>locale</code>",
+              "todos",
+              "BCP 47; cae al <code>lang</code> del documento"
+            ],
+            [
+              "<code>case</code>",
+              "text",
+              "<code>upper | lower | title | capitalize</code>"
+            ],
+            [
+              "<code>truncate</code>",
+              "text",
+              "máximo de caracteres (añade …)"
+            ],
+            [
+              "<code>pad-start</code> / <code>pad-end</code> + <code>pad-length</code>",
+              "text",
+              "relleno tipo Excel personalizado"
+            ],
+            [
+              "<code>date</code>",
+              "relative",
+              "ISO o timestamp; en relative también vale <code>value</code>"
+            ],
+            [
+              "<code>unit</code> / <code>display</code> / <code>autofit</code>",
+              "bytes",
+              "unidad de entrada, short|long, autofit"
+            ],
+            [
+              "<code>style</code> / <code>numeric</code> / <code>sync</code>",
+              "relative",
+              "long|short|narrow · always|auto · re-render 30s"
+            ],
+            [
+              "<code>weekday era year month day hour minute second hour-format</code>",
+              "date",
+              "opciones de <code>Intl.DateTimeFormat</code> (si no hay <code>pattern</code>)"
+            ],
+            [
+              "<code>minimum-fraction-digits</code> / <code>maximum-fraction-digits</code>",
+              "number",
+              "decimales Intl (si no hay <code>pattern</code>)"
+            ]
           ]
         }
       ]

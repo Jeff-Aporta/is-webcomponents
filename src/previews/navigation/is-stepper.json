@@ -15,7 +15,52 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-stepper id=\"stepper1\" active=\"1\">\r\n            <is-stepper-step label=\"Cuenta\" description=\"email.verificado@ejemplo.com\" icon=\"mdi:account\"></is-stepper-step>\r\n            <is-stepper-step label=\"Perfil\" description=\"Completa tus datos\" icon=\"mdi:card-account-details\"></is-stepper-step>\r\n            <is-stepper-step label=\"Confirmar\" description=\"Revisa y envía\" icon=\"mdi:check-circle\"></is-stepper-step>\r\n          </is-stepper>\r\n\r\n          <div style=\"display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end\">\r\n            <is-button id=\"prevBtn\" color=\"neutral\" variant=\"outlined\">Atrás</is-button>\r\n            <is-button id=\"nextBtn\" color=\"brand\">Siguiente</is-button>\r\n          </div>\r\n          <p id=\"stepLog\" class=\"lede\">Active: <code class=\"code\">1</code></p>"
+          "html": "<is-stepper id=\"stepper1\" active=\"1\">\r\n            <is-stepper-step label=\"Cuenta\" description=\"email.verificado@ejemplo.com\" icon=\"mdi:account\"></is-stepper-step>\r\n            <is-stepper-step label=\"Perfil\" description=\"Completa tus datos\" icon=\"mdi:card-account-details\"></is-stepper-step>\r\n            <is-stepper-step label=\"Confirmar\" description=\"Revisa y envía\" icon=\"mdi:check-circle\"></is-stepper-step>\r\n          </is-stepper>\r\n\r\n          <div style=\"display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end\">\r\n            <is-button id=\"prevBtn\" color=\"neutral\" variant=\"outlined\">Atrás</is-button>\r\n            <is-button id=\"nextBtn\" color=\"brand\">Siguiente</is-button>\r\n          </div>\r\n          <p id=\"stepLog\" class=\"lede\">Active: <code class=\"code\">1</code></p>",
+          "controls": [
+            {
+              "control": "number",
+              "prop": "attr:active",
+              "label": "active",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Cuenta",
+                "Perfil",
+                "Confirmar",
+                "Datos personales",
+                "Dirección",
+                "Pago",
+                "Revisar",
+                "Datos",
+                "Validación",
+                "Pendiente",
+                "Bloqueado",
+                "También bloqueado",
+                "Inicio",
+                "Medio",
+                "Fin",
+                "Paso 1",
+                "Paso 2",
+                "Paso 3"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:error",
+              "label": "error"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
+          ]
         },
         {
           "kind": "code",

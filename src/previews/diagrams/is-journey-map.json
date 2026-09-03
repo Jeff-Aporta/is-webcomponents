@@ -17,7 +17,14 @@
         },
         {
           "kind": "demo",
-          "html": "<is-journey-map open-on-click>\n  <script type=\"application/json\">\n    {\n      \"journey\": {\n        \"title\": \"Recorrido de una nota de voz\",\n        \"phases\": [\n          { \"id\": \"entrada\", \"name\": \"Entrada\", \"hue\": 210 },\n          { \"id\": \"proceso\", \"name\": \"Proceso\", \"hue\": 160 },\n          { \"id\": \"salida\", \"name\": \"Salida\", \"hue\": 38 }\n        ],\n        \"steps\": [\n          { \"id\": \"graba\", \"phase\": \"entrada\", \"label\": \"Graba la nota\", \"score\": 5, \"actor\": \"Usuario\" },\n          { \"id\": \"sube\", \"phase\": \"entrada\", \"label\": \"Sube el audio\", \"score\": 4, \"actor\": \"App\" },\n          { \"id\": \"transcribe\", \"phase\": \"proceso\", \"label\": \"Transcribe\", \"score\": 3, \"actor\": \"Servicio\" },\n          { \"id\": \"clasifica\", \"phase\": \"proceso\", \"label\": \"Clasifica\", \"score\": 2, \"actor\": \"Servicio\" },\n          { \"id\": \"responde\", \"phase\": \"salida\", \"label\": \"Responde\", \"score\": 4, \"actor\": \"Asistente\" }\n        ]\n      }\n    }\n  </script>\n</is-journey-map>"
+          "html": "<is-journey-map open-on-click>\n  <script type=\"application/json\">\n    {\n      \"journey\": {\n        \"title\": \"Recorrido de una nota de voz\",\n        \"phases\": [\n          { \"id\": \"entrada\", \"name\": \"Entrada\", \"hue\": 210 },\n          { \"id\": \"proceso\", \"name\": \"Proceso\", \"hue\": 160 },\n          { \"id\": \"salida\", \"name\": \"Salida\", \"hue\": 38 }\n        ],\n        \"steps\": [\n          { \"id\": \"graba\", \"phase\": \"entrada\", \"label\": \"Graba la nota\", \"score\": 5, \"actor\": \"Usuario\" },\n          { \"id\": \"sube\", \"phase\": \"entrada\", \"label\": \"Sube el audio\", \"score\": 4, \"actor\": \"App\" },\n          { \"id\": \"transcribe\", \"phase\": \"proceso\", \"label\": \"Transcribe\", \"score\": 3, \"actor\": \"Servicio\" },\n          { \"id\": \"clasifica\", \"phase\": \"proceso\", \"label\": \"Clasifica\", \"score\": 2, \"actor\": \"Servicio\" },\n          { \"id\": \"responde\", \"phase\": \"salida\", \"label\": \"Responde\", \"score\": 4, \"actor\": \"Asistente\" }\n        ]\n      }\n    }\n  </script>\n</is-journey-map>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

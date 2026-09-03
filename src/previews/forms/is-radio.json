@@ -14,7 +14,92 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-radio-group id=\"plan\" name=\"plan\" value=\"pro\" label=\"Plan\" hint=\"Flechas para navegar, Espacio para elegir\">\r\n            <is-radio value=\"free\">Gratis</is-radio>\r\n            <is-radio value=\"pro\">Profesional</is-radio>\r\n            <is-radio value=\"empresa\">Empresa</is-radio>\r\n            <is-radio value=\"legacy\" disabled>Heredado (no disponible)</is-radio>\r\n          </is-radio-group>"
+          "html": "<is-radio-group id=\"plan\" name=\"plan\" value=\"pro\" label=\"Plan\" hint=\"Flechas para navegar, Espacio para elegir\">\r\n            <is-radio value=\"free\">Gratis</is-radio>\r\n            <is-radio value=\"pro\">Profesional</is-radio>\r\n            <is-radio value=\"empresa\">Empresa</is-radio>\r\n            <is-radio value=\"legacy\" disabled>Heredado (no disponible)</is-radio>\r\n          </is-radio-group>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "pro",
+                "free",
+                "empresa",
+                "legacy",
+                "a",
+                "b",
+                "c",
+                "d",
+                "t",
+                "t2",
+                "s",
+                "s2",
+                "b2",
+                "e",
+                "e2",
+                "std",
+                "prio",
+                "ded",
+                "normal",
+                "express",
+                "recoger",
+                "si",
+                "no",
+                "auto",
+                "claro",
+                "oscuro",
+                "tarjeta",
+                "transferencia",
+                "efectivo"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:row",
+              "label": "row"
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "neutral",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:label-placement",
+              "label": "label-placement",
+              "options": [
+                "top",
+                "start",
+                "bottom",
+                "end"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:error",
+              "label": "error"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:readonly",
+              "label": "readonly"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            }
+          ]
         },
         {
           "kind": "html",

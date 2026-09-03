@@ -15,7 +15,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-block-layout id=\"bl-intro\" style=\"border:1px solid var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>\r\n            <p>sizew actual: <strong id=\"bl-out\">—</strong></p>\r\n          </is-block-layout>"
+          "html": "<is-block-layout id=\"bl-intro\" style=\"border:1px solid var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>\r\n            <p>sizew actual: <strong id=\"bl-out\">—</strong></p>\r\n          </is-block-layout>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:inline",
+              "label": "inline"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:cscroll",
+              "label": "cscroll"
+            }
+          ]
         }
       ]
     },

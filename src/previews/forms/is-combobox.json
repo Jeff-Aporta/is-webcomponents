@@ -13,7 +13,38 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"med\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"barr\">Barranquilla</is-option>\r\n            <is-option value=\"buc\">Bucaramanga</is-option>\r\n          </is-combobox>"
+          "html": "<is-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"med\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"barr\">Barranquilla</is-option>\r\n            <is-option value=\"buc\">Bucaramanga</is-option>\r\n          </is-combobox>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Ciudad",
+                "País"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "placeholder"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:clearable",
+              "label": "clearable"
+            },
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            }
+          ]
         }
       ]
     },

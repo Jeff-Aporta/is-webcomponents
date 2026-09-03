@@ -17,7 +17,14 @@
         },
         {
           "kind": "demo",
-          "html": "<is-use-case-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"useCase\": {\n        \"title\": \"Alcance del especialista de QA\",\n        \"system\": { \"name\": \"Portal de pruebas\" },\n        \"actors\": [\n          { \"id\": \"qa\", \"label\": \"Especialista QA\", \"side\": \"left\", \"hue\": 210 },\n          { \"id\": \"admin\", \"label\": \"Ingeniería\", \"side\": \"right\", \"hue\": 160 },\n          { \"id\": \"ia\", \"label\": \"Proveedor IA\", \"side\": \"right\", \"external\": true }\n        ],\n        \"cases\": [\n          { \"id\": \"chat\", \"label\": \"Conversar con el asistente\" },\n          { \"id\": \"calificar\", \"label\": \"Calificar respuesta\" },\n          { \"id\": \"prompts\", \"label\": \"Editar prompts\", \"hue\": 160 }\n        ],\n        \"links\": [\n          { \"from\": \"qa\", \"to\": \"chat\" },\n          { \"from\": \"qa\", \"to\": \"calificar\" },\n          { \"from\": \"calificar\", \"to\": \"chat\", \"kind\": \"extend\" },\n          { \"from\": \"chat\", \"to\": \"ia\", \"kind\": \"include\", \"label\": \"consulta\" },\n          { \"from\": \"admin\", \"to\": \"prompts\" }\n        ]\n      }\n    }\n  </script>\n</is-use-case-diagram>"
+          "html": "<is-use-case-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"useCase\": {\n        \"title\": \"Alcance del especialista de QA\",\n        \"system\": { \"name\": \"Portal de pruebas\" },\n        \"actors\": [\n          { \"id\": \"qa\", \"label\": \"Especialista QA\", \"side\": \"left\", \"hue\": 210 },\n          { \"id\": \"admin\", \"label\": \"Ingeniería\", \"side\": \"right\", \"hue\": 160 },\n          { \"id\": \"ia\", \"label\": \"Proveedor IA\", \"side\": \"right\", \"external\": true }\n        ],\n        \"cases\": [\n          { \"id\": \"chat\", \"label\": \"Conversar con el asistente\" },\n          { \"id\": \"calificar\", \"label\": \"Calificar respuesta\" },\n          { \"id\": \"prompts\", \"label\": \"Editar prompts\", \"hue\": 160 }\n        ],\n        \"links\": [\n          { \"from\": \"qa\", \"to\": \"chat\" },\n          { \"from\": \"qa\", \"to\": \"calificar\" },\n          { \"from\": \"calificar\", \"to\": \"chat\", \"kind\": \"extend\" },\n          { \"from\": \"chat\", \"to\": \"ia\", \"kind\": \"include\", \"label\": \"consulta\" },\n          { \"from\": \"admin\", \"to\": \"prompts\" }\n        ]\n      }\n    }\n  </script>\n</is-use-case-diagram>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

@@ -13,7 +13,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-line-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\"datasets\":[{\"label\":\"Visitas\",\"data\":[4200,4800,5100,4900,5500,6200]}]}}\r\n            </script>\r\n          </is-line-chart>"
+          "html": "<is-line-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\"datasets\":[{\"label\":\"Visitas\",\"data\":[4200,4800,5100,4900,5500,6200]}]}}\r\n            </script>\r\n          </is-line-chart>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

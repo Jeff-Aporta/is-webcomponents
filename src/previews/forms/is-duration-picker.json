@@ -20,7 +20,41 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-duration-picker id=\"dur\" value=\"3725\"></is-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--is-text-soft); font-size:.78rem; margin-top:.5rem\">\r\n            <code>value=\"3725\"</code> = 1h 02m 05s\r\n          </p>"
+          "html": "<is-duration-picker id=\"dur\" value=\"3725\"></is-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--is-text-soft); font-size:.78rem; margin-top:.5rem\">\r\n            <code>value=\"3725\"</code> = 1h 02m 05s\r\n          </p>",
+          "controls": [
+            {
+              "control": "number",
+              "prop": "attr:value",
+              "label": "value",
+              "min": 0,
+              "max": 3725,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:min",
+              "label": "min",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:max",
+              "label": "max",
+              "min": 0,
+              "max": 5400,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:step",
+              "label": "step",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            }
+          ]
         }
       ]
     },

@@ -10,11 +10,45 @@
     {
       "id": "intro",
       "title": "<is-relative-time>",
-          "lede": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).\n          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.\n          Alias de <code class=\"code\">&lt;is-format type=\"relative\"&gt;</code>.",
+      "lede": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).\n          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.\n          Alias de <code class=\"code\">&lt;is-format type=\"relative\"&gt;</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>\n          <p style=\"margin:0;font-size:1.15rem\">Actualizado <is-relative-time id=\"live\" sync></is-relative-time></p>"
+          "html": "<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>\n          <p style=\"margin:0;font-size:1.15rem\">Actualizado <is-relative-time id=\"live\" sync></is-relative-time></p>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:sync",
+              "label": "sync"
+            },
+            {
+              "control": "select",
+              "prop": "attr:data-rt-offset",
+              "label": "data-rt-offset",
+              "options": [
+                "-86400",
+                "-3600",
+                "-120",
+                "0",
+                "259200"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:format",
+              "label": "format",
+              "options": [
+                "long",
+                "short",
+                "narrow"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:numeric",
+              "label": "numeric"
+            }
+          ]
         }
       ]
     },
@@ -71,13 +105,31 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Default"],
+          "columns": [
+            "Atributo",
+            "Default"
+          ],
           "rows": [
-            ["<code>date</code>", "ISO o timestamp"],
-            ["<code>format</code>", "long · short · narrow"],
-            ["<code>numeric</code>", "auto · always"],
-            ["<code>locale</code>", "<code>html lang</code> (sistema) → <code>es</code>"],
-            ["<code>sync</code>", "actualiza cada ~30s"]
+            [
+              "<code>date</code>",
+              "ISO o timestamp"
+            ],
+            [
+              "<code>format</code>",
+              "long · short · narrow"
+            ],
+            [
+              "<code>numeric</code>",
+              "auto · always"
+            ],
+            [
+              "<code>locale</code>",
+              "<code>html lang</code> (sistema) → <code>es</code>"
+            ],
+            [
+              "<code>sync</code>",
+              "actualiza cada ~30s"
+            ]
           ]
         }
       ]

@@ -17,7 +17,14 @@
         },
         {
           "kind": "demo",
-          "html": "<is-gantt open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"gantt\": {\r\n                  \"title\": \"Cierre contable\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Preparación\", \"hue\": 239 },\r\n                    { \"id\": \"g2\", \"name\": \"Revisión\", \"hue\": 199 }\r\n                  ],\r\n                  \"tasks\": [\r\n                    { \"id\": \"t1\", \"label\": \"Conciliar bancos\", \"start\": \"2026-01-05\", \"duration\": \"3d\", \"group\": \"g1\", \"progress\": 100 },\r\n                    { \"id\": \"t2\", \"label\": \"Depreciaciones\", \"start\": \"2026-01-08\", \"end\": \"2026-01-12\", \"group\": \"g1\", \"after\": [\"t1\"], \"progress\": 60 },\r\n                    { \"id\": \"t3\", \"label\": \"Provisiones\", \"start\": \"2026-01-08\", \"duration\": \"5d\", \"group\": \"g1\", \"after\": [\"t1\"] },\r\n                    { \"id\": \"t4\", \"label\": \"Revisión contador\", \"start\": \"2026-01-13\", \"duration\": \"4d\", \"group\": \"g2\", \"after\": [\"t2\", \"t3\"] },\r\n                    { \"id\": \"m1\", \"label\": \"Cierre\", \"start\": \"2026-01-20\", \"milestone\": true, \"after\": [\"t4\"] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-gantt>"
+          "html": "<is-gantt open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"gantt\": {\r\n                  \"title\": \"Cierre contable\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Preparación\", \"hue\": 239 },\r\n                    { \"id\": \"g2\", \"name\": \"Revisión\", \"hue\": 199 }\r\n                  ],\r\n                  \"tasks\": [\r\n                    { \"id\": \"t1\", \"label\": \"Conciliar bancos\", \"start\": \"2026-01-05\", \"duration\": \"3d\", \"group\": \"g1\", \"progress\": 100 },\r\n                    { \"id\": \"t2\", \"label\": \"Depreciaciones\", \"start\": \"2026-01-08\", \"end\": \"2026-01-12\", \"group\": \"g1\", \"after\": [\"t1\"], \"progress\": 60 },\r\n                    { \"id\": \"t3\", \"label\": \"Provisiones\", \"start\": \"2026-01-08\", \"duration\": \"5d\", \"group\": \"g1\", \"after\": [\"t1\"] },\r\n                    { \"id\": \"t4\", \"label\": \"Revisión contador\", \"start\": \"2026-01-13\", \"duration\": \"4d\", \"group\": \"g2\", \"after\": [\"t2\", \"t3\"] },\r\n                    { \"id\": \"m1\", \"label\": \"Cierre\", \"start\": \"2026-01-20\", \"milestone\": true, \"after\": [\"t4\"] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-gantt>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     },

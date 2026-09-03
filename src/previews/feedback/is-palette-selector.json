@@ -14,7 +14,169 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"row\">\r\n            <is-palette-selector id=\"defaultPalette\"></is-palette-selector>\r\n            <is-theme-toggle id=\"defaultTheme\"></is-theme-toggle>\r\n          </div>"
+          "html": "<div class=\"row\">\r\n            <is-palette-selector id=\"defaultPalette\"></is-palette-selector>\r\n            <is-theme-toggle id=\"defaultTheme\"></is-theme-toggle>\r\n          </div>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:palettes",
+              "label": "palettes"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:value",
+              "label": "value"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:acme",
+              "label": "acme"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:label",
+              "label": "label"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Acme",
+              "label": "Acme"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Corp",
+              "label": "Corp"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:accent",
+              "label": "accent"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:e03131",
+              "label": "e03131"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:lead",
+              "label": "lead"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:ac",
+              "label": "ac"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:accentLabel",
+              "label": "accentLabel"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:me",
+              "label": "me"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:leadColor",
+              "label": "leadColor"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:accentColor",
+              "label": "accentColor"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:bg",
+              "label": "bg"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:fff",
+              "label": "fff"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:fg",
+              "label": "fg"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:ocean",
+              "label": "ocean"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Ocean",
+              "label": "Ocean"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:ea5e9",
+              "label": "ea5e9"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:o",
+              "label": "o"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:cean",
+              "label": "cean"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:forest",
+              "label": "forest"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Forest",
+              "label": "Forest"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:c55e",
+              "label": "c55e"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:f",
+              "label": "f"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:orest",
+              "label": "orest"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:dusk",
+              "label": "dusk"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Dusk",
+              "label": "Dusk"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:a855f7",
+              "label": "a855f7"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:d",
+              "label": "d"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:usk",
+              "label": "usk"
+            }
+          ]
         },
         {
           "kind": "code",

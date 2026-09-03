@@ -13,7 +13,66 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<p>Demo: <is-format-bytes value=\"1536000\"></is-format-bytes></p>"
+          "html": "<p>Demo: <is-format-bytes value=\"1536000\"></is-format-bytes></p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "1536000",
+                "1024",
+                "1",
+                "2.5",
+                "512",
+                "1073741824",
+                "204800",
+                "1048576",
+                "0",
+                "-2048"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:unit",
+              "label": "unit",
+              "options": [
+                "byte",
+                "kilobyte",
+                "megabyte",
+                "gigabyte",
+                "terabyte",
+                "petabyte"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:display",
+              "label": "display",
+              "options": [
+                "short",
+                "long"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:autofit",
+              "label": "autofit"
+            },
+            {
+              "control": "select",
+              "prop": "attr:locale",
+              "label": "locale",
+              "options": [
+                "en",
+                "es",
+                "fr",
+                "ar-EG",
+                "de",
+                "ja"
+              ]
+            }
+          ]
         }
       ]
     },

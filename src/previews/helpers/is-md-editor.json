@@ -14,7 +14,33 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-md-editor label=\"Prompt del sistema\" placeholder=\"Sin contenido. Haz clic para editar…\">\n  <script type=\"text/markdown\">\n# Instrucción\n\nEres un asistente que responde en **español** con tono profesional.\n\n- Usa `{{tono}}` como guía de estilo\n- Cita fuentes cuando aplique\n\n> Nunca inventes datos financieros.\n  </script>\n</is-md-editor>"
+          "html": "<is-md-editor label=\"Prompt del sistema\" placeholder=\"Sin contenido. Haz clic para editar…\">\n  <script type=\"text/markdown\">\n# Instrucción\n\nEres un asistente que responde en **español** con tono profesional.\n\n- Usa `{{tono}}` como guía de estilo\n- Cita fuentes cuando aplique\n\n> Nunca inventes datos financieros.\n  </script>\n</is-md-editor>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Prompt del sistema",
+                "Snippet CDN",
+                "Plantilla de correo"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:filename",
+              "label": "filename",
+              "options": [
+                "cdn-snippet.md",
+                "plantilla.md"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:can-edit",
+              "label": "can-edit"
+            }
+          ]
         }
       ]
     },
@@ -58,10 +84,19 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Necesitas", "Usar"],
+          "columns": [
+            "Necesitas",
+            "Usar"
+          ],
           "rows": [
-            ["Pintar MD embebido / edición ligera", "<code>is-md-render</code>"],
-            ["Toolbar, diálogo, CRUD", "<code>is-md-editor</code>"]
+            [
+              "Pintar MD embebido / edición ligera",
+              "<code>is-md-render</code>"
+            ],
+            [
+              "Toolbar, diálogo, CRUD",
+              "<code>is-md-editor</code>"
+            ]
           ]
         }
       ]
@@ -72,14 +107,35 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["API", "Notas"],
+          "columns": [
+            "API",
+            "Notas"
+          ],
           "rows": [
-            ["<code>load()</code> / <code>persistRemote()</code>", "actions → api endpoints"],
-            ["<code>el.actions</code>", "load / persist / delete (JS only)"],
-            ["<code>el.api</code> / <code>src</code>", "IsMdEditorApiConfig"],
-            ["<code>setDocument(doc)</code>", "content + filename + updatedAt/By"],
-            ["<code>download()</code>", "siempre habilitado"],
-            ["<code>is-persist</code>", "<code>{ value, document }</code>"]
+            [
+              "<code>load()</code> / <code>persistRemote()</code>",
+              "actions → api endpoints"
+            ],
+            [
+              "<code>el.actions</code>",
+              "load / persist / delete (JS only)"
+            ],
+            [
+              "<code>el.api</code> / <code>src</code>",
+              "IsMdEditorApiConfig"
+            ],
+            [
+              "<code>setDocument(doc)</code>",
+              "content + filename + updatedAt/By"
+            ],
+            [
+              "<code>download()</code>",
+              "siempre habilitado"
+            ],
+            [
+              "<code>is-persist</code>",
+              "<code>{ value, document }</code>"
+            ]
           ]
         }
       ]

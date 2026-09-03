@@ -19,7 +19,33 @@
         },
         {
           "kind": "demo",
-          "html": "<is-chart open-on-click type=\"bar\" label=\"Ingresos vs gastos\" x-label=\"Mes\" y-label=\"Millones COP\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\", \"May\", \"Jun\"],\r\n                  \"datasets\": [\r\n                    { \"label\": \"Ingresos\", \"data\": [48, 56, 62, 58, 71, 68] },\r\n                    { \"label\": \"Gastos\", \"data\": [35, 38, 40, 42, 45, 43] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-chart>"
+          "html": "<is-chart open-on-click type=\"bar\" label=\"Ingresos vs gastos\" x-label=\"Mes\" y-label=\"Millones COP\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\", \"May\", \"Jun\"],\r\n                  \"datasets\": [\r\n                    { \"label\": \"Ingresos\", \"data\": [48, 56, 62, 58, 71, 68] },\r\n                    { \"label\": \"Gastos\", \"data\": [35, 38, 40, 42, 45, 43] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-chart>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            },
+            {
+              "control": "select",
+              "prop": "attr:type",
+              "label": "type",
+              "options": [
+                "bar",
+                "line"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:x-label",
+              "label": "x-label"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-legend",
+              "label": "without-legend"
+            }
+          ]
         }
       ]
     },

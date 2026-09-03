@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></is-time-field>"
+          "html": "<is-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></is-time-field>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         },
         {
           "kind": "code",

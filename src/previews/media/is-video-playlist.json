@@ -15,7 +15,23 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video-playlist id=\"pl\" autoplay-next placement=\"bottom\">\r\n            <is-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Elephants Dream\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/03-elephants-dream.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/03-elephants-dream.mp4\"\r\n            ></is-video>\r\n          </is-video-playlist>"
+          "html": "<is-video-playlist id=\"pl\" autoplay-next placement=\"bottom\">\r\n            <is-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Elephants Dream\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/03-elephants-dream.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/03-elephants-dream.mp4\"\r\n            ></is-video>\r\n          </is-video-playlist>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:autoplay-next",
+              "label": "autoplay-next"
+            },
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "bottom",
+                "right"
+              ]
+            }
+          ]
         },
         {
           "kind": "code",

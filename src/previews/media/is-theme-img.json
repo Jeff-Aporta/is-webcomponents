@@ -13,7 +13,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:3rem\">\n            <is-theme-img\n              src-dark=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              src-light=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              alt=\"Demo\"\n              shape=\"circle\"\n            ></is-theme-img>\n            <span style=\"font-size:0.35em;opacity:.7\">cambia el theme-toggle del chrome</span>\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:3rem\">\n            <is-theme-img\n              src-dark=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              src-light=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              alt=\"Demo\"\n              shape=\"circle\"\n            ></is-theme-img>\n            <span style=\"font-size:0.35em;opacity:.7\">cambia el theme-toggle del chrome</span>\n          </div>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:alt",
+              "label": "alt"
+            }
+          ]
         },
         {
           "kind": "code",

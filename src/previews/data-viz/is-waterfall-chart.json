@@ -13,7 +13,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-waterfall-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Saldo inicial\", \"Ventas\", \"Costos\", \"Impuestos\", \"Saldo final\"],\r\n                  \"datasets\": [{ \"label\": \"Flujo\", \"data\": [1200, 850, -420, -180, null], \"totals\": [0, 4] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-waterfall-chart>"
+          "html": "<is-waterfall-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Saldo inicial\", \"Ventas\", \"Costos\", \"Impuestos\", \"Saldo final\"],\r\n                  \"datasets\": [{ \"label\": \"Flujo\", \"data\": [1200, 850, -420, -180, null], \"totals\": [0, 4] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-waterfall-chart>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

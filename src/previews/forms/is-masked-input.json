@@ -72,7 +72,51 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"mask-row\"><label>Tarjeta</label>\r\n            <is-masked-input id=\"card\" pattern=\"0000 0000 0000 0000\" autocomplete=\"cc-number\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Vencimiento</label>\r\n            <is-masked-input pattern=\"00/00\" placeholder=\"MM/AA\" required></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Fecha</label>\r\n            <is-masked-input pattern=\"00/00/0000\" placeholder=\"DD/MM/AAAA\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Teléfono</label>\r\n            <is-masked-input pattern=\"(+00) 0000-0000\" placeholder=\"(+57) 3000-0000\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Hora</label>\r\n            <is-masked-input pattern=\"00:00\" placeholder=\"HH:MM\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Código postal</label>\r\n            <is-masked-input pattern=\"A0A 0A0\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Placa</label>\r\n            <is-masked-input pattern=\"AAA-0000\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Hex color</label>\r\n            <is-masked-input pattern=\"#000000\" placeholder=\"#000000\" value=\"1a2b\"></is-masked-input>\r\n          </div>"
+          "html": "<div class=\"mask-row\"><label>Tarjeta</label>\r\n            <is-masked-input id=\"card\" pattern=\"0000 0000 0000 0000\" autocomplete=\"cc-number\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Vencimiento</label>\r\n            <is-masked-input pattern=\"00/00\" placeholder=\"MM/AA\" required></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Fecha</label>\r\n            <is-masked-input pattern=\"00/00/0000\" placeholder=\"DD/MM/AAAA\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Teléfono</label>\r\n            <is-masked-input pattern=\"(+00) 0000-0000\" placeholder=\"(+57) 3000-0000\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Hora</label>\r\n            <is-masked-input pattern=\"00:00\" placeholder=\"HH:MM\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Código postal</label>\r\n            <is-masked-input pattern=\"A0A 0A0\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Placa</label>\r\n            <is-masked-input pattern=\"AAA-0000\"></is-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Hex color</label>\r\n            <is-masked-input pattern=\"#000000\" placeholder=\"#000000\" value=\"1a2b\"></is-masked-input>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:pattern",
+              "label": "pattern",
+              "options": [
+                "0000 0000 0000 0000",
+                "00/00",
+                "00/00/0000",
+                "(+00) 0000-0000",
+                "00:00",
+                "A0A 0A0",
+                "AAA-0000",
+                "#000000"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:autocomplete",
+              "label": "autocomplete"
+            },
+            {
+              "control": "select",
+              "prop": "attr:placeholder",
+              "label": "placeholder",
+              "options": [
+                "MM/AA",
+                "DD/MM/AAAA",
+                "(+57) 3000-0000",
+                "HH:MM",
+                "#000000"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            },
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         }
       ]
     },

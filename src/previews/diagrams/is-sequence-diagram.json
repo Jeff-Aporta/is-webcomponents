@@ -18,7 +18,14 @@
         },
         {
           "kind": "demo",
-          "html": "<is-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              { \"preset\": \"tk1437191\" }\r\n            </script>\r\n          </is-sequence-diagram>"
+          "html": "<is-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              { \"preset\": \"tk1437191\" }\r\n            </script>\r\n          </is-sequence-diagram>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     },

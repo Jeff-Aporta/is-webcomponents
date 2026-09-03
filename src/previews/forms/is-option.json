@@ -14,7 +14,25 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"mde\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"brr\" disabled>Barranquilla (sin cobertura)</is-option>\r\n          </is-combobox>"
+          "html": "<is-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"mde\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"brr\" disabled>Barranquilla (sin cobertura)</is-option>\r\n          </is-combobox>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "bog",
+                "mde",
+                "cal",
+                "brr"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
+          ]
         },
         {
           "kind": "code",

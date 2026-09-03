@@ -16,7 +16,80 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"42\" label=\"CPU\" unit=\"%\" color=\"warning\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"92\" label=\"RAM\" unit=\"%\" color=\"success\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"15\" label=\"Errores\" unit=\"%\" color=\"danger\"></is-gauge>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"42\" label=\"CPU\" unit=\"%\" color=\"warning\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"92\" label=\"RAM\" unit=\"%\" color=\"success\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"15\" label=\"Errores\" unit=\"%\" color=\"danger\"></is-gauge>\r\n            </div>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "67",
+                "42",
+                "92",
+                "15",
+                "68",
+                "88",
+                "3.14159",
+                "12345",
+                "0.5",
+                "50"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Conversión",
+                "CPU",
+                "RAM",
+                "Errores",
+                "0.7em",
+                "1em",
+                "1.35em",
+                "Velocímetro",
+                "π",
+                "USD",
+                "CTR",
+                "Dinámico"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:unit",
+              "label": "unit",
+              "options": [
+                "%",
+                "€",
+                ""
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "warning",
+                "success",
+                "danger"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:half",
+              "label": "half"
+            },
+            {
+              "control": "select",
+              "prop": "attr:format",
+              "label": "format",
+              "options": [
+                "0.00",
+                "0,0",
+                "0.0%"
+              ]
+            }
+          ]
         },
         {
           "kind": "code",

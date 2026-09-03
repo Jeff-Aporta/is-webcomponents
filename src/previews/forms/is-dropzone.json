@@ -20,7 +20,30 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-dropzone id=\"dz\" accept=\"image/*\" max-files=\"6\" max-size=\"5242880\">\r\n          </is-dropzone>\r\n          <div style=\"display:flex; gap:.5rem; margin-top:.55rem; align-items:center\">\r\n            <button class=\"go\" id=\"uploadBtn\">Simular upload</button>\r\n            <small style=\"color:var(--is-text-soft); font-size:.78rem\">Arrastra o selecciona archivos; click \"Simular upload\" para ver el progreso.</small>\r\n          </div>"
+          "html": "<is-dropzone id=\"dz\" accept=\"image/*\" max-files=\"6\" max-size=\"5242880\">\r\n          </is-dropzone>\r\n          <div style=\"display:flex; gap:.5rem; margin-top:.55rem; align-items:center\">\r\n            <button class=\"go\" id=\"uploadBtn\">Simular upload</button>\r\n            <small style=\"color:var(--is-text-soft); font-size:.78rem\">Arrastra o selecciona archivos; click \"Simular upload\" para ver el progreso.</small>\r\n          </div>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:accept",
+              "label": "accept"
+            },
+            {
+              "control": "number",
+              "prop": "attr:max-files",
+              "label": "max-files",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:max-size",
+              "label": "max-size",
+              "min": 0,
+              "max": 5242880,
+              "step": 1
+            }
+          ]
         }
       ]
     },

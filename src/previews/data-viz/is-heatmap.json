@@ -20,7 +20,41 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-heatmap x-label=\"Hora\" y-label=\"Día\" color=\"brand\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"xLabels\": [\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\",\"18\",\"20\",\"22\"],\r\n                \"yLabels\": [\"Lun\",\"Mar\",\"Mié\",\"Jue\",\"Vie\",\"Sáb\",\"Dom\"],\r\n                \"data\": [\r\n                  [12, 8, 4, 6, 22, 48, 71, 80, 65, 42, 30, 22],\r\n                  [10, 6, 3, 5, 28, 52, 75, 82, 70, 50, 35, 25],\r\n                  [15, 9, 5, 7, 30, 55, 78, 86, 72, 48, 32, 24],\r\n                  [11, 7, 4, 6, 25, 49, 70, 79, 66, 44, 31, 20],\r\n                  [14, 8, 4, 7, 32, 58, 80, 88, 73, 47, 30, 21],\r\n                  [22, 16, 8, 5, 7, 11, 18, 16, 12, 10, 14, 18],\r\n                  [18, 12, 6, 4, 5, 9, 14, 13, 10, 9, 12, 16]\r\n                ]\r\n              }\r\n            </script>\r\n          </is-heatmap>"
+          "html": "<is-heatmap x-label=\"Hora\" y-label=\"Día\" color=\"brand\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"xLabels\": [\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\",\"18\",\"20\",\"22\"],\r\n                \"yLabels\": [\"Lun\",\"Mar\",\"Mié\",\"Jue\",\"Vie\",\"Sáb\",\"Dom\"],\r\n                \"data\": [\r\n                  [12, 8, 4, 6, 22, 48, 71, 80, 65, 42, 30, 22],\r\n                  [10, 6, 3, 5, 28, 52, 75, 82, 70, 50, 35, 25],\r\n                  [15, 9, 5, 7, 30, 55, 78, 86, 72, 48, 32, 24],\r\n                  [11, 7, 4, 6, 25, 49, 70, 79, 66, 44, 31, 20],\r\n                  [14, 8, 4, 7, 32, 58, 80, 88, 73, 47, 30, 21],\r\n                  [22, 16, 8, 5, 7, 11, 18, 16, 12, 10, 14, 18],\r\n                  [18, 12, 6, 4, 5, 9, 14, 13, 10, 9, 12, 16]\r\n                ]\r\n              }\r\n            </script>\r\n          </is-heatmap>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:x-label",
+              "label": "x-label",
+              "options": [
+                "Hora",
+                "Mes"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:y-label",
+              "label": "y-label",
+              "options": [
+                "Día",
+                "Categoría"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "red-blue"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:show-values",
+              "label": "show-values"
+            }
+          ]
         }
       ]
     },

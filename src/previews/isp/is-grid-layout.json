@@ -13,7 +13,38 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-grid-layout cells=\"3\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <is-card>1</is-card><is-card>2</is-card><is-card>3</is-card>\r\n            <is-card>4</is-card><is-card>5</is-card><is-card>6</is-card>\r\n          </is-grid-layout>"
+          "html": "<is-grid-layout cells=\"3\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <is-card>1</is-card><is-card>2</is-card><is-card>3</is-card>\r\n            <is-card>4</is-card><is-card>5</is-card><is-card>6</is-card>\r\n          </is-grid-layout>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:cells",
+              "label": "cells",
+              "options": [
+                "3",
+                "12rem 1fr",
+                "2"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:gap",
+              "label": "gap",
+              "options": [
+                "0.5rem",
+                "0.75rem"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:cells-fit",
+              "label": "cells-fit"
+            },
+            {
+              "control": "text",
+              "prop": "attr:items",
+              "label": "items"
+            }
+          ]
         }
       ]
     },

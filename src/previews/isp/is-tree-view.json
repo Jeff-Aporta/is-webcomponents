@@ -19,7 +19,14 @@
         },
         {
           "kind": "demo",
-          "html": "<is-tree-view id=\"tvDemo\" label-field=\"titulo\" style=\"height: 28rem;\"></is-tree-view>\n          <p id=\"tvLog\">Última acción: <code class=\"code\">—</code></p>"
+          "html": "<is-tree-view id=\"tvDemo\" label-field=\"titulo\" style=\"height: 28rem;\"></is-tree-view>\n          <p id=\"tvLog\">Última acción: <code class=\"code\">—</code></p>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label-field",
+              "label": "label-field"
+            }
+          ]
         },
         {
           "kind": "code",

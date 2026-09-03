@@ -14,7 +14,37 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-breadcrumb label=\"Catálogo\">\r\n            <is-breadcrumb-item href=\"/\">Catálogo</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/ropa\">Ropa</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/ropa/mujer\">Mujer</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\">Camisetas</is-breadcrumb-item>\r\n          </is-breadcrumb>"
+          "html": "<is-breadcrumb label=\"Catálogo\">\r\n            <is-breadcrumb-item href=\"/\">Catálogo</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/ropa\">Ropa</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/ropa/mujer\">Mujer</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\">Camisetas</is-breadcrumb-item>\r\n          </is-breadcrumb>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Catálogo",
+                "Navegación SPA",
+                "Inicio",
+                "App",
+                "Slash"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:href",
+              "label": "href",
+              "options": [
+                "/",
+                "/ropa",
+                "/ropa/mujer",
+                "",
+                "/articulos",
+                "/dashboard",
+                "/users",
+                "/home",
+                "/docs"
+              ]
+            }
+          ]
         },
         {
           "kind": "code",

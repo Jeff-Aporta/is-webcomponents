@@ -13,7 +13,27 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-range-picker\r\n            id=\"rp\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"\r\n          ></is-date-range-picker>"
+          "html": "<is-date-range-picker\r\n            id=\"rp\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"\r\n          ></is-date-range-picker>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:locale",
+              "label": "locale"
+            },
+            {
+              "control": "number",
+              "prop": "attr:calendars",
+              "label": "calendars",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         },
         {
           "kind": "html",

@@ -15,7 +15,110 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-slider id=\"demo\" label=\"Volumen\" hint=\"Arrastra o usa las flechas\" value=\"40\" value-label=\"auto\" name=\"volumen\"></is-slider>"
+          "html": "<is-slider id=\"demo\" label=\"Volumen\" hint=\"Arrastra o usa las flechas\" value=\"40\" value-label=\"auto\" name=\"volumen\"></is-slider>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "40",
+                "30",
+                "70",
+                "50",
+                "20",
+                "80",
+                "20,37",
+                "10,40,80",
+                "45",
+                "60",
+                "75",
+                "90",
+                "10"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:value-label",
+              "label": "value-label",
+              "options": [
+                "auto",
+                "on"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "number",
+              "prop": "attr:min",
+              "label": "min",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:max",
+              "label": "max",
+              "min": 0,
+              "max": 110,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:step",
+              "label": "step",
+              "options": [
+                "10",
+                "null",
+                "1"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:shift-step",
+              "label": "shift-step",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:min-distance",
+              "label": "min-distance",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disable-swap",
+              "label": "disable-swap"
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "neutral",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:track",
+              "label": "track",
+              "options": [
+                "none",
+                "inverted"
+              ]
+            }
+          ]
         },
         {
           "kind": "html",

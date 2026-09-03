@@ -19,7 +19,32 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"qr-row\">\r\n            <is-qrcode id=\"qr1\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></is-qrcode>\r\n            <is-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></is-qrcode>\r\n            <is-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></is-qrcode>\r\n          </div>"
+          "html": "<div class=\"qr-row\">\r\n            <is-qrcode id=\"qr1\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></is-qrcode>\r\n            <is-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></is-qrcode>\r\n            <is-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></is-qrcode>\r\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:level",
+              "label": "level",
+              "options": [
+                "M",
+                "Q",
+                "H"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:cell",
+              "label": "cell",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "text",
+              "prop": "attr:bg",
+              "label": "bg"
+            }
+          ]
         }
       ]
     },

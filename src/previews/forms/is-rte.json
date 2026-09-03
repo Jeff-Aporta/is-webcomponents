@@ -20,7 +20,28 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-rte id=\"rte\" placeholder=\"Empezá a escribir…\"\r\n                  value=\"<h2>Hola</h2><p><b>Bienvenido</b> al editor de ejemplo. Prueba <i>negrita</i>, <u>subrayado</u>, listas y enlaces.</p>\">\r\n          </is-rte>\r\n          <pre class=\"code output\" id=\"outHTML\" data-lang=\"html\"></pre>"
+          "html": "<is-rte id=\"rte\" placeholder=\"Empezá a escribir…\"\r\n                  value=\"<h2>Hola</h2><p><b>Bienvenido</b> al editor de ejemplo. Prueba <i>negrita</i>, <u>subrayado</u>, listas y enlaces.</p>\">\r\n          </is-rte>\r\n          <pre class=\"code output\" id=\"outHTML\" data-lang=\"html\"></pre>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:placeholder",
+              "label": "placeholder",
+              "options": [
+                "Empezá a escribir…",
+                "Solo lo esencial…"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:value",
+              "label": "value"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:h2",
+              "label": "h2"
+            }
+          ]
         }
       ]
     },

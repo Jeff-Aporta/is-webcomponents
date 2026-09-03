@@ -13,7 +13,93 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<p>Precio: <is-format-number value=\"1234567.89\" type=\"currency\" currency=\"COP\"></is-format-number></p>"
+          "html": "<p>Precio: <is-format-number value=\"1234567.89\" type=\"currency\" currency=\"COP\"></is-format-number></p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "1234567.89",
+                "1234.5",
+                "0.875",
+                "12500",
+                "99.9",
+                "49.99",
+                "1234.56",
+                "1.2",
+                "42",
+                "7",
+                "12",
+                "9.5",
+                "0",
+                "-42.5",
+                "1000000000"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:type",
+              "label": "type",
+              "options": [
+                "currency",
+                "decimal",
+                "percent"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:currency",
+              "label": "currency",
+              "options": [
+                "COP",
+                "USD",
+                "EUR"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:minimum-fraction-digits",
+              "label": "minimum-fraction-digits",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:maximum-fraction-digits",
+              "label": "maximum-fraction-digits",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:pad-start",
+              "label": "pad-start",
+              "options": [
+                "0",
+                "*",
+                " "
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:pad-length",
+              "label": "pad-length",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:minimum-integer-digits",
+              "label": "minimum-integer-digits",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            }
+          ]
         }
       ]
     },
@@ -80,16 +166,43 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Notas"],
+          "columns": [
+            "Atributo",
+            "Notas"
+          ],
           "rows": [
-            ["<code>value</code>", "número"],
-            ["<code>type</code>", "decimal · currency · percent · unit"],
-            ["<code>currency</code>", "ISO 4217 (útil con type=currency)"],
-            ["<code>minimum-fraction-digits</code>", "mínimo de decimales"],
-            ["<code>maximum-fraction-digits</code>", "máximo de decimales"],
-            ["<code>minimum-integer-digits</code>", "ceros a la izquierda vía Intl (1–21)"],
-            ["<code>pad-start</code>", "carácter de relleno (default <code>0</code> si hay pad-length)"],
-            ["<code>pad-length</code>", "longitud mínima del texto formateado (String.padStart)"]
+            [
+              "<code>value</code>",
+              "número"
+            ],
+            [
+              "<code>type</code>",
+              "decimal · currency · percent · unit"
+            ],
+            [
+              "<code>currency</code>",
+              "ISO 4217 (útil con type=currency)"
+            ],
+            [
+              "<code>minimum-fraction-digits</code>",
+              "mínimo de decimales"
+            ],
+            [
+              "<code>maximum-fraction-digits</code>",
+              "máximo de decimales"
+            ],
+            [
+              "<code>minimum-integer-digits</code>",
+              "ceros a la izquierda vía Intl (1–21)"
+            ],
+            [
+              "<code>pad-start</code>",
+              "carácter de relleno (default <code>0</code> si hay pad-length)"
+            ],
+            [
+              "<code>pad-length</code>",
+              "longitud mínima del texto formateado (String.padStart)"
+            ]
           ]
         }
       ]

@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-media-recorder source=\"mic\"></is-media-recorder>"
+          "html": "<is-media-recorder source=\"mic\"></is-media-recorder>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:source",
+              "label": "source"
+            }
+          ]
         },
         {
           "kind": "code",

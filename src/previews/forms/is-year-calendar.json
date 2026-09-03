@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-year-calendar value=\"2026-08\"></is-year-calendar>"
+          "html": "<is-year-calendar value=\"2026-08\"></is-year-calendar>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         },
         {
           "kind": "code",

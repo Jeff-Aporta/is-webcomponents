@@ -14,7 +14,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></is-date-time-input>"
+          "html": "<is-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></is-date-time-input>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label"
+            },
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         },
         {
           "kind": "code",

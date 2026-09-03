@@ -14,7 +14,49 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"cdBtn\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Eliminar tercero\r\n          </is-button>\r\n          <is-confirm-delete\r\n            id=\"cdDemo\"\r\n            for=\"cdBtn\"\r\n            entity=\"tercero\"\r\n            pk-label=\"NIT\"\r\n            confirm-value=\"900123456\"\r\n            maxlength=\"15\"></is-confirm-delete>\r\n          <p id=\"cdLog\">Última acción: <code class=\"code\">—</code></p>"
+          "html": "<is-button id=\"cdBtn\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Eliminar tercero\r\n          </is-button>\r\n          <is-confirm-delete\r\n            id=\"cdDemo\"\r\n            for=\"cdBtn\"\r\n            entity=\"tercero\"\r\n            pk-label=\"NIT\"\r\n            confirm-value=\"900123456\"\r\n            maxlength=\"15\"></is-confirm-delete>\r\n          <p id=\"cdLog\">Última acción: <code class=\"code\">—</code></p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:entity",
+              "label": "entity",
+              "options": [
+                "tercero",
+                "plantilla"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:pk-label",
+              "label": "pk-label",
+              "options": [
+                "NIT",
+                "código"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:confirm-value",
+              "label": "confirm-value",
+              "options": [
+                "900123456",
+                "PLT-Alfa"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:maxlength",
+              "label": "maxlength",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:case-sensitive",
+              "label": "case-sensitive"
+            }
+          ]
         },
         {
           "kind": "code",

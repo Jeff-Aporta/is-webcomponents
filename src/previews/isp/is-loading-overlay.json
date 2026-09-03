@@ -15,7 +15,23 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"loBtn\" color=\"brand\">Simular guardado (2 s)</is-button>\r\n          <is-loading-overlay id=\"loDemo\" message=\"Guardando…\" scroll-lock></is-loading-overlay>"
+          "html": "<is-button id=\"loBtn\" color=\"brand\">Simular guardado (2 s)</is-button>\r\n          <is-loading-overlay id=\"loDemo\" message=\"Guardando…\" scroll-lock></is-loading-overlay>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:message",
+              "label": "message",
+              "options": [
+                "Guardando…",
+                "Consolidando periodo…"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:scroll-lock",
+              "label": "scroll-lock"
+            }
+          ]
         },
         {
           "kind": "code",

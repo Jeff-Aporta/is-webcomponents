@@ -17,7 +17,14 @@
         },
         {
           "kind": "demo",
-          "html": "<is-treemap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"treemap\": {\r\n                  \"title\": \"Estructura del activo\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"inv\", \"label\": \"Inventario\", \"value\": 3200, \"hue\": 239 },\r\n                    { \"id\": \"inv-a\", \"parent\": \"inv\", \"label\": \"Materia prima\", \"value\": 1800 },\r\n                    { \"id\": \"inv-b\", \"parent\": \"inv\", \"label\": \"Producto terminado\", \"value\": 900 },\r\n                    { \"id\": \"inv-c\", \"parent\": \"inv\", \"label\": \"En proceso\", \"value\": 500 },\r\n                    { \"id\": \"cxc\", \"label\": \"Cartera\", \"value\": 2100, \"hue\": 199 },\r\n                    { \"id\": \"cxc-a\", \"parent\": \"cxc\", \"label\": \"Corriente\", \"value\": 1500 },\r\n                    { \"id\": \"cxc-b\", \"parent\": \"cxc\", \"label\": \"Vencida\", \"value\": 600 },\r\n                    { \"id\": \"caja\", \"label\": \"Caja y bancos\", \"value\": 1400, \"hue\": 38 },\r\n                    { \"id\": \"otros\", \"label\": \"Otros activos\", \"value\": 700, \"hue\": 280 }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-treemap>"
+          "html": "<is-treemap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"treemap\": {\r\n                  \"title\": \"Estructura del activo\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"inv\", \"label\": \"Inventario\", \"value\": 3200, \"hue\": 239 },\r\n                    { \"id\": \"inv-a\", \"parent\": \"inv\", \"label\": \"Materia prima\", \"value\": 1800 },\r\n                    { \"id\": \"inv-b\", \"parent\": \"inv\", \"label\": \"Producto terminado\", \"value\": 900 },\r\n                    { \"id\": \"inv-c\", \"parent\": \"inv\", \"label\": \"En proceso\", \"value\": 500 },\r\n                    { \"id\": \"cxc\", \"label\": \"Cartera\", \"value\": 2100, \"hue\": 199 },\r\n                    { \"id\": \"cxc-a\", \"parent\": \"cxc\", \"label\": \"Corriente\", \"value\": 1500 },\r\n                    { \"id\": \"cxc-b\", \"parent\": \"cxc\", \"label\": \"Vencida\", \"value\": 600 },\r\n                    { \"id\": \"caja\", \"label\": \"Caja y bancos\", \"value\": 1400, \"hue\": 38 },\r\n                    { \"id\": \"otros\", \"label\": \"Otros activos\", \"value\": 700, \"hue\": 280 }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-treemap>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     },

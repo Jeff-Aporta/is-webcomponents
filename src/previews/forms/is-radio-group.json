@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\r\n            <is-radio value=\"contado\">Contado</is-radio>\r\n            <is-radio value=\"credito\">Crédito</is-radio>\r\n            <is-radio value=\"mixto\">Mixto</is-radio>\r\n          </is-radio-group>"
+          "html": "<is-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\r\n            <is-radio value=\"contado\">Contado</is-radio>\r\n            <is-radio value=\"credito\">Crédito</is-radio>\r\n            <is-radio value=\"mixto\">Mixto</is-radio>\r\n          </is-radio-group>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         },
         {
           "kind": "code",

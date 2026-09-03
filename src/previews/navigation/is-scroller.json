@@ -14,7 +14,24 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-scroller id=\"sc1\" style=\"max-width: 480px;\">\r\n            <is-button>Pills 1</is-button>\r\n            <is-button>Pills 2</is-button>\r\n            <is-button>Pills 3</is-button>\r\n            <is-button>Pills 4</is-button>\r\n            <is-button>Pills 5</is-button>\r\n            <is-button>Pills 6</is-button>\r\n            <is-button>Pills 7</is-button>\r\n            <is-button>Pills 8</is-button>\r\n            <is-button>Pills 9</is-button>\r\n            <is-button>Pills 10</is-button>\r\n            <is-button>Pills 11</is-button>\r\n            <is-button>Pills 12</is-button>\r\n          </is-scroller>"
+          "html": "<is-scroller id=\"sc1\" style=\"max-width: 480px;\">\r\n            <is-button>Pills 1</is-button>\r\n            <is-button>Pills 2</is-button>\r\n            <is-button>Pills 3</is-button>\r\n            <is-button>Pills 4</is-button>\r\n            <is-button>Pills 5</is-button>\r\n            <is-button>Pills 6</is-button>\r\n            <is-button>Pills 7</is-button>\r\n            <is-button>Pills 8</is-button>\r\n            <is-button>Pills 9</is-button>\r\n            <is-button>Pills 10</is-button>\r\n            <is-button>Pills 11</is-button>\r\n            <is-button>Pills 12</is-button>\r\n          </is-scroller>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:orientation",
+              "label": "orientation",
+              "options": [
+                "horizontal",
+                "vertical",
+                "both"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-scroll-buttons",
+              "label": "without-scroll-buttons"
+            }
+          ]
         },
         {
           "kind": "code",

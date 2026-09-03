@@ -13,7 +13,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-bar-chart open-on-click stacked>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Excelente\", \"Bueno\", \"Regular\", \"Malo\"],\r\n                  \"datasets\": [{ \"label\": \"Respuestas\", \"data\": [45, 30, 18, 7] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-bar-chart>"
+          "html": "<is-bar-chart open-on-click stacked>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Excelente\", \"Bueno\", \"Regular\", \"Malo\"],\r\n                  \"datasets\": [{ \"label\": \"Respuestas\", \"data\": [45, 30, 18, 7] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-bar-chart>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:stacked",
+              "label": "stacked"
+            }
+          ]
         }
       ]
     }

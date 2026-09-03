@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-digital-clock value=\"14:30\"></is-digital-clock>"
+          "html": "<is-digital-clock value=\"14:30\"></is-digital-clock>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         },
         {
           "kind": "code",

@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-barcode-scanner formats=\"qr_code,ean_13\"></is-barcode-scanner>"
+          "html": "<is-barcode-scanner formats=\"qr_code,ean_13\"></is-barcode-scanner>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:formats",
+              "label": "formats"
+            }
+          ]
         },
         {
           "kind": "code",

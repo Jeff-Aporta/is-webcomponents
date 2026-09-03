@@ -15,7 +15,53 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"hd-pg\" id=\"hdPlayground\">\n            <div class=\"hd-stage\" style=\"color:#339af0\">\n              <is-heading id=\"hdLive\" level=\"2\">Título de ejemplo</is-heading>\n            </div>\n            <div class=\"hd-controls\">\n              <label class=\"hd-field\">level\n                <div class=\"hd-range-row\">\n                  <input id=\"hdLevel\" type=\"range\" min=\"1\" max=\"6\" step=\"1\" value=\"2\" />\n                  <span class=\"hd-range-val\" id=\"hdLevelVal\">2</span>\n                </div>\n              </label>\n              <label class=\"hd-field\">color\n                <select id=\"hdColorMode\">\n                  <option value=\"\" selected>(acento / default)</option>\n                  <option value=\"brand\">brand</option>\n                  <option value=\"neutral\">neutral</option>\n                  <option value=\"info\">info</option>\n                  <option value=\"success\">success</option>\n                  <option value=\"warning\">warning</option>\n                  <option value=\"danger\">danger</option>\n                  <option value=\"current\">current</option>\n                  <option value=\"css\">CSS libre…</option>\n                </select>\n              </label>\n              <label class=\"hd-field\">color CSS\n                <input id=\"hdColorCss\" type=\"text\" value=\"#e8590c\" disabled />\n              </label>\n              <label class=\"hd-field\">mix (%)\n                <div class=\"hd-range-row\">\n                  <input id=\"hdMix\" type=\"range\" min=\"0\" max=\"100\" step=\"1\" value=\"30\" />\n                  <span class=\"hd-range-val\" id=\"hdMixVal\">30%</span>\n                </div>\n              </label>\n              <label class=\"hd-field\">\n                <span><input id=\"hdMixDefault\" type=\"checkbox\" /> usar default mix</span>\n              </label>\n              <label class=\"hd-field\">mix-with\n                <select id=\"hdMixWith\">\n                  <option value=\"\" selected>text (default)</option>\n                  <option value=\"transparent\">transparent</option>\n                  <option value=\"white\">white</option>\n                  <option value=\"black\">black</option>\n                  <option value=\"current\">current</option>\n                </select>\n              </label>\n              <label class=\"hd-field\">size\n                <input id=\"hdSize\" type=\"text\" placeholder=\"(default nivel)\" value=\"\" />\n              </label>\n              <label class=\"hd-field\">texto\n                <input id=\"hdText\" type=\"text\" value=\"Título de ejemplo\" />\n              </label>\n            </div>\n            <p class=\"hd-caption\">Props: <code>level</code>, <code>color</code>, <code>mix</code>, <code>mix-with</code>, <code>size</code></p>\n            <pre class=\"hd-snippet\" id=\"hdSnippet\"></pre>\n          </div>"
+          "html": "<div class=\"hd-pg\" id=\"hdPlayground\">\n            <div class=\"hd-stage\" style=\"color:#339af0\">\n              <is-heading id=\"hdLive\" level=\"2\">Título de ejemplo</is-heading>\n            </div>\n            <div class=\"hd-controls\">\n              <label class=\"hd-field\">level\n                <div class=\"hd-range-row\">\n                  <input id=\"hdLevel\" type=\"range\" min=\"1\" max=\"6\" step=\"1\" value=\"2\" />\n                  <span class=\"hd-range-val\" id=\"hdLevelVal\">2</span>\n                </div>\n              </label>\n              <label class=\"hd-field\">color\n                <select id=\"hdColorMode\">\n                  <option value=\"\" selected>(acento / default)</option>\n                  <option value=\"brand\">brand</option>\n                  <option value=\"neutral\">neutral</option>\n                  <option value=\"info\">info</option>\n                  <option value=\"success\">success</option>\n                  <option value=\"warning\">warning</option>\n                  <option value=\"danger\">danger</option>\n                  <option value=\"current\">current</option>\n                  <option value=\"css\">CSS libre…</option>\n                </select>\n              </label>\n              <label class=\"hd-field\">color CSS\n                <input id=\"hdColorCss\" type=\"text\" value=\"#e8590c\" disabled />\n              </label>\n              <label class=\"hd-field\">mix (%)\n                <div class=\"hd-range-row\">\n                  <input id=\"hdMix\" type=\"range\" min=\"0\" max=\"100\" step=\"1\" value=\"30\" />\n                  <span class=\"hd-range-val\" id=\"hdMixVal\">30%</span>\n                </div>\n              </label>\n              <label class=\"hd-field\">\n                <span><input id=\"hdMixDefault\" type=\"checkbox\" /> usar default mix</span>\n              </label>\n              <label class=\"hd-field\">mix-with\n                <select id=\"hdMixWith\">\n                  <option value=\"\" selected>text (default)</option>\n                  <option value=\"transparent\">transparent</option>\n                  <option value=\"white\">white</option>\n                  <option value=\"black\">black</option>\n                  <option value=\"current\">current</option>\n                </select>\n              </label>\n              <label class=\"hd-field\">size\n                <input id=\"hdSize\" type=\"text\" placeholder=\"(default nivel)\" value=\"\" />\n              </label>\n              <label class=\"hd-field\">texto\n                <input id=\"hdText\" type=\"text\" value=\"Título de ejemplo\" />\n              </label>\n            </div>\n            <p class=\"hd-caption\">Props: <code>level</code>, <code>color</code>, <code>mix</code>, <code>mix-with</code>, <code>size</code></p>\n            <pre class=\"hd-snippet\" id=\"hdSnippet\"></pre>\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:level",
+              "label": "level",
+              "options": [
+                "2",
+                "1",
+                "3",
+                "4",
+                "5",
+                "6"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "neutral",
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "current",
+                "#e8590c",
+                "oklch(0.65 0.2 250)"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:mix",
+              "label": "mix",
+              "options": [
+                "0%",
+                "50%",
+                "100%"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:mix-with",
+              "label": "mix-with"
+            }
+          ]
         }
       ]
     },

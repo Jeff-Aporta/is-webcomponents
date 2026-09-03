@@ -14,7 +14,89 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">ahora · en vivo</span>\n          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">\n            <is-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format-date>\n          </p>"
+          "html": "<span class=\"demo-label\">ahora · en vivo</span>\n          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">\n            <is-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format-date>\n          </p>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:hour",
+              "label": "hour"
+            },
+            {
+              "control": "text",
+              "prop": "attr:minute",
+              "label": "minute"
+            },
+            {
+              "control": "text",
+              "prop": "attr:second",
+              "label": "second"
+            },
+            {
+              "control": "select",
+              "prop": "attr:year",
+              "label": "year",
+              "options": [
+                "numeric",
+                "2-digit"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:month",
+              "label": "month",
+              "options": [
+                "short",
+                "narrow",
+                "long",
+                "numeric"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:day",
+              "label": "day"
+            },
+            {
+              "control": "text",
+              "prop": "attr:weekday",
+              "label": "weekday"
+            },
+            {
+              "control": "text",
+              "prop": "attr:era",
+              "label": "era"
+            },
+            {
+              "control": "select",
+              "prop": "attr:hour-format",
+              "label": "hour-format",
+              "options": [
+                "24",
+                "12",
+                "auto"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:time-zone",
+              "label": "time-zone",
+              "options": [
+                "UTC",
+                "America/Bogota",
+                "Europe/Madrid",
+                "Asia/Tokyo"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:time-zone-name",
+              "label": "time-zone-name",
+              "options": [
+                "short",
+                "shortOffset"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -90,14 +172,35 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Default / notas"],
+          "columns": [
+            "Atributo",
+            "Default / notas"
+          ],
           "rows": [
-            ["<code>date</code>", "ISO, <code>YYYY-MM-DD</code> o timestamp ms — en este preview se reescribe cada 1&nbsp;s"],
-            ["<code>locale</code>", "BCP 47 · fallback <code>document.documentElement.lang</code>"],
-            ["<code>hour-format</code>", "auto · 12 · 24"],
-            ["<code>weekday</code> / <code>era</code> / <code>year</code> / <code>month</code> / <code>day</code>", "valores Intl"],
-            ["<code>hour</code> / <code>minute</code> / <code>second</code>", "valores Intl"],
-            ["<code>time-zone</code> / <code>time-zone-name</code>", "IANA + estilo de nombre"]
+            [
+              "<code>date</code>",
+              "ISO, <code>YYYY-MM-DD</code> o timestamp ms — en este preview se reescribe cada 1&nbsp;s"
+            ],
+            [
+              "<code>locale</code>",
+              "BCP 47 · fallback <code>document.documentElement.lang</code>"
+            ],
+            [
+              "<code>hour-format</code>",
+              "auto · 12 · 24"
+            ],
+            [
+              "<code>weekday</code> / <code>era</code> / <code>year</code> / <code>month</code> / <code>day</code>",
+              "valores Intl"
+            ],
+            [
+              "<code>hour</code> / <code>minute</code> / <code>second</code>",
+              "valores Intl"
+            ],
+            [
+              "<code>time-zone</code> / <code>time-zone-name</code>",
+              "IANA + estilo de nombre"
+            ]
           ]
         }
       ]

@@ -13,7 +13,48 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-time-clock id=\"tc\" value=\"09:30\" ampm locale=\"en-US\"></is-time-clock>\r\n          <is-time-clock value=\"14:15\" hour24 locale=\"es\"></is-time-clock>"
+          "html": "<is-time-clock id=\"tc\" value=\"09:30\" ampm locale=\"en-US\"></is-time-clock>\r\n          <is-time-clock value=\"14:15\" hour24 locale=\"es\"></is-time-clock>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "09:30",
+                "14:15",
+                "10:00"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:ampm",
+              "label": "ampm"
+            },
+            {
+              "control": "select",
+              "prop": "attr:locale",
+              "label": "locale",
+              "options": [
+                "en-US",
+                "es"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:hour24",
+              "label": "hour24"
+            },
+            {
+              "control": "text",
+              "prop": "attr:min-time",
+              "label": "min-time"
+            },
+            {
+              "control": "text",
+              "prop": "attr:max-time",
+              "label": "max-time"
+            }
+          ]
         },
         {
           "kind": "html",

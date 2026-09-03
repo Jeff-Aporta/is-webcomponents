@@ -15,7 +15,43 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"tx-pg\" id=\"txPlayground\">\n            <div class=\"tx-stage\" style=\"color:#2f9e44\">\n              <is-text id=\"txLive\">Texto de ejemplo para probar color y clamp.</is-text>\n            </div>\n            <div class=\"tx-controls\">\n              <label class=\"tx-field\">color\n                <select id=\"txColorMode\">\n                  <option value=\"\" selected>(hereda)</option>\n                  <option value=\"brand\">brand</option>\n                  <option value=\"neutral\">neutral</option>\n                  <option value=\"info\">info</option>\n                  <option value=\"success\">success</option>\n                  <option value=\"warning\">warning</option>\n                  <option value=\"danger\">danger</option>\n                  <option value=\"current\">current</option>\n                  <option value=\"css\">CSS libre…</option>\n                </select>\n              </label>\n              <label class=\"tx-field\">color CSS\n                <input id=\"txColorCss\" type=\"text\" value=\"#e8590c\" disabled />\n              </label>\n              <label class=\"tx-field\">\n                <span><input id=\"txMixOn\" type=\"checkbox\" /> usar mix</span>\n              </label>\n              <label class=\"tx-field\">mix (%)\n                <div class=\"tx-range-row\">\n                  <input id=\"txMix\" type=\"range\" min=\"0\" max=\"100\" step=\"1\" value=\"40\" disabled />\n                  <span class=\"tx-range-val\" id=\"txMixVal\">off</span>\n                </div>\n              </label>\n              <label class=\"tx-field\">mix-with\n                <select id=\"txMixWith\">\n                  <option value=\"\" selected>text (default)</option>\n                  <option value=\"transparent\">transparent</option>\n                  <option value=\"white\">white</option>\n                  <option value=\"black\">black</option>\n                  <option value=\"current\">current</option>\n                </select>\n              </label>\n              <label class=\"tx-field\">lines\n                <div class=\"tx-range-row\">\n                  <input id=\"txLines\" type=\"range\" min=\"0\" max=\"6\" step=\"1\" value=\"0\" />\n                  <span class=\"tx-range-val\" id=\"txLinesVal\">0</span>\n                </div>\n              </label>\n              <label class=\"tx-field\">texto\n                <textarea id=\"txText\" rows=\"2\">Texto de ejemplo para probar color y clamp. Puedes alargar este párrafo para ver el ellipsis.</textarea>\n              </label>\n            </div>\n            <p class=\"tx-caption\">Props: <code>color</code>, <code>mix</code>, <code>mix-with</code>, <code>lines</code></p>\n            <pre class=\"tx-snippet\" id=\"txSnippet\"></pre>\n          </div>"
+          "html": "<div class=\"tx-pg\" id=\"txPlayground\">\n            <div class=\"tx-stage\" style=\"color:#2f9e44\">\n              <is-text id=\"txLive\">Texto de ejemplo para probar color y clamp.</is-text>\n            </div>\n            <div class=\"tx-controls\">\n              <label class=\"tx-field\">color\n                <select id=\"txColorMode\">\n                  <option value=\"\" selected>(hereda)</option>\n                  <option value=\"brand\">brand</option>\n                  <option value=\"neutral\">neutral</option>\n                  <option value=\"info\">info</option>\n                  <option value=\"success\">success</option>\n                  <option value=\"warning\">warning</option>\n                  <option value=\"danger\">danger</option>\n                  <option value=\"current\">current</option>\n                  <option value=\"css\">CSS libre…</option>\n                </select>\n              </label>\n              <label class=\"tx-field\">color CSS\n                <input id=\"txColorCss\" type=\"text\" value=\"#e8590c\" disabled />\n              </label>\n              <label class=\"tx-field\">\n                <span><input id=\"txMixOn\" type=\"checkbox\" /> usar mix</span>\n              </label>\n              <label class=\"tx-field\">mix (%)\n                <div class=\"tx-range-row\">\n                  <input id=\"txMix\" type=\"range\" min=\"0\" max=\"100\" step=\"1\" value=\"40\" disabled />\n                  <span class=\"tx-range-val\" id=\"txMixVal\">off</span>\n                </div>\n              </label>\n              <label class=\"tx-field\">mix-with\n                <select id=\"txMixWith\">\n                  <option value=\"\" selected>text (default)</option>\n                  <option value=\"transparent\">transparent</option>\n                  <option value=\"white\">white</option>\n                  <option value=\"black\">black</option>\n                  <option value=\"current\">current</option>\n                </select>\n              </label>\n              <label class=\"tx-field\">lines\n                <div class=\"tx-range-row\">\n                  <input id=\"txLines\" type=\"range\" min=\"0\" max=\"6\" step=\"1\" value=\"0\" />\n                  <span class=\"tx-range-val\" id=\"txLinesVal\">0</span>\n                </div>\n              </label>\n              <label class=\"tx-field\">texto\n                <textarea id=\"txText\" rows=\"2\">Texto de ejemplo para probar color y clamp. Puedes alargar este párrafo para ver el ellipsis.</textarea>\n              </label>\n            </div>\n            <p class=\"tx-caption\">Props: <code>color</code>, <code>mix</code>, <code>mix-with</code>, <code>lines</code></p>\n            <pre class=\"tx-snippet\" id=\"txSnippet\"></pre>\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "neutral",
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "current",
+                "#e8590c",
+                "tomato"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:mix",
+              "label": "mix"
+            },
+            {
+              "control": "text",
+              "prop": "attr:mix-with",
+              "label": "mix-with"
+            },
+            {
+              "control": "number",
+              "prop": "attr:lines",
+              "label": "lines",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            }
+          ]
         }
       ]
     },

@@ -15,7 +15,28 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-btn-ref id=\"btnRefDemo\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\n          <p id=\"btnRefLog\">Seleccionado: <code class=\"code\">—</code></p>"
+          "html": "<is-btn-ref id=\"btnRefDemo\" label=\"Aplicación\" required style=\"width: 22rem;\"></is-btn-ref>\n          <p id=\"btnRefLog\">Seleccionado: <code class=\"code\">—</code></p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Aplicación",
+                "Aplicaciones"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:multi",
+              "label": "multi"
+            }
+          ]
         },
         {
           "kind": "code",

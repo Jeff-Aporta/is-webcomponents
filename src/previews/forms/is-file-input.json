@@ -14,7 +14,37 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-file-input\r\n            id=\"fi\"\r\n            label=\"Adjuntos\"\r\n            hint=\"PDF o imágenes · máx. varios archivos\"\r\n            accept=\"image/*,.pdf\"\r\n            multiple\r\n            name=\"attachments\"\r\n          ></is-file-input>"
+          "html": "<is-file-input\r\n            id=\"fi\"\r\n            label=\"Adjuntos\"\r\n            hint=\"PDF o imágenes · máx. varios archivos\"\r\n            accept=\"image/*,.pdf\"\r\n            multiple\r\n            name=\"attachments\"\r\n          ></is-file-input>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Adjuntos",
+                "Avatar"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:accept",
+              "label": "accept",
+              "options": [
+                "image/*,.pdf",
+                "image/*"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:multiple",
+              "label": "multiple"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            }
+          ]
         },
         {
           "kind": "html",

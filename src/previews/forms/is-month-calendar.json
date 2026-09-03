@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-month-calendar value=\"2026-08-12\"></is-month-calendar>"
+          "html": "<is-month-calendar value=\"2026-08-12\"></is-month-calendar>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         },
         {
           "kind": "code",

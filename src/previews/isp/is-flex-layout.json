@@ -19,7 +19,51 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"fx-controls\" id=\"fxControls\">\n            <label class=\"fx-field\">direction\n              <select id=\"fxDirection\">\n                <option value=\"row\" selected>row</option>\n                <option value=\"column\">column</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">justify\n              <select id=\"fxJustify\">\n                <option value=\"\">(default)</option>\n                <option value=\"start\">start</option>\n                <option value=\"center\" selected>center</option>\n                <option value=\"end\">end</option>\n                <option value=\"between\">between</option>\n                <option value=\"around\">around</option>\n                <option value=\"evenly\">evenly</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">align\n              <select id=\"fxAlign\">\n                <option value=\"\">(default)</option>\n                <option value=\"start\">start</option>\n                <option value=\"center\" selected>center</option>\n                <option value=\"end\">end</option>\n                <option value=\"stretch\">stretch</option>\n                <option value=\"baseline\">baseline</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">gap\n              <select id=\"fxGap\">\n                <option value=\"\">(responsive)</option>\n                <option value=\"0.25rem\">0.25rem</option>\n                <option value=\"0.5rem\" selected>0.5rem</option>\n                <option value=\"1rem\">1rem</option>\n              </select>\n            </label>\n            <div class=\"fx-bools\">\n              <is-switch id=\"fxWrap\">wrap</is-switch>\n              <is-switch id=\"fxGrow\">grow</is-switch>\n              <is-switch id=\"fxInline\">inline</is-switch>\n            </div>\n          </div>\n          <p class=\"fx-attr\" id=\"fxAttrSnippet\">&lt;is-flex-layout&gt;</p>\n          <div class=\"fx-stage\" id=\"fxStage\" title=\"Redimensionar ↘\">\n            <is-flex-layout id=\"fxPlay\" gap=\"0.5rem\" justify=\"center\" align=\"center\">\n              <span class=\"fx-chip fx-chip--sm\">🍎</span>\n              <span class=\"fx-chip fx-chip--md\">🧀 <span class=\"lbl\">Queso</span></span>\n              <span class=\"fx-chip fx-chip--lg\">🦒 <span class=\"lbl\">Jirafa alta</span></span>\n              <span class=\"fx-chip fx-chip--sm\">🥝 <span class=\"lbl\">Kiwi</span></span>\n              <span class=\"fx-chip fx-chip--xl\">🍕</span>\n              <span class=\"fx-chip fx-chip--md\">🌮 <span class=\"lbl\">Taco XL</span></span>\n            </is-flex-layout>\n          </div>\n          <p class=\"fx-hint\">Redimensiona el recuadro (↘). El contorno marca el área del flex.\n            <code class=\"code\">grow</code> llena el escenario; <code class=\"code\">wrap</code> salta de línea al estrechar;\n            <code class=\"code\">inline</code> encoge al contenido.</p>"
+          "html": "<div class=\"fx-controls\" id=\"fxControls\">\n            <label class=\"fx-field\">direction\n              <select id=\"fxDirection\">\n                <option value=\"row\" selected>row</option>\n                <option value=\"column\">column</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">justify\n              <select id=\"fxJustify\">\n                <option value=\"\">(default)</option>\n                <option value=\"start\">start</option>\n                <option value=\"center\" selected>center</option>\n                <option value=\"end\">end</option>\n                <option value=\"between\">between</option>\n                <option value=\"around\">around</option>\n                <option value=\"evenly\">evenly</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">align\n              <select id=\"fxAlign\">\n                <option value=\"\">(default)</option>\n                <option value=\"start\">start</option>\n                <option value=\"center\" selected>center</option>\n                <option value=\"end\">end</option>\n                <option value=\"stretch\">stretch</option>\n                <option value=\"baseline\">baseline</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">gap\n              <select id=\"fxGap\">\n                <option value=\"\">(responsive)</option>\n                <option value=\"0.25rem\">0.25rem</option>\n                <option value=\"0.5rem\" selected>0.5rem</option>\n                <option value=\"1rem\">1rem</option>\n              </select>\n            </label>\n            <div class=\"fx-bools\">\n              <is-switch id=\"fxWrap\">wrap</is-switch>\n              <is-switch id=\"fxGrow\">grow</is-switch>\n              <is-switch id=\"fxInline\">inline</is-switch>\n            </div>\n          </div>\n          <p class=\"fx-attr\" id=\"fxAttrSnippet\">&lt;is-flex-layout&gt;</p>\n          <div class=\"fx-stage\" id=\"fxStage\" title=\"Redimensionar ↘\">\n            <is-flex-layout id=\"fxPlay\" gap=\"0.5rem\" justify=\"center\" align=\"center\">\n              <span class=\"fx-chip fx-chip--sm\">🍎</span>\n              <span class=\"fx-chip fx-chip--md\">🧀 <span class=\"lbl\">Queso</span></span>\n              <span class=\"fx-chip fx-chip--lg\">🦒 <span class=\"lbl\">Jirafa alta</span></span>\n              <span class=\"fx-chip fx-chip--sm\">🥝 <span class=\"lbl\">Kiwi</span></span>\n              <span class=\"fx-chip fx-chip--xl\">🍕</span>\n              <span class=\"fx-chip fx-chip--md\">🌮 <span class=\"lbl\">Taco XL</span></span>\n            </is-flex-layout>\n          </div>\n          <p class=\"fx-hint\">Redimensiona el recuadro (↘). El contorno marca el área del flex.\n            <code class=\"code\">grow</code> llena el escenario; <code class=\"code\">wrap</code> salta de línea al estrechar;\n            <code class=\"code\">inline</code> encoge al contenido.</p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:gap",
+              "label": "gap",
+              "options": [
+                "0.5rem",
+                "0.35rem"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:justify",
+              "label": "justify",
+              "options": [
+                "center",
+                "between"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:align",
+              "label": "align",
+              "options": [
+                "center",
+                "start"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:wrap",
+              "label": "wrap"
+            },
+            {
+              "control": "text",
+              "prop": "attr:max-width",
+              "label": "max-width"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:grow",
+              "label": "grow"
+            }
+          ]
         }
       ]
     },
@@ -45,16 +89,43 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Valores / default"],
+          "columns": [
+            "Atributo",
+            "Valores / default"
+          ],
           "rows": [
-            ["<code>gap</code>", "CSS · default responsive 0.2 / 0.35 / 0.5rem"],
-            ["<code>direction</code>", "row (default) · column"],
-            ["<code>wrap</code>", "boolean (switch en el playground)"],
-            ["<code>justify</code>", "start · center · end · between · around · evenly · …"],
-            ["<code>align</code> / <code>items</code>", "start · center · end · stretch · baseline"],
-            ["<code>grow</code>", "boolean → <code>flex: 1 1 auto</code>"],
-            ["<code>inline</code>", "boolean → <code>display: inline-flex</code>"],
-            ["<code>width</code>, <code>height</code>, <code>min-*</code>, <code>max-*</code>", "valores CSS"]
+            [
+              "<code>gap</code>",
+              "CSS · default responsive 0.2 / 0.35 / 0.5rem"
+            ],
+            [
+              "<code>direction</code>",
+              "row (default) · column"
+            ],
+            [
+              "<code>wrap</code>",
+              "boolean (switch en el playground)"
+            ],
+            [
+              "<code>justify</code>",
+              "start · center · end · between · around · evenly · …"
+            ],
+            [
+              "<code>align</code> / <code>items</code>",
+              "start · center · end · stretch · baseline"
+            ],
+            [
+              "<code>grow</code>",
+              "boolean → <code>flex: 1 1 auto</code>"
+            ],
+            [
+              "<code>inline</code>",
+              "boolean → <code>display: inline-flex</code>"
+            ],
+            [
+              "<code>width</code>, <code>height</code>, <code>min-*</code>, <code>max-*</code>",
+              "valores CSS"
+            ]
           ]
         }
       ]

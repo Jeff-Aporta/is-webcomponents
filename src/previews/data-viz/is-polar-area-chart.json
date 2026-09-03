@@ -14,7 +14,41 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-polar-area-chart open-on-click label=\"Mix energético (GW)\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Solar\", \"Eólica\", \"Hidro\", \"Nuclear\", \"Gas\", \"Carbón\"],\r\n                  \"datasets\": [{ \"label\": \"GW instalados\", \"data\": [85, 72, 110, 95, 58, 40] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-polar-area-chart>"
+          "html": "<is-polar-area-chart open-on-click label=\"Mix energético (GW)\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Solar\", \"Eólica\", \"Hidro\", \"Nuclear\", \"Gas\", \"Carbón\"],\r\n                  \"datasets\": [{ \"label\": \"GW instalados\", \"data\": [85, 72, 110, 95, 58, 40] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-polar-area-chart>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            },
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Mix energético (GW)",
+                "Canales de tráfico",
+                "NPS por segmento",
+                "Sin animación",
+                "Paleta custom"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:legend-position",
+              "label": "legend-position"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-legend",
+              "label": "without-legend"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-animation",
+              "label": "without-animation"
+            }
+          ]
         }
       ]
     },

@@ -31,7 +31,47 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">root = #obsScroller · threshold = 0.4 · intersect-class = is-in</span>\n          <div id=\"obsScroller\" class=\"obs-scroller\">\n            <div class=\"obs-spacer\">↓ baja para revelar las tarjetas ↓</div>\n            <is-observer id=\"io\" type=\"intersection\" root=\"#obsScroller\" intersect-class=\"is-in\" threshold=\"0.4\">\n              <article class=\"obs-card\" data-label=\"A\">\n                <span>Tarjeta A — fade al entrar</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n              <article class=\"obs-card\" data-label=\"B\">\n                <span>Tarjeta B</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n              <article class=\"obs-card\" data-label=\"C\">\n                <span>Tarjeta C</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n            </is-observer>\n            <div class=\"obs-spacer\">fin del scroll</div>\n          </div>\n          <div class=\"log\" id=\"ioLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Eventos <code class=\"code\">is-intersect</code> al entrar/salir.</div>\n          </div>"
+          "html": "<span class=\"demo-label\">root = #obsScroller · threshold = 0.4 · intersect-class = is-in</span>\n          <div id=\"obsScroller\" class=\"obs-scroller\">\n            <div class=\"obs-spacer\">↓ baja para revelar las tarjetas ↓</div>\n            <is-observer id=\"io\" type=\"intersection\" root=\"#obsScroller\" intersect-class=\"is-in\" threshold=\"0.4\">\n              <article class=\"obs-card\" data-label=\"A\">\n                <span>Tarjeta A — fade al entrar</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n              <article class=\"obs-card\" data-label=\"B\">\n                <span>Tarjeta B</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n              <article class=\"obs-card\" data-label=\"C\">\n                <span>Tarjeta C</span>\n                <span class=\"obs-badge\" data-badge>fuera</span>\n              </article>\n            </is-observer>\n            <div class=\"obs-spacer\">fin del scroll</div>\n          </div>\n          <div class=\"log\" id=\"ioLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Eventos <code class=\"code\">is-intersect</code> al entrar/salir.</div>\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:type",
+              "label": "type",
+              "options": [
+                "intersection",
+                "mutation",
+                "resize"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:root",
+              "label": "root"
+            },
+            {
+              "control": "text",
+              "prop": "attr:intersect-class",
+              "label": "intersect-class"
+            },
+            {
+              "control": "number",
+              "prop": "attr:threshold",
+              "label": "threshold",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "text",
+              "prop": "attr:attr",
+              "label": "attr"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:child-list",
+              "label": "child-list"
+            }
+          ]
         },
         {
           "kind": "code",
@@ -80,18 +120,62 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Aplica a", "Descripción"],
+          "columns": [
+            "Atributo",
+            "Aplica a",
+            "Descripción"
+          ],
           "rows": [
-            ["<code>type</code>", "todos", "<code>intersection | mutation | resize</code>"],
-            ["<code>disabled</code>", "todos", "boolean — desconecta el observer"],
-            ["<code>intersect-class</code>", "intersection", "clase a togglear en cada hijo"],
-            ["<code>once</code>", "intersection", "boolean — des-observa tras la primera"],
-            ["<code>root</code>", "intersection", "selector CSS del root (default viewport)"],
-            ["<code>root-margin</code>", "intersection", "ej. <code>\"10px 20px\"</code>"],
-            ["<code>threshold</code>", "intersection", "número 0–1"],
-            ["<code>attr</code>", "mutation", "filtro de atributos a vigilar"],
-            ["<code>child-list</code>", "mutation", "boolean (default true)"],
-            ["<code>character-data</code>", "mutation", "boolean"]
+            [
+              "<code>type</code>",
+              "todos",
+              "<code>intersection | mutation | resize</code>"
+            ],
+            [
+              "<code>disabled</code>",
+              "todos",
+              "boolean — desconecta el observer"
+            ],
+            [
+              "<code>intersect-class</code>",
+              "intersection",
+              "clase a togglear en cada hijo"
+            ],
+            [
+              "<code>once</code>",
+              "intersection",
+              "boolean — des-observa tras la primera"
+            ],
+            [
+              "<code>root</code>",
+              "intersection",
+              "selector CSS del root (default viewport)"
+            ],
+            [
+              "<code>root-margin</code>",
+              "intersection",
+              "ej. <code>\"10px 20px\"</code>"
+            ],
+            [
+              "<code>threshold</code>",
+              "intersection",
+              "número 0–1"
+            ],
+            [
+              "<code>attr</code>",
+              "mutation",
+              "filtro de atributos a vigilar"
+            ],
+            [
+              "<code>child-list</code>",
+              "mutation",
+              "boolean (default true)"
+            ],
+            [
+              "<code>character-data</code>",
+              "mutation",
+              "boolean"
+            ]
           ]
         }
       ]

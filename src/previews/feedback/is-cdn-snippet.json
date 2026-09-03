@@ -13,7 +13,161 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-cdn-snippet tag=\"is-button\" category=\"actions\"></is-cdn-snippet>"
+          "html": "<is-cdn-snippet tag=\"is-button\" category=\"actions\"></is-cdn-snippet>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:tag",
+              "label": "tag",
+              "options": [
+                "is-button",
+                "is-popconfirm",
+                "is-chart",
+                "is-textarea"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:category",
+              "label": "category",
+              "options": [
+                "actions",
+                "feedback",
+                "data",
+                "forms"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:dependencies",
+              "label": "dependencies"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Chart",
+              "label": "Chart"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:js",
+              "label": "js"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:version",
+              "label": "version"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:https:",
+              "label": "https:"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:cdn",
+              "label": "cdn"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:jsdelivr",
+              "label": "jsdelivr"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:net",
+              "label": "net"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:npm",
+              "label": "npm"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:chart",
+              "label": "chart"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:dist",
+              "label": "dist"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:umd",
+              "label": "umd"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:min",
+              "label": "min"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:note",
+              "label": "note"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Necesario",
+              "label": "Necesario"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:si",
+              "label": "si"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:usas",
+              "label": "usas"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:lt",
+              "label": "lt"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:is-chart",
+              "label": "is-chart"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:gt",
+              "label": "gt"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:con",
+              "label": "con"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:type",
+              "label": "type"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:quot",
+              "label": "quot"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:bar",
+              "label": "bar"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:o",
+              "label": "o"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:line",
+              "label": "line"
+            }
+          ]
         },
         {
           "kind": "code",

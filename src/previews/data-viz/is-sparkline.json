@@ -18,7 +18,61 @@
         },
         {
           "kind": "demo",
-          "html": "<p class=\"spark-metric\" style=\"margin:0;font-size:1.05rem\">\r\n            Daily Wordle guesses\r\n            <is-sparkline data=\"12 15 11 14 9 10 8 7 9 6\" label=\"Wordle guesses trend\"></is-sparkline>\r\n            are trending down.\r\n          </p>"
+          "html": "<p class=\"spark-metric\" style=\"margin:0;font-size:1.05rem\">\r\n            Daily Wordle guesses\r\n            <is-sparkline data=\"12 15 11 14 9 10 8 7 9 6\" label=\"Wordle guesses trend\"></is-sparkline>\r\n            are trending down.\r\n          </p>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Wordle guesses trend",
+                "Ventas",
+                "Errores",
+                "solid",
+                "gradient",
+                "line",
+                "Revenue up",
+                "Churn down",
+                "Users stable",
+                "linear",
+                "natural",
+                "step",
+                "Page views",
+                "Bounce rate",
+                "Avg session"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "solid",
+                "gradient",
+                "line"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:trend",
+              "label": "trend",
+              "options": [
+                "positive",
+                "negative",
+                "neutral"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:curve",
+              "label": "curve",
+              "options": [
+                "linear",
+                "natural",
+                "step"
+              ]
+            }
+          ]
         },
         {
           "kind": "html",

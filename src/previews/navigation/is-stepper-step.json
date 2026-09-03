@@ -14,7 +14,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-stepper current=\"1\">\r\n            <is-stepper-step title=\"Datos\" description=\"Identificación\"></is-stepper-step>\r\n            <is-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></is-stepper-step>\r\n            <is-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></is-stepper-step>\r\n          </is-stepper>"
+          "html": "<is-stepper current=\"1\">\r\n            <is-stepper-step title=\"Datos\" description=\"Identificación\"></is-stepper-step>\r\n            <is-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></is-stepper-step>\r\n            <is-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></is-stepper-step>\r\n          </is-stepper>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:description",
+              "label": "description",
+              "options": [
+                "Identificación",
+                "Líneas del comprobante",
+                "Confirmar y guardar"
+              ]
+            }
+          ]
         },
         {
           "kind": "code",

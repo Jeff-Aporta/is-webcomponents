@@ -13,7 +13,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-funnel-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Visitas\", \"Registros\", \"Cotizaciones\", \"Cierres\"],\r\n                  \"datasets\": [{ \"label\": \"Conversión\", \"data\": [4200, 1800, 640, 210] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-funnel-chart>"
+          "html": "<is-funnel-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Visitas\", \"Registros\", \"Cotizaciones\", \"Cierres\"],\r\n                  \"datasets\": [{ \"label\": \"Conversión\", \"data\": [4200, 1800, 640, 210] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-funnel-chart>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:open-on-click",
+              "label": "open-on-click"
+            }
+          ]
         }
       ]
     }

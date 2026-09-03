@@ -14,7 +14,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-time-input label=\"Hora\" value=\"09:15\" style=\"max-width:280px\"></is-time-input>"
+          "html": "<is-time-input label=\"Hora\" value=\"09:15\" style=\"max-width:280px\"></is-time-input>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "label"
+            },
+            {
+              "control": "text",
+              "prop": "attr:value",
+              "label": "value"
+            }
+          ]
         },
         {
           "kind": "code",

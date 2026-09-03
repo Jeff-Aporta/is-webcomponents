@@ -14,7 +14,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-md-render>\n  <script type=\"text/markdown\">\n# Resumen\n\nEres un asistente en **español**.\n\n- Usa `{{tono}}` como guía\n- No inventes cifras\n\n> Solo hechos verificables.\n  </script>\n</is-md-render>"
+          "html": "<is-md-render>\n  <script type=\"text/markdown\">\n# Resumen\n\nEres un asistente en **español**.\n\n- Usa `{{tono}}` como guía\n- No inventes cifras\n\n> Solo hechos verificables.\n  </script>\n</is-md-render>",
+          "controls": [
+            {
+              "control": "boolean",
+              "prop": "attr:can-edit",
+              "label": "can-edit"
+            },
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "placeholder"
+            }
+          ]
         }
       ]
     },
@@ -35,11 +47,23 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Necesitas", "Usar"],
+          "columns": [
+            "Necesitas",
+            "Usar"
+          ],
           "rows": [
-            ["Solo pintar MD embebido", "<code>is-md-render</code>"],
-            ["Edición ligera sin tools", "<code>is-md-render can-edit</code>"],
-            ["Toolbar, diálogo, CRUD/API", "<code>is-md-editor</code>"]
+            [
+              "Solo pintar MD embebido",
+              "<code>is-md-render</code>"
+            ],
+            [
+              "Edición ligera sin tools",
+              "<code>is-md-render can-edit</code>"
+            ],
+            [
+              "Toolbar, diálogo, CRUD/API",
+              "<code>is-md-editor</code>"
+            ]
           ]
         }
       ]
