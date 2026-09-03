@@ -10,12 +10,88 @@ import path from 'node:path';
 import { ENV, e2eDir, faltanRequisitos } from './env.ts';
 import { crearGeneradorMiniMax } from './minimax.ts';
 import { estadoDe } from './estados.ts';
+import { levantarServidor, type ServidorE2E } from './server.ts';
 import type {
   CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,
 } from './tipos.ts';
 
 export { ENV, e2eDir, faltanRequisitos };
 export type { Page, Locator };
+
+// -- servidor controlado -----------------------------------------------------
+// Los tests SIEMPRE levantan su propio servidor (puerto indicado por
+// E2E_PORT/E2E_HOST, 0 = puerto libre) y lo apagan al cerrar el contexto o al
+// salir el proceso: nunca se deja un server vivo ni se colisiona con otros.
+let servidor: ServidorE2E | null = null;
+let promesaBase: Promise<string> | null = null;
+let baseResuelta: string = ENV.baseUrl;
+
+function apagarServidorSync(): void {
+  if (servidor) {
+    const s = servidor;
+    servidor = null;
+    void s.cerrar();
+  }
+}
+
+/** URL base ya resuelta (autoservidor o E2E_BASE_URL externa). */
+export function baseUrlResuelta(): string {
+  return baseResuelta;
+}
+
+/**
+ * Garantiza un servidor para la sesion de tests:
+ *  - si hay E2E_BASE_URL externa, se usa tal cual (sin levantar nada);
+ *  - si no, levanta el autoservidor en E2E_PORT (0 = libre) y lo apaga con
+ *    `apagarServidor()` / hooks de proceso. Si el puerto indicado está
+ *    ocupado, falla con aviso claro (nunca se apropia del puerto de otro).
+ */
+export async function asegurarServidor(): Promise<string> {
+  if (process.env.E2E_BASE_URL) {
+    baseResuelta = ENV.baseUrl;
+    return baseResuelta;
+  }
+  if (promesaBase) return promesaBase;
+  promesaBase = (async () => {
+    try {
+      const sv = await levantarServidor({ puerto: ENV.puerto, host: ENV.host });
+      servidor = sv;
+      baseResuelta = sv.url;
+      const cerrarUnaVez = (codigo: number): void => {
+        apagarServidorSync();
+        process.exit(codigo);
+      };
+      process.once('exit', () => apagarServidorSync());
+      process.once('SIGINT', () => cerrarUnaVez(130));
+      process.once('SIGTERM', () => cerrarUnaVez(143));
+      console.log(`[e2e] servidor local levantado en ${sv.url} (E2E_PORT=${ENV.puerto || 'libre'})`);
+      return sv.url;
+    } catch (e) {
+      promesaBase = null;
+      const err = e as NodeJS.ErrnoException;
+      if (err?.code === 'EADDRINUSE') {
+        throw new Error(
+          `E2E: el puerto ${ENV.puerto} ya está en uso (otro servicio). ` +
+          `Indica otro puerto con E2E_PORT (p. ej. 8450) o apunta a un host ya ` +
+          `levantado con E2E_AUTOSERVE=0 E2E_BASE_URL=http://127.0.0.1:<puerto>/index.html`,
+        );
+      }
+      throw e;
+    }
+  })();
+  return promesaBase;
+}
+
+/** Apaga el autoservidor si este proceso lo levantó (idempotente). */
+export async function apagarServidor(): Promise<void> {
+  if (servidor) {
+    const s = servidor;
+    servidor = null;
+    await s.cerrar();
+    console.log('[e2e] servidor local apagado');
+  }
+  promesaBase = null;
+}
 
 // -- utilidades --------------------------------------------------------------
 
@@ -26,7 +102,7 @@ export function b64urlDe(objeto: unknown): string {
 
 /** URL de la galeria para un tag del catalogo (null = home). */
 export function urlDeTag(tag: string | null): string {
-  return tag ? `${ENV.baseUrl}?s=${estadoDe(tag)}` : ENV.baseUrl;
+  return tag ? `${baseResuelta}?s=${estadoDe(tag)}` : baseResuelta;
 }
 
 export async function esperarMs(ms: number): Promise<void> {
@@ -312,6 +388,9 @@ export async function arrancar({ etiqueta = 'e2e' }: { etiqueta?: string } = {})
       `Faltan variables E2E (copia src/utils/health/e2e/.env.example a .env): ${faltan.join(', ')}`,
     );
   }
+  // Servidor controlado primero: url base resuelta antes de navegar y fallo
+  // temprano si el puerto indicado está ocupado.
+  await asegurarServidor();
   const browser = await localBrowser.launch({
     headless: ENV.headless,
     args: ['--disable-blink-features=AutomationControlled'],
@@ -343,6 +422,8 @@ export async function arrancar({ etiqueta = 'e2e' }: { etiqueta?: string } = {})
     } catch {
       /* ignore */
     }
+    // Siempre apagar el servidor que este proceso levantó (idempotente).
+    await apagarServidor();
   };
 
   return { browser, stagehand, page, consola, cerrar, etiqueta };

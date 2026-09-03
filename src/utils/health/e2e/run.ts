@@ -8,6 +8,7 @@ import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { levantarServidor, type ServidorE2E } from './lib/server.ts';
+import { ENV } from './lib/env.ts';
 
 const e2eDir = dirname(fileURLToPath(import.meta.url));
 const archivos = readdirSync(e2eDir)
@@ -20,10 +21,40 @@ let servidor: ServidorE2E | null = null;
 let base = process.env.E2E_BASE_URL;
 
 if (autoserve) {
-  servidor = await levantarServidor({});
+  // Puerto controlado: E2E_PORT (0 = libre) en E2E_HOST; si está ocupado,
+  // falla con aviso claro (nunca colisiona con otros servicios).
+  try {
+    servidor = await levantarServidor({ puerto: ENV.puerto, host: ENV.host });
+  } catch (e) {
+    const err = e as NodeJS.ErrnoException;
+    if (err?.code === 'EADDRINUSE') {
+      console.error(
+        `[e2e] el puerto ${ENV.puerto} ya está en uso (otro servicio). ` +
+        `Indica otro con E2E_PORT (p. ej. 8450) o usa E2E_AUTOSERVE=0 con E2E_BASE_URL.`,
+      );
+    } else {
+      console.error('[e2e] no se pudo levantar el servidor local:', err?.message ?? err);
+    }
+    process.exit(1);
+  }
   base = servidor.url;
-  console.log(`[e2e] servidor local levantado: ${servidor.url}`);
+  console.log(`[e2e] servidor local levantado: ${servidor.url} (E2E_PORT=${ENV.puerto || 'libre'})`);
 }
+
+// El servidor SIEMPRE se apaga: al terminar el runner (pase o falle) y ante
+// SIGINT/SIGTERM/exit.
+async function apagar(): Promise<void> {
+  if (servidor) {
+    const s = servidor;
+    servidor = null;
+    await s.cerrar();
+    console.log('[e2e] servidor local apagado');
+  }
+}
+const apagarSync = (): void => { void apagar(); };
+process.once('exit', apagarSync);
+process.once('SIGINT', () => { apagarSync(); process.exit(130); });
+process.once('SIGTERM', () => { apagarSync(); process.exit(143); });
 
 const child = spawn(
   process.execPath,
@@ -32,8 +63,5 @@ const child = spawn(
 );
 
 const codigo: number | null = await new Promise((res) => child.on('exit', res));
-if (servidor) {
-  await servidor.cerrar();
-  console.log('[e2e] servidor local apagado');
-}
+await apagar();
 process.exit(codigo ?? 1);

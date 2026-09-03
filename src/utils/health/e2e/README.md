@@ -49,6 +49,7 @@ node --experimental-strip-types --test --test-concurrency=1 src/utils/health/e2e
 | --- | --- |
 | `E2E_AUTOSERVE` | `0` apaga el servidor automático y usa `E2E_BASE_URL` |
 | `E2E_BASE_URL` | URL de la galería (default: la del autoservidor, `/index.html`) |
+| `E2E_PORT` / `E2E_HOST` | **Puerto controlado del autoservidor**: `0` (default) = puerto libre aleatorio (nunca colisiona). Para fijar uno indica `E2E_PORT`; si está ocupado el arranque falla con aviso claro |
 | `E2E_HEADLESS` | `false` abre Chrome visible |
 | `MINIMAX_API_KEY` | Key MiniMax para `act`/`extract`/`observe` de Stagehand |
 | `E2E_MINIMAX_MODEL` | `MiniMax-M3` (fijo, como el auditor) |
@@ -56,6 +57,21 @@ node --experimental-strip-types --test --test-concurrency=1 src/utils/health/e2e
 | `E2E_STRICT` | `1` falla si faltan variables (por defecto los tests se saltan) |
 | `E2E_ARTIFACTS` | Evidencias (PNG + árbol): `src/utils/health/e2e/.artifacts` (gitignored) |
 | `E2E_SETTLE_MS` / `E2E_TIMEOUT_MS` | Asentamiento por vista y tope de esperas |
+
+## Ciclo de vida del servidor (garantizado)
+
+Cada proceso de tests levanta **su propio** servidor de forma controlada y lo
+apaga **siempre**:
+
+- `run.ts` (vía `npm run test:e2e`) levanta el autoservidor en `E2E_PORT`
+  (0 = puerto libre) y lo cierra al terminar el runner (pase o falle) y ante
+  `SIGINT`/`SIGTERM`/`exit`.
+- Ejecutando un archivo suelto (`node --experimental-strip-types --test …`),
+  el harness (`asegurarServidor`) levanta el servidor en `E2E_PORT` dentro del
+  `before()` y lo apaga en `after()` (`ctx.cerrar()` → `apagarServidor`),
+  además de los hooks de proceso.
+- Si el puerto indicado está ocupado por otro servicio, el arranque falla con
+  un mensaje claro (`E2E_PORT`/`E2E_BASE_URL`) en lugar de colisionar.
 
 ## Cómo detecta problemas
 

@@ -58,6 +58,11 @@ export interface ConfigE2E {
   esperaMs: number;
   navegador: string;
   sweep: string[];
+  /** Puerto del autoservidor. 0 = puerto libre aleatorio (default). Para fijar
+   *  uno concreto (p. ej. compartir con CI) usa E2E_PORT: si está ocupado el
+   *  arranque falla con aviso claro, nunca colisiona con otro servicio. */
+  puerto: number;
+  host: string;
 }
 
 export const ENV: ConfigE2E = {
@@ -72,6 +77,8 @@ export const ENV: ConfigE2E = {
   asentarseMs: Number(o('E2E_SETTLE_MS', '1500')),
   esperaMs: Number(o('E2E_TIMEOUT_MS', '90000')),
   navegador: o('E2E_BROWSER', 'chrome'),
+  puerto: Number(o('E2E_PORT', '0')),
+  host: o('E2E_HOST', '127.0.0.1'),
   sweep: o('E2E_SWEEP',
     'is-code,is-component-diagram,is-flowchart,is-er-diagram,is-bar-chart,is-cdn-snippet,is-progress-bar,is-button,is-input,is-icon,is-confirm-modal,is-split-panel')
     .split(',').map((s) => s.trim()).filter(Boolean),

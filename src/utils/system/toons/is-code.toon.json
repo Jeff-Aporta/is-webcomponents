@@ -1,0 +1,27 @@
+{
+  "$schema": "toon/v1",
+  "tag": "is-code",
+  "textos": {
+    "escribirEnEditor": {
+      "texto": "// e2e nativo",
+      "variantes": []
+    },
+    "tooltipMarks": {
+      "texto": "add(a, b)",
+      "variantes": ["add(a, b)Devuelve la suma de a y b."]
+    },
+    "demoMarks": {
+      "texto": "Highlights y tooltips"
+    }
+  },
+  "config": {
+    "asentarMs": 600,
+    "esperaEditorMs": 700
+  },
+  "controles": [
+    { "control": "select", "prop": "lang", "label": "Lenguaje" },
+    { "control": "boolean", "prop": "readonly", "label": "Solo lectura" },
+    { "control": "boolean", "prop": "line-numbers", "label": "Números de línea" },
+    { "control": "text", "prop": "value", "label": "Código (value)" }
+  ]
+}
