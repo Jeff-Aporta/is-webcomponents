@@ -58,19 +58,15 @@ export function rowWindow(rowCount: number, rowHeight: number, scrollTop: number
  * @param {ColumnState[]} right
  * @returns {ColLayout}
  */
-export interface ColLayout {
+export type ColLayout = {
   /** Desplazamiento en px de cada columna central, desde su inicio. */
   positions: number[];
   totalWidth: number;
   leftWidth: number;
   rightWidth: number;
-}
+};
 
-export function columnLayout(
-  center: ColumnState[],
-  left: ColumnState[],
-  right: ColumnState[],
-): ColLayout {
+export function columnLayout(center: ColumnState[], left: ColumnState[], right: ColumnState[]): ColLayout {
   const positions: number[] = [];
   let x = 0;
   for (const c of center) { positions.push(x); x += c.width; }

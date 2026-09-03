@@ -1,15 +1,15 @@
 /**
  * gallery-boot.test.ts
  *
- * Caza la regresión FOUC / demos vacíos / boot 6–10s (LLM.md error #43):
- *  - CSS de la galería debe ser <link> estático (no await loadCSS* en path crítico)
+ * Caza la regresiÃ³n FOUC / demos vacÃ­os / boot 6â€“10s (LLM.md error #43):
+ *  - CSS de la galerÃ­a debe ser <link> estÃ¡tico (no await loadCSS* en path crÃ­tico)
  *  - await del head = solo shell tags + preview desde dist/cdn
- *  - load('all') y loadPageModules fuera del await crítico
+ *  - load('all') y loadPageModules fuera del await crÃ­tico
  *  - setHostPreview + whenDefined (own property tapa el setter)
  *  - cdn-panel NO importa cdn-snippet desde src/ (md-editor cuelga)
  *  - no reimportar preview-component desde src/
  *
- * Extensión: *.test.mjs. tests/ se commitea (solo *.tmp / coverage / .cache ignorados).
+ * ExtensiÃ³n: *.test.mjs. tests/ se commitea (solo *.tmp / coverage / .cache ignorados).
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -30,18 +30,18 @@ function headBootModule(html) {
   return m[1];
 }
 
-/** Módulo de la galería en <body> (nav + showPreview). */
+/** MÃ³dulo de la galerÃ­a en <body> (nav + showPreview). */
 function bodyGalleryModule(html) {
   const body = html.match(/<body[\s\S]*<\/body>/i)?.[0] ?? html;
   const scripts = [...body.matchAll(/<script\s+type="module">([\s\S]*?)<\/script>/gi)].map(
     (x) => x[1],
   );
   const hit = scripts.find((s) => /showPreview|setHostPreview|loadPreview/.test(s));
-  assert.ok(hit, 'falta módulo body con showPreview/setHostPreview');
+  assert.ok(hit, 'falta mÃ³dulo body con showPreview/setHostPreview');
   return hit;
 }
 
-test('CSS de galería es <link> estático (anti-FOUC)', () => {
+test('CSS de galerÃ­a es <link> estÃ¡tico (anti-FOUC)', () => {
   assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/is-base\.css"/);
   assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/palettes\.css"/);
   assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/shell\.css"/);
@@ -59,14 +59,14 @@ test('head no hace await loadCSS* / loadPageStyles en el boot', () => {
   assert.doesNotMatch(boot, /await\s+L\.loadPageStyles\s*\(/);
 });
 
-test('await crítico del head = shell tags + preview dist (no all, no pageModules)', () => {
+test('await crÃ­tico del head = shell tags + preview dist (no all, no pageModules)', () => {
   const boot = headBootModule(indexHtml);
   // Debe esperar shell puntual
   assert.match(boot, /await\s+Promise\.all\s*\(/);
   assert.match(boot, /L\.load\s*\([\s\S]*is-split-panel[\s\S]*is-button/);
   assert.match(
     boot,
-    /import\s*\(\s*['"]\.\/dist\/cdn\/layout\/preview-component\.min\.js['"]\s*\)/,
+    /import\s*\(\s*['"]\.\/dist\/cdn\/preview\/preview-component\.min\.js['"]\s*\)/,
   );
   assert.match(boot, /dataset\.kitShell\s*=\s*['"]1['"]/);
 
@@ -77,16 +77,16 @@ test('await crítico del head = shell tags + preview dist (no all, no pageModule
   assert.doesNotMatch(
     critical,
     /L\.load\s*\(\s*['"]all['"]\s*\)/,
-    'load(all) no puede ir en el await crítico del shell',
+    'load(all) no puede ir en el await crÃ­tico del shell',
   );
   assert.doesNotMatch(
     critical,
     /loadPageModules\s*\(/,
-    'loadPageModules no puede ir en el await crítico del shell',
+    'loadPageModules no puede ir en el await crÃ­tico del shell',
   );
 });
 
-test('load(all) y loadPageModules viven fuera del path crítico (fire-and-forget)', () => {
+test('load(all) y loadPageModules viven fuera del path crÃ­tico (fire-and-forget)', () => {
   const boot = headBootModule(indexHtml);
   assert.doesNotMatch(boot, /L\.load\s*\(\s*['"]all['"]\s*\)/);
   assert.match(boot, /loadPageModules\s*\(/);

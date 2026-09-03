@@ -46,22 +46,7 @@ export function createGridModel(options: GridOptions) {
    * Estado mutable del motor. No sale de aqui: lo que se publica es el
    * snapshot que devuelve `compute()`, y por eso este tipo es interno.
    */
-  interface EstadoInterno {
-    rawRows: RowData[];
-    nodes: RowNode[];
-    columns: ColumnState[];
-    sortModel: SortModel;
-    filterModel: FilterModel;
-    quickFilter: string;
-    selection: Set<string>;
-    density: DensityName;
-    pagination: boolean;
-    page: number;
-    pageSize: number;
-    rowGroupCols: string[];
-    expandedGroups: Set<string>;
-    getRowId: (row: RowData, index: number) => string;
-  }
+  type EstadoInterno = { rawRows: RowData[]; nodes: RowNode[]; columns: ColumnState[]; sortModel: SortModel; filterModel: FilterModel; quickFilter: string; selection: Set<string>; density: DensityName; pagination: boolean; page: number; pageSize: number; rowGroupCols: string[]; expandedGroups: Set<string>; getRowId: (row: RowData, index: number) => string; };
 
   const s: EstadoInterno = {
     rawRows: options.rows ?? [],

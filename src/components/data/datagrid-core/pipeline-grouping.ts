@@ -61,11 +61,7 @@ function aggregateGroup(leaves: RowNode[], colById: Map<string, ColumnState>): R
  * @returns {Array<{value: unknown, label: string, leaves: RowNode[]}>}
  */
 /** Un valor distinto de la columna, con las hojas que lo comparten. */
-interface Cubo {
-  value: unknown;
-  label: string;
-  leaves: RowNode[];
-}
+type Cubo = { value: unknown; label: string; leaves: RowNode[]; };
 
 function groupLevel(leaves: RowNode[], col: ColumnState): Cubo[] {
   const map = new Map<string, Cubo>();
@@ -89,12 +85,7 @@ function groupLevel(leaves: RowNode[], col: ColumnState): Cubo[] {
  * @param {Set<string>} expandedGroups
  * @returns {DisplayRow[]}
  */
-export function buildDisplayRows(
-  leaves: RowNode[],
-  rowGroupCols: string[],
-  colById: Map<string, ColumnState>,
-  expandedGroups: Set<string>,
-): DisplayRow[] {
+export function buildDisplayRows(leaves: RowNode[], rowGroupCols: string[], colById: Map<string, ColumnState>, expandedGroups: Set<string>): DisplayRow[] {
   if (!rowGroupCols.length) {
     return leaves.map((node) => ({ kind: 'leaf', level: 0, node }));
   }
@@ -136,11 +127,7 @@ export function buildDisplayRows(
  * @param {Map<string, ColumnState>} colById
  * @returns {string[]}
  */
-export function collectGroupIds(
-  leaves: RowNode[],
-  rowGroupCols: string[],
-  colById: Map<string, ColumnState>,
-): string[] {
+export function collectGroupIds(leaves: RowNode[], rowGroupCols: string[], colById: Map<string, ColumnState>): string[] {
   if (!rowGroupCols.length) return [];
   const ids: string[] = [];
   const walk = (rows: RowNode[], depth: number, prefix: string): void => {

@@ -11,35 +11,13 @@ function esperarMs(ms: number): Promise<void> {
 }
 
 /** Resultado normalizado del generador (contrato de Stagehand v4). */
-export interface ResultadoGenerador {
-  role: 'assistant';
-  content: { type: 'text'; text: string };
-  outputFormat: 'json_schema';
-  structuredContent: unknown;
-  usage: { inputTokens: number; outputTokens: number; totalTokens: number };
-}
+export type ResultadoGenerador = { role: 'assistant'; content: { type: 'text'; text: string }; outputFormat: 'json_schema'; structuredContent: unknown; usage: { inputTokens: number; outputTokens: number; totalTokens: number } };
 
-export interface OpcionesGenerador {
-  apiKey: string;
-  model: string;
-  baseUrl?: string;
-}
+export type OpcionesGenerador = { apiKey: string; model: string; baseUrl?: string };
 
-export interface ParamsGenerador {
-  systemPrompt?: string;
-  messages?: Array<{ role: string; content: unknown }>;
-  temperature?: number;
-  responseFormat?: { schema?: unknown };
-}
+export type ParamsGenerador = { systemPrompt?: string; messages?: Array<{ role: string; content: unknown }>; temperature?: number; responseFormat?: { schema?: unknown } };
 
-interface ParteContenido {
-  type?: string;
-  text?: string;
-  mimeType?: string;
-  data?: string;
-  content?: Array<{ type?: string; text?: string }>;
-  input?: unknown;
-}
+type ParteContenido = { type?: string; text?: string; mimeType?: string; data?: string; content?: Array<{ type?: string; text?: string }>; input?: unknown };
 
 function normalizarJson(texto: string): unknown {
   let t = String(texto ?? '').trim();

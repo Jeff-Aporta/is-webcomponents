@@ -29,12 +29,7 @@ import { upgradeProperties } from './element.js';
 import { syncStyleAttrs, styleAttrNames, type StyleAttrMap } from './attrs.js';
 
 /** Lo que la subclase puede declarar como estático. */
-export interface ElementBaseConstructor {
-  observedAttributes?: string[];
-  styleAttrs?: StyleAttrMap;
-  TEMPLATE?: HTMLTemplateElement;
-  __TEMPLATE?: HTMLTemplateElement;
-}
+export type ElementBaseConstructor = { observedAttributes?: string[]; styleAttrs?: StyleAttrMap; TEMPLATE?: HTMLTemplateElement; __TEMPLATE?: HTMLTemplateElement; };
 
 export class ElementBase extends HTMLElement {
   /**

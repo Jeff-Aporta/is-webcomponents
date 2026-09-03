@@ -109,7 +109,7 @@ Orden por defecto: `self` (si `preferSelf`) → jsDelivr → Pages. Un fallo en 
 La galería **no** debe esperar CSS del loader para el primer paint (FOUC). Contrato:
 
 1. `<link>` estáticos a `src/styles/is-base.css`, `palettes.css`, `shell.css`, `presentation.css` + `preview-component.css`.
-2. `await` solo shell tags + `import('./dist/cdn/layout/preview-component.min.js')`.
+2. `await` solo shell tags + `import('./dist/cdn/preview/preview-component.min.js')`.
 3. `load('all')` y `loadPageModules` en **background** (no bloquean `dataset.kitShell`).
 4. `is-preview-component` **no** está en el catálogo del loader → import dist, nunca `src/` (Pages 404 lucide).
 

@@ -1,4 +1,4 @@
-﻿// harness.ts: arranque y utilidades compartidas de los tests E2E de
+// harness.ts: arranque y utilidades compartidas de los tests E2E de
 // is-webcomponents con Stagehand. Port del esquema de
 // PatyIA/app/src/utils/health/e2e/lib/harness.ts adaptado a la galeria:
 // sin login ni ISS â€” el "estado" es el tag del componente (deep link ?s=).
@@ -109,9 +109,7 @@ export async function esperarMs(ms: number): Promise<void> {
   await new Promise((r) => setTimeout(r, ms));
 }
 
-interface OpcionesEspera {
-  ms?: number;
-}
+type OpcionesEspera = { ms?: number };
 
 /** Espera a que un selector exista y sea visible. Devuelve false al agotar. */
 export async function esperarVisible(
@@ -191,10 +189,7 @@ function selectorAtributo(fragmento: string): string {
   return `[title*="${f}"], [aria-label*="${f}"]`;
 }
 
-export interface BotonVisible {
-  i: number;
-  texto: string;
-}
+export type BotonVisible = { i: number; texto: string };
 
 /** Botones/pestanas (con su texto visible); penetra shadow roots. */
 export async function botones(page: Page, contenedor: string | null = null): Promise<BotonVisible[]> {

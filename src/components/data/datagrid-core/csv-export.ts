@@ -16,12 +16,12 @@ function escapeCsv(value: string, sep: string): string {
   return value;
 }
 
-export interface CsvOptions {
+export type CsvOptions = {
   /** Separador de campos; por defecto, `,`. */
   separator?: string;
   onlySelected?: boolean;
   selection?: Set<string>;
-}
+};
 
 /**
  * Construye el contenido CSV de las columnas visibles y las filas dadas.

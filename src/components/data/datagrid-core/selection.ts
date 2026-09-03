@@ -23,17 +23,7 @@ import type { SelectionModeName } from './types.js';
  * Cualquiera que se fiara del tipo declarado pasaba `'NONE'` y la seleccion
  * seguia activa sin dar error.
  */
-export function toggleRowSelection(
-  selection: Set<string>,
-  rowId: string,
-  mode: SelectionModeName,
-  opts: {
-    additive?: boolean;
-    range?: boolean;
-    rangeFrom?: string;
-    orderedIds?: string[];
-  } = {},
-): Set<string> {
+export function toggleRowSelection(selection: Set<string>, rowId: string, mode: SelectionModeName, opts: { additive?: boolean; range?: boolean; rangeFrom?: string; orderedIds?: string[]; } = {}): Set<string> {
   if (mode === SelectionMode.NONE) return selection;
 
   if (mode === SelectionMode.SINGLE) {

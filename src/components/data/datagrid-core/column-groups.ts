@@ -64,7 +64,7 @@ export function ispFilterFor(type: string, mode: 'lista'|'filtro') {
  * Nodo de `TGridColumn` tal y como lo manda ISP. Es un arbol: los nodos con
  * `children` son grupos de cabecera y el resto son columnas.
  */
-export interface IspColumn {
+export type IspColumn = {
   children?: Record<string, IspColumn>;
   caption?: string;
   align?: AlignName;
@@ -84,14 +84,14 @@ export interface IspColumn {
   GetDisplayValue?: (row: Record<string, unknown>) => Promise<unknown>;
   /** Render del texto ya resuelto (espejo de ISP). */
   GetDisplayText?: (row: Record<string, unknown>) => string;
-}
+};
 
 /**
  * Lo que produce la traduccion: la columna del motor mas los campos que solo
  * entiende la capa ISP. Se declara aparte de `ColumnDef` porque esos extras no
  * son parte del contrato del motor y no deben colarse en el.
  */
-export interface IspColumnDef extends Omit<ColumnDef, 'type'> {
+export type IspColumnDef = Omit<ColumnDef, 'type'> & {
   /**
    * ISP maneja tipos que el motor no conoce (`currency`, `dateTime`): se
    * ensancha aqui en vez de meterlos en el vocabulario del motor, que no sabe
@@ -105,21 +105,10 @@ export interface IspColumnDef extends Omit<ColumnDef, 'type'> {
   sort?: SortDirName;
   GetDisplayValue?: (row: Record<string, unknown>) => Promise<unknown>;
   GetDisplayText?: (row: Record<string, unknown>) => string;
-}
+};
 
-export interface GroupNode {
-  kind: 'group';
-  groupId: string;
-  headerName: string;
-  align: AlignName;
-  children: TreeNode[];
-}
-
-export interface LeafNode {
-  kind: 'leaf';
-  colId: string;
-  headerName: string;
-}
+export type GroupNode = { kind: 'group'; groupId: string; headerName: string; align: AlignName; children: TreeNode[]; };
+export type LeafNode = { kind: 'leaf'; colId: string; headerName: string; };
 
 /** Discriminada por `kind`. */
 export type TreeNode = GroupNode | LeafNode;
@@ -232,17 +221,14 @@ export function groupDepth(groups: readonly TreeNode[]): number {
  * @param {(colId: string) => boolean} isVisible  filtra columnas ocultas
  * @returns {Array<Array<{groupId: string|null, headerName: string, colIds: string[]}>>}
  */
-export function groupHeaderRows(
-  groups: readonly TreeNode[],
-  isVisible: (colId: string) => boolean = () => true,
-) {
+export function groupHeaderRows(groups: readonly TreeNode[], isVisible: (colId: string) => boolean = () => true) {
   const depth = groupDepth(groups);
   if (depth === 0) return [];
 
   // 1) Para cada hoja visible, su cadena de grupos ancestros (por nivel).
   /** @type {Array<{colId: string, chain: Array<{groupId: string, headerName: string}|null>}>} */
   /** Una hoja visible con la cadena de grupos que la cubre, de fuera a dentro. */
-  interface Ancestro { groupId: string; headerName: string }
+  type Ancestro = { groupId: string; headerName: string; };
   const leaves: { colId: string; chain: Ancestro[] }[] = [];
   (function walk(nodes: readonly TreeNode[], chain: Ancestro[]): void {
     for (const node of nodes ?? []) {
@@ -256,7 +242,7 @@ export function groupHeaderRows(
 
   // 2) Por nivel, se funden hojas consecutivas que comparten el mismo grupo.
   /** Celda de cabecera: un grupo (o un hueco) sobre una o varias columnas. */
-  interface Celda { groupId: string | null; headerName: string; colIds: string[] }
+  type Celda = { groupId: string | null; headerName: string; colIds: string[]; };
   const rows: Celda[][] = [];
   for (let level = 0; level < depth; level++) {
     const row: Celda[] = [];

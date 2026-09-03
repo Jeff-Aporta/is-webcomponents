@@ -104,11 +104,20 @@ const esUno = <L extends readonly string[]>(lista: L, v: string | null | undefin
 
 Un componente **nunca importa la clase de otro** para tiparlo: la mayoría de
 esas parejas se usan mutuamente y el import cierra un ciclo. Se declara en
-local la interfaz mínima que se necesita:
+local la forma mínima que se necesita:
 
 ```ts
-interface DropdownLike extends HTMLElement { open: boolean; hide(): void }
+type DropdownLike = HTMLElement & { open: boolean; hide(): void };
 ```
+
+## S-TS6b Preferir `type` sobre `interface`
+
+No se declaran `interface` top-level nuevas: se escribe `type X = { … };`.
+Los alias caben en una línea (1 type × 1 línea cuando no hay doc interna por
+campo); las interfaces presionan saltos. Si la forma necesita doc por campo,
+se mantiene multilínea como `type`. `extends` interno se expresa con
+intersección (`type Hijo = Base & { … };`). La conversión de `interface`
+existentes es mecánica y no cambia consumidores (verificación: `tsc`).
 
 ## S-TS7 Decoradores
 

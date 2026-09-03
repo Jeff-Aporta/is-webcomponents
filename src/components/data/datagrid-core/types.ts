@@ -196,7 +196,7 @@ export type ColumnDef = {
 /** Estado resuelto de una columna: lo que gestiona el motor. */
 export type ColumnState = { colId: string; field: string; headerName: string; type: ColumnTypeName | 'currency' | 'dateTime'; width: number; minWidth: number; maxWidth: number; flex?: number; sortable: boolean; resizable: boolean; filterType: FilterTypeName | null; pinned: PinSideName | null; hide: boolean; align: AlignName; enableRowGroup: boolean; aggFunc: AggFuncName | null; checkboxSelection: boolean; def: ColumnDef; };
 
-export type SortModelItem = { colId: string; dir: SortDirName };
+export type SortModelItem = { colId: string; dir: SortDirName; };
 export type SortModel = SortModelItem[];
 
 /* ── Motor ────────────────────────────────────────────────────────────── */

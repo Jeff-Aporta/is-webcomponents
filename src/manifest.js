@@ -1,17 +1,17 @@
-export default [
-  // isp — primitivas portadas de ISP-SvelteComponents (la librería Svelte de
-  // ContaPyme). El orden del nav no sale de aquí sino de `categoryMeta` en
-  // index.html, donde `isp` es la última clave.
+﻿export default [
+  // isp â€” primitivas portadas de ISP-SvelteComponents (la librerÃ­a Svelte de
+  // ContaPyme). El orden del nav no sale de aquÃ­ sino de `categoryMeta` en
+  // index.html, donde `isp` es la Ãºltima clave.
   { tag: 'is-accordion-group', title: 'Accordion Group', category: 'isp', origin: 'isp', script: '../../components/isp/accordion-group.js', style: '../../components/isp/accordion-group.css', page: 'isp/is-accordion-group.json' },
   { tag: 'is-block-layout', title: 'Block Layout', category: 'isp', origin: 'isp', script: '../../components/isp/block-layout.js', style: '../../components/isp/block-layout.css', page: 'isp/is-block-layout.json' },
   { tag: 'is-btn-ref', title: 'Btn Ref', category: 'isp', origin: 'isp', script: '../../components/isp/btn-ref.js', style: '../../components/isp/btn-ref.css', page: 'isp/is-btn-ref.json' },
-  { tag: 'is-catalogo-gen', title: 'Catálogo Gen', category: 'isp', origin: 'isp', script: '../../components/isp/catalogo-gen.js', style: '../../components/isp/catalogo-gen.css', page: 'isp/is-catalogo-gen.json' },
+  { tag: 'is-catalogo-gen', title: 'CatÃ¡logo Gen', category: 'isp', origin: 'isp', script: '../../components/isp/catalogo-gen.js', style: '../../components/isp/catalogo-gen.css', page: 'isp/is-catalogo-gen.json' },
   { tag: 'is-confirm-delete', title: 'Confirm Delete', category: 'isp', origin: 'isp', script: '../../components/isp/confirm-delete.js', style: '../../components/isp/confirm-delete.css', page: 'isp/is-confirm-delete.json' },
   { tag: 'is-flex-layout', title: 'Flex Layout', category: 'isp', origin: 'isp', script: '../../components/isp/flex-layout.js', style: '../../components/isp/flex-layout.css', page: 'isp/is-flex-layout.json' },
   { tag: 'is-flex-options', title: 'Flex Options', category: 'isp', origin: 'isp', script: '../../components/isp/flex-options.js', style: '../../components/isp/flex-options.css', page: 'isp/is-flex-options.json' },
   { tag: 'is-float-card', title: 'Float Card', category: 'isp', origin: 'isp', script: '../../components/isp/float-card.js', style: '../../components/isp/float-card.css', page: 'isp/is-float-card.json' },
   { tag: 'is-form', title: 'Form', category: 'isp', origin: 'isp', script: '../../components/isp/form.js', style: '../../components/isp/form.css', page: 'isp/is-form.json' },
-  { tag: 'is-modal-verificacion', title: 'Modal Verificación', category: 'isp', origin: 'isp', script: '../../components/isp/modal-verificacion.js', style: '../../components/isp/modal-verificacion.css', page: 'isp/is-modal-verificacion.json' },
+  { tag: 'is-modal-verificacion', title: 'Modal VerificaciÃ³n', category: 'isp', origin: 'isp', script: '../../components/isp/modal-verificacion.js', style: '../../components/isp/modal-verificacion.css', page: 'isp/is-modal-verificacion.json' },
   { tag: 'is-grid-layout', title: 'Grid Layout', category: 'isp', origin: 'isp', script: '../../components/isp/grid-layout.js', style: '../../components/isp/grid-layout.css', page: 'isp/is-grid-layout.json' },
   { tag: 'is-heading', title: 'Heading', category: 'isp', origin: 'isp', script: '../../components/isp/heading.js', style: '../../components/isp/heading.css', page: 'isp/is-heading.json' },
   { tag: 'is-loading-overlay', title: 'Loading Overlay', category: 'isp', origin: 'isp', script: '../../components/isp/loading-overlay.js', style: '../../components/isp/loading-overlay.css', page: 'isp/is-loading-overlay.json' },
@@ -115,10 +115,10 @@ export default [
   { tag: 'is-wake-lock', title: 'Wake Lock', category: 'helpers', script: '../../components/helpers/wake-lock.js', style: '../../components/helpers/wake-lock.css', page: 'helpers/is-wake-lock.json' },
   { tag: 'is-offscreen-canvas', title: 'Offscreen Canvas', category: 'helpers', script: '../../components/helpers/offscreen-canvas.js', style: '../../components/helpers/offscreen-canvas.css', page: 'helpers/is-offscreen-canvas.json' },
   { tag: 'is-format-date', title: 'Formato de fecha', category: 'helpers', script: '../../components/helpers/format-date.js', style: '../../components/helpers/format-date.css', page: 'helpers/is-format-date.json' },
-  { tag: 'is-format-number', title: 'Formato de número', category: 'helpers', script: '../../components/helpers/format-number.js', style: '../../components/helpers/format-number.css', page: 'helpers/is-format-number.json' },
+  { tag: 'is-format-number', title: 'Formato de nÃºmero', category: 'helpers', script: '../../components/helpers/format-number.js', style: '../../components/helpers/format-number.css', page: 'helpers/is-format-number.json' },
   { tag: 'is-format-bytes', title: 'Formato de bytes', category: 'helpers', script: '../../components/helpers/format-bytes.js', style: '../../components/helpers/format-bytes.css', page: 'helpers/is-format-bytes.json' },
-  { tag: 'is-intersection-observer', title: 'Observador de intersección', category: 'helpers', script: '../../components/helpers/intersection-observer.js', style: '../../components/helpers/intersection-observer.css', page: 'helpers/is-intersection-observer.json' },
-  { tag: 'is-mutation-observer', title: 'Observador de mutación', category: 'helpers', script: '../../components/helpers/mutation-observer.js', style: '../../components/helpers/mutation-observer.css', page: 'helpers/is-mutation-observer.json' },
+  { tag: 'is-intersection-observer', title: 'Observador de intersecciÃ³n', category: 'helpers', script: '../../components/helpers/intersection-observer.js', style: '../../components/helpers/intersection-observer.css', page: 'helpers/is-intersection-observer.json' },
+  { tag: 'is-mutation-observer', title: 'Observador de mutaciÃ³n', category: 'helpers', script: '../../components/helpers/mutation-observer.js', style: '../../components/helpers/mutation-observer.css', page: 'helpers/is-mutation-observer.json' },
   { tag: 'is-resize-observer', title: 'Resize Observer', category: 'helpers', script: '../../components/helpers/resize-observer.js', style: '../../components/helpers/resize-observer.css', page: 'helpers/is-resize-observer.json' },
   { tag: 'is-md-render', title: 'Render Markdown', category: 'helpers', script: '../../components/helpers/md-render.js', style: '../../components/helpers/md-render.css', page: 'helpers/is-md-render.json' },
   { tag: 'is-md-editor', title: 'Editor Markdown', category: 'helpers', script: '../../components/helpers/md-editor.js', style: '../../components/helpers/md-editor.css', page: 'helpers/is-md-editor.json' },
@@ -126,13 +126,13 @@ export default [
   { tag: 'is-funnel-chart', title: 'Funnel Chart', category: 'data-viz', script: '../../components/charts/funnel-chart.js', style: '../../components/charts/funnel-chart.css', page: 'data-viz/is-funnel-chart.json' },
   { tag: 'is-class-diagram', title: 'Diagrama de clases', category: 'diagrams', script: '../../components/diagrams/class-diagram.js', style: '../../components/diagrams/class-diagram.css', page: 'diagrams/is-class-diagram.json' },
   { tag: 'is-state-diagram', title: 'Diagrama de estados', category: 'diagrams', script: '../../components/diagrams/state-diagram.js', style: '../../components/diagrams/state-diagram.css', page: 'diagrams/is-state-diagram.json' },
-  { tag: 'is-er-diagram', title: 'Diagrama entidad-relación', category: 'diagrams', script: '../../components/diagrams/er-diagram.js', style: '../../components/diagrams/er-diagram.css', page: 'diagrams/is-er-diagram.json' },
+  { tag: 'is-er-diagram', title: 'Diagrama entidad-relaciÃ³n', category: 'diagrams', script: '../../components/diagrams/er-diagram.js', style: '../../components/diagrams/er-diagram.css', page: 'diagrams/is-er-diagram.json' },
   { tag: 'is-block-diagram', title: 'Diagrama de bloques', category: 'diagrams', script: '../../components/diagrams/block-diagram.js', style: '../../components/diagrams/block-diagram.css', page: 'diagrams/is-block-diagram.json' },
   { tag: 'is-component-diagram', title: 'Diagrama de componentes', category: 'diagrams', script: '../../components/diagrams/component-diagram.js', style: '../../components/diagrams/component-diagram.css', page: 'diagrams/is-component-diagram.json' },
   { tag: 'is-treemap', title: 'Treemap', category: 'data-viz', script: '../../components/charts/treemap.js', style: '../../components/charts/treemap.css', page: 'data-viz/is-treemap.json' },
   { tag: 'is-mindmap', title: 'Mapa mental', category: 'diagrams', script: '../../components/diagrams/mindmap.js', style: '../../components/diagrams/mindmap.css', page: 'diagrams/is-mindmap.json' },
   { tag: 'is-gantt', title: 'Diagrama de Gantt', category: 'diagrams', script: '../../components/diagrams/gantt.js', style: '../../components/diagrams/gantt.css', page: 'diagrams/is-gantt.json' },
-  { tag: 'is-timeline', title: 'Línea de tiempo', category: 'diagrams', script: '../../components/diagrams/timeline.js', style: '../../components/diagrams/timeline.css', page: 'diagrams/is-timeline.json' },
+  { tag: 'is-timeline', title: 'LÃ­nea de tiempo', category: 'diagrams', script: '../../components/diagrams/timeline.js', style: '../../components/diagrams/timeline.css', page: 'diagrams/is-timeline.json' },
   { tag: 'is-fab', title: 'Floating Action Button', category: 'actions', script: '../../components/actions/fab.js', style: '../../components/actions/fab.css', page: 'actions/is-fab.json' },
   { tag: 'is-popconfirm', title: 'Popconfirm', category: 'feedback', script: '../../components/feedback/popconfirm.js', style: '../../components/feedback/popconfirm.css', page: 'feedback/is-popconfirm.json' },
   { tag: 'is-confirm-modal', title: 'Confirm Modal', category: 'feedback', script: '../../components/feedback/confirm-modal.js', style: '../../components/feedback/confirm-modal.css', page: 'feedback/is-confirm-modal.json' },
@@ -180,4 +180,8 @@ export default [
   { tag: 'is-command-palette', title: 'Command Palette', category: 'overlays', script: '../../components/overlays/command-palette.js', style: '../../components/overlays/command-palette.css', page: 'overlays/is-command-palette.json' },
   { tag: 'is-pdf-viewer', title: 'PDF Viewer', category: 'overlays', script: '../../components/overlays/pdf-viewer.js', style: '../../components/overlays/pdf-viewer.css', page: 'overlays/is-pdf-viewer.json' },
   { tag: 'is-window', title: 'Window', category: 'overlays', script: '../../components/overlays/window.js', style: '../../components/overlays/window.css', page: 'overlays/is-window.json' },
+  // Preview/demo system: chrome de la galería expuesto por CDN (loader) para
+  // que cualquier app iswc pueda montar previews JSON de sus propios componentes.
+  { tag: 'is-preview-component', title: 'Preview Component', category: 'preview', script: '../../components/layout/preview-component.js', style: '../../components/layout/preview-component.css' },
+  { tag: 'is-preview-controls', title: 'Preview Controls', category: 'preview', script: '../../components/layout/preview-controls.js' },
 ];

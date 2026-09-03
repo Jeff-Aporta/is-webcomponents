@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T04:26:32.844Z",
+  "generatedAt": "2026-09-03T04:56:28.920Z",
   "count": 60,
   "modules": [
     {
@@ -197,7 +197,7 @@
       "id": "diagram-astar",
       "path": "src/components/_shared/diagram-astar.ts",
       "summary": "Rutas ortogonales en rejilla — A* ponderado reutilizable (secuencia, flujo, ER).",
-      "bytes": 19699,
+      "bytes": 19677,
       "exports": [
         "routeOrthogonal",
         "countTurns",
@@ -284,7 +284,7 @@
       "id": "diagram-grid",
       "path": "src/components/_shared/diagram-grid.ts",
       "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
-      "bytes": 11391,
+      "bytes": 11374,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",
@@ -305,7 +305,7 @@
       "id": "diagram-header",
       "path": "src/components/_shared/diagram-header.ts",
       "summary": "Módulo compartido `diagram-header.ts`.",
-      "bytes": 1155,
+      "bytes": 1142,
       "exports": [
         "diagramHeaderWidth"
       ]
@@ -315,7 +315,7 @@
       "id": "diagram-tipos",
       "path": "src/components/_shared/diagram-tipos.ts",
       "summary": "diagram-tipos — POR QUÉ AQUÍ. `component-pack.ts` y `component-spec.ts` se pasan los mismos",
-      "bytes": 4455,
+      "bytes": 4399,
       "exports": []
     },
     {
@@ -385,7 +385,7 @@
       "id": "grid-types",
       "path": "src/components/_shared/grid-types.ts",
       "summary": "Tipos de columna del data grid: alineación por defecto, comparador, — formateo y operadores de filtro. Réplica de los tipos nativos de MUI X",
-      "bytes": 17997,
+      "bytes": 17904,
       "exports": [
         "LOGIC",
         "stringComparator",
