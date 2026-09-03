@@ -367,8 +367,8 @@ await bundleCss(palettesIn, palettesOut);
 const palettesStat = await stat(palettesOut);
 console.log(`  ${'palettes'.padEnd(18)} css ${String(palettesStat.size).padStart(6)}`);
 
-// Alias en la raíz de dist/cdn: el path pre-folderizado sigue vivo en apps
-// (PatyIA, snippets). Sin esto jsDelivr sirve 404 y no hay tokens ni tema.
+// Alias CSS en la raíz de dist/cdn: path pre-folderizado (PatyIA, snippets).
+// Sin esto jsDelivr sirve 404 y no hay tokens ni tema. Canónico: core/.
 await copyFile(baseOut, join(dist, 'is-base.min.css'));
 await copyFile(palettesOut, join(dist, 'palettes.min.css'));
 
@@ -421,6 +421,9 @@ const loaderStat = await stat(loaderOut);
 console.log(`  ${'loader.min'.padEnd(18)} js ${String(loaderStat.size).padStart(6)}  (${Object.keys(loaderCatalog.categories).length} cats, ${Object.keys(loaderCatalog.tags).length / 2 | 0} tags)`);
 await copyFile(join(root, 'src', 'cdn', 'loader.md'), join(coreDist, 'loader.md'));
 console.log(`  ${'loader.md'.padEnd(18)} docs`);
+// Alias raíz: apps (PatyIA) importan …/dist/cdn/loader.min.js — canónico es core/.
+await copyFile(loaderOut, join(dist, 'loader.min.js'));
+console.log(`  ${'loader.min'.padEnd(18)} alias raíz (compat)`);
 await copyFile(join(root, 'src', 'cdn', 'LLM.md'), join(dist, 'LLM.md'));
 console.log(`  ${'LLM.md'.padEnd(18)} docs (cdn/)`);
 

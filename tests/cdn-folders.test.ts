@@ -26,14 +26,15 @@ if (!existsSync(dist)) {
   process.exit(0);
 }
 
-// Alias estables en la raíz: apps que aún enlazan dist/cdn/is-base.min.css
-// (pre-folderizado) no deben 404. El canónico sigue siendo core/.
+// Alias estables en la raíz: apps que aún enlazan paths pre-folderizado
+// (is-base, palettes, loader) no deben 404. El canónico sigue siendo core/.
 const ROOT_ALLOWED = new Set([
   'LLM.md',
   'versions.json',
   '_headers', 'llm',
   'is-base.min.css',
   'palettes.min.css',
+  'loader.min.js',
 ]);
 
 const CORE_REQUIRED = [
@@ -56,11 +57,11 @@ check(existsSync(core), 'falta dist/cdn/core/');
 for (const f of CORE_REQUIRED) {
   check(existsSync(join(core, f)), `falta dist/cdn/core/${f}`);
 }
-for (const f of ['is-base.min.css', 'palettes.min.css']) {
+for (const f of ['is-base.min.css', 'palettes.min.css', 'loader.min.js']) {
   check(existsSync(join(dist, f)), `falta dist/cdn/${f} (alias estable para consumidores)`);
-  const alias = readFileSync(join(dist, f), 'utf8');
-  const canon = readFileSync(join(core, f), 'utf8');
-  check(alias === canon, `dist/cdn/${f} debe ser copia de core/${f}`);
+  const alias = readFileSync(join(dist, f));
+  const canon = readFileSync(join(core, f));
+  check(Buffer.compare(alias, canon) === 0, `dist/cdn/${f} debe ser copia de core/${f}`);
 }
 
 check(categories.length > 0, 'dist/cdn no tiene carpetas de categoría');
