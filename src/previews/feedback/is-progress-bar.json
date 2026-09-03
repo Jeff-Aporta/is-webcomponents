@@ -19,7 +19,13 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"pb-demo\">\r\n            <is-progress-bar value=\"65\" label=\"Subiendo archivo\"></is-progress-bar>\r\n          </div>"
+          "html": "<div class=\"pb-demo\">\r\n            <is-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></is-progress-bar>\r\n          </div>",
+          "target": "#pb-play",
+          "controls": [
+            { "control": "range", "prop": "attr:value", "label": "Valor", "min": 0, "max": 100, "step": 5 },
+            { "control": "text", "prop": "attr:label", "label": "Label" },
+            { "control": "boolean", "prop": "attr:indeterminate", "label": "Indeterminada" }
+          ]
         }
       ]
     },

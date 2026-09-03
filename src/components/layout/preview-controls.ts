@@ -69,24 +69,9 @@ const CSS = `
 .boolean input { accent-color: currentColor; }
 `;
 
-export interface OpcionPanel {
-  value: unknown;
-  label: string;
-}
+export type OpcionPanel = { value: unknown; label: string; };
 
-export interface ControlPanel {
-  control: string;
-  prop: string;
-  label: string;
-  group?: string;
-  options?: Array<{ value: unknown; label: string }>;
-  min?: number;
-  max?: number;
-  step?: number;
-  placeholder?: string;
-  default?: unknown;
-  value?: unknown;
-}
+export type ControlPanel = { control: string; prop: string; label: string; group?: string; options?: Array<{ value: unknown; label: string }>; min?: number; max?: number; step?: number; placeholder?: string; default?: unknown; value?: unknown; };
 
 function escProp(prop: string): string {
   return String(prop).replace(/[\\"]/g, '\\$&');

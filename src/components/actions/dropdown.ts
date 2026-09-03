@@ -15,11 +15,7 @@ type Placement = (typeof PLACEMENTS)[number];
  * cosas de aqui) y el bundle los trata como modulos externos. Declarar solo lo
  * que se usa es ademas lo que documenta el acoplamiento real entre los dos.
  */
-interface DropdownItemEl extends HTMLElement {
-  disabled?: boolean;
-  type?: string;
-  closeSubmenu?: () => void;
-}
+type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSubmenu?: () => void; };
 
 /**
  * <is-dropdown> — menú anclado a un trigger.

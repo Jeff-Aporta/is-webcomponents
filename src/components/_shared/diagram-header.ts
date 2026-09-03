@@ -15,11 +15,7 @@ import { richTextPlain } from './tk-rich-text.js';
 const TITULO_CHAR_W = 7.4;
 const SUBTITULO_CHAR_W = 5.9;
 
-export function diagramHeaderWidth(
-  title: string | null | undefined,
-  subtitle: string | null | undefined,
-  { padding = 32 }: { padding?: number } = {},
-): number {
+export function diagramHeaderWidth(title: string | null | undefined, subtitle: string | null | undefined, { padding = 32 }: { padding?: number } = {}): number {
   const t = richTextPlain(title ?? '').length * TITULO_CHAR_W;
   const s = richTextPlain(subtitle ?? '').length * SUBTITULO_CHAR_W;
   const texto = Math.max(t, s);

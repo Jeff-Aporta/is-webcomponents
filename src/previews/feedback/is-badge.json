@@ -13,7 +13,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <is-badge>Nuevo</is-badge>\r\n            <is-badge color=\"success\">Activo</is-badge>\r\n            <is-badge color=\"warning\" attention=\"pulse\">Pendiente</is-badge>\r\n          </div>"
+          "html": "<div class=\"demo-row\">\r\n            <is-badge id=\"badge-play\">Nuevo</is-badge>\r\n            <is-badge color=\"success\">Activo</is-badge>\r\n            <is-badge color=\"warning\" attention=\"pulse\">Pendiente</is-badge>\r\n          </div>",
+          "target": "#badge-play",
+          "controls": [
+            { "control": "select", "prop": "attr:color", "label": "Color", "options": ["brand", "success", "warning", "danger", "neutral"] },
+            { "control": "select", "prop": "attr:variant", "label": "Variante", "options": ["accent", "filled", "outlined", "filled-outlined"] },
+            { "control": "select", "prop": "attr:attention", "label": "Atención", "options": ["none", "pulse", "bounce"] },
+            { "control": "boolean", "prop": "attr:pill", "label": "Píldora" }
+          ]
         }
       ]
     },

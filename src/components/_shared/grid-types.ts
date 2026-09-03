@@ -19,7 +19,7 @@ export type FilterValue = string | number | boolean | readonly (string | number)
 /** Una fila: mapa columna -> valor. */
 export type Row = Record<string, CellValue>;
 
-export interface Operator {
+export type Operator = {
   readonly value: string;
   readonly label: string;
   /** `false` cuando el operador no pide valor (`isEmpty`). */
@@ -37,7 +37,7 @@ export interface Operator {
    * lista) en vez de repetir el mismo estrechamiento treinta veces.
    */
   test(v: CellValue, f: FilterValue): boolean;
-}
+};
 
 /**
  * Columna tal y como la declara el consumidor del grid.
@@ -47,7 +47,7 @@ export interface Operator {
  * de lo que data-grid y grid-data leen de verdad, no de la API de MUI X
  * completa, para que el tipo no prometa mas de lo que el kit soporta.
  */
-export interface ColumnDef {
+export type ColumnDef = {
   readonly field?: string;
   readonly type?: string;
   readonly headerName?: string;
@@ -95,26 +95,12 @@ export interface ColumnDef {
   /* Filtrado */
   readonly operators?: readonly Operator[];
   readonly filterOperators?: readonly Operator[];
-}
+};
 
 /** Comparador de ordenacion: mismo contrato que `Array.prototype.sort`. */
 export type Comparator = (a: CellValue, b: CellValue) => number;
 
-export interface ColumnType {
-  readonly align: string;
-  readonly headerAlign?: string;
-  readonly comparator?: Comparator;
-  readonly operators?: readonly Operator[];
-  readonly editor?: string;
-  readonly format?: (v: CellValue) => string;
-  readonly sortable?: boolean;
-  readonly filterable?: boolean;
-  readonly editable?: boolean;
-  readonly resizable?: boolean;
-  readonly hideable?: boolean;
-  readonly disableColumnMenu?: boolean;
-  readonly width?: number;
-}
+export type ColumnType = { readonly align: string; readonly headerAlign?: string; readonly comparator?: Comparator; readonly operators?: readonly Operator[]; readonly editor?: string; readonly format?: (v: CellValue) => string; readonly sortable?: boolean; readonly filterable?: boolean; readonly editable?: boolean; readonly resizable?: boolean; readonly hideable?: boolean; readonly disableColumnMenu?: boolean; readonly width?: number; };
 
 export type ColumnTypeName = keyof typeof COLUMN_TYPES;
 
@@ -348,11 +334,7 @@ export function operatorNeedsInput(op: Operator | null | undefined): boolean {
 }
 
 /** Prepara el valor de la regla una vez (minúsculas, número, lista…). */
-export function prepareFilterValue(
-  op: Operator | null | undefined,
-  raw: CellValue,
-  col: ColumnDef | null | undefined,
-): FilterValue | null {
+export function prepareFilterValue(op: Operator | null | undefined, raw: CellValue, col: ColumnDef | null | undefined): FilterValue | null {
   if (!op || !operatorNeedsInput(op)) return null;
   // Regla sin valor: incompleta. `Number('')` es 0 y filtraría de más.
   if (raw == null || raw === '') return null;
@@ -379,15 +361,9 @@ export function prepareFilterValue(
 }
 
 /** Fábrica del test de una regla: null si la regla está incompleta. */
-export interface FilterRule {
-  readonly operator?: string;
-  readonly value?: CellValue;
-}
+export type FilterRule = { readonly operator?: string; readonly value?: CellValue; };
 
-export function filterTest(
-  item: FilterRule,
-  col: ColumnDef | null | undefined,
-): ((value: CellValue) => boolean) | null {
+export function filterTest(item: FilterRule, col: ColumnDef | null | undefined): ((value: CellValue) => boolean) | null {
   const op = operatorsFor(col).find((o) => o.value === item.operator);
   if (!op) return null;
   // Sin valor que comparar, el segundo argumento no lo mira nadie.
@@ -405,12 +381,12 @@ export function filterTest(
 const nums = (values: readonly CellValue[]): number[] =>
   values.map(Number).filter((n) => Number.isFinite(n));
 
-export interface AggregationFn {
+export type AggregationFn = {
   readonly label: string;
   /** Tipos de columna que la admiten; `null` = todas. */
   readonly types: readonly string[] | null;
   apply(values: readonly CellValue[], type?: string): CellValue;
-}
+};
 
 export const AGGREGATION_FNS: Record<string, AggregationFn> = {
   sum: { label: 'suma', types: ['number'], apply: (v: readonly CellValue[]) => nums(v).reduce((a, b) => a + b, 0) },
@@ -435,11 +411,7 @@ export const AGGREGATION_FNS: Record<string, AggregationFn> = {
   size: { label: 'cuenta', types: null, apply: (v: readonly CellValue[]) => v.length },
 };
 
-function reduceExtreme(
-  values: readonly CellValue[],
-  type: string | undefined,
-  sign: number,
-): CellValue {
+function reduceExtreme(values: readonly CellValue[], type: string | undefined, sign: number): CellValue {
   const cmp = type === 'date' || type === 'dateTime' ? dateComparator : numberComparator;
   const list = values.filter((v) => v != null && v !== '');
   if (!list.length) return null;

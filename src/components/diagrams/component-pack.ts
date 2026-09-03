@@ -21,12 +21,7 @@ export const EDGE_CLEARANCE = 14;
 /** Aire extra alrededor del título de paquete: 14 px no basta, se lee mal. */
 export const TITLE_CLEARANCE = 22;
 
-export function packDiagram(
-  packages: Paquete[],
-  components: Componente[],
-  edges: readonly Arista[] = [],
-  opts: OpcionesEmpaque = {},
-): void {
+export function packDiagram(packages: Paquete[], components: Componente[], edges: readonly Arista[] = [], opts: OpcionesEmpaque = {}): void {
   if (opts.mode === 'manual') return;
   const ungroup = new Set(opts.ungroup ?? []);
   if (ungroup.size) {
@@ -67,13 +62,7 @@ export function resolvePackingGaps(opts: OpcionesEmpaque = {}) {
   };
 }
 
-function packPackageColumns(
-  packages: Paquete[],
-  components: Componente[],
-  gut: number = COL_GUTTER,
-  corridor: number = PKG_CORRIDOR,
-  rowGap: number = ROW_GAP,
-): void {
+function packPackageColumns(packages: Paquete[], components: Componente[], gut: number = COL_GUTTER, corridor: number = PKG_CORRIDOR, rowGap: number = ROW_GAP): void {
   const kidsOf = (p: Paquete) => components.filter((c) => c.package === p.id);
   const sorted = packages.filter((p) => kidsOf(p).length).sort((a, b) => a.x - b.x || a.y - b.y);
   if (!sorted.length) return;
@@ -128,12 +117,7 @@ function boundsOf(items: readonly Caja[]) {
  * Cada origen (consumidor) en un lado distinto del clúster destino:
  * left / top / bottom / right. Evita un solo corredor saturado.
  */
-function packTriptych(
-  packages: Paquete[],
-  components: Componente[],
-  edges: readonly Arista[],
-  opts: OpcionesEmpaque,
-): void {
+function packTriptych(packages: Paquete[], components: Componente[], edges: readonly Arista[], opts: OpcionesEmpaque): void {
   const listed = opts.sources?.length
     ? opts.sources.map((id) => components.find((c) => c.id === id)).filter(Boolean)
     : inferSources(components, edges);
@@ -180,12 +164,7 @@ function packTriptych(
   }
 }
 
-function packPackage(
-  pkg: Paquete,
-  kids: Componente[],
-  gut: number = COL_GUTTER,
-  rowGap: number = ROW_GAP,
-): void {
+function packPackage(pkg: Paquete, kids: Componente[], gut: number = COL_GUTTER, rowGap: number = ROW_GAP): void {
   if (!kids.length) return;
   const cols = clusterColumns(kids);
   let x = pkg.x + PKG_PAD;
@@ -338,13 +317,7 @@ function distToRect(x: number, y: number, r: Caja): number {
   return Math.hypot(dx, dy);
 }
 
-function cellInConvex(
-  xs: readonly number[],
-  ys: readonly number[],
-  occ: readonly boolean[][],
-  x: number,
-  y: number,
-): boolean {
+function cellInConvex(xs: readonly number[], ys: readonly number[], occ: readonly boolean[][], x: number, y: number): boolean {
   for (let i = 0; i < occ.length; i++) {
     if (x < xs[i] || x >= xs[i + 1]) continue;
     for (let j = 0; j < occ[i].length; j++) {
@@ -420,11 +393,7 @@ function connectIslands(occ: boolean[][], blocked: readonly boolean[][]): void {
  * Contornos de paquete: cuadrícula que envuelve a todos los hijos.
  * Celdas en conflicto van al paquete del hijo más cercano (tocan, no solapan).
  */
-export function layoutPackageOutlines(
-  packages: readonly Paquete[],
-  components: readonly Componente[],
-  opts: OpcionesEmpaque = {},
-) {
+export function layoutPackageOutlines(packages: readonly Paquete[], components: readonly Componente[], opts: OpcionesEmpaque = {}) {
   const pad = opts.pad ?? 12;
   const tabH = opts.tabH ?? 18;
   const groups = packages.map((p) => {
@@ -487,12 +456,7 @@ export function layoutPackageOutlines(
   }
 }
 
-function walkOutline(
-  xs: readonly number[],
-  ys: readonly number[],
-  h: readonly boolean[][],
-  v: readonly boolean[][],
-): Punto[] {
+function walkOutline(xs: readonly number[], ys: readonly number[], h: readonly boolean[][], v: readonly boolean[][]): Punto[] {
   let i0 = -1;
   let j0 = -1;
   for (let j = 0; j < h[0].length; j++) {

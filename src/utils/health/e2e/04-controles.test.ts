@@ -42,8 +42,27 @@ const previewsDir = join(repoDir, 'src', 'previews');
 
 interface TagConControles {
   tag: string;
+  cat: string;
   nControles: number;
   nPaneles: number;
+}
+
+/** Documentación .md del componente (si existe) para verificar objetivos. */
+function mdDelComponente(tag: string, cat: string): string | null {
+  const base = tag.replace(/^is-/, '');
+  const candidatos = [
+    join(repoDir, 'src', 'components', cat, `${tag}.md`),
+    join(repoDir, 'src', 'components', cat, `${base}.md`),
+  ];
+  for (const c of candidatos) {
+    try {
+      const texto = readFileSync(c, 'utf8').toLowerCase();
+      if (texto.trim()) return texto;
+    } catch {
+      /* siguiente candidato */
+    }
+  }
+  return null;
 }
 
 function listarTagsConControles(): TagConControles[] {
@@ -73,7 +92,11 @@ function listarTagsConControles(): TagConControles[] {
               }
             }
           }
-          if (nPaneles > 0) out.push({ tag: def.tag, nControles, nPaneles });
+          if (nPaneles > 0) {
+            const rel = p.slice(previewsDir.length + 1);
+            const cat = rel.split(/[\\/]/)[0] ?? '';
+            out.push({ tag: def.tag, cat, nControles, nPaneles });
+          }
         } catch {
           /* JSON inválido: lo reporta preview-json-contract */
         }
@@ -224,7 +247,7 @@ test('controles data-driven: cada control del panel reacciona en el host', { tim
   t.diagnostic(`tags con controles JSON: ${tags.map((x) => x.tag).join(', ') || '(ninguno aún)'}`);
   if (tags.length === 0) return t.skip('ningún preview declara controles todavía');
   const fallos: Fallo[] = [];
-  for (const { tag, nPaneles } of tags) {
+  for (const { tag, cat, nPaneles } of tags) {
     const marcador = ctx!.consola.length;
     try {
       await abrirGaleria(page, tag, { ms: 4500 });
@@ -237,9 +260,11 @@ test('controles data-driven: cada control del panel reacciona en el host', { tim
     if (paneles.length < nPaneles) {
       fallos.push({ tag, control: '(panel)', detalle: `se esperaban ${nPaneles} paneles, montados ${paneles.length}` });
     }
+    const propsEjercitados = new Set<string>();
     for (const panel of paneles) {
       for (const c of panel.spec) {
         const { v, esperado } = nuevoValor(c);
+        propsEjercitados.add(c.prop.replace(/^(attr:|prop:)/, ''));
         const res = await manipularYVerificar(page, panel.idx, c, v, esperado);
         if (res === null) {
           fallos.push({ tag, control: `${c.control}:${c.prop}`, detalle: 'host no resuelto' });
@@ -254,6 +279,18 @@ test('controles data-driven: cada control del panel reacciona en el host', { tim
         }
         await esperarMs(80);
       }
+    }
+    // Objetivos documentados: si el componente tiene .md, cada prop controlada
+    // debe estar documentada (verificación por testing de la documentación).
+    const md = mdDelComponente(tag, cat);
+    if (md) {
+      for (const prop of propsEjercitados) {
+        if (!md.includes(prop.toLowerCase())) {
+          fallos.push({ tag, control: `md:${prop}`, detalle: `no aparece en la documentación del componente` });
+        }
+      }
+    } else {
+      t.diagnostic(`sin .md para ${tag} (${cat}): se omite la verificación documental`);
     }
     const problemas = problemasDeConsola(ctx!.consola.slice(marcador));
     if (problemas.length) {

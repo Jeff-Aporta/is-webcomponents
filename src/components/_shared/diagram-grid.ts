@@ -48,15 +48,7 @@ export function cellCost(g, col: number, row: number) {
 }
 
 /** Aplica un costo a todas las celdas que tocan el rectángulo (px). `add=false` fija el valor. */
-export function applyRectCost(
-  g,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  cost,
-  add = false,
-) {
+export function applyRectCost(g, x: number, y: number, w: number, h: number, cost, add = false) {
   // El rect cubre el intervalo semiabierto [x, x+w) × [y, y+h): la última
   // celda que realmente toca es la que contiene x+w-ε, no ceil((x+w)/grid)
   // sin restar 1. Con la fórmula anterior, un nodo que termina justo en un

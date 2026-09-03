@@ -476,14 +476,7 @@ export function routeSequenceHorizontal(fromX, toX, y, g) {
  * waypoints colapsaba el tercer segmento a 1 celda (8px) — el resultado era
  * una línea vertical con flecha, no la herradura que distingue un self-loop.
  */
-export function routeSequenceSelf(
-  lifelineX,
-  y,
-  g,
-  side = 1,
-  loopW: number = 40,
-  loopH: number = 24,
-) {
+export function routeSequenceSelf(lifelineX, y, g, side = 1, loopW: number = 40, loopH: number = 24) {
   const gx = snapDiagramGrid(lifelineX);
   const gy = snapDiagramGrid(y);
   const wCells = Math.max(2, Math.round(loopW / g.grid));

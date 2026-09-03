@@ -20,7 +20,7 @@
 export type Caja = { x: number; y: number; w: number; h: number; };
 
 /** Un componente del diagrama. */
-export interface Componente extends Caja {
+export type Componente = Caja & {
   id: string;
   /** Id del paquete que lo contiene; `undefined` si va suelto. */
   package?: string | undefined;
@@ -39,7 +39,7 @@ export interface Componente extends Caja {
   connects?: unknown[];
   /** Endpoints o líneas del cuerpo de la caja. */
   items?: unknown[];
-}
+};
 
 /**
  * Un paquete: contorno que agrupa componentes.
@@ -47,20 +47,16 @@ export interface Componente extends Caja {
  * Su geometría no la pone el consumidor, la calcula el empaquetado como unión
  * ortogonal de sus hijos — por eso hereda de `Caja` igual que un componente.
  */
-export interface Paquete extends Caja {
+export type Paquete = Caja & {
   id: string;
   name?: string;
   stereotype?: string | undefined;
   /** Matiz de color; lo elige el consumidor. */
   hue?: number | undefined;
-}
+};
 
 /** Arista entre dos componentes, por id. */
-export interface Arista {
-  from: string;
-  to: string;
-  [extra: string]: unknown;
-}
+export type Arista = { from: string; to: string; [extra: string]: unknown; };
 
 /** Lado de una caja por el que entra o sale una arista. */
 export type Lado = 'top' | 'right' | 'bottom' | 'left';
@@ -72,7 +68,7 @@ export type Lado = 'top' | 'right' | 'bottom' | 'left';
  * aristas, que se llaman con el mismo objeto. Separarlo en dos exigiría tocar
  * a los dos consumidores; se deja documentado por bloques.
  */
-export interface OpcionesEmpaque {
+export type OpcionesEmpaque = {
   /** `manual` no recoloca nada; `triptych` usa el layout de tres columnas. */
   mode?: 'manual' | 'triptych' | string;
   /** Ids de paquetes que se disuelven antes de empaquetar. */
@@ -103,13 +99,10 @@ export interface OpcionesEmpaque {
   frame?: Caja;
   /** Segmentos ya ocupados por otras aristas, para no solaparlas. */
   usedSegs?: unknown[];
-}
+};
 
 /** Punto suelto: extremos y vértices de las aristas trazadas. */
-export interface Punto {
-  x: number;
-  y: number;
-}
+export type Punto = { x: number; y: number; };
 
 /**
  * Interfaz UML anclada al borde de un componente (la «piruleta»).
@@ -117,7 +110,7 @@ export interface Punto {
  * `cx`/`cy` no vienen del payload: los calcula el trazado y los escribe aquí,
  * por eso son opcionales y mutables.
  */
-export interface InterfazUml {
+export type InterfazUml = {
   id: string;
   /** Id del componente al que se ancla. */
   component: string;
@@ -130,4 +123,4 @@ export interface InterfazUml {
   cy?: number;
   /** La calcula el trazado: si quedó pegada a otra interfaz. */
   docked?: boolean;
-}
+};
