@@ -15,6 +15,44 @@
         {
           "kind": "demo",
           "html": "<is-button id=\"pop1\">Show popover</is-button>\r\n          <is-popover for=\"pop1\">\r\n            <div class=\"stack\">\r\n              <p style=\"margin:0\">This popover contains interactive content.</p>\r\n              <is-button color=\"brand\" data-popover=\"close\">Take Action</is-button>\r\n            </div>\r\n          </is-popover>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:placement",
+                "label": "placement",
+                "options": [
+                  "top",
+                  "bottom",
+                  "left",
+                  "right",
+                  "bottom-end"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:flip",
+                "label": "flip"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:shift",
+                "label": "shift"
+              },
+              {
+                "control": "text",
+                "prop": "attr:boundary",
+                "label": "boundary"
+              },
+              {
+                "control": "select",
+                "prop": "attr:auto-size",
+                "label": "auto-size",
+                "options": [
+                  "both",
+                  "vertical"
+                ]
+              }
+          ],
           "equivNote": "Base de overlays anclados: click o API; cierre Escape/fuera.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-popover: trigger\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"trigger=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"click → toggle\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"manual → open()\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"Escape / fuera / close\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"click\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"manual\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

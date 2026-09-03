@@ -17,6 +17,80 @@
         {
           "kind": "demo",
           "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">appearance=\"segmented\" · select=\"single\" · <code class=\"code\">hue</code> por botón</span>\n                    <is-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n                      <is-button variant=\"plain\" value=\"lista\" hue=\"210\">\n                        <is-icon slot=\"start\" icon=\"mdi:format-list-bulleted\"></is-icon>\n                        Lista\n                      </is-button>\n                      <is-button variant=\"plain\" value=\"tabla\" hue=\"160\">\n                        <is-icon slot=\"start\" icon=\"mdi:table\"></is-icon>\n                        Tabla\n                      </is-button>\n                      <is-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">\n                        <is-icon slot=\"start\" icon=\"mdi:view-grid-outline\"></is-icon>\n                        Tarjetas\n                      </is-button>\n                    </is-button-group>\n                  </div>\n                  <p class=\"lede\" id=\"introLog\">vista: <code class=\"code\">lista</code></p>\n                </div>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:label",
+                "label": "label",
+                "options": [
+                  "Vista",
+                  "Alineación",
+                  "Opciones",
+                  "Periodo",
+                  "Formato",
+                  "Prioridad",
+                  "Plan",
+                  "Guardar",
+                  "Exportar",
+                  "Historial",
+                  "Demo"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:variant",
+                "label": "variant",
+                "options": [
+                  "segmented",
+                  "separated",
+                  "joined"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:select",
+                "label": "select",
+                "options": [
+                  "single",
+                  "multiple"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:value",
+                "label": "value",
+                "options": [
+                  "lista",
+                  "Centro",
+                  "Medio",
+                  "mes",
+                  "bold",
+                  "pro",
+                  "left",
+                  "B"
+                ]
+              },
+              {
+                "control": "text",
+                "prop": "attr:orientation",
+                "label": "orientation"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:allow-empty",
+                "label": "allow-empty"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:pill",
+                "label": "pill"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:stretch",
+                "label": "stretch"
+              }
+          ],
           "equivNote": "El kit aporta selección, hue y estilos. En HTML puro el análogo más cercano es un <code class=\"code\">radiogroup</code> con botones.",
           "equivHtml": "<div role=\"radiogroup\" aria-label=\"Vista\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"true\">Lista</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Tabla</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Tarjetas</button>\n</div>"
         },

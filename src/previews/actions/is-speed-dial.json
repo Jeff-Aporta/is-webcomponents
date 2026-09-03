@@ -21,6 +21,88 @@
         {
           "kind": "demo",
           "html": "<div class=\"stage\">\r\n            <is-speed-dial id=\"dial1\">\r\n              <is-speed-dial-action icon=\"mdi:content-copy\" label=\"Copiar\">Copiar</is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:share-variant\" label=\"Compartir\">Compartir</is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:download\" label=\"Descargar\">Descargar</is-speed-dial-action>\r\n              <is-speed-dial-action icon=\"mdi:pencil\" label=\"Editar\">Editar</is-speed-dial-action>\r\n            </is-speed-dial>\r\n          </div>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:label",
+                "label": "label",
+                "options": [
+                  "Copiar",
+                  "Compartir",
+                  "Descargar",
+                  "Editar",
+                  "Ajustes",
+                  "Tema",
+                  "Idioma",
+                  "Más",
+                  "Copiar enlace",
+                  "Crear",
+                  "Documento",
+                  "Imagen",
+                  "Enlace",
+                  "Evento",
+                  "Contacto",
+                  "Etiqueta",
+                  "Avisos",
+                  "Privacidad",
+                  "Todo",
+                  "Reporte",
+                  "Correo",
+                  "Ubicación",
+                  "Audio",
+                  "Video",
+                  "Código",
+                  "Carpeta",
+                  "Favorito"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:direction",
+                "label": "direction",
+                "options": [
+                  "left",
+                  "right",
+                  "radial"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:open",
+                "label": "open"
+              },
+              {
+                "control": "select",
+                "prop": "attr:data-wrapper",
+                "label": "data-wrapper",
+                "options": [
+                  ".radial-stage",
+                  ".radial-stage--tall",
+                  ".radial-stage--corner"
+                ]
+              },
+              {
+                "control": "number",
+                "prop": "attr:data-arc",
+                "label": "data-arc",
+                "min": 0,
+                "max": 180,
+                "step": 1
+              },
+              {
+                "control": "number",
+                "prop": "attr:data-start-angle",
+                "label": "data-start-angle",
+                "min": -90,
+                "max": 100,
+                "step": 1
+              },
+              {
+                "control": "text",
+                "prop": "attr:data-sweep",
+                "label": "data-sweep"
+              }
+          ],
           "equivNote": "direction lineal vs radial cambia el layout de acciones.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-speed-dial: layout\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"direction=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"radial → grid/flex\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"up/down/left/right\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"radial\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"lineal\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

@@ -16,6 +16,144 @@
         {
           "kind": "demo",
           "html": "<is-select id=\"sel\" label=\"Ciudad\" hint=\"Una sola opción\" placeholder=\"Elige una ciudad…\" name=\"city\" clearable style=\"max-width:20rem\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"med\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"barr\">Barranquilla</is-option>\r\n            <is-option value=\"buc\" disabled>Bucaramanga (no disponible)</is-option>\r\n            <is-option value=\"cta\">Cartagena</is-option>\r\n          </is-select>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:label",
+                "label": "label",
+                "options": [
+                  "Ciudad",
+                  "outlined (default)",
+                  "filled",
+                  "underlined",
+                  "Con hint",
+                  "Con error",
+                  "Error + filled",
+                  "normal",
+                  "full-width",
+                  "auto-width",
+                  "max-visible 4.5",
+                  "tags (default)",
+                  "text",
+                  "count",
+                  "limit-tags 2",
+                  "Personas",
+                  "Categoría",
+                  "Destino",
+                  "País",
+                  "Etiquetas",
+                  "Deshabilitado",
+                  "Con slot start",
+                  "Clearable"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:placeholder",
+                "label": "placeholder",
+                "options": [
+                  "Elige una ciudad…",
+                  "Sin selección…",
+                  "Ancho por defecto…",
+                  "Ocupa el resto…",
+                  "Estrecho…",
+                  "20 opciones…",
+                  "Selecciona…",
+                  "Elige una…",
+                  "Elige un destino…",
+                  "Obligatorio…",
+                  "Opcional…",
+                  "Buscar…"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:clearable",
+                "label": "clearable"
+              },
+              {
+                "control": "select",
+                "prop": "attr:value",
+                "label": "value",
+                "options": [
+                  "a",
+                  "js,css",
+                  "js,css,html",
+                  "js,ts,css,html",
+                  "oliver,april",
+                  "1"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:variant",
+                "label": "variant",
+                "options": [
+                  "filled",
+                  "underlined"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:error",
+                "label": "error"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:full-width",
+                "label": "full-width"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:auto-width",
+                "label": "auto-width"
+              },
+              {
+                "control": "number",
+                "prop": "attr:max-visible",
+                "label": "max-visible",
+                "min": 0,
+                "max": 100,
+                "step": 1
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:multiple",
+                "label": "multiple"
+              },
+              {
+                "control": "select",
+                "prop": "attr:selection-display",
+                "label": "selection-display",
+                "options": [
+                  "text",
+                  "count"
+                ]
+              },
+              {
+                "control": "number",
+                "prop": "attr:limit-tags",
+                "label": "limit-tags",
+                "min": 0,
+                "max": 100,
+                "step": 1
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:checkmarks",
+                "label": "checkmarks"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:required",
+                "label": "required"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:disabled",
+                "label": "disabled"
+              }
+          ],
           "equivNote": "Ramas de selección: multiple cambia FormData y cómo se muestra el valor.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-select: ramas\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"multiple?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"s\",\n          \"label\": \"single → value string\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"m\",\n          \"label\": \"multiple → CSV / tags\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"selection-display?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"t\",\n          \"label\": \"tags | text | count\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"s\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"m\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"m\",\n          \"to\": \"d\"\n        },\n        {\n          \"from\": \"d\",\n          \"to\": \"t\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

@@ -16,6 +16,23 @@
         {
           "kind": "demo",
           "html": "<div class=\"dock-stage\">\r\n            <is-dock>\r\n              <is-dock-item icon=\"mdi:home\" label=\"Inicio\" active></is-dock-item>\r\n              <is-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></is-dock-item>\r\n              <is-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></is-dock-item>\r\n            </is-dock>\r\n          </div>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:label",
+                "label": "label",
+                "options": [
+                  "Inicio",
+                  "Reportes",
+                  "Ajustes"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:active",
+                "label": "active"
+              }
+          ],
           "contain": true
         },
         {

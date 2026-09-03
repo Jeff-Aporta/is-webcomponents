@@ -376,7 +376,12 @@
       await customElements.whenDefined('is-preview-component');
       const L = globalThis.ISWebComponentsLoader;
       if (!L) return;
-      const tags = [...new Set([...GALLERY_CHROME_TAGS, ...collectIsTags(preview.definition ?? preview)])];
+      let tags = [...new Set([...GALLERY_CHROME_TAGS, ...collectIsTags(preview.definition ?? preview)])];
+      // Los demos pueden citar tags de soporte sin catálogo (chrome hijos como
+      // is-tab): pedirlos al loader tiraba el mount entero. Solo cargar los
+      // que el catálogo sabe resolver; el resto queda como markup declarativo.
+      tags = tags.filter((t) => L.catalog?.tags?.[t]
+        || L.catalog?.categories?.[L.catalog.aliases?.[t] || t]);
       if (tags.length) await L.load(...tags);
       if (tag.startsWith('is-') && !customElements.get(tag)) {
         await customElements.whenDefined(tag);

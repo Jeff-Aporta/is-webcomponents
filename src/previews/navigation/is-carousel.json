@@ -16,6 +16,49 @@
         {
           "kind": "demo",
           "html": "<is-carousel id=\"c1\" loop>\r\n            <is-carousel-item><div class=\"slide s1\">Slide 1</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s2\">Slide 2</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s3\">Slide 3</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s4\">Slide 4</div></is-carousel-item>\r\n            <is-carousel-item><div class=\"slide s5\">Slide 5</div></is-carousel-item>\r\n          </is-carousel>\r\n          <p id=\"c1Log\" class=\"lede\">Slide: <code class=\"code\">0</code></p>",
+          "controls": [
+              {
+                "control": "boolean",
+                "prop": "attr:loop",
+                "label": "loop"
+              },
+              {
+                "control": "number",
+                "prop": "attr:autoplay",
+                "label": "autoplay",
+                "min": 0,
+                "max": 2000,
+                "step": 1
+              },
+              {
+                "control": "number",
+                "prop": "attr:slides-per-page",
+                "label": "slides-per-page",
+                "min": 0,
+                "max": 100,
+                "step": 1
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:vertical",
+                "label": "vertical"
+              },
+              {
+                "control": "text",
+                "prop": "attr:aspect-ratio",
+                "label": "aspect-ratio"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:without-indicators",
+                "label": "without-indicators"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:without-controls",
+                "label": "without-controls"
+              }
+          ],
           "equivNote": "autoplay y flags de chrome (controls/indicators).",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-carousel: autoplay\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"autoplay?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"timer (+ pause hover)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"solo manual\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"without-controls?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"sin flechas\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

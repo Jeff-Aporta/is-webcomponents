@@ -15,6 +15,32 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</is-callout>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:color",
+                "label": "color",
+                "options": [
+                  "brand",
+                  "neutral",
+                  "success",
+                  "warning",
+                  "danger"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:variant",
+                "label": "variant",
+                "options": [
+                  "accent",
+                  "filled-outlined",
+                  "filled",
+                  "outlined",
+                  "plain"
+                ]
+              }
+          ],
           "equivNote": "color sugiere icono; slot o icon vacío lo anulan.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-callout: icono\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"slot icon?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"override slot\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"icon=\\\"\\\"?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"sin icono\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"default por color\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

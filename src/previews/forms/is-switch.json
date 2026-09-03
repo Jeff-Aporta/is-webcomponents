@@ -16,6 +16,93 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <is-switch name=\"notificaciones\" checked>Notificaciones</is-switch>\r\n            <is-switch name=\"beta\">Funciones beta</is-switch>\r\n            <is-switch name=\"bloqueado\" checked disabled>Bloqueado por política</is-switch>\r\n          </div>",
+          "controls": [
+              {
+                "control": "boolean",
+                "prop": "attr:checked",
+                "label": "checked"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:disabled",
+                "label": "disabled"
+              },
+              {
+                "control": "select",
+                "prop": "attr:color",
+                "label": "color",
+                "options": [
+                  "neutral",
+                  "success",
+                  "warning",
+                  "danger"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:label-placement",
+                "label": "label-placement",
+                "options": [
+                  "start",
+                  "top",
+                  "bottom"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:checked-icon",
+                "label": "checked-icon",
+                "options": [
+                  "mdi:white-balance-sunny",
+                  "mdi:check",
+                  "mdi:lock"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:on-label",
+                "label": "on-label",
+                "options": [
+                  "ON",
+                  "SÍ",
+                  "24h"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:off-label",
+                "label": "off-label",
+                "options": [
+                  "OFF",
+                  "NO",
+                  "12h"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:readonly",
+                "label": "readonly"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:error",
+                "label": "error"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:required",
+                "label": "required"
+              },
+              {
+                "control": "select",
+                "prop": "attr:value",
+                "label": "value",
+                "options": [
+                  "si",
+                  "semanal"
+                ]
+              }
+          ],
           "equivNote": "Como checkbox: solo el estado on aporta al FormData.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-switch: FormData\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"checked?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"on → aporta value\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"off → no envía\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"readonly / disabled\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

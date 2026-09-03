@@ -24,6 +24,49 @@
         {
           "kind": "demo",
           "html": "<div class=\"bc-check\">\r\n            <div class=\"bc-case\">\r\n              <is-barcode type=\"ean13\" value=\"770123456789\" height=\"70\"></is-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">770123456789</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">7701234567897</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>770 · Colombia</dd>\r\n              </dl>\r\n            </div>\r\n\r\n            <div class=\"bc-case\">\r\n              <is-barcode type=\"ean13\" value=\"750103131130\" height=\"70\"></is-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">750103131130</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">7501031311309</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>750 · México</dd>\r\n              </dl>\r\n            </div>\r\n\r\n            <div class=\"bc-case\">\r\n              <is-barcode type=\"ean13\" value=\"400638133393\" height=\"70\"></is-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">400638133393</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">4006381333931</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>400 · Alemania</dd>\r\n              </dl>\r\n            </div>\r\n          </div>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:type",
+                "label": "type",
+                "options": [
+                  "ean13",
+                  "code128"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:value",
+                "label": "value",
+                "options": [
+                  "770123456789",
+                  "750103131130",
+                  "400638133393",
+                  "INSOFT-2026-001",
+                  "LOTE-7782-A",
+                  "CEDULA 1234567890",
+                  "DEMO-INSOFT"
+                ]
+              },
+              {
+                "control": "number",
+                "prop": "attr:height",
+                "label": "height",
+                "min": 0,
+                "max": 100,
+                "step": 1
+              },
+              {
+                "control": "text",
+                "prop": "attr:fg",
+                "label": "fg"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:show-text",
+                "label": "show-text"
+              }
+          ],
           "heading": "Qué lee un escáner en cada código"
         },
         {

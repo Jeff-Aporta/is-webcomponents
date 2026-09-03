@@ -15,6 +15,13 @@
         {
           "kind": "demo",
           "html": "<is-breadcrumb>\r\n            <is-breadcrumb-item href=\"#\"><is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>Inicio</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"#\">Contabilidad</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"#\">Comprobantes</is-breadcrumb-item>\r\n            <is-breadcrumb-item>Detalle</is-breadcrumb-item>\r\n          </is-breadcrumb>",
+          "controls": [
+              {
+                "control": "text",
+                "prop": "attr:href",
+                "label": "href"
+              }
+          ],
           "equivNote": "Con href pinta enlace; vacío = current; sin href = span.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-breadcrumb-item: host\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"tiene href?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"elemento a (enlace)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"href vacío?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"página actual (span)\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"span SPA\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"\\\"\\\"\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"a\",\n          \"label\": \"url\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

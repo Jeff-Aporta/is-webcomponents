@@ -22,6 +22,13 @@
         {
           "kind": "demo",
           "html": "<div class=\"canvas\" id=\"canvas1\">Clic derecho aquí →</div>\r\n          <is-context-menu for=\"#canvas1\">\r\n            <button class=\"item\" data-value=\"open\">Abrir</button>\r\n            <button class=\"item\" data-value=\"open-tab\">Abrir en pestaña nueva</button>\r\n            <button class=\"item\" data-value=\"duplicate\">Duplicar</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"rename\">Renombrar…</button>\r\n            <button class=\"item\" data-value=\"properties\">Propiedades</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"delete\" disabled>Eliminar</button>\r\n          </is-context-menu>",
+          "controls": [
+              {
+                "control": "boolean",
+                "prop": "attr:scroll-lock",
+                "label": "scroll-lock"
+              }
+          ],
           "equivNote": "Por defecto el scroll cierra el menú; scroll-lock lo evita.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-context-menu: scroll\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"scroll-lock?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"congela documento\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"scroll → cierra\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

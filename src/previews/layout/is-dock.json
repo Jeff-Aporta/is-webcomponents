@@ -21,6 +21,37 @@
         {
           "kind": "demo",
           "html": "<div class=\"stage\"></div>\r\n          <is-dock>\r\n            <is-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></is-dock-item>\r\n            <is-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></is-dock-item>\r\n            <is-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></is-dock-item>\r\n            <is-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></is-dock-item>\r\n            <is-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></is-dock-item>\r\n            <is-dock-item label=\"Música\"     icon=\"mdi:music\"></is-dock-item>\r\n            <is-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></is-dock-item>\r\n          </is-dock>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:label",
+                "label": "label",
+                "options": [
+                  "Inicio",
+                  "Buscar",
+                  "Mensajes",
+                  "Calendario",
+                  "Notas",
+                  "Música",
+                  "Ajustes",
+                  "VS Code",
+                  "Git",
+                  "Terminal",
+                  "Docker",
+                  "Browser"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:active",
+                "label": "active"
+              },
+              {
+                "control": "text",
+                "prop": "attr:position",
+                "label": "position"
+              }
+          ],
           "contain": true
         }
       ]

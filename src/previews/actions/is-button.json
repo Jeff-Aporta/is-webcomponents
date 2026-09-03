@@ -16,6 +16,118 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">// El caso más simple</span>\r\n          <div class=\"demo-row\">\r\n            <is-button>Hola mundo</is-button>\r\n            <is-button color=\"brand\">Guardar</is-button>\r\n            <is-button color=\"success\" variant=\"outlined\">\r\n              <is-icon slot=\"start\" icon=\"mdi:check\"></is-icon>\r\n              Aprobado\r\n            </is-button>\r\n          </div>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:color",
+                "label": "color",
+                "options": [
+                  "brand",
+                  "success",
+                  "neutral",
+                  "warning",
+                  "danger",
+                  "info",
+                  "error",
+                  "#ae3ec9",
+                  "#0ca678",
+                  "#d9480f"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:variant",
+                "label": "variant",
+                "options": [
+                  "outlined",
+                  "plain",
+                  "filled",
+                  "ghost"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:pill",
+                "label": "pill"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:with-caret",
+                "label": "with-caret"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:loading",
+                "label": "loading"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:disabled",
+                "label": "disabled"
+              },
+              {
+                "control": "text",
+                "prop": "attr:target",
+                "label": "target"
+              },
+              {
+                "control": "text",
+                "prop": "attr:rel",
+                "label": "rel"
+              },
+              {
+                "control": "text",
+                "prop": "attr:download",
+                "label": "download"
+              },
+              {
+                "control": "select",
+                "prop": "attr:type",
+                "label": "type",
+                "options": [
+                  "submit",
+                  "reset"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:value",
+                "label": "value",
+                "options": [
+                  "save",
+                  "publish"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:color-hover",
+                "label": "color-hover",
+                "options": [
+                  "#862e9c",
+                  "#087f5b",
+                  "#a03406"
+                ]
+              },
+              {
+                "control": "text",
+                "prop": "attr:color-active",
+                "label": "color-active"
+              },
+              {
+                "control": "select",
+                "prop": "attr:radius",
+                "label": "radius",
+                "options": [
+                  "0",
+                  "18px"
+                ]
+              },
+              {
+                "control": "text",
+                "prop": "attr:border-width",
+                "label": "border-width"
+              }
+          ],
           "equivNote": "Segun attrs, el host se comporta como button o como enlace. El diagrama resume las ramas — clic para abrir el lightbox.",
           "equivHtml": "<button type=\"button\">Accion</button>",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"Que pinta is-button\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        { \"id\": \"q\", \"label\": \"tiene href?\", \"shape\": \"diamond\" },\n        { \"id\": \"a\", \"label\": \"elemento a (enlace)\", \"shape\": \"stadium\" },\n        { \"id\": \"q2\", \"label\": \"type submit/reset?\", \"shape\": \"diamond\" },\n        { \"id\": \"b\", \"label\": \"button submit|reset\", \"shape\": \"stadium\" },\n        { \"id\": \"c\", \"label\": \"button type=button\", \"shape\": \"stadium\" }\n      ],\n      \"edges\": [\n        { \"from\": \"q\", \"to\": \"a\", \"label\": \"si\" },\n        { \"from\": \"q\", \"to\": \"q2\", \"label\": \"no\" },\n        { \"from\": \"q2\", \"to\": \"b\", \"label\": \"si\" },\n        { \"from\": \"q2\", \"to\": \"c\", \"label\": \"no\" }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

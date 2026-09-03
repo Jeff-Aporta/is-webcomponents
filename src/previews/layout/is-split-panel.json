@@ -175,6 +175,33 @@
         {
           "kind": "demo",
           "html": "<div class=\"split-stage\" style=\"height: 180px;\">\r\n            <is-split-panel id=\"apiSplit\" style=\"height: 100%;\">\r\n              <div slot=\"start\" class=\"panel-demo\"><h4>Start</h4><p>Pos: <span id=\"apiPos\">50</span>%</p></div>\r\n              <div slot=\"end\" class=\"panel-demo panel-demo--alt\"><h4>End</h4></div>\r\n            </is-split-panel>\r\n          </div>\r\n\r\n          <div class=\"demo-row\" style=\"margin-top: 12px;\">\r\n            <is-button id=\"apiPosBtn\" color=\"neutral\" variant=\"outlined\">position += 10</is-button>\r\n            <is-button id=\"apiEnd\" color=\"neutral\" variant=\"outlined\">primary=end</is-button>\r\n            <is-button id=\"apiStart\" color=\"neutral\" variant=\"outlined\">primary=start</is-button>\r\n            <is-button id=\"apiVertical\" color=\"neutral\" variant=\"outlined\">toggle orientation</is-button>\r\n            <is-button id=\"apiDisabled\" color=\"neutral\" variant=\"outlined\">toggle disabled</is-button>\r\n          </div>",
+          "controls": [
+              {
+                "control": "text",
+                "prop": "attr:storage-key",
+                "label": "storage-key"
+              },
+              {
+                "control": "text",
+                "prop": "attr:orientation",
+                "label": "orientation"
+              },
+              {
+                "control": "text",
+                "prop": "attr:primary",
+                "label": "primary"
+              },
+              {
+                "control": "text",
+                "prop": "attr:snap",
+                "label": "snap"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:disabled",
+                "label": "disabled"
+              }
+          ],
           "equivNote": "orientation + primary definen qué panel absorbe el resize.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-split-panel: primary\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"orientation=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"horizontal\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"vertical\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"primary=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"start crece\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"end crece\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"H\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"V\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"start\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"end\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"

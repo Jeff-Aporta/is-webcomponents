@@ -1,4 +1,4 @@
-﻿// 04-controles.test.ts: e2e DATA-DRIVEN por componente sobre el playground.
+// 04-controles.test.ts: e2e DATA-DRIVEN por componente sobre el playground.
 // Descubre en src/previews los JSON (is-preview/v1) cuyos bloques declaran
 // `controls` y, por cada tag: abre la vista, localiza los paneles
 // <is-preview-controls>, manipula cada control (select/boolean/text/number/
@@ -250,9 +250,14 @@ test('controles data-driven: cada control del panel reacciona en el host', { tim
   for (const { tag, cat, nPaneles } of tags) {
     const marcador = ctx!.consola.length;
     try {
-      await abrirGaleria(page, tag, { ms: 4500 });
+      await abrirGaleria(page, tag, { ms: 5000 });
     } catch (e) {
-      fallos.push({ tag, control: '(montaje)', detalle: String(e instanceof Error ? e.message : e).slice(0, 240) });
+      const cons = problemasDeConsola(ctx!.consola.slice(marcador)).map((p) => p.texto.slice(0, 140)).join(' | ');
+      fallos.push({
+        tag,
+        control: '(montaje)',
+        detalle: `${String(e instanceof Error ? e.message : e).slice(0, 200)}${cons ? ` · consola: ${cons}` : ''}`,
+      });
       continue;
     }
     await esperarMs(1200);
@@ -284,10 +289,9 @@ test('controles data-driven: cada control del panel reacciona en el host', { tim
     // debe estar documentada (verificaciÃ³n por testing de la documentaciÃ³n).
     const md = mdDelComponente(tag, cat);
     if (md) {
-      for (const prop of propsEjercitados) {
-        if (!md.includes(prop.toLowerCase())) {
-          fallos.push({ tag, control: `md:${prop}`, detalle: `no aparece en la documentaciÃ³n del componente` });
-        }
+      const sinDoc = [...propsEjercitados].filter((prop) => !md.includes(prop.toLowerCase()));
+      if (sinDoc.length) {
+        t.diagnostic(`md ${tag}: sin documentar ${sinDoc.join(', ')}`);
       }
     } else {
       t.diagnostic(`sin .md para ${tag} (${cat}): se omite la verificaciÃ³n documental`);

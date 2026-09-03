@@ -15,6 +15,38 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-details summary=\"¿Qué es InSoft?\">\r\n            InSoft es un ERP modular para empresas medianas que necesitan integrar\r\n            contabilidad, inventario, facturación y CRM en una sola plataforma.\r\n          </is-details>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:variant",
+                "label": "variant",
+                "options": [
+                  "outlined",
+                  "filled",
+                  "filled-outlined",
+                  "plain"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:icon-placement",
+                "label": "icon-placement",
+                "options": [
+                  "end",
+                  "start"
+                ]
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:open",
+                "label": "open"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:disabled",
+                "label": "disabled"
+              }
+          ],
           "equivNote": "Varios details con el mismo name se comportan como accordion.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-details: accordion\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mismo name?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"accordion (uno abierto)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"disclosure independiente\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
