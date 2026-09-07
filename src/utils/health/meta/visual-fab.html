@@ -1,0 +1,109 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>visual · is-fab</title>
+<!--
+  Banco de pruebas visual de <is-fab>. No es un test automatico: es la pagina
+  que se fotografia con Chrome headless (--screenshot) antes y despues de un
+  refactor para comprobar a ojo que la pinta no cambia.
+
+  Cubre la matriz que el CSS del componente distingue: cada color, extendido o
+  no, con sombra y sin ella, y las tres escalas de font-size. `position` se
+  fuerza a `inline` en todos para que quepan en la foto (el valor real es
+  fixed y los apilaria en la esquina).
+-->
+<link rel="stylesheet" href="/src/styles/is-base.css">
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: var(--is-bg, #0d1117);
+    color: var(--is-text, #e8eaf1);
+    font-family: system-ui, sans-serif;
+  }
+
+  section {
+    margin-bottom: 28px;
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.65;
+    }
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    small {
+      font-size: 11px;
+      opacity: 0.55;
+    }
+  }
+</style>
+
+<section>
+  <h2>color × circular</h2>
+  <div class="row" id="colores"></div>
+</section>
+
+<section>
+  <h2>color × extended</h2>
+  <div class="row" id="extendidos"></div>
+</section>
+
+<section>
+  <h2>escala (font-size) · sin sombra · pulse</h2>
+  <div class="row" id="varios"></div>
+</section>
+
+<script type="module">
+  import '/src/components/actions/fab.js';
+
+  // El vocabulario de `color` de is-fab es INTENT (5 valores), no los 7 de
+  // is-button: info/error no forman parte del contrato del fab.
+  const COLORES = ['brand', 'neutral', 'success', 'warning', 'danger'];
+
+  /** Crea una celda etiquetada con el <is-fab> ya configurado. */
+  const celda = (etiqueta, attrs, texto = '') => {
+    const box = document.createElement('div');
+    box.className = 'cell';
+    const fab = document.createElement('is-fab');
+    fab.setAttribute('position', 'inline');
+    for (const [k, v] of Object.entries(attrs)) fab.setAttribute(k, v);
+    if (texto) fab.textContent = texto;
+    const cap = document.createElement('small');
+    cap.textContent = etiqueta;
+    box.append(fab, cap);
+    return box;
+  };
+
+  for (const c of COLORES) {
+    colores.append(celda(c, { color: c, icon: 'mdi:plus' }));
+    extendidos.append(celda(c, { color: c, icon: 'mdi:plus', extended: '' }, 'Crear'));
+  }
+
+  for (const size of ['0.75em', '1em', '1.25em']) {
+    const box = celda(`size ${size}`, { icon: 'mdi:plus' });
+    box.querySelector('is-fab').style.fontSize = size;
+    varios.append(box);
+  }
+  varios.append(
+    celda('without-shadow', { icon: 'mdi:pencil', 'without-shadow': '' }),
+    celda('pulse', { icon: 'mdi:bell', pulse: '' }),
+    celda('href', { icon: 'mdi:link', href: '#x' }),
+    celda('label attr', { icon: 'mdi:plus', extended: '', label: 'Nuevo' }),
+  );
+</script>
