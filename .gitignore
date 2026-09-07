@@ -14,14 +14,19 @@ dist/**/*.map
 
 dist/cdn/assets/icons/.state/
 
-tests/*.tmp
-tests/coverage/
-tests/.cache/
-tests/_author-index.json
+src/utils/health/**/*.tmp
+src/utils/health/coverage/
+src/utils/health/.cache/
+src/utils/health/_author-index.json
 
 .tmp/
 
 
 .superpowers/
 .wrangler/
+
+# Specs locales del superpowers (auto-generadas, decisión del proyecto).
+# El plugin auditor tiene los templates canónicos en `specs/commons/auditoria/`
+# y los replanta write-once; los duplicados locales se ignoran.
+docs/superpowers/
 
