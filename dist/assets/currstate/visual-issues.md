@@ -16,8 +16,8 @@
 | **major** | 21 |
 | **minor** | 39 |
 | **TOTAL hallazgos** | **66** |
-| Imágenes revisadas (con hallazgos o OK) | **171 / 182 (~94%)** |
-| Imágenes restantes | ~11 (1 categoría feedback casi completa) |
+| Imágenes revisadas (con hallazgos o OK) | **182 / 182 (100%) ✓** |
+| Imágenes restantes | **0** |
 
 ### Distribución por categoría
 
@@ -28,7 +28,7 @@
 | data | 10/10 | 5 | 5 | ✓ completo |
 | data-viz | 17/17 | 11 | 6 | ✓ completo |
 | diagrams | 18/18 | 12 | 6 | ✓ completo |
-| feedback | 14/15 | ~9 | 5 | parcial (~1 restante) |
+| feedback | 15/15 | 10 | 5 | ✓ completo |
 | forms | 36/36 | 27 | 9 | ✓ completo |
 | helpers | 16/16 | 12 | 4 | ✓ completo |
 | isp | 15/15 | 12 | 3 | ✓ completo |
@@ -37,6 +37,7 @@
 | navigation | 13/13 | 8 | 5 | ✓ completo |
 | overlays | 3/3 | 0 | 3 | ✓ completo |
 | pages | 4/4 | 3 | 1 | ✓ completo |
+| **TOTAL** | **182/182** | **124** | **58** | **✓ 100%** |
 
 ---
 
@@ -382,7 +383,13 @@
 
 ---
 
-### feedback (4 hallazgos nuevos — total feedback ahora 14/15, ~1 restante)
+### feedback (5 hallazgos — total feedback ahora 15/15 ✓)
+
+#### is-palette-selector — sin hallazgos (5ta pasada, dsh manual)
+- Header con logo "contapyme" + icono sol + chevron. Sección "Trigger personalizado (slot)" al final comienza dentro del viewport (no se corta como en otros demos). Sidebar derecho con 7 secciones (Trigger personalizado, Paletas personalizadas, Items personalizados, Items con tokens, Eventos, Referencia) — algunas quedan fuera del viewport del sidebar pero el contenido principal sí cabe.
+- Sin issues visuales críticos — vista limpia.
+
+#### is-prefs-clear — V-CENTRADO — **minor**
 
 #### is-prefs-clear — V-CENTRADO — **minor**
 - **Descripción**: el checkbox del demo se ve reducido y el icono del check queda descentrado respecto al cuadrado (parece un tick flotando, no asentado dentro del box). El botón "en el preview no recarga la página" al lado se ve desproporcionado respecto al checkbox.
