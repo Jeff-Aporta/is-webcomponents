@@ -6,6 +6,7 @@ import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
@@ -297,7 +298,28 @@ class IsErDiagram extends DiagramElementBase {
         fill: theme.text, 'font-size': '11', 'font-weight': '700',
         'font-family': 'Tahoma,Arial,sans-serif',
       });
-      nameT.textContent = e.name;
+      // Wrap del nombre de la entidad si es largo.
+      const entityResult = wrapText({
+        text: e.name,
+        maxWidth: e.w - 12,
+        maxHeight: ER_HEADER_H - 4,
+        fontSize: 11,
+        fontFamily: 'Tahoma,Arial,sans-serif',
+        overflow: e.overflow ?? 'grow',
+      });
+      const entityTspans = buildTspans(
+        entityResult.lines,
+        e.x + 6, e.y, e.w - 12, ER_HEADER_H,
+        'middle', 11, 1.2,
+      );
+      for (const span of entityTspans) {
+        const ts = svgEl('tspan', {
+          x: span.x, y: span.y,
+          ...(span.dy != null ? { dy: span.dy } : {}),
+        });
+        ts.textContent = span.text;
+        nameT.appendChild(ts);
+      }
       g.appendChild(nameT);
 
       e.attributes.forEach((a, i) => {
