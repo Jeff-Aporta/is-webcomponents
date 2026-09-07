@@ -4,6 +4,7 @@ import { resolveSankeySpec, computeSankeyLayout } from './sankey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
@@ -186,14 +187,45 @@ class IsSankeyDiagram extends DiagramElementBase {
       }));
 
       const right = n.labelSide === 'right';
+      const labelHasMd = /[*`\[]/.test(n.label) || n.label.includes('{{');
       const t = svgEl('text', {
-        x: right ? n.x + n.w + 8 : n.x - 8,
-        y: n.y + n.h / 2 + 3.5,
-        'text-anchor': right ? 'start' : 'end',
         fill: theme.text, 'font-size': '11', 'font-weight': '600',
         'font-family': 'Tahoma,Arial,sans-serif',
       });
-      t.innerHTML = inlineMdWeb(n.label);
+      if (labelHasMd) {
+        // Markdown inline: foreignObject para preservar el formato.
+        const xPos = right ? n.x + n.w + 8 : n.x - 8;
+        t.setAttribute('x', xPos);
+        t.setAttribute('y', n.y + n.h / 2 + 3.5);
+        t.setAttribute('text-anchor', right ? 'start' : 'end');
+        t.innerHTML = inlineMdWeb(n.label);
+      } else {
+        // Wrap con el helper. El ancho disponible es el alto del nodo
+        // (porque los labels van horizontales a la derecha/izquierda del bar).
+        const xPos = right ? n.x + n.w + 8 : n.x - 8;
+        const skresult = wrapText({
+          text: n.label,
+          maxWidth: Math.max(n.h, 60),
+          maxHeight: 60,
+          fontSize: 11,
+          fontFamily: 'Tahoma,Arial,sans-serif',
+          overflow: n.overflow ?? 'ellipsis',
+        });
+        const sktspans = buildTspans(
+          skresult.lines,
+          xPos, n.y, 200, n.h,
+          right ? 'start' : 'end', 11, 1.2,
+        );
+        t.setAttribute('y', n.y + 12);
+        for (const span of sktspans) {
+          const ts = svgEl('tspan', {
+            x: span.x, y: span.y,
+            ...(span.dy != null ? { dy: span.dy } : {}),
+          });
+          ts.textContent = span.text;
+          t.appendChild(ts);
+        }
+      }
       g.appendChild(t);
 
       const value = svgEl('text', {
