@@ -35,3 +35,7 @@ EXEC-PLAN-*.md
 HANDOFF-*.md
 WIP-*.md
 
+# Evidencias full e2e (currstate): se regeneran en cada corrida del test
+# 05-cobertura-total.test.ts; no se versionan (salida de evidencia, no código).
+dist/assets/currstate/
+

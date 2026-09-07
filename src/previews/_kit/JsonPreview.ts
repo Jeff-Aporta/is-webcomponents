@@ -15,6 +15,9 @@ type CtxMontaje = { main?: HTMLElement | null; root?: HTMLElement | null; aside?
 /** Módulo de comportamiento opcional (behaviors/<tag>.js). */
 type ModuloBehavior = { mount?(ctx: CtxMontaje, preview: unknown): unknown; unmount?(ctx: CtxMontaje, preview: unknown): void; };
 
+/** Vista del preview con su definición (la base la expone congelada). */
+type ConDefinicion = { definition: DefinicionPreview };
+
 export class JsonPreview extends ISComponentPreview {
   #behavior: ModuloBehavior | null = null;
 
@@ -35,7 +38,7 @@ export class JsonPreview extends ISComponentPreview {
     if (this.#behavior?.mount) await this.#behavior.mount(ctx, this);
     // Playground JSON-driven: paneles de controles de los bloques demo/html
     // que declaren `controls` (se aplican vía JSON -> prop/attr del host).
-    const definition = (this as unknown as { definition: DefinicionPreview }).definition;
+    const definition = (this as unknown as ConDefinicion).definition;
     try {
       await montarControles(definition, ctx);
     } catch (e) {

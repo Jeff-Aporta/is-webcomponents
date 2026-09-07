@@ -7,7 +7,8 @@ import { spawn } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { levantarServidor, type ServidorE2E } from './lib/server.ts';
+import { levantarServidor } from './lib/server.ts';
+import type { ServidorE2E } from './lib/server.ts';
 import { ENV } from './lib/env.ts';
 import { descargarConfigE2E } from './lib/vendor-e2e-config.ts';
 

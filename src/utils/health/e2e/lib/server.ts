@@ -4,7 +4,8 @@
 // en crudo (src/previews/registry.ts, src/cdn/collect-is-tags.ts) y los
 // componentes piden ./x.js cuando en disco hay x.ts: hay que transpilar TS al
 // vuelo y mapear .js → .ts, igual que scripts/serve.mjs del repo.
-import { createServer, type Server } from 'node:http';
+import { createServer } from 'node:http';
+import type { Server } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { repoDir } from './env.ts';

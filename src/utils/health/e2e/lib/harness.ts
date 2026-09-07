@@ -12,7 +12,8 @@ import type { TestContext } from 'node:test';
 import { ENV, e2eDir, faltanRequisitos } from './env.ts';
 import { crearGeneradorMiniMax } from './minimax.ts';
 import { estadoDe } from './estados.ts';
-import { levantarServidor, type ServidorE2E } from './server.ts';
+import { levantarServidor } from './server.ts';
+import type { ServidorE2E } from './server.ts';
 import { titulo, marcar, tituloDe, lineaDe, EMOJIS } from './e2e-config.ts';
 import type { EstadoE2E } from './e2e-config.ts';
 import type {
