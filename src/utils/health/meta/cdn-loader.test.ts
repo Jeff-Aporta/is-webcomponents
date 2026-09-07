@@ -72,13 +72,16 @@ test('index.html no reimporta preview-component ni icon desde src/ (Pages 404)',
   assert.doesNotMatch(indexHtml, /src\/components\/_shared\/icon-loader\.js/);
 });
 
-test('LLM.md documenta pin y mirrors (sin README.txt)', () => {
-  const llm = readFileSync(join(root, 'dist', 'cdn', 'LLM.md'), 'utf8');
-  assert.match(llm, /loader\.min\.js/);
-  assert.match(llm, /loadCSSBase/);
-  assert.match(llm, /pin\(/);
-  assert.match(llm, /mirrors|jsDelivr|Pages/i);
-  assert.ok(!existsSync(join(root, 'dist', 'cdn', 'README.txt')), 'README.txt retirado — solo LLM.md');
+test('specs/cdn.md documenta pin/mirrors (consolidación 2026-09-07)', () => {
+  // Antes: dist/cdn/LLM.md documentaba el loader + pin + mirrors.
+  // Consolidación 2026-09-07: LLM.md eliminado; el contenido vive en
+  // specs/cdn.md § "Detalle operativo". El guardián migró.
+  const cdn = readFileSync(join(root, 'specs', 'cdn.md'), 'utf8');
+  assert.match(cdn, /loader\.min\.js/);
+  assert.match(cdn, /loadCSSBase|ISWebComponentsLoader/i);
+  assert.match(cdn, /pin|SHA|branch/i);
+  assert.match(cdn, /mirrors|jsDelivr|Pages/i);
+  assert.ok(!existsSync(join(root, 'dist', 'cdn', 'README.txt')), 'README.txt retirado — specs/cdn.md es el índice');
 });
 
 test('configure acepta host + v/query (cache-bust)', () => {

@@ -34,8 +34,11 @@ test('data-grid.md documenta toolbar-tools', async () => {
   assert.match(md, /false/, 'MD debe explicar false = ocultar tools');
 });
 
-test('components/data/LLM.md recuerda no ocultar tools con CSS', async () => {
-  const md = await readFile(join(root, 'src/components/data/LLM.md'), 'utf8');
-  assert.match(md, /toolbar-tools/, 'LLM data debe mencionar toolbar-tools');
-  assert.match(md, /No ocultar|no ocultar|CSS/i, 'LLM debe prohibir ocultar con CSS');
+test('specs/componentes.md recuerda no ocultar tools con CSS', async () => {
+  // Antes: src/components/data/LLM.md documentaba la regla. Consolidación
+  // 2026-09-07: el contenido vive ahora en specs/componentes.md (catálogo
+  // consolidado). El guardián migró a esa ubicación.
+  const md = await readFile(join(root, 'specs', 'componentes.md'), 'utf8');
+  assert.match(md, /toolbar-tools/, 'specs debe mencionar toolbar-tools');
+  assert.match(md, /No ocultar|no ocultar|CSS/i, 'specs debe prohibir ocultar tools con CSS');
 });

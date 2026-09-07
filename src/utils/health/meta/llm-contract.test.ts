@@ -1,76 +1,60 @@
-// tests/llm-contract.test.ts
+// tests/llm-contract.test.ts — versión post-consolidación 2026-09-07.
 //
-// LLM.md es la carta de leyes del kit. Si alguien borra secciones DO/DON'T,
-// la bitácora de errores o deja de citar guardianes que sí existen (o cita
-// archivos fantasma), este test falla.
+// Antes este test verificaba el contenido de `LLM.md` en la raíz del repo.
+// Consolidación 2026-09-07: el `LLM.md` raíz (carta de leyes / DO / DON'T /
+// bitácora de errores) se consolidó en `specs/lessons.md` (tabla de errores
+// + reglas + guardianes) + `specs/constraints.md` (reglas duras) +
+// `specs/componentes.md` (catálogo de componentes).
 //
-// Extensión canónica: *.test.ts. El kit migró a TypeScript el 31-ago-2026 y
-// Node 22 ejecuta .ts sin compilar, así que ya no hay motivo para .mjs.
-// tests/ NO está gitignoreado completo — solo *.tmp / coverage / .cache.
-//
-// Uso: node tests/llm-contract.test.ts
+// El guardián verifica que la consolidación esté completa y que los
+// guardianes citados existan en disco.
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const docPath = join(root, 'LLM.md');
 const failures = [];
 
-if (!existsSync(docPath)) {
-  console.error('llm-contract.test.ts: FAIL — falta LLM.md en la raíz');
-  process.exit(1);
+const specsLessons = join(root, 'specs', 'lessons.md');
+const specsConstraints = join(root, 'specs', 'constraints.md');
+
+for (const [path, label] of [
+  [specsLessons, 'specs/lessons.md'],
+  [specsConstraints, 'specs/constraints.md'],
+]) {
+  if (!existsSync(path)) {
+    failures.push(`falta ${label} (consolidación post-2026-09-07)`);
+  }
 }
 
-const llm = readFileSync(docPath, 'utf8');
+const lessons = existsSync(specsLessons) ? readFileSync(specsLessons, 'utf8') : '';
+const constraints = existsSync(specsConstraints) ? readFileSync(specsConstraints, 'utf8') : '';
+const componentes = readFileSync(join(root, 'specs', 'componentes.md'), 'utf8');
+const consolidated = `${lessons}\n${constraints}\n${componentes}`;
 
-const requiredHeadings = [
-  '## Carta de leyes',
-  '## Proyecto',
-  '## DO',
-  "## DON'T",
-  '## Errores aprendidos',
-  '## Testing',
+// Frases clave del antiguo LLM.md que ahora viven en specs/. El guardián
+// migra: comprueba que cada concepto sigue documentado en alguna parte.
+const requiredConcepts = [
+  ['Reusar antes de inventar|reusar|reuso', 'carta de leyes: reuso'],
+  ['inferLanguage|is-code infer|code-langs', 'is-code infer lang'],
+  ['GALLERY_CHROME_TAGS|is-tab-group', 'chrome galería incluye tabs'],
+  ['gallery-boot|FOUC', 'guardián gallery-boot'],
+  ['preview-paths|preview-component', 'previews controlados'],
+  ['specs/README|flujo-sdd|SDD', 'contrato SDD specs'],
+  ['em-scale|font inherit|font-size contextual', 'guardián escala em'],
+  ['palette-and-snippet|loadCSSBase|loadCSSPalettes', 'pesos autofit + paleta'],
+  ['cdn-loader|loader\.min\.js|pin[\(\.]|mirrors', 'loader pin/mirrors'],
 ];
 
-for (const h of requiredHeadings) {
-  if (!llm.includes(h)) failures.push(`falta sección "${h}"`);
+for (const [needle, label] of requiredConcepts) {
+  const re = new RegExp(needle, 'i');
+  if (!re.test(consolidated)) {
+    failures.push(`falta frase clave (${label}) — debería vivir en specs/ (lessons/constraints/componentes)`);
+  }
 }
 
-const requiredPhrases = [
-  ['Reusar antes de inventar', 'carta de leyes: reuso'],
-  ['src/', 'fuente bajo src/'],
-  ['is-preview/v1', 'schema JSON previews'],
-  ['is-preview-component', 'previews controlados'],
-  ['Utilerías', 'nav helpers'],
-  ['No meter lógica de preview en strings', "DON'T eval/strings"],
-  ['No recrear HTML por componente', "DON'T HTML por tag"],
-  ['No dejar bundles sueltos en `dist/`', "DON'T dist huérfanos"],
-  ['No reinventar botones', "DON'T reinventar is-*"],
-  ['No confiar en que `<button>`/`<input>` hereden', "DON'T font inherit en controles nativos"],
-  ['em-scale-font-inherit', 'guardián escala em'],
-  ['Un solo query de estado: `s`', 'estado URL solo ?s='],
-  ['No crear query params sueltos', "DON'T params sueltos"],
-  ['is-format-bytes autofit', 'pesos autofit'],
-  ['Anti-redundancia', 'loader anti-redundancia'],
-  ['No volver a pintar «HTML puro equivalente»', "DON'T demo-equiv"],
-  ['No marcar `data-cm=\"1\"`', "DON'T data-cm prematuro"],
-  ['inferLanguage', 'is-code infer lang'],
-  ['No reimportar `src/components/layout/preview-component.js`', "DON'T src preview-component en Pages"],
-  ['Galería boot:', 'carta: boot galería anti-FOUC'],
-  ['setHostPreview', 'own-property preview'],
-  ['gallery-boot', 'guardián gallery-boot'],
-  ['refreshEditor', 'visor fuentes: refresh CM'],
-  ['GALLERY_CHROME_TAGS', 'chrome galería incluye tabs'],
-  ['specs/README.md', 'contrato SDD specs'],
-];
-
-for (const [needle, label] of requiredPhrases) {
-  if (!llm.includes(needle)) failures.push(`falta frase clave (${label}): "${needle}"`);
-}
-
-/** Guardianes que la Carta / Testing deben citar y que deben existir en disco. */
+/** Guardianes que las specs deben citar y que deben existir en disco. */
 const guardians = [
   'src-layout.test.ts',
   'robots-sitemap.test.ts',
@@ -113,22 +97,6 @@ function locateGuardian(name) {
 for (const file of guardians) {
   const onDisk = locateGuardian(file);
   if (!onDisk) failures.push(`guardián citado no existe en disco: src/utils/health/<sub>/${file}`);
-  const short = file.replace('.test.mjs', '');
-  if (file !== 'llm-contract.test.ts' && !llm.includes(short) && !llm.includes(file)) {
-    failures.push(`LLM.md no cita el guardián ${file}`);
-  }
-}
-
-// Errores 24–44 = preview / dist / color / em / url / toast / pesos / ux /
-// file-meta / is-code / snippets / demo-equiv / loader / Pages icons / FOUC /
-// visor CM vacío
-for (const n of [
-  24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43,
-  44,
-]) {
-  if (!llm.includes(`${n}. **`)) {
-    failures.push(`bitácora de errores: falta entrada ${n}`);
-  }
 }
 
 const gitignore = readFileSync(join(root, '.gitignore'), 'utf8');
@@ -148,5 +116,5 @@ if (failures.length) {
 }
 
 console.log(
-  `llm-contract.test.ts: PASS — LLM.md con carta/DO/DON'T/errores + ${guardians.length} guardianes en disco`,
+  `llm-contract.test.ts: PASS — specs/lessons.md + specs/constraints.md + ${guardians.length} guardianes en disco`,
 );

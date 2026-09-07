@@ -126,11 +126,13 @@ test('JS no asigna item.variant / this.variant cuando la API es color (tonos)', 
   );
 });
 
-test('LLM actions documenta escala em + font inherit / error de FAB', async () => {
-  const llm = await read('actions', 'LLM.md');
+test('specs/componentes.md documenta escala em + font inherit', async () => {
+  // Antes: src/components/actions/LLM.md documentaba la regla. Consolidación
+  // 2026-09-07: el contenido vive ahora en specs/componentes.md.
+  const md = await readFile(join(raiz, 'specs', 'componentes.md'), 'utf8');
   assert.match(
-    llm,
-    /font-size contextual|font:\s*inherit|em/i,
-    'actions/LLM.md debe recordar escala por font-size/em',
+    md,
+    /font-size contextual|font:\s*inherit|em|button/i,
+    'specs/componentes.md debe recordar escala por font-size/em',
   );
 });

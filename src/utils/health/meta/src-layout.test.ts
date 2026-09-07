@@ -22,12 +22,14 @@ const mustExist = [
   'src/utils/health/e2e',
   // `src/assets/` se consolidó en `dist/assets/` (fuera de dist/cdn/).
   'dist/assets/icons',
-  'src/components/LLM.md',
+  // Consolidación 2026-09-07: LLM.md (root + per-componente) eliminado;
+  // el contenido vive en specs/lessons.md + specs/constraints.md +
+  // specs/componentes.md.
+  'specs/lessons.md',
   'src/styles/is-base.css',
   'scripts/build.mjs',
   'dist/cdn',
   'src/manifest.ts',
-  'LLM.md',
   'index.html',
   'robots.txt',
   // `sitemap.xml` se retiro el 31-ago-2026 junto con `docs/`: con una sola URL

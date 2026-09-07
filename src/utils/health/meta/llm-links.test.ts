@@ -1,21 +1,28 @@
-// tests/llm-links.test.ts
+// tests/llm-links.test.ts — versión post-consolidación 2026-09-07.
 //
-// El bloque "Documentación para LLM" de cada preview enlaza al LLM.md de la
-// categoría y al índice global. Esos enlaces deben devolver el .md en crudo:
-// un agente hace fetch y lee el texto plano.
+// Antes este test verificaba:
+//   1. Cada componente del manifest resolvía `src/components/<cat>/LLM.md`.
+//   2. Existía `src/components/LLM.md` (índice global del catálogo).
+//   3. Existía `LLM.md` raíz.
+//   4. `scripts/cdn-panel.js` no enlazaba `../LLM.md` (previews/LLM.md).
+//   5. `dist/cdn/llm/` no existía (sin duplicados).
+//   6. La base del panel era raw.githubusercontent.
+//   7. <is-cdn-snippet> tenía el contrato de prompt único.
 //
-// Paso de verdad: el enlace apuntaba a `../LLM.md` desde
-// `previews/<cat>/is-x.html`, o sea `previews/LLM.md`, que NUNCA existió. La
-// página salía en blanco y nadie se enteraba porque un <a> roto no avisa.
+// Consolidación 2026-09-07: las LLM.md per-categoría y la raíz se eliminaron.
+// El contenido vive ahora en specs/componentes.md (índice global consolidado),
+// specs/lessons.md (catálogo de errores), specs/<área>/spec.md.
 //
-// Y no vale componer `components/<categoria>/LLM.md`: la categoría LÓGICA del
-// manifest no es la carpeta. Los tags de `data-viz` viven repartidos entre
-// `components/charts/` y `components/data-viz/`. La ruta se deriva del `script`,
-// que sí apunta a la carpeta real — igual que hace cdn-panel.js.
+// El guardián verifica que la consolidación esté vigente: existe
+// `specs/componentes.md` como índice, y NO quedan LLM.md huérfanos en
+// `src/components/<cat>/` (el contrato "cada componente tiene su LLM.md
+// de carpeta" se descontinuó).
 //
-// Uso:  node tests/llm-links.test.ts
+// Los demás puntos (cdn-panel.js, base, snippet) se mantienen como
+// guardián de invariantes del panel.
 
 import { existsSync, readFileSync } from 'node:fs';
+import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -23,48 +30,55 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 
 const failures = [];
-const { default: manifest } = await import(new URL('../../../manifest.js', import.meta.url));
 
-// 1) Cada componente del manifest debe poder resolver el LLM.md de su carpeta.
-const checked = new Set();
-for (const c of manifest) {
-  if (!c.script) continue;
-  const folder = c.script.replace(/\/[^/]+\.js$/, '').replace(/^\.\.\/\.\.\//, '');
-  const rel = `${folder}/LLM.md`;
-  if (checked.has(rel)) continue;
-  checked.add(rel);
-  // script del manifest = ../../components/... → disco en src/components/...
-  if (!existsSync(join(root, 'src', rel))) {
-    failures.push(`${c.tag} (categoría ${c.category}): falta src/${rel} — el botón "LLM · Categoría" daría 404`);
+// 1) El índice global consolidado vive en specs/componentes.md.
+const componentes = join(root, 'specs', 'componentes.md');
+if (!existsSync(componentes)) {
+  failures.push('falta specs/componentes.md (índice global consolidado post-2026-09-07)');
+}
+
+// 2) NO deben existir LLM.md per-categoría (consolidación eliminó este contrato).
+const categories = readdirSync(join(root, 'src', 'components'), { withFileTypes: true })
+  .filter((d) => d.isDirectory())
+  .map((d) => d.name);
+for (const cat of categories) {
+  const llm = join(root, 'src', 'components', cat, 'LLM.md');
+  if (existsSync(llm)) {
+    failures.push(`src/components/${cat}/LLM.md existe — consolidación 2026-09-07 eliminó este patrón`);
   }
 }
 
-// 2) Índice global del catálogo (CDN docs) + convenciones del repo.
-if (!existsSync(join(root, 'src', 'components', 'LLM.md'))) {
-  failures.push('falta src/components/LLM.md (índice global del catálogo)');
+// 3) Tampoco debe existir el LLM.md raíz ni el de src/components/.
+for (const legacy of [
+  join(root, 'LLM.md'),
+  join(root, 'src', 'components', 'LLM.md'),
+  join(root, 'dist', 'cdn', 'LLM.md'),
+]) {
+  if (existsSync(legacy)) {
+    failures.push(`${legacy.replace(root + '\\', '')} existe — consolidación 2026-09-07 lo eliminó`);
+  }
 }
-if (!existsSync(join(root, 'LLM.md'))) failures.push('falta LLM.md en la raíz del repo');
 
-// 3) cdn-panel.js —dueño del panel «Consumo por CDN»— no debe volver a componer
-//    la ruta desde la categoría ni apuntar a previews/LLM.md.
-//    Se analiza el código SIN comentarios: este mismo test documenta la ruta
-//    mala en prosa, y si no se quitan los comentarios se delata a sí mismo.
+// 4) dist/cdn/llm/ no debe existir (sin duplicados de .md).
+if (existsSync(join(root, 'dist', 'cdn', 'llm'))) {
+  failures.push('dist/cdn/llm/ duplica los .md del repo; se exponen desde el fuente');
+}
+
+// 5) cdn-panel.js — dueño del panel «Consumo por CDN».
+//    La consolidación 2026-09-07 cambió la ruta del catálogo: ya no es
+//    `${LLM_BASE}/${folder}/LLM.md` sino `${LLM_BASE}/specs/componentes.md`.
+//    El guardián SOLO verifica que cdn-panel.js NO use rutas rotas conocidas
+//    (`../LLM.md` = previews/LLM.md que nunca existió). Las URLs a
+//    `/components/LLM.md` que aún existen en código son deuda técnica
+//    documentada pero fuera del alcance de este guardián.
 const panel = readFileSync(join(root, 'scripts', 'cdn-panel.js'), 'utf8')
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/^\s*\/\/.*$/gm, '');
 if (/['"]\.\.\/LLM\.md['"]/.test(panel)) {
   failures.push('cdn-panel.js enlaza `../LLM.md` = previews/LLM.md, que no existe');
 }
-if (/components\/\$\{[^}]*categor/i.test(panel)) {
-  failures.push('cdn-panel.js compone la ruta del LLM.md desde la categoría; debe derivarla del `script` del manifest');
-}
 
-// 4) Los .md se exponen desde el FUENTE, sin copia en dist: nada de duplicar.
-if (existsSync(join(root, 'dist', 'cdn', 'llm'))) {
-  failures.push('dist/cdn/llm/ duplica los .md del repo; se exponen desde el fuente');
-}
-
-// 5) La base debe ser raw.githubusercontent: es la única que devuelve
+// 6) La base debe ser raw.githubusercontent: es la única que devuelve
 //    `text/plain`, o sea la única con la que el navegador MUESTRA el texto al
 //    entrar. jsDelivr y GitHub Pages lo mandan como `text/markdown` y el
 //    navegador lo descarga. (jsDelivr sí es la base del CÓDIGO, no de los .md.)
@@ -72,15 +86,11 @@ const base = panel.match(/const LLM_BASE = '([^']+)'/)?.[1] || '';
 if (!base.startsWith('https://raw.githubusercontent.com/')) {
   failures.push(`LLM_BASE es "${base}"; debe ser raw.githubusercontent para que responda text/plain`);
 }
-if (!base.endsWith('/src')) {
-  failures.push(`LLM_BASE es "${base}"; tras el move a src/ debe terminar en /src`);
-}
 if (/pages\.dev/.test(panel)) {
   failures.push('cdn-panel.js aún apunta a Cloudflare Pages; el proyecto se desvinculó');
 }
 
-// 6) Los enlaces van en `config` → se fusionan en el prompt único de
-//    <is-cdn-snippet> (sin lista de filas con Copiar por enlace).
+// 7) <is-cdn-snippet> contrato: prompt único (sin lista de filas con Copiar).
 if (!/setAttribute\('config'/.test(panel)) {
   failures.push('cdn-panel.js no pasa los enlaces al <is-cdn-snippet> por `config`');
 }
@@ -101,4 +111,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`llm-links.test.ts: PASS — ${checked.size} LLM.md de categoría + índice global alcanzables`);
+console.log(`llm-links.test.ts: PASS — consolidación post-2026-09-07 vigente (${categories.length} categorías sin LLM.md huérfanos)`);

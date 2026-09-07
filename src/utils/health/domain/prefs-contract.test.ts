@@ -31,7 +31,10 @@ const agGridMdPath = join(root, 'src', 'components', 'data', 'ag-grid.md');
 const mainPath = join(root, 'src', 'components', 'layout', 'main.ts');
 const scrollMemoryPath = join(root, 'src', 'components', '_shared', 'scroll-memory.ts');
 const splitPath = join(root, 'src', 'components', 'layout', 'split-panel.ts');
-const dataLlm = join(root, 'src', 'components', 'data', 'LLM.md');
+// Consolidación 2026-09-07: data/LLM.md y components/LLM.md eliminados.
+// El catálogo de componentes vive ahora en specs/componentes.md (índice
+// global) y en el .md por componente (p.ej. src/components/data/ag-grid.md).
+const componentesSpec = join(root, 'specs', 'componentes.md');
 
 check(existsSync(prefsPath), 'falta components/_shared/prefs.ts');
 check(existsSync(scrollMemoryPath), 'falta components/_shared/scroll-memory.ts');
@@ -123,23 +126,23 @@ check(md.includes('is-webcomponents'), 'ag-grid.md: debe documentar localStorage
 check(md.includes('replaceComponentPrefs') || md.includes('prefs.ts'), 'ag-grid.md: debe apuntar a prefs.ts');
 check(/Qué no hacer|no hacer/i.test(md), 'ag-grid.md: debe tener sección de anti-patrones');
 
-if (existsSync(dataLlm)) {
-  const llm = readFileSync(dataLlm, 'utf8');
-  check(llm.includes('is-ag-grid') || llm.includes('ag-grid.md'), 'data/LLM.md: debe listar is-ag-grid');
-  check(llm.includes('is-webcomponents'), 'data/LLM.md: debe mencionar root is-webcomponents');
-}
-
-const inventory = readFileSync(join(root, 'src', 'components', 'LLM.md'), 'utf8');
+// Consolidación 2026-09-07: data/LLM.md y components/LLM.md ya no existen.
+// El catálogo de componentes vive ahora en specs/componentes.md (índice
+// global). Verificamos allí que is-ag-grid esté documentado.
+const componentesSrc = existsSync(componentesSpec) ? readFileSync(componentesSpec, 'utf8') : '';
 check(
-  inventory.includes('data/ag-grid.md'),
-  'components/LLM.md: falta fila data/ag-grid.md en inventario',
+  componentesSrc.includes('is-ag-grid') || componentesSrc.includes('ag-grid.md'),
+  'specs/componentes.md: debe listar is-ag-grid',
+);
+check(
+  componentesSrc.includes('is-webcomponents'),
+  'specs/componentes.md: debe mencionar root is-webcomponents',
 );
 
 // Docs canónicas no deben decir que el root actual ES is-components
 // (mencionar legacy/migración sí está bien).
 const docsToScan = [
-  join(root, 'src', 'components', 'data', 'LLM.md'),
-  join(root, 'src', 'components', 'layout', 'LLM.md'),
+  join(root, 'specs', 'componentes.md'),
   join(root, 'src', 'components', 'data', 'ag-grid.md'),
   join(root, 'src', 'previews', 'data', 'is-ag-grid.json'),
 ].filter(existsSync);

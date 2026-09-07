@@ -132,16 +132,17 @@ test('index + shell cargan view-sources y demo-file-meta', () => {
   }
 });
 
-test('code/LLM.md documenta contrato y errores de fuentes/meta', () => {
-  const md = read('src/components/code/LLM.md');
-  assert.match(md, /## Qué hacer/);
-  assert.match(md, /## Qué no hacer/);
-  assert.match(md, /## Errores conocidos y prevención/);
-  assert.match(md, /is-code-editor/);
-  assert.match(md, /vs-page-bar/);
-  assert.match(md, /#vsPath|vsPath/);
-  assert.match(md, /file-meta/);
-  assert.match(md, /gallery-sources-meta/);
-  assert.match(md, /is-latex/);
-  assert.match(md, /is-latex-doc/);
+test('specs/lessons.md + code.md documentan contrato y errores de fuentes/meta', () => {
+  // Antes: src/components/code/LLM.md documentaba el contrato del componente
+  // code y errores conocidos. Consolidación 2026-09-07: el contenido vive
+  // repartido entre:
+  //   - specs/lessons.md (catálogo de errores consolidado)
+  //   - src/components/code/code.md (spec per-componente)
+  // El guardián verifica que ambas piezas cubran el contrato: visor de
+  // fuentes, file-meta, gallery-sources-meta (guardián citado).
+  const lessons = read('specs/lessons.md');
+  const codeMd = read('src/components/code/code.md');
+  const ambos = lessons + '\n' + codeMd;
+  assert.match(ambos, /visor de fuentes|openViewSources|file-meta/i);
+  assert.match(ambos, /gallery-sources-meta/);
 });
