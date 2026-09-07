@@ -6,6 +6,7 @@ import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -264,11 +265,38 @@ class IsStateDiagram extends DiagramElementBase {
         g.appendChild(box);
 
         const t = svgEl('text', {
-          x: n.x + n.w / 2, y: n.y + n.h / 2 + 4, 'text-anchor': 'middle',
           fill: theme.text, 'font-size': '11', 'font-weight': '600',
           'font-family': 'Tahoma,Arial,sans-serif',
         });
-        t.innerHTML = inlineMdWeb(n.label);
+        const stHasMd = /[*`\[]/.test(n.label) || n.label.includes('{{');
+        if (stHasMd) {
+          t.setAttribute('x', n.x + n.w / 2);
+          t.setAttribute('y', n.y + n.h / 2 + 4);
+          t.setAttribute('text-anchor', 'middle');
+          t.innerHTML = inlineMdWeb(n.label);
+        } else {
+          const stresult = wrapText({
+            text: n.label,
+            maxWidth: Math.max(n.w - 12, 8),
+            maxHeight: n.h - 4,
+            fontSize: 11,
+            fontFamily: 'Tahoma,Arial,sans-serif',
+            overflow: n.overflow ?? 'grow',
+          });
+          const sttspans = buildTspans(
+            stresult.lines,
+            n.x, n.y, n.w, n.h,
+            'middle', 11, 1.2,
+          );
+          for (const span of sttspans) {
+            const ts = svgEl('tspan', {
+              x: span.x, y: span.y,
+              ...(span.dy != null ? { dy: span.dy } : {}),
+            });
+            ts.textContent = span.text;
+            t.appendChild(ts);
+          }
+        }
         g.appendChild(t);
       }
 
