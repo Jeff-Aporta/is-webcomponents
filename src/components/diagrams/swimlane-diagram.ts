@@ -5,6 +5,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -233,10 +234,38 @@ class IsSwimlaneDiagram extends DiagramElementBase {
         class: 'sw-step__box',
       }));
       const t = svgEl('text', {
-        x: s.x + s.w / 2, y: s.y + s.h / 2 + 4, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '10.5', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
+        fill: theme.text, 'font-size': '10.5', 'font-weight': '600',
+        'font-family': 'Tahoma,Arial,sans-serif',
       });
-      t.innerHTML = inlineMdWeb(s.label);
+      const swHasMd = /[*`\[]/.test(s.label) || s.label.includes('{{');
+      if (swHasMd) {
+        t.setAttribute('x', s.x + s.w / 2);
+        t.setAttribute('y', s.y + s.h / 2 + 4);
+        t.setAttribute('text-anchor', 'middle');
+        t.innerHTML = inlineMdWeb(s.label);
+      } else {
+        const swresult = wrapText({
+          text: s.label,
+          maxWidth: Math.max(s.w - 12, 8),
+          maxHeight: s.h - 4,
+          fontSize: 10.5,
+          fontFamily: 'Tahoma,Arial,sans-serif',
+          overflow: s.overflow ?? 'grow',
+        });
+        const swtspans = buildTspans(
+          swresult.lines,
+          s.x, s.y, s.w, s.h,
+          'middle', 10.5, 1.2,
+        );
+        for (const span of swtspans) {
+          const ts = svgEl('tspan', {
+            x: span.x, y: span.y,
+            ...(span.dy != null ? { dy: span.dy } : {}),
+          });
+          ts.textContent = span.text;
+          t.appendChild(ts);
+        }
+      }
       g.appendChild(t);
 
       this.svg.appendChild(g);
