@@ -11,7 +11,7 @@
     "typecheck": "tsc -p tsconfig.json",
     "test": "node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/meta/*.test.ts src/utils/health/diagrams/*.test.ts src/utils/health/domain/*.test.ts",
     "test:e2e": "node --experimental-strip-types src/utils/health/e2e/run.ts",
-    "audit": "python -B ../../../RAG/auditor/auditor.py audit is-webcomponents"
+    "audit": "python -B \"%DSH_HOME%\\profiles\\auditor\\motor\\auditor.py\" audit is-webcomponents --sin-preguntas"
   },
   "devDependencies": {
     "@browserbasehq/stagehand": "^4.0.2",

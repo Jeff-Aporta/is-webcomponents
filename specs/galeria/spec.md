@@ -2,7 +2,7 @@
 
 Shell de demostración, estado en URL y previews controlados por JSON.
 
-Diario: [`AGENTS.md`](../../LLM.md) (previews, URL, boot).
+Diario: [`lessons.md`](../../specs/lessons.md) · [`constraints.md`](../../specs/constraints.md) (previews, URL, boot).
 
 ## Contexto
 

@@ -1,6 +1,6 @@
 # Specs IS Web Components (SDD)
 
-Contrato vigente del kit. **No sustituye** [`AGENTS.md`](../LLM.md): el spec dice qué debe pasar; el diario dice qué pasó y por qué.
+Contrato vigente del kit. **No sustituye** [`constraints.md`](constraints.md) / [`lessons.md`](lessons.md): el spec dice qué debe pasar; el diario dice qué pasó y por qué.
 
 Cómo se trabaja: [flujo-sdd.md](flujo-sdd.md) — spec → tasks → ejecución → gate.
 
@@ -28,7 +28,7 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 
 1. [constitution.md](constitution.md) y [constraints.md](constraints.md).
 2. `specs/<dominio>/spec.md` del área que tocas.
-3. Entrada en `AGENTS.md` si el síntoma ya ocurrió.
+3. Entrada en [`lessons.md`](lessons.md) si el síntoma ya ocurrió.
 
 ## Dominios
 

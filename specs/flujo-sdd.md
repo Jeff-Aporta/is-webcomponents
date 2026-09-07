@@ -31,7 +31,7 @@ Por cada tarea:
 1. **Rojo primero.** Escribir o extender el guardián en `tests/<area>.test.ts` antes de la implementación.
 2. **Verde.** Diff mínimo en `src/` (o `src/manifest.ts` / `scripts/` si aplica).
 3. **Gate.** `node tests/run-all.ts` (y el guardián nuevo aislado).
-4. **Diario.** Si el error fue nuevo, entrada en `AGENTS.md` § bitácora.
+4. **Diario.** Si el error fue nuevo, entrada en `specs/lessons.md`.
 
 Push solo si el usuario lo pide. Autor **Jeff-Aporta**. Sin `Co-authored-by`.
 
@@ -42,8 +42,8 @@ Push solo si el usuario lo pide. Autor **Jeff-Aporta**. Sin `Co-authored-by`.
 | `specs/<dominio>/spec.md` | Cambió el comportamiento exigido |
 | `specs/constraints.md` | Error pagado que hay que prohibir |
 | `specs/adr/README.md` | Debate cerrado |
-| `AGENTS.md` | Lección con síntoma + verificación |
-| `AGENTS.md` | Trampa operativa (PowerShell, paths, iconos…) |
-| `specs/lessons/README.md` | Fila índice a la lección |
+| `specs/lessons.md` | Lección con síntoma + verificación |
+| `specs/constraints.md` | Trampa operativa (PowerShell, paths, iconos…) |
+| `specs/lessons.md` | Fila índice a la lección |
 
-El spec dice **qué debe pasar**. `AGENTS.md` dice **qué pasó**.
+El spec dice **qué debe pasar**. `lessons.md` dice **qué pasó**.
