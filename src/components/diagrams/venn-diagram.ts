@@ -4,6 +4,7 @@ import { resolveVennSpec, computeVennLayout } from './venn-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
@@ -136,11 +137,38 @@ class IsVennDiagram extends DiagramElementBase {
       const text = r.label ?? '';
       if (text) {
         const t = svgEl('text', {
-          x: r.x, y: r.y, 'text-anchor': 'middle', fill: theme.text,
-          'font-size': '10.5', 'font-family': 'Tahoma,Arial,sans-serif',
+          fill: theme.text, 'font-size': '10.5', 'font-family': 'Tahoma,Arial,sans-serif',
           class: 'vn-region__label',
         });
-        t.innerHTML = inlineMdWeb(text);
+        const vnHasMd = /[*`\[]/.test(text) || text.includes('{{');
+        if (vnHasMd) {
+          t.setAttribute('x', r.x);
+          t.setAttribute('y', r.y);
+          t.setAttribute('text-anchor', 'middle');
+          t.innerHTML = inlineMdWeb(text);
+        } else {
+          const vnresult = wrapText({
+            text,
+            maxWidth: 80,
+            maxHeight: 50,
+            fontSize: 10.5,
+            fontFamily: 'Tahoma,Arial,sans-serif',
+            overflow: r.overflow ?? 'ellipsis',
+          });
+          const vntspans = buildTspans(
+            vnresult.lines,
+            r.x - 40, r.y - 25, 80, 50,
+            'middle', 10.5, 1.2,
+          );
+          for (const span of vntspans) {
+            const ts = svgEl('tspan', {
+              x: span.x, y: span.y,
+              ...(span.dy != null ? { dy: span.dy } : {}),
+            });
+            ts.textContent = span.text;
+            t.appendChild(ts);
+          }
+        }
         g.appendChild(t);
       }
       if (r.value != null) {
