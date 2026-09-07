@@ -14,7 +14,7 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 
 | Pieza | Fuente |
 |---|---|
-| Inventario de tags | [`manifest.js`](../src/manifest.js) |
+| Inventario de tags | [`manifest.js`](../src/manifest.ts) |
 | Fuentes de componentes | `src/components/` |
 | Previews | `src/previews/<cat>/<tag>.json` + `behaviors/` |
 | Estilos / tokens | `src/styles/` (`--is-*`) |
@@ -25,9 +25,9 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 
 ## C-3 Layout `src/`
 
-- Toda la fuente de producto bajo `src/` (incl. `src/manifest.js`). En la raíz: `scripts/`, `dist/`, `tests/`, `index.html`, `docs/` (HTML SEO generado).
+- Toda la fuente de producto bajo `src/` (incl. `src/manifest.ts`). En la raíz: `scripts/`, `dist/`, `tests/`, `index.html`, `docs/` (HTML SEO generado).
 - **Prohibido** recrear `components/`, `styles/`, `previews/`, `skills/` en la raíz del repo.
-- Guardián: `tests/src-layout.test.ts`.
+- Guardián: `src/utils/health/meta/src-layout.test.ts`.
 
 ## C-4 Guardianes
 

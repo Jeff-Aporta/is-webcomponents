@@ -34,7 +34,7 @@ PORT=8391 node tests/run-all.ts   # terminal B
 
 ## S-T4 Meta-spec SDD
 
-La estructura de `specs/` se valida con `tests/specs-sdd.test.ts`:
+La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts`:
 
 - Archivos obligatorios (`README`, `flujo-sdd`, `constitution`, `constraints`, plantillas, adr, lessons).
 - Sin `spec-*.md` sueltos en raíz de `specs/`.
@@ -46,21 +46,21 @@ La estructura de `specs/` se valida con `tests/specs-sdd.test.ts`:
 
 1. Guardián nuevo en verde.
 2. `node tests/run-all.ts` verde (mínimo sin servidor).
-3. Si tocó `AGENTS.md`: `tests/llm-contract.test.ts`.
-4. Si tocó `specs/`: `tests/specs-sdd.test.ts`.
+3. Si tocó `AGENTS.md`: `src/utils/health/meta/llm-contract.test.ts`.
+4. Si tocó `specs/`: `src/utils/health/meta/specs-sdd.test.ts`.
 
 ## Contratos
 
 | Pieza | Contrato |
 |---|---|
 | Runner | `tests/run-all.ts` |
-| Meta SDD | `tests/specs-sdd.test.ts` |
-| Carta | `tests/llm-contract.test.ts` |
+| Meta SDD | `src/utils/health/meta/specs-sdd.test.ts` |
+| Carta | `src/utils/health/meta/llm-contract.test.ts` |
 
 ## Aceptación
 
 | Caso | Resultado | Verificación |
 |---|---|---|
 | Suite sin servidor | todos exit 0 | `node tests/run-all.ts` |
-| Estructura specs | mapa + links + citas tests | `tests/specs-sdd.test.ts` |
-| LLM contractual | secciones + guardianes en disco | `tests/llm-contract.test.ts` |
+| Estructura specs | mapa + links + citas tests | `src/utils/health/meta/specs-sdd.test.ts` |
+| LLM contractual | secciones + guardianes en disco | `src/utils/health/meta/llm-contract.test.ts` |

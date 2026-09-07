@@ -49,4 +49,4 @@ Errores ya pagados. Detalle: `AGENTS.md` (carta, errores #24–#46, entorno loca
 ## Documentación
 
 - No duplicar la carta de leyes en cada `*.md` de tag — enlazar `AGENTS.md` / categoría.
-- No borrar secciones obligatorias de `AGENTS.md` (vigila `tests/llm-contract.test.ts`).
+- No borrar secciones obligatorias de `AGENTS.md` (vigila `src/utils/health/meta/llm-contract.test.ts`).

@@ -28,7 +28,7 @@ Orden en `src/components/_shared/iconify-loader.js`:
 
 - `icon.js` inyecta SVG **inline** (no `<img>`) para `currentColor`.
 - `#normalizeInlineSvg()` fuerza `fill`/`stroke: currentColor` en hijos.
-- Guardián: `tests/icon-references.test.ts` (referencias en previews/manifest).
+- Guardián: `src/utils/health/domain/icon-references.test.ts` (referencias en previews/manifest).
 
 ## S-I4 Corpus commiteado
 
@@ -48,6 +48,6 @@ Orden en `src/components/_shared/iconify-loader.js`:
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Referencias icon= en repo | colección conocida o CDN | `tests/icon-references.test.ts` |
-| currentColor en SVG | sin `<img>` para iconify | `tests/icon-currentcolor.test.ts` |
-| Fetch local con server | iconos resuelven en galería | `tests/cdn-icons.test.ts` (PORT=8391) |
+| Referencias icon= en repo | colección conocida o CDN | `src/utils/health/domain/icon-references.test.ts` |
+| currentColor en SVG | sin `<img>` para iconify | `src/utils/health/domain/icon-currentcolor.test.ts` |
+| Fetch local con server | iconos resuelven en galería | `src/utils/health/meta/cdn-icons.test.ts` (PORT=8391) |

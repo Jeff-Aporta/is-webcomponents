@@ -40,7 +40,7 @@ Humanos y agentes consumen el kit vía galería, CDN y markdown raw en GitHub. L
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| AGENTS.md completo | secciones carta/DO/DON'T/errores | `tests/llm-contract.test.ts` |
-| Manifest ↔ disco | 0 huérfanos | `tests/manifest-paths.test.ts` |
-| Robots | Allow / y sin `Sitemap:` colgado | `tests/robots-sitemap.test.ts` |
-| Specs SDD | mapa + enlaces + guardianes citados | `tests/specs-sdd.test.ts` |
+| AGENTS.md completo | secciones carta/DO/DON'T/errores | `src/utils/health/meta/llm-contract.test.ts` |
+| Manifest ↔ disco | 0 huérfanos | `src/utils/health/meta/manifest-paths.test.ts` |
+| Robots | Allow / y sin `Sitemap:` colgado | `src/utils/health/meta/robots-sitemap.test.ts` |
+| Specs SDD | mapa + enlaces + guardianes citados | `src/utils/health/meta/specs-sdd.test.ts` |

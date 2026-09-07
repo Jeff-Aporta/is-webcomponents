@@ -6,7 +6,7 @@ Diario: [`AGENTS.md`](../LLM.md) (carta, DO/DON'T, enums).
 
 ## Contexto
 
-Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build salen de [`manifest.js`](../src/manifest.js).
+Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build salen de [`manifest.js`](../src/manifest.ts).
 
 ## S-K1 Nomenclatura y categorías
 
@@ -51,9 +51,9 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Manifest coherente | page/script/style existen | `tests/manifest-paths.test.ts` |
-| Enums en previews | solo valores válidos | `tests/attr-enums.test.ts` |
-| Tokens `--is-color-*` | vocabulario estable | `tests/token-vocabulary.test.ts` |
-| Botones eventos/color | contrato UI | `tests/button-events.test.ts`, `tests/button-color-appearance.test.ts` |
-| Escala em en controles | herencia font-size | `tests/em-scale-font-inherit.test.ts` |
-| Helpers homogéneos | tab + json + md | `tests/helpers-homogeneity.test.ts` |
+| Manifest coherente | page/script/style existen | `src/utils/health/meta/manifest-paths.test.ts` |
+| Enums en previews | solo valores válidos | `src/utils/health/domain/attr-enums.test.ts` |
+| Tokens `--is-color-*` | vocabulario estable | `src/utils/health/domain/token-vocabulary.test.ts` |
+| Botones eventos/color | contrato UI | `src/utils/health/domain/button-events.test.ts`, `src/utils/health/domain/button-color-appearance.test.ts` |
+| Escala em en controles | herencia font-size | `src/utils/health/domain/em-scale-font-inherit.test.ts` |
+| Helpers homogéneos | tab + json + md | `src/utils/health/meta/helpers-homogeneity.test.ts` |

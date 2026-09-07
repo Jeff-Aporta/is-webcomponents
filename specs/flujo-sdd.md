@@ -29,7 +29,7 @@ Plantilla: [plantillas/tasks.template.md](plantillas/tasks.template.md).
 Por cada tarea:
 
 1. **Rojo primero.** Escribir o extender el guardián en `tests/<area>.test.ts` antes de la implementación.
-2. **Verde.** Diff mínimo en `src/` (o `src/manifest.js` / `scripts/` si aplica).
+2. **Verde.** Diff mínimo en `src/` (o `src/manifest.ts` / `scripts/` si aplica).
 3. **Gate.** `node tests/run-all.ts` (y el guardián nuevo aislado).
 4. **Diario.** Si el error fue nuevo, entrada en `AGENTS.md` § bitácora.
 

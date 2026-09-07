@@ -45,8 +45,8 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Solo `dist/cdn/` + `dist/assets/` | sin huérfanos sueltos en `dist/` | `tests/dist-cdn-layout.test.ts` |
-| Carpetas CDN | una carpeta por categoría manifest | `tests/cdn-folders.test.ts` |
-| Loader y plan | sin doble fetch categoría+tag | `tests/cdn-loader.test.ts`, `tests/load-plan.test.ts` |
-| Snippet match preview | paths coherentes con manifest | `tests/cdn-snippet-match.test.ts` |
-| Iconos vía CDN local | fetch OK con server :8391 | `tests/cdn-icons.test.ts` (requiere `PORT=8391`) |
+| Solo `dist/cdn/` + `dist/assets/` | sin huérfanos sueltos en `dist/` | `src/utils/health/meta/dist-cdn-layout.test.ts` |
+| Carpetas CDN | una carpeta por categoría manifest | `src/utils/health/meta/cdn-folders.test.ts` |
+| Loader y plan | sin doble fetch categoría+tag | `src/utils/health/meta/cdn-loader.test.ts`, `src/utils/health/domain/load-plan.test.ts` |
+| Snippet match preview | paths coherentes con manifest | `src/utils/health/meta/cdn-snippet-match.test.ts` |
+| Iconos vía CDN local | fetch OK con server :8391 | `src/utils/health/meta/cdn-icons.test.ts` (requiere `PORT=8391`) |

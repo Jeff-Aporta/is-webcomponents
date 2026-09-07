@@ -1,12 +1,5 @@
 # Auditoría recíproca — sistema feedback
 
-## Persona
-
-> El sistema de auto-mejora del auditor se comporta según
-> [`automation/profile.md`](automation/profile.md). Antes de emitir una regla seguimos los
-> principios §4 y respetamos los anti-patrones §13.
->
-
 Zona pactada entre el harness de auditoría y el agente que revisa los casos.
 El harness coloca este sistema automáticamente al iniciar una corrida (solo si
 falta; nunca pisa contenido). El revisor alimenta el ciclo con observaciones.
