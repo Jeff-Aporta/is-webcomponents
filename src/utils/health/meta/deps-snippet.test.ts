@@ -22,7 +22,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 const csJs   = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.ts'), 'utf8');
 const csCss  = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.css'), 'utf8');
 const prevJson = await readFile(join(root, 'src', 'previews', 'feedback', 'is-cdn-snippet.json'), 'utf8');
-const manifest = await readFile(join(root, 'src', 'manifest.js'), 'utf8');
+const manifest = await readFile(join(root, 'src', 'manifest.ts'), 'utf8');
 
 // El preview es JSON: en el archivo el markup viaja escapado (`slot=\"deps\"`),
 // así que se buscan los patrones sobre los textos ya parseados y no sobre el
@@ -41,7 +41,7 @@ const check = (cond, msg) => { if (!cond) failures.push(msg); };
 // ─── manifest.js: el componente está registrado ─────────────────────────────
 
 check(/tag:\s*['"]is-cdn-snippet['"]/.test(manifest),
-  'manifest.js: is-cdn-snippet no está registrado');
+  'manifest.ts: is-cdn-snippet no está registrado');
 
 // ─── cdn-snippet.ts: API para dependencies ─────────────────────────────────
 

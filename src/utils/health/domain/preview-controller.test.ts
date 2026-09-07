@@ -64,10 +64,16 @@ assert.equal(bg.tag, 'is-button-group');
 assert.ok(Array.isArray(bg.sections) && bg.sections.length > 0);
 
 const index = readFileSync(join(root, 'index.html'), 'utf8');
-if (!/previewHost/.test(index) || !/hasControlledPreview/.test(index)) {
-  failures.push('index.html debe montar host controlado');
+const galleryApp = readFileSync(join(root, 'src/gallery/app.ts'), 'utf8');
+// index.html solo monta el host; la lógica vive en gallery/app.ts (bundle
+// del SPA — la migración del inline JS al bundle cambió dónde están los
+// nombres de las funciones).
+if (!/previewHost/.test(index)) {
+  failures.push('index.html debe montar el host <is-preview-component id="previewHost">');
 }
-if (!/loadPreview/.test(index)) failures.push('index.html debe loadPreview desde registry');
+if (!/hasControlledPreview/.test(galleryApp) || !/loadPreview/.test(galleryApp) || !/hasCachedPreview/.test(galleryApp)) {
+  failures.push('gallery/app.ts debe usar hasControlledPreview + loadPreview + hasCachedPreview del registry');
+}
 
 const { hasControlledPreview, hasCachedPreview, controlledPreviewTags, loadPreview, clearPreviewCache } = await import('../../../previews/registry.ts');
 assert.equal(hasControlledPreview('is-button-group'), true);
@@ -88,7 +94,7 @@ const again = await loadPreview('is-button-group');
 // que sí debe cumplirse es que la definición salga de la caché y sea la misma.
 assert.equal(hasCachedPreview('is-button-group'), true, 'la definición debe seguir cacheada');
 assert.deepEqual(again.definition, preview.definition, 'segunda carga debe reutilizar la definición en memoria');
-assert.ok(/hasCachedPreview/.test(index), 'index.html debe evitar vaciar el host si el JSON ya está en caché');
+assert.ok(/hasCachedPreview/.test(galleryApp), 'gallery/app.ts debe evitar vaciar el host si el JSON ya está en caché');
 assert.ok(/#paintGen/.test(host) || /paintGen/.test(host), 'is-preview-component debe invalidar mounts en vuelo');
 
 if (failures.length) {

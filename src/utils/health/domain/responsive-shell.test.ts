@@ -123,24 +123,28 @@ test('is-preview-component: el índice se muda a un drawer derecho en compacto',
 });
 
 test('galería: el catálogo se muda a un drawer izquierdo en móvil', () => {
+  // El catálogo drawer vive en index.html (su elemento host), pero la
+  // lógica del escalón móvil (matchMedia, setAttribute, hide?.()) vive en
+  // gallery/app.ts (bundle del SPA). El guardián verifica AMBAS piezas.
+  const gallery = read('src', 'gallery', 'app.ts');
   assert.ok(/id="navDrawer"[\s\S]*?placement="start"/.test(indexHtml), 'el catálogo abre por la izquierda');
   assert.ok(/id="navToggle"/.test(indexHtml), 'falta la hamburguesa del catálogo');
   assert.ok(
     /<is-button[^>]*id="navToggle"[^>]*variant="plain"/.test(indexHtml),
     'navToggle debe ser is-button variant=plain',
   );
-  assert.ok(/matchMedia\('\(max-width: 640px\)'\)/.test(indexHtml), 'el escalón móvil es 640px');
+  assert.ok(/matchMedia\('\(max-width: 640px\)'\)/.test(gallery), 'el escalón móvil es 640px (en gallery/app.ts)');
   assert.ok(
-    /mainSplit\.setAttribute\('collapse', 'start'\)/.test(indexHtml),
-    'en móvil el split cede todo el ancho al preview',
+    /mainSplit\.setAttribute\('collapse', 'start'\)/.test(gallery),
+    'en móvil el split cede todo el ancho al preview (en gallery/app.ts)',
   );
   assert.ok(
-    /navDrawer'\)\?\.hide\?\.\(\)/.test(indexHtml),
-    'elegir un componente debe cerrar el catálogo',
+    /navDrawer'\)\?\.hide\?\.\(\)/.test(gallery),
+    'elegir un componente debe cerrar el catálogo (en gallery/app.ts)',
   );
   assert.ok(
-    !/mainSplit\.orientation = mql\.matches/.test(indexHtml),
-    'el apilado vertical en móvil quedó reemplazado por el drawer',
+    !/mainSplit\.orientation = mql\.matches/.test(gallery),
+    'el apilado vertical en móvil quedó reemplazado por el drawer (en gallery/app.ts)',
   );
   assert.ok(/\.shell-menu-btn/.test(shellCss), 'la hamburguesa del shell necesita estilo propio');
 });

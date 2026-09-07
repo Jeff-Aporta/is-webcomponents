@@ -56,9 +56,12 @@ test('format-bytes autofit', () => {
 });
 
 test('galería mergea keys de ?s= al cambiar component', () => {
-  const html = read('index.html');
-  assert.match(html, /readStateParam\(\)\s*\|\|\s*\{\}/);
-  assert.match(html, /\.\.\.prev,\s*component:/);
+  // La lógica del state vive en el bundle del SPA (gallery/app.ts), no inline
+  // en index.html (la migración del inline JS al bundle cambió dónde están
+  // los marcadores — el guardián se actualiza al nuevo contrato).
+  const gallery = read('src/gallery/app.ts');
+  assert.match(gallery, /readStateParam\(\)\s*\|\|\s*\{\}/);
+  assert.match(gallery, /\.\.\.prev,\s*component:/);
 });
 
 test('ux-audit harness existe y no se confunde con .test.ts', () => {

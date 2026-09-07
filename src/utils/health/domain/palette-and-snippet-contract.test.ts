@@ -98,12 +98,12 @@ check(
   'is-base.css: el bloque :root (.theme-dark compartido) NO debe tener color-scheme',
 );
 check(
-  /\.theme-dark\s*\{[^}]*color-scheme\s*:\s*dark/.test(isBase),
-  'is-base.css: color-scheme: dark debe vivir en .theme-dark',
+  /\.[\s\S]*?\.theme-dark[\s\S]*?\{[^}]*color-scheme\s*:\s*dark/.test(isBase),
+  'is-base.css: color-scheme: dark debe vivir en un bloque que incluye .theme-dark',
 );
 check(
-  /\.theme-light\s*\{[^}]*color-scheme\s*:\s*light/.test(isBase),
-  'is-base.css: color-scheme: light debe vivir en .theme-light',
+  /\.[\s\S]*?\.theme-light[\s\S]*?\{[^}]*color-scheme\s*:\s*light/.test(isBase),
+  'is-base.css: color-scheme: light debe vivir en un bloque que incluye .theme-light',
 );
 
 // ─── 3. Sin pintar canvas en base/palettes ──────────────────────────────────

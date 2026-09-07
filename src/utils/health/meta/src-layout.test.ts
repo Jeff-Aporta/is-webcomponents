@@ -26,7 +26,7 @@ const mustExist = [
   'src/styles/is-base.css',
   'scripts/build.mjs',
   'dist/cdn',
-  'src/manifest.js',
+  'src/manifest.ts',
   'LLM.md',
   'index.html',
   'robots.txt',

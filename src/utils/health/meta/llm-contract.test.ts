@@ -100,9 +100,19 @@ const guardians = [
   'specs-sdd.test.ts',
 ];
 
+// Mapear cada guardián a su ubicación real post-TAREA 3:
+// tests/ → src/utils/health/<sub>/. Los subdirs son meta/diagrams/domain/e2e.
+function locateGuardian(name) {
+  for (const sub of ['meta', 'diagrams', 'domain', 'e2e']) {
+    const p = join(root, 'src', 'utils', 'health', sub, name);
+    if (existsSync(p)) return p;
+  }
+  return null;
+}
+
 for (const file of guardians) {
-  const onDisk = existsSync(join(root, 'tests', file));
-  if (!onDisk) failures.push(`guardián citado no existe en disco: tests/${file}`);
+  const onDisk = locateGuardian(file);
+  if (!onDisk) failures.push(`guardián citado no existe en disco: src/utils/health/<sub>/${file}`);
   const short = file.replace('.test.mjs', '');
   if (file !== 'llm-contract.test.ts' && !llm.includes(short) && !llm.includes(file)) {
     failures.push(`LLM.md no cita el guardián ${file}`);
@@ -122,13 +132,13 @@ for (const n of [
 }
 
 const gitignore = readFileSync(join(root, '.gitignore'), 'utf8');
-if (/^tests\/\s*$/m.test(gitignore) || /^\/tests\/?\s*$/m.test(gitignore)) {
+if (/^src\/utils\/health\/\s*$/m.test(gitignore) || /^\/src\/utils\/health\/?\s*$/m.test(gitignore)) {
   failures.push(
-    '.gitignore ignora tests/ entero — solo deben ignorarse *.tmp / coverage / .cache (los *.test.mjs se commitean)',
+    '.gitignore ignora src/utils/health/ entero — solo deben ignorarse *.tmp / coverage / .cache (los *.test.ts se commitean)',
   );
 }
-if (!/tests\/\*\.tmp/.test(gitignore)) {
-  failures.push('.gitignore debería ignorar tests/*.tmp (artefactos), no el directorio entero');
+if (!/(?:src\/utils\/health|tests)\/\*+\/?\*?\.tmp/.test(gitignore)) {
+  failures.push('.gitignore debería ignorar src/utils/health/**/*.tmp (artefactos), no el directorio entero');
 }
 
 if (failures.length) {

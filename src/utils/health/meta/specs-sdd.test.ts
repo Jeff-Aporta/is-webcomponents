@@ -12,8 +12,17 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const SPECS = join(root, 'specs');
-const TESTS = join(root, 'tests');
+const HEALTH = join(root, 'src', 'utils', 'health');
 const failures = [];
+
+// post-TAREA 3: tests/ → src/utils/health/<sub>/. Buscar el archivo por basename.
+function locateTest(name) {
+  for (const sub of ['meta', 'diagrams', 'domain', 'e2e']) {
+    const p = join(HEALTH, sub, name);
+    if (existsSync(p)) return p;
+  }
+  return null;
+}
 
 const OBLIGATORIOS = [
   'README.md',
@@ -83,13 +92,16 @@ const readme = readFileSync(join(SPECS, 'README.md'), 'utf8');
 for (const d of dominios) {
   if (!readme.includes(d)) failures.push(`README no enlaza ${d}`);
   const spec = readFileSync(join(SPECS, ...d.split('/')), 'utf8');
-  const citados = [...spec.matchAll(/`tests\/([a-z0-9-]+\.test\.ts)`/gi)].map((m) => m[1]);
+  const citados = [
+    ...spec.matchAll(/`tests\/([a-z0-9-]+\.test\.[a-z]+)`/gi),
+    ...spec.matchAll(/`src\/utils\/health\/(?:meta|diagrams|domain|e2e)\/([a-z0-9-]+\.test\.[a-z]+)`/gi),
+  ].map((m) => m[1]);
   if (citados.length === 0) {
-    failures.push(`${d} no cita ningún tests/*.test.ts`);
+    failures.push(`${d} no cita ningún src/utils/health/<sub>/*.test.ts`);
     continue;
   }
   for (const file of citados) {
-    if (!existsSync(join(TESTS, file))) failures.push(`${d} cita tests/${file} inexistente`);
+    if (!locateTest(file)) failures.push(`${d} cita src/utils/health/<sub>/${file} inexistente`);
   }
 }
 

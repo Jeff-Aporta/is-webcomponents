@@ -67,17 +67,29 @@ assert.equal(
 
 // El wordmark compuesto tiene que llevar la S mayúscula en las DOS
 // implementaciones, que hasta ahora divergían.
+//
+// Verificación 1: la paleta 'insoft' declara `accentLabel: 'Soft'`
+// (capitalizada) en el data del componente.
 const selector = await readFile(join(root, 'src/components/feedback/palette-selector.ts'), 'utf8');
 assert.match(
   selector,
   /accentLabel:\s*'Soft'/,
   'is-palette-selector debe componer el wordmark con "Soft" (S mayúscula), no "soft"',
 );
-const indexHtml = await readFile(join(root, 'index.html'), 'utf8');
+
+// Verificación 2: gallery/app.ts pinta el accent del wordmark leyendo
+// brandData.accent (lo que garantiza que las mayúsculas del data se
+// trasladan al DOM en tiempo de ejecución, no inline en index.html).
+const galleryApp = await readFile(join(root, 'src/gallery/app.ts'), 'utf8');
 assert.match(
-  indexHtml,
-  /accent:\s*'Soft'/,
-  'index.html debe componer el wordmark con "Soft" (S mayúscula)',
+  galleryApp,
+  /brandAccent\.textContent\s*=\s*brandData\.accent/,
+  'gallery/app.ts debe pintar el accent del wordmark desde brandData.accent (S mayúscula del data)',
+);
+assert.match(
+  galleryApp,
+  /brandLead\.textContent\s*=\s*brandData\.lead/,
+  'gallery/app.ts debe pintar el lead del wordmark desde brandData.lead',
 );
 
 // El identificador de paleta sigue en minúsculas: es API, no texto.

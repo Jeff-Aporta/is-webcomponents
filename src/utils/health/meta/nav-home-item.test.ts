@@ -24,6 +24,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 
 const index = await readFile(join(root, 'index.html'), 'utf8');
+const galleryApp = await readFile(join(root, 'src', 'gallery', 'app.ts'), 'utf8');
 const shellCss = await readFile(join(root, 'src', 'styles', 'shell.css'), 'utf8');
 
 const failures = [];
@@ -37,15 +38,13 @@ const check = (cond, msg) => { if (!cond) failures.push(msg); };
 //   - el title.textContent es 'Inicio'
 //   - NO anade un <span class="shell-nav__tag">
 
-// Aislamos el bloque { const btn = ... } del home. Como el script usa
-// strings pre-construidas con fromCharCode (no literales HTML), no
-// podemos buscar un '<button' literal. En lugar de eso, nos ceñimos
-// a marcadores que SI son literales: el primer `HOME.tag` despues de
-// la declaracion HOME = { ... }, hasta el primer `shellNav.appendChild(btn);`.
+// Aislamos el bloque { const btn = ... } del home en gallery/app.ts
+// (el código que construye los items del nav vive en el bundle de la
+// galería, no en index.html — esto cambió al pasar de inline JS a bundle).
 const homeBlockMatch = (() => {
-  const homeDecl = index.indexOf("HOME = { tag: 'home'");
+  const homeDecl = galleryApp.indexOf("HOME = { tag: 'home'");
   if (homeDecl < 0) return null;
-  const fromHome = index.slice(homeDecl);
+  const fromHome = galleryApp.slice(homeDecl);
   const appendEnd = fromHome.indexOf('shellNav.appendChild(btn);');
   if (appendEnd < 0) return null;
   return fromHome.slice(0, appendEnd + 'shellNav.appendChild(btn);'.length);
@@ -72,13 +71,12 @@ if (homeBlockMatch) {
     'index.html: el bloque del home no debe crear un <span class="shell-nav__tag"> (no debe haber tag duplicado)');
 }
 
-// Estos chequeos pueden aplicarse sobre el bloque aislado o sobre el archivo
-// completo: aseguramos que el HTML completo no contiene dos veces la cadena
-// "Inicio" en el contexto del home (title vs tag duplicado).
-const homeTitleCount = (index.match(/textContent\s*=\s*['"]Inicio['"]/g) || []).length;
-const homeTagCount = (index.match(/<span\s+class="shell-nav__tag"[^>]*>\s*Inicio\s*<\/span>/g) || []).length;
-check(homeTitleCount === 1, `index.html: esperaba 1 'textContent="Inicio"' (solo el title), encontre ${homeTitleCount}`);
-check(homeTagCount === 0, `index.html: el item home NO debe tener un <span class="shell-nav__tag">Inicio</span> duplicado, encontre ${homeTagCount}`);
+// Estos chequeos sobre el bundle de la galería: gallery/app.ts debe
+// contener una sola asignación `textContent = 'Inicio'` (solo el title).
+const homeTitleCount = (galleryApp.match(/textContent\s*=\s*['"]Inicio['"]/g) || []).length;
+const homeTagCount = (galleryApp.match(/<span\s+class="shell-nav__tag"[^>]*>\s*Inicio\s*<\/span>/g) || []).length;
+check(homeTitleCount === 1, `gallery/app.ts: esperaba 1 'textContent="Inicio"' (solo el title), encontre ${homeTitleCount}`);
+check(homeTagCount === 0, `gallery/app.ts: el item home NO debe tener un <span class="shell-nav__tag">Inicio</span> duplicado, encontre ${homeTagCount}`);
 
 // Estas pruebas contra el archivo completo ya estan cubiertas por el
 // bloque aislado arriba, asi que las omitimos para evitar falsos negativos

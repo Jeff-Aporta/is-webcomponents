@@ -18,7 +18,7 @@ if (!existsSync(join(dist, 'cdn'))) {
   failures.push('falta dist/cdn/ — el build debe emitir ahí');
 }
 
-const allowedRootFiles = new Set(['.gitignore']);
+const allowedRootFiles = new Set(['.gitignore', 'gallery-app.min.js']);
 const allowedRootDirs = new Set(['cdn', 'assets']);
 
 if (existsSync(dist)) {

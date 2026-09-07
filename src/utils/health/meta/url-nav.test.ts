@@ -85,8 +85,11 @@ test('is-cdn-snippet url-key persiste alcance tag|category|all', async () => {
 });
 
 test('galería mergea nav keys al actualizar component en ?s=', async () => {
-  const html = await readFile(join(raiz, 'index.html'), 'utf8');
-  assert.match(html, /readStateParam\(\)\s*\|\|\s*\{\}/);
-  assert.match(html, /\.\.\.prev,\s*component:/);
-  assert.match(html, /delete next\.theme/);
+  // La lógica del state vive en el bundle del SPA (gallery/app.ts), no inline
+  // en index.html (la migración del inline JS al bundle cambió dónde están
+  // los marcadores — el guardián se actualiza al nuevo contrato).
+  const gallery = await readFile(join(raiz, 'src/gallery/app.ts'), 'utf8');
+  assert.match(gallery, /readStateParam\(\)\s*\|\|\s*\{\}/);
+  assert.match(gallery, /\.\.\.prev,\s*component:/);
+  assert.match(gallery, /delete next\.theme/);
 });
