@@ -14,6 +14,7 @@ import { svgIconGroup, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { contrastFontColor } from '../_shared/tk-color.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 /**
@@ -397,12 +398,37 @@ class IsSequenceDiagram extends DiagramElementBase {
         },
       );
     }
+    // Wrap con el helper compartido: el chip rectangular tiene ancho/alto fijo
+    // (m.labelW/m.labelH), así que por defecto usamos ellipsis si el texto no
+    // cabe — los chips de mensaje no pueden crecer verticalmente (romperían
+    // la rejilla de la secuencia). El caller puede sobreescribir con
+    // `m.overflow` si quiere un comportamiento distinto.
+    const overflow = (m.overflow === 'grow' || m.overflow === 'ellipsis') ? m.overflow : 'ellipsis';
+    const result = wrapText({
+      text: m.label,
+      maxWidth: m.labelW,
+      maxHeight: m.labelH,
+      fontSize: 10,
+      fontFamily: 'Consolas,Menlo,monospace',
+      overflow,
+    });
+    const tspans = buildTspans(
+      result.lines,
+      m.labelX, m.labelY, m.labelW, m.labelH,
+      'middle', 10, 1.2,
+    );
     const t = svgEl('text', {
-      x: m.labelX + m.labelW / 2, y: m.labelY + 13, 'text-anchor': 'middle',
       fill: theme.muted, 'font-size': '10', 'font-family': 'Consolas,Menlo,monospace',
       class: 'seq-label-text',
     });
-    t.textContent = m.label;
+    for (const span of tspans) {
+      const ts = svgEl('tspan', {
+        x: span.x, y: span.y,
+        ...(span.dy != null ? { dy: span.dy } : {}),
+      });
+      ts.textContent = span.text;
+      t.appendChild(ts);
+    }
     return t;
   }
 
