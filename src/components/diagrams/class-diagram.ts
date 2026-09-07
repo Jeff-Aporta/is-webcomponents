@@ -6,6 +6,7 @@ import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
@@ -304,18 +305,60 @@ class IsClassDiagram extends DiagramElementBase {
             });
             st.textContent = n.stereotype;
             g.appendChild(st);
-            const nameT = svgEl('text', {
-              x: n.x + n.w / 2, y: n.y + section.h - 8, 'text-anchor': 'middle', fill: theme.text,
-              'font-size': '11.5', 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
+            // Wrap del nombre de clase si es largo.
+            const result = wrapText({
+              text: n.name,
+              maxWidth: n.w - 12,
+              maxHeight: section.h - 8,
+              fontSize: 11.5,
+              fontFamily: 'Tahoma,Arial,sans-serif',
+              overflow: n.overflow ?? 'grow',
             });
-            nameT.textContent = n.name;
+            const tspans = buildTspans(
+              result.lines,
+              n.x + 6, n.y, n.w - 12, section.h,
+              'middle', 11.5, 1.2,
+            );
+            const nameT = svgEl('text', {
+              fill: theme.text, 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
+              'font-size': '11.5',
+            });
+            for (const span of tspans) {
+              const ts = svgEl('tspan', {
+                x: span.x, y: span.y,
+                ...(span.dy != null ? { dy: span.dy } : {}),
+              });
+              ts.textContent = span.text;
+              nameT.appendChild(ts);
+            }
             g.appendChild(nameT);
           } else {
-            const nameT = svgEl('text', {
-              x: n.x + n.w / 2, y: midY + 4, 'text-anchor': 'middle', fill: theme.text,
-              'font-size': '11.5', 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
+            // Wrap del nombre de clase si es largo.
+            const result = wrapText({
+              text: n.name,
+              maxWidth: n.w - 12,
+              maxHeight: section.h - 8,
+              fontSize: 11.5,
+              fontFamily: 'Tahoma,Arial,sans-serif',
+              overflow: n.overflow ?? 'grow',
             });
-            nameT.textContent = n.name;
+            const tspans = buildTspans(
+              result.lines,
+              n.x + 6, n.y, n.w - 12, section.h,
+              'middle', 11.5, 1.2,
+            );
+            const nameT = svgEl('text', {
+              fill: theme.text, 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
+              'font-size': '11.5',
+            });
+            for (const span of tspans) {
+              const ts = svgEl('tspan', {
+                x: span.x, y: span.y,
+                ...(span.dy != null ? { dy: span.dy } : {}),
+              });
+              ts.textContent = span.text;
+              nameT.appendChild(ts);
+            }
             g.appendChild(nameT);
           }
           continue;
