@@ -143,7 +143,7 @@ type Resultado = {
   descripcion: string;
   lede: string;
   evidenciaDom: string;
-  bytes: number;
+  bytes: number; // conservado para diagnóstico pero ya no se imprime en state.md
 };
 
 /**
@@ -321,7 +321,6 @@ testE2E(
         if (r.evidenciaDom) lineas.push(`- **Vista (DOM vivo)**: ${r.evidenciaDom}`);
         if (r.ok) {
           lineas.push(`- **Captura**: ![${r.tag}](${r.rutaImg})`);
-          lineas.push(`- **Tamaño**: ${r.bytes} bytes`);
         } else {
           lineas.push(`- **Captura**: NO GENERADA — ${r.motivo ?? 'motivo desconocido'}`);
         }
