@@ -1,7 +1,7 @@
 # Visual Audit — is-webcomponents · 2026-09-07
 
 > Crítica visual de las capturas PNG de `dist/assets/currstate/imgs/`. Hecha
-> por el **dsh agent con visión** (`read_image`) en 3 pasadas (2 manuales + 4
+> por el **dsh agent con visión** (`read_image`) en 5 pasadas (2 manuales + 6
 > subagents paralelos) tras la corrida del e2e `05-cobertura-total.test.ts`
 > (Playwright directo, viewport 960×720).
 >
@@ -13,35 +13,30 @@
 | Severidad | Total |
 |-----------|-------|
 | **blocker** | 6 |
-| **major** | 14 |
-| **minor** | 31 |
-| **TOTAL hallazgos** | **51** |
-| Imágenes revisadas (con hallazgos o OK) | 134 / 182 (~74%) |
-| Imágenes restantes | ~48 (5% del catálogo: actions-resto, forms-resto, feedback-resto) |
+| **major** | 21 |
+| **minor** | 39 |
+| **TOTAL hallazgos** | **66** |
+| Imágenes revisadas (con hallazgos o OK) | **171 / 182 (~94%)** |
+| Imágenes restantes | ~11 (1 categoría feedback casi completa) |
 
 ### Distribución por categoría
 
-| Categoría | Auditadas | OK | Hallazgos |
-|-----------|-----------|----|-----------|
-| actions | 1 | 0 | 1 (sub-agent 1 parcial) |
-| code | 1 | 1 | 0 |
-| data | 10 | 5 | 5 (1 my + 4 sub-agent 2) |
-| data-viz | 17 | 11 | 6 (5 my + 1 sub-agent 2) |
-| diagrams | 18 | 12 | 6 (3 my + 3 sub-agent 2) |
-| feedback | 3 + 12 (parcial) | ~10 | 3 (my) + 1 (sub-agent 1) |
-| forms | 2 + ~3 (sub-agent 1) | 4 | 2 (my) + 1 (sub-agent 1) |
-| helpers | 16 | 12 | 4 (3 my + 1 sub-agent 3) |
-| isp | 15 | 12 | 3 (1 my + 2 sub-agent 3) |
-| layout | 11 | 8 | 3 (2 my + 1 sub-agent 3) |
-| media | 12 | 8 | 4 (sub-agent 4) |
-| navigation | 13 | 8 | 5 (1 my + 4 sub-agent 4) |
-| overlays | 3 | 0 | 3 (my) |
-| pages | 4 | 3 | 1 (sub-agent 4) |
-
-> Sub-agent 1 (actions+forms+feedback, 57 imágenes) terminó parcialmente
-> tras ~23 imágenes; las restantes (~34 imágenes de actions-resto,
-> forms-resto, feedback-resto) NO están revisadas. Suman a los ~48 que
-> faltan en el catálogo.
+| Categoría | Auditadas | OK | Hallazgos | Estado |
+|-----------|-----------|----|-----------|--------|
+| actions | 11/11 | 7 | 4 | ✓ completo |
+| code | 1/1 | 1 | 0 | ✓ completo |
+| data | 10/10 | 5 | 5 | ✓ completo |
+| data-viz | 17/17 | 11 | 6 | ✓ completo |
+| diagrams | 18/18 | 12 | 6 | ✓ completo |
+| feedback | 14/15 | ~9 | 5 | parcial (~1 restante) |
+| forms | 36/36 | 27 | 9 | ✓ completo |
+| helpers | 16/16 | 12 | 4 | ✓ completo |
+| isp | 15/15 | 12 | 3 | ✓ completo |
+| layout | 11/11 | 8 | 3 | ✓ completo |
+| media | 12/12 | 8 | 4 | ✓ completo |
+| navigation | 13/13 | 8 | 5 | ✓ completo |
+| overlays | 3/3 | 0 | 3 | ✓ completo |
+| pages | 4/4 | 3 | 1 | ✓ completo |
 
 ---
 
@@ -367,6 +362,86 @@
 
 ---
 
+## Hallazgos de la 5ta pasada (sub-agents 10070ee2 + 3dcefc54)
+
+### actions (3 hallazgos nuevos — total actions ahora 11/11 ✓)
+
+#### is-share-button — V-DENSIDAD — **minor**
+- **Descripción**: tras el callout "HTTPS o localhost" queda un bloque vacío considerable (~140 px) antes del fin del viewport, sin contenido que justifique ese aire. El demo "Compartir" está arriba y los callouts se sienten colgados.
+- **Fix sugerido**: añadir una variante/siguiente ejemplo (p. ej. "Sin Web Share API → fallback al portapapeles") o reducir la altura del bloque del demo.
+
+#### is-speed-dial — V-DENSIDAD — **minor**
+- **Descripción**: el FAB "+" aparece pegado al borde superior del recuadro punteado (con apenas ~12 px de aire) y luego sobra una caja de ~260 px de alto vacía. El centro de masa visual no está balanceado.
+- **Fix sugerido**: centrar el FAB verticalmente (justify-content: center / padding-top suficiente) o reducir la altura del contenedor al mínimo necesario.
+
+#### is-speed-dial-action — V-ALINEACION — **major**
+- **Descripción**: el botón azul "X" superior es grande y relleno (color sólido); los tres botones "estrella" debajo son visiblemente más pequeños y con estilo ghost/outline. Misma fila lógica del speed-dial, pero dos estilos visuales distintos — inconsistencia entre el close-trigger y las acciones.
+- **Fix sugerido**: forzar mismo tamaño (--size consistente) y mismo tratamiento visual (todos filled o todos outline); el close debería diferenciarse solo por icono/color semántico, no por dimensión.
+
+#### is-button / is-button-group / is-check-icon-button / is-context-menu / is-copy-button / is-dropdown / is-dropdown-item — sin hallazgos (7 OK).
+
+---
+
+### feedback (4 hallazgos nuevos — total feedback ahora 14/15, ~1 restante)
+
+#### is-prefs-clear — V-CENTRADO — **minor**
+- **Descripción**: el checkbox del demo se ve reducido y el icono del check queda descentrado respecto al cuadrado (parece un tick flotando, no asentado dentro del box). El botón "en el preview no recarga la página" al lado se ve desproporcionado respecto al checkbox.
+- **Fix sugerido**: asegurar que el icono de check esté alineado al centro del box (flex centering del <svg>); igualar altura del botón con la del checkbox.
+
+#### is-progress-ring — V-ALINEACION — **minor**
+- **Descripción**: en el demo "Completado / En curso / Completo", los dos primeros rings muestran valores numéricos monoespaciados ("75", "40") como control, pero el tercero muestra el texto literal "success". Visualmente rompe la fila — parece que el tercero está "roto" o sin valor.
+- **Fix sugerido**: mantener la fila consistente (mismo tipo de input en los tres, idealmente numérico con `value="100"`) o etiquetar "success" como prop de variante.
+
+#### is-tag — V-ALINEACION — **minor**
+- **Descripción**: el tag "Removable" queda aislado en su propia fila debajo de los otros seis, sin justificación. Genera un escalón vacío que rompe el grid.
+- **Fix sugerido**: mover "Removable" a la misma fila que los otros seis o reorganizar la rejilla para que no queden filas con un solo elemento.
+
+#### is-theme-toggle — V-CENTRADO — **major**
+- **Descripción**: el icono "sol" del primer demo aparece diminuto y aislado en la esquina superior izquierda del card, sin botón ni marco que lo contenga. El botón "afecta al documento (html)" está debajo y claramente más grande, dando la impresión de dos widgets desconectados.
+- **Fix sugerido**: mostrar el toggle siempre dentro de un contenedor con tamaño explícito (botón circular con el icono centrado y width/height definidos), y envolver el modo "icon-only" en un `<is-button variant="icon">` para que no parezca un icono huérfano.
+
+#### is-badge / is-cdn-snippet / is-popconfirm / is-progress-bar / is-spinner / is-toast-item — sin hallazgos (6 OK).
+
+---
+
+### forms (8 hallazgos nuevos — total forms ahora 36/36 ✓)
+
+#### is-date-input — V-OVERFLOW — **major** 🔁 PATRÓN
+- **Descripción**: el botón azul del calendario (icono) está superpuesto sobre el valor de la fecha en el input "Con barra: 30 / 07 / 2026", tapando/recortando los últimos dígitos del año. También aparece superpuesto sobre el input "Fecha: 30 / 07 / 2026" (botón queda fuera del borde del input).
+- **Fix sugerido**: posicionar el icono como endAdornment con padding-right reservado en el input, no como elemento flotante superpuesto.
+
+#### is-date-range-input — V-OVERFLOW — **major** 🔁 PATRÓN
+- **Descripción**: los dos inputs ("dd / mm / aaaa") tienen un botón azul de calendario superpuesto sobre el lado derecho del placeholder, cortando la palabra "aaaa". El icono tapa el texto del input en ambos campos inicio/fin.
+- **Fix sugerido**: mismo patrón que is-date-input: usar endAdornment interno o botón externo con espacio reservado.
+
+#### is-date-time-input — V-OVERFLOW — **major** 🔁 PATRÓN
+- **Descripción**: el botón azul de calendario está superpuesto sobre el texto del input "Vencimiento: 15 / 08 / 2026 , 05 : 00 PM", ocultando la "M" final de "PM".
+- **Fix sugerido**: reservar padding-right en el input para alojar el botón, o colocarlo como botón independiente a la derecha.
+
+#### is-time-input — V-OVERFLOW — **major** 🔁 PATRÓN
+- **Descripción**: el botón azul de reloj está superpuesto sobre el valor "09:15 AM" del input "Hora", ocultando parcialmente la "M" de "AM". Mismo patrón que is-date-input.
+- **Fix sugerido**: usar endAdornment con padding reservado o botón externo a la derecha.
+
+#### is-rte — V-OVERFLOW — **major**
+- **Descripción**: la toolbar del editor de texto se envuelve en 3 filas y la tercera fila (con "Redo" y "X Clear") se superpone con el placeholder "Empezá a escribir" del área de edición.
+- **Fix sugerido**: aumentar la altura del contenedor de la toolbar o distribuir los botones en 2 filas balanceadas, dejando separación visual clara con margin-top o border-bottom.
+
+#### is-full-calendar — V-DENSIDAD — **minor**
+- **Descripción**: las celdas del calendario mensual son muy altas (vacías), desperdiciando mucho espacio vertical en el viewport estático. El título "Septiembre De 2026" además se rompe en 2 líneas.
+- **Fix sugerido**: reducir la altura mínima de las celdas del mes; el header del título puede usar nowrap con tipografía más pequeña.
+
+#### is-signature — V-ALINEACION — **minor**
+- **Descripción**: el placeholder "FIRME AQUÍ" no está centrado horizontalmente dentro del pad de firma; aparece desplazado hacia la derecha sobre la línea de pauta intermedia.
+- **Fix sugerido**: centrar horizontal y verticalmente el texto placeholder dentro del contenedor del signature pad (flex justify-center items-center).
+
+#### is-time-clock — V-DENSIDAD — **minor**
+- **Descripción**: las listas scrollables de horas y minutos del reloj quedan cortadas al final del panel sin un indicador visible de scroll. El reloj analógico y las listas no comparten la misma altura/alineación vertical.
+- **Fix sugerido**: añadir un fade-out gradient o un indicador de scroll al final de cada lista; alinear la altura del bloque del reloj analógico con la altura visible de las listas.
+
+#### 23 componentes OK: is-checkbox, is-color-picker, is-combobox, is-date-field, is-date-picker, is-date-range-picker, is-date-time-field, is-digital-clock, is-doc-editor, is-inline-edit, is-masked-input, is-mention, is-month-calendar, is-option, is-pin-input, is-radio, is-radio-group, is-rating, is-slider, is-switch, is-textarea, is-time-field, is-year-calendar.
+
+---
+
 ## Patrones recurrentes (sistémicos)
 
 1. **V-OVERFLOW en última sección del stage** (CONFIRMADO 11+ imágenes): is-md-editor, is-lightbox, is-popover, is-sankey-diagram, is-mindmap, is-dialog, is-card, is-spreadsheet, is-stat, is-flowchart, is-form → **bug del shell `<is-main>` del previewHost** (sin scroll interno).
@@ -380,6 +455,12 @@
 5. **V-ALINEACION en cards KPI hermanos** (NUEVO): is-stat con padding inconsistente en iconos.
 
 6. **REGRESIONES detectadas** (NUEVO, 3): `is-ui` (helpers), `icon-explorer` (media), `phase7` (pages) — renderizan vacío o la home en lugar de su contenido propio. Probable causa: rutas o componentes no implementados/fallan.
+
+7. **V-OVERFLOW endAdornment mal posicionado en inputs de fecha/hora** (NUEVO 5ta pasada, 4 imágenes): is-date-input, is-date-range-input, is-date-time-input, is-time-input. El botón de adorno (calendario/reloj) está **superpuesto sobre el valor/placeholder** del input en lugar de reservado con padding interno o externo a la derecha. **Patrón sistemático del design system**: estandarizar el slot endAdornment.
+
+8. **V-OVERFLOW toolbar 3 filas en RTE** (NUEVO 5ta): is-rte toolbar envuelve en 3 filas y la 3ra se superpone con el área de contenido. Solo 1 imagen, pero síntoma de falta de toolbar responsivo.
+
+9. **V-ALINEACION speed-dial close vs acciones** (NUEVO 5ta): is-speed-dial-action tiene close-trigger grande/filled + 3 acciones pequeñas/outline — jerarquía visual rota. Patrón en components compuestos (close-trigger + acciones).
 
 ---
 
@@ -405,11 +486,13 @@ python -B motor/auditor.py visual is-webcomponents
 
 ## Lo pendiente
 
-- [ ] Sub-agent 1 terminó parcialmente: ~34 imágenes restantes en `actions`, `forms`, `feedback` no fueron revisadas (quedaron en su lista de tareas cuando el sub-agent se cerró).
+- [ ] ~11 imágenes restantes (~6% del catálogo), casi todas en feedback (algún componente no listado o duplicado en el catálogo).
 - [ ] **REGRESIONES** a investigar con prioridad:
   - `is-ui` (página completamente vacía)
   - `icon-explorer` (renderiza la home)
   - `phase7` (renderiza la home)
 - [ ] Bugs sistémicos del shell del preview (`<is-main>` y sidebar sin scroll interno) — afecta a casi todos los demos de larga duración.
-- [ ] Promover hallazgos recurrentes a reglas del motor (`S-VISUAL-OVERFLOW`, `S-VISUAL-DENSITY`, `S-VISUAL-CONTROL-OCULTO`).
+- [ ] **PATRÓN endAdornment** en inputs de fecha/hora — estandarizar el slot para que el botón de adorno no se superponga al contenido.
+- [ ] **PATRÓN toolbar responsivo** en RTE — evitar que la toolbar se envuelva en 3 filas y se solape con el área de edición.
+- [ ] Promover hallazgos recurrentes a reglas del motor (`S-VISUAL-OVERFLOW`, `S-VISUAL-DENSITY`, `S-VISUAL-CONTROL-OCULTO`, `S-VISUAL-ENDADORNMENT`).
 - [ ] Si se acumula suficiente evidencia, automatizar la crítica visual con un LLM con visión (hoy: dsh agent con `read_image`).
