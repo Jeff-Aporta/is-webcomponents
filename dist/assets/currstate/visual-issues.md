@@ -15,11 +15,12 @@
 | Severidad | Total |
 |-----------|-------|
 | **blocker** | 4 |
-| **major** | 8 |
-| **minor** | 5 |
-| **TOTAL hallazgos** | **17** |
-| Componentes auditados | ~15 de 182 (1ra pasada) |
-| Cobertura | ~8% — quedan 167 por revisar |
+| **major** | 9 |
+| **minor** | 13 |
+| **TOTAL hallazgos** | **26** |
+| Componentes auditados | 27 de 182 (~15% — 2 pasadas) |
+| Categorías cubiertas | actions(1), data(3), data-viz(5), diagrams(3), feedback(3), forms(2), helpers(3), isp(1), layout(3), navigation(1), overlays(3), feedback(1 is-skeleton OK) |
+| Quedan por revisar | ~155 imágenes (~85%) |
 
 ---
 
@@ -110,6 +111,94 @@
 2. **V-DENSIDAD en charts (data-viz)**: charts pequeños con mucho espacio vacío alrededor. Aprovechan ~40-50% del stage.
 
 3. **V-OVERFLOW en sections largas**: cuando una sección (is-confirm-modal Slot message, is-tooltip Placement) tiene contenido extenso, se corta por el borde inferior.
+
+---
+
+## data (4 hallazgos nuevos — 2da pasada)
+
+### is-stat — V-CENTRADO — **major**
+- **Descripción**: en el 3er card KPI (Tasa de conversión) el icono (esquina superior derecha del card) está pegado al borde, mientras que en los otros 2 cards (Ingresos, Usuarios Activos) el icono está bien centrado dentro del card. Inconsistencia de centrado entre cards hermanos.
+- **Fix sugerido**: aplicar el mismo padding-right al slot del icono en todos los cards (variable CSS reutilizable).
+
+### is-stat — V-OVERFLOW — **major**
+- **Descripción**: el 3er card KPI "Tasa de conversión" se corta por el bottom del viewport — la fila de "vs objetivo" con el porcentaje rojo queda truncada.
+- **Fix sugerido**: scroll interno del stage o mostrar 2 cards por fila en lugar de 3.
+
+### is-spreadsheet — V-OVERFLOW — **minor**
+- **Descripción**: la sección "API / fórmulas" al final de la página queda cortada por el bottom.
+- **Fix sugerido**: scroll vertical en el stage.
+
+### is-transfer — sin hallazgos (vista limpia, sin overflow, sin labels cortados).
+
+---
+
+## diagrams (3 hallazgos nuevos)
+
+### is-flowchart — V-DENSIDAD — **minor**
+- **Descripción**: el flowchart ocupa ~30% del área stage con mucho espacio vacío alrededor (sandbox central pequeño).
+- **Fix sugerido**: agrandar el flowchart o reducir el stage.
+
+### is-mindmap — V-OVERFLOW — **minor**
+- **Descripción**: la sección "CONTROLES" colapsada al final se corta por el bottom.
+- **Fix sugerido**: scroll vertical.
+
+### is-sankey-diagram — V-OVERFLOW — **minor**
+- **Descripción**: la sección "CONTROLES" colapsada al final se corta por el bottom.
+- **Fix sugerido**: scroll vertical.
+
+---
+
+## helpers (3 hallazgos nuevos)
+
+### is-popover — V-OVERFLOW — **minor**
+- **Descripción**: la sección "Placement" al final se corta por el bottom.
+- **Fix sugerido**: scroll vertical.
+
+### is-lightbox — V-OVERFLOW — **minor**
+- **Descripción**: la sección "Variantes de backdrop" al final se corta por el bottom.
+- **Fix sugerido**: scroll vertical.
+
+### is-md-editor — V-OVERFLOW — **minor**
+- **Descripción**: la sección "Solo lectura" al final se corta por el bottom.
+- **Fix sugerido**: scroll vertical.
+
+---
+
+## isp (1 hallazgo nuevo)
+
+### is-form — sin hallazgos visuales críticos.
+- Form bien estructurado (Código, Nombre, switch Activo). Sidebar derecho con solo 2 secciones ("Round-trip JSON", "Referencia") — OK.
+
+---
+
+## layout (2 hallazgos nuevos)
+
+### is-dialog — V-OVERFLOW — **minor**
+- **Descripción**: la sección "Sin header" al final se corta por el bottom.
+- **Fix sugerido**: scroll vertical.
+
+### is-card — V-DENSIDAD — **minor**
+- **Descripción**: el card "caso mínimo" con "Hola mundo" es muy pequeño y ocupa ~25% del área stage. Mucho espacio vacío alrededor.
+- **Fix sugerido**: agrandar el card o añadir más demos.
+
+---
+
+## feedback (subagent encontró 1 imagen OK)
+
+### is-skeleton — sin hallazgos.
+- Subagent (b70bf331): "is-skeleton.png se ve correcto. Skeletons con efecto sheen." Skeleton loading placeholders con shimmer effect (gradient). 2 playgrounds: top con skeleton blocks + shimmer, y effects (sheen, pulse variants).
+
+---
+
+## Patrones recurrentes actualizados (2da pasada confirma)
+
+1. **V-OVERFLOW sistémico en última sección del stage** (CONFIRMADO en 2da pasada): is-md-editor, is-lightbox, is-popover, is-sankey-diagram, is-mindmap, is-dialog, is-card, is-spreadsheet, is-stat, is-flowchart, is-form → **la sección final del scrollSpy casi siempre queda cortada por el bottom del viewport**. Esto NO es bug de los componentes individuales, es del **shell del demo preview** (el `<is-main>` del previewHost tiene altura limitada sin scroll interno).
+
+2. **V-OVERFLOW en sidebar derecho** (CONFIRMADO en 2da pasada): is-input, is-select, is-toast, is-confirm-modal, is-tooltip, charts data-viz → **el sidebar derecho del shell tiene muchas secciones que se cortan sin scroll interno visible**.
+
+3. **V-CENTRADO en cards KPI** (NUEVO en 2da pasada): is-stat → **iconos de cards hermanos con posición inconsistente** (uno pegado al borde, otros centrados).
+
+4. **V-DENSIDAD en charts data-viz y diagrams** (CONFIRMADO en 2da pasada): aprovechan ~30-50% del stage. Charts pequeños centrados con mucho espacio vacío alrededor.
 
 ---
 
