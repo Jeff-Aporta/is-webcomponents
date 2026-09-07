@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-03T18:25:06.236Z",
-  "count": 60,
+  "generatedAt": "2026-09-07T15:12:55.116Z",
+  "count": 61,
   "modules": [
     {
       "file": "cdn-ref.ts",
@@ -308,6 +308,18 @@
       "bytes": 1142,
       "exports": [
         "diagramHeaderWidth"
+      ]
+    },
+    {
+      "file": "diagram-text-wrap.ts",
+      "id": "diagram-text-wrap",
+      "path": "src/components/_shared/diagram-text-wrap.ts",
+      "summary": "diagram-text-wrap — Tres funciones públicas:",
+      "bytes": 11464,
+      "exports": [
+        "defaultMeasureTextWidth",
+        "wrapText",
+        "buildTspans"
       ]
     },
     {
