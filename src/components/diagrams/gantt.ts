@@ -6,6 +6,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -201,7 +202,28 @@ class IsGantt extends DiagramElementBase {
         x: 16, y: r.y + r.h / 2 + 4, fill: theme.text,
         'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
       });
-      label.textContent = r.label;
+      // Wrap del label de la fila si es largo (no debe desbordar la barra).
+      const lresult = wrapText({
+        text: r.label,
+        maxWidth: Math.max(r.w - 8, 16),
+        maxHeight: r.h - 4,
+        fontSize: 11,
+        fontFamily: 'Tahoma,Arial,sans-serif',
+        overflow: r.overflow ?? 'ellipsis',
+      });
+      const ltspans = buildTspans(
+        lresult.lines,
+        r.x, r.y, r.w, r.h,
+        'start', 11, 1.2,
+      );
+      for (const span of ltspans) {
+        const ts = svgEl('tspan', {
+          x: span.x, y: span.y,
+          ...(span.dy != null ? { dy: span.dy } : {}),
+        });
+        ts.textContent = span.text;
+        label.appendChild(ts);
+      }
       g.appendChild(label);
 
       this.svg.appendChild(g);
