@@ -1,4 +1,38 @@
-export default [
+/**
+ * Manifest del kit is-webcomponents.
+ *
+ * Cada entrada describe un Web Component publicado: su `tag`, su categoría
+ * (usada para folderizar el nav y el bundle CDN) y los recursos opcionales
+ * (`script`, `style`, `page` para el preview). Las rutas `script` y `style`
+ * son **relativas al directorio del preview** (resuelven desde
+ * `<root>/src/previews/<categoria>/`). El smoke runtime las reescribe con un
+ * `BASE` antes de importar para que apunten a `<root>/src/components/...`
+ * real; el guardián `tests/manifest-paths.test.ts` las valida desde la misma
+ * base y acepta `.js` o `.ts` en disco.
+ *
+ * No commitear cambios aquí sin correr `npm test` — el guardián rompe el
+ * build si una ruta apunta a un archivo inexistente.
+ */
+export interface ComponentManifestItem {
+  /** Tag HTML del custom element (siempre `is-*`). */
+  tag: string;
+  /** Título legible para el nav y los headers de la galería. */
+  title: string;
+  /** Categoría manifest. Define la carpeta de bundle CDN y el orden del nav. */
+  category: string;
+  /** Origen del componente (`isp` = primitiva portada de ISP-SvelteComponents). Opcional. */
+  origin?: string;
+  /** Path al módulo JS/TS, relativo a `<root>/src/previews/<categoria>/`. */
+  script: string;
+  /** Path al CSS, relativo a `<root>/src/previews/<categoria>/`. Opcional. */
+  style?: string;
+  /** Path al preview JSON bajo `<root>/src/previews/`. Opcional. */
+  page?: string;
+  /** `true` si el módulo no es un custom element sino utilidades (`is-ui`). */
+  module?: boolean;
+}
+
+const manifest: ComponentManifestItem[] = [
   // isp — primitivas portadas de ISP-SvelteComponents (la librería Svelte de
   // ContaPyme). El orden del nav no sale de aquí sino de `categoryMeta` en
   // index.html, donde `isp` es la última clave.
@@ -185,3 +219,5 @@ export default [
   { tag: 'is-preview-component', title: 'Preview Component', category: 'preview', script: '../../components/layout/preview-component.js', style: '../../components/layout/preview-component.css' },
   { tag: 'is-preview-controls', title: 'Preview Controls', category: 'preview', script: '../../components/layout/preview-controls.js' },
 ];
+
+export default manifest;
