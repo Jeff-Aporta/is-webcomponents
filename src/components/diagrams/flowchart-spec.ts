@@ -10,6 +10,7 @@ import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from
 import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import { wrapText } from '../_shared/diagram-text-wrap.js';
 
 /**
  * Especificación y layout de diagramas de flujo (sin Mermaid).
@@ -63,6 +64,8 @@ function readNode(raw, i: number) {
   const rawLabel = String(r.label ?? r.text ?? r.id ?? `Nodo ${i + 1}`);
   const leading = extractLeadingIconToken(rawLabel);
   const shape = FLOW_SHAPES.has(String(r.shape)) ? String(r.shape) : 'rect';
+  const overflowRaw = String(r.overflow ?? '').trim();
+  const overflow = overflowRaw === 'grow' || overflowRaw === 'ellipsis' ? overflowRaw : undefined;
   return {
     id: String(r.id ?? `n${i}`),
     label: rawLabel,
@@ -71,6 +74,7 @@ function readNode(raw, i: number) {
     hue: leading?.hue ?? (r.hue != null ? resolveTkHue(r) : undefined),
     group: String(r.group ?? '') || undefined,
     description: String(r.desc ?? r.description ?? '').trim() || undefined,
+    overflow,
   };
 }
 
@@ -124,15 +128,18 @@ export function flowchartSpecFromPayload(payload) {
     .filter((e) => known.has(e.from) && known.has(e.to));
 
   const dir = String(src.direction ?? 'TB').toUpperCase();
+  const defaultOverflowRaw = String(src.defaultOverflow ?? 'grow').trim();
+  const defaultOverflow = defaultOverflowRaw === 'ellipsis' ? 'ellipsis' : 'grow';
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
     direction: DIRECTIONS.has(dir) ? dir : (dir === 'TD' ? 'TB' : 'TB'),
+    defaultOverflow,
     groups: readGroups(src),
     // Zonas donde nodos y aristas tienen prohibido entrar (espaciado estético).
     // Mismo espacio de coordenadas que los nodos, antes del margen del lienzo.
     exclusionZones: readExclusionZones(src.exclusionZones),
-    nodes,
+    nodes: nodes.map((n) => ({ ...n, overflow: n.overflow ?? defaultOverflow })),
     edges,
   };
 }
@@ -236,11 +243,25 @@ export function computeFlowchartLayout(spec, overrides = null) {
   const subtitleY = title ? 40 : 24;
   const headerH = hasHeader ? (subtitle ? 54 : 36) : 0;
 
-  const sized = spec.nodes.map((n) => ({
-    id: n.id,
-    w: nodeWidth(n.label, n.shape),
-    h: nodeHeight(n.shape),
-  }));
+  // Si el diagrama declara `overflow: 'grow'` en un nodo, el wrap puede
+  // necesitar más líneas de las que caben en el alto inicial; ajustamos la
+  // altura del nodo antes del layout Sugiyama para que el A* de aristas
+  // coloque las cajas con el alto real.
+  const FONT_SIZE = 11;
+  const FONT_FAMILY = 'Tahoma,Arial,sans-serif';
+
+  const sized = spec.nodes.map((n) => {
+    const w = nodeWidth(n.label, n.shape);
+    const baseH = nodeHeight(n.shape);
+    if (n.overflow === 'grow' && n.label && !/[*`\[]/.test(n.label) && !n.label.includes('{{')) {
+      const wrap = wrapText({
+        text: n.label, maxWidth: w, maxHeight: baseH,
+        fontSize: FONT_SIZE, fontFamily: FONT_FAMILY, overflow: 'grow',
+      });
+      return { id: n.id, w, h: Math.ceil(wrap.requiredHeightUsed) };
+    }
+    return { id: n.id, w, h: baseH };
+  });
 
   const placed = layoutNodeLink(sized, spec.edges, {
     direction: spec.direction,

@@ -7,6 +7,7 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -344,12 +345,32 @@ class IsFlowchart extends DiagramElementBase {
         fo.appendChild(div);
         g.appendChild(fo);
       } else {
+        // Wrap con el helper compartido: respeta `n.overflow` (grow/ellipsis).
+        const result = wrapText({
+          text: n.label,
+          maxWidth: Math.max(textRight - textLeft, 8),
+          maxHeight: n.h,
+          fontSize: 11,
+          fontFamily: 'Tahoma,Arial,sans-serif',
+          overflow: n.overflow ?? 'grow',
+        });
+        const tspans = buildTspans(
+          result.lines,
+          n.x, n.y, n.w, n.h,
+          'middle', 11, 1.2,
+        );
         const t = svgEl('text', {
-          x: (textLeft + textRight) / 2, y: n.y + n.h / 2 + 4, 'text-anchor': 'middle',
           fill: theme.text, 'font-size': '11', 'font-weight': '600',
           'font-family': 'Tahoma,Arial,sans-serif',
         });
-        t.textContent = n.label;
+        for (const span of tspans) {
+          const ts = svgEl('tspan', {
+            x: span.x, y: span.y,
+            ...(span.dy != null ? { dy: span.dy } : {}),
+          });
+          ts.textContent = span.text;
+          t.appendChild(ts);
+        }
         g.appendChild(t);
       }
 
