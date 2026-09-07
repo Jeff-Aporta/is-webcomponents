@@ -7,6 +7,7 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -340,13 +341,33 @@ class IsBlockDiagram extends DiagramElementBase {
         fo.appendChild(div);
         g.appendChild(fo);
       } else {
+        // Wrap con el helper compartido: respeta `b.overflow`.
+        const result = wrapText({
+          text: b.label,
+          maxWidth: Math.max(textRight - textLeft, 8),
+          maxHeight: b.h,
+          fontSize: 12,
+          fontFamily: 'Inter,ui-sans-serif,system-ui,sans-serif',
+          overflow: b.overflow ?? 'grow',
+        });
+        const tspans = buildTspans(
+          result.lines,
+          b.x, b.y, b.w, b.h,
+          'middle', 12, 1.25,
+        );
         const t = svgEl('text', {
-          x: (textLeft + textRight) / 2, y: b.y + b.h / 2 + 4.5, 'text-anchor': 'middle',
           fill: theme.text, 'font-size': '12', 'font-weight': '600',
           'font-family': 'Inter,ui-sans-serif,system-ui,sans-serif',
           'letter-spacing': '-0.005em',
         });
-        t.textContent = b.label;
+        for (const span of tspans) {
+          const ts = svgEl('tspan', {
+            x: span.x, y: span.y,
+            ...(span.dy != null ? { dy: span.dy } : {}),
+          });
+          ts.textContent = span.text;
+          t.appendChild(ts);
+        }
         g.appendChild(t);
       }
 
