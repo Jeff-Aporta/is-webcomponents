@@ -5,6 +5,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -274,10 +275,38 @@ class IsUseCaseDiagram extends DiagramElementBase {
         fill: theme.chipFill, stroke: color, 'stroke-width': 1.3, class: 'uc-case__shape',
       }));
       const t = svgEl('text', {
-        x: c.x + c.w / 2, y: c.y + c.h / 2 + 4, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '11', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
+        fill: theme.text, 'font-size': '11', 'font-weight': '600',
+        'font-family': 'Tahoma,Arial,sans-serif',
       });
-      t.innerHTML = inlineMdWeb(c.label);
+      const ucHasMd = /[*`\[]/.test(c.label) || c.label.includes('{{');
+      if (ucHasMd) {
+        t.setAttribute('x', c.x + c.w / 2);
+        t.setAttribute('y', c.y + c.h / 2 + 4);
+        t.setAttribute('text-anchor', 'middle');
+        t.innerHTML = inlineMdWeb(c.label);
+      } else {
+        const ucresult = wrapText({
+          text: c.label,
+          maxWidth: Math.max(c.w - 16, 8),
+          maxHeight: c.h - 8,
+          fontSize: 11,
+          fontFamily: 'Tahoma,Arial,sans-serif',
+          overflow: c.overflow ?? 'ellipsis',
+        });
+        const uctspans = buildTspans(
+          ucresult.lines,
+          c.x, c.y, c.w, c.h,
+          'middle', 11, 1.2,
+        );
+        for (const span of uctspans) {
+          const ts = svgEl('tspan', {
+            x: span.x, y: span.y,
+            ...(span.dy != null ? { dy: span.dy } : {}),
+          });
+          ts.textContent = span.text;
+          t.appendChild(ts);
+        }
+      }
       g.appendChild(t);
 
       this.svg.appendChild(g);
