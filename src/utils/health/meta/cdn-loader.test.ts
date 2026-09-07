@@ -45,10 +45,12 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
 });
 
 test('min.js de componente lleva banner de docs MD', () => {
+  // Consolidación 2026-09-07: el banner ya no apunta a LLM.md per-carpeta
+  // (eliminado); apunta a specs/componentes.md (índice global consolidado).
   const btn = readFileSync(join(root, 'dist', 'cdn', 'actions', 'button.min.js'), 'utf8');
   assert.match(btn, /^\/\*!/);
   assert.match(btn, /src\/components\/actions\/button\.md/);
-  assert.match(btn, /src\/components\/actions\/LLM\.md/);
+  assert.match(btn, /specs\/componentes\.md/);
   assert.match(btn, /src\/cdn\/loader\.md/);
   assert.match(btn, /is-cdn-install\/SKILL\.md/);
 });

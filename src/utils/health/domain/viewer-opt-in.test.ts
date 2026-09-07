@@ -41,9 +41,9 @@ const scanned = [
   join(root, 'index.html'),
 ].filter((f) => /\.(ts|css|html|md)$/.test(f));
 
-// LLM.md documenta los errores pasados por su nombre: ahi el atributo viejo
-// tiene que poder mencionarse, o no se puede explicar que se dejo de hacer.
-const NARRA_HISTORIA = new Set(['src/components/LLM.md']);
+// specs/lessons.md documenta los errores pasados por su nombre: ahí el atributo
+// viejo tiene que poder mencionarse, o no se puede explicar que se dejó de hacer.
+const NARRA_HISTORIA = new Set(['specs/lessons.md']);
 
 for (const f of scanned) {
   if (NARRA_HISTORIA.has(rel(f))) continue;

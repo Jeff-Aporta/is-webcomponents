@@ -46,10 +46,10 @@ No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada pr
 Usa el kit IS Web Components solo por CDN (jsDelivr), sin npm ni npx.
 Bootstrap: `loader.min.js` + `L.load(tags de la vista)`. Sin `all.min.js` ni bundles de categoría.
 Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
-Antes de inventar API: lee src/components/LLM.md, el LLM.md de la categoría y el MD del módulo.
+Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.
 ```
 
-Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/LLM.md) · [AGENTS.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/AGENTS.md) · skill en `src/skills/is-webcomponents/SKILL.md`.
+Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) · [catálogo de errores](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/lessons.md) · skill en `src/skills/is-webcomponents/SKILL.md`.
 
 ## Licencia
 

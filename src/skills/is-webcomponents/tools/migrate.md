@@ -41,7 +41,7 @@ mapean a qué tag `is-*`, cómo quedó el bootstrap, qué se eliminó del
    Svelte/Vue/etc., el bundler asociado (Vite/webpack/CRA…) y sus configs,
    si ya no queda ningún archivo que los use.
 7. **No reinventar el kit.** Si durante la migración parece que falta un
-   componente, verificar primero en `src/components/LLM.md` y en el LLM.md
+   componente, verificar primero en `specs/componentes.md` y en el LLM.md
    de la categoría antes de asumir que hay que crearlo.
 
 ## Checklist de salida
