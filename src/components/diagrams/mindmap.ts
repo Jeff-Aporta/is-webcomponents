@@ -6,6 +6,7 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
@@ -175,15 +176,35 @@ class IsMindmap extends DiagramElementBase {
         g.appendChild(fo);
       } else {
         const t = svgEl('text', {
-          x: n.kind === 'leaf' ? textLeft : (textLeft + textRight) / 2,
-          y: n.y + n.h / 2 + 4,
-          'text-anchor': n.kind === 'leaf' ? 'start' : 'middle',
           fill: textFill,
           'font-size': n.kind === 'root' ? '12' : '11',
           'font-weight': n.kind === 'leaf' ? '500' : '600',
           'font-family': 'Tahoma,Arial,sans-serif',
         });
-        t.textContent = n.label;
+        // Wrap del label del nodo si es largo.
+        const fontSize = n.kind === 'root' ? 12 : 11;
+        const mresult = wrapText({
+          text: n.label,
+          maxWidth: Math.max(textRight - textLeft, 8),
+          maxHeight: n.h - 4,
+          fontSize,
+          fontFamily: 'Tahoma,Arial,sans-serif',
+          overflow: n.overflow ?? 'grow',
+        });
+        const mtspans = buildTspans(
+          mresult.lines,
+          n.x, n.y, n.w, n.h,
+          n.kind === 'leaf' ? 'start' : 'middle',
+          fontSize, 1.2,
+        );
+        for (const span of mtspans) {
+          const ts = svgEl('tspan', {
+            x: span.x, y: span.y,
+            ...(span.dy != null ? { dy: span.dy } : {}),
+          });
+          ts.textContent = span.text;
+          t.appendChild(ts);
+        }
         g.appendChild(t);
       }
 

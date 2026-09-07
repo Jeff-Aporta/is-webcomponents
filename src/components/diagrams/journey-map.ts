@@ -4,6 +4,7 @@ import { resolveJourneySpec, computeJourneyLayout } from './journey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
@@ -153,7 +154,28 @@ class IsJourneyMap extends DiagramElementBase {
         'font-size': '10.5', 'font-weight': '600', 'letter-spacing': '0.03em',
         'font-family': 'Tahoma,Arial,sans-serif',
       });
-      t.textContent = f.name;
+      // Wrap del nombre de fase si es largo.
+      const fresult = wrapText({
+        text: f.name,
+        maxWidth: f.w - 8,
+        maxHeight: f.h - 4,
+        fontSize: 10.5,
+        fontFamily: 'Tahoma,Arial,sans-serif',
+        overflow: f.overflow ?? 'ellipsis',
+      });
+      const ftspans = buildTspans(
+        fresult.lines,
+        f.x, f.y, f.w, f.h,
+        'middle', 10.5, 1.2,
+      );
+      for (const span of ftspans) {
+        const ts = svgEl('tspan', {
+          x: span.x, y: span.y,
+          ...(span.dy != null ? { dy: span.dy } : {}),
+        });
+        ts.textContent = span.text;
+        t.appendChild(ts);
+      }
       item.appendChild(t);
       g.appendChild(item);
     }
