@@ -33,7 +33,7 @@ test('manifest usa is-code (no is-code-editor)', () => {
 });
 
 test('component-sources: localSourceUrl es absoluta (.href)', async () => {
-  const mod = await import(pathToFileURL(join(root, 'scripts/component-sources.js')).href);
+  const mod = await import(pathToFileURL(join(root, 'src/utils/source-paths.ts')).href);
   const url = mod.localSourceUrl('src/components/actions/button.ts');
   // En Node es file://…; en browser Live Server es http(s)://host/…
   assert.match(url, /^[a-z][a-z0-9+.-]*:\/\//i, `esperado URL absoluta, got: ${url}`);

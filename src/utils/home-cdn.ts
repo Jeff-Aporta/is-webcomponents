@@ -1,20 +1,25 @@
-// home-cdn.js — Inicializa el módulo de consumo por CDN en el home.
+// home-cdn.ts — Inicializa el módulo de consumo por CDN en el home.
+// Migrado de `scripts/home-cdn.js` (2026-09-07): S-DEP-FUERA exige que
+// `src/` no dependa de `scripts/`.
+//
 // Sin literales `</script>` en este archivo: se construye con fromCharCode
 // para evitar que el lexer HTML cierre el `<script>` de este módulo.
+
+import manifest from '../manifest.js';
+import { paint } from '../components/_shared/highlight-code.js';
 
 const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
 
 // dist/cdn folderizado por categoria: <categoria>/<tag>.min.js
-import manifest from '../src/manifest.js';
-import { paint } from '../src/components/_shared/highlight-code.js';
-const catOf = (name) => manifest.find((c) => c.tag === `is-${name}`)?.category || 'helpers';
-const cdnJs = (name) => `${CDN}/${catOf(name)}/${name}.min.js`;
+const catOf = (name: string): string =>
+  manifest.find((c) => c.tag === `is-${name}`)?.category || 'helpers';
+const cdnJs = (name: string): string => `${CDN}/${catOf(name)}/${name}.min.js`;
 const open = String.fromCharCode(60);
 const slash = String.fromCharCode(47);
 const close = String.fromCharCode(62);
 
 // Sin <link> de CSS: cada .min.js carga su .min.css hermano en su Shadow DOM.
-const buildJsCssSnippet = () => [
+const buildJsCssSnippet = (): string => [
   `${open}!-- Carga solo los componentes que necesites --${close}`,
   `${open}script type="module" src="${cdnJs('button')}"${close}${open}${slash}script${close}`,
   `${open}script type="module" src="${cdnJs('badge')}"${close}${open}${slash}script${close}`,
@@ -30,7 +35,7 @@ const buildJsCssSnippet = () => [
   `${open}is-sparkline values="4,6,5,8,7,11,13"${close}${open}${slash}is-sparkline${close}`,
 ].join('\n');
 
-const buildBundleSnippet = () => [
+const buildBundleSnippet = (): string => [
   `${open}script type="module" src="${CDN}/core/loader.min.js"${close}${open}${slash}script${close}`,
   `${open}script type="module"${close}`,
   `  const L = globalThis.ISWebComponentsLoader;`,
@@ -43,7 +48,7 @@ const buildBundleSnippet = () => [
 ].join('\n');
 
 // ── html autocontenido para descargar ─────────────────────────────
-const modules = [
+const modules: string[] = [
   'button', 'card', 'badge', 'tag', 'icon', 'avatar',
   'toast', 'tooltip', 'theme-toggle',
   'split-panel', 'main',
@@ -57,7 +62,7 @@ const modules = [
   'sequence-diagram',
 ];
 
-const chartTile = (type, json) => `        ${open}div class="tile"${close}
+const chartTile = (type: string, json: string): string => `        ${open}div class="tile"${close}
           ${open}small${close}${type}${open}${slash}small${close}
           ${open}is-${type}${close}
             ${open}script type="application/json"${close}
@@ -66,7 +71,7 @@ const chartTile = (type, json) => `        ${open}div class="tile"${close}
           ${open}${slash}is-${type}${close}
         ${open}${slash}div${close}`;
 
-const buildDemoHtml = (variant) => {
+const buildDemoHtml = (variant: string): string => {
   const imp = `${open}script type="importmap"${close}\n{\n  "imports": {\n    "@is-webcomponents/": "${CDN}/"\n  }\n}\n${open}${slash}script${close}`;
   const mod = `${open}script type="module"${close}\n  ${modules.map((m) => `import '@is-webcomponents/${catOf(m)}/${m}.min.js';`).join('\n  ')}\n${open}${slash}script${close}`;
   const moduleImports = (variant === 'bundle')
@@ -277,7 +282,7 @@ ${moduleImports}
 `;
 };
 
-const downloadHtml = (variant) => {
+const downloadHtml = (variant: string): void => {
   const html = buildDemoHtml(variant);
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
@@ -303,18 +308,16 @@ let copiaCableada = false;
  * Es una función y no efectos de módulo porque el home se monta y desmonta
  * dentro de la galería: con la lógica al importar, un segundo montaje dejaba
  * los `<pre>` vacíos (el módulo ya estaba en caché y no volvía a ejecutarse).
- *
- * @param {ParentNode} [raiz]
  */
-export function init(raiz = document) {
+export function init(raiz: ParentNode = document): void {
   const preJs = raiz.querySelector('#cdnJsCss');
   const preB = raiz.querySelector('#cdnBundle');
-  const setSnippet = (el, text) => {
+  const setSnippet = (el: Element | null, text: string): void => {
     if (!el) return;
     if (el.localName === 'is-code') {
-      el.value = text;
-      el.dataset.cmSource = text;
-      delete el.dataset.cm;
+      (el as HTMLElement).value = text;
+      (el as HTMLElement).dataset.cmSource = text;
+      delete (el as HTMLElement).dataset.cm;
     } else {
       el.textContent = text;
     }
@@ -324,8 +327,8 @@ export function init(raiz = document) {
 
   // Resaltado vía <is-code readonly> (paint sustituye pre.code legacy).
   Promise.all([
-    preJs ? paint(preJs) : null,
-    preB ? paint(preB) : null,
+    preJs ? paint(preJs as HTMLElement) : null,
+    preB ? paint(preB as HTMLElement) : null,
   ]).catch(console.error);
 
   // Tabs.
@@ -333,10 +336,10 @@ export function init(raiz = document) {
   const panels = raiz.querySelectorAll('.home-cdn__panel');
   tabs.forEach((tab) => {
     tab.addEventListener('click', () => {
-      const target = tab.dataset.tab;
+      const target = (tab as HTMLElement).dataset.tab;
       tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
       panels.forEach((p) => {
-        p.hidden = p.dataset.panel !== target;
+        (p as HTMLElement).hidden = (p as HTMLElement).dataset.panel !== target;
       });
     });
   });
@@ -348,7 +351,7 @@ export function init(raiz = document) {
 }
 
 // Copy-to-clipboard (fallback para file:// o contextos sin clipboard API).
-const writeText = async (text) => {
+const writeText = async (text: string): Promise<void> => {
   if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
   const ta = document.createElement('textarea');
   ta.value = text;
@@ -363,9 +366,10 @@ const writeText = async (text) => {
 // Delegated handler: cualquier botón .home-cdn__copy se resuelve en click.
 // Usamos delegación porque los botones pueden re-renderizarse (algunos
 // componentes del home los reemplazan) y un listener directo se perdería.
-function cablearCopiaYDescarga() {
+function cablearCopiaYDescarga(): void {
   document.addEventListener('click', async (ev) => {
-    const btn = ev.target?.closest?.('.home-cdn__copy');
+    const target = ev.target as HTMLElement | null;
+    const btn = target?.closest?.('.home-cdn__copy') as HTMLElement | null;
     if (!btn) return;
     ev.preventDefault();
     const key = btn.dataset.copy;

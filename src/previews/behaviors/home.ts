@@ -14,7 +14,7 @@
  * @typedef {import('../_kit/types.d.ts').PreviewMountContext} PreviewMountContext
  * @typedef {import('../_kit/types.d.ts').ISComponentPreviewLike} ISComponentPreviewLike
  */
-import { init as pintarConsumoCdn } from '../../../scripts/home-cdn.js';
+import { init as pintarConsumoCdn } from '../../../utils/home-cdn.js';
 
 /** Tags con demo propia: definen en qué cards aparece el botón de «abrir». */
 const CON_DEMO = new Set([

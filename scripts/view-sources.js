@@ -22,7 +22,7 @@ import {
   fetchSourceFile,
   rawSourceUrl,
   localSourceUrl,
-} from './component-sources.js';
+} from '../src/utils/source-paths.js';
 
 const DIALOG_ID = 'is-view-sources-dialog';
 const KINDS = /** @type {const} */ (['js', 'css', 'md']);

@@ -1,38 +1,56 @@
 /**
- * component-sources.js — rutas y fetch de fuentes NO minificadas (JS/CSS/MD).
+ * src/utils/source-paths.ts — rutas y fetch de fuentes NO minificadas (JS/CSS/MD).
  *
- * Las URLs locales salen de `import.meta.url` (scripts/ → src/components/),
- * así funcionan en `file`/dev server y en GitHub Pages sin hardcodear el
- * subpath del repo. Si el local falla (404), cae a raw.githubusercontent.
+ * Migrado de `scripts/component-sources.js` (2026-09-07): la convención es que
+ * `src/` no dependa de `scripts/` (S-DEP-FUERA). Las URLs locales salen de
+ * `import.meta.url` (src/utils/ → src/components/), así funcionan en `file`/dev
+ * server y en GitHub Pages sin hardcodear el subpath del repo. Si el local
+ * falla (404), cae a raw.githubusercontent.
  */
 import { docsBase } from './cdn-sources.js';
 
-const GH_RAW = () => docsBase('main');
-
-/** `../../components/actions/button.js` → `components/actions/button.js` */
-export function manifestToComponentsPath(rel) {
+/**
+ * `../../components/actions/button.js` → `components/actions/button.js`
+ */
+export function manifestToComponentsPath(rel: string | null | undefined): string {
   return String(rel || '')
     .replace(/^\.\.\/\.\.\//, '')
     .replace(/^\.\.\//, '')
     .replace(/^\/+/, '');
 }
 
+export interface ManifestEntry {
+  script?: string;
+  style?: string;
+  tag?: string;
+  category?: string;
+}
+
+export interface SourceFile {
+  kind: 'js' | 'css' | 'md';
+  label: string;
+  repoPath: string;
+  fileName: string;
+}
+
 /**
- * @param {{ script?: string, style?: string, tag?: string }} entry
- * @returns {{ js?: SourceFile, css?: SourceFile, md?: SourceFile }}
+ * Resuelve las rutas locales (TS/CSS/MD) de una entrada del manifest.
+ * El manifiesto nombra el módulo con `.js` —es un especificador, no un
+ * fichero— pero en el repositorio el fuente es TypeScript. Para enlazar al
+ * código hay que traducir la extensión; el `.min.js` publicado no se toca.
  */
-export function resolveSourceFiles(entry) {
+export function resolveSourceFiles(entry: ManifestEntry): {
+  js?: SourceFile;
+  css?: SourceFile;
+  md?: SourceFile;
+} {
   if (!entry?.script) return {};
   const scriptPath = manifestToComponentsPath(entry.script);
   if (!scriptPath.endsWith('.js')) return {};
 
-  // El manifiesto nombra el modulo con `.js` —es un especificador, no un
-  // fichero— pero en el repositorio el fuente es TypeScript. Para enlazar al
-  // codigo hay que traducir la extension; el `.min.js` publicado no se toca.
   const fuenteRel = scriptPath.replace(/\.js$/, '.ts');
 
-  /** @type {{ js?: SourceFile, css?: SourceFile, md?: SourceFile }} */
-  const out = {
+  const out: ReturnType<typeof resolveSourceFiles> = {
     js: {
       kind: 'js',
       label: 'TS',
@@ -66,10 +84,15 @@ export function resolveSourceFiles(entry) {
 
 /**
  * Rutas CDN minificadas (`dist/cdn/...`) del componente.
- * @param {{ tag?: string, category?: string, style?: string }} entry
- * @returns {{ js: string, css: string | null, short: string, category: string } | null}
  */
-export function resolveCdnMinPaths(entry) {
+export interface CdnMinPaths {
+  js: string;
+  css: string | null;
+  short: string;
+  category: string;
+}
+
+export function resolveCdnMinPaths(entry: ManifestEntry): CdnMinPaths | null {
   if (!entry?.tag || !entry?.category) return null;
   const short = String(entry.tag).replace(/^is-/, '');
   const category = entry.category;
@@ -80,24 +103,24 @@ export function resolveCdnMinPaths(entry) {
 
 /**
  * URL same-origin hacia el archivo fuente (legible, sin minify).
- * @param {string} repoPath  p.ej. `src/components/actions/button.js`
+ * src/utils/ → ../src/ = repo/src/.
  */
-export function localSourceUrl(repoPath) {
-  // scripts/view-sources.js → ../src/... = repo/src/...
+export function localSourceUrl(repoPath: string): string {
   const rel = repoPath.replace(/^src\//, '');
   return new URL(`../src/${rel}`, import.meta.url).href;
 }
 
-/** @param {string} repoPath */
-export function rawSourceUrl(repoPath) {
-  return `${GH_RAW()}/${repoPath}`;
+export function rawSourceUrl(repoPath: string): string {
+  return `${docsBase('main')}/${repoPath}`;
 }
 
-/**
- * @param {SourceFile} file
- * @returns {Promise<{ text: string, url: string, source: 'local' | 'raw' }>}
- */
-export async function fetchSourceFile(file) {
+export interface FetchedSource {
+  text: string;
+  url: string;
+  source: 'local' | 'raw';
+}
+
+export async function fetchSourceFile(file: SourceFile): Promise<FetchedSource> {
   const local = localSourceUrl(file.repoPath);
   try {
     const res = await fetch(local, { cache: 'no-cache' });
@@ -112,12 +135,8 @@ export async function fetchSourceFile(file) {
   const res = await fetch(raw, { cache: 'no-cache' });
   if (!res.ok) {
     const err = new Error(`${res.status} ${file.repoPath}`);
-    err.status = res.status;
+    (err as Error & { status?: number }).status = res.status;
     throw err;
   }
   return { text: await res.text(), url: raw, source: 'raw' };
 }
-
-/**
- * @typedef {{ kind: 'js'|'css'|'md', label: string, repoPath: string, fileName: string }} SourceFile
- */

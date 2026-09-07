@@ -9,7 +9,7 @@ import '../src/components/media/icon.js';
 import '../src/components/actions/button.js';
 import '../src/components/helpers/format-bytes.js';
 import components from '../src/manifest.js';
-import { resolveCdnMinPaths, resolveSourceFiles } from './component-sources.js';
+import { resolveCdnMinPaths, resolveSourceFiles } from '../src/utils/source-paths.js';
 import { openViewSources } from './view-sources.js';
 
 /** @type {string | null} */

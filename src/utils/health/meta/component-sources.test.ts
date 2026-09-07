@@ -1,5 +1,5 @@
 // tests/component-sources.test.ts
-import { resolveSourceFiles, manifestToComponentsPath } from '../../../../scripts/component-sources.js';
+import { resolveSourceFiles, manifestToComponentsPath } from '../../../utils/source-paths.js';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

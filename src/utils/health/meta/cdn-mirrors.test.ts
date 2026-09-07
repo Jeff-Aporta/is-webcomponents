@@ -46,7 +46,7 @@ test('cdn-snippet: loader copy-paste; alcance tag|category|all vía L.load (sin 
 });
 
 test('listSources expone ambos espejos', async () => {
-  const src = await readFile(join(raiz, 'scripts/cdn-sources.js'), 'utf8');
+  const src = await readFile(join(raiz, 'src/utils/cdn-sources.ts'), 'utf8');
   assert.match(src, /MIRRORS/);
   assert.match(src, /listSources/);
 });
