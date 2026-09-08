@@ -21,6 +21,7 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 | Spec | [testing.md](testing.md) | ¿Qué hace verde el gate? |
 | Spec | [typescript/spec.md](typescript/spec.md) | ¿Cómo se tipa el kit? |
 | Plan | [iswc-refactor-plan.md](iswc-refactor-plan.md) | Refactor ISWC 2026-09-08 (H1-H10 + S-PUERTO) |
+| Reporte | [iswc-refactor-f6.md](iswc-refactor-f6.md) | F6 del refactor ISWC 2026-09-08 (gates verdes) |
 | Plantillas | [plantillas/](plantillas) | `spec.template.md`, `tasks.template.md` |
 | ADR | [adr.md](adr.md) | Decisiones cerradas |
 | Lesson | [lessons.md](lessons.md) | Índice del diario |
