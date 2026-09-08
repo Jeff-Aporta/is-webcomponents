@@ -21,8 +21,8 @@ import assert from 'node:assert/strict';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 
-const DIRS = ['previews', 'components', 'scripts', 'styles', 'tests'];
-const FILES = ['index.html', 'LLM.md', 'README.md', 'LLM.md'];
+const DIRS = ['previews', 'components', 'scripts', 'styles', 'tests', 'specs'];
+const FILES = ['index.html', 'README.md'];
 const EXT = /\.(html|md|js|mjs|css)$/;
 
 async function walk(dir, out = []) {

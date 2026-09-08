@@ -431,13 +431,9 @@ console.log(`  ${'loader.md'.padEnd(18)} docs`);
 // Alias raíz: apps (PatyIA) importan …/dist/cdn/loader.min.js — canónico es core/.
 await copyFile(loaderOut, join(dist, 'loader.min.js'));
 console.log(`  ${'loader.min'.padEnd(18)} alias raíz (compat)`);
-// Consolidación 2026-09-07: src/cdn/LLM.md eliminado (contenido vive en
-// specs/cdn.md). El build ya no copia ese doc a dist/cdn/LLM.md.
-const legacyLlmSrc = join(root, 'src', 'cdn', 'LLM.md');
-if (existsSync(legacyLlmSrc)) {
-  await copyFile(legacyLlmSrc, join(dist, 'LLM.md'));
-  console.log(`  ${'LLM.md'.padEnd(18)} docs (cdn/)`);
-}
+// Consolidación 2026-09-07: src/cdn/LLM.md eliminado. El contenido del visor del
+// loader vive en specs/cdn.md (catálogo visible por LLM); no se copia nada a
+// dist/cdn/LLM.md raíz (apps que lo enlazaban fueron migradas al spec).
 
 // ── Iconos: dist/assets/ no se toca en el build ───────────────────
 // `dist/assets/` es la unica copia del material del kit. No se genera desde

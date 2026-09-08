@@ -1,11 +1,17 @@
 // tests/cdn-folders.test.ts
 //
 // dist/cdn está folderizado por categoría. Verifica que:
-//   - La raíz: sizes, README, LLM.md (sin artefactos planos sueltos).
+//   - La raíz: sizes, versions.json, _headers, llm/, alias estables (loader.min.js,
+//     is-base.min.css, palettes.min.css) — sin artefactos planos sueltos.
 //   - core/: loader, CSS base, módulos src/core.
 //   - Cada componente del manifest existe en <categoria>/<tag>.min.js.
 //   - Cada carpeta con componentes trae su scrollbars.css (lo pide adoptCss).
 //   - No hay all.min.js ni category.<cat>.min.js.
+//
+// Consolidación 2026-09-07: LLM.md (per-carpeta + raíz) eliminada; el catálogo vive
+// en specs/componentes.md (consumido por el viewer) y specs/cdn.md (para apps que
+// importan desde dist/cdn/). dist/cdn/LLM.md raíz ya NO se genera (build.mjs rama
+// defensiva eliminada en esta limpieza).
 //
 // Uso:  node tests/cdn-folders.test.ts
 
@@ -28,8 +34,9 @@ if (!existsSync(dist)) {
 
 // Alias estables en la raíz: apps que aún enlazan paths pre-folderizado
 // (is-base, palettes, loader) no deben 404. El canónico sigue siendo core/.
+// Consolidación 2026-09-07: 'LLM.md' se quitó de la whitelist raíz (no se copia
+// desde src/cdn/LLM.md — esa rama quedó eliminada en build.mjs).
 const ROOT_ALLOWED = new Set([
-  'LLM.md',
   'versions.json',
   '_headers', 'llm',
   'is-base.min.css',
