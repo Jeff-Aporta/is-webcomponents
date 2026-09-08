@@ -28,7 +28,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     // Ejemplo HTTP (desactivado; el mock gana si no hay server):
     // server: {
     //   useLocal: true,
-    //   local: { host: 'localhost', port: 20040, https: false, restcontext: '' },
+    //   local: { host: 'localhost', port: <SERVER_PORT>, https: false, restcontext: '' },
     //   remote: { host: 'clientesis-contapymeu.azurewebsites.net', port: 443, https: true, restcontext: '' },
     // },
     // endpoints: { recurso: 'curso', recursos: 'cursos' },

@@ -33,7 +33,7 @@ import {
 } from 'node:fs';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
-import { chromium, type Browser, type Page } from 'playwright';
+import { chromium } from 'playwright';
 import catalog from '../../../previews/catalog.ts';
 import {
   asegurarServidor,
@@ -44,6 +44,7 @@ import {
   crearTestE2E,
 } from './lib/harness.ts';
 import { repoDir } from './lib/env.ts';
+import type { Browser, Page } from 'playwright';
 import type { CtxE2E } from './lib/tipos.d.ts';
 
 type EntradaCatalogo = {

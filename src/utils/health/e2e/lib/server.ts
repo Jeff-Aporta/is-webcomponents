@@ -5,10 +5,10 @@
 // componentes piden ./x.js cuando en disco hay x.ts: hay que transpilar TS al
 // vuelo y mapear .js → .ts, igual que scripts/serve.mjs del repo.
 import { createServer } from 'node:http';
-import type { Server } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { repoDir } from './env.ts';
+import type { Server } from 'node:http';
 
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',

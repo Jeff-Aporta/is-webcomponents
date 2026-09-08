@@ -23,7 +23,7 @@
         },
         {
           "kind": "code",
-          "code": "import { createCatalogController } from './isp/controller-from-config.min.js';\n\ncat.controller = createCatalogController({\n  entrie: 'Curso',\n  primaryKeys: ['icurso'],\n  columns: [\n    { field: 'icurso', header: 'Código' },\n    { field: 'ncurso', header: 'Nombre' },\n  ],\n  // actions: true  → todas (default)\n  // actions: ['crear','modificar','eliminar']\n  mock: [\n    { icurso: 'C001', ncurso: 'Contabilidad básica' },\n  ],\n  // server: {\n  //   useLocal: false,\n  //   local:  { host: 'localhost', port: 20040, https: false },\n  //   remote: { host: '….azurewebsites.net', port: 443, https: true },\n  // },\n  // endpoints: { recurso: 'curso', recursos: 'cursos' },\n  // token: () => sessionStorage.getItem('token'),\n});",
+          "code": "import { createCatalogController } from './isp/controller-from-config.min.js';\n\ncat.controller = createCatalogController({\n  entrie: 'Curso',\n  primaryKeys: ['icurso'],\n  columns: [\n    { field: 'icurso', header: 'Código' },\n    { field: 'ncurso', header: 'Nombre' },\n  ],\n  // actions: true  → todas (default)\n  // actions: ['crear','modificar','eliminar']\n  mock: [\n    { icurso: 'C001', ncurso: 'Contabilidad básica' },\n  ],\n  // server: {\n  //   useLocal: false,\n  //   local:  { host: 'localhost', port: <SERVER_PORT>, https: false },\n  //   remote: { host: '….azurewebsites.net', port: 443, https: true },\n  // },\n  // endpoints: { recurso: 'curso', recursos: 'cursos' },\n  // token: () => sessionStorage.getItem('token'),\n});",
           "lang": "js"
         }
       ]

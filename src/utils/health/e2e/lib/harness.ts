@@ -4,17 +4,17 @@
 // sin login ni ISS — el "estado" es el tag del componente (deep link ?s=).
 // TODO el codigo esta fuertemente tipado (tsc strict).
 import { localBrowser, Stagehand } from '@browserbasehq/stagehand';
-import type { Page, Locator, StagehandCreateOptions } from '@browserbasehq/stagehand';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
-import type { TestContext } from 'node:test';
 import { ENV, e2eDir, faltanRequisitos } from './env.ts';
 import { crearGeneradorMiniMax } from './minimax.ts';
 import { estadoDe } from './estados.ts';
 import { levantarServidor } from './server.ts';
-import type { ServidorE2E } from './server.ts';
 import { titulo, marcar, tituloDe, lineaDe, EMOJIS } from './e2e-config.ts';
+import type { Page, Locator, StagehandCreateOptions } from '@browserbasehq/stagehand';
+import type { TestContext } from 'node:test';
+import type { ServidorE2E } from './server.ts';
 import type { EstadoE2E } from './e2e-config.ts';
 import type {
   CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,

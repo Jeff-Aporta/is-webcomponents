@@ -8,9 +8,9 @@ import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { levantarServidor } from './lib/server.ts';
-import type { ServidorE2E } from './lib/server.ts';
 import { ENV } from './lib/env.ts';
 import { descargarConfigE2E } from './lib/vendor-e2e-config.ts';
+import type { ServidorE2E } from './lib/server.ts';
 
 const e2eDir = dirname(fileURLToPath(import.meta.url));
 
