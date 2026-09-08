@@ -6,7 +6,7 @@ category: data
 status: public
 source: ./pivot-table.js
 style: ./pivot-table.css
-preview: ../../previews/data/is-pivot-table.json
+preview: ./pivot-table.json
 ---
 # `<is-pivot-table>`
 
@@ -298,4 +298,4 @@ Tags del módulo: `<is-pivot-table>`.
 - [CSS](./pivot-table.css)
 - [Partial de cabeceras pegadas](./_sticky.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data/is-pivot-table.json)
+- [Preview](./pivot-table.json)

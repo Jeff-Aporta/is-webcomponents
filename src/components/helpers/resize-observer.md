@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./resize-observer.js
 style: ./resize-observer.css
-preview: ../../previews/helpers/is-resize-observer.json
+preview: ./resize-observer.json
 ---
 # `<is-resize-observer>`
 
@@ -132,4 +132,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./resize-observer.js)
 - [CSS](./resize-observer.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-resize-observer.json)
+- [Preview](./resize-observer.json)

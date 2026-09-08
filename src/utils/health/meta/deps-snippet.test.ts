@@ -21,7 +21,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 
 const csJs   = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.ts'), 'utf8');
 const csCss  = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.css'), 'utf8');
-const prevJson = await readFile(join(root, 'src', 'previews', 'feedback', 'is-cdn-snippet.json'), 'utf8');
+const prevJson = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.json'), 'utf8');
 const manifest = await readFile(join(root, 'src', 'manifest.ts'), 'utf8');
 
 // El preview es JSON: en el archivo el markup viaja escapado (`slot=\"deps\"`),

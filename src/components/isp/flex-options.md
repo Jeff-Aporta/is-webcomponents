@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./flex-options.js
 style: ./flex-options.css
-preview: ../../previews/isp/is-flex-options.json
+preview: ./flex-options.json
 ---
 # `<is-flex-options>`
 
@@ -160,4 +160,4 @@ Tags del módulo: `<is-flex-options>`.
 
 - [JavaScript](./flex-options.js)
 - [CSS](./flex-options.css)
-- [Preview](../../previews/isp/is-flex-options.json)
+- [Preview](./flex-options.json)

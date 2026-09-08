@@ -9,7 +9,7 @@
  * No evalúa strings de comportamiento. El markup estático de demos sí puede
  * ser HTML string en la definición (serializable); los listeners viven en mount.
  *
- *   import ButtonGroupPreview from '../previews/actions/is-button-group.preview.js';
+ *   import ButtonGroupPreview from '../actions/button-group.preview.controller.js';
  *   el.preview = new ButtonGroupPreview();
  */
 import { withStyleAttrs } from '../../core/attrs.js';

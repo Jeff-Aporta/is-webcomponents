@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./duration-picker.js
 style: ./duration-picker.css
-preview: ../../previews/forms/is-duration-picker.json
+preview: ./duration-picker.json
 ---
 # `<is-duration-picker>`
 
@@ -183,4 +183,4 @@ separadores `:` son `aria-hidden`.
 - [JavaScript](./duration-picker.js)
 - [CSS](./duration-picker.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-duration-picker.json)
+- [Preview](./duration-picker.json)

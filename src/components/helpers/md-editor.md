@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./md-editor.js
 style: ./md-editor.css
-preview: ../../previews/helpers/is-md-editor.json
+preview: ./md-editor.json
 ---
 # `<is-md-editor>`
 
@@ -227,4 +227,4 @@ Tags del módulo: `<is-md-editor>`.
 - [JavaScript](./md-editor.js)
 - [CSS](./md-editor.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-md-editor.json)
+- [Preview](./md-editor.json)

@@ -7,7 +7,7 @@ category: data-viz
 status: public
 source: ./maps.js
 style: ./maps.css
-preview: ../../previews/data-viz/is-maps.json
+preview: ./maps.json
 ---
 # `<is-maps>`
 
@@ -284,5 +284,5 @@ Tags del módulo: `<is-maps>`, `<is-map-marker>`.
 - [JavaScript](./maps.js)
 - [CSS](./maps.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-maps.json)
-- [Preview `<is-map-marker>`](../../previews/data-viz/is-map-marker.json)
+- [Preview](./maps.json)
+- [Preview `<is-map-marker>`](./map-marker.json)

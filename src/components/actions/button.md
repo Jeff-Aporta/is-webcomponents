@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./button.js
 style: ./button.css
-preview: ../../previews/actions/is-button.json
+preview: ./button.json
 ---
 # `<is-button>`
 
@@ -305,4 +305,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./button.js)
 - [CSS](./button.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-button.json)
+- [Preview](./button.json)

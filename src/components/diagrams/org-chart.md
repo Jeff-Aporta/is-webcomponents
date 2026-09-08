@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./org-chart.js
 style: ./org-chart.css
-preview: ../../previews/diagrams/is-org-chart.json
+preview: ./org-chart.json
 ---
 # `<is-org-chart>`
 
@@ -201,4 +201,4 @@ usar `photo`, acompañarla siempre de `name` para que la tarjeta tenga texto.
 - [JavaScript](./org-chart.js)
 - [CSS](./org-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-org-chart.json)
+- [Preview](./org-chart.json)

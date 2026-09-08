@@ -7,7 +7,7 @@ category: data
 status: public
 source: ./transfer.js
 style: ./transfer.css
-preview: ../../previews/data/is-transfer.json
+preview: ./transfer.json
 ---
 # `<is-transfer>` / `<is-transfer-item>`
 
@@ -192,4 +192,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./transfer.js)
 - [CSS](./transfer.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data/is-transfer.json)
+- [Preview](./transfer.json)

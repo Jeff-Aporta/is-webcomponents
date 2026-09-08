@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./form.js
 style: ./form.css
-preview: ../../previews/isp/is-form.json
+preview: ./form.json
 ---
 # `<is-form>`
 
@@ -223,4 +223,4 @@ console.log(form.html2json());
 - [CSS](./form.css)
 - [Codec](../_shared/json-html.js)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-form.json)
+- [Preview](./form.json)

@@ -4,798 +4,798 @@
  */
 export default {
   "is-code": {
-    "json": "./code/is-code.json",
-    "behavior": "./behaviors/is-code.js",
+    "json": "../components/code/code.json",
+    "behavior": "../components/code/code.preview.js",
     "category": "code"
   },
   "is-button-group": {
-    "json": "./actions/is-button-group.json",
-    "behavior": "./behaviors/is-button-group.js",
+    "json": "../components/actions/button-group.json",
+    "behavior": "../components/actions/button-group.preview.js",
     "category": "actions"
   },
   "is-button": {
-    "json": "./actions/is-button.json",
-    "behavior": "./behaviors/is-button.js",
+    "json": "../components/actions/button.json",
+    "behavior": "../components/actions/button.preview.js",
     "category": "actions"
   },
   "is-check-icon-button": {
-    "json": "./actions/is-check-icon-button.json",
+    "json": "../components/actions/check-icon-button.json",
     "category": "actions"
   },
   "is-context-menu": {
-    "json": "./actions/is-context-menu.json",
-    "behavior": "./behaviors/is-context-menu.js",
+    "json": "../components/actions/context-menu.json",
+    "behavior": "../components/actions/context-menu.preview.js",
     "category": "actions"
   },
   "is-copy-button": {
-    "json": "./actions/is-copy-button.json",
+    "json": "../components/actions/copy-button.json",
     "category": "actions"
   },
   "is-share-button": {
-    "json": "./actions/is-share-button.json",
+    "json": "../components/actions/share-button.json",
     "category": "actions"
   },
   "is-dropdown-item": {
-    "json": "./actions/is-dropdown-item.json",
+    "json": "../components/actions/dropdown-item.json",
     "category": "actions"
   },
   "is-dropdown": {
-    "json": "./actions/is-dropdown.json",
-    "behavior": "./behaviors/is-dropdown.js",
+    "json": "../components/actions/dropdown.json",
+    "behavior": "../components/actions/dropdown.preview.js",
     "category": "actions"
   },
   "is-fab": {
-    "json": "./actions/is-fab.json",
+    "json": "../components/actions/fab.json",
     "category": "actions"
   },
   "is-speed-dial-action": {
-    "json": "./actions/is-speed-dial-action.json",
+    "json": "../components/actions/speed-dial-action.json",
     "category": "actions"
   },
   "is-speed-dial": {
-    "json": "./actions/is-speed-dial.json",
-    "behavior": "./behaviors/is-speed-dial.js",
+    "json": "../components/actions/speed-dial.json",
+    "behavior": "../components/actions/speed-dial.preview.js",
     "category": "actions"
   },
   "is-ag-grid": {
-    "json": "./data/is-ag-grid.json",
-    "behavior": "./behaviors/is-ag-grid.js",
+    "json": "../components/data/ag-grid.json",
+    "behavior": "../components/data/ag-grid.preview.js",
     "category": "data"
   },
   "is-data-grid": {
-    "json": "./data/is-data-grid.json",
-    "behavior": "./behaviors/is-data-grid.js",
+    "json": "../components/data/data-grid.json",
+    "behavior": "../components/data/data-grid.preview.js",
     "category": "data"
   },
   "is-kanban-card": {
-    "json": "./data/is-kanban-card.json",
+    "json": "../components/data/kanban-card.json",
     "category": "data"
   },
   "is-kanban-column": {
-    "json": "./data/is-kanban-column.json",
+    "json": "../components/data/kanban-column.json",
     "category": "data"
   },
   "is-kanban": {
-    "json": "./data/is-kanban.json",
+    "json": "../components/data/kanban.json",
     "category": "data"
   },
   "is-pivot-table": {
-    "json": "./data/is-pivot-table.json",
-    "behavior": "./behaviors/is-pivot-table.js",
+    "json": "../components/data/pivot-table.json",
+    "behavior": "../components/data/pivot-table.preview.js",
     "category": "data"
   },
   "is-spreadsheet": {
-    "json": "./data/is-spreadsheet.json",
+    "json": "../components/data/spreadsheet.json",
     "category": "data"
   },
   "is-stat": {
-    "json": "./data/is-stat.json",
+    "json": "../components/data/stat.json",
     "category": "data"
   },
   "is-transfer-item": {
-    "json": "./data/is-transfer-item.json",
+    "json": "../components/data/transfer-item.json",
     "category": "data"
   },
   "is-transfer": {
-    "json": "./data/is-transfer.json",
+    "json": "../components/data/transfer.json",
     "category": "data"
   },
   "is-bar-chart": {
-    "json": "./data-viz/is-bar-chart.json",
+    "json": "../components/charts/bar-chart.json",
     "category": "data-viz"
   },
   "is-bubble-chart": {
-    "json": "./data-viz/is-bubble-chart.json",
+    "json": "../components/charts/bubble-chart.json",
     "category": "data-viz"
   },
   "is-chart": {
-    "json": "./data-viz/is-chart.json",
-    "behavior": "./behaviors/is-chart.js",
+    "json": "../components/charts/chart.json",
+    "behavior": "../components/charts/chart.preview.js",
     "category": "data-viz"
   },
   "is-doughnut-chart": {
-    "json": "./data-viz/is-doughnut-chart.json",
+    "json": "../components/charts/doughnut-chart.json",
     "category": "data-viz"
   },
   "is-funnel-chart": {
-    "json": "./data-viz/is-funnel-chart.json",
+    "json": "../components/charts/funnel-chart.json",
     "category": "data-viz"
   },
   "is-gauge": {
-    "json": "./data-viz/is-gauge.json",
-    "behavior": "./behaviors/is-gauge.js",
+    "json": "../components/data/gauge.json",
+    "behavior": "../components/data/gauge.preview.js",
     "category": "data-viz"
   },
   "is-heatmap": {
-    "json": "./data-viz/is-heatmap.json",
-    "behavior": "./behaviors/is-heatmap.js",
+    "json": "../components/data-viz/heatmap.json",
+    "behavior": "../components/data-viz/heatmap.preview.js",
     "category": "data-viz"
   },
   "is-line-chart": {
-    "json": "./data-viz/is-line-chart.json",
+    "json": "../components/charts/line-chart.json",
     "category": "data-viz"
   },
   "is-map-marker": {
-    "json": "./data-viz/is-map-marker.json",
+    "json": "../components/data-viz/map-marker.json",
     "category": "data-viz"
   },
   "is-maps": {
-    "json": "./data-viz/is-maps.json",
+    "json": "../components/data-viz/maps.json",
     "category": "data-viz"
   },
   "is-pie-chart": {
-    "json": "./data-viz/is-pie-chart.json",
+    "json": "../components/charts/pie-chart.json",
     "category": "data-viz"
   },
   "is-polar-area-chart": {
-    "json": "./data-viz/is-polar-area-chart.json",
+    "json": "../components/charts/polar-area-chart.json",
     "category": "data-viz"
   },
   "is-radar-chart": {
-    "json": "./data-viz/is-radar-chart.json",
-    "behavior": "./behaviors/is-radar-chart.js",
+    "json": "../components/charts/radar-chart.json",
+    "behavior": "../components/charts/radar-chart.preview.js",
     "category": "data-viz"
   },
   "is-scatter-chart": {
-    "json": "./data-viz/is-scatter-chart.json",
-    "behavior": "./behaviors/is-scatter-chart.js",
+    "json": "../components/charts/scatter-chart.json",
+    "behavior": "../components/charts/scatter-chart.preview.js",
     "category": "data-viz"
   },
   "is-sparkline": {
-    "json": "./data-viz/is-sparkline.json",
+    "json": "../components/charts/sparkline.json",
     "category": "data-viz"
   },
   "is-treemap": {
-    "json": "./data-viz/is-treemap.json",
+    "json": "../components/charts/treemap.json",
     "category": "data-viz"
   },
   "is-waterfall-chart": {
-    "json": "./data-viz/is-waterfall-chart.json",
+    "json": "../components/charts/waterfall-chart.json",
     "category": "data-viz"
   },
   "is-block-diagram": {
-    "json": "./diagrams/is-block-diagram.json",
+    "json": "../components/diagrams/block-diagram.json",
     "category": "diagrams"
   },
   "is-class-diagram": {
-    "json": "./diagrams/is-class-diagram.json",
+    "json": "../components/diagrams/class-diagram.json",
     "category": "diagrams"
   },
   "is-diagram-lightbox": {
-    "json": "./diagrams/is-diagram-lightbox.json",
-    "behavior": "./behaviors/is-diagram-lightbox.js",
+    "json": "../components/diagrams/diagram-lightbox.json",
+    "behavior": "../components/diagrams/diagram-lightbox.preview.js",
     "category": "diagrams"
   },
   "is-component-diagram": {
-    "json": "./diagrams/is-component-diagram.json",
+    "json": "../components/diagrams/component-diagram.json",
     "category": "diagrams"
   },
   "is-er-diagram": {
-    "json": "./diagrams/is-er-diagram.json",
+    "json": "../components/diagrams/er-diagram.json",
     "category": "diagrams"
   },
   "is-flowchart": {
-    "json": "./diagrams/is-flowchart.json",
+    "json": "../components/diagrams/flowchart.json",
     "category": "diagrams"
   },
   "is-gantt": {
-    "json": "./diagrams/is-gantt.json",
+    "json": "../components/diagrams/gantt.json",
     "category": "diagrams"
   },
   "is-mindmap": {
-    "json": "./diagrams/is-mindmap.json",
+    "json": "../components/diagrams/mindmap.json",
     "category": "diagrams"
   },
   "is-org-chart": {
-    "json": "./diagrams/is-org-chart.json",
-    "behavior": "./behaviors/is-org-chart.js",
+    "json": "../components/diagrams/org-chart.json",
+    "behavior": "../components/diagrams/org-chart.preview.js",
     "category": "diagrams"
   },
   "is-journey-map": {
-    "json": "./diagrams/is-journey-map.json",
+    "json": "../components/diagrams/journey-map.json",
     "category": "diagrams"
   },
   "is-quadrant-chart": {
-    "json": "./diagrams/is-quadrant-chart.json",
+    "json": "../components/diagrams/quadrant-chart.json",
     "category": "diagrams"
   },
   "is-sankey-diagram": {
-    "json": "./diagrams/is-sankey-diagram.json",
+    "json": "../components/diagrams/sankey-diagram.json",
     "category": "diagrams"
   },
   "is-swimlane-diagram": {
-    "json": "./diagrams/is-swimlane-diagram.json",
+    "json": "../components/diagrams/swimlane-diagram.json",
     "category": "diagrams"
   },
   "is-use-case-diagram": {
-    "json": "./diagrams/is-use-case-diagram.json",
+    "json": "../components/diagrams/use-case-diagram.json",
     "category": "diagrams"
   },
   "is-venn-diagram": {
-    "json": "./diagrams/is-venn-diagram.json",
+    "json": "../components/diagrams/venn-diagram.json",
     "category": "diagrams"
   },
   "is-sequence-diagram": {
-    "json": "./diagrams/is-sequence-diagram.json",
-    "behavior": "./behaviors/is-sequence-diagram.js",
+    "json": "../components/diagrams/sequence-diagram.json",
+    "behavior": "../components/diagrams/sequence-diagram.preview.js",
     "category": "diagrams"
   },
   "is-state-diagram": {
-    "json": "./diagrams/is-state-diagram.json",
+    "json": "../components/diagrams/state-diagram.json",
     "category": "diagrams"
   },
   "is-timeline": {
-    "json": "./diagrams/is-timeline.json",
+    "json": "../components/diagrams/timeline.json",
     "category": "diagrams"
   },
   "is-badge": {
-    "json": "./feedback/is-badge.json",
+    "json": "../components/feedback/badge.json",
     "category": "feedback"
   },
   "is-cdn-snippet": {
-    "json": "./feedback/is-cdn-snippet.json",
+    "json": "../components/feedback/cdn-snippet.json",
     "category": "feedback"
   },
   "is-confirm-modal": {
-    "json": "./feedback/is-confirm-modal.json",
+    "json": "../components/feedback/confirm-modal.json",
     "category": "feedback"
   },
   "is-palette-selector": {
-    "json": "./feedback/is-palette-selector.json",
+    "json": "../components/feedback/palette-selector.json",
     "category": "feedback"
   },
   "is-popconfirm": {
-    "json": "./feedback/is-popconfirm.json",
+    "json": "../components/feedback/popconfirm.json",
     "category": "feedback"
   },
   "is-progress-bar": {
-    "json": "./feedback/is-progress-bar.json",
-    "behavior": "./behaviors/is-progress-bar.js",
+    "json": "../components/feedback/progress-bar.json",
+    "behavior": "../components/feedback/progress-bar.preview.js",
     "category": "feedback"
   },
   "is-progress-ring": {
-    "json": "./feedback/is-progress-ring.json",
+    "json": "../components/feedback/progress-ring.json",
     "category": "feedback"
   },
   "is-skeleton": {
-    "json": "./feedback/is-skeleton.json",
+    "json": "../components/feedback/skeleton.json",
     "category": "feedback"
   },
   "is-spinner": {
-    "json": "./feedback/is-spinner.json",
+    "json": "../components/feedback/spinner.json",
     "category": "feedback"
   },
   "is-tag": {
-    "json": "./feedback/is-tag.json",
+    "json": "../components/feedback/tag.json",
     "category": "feedback"
   },
   "is-theme-toggle": {
-    "json": "./feedback/is-theme-toggle.json",
+    "json": "../components/feedback/theme-toggle.json",
     "category": "feedback"
   },
   "is-prefs-clear": {
-    "json": "./feedback/is-prefs-clear.json",
+    "json": "../components/feedback/prefs-clear.json",
     "category": "feedback"
   },
   "is-toast-item": {
-    "json": "./feedback/is-toast-item.json",
+    "json": "../components/feedback/toast-item.json",
     "category": "feedback"
   },
   "is-toast": {
-    "json": "./feedback/is-toast.json",
-    "behavior": "./behaviors/is-toast.js",
+    "json": "../components/feedback/toast.json",
+    "behavior": "../components/feedback/toast.preview.js",
     "category": "feedback"
   },
   "is-tooltip": {
-    "json": "./feedback/is-tooltip.json",
-    "behavior": "./behaviors/is-tooltip.js",
+    "json": "../components/feedback/tooltip.json",
+    "behavior": "../components/feedback/tooltip.preview.js",
     "category": "feedback"
   },
   "is-checkbox": {
-    "json": "./forms/is-checkbox.json",
-    "behavior": "./behaviors/is-checkbox.js",
+    "json": "../components/forms/checkbox.json",
+    "behavior": "../components/forms/checkbox.preview.js",
     "category": "forms"
   },
   "is-color-picker": {
-    "json": "./forms/is-color-picker.json",
-    "behavior": "./behaviors/is-color-picker.js",
+    "json": "../components/forms/color-picker.json",
+    "behavior": "../components/forms/color-picker.preview.js",
     "category": "forms"
   },
   "is-combobox": {
-    "json": "./forms/is-combobox.json",
+    "json": "../components/forms/combobox.json",
     "category": "forms"
   },
   "is-date-field": {
-    "json": "./forms/is-date-field.json",
+    "json": "../components/forms/date-field.json",
     "category": "forms"
   },
   "is-date-input": {
-    "json": "./forms/is-date-input.json",
+    "json": "../components/forms/date-input.json",
     "category": "forms"
   },
   "is-date-picker": {
-    "json": "./forms/is-date-picker.json",
+    "json": "../components/forms/date-picker.json",
     "category": "forms"
   },
   "is-date-range-input": {
-    "json": "./forms/is-date-range-input.json",
+    "json": "../components/forms/date-range-input.json",
     "category": "forms"
   },
   "is-date-range-picker": {
-    "json": "./forms/is-date-range-picker.json",
+    "json": "../components/forms/date-range-picker.json",
     "category": "forms"
   },
   "is-date-time-field": {
-    "json": "./forms/is-date-time-field.json",
+    "json": "../components/forms/date-time-field.json",
     "category": "forms"
   },
   "is-date-time-input": {
-    "json": "./forms/is-date-time-input.json",
+    "json": "../components/forms/date-time-input.json",
     "category": "forms"
   },
   "is-digital-clock": {
-    "json": "./forms/is-digital-clock.json",
+    "json": "../components/forms/digital-clock.json",
     "category": "forms"
   },
   "is-doc-editor": {
-    "json": "./forms/is-doc-editor.json",
-    "behavior": "./behaviors/is-doc-editor.js",
+    "json": "../components/forms/doc-editor.json",
+    "behavior": "../components/forms/doc-editor.preview.js",
     "category": "forms"
   },
   "is-dropzone": {
-    "json": "./forms/is-dropzone.json",
-    "behavior": "./behaviors/is-dropzone.js",
+    "json": "../components/forms/dropzone.json",
+    "behavior": "../components/forms/dropzone.preview.js",
     "category": "forms"
   },
   "is-duration-picker": {
-    "json": "./forms/is-duration-picker.json",
-    "behavior": "./behaviors/is-duration-picker.js",
+    "json": "../components/forms/duration-picker.json",
+    "behavior": "../components/forms/duration-picker.preview.js",
     "category": "forms"
   },
   "is-file-input": {
-    "json": "./forms/is-file-input.json",
-    "behavior": "./behaviors/is-file-input.js",
+    "json": "../components/forms/file-input.json",
+    "behavior": "../components/forms/file-input.preview.js",
     "category": "forms"
   },
   "is-full-calendar": {
-    "json": "./forms/is-full-calendar.json",
-    "behavior": "./behaviors/is-full-calendar.js",
+    "json": "../components/forms/full-calendar.json",
+    "behavior": "../components/forms/full-calendar.preview.js",
     "category": "forms"
   },
   "is-inline-edit": {
-    "json": "./forms/is-inline-edit.json",
+    "json": "../components/forms/inline-edit.json",
     "category": "forms"
   },
   "is-input": {
-    "json": "./forms/is-input.json",
-    "behavior": "./behaviors/is-input.js",
+    "json": "../components/forms/input.json",
+    "behavior": "../components/forms/input.preview.js",
     "category": "forms"
   },
   "is-masked-input": {
-    "json": "./forms/is-masked-input.json",
+    "json": "../components/forms/masked-input.json",
     "category": "forms"
   },
   "is-mention": {
-    "json": "./forms/is-mention.json",
-    "behavior": "./behaviors/is-mention.js",
+    "json": "../components/forms/mention.json",
+    "behavior": "../components/forms/mention.preview.js",
     "category": "forms"
   },
   "is-month-calendar": {
-    "json": "./forms/is-month-calendar.json",
+    "json": "../components/forms/month-calendar.json",
     "category": "forms"
   },
   "is-option": {
-    "json": "./forms/is-option.json",
+    "json": "../components/forms/option.json",
     "category": "forms"
   },
   "is-pin-input": {
-    "json": "./forms/is-pin-input.json",
+    "json": "../components/forms/pin-input.json",
     "category": "forms"
   },
   "is-radio-group": {
-    "json": "./forms/is-radio-group.json",
+    "json": "../components/forms/radio-group.json",
     "category": "forms"
   },
   "is-radio": {
-    "json": "./forms/is-radio.json",
+    "json": "../components/forms/radio.json",
     "category": "forms"
   },
   "is-rating": {
-    "json": "./forms/is-rating.json",
-    "behavior": "./behaviors/is-rating.js",
+    "json": "../components/forms/rating.json",
+    "behavior": "../components/forms/rating.preview.js",
     "category": "forms"
   },
   "is-rte": {
-    "json": "./forms/is-rte.json",
-    "behavior": "./behaviors/is-rte.js",
+    "json": "../components/forms/rte.json",
+    "behavior": "../components/forms/rte.preview.js",
     "category": "forms"
   },
   "is-select": {
-    "json": "./forms/is-select.json",
-    "behavior": "./behaviors/is-select.js",
+    "json": "../components/forms/select.json",
+    "behavior": "../components/forms/select.preview.js",
     "category": "forms"
   },
   "is-signature": {
-    "json": "./forms/is-signature.json",
-    "behavior": "./behaviors/is-signature.js",
+    "json": "../components/forms/signature.json",
+    "behavior": "../components/forms/signature.preview.js",
     "category": "forms"
   },
   "is-slider": {
-    "json": "./forms/is-slider.json",
-    "behavior": "./behaviors/is-slider.js",
+    "json": "../components/forms/slider.json",
+    "behavior": "../components/forms/slider.preview.js",
     "category": "forms"
   },
   "is-switch": {
-    "json": "./forms/is-switch.json",
-    "behavior": "./behaviors/is-switch.js",
+    "json": "../components/forms/switch.json",
+    "behavior": "../components/forms/switch.preview.js",
     "category": "forms"
   },
   "is-textarea": {
-    "json": "./forms/is-textarea.json",
-    "behavior": "./behaviors/is-textarea.js",
+    "json": "../components/forms/textarea.json",
+    "behavior": "../components/forms/textarea.preview.js",
     "category": "forms"
   },
   "is-time-clock": {
-    "json": "./forms/is-time-clock.json",
+    "json": "../components/forms/time-clock.json",
     "category": "forms"
   },
   "is-time-field": {
-    "json": "./forms/is-time-field.json",
+    "json": "../components/forms/time-field.json",
     "category": "forms"
   },
   "is-time-input": {
-    "json": "./forms/is-time-input.json",
+    "json": "../components/forms/time-input.json",
     "category": "forms"
   },
   "is-year-calendar": {
-    "json": "./forms/is-year-calendar.json",
+    "json": "../components/forms/year-calendar.json",
     "category": "forms"
   },
   "is-format-bytes": {
-    "json": "./helpers/is-format-bytes.json",
+    "json": "../components/helpers/format-bytes.json",
     "category": "helpers"
   },
   "is-format-date": {
-    "json": "./helpers/is-format-date.json",
-    "behavior": "./behaviors/is-format-date.js",
+    "json": "../components/helpers/format-date.json",
+    "behavior": "../components/helpers/format-date.preview.js",
     "category": "helpers"
   },
   "is-format-number": {
-    "json": "./helpers/is-format-number.json",
+    "json": "../components/helpers/format-number.json",
     "category": "helpers"
   },
   "is-format": {
-    "json": "./helpers/is-format.json",
+    "json": "../components/helpers/format.json",
     "category": "helpers"
   },
   "is-intersection-observer": {
-    "json": "./helpers/is-intersection-observer.json",
+    "json": "../components/helpers/intersection-observer.json",
     "category": "helpers"
   },
   "is-lightbox": {
-    "json": "./helpers/is-lightbox.json",
-    "behavior": "./behaviors/is-lightbox.js",
+    "json": "../components/diagrams/lightbox.json",
+    "behavior": "../components/diagrams/lightbox.preview.js",
     "category": "helpers"
   },
   "is-md-editor": {
-    "json": "./helpers/is-md-editor.json",
+    "json": "../components/helpers/md-editor.json",
     "category": "helpers"
   },
   "is-md-render": {
-    "json": "./helpers/is-md-render.json",
+    "json": "../components/helpers/md-render.json",
     "category": "helpers"
   },
   "is-mutation-observer": {
-    "json": "./helpers/is-mutation-observer.json",
-    "behavior": "./behaviors/is-mutation-observer.js",
+    "json": "../components/helpers/mutation-observer.json",
+    "behavior": "../components/helpers/mutation-observer.preview.js",
     "category": "helpers"
   },
   "is-observer": {
-    "json": "./helpers/is-observer.json",
-    "behavior": "./behaviors/is-observer.js",
+    "json": "../components/helpers/observer.json",
+    "behavior": "../components/helpers/observer.preview.js",
     "category": "helpers"
   },
   "is-wake-lock": {
-    "json": "./helpers/is-wake-lock.json",
+    "json": "../components/helpers/wake-lock.json",
     "category": "helpers"
   },
   "is-offscreen-canvas": {
-    "json": "./helpers/is-offscreen-canvas.json",
+    "json": "../components/helpers/offscreen-canvas.json",
     "category": "helpers"
   },
   "is-popover": {
-    "json": "./helpers/is-popover.json",
+    "json": "../components/helpers/popover.json",
     "category": "helpers"
   },
   "is-relative-time": {
-    "json": "./helpers/is-relative-time.json",
-    "behavior": "./behaviors/is-relative-time.js",
+    "json": "../components/helpers/relative-time.json",
+    "behavior": "../components/helpers/relative-time.preview.js",
     "category": "helpers"
   },
   "is-resize-observer": {
-    "json": "./helpers/is-resize-observer.json",
-    "behavior": "./behaviors/is-resize-observer.js",
+    "json": "../components/helpers/resize-observer.json",
+    "behavior": "../components/helpers/resize-observer.preview.js",
     "category": "helpers"
   },
   "is-ui": {
-    "json": "./helpers/is-ui.json",
-    "behavior": "./behaviors/is-ui.js",
+    "json": "../components/helpers/ui.json",
+    "behavior": "../components/helpers/ui.preview.js",
     "category": "helpers"
   },
   "home": {
-    "json": "./home.json",
-    "behavior": "./behaviors/home.js",
+    "json": "../pages/home.json",
+    "behavior": "../pages/home.js",
     "category": ""
   },
   "is-accordion-group": {
-    "json": "./isp/is-accordion-group.json",
+    "json": "../components/isp/accordion-group.json",
     "category": "isp"
   },
   "is-block-layout": {
-    "json": "./isp/is-block-layout.json",
-    "behavior": "./behaviors/is-block-layout.js",
+    "json": "../components/isp/block-layout.json",
+    "behavior": "../components/isp/block-layout.preview.js",
     "category": "isp"
   },
   "is-btn-ref": {
-    "json": "./isp/is-btn-ref.json",
-    "behavior": "./behaviors/is-btn-ref.js",
+    "json": "../components/isp/btn-ref.json",
+    "behavior": "../components/isp/btn-ref.preview.js",
     "category": "isp"
   },
   "is-catalogo-gen": {
-    "json": "./isp/is-catalogo-gen.json",
-    "behavior": "./behaviors/is-catalogo-gen.js",
+    "json": "../components/isp/catalogo-gen.json",
+    "behavior": "../components/isp/catalogo-gen.preview.js",
     "category": "isp"
   },
   "is-confirm-delete": {
-    "json": "./isp/is-confirm-delete.json",
+    "json": "../components/isp/confirm-delete.json",
     "category": "isp"
   },
   "is-flex-layout": {
-    "json": "./isp/is-flex-layout.json",
-    "behavior": "./behaviors/is-flex-layout.js",
+    "json": "../components/isp/flex-layout.json",
+    "behavior": "../components/isp/flex-layout.preview.js",
     "category": "isp"
   },
   "is-flex-options": {
-    "json": "./isp/is-flex-options.json",
-    "behavior": "./behaviors/is-flex-options.js",
+    "json": "../components/isp/flex-options.json",
+    "behavior": "../components/isp/flex-options.preview.js",
     "category": "isp"
   },
   "is-float-card": {
-    "json": "./isp/is-float-card.json",
-    "behavior": "./behaviors/is-float-card.js",
+    "json": "../components/isp/float-card.json",
+    "behavior": "../components/isp/float-card.preview.js",
     "category": "isp"
   },
   "is-form": {
-    "json": "./isp/is-form.json",
-    "behavior": "./behaviors/is-form.js",
+    "json": "../components/isp/form.json",
+    "behavior": "../components/isp/form.preview.js",
     "category": "isp"
   },
   "is-grid-layout": {
-    "json": "./isp/is-grid-layout.json",
+    "json": "../components/isp/grid-layout.json",
     "category": "isp"
   },
   "is-heading": {
-    "json": "./isp/is-heading.json",
-    "behavior": "./behaviors/is-heading.js",
+    "json": "../components/isp/heading.json",
+    "behavior": "../components/isp/heading.preview.js",
     "category": "isp"
   },
   "is-loading-overlay": {
-    "json": "./isp/is-loading-overlay.json",
-    "behavior": "./behaviors/is-loading-overlay.js",
+    "json": "../components/isp/loading-overlay.json",
+    "behavior": "../components/isp/loading-overlay.preview.js",
     "category": "isp"
   },
   "is-modal-verificacion": {
-    "json": "./isp/is-modal-verificacion.json",
-    "behavior": "./behaviors/is-modal-verificacion.js",
+    "json": "../components/isp/modal-verificacion.json",
+    "behavior": "../components/isp/modal-verificacion.preview.js",
     "category": "isp"
   },
   "is-text": {
-    "json": "./isp/is-text.json",
-    "behavior": "./behaviors/is-text.js",
+    "json": "../components/isp/text.json",
+    "behavior": "../components/isp/text.preview.js",
     "category": "isp"
   },
   "is-tree-view": {
-    "json": "./isp/is-tree-view.json",
-    "behavior": "./behaviors/is-tree-view.js",
+    "json": "../components/isp/tree-view.json",
+    "behavior": "../components/isp/tree-view.preview.js",
     "category": "isp"
   },
   "is-callout": {
-    "json": "./layout/is-callout.json",
+    "json": "../components/layout/callout.json",
     "category": "layout"
   },
   "is-card": {
-    "json": "./layout/is-card.json",
+    "json": "../components/layout/card.json",
     "category": "layout"
   },
   "is-details": {
-    "json": "./layout/is-details.json",
+    "json": "../components/layout/details.json",
     "category": "layout"
   },
   "is-dialog": {
-    "json": "./layout/is-dialog.json",
+    "json": "../components/layout/dialog.json",
     "category": "layout"
   },
   "is-divider": {
-    "json": "./layout/is-divider.json",
+    "json": "../components/layout/divider.json",
     "category": "layout"
   },
   "is-dock-item": {
-    "json": "./layout/is-dock-item.json",
+    "json": "../components/layout/dock-item.json",
     "category": "layout"
   },
   "is-dock": {
-    "json": "./layout/is-dock.json",
-    "behavior": "./behaviors/is-dock.js",
+    "json": "../components/layout/dock.json",
+    "behavior": "../components/layout/dock.preview.js",
     "category": "layout"
   },
   "is-drawer": {
-    "json": "./layout/is-drawer.json",
+    "json": "../components/layout/drawer.json",
     "category": "layout"
   },
   "is-main": {
-    "json": "./layout/is-main.json",
-    "behavior": "./behaviors/is-main.js",
+    "json": "../components/layout/main.json",
+    "behavior": "../components/layout/main.preview.js",
     "category": "layout"
   },
   "is-scrollspy": {
-    "json": "./layout/is-scrollspy.json",
+    "json": "../components/layout/scrollspy.json",
     "category": "layout"
   },
   "is-split-panel": {
-    "json": "./layout/is-split-panel.json",
+    "json": "../components/layout/split-panel.json",
     "category": "layout"
   },
   "icon-explorer": {
-    "json": "./media/icon-explorer.json",
-    "behavior": "./behaviors/icon-explorer.js",
+    "json": "../components/media/icon-explorer.json",
+    "behavior": "../components/media/icon-explorer.preview.js",
     "category": "media"
   },
   "is-avatar": {
-    "json": "./media/is-avatar.json",
+    "json": "../components/media/avatar.json",
     "category": "media"
   },
   "is-theme-img": {
-    "json": "./media/is-theme-img.json",
+    "json": "../components/media/theme-img.json",
     "category": "media"
   },
   "is-barcode": {
-    "json": "./media/is-barcode.json",
+    "json": "../components/media/barcode.json",
     "category": "media"
   },
   "is-barcode-scanner": {
-    "json": "./media/is-barcode-scanner.json",
+    "json": "../components/media/barcode-scanner.json",
     "category": "media"
   },
   "is-icon": {
-    "json": "./media/is-icon.json",
-    "behavior": "./behaviors/is-icon.js",
+    "json": "../components/media/icon.json",
+    "behavior": "../components/media/icon.preview.js",
     "category": "media"
   },
   "is-image-editor": {
-    "json": "./media/is-image-editor.json",
-    "behavior": "./behaviors/is-image-editor.js",
+    "json": "../components/media/image-editor.json",
+    "behavior": "../components/media/image-editor.preview.js",
     "category": "media"
   },
   "is-qrcode": {
-    "json": "./media/is-qrcode.json",
+    "json": "../components/media/qrcode.json",
     "category": "media"
   },
   "is-video-playlist": {
-    "json": "./media/is-video-playlist.json",
-    "behavior": "./behaviors/is-video-playlist.js",
+    "json": "../components/media/video-playlist.json",
+    "behavior": "../components/media/video-playlist.preview.js",
     "category": "media"
   },
   "is-video": {
-    "json": "./media/is-video.json",
-    "behavior": "./behaviors/is-video.js",
+    "json": "../components/media/video.json",
+    "behavior": "../components/media/video.preview.js",
     "category": "media"
   },
   "is-speech": {
-    "json": "./media/is-speech.json",
+    "json": "../components/media/speech.json",
     "category": "media"
   },
   "is-media-recorder": {
-    "json": "./media/is-media-recorder.json",
+    "json": "../components/media/media-recorder.json",
     "category": "media"
   },
   "is-breadcrumb-item": {
-    "json": "./navigation/is-breadcrumb-item.json",
+    "json": "../components/navigation/breadcrumb-item.json",
     "category": "navigation"
   },
   "is-breadcrumb": {
-    "json": "./navigation/is-breadcrumb.json",
+    "json": "../components/navigation/breadcrumb.json",
     "category": "navigation"
   },
   "is-carousel-item": {
-    "json": "./navigation/is-carousel-item.json",
+    "json": "../components/navigation/carousel-item.json",
     "category": "navigation"
   },
   "is-carousel": {
-    "json": "./navigation/is-carousel.json",
+    "json": "../components/navigation/carousel.json",
     "category": "navigation"
   },
   "is-mega-menu": {
-    "json": "./navigation/is-mega-menu.json",
-    "behavior": "./behaviors/is-mega-menu.js",
+    "json": "../components/navigation/mega-menu.json",
+    "behavior": "../components/navigation/mega-menu.preview.js",
     "category": "navigation"
   },
   "is-scroller": {
-    "json": "./navigation/is-scroller.json",
+    "json": "../components/navigation/scroller.json",
     "category": "navigation"
   },
   "is-stepper-step": {
-    "json": "./navigation/is-stepper-step.json",
+    "json": "../components/navigation/stepper-step.json",
     "category": "navigation"
   },
   "is-stepper": {
-    "json": "./navigation/is-stepper.json",
+    "json": "../components/navigation/stepper.json",
     "category": "navigation"
   },
   "is-tab-group": {
-    "json": "./navigation/is-tab-group.json",
+    "json": "../components/navigation/tab-group.json",
     "category": "navigation"
   },
   "is-tab-panel": {
-    "json": "./navigation/is-tab-panel.json",
+    "json": "../components/navigation/tab-panel.json",
     "category": "navigation"
   },
   "is-tab": {
-    "json": "./navigation/is-tab.json",
+    "json": "../components/navigation/tab.json",
     "category": "navigation"
   },
   "is-tree-item": {
-    "json": "./navigation/is-tree-item.json",
+    "json": "../components/navigation/tree-item.json",
     "category": "navigation"
   },
   "is-tree": {
-    "json": "./navigation/is-tree.json",
+    "json": "../components/navigation/tree.json",
     "category": "navigation"
   },
   "is-command-palette": {
-    "json": "./overlays/is-command-palette.json",
-    "behavior": "./behaviors/is-command-palette.js",
+    "json": "../components/overlays/command-palette.json",
+    "behavior": "../components/overlays/command-palette.preview.js",
     "category": "overlays"
   },
   "is-pdf-viewer": {
-    "json": "./overlays/is-pdf-viewer.json",
+    "json": "../components/overlays/pdf-viewer.json",
     "category": "overlays"
   },
   "is-window": {
-    "json": "./overlays/is-window.json",
+    "json": "../components/overlays/window.json",
     "category": "overlays"
   },
   "phase7": {
-    "json": "./phase7.json",
+    "json": "../pages/phase7.json",
     "category": ""
   },
   "theming": {
-    "json": "./theming.json",
-    "behavior": "./behaviors/theming.js",
+    "json": "../pages/theming.json",
+    "behavior": "../pages/theming.js",
     "category": ""
   },
   "ecosystem": {
-    "json": "./ecosystem.json",
-    "behavior": "./behaviors/ecosystem.js",
+    "json": "../pages/ecosystem.json",
+    "behavior": "../pages/ecosystem.js",
     "category": ""
   }
 };

@@ -6,7 +6,7 @@ category: data-viz
 status: public
 source: ./heatmap.js
 style: ./heatmap.css
-preview: ../../previews/data-viz/is-heatmap.json
+preview: ./heatmap.json
 ---
 # `<is-heatmap>`
 
@@ -260,4 +260,4 @@ contenido. Recomendaciones:
 - [JavaScript](./heatmap.js)
 - [CSS](./heatmap.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-heatmap.json)
+- [Preview](./heatmap.json)

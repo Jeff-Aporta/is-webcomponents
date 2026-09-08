@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./quadrant-chart.js
 style: ./quadrant-chart.css
-preview: ../../previews/diagrams/is-quadrant-chart.json
+preview: ./quadrant-chart.json
 ---
 # `<is-quadrant-chart>`
 
@@ -149,7 +149,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 Ver el preview de la galería, que trae el payload completo con grupos y estilos:
-[`../../previews/diagrams/is-quadrant-chart.json`](../../previews/diagrams/is-quadrant-chart.json).
+[`./quadrant-chart.json`](./quadrant-chart.json).
 
 ## Errores comunes
 
@@ -173,4 +173,4 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 - [CSS](./quadrant-chart.css)
 - [Spec y layout](./quadrant-spec.js)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-quadrant-chart.json)
+- [Preview](./quadrant-chart.json)

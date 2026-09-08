@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./sankey-diagram.js
 style: ./sankey-diagram.css
-preview: ../../previews/diagrams/is-sankey-diagram.json
+preview: ./sankey-diagram.json
 ---
 # `<is-sankey-diagram>`
 
@@ -151,7 +151,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 Ver el preview de la galería, que trae el payload completo con grupos y estilos:
-[`../../previews/diagrams/is-sankey-diagram.json`](../../previews/diagrams/is-sankey-diagram.json).
+[`./sankey-diagram.json`](./sankey-diagram.json).
 
 ## Errores comunes
 
@@ -175,4 +175,4 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 - [CSS](./sankey-diagram.css)
 - [Spec y layout](./sankey-spec.js)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-sankey-diagram.json)
+- [Preview](./sankey-diagram.json)

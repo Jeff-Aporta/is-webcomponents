@@ -21,7 +21,12 @@ import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const previews = join(root, 'src', 'previews');
+// Consolidación 2026-09-07: los JSON de preview viven en src/components/** (junto al
+// componente) y las pages en src/pages/. Se escanean ambos (no src/previews/, que solo
+// tiene catalog/registry/_kit).
+const componentsRoot = join(root, 'src', 'components');
+const pagesRoot = join(root, 'src', 'pages');
+const previews = componentsRoot;
 const failures = [];
 
 /** Clases del coloreado a mano de las páginas pre-migración. */
@@ -65,7 +70,7 @@ function textosLiterales(valor, ruta, salida) {
 
 let codigo = 0;
 let tablas = 0;
-for (const archivo of jsons(previews)) {
+for (const archivo of jsons(componentsRoot).concat(jsons(pagesRoot))) {
   const rel = relative(root, archivo).replace(/\\/g, '/');
   let def;
   try {

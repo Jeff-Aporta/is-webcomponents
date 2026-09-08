@@ -13,14 +13,22 @@ import { default as manifest } from '../../../manifest.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const previews = join(root, 'src', 'previews');
+// Consolidación 2026-09-07: los paths del catalog ahora son relativos a src/
+// ("./home.json" → src/previews/home.json; "../components/x.json" → src/components/x.json;
+//  "../pages/x.json" → src/pages/x.json). Resolvemos contra src/ normalizando.
+const srcDir = join(root, 'src');
+function resolveCatalogPath(p) {
+  const clean = p.replace(/^\.\.\//, '');   // quita el primer ../ (paths que suben a src/)
+  return join(srcDir, clean);
+}
 const failures = [];
 
 const KINDS = new Set(['demo', 'callout', 'code', 'html', 'table', 'lede']);
 
 for (const [tag, entry] of Object.entries(catalog)) {
-  const jsonPath = join(previews, entry.json.replace(/^\.\//, ''));
+  const jsonPath = resolveCatalogPath(entry.json);
   if (!existsSync(jsonPath)) {
-    failures.push(`${tag}: falta ${entry.json}`);
+    failures.push(`${tag}: falta ${entry.json} → ${jsonPath}`);
     continue;
   }
   let def;
@@ -45,8 +53,9 @@ for (const [tag, entry] of Object.entries(catalog)) {
     }
   }
   if (entry.behavior || def.hasBehavior) {
-    const beh = join(previews, (entry.behavior || `./behaviors/${tag}.js`).replace(/^\.\//, '').replace(/\.js$/, '.ts'));
-    if (!existsSync(beh)) failures.push(`${tag}: hasBehavior pero falta ${beh}`);
+    const behRel = (entry.behavior || `./behaviors/${tag}.js`).replace(/\.js$/, '.ts');
+    const beh = resolveCatalogPath(behRel);
+    if (!existsSync(beh)) failures.push(`${tag}: hasBehavior pero falta ${behRel} → ${beh}`);
   }
 }
 
@@ -56,10 +65,21 @@ for (const m of manifest) {
     failures.push(`manifest ${m.tag}: page debe ser .json (tiene ${m.page})`);
   }
   if (!catalog[m.tag]) failures.push(`manifest ${m.tag}: no está en catalog.ts`);
-  const expected = m.page;
   const entry = catalog[m.tag];
-  if (entry && entry.json.replace(/^\.\//, '') !== expected) {
-    failures.push(`manifest ${m.tag}: page=${expected} vs catalog ${entry.json}`);
+  if (entry) {
+    // manifest.page es relativo a catalog (antes ./<cat>/is-x.json). Normalizar ambos.
+    const norm = (p) => p.replace(/^\.\//, '').replace(/^\.\.\//, '').replace(/^components\//, '').replace(/^previews\//, '').replace(/^pages\//, '');
+    const pageNorm = norm(m.page);
+    const catNorm = norm(entry.json);
+    const equivalent =
+      pageNorm === catNorm ||
+      `components/${pageNorm}` === catNorm ||
+      pageNorm === `components/${catNorm}` ||
+      `pages/${pageNorm}` === catNorm ||
+      pageNorm === `pages/${catNorm}`;
+    if (!equivalent) {
+      failures.push(`manifest ${m.tag}: page=${m.page} vs catalog ${entry.json}`);
+    }
   }
 }
 

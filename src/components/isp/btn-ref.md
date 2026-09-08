@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./btn-ref.js
 style: ./btn-ref.css
-preview: ../../previews/isp/is-btn-ref.json
+preview: ./btn-ref.json
 ---
 # `<is-btn-ref>`
 
@@ -214,7 +214,7 @@ texto accesible y el modal es un `<is-dialog>`, con foco atrapado y cierre por
 - [JavaScript](./btn-ref.js)
 - [CSS](./btn-ref.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-btn-ref.json)
+- [Preview](./btn-ref.json)
 
 ## Relación con ISP
 

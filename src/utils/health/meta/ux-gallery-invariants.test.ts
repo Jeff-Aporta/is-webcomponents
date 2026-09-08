@@ -2,7 +2,7 @@
  * ux-gallery-invariants.test.ts
  *
  * Caza regresiones de la auditoría UX (6-ago-2026):
- *  - behaviors/is-toast debe crear #toaster si el JSON no lo trae
+ *  - toast.preview.ts debe crear #toaster si el JSON no lo trae
  *  - ISComponentPreview.on tolera target null
  *  - url-nav solo escribe ?s= (no params sueltos)
  *  - format-bytes tiene autofit
@@ -19,7 +19,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..
 const read = (rel) => readFileSync(join(root, rel), 'utf8');
 
 test('is-toast behavior crea #toaster si falta (no create-on-null)', () => {
-  const src = read('src/previews/behaviors/is-toast.ts');
+  const src = read('src/components/feedback/toast.preview.ts');
   assert.match(src, /getElementById\(['"]toaster['"]\)/);
   assert.match(src, /createElement\(['"]is-toast['"]\)/);
   assert.match(src, /id\s*=\s*['"]toaster['"]|setAttribute\(['"]id['"],\s*['"]toaster['"]\)/);
@@ -73,8 +73,8 @@ test('ux-audit harness existe y no se confunde con .test.ts', () => {
 
 test('is-btn-ref / is-catalogo-gen behaviors asignan controller', () => {
   for (const tag of ['is-btn-ref', 'is-catalogo-gen']) {
-    assert.ok(existsSync(join(root, `src/previews/behaviors/${tag}.ts`)), `${tag} behavior`);
-    const src = read(`src/previews/behaviors/${tag}.ts`);
+    assert.ok(existsSync(join(root, `src/components/isp/${tag.replace(/^is-/, '')}.preview.ts`)), `${tag} behavior`);
+    const src = read(`src/components/isp/${tag.replace(/^is-/, '')}.preview.ts`);
     assert.match(src, /\.controller\s*=/);
     // El `Lista` puede venir inline o del factory compartido
     // `controller-from-config.ts`, que ya lo implementa una sola vez.
@@ -84,8 +84,8 @@ test('is-btn-ref / is-catalogo-gen behaviors asignan controller', () => {
     );
   }
   const catalog = read('src/previews/catalog.ts');
-  assert.match(catalog, /is-btn-ref[\s\S]*?behaviors\/is-btn-ref\.js/);
-  assert.match(catalog, /is-catalogo-gen[\s\S]*?behaviors\/is-catalogo-gen\.js/);
+  assert.match(catalog, /is-btn-ref[\s\S]*?\.\.\/components\/isp\/btn-ref\.preview\.js/);
+  assert.match(catalog, /is-catalogo-gen[\s\S]*?\.\.\/components\/isp\/catalogo-gen\.preview\.js/);
 });
 
 test('is-ag-grid api facade no asume #api listo (getState/setRows)', () => {
@@ -105,7 +105,7 @@ test('is-data-grid page-size no usa .options nativo de is-select', () => {
 });
 
 test('is-speed-dial behavior garantiza #logTable o no querySelector-on-null', () => {
-  const src = read('src/previews/behaviors/is-speed-dial.ts');
+  const src = read('src/components/actions/speed-dial.preview.ts');
   assert.match(src, /logTable/);
   assert.match(src, /if\s*\(!logBody\)|!logBody\)\s*return/);
 });

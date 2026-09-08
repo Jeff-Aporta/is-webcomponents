@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./masked-input.js
 style: ./masked-input.css
-preview: ../../previews/forms/is-masked-input.json
+preview: ./masked-input.json
 ---
 # `<is-masked-input>`
 
@@ -209,4 +209,4 @@ asociada al componente.
 - [JavaScript](./masked-input.js)
 - [CSS](./masked-input.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-masked-input.json)
+- [Preview](./masked-input.json)

@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./drawer.js
 style: ./drawer.css
-preview: ../../previews/layout/is-drawer.json
+preview: ./drawer.json
 ---
 # `<is-drawer>`
 
@@ -208,4 +208,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - [JavaScript](./drawer.js)
 - [CSS](./drawer.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-drawer.json)
+- [Preview](./drawer.json)

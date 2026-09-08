@@ -7,7 +7,7 @@ category: layout
 status: public
 source: ./dock.js
 style: ./dock.css
-preview: ../../previews/layout/is-dock.json
+preview: ./dock.json
 ---
 # `<is-dock>`
 
@@ -173,4 +173,4 @@ orden de foco ni contenido anunciado.
 - [JavaScript](./dock.js)
 - [CSS](./dock.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-dock.json)
+- [Preview](./dock.json)

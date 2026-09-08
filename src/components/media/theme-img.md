@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./theme-img.js
 style: ./theme-img.css
-preview: ../../previews/media/is-theme-img.json
+preview: ./theme-img.json
 ---
 # `<is-theme-img>`
 

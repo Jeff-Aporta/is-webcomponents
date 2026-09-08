@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./grid-layout.js
 style: ./grid-layout.css
-preview: ../../previews/isp/is-grid-layout.json
+preview: ./grid-layout.json
 ---
 # `<is-grid-layout>`
 
@@ -170,4 +170,4 @@ tabulares.
 - [JavaScript](./grid-layout.js)
 - [CSS](./grid-layout.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-grid-layout.json)
+- [Preview](./grid-layout.json)

@@ -24,7 +24,7 @@ const kitFiles = [
   'src/previews/catalog.ts',
   'src/components/layout/preview-component.ts',
   'src/previews/_shell.html',
-  'src/previews/actions/is-button-group.json',
+  'src/components/actions/button-group.json',
 ];
 for (const f of kitFiles) {
   if (!existsSync(join(root, f))) failures.push(`falta ${f}`);
@@ -58,7 +58,7 @@ if (!/PreviewDefinition/.test(types)) failures.push('falta PreviewDefinition');
 const host = readFileSync(join(root, 'src/components/layout/preview-component.ts'), 'utf8');
 if (/eval\s*\(/.test(host)) failures.push('is-preview-component no debe usar eval');
 
-const bg = JSON.parse(readFileSync(join(root, 'src/previews/actions/is-button-group.json'), 'utf8'));
+const bg = JSON.parse(readFileSync(join(root, 'src/components/actions/button-group.json'), 'utf8'));
 assert.equal(bg.$schema, 'is-preview/v1');
 assert.equal(bg.tag, 'is-button-group');
 assert.ok(Array.isArray(bg.sections) && bg.sections.length > 0);

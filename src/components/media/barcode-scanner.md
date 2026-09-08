@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./barcode-scanner.js
 style: ./barcode-scanner.css
-preview: ../../previews/media/is-barcode-scanner.json
+preview: ./barcode-scanner.json
 ---
 # `<is-barcode-scanner>`
 
@@ -117,4 +117,4 @@ Botón escanear/detener.
 ## Fuentes
 
 - `./barcode-scanner.js` · `./barcode-scanner.css`
-- Preview: `../../previews/media/is-barcode-scanner.json`
+- Preview: `./barcode-scanner.json`

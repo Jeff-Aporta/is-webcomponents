@@ -126,7 +126,7 @@ test('Las 3 paletas definen la rampa relativa completa de info', () => {
 
 test('preview de is-tag muestra la colore info', () => {
   const def = JSON.parse(
-    readFileSync(join(root, 'src', 'previews', 'feedback', 'is-tag.json'), 'utf8'),
+    readFileSync(join(root, 'src', 'components', 'feedback', 'tag.json'), 'utf8'),
   );
   const html = JSON.stringify(def.sections);
   assert.ok(

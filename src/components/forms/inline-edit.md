@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./inline-edit.js
 style: ./inline-edit.css
-preview: ../../previews/forms/is-inline-edit.json
+preview: ./inline-edit.json
 ---
 # `<is-inline-edit>`
 
@@ -198,4 +198,4 @@ accesible propio.
 - [JavaScript](./inline-edit.js)
 - [CSS](./inline-edit.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-inline-edit.json)
+- [Preview](./inline-edit.json)

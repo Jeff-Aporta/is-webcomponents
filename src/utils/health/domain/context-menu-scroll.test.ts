@@ -70,7 +70,7 @@ test('context-menu: scroll interno del panel no cierra', async () => {
 
 test('preview documenta default close + scroll-lock', async () => {
   const json = await readFile(
-    join(raiz, 'src', 'previews', 'actions', 'is-context-menu.json'),
+    join(raiz, 'src', 'components', 'actions', 'context-menu.json'),
     'utf8',
   );
   assert.match(json, /scroll-lock/, 'demo/API mencionan scroll-lock');

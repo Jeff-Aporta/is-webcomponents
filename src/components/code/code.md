@@ -6,7 +6,7 @@ category: code
 status: public
 source: ./code.js
 style: ./code.css
-preview: ../../previews/code/is-code.json
+preview: ./code.json
 ---
 # `<is-code>`
 
@@ -315,4 +315,4 @@ Con `readonly` no hay caret ni línea activa; se puede seleccionar y copiar.
 - [JavaScript](code.md)
 - [CSS](./code.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/code/is-code.json)
+- [Preview](./code.json)

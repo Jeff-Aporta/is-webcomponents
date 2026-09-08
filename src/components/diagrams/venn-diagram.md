@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./venn-diagram.js
 style: ./venn-diagram.css
-preview: ../../previews/diagrams/is-venn-diagram.json
+preview: ./venn-diagram.json
 ---
 # `<is-venn-diagram>`
 
@@ -147,7 +147,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 Ver el preview de la galería, que trae el payload completo con grupos y estilos:
-[`../../previews/diagrams/is-venn-diagram.json`](../../previews/diagrams/is-venn-diagram.json).
+[`./venn-diagram.json`](./venn-diagram.json).
 
 ## Errores comunes
 
@@ -171,4 +171,4 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 - [CSS](./venn-diagram.css)
 - [Spec y layout](./venn-spec.js)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-venn-diagram.json)
+- [Preview](./venn-diagram.json)

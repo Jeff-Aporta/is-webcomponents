@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./state-diagram.js
 style: ./state-diagram.css
-preview: ../../previews/diagrams/is-state-diagram.json
+preview: ./state-diagram.json
 ---
 # `<is-state-diagram>`
 
@@ -164,4 +164,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./state-diagram.js)
 - [CSS](./state-diagram.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-state-diagram.json)
+- [Preview](./state-diagram.json)

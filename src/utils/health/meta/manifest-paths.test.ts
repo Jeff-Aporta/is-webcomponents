@@ -2,19 +2,19 @@
 //
 // Verifica que el manifest.js no apunta a archivos que no existen.
 //
-// IMPORTANTE: los paths del manifest (`script`, `style`, `page`) son
-// RELATIVOS al directorio del preview que los usa, no a la raiz del repo.
-//   - `script: '../components/actions/button.ts'` se usa en
-//     `previews/actions/is-button.html` y resuelve a
-//     `<root>/components/actions/button.ts`.
-//   - `page: 'actions/is-button.html'` se usa en `index.html` que lo
-//     concatena con `'previews/'` -> `<root>/previews/actions/is-button.html`.
+// Consolidación 2026-09-07: los paths del manifest (`script`, `style`, `page`)
+// son RELATIVOS a src/ (no a previews/). Los previews viven junto al
+// componente en src/components/<cat>/; las pages en src/pages/.
+//   - `script: 'components/actions/button.js'` resuelve a
+//     `<root>/src/components/actions/button.ts` (se acepta .ts por .js).
+//   - `page: 'components/actions/button.json'` resuelve a
+//     `<root>/src/components/actions/button.json`.
 //
 // Reglas:
-//   1. Cada item del manifest con `page` debe apuntar a un HTML que existe
-//      en previews/.
-//   2. Cada `script` debe apuntar a un JS que existe (relativo a previews/).
-//   3. Cada `style` debe apuntar a un CSS que existe (relativo a previews/),
+//   1. Cada item del manifest con `page` debe apuntar a un JSON que existe
+//      en src/.
+//   2. Cada `script` debe apuntar a un JS que existe (relativo a src/).
+//   3. Cada `style` debe apuntar a un CSS que existe (relativo a src/),
 //      o no estar.
 //   4. Los tags duplicados fallan.
 //
@@ -26,7 +26,8 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
-const previewsRoot = join(root, 'src', 'previews');
+const srcRoot = join(root, 'src');
+const previewsRoot = join(srcRoot, 'previews');
 
 assert(Array.isArray((await import('../../../manifest.js')).default), 'manifest.js debe exportar un array');
 const manifest = (await import('../../../manifest.js')).default;
@@ -53,17 +54,12 @@ for (const item of manifest) {
     continue;
   }
 
-  // Los paths del manifest son relativos al directorio del preview.
-  // Para validar, resolvemos desde <root>/previews/<categoria>/, que es
-  // donde viven la mayoria de los previews.
-  // Si el item no tiene `page` (p.ej. is-cdn-snippet que no se previsualiza),
-  // asumimos que se va a inyectar en un preview bajo <root>/previews/<cat>/.
-  // Buscamos la categoria del item para usar su subdir como base.
-  const baseDir = item.page
-    ? join(previewsRoot, dirname(item.page))
-    : item.category
-      ? join(previewsRoot, item.category)
-      : previewsRoot;
+  // Consolidación 2026-09-07: los paths del manifest (`script`, `style`) son
+  // relativos a <root>/src/previews/<categoria>/ (antes) — tras la consolidación
+  // los previews viven en components/ y pages/. `page` es relativo a src/.
+  // Para validar, resolvemos los recursos desde la raiz del proyecto (src/),
+  // y `page` directamente contra srcRoot (components/... o pages/...).
+  const baseDir = srcRoot;
   const fromPreview = (rel) => resolvePath(baseDir, rel);
 
   /**
@@ -74,8 +70,10 @@ for (const item of manifest) {
    * módulo exista, no con qué extensión se le nombre.
    */
   const existe = async (rel) => {
-    const candidatos = [fromPreview(rel)];
-    if (rel.endsWith('.js')) candidatos.push(fromPreview(rel.replace(/\.js$/, '.ts')));
+    // rel puede ser relativo a src/ o tener ./ para src/
+    const base = rel.startsWith('./') ? srcRoot : baseDir;
+    const candidatos = [resolvePath(base, rel)];
+    if (rel.endsWith('.js')) candidatos.push(resolvePath(base, rel.replace(/\.js$/, '.ts')));
     for (const ruta of candidatos) {
       try {
         await stat(ruta);
@@ -94,12 +92,12 @@ for (const item of manifest) {
   }
 
   if (item.page) {
-    // page se compone con 'previews/' desde index.html.
-    const pagePath = join(previewsRoot, item.page);
+    // page es relativo a src/ (components/<cat>/<tag>.json o pages/<tag>.json).
+    const pagePath = join(srcRoot, item.page);
     try {
       await stat(pagePath);
     } catch {
-      failures.push(`${item.tag}: page no existe -> previews/${item.page}`);
+      failures.push(`${item.tag}: page no existe -> ${item.page} (src/${item.page})`);
     }
   } else {
     // Sub-componentes sin preview propio: permitido, pero verifica que el

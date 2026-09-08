@@ -79,13 +79,16 @@ const PORT = process.env.PORT;
 // PORT=8391 (el dev server del kit). El PORT genérico del entorno (3081 DSH
 // web) NO debe disparar este fetch — solo si PORT coincide con el puerto
 // esperado del dev server del kit.
+// Consolidación 2026-09-07: no hay previews HTML individuales; la galería es
+// una SPA (src/gallery/) que carga los JSON desde components/. El fetch de
+// smoke apunta a la raíz del kit (el _shell.html ya no se sirve por ruta).
 if (PORT && PORT === '8391') {
   try {
-    const res = await fetch(`http://localhost:${PORT}/previews/media/is-icon.html?s=${encodeURIComponent(JSON.stringify({embed: true}))}`, {
+    const res = await fetch(`http://localhost:${PORT}/src/gallery/?tag=is-icon`, {
       signal: AbortSignal.timeout(2000),
     });
-    assert.equal(res.status, 200, 'preview debe responder 200');
-    console.log(`✔ preview de is-icon respondio 200 en :${PORT}`);
+    assert.equal(res.status, 200, 'galería debe responder 200');
+    console.log(`✔ galería is-icon respondio 200 en :${PORT}`);
   } catch (e) {
     // Servidor no responde — omitir el test runtime (las reglas estáticas
     // arriba ya cubren el contrato).

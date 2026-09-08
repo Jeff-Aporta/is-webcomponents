@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./component-diagram.js
 style: ./component-diagram.css
-preview: ../../previews/diagrams/is-component-diagram.json
+preview: ./component-diagram.json
 ---
 # `<is-component-diagram>`
 
@@ -217,7 +217,7 @@ autogenera desde `title` o cae a "Diagrama de componentes".
 
 Ver el preview de la galería, que trae paquetes, estereotipos e interfaces
 provided/required:
-[`../../previews/diagrams/is-component-diagram.json`](../../previews/diagrams/is-component-diagram.json).
+[`./component-diagram.json`](./component-diagram.json).
 
 ## Errores comunes
 
@@ -240,4 +240,4 @@ provided/required:
 - [CSS](./component-diagram.css)
 - [Spec y layout](./component-spec.js)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-component-diagram.json)
+- [Preview](./component-diagram.json)

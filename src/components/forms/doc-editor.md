@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./doc-editor.js
 style: ./doc-editor.css
-preview: ../../previews/forms/is-doc-editor.json
+preview: ./doc-editor.json
 ---
 # `<is-doc-editor>`
 
@@ -279,4 +279,4 @@ Si la accesibilidad del editor es un requisito duro del proyecto, añade
 - [JavaScript](./doc-editor.js)
 - [CSS](./doc-editor.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-doc-editor.json)
+- [Preview](./doc-editor.json)

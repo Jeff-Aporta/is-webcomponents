@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./share-button.js
 style: ./share-button.css
-preview: ../../previews/actions/is-share-button.json
+preview: ./share-button.json
 ---
 # `<is-share-button>`
 
@@ -122,4 +122,4 @@ El control interno es `is-button`.
 ## Fuentes
 
 - `./share-button.js` · `./share-button.css`
-- Preview: `../../previews/actions/is-share-button.json`
+- Preview: `./share-button.json`

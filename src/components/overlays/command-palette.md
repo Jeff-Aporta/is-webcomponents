@@ -6,7 +6,7 @@ category: overlays
 status: public
 source: ./command-palette.js
 style: ./command-palette.css
-preview: ../../previews/overlays/is-command-palette.json
+preview: ./command-palette.json
 ---
 # `<is-command-palette>`
 
@@ -167,4 +167,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 - [JavaScript](./command-palette.js)
 - [CSS](./command-palette.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/overlays/is-command-palette.json)
+- [Preview](./command-palette.json)

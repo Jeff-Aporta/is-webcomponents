@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./details.js
 style: ./details.css
-preview: ../../previews/layout/is-details.json
+preview: ./details.json
 ---
 # `<is-details>`
 
@@ -204,4 +204,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-expand
 - [JavaScript](./details.js)
 - [CSS](./details.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-details.json)
+- [Preview](./details.json)

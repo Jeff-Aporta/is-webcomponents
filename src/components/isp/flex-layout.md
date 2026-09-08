@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./flex-layout.js
 style: ./flex-layout.css
-preview: ../../previews/isp/is-flex-layout.json
+preview: ./flex-layout.json
 ---
 # `<is-flex-layout>`
 
@@ -182,4 +182,4 @@ mientras no se usen `order`/`row-reverse` desde fuera.
 - [JavaScript](./flex-layout.js)
 - [CSS](./flex-layout.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-flex-layout.json)
+- [Preview](./flex-layout.json)

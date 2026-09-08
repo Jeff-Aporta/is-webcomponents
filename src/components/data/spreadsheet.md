@@ -6,7 +6,7 @@ category: data
 status: public
 source: ./spreadsheet.js
 style: ./spreadsheet.css
-preview: ../../previews/data/is-spreadsheet.json
+preview: ./spreadsheet.json
 ---
 # `<is-spreadsheet>`
 
@@ -336,4 +336,4 @@ Tags del módulo: `<is-spreadsheet>`.
 - [CSS](./spreadsheet.css)
 - [Partial de cabeceras pegadas](./_sticky.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data/is-spreadsheet.json)
+- [Preview](./spreadsheet.json)

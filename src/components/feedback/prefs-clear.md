@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./prefs-clear.js
 style: ./prefs-clear.css
-preview: ../../previews/feedback/is-prefs-clear.json
+preview: ./prefs-clear.json
 ---
 # `<is-prefs-clear>`
 

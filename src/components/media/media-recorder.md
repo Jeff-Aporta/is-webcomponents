@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./media-recorder.js
 style: ./media-recorder.css
-preview: ../../previews/media/is-media-recorder.json
+preview: ./media-recorder.json
 ---
 # `<is-media-recorder>`
 
@@ -118,4 +118,4 @@ Botón grabar/detener.
 ## Fuentes
 
 - `./media-recorder.js` · `./media-recorder.css`
-- Preview: `../../previews/media/is-media-recorder.json`
+- Preview: `./media-recorder.json`

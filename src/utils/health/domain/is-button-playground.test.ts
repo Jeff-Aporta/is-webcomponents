@@ -12,12 +12,12 @@ const read = (rel) => readFileSync(join(root, rel), 'utf8');
 
 test('catalog registra behavior de is-button', () => {
   const cat = read('src/previews/catalog.ts');
-  assert.match(cat, /"is-button"[\s\S]*?behaviors\/is-button\.js/);
-  assert.ok(existsSync(join(root, 'src/previews/behaviors/is-button.ts')));
+  assert.match(cat, /"is-button"[\s\S]*?\.\.\/components\/actions\/button\.preview\.js/);
+  assert.ok(existsSync(join(root, 'src/components/actions/button.preview.ts')));
 });
 
 test('playground usa color/variant (no appearance legacy) y pgOut', () => {
-  const json = JSON.parse(read('src/previews/actions/is-button.json'));
+  const json = JSON.parse(read('src/components/actions/button.json'));
   assert.equal(json.hasBehavior, true);
   const section = json.sections.find((s) => s.id === 'playground');
   assert.ok(section);
@@ -31,7 +31,7 @@ test('playground usa color/variant (no appearance legacy) y pgOut', () => {
 });
 
 test('behavior aplica color/variant/pill al #pgBtn', () => {
-  const src = read('src/previews/behaviors/is-button.ts');
+  const src = read('src/components/actions/button.preview.ts');
   assert.match(src, /setAttribute\(\s*['"]color['"]/);
   assert.match(src, /setAttribute\(\s*['"]variant['"]/);
   assert.match(src, /toggleAttribute\(\s*['"]pill['"]/);

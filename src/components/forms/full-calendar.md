@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./full-calendar.js
 style: ./full-calendar.css
-preview: ../../previews/forms/is-full-calendar.json
+preview: ./full-calendar.json
 ---
 # `<is-full-calendar>`
 
@@ -192,4 +192,4 @@ flujo debe ser navegable por teclado, exponer las mismas acciones (`prev()`,
 - [JavaScript](./full-calendar.js)
 - [CSS](./full-calendar.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-full-calendar.json)
+- [Preview](./full-calendar.json)

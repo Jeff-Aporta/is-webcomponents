@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./popconfirm.js
 style: ./popconfirm.css
-preview: ../../previews/feedback/is-popconfirm.json
+preview: ./popconfirm.json
 ---
 # `<is-popconfirm>`
 
@@ -187,4 +187,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - [JavaScript](./popconfirm.js)
 - [CSS](./popconfirm.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-popconfirm.json)
+- [Preview](./popconfirm.json)

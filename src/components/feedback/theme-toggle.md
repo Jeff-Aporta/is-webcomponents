@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./theme-toggle.js
 style: ./theme-toggle.css
-preview: ../../previews/feedback/is-theme-toggle.json
+preview: ./theme-toggle.json
 ---
 # `<is-theme-toggle>`
 
@@ -163,4 +163,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./theme-toggle.js)
 - [CSS](./theme-toggle.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-theme-toggle.json)
+- [Preview](./theme-toggle.json)

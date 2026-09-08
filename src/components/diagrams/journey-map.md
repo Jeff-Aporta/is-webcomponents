@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./journey-map.js
 style: ./journey-map.css
-preview: ../../previews/diagrams/is-journey-map.json
+preview: ./journey-map.json
 ---
 # `<is-journey-map>`
 
@@ -149,7 +149,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 Ver el preview de la galería, que trae el payload completo con grupos y estilos:
-[`../../previews/diagrams/is-journey-map.json`](../../previews/diagrams/is-journey-map.json).
+[`./journey-map.json`](./journey-map.json).
 
 ## Errores comunes
 
@@ -173,4 +173,4 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 - [CSS](./journey-map.css)
 - [Spec y layout](./journey-spec.js)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-journey-map.json)
+- [Preview](./journey-map.json)

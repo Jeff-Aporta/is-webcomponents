@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./barcode.js
 style: ./barcode.css
-preview: ../../previews/media/is-barcode.json
+preview: ./barcode.json
 ---
 # `<is-barcode>`
 

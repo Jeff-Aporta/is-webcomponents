@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./palette-selector.js
 style: ./palette-selector.css
-preview: ../../previews/feedback/is-palette-selector.json
+preview: ./palette-selector.json
 ---
 # `<is-palette-selector>`
 
@@ -211,4 +211,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado:
 - [JavaScript](./palette-selector.js)
 - [CSS](./palette-selector.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-palette-selector.json)
+- [Preview](./palette-selector.json)

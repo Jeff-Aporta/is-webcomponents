@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./signature.js
 style: ./signature.css
-preview: ../../previews/forms/is-signature.json
+preview: ./signature.json
 ---
 # `<is-signature>`
 
@@ -179,4 +179,4 @@ puntero: si el flujo debe ser operable sin puntero, ofrecer una alternativa
 - [JavaScript](./signature.js)
 - [CSS](./signature.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-signature.json)
+- [Preview](./signature.json)

@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./qrcode.js
 style: ./qrcode.css
-preview: ../../previews/media/is-qrcode.json
+preview: ./qrcode.json
 ---
 # `<is-qrcode>`
 

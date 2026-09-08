@@ -68,7 +68,7 @@ export async function loadPreview(tag: string) {
   /** @type {import('./_kit/types.d.ts').PreviewBehaviorModule | null} */
   let behavior = null;
   if (entry.behavior || definition.hasBehavior) {
-    const behPath = entry.behavior || `./behaviors/${tag}.js`;
+    const behPath = entry.behavior || `../components/${tag}.js`  // legacy fallback;
     const behKey = behPath;
     if (behaviorCache.has(behKey)) {
       behavior = behaviorCache.get(behKey);

@@ -64,7 +64,7 @@ test('is-fab: host + .fab heredan font-size (escala em)', async () => {
 
 test('is-fab preview: demo de escala con tres font-size distintos', async () => {
   const json = await readFile(
-    join(raiz, 'src', 'previews', 'actions', 'is-fab.json'),
+    join(raiz, 'src', 'components', 'actions', 'fab.json'),
     'utf8',
   );
   assert.match(json, /font-size:0\.75em/, 'demo 0.75em');

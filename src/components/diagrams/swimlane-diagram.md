@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./swimlane-diagram.js
 style: ./swimlane-diagram.css
-preview: ../../previews/diagrams/is-swimlane-diagram.json
+preview: ./swimlane-diagram.json
 ---
 # `<is-swimlane-diagram>`
 
@@ -150,7 +150,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 Ver el preview de la galería, que trae el payload completo con grupos y estilos:
-[`../../previews/diagrams/is-swimlane-diagram.json`](../../previews/diagrams/is-swimlane-diagram.json).
+[`./swimlane-diagram.json`](./swimlane-diagram.json).
 
 ## Errores comunes
 
@@ -174,4 +174,4 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 - [CSS](./swimlane-diagram.css)
 - [Spec y layout](./swimlane-spec.js)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-swimlane-diagram.json)
+- [Preview](./swimlane-diagram.json)

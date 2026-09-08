@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./sparkline.js
 style: ./sparkline.css
-preview: ../../previews/data-viz/is-sparkline.json
+preview: ./sparkline.json
 ---
 # `<is-sparkline>`
 
@@ -147,4 +147,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./sparkline.js)
 - [CSS](./sparkline.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-sparkline.json)
+- [Preview](./sparkline.json)

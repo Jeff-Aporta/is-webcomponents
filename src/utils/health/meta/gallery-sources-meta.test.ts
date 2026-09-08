@@ -27,9 +27,9 @@ test('manifest usa is-code (no is-code-editor)', () => {
   const src = read('src/manifest.ts');
   assert.match(src, /tag:\s*['"]is-code['"]/);
   assert.doesNotMatch(src, /is-code-editor/);
-  assert.ok(existsSync(join(root, 'src/previews/code/is-code.json')));
-  assert.ok(existsSync(join(root, 'src/previews/behaviors/is-code.ts')));
-  assert.ok(!existsSync(join(root, 'src/previews/code/is-code-editor.json')));
+  assert.ok(existsSync(join(root, 'src/components/code/code.json')));
+  assert.ok(existsSync(join(root, 'src/components/code/code.preview.ts')));
+  assert.ok(!existsSync(join(root, 'src/components/code/code-editor.json')));
 });
 
 test('component-sources: localSourceUrl es absoluta (.href)', async () => {

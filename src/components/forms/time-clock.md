@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./time-clock.js
 style: ./time-clock.css
-preview: ../../previews/forms/is-time-clock.json
+preview: ./time-clock.json
 ---
 # `<is-time-clock>`
 
@@ -182,4 +182,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./time-clock.js)
 - [CSS](./time-clock.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-time-clock.json)
+- [Preview](./time-clock.json)

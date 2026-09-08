@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./dropzone.js
 style: ./dropzone.css
-preview: ../../previews/forms/is-dropzone.json
+preview: ./dropzone.json
 ---
 # `<is-dropzone>`
 
@@ -295,4 +295,4 @@ Tags del módulo: `<is-dropzone>`.
 - [JavaScript](./dropzone.js)
 - [CSS](./dropzone.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-dropzone.json)
+- [Preview](./dropzone.json)

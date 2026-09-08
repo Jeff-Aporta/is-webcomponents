@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./toast-item.js
 style: ./toast-item.css
-preview: ../../previews/feedback/is-toast-item.json
+preview: ./toast-item.json
 ---
 # `<is-toast-item>`
 
@@ -187,4 +187,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`,
 - [JavaScript](./toast-item.js)
 - [CSS](./toast-item.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-toast-item.json)
+- [Preview](./toast-item.json)

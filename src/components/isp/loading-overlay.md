@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./loading-overlay.js
 style: ./loading-overlay.css
-preview: ../../previews/isp/is-loading-overlay.json
+preview: ./loading-overlay.json
 ---
 # `<is-loading-overlay>`
 
@@ -157,4 +157,4 @@ Tags del módulo: `<is-loading-overlay>`.
 
 - [JavaScript](./loading-overlay.js)
 - [CSS](./loading-overlay.css)
-- [Preview](../../previews/isp/is-loading-overlay.json)
+- [Preview](./loading-overlay.json)

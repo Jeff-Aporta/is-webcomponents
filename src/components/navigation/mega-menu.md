@@ -6,7 +6,7 @@ category: navigation
 status: public
 source: ./mega-menu.js
 style: ./mega-menu.css
-preview: ../../previews/navigation/is-mega-menu.json
+preview: ./mega-menu.json
 ---
 # `<is-mega-menu>`
 

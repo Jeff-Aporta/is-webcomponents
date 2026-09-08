@@ -14,8 +14,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const __dirname = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const homePath = join(__dirname, '..', 'src', 'previews', 'home.json');
-const homeBeh = join(__dirname, '..', 'src', 'previews', 'behaviors', 'home.ts');
+const homePath = join(__dirname, 'pages', 'home.json');
+const homeBeh = join(__dirname, 'pages', 'home.ts');
 const homeDef = JSON.parse(readFileSync(homePath, 'utf8'));
 /** Contenido buscable: styles + demos JSON + behavior (scripts migrados). */
 const behSrc = readFileSync(homeBeh, 'utf8');

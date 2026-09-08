@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./fab.js
 style: ./fab.css
-preview: ../../previews/actions/is-fab.json
+preview: ./fab.json
 ---
 # `<is-fab>`
 
@@ -169,4 +169,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./fab.js)
 - [CSS](./fab.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-fab.json)
+- [Preview](./fab.json)

@@ -23,8 +23,8 @@ import assert from 'node:assert/strict';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 const html = [
-  await readFile(join(root, 'src/previews/media/icon-explorer.json'), 'utf8'),
-  await readFile(join(root, 'src/previews/behaviors/icon-explorer.ts'), 'utf8'),
+  await readFile(join(root, 'src/components/media/icon-explorer.json'), 'utf8'),
+  await readFile(join(root, 'src/components/media/icon-explorer.preview.ts'), 'utf8'),
 ].join('\n');
 
 // --- 1. Scroll propio ------------------------------------------------------
@@ -180,10 +180,10 @@ assert.equal(
 );
 
 // --- 5. Embebido al final del demo de is-icon ------------------------------
-// El explorador vive al final de previews/media/is-icon.html, EMBEBIDO, no
+// El explorador vive al final del demo de is-icon (components/media/icon.json), EMBEBIDO, no
 // copiado: duplicar su markup significaria mantener dos buscadores.
 
-const iconHtml = await readFile(join(root, 'src/previews/media/is-icon.json'), 'utf8');
+const iconHtml = await readFile(join(root, 'src/components/media/icon.json'), 'utf8');
 
 assert.ok(/id":\s*"explorer"/.test(iconHtml) || /"id": "explorer"/.test(iconHtml), 'is-icon.json debe tener la sección explorer');
 assert.ok(/xpFrame/.test(iconHtml), 'el explorador debe embeberse por iframe (fuente única)');

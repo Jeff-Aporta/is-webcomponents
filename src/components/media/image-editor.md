@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./image-editor.js
 style: ./image-editor.css
-preview: ../../previews/media/is-image-editor.json
+preview: ./image-editor.json
 ---
 # `<is-image-editor>`
 

@@ -122,7 +122,9 @@ async function walk(dir, out = []) {
       await walk(p, out);
     } else if (/\.(ts|js)$/.test(name.name) && !/^index\.(ts|js)$/.test(name.name)
                && !name.name.endsWith('.d.ts')
-               && !name.name.includes('.selfcheck.')) {
+               && !name.name.includes('.selfcheck.')
+               && !name.name.includes('.preview.')
+               && !name.name.endsWith('.json')) {
       out.push(p);
     }
   }

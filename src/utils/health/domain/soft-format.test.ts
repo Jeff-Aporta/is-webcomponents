@@ -71,9 +71,9 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
 
 test('las salidas vivas del docs son pre.code o is-code (paint → editor)', () => {
   const casos = [
-    ['src/previews/theming.json', 'cssOut', 'css'],
-    ['src/previews/forms/is-rte.json', 'outHTML', 'html'],
-    ['src/previews/forms/is-doc-editor.json', 'out', 'javascript'],
+    ['src/pages/theming.json', 'cssOut', 'css'],
+    ['src/components/forms/rte.json', 'outHTML', 'html'],
+    ['src/components/forms/doc-editor.json', 'out', 'javascript'],
   ];
   for (const [archivo, id, lang] of casos) {
     const raw = readFileSync(join(root, archivo), 'utf8');

@@ -22,7 +22,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 const toastJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast.ts'), 'utf8');
 const toastItemJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast-item.ts'), 'utf8');
 const toastCss = await readFile(join(root, 'src', 'components', 'feedback', 'toast-item.css'), 'utf8');
-const preview = await readFile(join(root, 'src', 'previews', 'feedback', 'is-toast.json'), 'utf8');
+const preview = await readFile(join(root, 'src', 'components', 'feedback', 'toast.json'), 'utf8');
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
