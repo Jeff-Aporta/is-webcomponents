@@ -1,0 +1,1431 @@
+[1-191689] RootWebArea: Date Picker | ContaPyme
+  [1-192063] scrollable, html
+    [1-192090] body
+      [1-192091] banner
+        [1-192095] button: ContaPyme — elegir paleta
+          [1-191687] StaticText: conta
+          [1-191688] StaticText: pyme
+        [1-192762] button: Abrir preview en pantalla completa
+        [1-192873] button: Cambiar a tema claro
+      [1-192115] is-split-panel
+        [1-192061] scrollable, nav: Componentes
+          [1-192116] button: Inicio — home
+            [1-191704] StaticText: Inicio
+          [1-192118] button: Personalización — theming
+            [1-191705] StaticText: Personalización
+          [1-192120] button: Ecosistema JS — utilidades compartidas
+            [1-191706] StaticText: Ecosistema JS
+          [1-192122] group: ACCIONES
+            [1-192124] button: Button is-button
+              [1-191707] StaticText: Button
+              [1-191708] StaticText: <is-button>
+            [1-192127] button: Button Group is-button-group
+              [1-191709] StaticText: Button Group
+              [1-191710] StaticText: <is-button-group>
+            [1-192130] button: Check Icon Button is-check-icon-button
+              [1-191711] StaticText: Check Icon Button
+              [1-191712] StaticText: <is-check-icon-button>
+            [1-192133] button: Context Menu is-context-menu
+              [1-191713] StaticText: Context Menu
+              [1-191714] StaticText: <is-context-menu>
+            [1-192136] button: Copy Button is-copy-button
+              [1-191715] StaticText: Copy Button
+              [1-191716] StaticText: <is-copy-button>
+            [1-192139] button: Dropdown is-dropdown
+              [1-191717] StaticText: Dropdown
+              [1-191718] StaticText: <is-dropdown>
+            [1-192142] button: Dropdown Item is-dropdown-item
+              [1-191719] StaticText: Dropdown Item
+              [1-191720] StaticText: <is-dropdown-item>
+            [1-192145] button: Floating Action Button is-fab
+              [1-191721] StaticText: Floating Action Button
+              [1-191722] StaticText: <is-fab>
+            [1-192148] button: Share Button is-share-button
+              [1-191723] StaticText: Share Button
+              [1-191724] StaticText: <is-share-button>
+            [1-192151] button: Speed Dial is-speed-dial
+              [1-191725] StaticText: Speed Dial
+              [1-191726] StaticText: <is-speed-dial>
+            [1-192154] button: Speed Dial Action is-speed-dial-action
+              [1-191727] StaticText: Speed Dial Action
+              [1-191728] StaticText: <is-speed-dial-action>
+          [1-192157] group: MEDIA
+            [1-192159] button: Avatar is-avatar
+              [1-191729] StaticText: Avatar
+              [1-191730] StaticText: <is-avatar>
+            [1-192162] button: Barcode is-barcode
+              [1-191731] StaticText: Barcode
+              [1-191732] StaticText: <is-barcode>
+            [1-192165] button: Barcode Scanner is-barcode-scanner
+              [1-191733] StaticText: Barcode Scanner
+              [1-191734] StaticText: <is-barcode-scanner>
+            [1-192168] button: Icon is-icon
+              [1-191735] StaticText: Icon
+              [1-191736] StaticText: <is-icon>
+            [1-192171] button: Image Editor is-image-editor
+              [1-191737] StaticText: Image Editor
+              [1-191738] StaticText: <is-image-editor>
+            [1-192174] button: Media Recorder is-media-recorder
+              [1-191739] StaticText: Media Recorder
+              [1-191740] StaticText: <is-media-recorder>
+            [1-192177] button: QR Code is-qrcode
+              [1-191741] StaticText: QR Code
+              [1-191742] StaticText: <is-qrcode>
+            [1-192180] button: Speech is-speech
+              [1-191743] StaticText: Speech
+              [1-191744] StaticText: <is-speech>
+            [1-192183] button: Theme Img is-theme-img
+              [1-191745] StaticText: Theme Img
+              [1-191746] StaticText: <is-theme-img>
+            [1-192186] button: Video is-video
+              [1-191747] StaticText: Video
+              [1-191748] StaticText: <is-video>
+            [1-192189] button: Video Playlist is-video-playlist
+              [1-191749] StaticText: Video Playlist
+              [1-191750] StaticText: <is-video-playlist>
+          [1-192192] group: FEEDBACK
+            [1-192194] button: Badge is-badge
+              [1-191751] StaticText: Badge
+              [1-191752] StaticText: <is-badge>
+            [1-192197] button: CDN Snippet is-cdn-snippet
+              [1-191753] StaticText: CDN Snippet
+              [1-191754] StaticText: <is-cdn-snippet>
+            [1-192200] button: Confirm Modal is-confirm-modal
+              [1-191755] StaticText: Confirm Modal
+              [1-191756] StaticText: <is-confirm-modal>
+            [1-192203] button: Palette Selector is-palette-selector
+              [1-191757] StaticText: Palette Selector
+              [1-191758] StaticText: <is-palette-selector>
+            [1-192206] button: Popconfirm is-popconfirm
+              [1-191759] StaticText: Popconfirm
+              [1-191760] StaticText: <is-popconfirm>
+            [1-192209] button: Prefs Clear is-prefs-clear
+              [1-191761] StaticText: Prefs Clear
+              [1-191762] StaticText: <is-prefs-clear>
+            [1-192212] button: Progress Bar is-progress-bar
+              [1-191763] StaticText: Progress Bar
+              [1-191764] StaticText: <is-progress-bar>
+            [1-192215] button: Progress Ring is-progress-ring
+              [1-191765] StaticText: Progress Ring
+              [1-191766] StaticText: <is-progress-ring>
+            [1-192218] button: Skeleton is-skeleton
+              [1-191767] StaticText: Skeleton
+              [1-191768] StaticText: <is-skeleton>
+            [1-192221] button: Spinner is-spinner
+              [1-191769] StaticText: Spinner
+              [1-191770] StaticText: <is-spinner>
+            [1-192224] button: Tag is-tag
+              [1-191771] StaticText: Tag
+              [1-191772] StaticText: <is-tag>
+            [1-192227] button: Theme Toggle is-theme-toggle
+              [1-191773] StaticText: Theme Toggle
+              [1-191774] StaticText: <is-theme-toggle>
+            [1-192230] button: Toast is-toast
+              [1-191775] StaticText: Toast
+              [1-191776] StaticText: <is-toast>
+            [1-192233] button: Toast Item is-toast-item
+              [1-191777] StaticText: Toast Item
+              [1-191778] StaticText: <is-toast-item>
+            [1-192236] button: Tooltip is-tooltip
+              [1-191779] StaticText: Tooltip
+              [1-191780] StaticText: <is-tooltip>
+          [1-192239] group: LAYOUT
+            [1-192241] button: Callout is-callout
+              [1-191781] StaticText: Callout
+              [1-191782] StaticText: <is-callout>
+            [1-192244] button: Card is-card
+              [1-191783] StaticText: Card
+              [1-191784] StaticText: <is-card>
+            [1-192247] button: Details is-details
+              [1-191785] StaticText: Details
+              [1-191786] StaticText: <is-details>
+            [1-192250] button: Dialog is-dialog
+              [1-191787] StaticText: Dialog
+              [1-191788] StaticText: <is-dialog>
+            [1-192253] button: Divider is-divider
+              [1-191789] StaticText: Divider
+              [1-191790] StaticText: <is-divider>
+            [1-192256] button: Dock is-dock
+              [1-191791] StaticText: Dock
+              [1-191792] StaticText: <is-dock>
+            [1-192259] button: Dock Item is-dock-item
+              [1-191793] StaticText: Dock Item
+              [1-191794] StaticText: <is-dock-item>
+            [1-192262] button: Drawer is-drawer
+              [1-191795] StaticText: Drawer
+              [1-191796] StaticText: <is-drawer>
+            [1-192265] button: Main is-main
+              [1-191797] StaticText: Main
+              [1-191798] StaticText: <is-main>
+            [1-192268] button: Panel dividido is-split-panel
+              [1-191799] StaticText: Panel dividido
+              [1-191800] StaticText: <is-split-panel>
+            [1-192271] button: Scrollspy is-scrollspy
+              [1-191801] StaticText: Scrollspy
+              [1-191802] StaticText: <is-scrollspy>
+          [1-192274] group: NAVEGACIÓN
+            [1-192276] button: Breadcrumb is-breadcrumb
+              [1-191803] StaticText: Breadcrumb
+              [1-191804] StaticText: <is-breadcrumb>
+            [1-192279] button: Breadcrumb Item is-breadcrumb-item
+              [1-191805] StaticText: Breadcrumb Item
+              [1-191806] StaticText: <is-breadcrumb-item>
+            [1-192282] button: Carousel is-carousel
+              [1-191807] StaticText: Carousel
+              [1-191808] StaticText: <is-carousel>
+            [1-192285] button: Carousel Item is-carousel-item
+              [1-191809] StaticText: Carousel Item
+              [1-191810] StaticText: <is-carousel-item>
+            [1-192288] button: Mega Menu is-mega-menu
+              [1-191811] StaticText: Mega Menu
+              [1-191812] StaticText: <is-mega-menu>
+            [1-192291] button: Scroller is-scroller
+              [1-191813] StaticText: Scroller
+              [1-191814] StaticText: <is-scroller>
+            [1-192294] button: Stepper is-stepper
+              [1-191815] StaticText: Stepper
+              [1-191816] StaticText: <is-stepper>
+            [1-192297] button: Stepper Step is-stepper-step
+              [1-191817] StaticText: Stepper Step
+              [1-191818] StaticText: <is-stepper-step>
+            [1-192300] button: Tab is-tab
+              [1-191819] StaticText: Tab
+              [1-191820] StaticText: <is-tab>
+            [1-192303] button: Tab Group is-tab-group
+              [1-191821] StaticText: Tab Group
+              [1-191822] StaticText: <is-tab-group>
+            [1-192306] button: Tab Panel is-tab-panel
+              [1-191823] StaticText: Tab Panel
+              [1-191824] StaticText: <is-tab-panel>
+            [1-192309] button: Tree is-tree
+              [1-191825] StaticText: Tree
+              [1-191826] StaticText: <is-tree>
+            [1-192312] button: Tree Item is-tree-item
+              [1-191827] StaticText: Tree Item
+              [1-191828] StaticText: <is-tree-item>
+          [1-192315] group: FORMULARIOS
+            [1-192317] button: Checkbox is-checkbox
+              [1-191829] StaticText: Checkbox
+              [1-191830] StaticText: <is-checkbox>
+            [1-192320] button: Color Picker is-color-picker
+              [1-191831] StaticText: Color Picker
+              [1-191832] StaticText: <is-color-picker>
+            [1-192323] button: Combobox is-combobox
+              [1-191833] StaticText: Combobox
+              [1-191834] StaticText: <is-combobox>
+            [1-192326] button: Date Field is-date-field
+              [1-191835] StaticText: Date Field
+              [1-191836] StaticText: <is-date-field>
+            [1-192329] button: Date Input is-date-input
+              [1-191837] StaticText: Date Input
+              [1-191838] StaticText: <is-date-input>
+            [1-192332] button: Date Picker is-date-picker
+              [1-191839] StaticText: Date Picker
+              [1-191840] StaticText: <is-date-picker>
+            [1-192335] button: Date Range Input is-date-range-input
+              [1-191841] StaticText: Date Range Input
+              [1-191842] StaticText: <is-date-range-input>
+            [1-192338] button: Date Range Picker is-date-range-picker
+              [1-191843] StaticText: Date Range Picker
+              [1-191844] StaticText: <is-date-range-picker>
+            [1-192341] button: Date Time Field is-date-time-field
+              [1-191845] StaticText: Date Time Field
+              [1-191846] StaticText: <is-date-time-field>
+            [1-192344] button: Date Time Input is-date-time-input
+              [1-191847] StaticText: Date Time Input
+              [1-191848] StaticText: <is-date-time-input>
+            [1-192347] button: Digital Clock is-digital-clock
+              [1-191849] StaticText: Digital Clock
+              [1-191850] StaticText: <is-digital-clock>
+            [1-192350] button: Document Editor is-doc-editor
+              [1-191851] StaticText: Document Editor
+              [1-191852] StaticText: <is-doc-editor>
+            [1-192353] button: Dropzone is-dropzone
+              [1-191853] StaticText: Dropzone
+              [1-191854] StaticText: <is-dropzone>
+            [1-192356] button: Duration Picker is-duration-picker
+              [1-191855] StaticText: Duration Picker
+              [1-191856] StaticText: <is-duration-picker>
+            [1-192359] button: File Input is-file-input
+              [1-191857] StaticText: File Input
+              [1-191858] StaticText: <is-file-input>
+            [1-192362] button: Full Calendar is-full-calendar
+              [1-191859] StaticText: Full Calendar
+              [1-191860] StaticText: <is-full-calendar>
+            [1-192365] button: Inline Edit is-inline-edit
+              [1-191861] StaticText: Inline Edit
+              [1-191862] StaticText: <is-inline-edit>
+            [1-192368] button: Input is-input
+              [1-191863] StaticText: Input
+              [1-191864] StaticText: <is-input>
+            [1-192371] button: Masked Input is-masked-input
+              [1-191865] StaticText: Masked Input
+              [1-191866] StaticText: <is-masked-input>
+            [1-192374] button: Mention is-mention
+              [1-191867] StaticText: Mention
+              [1-191868] StaticText: <is-mention>
+            [1-192377] button: Month Calendar is-month-calendar
+              [1-191869] StaticText: Month Calendar
+              [1-191870] StaticText: <is-month-calendar>
+            [1-192380] button: Option is-option
+              [1-191871] StaticText: Option
+              [1-191872] StaticText: <is-option>
+            [1-192383] button: Pin Input is-pin-input
+              [1-191873] StaticText: Pin Input
+              [1-191874] StaticText: <is-pin-input>
+            [1-192386] button: Radio is-radio
+              [1-191875] StaticText: Radio
+              [1-191876] StaticText: <is-radio>
+            [1-192389] button: Radio Group is-radio-group
+              [1-191877] StaticText: Radio Group
+              [1-191878] StaticText: <is-radio-group>
+            [1-192392] button: Rating is-rating
+              [1-191879] StaticText: Rating
+              [1-191880] StaticText: <is-rating>
+            [1-192395] button: Rich Text Editor is-rte
+              [1-191881] StaticText: Rich Text Editor
+              [1-191882] StaticText: <is-rte>
+            [1-192398] button: Select is-select
+              [1-191883] StaticText: Select
+              [1-191884] StaticText: <is-select>
+            [1-192401] button: Signature is-signature
+              [1-191885] StaticText: Signature
+              [1-191886] StaticText: <is-signature>
+            [1-192404] button: Slider is-slider
+              [1-191887] StaticText: Slider
+              [1-191888] StaticText: <is-slider>
+            [1-192407] button: Switch is-switch
+              [1-191889] StaticText: Switch
+              [1-191890] StaticText: <is-switch>
+            [1-192410] button: Textarea is-textarea
+              [1-191891] StaticText: Textarea
+              [1-191892] StaticText: <is-textarea>
+            [1-192413] button: Time Clock is-time-clock
+              [1-191893] StaticText: Time Clock
+              [1-191894] StaticText: <is-time-clock>
+            [1-192416] button: Time Field is-time-field
+              [1-191895] StaticText: Time Field
+              [1-191896] StaticText: <is-time-field>
+            [1-192419] button: Time Input is-time-input
+              [1-191897] StaticText: Time Input
+              [1-191898] StaticText: <is-time-input>
+            [1-192422] button: Year Calendar is-year-calendar
+              [1-191899] StaticText: Year Calendar
+              [1-191900] StaticText: <is-year-calendar>
+          [1-192425] group: CÓDIGO
+            [1-192427] button: Code is-code
+              [1-191901] StaticText: Code
+              [1-191902] StaticText: <is-code>
+          [1-192430] group: DATOS
+            [1-192432] button: AG Grid is-ag-grid
+              [1-191903] StaticText: AG Grid
+              [1-191904] StaticText: <is-ag-grid>
+            [1-192435] button: Data Grid is-data-grid
+              [1-191905] StaticText: Data Grid
+              [1-191906] StaticText: <is-data-grid>
+            [1-192438] button: Kanban is-kanban
+              [1-191907] StaticText: Kanban
+              [1-191908] StaticText: <is-kanban>
+            [1-192441] button: Kanban Card is-kanban-card
+              [1-191909] StaticText: Kanban Card
+              [1-191910] StaticText: <is-kanban-card>
+            [1-192444] button: Kanban Column is-kanban-column
+              [1-191911] StaticText: Kanban Column
+              [1-191912] StaticText: <is-kanban-column>
+            [1-192447] button: Pivot Table is-pivot-table
+              [1-191913] StaticText: Pivot Table
+              [1-191914] StaticText: <is-pivot-table>
+            [1-192450] button: Spreadsheet is-spreadsheet
+              [1-191915] StaticText: Spreadsheet
+              [1-191916] StaticText: <is-spreadsheet>
+            [1-192453] button: Stat KPI is-stat
+              [1-191917] StaticText: Stat KPI
+              [1-191918] StaticText: <is-stat>
+            [1-192456] button: Transfer is-transfer
+              [1-191919] StaticText: Transfer
+              [1-191920] StaticText: <is-transfer>
+            [1-192459] button: Transfer Item is-transfer-item
+              [1-191921] StaticText: Transfer Item
+              [1-191922] StaticText: <is-transfer-item>
+          [1-192462] group: GRÁFICOS
+            [1-192464] button: Bar Chart is-bar-chart
+              [1-191923] StaticText: Bar Chart
+              [1-191924] StaticText: <is-bar-chart>
+            [1-192467] button: Bubble Chart is-bubble-chart
+              [1-191925] StaticText: Bubble Chart
+              [1-191926] StaticText: <is-bubble-chart>
+            [1-192470] button: Chart is-chart
+              [1-191927] StaticText: Chart
+              [1-191928] StaticText: <is-chart>
+            [1-192473] button: Doughnut Chart is-doughnut-chart
+              [1-191929] StaticText: Doughnut Chart
+              [1-191930] StaticText: <is-doughnut-chart>
+            [1-192476] button: Funnel Chart is-funnel-chart
+              [1-191931] StaticText: Funnel Chart
+              [1-191932] StaticText: <is-funnel-chart>
+            [1-192479] button: Gauge is-gauge
+              [1-191933] StaticText: Gauge
+              [1-191934] StaticText: <is-gauge>
+            [1-192482] button: Heatmap is-heatmap
+              [1-191935] StaticText: Heatmap
+              [1-191936] StaticText: <is-heatmap>
+            [1-192485] button: Line Chart is-line-chart
+              [1-191937] StaticText: Line Chart
+              [1-191938] StaticText: <is-line-chart>
+            [1-192488] button: Map Marker is-map-marker
+              [1-191939] StaticText: Map Marker
+              [1-191940] StaticText: <is-map-marker>
+            [1-192491] button: Maps is-maps
+              [1-191941] StaticText: Maps
+              [1-191942] StaticText: <is-maps>
+            [1-192494] button: Pie Chart is-pie-chart
+              [1-191943] StaticText: Pie Chart
+              [1-191944] StaticText: <is-pie-chart>
+            [1-192497] button: Polar Area Chart is-polar-area-chart
+              [1-191945] StaticText: Polar Area Chart
+              [1-191946] StaticText: <is-polar-area-chart>
+            [1-192500] button: Radar Chart is-radar-chart
+              [1-191947] StaticText: Radar Chart
+              [1-191948] StaticText: <is-radar-chart>
+            [1-192503] button: Scatter Chart is-scatter-chart
+              [1-191949] StaticText: Scatter Chart
+              [1-191950] StaticText: <is-scatter-chart>
+            [1-192506] button: Sparkline is-sparkline
+              [1-191951] StaticText: Sparkline
+              [1-191952] StaticText: <is-sparkline>
+            [1-192509] button: Treemap is-treemap
+              [1-191953] StaticText: Treemap
+              [1-191954] StaticText: <is-treemap>
+            [1-192512] button: Waterfall Chart is-waterfall-chart
+              [1-191955] StaticText: Waterfall Chart
+              [1-191956] StaticText: <is-waterfall-chart>
+          [1-192515] group: DIAGRAMAS
+            [1-192517] button: Diagrama de bloques is-block-diagram
+              [1-191957] StaticText: Diagrama de bloques
+              [1-191958] StaticText: <is-block-diagram>
+            [1-192520] button: Diagrama de carriles is-swimlane-diagram
+              [1-191959] StaticText: Diagrama de carriles
+              [1-191960] StaticText: <is-swimlane-diagram>
+            [1-192523] button: Diagrama de casos de uso is-use-case-diagram
+              [1-191961] StaticText: Diagrama de casos de uso
+              [1-191962] StaticText: <is-use-case-diagram>
+            [1-192526] button: Diagrama de clases is-class-diagram
+              [1-191963] StaticText: Diagrama de clases
+              [1-191964] StaticText: <is-class-diagram>
+            [1-192529] button: Diagrama de componentes is-component-diagram
+              [1-191965] StaticText: Diagrama de componentes
+              [1-191966] StaticText: <is-component-diagram>
+            [1-192532] button: Diagrama de estados is-state-diagram
+              [1-191967] StaticText: Diagrama de estados
+              [1-191968] StaticText: <is-state-diagram>
+            [1-192535] button: Diagrama de flujo is-flowchart
+              [1-191969] StaticText: Diagrama de flujo
+              [1-191970] StaticText: <is-flowchart>
+            [1-192538] button: Diagrama de Gantt is-gantt
+              [1-191971] StaticText: Diagrama de Gantt
+              [1-191972] StaticText: <is-gantt>
+            [1-192541] button: Diagrama de Sankey is-sankey-diagram
+              [1-191973] StaticText: Diagrama de Sankey
+              [1-191974] StaticText: <is-sankey-diagram>
+            [1-192544] button: Diagrama de secuencia is-sequence-diagram
+              [1-191975] StaticText: Diagrama de secuencia
+              [1-191976] StaticText: <is-sequence-diagram>
+            [1-192547] button: Diagrama de Venn is-venn-diagram
+              [1-191977] StaticText: Diagrama de Venn
+              [1-191978] StaticText: <is-venn-diagram>
+            [1-192550] button: Diagrama entidad-relación is-er-diagram
+              [1-191979] StaticText: Diagrama entidad-relación
+              [1-191980] StaticText: <is-er-diagram>
+            [1-192553] button: Línea de tiempo is-timeline
+              [1-191981] StaticText: Línea de tiempo
+              [1-191982] StaticText: <is-timeline>
+            [1-192556] button: Mapa de recorrido is-journey-map
+              [1-191983] StaticText: Mapa de recorrido
+              [1-191984] StaticText: <is-journey-map>
+            [1-192559] button: Mapa mental is-mindmap
+              [1-191985] StaticText: Mapa mental
+              [1-191986] StaticText: <is-mindmap>
+            [1-192562] button: Matriz de cuadrantes is-quadrant-chart
+              [1-191987] StaticText: Matriz de cuadrantes
+              [1-191988] StaticText: <is-quadrant-chart>
+            [1-192565] button: Org Chart is-org-chart
+              [1-191989] StaticText: Org Chart
+              [1-191990] StaticText: <is-org-chart>
+            [1-192568] button: Visor de diagramas is-diagram-lightbox
+              [1-191991] StaticText: Visor de diagramas
+              [1-191992] StaticText: <is-diagram-lightbox>
+          [1-192571] group: OVERLAYS
+            [1-192573] button: Command Palette is-command-palette
+              [1-191993] StaticText: Command Palette
+              [1-191994] StaticText: <is-command-palette>
+            [1-192576] button: PDF Viewer is-pdf-viewer
+              [1-191995] StaticText: PDF Viewer
+              [1-191996] StaticText: <is-pdf-viewer>
+            [1-192579] button: Window is-window
+              [1-191997] StaticText: Window
+              [1-191998] StaticText: <is-window>
+          [1-192582] group: UTILERÍAS
+            [1-192584] button: Editor Markdown is-md-editor
+              [1-191999] StaticText: Editor Markdown
+              [1-192000] StaticText: <is-md-editor>
+            [1-192587] button: Formato is-format
+              [1-192001] StaticText: Formato
+              [1-192002] StaticText: <is-format>
+            [1-192590] button: Formato de bytes is-format-bytes
+              [1-192003] StaticText: Formato de bytes
+              [1-192004] StaticText: <is-format-bytes>
+            [1-192593] button: Formato de fecha is-format-date
+              [1-192005] StaticText: Formato de fecha
+              [1-192006] StaticText: <is-format-date>
+            [1-192596] button: Formato de número is-format-number
+              [1-192007] StaticText: Formato de número
+              [1-192008] StaticText: <is-format-number>
+            [1-192599] button: IsUi is-ui
+              [1-192009] StaticText: IsUi
+              [1-192010] StaticText: <is-ui>
+            [1-192602] button: Lightbox is-lightbox
+              [1-192011] StaticText: Lightbox
+              [1-192012] StaticText: <is-lightbox>
+            [1-192605] button: Observador de intersección is-intersection-observer
+              [1-192013] StaticText: Observador de intersección
+              [1-192014] StaticText: <is-intersection-observer>
+            [1-192608] button: Observador de mutación is-mutation-observer
+              [1-192015] StaticText: Observador de mutación
+              [1-192016] StaticText: <is-mutation-observer>
+            [1-192611] button: Observer is-observer
+              [1-192017] StaticText: Observer
+              [1-192018] StaticText: <is-observer>
+            [1-192614] button: Offscreen Canvas is-offscreen-canvas
+              [1-192019] StaticText: Offscreen Canvas
+              [1-192020] StaticText: <is-offscreen-canvas>
+            [1-192617] button: Popover is-popover
+              [1-192021] StaticText: Popover
+              [1-192022] StaticText: <is-popover>
+            [1-192620] button: Render Markdown is-md-render
+              [1-192023] StaticText: Render Markdown
+              [1-192024] StaticText: <is-md-render>
+            [1-192623] button: Resize Observer is-resize-observer
+              [1-192025] StaticText: Resize Observer
+              [1-192026] StaticText: <is-resize-observer>
+            [1-192626] button: Tiempo relativo is-relative-time
+              [1-192027] StaticText: Tiempo relativo
+              [1-192028] StaticText: <is-relative-time>
+            [1-192629] button: Wake Lock is-wake-lock
+              [1-192029] StaticText: Wake Lock
+              [1-192030] StaticText: <is-wake-lock>
+          [1-192632] group: ISP-SVELTECOMPONENTS
+            [1-192634] button: Accordion Group is-accordion-group
+              [1-192031] StaticText: Accordion Group
+              [1-192032] StaticText: <is-accordion-group>
+            [1-192638] button: Block Layout is-block-layout
+              [1-192033] StaticText: Block Layout
+              [1-192034] StaticText: <is-block-layout>
+            [1-192642] button: Btn Ref is-btn-ref
+              [1-192035] StaticText: Btn Ref
+              [1-192036] StaticText: <is-btn-ref>
+            [1-192646] button: Catálogo Gen is-catalogo-gen
+              [1-192037] StaticText: Catálogo Gen
+              [1-192038] StaticText: <is-catalogo-gen>
+            [1-192650] button: Confirm Delete is-confirm-delete
+              [1-192039] StaticText: Confirm Delete
+              [1-192040] StaticText: <is-confirm-delete>
+            [1-192654] button: Flex Layout is-flex-layout
+              [1-192041] StaticText: Flex Layout
+              [1-192042] StaticText: <is-flex-layout>
+            [1-192658] button: Flex Options is-flex-options
+              [1-192043] StaticText: Flex Options
+              [1-192044] StaticText: <is-flex-options>
+            [1-192662] button: Float Card is-float-card
+              [1-192045] StaticText: Float Card
+              [1-192046] StaticText: <is-float-card>
+            [1-192666] button: Form is-form
+              [1-192047] StaticText: Form
+              [1-192048] StaticText: <is-form>
+            [1-192670] button: Grid Layout is-grid-layout
+              [1-192049] StaticText: Grid Layout
+              [1-192050] StaticText: <is-grid-layout>
+            [1-192674] button: Heading is-heading
+              [1-192051] StaticText: Heading
+              [1-192052] StaticText: <is-heading>
+            [1-192678] button: Loading Overlay is-loading-overlay
+              [1-192053] StaticText: Loading Overlay
+              [1-192054] StaticText: <is-loading-overlay>
+            [1-192682] button: Modal Verificación is-modal-verificacion
+              [1-192055] StaticText: Modal Verificación
+              [1-192056] StaticText: <is-modal-verificacion>
+            [1-192686] button: Text is-text
+              [1-192057] StaticText: Text
+              [1-192058] StaticText: <is-text>
+            [1-192690] button: Tree View is-tree-view
+              [1-192059] StaticText: Tree View
+              [1-192060] StaticText: <is-tree-view>
+        [1-192718] separator: Redimensionar panel
+        [1-192809] is-split-panel
+          [1-192810] scrollable, is-main
+            [1-192920] section
+              [1-192911] heading: <is-date-picker>
+              [1-192914] paragraph
+                [1-193226] StaticText: Calendario inline (DateCalendar de
+                [1-192912] link: MUI X
+                [1-193228] StaticText: ). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un
+                [1-192913] code
+                  [1-193229] StaticText: is-dropdown
+                [1-193230] StaticText: .
+              [1-192917] div
+                [1-192916] is-demo
+                  [1-192921] div
+                    [1-192922] div
+                      [1-192939] button: Anterior
+                        [1-193231] StaticText: ‹
+                      [1-192924] div
+                        [1-192959] button: July
+                        [1-192979] button: 2026
+                      [1-192994] button: Siguiente
+                        [1-193234] StaticText: ›
+                    [1-192934] div
+                      [1-192935] div
+                        [1-201260] columnheader: Mon
+                        [1-201261] columnheader: Tue
+                        [1-201262] columnheader: Wed
+                        [1-201263] columnheader: Thu
+                        [1-201264] columnheader: Fri
+                        [1-201265] columnheader: Sat
+                        [1-201266] columnheader: Sun
+                      [1-192936] grid
+                        [1-201315] row: 27 29 30 1 2 3 4 5
+                          [1-201267] rowheader: 27
+                          [1-201268] gridcell: 29
+                          [1-201269] gridcell: 30
+                          [1-201270] gridcell: 1 [selected]
+                          [1-201271] gridcell: 2
+                          [1-201272] gridcell: 3
+                          [1-201273] gridcell: 4
+                          [1-201274] gridcell: 5
+                        [1-201316] row: 28 6 7 8 9 10 11 12
+                          [1-201275] rowheader: 28
+                          [1-201276] gridcell: 6
+                          [1-201277] gridcell: 7
+                          [1-201278] gridcell: 8
+                          [1-201279] gridcell: 9
+                          [1-201280] gridcell: 10
+                          [1-201281] gridcell: 11
+                          [1-201282] gridcell: 12
+                        [1-201317] row: 29 13 14 15 16 17 18 19
+                          [1-201283] rowheader: 29
+                          [1-201284] gridcell: 13
+                          [1-201285] gridcell: 14
+                          [1-201286] gridcell: 15
+                          [1-201287] gridcell: 16
+                          [1-201288] gridcell: 17
+                          [1-201289] gridcell: 18
+                          [1-201290] gridcell: 19
+                        [1-201318] row: 30 20 21 22 23 24 25 26
+                          [1-201291] rowheader: 30
+                          [1-201292] gridcell: 20
+                          [1-201293] gridcell: 21
+                          [1-201294] gridcell: 22
+                          [1-201295] gridcell: 23
+                          [1-201296] gridcell: 24
+                          [1-201297] gridcell: 25
+                          [1-201298] gridcell: 26
+                        [1-201319] row: 31 27 28 29 30 31 1 2
+                          [1-201299] rowheader: 31
+                          [1-201300] gridcell: 27
+                          [1-201301] gridcell: 28
+                          [1-201302] gridcell: 29
+                          [1-201303] gridcell: 30
+                          [1-201304] gridcell: 31
+                          [1-201305] gridcell: 1
+                          [1-201306] gridcell: 2
+                        [1-201320] row: 32 3 4 5 6 7 8 9
+                          [1-201307] rowheader: 32
+                          [1-201308] gridcell: 3
+                          [1-201309] gridcell: 4
+                          [1-201310] gridcell: 5
+                          [1-201311] gridcell: 6
+                          [1-201312] gridcell: 7
+                          [1-201313] gridcell: 8
+                          [1-201314] gridcell: 9
+                  [1-199873] button: Ver código del ejemplo
+                  [1-200264] button: Ver fuentes JS / CSS / MD
+                [1-198092] group
+                  [1-198097] DisclosureTriangle: CONTROLES
+              [1-192918] paragraph
+            [1-193461] section
+              [1-193456] heading: Rango
+              [1-193457] paragraph
+                [1-193806] StaticText: Tras elegir el inicio, el calendario pinta el rango tentativo hasta el día bajo el cursor o el foco, y el extremo móvil se marca con un anillo.
+              [1-193459] is-demo
+                [1-193462] div
+                  [1-193463] div
+                    [1-193480] button: Anterior
+                      [1-193807] StaticText: ‹
+                    [1-193465] div
+                      [1-193500] button: septiembre
+                      [1-193520] button: 2026
+                    [1-193535] button: Siguiente
+                      [1-193810] StaticText: ›
+                  [1-193475] div
+                    [1-193476] div
+                      [1-193867] columnheader: Lun
+                      [1-193868] columnheader: Mar
+                      [1-193869] columnheader: Mié
+                      [1-193870] columnheader: Jue
+                      [1-193871] columnheader: Vie
+                      [1-193872] columnheader: Sáb
+                      [1-193873] columnheader: Dom
+                    [1-193477] grid
+                      [1-193939] row: 1 2 3 4 5 6
+                        [1-193875] gridcell: 1
+                        [1-193876] gridcell: 2
+                        [1-193877] gridcell: 3
+                        [1-193878] gridcell: 4
+                        [1-193879] gridcell: 5
+                        [1-193880] gridcell: 6
+                      [1-193940] row: 7 8 9 10 11 12 13
+                        [1-193881] gridcell: 7
+                        [1-193882] gridcell: 8
+                        [1-193883] gridcell: 9
+                        [1-193884] gridcell: 10
+                        [1-193885] gridcell: 11
+                        [1-193886] gridcell: 12
+                        [1-193887] gridcell: 13
+                      [1-193941] row: 14 15 16 17 18 19 20
+                        [1-193888] gridcell: 14
+                        [1-193889] gridcell: 15
+                        [1-193890] gridcell: 16
+                        [1-193891] gridcell: 17
+                        [1-193892] gridcell: 18
+                        [1-193893] gridcell: 19
+                        [1-193894] gridcell: 20
+                      [1-193942] row: 21 22 23 24 25 26 27
+                        [1-193895] gridcell: 21
+                        [1-193896] gridcell: 22
+                        [1-193897] gridcell: 23
+                        [1-193898] gridcell: 24
+                        [1-193899] gridcell: 25
+                        [1-193900] gridcell: 26
+                        [1-193901] gridcell: 27
+                      [1-193943] row: 28 29 30
+                        [1-193902] gridcell: 28
+                        [1-193903] gridcell: 29
+                        [1-193904] gridcell: 30
+                [1-199934] button: Ver código del ejemplo
+                [1-200268] button: Ver fuentes JS / CSS / MD
+            [1-193956] section
+              [1-193944] heading: Vistas
+              [1-193947] paragraph
+                [1-193945] code
+                  [1-194302] StaticText: view
+                [1-194303] StaticText: fuerza la vista;
+                [1-193946] code
+                  [1-194304] StaticText: views
+                [1-194305] StaticText: limita las permitidas. Un picker de solo mes/año fija valor al elegir mes.
+              [1-193954] is-demo
+                [1-193948] div
+                  [1-194306] StaticText: open-to="year"
+                  [1-194058] scrollable, div
+                    [1-194563] radio: 1926
+                    [1-194564] radio: 1927
+                    [1-194565] radio: 1928
+                    [1-194566] radio: 1929
+                    [1-194567] radio: 1930
+                    [1-194568] radio: 1931
+                    [1-194569] radio: 1932
+                    [1-194570] radio: 1933
+                    [1-194571] radio: 1934
+                    [1-194572] radio: 1935
+                    [1-194573] radio: 1936
+                    [1-194574] radio: 1937
+                    [1-194575] radio: 1938
+                    [1-194576] radio: 1939
+                    [1-194577] radio: 1940
+                    [1-194578] radio: 1941
+                    [1-194579] radio: 1942
+                    [1-194580] radio: 1943
+                    [1-194581] radio: 1944
+                    [1-194582] radio: 1945
+                    [1-194583] radio: 1946
+                    [1-194584] radio: 1947
+                    [1-194585] radio: 1948
+                    [1-194586] radio: 1949
+                    [1-194587] radio: 1950
+                    [1-194588] radio: 1951
+                    [1-194589] radio: 1952
+                    [1-194590] radio: 1953
+                    [1-194591] radio: 1954
+                    [1-194592] radio: 1955
+                    [1-194593] radio: 1956
+                    [1-194594] radio: 1957
+                    [1-194595] radio: 1958
+                    [1-194596] radio: 1959
+                    [1-194597] radio: 1960
+                    [1-194598] radio: 1961
+                    [1-194599] radio: 1962
+                    [1-194600] radio: 1963
+                    [1-194601] radio: 1964
+                    [1-194602] radio: 1965
+                    [1-194603] radio: 1966
+                    [1-194604] radio: 1967
+                    [1-194605] radio: 1968
+                    [1-194606] radio: 1969
+                    [1-194607] radio: 1970
+                    [1-194608] radio: 1971
+                    [1-194609] radio: 1972
+                    [1-194610] radio: 1973
+                    [1-194611] radio: 1974
+                    [1-194612] radio: 1975
+                    [1-194613] radio: 1976
+                    [1-194614] radio: 1977
+                    [1-194615] radio: 1978
+                    [1-194616] radio: 1979
+                    [1-194617] radio: 1980
+                    [1-194618] radio: 1981
+                    [1-194619] radio: 1982
+                    [1-194620] radio: 1983
+                    [1-194621] radio: 1984
+                    [1-194622] radio: 1985
+                    [1-194623] radio: 1986
+                    [1-194624] radio: 1987
+                    [1-194625] radio: 1988
+                    [1-194626] radio: 1989
+                    [1-194627] radio: 1990
+                    [1-194628] radio: 1991
+                    [1-194629] radio: 1992
+                    [1-194630] radio: 1993
+                    [1-194631] radio: 1994
+                    [1-194632] radio: 1995
+                    [1-194633] radio: 1996
+                    [1-194634] radio: 1997
+                    [1-194635] radio: 1998
+                    [1-194636] radio: 1999
+                    [1-194637] radio: 2000
+                    [1-194638] radio: 2001
+                    [1-194639] radio: 2002
+                    [1-194640] radio: 2003
+                    [1-194641] radio: 2004
+                    [1-194642] radio: 2005
+                    [1-194643] radio: 2006
+                    [1-194644] radio: 2007
+                    [1-194645] radio: 2008
+                    [1-194646] radio: 2009
+                    [1-194647] radio: 2010
+                    [1-194648] radio: 2011
+                    [1-194649] radio: 2012
+                    [1-194650] radio: 2013
+                    [1-194651] radio: 2014
+                    [1-194652] radio: 2015
+                    [1-194653] radio: 2016
+                    [1-194654] radio: 2017
+                    [1-194655] radio: 2018
+                    [1-194656] radio: 2019
+                    [1-194657] radio: 2020
+                    [1-194658] radio: 2021
+                    [1-194659] radio: 2022
+                    [1-194660] radio: 2023
+                    [1-194661] radio: 2024
+                    [1-194662] radio: 2025
+                    [1-194663] radio: 2026 [checked]
+                    [1-194664] radio: 2027
+                    [1-194665] radio: 2028
+                    [1-194666] radio: 2029
+                    [1-194667] radio: 2030
+                    [1-194668] radio: 2031
+                    [1-194669] radio: 2032
+                    [1-194670] radio: 2033
+                    [1-194671] radio: 2034
+                    [1-194672] radio: 2035
+                    [1-194673] radio: 2036
+                    [1-194674] radio: 2037
+                    [1-194675] radio: 2038
+                    [1-194676] radio: 2039
+                    [1-194677] radio: 2040
+                    [1-194678] radio: 2041
+                    [1-194679] radio: 2042
+                    [1-194680] radio: 2043
+                    [1-194681] radio: 2044
+                    [1-194682] radio: 2045
+                    [1-194683] radio: 2046
+                    [1-194684] radio: 2047
+                    [1-194685] radio: 2048
+                    [1-194686] radio: 2049
+                    [1-194687] radio: 2050
+                    [1-194688] radio: 2051
+                    [1-194689] radio: 2052
+                    [1-194690] radio: 2053
+                    [1-194691] radio: 2054
+                    [1-194692] radio: 2055
+                    [1-194693] radio: 2056
+                    [1-194694] radio: 2057
+                    [1-194695] radio: 2058
+                    [1-194696] radio: 2059
+                    [1-194697] radio: 2060
+                    [1-194698] radio: 2061
+                    [1-194699] radio: 2062
+                    [1-194700] radio: 2063
+                    [1-194701] radio: 2064
+                    [1-194702] radio: 2065
+                    [1-194703] radio: 2066
+                    [1-194704] radio: 2067
+                    [1-194705] radio: 2068
+                    [1-194706] radio: 2069
+                    [1-194707] radio: 2070
+                    [1-194708] radio: 2071
+                    [1-194709] radio: 2072
+                    [1-194710] radio: 2073
+                    [1-194711] radio: 2074
+                    [1-194712] radio: 2075
+                    [1-194713] radio: 2076
+                    [1-194714] radio: 2077
+                    [1-194715] radio: 2078
+                    [1-194716] radio: 2079
+                    [1-194717] radio: 2080
+                    [1-194718] radio: 2081
+                    [1-194719] radio: 2082
+                    [1-194720] radio: 2083
+                    [1-194721] radio: 2084
+                    [1-194722] radio: 2085
+                    [1-194723] radio: 2086
+                    [1-194724] radio: 2087
+                    [1-194725] radio: 2088
+                    [1-194726] radio: 2089
+                    [1-194727] radio: 2090
+                    [1-194728] radio: 2091
+                    [1-194729] radio: 2092
+                    [1-194730] radio: 2093
+                    [1-194731] radio: 2094
+                    [1-194732] radio: 2095
+                    [1-194733] radio: 2096
+                    [1-194734] radio: 2097
+                    [1-194735] radio: 2098
+                    [1-194736] radio: 2099
+                    [1-194737] radio: 2100
+                    [1-194738] radio: 2101
+                    [1-194739] radio: 2102
+                    [1-194740] radio: 2103
+                    [1-194741] radio: 2104
+                    [1-194742] radio: 2105
+                    [1-194743] radio: 2106
+                    [1-194744] radio: 2107
+                    [1-194745] radio: 2108
+                    [1-194746] radio: 2109
+                    [1-194747] radio: 2110
+                    [1-194748] radio: 2111
+                    [1-194749] radio: 2112
+                    [1-194750] radio: 2113
+                    [1-194751] radio: 2114
+                    [1-194752] radio: 2115
+                    [1-194753] radio: 2116
+                    [1-194754] radio: 2117
+                    [1-194755] radio: 2118
+                    [1-194756] radio: 2119
+                    [1-194757] radio: 2120
+                    [1-194758] radio: 2121
+                    [1-194759] radio: 2122
+                    [1-194760] radio: 2123
+                    [1-194761] radio: 2124
+                    [1-194762] radio: 2125
+                    [1-194763] radio: 2126
+                [1-193951] div
+                  [1-194312] StaticText: views="month year"
+                  [1-194967] div
+                    [1-194968] div
+                      [1-194985] button: Anterior
+                        [1-195270] StaticText: ‹
+                      [1-195025] button: 2026
+                      [1-195040] button: Siguiente
+                        [1-195273] StaticText: ›
+                    [1-195055] radiogroup
+                      [1-195335] radio: Ene
+                      [1-195336] radio: Feb
+                      [1-195337] radio: Mar
+                      [1-195338] radio: Abr
+                      [1-195339] radio: May
+                      [1-195340] radio: Jun
+                      [1-195341] radio: Jul [checked]
+                      [1-195342] radio: Ago
+                      [1-195343] radio: Sept
+                      [1-195344] radio: Oct
+                      [1-195345] radio: Nov
+                      [1-195346] radio: Dic
+                [1-199995] button: Ver código del ejemplo
+                [1-200272] button: Ver fuentes JS / CSS / MD
+            [1-195363] section
+              [1-195349] heading: Semana y rejilla
+              [1-195354] paragraph
+                [1-195350] code
+                  [1-195683] StaticText: first-day-of-week
+                [1-195684] StaticText: ,
+                [1-195351] code
+                  [1-195685] StaticText: show-outside-days
+                [1-195686] StaticText: ,
+                [1-195352] code
+                  [1-195687] StaticText: fixed-weeks
+                [1-195688] StaticText: y
+                [1-195353] code
+                  [1-195689] StaticText: show-week-numbers
+                [1-195690] StaticText: .
+              [1-195361] is-demo
+                [1-195355] div
+                  [1-195691] StaticText: domingo + outside + week numbers
+                  [1-195364] div
+                    [1-195365] div
+                      [1-195382] button: Anterior
+                        [1-195692] StaticText: ‹
+                      [1-195367] div
+                        [1-195402] button: July
+                        [1-195422] button: 2026
+                      [1-195437] button: Siguiente
+                        [1-195695] StaticText: ›
+                    [1-195377] div
+                      [1-195378] div
+                        [1-195891] columnheader: Sun
+                        [1-195892] columnheader: Mon
+                        [1-195893] columnheader: Tue
+                        [1-195894] columnheader: Wed
+                        [1-195895] columnheader: Thu
+                        [1-195896] columnheader: Fri
+                        [1-195897] columnheader: Sat
+                      [1-195379] grid
+                        [1-195994] row: 26 28 29 30 1 2 3 4
+                          [1-195898] rowheader: 26
+                          [1-195899] gridcell: 28
+                          [1-195900] gridcell: 29
+                          [1-195901] gridcell: 30
+                          [1-195902] gridcell: 1
+                          [1-195903] gridcell: 2
+                          [1-195904] gridcell: 3
+                          [1-195905] gridcell: 4
+                        [1-195995] row: 27 5 6 7 8 9 10 11
+                          [1-195906] rowheader: 27
+                          [1-195907] gridcell: 5
+                          [1-195908] gridcell: 6
+                          [1-195909] gridcell: 7
+                          [1-195910] gridcell: 8
+                          [1-195911] gridcell: 9
+                          [1-195912] gridcell: 10
+                          [1-195913] gridcell: 11
+                        [1-195996] row: 28 12 13 14 15 16 17 18
+                          [1-195914] rowheader: 28
+                          [1-195915] gridcell: 12
+                          [1-195916] gridcell: 13
+                          [1-195917] gridcell: 14
+                          [1-195918] gridcell: 15 [selected]
+                          [1-195919] gridcell: 16
+                          [1-195920] gridcell: 17
+                          [1-195921] gridcell: 18
+                        [1-195997] row: 29 19 20 21 22 23 24 25
+                          [1-195922] rowheader: 29
+                          [1-195923] gridcell: 19
+                          [1-195924] gridcell: 20
+                          [1-195925] gridcell: 21
+                          [1-195926] gridcell: 22
+                          [1-195927] gridcell: 23
+                          [1-195928] gridcell: 24
+                          [1-195929] gridcell: 25
+                        [1-195998] row: 30 26 27 28 29 30 31 1
+                          [1-195930] rowheader: 30
+                          [1-195931] gridcell: 26
+                          [1-195932] gridcell: 27
+                          [1-195933] gridcell: 28
+                          [1-195934] gridcell: 29
+                          [1-195935] gridcell: 30
+                          [1-195936] gridcell: 31
+                          [1-195937] gridcell: 1
+                        [1-195999] row: 31 2 3 4 5 6 7 8
+                          [1-195938] rowheader: 31
+                          [1-195939] gridcell: 2
+                          [1-195940] gridcell: 3
+                          [1-195941] gridcell: 4
+                          [1-195942] gridcell: 5
+                          [1-195943] gridcell: 6
+                          [1-195944] gridcell: 7
+                          [1-195945] gridcell: 8
+                [1-195358] div
+                  [1-195697] StaticText: fines de semana off
+                  [1-196000] div
+                    [1-196001] div
+                      [1-196018] button: Anterior
+                        [1-196361] StaticText: ‹
+                      [1-196003] div
+                        [1-196038] button: julio
+                        [1-196058] button: 2026
+                      [1-196073] button: Siguiente
+                        [1-196364] StaticText: ›
+                    [1-196013] div
+                      [1-196014] div
+                        [1-196509] columnheader: Lun
+                        [1-196510] columnheader: Mar
+                        [1-196511] columnheader: Mié
+                        [1-196512] columnheader: Jue
+                        [1-196513] columnheader: Vie
+                        [1-196514] columnheader: Sáb
+                        [1-196515] columnheader: Dom
+                      [1-196015] grid
+                        [1-196582] row: 1 2 3 4 5
+                          [1-196518] gridcell: 1
+                          [1-196519] gridcell: 2
+                          [1-196520] gridcell: 3
+                          [1-196521] gridcell: 4
+                          [1-196522] gridcell: 5
+                        [1-196583] row: 6 7 8 9 10 11 12
+                          [1-196523] gridcell: 6
+                          [1-196524] gridcell: 7
+                          [1-196525] gridcell: 8
+                          [1-196526] gridcell: 9
+                          [1-196527] gridcell: 10
+                          [1-196528] gridcell: 11
+                          [1-196529] gridcell: 12
+                        [1-196584] row: 13 14 15 16 17 18 19
+                          [1-196530] gridcell: 13
+                          [1-196531] gridcell: 14
+                          [1-196532] gridcell: 15 [selected]
+                          [1-196533] gridcell: 16
+                          [1-196534] gridcell: 17
+                          [1-196535] gridcell: 18
+                          [1-196536] gridcell: 19
+                        [1-196585] row: 20 21 22 23 24 25 26
+                          [1-196537] gridcell: 20
+                          [1-196538] gridcell: 21
+                          [1-196539] gridcell: 22
+                          [1-196540] gridcell: 23
+                          [1-196541] gridcell: 24
+                          [1-196542] gridcell: 25
+                          [1-196543] gridcell: 26
+                        [1-196586] row: 27 28 29 30 31
+                          [1-196544] gridcell: 27
+                          [1-196545] gridcell: 28
+                          [1-196546] gridcell: 29
+                          [1-196547] gridcell: 30
+                          [1-196548] gridcell: 31
+                [1-200056] button: Ver código del ejemplo
+                [1-200276] button: Ver fuentes JS / CSS / MD
+            [1-196596] section
+              [1-196587] heading: Deshabilitado
+              [1-196594] is-demo
+                [1-196588] div
+                  [1-196943] StaticText: disable-past
+                  [1-196597] div
+                    [1-196598] div
+                      [1-196615] button: Anterior
+                        [1-196944] StaticText: ‹
+                      [1-196600] div
+                        [1-196635] button: septiembre
+                        [1-196655] button: 2026
+                      [1-196670] button: Siguiente
+                        [1-196947] StaticText: ›
+                    [1-196610] div
+                      [1-196611] div
+                        [1-197092] columnheader: Lun
+                        [1-197093] columnheader: Mar
+                        [1-197094] columnheader: Mié
+                        [1-197095] columnheader: Jue
+                        [1-197096] columnheader: Vie
+                        [1-197097] columnheader: Sáb
+                        [1-197098] columnheader: Dom
+                      [1-196612] grid
+                        [1-197164] row: 1 2 3 4 5 6
+                          [1-197100] gridcell: 1
+                          [1-197101] gridcell: 2
+                          [1-197102] gridcell: 3
+                          [1-197103] gridcell: 4
+                          [1-197104] gridcell: 5
+                          [1-197105] gridcell: 6
+                        [1-197165] row: 7 8 9 10 11 12 13
+                          [1-197106] gridcell: 7
+                          [1-197107] gridcell: 8
+                          [1-197108] gridcell: 9
+                          [1-197109] gridcell: 10
+                          [1-197110] gridcell: 11
+                          [1-197111] gridcell: 12
+                          [1-197112] gridcell: 13
+                        [1-197166] row: 14 15 16 17 18 19 20
+                          [1-197113] gridcell: 14
+                          [1-197114] gridcell: 15
+                          [1-197115] gridcell: 16
+                          [1-197116] gridcell: 17
+                          [1-197117] gridcell: 18
+                          [1-197118] gridcell: 19
+                          [1-197119] gridcell: 20
+                        [1-197167] row: 21 22 23 24 25 26 27
+                          [1-197120] gridcell: 21
+                          [1-197121] gridcell: 22
+                          [1-197122] gridcell: 23
+                          [1-197123] gridcell: 24
+                          [1-197124] gridcell: 25
+                          [1-197125] gridcell: 26
+                          [1-197126] gridcell: 27
+                        [1-197168] row: 28 29 30
+                          [1-197127] gridcell: 28
+                          [1-197128] gridcell: 29
+                          [1-197129] gridcell: 30
+                [1-196591] div
+                  [1-196949] StaticText: disabled-dates
+                  [1-197169] div
+                    [1-197170] div
+                      [1-197187] button: Anterior
+                        [1-197511] StaticText: ‹
+                      [1-197172] div
+                        [1-197207] button: julio
+                        [1-197227] button: 2026
+                      [1-197242] button: Siguiente
+                        [1-197514] StaticText: ›
+                    [1-197182] div
+                      [1-197183] div
+                        [1-197659] columnheader: Lun
+                        [1-197660] columnheader: Mar
+                        [1-197661] columnheader: Mié
+                        [1-197662] columnheader: Jue
+                        [1-197663] columnheader: Vie
+                        [1-197664] columnheader: Sáb
+                        [1-197665] columnheader: Dom
+                      [1-197184] grid
+                        [1-197732] row: 1 2 3 4 5
+                          [1-197668] gridcell: 1 [selected]
+                          [1-197669] gridcell: 2
+                          [1-197670] gridcell: 3
+                          [1-197671] gridcell: 4
+                          [1-197672] gridcell: 5
+                        [1-197733] row: 6 7 8 9 10 11 12
+                          [1-197673] gridcell: 6
+                          [1-197674] gridcell: 7
+                          [1-197675] gridcell: 8
+                          [1-197676] gridcell: 9
+                          [1-197677] gridcell: 10
+                          [1-197678] gridcell: 11
+                          [1-197679] gridcell: 12
+                        [1-197734] row: 13 14 15 16 17 18 19
+                          [1-197680] gridcell: 13
+                          [1-197681] gridcell: 14
+                          [1-197682] gridcell: 15
+                          [1-197683] gridcell: 16
+                          [1-197684] gridcell: 17
+                          [1-197685] gridcell: 18
+                          [1-197686] gridcell: 19
+                        [1-197735] row: 20 21 22 23 24 25 26
+                          [1-197687] gridcell: 20
+                          [1-197688] gridcell: 21
+                          [1-197689] gridcell: 22
+                          [1-197690] gridcell: 23
+                          [1-197691] gridcell: 24
+                          [1-197692] gridcell: 25
+                          [1-197693] gridcell: 26
+                        [1-197736] row: 27 28 29 30 31
+                          [1-197694] gridcell: 27
+                          [1-197695] gridcell: 28
+                          [1-197696] gridcell: 29
+                          [1-197697] gridcell: 30
+                          [1-197698] gridcell: 31
+                [1-200117] button: Ver código del ejemplo
+                [1-200280] button: Ver fuentes JS / CSS / MD
+            [1-197745] section
+              [1-197737] heading: Mes y año sueltos
+              [1-197740] paragraph
+                [1-197738] code
+                  [1-197839] StaticText: is-month-calendar
+                [1-197840] StaticText: e
+                [1-197739] code
+                  [1-197841] StaticText: is-year-calendar
+                [1-197842] StaticText: también se usan solos.
+              [1-197743] is-demo
+                [1-197746] radiogroup
+                  [1-197747] radio: Ene
+                  [1-197748] radio: Feb
+                  [1-197749] radio: Mar
+                  [1-197750] radio: Abr
+                  [1-197751] radio: May
+                  [1-197752] radio: Jun
+                  [1-197753] radio: Jul [checked]
+                  [1-197754] radio: Ago
+                  [1-197755] radio: Sept
+                  [1-197756] radio: Oct
+                  [1-197757] radio: Nov
+                  [1-197758] radio: Dic
+                [1-197759] scrollable, div
+                  [1-197760] radio: 2010
+                  [1-197761] radio: 2011
+                  [1-197762] radio: 2012
+                  [1-197763] radio: 2013
+                  [1-197764] radio: 2014
+                  [1-197765] radio: 2015
+                  [1-197766] radio: 2016
+                  [1-197767] radio: 2017
+                  [1-197768] radio: 2018
+                  [1-197769] radio: 2019
+                  [1-197770] radio: 2020
+                  [1-197771] radio: 2021
+                  [1-197772] radio: 2022
+                  [1-197773] radio: 2023
+                  [1-197774] radio: 2024
+                  [1-197775] radio: 2025
+                  [1-197776] radio: 2026 [checked]
+                  [1-197777] radio: 2027
+                  [1-197778] radio: 2028
+                  [1-197779] radio: 2029
+                  [1-197780] radio: 2030
+                  [1-197781] radio: 2031
+                  [1-197782] radio: 2032
+                  [1-197783] radio: 2033
+                  [1-197784] radio: 2034
+                  [1-197785] radio: 2035
+                [1-200178] button: Ver código del ejemplo
+                [1-200284] button: Ver fuentes JS / CSS / MD
+            [1-197951] section
+              [1-197869] heading: Referencia
+              [1-197877] paragraph
+                [1-198188] StaticText: Eventos:
+                [1-197870] code
+                  [1-198189] StaticText: is-change
+                [1-198190] StaticText: ,
+                [1-197871] code
+                  [1-198191] StaticText: is-view-change
+                [1-198192] StaticText: ,
+                [1-197872] code
+                  [1-198193] StaticText: is-month-change
+                [1-198194] StaticText: ,
+                [1-197873] code
+                  [1-198195] StaticText: is-day-hover
+                [1-198196] StaticText: . Métodos:
+                [1-197874] code
+                  [1-198197] StaticText: navigate(n)
+                [1-198198] StaticText: ,
+                [1-197875] code
+                  [1-198199] StaticText: focusDate(iso)
+                [1-198200] StaticText: ,
+                [1-197876] code
+                  [1-198201] StaticText: clear()
+                [1-198202] StaticText: .
+              [1-197936] table
+                [1-197934] rowgroup
+                  [1-197880] row
+                    [1-197878] columnheader: ATRIBUTO
+                    [1-197879] columnheader: DEFAULT
+                [1-197935] tbody
+                  [1-197885] row
+                    [1-197882] cell: value
+                      [1-197881] code
+                        [1-198203] StaticText: value
+                    [1-197884] cell: — · rango: start/end
+                      [1-198204] StaticText: — · rango:
+                      [1-197883] code
+                        [1-198205] StaticText: start/end
+                  [1-197889] row
+                    [1-197887] cell: mode
+                      [1-197886] code
+                        [1-198206] StaticText: mode
+                    [1-197888] cell: single · range
+                  [1-197895] row
+                    [1-197893] cell: view / views / open-to
+                      [1-197890] code
+                        [1-198208] StaticText: view
+                      [1-198209] StaticText: /
+                      [1-197891] code
+                        [1-198210] StaticText: views
+                      [1-198211] StaticText: /
+                      [1-197892] code
+                        [1-198212] StaticText: open-to
+                    [1-197894] cell: day · day month year · day
+                  [1-197900] row
+                    [1-197898] cell: min / max
+                      [1-197896] code
+                        [1-198214] StaticText: min
+                      [1-198215] StaticText: /
+                      [1-197897] code
+                        [1-198216] StaticText: max
+                    [1-197899] cell: —
+                  [1-197905] row
+                    [1-197903] cell: locale / first-day-of-week
+                      [1-197901] code
+                        [1-198218] StaticText: locale
+                      [1-198219] StaticText: /
+                      [1-197902] code
+                        [1-198220] StaticText: first-day-of-week
+                    [1-197904] cell: document.lang · Intl
+                  [1-197911] row
+                    [1-197909] cell: show-outside-days / fixed-weeks / show-week-numbers
+                      [1-197906] code
+                        [1-198222] StaticText: show-outside-days
+                      [1-198223] StaticText: /
+                      [1-197907] code
+                        [1-198224] StaticText: fixed-weeks
+                      [1-198225] StaticText: /
+                      [1-197908] code
+                        [1-198226] StaticText: show-week-numbers
+                    [1-197910] cell: off
+                  [1-197916] row
+                    [1-197914] cell: disable-past / disable-future
+                      [1-197912] code
+                        [1-198228] StaticText: disable-past
+                      [1-198229] StaticText: /
+                      [1-197913] code
+                        [1-198230] StaticText: disable-future
+                    [1-197915] cell: off
+                  [1-197921] row
+                    [1-197919] cell: disabled-dates / disabled-days
+                      [1-197917] code
+                        [1-198232] StaticText: disabled-dates
+                      [1-198233] StaticText: /
+                      [1-197918] code
+                        [1-198234] StaticText: disabled-days
+                    [1-197920] cell: —
+                  [1-197925] row
+                    [1-197923] cell: nav
+                      [1-197922] code
+                        [1-198236] StaticText: nav
+                    [1-197924] cell: both · prev · next · none
+                  [1-197929] row
+                    [1-197927] cell: frameless
+                      [1-197926] code
+                        [1-198238] StaticText: frameless
+                    [1-197928] cell: off (para meter varios en una tarjeta)
+                  [1-197933] row
+                    [1-197931] cell: preview-to
+                      [1-197930] code
+                        [1-198240] StaticText: preview-to
+                    [1-197932] cell: — (rango tentativo impuesto desde fuera)
+              [1-197938] paragraph
+                [1-198242] StaticText: Parts:
+                [1-197939] code
+                  [1-198243] StaticText: base
+                [1-198244] StaticText: ,
+                [1-197940] code
+                  [1-198245] StaticText: nav
+                [1-198246] StaticText: ,
+                [1-197941] code
+                  [1-198247] StaticText: month-label
+                [1-198248] StaticText: ,
+                [1-197942] code
+                  [1-198249] StaticText: month-select
+                [1-198250] StaticText: ,
+                [1-197943] code
+                  [1-198251] StaticText: year-select
+                [1-198252] StaticText: ,
+                [1-197944] code
+                  [1-198253] StaticText: weekdays
+                [1-198254] StaticText: ,
+                [1-197945] code
+                  [1-198255] StaticText: grid
+                [1-198256] StaticText: ,
+                [1-197946] code
+                  [1-198257] StaticText: day
+                [1-198258] StaticText: ,
+                [1-197947] code
+                  [1-198259] StaticText: week-number
+                [1-198260] StaticText: ,
+                [1-197948] code
+                  [1-198261] StaticText: month-view
+                [1-198262] StaticText: ,
+                [1-197949] code
+                  [1-198263] StaticText: year-view
+                [1-198264] StaticText: .
+          [1-192817] separator: Redimensionar panel
+          [1-192811] complementary
+            [1-197952] heading: IS-DATE-PICKER
+            [1-197953] slot
+              [1-197954] link: intro
+              [1-197955] link: Rango
+              [1-197956] link: Vistas
+              [1-197957] link: Semana y rejilla
+              [1-197958] link: Deshabilitado
+              [1-197959] link: Mes y año sueltos
+              [1-197960] link: Referencia

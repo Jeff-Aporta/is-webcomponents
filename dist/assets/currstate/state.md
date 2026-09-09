@@ -1,4 +1,4 @@
-# Currstate · is-webcomponents · 2026-09-07 22:17:14
+# Currstate · is-webcomponents · 2026-09-08 01:23:59
 
 > Generado por `05-cobertura-total.test.ts` (Playwright directo, batches de 30). Cada corrida **purga** `dist/assets/currstate/` y regenera todas las evidencias.
 
