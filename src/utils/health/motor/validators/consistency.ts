@@ -148,7 +148,6 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
   //     el componente declara `static styleAttrs = { 'attr-name': {...}, ... }`
   //     y combina sus keys via `...IsFoo.styleAttrNames` en observedAttributes.
   //     Extraer las keys del `styleAttrs` literal del propio archivo.
-  //     Usamos balanceo de llaves para capturar el cuerpo completo.
   {
     const styleStart = src.search(/static\s+styleAttrs\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?=\s*\{/);
     if (styleStart >= 0) {
@@ -169,7 +168,6 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
       }
     }
   }
-
   // 1d. Wrappers que delegan en fábricas (defineDateField, definePickerInput,
   //     defineTypedChart): si no hay attrs en el wrapper, leer del archivo
   //     de la fábrica importada. El motor funciona tanto en ESM (donde
