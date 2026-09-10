@@ -26,7 +26,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 const OBSERVED = [
   'type', 'label', 'legend-position', 'index-axis', 'min', 'max', 'grid',
   'stacked', 'without-animation', 'without-legend', 'without-tooltip',
-  'x-label', 'y-label', 'color',
+  'x-label', 'y-label', 'color', 'open-on-click',
 ];
 
 const RADIAL_TYPES = new Set(['pie', 'doughnut', 'polarArea', 'radar']);

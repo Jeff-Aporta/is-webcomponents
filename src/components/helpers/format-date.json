@@ -118,7 +118,7 @@
       "lede": "Se filtran con <code class=\"code\">Intl.DateTimeFormat.supportedLocalesOf()</code>. Cada tarjeta muestra el <strong>ahora</strong> en ese locale (con segundos).",
       "blocks": [
         {
-          "kind": "demo",
+          "kind": "html",
           "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>\n          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">\n            Probar locale\n            <input id=\"localeProbe\" type=\"text\" value=\"es-MX\" list=\"localeHints\"\n              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--is-border);border-radius:var(--is-radius-sm);background:var(--is-control-bg);color:var(--is-text);max-width:10rem\" />\n            <datalist id=\"localeHints\"></datalist>\n            <span id=\"localeProbeOut\"></span>\n          </label>"
         },
         {

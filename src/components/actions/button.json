@@ -482,7 +482,7 @@
         },
         {
           "kind": "html",
-          "html": "<h4>Override del spinner</h4>\r\n        <style>\r\n          #customSpinnerBtn::part(spinner) svg {\r\n            stroke: #ff6b6b;\r\n            stroke-width: 3;\r\n          }\r\n          #customSpinnerBtn::part(spinner) svg circle {\r\n            stroke-dasharray: 12 6;\r\n          }\r\n        </style>"
+          "html": "<h4>Override del spinner</h4>\n        <p class=\"lede\">El CSS vive en el campo <code class=\"code\">styles</code> raíz del JSON (ya cargado).</p>"
         },
         {
           "kind": "demo",

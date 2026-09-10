@@ -139,7 +139,7 @@ async function mountSharedCatalog(root: ParentNode, preview: import('../previews
 
   let modules = [];
   try {
-    const url = new URL('../data/shared-modules.json', import.meta.url);
+    const url = new URL('../previews/data/shared-modules.json', import.meta.url);
     const res = await fetch(url, { cache: 'no-cache', signal: preview?.signal });
     if (!res.ok) throw new Error(`${res.status}`);
     const catalog = await res.json();

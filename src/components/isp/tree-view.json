@@ -19,7 +19,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-tree-view id=\"tvDemo\" label-field=\"titulo\" style=\"height: 28rem;\"></is-tree-view>\n          <p id=\"tvLog\">Última acción: <code class=\"code\">—</code></p>",
+          "html": "<is-tree-view id=\"tvDemo\" label-field=\"titulo\" style=\"height: 28rem;\">\n            <script type=\"application/json\">\n              {\n                \"list\": [\n                  { \"iplan\": \"1\", \"titulo\": \"Módulo 1\", \"children\": [\n                    { \"iplan\": \"1.1\", \"titulo\": \"Introducción\" },\n                    { \"iplan\": \"1.2\", \"titulo\": \"Conceptos básicos\" }\n                  ]},\n                  { \"iplan\": \"2\", \"titulo\": \"Módulo 2\", \"children\": [\n                    { \"iplan\": \"2.1\", \"titulo\": \"Lección 1\" },\n                    { \"iplan\": \"2.2\", \"titulo\": \"Lección 2\" }\n                  ]}\n                ],\n                \"customs\": {\n                  \"iplan\": \"flatPath\"\n                }\n              }\n            </script>\n          </is-tree-view>\n          <p id=\"tvLog\">Última acción: <code class=\"code\">—</code></p>",
           "controls": [
             {
               "control": "text",
@@ -30,7 +30,7 @@
         },
         {
           "kind": "code",
-          "code": "import { TreeCustomsBase } from './isp/tree-view.min.js';\n\nclass PlanCustoms extends TreeCustomsBase {\n  entrie = 'contenido';\n  entries = 'Plan de contenidos';\n  getFlatPath = (r) => String(r.iplan ?? '').trim();\n  setFlatPath = (r, fp) => { r.iplan = fp; };\n  levelName = ({ depth }) => depth === 0 ? 'Módulo' : 'Lección';\n}\n\ntv.customs = new PlanCustoms();\ntv.list = [\n  { iplan: '1', titulo: 'Módulo 1' },\n  { iplan: '1.1', titulo: 'Introducción' },\n];",
+          "code": "// Equivalente: pasar `list` y `customs` por JSON al host.\n// El componente lee el <script type=\"application/json\"> como spec\n// y aplica la configuración al upgrade.\ntv.list = [...];\ntv.customs = new PlanCustoms();",
           "lang": "js"
         }
       ]

@@ -49,7 +49,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     </is-button>
   `;
 
-  const OBSERVED = ['checked', 'icon', 'checked-icon', 'label', 'checked-label', 'disabled'];
+  const OBSERVED = ['checked', 'icon', 'checked-icon', 'label', 'checked-label', 'variant', 'disabled'];
 
   class IsCheckIconButton extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }

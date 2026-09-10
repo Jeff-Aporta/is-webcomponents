@@ -48,7 +48,7 @@
           "html": "<p class=\"empty-note\">\r\n          Cada tarjeta es contenido que el visor recibe como slot. Distintos\r\n          tipos (svg, html, video) comparten la misma API.\r\n        </p>"
         },
         {
-          "kind": "demo",
+          "kind": "html",
           "html": "<figure>\r\n            <div class=\"lb-target\" data-tone=\"brand\" data-lb-target=\"svg-1\">SVG · 640×400</div>\r\n            <figcaption>Vector dentro del lightbox.</figcaption>\r\n          </figure>\r\n          <figure>\r\n            <div class=\"lb-target\" data-tone=\"success\" data-lb-target=\"svg-2\">SVG · 800×300</div>\r\n            <figcaption>Otro SVG, misma API.</figcaption>\r\n          </figure>\r\n          <figure>\r\n            <div class=\"lb-target\" data-tone=\"warning\" data-lb-target=\"html-1\">HTML card</div>\r\n            <figcaption>HTML arbitrario.</figcaption>\r\n          </figure>"
         },
         {

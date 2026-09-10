@@ -25,6 +25,7 @@ const OBSERVED = [
   'readonly', 'locale', 'ampm', 'hour24', 'seconds', 'clearable', 'color',
   'placement', 'action-bar', 'views', 'open-to', 'calendars', 'shortcuts',
   'panel', 'close-on-select', 'invalid', 'start-label', 'end-label',
+  'start', 'end',
 ];
 
 /** Atributos que el picker copia a su(s) campo(s). */

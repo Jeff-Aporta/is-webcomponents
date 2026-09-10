@@ -123,14 +123,12 @@
           "html": "<div class=\"tw-panels\">"
         },
         {
-          "kind": "demo",
-          "html": "<p class=\"tw-panel__head\"><span>Tema oscuro</span><span id=\"darkBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body></div>",
-          "noCode": true
+          "kind": "html",
+          "html": "<p class=\"tw-panel__head\"><span>Tema oscuro</span><span id=\"darkBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body></div>"
         },
         {
-          "kind": "demo",
-          "html": "<p class=\"tw-panel__head\"><span>Tema claro</span><span id=\"lightBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body></div>",
-          "noCode": true
+          "kind": "html",
+          "html": "<p class=\"tw-panel__head\"><span>Tema claro</span><span id=\"lightBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body></div>"
         },
         {
           "kind": "html",

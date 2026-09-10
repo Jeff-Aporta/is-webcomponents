@@ -18,7 +18,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"eco-snippet-wrap\">\n            <is-code id=\"ecoGetStarted\" language=\"html\" readonly compact></is-code>\n          </div>"
+          "html": "<div class=\"eco-snippet-wrap\">\n            <is-code id=\"ecoGetStarted\" lang=\"html\" readonly compact></is-code>\n          </div>"
         }
       ]
     },
@@ -29,7 +29,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"eco-grid\">\n            <div>\n              <p class=\"eco-count\">Categorías</p>\n              <div class=\"eco-pick\" id=\"ecoCats\"></div>\n            </div>\n            <div>\n              <p class=\"eco-count\">Tags (acciones rápidas)</p>\n              <div class=\"eco-pick\" id=\"ecoTags\"></div>\n            </div>\n          </div>\n          <div class=\"eco-snippet-wrap\">\n            <is-code id=\"ecoSnippet\" language=\"html\" readonly compact></is-code>\n          </div>\n          <div class=\"eco-live\" id=\"ecoLive\" aria-live=\"polite\"></div>\n          <is-button id=\"ecoApply\" color=\"brand\">Aplicar load()</is-button>"
+          "html": "<div class=\"eco-grid\">\n            <div>\n              <p class=\"eco-count\">Categorías</p>\n              <div class=\"eco-pick\" id=\"ecoCats\"></div>\n            </div>\n            <div>\n              <p class=\"eco-count\">Tags (acciones rápidas)</p>\n              <div class=\"eco-pick\" id=\"ecoTags\"></div>\n            </div>\n          </div>\n          <div class=\"eco-snippet-wrap\">\n            <is-code id=\"ecoSnippet\" lang=\"html\" readonly compact></is-code>\n          </div>\n          <div class=\"eco-live\" id=\"ecoLive\" aria-live=\"polite\"></div>\n          <is-button id=\"ecoApply\" color=\"brand\">Aplicar load()</is-button>"
         }
       ]
     },
@@ -39,7 +39,7 @@
       "lede": "Utilidades compartidas en <code>src/components/_shared/</code>: no son Web Components, pero sostienen el kit (eventos, CSS adoption, CDN, fechas, grids, diagramas…). Listado completo.",
       "blocks": [
         {
-          "kind": "demo",
+          "kind": "html",
           "html": "<div class=\"eco-toolbar\">\n            <label class=\"eco-field\">Buscar\n              <input id=\"ecoFilter\" type=\"search\" placeholder=\"nombre, path, export…\" autocomplete=\"off\" />\n            </label>\n          </div>\n          <p class=\"eco-count\" id=\"ecoCount\"></p>\n          <div class=\"eco-list\" id=\"ecoList\"></div>"
         }
       ]

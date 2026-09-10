@@ -38,7 +38,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  *   is-open-viewer  detail: { payload } — cancelable; clic en el fondo con open-on-click
  */
 (() => {
-  const OBSERVED = ['direction', 'node-width', 'node-height', 'gap', 'color'];
+  const OBSERVED = ['direction', 'node-width', 'node-height', 'gap', 'color', 'open-on-click'];
   const MOVE_MS = 300;
 
   /** Iniciales del avatar por defecto (se perdió en la migración a TS y las

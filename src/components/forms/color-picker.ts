@@ -171,6 +171,15 @@ import { computePosition } from '../_shared/position.js';
         const norm = normalizeHex(newVal) || DEFAULT_VALUE;
         if (norm !== newVal) this.#writeValueAttr(norm);
         this.#sync();
+        // 2026-Q1 fix: emitir también cuando el cambio venga de fuera
+        // (programador: el.value = '#…' o setAttribute). Antes solo
+        // se emitía desde los handlers internos, así que setear el valor
+        // por JS no disparaba is-input / is-change y los consumidores
+        // (taller de temas, formularios reactivos) parecían no responder.
+        if (norm !== (oldVal ?? '')) {
+          emit(this, 'is-input', { value: norm });
+          emit(this, 'is-change', { value: norm });
+        }
       } else if (name === 'disabled') this.#syncDisabled();
       else if (name === 'swatches') this.#renderSwatches();
       else if (name === 'required') this.#updateValidity();

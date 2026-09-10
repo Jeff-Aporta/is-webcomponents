@@ -29,7 +29,7 @@
       "title": "Exportar",
       "blocks": [
         {
-          "kind": "demo",
+          "kind": "html",
           "html": "<div class=\"sig-output\" id=\"output\">\r\n            <small style=\"color:var(--is-text-soft)\">— presioná \"Exportar\" para ver el resultado —</small>\r\n          </div>"
         }
       ]

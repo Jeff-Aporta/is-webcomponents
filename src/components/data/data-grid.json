@@ -23,7 +23,7 @@
         },
         {
           "kind": "code",
-          "code": "",
+          "code": "<!-- El snippet completo vive en el bloque <code> de la siguiente sección (cols). -->",
           "lang": "html"
         }
       ]
