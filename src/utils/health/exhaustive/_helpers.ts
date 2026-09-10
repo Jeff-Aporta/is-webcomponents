@@ -160,3 +160,57 @@ export function adoptaCss(src: string): boolean {
 export function tieneJsDoc(src: string): boolean {
   return /\/\*\*[\s\S]{20,800}?\*\//.test(src);
 }
+
+/** Alias: algunos tests importan `extraerObservados` en vez de
+ *  usar `extraerMetaComponente` directamente. Acepta tanto la ruta
+ *  del módulo como el código fuente ya leído (string). Devuelve
+ *  un array de strings con los nombres de los atributos
+ *  (compatible con `.includes()`). */
+export function extraerObservados(rutaOContenido: string): string[] {
+  // Acepta tanto una ruta como el código fuente directamente.
+  let src: string;
+  if (exists(rutaOContenido)) {
+    src = read(rutaOContenido);
+  } else {
+    src = rutaOContenido;
+  }
+  const set = new Set<string>();
+
+  // 1. Array literal en observedAttributes.
+  const obsStart = src.match(/static\s+get\s+observedAttributes[\s\S]*?return\s*\[/);
+  if (obsStart) {
+    const start = obsStart.index + obsStart[0].length - 1;
+    let depth = 0;
+    let end = start;
+    for (let i = start; i < src.length; i++) {
+      if (src[i] === '[') depth++;
+      else if (src[i] === ']') { depth--; if (depth === 0) { end = i; break; } }
+    }
+    const literal = src.substring(start + 1, end);
+    for (const m of literal.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(m[1]);
+    for (const m of literal.matchAll(/\.\.\.\s*([A-Za-z_$][\w$]*)/g)) {
+      const alias = m[1];
+      const aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`));
+      if (aliasMatch) {
+        for (const mm of aliasMatch[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
+      }
+    }
+  }
+
+  // 2. styleAttrs (heredado de ElementBase).
+  const styleStart = src.search(/static\s+styleAttrs\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?=\s*\{/);
+  if (styleStart >= 0) {
+    const openIdx = src.indexOf('{', styleStart);
+    let depth = 0;
+    let endIdx = openIdx;
+    for (let i = openIdx; i < src.length; i++) {
+      if (src[i] === '{') depth++;
+      else if (src[i] === '}') { depth--; if (depth === 0) { endIdx = i; break; } }
+    }
+    const body = src.substring(openIdx + 1, endIdx);
+    for (const m of body.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]\s*:|([a-zA-Z][a-zA-Z0-9-]*)\s*:/g)) {
+      set.add(m[1] ?? m[2]);
+    }
+  }
+  return [...set];
+}

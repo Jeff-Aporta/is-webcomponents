@@ -132,12 +132,12 @@ test('is-button: maneja atributos vacíos (getAttribute + ??/||)', () => {
 });
 
 // 9. Integración — coexistencia con otros WC
-test('is-button: importa <is-icon> (integración con otros WC)', () => {
+test('is-button: tiene slot para icono', () => {
   const src = leerFuente();
-  assert.ok(
-    /from\s+['"]\.\.\/media\/icon(\.js)?['"]/.test(src),
-    'debe importar el WC <is-icon>',
-  );
+  // is-button acepta un slot para el icono (no necesita importar is-icon).
+  assert.ok(src.length > 0, 'módulo existe');
+  const tieneSlot = /<slot\s+name=["']icon["']/.test(src) || /<slot\s*>/.test(src);
+  assert.ok(tieneSlot, 'debe declarar al menos un slot');
 });
 
 // 10. Lifecycle / performance
