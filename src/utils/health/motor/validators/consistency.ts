@@ -144,6 +144,30 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
       for (const s of m[2].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) atributosObservados.add(s[1]);
     }
   }
+  // 1e. Patrón `IsFoo.styleAttrNames` (definido en `ElementBase`):
+  //     el componente declara `static styleAttrs = { 'attr-name': {...}, ... }`
+  //     y combina sus keys via `...IsFoo.styleAttrNames` en observedAttributes.
+  //     Extraer las keys del `styleAttrs` literal del propio archivo.
+  {
+    const styleStart = src.search(/static\s+styleAttrs\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?=\s*\{/);
+    if (styleStart >= 0) {
+      const openIdx = src.indexOf('{', styleStart);
+      let depth = 0;
+      let endIdx = openIdx;
+      for (let i = openIdx; i < src.length; i++) {
+        if (src[i] === '{') depth++;
+        else if (src[i] === '}') {
+          depth--;
+          if (depth === 0) { endIdx = i; break; }
+        }
+      }
+      const body = src.substring(openIdx + 1, endIdx);
+      // Acepta claves con o sin comillas: `radius:` y `'border-width':`.
+      for (const m of body.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]\s*:|([a-zA-Z][a-zA-Z0-9-]*)\s*:/g)) {
+        atributosObservados.add(m[1] ?? m[2]);
+      }
+    }
+  }
   // 1d. Wrappers que delegan en fábricas (defineDateField, definePickerInput,
   //     defineTypedChart): si no hay attrs en el wrapper, leer del archivo
   //     de la fábrica importada. El motor funciona tanto en ESM (donde
