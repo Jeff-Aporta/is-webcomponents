@@ -47,7 +47,10 @@ test('5. level cubre 1-6', async () => {
 });
 
 test('6. color cubre brand | neutral | info | success | warning | danger | current', async () => {
-  const src = readFileSync(TS, 'utf8');
+  // Los colores viven en `intent.ts` (import compartido). Usar leerConBase
+  // para que los imports se concatenen.
+  const { leerConBase } = await import('../_helpers.js');
+  const src = leerConBase(TS);
   for (const c of ['brand', 'neutral', 'info', 'success', 'warning', 'danger', 'current']) {
     assert.ok(src.includes(`'${c}'`) || src.includes(`"${c}"`), `color="${c}"`);
   }
@@ -71,6 +74,16 @@ test('9. custom element registrado', async () => {
 });
 
 test('10. preview.ts existe', async () => {
-  const preview = join(ROOT, 'src', 'components', 'isp', 'heading.preview.ts');
-  assert.ok(existsSync(preview));
+  // El test se ejecuta con CWD en `is-webcomponents`, así que usamos
+  // una ruta relativa robusta. Si no existe, es fail legítimo.
+  const { join: pJoin } = await import('node:path');
+  const possiblePaths = [
+    pJoin(ROOT, 'src', 'components', 'isp', 'heading.preview.ts'),
+    'src/components/isp/heading.preview.ts',
+  ];
+  let found = false;
+  for (const p of possiblePaths) {
+    if (existsSync(p)) { found = true; break; }
+  }
+  assert.ok(found, 'heading.preview.ts debe existir');
 });

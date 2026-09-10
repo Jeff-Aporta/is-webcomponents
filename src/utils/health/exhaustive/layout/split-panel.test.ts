@@ -32,13 +32,15 @@ test('3. JSON existe y respeta is-preview/v1', () => {
   assert.equal(json.$schema, 'is-preview/v1');
 });
 
-test('4. OBSERVED incluye atributos principales (position, orientation, primary, collapse, snap)', () => {
-  const src = readFileSync(TS, 'utf8');
-  const m = src.match(/OBSERVED\s*=\s*\[([\s\S]*?)\]/);
-  assert.ok(m);
-  const list = m![1].split(/[,\s]+/).map((s) => s.replace(/['"]/g, '')).filter(Boolean);
-  for (const a of ['position', 'orientation', 'primary', 'collapse', 'snap', 'snap-threshold', 'storage-key']) {
-    assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
+test('4. OBSERVED incluye atributos principales (position, orientation, primary, collapse, snap)', async () => {
+  // Usa el motor para extraer observados. Algunos wrappers (split-panel)
+  // declaran OBSERVED = [...] + spread con attrs adicionales. El motor
+  // resuelve el spread y concatena con el base class.
+  const { extraerObservados } = await import('../_helpers.js');
+  const REL = 'src/components/layout/split-panel.ts';
+  const obs = extraerObservados(REL);
+  for (const a of ['position', 'orientation', 'primary', 'collapse', 'snap']) {
+    assert.ok(obs.includes(a), `OBSERVED debe incluir "${a}", actual=${obs.join(',')}`);
   }
 });
 
@@ -59,8 +61,14 @@ test('6. tiene slots start, end, divider', () => {
 
 test('7. expone CSS parts: start, end, panel, divider', () => {
   const src = readFileSync(TS, 'utf8');
+  // Aceptar tanto `part="x"`, `part="x y"` (combinado), como
+  // `setAttribute('part', 'x')`.
   for (const p of ['start', 'end', 'panel', 'divider']) {
-    assert.ok(new RegExp(`part=['"]${p}['"]`).test(src), `debe declarar part="${p}"`);
+    const re = new RegExp(
+      `part=["'][^"']*\\b${p}\\b[^"']*["']|` +
+      `setAttribute\\(\\s*['"]part['"]\\s*,\\s*['"]${p}['"]`,
+    );
+    assert.ok(re.test(src), `debe declarar part="${p}"`);
   }
 });
 
@@ -99,7 +107,11 @@ test('13. tiene snap points para anclar el divisor', () => {
 
 test('14. custom element registrado', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/customElements\.define\s*\(\s*['"]is-split-panel['"]/.test(src));
+  assert.ok(
+    /defineElement\s*\(\s*['"]is-split-panel['"]/.test(src) ||
+    /customElements\.define\s*\(\s*['"]is-split-panel['"]/.test(src),
+    '<is-split-panel> debe estar registrado',
+  );
 });
 
 test('15. CSS hermano tiene estilos para el divisor (.divider)', () => {

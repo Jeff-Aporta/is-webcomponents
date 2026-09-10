@@ -18,7 +18,7 @@
  *  10. Performance   → disconnectedCallback cleanup
  */
 import { readFileSync, existsSync } from 'node:fs';
-import { dirname, join, sep } from 'node:path';
+import { dirname, join, sep, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,10 +27,12 @@ const __dirname = dirname(__filename);
 export const ROOT = join(__dirname, '..', '..', '..', '..');
 
 export function read(rel: string): string {
+  if (isAbsolute(rel)) return readFileSync(rel, 'utf8');
   return readFileSync(join(ROOT, rel), 'utf8');
 }
 
 export function exists(rel: string): boolean {
+  if (isAbsolute(rel)) return existsSync(rel);
   return existsSync(join(ROOT, rel));
 }
 
@@ -174,9 +176,18 @@ export function extraerObservados(rutaOContenido: string): string[] {
   // Acepta tanto una ruta como el código fuente directamente.
   let src: string;
   let ruta: string | null = null;
-  if (exists(rutaOContenido)) {
+  if (isAbsolute(rutaOContenido) && exists(rutaOContenido)) {
+    // Path absoluto que existe.
     ruta = rutaOContenido;
     src = read(rutaOContenido);
+  } else if (exists(rutaOContenido)) {
+    // Path relativo que existe.
+    ruta = rutaOContenido;
+    src = read(rutaOContenido);
+  } else if (exists(join(process.cwd(), rutaOContenido))) {
+    // Path relativo desde CWD.
+    ruta = join(process.cwd(), rutaOContenido);
+    src = read(ruta);
   } else {
     src = rutaOContenido;
   }
@@ -208,7 +219,21 @@ export function extraerObservados(rutaOContenido: string): string[] {
         // El atributo viene del base class (ya leído arriba en paso 3).
         // Ya tenemos los attrs del base en `set` — nada que hacer aquí.
         if (alias.startsWith('super.')) continue;
-        const aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`));
+        let aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]\\)?`));
+        if (!aliasMatch && ruta) {
+          // Buscar como import: `import { X } from '...'` y leer el archivo.
+          const importMatch = src.match(new RegExp(`import\\s*\\{[^}]*\\b${alias}\\b[^}]*\\}\\s*from\\s*['"]([^'"]+)['"]`));
+          if (importMatch) {
+            const impPath = importMatch[1];
+            const dir = dirname(ruta);
+            let target = join(dir, impPath);
+            if (!exists(target)) target = target.replace(/\.js$/, '.ts');
+            if (exists(target)) {
+              const impSrc = read(target);
+              aliasMatch = impSrc.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]\\)?`));
+            }
+          }
+        }
         if (aliasMatch) {
           for (const mm of aliasMatch[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
         }
@@ -224,7 +249,11 @@ export function extraerObservados(rutaOContenido: string): string[] {
     const obsConst = srcSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s+([A-Z_$][\w$]*)/);
     if (obsConst) {
       const alias = obsConst[1];
-      for (const m of src.matchAll(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`, 'g'))) {
+      // Buscar el array en el source completo (no solo sin comentarios).
+      // La regex es lazy pero con flag `g` y un matchAll iteramos todas
+      // las ocurrencias.
+      const re = new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`, 'g');
+      for (const m of src.matchAll(re)) {
         for (const mm of m[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
       }
     }
