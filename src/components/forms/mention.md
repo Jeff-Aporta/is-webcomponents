@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./mention.js
 style: ./mention.css
-preview: ../../previews/forms/is-mention.json
+preview: ./mention.json
 ---
 # `<is-mention>`
 
@@ -187,4 +187,4 @@ el foco fuera del input.
 - [JavaScript](./mention.js)
 - [CSS](./mention.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-mention.json)
+- [Preview](./mention.json)

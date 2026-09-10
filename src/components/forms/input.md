@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./input.js
 style: ./input.css
-preview: ../../previews/forms/is-input.json
+preview: ./input.json
 ---
 # `<is-input>`
 
@@ -274,4 +274,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 - [JavaScript](./input.js)
 - [CSS](./input.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-input.json)
+- [Preview](./input.json)

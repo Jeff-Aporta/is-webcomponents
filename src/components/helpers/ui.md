@@ -5,7 +5,7 @@ tags:
 category: helpers
 status: public
 source: ./ui.js
-preview: ../../previews/helpers/is-ui.json
+preview: ./ui.json
 ---
 # `helpers/ui` · `IsUi`
 
@@ -140,4 +140,4 @@ define('app-files', AppFiles);
 ## Fuentes
 
 - `./ui.js`
-- Preview: `../../previews/helpers/is-ui.json`
+- Preview: `./ui.json`

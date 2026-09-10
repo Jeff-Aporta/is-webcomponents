@@ -21,6 +21,24 @@ import { setStringAttr } from '../_shared/reflect.js';
   class IsBarcodeScanner extends HTMLElement {
     static get observedAttributes(): string[] { return ['formats', 'disabled']; }
 
+    /**
+     * 2026-Q1 fix: attributeChangedCallback faltaba → el playground no
+     * podía alternar `formats` ni `disabled` después del mount. Ahora
+     * `disabled` re-aplica el estado al botón de acción, y `formats`
+     * re-construye la lista interna de decodificadores si el scanner
+     * está activo.
+     */
+    attributeChangedCallback(name: string, _oldVal: string | null, newVal: string | null): void {
+      if (name === 'disabled') {
+        this.#go?.toggleAttribute('disabled', this.hasAttribute('disabled'));
+      } else if (name === 'formats' && this.#stream) {
+        // Cambio de formatos en vivo: reiniciar para que tome los nuevos.
+        this.stop();
+        this.start();
+      }
+      void newVal;
+    }
+
     #video!: HTMLElement;
     #stream = null;
     #timer = null;

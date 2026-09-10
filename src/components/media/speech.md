@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./speech.js
 style: ./speech.css
-preview: ../../previews/media/is-speech.json
+preview: ./speech.json
 ---
 # `<is-speech>`
 
@@ -119,4 +119,4 @@ Botones con `aria-pressed` en dictado; transcript `aria-live`.
 ## Fuentes
 
 - `./speech.js` · `./speech.css`
-- Preview: `../../previews/media/is-speech.json`
+- Preview: `./speech.json`

@@ -6,7 +6,7 @@ category: overlays
 status: public
 source: ./window.js
 style: ./window.css
-preview: ../../previews/overlays/is-window.json
+preview: ./window.json
 ---
 # `<is-window>`
 
@@ -172,4 +172,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 - [JavaScript](./window.js)
 - [CSS](./window.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/overlays/is-window.json)
+- [Preview](./window.json)

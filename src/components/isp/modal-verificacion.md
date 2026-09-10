@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./modal-verificacion.js
 style: ./modal-verificacion.css
-preview: ../../previews/isp/is-modal-verificacion.json
+preview: ./modal-verificacion.json
 ---
 # `<is-modal-verificacion>`
 
@@ -218,4 +218,4 @@ que sin él no matchean el selector de focuseables del trap.
 
 - [JavaScript](./modal-verificacion.js)
 - [CSS](./modal-verificacion.css)
-- [Preview](../../previews/isp/is-modal-verificacion.json)
+- [Preview](./modal-verificacion.json)

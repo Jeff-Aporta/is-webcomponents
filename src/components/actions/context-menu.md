@@ -6,7 +6,7 @@ category: actions
 status: public
 source: ./context-menu.js
 style: ./context-menu.css
-preview: ../../previews/actions/is-context-menu.json
+preview: ./context-menu.json
 ---
 # `<is-context-menu>`
 
@@ -196,4 +196,4 @@ mostrado con `show()`; los items se detectan por `[role="menuitem"]`, `.item`,
 - [JavaScript](./context-menu.js)
 - [CSS](./context-menu.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-context-menu.json)
+- [Preview](./context-menu.json)

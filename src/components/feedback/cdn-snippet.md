@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./cdn-snippet.js
 style: ./cdn-snippet.css
-preview: ../../previews/feedback/is-cdn-snippet.json
+preview: ./cdn-snippet.json
 ---
 # `<is-cdn-snippet>`
 

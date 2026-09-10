@@ -83,9 +83,11 @@ const defineCss = async (cssFile) => {
 const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
 const GH_BLOB = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main';
 const CDN_SKILL = `${GH_RAW}/src/skills/is-cdn-install/SKILL.md`;
-const CDN_COMP_LLM = `${GH_RAW}/src/components/LLM.md`;
+// Consolidación 2026-09-07: src/components/LLM.md y src/cdn/LLM.md eliminados.
+// El catálogo global vive en specs/componentes.md; el doc del loader en
+// src/cdn/loader.md (sin cambio).
+const CDN_COMP_INDEX = `${GH_RAW}/specs/componentes.md`;
 const CDN_LOADER_MD = `${GH_RAW}/src/cdn/loader.md`;
-const CDN_LOADER_LLM = `${GH_RAW}/src/cdn/LLM.md`;
 
 /** Banner inicial de cada .min.js con rutas MD para LLMs. */
 const docsBanner = (lines) =>
@@ -94,14 +96,17 @@ const docsBanner = (lines) =>
 const componentDocsBanner = (folder, tag) => {
   const lines = [
     `component: ${GH_RAW}/src/components/${folder}/${tag}.md`,
-    `category: ${GH_RAW}/src/components/${folder}/LLM.md`,
-    `kit: ${CDN_COMP_LLM}`,
+    // Consolidación 2026-09-07: la "category" ya no es por-componente (las
+    // LLM.md per-carpeta se eliminaron). El catálogo consolidado está en
+    // specs/componentes.md.
+    `category: ${CDN_COMP_INDEX}`,
+    `kit: ${CDN_COMP_INDEX}`,
     `loader: ${CDN_LOADER_MD}`,
     `cdn-install: ${CDN_SKILL}`,
     `blob: ${GH_BLOB}/src/components/${folder}/${tag}.js`,
   ];
   if (!existsSync(join(compRoot, folder, `${tag}.md`))) {
-    lines[0] = `component: (sin ${tag}.md) → ver category/kit`;
+    lines[0] = `component: (sin ${tag}.md) → ver specs/componentes.md`;
   }
   return docsBanner(lines);
 };
@@ -117,7 +122,9 @@ async function walk(dir, out = []) {
       await walk(p, out);
     } else if (/\.(ts|js)$/.test(name.name) && !/^index\.(ts|js)$/.test(name.name)
                && !name.name.endsWith('.d.ts')
-               && !name.name.includes('.selfcheck.')) {
+               && !name.name.includes('.selfcheck.')
+               && !name.name.includes('.preview.')
+               && !name.name.endsWith('.json')) {
       out.push(p);
     }
   }
@@ -399,9 +406,11 @@ const loaderSrc = join(root, 'src', 'cdn', 'loader.ts');
 const loaderOut = join(coreDist, 'loader.min.js');
 const loaderBanner = docsBanner([
   `md: ${CDN_LOADER_MD}`,
-  `llm: ${CDN_LOADER_LLM}`,
-  `cdn-copy: dist/cdn/core/loader.md + dist/cdn/LLM.md`,
-  `kit: ${CDN_COMP_LLM}`,
+  // Consolidación 2026-09-07: dist/cdn/LLM.md y src/cdn/LLM.md eliminados.
+  // El banner del loader ahora apunta al catálogo global consolidado.
+  `specs: ${CDN_COMP_INDEX}`,
+  `cdn-copy: dist/cdn/core/loader.md`,
+  `kit: ${CDN_COMP_INDEX}`,
   `cdn-install: ${CDN_SKILL}`,
 ]);
 await build({
@@ -424,8 +433,9 @@ console.log(`  ${'loader.md'.padEnd(18)} docs`);
 // Alias raíz: apps (PatyIA) importan …/dist/cdn/loader.min.js — canónico es core/.
 await copyFile(loaderOut, join(dist, 'loader.min.js'));
 console.log(`  ${'loader.min'.padEnd(18)} alias raíz (compat)`);
-await copyFile(join(root, 'src', 'cdn', 'LLM.md'), join(dist, 'LLM.md'));
-console.log(`  ${'LLM.md'.padEnd(18)} docs (cdn/)`);
+// Consolidación 2026-09-07: src/cdn/LLM.md eliminado. El contenido del visor del
+// loader vive en specs/cdn.md (catálogo visible por LLM); no se copia nada a
+// dist/cdn/LLM.md raíz (apps que lo enlazaban fueron migradas al spec).
 
 // ── Iconos: dist/assets/ no se toca en el build ───────────────────
 // `dist/assets/` es la unica copia del material del kit. No se genera desde

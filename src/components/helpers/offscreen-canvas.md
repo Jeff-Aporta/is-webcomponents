@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./offscreen-canvas.js
 style: ./offscreen-canvas.css
-preview: ../../previews/helpers/is-offscreen-canvas.json
+preview: ./offscreen-canvas.json
 ---
 # `<is-offscreen-canvas>`
 
@@ -118,4 +118,4 @@ Canvas decorativo salvo que el consumidor ponga `aria-label`.
 ## Fuentes
 
 - `./offscreen-canvas.js` · `./offscreen-canvas.css`
-- Preview: `../../previews/helpers/is-offscreen-canvas.json`
+- Preview: `./offscreen-canvas.json`

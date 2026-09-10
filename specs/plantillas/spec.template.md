@@ -3,7 +3,7 @@
 > Copiar a `specs/<dominio>/spec.md`. Plantilla canónica de este repo.
 > No duplicar [constitution.md](../constitution.md).
 
-Comportamiento exigido. Diario: [`AGENTS.md`](../../LLM.md).
+Comportamiento exigido. Diario: [`lessons.md`](../../specs/lessons.md).
 
 ## Contexto
 

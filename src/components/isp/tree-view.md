@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./tree-view.js
 style: ./tree-view.css
-preview: ../../previews/isp/is-tree-view.json
+preview: ./tree-view.json
 ---
 # `<is-tree-view>`
 
@@ -227,7 +227,7 @@ Ver también **[Roles 3D](./tree-view-roles.md)** para cuándo usar `atom`,
 - [CSS](./tree-view.css)
 - [Roles 3D — guía ilustrativa](./tree-view-roles.md)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-tree-view.json)
+- [Preview](./tree-view.json)
 
 ## Relación con ISP
 

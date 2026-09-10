@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./lightbox.js
 style: ./lightbox.css
-preview: ../../previews/helpers/is-lightbox.json
+preview: ./lightbox.json
 ---
 # `<is-lightbox>`
 
@@ -224,4 +224,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./lightbox.js)
 - [CSS](./lightbox.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-lightbox.json)
+- [Preview](./lightbox.json)

@@ -1,0 +1,39 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-tree-view",
+  "category": "isp",
+  "title": "<is-tree-view>",
+  "titleHtml": true,
+  "description": "Árbol editable ISP (port TreeRowView): drag, historial y ficha.",
+  "storageKey": "docs-is-tree-view",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-tree-view>",
+      "lede": "Port de <code class=\"code\">TreeRowView</code> (ClientesIS). No es <code class=\"code\">&lt;is-tree&gt;</code>:\n          este sí muta, arrastra y guarda historial. El consumidor pasa <code class=\"code\">list</code> +\n          <code class=\"code\">customs</code> (mapeo <code class=\"code\">iplan</code> ↔ <code class=\"code\">flatPath</code>).",
+      "blocks": [
+        {
+          "kind": "callout",
+          "html": "Toolbar: agregar raíz, expandir/colapsar, deshacer / proteger / rehacer.\n          Hover en una fila muestra mover / agregar hijo. Doble clic abre el drawer."
+        },
+        {
+          "kind": "demo",
+          "html": "<is-tree-view id=\"tvDemo\" label-field=\"titulo\" style=\"height: 28rem;\">\n            <script type=\"application/json\">\n              {\n                \"list\": [\n                  { \"iplan\": \"1\", \"titulo\": \"Módulo 1\", \"children\": [\n                    { \"iplan\": \"1.1\", \"titulo\": \"Introducción\" },\n                    { \"iplan\": \"1.2\", \"titulo\": \"Conceptos básicos\" }\n                  ]},\n                  { \"iplan\": \"2\", \"titulo\": \"Módulo 2\", \"children\": [\n                    { \"iplan\": \"2.1\", \"titulo\": \"Lección 1\" },\n                    { \"iplan\": \"2.2\", \"titulo\": \"Lección 2\" }\n                  ]}\n                ],\n                \"customs\": {\n                  \"iplan\": \"flatPath\"\n                }\n              }\n            </script>\n          </is-tree-view>\n          <p id=\"tvLog\">Última acción: <code class=\"code\">—</code></p>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:label-field",
+              "label": "label-field"
+            }
+          ]
+        },
+        {
+          "kind": "code",
+          "code": "// Equivalente: pasar `list` y `customs` por JSON al host.\n// El componente lee el <script type=\"application/json\"> como spec\n// y aplica la configuración al upgrade.\ntv.list = [...];\ntv.customs = new PlanCustoms();",
+          "lang": "js"
+        }
+      ]
+    }
+  ]
+}

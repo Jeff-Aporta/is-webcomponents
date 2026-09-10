@@ -30,7 +30,7 @@ PORT=8391 node tests/run-all.ts   # terminal B
 - Cabecera: qué verifica y comando de uso.
 - Exit 0 + línea `PASS` al final.
 - Sin snapshots binarios pesados en `tests/`.
-- Citar el guardián en `AGENTS.md` (carta o testing) y en el spec del dominio.
+- Citar el guardián en `constraints.md`/`lessons.md` (carta o testing) y en el spec del dominio.
 
 ## S-T4 Meta-spec SDD
 
@@ -46,7 +46,7 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 
 1. Guardián nuevo en verde.
 2. `node tests/run-all.ts` verde (mínimo sin servidor).
-3. Si tocó `AGENTS.md`: `src/utils/health/meta/llm-contract.test.ts`.
+3. Si tocó la carta (constraints/lessons): `src/utils/health/meta/llm-contract.test.ts` *(migrar el test a los specs consolidados)*.
 4. Si tocó `specs/`: `src/utils/health/meta/specs-sdd.test.ts`.
 
 ## Contratos

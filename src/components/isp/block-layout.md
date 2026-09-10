@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./block-layout.js
 style: ./block-layout.css
-preview: ../../previews/isp/is-block-layout.json
+preview: ./block-layout.json
 ---
 # `<is-block-layout>`
 
@@ -219,4 +219,4 @@ Contenedor sin semántica propia: no altera el árbol de accesibilidad.
 - [JavaScript](./block-layout.js)
 - [CSS](./block-layout.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-block-layout.json)
+- [Preview](./block-layout.json)

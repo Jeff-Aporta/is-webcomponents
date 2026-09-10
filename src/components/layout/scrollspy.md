@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./scrollspy.js
 style: ./scrollspy.css
-preview: ../../previews/layout/is-scrollspy.json
+preview: ./scrollspy.json
 ---
 # `<is-scrollspy>`
 

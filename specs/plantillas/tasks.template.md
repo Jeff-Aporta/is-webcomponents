@@ -23,5 +23,5 @@ Spec de origen: `specs/<dominio>/spec.md`.
 
 - [ ] `node tests/run-all.ts` verde
 - [ ] `specs/<dominio>/spec.md` actualizado
-- [ ] Lección en `AGENTS.md` si hubo error nuevo
+- [ ] Lección en `specs/lessons.md` si hubo error nuevo
 - [ ] Commit solo si el usuario lo pide

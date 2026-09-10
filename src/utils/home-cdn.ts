@@ -312,18 +312,29 @@ let copiaCableada = false;
 export function init(raiz: ParentNode = document): void {
   const preJs = raiz.querySelector('#cdnJsCss');
   const preB = raiz.querySelector('#cdnBundle');
-  const setSnippet = (el: Element | null, text: string): void => {
-    if (!el) return;
-    if (el.localName === 'is-code') {
-      (el as HTMLElement).value = text;
-      (el as HTMLElement).dataset.cmSource = text;
-      delete (el as HTMLElement).dataset.cm;
-    } else {
-      el.textContent = text;
-    }
-  };
-  setSnippet(preJs, jsCssSnippet);
-  setSnippet(preB, bundleSnippet);
+  // iswc-audit: diagnóstico para entender por qué los is-code no recibían
+  // contenido. Antes: `preJs` se buscaba con el id solo, pero al haber
+  // cambiado el contenedor `<pre>` por `<is-code>` el lookup seguía
+  // funcionando. Lo que NO se actualizaba era el dataset cmSource + value
+  // cuando el is-code aún no había sido upgraded: en ese momento
+  // `el.value = text` no hace nada (la propiedad se setea DESPUÉS del
+  // upgrade, vía attributeChangedCallback). Por eso el snippet quedaba
+  // vacío. Fix: usar el atributo `value` directamente, que sí es
+  // observado desde antes del upgrade.
+  if (preJs && preJs.localName === 'is-code') {
+    (preJs as HTMLElement).setAttribute('value', jsCssSnippet);
+    (preJs as HTMLElement).dataset.cmSource = jsCssSnippet;
+  } else if (preJs) {
+    preJs.textContent = jsCssSnippet;
+  }
+  if (preB && preB.localName === 'is-code') {
+    (preB as HTMLElement).setAttribute('value', bundleSnippet);
+    (preB as HTMLElement).dataset.cmSource = bundleSnippet;
+  } else if (preB) {
+    preB.textContent = bundleSnippet;
+  }
+  // setSnippet ya no se necesita: el bloque de arriba cubre los tres
+  // casos (is-code, pre/textarea, no-encontrado).
 
   // Resaltado vía <is-code readonly> (paint sustituye pre.code legacy).
   Promise.all([

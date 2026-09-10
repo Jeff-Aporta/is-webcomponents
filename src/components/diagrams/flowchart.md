@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./flowchart.js
 style: ./flowchart.css
-preview: ../../previews/diagrams/is-flowchart.json
+preview: ./flowchart.json
 ---
 # `<is-flowchart>`
 
@@ -180,4 +180,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [JavaScript](./flowchart.js)
 - [CSS](./flowchart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-flowchart.json)
+- [Preview](./flowchart.json)

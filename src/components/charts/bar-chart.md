@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./bar-chart.js
 style: ./bar-chart.css
-preview: ../../previews/data-viz/is-bar-chart.json
+preview: ./bar-chart.json
 ---
 # `<is-bar-chart>`
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./bar-chart.js)
 - [CSS](./bar-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-bar-chart.json)
+- [Preview](./bar-chart.json)

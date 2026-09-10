@@ -5,13 +5,20 @@
   "description": "Galería de Web Components de Insoft — shell de preview con componentes vanilla.",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs",
+    "build": "node --import ./scripts/ts-resolve-hook.ts scripts/build.mjs",
     "dev": "node scripts/serve.mjs",
     "icons:download": "node scripts/download-icons.ts",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/meta/*.test.ts src/utils/health/diagrams/*.test.ts src/utils/health/domain/*.test.ts",
+    "test": "node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/meta/*.test.ts src/utils/health/diagrams/*.test.ts src/utils/health/domain/*.test.ts src/utils/health/audit/*.test.ts",
     "test:e2e": "node --experimental-strip-types src/utils/health/e2e/run.ts",
-    "audit": "python -B ../../../RAG/auditor/auditor.py audit is-webcomponents"
+    "audit": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json",
+    "audit:full": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts",
+    "audit:stagehand": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --puerto 8391",
+    "audit:json": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json --salida-json .audit/last.json",
+    "audit:md": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json --salida-md .audit/last.md",
+    "audit:tag": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json --solo",
+    "audit:category": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json --categoria",
+    "audit:python": "python -B \"%DSH_HOME%\\profiles\\auditor\\motor\\auditor.py\" audit is-webcomponents --sin-deep --sin-preguntas --sin-documentar"
   },
   "devDependencies": {
     "@browserbasehq/stagehand": "^4.0.2",

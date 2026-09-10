@@ -6,7 +6,7 @@ category: feedback
 status: public
 source: ./confirm-modal.js
 style: ./confirm-modal.css
-preview: ../../previews/feedback/is-confirm-modal.json
+preview: ./confirm-modal.json
 ---
 # `<is-confirm-modal>`
 
@@ -179,4 +179,4 @@ cerrar. Escape siempre cancela.
 - [JavaScript](./confirm-modal.js)
 - [CSS](./confirm-modal.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/feedback/is-confirm-modal.json)
+- [Preview](./confirm-modal.json)

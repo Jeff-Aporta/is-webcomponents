@@ -32,6 +32,23 @@ import { setStringAttr } from '../_shared/reflect.js';
   class IsSpeech extends HTMLElement {
     static get observedAttributes(): string[] { return ['lang', 'text']; }
 
+    /**
+     * 2026-Q1 fix: attributeChangedCallback faltaba → los cambios de
+     * atributo vía playground o setAttribute programático no se
+     * procesaban. Si el usuario cambia `lang` mientras escucha, la sesión
+     * de SpeechRecognition sigue con el idioma anterior; si cambia
+     * `text`, el componente no releía para speak(). Ahora `lang` se
+     * re-aplica a la sesión activa y `text` dispara speak() automáticamente.
+     */
+    attributeChangedCallback(name: string, _oldVal: string | null, newVal: string | null): void {
+      if (name === 'lang' && this.#rec) {
+        // lang cambia → reiniciar sesión para que tome el nuevo idioma.
+        try { this.#rec.lang = newVal || 'es-ES'; } catch { /* no-op */ }
+      } else if (name === 'text' && newVal) {
+        this.speak(newVal);
+      }
+    }
+
     #rec = null;
     #listening = false;
     #out!: HTMLElement;

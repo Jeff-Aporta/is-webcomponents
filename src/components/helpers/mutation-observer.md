@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./mutation-observer.js
 style: ./mutation-observer.css
-preview: ../../previews/helpers/is-mutation-observer.json
+preview: ./mutation-observer.json
 ---
 # `<is-mutation-observer>`
 
@@ -140,4 +140,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 - [JavaScript](./mutation-observer.js)
 - [CSS](./mutation-observer.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-mutation-observer.json)
+- [Preview](./mutation-observer.json)

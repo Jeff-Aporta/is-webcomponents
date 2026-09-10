@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./text.js
 style: ./text.css
-preview: ../../previews/isp/is-text.json
+preview: ./text.json
 ---
 # `<is-text>`
 
@@ -157,4 +157,4 @@ entero. Si el recorte debe ser también semántico, acortar el contenido.
 - [JavaScript](./text.js)
 - [CSS](./text.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-text.json)
+- [Preview](./text.json)

@@ -7,7 +7,7 @@ category: actions
 status: public
 source: ./speed-dial.js
 style: ./speed-dial.css
-preview: ../../previews/actions/is-speed-dial.json
+preview: ./speed-dial.json
 ---
 # `<is-speed-dial>`
 
@@ -238,4 +238,4 @@ acción (se rellena desde `label` o el texto del item).
 - [JavaScript](./speed-dial.js)
 - [CSS](./speed-dial.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/actions/is-speed-dial.json)
+- [Preview](./speed-dial.json)

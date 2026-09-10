@@ -6,7 +6,7 @@ category: layout
 status: public
 source: ./dialog.js
 style: ./dialog.css
-preview: ../../previews/layout/is-dialog.json
+preview: ./dialog.json
 ---
 # `<is-dialog>`
 
@@ -212,4 +212,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 - [JavaScript](./dialog.js)
 - [CSS](./dialog.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/layout/is-dialog.json)
+- [Preview](./dialog.json)

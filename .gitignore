@@ -30,3 +30,8 @@ src/utils/health/_author-index.json
 # y los replanta write-once; los duplicados locales se ignoran.
 docs/superpowers/
 
+# Bitácoras de plan/handoff de sesión: nunca versionar (se consolidan en specs/).
+EXEC-PLAN-*.md
+HANDOFF-*.md
+WIP-*.md
+

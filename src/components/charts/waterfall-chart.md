@@ -6,7 +6,7 @@ category: charts
 status: public
 source: ./waterfall-chart.js
 style: ./waterfall-chart.css
-preview: ../../previews/data-viz/is-waterfall-chart.json
+preview: ./waterfall-chart.json
 ---
 # `<is-waterfall-chart>`
 
@@ -189,4 +189,4 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
 - [JavaScript](./waterfall-chart.js)
 - [CSS](./waterfall-chart.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data-viz/is-waterfall-chart.json)
+- [Preview](./waterfall-chart.json)

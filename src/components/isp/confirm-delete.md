@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./confirm-delete.js
 style: ./confirm-delete.css
-preview: ../../previews/isp/is-confirm-delete.json
+preview: ./confirm-delete.json
 ---
 # `<is-confirm-delete>`
 
@@ -202,4 +202,4 @@ del trap y `Tab` se quedaría muerto.
 
 - [JavaScript](./confirm-delete.js)
 - [CSS](./confirm-delete.css)
-- [Preview](../../previews/isp/is-confirm-delete.json)
+- [Preview](./confirm-delete.json)

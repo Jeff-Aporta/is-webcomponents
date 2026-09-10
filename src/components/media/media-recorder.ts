@@ -22,6 +22,21 @@ import { setStringAttr } from '../_shared/reflect.js';
   class IsMediaRecorder extends HTMLElement {
     static get observedAttributes(): string[] { return ['source', 'disabled']; }
 
+    /**
+     * 2026-Q1 fix: attributeChangedCallback faltaba → el playground no
+     * podía alternar `source` (camera / mic / display) ni `disabled`.
+     * Ahora ambos disparan la acción correspondiente.
+     */
+    attributeChangedCallback(name: string, _oldVal: string | null, _newVal: string | null): void {
+      if (name === 'source') {
+        // Cambio de fuente: si está grabando, parar; si no, refrescar preview.
+        if (this.#rec) this.stop();
+        this.#attach();
+      } else if (name === 'disabled') {
+        this.#go?.toggleAttribute('disabled', this.hasAttribute('disabled'));
+      }
+    }
+
     #video!: HTMLElement;
     #go!: HTMLElement;
     #dl!: HTMLElement;

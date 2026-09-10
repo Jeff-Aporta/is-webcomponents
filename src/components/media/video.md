@@ -6,7 +6,7 @@ category: media
 status: public
 source: ./video.js
 style: ./video.css
-preview: ../../previews/media/is-video.json
+preview: ./video.json
 ---
 # `<is-video>`
 
@@ -207,4 +207,4 @@ src="video.mp4"
 - [JavaScript](./video.js)
 - [CSS](./video.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/media/is-video.json)
+- [Preview](./video.json)

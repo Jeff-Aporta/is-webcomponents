@@ -6,7 +6,7 @@ category: forms
 status: public
 source: ./rte.js
 style: ./rte.css
-preview: ../../previews/forms/is-rte.json
+preview: ./rte.json
 ---
 # `<is-rte>`
 
@@ -212,4 +212,4 @@ accesible propio, registrar un comando personalizado que abra `<is-dialog>`.
 - [JavaScript](./rte.js)
 - [CSS](./rte.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/forms/is-rte.json)
+- [Preview](./rte.json)

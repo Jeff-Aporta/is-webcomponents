@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./heading.js
 style: ./heading.css
-preview: ../../previews/isp/is-heading.json
+preview: ./heading.json
 ---
 # `<is-heading>`
 
@@ -165,4 +165,4 @@ tamaño.
 - [JavaScript](./heading.js)
 - [CSS](./heading.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-heading.json)
+- [Preview](./heading.json)

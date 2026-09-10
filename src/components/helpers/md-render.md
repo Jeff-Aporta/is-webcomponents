@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./md-render.js
 style: ./md-render.css
-preview: ../../previews/helpers/is-md-render.json
+preview: ./md-render.json
 ---
 # `<is-md-render>`
 
@@ -142,4 +142,4 @@ Notas de **{{proyecto}}**.
 - [JavaScript](./md-render.js)
 - [CSS](./md-render.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/helpers/is-md-render.json)
+- [Preview](./md-render.json)

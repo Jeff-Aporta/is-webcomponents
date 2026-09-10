@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./catalogo-gen.js
 style: ./catalogo-gen.css
-preview: ../../previews/isp/is-catalogo-gen.json
+preview: ./catalogo-gen.json
 ---
 # `<is-catalogo-gen>`
 
@@ -221,7 +221,7 @@ aunque muestren solo icono.
 - [JavaScript](./catalogo-gen.js)
 - [CSS](./catalogo-gen.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/isp/is-catalogo-gen.json)
+- [Preview](./catalogo-gen.json)
 
 ## Relación con ISP
 

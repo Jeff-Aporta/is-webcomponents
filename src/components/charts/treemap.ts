@@ -31,7 +31,7 @@ function fmtValue(v: number) {
 }
 
 class IsTreemap extends HTMLElement {
-  static get observedAttributes(): string[] { return ['color']; }
+  static get observedAttributes(): string[] { return ['color', 'open-on-click']; }
 
   #wrap!: HTMLElement; #svg!: HTMLElement; #tooltipEl!: HTMLElement;
   #payload = null;

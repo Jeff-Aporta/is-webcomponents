@@ -1,0 +1,661 @@
+[1-136395] RootWebArea: Badge | ContaPyme
+  [1-136769] scrollable, html
+    [1-136796] body
+      [1-136797] banner
+        [1-136801] button: ContaPyme — elegir paleta
+          [1-136393] StaticText: conta
+          [1-136394] StaticText: pyme
+        [1-137433] button: Abrir preview en pantalla completa
+        [1-137579] button: Cambiar a tema claro
+      [1-136821] is-split-panel
+        [1-136767] scrollable, nav: Componentes
+          [1-136822] button: Inicio — home
+            [1-136410] StaticText: Inicio
+          [1-136824] button: Personalización — theming
+            [1-136411] StaticText: Personalización
+          [1-136826] button: Ecosistema JS — utilidades compartidas
+            [1-136412] StaticText: Ecosistema JS
+          [1-136828] group: ACCIONES
+            [1-136830] button: Button is-button
+              [1-136413] StaticText: Button
+              [1-136414] StaticText: <is-button>
+            [1-136833] button: Button Group is-button-group
+              [1-136415] StaticText: Button Group
+              [1-136416] StaticText: <is-button-group>
+            [1-136836] button: Check Icon Button is-check-icon-button
+              [1-136417] StaticText: Check Icon Button
+              [1-136418] StaticText: <is-check-icon-button>
+            [1-136839] button: Context Menu is-context-menu
+              [1-136419] StaticText: Context Menu
+              [1-136420] StaticText: <is-context-menu>
+            [1-136842] button: Copy Button is-copy-button
+              [1-136421] StaticText: Copy Button
+              [1-136422] StaticText: <is-copy-button>
+            [1-136845] button: Dropdown is-dropdown
+              [1-136423] StaticText: Dropdown
+              [1-136424] StaticText: <is-dropdown>
+            [1-136848] button: Dropdown Item is-dropdown-item
+              [1-136425] StaticText: Dropdown Item
+              [1-136426] StaticText: <is-dropdown-item>
+            [1-136851] button: Floating Action Button is-fab
+              [1-136427] StaticText: Floating Action Button
+              [1-136428] StaticText: <is-fab>
+            [1-136854] button: Share Button is-share-button
+              [1-136429] StaticText: Share Button
+              [1-136430] StaticText: <is-share-button>
+            [1-136857] button: Speed Dial is-speed-dial
+              [1-136431] StaticText: Speed Dial
+              [1-136432] StaticText: <is-speed-dial>
+            [1-136860] button: Speed Dial Action is-speed-dial-action
+              [1-136433] StaticText: Speed Dial Action
+              [1-136434] StaticText: <is-speed-dial-action>
+          [1-136863] group: MEDIA
+            [1-136865] button: Avatar is-avatar
+              [1-136435] StaticText: Avatar
+              [1-136436] StaticText: <is-avatar>
+            [1-136868] button: Barcode is-barcode
+              [1-136437] StaticText: Barcode
+              [1-136438] StaticText: <is-barcode>
+            [1-136871] button: Barcode Scanner is-barcode-scanner
+              [1-136439] StaticText: Barcode Scanner
+              [1-136440] StaticText: <is-barcode-scanner>
+            [1-136874] button: Icon is-icon
+              [1-136441] StaticText: Icon
+              [1-136442] StaticText: <is-icon>
+            [1-136877] button: Image Editor is-image-editor
+              [1-136443] StaticText: Image Editor
+              [1-136444] StaticText: <is-image-editor>
+            [1-136880] button: Media Recorder is-media-recorder
+              [1-136445] StaticText: Media Recorder
+              [1-136446] StaticText: <is-media-recorder>
+            [1-136883] button: QR Code is-qrcode
+              [1-136447] StaticText: QR Code
+              [1-136448] StaticText: <is-qrcode>
+            [1-136886] button: Speech is-speech
+              [1-136449] StaticText: Speech
+              [1-136450] StaticText: <is-speech>
+            [1-136889] button: Theme Img is-theme-img
+              [1-136451] StaticText: Theme Img
+              [1-136452] StaticText: <is-theme-img>
+            [1-136892] button: Video is-video
+              [1-136453] StaticText: Video
+              [1-136454] StaticText: <is-video>
+            [1-136895] button: Video Playlist is-video-playlist
+              [1-136455] StaticText: Video Playlist
+              [1-136456] StaticText: <is-video-playlist>
+          [1-136898] group: FEEDBACK
+            [1-136900] button: Badge is-badge
+              [1-136457] StaticText: Badge
+              [1-136458] StaticText: <is-badge>
+            [1-136903] button: CDN Snippet is-cdn-snippet
+              [1-136459] StaticText: CDN Snippet
+              [1-136460] StaticText: <is-cdn-snippet>
+            [1-136906] button: Confirm Modal is-confirm-modal
+              [1-136461] StaticText: Confirm Modal
+              [1-136462] StaticText: <is-confirm-modal>
+            [1-136909] button: Palette Selector is-palette-selector
+              [1-136463] StaticText: Palette Selector
+              [1-136464] StaticText: <is-palette-selector>
+            [1-136912] button: Popconfirm is-popconfirm
+              [1-136465] StaticText: Popconfirm
+              [1-136466] StaticText: <is-popconfirm>
+            [1-136915] button: Prefs Clear is-prefs-clear
+              [1-136467] StaticText: Prefs Clear
+              [1-136468] StaticText: <is-prefs-clear>
+            [1-136918] button: Progress Bar is-progress-bar
+              [1-136469] StaticText: Progress Bar
+              [1-136470] StaticText: <is-progress-bar>
+            [1-136921] button: Progress Ring is-progress-ring
+              [1-136471] StaticText: Progress Ring
+              [1-136472] StaticText: <is-progress-ring>
+            [1-136924] button: Skeleton is-skeleton
+              [1-136473] StaticText: Skeleton
+              [1-136474] StaticText: <is-skeleton>
+            [1-136927] button: Spinner is-spinner
+              [1-136475] StaticText: Spinner
+              [1-136476] StaticText: <is-spinner>
+            [1-136930] button: Tag is-tag
+              [1-136477] StaticText: Tag
+              [1-136478] StaticText: <is-tag>
+            [1-136933] button: Theme Toggle is-theme-toggle
+              [1-136479] StaticText: Theme Toggle
+              [1-136480] StaticText: <is-theme-toggle>
+            [1-136936] button: Toast is-toast
+              [1-136481] StaticText: Toast
+              [1-136482] StaticText: <is-toast>
+            [1-136939] button: Toast Item is-toast-item
+              [1-136483] StaticText: Toast Item
+              [1-136484] StaticText: <is-toast-item>
+            [1-136942] button: Tooltip is-tooltip
+              [1-136485] StaticText: Tooltip
+              [1-136486] StaticText: <is-tooltip>
+          [1-136945] group: LAYOUT
+            [1-136947] button: Callout is-callout
+              [1-136487] StaticText: Callout
+              [1-136488] StaticText: <is-callout>
+            [1-136950] button: Card is-card
+              [1-136489] StaticText: Card
+              [1-136490] StaticText: <is-card>
+            [1-136953] button: Details is-details
+              [1-136491] StaticText: Details
+              [1-136492] StaticText: <is-details>
+            [1-136956] button: Dialog is-dialog
+              [1-136493] StaticText: Dialog
+              [1-136494] StaticText: <is-dialog>
+            [1-136959] button: Divider is-divider
+              [1-136495] StaticText: Divider
+              [1-136496] StaticText: <is-divider>
+            [1-136962] button: Dock is-dock
+              [1-136497] StaticText: Dock
+              [1-136498] StaticText: <is-dock>
+            [1-136965] button: Dock Item is-dock-item
+              [1-136499] StaticText: Dock Item
+              [1-136500] StaticText: <is-dock-item>
+            [1-136968] button: Drawer is-drawer
+              [1-136501] StaticText: Drawer
+              [1-136502] StaticText: <is-drawer>
+            [1-136971] button: Main is-main
+              [1-136503] StaticText: Main
+              [1-136504] StaticText: <is-main>
+            [1-136974] button: Panel dividido is-split-panel
+              [1-136505] StaticText: Panel dividido
+              [1-136506] StaticText: <is-split-panel>
+            [1-136977] button: Scrollspy is-scrollspy
+              [1-136507] StaticText: Scrollspy
+              [1-136508] StaticText: <is-scrollspy>
+          [1-136980] group: NAVEGACIÓN
+            [1-136982] button: Breadcrumb is-breadcrumb
+              [1-136509] StaticText: Breadcrumb
+              [1-136510] StaticText: <is-breadcrumb>
+            [1-136985] button: Breadcrumb Item is-breadcrumb-item
+              [1-136511] StaticText: Breadcrumb Item
+              [1-136512] StaticText: <is-breadcrumb-item>
+            [1-136988] button: Carousel is-carousel
+              [1-136513] StaticText: Carousel
+              [1-136514] StaticText: <is-carousel>
+            [1-136991] button: Carousel Item is-carousel-item
+              [1-136515] StaticText: Carousel Item
+              [1-136516] StaticText: <is-carousel-item>
+            [1-136994] button: Mega Menu is-mega-menu
+              [1-136517] StaticText: Mega Menu
+              [1-136518] StaticText: <is-mega-menu>
+            [1-136997] button: Scroller is-scroller
+              [1-136519] StaticText: Scroller
+              [1-136520] StaticText: <is-scroller>
+            [1-137000] button: Stepper is-stepper
+              [1-136521] StaticText: Stepper
+              [1-136522] StaticText: <is-stepper>
+            [1-137003] button: Stepper Step is-stepper-step
+              [1-136523] StaticText: Stepper Step
+              [1-136524] StaticText: <is-stepper-step>
+            [1-137006] button: Tab is-tab
+              [1-136525] StaticText: Tab
+              [1-136526] StaticText: <is-tab>
+            [1-137009] button: Tab Group is-tab-group
+              [1-136527] StaticText: Tab Group
+              [1-136528] StaticText: <is-tab-group>
+            [1-137012] button: Tab Panel is-tab-panel
+              [1-136529] StaticText: Tab Panel
+              [1-136530] StaticText: <is-tab-panel>
+            [1-137015] button: Tree is-tree
+              [1-136531] StaticText: Tree
+              [1-136532] StaticText: <is-tree>
+            [1-137018] button: Tree Item is-tree-item
+              [1-136533] StaticText: Tree Item
+              [1-136534] StaticText: <is-tree-item>
+          [1-137021] group: FORMULARIOS
+            [1-137023] button: Checkbox is-checkbox
+              [1-136535] StaticText: Checkbox
+              [1-136536] StaticText: <is-checkbox>
+            [1-137026] button: Color Picker is-color-picker
+              [1-136537] StaticText: Color Picker
+              [1-136538] StaticText: <is-color-picker>
+            [1-137029] button: Combobox is-combobox
+              [1-136539] StaticText: Combobox
+              [1-136540] StaticText: <is-combobox>
+            [1-137032] button: Date Field is-date-field
+              [1-136541] StaticText: Date Field
+              [1-136542] StaticText: <is-date-field>
+            [1-137035] button: Date Input is-date-input
+              [1-136543] StaticText: Date Input
+              [1-136544] StaticText: <is-date-input>
+            [1-137038] button: Date Picker is-date-picker
+              [1-136545] StaticText: Date Picker
+              [1-136546] StaticText: <is-date-picker>
+            [1-137041] button: Date Range Input is-date-range-input
+              [1-136547] StaticText: Date Range Input
+              [1-136548] StaticText: <is-date-range-input>
+            [1-137044] button: Date Range Picker is-date-range-picker
+              [1-136549] StaticText: Date Range Picker
+              [1-136550] StaticText: <is-date-range-picker>
+            [1-137047] button: Date Time Field is-date-time-field
+              [1-136551] StaticText: Date Time Field
+              [1-136552] StaticText: <is-date-time-field>
+            [1-137050] button: Date Time Input is-date-time-input
+              [1-136553] StaticText: Date Time Input
+              [1-136554] StaticText: <is-date-time-input>
+            [1-137053] button: Digital Clock is-digital-clock
+              [1-136555] StaticText: Digital Clock
+              [1-136556] StaticText: <is-digital-clock>
+            [1-137056] button: Document Editor is-doc-editor
+              [1-136557] StaticText: Document Editor
+              [1-136558] StaticText: <is-doc-editor>
+            [1-137059] button: Dropzone is-dropzone
+              [1-136559] StaticText: Dropzone
+              [1-136560] StaticText: <is-dropzone>
+            [1-137062] button: Duration Picker is-duration-picker
+              [1-136561] StaticText: Duration Picker
+              [1-136562] StaticText: <is-duration-picker>
+            [1-137065] button: File Input is-file-input
+              [1-136563] StaticText: File Input
+              [1-136564] StaticText: <is-file-input>
+            [1-137068] button: Full Calendar is-full-calendar
+              [1-136565] StaticText: Full Calendar
+              [1-136566] StaticText: <is-full-calendar>
+            [1-137071] button: Inline Edit is-inline-edit
+              [1-136567] StaticText: Inline Edit
+              [1-136568] StaticText: <is-inline-edit>
+            [1-137074] button: Input is-input
+              [1-136569] StaticText: Input
+              [1-136570] StaticText: <is-input>
+            [1-137077] button: Masked Input is-masked-input
+              [1-136571] StaticText: Masked Input
+              [1-136572] StaticText: <is-masked-input>
+            [1-137080] button: Mention is-mention
+              [1-136573] StaticText: Mention
+              [1-136574] StaticText: <is-mention>
+            [1-137083] button: Month Calendar is-month-calendar
+              [1-136575] StaticText: Month Calendar
+              [1-136576] StaticText: <is-month-calendar>
+            [1-137086] button: Option is-option
+              [1-136577] StaticText: Option
+              [1-136578] StaticText: <is-option>
+            [1-137089] button: Pin Input is-pin-input
+              [1-136579] StaticText: Pin Input
+              [1-136580] StaticText: <is-pin-input>
+            [1-137092] button: Radio is-radio
+              [1-136581] StaticText: Radio
+              [1-136582] StaticText: <is-radio>
+            [1-137095] button: Radio Group is-radio-group
+              [1-136583] StaticText: Radio Group
+              [1-136584] StaticText: <is-radio-group>
+            [1-137098] button: Rating is-rating
+              [1-136585] StaticText: Rating
+              [1-136586] StaticText: <is-rating>
+            [1-137101] button: Rich Text Editor is-rte
+              [1-136587] StaticText: Rich Text Editor
+              [1-136588] StaticText: <is-rte>
+            [1-137104] button: Select is-select
+              [1-136589] StaticText: Select
+              [1-136590] StaticText: <is-select>
+            [1-137107] button: Signature is-signature
+              [1-136591] StaticText: Signature
+              [1-136592] StaticText: <is-signature>
+            [1-137110] button: Slider is-slider
+              [1-136593] StaticText: Slider
+              [1-136594] StaticText: <is-slider>
+            [1-137113] button: Switch is-switch
+              [1-136595] StaticText: Switch
+              [1-136596] StaticText: <is-switch>
+            [1-137116] button: Textarea is-textarea
+              [1-136597] StaticText: Textarea
+              [1-136598] StaticText: <is-textarea>
+            [1-137119] button: Time Clock is-time-clock
+              [1-136599] StaticText: Time Clock
+              [1-136600] StaticText: <is-time-clock>
+            [1-137122] button: Time Field is-time-field
+              [1-136601] StaticText: Time Field
+              [1-136602] StaticText: <is-time-field>
+            [1-137125] button: Time Input is-time-input
+              [1-136603] StaticText: Time Input
+              [1-136604] StaticText: <is-time-input>
+            [1-137128] button: Year Calendar is-year-calendar
+              [1-136605] StaticText: Year Calendar
+              [1-136606] StaticText: <is-year-calendar>
+          [1-137131] group: CÓDIGO
+            [1-137133] button: Code is-code
+              [1-136607] StaticText: Code
+              [1-136608] StaticText: <is-code>
+          [1-137136] group: DATOS
+            [1-137138] button: AG Grid is-ag-grid
+              [1-136609] StaticText: AG Grid
+              [1-136610] StaticText: <is-ag-grid>
+            [1-137141] button: Data Grid is-data-grid
+              [1-136611] StaticText: Data Grid
+              [1-136612] StaticText: <is-data-grid>
+            [1-137144] button: Kanban is-kanban
+              [1-136613] StaticText: Kanban
+              [1-136614] StaticText: <is-kanban>
+            [1-137147] button: Kanban Card is-kanban-card
+              [1-136615] StaticText: Kanban Card
+              [1-136616] StaticText: <is-kanban-card>
+            [1-137150] button: Kanban Column is-kanban-column
+              [1-136617] StaticText: Kanban Column
+              [1-136618] StaticText: <is-kanban-column>
+            [1-137153] button: Pivot Table is-pivot-table
+              [1-136619] StaticText: Pivot Table
+              [1-136620] StaticText: <is-pivot-table>
+            [1-137156] button: Spreadsheet is-spreadsheet
+              [1-136621] StaticText: Spreadsheet
+              [1-136622] StaticText: <is-spreadsheet>
+            [1-137159] button: Stat KPI is-stat
+              [1-136623] StaticText: Stat KPI
+              [1-136624] StaticText: <is-stat>
+            [1-137162] button: Transfer is-transfer
+              [1-136625] StaticText: Transfer
+              [1-136626] StaticText: <is-transfer>
+            [1-137165] button: Transfer Item is-transfer-item
+              [1-136627] StaticText: Transfer Item
+              [1-136628] StaticText: <is-transfer-item>
+          [1-137168] group: GRÁFICOS
+            [1-137170] button: Bar Chart is-bar-chart
+              [1-136629] StaticText: Bar Chart
+              [1-136630] StaticText: <is-bar-chart>
+            [1-137173] button: Bubble Chart is-bubble-chart
+              [1-136631] StaticText: Bubble Chart
+              [1-136632] StaticText: <is-bubble-chart>
+            [1-137176] button: Chart is-chart
+              [1-136633] StaticText: Chart
+              [1-136634] StaticText: <is-chart>
+            [1-137179] button: Doughnut Chart is-doughnut-chart
+              [1-136635] StaticText: Doughnut Chart
+              [1-136636] StaticText: <is-doughnut-chart>
+            [1-137182] button: Funnel Chart is-funnel-chart
+              [1-136637] StaticText: Funnel Chart
+              [1-136638] StaticText: <is-funnel-chart>
+            [1-137185] button: Gauge is-gauge
+              [1-136639] StaticText: Gauge
+              [1-136640] StaticText: <is-gauge>
+            [1-137188] button: Heatmap is-heatmap
+              [1-136641] StaticText: Heatmap
+              [1-136642] StaticText: <is-heatmap>
+            [1-137191] button: Line Chart is-line-chart
+              [1-136643] StaticText: Line Chart
+              [1-136644] StaticText: <is-line-chart>
+            [1-137194] button: Map Marker is-map-marker
+              [1-136645] StaticText: Map Marker
+              [1-136646] StaticText: <is-map-marker>
+            [1-137197] button: Maps is-maps
+              [1-136647] StaticText: Maps
+              [1-136648] StaticText: <is-maps>
+            [1-137200] button: Pie Chart is-pie-chart
+              [1-136649] StaticText: Pie Chart
+              [1-136650] StaticText: <is-pie-chart>
+            [1-137203] button: Polar Area Chart is-polar-area-chart
+              [1-136651] StaticText: Polar Area Chart
+              [1-136652] StaticText: <is-polar-area-chart>
+            [1-137206] button: Radar Chart is-radar-chart
+              [1-136653] StaticText: Radar Chart
+              [1-136654] StaticText: <is-radar-chart>
+            [1-137209] button: Scatter Chart is-scatter-chart
+              [1-136655] StaticText: Scatter Chart
+              [1-136656] StaticText: <is-scatter-chart>
+            [1-137212] button: Sparkline is-sparkline
+              [1-136657] StaticText: Sparkline
+              [1-136658] StaticText: <is-sparkline>
+            [1-137215] button: Treemap is-treemap
+              [1-136659] StaticText: Treemap
+              [1-136660] StaticText: <is-treemap>
+            [1-137218] button: Waterfall Chart is-waterfall-chart
+              [1-136661] StaticText: Waterfall Chart
+              [1-136662] StaticText: <is-waterfall-chart>
+          [1-137221] group: DIAGRAMAS
+            [1-137223] button: Diagrama de bloques is-block-diagram
+              [1-136663] StaticText: Diagrama de bloques
+              [1-136664] StaticText: <is-block-diagram>
+            [1-137226] button: Diagrama de carriles is-swimlane-diagram
+              [1-136665] StaticText: Diagrama de carriles
+              [1-136666] StaticText: <is-swimlane-diagram>
+            [1-137229] button: Diagrama de casos de uso is-use-case-diagram
+              [1-136667] StaticText: Diagrama de casos de uso
+              [1-136668] StaticText: <is-use-case-diagram>
+            [1-137232] button: Diagrama de clases is-class-diagram
+              [1-136669] StaticText: Diagrama de clases
+              [1-136670] StaticText: <is-class-diagram>
+            [1-137235] button: Diagrama de componentes is-component-diagram
+              [1-136671] StaticText: Diagrama de componentes
+              [1-136672] StaticText: <is-component-diagram>
+            [1-137238] button: Diagrama de estados is-state-diagram
+              [1-136673] StaticText: Diagrama de estados
+              [1-136674] StaticText: <is-state-diagram>
+            [1-137241] button: Diagrama de flujo is-flowchart
+              [1-136675] StaticText: Diagrama de flujo
+              [1-136676] StaticText: <is-flowchart>
+            [1-137244] button: Diagrama de Gantt is-gantt
+              [1-136677] StaticText: Diagrama de Gantt
+              [1-136678] StaticText: <is-gantt>
+            [1-137247] button: Diagrama de Sankey is-sankey-diagram
+              [1-136679] StaticText: Diagrama de Sankey
+              [1-136680] StaticText: <is-sankey-diagram>
+            [1-137250] button: Diagrama de secuencia is-sequence-diagram
+              [1-136681] StaticText: Diagrama de secuencia
+              [1-136682] StaticText: <is-sequence-diagram>
+            [1-137253] button: Diagrama de Venn is-venn-diagram
+              [1-136683] StaticText: Diagrama de Venn
+              [1-136684] StaticText: <is-venn-diagram>
+            [1-137256] button: Diagrama entidad-relación is-er-diagram
+              [1-136685] StaticText: Diagrama entidad-relación
+              [1-136686] StaticText: <is-er-diagram>
+            [1-137259] button: Línea de tiempo is-timeline
+              [1-136687] StaticText: Línea de tiempo
+              [1-136688] StaticText: <is-timeline>
+            [1-137262] button: Mapa de recorrido is-journey-map
+              [1-136689] StaticText: Mapa de recorrido
+              [1-136690] StaticText: <is-journey-map>
+            [1-137265] button: Mapa mental is-mindmap
+              [1-136691] StaticText: Mapa mental
+              [1-136692] StaticText: <is-mindmap>
+            [1-137268] button: Matriz de cuadrantes is-quadrant-chart
+              [1-136693] StaticText: Matriz de cuadrantes
+              [1-136694] StaticText: <is-quadrant-chart>
+            [1-137271] button: Org Chart is-org-chart
+              [1-136695] StaticText: Org Chart
+              [1-136696] StaticText: <is-org-chart>
+            [1-137274] button: Visor de diagramas is-diagram-lightbox
+              [1-136697] StaticText: Visor de diagramas
+              [1-136698] StaticText: <is-diagram-lightbox>
+          [1-137277] group: OVERLAYS
+            [1-137279] button: Command Palette is-command-palette
+              [1-136699] StaticText: Command Palette
+              [1-136700] StaticText: <is-command-palette>
+            [1-137282] button: PDF Viewer is-pdf-viewer
+              [1-136701] StaticText: PDF Viewer
+              [1-136702] StaticText: <is-pdf-viewer>
+            [1-137285] button: Window is-window
+              [1-136703] StaticText: Window
+              [1-136704] StaticText: <is-window>
+          [1-137288] group: UTILERÍAS
+            [1-137290] button: Editor Markdown is-md-editor
+              [1-136705] StaticText: Editor Markdown
+              [1-136706] StaticText: <is-md-editor>
+            [1-137293] button: Formato is-format
+              [1-136707] StaticText: Formato
+              [1-136708] StaticText: <is-format>
+            [1-137296] button: Formato de bytes is-format-bytes
+              [1-136709] StaticText: Formato de bytes
+              [1-136710] StaticText: <is-format-bytes>
+            [1-137299] button: Formato de fecha is-format-date
+              [1-136711] StaticText: Formato de fecha
+              [1-136712] StaticText: <is-format-date>
+            [1-137302] button: Formato de número is-format-number
+              [1-136713] StaticText: Formato de número
+              [1-136714] StaticText: <is-format-number>
+            [1-137305] button: IsUi is-ui
+              [1-136715] StaticText: IsUi
+              [1-136716] StaticText: <is-ui>
+            [1-137308] button: Lightbox is-lightbox
+              [1-136717] StaticText: Lightbox
+              [1-136718] StaticText: <is-lightbox>
+            [1-137311] button: Observador de intersección is-intersection-observer
+              [1-136719] StaticText: Observador de intersección
+              [1-136720] StaticText: <is-intersection-observer>
+            [1-137314] button: Observador de mutación is-mutation-observer
+              [1-136721] StaticText: Observador de mutación
+              [1-136722] StaticText: <is-mutation-observer>
+            [1-137317] button: Observer is-observer
+              [1-136723] StaticText: Observer
+              [1-136724] StaticText: <is-observer>
+            [1-137320] button: Offscreen Canvas is-offscreen-canvas
+              [1-136725] StaticText: Offscreen Canvas
+              [1-136726] StaticText: <is-offscreen-canvas>
+            [1-137323] button: Popover is-popover
+              [1-136727] StaticText: Popover
+              [1-136728] StaticText: <is-popover>
+            [1-137326] button: Render Markdown is-md-render
+              [1-136729] StaticText: Render Markdown
+              [1-136730] StaticText: <is-md-render>
+            [1-137329] button: Resize Observer is-resize-observer
+              [1-136731] StaticText: Resize Observer
+              [1-136732] StaticText: <is-resize-observer>
+            [1-137332] button: Tiempo relativo is-relative-time
+              [1-136733] StaticText: Tiempo relativo
+              [1-136734] StaticText: <is-relative-time>
+            [1-137335] button: Wake Lock is-wake-lock
+              [1-136735] StaticText: Wake Lock
+              [1-136736] StaticText: <is-wake-lock>
+          [1-137338] group: ISP-SVELTECOMPONENTS
+            [1-137340] button: Accordion Group is-accordion-group
+              [1-136737] StaticText: Accordion Group
+              [1-136738] StaticText: <is-accordion-group>
+            [1-137344] button: Block Layout is-block-layout
+              [1-136739] StaticText: Block Layout
+              [1-136740] StaticText: <is-block-layout>
+            [1-137348] button: Btn Ref is-btn-ref
+              [1-136741] StaticText: Btn Ref
+              [1-136742] StaticText: <is-btn-ref>
+            [1-137352] button: Catálogo Gen is-catalogo-gen
+              [1-136743] StaticText: Catálogo Gen
+              [1-136744] StaticText: <is-catalogo-gen>
+            [1-137356] button: Confirm Delete is-confirm-delete
+              [1-136745] StaticText: Confirm Delete
+              [1-136746] StaticText: <is-confirm-delete>
+            [1-137360] button: Flex Layout is-flex-layout
+              [1-136747] StaticText: Flex Layout
+              [1-136748] StaticText: <is-flex-layout>
+            [1-137364] button: Flex Options is-flex-options
+              [1-136749] StaticText: Flex Options
+              [1-136750] StaticText: <is-flex-options>
+            [1-137368] button: Float Card is-float-card
+              [1-136751] StaticText: Float Card
+              [1-136752] StaticText: <is-float-card>
+            [1-137372] button: Form is-form
+              [1-136753] StaticText: Form
+              [1-136754] StaticText: <is-form>
+            [1-137376] button: Grid Layout is-grid-layout
+              [1-136755] StaticText: Grid Layout
+              [1-136756] StaticText: <is-grid-layout>
+            [1-137380] button: Heading is-heading
+              [1-136757] StaticText: Heading
+              [1-136758] StaticText: <is-heading>
+            [1-137384] button: Loading Overlay is-loading-overlay
+              [1-136759] StaticText: Loading Overlay
+              [1-136760] StaticText: <is-loading-overlay>
+            [1-137388] button: Modal Verificación is-modal-verificacion
+              [1-136761] StaticText: Modal Verificación
+              [1-136762] StaticText: <is-modal-verificacion>
+            [1-137392] button: Text is-text
+              [1-136763] StaticText: Text
+              [1-136764] StaticText: <is-text>
+            [1-137396] button: Tree View is-tree-view
+              [1-136765] StaticText: Tree View
+              [1-136766] StaticText: <is-tree-view>
+        [1-137464] separator: Redimensionar panel
+        [1-137515] is-split-panel
+          [1-137516] scrollable, is-main
+            [1-137649] section
+              [1-137641] heading: <is-badge>
+              [1-137642] paragraph
+                [1-137919] StaticText: Etiqueta compacta con variantes semánticas y apariencias.
+              [1-137648] div
+                [1-137647] is-demo
+                  [1-137643] div
+                    [1-137920] StaticText: Nuevo
+                    [1-137921] StaticText: Activo
+                    [1-137922] StaticText: Pendiente
+                  [1-138000] button: Ver código del ejemplo
+                  [1-138115] button: Ver fuentes JS / CSS / MD
+                [1-137831] group
+                  [1-137836] DisclosureTriangle: CONTROLES
+            [1-137693] section
+              [1-137671] heading: Variantes y apariencias
+              [1-137684] is-demo
+                [1-137672] div
+                  [1-137924] StaticText: accent
+                  [1-137925] StaticText: filled
+                  [1-137926] StaticText: outlined
+                  [1-137927] StaticText: filled-outlined
+                  [1-137928] StaticText: pill bounce
+                [1-137678] div
+                  [1-137929] StaticText: neutral
+                  [1-137930] StaticText: success
+                  [1-137931] StaticText: warning
+                  [1-137932] StaticText: danger
+                  [1-137933] StaticText: pulse
+                [1-138061] button: Ver código del ejemplo
+                [1-138119] button: Ver fuentes JS / CSS / MD
+              [1-138149] div
+                [1-137785] pre: Código
+                  [1-137765] div
+                    [1-137934] StaticText: <is-badge
+                    [1-137935] StaticText: 
+                    [1-137936] StaticText: color
+                    [1-137937] StaticText: =
+                    [1-137938] StaticText: "success"
+                    [1-137939] StaticText: 
+                    [1-137940] StaticText: variant
+                    [1-137941] StaticText: =
+                    [1-137942] StaticText: "filled"
+                    [1-137943] StaticText: >
+                    [1-137944] StaticText: OK
+                    [1-137945] StaticText: </is-badge
+                    [1-137946] StaticText: >
+                  [1-137776] div
+                    [1-137947] StaticText: <is-badge
+                    [1-137948] StaticText: 
+                    [1-137949] StaticText: pill
+                    [1-137950] StaticText: 
+                    [1-137951] StaticText: attention
+                    [1-137952] StaticText: =
+                    [1-137953] StaticText: "pulse"
+                    [1-137954] StaticText: >
+                    [1-137955] StaticText: Live
+                    [1-137956] StaticText: </is-badge
+                    [1-137957] StaticText: >
+                [1-138166] button: Copiar
+            [1-137822] section
+              [1-137797] heading: Referencia
+              [1-137798] paragraph
+                [1-137961] StaticText: Slots: default, start, end.
+              [1-137820] table
+                [1-137818] rowgroup
+                  [1-137801] row
+                    [1-137799] columnheader: ATRIBUTO
+                    [1-137800] columnheader: DEFAULT
+                [1-137819] tbody
+                  [1-137805] row
+                    [1-137803] cell: variant
+                      [1-137802] code
+                        [1-137962] StaticText: variant
+                    [1-137804] cell: brand
+                  [1-137809] row
+                    [1-137807] cell: appearance
+                      [1-137806] code
+                        [1-137964] StaticText: appearance
+                    [1-137808] cell: accent
+                  [1-137813] row
+                    [1-137811] cell: pill
+                      [1-137810] code
+                        [1-137966] StaticText: pill
+                    [1-137812] cell: false
+                  [1-137817] row
+                    [1-137815] cell: attention
+                      [1-137814] code
+                        [1-137968] StaticText: attention
+                    [1-137816] cell: none · pulse · bounce
+          [1-137523] separator: Redimensionar panel
+          [1-137517] complementary
+            [1-137823] heading: IS-BADGE
+            [1-137824] slot
+              [1-137825] link: intro
+              [1-137826] link: Variantes y apariencias
+              [1-137827] link: Referencia

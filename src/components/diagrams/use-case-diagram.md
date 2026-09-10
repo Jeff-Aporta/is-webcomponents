@@ -6,7 +6,7 @@ category: diagrams
 status: public
 source: ./use-case-diagram.js
 style: ./use-case-diagram.css
-preview: ../../previews/diagrams/is-use-case-diagram.json
+preview: ./use-case-diagram.json
 ---
 # `<is-use-case-diagram>`
 
@@ -151,7 +151,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 Ver el preview de la galería, que trae el payload completo con grupos y estilos:
-[`../../previews/diagrams/is-use-case-diagram.json`](../../previews/diagrams/is-use-case-diagram.json).
+[`./use-case-diagram.json`](./use-case-diagram.json).
 
 ## Errores comunes
 
@@ -175,4 +175,4 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 - [CSS](./use-case-diagram.css)
 - [Spec y layout](./use-case-spec.js)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/diagrams/is-use-case-diagram.json)
+- [Preview](./use-case-diagram.json)

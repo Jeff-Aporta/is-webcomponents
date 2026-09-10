@@ -6,7 +6,7 @@ category: helpers
 status: public
 source: ./wake-lock.js
 style: ./wake-lock.css
-preview: ../../previews/helpers/is-wake-lock.json
+preview: ./wake-lock.json
 ---
 # `<is-wake-lock>`
 
@@ -116,4 +116,4 @@ No altera el árbol.
 ## Fuentes
 
 - `./wake-lock.js` · `./wake-lock.css`
-- Preview: `../../previews/helpers/is-wake-lock.json`
+- Preview: `./wake-lock.json`

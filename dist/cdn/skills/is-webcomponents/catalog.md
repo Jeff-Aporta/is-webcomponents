@@ -1,6 +1,6 @@
 # Catálogo is-* (inventario)
 
-Fuente: [LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/LLM.md).  
+Fuente: [LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md).  
 MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/<documento>`.
 
 ## Categorías
@@ -196,4 +196,4 @@ MD módulo: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main
 | `navigation/stepper.md` | `<is-stepper>`, `<is-stepper-step>` |
 
 ### overlays
-Ver [overlays/LLM.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/overlays/LLM.md) — paleta de comandos, visor de documentos, ventanas flotantes. No inventar tags: leer el índice de categoría.
+Ver [`specs/componentes.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) — paleta de comandos, visor de documentos, ventanas flotantes. No inventar tags: leer el índice de categoría.

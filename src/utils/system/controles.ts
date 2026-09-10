@@ -39,6 +39,9 @@ export type ControlesDeDemo = {
 /** Bloque de preview que puede llevar controles (kind demo|html). */
 export type BloqueConControles = { kind: 'demo' | 'html'; html?: string } & ControlesDeDemo;
 
+/** Forma del panel <is-preview-controls> (su setter `spec` vive en preview-controls.ts). */
+type PanelConSpec = { spec: unknown[] };
+
 function esAttr(prop: string): boolean {
   return prop.startsWith('attr:');
 }
@@ -186,7 +189,7 @@ async function montarPanel(contenedor: HTMLElement, _seccion: HTMLElement, defs:
       value: valorInicial(host as HTMLElement, d),
     };
   });
-  (panel as unknown as { spec: unknown[] }).spec = spec;
+  (panel as unknown as PanelConSpec).spec = spec;
   const ancla = isDemo ?? contenedor;
   ancla.insertAdjacentElement('afterend', panel);
   panel.addEventListener('is-controls-change', ((e: Event) => {

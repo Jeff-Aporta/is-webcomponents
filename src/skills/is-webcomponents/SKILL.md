@@ -1,27 +1,27 @@
-Ôªø---
+---
 name: is-webcomponents
 description: >-
   Obliga a reusar el kit is-* (Jeff-Aporta/is-webcomponents) al fundar o extender
   apps de web components sin framework. Usar cuando hay CDN loader.min.js / is-base /
   palettes, tags is-button is-dialog is-data-grid is-chart is-icon, apps tipo
   frontend-webcomponents / tk-*, migraciones desde React/MUI/Svelte, o cuando se
-  pueda reinventar UI que ya existe en el cat√°logo LLM.md del kit.
+  pueda reinventar UI que ya existe en el cat·logo LLM.md del kit.
 ---
 
-# IS Web Components ‚Äî stack obligatorio
+# IS Web Components ó stack obligatorio
 
-## Regla absoluta (l√©ela primero)
+## Regla absoluta (lÈela primero)
 
 Usa el kit **solo por CDN** (jsDelivr o GitHub Pages). Prohibido `npm
-install`, `npx`, `yarn`, `pnpm`, `bun`, y bundlers (`vite`, `webpack`, ‚Ä¶)
-para consumir el kit ‚Äî no hay paquete publicado y no hace falta build step.
+install`, `npx`, `yarn`, `pnpm`, `bun`, y bundlers (`vite`, `webpack`, Ö)
+para consumir el kit ó no hay paquete publicado y no hace falta build step.
 Prompt completo, listo para copiar: [`PROMPT.md`](PROMPT.md).
 
 **Antes de escribir HTML/CSS/JS**, lee en orden:
 
-1. [`is-cdn-install/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md) ‚Äî bootstrap, espejos, pin SHA, fallback.
-2. Este archivo ‚Äî arquitectura y reglas de reuso.
-3. `src/components/LLM.md` (√≠ndice) ‚Üí `LLM.md` de categor√≠a ‚Üí MD del m√≥dulo.
+1. [`is-cdn-install/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md) ó bootstrap, espejos, pin SHA, fallback.
+2. Este archivo ó arquitectura y reglas de reuso.
+3. `specs/componentes.md` (Ìndice) ? `LLM.md` de categorÌa ? MD del mÛdulo.
 
 ## Herramientas (`/is-webcomponents:*`)
 
@@ -30,7 +30,7 @@ Comandos tipo slash, uno por archivo en [`tools/`](tools/):
 | Comando | Uso |
 | --- | --- |
 | [`/is-webcomponents:build`](tools/build.md) | Fundar o extender una app con `is-*` por CDN (o local). |
-| [`/is-webcomponents:migrate`](tools/migrate.md) | Convertir un frontend con framework (React/MUI/Svelte/‚Ä¶) a vanilla + `is-*`. |
+| [`/is-webcomponents:migrate`](tools/migrate.md) | Convertir un frontend con framework (React/MUI/Svelte/Ö) a vanilla + `is-*`. |
 | [`/is-webcomponents:local`](tools/local.md) | Vendorizar el kit y bootear local-first, con CDN como fallback. |
 
 ## Enlaces (GitHub primero, raw como secundario)
@@ -42,13 +42,13 @@ Usa `raw.githubusercontent.com` solo para lectura como `text/plain` puro.
 | --- | --- | --- |
 | Prompt LLM | [PROMPT.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-webcomponents/PROMPT.md) |
 | Esta skill | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-webcomponents/SKILL.md) |
-| Skill instalaci√≥n CDN | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md) |
-| Herramientas | [tools/](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) | ‚Äî |
-| √çndice LLM.md | [LLM.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/LLM.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/LLM.md) |
+| Skill instalaciÛn CDN | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md) |
+| Herramientas | [tools/](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) | ó |
+| Õndice LLM.md | [LLM.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) |
 
-Local: `dist/cdn/skills/<name>/SKILL.md` v√≠a jsDelivr/Pages una vez la app ya bootea desde ah√≠.
+Local: `dist/cdn/skills/<name>/SKILL.md` vÌa jsDelivr/Pages una vez la app ya bootea desde ahÌ.
 
-Inventario propio: [catalog.md](catalog.md) ¬∑ Mapa intenci√≥n‚Üícomponente: [reference.md](reference.md)  
+Inventario propio: [catalog.md](catalog.md) ∑ Mapa intenciÛn?componente: [reference.md](reference.md)  
 App de referencia: apps consumidoras vanilla (`tk-*` sobre `is-*`), p. ej. jagudeloe/frontend-webcomponents
 
 ## Regla de reuso
@@ -56,19 +56,19 @@ App de referencia: apps consumidoras vanilla (`tk-*` sobre `is-*`), p. ej. jagud
 **Nada se reimplementa si el kit ya lo resuelve.** Antes de escribir HTML/CSS/JS
 propio para botones, formularios, tablas, charts, toasts, dialogs, iconos, layouts, etc.:
 
-1. Clasificar la intenci√≥n (categor√≠a).
-2. Abrir el `LLM.md` de categor√≠a o [catalog.md](catalog.md).
-3. Abrir el MD del m√≥dulo (`https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/<doc>`).
+1. Clasificar la intenciÛn (categorÌa).
+2. Abrir el `LLM.md` de categorÌa o [catalog.md](catalog.md).
+3. Abrir el MD del mÛdulo (`https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/<doc>`).
 4. Confirmar API en el MD (no inventar props/eventos).
 5. Usar el tag `is-*`. Solo crear componentes de dominio (`tk-*`, `app-*`) que **traduzcan datos** al kit.
 
-Si no hay tag exacto ‚Üí buscar el m√°s cercano en el kit. Solo entonces un primitivo nativo o un wrapper m√≠nimo.
+Si no hay tag exacto ? buscar el m·s cercano en el kit. Solo entonces un primitivo nativo o un wrapper mÌnimo.
 
 ## Bootstrap CDN (apps consumidoras)
 
 Por defecto pin por **commit SHA** (sustituir `{{SHA}}` por el tip actual de
-`main`; ver [`tools/local.md`](tools/local.md) para c√≥mo resolverlo y
-refrescarlo). Excepci√≥n: apps que declaran seguimiento continuo
+`main`; ver [`tools/local.md`](tools/local.md) para cÛmo resolverlo y
+refrescarlo). ExcepciÛn: apps que declaran seguimiento continuo
 (p. ej. `jagudeloe/frontend-webcomponents`) pueden usar `@main`.
 
 ```html
@@ -90,17 +90,17 @@ refrescarlo). Excepci√≥n: apps que declaran seguimiento continuo
 ```
 
 - CSS de documento: `loadCSSBase` + `loadCSSPalettesDefault`. El CSS de cada `is-*` lo carga el propio tag.
-- Cargar solo los tags de la vista. `load('actions')` expande a cada `.min.js` de la categor√≠a (no hay bundle). `load('all')` pide todos los tags, no un archivo √∫nico.
+- Cargar solo los tags de la vista. `load('actions')` expande a cada `.min.js` de la categorÌa (no hay bundle). `load('all')` pide todos los tags, no un archivo ˙nico.
 - Tema: `data-theme` / `data-palette` en `<html>`. Tokens: `--is-text`, `--is-bg`, `--is-border`, `--is-accent`, etc.
 - Si la app prefiere no depender de red: usar [`/is-webcomponents:local`](tools/local.md) (vendoriza JS+CSS, boot local-first con fallback a CDN).
 
-## Arquitectura de apps (patr√≥n jagudeloe / r2admin)
+## Arquitectura de apps (patrÛn jagudeloe / r2admin)
 
 | Capa | Prefijo | Responsabilidad |
 |------|---------|-----------------|
-| Kit | `is-*` | UI gen√©rica del CDN |
-| Dominio | `tk-*` / `app-*` | Traducir payload ‚Üí `is-*` |
-| Shell | `*-app`, `*-nav`, `*-view` | Orquestaci√≥n, routing, datos |
+| Kit | `is-*` | UI genÈrica del CDN |
+| Dominio | `tk-*` / `app-*` | Traducir payload ? `is-*` |
+| Shell | `*-app`, `*-nav`, `*-view` | OrquestaciÛn, routing, datos |
 
 ### CSS de dominio (igual que el kit)
 
@@ -114,63 +114,63 @@ Tras vaciar el shadow, vuelve a llamar `adoptCss` (los `<link>` se borran con el
 
 `IsUi.css(shadow, cssText)` queda solo para prototipos sin archivo hermano.
 
-Docs: [helpers/ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) ¬∑ `all.min.js` incluye `helpers/ui`.
+Docs: [helpers/ui.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.md) ∑ `all.min.js` incluye `helpers/ui`.
 
 ## Prohibido / eliminado
 
 - **`is-popup`**: eliminado. No existe alias ni registro. Para paneles anclados usa **`<is-popover>`**. Tooltips: **`<is-tooltip>`**.
 - **`is-floating`**: building block **interno** (no API de producto). No usarlo en apps.
-- No hay componentes deprecados en el cat√°logo p√∫blico: si el MD dice `status: internal`, no es API.
+- No hay componentes deprecados en el cat·logo p˙blico: si el MD dice `status: internal`, no es API.
 - `npm`/`npx`/`yarn`/`pnpm`/`bun`/`vite`/`webpack` **para consumir el kit** (ver regla absoluta arriba).
 
 ## Lectura de docs (ruta obligatoria)
 
-1. √çndice: `src/components/LLM.md`
-2. Categor√≠a: `src/components/<cat>/LLM.md`
-3. M√≥dulo: `src/components/<cat>/<modulo>.md`
-4. Si la API no est√° en el MD ‚Üí **no inventar**; leer fuente solo para confirmar, no para inventar contrato.
+1. Õndice: `specs/componentes.md`
+2. CategorÌa: `specs/componentes.md`
+3. MÛdulo: `src/components/<cat>/<modulo>.md`
+4. Si la API no est· en el MD ? **no inventar**; leer fuente solo para confirmar, no para inventar contrato.
 
 Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/`
 
 ## Convenciones al componer
 
-- Escala: `style="font-size: ‚Ä¶em"` / CSS del wrapper; sin `size` en el kit.
+- Escala: `style="font-size: Öem"` / CSS del wrapper; sin `size` en el kit.
 - Iconos: `<is-icon icon="familia:icono">` (p. ej. `mdi:check`).
 - Forms: form-associated del kit; no wrappers `<input>` nativos si hay `is-input`.
 - Overlays posicionados: `<is-popover>` / `<is-tooltip>` / position compartido; no reinventar floating UI ni usar `is-popup`.
-- Charts/diagramas: payloads declarativos documentados en el MD del m√≥dulo.
+- Charts/diagramas: payloads declarativos documentados en el MD del mÛdulo.
 - Listeners en `document`/`window`: solo en `connectedCallback`, quitar en `disconnectedCallback`.
 - Estados por atributo del host en CSS propio: `:host([attr])` top-level (nunca `&[attr]` dentro de `:host { }`).
 
-## Qu√© no hacer
+## QuÈ no hacer
 
-- Reimplementar bot√≥n, modal, tabla, toast, tag, skeleton, spinner, tree, tabs, stepper, chart.
+- Reimplementar botÛn, modal, tabla, toast, tag, skeleton, spinner, tree, tabs, stepper, chart.
 - Traer MUI / React / Iconify / Chart.js directo cuando el kit cubre el caso (si vienes de uno de estos, ver [`/is-webcomponents:migrate`](tools/migrate.md)).
 - Usar o documentar `is-popup` (eliminado).
 - Meter CSS de componente del kit en el `<head>` (solo tema + paletas).
 - Meter el CSS del wrapper de dominio como string dentro del `.ts` (usar `.css` hermano + `adoptCss`).
 - Inventar props/`data-*` no documentados.
 - Usar `size` colors o APIs ad-hoc fuera del contrato MD.
-- Crear un `tk-*` que pinte UI gen√©rica en vez de delegar a `is-*`.
+- Crear un `tk-*` que pinte UI genÈrica en vez de delegar a `is-*`.
 - Asumir submit nativo de `<is-button type="submit">` en forms light-DOM sin el cableado del kit (`requestSubmit`).
 - Usar `is-split-panel` con porcentaje alto como sidebar fijo de app (preferir grid CSS).
-- Buscar fuentes del kit en la ra√≠z del repo (`components/`, `styles/`): viven en **`src/`**.
-- L√≥gica de preview como string/`eval`: en el kit, `ISComponentPreview.mount()` + registry.
+- Buscar fuentes del kit en la raÌz del repo (`components/`, `styles/`): viven en **`src/`**.
+- LÛgica de preview como string/`eval`: en el kit, `ISComponentPreview.mount()` + registry.
 - Ignorar `tests/` entero en git: los `*.test.mjs` se commitean (solo artefactos en gitignore).
 - Usar `npm`/`npx`/bundler para instalar/servir el kit en la app consumidora.
 
 ## Kit: carta de leyes
 
-Antes de cambiar el repo del kit, leer la ra√≠z [`LLM.md`](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/LLM.md) (Carta de leyes / DO / DON'T / errores). Guardianes: `node tests/llm-contract.test.ts` y el resto de `tests/*.test.mjs`.
+Antes de cambiar el repo del kit, leer la raÌz [`specs/lessons.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/lessons.md) (cat·logo de errores) / DO / DON'T / errores). Guardianes: `node tests/llm-contract.test.ts` y el resto de `tests/*.test.mjs`.
 
 ## Checklist pre-entrega
 
-- [ ] Cada control visual mapea a un `is-*` existente (o justificaci√≥n expl√≠cita de que no existe).
-- [ ] Docs del m√≥dulo le√≠das; props/eventos seg√∫n MD.
-- [ ] Iconos v√≠a `is-icon`.
+- [ ] Cada control visual mapea a un `is-*` existente (o justificaciÛn explÌcita de que no existe).
+- [ ] Docs del mÛdulo leÌdas; props/eventos seg˙n MD.
+- [ ] Iconos vÌa `is-icon`.
 - [ ] Tema/paleta con tokens `--is-*`.
-- [ ] Wrappers de dominio solo traducen datos ‚Üí kit.
-- [ ] CDN: SHA fijado (`{{SHA}}` resuelto) **o** `@main` si el proyecto (como tks) sigue tip **o** copia local v√≠a `/is-webcomponents:local`.
+- [ ] Wrappers de dominio solo traducen datos ? kit.
+- [ ] CDN: SHA fijado (`{{SHA}}` resuelto) **o** `@main` si el proyecto (como tks) sigue tip **o** copia local vÌa `/is-webcomponents:local`.
 - [ ] CSS de dominio en archivo hermano + `adoptCss` (no `const CSS` gigante en el JS).
 - [ ] Build de la app emite `.css` minificado junto al `.js` en `dist/cdn`.
 - [ ] Sin `npm install`/`npx`/bundler para el kit.
@@ -178,7 +178,7 @@ Antes de cambiar el repo del kit, leer la ra√≠z [`LLM.md`](https://raw.githubuse
 ## Fundar o migrar una app
 
 - **App nueva o extender una existente:** seguir [`/is-webcomponents:build`](tools/build.md).
-- **Migrar desde React/MUI/Svelte/otro framework:** seguir [`/is-webcomponents:migrate`](tools/migrate.md) (patr√≥n de referencia: `is-swagger` ‚Üí `is-swagger2`).
+- **Migrar desde React/MUI/Svelte/otro framework:** seguir [`/is-webcomponents:migrate`](tools/migrate.md) (patrÛn de referencia: `is-swagger` ? `is-swagger2`).
 - **Servir el kit sin depender de CDN en runtime:** seguir [`/is-webcomponents:local`](tools/local.md).
 
-Resumen r√°pido de fundaci√≥n: scaffold HTML con bootstrap CDN + `data-theme`/`data-palette` ‚Üí shell m√≠nimo (`is-main`/`is-split-panel`/`is-drawer`) ‚Üí `<is-toast>` global ‚Üí capas de dominio que solo mapean datos a tags del kit ‚Üí un componente de dominio por concepto de negocio, cero UI gen√©rica duplicada (disciplina `frontend-webcomponents`).
+Resumen r·pido de fundaciÛn: scaffold HTML con bootstrap CDN + `data-theme`/`data-palette` ? shell mÌnimo (`is-main`/`is-split-panel`/`is-drawer`) ? `<is-toast>` global ? capas de dominio que solo mapean datos a tags del kit ? un componente de dominio por concepto de negocio, cero UI genÈrica duplicada (disciplina `frontend-webcomponents`).

@@ -6,7 +6,7 @@ category: data
 status: public
 source: ./ag-grid.js
 style: ./ag-grid.css
-preview: ../../previews/data/is-ag-grid.json
+preview: ./ag-grid.json
 ---
 # `<is-ag-grid>`
 
@@ -295,7 +295,7 @@ para poder restaurarlas por teclado.
 - [JavaScript](./ag-grid.js)
 - [CSS](./ag-grid.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data/is-ag-grid.json)
+- [Preview](./ag-grid.json)
 
 ## Checker
 
@@ -308,4 +308,4 @@ node scripts/docs-consistency.selfcheck.mjs
 
 - [Índice data](./LLM.md)
 - [Índice global](../LLM.md)
-- Preview: `previews/data/is-ag-grid.json`
+- Preview: `components/data/ag-grid.json`

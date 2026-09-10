@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./accordion-group.js
 style: ./accordion-group.css
-preview: ../../previews/isp/is-accordion-group.json
+preview: ./accordion-group.json
 ---
 # `<is-accordion-group>`
 
@@ -149,4 +149,4 @@ Cada panel conserva el `aria-expanded` y el botón de `<is-details>`.
 
 - [JavaScript](./accordion-group.js)
 - [CSS](./accordion-group.css)
-- [Preview](../../previews/isp/is-accordion-group.json)
+- [Preview](./accordion-group.json)

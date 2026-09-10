@@ -6,7 +6,7 @@ category: data
 status: public
 source: ./data-grid.js
 style: ./data-grid.css
-preview: ../../previews/data/is-data-grid.json
+preview: ./data-grid.json
 ---
 # `<is-data-grid>`
 
@@ -365,4 +365,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 - [JavaScript](./data-grid.js)
 - [CSS](./data-grid.css)
 - [Índice de categoría](./LLM.md)
-- [Preview](../../previews/data/is-data-grid.json)
+- [Preview](./data-grid.json)

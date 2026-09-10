@@ -74,8 +74,6 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
   const ICON_FULL = 'mdi:star';
   const ICON_EMPTY = 'mdi:star-outline';
 
-
-
   /** Quita el ruido float que dejan las sumas de precisiones decimales. */
 
   class IsRating extends ElementBase {

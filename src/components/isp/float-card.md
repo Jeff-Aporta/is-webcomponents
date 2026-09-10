@@ -6,7 +6,7 @@ category: isp
 status: public
 source: ./float-card.js
 style: ./float-card.css
-preview: ../../previews/isp/is-float-card.json
+preview: ./float-card.json
 ---
 # `<is-float-card>`
 
@@ -166,4 +166,4 @@ ocultas.
 
 - [JavaScript](./float-card.js)
 - [CSS](./float-card.css)
-- [Preview](../../previews/isp/is-float-card.json)
+- [Preview](./float-card.json)
