@@ -33,10 +33,11 @@ test('3. JSON existe y respeta is-preview/v1', async () => {
 });
 
 test('4. OBSERVED incluye active, placement, activation', async () => {
-  const src = readFileSync(TS, 'utf8');
-  const m = src.match(/OBSERVED\s*=\s*\[([\s\S]*?)\]/.exec(src));
-  assert.ok(m);
-  const list = m![1].split(/[,\s]+/).map((s) => s.replace(/['"]/g, '')).filter(Boolean);
+  // Pasa la ruta RELATIVA a la raíz del repo (no absoluta), porque
+  // `extraerObservados` usa `readFileSync(join(ROOT, ruta))` internamente.
+  const { extraerObservados } = await import('../_helpers.js');
+  const REL_TS = TS.slice(ROOT.length + 1).replace(/\\/g, '/');
+  const list = extraerObservados(REL_TS);
   for (const a of ['active', 'placement', 'activation', 'url-key']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
   }
@@ -59,9 +60,11 @@ test('7. persiste active en URL via url-key (readUrlNav/writeUrlNav)', async () 
   assert.ok(/readUrlNav/.test(src) && /writeUrlNav/.test(src));
 });
 
-test('8. emite is-change cuando cambia el active', async () => {
-  const src = readFileSync(TS, 'utf8');
-  assert.ok(/['"]is-change['"]/.test(src));
+test('8. emite is-tab-show / is-tab-close cuando cambia el active', async () => {
+  const { extraerEventos } = await import('../_helpers.js');
+  const evs = extraerEventos(readFileSync(TS, 'utf8'));
+  assert.ok(evs.includes('is-tab-show'), 'debe emitir is-tab-show al activar');
+  assert.ok(evs.includes('is-tab-close'), 'debe emitir is-tab-close al cerrar');
 });
 
 test('9. integra con is-tab e is-tab-panel (slots)', async () => {

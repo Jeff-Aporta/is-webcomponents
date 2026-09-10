@@ -7,9 +7,13 @@ import assert from 'node:assert/strict';
 import {
   leerComponente, leerPreview, existeCss,
   atributosObservados, eventosEmitidos,
-  slotsDeclarados, partsDeclaradas,
+  slotsDeclarados,
   esFormAssociated,
 } from './_helpers.js';
+// `partsDeclaradas` solo captura `part="x"` estáticos; el slider además
+// define `mark` / `mark-label` dinámicamente vía `setAttribute('part', …)`,
+// así que usamos el helper del root `_helpers.ts` que cubre ambos casos.
+import { extraerParts } from '../_helpers.js';
 
 const TAG = 'is-slider';
 const src = leerComponente(TAG);
@@ -82,7 +86,7 @@ test('slider: thumb con role=slider + aria-valuenow', () => {
 });
 
 test('slider: shadow DOM parts', () => {
-  const parts = partsDeclaradas(src);
+  const parts = extraerParts(src);
   for (const p of ['form-control', 'label', 'base', 'rail', 'track',
                    'mark', 'mark-label', 'thumb', 'value-label', 'hint']) {
     assert.ok(parts.includes(p));

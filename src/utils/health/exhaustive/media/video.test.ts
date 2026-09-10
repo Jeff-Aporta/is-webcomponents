@@ -32,10 +32,11 @@ test('3. JSON existe y respeta is-preview/v1', async () => {
 });
 
 test('4. OBSERVED incluye src, poster, muted, loop, autoplay, playsinline', async () => {
-  const src = readFileSync(TS, 'utf8');
-  // Reemplazado por extracción del motor
-    const { extraerObservados } = await import('../_helpers.js');
-    const list = extraerObservados(TS);;
+  // Pasa la ruta RELATIVA a la raíz del repo (no absoluta), porque
+  // `extraerObservados` usa `readFileSync(join(ROOT, ruta))` internamente.
+  const { extraerObservados } = await import('../_helpers.js');
+  const REL_TS = TS.slice(ROOT.length + 1).replace(/\\/g, '/');
+  const list = extraerObservados(REL_TS);
   for (const a of ['src', 'poster', 'muted', 'loop', 'autoplay', 'playsinline']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
   }

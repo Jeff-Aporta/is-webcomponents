@@ -9,8 +9,12 @@ import assert from 'node:assert/strict';
 import {
   leerComponente, leerPreview, existeCss,
   atributosObservados, eventosEmitidos,
-  slotsDeclarados, partsDeclaradas,
+  slotsDeclarados,
 } from './_helpers.js';
+// `partsDeclaradas` solo captura `part="x"` estáticos; el file-input además
+// define `file` / `remove-button` dinámicamente vía `setAttribute('part', …)`,
+// así que usamos el helper del root `_helpers.ts` que cubre ambos casos.
+import { extraerParts } from '../_helpers.js';
 
 const TAG = 'is-file-input';
 const src = leerComponente(TAG);
@@ -47,7 +51,7 @@ test('file-input: slots (label, hint, dropzone)', () => {
 });
 
 test('file-input: shadow DOM parts', () => {
-  const parts = partsDeclaradas(src);
+  const parts = extraerParts(src);
   for (const p of ['base', 'label', 'hint', 'dropzone',
                    'file-list', 'file', 'remove-button', 'input']) {
     assert.ok(parts.includes(p), `<is-file-input> part="${p}"`);
