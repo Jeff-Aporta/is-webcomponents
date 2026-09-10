@@ -73,10 +73,8 @@ test('10. soporta scroll memory opt-in (remember-scroll + storage-key)', async (
 });
 
 test('11. OBSERVED incluye atributos principales', async () => {
-  const src = readFileSync(TS, 'utf8');
-  const m = src.match(/OBSERVED\s*=\s*\[([\s\S]*?)\]/);
-  assert.ok(m);
-  const list = m![1].split(/[,\s]+/).map((s) => s.replace(/['"]/g, '')).filter(Boolean);
+  const { extraerObservados } = await import('../_helpers.js');
+  const list = extraerObservados(TS);
   for (const a of ['inline', 'cscroll', 'remember-scroll', 'storage-key']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
   }

@@ -42,10 +42,11 @@ test('3. JSON existe, declara el tag y respeta el esquema is-preview/v1', async 
 });
 
 test('4. static observedAttributes incluye TODOS los atributos documentados en JSDoc', async () => {
-  const src = readFileSync(TS, 'utf8');
-  const m = src.match(/OBSERVED\s*=\s*\[([^\]]+)\]/);
-  assert.ok(m, 'debe haber un OBSERVED = [...]');
-  const list = m![1].replace(/['"\s]/g, '').split(',').filter(Boolean);
+  const helpers = await import('../_helpers.js');
+  console.log('DEBUG helpers keys:', Object.keys(helpers).filter(k => k.includes('extraer')));
+  console.log('DEBUG helpers.extraerObservados type:', typeof helpers.extraerObservados);
+  const list = helpers.extraerObservados(TS);
+  console.log('DEBUG format-date list:', list, 'TS=', TS, 'has date?', list.includes('date'));
   const esperados = ['date', 'weekday', 'era', 'year', 'month', 'day', 'hour', 'minute', 'second', 'time-zone', 'time-zone-name', 'hour-format', 'locale'];
   for (const e of esperados) {
     assert.ok(list.includes(e), `OBSERVED debe incluir "${e}"`);

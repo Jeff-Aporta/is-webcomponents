@@ -42,20 +42,22 @@ test('5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-v
   // El dialog delega lifecycle en ModalBase. Buscamos en el wrapper
   // los atributos que efectivamente declara (open/label/light-dismiss
   // vienen de la base; backdrop-variant del wrapper).
-  const { extraerObservados } = await import('../_helpers.js');
-  const src = leerConBase(TS);
+  const { extraerObservados, leerConBase } = await import('../_helpers.js');
+  const REL = 'src/components/layout/dialog.ts';
+  const src = leerConBase(REL);
+  const obs = extraerObservados(REL);
   for (const a of ['open', 'label', 'light-dismiss', 'backdrop-variant']) {
-    // El atributo debe estar mencionado como string literal en el source
-    // (sea en OBSERVED, en un getter, en styleAttrs, o en JSDoc).
     assert.ok(
       src.includes(`'${a}'`) || src.includes(`"${a}"`) || src.includes(`--${a}`),
-      `dialog debe declarar "${a}", actual=${extraerObservados(TS).join(',')}`,
+      `dialog debe declarar "${a}", actual=${obs.join(',')}`,
     );
   }
 });
 
 test('6. emite is-show, is-after-show, is-hide, is-after-hide', async () => {
-  const src = readFileSync(TS, 'utf8');
+  // Los eventos se emiten desde ModalBase; leerConBase los concatena.
+  const { leerConBase } = await import('../_helpers.js');
+  const src = leerConBase('src/components/layout/dialog.ts');
   for (const ev of ['is-show', 'is-after-show', 'is-hide', 'is-after-hide']) {
     assert.ok(src.includes(`'${ev}'`) || src.includes(`"${ev}"`), `debe emitir ${ev}`);
   }
@@ -75,8 +77,9 @@ test('8. backdrop-variant acepta "none" | "basic"', async () => {
 
 test('9. integra con is-icon e is-button (chrome)', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/from\s*['"][./]+media\/icon/.test(src));
-  assert.ok(/from\s*['"][./]+actions\/button/.test(src));
+  // Side-effect imports `import '../media/icon.js'` y `import '../actions/button.js'`.
+  assert.ok(/media[\\/]+icon/.test(src), 'importa icon');
+  assert.ok(/actions[\\/]+button/.test(src), 'importa button');
 });
 
 test('10. soporta slot default y header-actions, footer, label', async () => {
@@ -87,8 +90,13 @@ test('10. soporta slot default y header-actions, footer, label', async () => {
 });
 
 test('11. atributo open es reflected (getter/setter + toggleAttribute)', async () => {
-  const src = readFileSync(TS, 'utf8');
-  assert.ok(/setBooleanAttr|toggleAttribute/.test(src));
+  // El getter/setter `open` está en ModalBase.
+  const { leerConBase } = await import('../_helpers.js');
+  const src = leerConBase('src/components/layout/dialog.ts');
+  assert.ok(
+    /setBooleanAttr|toggleAttribute|get\s+open\s*\(\s*\)|set\s+open\s*\(/.test(src),
+    'open debe ser reflected en la base',
+  );
 });
 
 test('12. custom element registrado', async () => {

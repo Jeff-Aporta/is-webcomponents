@@ -202,8 +202,12 @@ export function extraerObservados(rutaOContenido: string): string[] {
       }
       const literal = src.substring(idxEnSrc + 1, end);
       for (const m of literal.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(m[1]);
-      for (const m of literal.matchAll(/\.\.\.\s*([A-Za-z_$][\w$]*)/g)) {
+      for (const m of literal.matchAll(/\.\.\.\s*([A-Za-z_$][\w$\.]*)/g)) {
         const alias = m[1];
+        // Caso especial: `...super.observedAttributes` o `...super.attrNames`.
+        // El atributo viene del base class (ya leído arriba en paso 3).
+        // Ya tenemos los attrs del base en `set` — nada que hacer aquí.
+        if (alias.startsWith('super.')) continue;
         const aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`));
         if (aliasMatch) {
           for (const mm of aliasMatch[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
@@ -265,6 +269,7 @@ export function extraerObservados(rutaOContenido: string): string[] {
           const baseSinComentarios = baseSrc
             .replace(/\/\*[\s\S]*?\*\//g, '')
             .replace(/^\s*\/\/.*$/gm, '');
+          // Caso 1: array literal `return [...]`.
           const baseObsStart = baseSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s*\[/);
           if (baseObsStart) {
             const startInBase = baseSrc.indexOf(baseObsStart[0].slice(0, -1));
@@ -278,6 +283,14 @@ export function extraerObservados(rutaOContenido: string): string[] {
               }
               const literal = baseSrc.substring(idx + 1, end);
               for (const mm of literal.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
+            }
+          }
+          // Caso 2: `return CONST_NAME;` (const reference, e.g. ModalBase).
+          const baseObsConst = baseSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s+([A-Z_$][\w$]*)/);
+          if (baseObsConst) {
+            const alias = baseObsConst[1];
+            for (const m of baseSrc.matchAll(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`, 'g'))) {
+              for (const mm of m[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
             }
           }
           break;

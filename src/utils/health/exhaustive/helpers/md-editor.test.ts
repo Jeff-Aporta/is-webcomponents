@@ -33,10 +33,8 @@ test('3. JSON existe y respeta is-preview/v1', async () => {
 });
 
 test('4. OBSERVED incluye label, placeholder, filename, value', async () => {
-  const src = readFileSync(TS, 'utf8');
-  const m = src.match(/OBSERVED\s*=\s*\[([^\]]+)\]/);
-  assert.ok(m);
-  const list = m![1].replace(/['"\s]/g, '').split(',').filter(Boolean);
+  const { extraerObservados } = await import('../_helpers.js');
+  const list = extraerObservados(TS);
   for (const a of ['label', 'placeholder']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
   }

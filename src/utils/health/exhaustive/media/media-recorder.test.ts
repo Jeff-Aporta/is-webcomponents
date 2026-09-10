@@ -29,14 +29,15 @@ test('2. CSS hermano existe', async () => {
 test('3. JSON existe y respeta is-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json['$schema'], 'is-preview/v1');
 });
 
 test('4. OBSERVED incluye source, disabled', async () => {
-  const src = readFileSync(TS, 'utf8');
-  const m = src.match(/observedAttributes\s*\(\s*\)\s*\{[^}]*return\s*\[([^\]]+)\]/.exec(src);
-  assert.ok(m, 'debe haber observedAttributes getter');
-  const list = m![1].replace(/['"\s]/g, '').split(',').filter(Boolean);
+  // Pasa la ruta RELATIVA a la raíz del repo (no absoluta), porque
+  // `extraerObservados` usa `readFileSync(join(ROOT, ruta))` internamente.
+  const { extraerObservados } = await import('../_helpers.js');
+  const REL_TS = TS.slice(ROOT.length + 1).replace(/\\/g, '/');
+  const list = extraerObservados(REL_TS);
   for (const a of ['source', 'disabled']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
   }
@@ -58,9 +59,11 @@ test('7. usa MediaRecorder API', async () => {
 });
 
 test('8. emite is-start, is-stop, is-error', async () => {
-  const src = readFileSync(TS, 'utf8');
+  const { extraerEventos } = await import('../_helpers.js');
+  const REL_TS = TS.slice(ROOT.length + 1).replace(/\\/g, '/');
+  const evs = extraerEventos(readFileSync(TS, 'utf8'));
   for (const ev of ['is-start', 'is-stop', 'is-error']) {
-    assert.ok(src.includes(`'${ev}'`) || src.includes(`"${ev}"`), `debe emitir ${ev}`);
+    assert.ok(evs.includes(ev), `debe emitir ${ev}`);
   }
 });
 
@@ -78,9 +81,11 @@ test('10. atributo source acepta "camera" | "mic" | "display"', async () => {
 });
 
 test('11. expone parte preview y download', async () => {
-  const src = readFileSync(TS, 'utf8');
-  assert.ok(/part=['"]preview['"]/.test(src));
-  assert.ok(/part=['"]download['"]/.test(src));
+  const { extraerParts } = await import('../_helpers.js');
+  const parts = extraerParts(readFileSync(TS, 'utf8'));
+  for (const p of ['preview', 'download']) {
+    assert.ok(parts.includes(p), `debe exponer part="${p}"`);
+  }
 });
 
 test('12. custom element registrado', async () => {
