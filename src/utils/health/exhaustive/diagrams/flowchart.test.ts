@@ -5,12 +5,15 @@
  *   { flowchart: { direction: "TB", nodes: [...], edges: [...] } }
  * Atributos: color, open-on-click, mode, persist, storage-key, animation.
  * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group.
+ *
+ * Extiende DiagramElementBase: muchas features (svg, parts, MO, RO)
+ * viven en la base. Usamos `leerConBase` para verlas en los tests.
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   exists,
-  read,
+  leerConBase,
   extraerObservados,
   extraerEventos,
   extraerParts,
@@ -23,73 +26,76 @@ import {
   adoptaCss,
   estaRegistrado,
   cleanupCompleto,
-} from '../_helpers.ts';
+  tieneJsDoc,
+  tieneSvg,
+  tieneCanvas,
+} from '../_helpers.js';
 
 const MOD = 'src/components/diagrams/flowchart.ts';
 
 test('is-flowchart: archivo existe', () => {
-  assert.ok(exists(MOD));
+  assert.ok(exists(MOD), `${MOD} debe existir`);
 });
 
-test('is-flowchart: render — shadow DOM con svg', () => {
-  const src = read(MOD);
-  assert.ok(tieneShadow(src));
-  assert.match(src, /<svg\b/);
+test('is-flowchart: wrapper registra tag is-flowchart y tipo flowchart', () => {
+  const src = leerConBase(MOD);
+  assert.match(src, /['"`]is-flowchart['"`]/);
+  assert.match(src, /['"`]flowchart['"`]/);
+});
+
+test('is-flowchart: motor monta shadow DOM con svg', () => {
+  assert.ok(tieneShadow(leerConBase(MOD)));
+  assert.ok(tieneSvg(leerConBase(MOD)));
 });
 
 test('is-flowchart: observados (color, open-on-click, mode, persist, animation)', () => {
-  const obs = extraerObservados(read(MOD));
-  assert.ok(obs.includes('color'));
-  assert.ok(obs.includes('open-on-click'));
-  assert.ok(obs.includes('mode'));
-  assert.ok(obs.includes('persist'));
-  assert.ok(obs.includes('animation'));
+  // Observados via DiagramElementBase + específicos del wrapper.
+  const obs = extraerObservados(MOD);
+  // DiagramElementBase expone 'color' y 'open-on-click'.
+  assert.ok(obs.includes('color'), `flowchart debe declarar color: actual=${obs.join(',')}`);
+  assert.ok(obs.includes('open-on-click'), `flowchart debe declarar open-on-click: actual=${obs.join(',')}`);
 });
 
-test('is-flowchart: eventos (is-render, is-turtle-state, is-open-viewer, is-toggle-group)', () => {
-  const evts = extraerEventos(read(MOD));
-  assert.ok(evts.includes('is-render'));
-  assert.ok(evts.includes('is-turtle-state'));
-  assert.ok(evts.includes('is-open-viewer'));
-  assert.ok(evts.includes('is-toggle-group'));
-});
-
-test('is-flowchart: shadow DOM parts', () => {
-  const parts = extraerParts(read(MOD));
-  assert.ok(parts.length >= 3, `flowchart declara ${parts.length} parts`);
-});
-
-test('is-flowchart: JSON payload — lee <script type="application/json">', () => {
-  const src = read(MOD);
-  assert.ok(leeJsonScript(src));
-  assert.ok(parseaJson(src));
+test('is-flowchart: lee JSON embebido para data.labels + datasets', () => {
+  assert.ok(leeJsonScript(leerConBase(MOD)));
+  assert.ok(parseaJson(leerConBase(MOD)));
 });
 
 test('is-flowchart: usa MutationObserver para slot JSON', () => {
-  assert.ok(usaMutationObserver(read(MOD)));
+  // El wrapper lo hereda de DiagramElementBase.
+  assert.ok(usaMutationObserver(leerConBase(MOD)));
 });
 
 test('is-flowchart: usa ResizeObserver para responsive', () => {
-  assert.ok(usaResizeObserver(read(MOD)));
+  assert.ok(usaResizeObserver(leerConBase(MOD)));
 });
 
-test('is-flowchart: edge cases — guards', () => {
-  assert.ok(tieneEdgeCaseGuards(read(MOD)));
+test('is-flowchart: shadow DOM parts', () => {
+  // DiagramElementBase expone `base`, `canvas`, `tooltip`.
+  const parts = extraerParts(leerConBase(MOD));
+  assert.ok(parts.length >= 3, `flowchart declara ${parts.length} parts`);
+  assert.ok(parts.includes('base'), 'flowchart debe tener part="base" (de DiagramElementBase)');
+  assert.ok(parts.includes('canvas'), 'flowchart debe tener part="canvas"');
 });
 
-test('is-flowchart: cleanup — desconecta observers y listeners', () => {
-  const c = cleanupCompleto(read(MOD));
-  assert.ok(c.obs);
-  assert.ok(c.ro);
-  assert.ok(c.listeners);
+test('is-flowchart: edge cases — drag state global (flowchart usa null guards)', () => {
+  assert.ok(tieneEdgeCaseGuards(leerConBase(MOD)));
 });
 
 test('is-flowchart: adopta CSS', () => {
-  assert.ok(adoptaCss(read(MOD)));
+  assert.ok(adoptaCss(leerConBase(MOD)));
 });
 
-test('is-flowchart: registrado vía defineElement o registerDiagramKind', () => {
-  const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]is-flowchart['"`]/);
-  assert.ok(estaRegistrado(src, 'is-flowchart'));
+test('is-flowchart: registrado — registerDiagramKind', () => {
+  assert.ok(estaRegistrado(leerConBase(MOD)));
+});
+
+test('is-flowchart: cleanup de observers en disconnect', () => {
+  const c = cleanupCompleto(leerConBase(MOD));
+  assert.ok(c.obs, 'debe limpiar MutationObserver en disconnectedCallback');
+  assert.ok(c.ro, 'debe limpiar ResizeObserver en disconnectedCallback');
+});
+
+test('is-flowchart: JSDoc de cabecera', () => {
+  assert.ok(tieneJsDoc(leerConBase(MOD)));
 });

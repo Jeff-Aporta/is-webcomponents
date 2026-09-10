@@ -18,61 +18,61 @@ const TS  = join(ROOT, 'src', 'components', 'isp', 'block-layout.ts');
 const CSS = join(ROOT, 'src', 'components', 'isp', 'block-layout.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'block-layout.json');
 
-test('1. módulo existe', () => {
+test('1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', () => {
+test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta is-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'is-preview/v1');
 });
 
-test('4. exporta constantes BREAKPOINTS = [xs, sm, md, lg, xl]', () => {
+test('4. exporta constantes BREAKPOINTS = [xs, sm, md, lg, xl]', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/export\s+const\s+BREAKPOINTS\s*=\s*\[\s*['"]xs['"]/.test(src));
   assert.ok(/['"]sm['"]/.test(src) && /['"]md['"]/.test(src));
   assert.ok(/['"]lg['"]/.test(src) && /['"]xl['"]/.test(src));
 });
 
-test('5. exporta BREAKPOINT_W con anchos numéricos', () => {
+test('5. exporta BREAKPOINT_W con anchos numéricos', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/export\s+const\s+BREAKPOINT_W\s*=\s*\{/.test(src));
 });
 
-test('6. exporta sizewFor(width) para resolver breakpoint desde ancho', () => {
+test('6. exporta sizewFor(width) para resolver breakpoint desde ancho', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/export\s+function\s+sizewFor\b/.test(src));
 });
 
-test('7. emite is-breakpoint cuando cambia el sizew', () => {
+test('7. emite is-breakpoint cuando cambia el sizew', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/['"]is-breakpoint['"]/.test(src), 'debe emitir is-breakpoint');
 });
 
-test('8. tiene API de geometría (getWidth/getHeight/rect)', () => {
+test('8. tiene API de geometría (getWidth/getHeight/rect)', async () => {
   const src = readFileSync(TS, 'utf8');
   for (const m of ['getWidth', 'getHeight', 'rect']) {
     assert.ok(src.includes(m), `API debe incluir ${m}()`);
   }
 });
 
-test('9. usa codec json2html/html2json (round-trip)', () => {
+test('9. usa codec json2html/html2json (round-trip)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/json2html\b/.test(src) && /html2json\b/.test(src), 'codec bidireccional');
 });
 
-test('10. soporta scroll memory opt-in (remember-scroll + storage-key)', () => {
+test('10. soporta scroll memory opt-in (remember-scroll + storage-key)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/remember-scroll/.test(src) && /storage-key/.test(src));
   assert.ok(/ScrollMemory|scroll-memory/.test(src), 'integra con helper ScrollMemory');
 });
 
-test('11. OBSERVED incluye atributos principales', () => {
+test('11. OBSERVED incluye atributos principales', async () => {
   const src = readFileSync(TS, 'utf8');
   const m = src.match(/OBSERVED\s*=\s*\[([\s\S]*?)\]/);
   assert.ok(m);
@@ -82,24 +82,24 @@ test('11. OBSERVED incluye atributos principales', () => {
   }
 });
 
-test('12. custom element registrado', () => {
+test('12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/defineElement\s*\(\s*['"]is-block-layout['"]/.test(src));
 });
 
-test('13. CSS hermano tiene reglas para grid/flex (es un layout)', () => {
+test('13. CSS hermano tiene reglas para grid/flex (es un layout)', async () => {
   const css = readFileSync(CSS, 'utf8');
   assert.ok(/display\s*:\s*(grid|flex|block)/.test(css), 'debe tener regla display');
   assert.ok(/--/.test(css), 'debe exponer CSS custom properties');
 });
 
-test('14. JSON tiene sección intro con lede (no es solo una tabla)', () => {
+test('14. JSON tiene sección intro con lede (no es solo una tabla)', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   const intro = (json.sections || [])[0];
   assert.ok(intro && typeof intro.lede === 'string' && intro.lede.length > 30);
 });
 
-test('15. preview.ts existe (componente complejo → tiene behavior)', () => {
+test('15. preview.ts existe (componente complejo → tiene behavior)', async () => {
   const preview = join(ROOT, 'src', 'components', 'isp', 'block-layout.preview.ts');
   assert.ok(existsSync(preview));
 });

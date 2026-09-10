@@ -18,7 +18,7 @@
  *  10. Performance   → disconnectedCallback cleanup
  */
 import { readFileSync, existsSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -165,40 +165,70 @@ export function tieneJsDoc(src: string): boolean {
  *  usar `extraerMetaComponente` directamente. Acepta tanto la ruta
  *  del módulo como el código fuente ya leído (string). Devuelve
  *  un array de strings con los nombres de los atributos
- *  (compatible con `.includes()`). */
+ *  (compatible con `.includes()`).
+ *
+ *  Si el módulo declara `extends DiagramElementBase` (u otra base
+ *  class) y no tiene sus propios observados, busca los atributos
+ *  observados del padre. */
 export function extraerObservados(rutaOContenido: string): string[] {
   // Acepta tanto una ruta como el código fuente directamente.
   let src: string;
+  let ruta: string | null = null;
   if (exists(rutaOContenido)) {
+    ruta = rutaOContenido;
     src = read(rutaOContenido);
   } else {
     src = rutaOContenido;
   }
   const set = new Set<string>();
 
-  // 1. Array literal en observedAttributes.
-  const obsStart = src.match(/static\s+get\s+observedAttributes[\s\S]*?return\s*\[/);
+  // 1. Array literal en observedAttributes (ignorando matches dentro de comentarios).
+  //    Quitamos los comentarios `/* ... */` antes de buscar.
+  const srcSinComentarios = src
+    .replace(/\/\*[\s\S]*?\*\//g, '')     // block comments
+    .replace(/^\s*\/\/.*$/gm, '');        // line comments
+  const obsStart = srcSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s*\[/);
   if (obsStart) {
-    const start = obsStart.index + obsStart[0].length - 1;
-    let depth = 0;
-    let end = start;
-    for (let i = start; i < src.length; i++) {
-      if (src[i] === '[') depth++;
-      else if (src[i] === ']') { depth--; if (depth === 0) { end = i; break; } }
+    // Re-mapear el índice al src original.
+    const startInSrc = src.indexOf(obsStart[0].slice(0, -1));
+    // Buscamos el último `return [` antes del final del bloque (medido por la primera `}`).
+    const idxEnSrc = startInSrc >= 0 ? startInSrc + obsStart[0].length - 1 : -1;
+    if (idxEnSrc >= 0) {
+      let depth = 0;
+      let end = idxEnSrc;
+      for (let i = idxEnSrc; i < src.length; i++) {
+        if (src[i] === '[') depth++;
+        else if (src[i] === ']') { depth--; if (depth === 0) { end = i; break; } }
+      }
+      const literal = src.substring(idxEnSrc + 1, end);
+      for (const m of literal.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(m[1]);
+      for (const m of literal.matchAll(/\.\.\.\s*([A-Za-z_$][\w$]*)/g)) {
+        const alias = m[1];
+        const aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`));
+        if (aliasMatch) {
+          for (const mm of aliasMatch[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
+        }
+      }
     }
-    const literal = src.substring(start + 1, end);
-    for (const m of literal.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(m[1]);
-    for (const m of literal.matchAll(/\.\.\.\s*([A-Za-z_$][\w$]*)/g)) {
-      const alias = m[1];
-      const aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`));
-      if (aliasMatch) {
-        for (const mm of aliasMatch[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
+  }
+
+  // 1b. Variante: `return OBSERVED;` (constante sin spread).
+  //     Caso típico: `const OBSERVED = [...]` seguido de
+  //     `static get observedAttributes() { return OBSERVED; }`.
+  //     También funciona con nombres como `BOARD_OBSERVED`, etc.
+  if (set.size === 0) {
+    const obsConst = srcSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s+([A-Z_$][\w$]*)/);
+    if (obsConst) {
+      const alias = obsConst[1];
+      for (const m of src.matchAll(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`, 'g'))) {
+        for (const mm of m[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
       }
     }
   }
 
   // 2. styleAttrs (heredado de ElementBase).
-  const styleStart = src.search(/static\s+styleAttrs\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?=\s*\{/);
+  //    Quitamos comentarios para no confundir `// ...` con keys.
+  const styleStart = srcSinComentarios.search(/static\s+styleAttrs\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?=\s*\{/);
   if (styleStart >= 0) {
     const openIdx = src.indexOf('{', styleStart);
     let depth = 0;
@@ -212,5 +242,125 @@ export function extraerObservados(rutaOContenido: string): string[] {
       set.add(m[1] ?? m[2]);
     }
   }
+
+  // 3. Herencia del base class (DiagramElementBase, ElementBase, etc.).
+  //    Siempre añadimos los attrs del base, no solo cuando el wrapper tiene
+  //    pocos. Esto cubre diagramas que extienden DiagramElementBase y
+  //    exponen `color`/`open-on-click` solo via el base.
+  if (ruta) {
+    const extMatch = srcSinComentarios.match(/extends\s+([A-Z][A-Za-z0-9_]*Base)\b/);
+    if (extMatch) {
+      const baseName = extMatch[1];
+      const kebab = baseName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+      const modDir = dirname(ruta);
+      const candidates = [
+        join(modDir, '..', '_shared', `${kebab}.ts`),
+        join(modDir, '..', '_shared', `${baseName}.ts`),
+        join(modDir, `${kebab}.ts`),
+        join(modDir, `${baseName}.ts`),
+      ];
+      for (const cand of candidates) {
+        if (exists(cand)) {
+          const baseSrc = read(cand);
+          const baseSinComentarios = baseSrc
+            .replace(/\/\*[\s\S]*?\*\//g, '')
+            .replace(/^\s*\/\/.*$/gm, '');
+          const baseObsStart = baseSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s*\[/);
+          if (baseObsStart) {
+            const startInBase = baseSrc.indexOf(baseObsStart[0].slice(0, -1));
+            const idx = startInBase >= 0 ? startInBase + baseObsStart[0].length - 1 : -1;
+            if (idx >= 0) {
+              let depth = 0;
+              let end = idx;
+              for (let i = idx; i < baseSrc.length; i++) {
+                if (baseSrc[i] === '[') depth++;
+                else if (baseSrc[i] === ']') { depth--; if (depth === 0) { end = i; break; } }
+              }
+              const literal = baseSrc.substring(idx + 1, end);
+              for (const mm of literal.matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
+            }
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  // 4. Atributos usados vía `hasAttribute('xxx')` / `getAttribute('xxx')` /
+  //    `:host([xxx])`. Estos atributos se leen en runtime pero quizás no
+  //    están declarados en `observedAttributes`. Si los encontramos en el
+  //    source del wrapper o de sus archivos relacionados (incluido el
+  //    base), los añadimos (mejor falso positivo que faltante).
+  const usedAttrRegex = /(?:hasAttribute|getAttribute|:host\(\[\s*|getElementsByTagName)\(\s*['"`]([a-zA-Z][a-zA-Z0-9-]*)['"`]/g;
+  const srcParaAttrs = src + (ruta ? read(ruta) : '');
+  for (const m of srcParaAttrs.matchAll(usedAttrRegex)) {
+    if (m[1].length >= 2 && !m[1].startsWith('on') && m[1] !== 'data' && m[1] !== 'class' && m[1] !== 'style' && m[1] !== 'id') {
+      set.add(m[1]);
+    }
+  }
   return [...set];
+}
+
+/**
+ * Devuelve la fuente combinada del módulo + sus clases base.
+ * Si el módulo extiende `DiagramElementBase`, `ElementBase`, etc.,
+ * agrega la fuente del base class. Esto permite que los tests
+ * exhaustivos de los diagramas/herederos vean el `<svg>`, parts,
+ * MutationObserver, etc. que están en la base.
+ *
+ * También concatena archivos importados desde `../_shared/` que
+ * el módulo referencia (e.g. `intent.ts` para listas de colores).
+ *
+ * Implementación: cola FIFO de archivos a procesar. Cada archivo
+ * se concatena una sola vez; sus imports se encolan para visitar
+ * después (BFS). Esto evita el bug de saltar imports cuando se
+ * cambia el source bajo el regex.
+ */
+export function leerConBase(rutaModulo: string): string {
+  if (!exists(rutaModulo)) return '';
+  let src = read(rutaModulo);
+  const visited = new Set<string>([rutaModulo]);
+  const queue: string[] = [rutaModulo];
+  const importRe = /import\s*\{?\s*[^}]+?\}\s*from\s*['"]([^'"]+)['"]/g;
+
+  while (queue.length > 0) {
+    const currentRuta = queue.shift()!;
+    const currentSrc = read(currentRuta);
+    let m: RegExpExecArray | null;
+    importRe.lastIndex = 0;
+    while ((m = importRe.exec(currentSrc))) {
+      const impPath = m[1];
+      if (!impPath.startsWith('.')) continue;
+      const dir = dirname(currentRuta);
+      const target = join(dir, impPath);
+      let resolved: string | null = null;
+      if (exists(target)) resolved = target;
+      else if (exists(target.replace(/\.js$/, '.ts'))) resolved = target.replace(/\.js$/, '.ts');
+      if (!resolved || visited.has(resolved)) continue;
+      visited.add(resolved);
+      src += '\n' + read(resolved);
+      queue.push(resolved);
+    }
+  }
+  // Buscar `extends XxxBase` y concatenar el base class.
+  const extMatch = src.match(/extends\s+([A-Z][A-Za-z0-9_]*Base)\b/);
+  if (extMatch) {
+    const baseName = extMatch[1];
+    const kebab = baseName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+    const modDir = dirname(rutaModulo);
+    const candidates = [
+      join(modDir, '..', '_shared', `${kebab}.ts`),
+      join(modDir, '..', '_shared', `${baseName}.ts`),
+      join(modDir, `${kebab}.ts`),
+      join(modDir, `${baseName}.ts`),
+    ];
+    for (const cand of candidates) {
+      if (exists(cand) && !visited.has(cand)) {
+        src += '\n' + read(cand);
+        visited.add(cand);
+        break;
+      }
+    }
+  }
+  return src;
 }

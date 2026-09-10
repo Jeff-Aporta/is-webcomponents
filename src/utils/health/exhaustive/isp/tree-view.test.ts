@@ -18,73 +18,73 @@ const TS  = join(ROOT, 'src', 'components', 'isp', 'tree-view.ts');
 const CSS = join(ROOT, 'src', 'components', 'isp', 'tree-view.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'tree-view.json');
 
-test('1. módulo existe', () => {
+test('1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', () => {
+test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta is-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'is-preview/v1');
 });
 
-test('4. reexporta TreeRowViewAdapter / TreeAdapter / TreeCustomsBase', () => {
+test('4. reexporta TreeRowViewAdapter / TreeAdapter / TreeCustomsBase', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/export\s*\{[^}]*TreeRowViewAdapter[^}]*\}/.test(src));
   assert.ok(/export\s*\{[^}]*TreeCustomsBase[^}]*\}/.test(src));
 });
 
-test('5. importa customs base compartido (_shared/tree-view/customs-base)', () => {
+test('5. importa customs base compartido (_shared/tree-view/customs-base)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/from\s*['"][./]+_shared\/tree-view\/customs-base/.test(src));
 });
 
-test('6. importa paintForest para pintar el árbol', () => {
+test('6. importa paintForest para pintar el árbol', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/from\s*['"][./]+_shared\/tree-view\/render-rows/.test(src));
   assert.ok(/paintForest/.test(src));
 });
 
-test('7. custom element registrado', () => {
+test('7. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/defineElement\s*\(\s*['"]is-tree-view['"]/.test(src));
 });
 
-test('8. integra con confirm-delete', () => {
+test('8. integra con confirm-delete', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/from\s*['"][./]+confirm-delete/.test(src), 'importa is-confirm-delete');
 });
 
-test('9. integra con flex-options (panel de opciones)', () => {
+test('9. integra con flex-options (panel de opciones)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/from\s*['"][./]+flex-options/.test(src));
 });
 
-test('10. integra con float-card (ficha del item)', () => {
+test('10. integra con float-card (ficha del item)', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/from\s*['"][./]+float-card/.test(src));
 });
 
-test('11. el módulo de customs base existe en _shared/tree-view/', () => {
+test('11. el módulo de customs base existe en _shared/tree-view/', async () => {
   const customs = join(ROOT, 'src', 'components', 'isp', '_shared', 'tree-view', 'customs-base.ts');
   assert.ok(existsSync(customs));
 });
 
-test('12. emite eventos de cambio / selección', () => {
+test('12. emite eventos de cambio / selección', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/['"]is-change['"]/.test(src) || /['"]is-select['"]/.test(src) || /['"]is-edit['"]/.test(src));
 });
 
-test('13. CSS tiene reglas para indentación y chevron del árbol', () => {
+test('13. CSS tiene reglas para indentación y chevron del árbol', async () => {
   const css = readFileSync(CSS, 'utf8');
   assert.ok(/padding-left|--indent/.test(css), 'debe tener indentación por nivel');
 });
 
-test('14. JSON tiene secciones de demo (no es solo tabla de referencia)', () => {
+test('14. JSON tiene secciones de demo (no es solo tabla de referencia)', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   const demos = (json.sections || []).filter((s: any) =>
     (s.blocks || []).some((b: any) => b.kind === 'demo')
@@ -92,7 +92,7 @@ test('14. JSON tiene secciones de demo (no es solo tabla de referencia)', () => 
   assert.ok(demos.length > 0, `debe haber al menos 1 sección con demo, hay ${demos.length}`);
 });
 
-test('15. preview.ts existe (componente complejo → behavior obligatorio)', () => {
+test('15. preview.ts existe (componente complejo → behavior obligatorio)', async () => {
   const preview = join(ROOT, 'src', 'components', 'isp', 'tree-view.preview.ts');
   assert.ok(existsSync(preview));
 });

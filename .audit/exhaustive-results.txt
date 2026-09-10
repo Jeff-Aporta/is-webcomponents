@@ -1,0 +1,4543 @@
+TAP version 13
+# Subtest: is-button: módulo existe y es importable
+ok 1 - is-button: módulo existe y es importable
+  ---
+  duration_ms: 13.4315
+  type: 'test'
+  ...
+# Subtest: is-button: declares observedAttributes
+ok 2 - is-button: declares observedAttributes
+  ---
+  duration_ms: 5.5613
+  type: 'test'
+  ...
+# Subtest: is-button: emite al menos un evento is-*
+ok 3 - is-button: emite al menos un evento is-*
+  ---
+  duration_ms: 0.7669
+  type: 'test'
+  ...
+# Subtest: is-button: JSON preview respeta esquema is-preview/v1
+ok 4 - is-button: JSON preview respeta esquema is-preview/v1
+  ---
+  duration_ms: 1.2136
+  type: 'test'
+  ...
+# Subtest: is-button: consistencia JSON ↔ módulo
+ok 5 - is-button: consistencia JSON ↔ módulo
+  ---
+  duration_ms: 49.9389
+  type: 'test'
+  ...
+# Subtest: is-button: tiene JSDoc de cabecera
+ok 6 - is-button: tiene JSDoc de cabecera
+  ---
+  duration_ms: 0.8327
+  type: 'test'
+  ...
+# Subtest: is-button: tiene Shadow DOM
+ok 7 - is-button: tiene Shadow DOM
+  ---
+  duration_ms: 0.7301
+  type: 'test'
+  ...
+# Subtest: is-button: edge case — maneja atributo vacío sin errores
+ok 8 - is-button: edge case — maneja atributo vacío sin errores
+  ---
+  duration_ms: 0.5867
+  type: 'test'
+  ...
+# Subtest: is-button: emite is-click para interacción
+ok 9 - is-button: emite is-click para interacción
+  ---
+  duration_ms: 0.9315
+  type: 'test'
+  ...
+# Subtest: is-button: cobertura de atributos esperada
+ok 10 - is-button: cobertura de atributos esperada
+  ---
+  duration_ms: 2.5197
+  type: 'test'
+  ...
+# Subtest: is-button: módulo existe y registra el custom element
+ok 11 - is-button: módulo existe y registra el custom element
+  ---
+  duration_ms: 2.6377
+  type: 'test'
+  ...
+# Subtest: is-button: declares observedAttributes (≥8)
+ok 12 - is-button: declares observedAttributes (≥8)
+  ---
+  duration_ms: 5.1891
+  type: 'test'
+  ...
+# Subtest: is-button: emite is-click, is-focus, is-blur, is-invalid
+ok 13 - is-button: emite is-click, is-focus, is-blur, is-invalid
+  ---
+  duration_ms: 1.123
+  type: 'test'
+  ...
+# Subtest: is-button: declara slots default, start, end
+ok 14 - is-button: declara slots default, start, end
+  ---
+  duration_ms: 0.8967
+  type: 'test'
+  ...
+# Subtest: is-button: usa Shadow DOM con delegatesFocus y CSS parts
+ok 15 - is-button: usa Shadow DOM con delegatesFocus y CSS parts
+  ---
+  duration_ms: 0.9488
+  type: 'test'
+  ...
+# Subtest: is-button: JSON preview respeta is-preview/v1
+ok 16 - is-button: JSON preview respeta is-preview/v1
+  ---
+  duration_ms: 1.211
+  type: 'test'
+  ...
+# Subtest: is-button: accesibilidad — role implícito (button interno) y aria-*
+ok 17 - is-button: accesibilidad — role implícito (button interno) y aria-*
+  ---
+  duration_ms: 19.5051
+  type: 'test'
+  ...
+# Subtest: is-button: maneja atributos vacíos (getAttribute + ??/||)
+ok 18 - is-button: maneja atributos vacíos (getAttribute + ??/||)
+  ---
+  duration_ms: 0.9488
+  type: 'test'
+  ...
+# Subtest: is-button: tiene slot para icono
+ok 19 - is-button: tiene slot para icono
+  ---
+  duration_ms: 0.9432
+  type: 'test'
+  ...
+# Subtest: is-button: implementa lifecycle (connectedCallback / disconnectedCallback)
+ok 20 - is-button: implementa lifecycle (connectedCallback / disconnectedCallback)
+  ---
+  duration_ms: 1.0849
+  type: 'test'
+  ...
+# Subtest: is-bar-chart: archivo existe y mide >0 bytes
+ok 21 - is-bar-chart: archivo existe y mide >0 bytes
+  ---
+  duration_ms: 2.2904
+  type: 'test'
+  ...
+# Subtest: is-bar-chart: wrapper invoca window.__isDefineTypedChart con tag y tipo bar
+ok 22 - is-bar-chart: wrapper invoca window.__isDefineTypedChart con tag y tipo bar
+  ---
+  duration_ms: 1.6713
+  type: 'test'
+  ...
+# Subtest: is-bar-chart: motor <is-chart> tiene shadow DOM abierto
+ok 23 - is-bar-chart: motor <is-chart> tiene shadow DOM abierto
+  ---
+  duration_ms: 0.9972
+  type: 'test'
+  ...
+# Subtest: is-bar-chart: observado via motor (heredado de chart.ts)
+ok 24 - is-bar-chart: observado via motor (heredado de chart.ts)
+  ---
+  duration_ms: 7.3445
+  type: 'test'
+  ...
+# Subtest: is-bar-chart: lee <script type="application/json"> para data
+ok 25 - is-bar-chart: lee <script type="application/json"> para data
+  ---
+  duration_ms: 1.999
+  type: 'test'
+  ...
+# Subtest: is-bar-chart: usa ResizeObserver para re-render en resize
+ok 26 - is-bar-chart: usa ResizeObserver para re-render en resize
+  ---
+  duration_ms: 0.7465
+  type: 'test'
+  ...
+# Subtest: is-bar-chart: registrado vía customElements (indirecto via chart.ts)
+ok 27 - is-bar-chart: registrado vía customElements (indirecto via chart.ts)
+  ---
+  duration_ms: 0.8414
+  type: 'test'
+  ...
+# Subtest: is-bar-chart: tiene edge case guards (null/undefined en data)
+ok 28 - is-bar-chart: tiene edge case guards (null/undefined en data)
+  ---
+  duration_ms: 0.6114
+  type: 'test'
+  ...
+# Subtest: is-bubble-chart: archivo existe
+ok 29 - is-bubble-chart: archivo existe
+  ---
+  duration_ms: 1.963
+  type: 'test'
+  ...
+# Subtest: is-bubble-chart: wrapper registra tag is-bubble-chart y tipo bubble
+ok 30 - is-bubble-chart: wrapper registra tag is-bubble-chart y tipo bubble
+  ---
+  duration_ms: 0.7801
+  type: 'test'
+  ...
+# Subtest: is-bubble-chart: motor monta shadow DOM con svg
+ok 31 - is-bubble-chart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 0.6717
+  type: 'test'
+  ...
+# Subtest: is-bubble-chart: observados del motor
+ok 32 - is-bubble-chart: observados del motor
+  ---
+  duration_ms: 5.2202
+  type: 'test'
+  ...
+# Subtest: is-bubble-chart: lee JSON embebido
+ok 33 - is-bubble-chart: lee JSON embebido
+  ---
+  duration_ms: 2.1467
+  type: 'test'
+  ...
+# Subtest: is-bubble-chart: usa ResizeObserver
+ok 34 - is-bubble-chart: usa ResizeObserver
+  ---
+  duration_ms: 1.0425
+  type: 'test'
+  ...
+# Subtest: is-bubble-chart: registrado
+ok 35 - is-bubble-chart: registrado
+  ---
+  duration_ms: 0.9288
+  type: 'test'
+  ...
+# Subtest: is-bubble-chart: edge case guards
+ok 36 - is-bubble-chart: edge case guards
+  ---
+  duration_ms: 0.6374
+  type: 'test'
+  ...
+# Subtest: is-chart: archivo existe
+ok 37 - is-chart: archivo existe
+  ---
+  duration_ms: 1.6807
+  type: 'test'
+  ...
+# Subtest: is-chart: render — attachShadow open + svg en shadow DOM
+ok 38 - is-chart: render — attachShadow open + svg en shadow DOM
+  ---
+  duration_ms: 1.015
+  type: 'test'
+  ...
+# Subtest: is-chart: atributos observados (mínimo 10)
+ok 39 - is-chart: atributos observados (mínimo 10)
+  ---
+  duration_ms: 8.7526
+  type: 'test'
+  ...
+# Subtest: is-chart: eventos emitidos (is-render)
+ok 40 - is-chart: eventos emitidos (is-render)
+  ---
+  duration_ms: 1.1038
+  type: 'test'
+  ...
+# Subtest: is-chart: tiene un slot oculto para <script type="application/json">
+ok 41 - is-chart: tiene un slot oculto para <script type="application/json">
+  ---
+  duration_ms: 0.7357
+  type: 'test'
+  ...
+# Subtest: is-chart: shadow DOM parts
+ok 42 - is-chart: shadow DOM parts
+  ---
+  duration_ms: 0.9357
+  type: 'test'
+  ...
+# Subtest: is-chart: JSON payload — lee <script type="application/json">
+ok 43 - is-chart: JSON payload — lee <script type="application/json">
+  ---
+  duration_ms: 0.7871
+  type: 'test'
+  ...
+# Subtest: is-chart: accesibilidad — usa role o aria-*
+ok 44 - is-chart: accesibilidad — usa role o aria-*
+  ---
+  duration_ms: 0.5675
+  type: 'test'
+  ...
+# Subtest: is-chart: edge cases — null/undefined/empty arrays
+ok 45 - is-chart: edge cases — null/undefined/empty arrays
+  ---
+  duration_ms: 1.0298
+  type: 'test'
+  ...
+# Subtest: is-chart: integración — registrado vía defineElement
+ok 46 - is-chart: integración — registrado vía defineElement
+  ---
+  duration_ms: 1.9647
+  type: 'test'
+  ...
+# Subtest: is-chart: performance — usa ResizeObserver y MutationObserver
+ok 47 - is-chart: performance — usa ResizeObserver y MutationObserver
+  ---
+  duration_ms: 0.7797
+  type: 'test'
+  ...
+# Subtest: is-chart: cleanup — disconnectedCallback desconecta observers
+ok 48 - is-chart: cleanup — disconnectedCallback desconecta observers
+  ---
+  duration_ms: 0.8156
+  type: 'test'
+  ...
+# Subtest: is-chart: adopta CSS
+ok 49 - is-chart: adopta CSS
+  ---
+  duration_ms: 0.5504
+  type: 'test'
+  ...
+# Subtest: is-doughnut-chart: archivo existe
+ok 50 - is-doughnut-chart: archivo existe
+  ---
+  duration_ms: 2.0347
+  type: 'test'
+  ...
+# Subtest: is-doughnut-chart: wrapper registra tag is-doughnut-chart y tipo doughnut
+ok 51 - is-doughnut-chart: wrapper registra tag is-doughnut-chart y tipo doughnut
+  ---
+  duration_ms: 0.9329
+  type: 'test'
+  ...
+# Subtest: is-doughnut-chart: motor monta shadow DOM con svg
+ok 52 - is-doughnut-chart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 0.8007
+  type: 'test'
+  ...
+# Subtest: is-doughnut-chart: observados del motor
+ok 53 - is-doughnut-chart: observados del motor
+  ---
+  duration_ms: 5.5347
+  type: 'test'
+  ...
+# Subtest: is-doughnut-chart: lee JSON embebido
+ok 54 - is-doughnut-chart: lee JSON embebido
+  ---
+  duration_ms: 4.6731
+  type: 'test'
+  ...
+# Subtest: is-doughnut-chart: usa ResizeObserver
+ok 55 - is-doughnut-chart: usa ResizeObserver
+  ---
+  duration_ms: 4.1561
+  type: 'test'
+  ...
+# Subtest: is-doughnut-chart: registrado
+ok 56 - is-doughnut-chart: registrado
+  ---
+  duration_ms: 1.0507
+  type: 'test'
+  ...
+# Subtest: is-doughnut-chart: edge case guards
+ok 57 - is-doughnut-chart: edge case guards
+  ---
+  duration_ms: 0.8248
+  type: 'test'
+  ...
+# Subtest: is-funnel-chart: archivo existe
+ok 58 - is-funnel-chart: archivo existe
+  ---
+  duration_ms: 2.7322
+  type: 'test'
+  ...
+# Subtest: is-funnel-chart: wrapper registra tag is-funnel-chart y tipo funnel
+ok 59 - is-funnel-chart: wrapper registra tag is-funnel-chart y tipo funnel
+  ---
+  duration_ms: 0.9118
+  type: 'test'
+  ...
+# Subtest: is-funnel-chart: motor monta shadow DOM con svg
+ok 60 - is-funnel-chart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 0.8363
+  type: 'test'
+  ...
+# Subtest: is-funnel-chart: observados del motor
+ok 61 - is-funnel-chart: observados del motor
+  ---
+  duration_ms: 7.3344
+  type: 'test'
+  ...
+# Subtest: is-funnel-chart: lee JSON embebido
+ok 62 - is-funnel-chart: lee JSON embebido
+  ---
+  duration_ms: 3.5312
+  type: 'test'
+  ...
+# Subtest: is-funnel-chart: usa ResizeObserver
+ok 63 - is-funnel-chart: usa ResizeObserver
+  ---
+  duration_ms: 0.8069
+  type: 'test'
+  ...
+# Subtest: is-funnel-chart: registrado
+ok 64 - is-funnel-chart: registrado
+  ---
+  duration_ms: 1.0921
+  type: 'test'
+  ...
+# Subtest: is-funnel-chart: edge case guards
+ok 65 - is-funnel-chart: edge case guards
+  ---
+  duration_ms: 0.6289
+  type: 'test'
+  ...
+# Subtest: is-gauge: archivo existe en data/
+ok 66 - is-gauge: archivo existe en data/
+  ---
+  duration_ms: 2.0348
+  type: 'test'
+  ...
+# Subtest: is-gauge: render — shadow con svg
+ok 67 - is-gauge: render — shadow con svg
+  ---
+  duration_ms: 1.3587
+  type: 'test'
+  ...
+# Subtest: is-gauge: observados (value, min, max, label, color)
+ok 68 - is-gauge: observados (value, min, max, label, color)
+  ---
+  duration_ms: 4.8921
+  type: 'test'
+  ...
+# Subtest: is-gauge: eventos emitidos (BUG: docs declaran is-gauge-change pero código no emite)
+ok 69 - is-gauge: eventos emitidos (BUG: docs declaran is-gauge-change pero código no emite)
+  ---
+  duration_ms: 1.3379
+  type: 'test'
+  ...
+# Subtest: is-gauge: data vía setAttribute (no JSON config)
+ok 70 - is-gauge: data vía setAttribute (no JSON config)
+  ---
+  duration_ms: 0.7442
+  type: 'test'
+  ...
+# Subtest: is-gauge: edge cases — value fuera de [min,max]
+ok 71 - is-gauge: edge cases — value fuera de [min,max]
+  ---
+  duration_ms: 0.9612
+  type: 'test'
+  ...
+# Subtest: is-gauge: adopta CSS
+ok 72 - is-gauge: adopta CSS
+  ---
+  duration_ms: 0.7636
+  type: 'test'
+  ...
+# Subtest: is-gauge: registrado
+ok 73 - is-gauge: registrado
+  ---
+  duration_ms: 0.8927
+  type: 'test'
+  ...
+# Subtest: is-heatmap: archivo existe en charts/
+ok 74 - is-heatmap: archivo existe en charts/
+  ---
+  duration_ms: 1.7189
+  type: 'test'
+  ...
+# Subtest: is-line-chart: archivo existe
+ok 75 - is-line-chart: archivo existe
+  ---
+  duration_ms: 1.6002
+  type: 'test'
+  ...
+# Subtest: is-line-chart: wrapper registra tag is-line-chart y tipo line
+ok 76 - is-line-chart: wrapper registra tag is-line-chart y tipo line
+  ---
+  duration_ms: 0.8787
+  type: 'test'
+  ...
+# Subtest: is-line-chart: motor monta shadow DOM
+ok 77 - is-line-chart: motor monta shadow DOM
+  ---
+  duration_ms: 0.7589
+  type: 'test'
+  ...
+# Subtest: is-line-chart: observados heredados contienen type/label/x-label/y-label
+ok 78 - is-line-chart: observados heredados contienen type/label/x-label/y-label
+  ---
+  duration_ms: 5.7008
+  type: 'test'
+  ...
+# Subtest: is-line-chart: lee JSON embebido
+ok 79 - is-line-chart: lee JSON embebido
+  ---
+  duration_ms: 1.7616
+  type: 'test'
+  ...
+# Subtest: is-line-chart: usa ResizeObserver para responsive
+ok 80 - is-line-chart: usa ResizeObserver para responsive
+  ---
+  duration_ms: 1.0007
+  type: 'test'
+  ...
+# Subtest: is-line-chart: registrado como custom element
+ok 81 - is-line-chart: registrado como custom element
+  ---
+  duration_ms: 3.255
+  type: 'test'
+  ...
+# Subtest: is-line-chart: tiene guards contra null en data
+ok 82 - is-line-chart: tiene guards contra null en data
+  ---
+  duration_ms: 0.835
+  type: 'test'
+  ...
+# Subtest: is-pie-chart: archivo existe
+ok 83 - is-pie-chart: archivo existe
+  ---
+  duration_ms: 2.1494
+  type: 'test'
+  ...
+# Subtest: is-pie-chart: wrapper registra tag is-pie-chart y tipo pie
+ok 84 - is-pie-chart: wrapper registra tag is-pie-chart y tipo pie
+  ---
+  duration_ms: 1.5798
+  type: 'test'
+  ...
+# Subtest: is-pie-chart: motor monta shadow DOM con svg
+ok 85 - is-pie-chart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 0.999
+  type: 'test'
+  ...
+# Subtest: is-pie-chart: observados del motor incluyen type/label/legend-position
+ok 86 - is-pie-chart: observados del motor incluyen type/label/legend-position
+  ---
+  duration_ms: 5.9475
+  type: 'test'
+  ...
+# Subtest: is-pie-chart: lee JSON embebido para data.labels + datasets
+ok 87 - is-pie-chart: lee JSON embebido para data.labels + datasets
+  ---
+  duration_ms: 5.7305
+  type: 'test'
+  ...
+# Subtest: is-pie-chart: usa ResizeObserver
+ok 88 - is-pie-chart: usa ResizeObserver
+  ---
+  duration_ms: 0.8177
+  type: 'test'
+  ...
+# Subtest: is-pie-chart: registrado
+ok 89 - is-pie-chart: registrado
+  ---
+  duration_ms: 0.8133
+  type: 'test'
+  ...
+# Subtest: is-pie-chart: edge case guards
+ok 90 - is-pie-chart: edge case guards
+  ---
+  duration_ms: 3.4327
+  type: 'test'
+  ...
+# Subtest: is-polar-area-chart: archivo existe
+ok 91 - is-polar-area-chart: archivo existe
+  ---
+  duration_ms: 1.7876
+  type: 'test'
+  ...
+# Subtest: is-polar-area-chart: wrapper registra tag is-polar-area-chart y tipo polarArea
+ok 92 - is-polar-area-chart: wrapper registra tag is-polar-area-chart y tipo polarArea
+  ---
+  duration_ms: 0.862
+  type: 'test'
+  ...
+# Subtest: is-polar-area-chart: motor monta shadow DOM con svg
+ok 93 - is-polar-area-chart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 0.7292
+  type: 'test'
+  ...
+# Subtest: is-polar-area-chart: observados del motor
+ok 94 - is-polar-area-chart: observados del motor
+  ---
+  duration_ms: 19.3465
+  type: 'test'
+  ...
+# Subtest: is-polar-area-chart: lee JSON embebido
+ok 95 - is-polar-area-chart: lee JSON embebido
+  ---
+  duration_ms: 2.1513
+  type: 'test'
+  ...
+# Subtest: is-polar-area-chart: usa ResizeObserver
+ok 96 - is-polar-area-chart: usa ResizeObserver
+  ---
+  duration_ms: 1.2387
+  type: 'test'
+  ...
+# Subtest: is-polar-area-chart: registrado
+ok 97 - is-polar-area-chart: registrado
+  ---
+  duration_ms: 1.3409
+  type: 'test'
+  ...
+# Subtest: is-polar-area-chart: edge case guards
+ok 98 - is-polar-area-chart: edge case guards
+  ---
+  duration_ms: 1.0622
+  type: 'test'
+  ...
+# Subtest: is-radar-chart: archivo existe
+ok 99 - is-radar-chart: archivo existe
+  ---
+  duration_ms: 5.4649
+  type: 'test'
+  ...
+# Subtest: is-radar-chart: wrapper registra tag is-radar-chart y tipo radar
+ok 100 - is-radar-chart: wrapper registra tag is-radar-chart y tipo radar
+  ---
+  duration_ms: 1.2565
+  type: 'test'
+  ...
+# Subtest: is-radar-chart: motor monta shadow DOM con svg
+ok 101 - is-radar-chart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 0.9383
+  type: 'test'
+  ...
+# Subtest: is-radar-chart: observados del motor
+ok 102 - is-radar-chart: observados del motor
+  ---
+  duration_ms: 6.0133
+  type: 'test'
+  ...
+# Subtest: is-radar-chart: lee JSON embebido
+ok 103 - is-radar-chart: lee JSON embebido
+  ---
+  duration_ms: 1.7357
+  type: 'test'
+  ...
+# Subtest: is-radar-chart: usa ResizeObserver
+ok 104 - is-radar-chart: usa ResizeObserver
+  ---
+  duration_ms: 0.9921
+  type: 'test'
+  ...
+# Subtest: is-radar-chart: registrado
+ok 105 - is-radar-chart: registrado
+  ---
+  duration_ms: 1.6619
+  type: 'test'
+  ...
+# Subtest: is-radar-chart: edge case guards
+ok 106 - is-radar-chart: edge case guards
+  ---
+  duration_ms: 1.1062
+  type: 'test'
+  ...
+# Subtest: is-scatter-chart: archivo existe
+ok 107 - is-scatter-chart: archivo existe
+  ---
+  duration_ms: 3.0546
+  type: 'test'
+  ...
+# Subtest: is-scatter-chart: wrapper registra tag is-scatter-chart y tipo scatter
+ok 108 - is-scatter-chart: wrapper registra tag is-scatter-chart y tipo scatter
+  ---
+  duration_ms: 1.1651
+  type: 'test'
+  ...
+# Subtest: is-scatter-chart: motor monta shadow DOM con svg
+ok 109 - is-scatter-chart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 1.0176
+  type: 'test'
+  ...
+# Subtest: is-scatter-chart: observados del motor incluyen type/label
+ok 110 - is-scatter-chart: observados del motor incluyen type/label
+  ---
+  duration_ms: 7.3966
+  type: 'test'
+  ...
+# Subtest: is-scatter-chart: lee JSON embebido
+ok 111 - is-scatter-chart: lee JSON embebido
+  ---
+  duration_ms: 4.1701
+  type: 'test'
+  ...
+# Subtest: is-scatter-chart: usa ResizeObserver
+ok 112 - is-scatter-chart: usa ResizeObserver
+  ---
+  duration_ms: 0.8591
+  type: 'test'
+  ...
+# Subtest: is-scatter-chart: registrado
+ok 113 - is-scatter-chart: registrado
+  ---
+  duration_ms: 0.9079
+  type: 'test'
+  ...
+# Subtest: is-scatter-chart: edge case guards
+ok 114 - is-scatter-chart: edge case guards
+  ---
+  duration_ms: 0.6708
+  type: 'test'
+  ...
+# Subtest: is-sparkline: archivo existe
+ok 115 - is-sparkline: archivo existe
+  ---
+  duration_ms: 2.2021
+  type: 'test'
+  ...
+# Subtest: is-sparkline: render — shadow con svg
+ok 116 - is-sparkline: render — shadow con svg
+  ---
+  duration_ms: 1.2448
+  type: 'test'
+  ...
+# Subtest: is-sparkline: observados (values, data, type, label, variant, curve, trend)
+ok 117 - is-sparkline: observados (values, data, type, label, variant, curve, trend)
+  ---
+  duration_ms: 3.7618
+  type: 'test'
+  ...
+# Subtest: is-sparkline: edge cases — Array.isArray + Number.isFinite en setter data
+ok 118 - is-sparkline: edge cases — Array.isArray + Number.isFinite en setter data
+  ---
+  duration_ms: 8.5599
+  type: 'test'
+  ...
+# Subtest: is-sparkline: usa ResizeObserver para re-render
+ok 119 - is-sparkline: usa ResizeObserver para re-render
+  ---
+  duration_ms: 0.8232
+  type: 'test'
+  ...
+# Subtest: is-sparkline: cleanup — desconecta ResizeObserver en disconnectedCallback
+ok 120 - is-sparkline: cleanup — desconecta ResizeObserver en disconnectedCallback
+  ---
+  duration_ms: 1.0292
+  type: 'test'
+  ...
+# Subtest: is-sparkline: adopta CSS
+ok 121 - is-sparkline: adopta CSS
+  ---
+  duration_ms: 0.8909
+  type: 'test'
+  ...
+# Subtest: is-sparkline: registrado como custom element
+ok 122 - is-sparkline: registrado como custom element
+  ---
+  duration_ms: 0.8908
+  type: 'test'
+  ...
+# Subtest: is-treemap: archivo existe
+ok 123 - is-treemap: archivo existe
+  ---
+  duration_ms: 2.0237
+  type: 'test'
+  ...
+# Subtest: is-treemap: render — shadow con svg
+ok 124 - is-treemap: render — shadow con svg
+  ---
+  duration_ms: 1.1038
+  type: 'test'
+  ...
+# Subtest: is-treemap: observados (color, open-on-click)
+ok 125 - is-treemap: observados (color, open-on-click)
+  ---
+  duration_ms: 3.2601
+  type: 'test'
+  ...
+# Subtest: is-treemap: eventos (is-render, is-open-viewer)
+ok 126 - is-treemap: eventos (is-render, is-open-viewer)
+  ---
+  duration_ms: 0.967
+  type: 'test'
+  ...
+# Subtest: is-treemap: CSS parts (base, canvas, tooltip)
+ok 127 - is-treemap: CSS parts (base, canvas, tooltip)
+  ---
+  duration_ms: 0.7265
+  type: 'test'
+  ...
+# Subtest: is-treemap: JSON payload — lee <script type="application/json">
+ok 128 - is-treemap: JSON payload — lee <script type="application/json">
+  ---
+  duration_ms: 0.6352
+  type: 'test'
+  ...
+# Subtest: is-treemap: usa MutationObserver para slot JSON reactivo
+ok 129 - is-treemap: usa MutationObserver para slot JSON reactivo
+  ---
+  duration_ms: 7.7938
+  type: 'test'
+  ...
+# Subtest: is-treemap: usa ResizeObserver para responsive
+ok 130 - is-treemap: usa ResizeObserver para responsive
+  ---
+  duration_ms: 1.3605
+  type: 'test'
+  ...
+# Subtest: is-treemap: edge cases — null payload / empty nodes
+ok 131 - is-treemap: edge cases — null payload / empty nodes
+  ---
+  duration_ms: 1.9193
+  type: 'test'
+  ...
+# Subtest: is-treemap: cleanup — desconecta observers + listeners
+ok 132 - is-treemap: cleanup — desconecta observers + listeners
+  ---
+  duration_ms: 3.7475
+  type: 'test'
+  ...
+# Subtest: is-treemap: adopta CSS
+ok 133 - is-treemap: adopta CSS
+  ---
+  duration_ms: 0.7065
+  type: 'test'
+  ...
+# Subtest: is-treemap: registrado
+ok 134 - is-treemap: registrado
+  ---
+  duration_ms: 0.699
+  type: 'test'
+  ...
+# Subtest: is-waterfall-chart: archivo existe
+ok 135 - is-waterfall-chart: archivo existe
+  ---
+  duration_ms: 1.7463
+  type: 'test'
+  ...
+# Subtest: is-waterfall-chart: wrapper registra tag is-waterfall-chart y tipo waterfall
+ok 136 - is-waterfall-chart: wrapper registra tag is-waterfall-chart y tipo waterfall
+  ---
+  duration_ms: 0.8501
+  type: 'test'
+  ...
+# Subtest: is-waterfall-chart: motor monta shadow DOM con svg
+ok 137 - is-waterfall-chart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 0.7411
+  type: 'test'
+  ...
+# Subtest: is-waterfall-chart: observados del motor
+ok 138 - is-waterfall-chart: observados del motor
+  ---
+  duration_ms: 7.1097
+  type: 'test'
+  ...
+# Subtest: is-waterfall-chart: lee JSON embebido
+ok 139 - is-waterfall-chart: lee JSON embebido
+  ---
+  duration_ms: 2.7678
+  type: 'test'
+  ...
+# Subtest: is-waterfall-chart: usa ResizeObserver
+ok 140 - is-waterfall-chart: usa ResizeObserver
+  ---
+  duration_ms: 1.1966
+  type: 'test'
+  ...
+# Subtest: is-waterfall-chart: registrado
+ok 141 - is-waterfall-chart: registrado
+  ---
+  duration_ms: 0.8478
+  type: 'test'
+  ...
+# Subtest: is-waterfall-chart: edge case guards
+ok 142 - is-waterfall-chart: edge case guards
+  ---
+  duration_ms: 0.5864
+  type: 'test'
+  ...
+# Subtest: is-data-grid: archivo existe
+ok 143 - is-data-grid: archivo existe
+  ---
+  duration_ms: 1.8566
+  type: 'test'
+  ...
+# Subtest: is-data-grid: shadow DOM
+ok 144 - is-data-grid: shadow DOM
+  ---
+  duration_ms: 1.6951
+  type: 'test'
+  ...
+# Subtest: is-data-grid: observados (density, pagination, page-size, editable, show-toolbar)
+ok 145 - is-data-grid: observados (density, pagination, page-size, editable, show-toolbar)
+  ---
+  duration_ms: 29.2549
+  type: 'test'
+  ...
+# Subtest: is-data-grid: eventos (is-sort-change, is-page-change, is-select, is-row-click, is-edit-start)
+ok 146 - is-data-grid: eventos (is-sort-change, is-page-change, is-select, is-row-click, is-edit-start)
+  ---
+  duration_ms: 2.0181
+  type: 'test'
+  ...
+# Subtest: is-data-grid: shadow DOM parts (toolbar, viewport, header, body, row, cell, footer)
+ok 147 - is-data-grid: shadow DOM parts (toolbar, viewport, header, body, row, cell, footer)
+  ---
+  duration_ms: 1.5991
+  type: 'test'
+  ...
+# Subtest: is-data-grid: edge cases — guards contra null/undefined
+ok 148 - is-data-grid: edge cases — guards contra null/undefined
+  ---
+  duration_ms: 4.9548
+  type: 'test'
+  ...
+# Subtest: is-data-grid: adopta CSS
+ok 149 - is-data-grid: adopta CSS
+  ---
+  duration_ms: 1.6001
+  type: 'test'
+  ...
+# Subtest: is-data-grid: integra is-button, is-input, is-select, is-option, is-checkbox
+ok 150 - is-data-grid: integra is-button, is-input, is-select, is-option, is-checkbox
+  ---
+  duration_ms: 1.3312
+  type: 'test'
+  ...
+# Subtest: is-data-grid: API — setters `columns` y `rows`
+ok 151 - is-data-grid: API — setters `columns` y `rows`
+  ---
+  duration_ms: 1.4675
+  type: 'test'
+  ...
+# Subtest: is-data-grid: registrado vía defineElement
+ok 152 - is-data-grid: registrado vía defineElement
+  ---
+  duration_ms: 1.5911
+  type: 'test'
+  ...
+# Subtest: is-data-grid: performance — cleanup en disconnectedCallback
+ok 153 - is-data-grid: performance — cleanup en disconnectedCallback
+  ---
+  duration_ms: 1.5579
+  type: 'test'
+  ...
+# Subtest: is-kanban: archivo existe
+ok 154 - is-kanban: archivo existe
+  ---
+  duration_ms: 1.5271
+  type: 'test'
+  ...
+# Subtest: is-kanban: shadow DOM en board y column (card usa class CSS)
+ok 155 - is-kanban: shadow DOM en board y column (card usa class CSS)
+  ---
+  duration_ms: 0.7962
+  type: 'test'
+  ...
+# Subtest: is-kanban: observados (columns, orientation)
+ok 156 - is-kanban: observados (columns, orientation)
+  ---
+  duration_ms: 2.7145
+  type: 'test'
+  ...
+# Subtest: is-kanban: eventos (is-kanban-card-click, is-kanban-move)
+ok 157 - is-kanban: eventos (is-kanban-card-click, is-kanban-move)
+  ---
+  duration_ms: 0.7771
+  type: 'test'
+  ...
+# Subtest: is-kanban: slots (default en board, header-actions en column)
+ok 158 - is-kanban: slots (default en board, header-actions en column)
+  ---
+  duration_ms: 1.0742
+  type: 'test'
+  ...
+# Subtest: is-kanban: CSS parts (base, column, col-head, title, badge, actions)
+ok 159 - is-kanban: CSS parts (base, column, col-head, title, badge, actions)
+  ---
+  duration_ms: 0.7641
+  type: 'test'
+  ...
+# Subtest: is-kanban: edge cases — drag state global (kanban usa null guards)
+ok 160 - is-kanban: edge cases — drag state global (kanban usa null guards)
+  ---
+  duration_ms: 0.6393
+  type: 'test'
+  ...
+# Subtest: is-kanban: adopta CSS
+ok 161 - is-kanban: adopta CSS
+  ---
+  duration_ms: 0.542
+  type: 'test'
+  ...
+# Subtest: is-kanban: registrado — 3 custom elements
+ok 162 - is-kanban: registrado — 3 custom elements
+  ---
+  duration_ms: 0.7834
+  type: 'test'
+  ...
+# Subtest: is-kanban: usa addEventListener (drag events)
+ok 163 - is-kanban: usa addEventListener (drag events)
+  ---
+  duration_ms: 2.0407
+  type: 'test'
+  ...
+# Subtest: is-pivot-table: archivo existe
+ok 164 - is-pivot-table: archivo existe
+  ---
+  duration_ms: 1.5911
+  type: 'test'
+  ...
+# Subtest: is-pivot-table: shadow DOM
+ok 165 - is-pivot-table: shadow DOM
+  ---
+  duration_ms: 1.6728
+  type: 'test'
+  ...
+# Subtest: is-pivot-table: registrado
+ok 166 - is-pivot-table: registrado
+  ---
+  duration_ms: 0.901
+  type: 'test'
+  ...
+# Subtest: is-pivot-table: adopta CSS
+ok 167 - is-pivot-table: adopta CSS
+  ---
+  duration_ms: 0.5006
+  type: 'test'
+  ...
+# Subtest: is-pivot-table: edge cases
+ok 168 - is-pivot-table: edge cases
+  ---
+  duration_ms: 0.6184
+  type: 'test'
+  ...
+# Subtest: is-pivot-table: behavior — preview asigna properties o config
+ok 169 - is-pivot-table: behavior — preview asigna properties o config
+  ---
+  duration_ms: 0.5898
+  type: 'test'
+  ...
+# Subtest: is-pivot-table: usa shadow DOM (no requiere importar otros is-*)
+ok 170 - is-pivot-table: usa shadow DOM (no requiere importar otros is-*)
+  ---
+  duration_ms: 0.6942
+  type: 'test'
+  ...
+# Subtest: is-spreadsheet: archivo existe
+ok 171 - is-spreadsheet: archivo existe
+  ---
+  duration_ms: 1.8942
+  type: 'test'
+  ...
+# Subtest: is-spreadsheet: shadow DOM
+ok 172 - is-spreadsheet: shadow DOM
+  ---
+  duration_ms: 0.6827
+  type: 'test'
+  ...
+# Subtest: is-spreadsheet: registrado
+ok 173 - is-spreadsheet: registrado
+  ---
+  duration_ms: 0.7396
+  type: 'test'
+  ...
+# Subtest: is-spreadsheet: adopta CSS
+ok 174 - is-spreadsheet: adopta CSS
+  ---
+  duration_ms: 0.5313
+  type: 'test'
+  ...
+# Subtest: is-spreadsheet: edge cases
+ok 175 - is-spreadsheet: edge cases
+  ---
+  duration_ms: 0.6141
+  type: 'test'
+  ...
+# Subtest: is-spreadsheet: usa input nativo (HTMLInputElement) para edición
+ok 176 - is-spreadsheet: usa input nativo (HTMLInputElement) para edición
+  ---
+  duration_ms: 0.4597
+  type: 'test'
+  ...
+# Subtest: is-spreadsheet: tiene tabla (o similar) en shadow DOM
+ok 177 - is-spreadsheet: tiene tabla (o similar) en shadow DOM
+  ---
+  duration_ms: 0.5596
+  type: 'test'
+  ...
+# Subtest: is-stat: archivo existe
+ok 178 - is-stat: archivo existe
+  ---
+  duration_ms: 2.0432
+  type: 'test'
+  ...
+# Subtest: is-stat: render — shadow DOM
+ok 179 - is-stat: render — shadow DOM
+  ---
+  duration_ms: 0.9237
+  type: 'test'
+  ...
+# Subtest: is-stat: observados (label, value, helper, trend, trend-direction, icon, color)
+ok 180 - is-stat: observados (label, value, helper, trend, trend-direction, icon, color)
+  ---
+  duration_ms: 3.1735
+  type: 'test'
+  ...
+# Subtest: is-stat: slots (label, value, helper, trend, icon)
+ok 181 - is-stat: slots (label, value, helper, trend, icon)
+  ---
+  duration_ms: 1.1316
+  type: 'test'
+  ...
+# Subtest: is-stat: CSS parts (base, head, label, value, foot, trend, helper, icon)
+ok 182 - is-stat: CSS parts (base, head, label, value, foot, trend, helper, icon)
+  ---
+  duration_ms: 0.711
+  type: 'test'
+  ...
+# Subtest: is-stat: eventos (stat no emite eventos según docs)
+ok 183 - is-stat: eventos (stat no emite eventos según docs)
+  ---
+  duration_ms: 0.8886
+  type: 'test'
+  ...
+# Subtest: is-stat: edge cases — fallback a defaults (stat usa || " ")
+ok 184 - is-stat: edge cases — fallback a defaults (stat usa || " ")
+  ---
+  duration_ms: 0.7361
+  type: 'test'
+  ...
+# Subtest: is-stat: accesibilidad
+ok 185 - is-stat: accesibilidad
+  ---
+  duration_ms: 0.5646
+  type: 'test'
+  ...
+# Subtest: is-stat: adopta CSS
+ok 186 - is-stat: adopta CSS
+  ---
+  duration_ms: 0.8379
+  type: 'test'
+  ...
+# Subtest: is-stat: registrado vía defineElement
+ok 187 - is-stat: registrado vía defineElement
+  ---
+  duration_ms: 1.3529
+  type: 'test'
+  ...
+# Subtest: is-transfer: archivo existe
+ok 188 - is-transfer: archivo existe
+  ---
+  duration_ms: 2.2709
+  type: 'test'
+  ...
+# Subtest: is-transfer: shadow DOM
+ok 189 - is-transfer: shadow DOM
+  ---
+  duration_ms: 0.7667
+  type: 'test'
+  ...
+# Subtest: is-transfer: observados (source-title, target-title, searchable, max-target)
+ok 190 - is-transfer: observados (source-title, target-title, searchable, max-target)
+  ---
+  duration_ms: 4.4546
+  type: 'test'
+  ...
+# Subtest: is-transfer: eventos (is-transfer-change)
+ok 191 - is-transfer: eventos (is-transfer-change)
+  ---
+  duration_ms: 0.9845
+  type: 'test'
+  ...
+# Subtest: is-transfer: CSS parts (base, pane, pane-head, title, count, list, controls)
+ok 192 - is-transfer: CSS parts (base, pane, pane-head, title, count, list, controls)
+  ---
+  duration_ms: 0.8731
+  type: 'test'
+  ...
+# Subtest: is-transfer: accesibilidad — role=listbox, aria-multiselectable
+ok 193 - is-transfer: accesibilidad — role=listbox, aria-multiselectable
+  ---
+  duration_ms: 1.2274
+  type: 'test'
+  ...
+# Subtest: is-transfer: edge cases — fallback a string vacío y ??
+ok 194 - is-transfer: edge cases — fallback a string vacío y ??
+  ---
+  duration_ms: 0.9684
+  type: 'test'
+  ...
+# Subtest: is-transfer: adopta CSS
+ok 195 - is-transfer: adopta CSS
+  ---
+  duration_ms: 1.5392
+  type: 'test'
+  ...
+# Subtest: is-transfer: registrado
+ok 196 - is-transfer: registrado
+  ---
+  duration_ms: 1.697
+  type: 'test'
+  ...
+# Subtest: is-transfer-item: registrado
+ok 197 - is-transfer-item: registrado
+  ---
+  duration_ms: 1.2129
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: archivo existe
+ok 198 - is-class-diagram: archivo existe
+  ---
+  duration_ms: 1.8667
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: shadow DOM con svg
+ok 199 - is-class-diagram: shadow DOM con svg
+  ---
+  duration_ms: 29.1405
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: observados (color)
+ok 200 - is-class-diagram: observados (color)
+  ---
+  duration_ms: 30.0951
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: eventos
+ok 201 - is-class-diagram: eventos
+  ---
+  duration_ms: 17.6564
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: shadow DOM parts
+ok 202 - is-class-diagram: shadow DOM parts
+  ---
+  duration_ms: 14.9917
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: JSON payload
+ok 203 - is-class-diagram: JSON payload
+  ---
+  duration_ms: 27.8018
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: usa MutationObserver
+ok 204 - is-class-diagram: usa MutationObserver
+  ---
+  duration_ms: 16.4763
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: edge cases
+ok 205 - is-class-diagram: edge cases
+  ---
+  duration_ms: 51.6058
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: adopta CSS
+ok 206 - is-class-diagram: adopta CSS
+  ---
+  duration_ms: 12.7371
+  type: 'test'
+  ...
+# Subtest: is-class-diagram: registrado
+ok 207 - is-class-diagram: registrado
+  ---
+  duration_ms: 29.22
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: archivo existe
+ok 208 - is-er-diagram: archivo existe
+  ---
+  duration_ms: 1.8121
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: shadow DOM con svg
+ok 209 - is-er-diagram: shadow DOM con svg
+  ---
+  duration_ms: 28.4502
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: observados (color)
+ok 210 - is-er-diagram: observados (color)
+  ---
+  duration_ms: 36.9011
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: eventos
+ok 211 - is-er-diagram: eventos
+  ---
+  duration_ms: 26.5222
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: shadow DOM parts
+ok 212 - is-er-diagram: shadow DOM parts
+  ---
+  duration_ms: 29.5426
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: JSON payload
+ok 213 - is-er-diagram: JSON payload
+  ---
+  duration_ms: 43.8075
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: usa MutationObserver
+ok 214 - is-er-diagram: usa MutationObserver
+  ---
+  duration_ms: 19.5695
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: edge cases
+ok 215 - is-er-diagram: edge cases
+  ---
+  duration_ms: 38.5556
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: adopta CSS
+ok 216 - is-er-diagram: adopta CSS
+  ---
+  duration_ms: 25.9967
+  type: 'test'
+  ...
+# Subtest: is-er-diagram: registrado
+ok 217 - is-er-diagram: registrado
+  ---
+  duration_ms: 17.3491
+  type: 'test'
+  ...
+# Subtest: is-flowchart: archivo existe
+ok 218 - is-flowchart: archivo existe
+  ---
+  duration_ms: 1.8648
+  type: 'test'
+  ...
+# Subtest: is-flowchart: wrapper registra tag is-flowchart y tipo flowchart
+ok 219 - is-flowchart: wrapper registra tag is-flowchart y tipo flowchart
+  ---
+  duration_ms: 50.5348
+  type: 'test'
+  ...
+# Subtest: is-flowchart: motor monta shadow DOM con svg
+ok 220 - is-flowchart: motor monta shadow DOM con svg
+  ---
+  duration_ms: 47.887
+  type: 'test'
+  ...
+# Subtest: is-flowchart: observados (color, open-on-click, mode, persist, animation)
+ok 221 - is-flowchart: observados (color, open-on-click, mode, persist, animation)
+  ---
+  duration_ms: 3.1583
+  type: 'test'
+  ...
+# Subtest: is-flowchart: lee JSON embebido para data.labels + datasets
+ok 222 - is-flowchart: lee JSON embebido para data.labels + datasets
+  ---
+  duration_ms: 96.0117
+  type: 'test'
+  ...
+# Subtest: is-flowchart: usa MutationObserver para slot JSON
+ok 223 - is-flowchart: usa MutationObserver para slot JSON
+  ---
+  duration_ms: 18.0157
+  type: 'test'
+  ...
+# Subtest: is-flowchart: usa ResizeObserver para responsive
+not ok 224 - is-flowchart: usa ResizeObserver para responsive
+  ---
+  duration_ms: 76.1893
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\diagrams\\flowchart.test.ts:69:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(usaResizeObserver(leerConBase(MOD)))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/diagrams/flowchart.test.ts:70:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: is-flowchart: shadow DOM parts
+ok 225 - is-flowchart: shadow DOM parts
+  ---
+  duration_ms: 26.4402
+  type: 'test'
+  ...
+# Subtest: is-flowchart: edge cases — drag state global (flowchart usa null guards)
+ok 226 - is-flowchart: edge cases — drag state global (flowchart usa null guards)
+  ---
+  duration_ms: 30.263
+  type: 'test'
+  ...
+# Subtest: is-flowchart: adopta CSS
+ok 227 - is-flowchart: adopta CSS
+  ---
+  duration_ms: 22.9478
+  type: 'test'
+  ...
+# Subtest: is-flowchart: registrado — registerDiagramKind
+ok 228 - is-flowchart: registrado — registerDiagramKind
+  ---
+  duration_ms: 15.0736
+  type: 'test'
+  ...
+# Subtest: is-flowchart: cleanup de observers en disconnect
+ok 229 - is-flowchart: cleanup de observers en disconnect
+  ---
+  duration_ms: 15.3317
+  type: 'test'
+  ...
+# Subtest: is-flowchart: JSDoc de cabecera
+ok 230 - is-flowchart: JSDoc de cabecera
+  ---
+  duration_ms: 37.9516
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: archivo existe
+ok 231 - is-sequence-diagram: archivo existe
+  ---
+  duration_ms: 1.8342
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: shadow DOM con svg
+ok 232 - is-sequence-diagram: shadow DOM con svg
+  ---
+  duration_ms: 22.0176
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: observados (color)
+ok 233 - is-sequence-diagram: observados (color)
+  ---
+  duration_ms: 29.4405
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: eventos (is-turtle-state, is-open-viewer, is-toggle-group)
+ok 234 - is-sequence-diagram: eventos (is-turtle-state, is-open-viewer, is-toggle-group)
+  ---
+  duration_ms: 72.5531
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: shadow DOM parts
+ok 235 - is-sequence-diagram: shadow DOM parts
+  ---
+  duration_ms: 13.4089
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: JSON payload
+ok 236 - is-sequence-diagram: JSON payload
+  ---
+  duration_ms: 12.935
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: usa MutationObserver
+ok 237 - is-sequence-diagram: usa MutationObserver
+  ---
+  duration_ms: 12.2822
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: edge cases
+ok 238 - is-sequence-diagram: edge cases
+  ---
+  duration_ms: 10.9683
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: adopta CSS
+ok 239 - is-sequence-diagram: adopta CSS
+  ---
+  duration_ms: 11.2563
+  type: 'test'
+  ...
+# Subtest: is-sequence-diagram: registrado
+ok 240 - is-sequence-diagram: registrado
+  ---
+  duration_ms: 25.2413
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: archivo existe
+ok 241 - is-state-diagram: archivo existe
+  ---
+  duration_ms: 6.5029
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: shadow DOM con svg
+ok 242 - is-state-diagram: shadow DOM con svg
+  ---
+  duration_ms: 28.3537
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: observados (color)
+ok 243 - is-state-diagram: observados (color)
+  ---
+  duration_ms: 28.3656
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: eventos
+ok 244 - is-state-diagram: eventos
+  ---
+  duration_ms: 29.6697
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: shadow DOM parts
+ok 245 - is-state-diagram: shadow DOM parts
+  ---
+  duration_ms: 14.3086
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: JSON payload
+ok 246 - is-state-diagram: JSON payload
+  ---
+  duration_ms: 31.8834
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: usa MutationObserver
+ok 247 - is-state-diagram: usa MutationObserver
+  ---
+  duration_ms: 23.4501
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: edge cases
+ok 248 - is-state-diagram: edge cases
+  ---
+  duration_ms: 43.7273
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: adopta CSS
+ok 249 - is-state-diagram: adopta CSS
+  ---
+  duration_ms: 20.495
+  type: 'test'
+  ...
+# Subtest: is-state-diagram: registrado
+ok 250 - is-state-diagram: registrado
+  ---
+  duration_ms: 15.263
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 251 - 1. módulo existe
+  ---
+  duration_ms: 1.947
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 252 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.4789
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 253 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.5676
+  type: 'test'
+  ...
+# Subtest: 4. OBSERVED incluye color, variant, pill, attention
+ok 254 - 4. OBSERVED incluye color, variant, pill, attention
+  ---
+  duration_ms: 2.6103
+  type: 'test'
+  ...
+# Subtest: 5. color acepta brand | neutral | success | warning | danger
+ok 255 - 5. color acepta brand | neutral | success | warning | danger
+  ---
+  duration_ms: 11.7698
+  type: 'test'
+  ...
+# Subtest: 6. variant acepta accent | filled | outlined | filled-outlined
+ok 256 - 6. variant acepta accent | filled | outlined | filled-outlined
+  ---
+  duration_ms: 6.2783
+  type: 'test'
+  ...
+# Subtest: 7. attention tiene pulse y bounce
+ok 257 - 7. attention tiene pulse y bounce
+  ---
+  duration_ms: 19.7492
+  type: 'test'
+  ...
+# Subtest: 8. expone CSS parts: badge, start, label, end
+ok 258 - 8. expone CSS parts: badge, start, label, end
+  ---
+  duration_ms: 5.2506
+  type: 'test'
+  ...
+# Subtest: 9. slots default + start + end
+ok 259 - 9. slots default + start + end
+  ---
+  duration_ms: 3.9889
+  type: 'test'
+  ...
+# Subtest: 10. custom element registrado
+ok 260 - 10. custom element registrado
+  ---
+  duration_ms: 12.8939
+  type: 'test'
+  ...
+# Subtest: 11. JSDoc de cabecera
+ok 261 - 11. JSDoc de cabecera
+  ---
+  duration_ms: 2.9572
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 262 - 1. módulo existe
+  ---
+  duration_ms: 2.0646
+  type: 'test'
+  ...
+# Subtest: 2. JSON existe y respeta is-preview/v1
+ok 263 - 2. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.6174
+  type: 'test'
+  ...
+# Subtest: 3. CSS hermano existe
+ok 264 - 3. CSS hermano existe
+  ---
+  duration_ms: 0.4712
+  type: 'test'
+  ...
+# Subtest: 4. integra con is-toast-item (light DOM o shadow)
+ok 265 - 4. integra con is-toast-item (light DOM o shadow)
+  ---
+  duration_ms: 5.9769
+  type: 'test'
+  ...
+# Subtest: 5. OBSERVED incluye placement
+ok 266 - 5. OBSERVED incluye placement
+  ---
+  duration_ms: 3.519
+  type: 'test'
+  ...
+# Subtest: 6. placement cubre 6 posiciones (top/bottom × start/center/end)
+ok 267 - 6. placement cubre 6 posiciones (top/bottom × start/center/end)
+  ---
+  duration_ms: 4.3628
+  type: 'test'
+  ...
+# Subtest: 7. método create(message, options?) para crear toast imperativo
+ok 268 - 7. método create(message, options?) para crear toast imperativo
+  ---
+  duration_ms: 10.9399
+  type: 'test'
+  ...
+# Subtest: 8. helpers estáticos: error / success / loading
+ok 269 - 8. helpers estáticos: error / success / loading
+  ---
+  duration_ms: 3.7149
+  type: 'test'
+  ...
+# Subtest: 9. atajo de promesa (IsToast.promise)
+ok 270 - 9. atajo de promesa (IsToast.promise)
+  ---
+  duration_ms: 2.8571
+  type: 'test'
+  ...
+# Subtest: 10. helper estático host() devuelve el singleton del documento
+ok 271 - 10. helper estático host() devuelve el singleton del documento
+  ---
+  duration_ms: 3.075
+  type: 'test'
+  ...
+# Subtest: 11. usa normalizeIntent para mapear colores
+ok 272 - 11. usa normalizeIntent para mapear colores
+  ---
+  duration_ms: 2.4636
+  type: 'test'
+  ...
+# Subtest: 12. custom element registrado y preview.ts existe
+ok 273 - 12. custom element registrado y preview.ts existe
+  ---
+  duration_ms: 3.8534
+  type: 'test'
+  ...
+# Subtest: 13. JSDoc de cabecera
+ok 274 - 13. JSDoc de cabecera
+  ---
+  duration_ms: 2.9265
+  type: 'test'
+  ...
+# Subtest: checkbox: archivo y registro
+ok 275 - checkbox: archivo y registro
+  ---
+  duration_ms: 2.426
+  type: 'test'
+  ...
+# Subtest: checkbox: atributos observados
+ok 276 - checkbox: atributos observados
+  ---
+  duration_ms: 1.8182
+  type: 'test'
+  ...
+# Subtest: checkbox: eventos (is-change con checked + value)
+ok 277 - checkbox: eventos (is-change con checked + value)
+  ---
+  duration_ms: 0.9241
+  type: 'test'
+  ...
+# Subtest: checkbox: slots (default, hint)
+ok 278 - checkbox: slots (default, hint)
+  ---
+  duration_ms: 0.6498
+  type: 'test'
+  ...
+# Subtest: checkbox: shadow DOM parts
+ok 279 - checkbox: shadow DOM parts
+  ---
+  duration_ms: 0.5529
+  type: 'test'
+  ...
+# Subtest: checkbox: color enum (brand|neutral|success|warning|danger)
+ok 280 - checkbox: color enum (brand|neutral|success|warning|danger)
+  ---
+  duration_ms: 0.5046
+  type: 'test'
+  ...
+# Subtest: checkbox: form-associated + indeterminate state
+ok 281 - checkbox: form-associated + indeterminate state
+  ---
+  duration_ms: 0.5129
+  type: 'test'
+  ...
+# Subtest: checkbox: custom states (checked, indeterminate, disabled, readonly, error)
+ok 282 - checkbox: custom states (checked, indeterminate, disabled, readonly, error)
+  ---
+  duration_ms: 0.579
+  type: 'test'
+  ...
+# Subtest: checkbox: preview JSON
+ok 283 - checkbox: preview JSON
+  ---
+  duration_ms: 3.5408
+  type: 'test'
+  ...
+# Subtest: color-picker: archivo y registro
+ok 284 - color-picker: archivo y registro
+  ---
+  duration_ms: 2.3863
+  type: 'test'
+  ...
+# Subtest: color-picker: atributos observados
+ok 285 - color-picker: atributos observados
+  ---
+  duration_ms: 1.1693
+  type: 'test'
+  ...
+# Subtest: color-picker: eventos (is-input, is-change)
+ok 286 - color-picker: eventos (is-input, is-change)
+  ---
+  duration_ms: 0.772
+  type: 'test'
+  ...
+# Subtest: color-picker: value default (\#808080)
+ok 287 - color-picker: value default (\#808080)
+  ---
+  duration_ms: 0.2525
+  type: 'test'
+  ...
+# Subtest: color-picker: usa <dialog> en top layer
+ok 288 - color-picker: usa <dialog> en top layer
+  ---
+  duration_ms: 0.2446
+  type: 'test'
+  ...
+# Subtest: color-picker: input color nativo + is-input hex
+ok 289 - color-picker: input color nativo + is-input hex
+  ---
+  duration_ms: 0.2938
+  type: 'test'
+  ...
+# Subtest: color-picker: shadow DOM parts
+ok 290 - color-picker: shadow DOM parts
+  ---
+  duration_ms: 0.5778
+  type: 'test'
+  ...
+# Subtest: color-picker: trigger accesible (aria-haspopup=dialog)
+ok 291 - color-picker: trigger accesible (aria-haspopup=dialog)
+  ---
+  duration_ms: 0.2229
+  type: 'test'
+  ...
+# Subtest: color-picker: swatches predefinidos (paleta por defecto)
+ok 292 - color-picker: swatches predefinidos (paleta por defecto)
+  ---
+  duration_ms: 0.449
+  type: 'test'
+  ...
+# Subtest: color-picker: eyedropper (EyeDropper API)
+ok 293 - color-picker: eyedropper (EyeDropper API)
+  ---
+  duration_ms: 0.6821
+  type: 'test'
+  ...
+# Subtest: color-picker: form-associated
+ok 294 - color-picker: form-associated
+  ---
+  duration_ms: 0.2595
+  type: 'test'
+  ...
+# Subtest: color-picker: preview JSON
+ok 295 - color-picker: preview JSON
+  ---
+  duration_ms: 0.7689
+  type: 'test'
+  ...
+# Subtest: color-picker: edge case — hex inválido (no rompe)
+ok 296 - color-picker: edge case — hex inválido (no rompe)
+  ---
+  duration_ms: 0.176
+  type: 'test'
+  ...
+# Subtest: combobox: archivo y registro
+ok 297 - combobox: archivo y registro
+  ---
+  duration_ms: 2.525
+  type: 'test'
+  ...
+# Subtest: combobox: atributos observados
+ok 298 - combobox: atributos observados
+  ---
+  duration_ms: 1.1994
+  type: 'test'
+  ...
+# Subtest: combobox: eventos (is-change, is-input, is-show, is-hide)
+ok 299 - combobox: eventos (is-change, is-input, is-show, is-hide)
+  ---
+  duration_ms: 0.7684
+  type: 'test'
+  ...
+# Subtest: combobox: input con role=combobox + aria-autocomplete=list
+ok 300 - combobox: input con role=combobox + aria-autocomplete=list
+  ---
+  duration_ms: 0.5841
+  type: 'test'
+  ...
+# Subtest: combobox: listbox en <dialog> (top layer)
+ok 301 - combobox: listbox en <dialog> (top layer)
+  ---
+  duration_ms: 0.3431
+  type: 'test'
+  ...
+# Subtest: combobox: shadow DOM parts
+ok 302 - combobox: shadow DOM parts
+  ---
+  duration_ms: 0.7215
+  type: 'test'
+  ...
+# Subtest: combobox: filtra options (acepta <is-option> y <option>)
+ok 303 - combobox: filtra options (acepta <is-option> y <option>)
+  ---
+  duration_ms: 0.3151
+  type: 'test'
+  ...
+# Subtest: combobox: form-associated + ElementBase
+ok 304 - combobox: form-associated + ElementBase
+  ---
+  duration_ms: 0.4512
+  type: 'test'
+  ...
+# Subtest: combobox: preview JSON
+ok 305 - combobox: preview JSON
+  ---
+  duration_ms: 1.2873
+  type: 'test'
+  ...
+# Subtest: date-field: archivo y registro
+ok 306 - date-field: archivo y registro
+  ---
+  duration_ms: 2.4234
+  type: 'test'
+  ...
+# Subtest: date-field: atributos vienen del factory (OBSERVED const)
+ok 307 - date-field: atributos vienen del factory (OBSERVED const)
+  ---
+  duration_ms: 1.266
+  type: 'test'
+  ...
+# Subtest: date-field: eventos del factory (is-change, is-input)
+ok 308 - date-field: eventos del factory (is-change, is-input)
+  ---
+  duration_ms: 0.7098
+  type: 'test'
+  ...
+# Subtest: date-field: shadow DOM (open + delegatesFocus para teclado)
+ok 309 - date-field: shadow DOM (open + delegatesFocus para teclado)
+  ---
+  duration_ms: 0.4191
+  type: 'test'
+  ...
+# Subtest: date-field: form-associated + ElementBase-ish (HTMLElement + attachInternals)
+ok 310 - date-field: form-associated + ElementBase-ish (HTMLElement + attachInternals)
+  ---
+  duration_ms: 0.387
+  type: 'test'
+  ...
+# Subtest: date-field: se compone con is-date-picker para el panel (en date-input)
+ok 311 - date-field: se compone con is-date-picker para el panel (en date-input)
+  ---
+  duration_ms: 0.6606
+  type: 'test'
+  ...
+# Subtest: date-field: usa Intl nativo para locale (delegado en date-utils/date-field-core)
+ok 312 - date-field: usa Intl nativo para locale (delegado en date-utils/date-field-core)
+  ---
+  duration_ms: 1.3386
+  type: 'test'
+  ...
+# Subtest: date-field: kind=date en la invocación
+ok 313 - date-field: kind=date en la invocación
+  ---
+  duration_ms: 0.2766
+  type: 'test'
+  ...
+# Subtest: date-field: slots del factory (start, end)
+ok 314 - date-field: slots del factory (start, end)
+  ---
+  duration_ms: 0.4617
+  type: 'test'
+  ...
+# Subtest: date-field: shadow DOM parts del factory
+ok 315 - date-field: shadow DOM parts del factory
+  ---
+  duration_ms: 0.7915
+  type: 'test'
+  ...
+# Subtest: date-field: edge case — value="" (vacío) y min > max
+ok 316 - date-field: edge case — value="" (vacío) y min > max
+  ---
+  duration_ms: 0.2055
+  type: 'test'
+  ...
+# Subtest: date-field: edge case — locale inválido cae al del sistema
+ok 317 - date-field: edge case — locale inválido cae al del sistema
+  ---
+  duration_ms: 0.1542
+  type: 'test'
+  ...
+# Subtest: date-field: preview JSON
+ok 318 - date-field: preview JSON
+  ---
+  duration_ms: 0.8796
+  type: 'test'
+  ...
+# Subtest: date-input: archivo y registro
+ok 319 - date-input: archivo y registro
+  ---
+  duration_ms: 2.5039
+  type: 'test'
+  ...
+# Subtest: date-input: compone field + picker (imports)
+ok 320 - date-input: compone field + picker (imports)
+  ---
+  duration_ms: 0.4008
+  type: 'test'
+  ...
+# Subtest: date-input: atributos del factory picker (placement, action-bar, views, ...)
+ok 321 - date-input: atributos del factory picker (placement, action-bar, views, ...)
+  ---
+  duration_ms: 0.4727
+  type: 'test'
+  ...
+# Subtest: date-input: eventos del factory (is-change, is-show, is-hide)
+ok 322 - date-input: eventos del factory (is-change, is-show, is-hide)
+  ---
+  duration_ms: 0.5594
+  type: 'test'
+  ...
+# Subtest: date-input: usa <dialog> en top layer
+ok 323 - date-input: usa <dialog> en top layer
+  ---
+  duration_ms: 0.2049
+  type: 'test'
+  ...
+# Subtest: date-input: methods públicos (show, hide)
+ok 324 - date-input: methods públicos (show, hide)
+  ---
+  duration_ms: 0.2779
+  type: 'test'
+  ...
+# Subtest: date-input: edge case — close-on-select cierra al elegir
+ok 325 - date-input: edge case — close-on-select cierra al elegir
+  ---
+  duration_ms: 0.3603
+  type: 'test'
+  ...
+# Subtest: date-input: edge case — color=mobile centra en pantalla
+ok 326 - date-input: edge case — color=mobile centra en pantalla
+  ---
+  duration_ms: 0.2665
+  type: 'test'
+  ...
+# Subtest: date-input: preview JSON
+ok 327 - date-input: preview JSON
+  ---
+  duration_ms: 1.0242
+  type: 'test'
+  ...
+# Subtest: date-input: shortcuts (preset buttons en action-bar)
+ok 328 - date-input: shortcuts (preset buttons en action-bar)
+  ---
+  duration_ms: 0.705
+  type: 'test'
+  ...
+# Subtest: date-input: action-bar configurable
+ok 329 - date-input: action-bar configurable
+  ---
+  duration_ms: 0.1961
+  type: 'test'
+  ...
+# Subtest: date-picker: archivo y registro
+ok 330 - date-picker: archivo y registro
+  ---
+  duration_ms: 2.5587
+  type: 'test'
+  ...
+# Subtest: date-picker: atributos observados
+ok 331 - date-picker: atributos observados
+  ---
+  duration_ms: 1.1577
+  type: 'test'
+  ...
+# Subtest: date-picker: eventos (is-change, is-view-change, is-month-change)
+ok 332 - date-picker: eventos (is-change, is-view-change, is-month-change)
+  ---
+  duration_ms: 0.6972
+  type: 'test'
+  ...
+# Subtest: date-picker: mode enum (single|range)
+ok 333 - date-picker: mode enum (single|range)
+  ---
+  duration_ms: 0.3412
+  type: 'test'
+  ...
+# Subtest: date-picker: view enum (day|month|year)
+ok 334 - date-picker: view enum (day|month|year)
+  ---
+  duration_ms: 0.433
+  type: 'test'
+  ...
+# Subtest: date-picker: compone con is-month-calendar e is-year-calendar
+ok 335 - date-picker: compone con is-month-calendar e is-year-calendar
+  ---
+  duration_ms: 0.2884
+  type: 'test'
+  ...
+# Subtest: date-picker: usa Intl.DateTimeFormat para weekday labels
+ok 336 - date-picker: usa Intl.DateTimeFormat para weekday labels
+  ---
+  duration_ms: 0.2214
+  type: 'test'
+  ...
+# Subtest: date-picker: shadow DOM parts
+ok 337 - date-picker: shadow DOM parts
+  ---
+  duration_ms: 0.4988
+  type: 'test'
+  ...
+# Subtest: date-picker: edge case — disabled-dates / disabled-days
+ok 338 - date-picker: edge case — disabled-dates / disabled-days
+  ---
+  duration_ms: 0.4863
+  type: 'test'
+  ...
+# Subtest: date-picker: edge case — value en formato ISO yyyy-mm-dd
+ok 339 - date-picker: edge case — value en formato ISO yyyy-mm-dd
+  ---
+  duration_ms: 0.753
+  type: 'test'
+  ...
+# Subtest: date-picker: keyboard navigation (ArrowLeft/Right/Up/Down)
+ok 340 - date-picker: keyboard navigation (ArrowLeft/Right/Up/Down)
+  ---
+  duration_ms: 0.4389
+  type: 'test'
+  ...
+# Subtest: date-picker: preview JSON
+ok 341 - date-picker: preview JSON
+  ---
+  duration_ms: 0.9525
+  type: 'test'
+  ...
+# Subtest: date-range-input: archivo y registro
+ok 342 - date-range-input: archivo y registro
+  ---
+  duration_ms: 2.0738
+  type: 'test'
+  ...
+# Subtest: date-range-input: atributos start/end/start-label/end-label
+ok 343 - date-range-input: atributos start/end/start-label/end-label
+  ---
+  duration_ms: 0.4591
+  type: 'test'
+  ...
+# Subtest: date-range-input: compone con is-date-range-picker
+ok 344 - date-range-input: compone con is-date-range-picker
+  ---
+  duration_ms: 0.4641
+  type: 'test'
+  ...
+# Subtest: date-range-input: edge case — start > end debe marcar invalid
+ok 345 - date-range-input: edge case — start > end debe marcar invalid
+  ---
+  duration_ms: 0.5655
+  type: 'test'
+  ...
+# Subtest: date-range-input: eventos (is-change, is-show, is-hide)
+ok 346 - date-range-input: eventos (is-change, is-show, is-hide)
+  ---
+  duration_ms: 0.6825
+  type: 'test'
+  ...
+# Subtest: date-range-input: preview JSON
+ok 347 - date-range-input: preview JSON
+  ---
+  duration_ms: 0.9676
+  type: 'test'
+  ...
+# Subtest: date-time-field: archivo y registro
+ok 348 - date-time-field: archivo y registro
+  ---
+  duration_ms: 2.1046
+  type: 'test'
+  ...
+# Subtest: date-time-field: atributos del factory
+ok 349 - date-time-field: atributos del factory
+  ---
+  duration_ms: 0.5794
+  type: 'test'
+  ...
+# Subtest: date-time-field: split date/time del factory
+ok 350 - date-time-field: split date/time del factory
+  ---
+  duration_ms: 0.2238
+  type: 'test'
+  ...
+# Subtest: date-time-field: preview JSON
+ok 351 - date-time-field: preview JSON
+  ---
+  duration_ms: 0.8547
+  type: 'test'
+  ...
+# Subtest: date-time-input: archivo y registro
+ok 352 - date-time-input: archivo y registro
+  ---
+  duration_ms: 2.3633
+  type: 'test'
+  ...
+# Subtest: date-time-input: eventos is-change/is-show/is-hide
+ok 353 - date-time-input: eventos is-change/is-show/is-hide
+  ---
+  duration_ms: 0.4755
+  type: 'test'
+  ...
+# Subtest: date-time-input: preview JSON
+ok 354 - date-time-input: preview JSON
+  ---
+  duration_ms: 0.7568
+  type: 'test'
+  ...
+# Subtest: file-input: archivo y registro
+ok 355 - file-input: archivo y registro
+  ---
+  duration_ms: 2.4527
+  type: 'test'
+  ...
+# Subtest: file-input: atributos observados
+ok 356 - file-input: atributos observados
+  ---
+  duration_ms: 1.2581
+  type: 'test'
+  ...
+# Subtest: file-input: eventos (is-change, change nativo)
+ok 357 - file-input: eventos (is-change, change nativo)
+  ---
+  duration_ms: 0.6728
+  type: 'test'
+  ...
+# Subtest: file-input: slots (label, hint, dropzone)
+ok 358 - file-input: slots (label, hint, dropzone)
+  ---
+  duration_ms: 0.4162
+  type: 'test'
+  ...
+# Subtest: file-input: shadow DOM parts
+not ok 359 - file-input: shadow DOM parts
+  ---
+  duration_ms: 1.0995
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\forms\\file-input.test.ts:49:1'
+  failureType: 'testCodeFailure'
+  error: '<is-file-input> part="file"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/forms/file-input.test.ts:53:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: file-input: dropzone accesible (role=button, tabindex)
+ok 360 - file-input: dropzone accesible (role=button, tabindex)
+  ---
+  duration_ms: 0.3891
+  type: 'test'
+  ...
+# Subtest: file-input: input file nativo con aria-hidden
+ok 361 - file-input: input file nativo con aria-hidden
+  ---
+  duration_ms: 0.2316
+  type: 'test'
+  ...
+# Subtest: file-input: propiedad files (File[])
+ok 362 - file-input: propiedad files (File[])
+  ---
+  duration_ms: 0.2574
+  type: 'test'
+  ...
+# Subtest: file-input: drop event (drag & drop)
+ok 363 - file-input: drop event (drag & drop)
+  ---
+  duration_ms: 0.4094
+  type: 'test'
+  ...
+# Subtest: file-input: custom state dragging
+ok 364 - file-input: custom state dragging
+  ---
+  duration_ms: 0.7358
+  type: 'test'
+  ...
+# Subtest: file-input: preview JSON
+ok 365 - file-input: preview JSON
+  ---
+  duration_ms: 0.8875
+  type: 'test'
+  ...
+# Subtest: full-calendar: archivo y registro
+ok 366 - full-calendar: archivo y registro
+  ---
+  duration_ms: 2.5121
+  type: 'test'
+  ...
+# Subtest: full-calendar: atributos observados
+ok 367 - full-calendar: atributos observados
+  ---
+  duration_ms: 1.2621
+  type: 'test'
+  ...
+# Subtest: full-calendar: view enum (month|week|day)
+ok 368 - full-calendar: view enum (month|week|day)
+  ---
+  duration_ms: 0.4375
+  type: 'test'
+  ...
+# Subtest: full-calendar: eventos (is-day-click, is-event-click, is-view-change)
+ok 369 - full-calendar: eventos (is-day-click, is-event-click, is-view-change)
+  ---
+  duration_ms: 1.0489
+  type: 'test'
+  ...
+# Subtest: full-calendar: lee <script type="application/json"> para eventos
+ok 370 - full-calendar: lee <script type="application/json"> para eventos
+  ---
+  duration_ms: 0.4066
+  type: 'test'
+  ...
+# Subtest: full-calendar: API pública (setDate, setView, prev, next, today)
+ok 371 - full-calendar: API pública (setDate, setView, prev, next, today)
+  ---
+  duration_ms: 0.6552
+  type: 'test'
+  ...
+# Subtest: full-calendar: properties públicas (events)
+ok 372 - full-calendar: properties públicas (events)
+  ---
+  duration_ms: 0.3408
+  type: 'test'
+  ...
+# Subtest: full-calendar: shadow DOM parts
+ok 373 - full-calendar: shadow DOM parts
+  ---
+  duration_ms: 0.5567
+  type: 'test'
+  ...
+# Subtest: full-calendar: edge case — hours-start > hours-end
+ok 374 - full-calendar: edge case — hours-start > hours-end
+  ---
+  duration_ms: 0.5396
+  type: 'test'
+  ...
+# Subtest: full-calendar: preview JSON
+ok 375 - full-calendar: preview JSON
+  ---
+  duration_ms: 1.6386
+  type: 'test'
+  ...
+# Subtest: input: archivo y registro
+ok 376 - input: archivo y registro
+  ---
+  duration_ms: 4.3528
+  type: 'test'
+  ...
+# Subtest: input: atributos observados
+ok 377 - input: atributos observados
+  ---
+  duration_ms: 1.4451
+  type: 'test'
+  ...
+# Subtest: input: eventos emitidos vs documentados
+ok 378 - input: eventos emitidos vs documentados
+  ---
+  duration_ms: 0.7621
+  type: 'test'
+  ...
+# Subtest: input: slots (label, hint, start, end)
+ok 379 - input: slots (label, hint, start, end)
+  ---
+  duration_ms: 0.5699
+  type: 'test'
+  ...
+# Subtest: input: shadow DOM parts
+ok 380 - input: shadow DOM parts
+  ---
+  duration_ms: 0.7608
+  type: 'test'
+  ...
+# Subtest: input: shadow DOM (open + delegatesFocus)
+ok 381 - input: shadow DOM (open + delegatesFocus)
+  ---
+  duration_ms: 0.4223
+  type: 'test'
+  ...
+# Subtest: input: form-associated (ElementBase + attachFormInternals)
+ok 382 - input: form-associated (ElementBase + attachFormInternals)
+  ---
+  duration_ms: 0.6684
+  type: 'test'
+  ...
+# Subtest: input: preview JSON válido
+ok 383 - input: preview JSON válido
+  ---
+  duration_ms: 1.2137
+  type: 'test'
+  ...
+# Subtest: input: documentación coherente (JSDoc cabecera)
+ok 384 - input: documentación coherente (JSDoc cabecera)
+  ---
+  duration_ms: 1.1535
+  type: 'test'
+  ...
+# Subtest: input: type enum (text|email|password|number|search|tel|url|date)
+ok 385 - input: type enum (text|email|password|number|search|tel|url|date)
+  ---
+  duration_ms: 1.4201
+  type: 'test'
+  ...
+# Subtest: input: variant y label-placement
+ok 386 - input: variant y label-placement
+  ---
+  duration_ms: 0.3402
+  type: 'test'
+  ...
+# Subtest: input: custom states (blank, focused, invalid, password-visible)
+ok 387 - input: custom states (blank, focused, invalid, password-visible)
+  ---
+  duration_ms: 0.5451
+  type: 'test'
+  ...
+# Subtest: input: performance — cleanup en disconnected
+ok 388 - input: performance — cleanup en disconnected
+  ---
+  duration_ms: 0.1943
+  type: 'test'
+  ...
+# Subtest: input: edge case — caracteres unicode en el valor
+ok 389 - input: edge case — caracteres unicode en el valor
+  ---
+  duration_ms: 0.1866
+  type: 'test'
+  ...
+# Subtest: input: edge case — customValidity permite mensajes arbitrarios
+ok 390 - input: edge case — customValidity permite mensajes arbitrarios
+  ---
+  duration_ms: 0.1953
+  type: 'test'
+  ...
+# Subtest: input: maxlength se refleja al <input> interno
+ok 391 - input: maxlength se refleja al <input> interno
+  ---
+  duration_ms: 0.1115
+  type: 'test'
+  ...
+# Subtest: input: form-associated + formDisabledCallback
+ok 392 - input: form-associated + formDisabledCallback
+  ---
+  duration_ms: 0.1408
+  type: 'test'
+  ...
+# Subtest: month-calendar: archivo y registro
+ok 393 - month-calendar: archivo y registro
+  ---
+  duration_ms: 5.6715
+  type: 'test'
+  ...
+# Subtest: month-calendar: atributos observados
+ok 394 - month-calendar: atributos observados
+  ---
+  duration_ms: 0.9726
+  type: 'test'
+  ...
+# Subtest: month-calendar: eventos (is-change)
+ok 395 - month-calendar: eventos (is-change)
+  ---
+  duration_ms: 0.5287
+  type: 'test'
+  ...
+# Subtest: month-calendar: base con role=radiogroup
+ok 396 - month-calendar: base con role=radiogroup
+  ---
+  duration_ms: 0.34
+  type: 'test'
+  ...
+# Subtest: month-calendar: month-width enum (short|long)
+ok 397 - month-calendar: month-width enum (short|long)
+  ---
+  duration_ms: 0.2091
+  type: 'test'
+  ...
+# Subtest: month-calendar: usa monthLabels (Intl) de date-utils
+ok 398 - month-calendar: usa monthLabels (Intl) de date-utils
+  ---
+  duration_ms: 0.1673
+  type: 'test'
+  ...
+# Subtest: month-calendar: shadow DOM part=base
+ok 399 - month-calendar: shadow DOM part=base
+  ---
+  duration_ms: 0.4308
+  type: 'test'
+  ...
+# Subtest: month-calendar: preview JSON
+ok 400 - month-calendar: preview JSON
+  ---
+  duration_ms: 0.6362
+  type: 'test'
+  ...
+# Subtest: option: archivo y registro
+ok 401 - option: archivo y registro
+  ---
+  duration_ms: 3.1108
+  type: 'test'
+  ...
+# Subtest: option: atributos observados
+ok 402 - option: atributos observados
+  ---
+  duration_ms: 0.8829
+  type: 'test'
+  ...
+# Subtest: option: shadow DOM (role=option)
+ok 403 - option: shadow DOM (role=option)
+  ---
+  duration_ms: 0.2256
+  type: 'test'
+  ...
+# Subtest: option: shadow DOM parts
+ok 404 - option: shadow DOM parts
+  ---
+  duration_ms: 0.3203
+  type: 'test'
+  ...
+# Subtest: option: slots (default, start, description)
+ok 405 - option: slots (default, start, description)
+  ---
+  duration_ms: 0.3003
+  type: 'test'
+  ...
+# Subtest: option: NO emite eventos (es un presentational component)
+ok 406 - option: NO emite eventos (es un presentational component)
+  ---
+  duration_ms: 0.4258
+  type: 'test'
+  ...
+# Subtest: option: preview JSON
+ok 407 - option: preview JSON
+  ---
+  duration_ms: 0.6871
+  type: 'test'
+  ...
+# Subtest: radio-group: archivo y registro
+ok 408 - radio-group: archivo y registro
+  ---
+  duration_ms: 2.4331
+  type: 'test'
+  ...
+# Subtest: radio-group: atributos observados
+ok 409 - radio-group: atributos observados
+  ---
+  duration_ms: 0.8959
+  type: 'test'
+  ...
+# Subtest: radio-group: eventos (is-change)
+ok 410 - radio-group: eventos (is-change)
+  ---
+  duration_ms: 0.4608
+  type: 'test'
+  ...
+# Subtest: radio-group: keyboard navigation (ArrowUp/Down/Left/Right)
+ok 411 - radio-group: keyboard navigation (ArrowUp/Down/Left/Right)
+  ---
+  duration_ms: 0.4037
+  type: 'test'
+  ...
+# Subtest: radio-group: orientation enum (vertical|horizontal)
+ok 412 - radio-group: orientation enum (vertical|horizontal)
+  ---
+  duration_ms: 0.3016
+  type: 'test'
+  ...
+# Subtest: radio-group: base con role=radiogroup
+ok 413 - radio-group: base con role=radiogroup
+  ---
+  duration_ms: 0.3475
+  type: 'test'
+  ...
+# Subtest: radio-group: shadow DOM parts
+ok 414 - radio-group: shadow DOM parts
+  ---
+  duration_ms: 0.607
+  type: 'test'
+  ...
+# Subtest: radio-group: form-associated
+ok 415 - radio-group: form-associated
+  ---
+  duration_ms: 0.2591
+  type: 'test'
+  ...
+# Subtest: radio-group: preview JSON
+ok 416 - radio-group: preview JSON
+  ---
+  duration_ms: 0.9478
+  type: 'test'
+  ...
+# Subtest: radio: archivo y registro
+ok 417 - radio: archivo y registro
+  ---
+  duration_ms: 1.6326
+  type: 'test'
+  ...
+# Subtest: radio: atributos observados
+ok 418 - radio: atributos observados
+  ---
+  duration_ms: 0.8423
+  type: 'test'
+  ...
+# Subtest: radio: emite is-radio-select para el grupo
+ok 419 - radio: emite is-radio-select para el grupo
+  ---
+  duration_ms: 0.4559
+  type: 'test'
+  ...
+# Subtest: radio: shadow DOM parts
+ok 420 - radio: shadow DOM parts
+  ---
+  duration_ms: 0.4151
+  type: 'test'
+  ...
+# Subtest: radio: slots (default, description)
+ok 421 - radio: slots (default, description)
+  ---
+  duration_ms: 0.2911
+  type: 'test'
+  ...
+# Subtest: radio: NO es form-associated (delegado al grupo)
+ok 422 - radio: NO es form-associated (delegado al grupo)
+  ---
+  duration_ms: 0.2558
+  type: 'test'
+  ...
+# Subtest: radio: extiende ElementBase
+ok 423 - radio: extiende ElementBase
+  ---
+  duration_ms: 0.2783
+  type: 'test'
+  ...
+# Subtest: radio: preview JSON
+ok 424 - radio: preview JSON
+  ---
+  duration_ms: 0.8685
+  type: 'test'
+  ...
+# Subtest: rating: archivo y registro
+ok 425 - rating: archivo y registro
+  ---
+  duration_ms: 3.0109
+  type: 'test'
+  ...
+# Subtest: rating: atributos observados
+ok 426 - rating: atributos observados
+  ---
+  duration_ms: 1.3816
+  type: 'test'
+  ...
+# Subtest: rating: eventos (is-change, is-hover)
+ok 427 - rating: eventos (is-change, is-hover)
+  ---
+  duration_ms: 0.7155
+  type: 'test'
+  ...
+# Subtest: rating: precision enum (1|0.5|0.25|0.1)
+ok 428 - rating: precision enum (1|0.5|0.25|0.1)
+  ---
+  duration_ms: 0.2301
+  type: 'test'
+  ...
+# Subtest: rating: color enum (brand|neutral|success|warning|danger)
+ok 429 - rating: color enum (brand|neutral|success|warning|danger)
+  ---
+  duration_ms: 0.7918
+  type: 'test'
+  ...
+# Subtest: rating: base con role=slider + aria-valuemin
+ok 430 - rating: base con role=slider + aria-valuemin
+  ---
+  duration_ms: 0.3636
+  type: 'test'
+  ...
+# Subtest: rating: shadow DOM parts
+ok 431 - rating: shadow DOM parts
+  ---
+  duration_ms: 0.6133
+  type: 'test'
+  ...
+# Subtest: rating: form-associated
+ok 432 - rating: form-associated
+  ---
+  duration_ms: 0.2868
+  type: 'test'
+  ...
+# Subtest: rating: preview JSON
+ok 433 - rating: preview JSON
+  ---
+  duration_ms: 1.1006
+  type: 'test'
+  ...
+# Subtest: select: archivo y registro
+ok 434 - select: archivo y registro
+  ---
+  duration_ms: 2.4468
+  type: 'test'
+  ...
+# Subtest: select: atributos observados
+ok 435 - select: atributos observados
+  ---
+  duration_ms: 1.5649
+  type: 'test'
+  ...
+# Subtest: select: eventos (is-change, is-show, is-hide)
+ok 436 - select: eventos (is-change, is-show, is-hide)
+  ---
+  duration_ms: 0.787
+  type: 'test'
+  ...
+# Subtest: select: usa <dialog> en top layer (no se pierde por overflow)
+ok 437 - select: usa <dialog> en top layer (no se pierde por overflow)
+  ---
+  duration_ms: 0.387
+  type: 'test'
+  ...
+# Subtest: select: trigger accesible (aria-haspopup, aria-expanded)
+ok 438 - select: trigger accesible (aria-haspopup, aria-expanded)
+  ---
+  duration_ms: 0.4672
+  type: 'test'
+  ...
+# Subtest: select: selection-display enum (tags|text|count)
+ok 439 - select: selection-display enum (tags|text|count)
+  ---
+  duration_ms: 0.3161
+  type: 'test'
+  ...
+# Subtest: select: shadow DOM parts (estáticos en TEMPLATE)
+ok 440 - select: shadow DOM parts (estáticos en TEMPLATE)
+  ---
+  duration_ms: 0.6593
+  type: 'test'
+  ...
+# Subtest: select: form-associated (multiple envía FormData)
+ok 441 - select: form-associated (multiple envía FormData)
+  ---
+  duration_ms: 0.3736
+  type: 'test'
+  ...
+# Subtest: select: keyboard navigation (typeahead)
+ok 442 - select: keyboard navigation (typeahead)
+  ---
+  duration_ms: 0.6744
+  type: 'test'
+  ...
+# Subtest: select: preview JSON
+ok 443 - select: preview JSON
+  ---
+  duration_ms: 1.8114
+  type: 'test'
+  ...
+# Subtest: signature: archivo y registro
+ok 444 - signature: archivo y registro
+  ---
+  duration_ms: 2.1084
+  type: 'test'
+  ...
+# Subtest: signature: atributos observados
+ok 445 - signature: atributos observados
+  ---
+  duration_ms: 0.9187
+  type: 'test'
+  ...
+# Subtest: signature: eventos (is-stroke-end, is-change)
+ok 446 - signature: eventos (is-stroke-end, is-change)
+  ---
+  duration_ms: 0.4549
+  type: 'test'
+  ...
+# Subtest: signature: API pública (toDataURL, toSVG, clear, isEmpty)
+ok 447 - signature: API pública (toDataURL, toSVG, clear, isEmpty)
+  ---
+  duration_ms: 0.4444
+  type: 'test'
+  ...
+# Subtest: signature: usa <canvas> en Shadow DOM
+ok 448 - signature: usa <canvas> en Shadow DOM
+  ---
+  duration_ms: 0.1494
+  type: 'test'
+  ...
+# Subtest: signature: pointer events (touch + mouse)
+ok 449 - signature: pointer events (touch + mouse)
+  ---
+  duration_ms: 0.1101
+  type: 'test'
+  ...
+# Subtest: signature: shadow DOM parts
+ok 450 - signature: shadow DOM parts
+  ---
+  duration_ms: 0.421
+  type: 'test'
+  ...
+# Subtest: signature: hint default
+ok 451 - signature: hint default
+  ---
+  duration_ms: 0.134
+  type: 'test'
+  ...
+# Subtest: signature: preview JSON
+ok 452 - signature: preview JSON
+  ---
+  duration_ms: 1.074
+  type: 'test'
+  ...
+# Subtest: slider: archivo y registro
+ok 453 - slider: archivo y registro
+  ---
+  duration_ms: 2.4372
+  type: 'test'
+  ...
+# Subtest: slider: atributos observados
+ok 454 - slider: atributos observados
+  ---
+  duration_ms: 1.124
+  type: 'test'
+  ...
+# Subtest: slider: eventos (is-input drag/tecla, is-change al confirmar)
+ok 455 - slider: eventos (is-input drag/tecla, is-change al confirmar)
+  ---
+  duration_ms: 0.6572
+  type: 'test'
+  ...
+# Subtest: slider: orientation enum (horizontal|vertical)
+ok 456 - slider: orientation enum (horizontal|vertical)
+  ---
+  duration_ms: 0.3257
+  type: 'test'
+  ...
+# Subtest: slider: track enum (normal|none|inverted)
+ok 457 - slider: track enum (normal|none|inverted)
+  ---
+  duration_ms: 0.7539
+  type: 'test'
+  ...
+# Subtest: slider: value-label enum (off|auto|on)
+ok 458 - slider: value-label enum (off|auto|on)
+  ---
+  duration_ms: 0.2809
+  type: 'test'
+  ...
+# Subtest: slider: rango con 2 thumbs (value="20,37")
+ok 459 - slider: rango con 2 thumbs (value="20,37")
+  ---
+  duration_ms: 0.1483
+  type: 'test'
+  ...
+# Subtest: slider: edge case — valor fuera de rango (clampTo)
+ok 460 - slider: edge case — valor fuera de rango (clampTo)
+  ---
+  duration_ms: 0.1217
+  type: 'test'
+  ...
+# Subtest: slider: edge case — step="null" restringe a los marks
+ok 461 - slider: edge case — step="null" restringe a los marks
+  ---
+  duration_ms: 0.397
+  type: 'test'
+  ...
+# Subtest: slider: thumb con role=slider + aria-valuenow
+ok 462 - slider: thumb con role=slider + aria-valuenow
+  ---
+  duration_ms: 0.6375
+  type: 'test'
+  ...
+# Subtest: slider: shadow DOM parts
+not ok 463 - slider: shadow DOM parts
+  ---
+  duration_ms: 12.7695
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\forms\\slider.test.ts:84:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(parts.includes(p))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/forms/slider.test.ts:88:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: slider: form-associated
+ok 464 - slider: form-associated
+  ---
+  duration_ms: 0.2978
+  type: 'test'
+  ...
+# Subtest: slider: preview JSON
+ok 465 - slider: preview JSON
+  ---
+  duration_ms: 9.2061
+  type: 'test'
+  ...
+# Subtest: switch: archivo y registro
+ok 466 - switch: archivo y registro
+  ---
+  duration_ms: 2.0383
+  type: 'test'
+  ...
+# Subtest: switch: atributos observados
+ok 467 - switch: atributos observados
+  ---
+  duration_ms: 1.0972
+  type: 'test'
+  ...
+# Subtest: switch: eventos (is-change)
+ok 468 - switch: eventos (is-change)
+  ---
+  duration_ms: 0.5673
+  type: 'test'
+  ...
+# Subtest: switch: shadow DOM parts
+ok 469 - switch: shadow DOM parts
+  ---
+  duration_ms: 0.5853
+  type: 'test'
+  ...
+# Subtest: switch: track labels (on-label, off-label)
+ok 470 - switch: track labels (on-label, off-label)
+  ---
+  duration_ms: 0.2019
+  type: 'test'
+  ...
+# Subtest: switch: color enum (brand|neutral|success|warning|danger)
+ok 471 - switch: color enum (brand|neutral|success|warning|danger)
+  ---
+  duration_ms: 0.3407
+  type: 'test'
+  ...
+# Subtest: switch: form-associated
+ok 472 - switch: form-associated
+  ---
+  duration_ms: 0.2613
+  type: 'test'
+  ...
+# Subtest: switch: custom states (checked, disabled, error)
+ok 473 - switch: custom states (checked, disabled, error)
+  ---
+  duration_ms: 0.6632
+  type: 'test'
+  ...
+# Subtest: switch: preview JSON
+ok 474 - switch: preview JSON
+  ---
+  duration_ms: 1.2531
+  type: 'test'
+  ...
+# Subtest: textarea: archivo y registro
+ok 475 - textarea: archivo y registro
+  ---
+  duration_ms: 2.0418
+  type: 'test'
+  ...
+# Subtest: textarea: atributos observados
+ok 476 - textarea: atributos observados
+  ---
+  duration_ms: 1.1965
+  type: 'test'
+  ...
+# Subtest: textarea: eventos (is-input, is-change)
+ok 477 - textarea: eventos (is-input, is-change)
+  ---
+  duration_ms: 0.6665
+  type: 'test'
+  ...
+# Subtest: textarea: slots (label, hint)
+ok 478 - textarea: slots (label, hint)
+  ---
+  duration_ms: 0.4077
+  type: 'test'
+  ...
+# Subtest: textarea: shadow DOM parts
+ok 479 - textarea: shadow DOM parts
+  ---
+  duration_ms: 0.4682
+  type: 'test'
+  ...
+# Subtest: textarea: resize enum (none|vertical|both|auto)
+ok 480 - textarea: resize enum (none|vertical|both|auto)
+  ---
+  duration_ms: 0.4452
+  type: 'test'
+  ...
+# Subtest: textarea: form-associated + autosize
+ok 481 - textarea: form-associated + autosize
+  ---
+  duration_ms: 0.399
+  type: 'test'
+  ...
+# Subtest: textarea: cleanup del ResizeObserver en disconnect
+ok 482 - textarea: cleanup del ResizeObserver en disconnect
+  ---
+  duration_ms: 0.2082
+  type: 'test'
+  ...
+# Subtest: textarea: preview JSON
+ok 483 - textarea: preview JSON
+  ---
+  duration_ms: 1.3946
+  type: 'test'
+  ...
+# Subtest: textarea: edge case — rows default 3
+ok 484 - textarea: edge case — rows default 3
+  ---
+  duration_ms: 0.8254
+  type: 'test'
+  ...
+# Subtest: time-field: archivo y registro
+ok 485 - time-field: archivo y registro
+  ---
+  duration_ms: 3.8941
+  type: 'test'
+  ...
+# Subtest: time-field: atributos del factory (ampm, hour24, seconds)
+ok 486 - time-field: atributos del factory (ampm, hour24, seconds)
+  ---
+  duration_ms: 0.5638
+  type: 'test'
+  ...
+# Subtest: time-field: eventos (is-change, is-input)
+ok 487 - time-field: eventos (is-change, is-input)
+  ---
+  duration_ms: 0.4523
+  type: 'test'
+  ...
+# Subtest: time-field: usa 12h/24h según locale/am-pm
+ok 488 - time-field: usa 12h/24h según locale/am-pm
+  ---
+  duration_ms: 0.3932
+  type: 'test'
+  ...
+# Subtest: time-field: preview JSON
+ok 489 - time-field: preview JSON
+  ---
+  duration_ms: 0.7486
+  type: 'test'
+  ...
+# Subtest: time-input: archivo y registro
+ok 490 - time-input: archivo y registro
+  ---
+  duration_ms: 2.105
+  type: 'test'
+  ...
+# Subtest: time-input: compone time-field + time-clock (o digital-clock)
+ok 491 - time-input: compone time-field + time-clock (o digital-clock)
+  ---
+  duration_ms: 0.4062
+  type: 'test'
+  ...
+# Subtest: time-input: atributos del factory (ampm, hour24, seconds)
+ok 492 - time-input: atributos del factory (ampm, hour24, seconds)
+  ---
+  duration_ms: 0.3172
+  type: 'test'
+  ...
+# Subtest: time-input: preview JSON
+ok 493 - time-input: preview JSON
+  ---
+  duration_ms: 0.95
+  type: 'test'
+  ...
+# Subtest: year-calendar: archivo y registro
+ok 494 - year-calendar: archivo y registro
+  ---
+  duration_ms: 1.9079
+  type: 'test'
+  ...
+# Subtest: year-calendar: atributos observados
+ok 495 - year-calendar: atributos observados
+  ---
+  duration_ms: 1.1229
+  type: 'test'
+  ...
+# Subtest: year-calendar: eventos (is-change)
+ok 496 - year-calendar: eventos (is-change)
+  ---
+  duration_ms: 0.5313
+  type: 'test'
+  ...
+# Subtest: year-calendar: base con role=radiogroup
+ok 497 - year-calendar: base con role=radiogroup
+  ---
+  duration_ms: 0.2354
+  type: 'test'
+  ...
+# Subtest: year-calendar: scrollToSelection() en connect
+ok 498 - year-calendar: scrollToSelection() en connect
+  ---
+  duration_ms: 0.1492
+  type: 'test'
+  ...
+# Subtest: year-calendar: shadow DOM part=base
+ok 499 - year-calendar: shadow DOM part=base
+  ---
+  duration_ms: 0.3018
+  type: 'test'
+  ...
+# Subtest: year-calendar: preview JSON
+ok 500 - year-calendar: preview JSON
+  ---
+  duration_ms: 0.7261
+  type: 'test'
+  ...
+# Subtest: 1. el módulo .ts existe y es legible
+ok 501 - 1. el módulo .ts existe y es legible
+  ---
+  duration_ms: 6.0042
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe (.css)
+ok 502 - 2. CSS hermano existe (.css)
+  ---
+  duration_ms: 0.6523
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe, declara el tag y respeta el esquema is-preview/v1
+ok 503 - 3. JSON existe, declara el tag y respeta el esquema is-preview/v1
+  ---
+  duration_ms: 1.0865
+  type: 'test'
+  ...
+# Subtest: 4. static observedAttributes incluye TODOS los atributos documentados en JSDoc
+ok 504 - 4. static observedAttributes incluye TODOS los atributos documentados en JSDoc
+  ---
+  duration_ms: 0.8198
+  type: 'test'
+  ...
+# Subtest: 5. la clase reacciona a cambios de atributo (override o via ElementBase.onAttributeChanged)
+ok 505 - 5. la clase reacciona a cambios de atributo (override o via ElementBase.onAttributeChanged)
+  ---
+  duration_ms: 1.1182
+  type: 'test'
+  ...
+# Subtest: 6. la clase llama adoptCss() con import.meta.url
+ok 506 - 6. la clase llama adoptCss() con import.meta.url
+  ---
+  duration_ms: 0.5459
+  type: 'test'
+  ...
+# Subtest: 7. Shadow DOM contiene <time part="date">
+ok 507 - 7. Shadow DOM contiene <time part="date">
+  ---
+  duration_ms: 3.2193
+  type: 'test'
+  ...
+# Subtest: 8. la clase está registrada con defineElement o customElements.define
+ok 508 - 8. la clase está registrada con defineElement o customElements.define
+  ---
+  duration_ms: 0.8309
+  type: 'test'
+  ...
+# Subtest: 9. parseLooseDate() exporta la función de parseo laxo
+ok 509 - 9. parseLooseDate() exporta la función de parseo laxo
+  ---
+  duration_ms: 1.9475
+  type: 'test'
+  ...
+# Subtest: 10. parseLooseDate() maneja YYYY-MM-DD como fecha local
+ok 510 - 10. parseLooseDate() maneja YYYY-MM-DD como fecha local
+  ---
+  duration_ms: 1.2042
+  type: 'test'
+  ...
+# Subtest: 11. parseLooseDate() maneja timestamp numérico
+ok 511 - 11. parseLooseDate() maneja timestamp numérico
+  ---
+  duration_ms: 0.5726
+  type: 'test'
+  ...
+# Subtest: 12. parseLooseDate() delega en new Date() para ISO completo
+ok 512 - 12. parseLooseDate() delega en new Date() para ISO completo
+  ---
+  duration_ms: 0.4319
+  type: 'test'
+  ...
+# Subtest: 13. parseLooseDate() devuelve null en entradas inválidas
+ok 513 - 13. parseLooseDate() devuelve null en entradas inválidas
+  ---
+  duration_ms: 0.4026
+  type: 'test'
+  ...
+# Subtest: 14. la clase expone getters/setters para los atributos principales
+ok 514 - 14. la clase expone getters/setters para los atributos principales
+  ---
+  duration_ms: 0.5611
+  type: 'test'
+  ...
+# Subtest: 15. OPT_ATTRS mapea kebab-case a camelCase para Intl.DateTimeFormat
+ok 515 - 15. OPT_ATTRS mapea kebab-case a camelCase para Intl.DateTimeFormat
+  ---
+  duration_ms: 0.4542
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 516 - 1. módulo existe
+  ---
+  duration_ms: 2.284
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 517 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.933
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 518 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 1.0933
+  type: 'test'
+  ...
+# Subtest: 4. delega en createObserverElement("intersection") del factory observer.ts
+ok 519 - 4. delega en createObserverElement("intersection") del factory observer.ts
+  ---
+  duration_ms: 2.5032
+  type: 'test'
+  ...
+# Subtest: 5. importa createObserverElement desde ./observer.js
+ok 520 - 5. importa createObserverElement desde ./observer.js
+  ---
+  duration_ms: 1.0722
+  type: 'test'
+  ...
+# Subtest: 6. está registrado con defineElement
+ok 521 - 6. está registrado con defineElement
+  ---
+  duration_ms: 1.4969
+  type: 'test'
+  ...
+# Subtest: 7. hereda OBSERVED del observer genérico
+ok 522 - 7. hereda OBSERVED del observer genérico
+  ---
+  duration_ms: 0.7162
+  type: 'test'
+  ...
+# Subtest: 8. el JSDoc documenta los atributos intersection (intersect-class, once, root, threshold)
+ok 523 - 8. el JSDoc documenta los atributos intersection (intersect-class, once, root, threshold)
+  ---
+  duration_ms: 0.6344
+  type: 'test'
+  ...
+# Subtest: 9. el JSDoc documenta el evento is-intersect
+ok 524 - 9. el JSDoc documenta el evento is-intersect
+  ---
+  duration_ms: 0.7386
+  type: 'test'
+  ...
+# Subtest: 10. el componente existe en el manifest (catalog.ts)
+ok 525 - 10. el componente existe en el manifest (catalog.ts)
+  ---
+  duration_ms: 2.0219
+  type: 'test'
+  ...
+# Subtest: 11. CSS tiene regla para display:contents o similar (es transparente)
+ok 526 - 11. CSS tiene regla para display:contents o similar (es transparente)
+  ---
+  duration_ms: 0.5641
+  type: 'test'
+  ...
+# Subtest: 12. el JSON declara atributos en el panel reference
+ok 527 - 12. el JSON declara atributos en el panel reference
+  ---
+  duration_ms: 0.818
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 528 - 1. módulo existe
+  ---
+  duration_ms: 7.4817
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 529 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.4174
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 530 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.6224
+  type: 'test'
+  ...
+# Subtest: 4. OBSERVED incluye label, placeholder, filename, value
+ok 531 - 4. OBSERVED incluye label, placeholder, filename, value
+  ---
+  duration_ms: 0.8333
+  type: 'test'
+  ...
+# Subtest: 5. usa textarea (no contenteditable para markdown)
+ok 532 - 5. usa textarea (no contenteditable para markdown)
+  ---
+  duration_ms: 0.8165
+  type: 'test'
+  ...
+# Subtest: 6. expone getter/setter para value
+ok 533 - 6. expone getter/setter para value
+  ---
+  duration_ms: 3.0295
+  type: 'test'
+  ...
+# Subtest: 7. emite eventos de editor (is-persist, is-change, is-delete, is-load)
+ok 534 - 7. emite eventos de editor (is-persist, is-change, is-delete, is-load)
+  ---
+  duration_ms: 0.8486
+  type: 'test'
+  ...
+# Subtest: 8. atributo can-edit bloquea edición
+ok 535 - 8. atributo can-edit bloquea edición
+  ---
+  duration_ms: 0.6189
+  type: 'test'
+  ...
+# Subtest: 9. shadow DOM expone parte label/input/footer
+ok 536 - 9. shadow DOM expone parte label/input/footer
+  ---
+  duration_ms: 0.8828
+  type: 'test'
+  ...
+# Subtest: 10. custom element registrado
+ok 537 - 10. custom element registrado
+  ---
+  duration_ms: 3.278
+  type: 'test'
+  ...
+# Subtest: 11. integra con md-render (preview en vivo)
+ok 538 - 11. integra con md-render (preview en vivo)
+  ---
+  duration_ms: 0.751
+  type: 'test'
+  ...
+# Subtest: 12. el template expone partes CSS para customización externa
+ok 539 - 12. el template expone partes CSS para customización externa
+  ---
+  duration_ms: 0.6162
+  type: 'test'
+  ...
+# Subtest: 1. módulo .ts existe
+ok 540 - 1. módulo .ts existe
+  ---
+  duration_ms: 3.6777
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 541 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.4862
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 542 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.7522
+  type: 'test'
+  ...
+# Subtest: 4. lee markdown desde <script type="text/markdown"> hijo
+ok 543 - 4. lee markdown desde <script type="text/markdown"> hijo
+  ---
+  duration_ms: 0.4513
+  type: 'test'
+  ...
+# Subtest: 5. tiene su propio parser md (md-lite) — no dependencia externa
+ok 544 - 5. tiene su propio parser md (md-lite) — no dependencia externa
+  ---
+  duration_ms: 1.0945
+  type: 'test'
+  ...
+# Subtest: 6. escapa HTML del usuario (anti-XSS)
+ok 545 - 6. escapa HTML del usuario (anti-XSS)
+  ---
+  duration_ms: 0.7135
+  type: 'test'
+  ...
+# Subtest: 7. atributo can-edit cambia a modo editor
+ok 546 - 7. atributo can-edit cambia a modo editor
+  ---
+  duration_ms: 0.5706
+  type: 'test'
+  ...
+# Subtest: 8. shadow DOM tiene parte prose o root
+ok 547 - 8. shadow DOM tiene parte prose o root
+  ---
+  duration_ms: 0.51
+  type: 'test'
+  ...
+# Subtest: 9. custom element registrado
+ok 548 - 9. custom element registrado
+  ---
+  duration_ms: 0.7923
+  type: 'test'
+  ...
+# Subtest: 10. emite is-md-change o is-change al cambiar contenido (modo edit)
+ok 549 - 10. emite is-md-change o is-change al cambiar contenido (modo edit)
+  ---
+  duration_ms: 0.8386
+  type: 'test'
+  ...
+# Subtest: 11. el módulo no depende de marked/remark (vanilla)
+ok 550 - 11. el módulo no depende de marked/remark (vanilla)
+  ---
+  duration_ms: 0.6615
+  type: 'test'
+  ...
+# Subtest: 12. el CSS hermano define estilo para .prose o contenedor
+ok 551 - 12. el CSS hermano define estilo para .prose o contenedor
+  ---
+  duration_ms: 0.4815
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 552 - 1. módulo existe
+  ---
+  duration_ms: 1.8757
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 553 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.5663
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 554 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.8228
+  type: 'test'
+  ...
+# Subtest: 4. delega en createObserverElement("mutation")
+ok 555 - 4. delega en createObserverElement("mutation")
+  ---
+  duration_ms: 0.5156
+  type: 'test'
+  ...
+# Subtest: 5. importa desde ./observer.js
+ok 556 - 5. importa desde ./observer.js
+  ---
+  duration_ms: 0.5026
+  type: 'test'
+  ...
+# Subtest: 6. está registrado con defineElement
+ok 557 - 6. está registrado con defineElement
+  ---
+  duration_ms: 0.5828
+  type: 'test'
+  ...
+# Subtest: 7. hereda OBSERVED del factory (no redefinir)
+ok 558 - 7. hereda OBSERVED del factory (no redefinir)
+  ---
+  duration_ms: 0.4282
+  type: 'test'
+  ...
+# Subtest: 8. JSDoc documenta atributos de mutation (attr, child-list, character-data)
+ok 559 - 8. JSDoc documenta atributos de mutation (attr, child-list, character-data)
+  ---
+  duration_ms: 0.535
+  type: 'test'
+  ...
+# Subtest: 9. JSDoc documenta evento is-mutate
+ok 560 - 9. JSDoc documenta evento is-mutate
+  ---
+  duration_ms: 0.7405
+  type: 'test'
+  ...
+# Subtest: 10. registrado en catalog.ts
+ok 561 - 10. registrado en catalog.ts
+  ---
+  duration_ms: 1.1184
+  type: 'test'
+  ...
+# Subtest: 11. CSS host con display:contents
+ok 562 - 11. CSS host con display:contents
+  ---
+  duration_ms: 0.4652
+  type: 'test'
+  ...
+# Subtest: 12. JSON tiene sección de reference o atributos documentados
+ok 563 - 12. JSON tiene sección de reference o atributos documentados
+  ---
+  duration_ms: 0.5263
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 564 - 1. módulo existe
+  ---
+  duration_ms: 3.1212
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 565 - 2. CSS hermano existe
+  ---
+  duration_ms: 18.0506
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 566 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 1.0116
+  type: 'test'
+  ...
+# Subtest: 4. OBSERVED incluye TODOS los attrs documentados en JSDoc
+ok 567 - 4. OBSERVED incluye TODOS los attrs documentados en JSDoc
+  ---
+  duration_ms: 1.0826
+  type: 'test'
+  ...
+# Subtest: 5. valida type ∈ {intersection, mutation, resize}
+ok 568 - 5. valida type ∈ {intersection, mutation, resize}
+  ---
+  duration_ms: 0.6833
+  type: 'test'
+  ...
+# Subtest: 6. factory createObserverElement exporta y se usa para los 3 wrappers
+ok 569 - 6. factory createObserverElement exporta y se usa para los 3 wrappers
+  ---
+  duration_ms: 1.3238
+  type: 'test'
+  ...
+# Subtest: 7. emite is-intersect / is-mutate / is-resize según type
+ok 570 - 7. emite is-intersect / is-mutate / is-resize según type
+  ---
+  duration_ms: 0.6341
+  type: 'test'
+  ...
+# Subtest: 8. IntersectionObserver se usa cuando type="intersection"
+ok 571 - 8. IntersectionObserver se usa cuando type="intersection"
+  ---
+  duration_ms: 0.4226
+  type: 'test'
+  ...
+# Subtest: 9. MutationObserver se usa cuando type="mutation"
+ok 572 - 9. MutationObserver se usa cuando type="mutation"
+  ---
+  duration_ms: 0.731
+  type: 'test'
+  ...
+# Subtest: 10. ResizeObserver se usa cuando type="resize"
+ok 573 - 10. ResizeObserver se usa cuando type="resize"
+  ---
+  duration_ms: 0.9146
+  type: 'test'
+  ...
+# Subtest: 11. atributo `once` desconecta tras primera intersección
+ok 574 - 11. atributo `once` desconecta tras primera intersección
+  ---
+  duration_ms: 0.5422
+  type: 'test'
+  ...
+# Subtest: 12. atributo `disabled` desconecta sin destruir
+ok 575 - 12. atributo `disabled` desconecta sin destruir
+  ---
+  duration_ms: 0.5865
+  type: 'test'
+  ...
+# Subtest: 13. cleanup en disconnectedCallback (disconnect + null)
+ok 576 - 13. cleanup en disconnectedCallback (disconnect + null)
+  ---
+  duration_ms: 0.477
+  type: 'test'
+  ...
+# Subtest: 14. slot default para los hijos observados
+ok 577 - 14. slot default para los hijos observados
+  ---
+  duration_ms: 0.4343
+  type: 'test'
+  ...
+# Subtest: 15. custom element registrado con defineElement
+ok 578 - 15. custom element registrado con defineElement
+  ---
+  duration_ms: 0.4568
+  type: 'test'
+  ...
+# Subtest: 1. módulo .ts existe y es legible
+ok 579 - 1. módulo .ts existe y es legible
+  ---
+  duration_ms: 18.5682
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 580 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.4927
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 581 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.7973
+  type: 'test'
+  ...
+# Subtest: 4. OBSERVED incluye date, sync, locale, format
+ok 582 - 4. OBSERVED incluye date, sync, locale, format
+  ---
+  duration_ms: 0.7281
+  type: 'test'
+  ...
+# Subtest: 5. el módulo reusa parseLooseDate (no reinventa la rueda)
+ok 583 - 5. el módulo reusa parseLooseDate (no reinventa la rueda)
+  ---
+  duration_ms: 0.6503
+  type: 'test'
+  ...
+# Subtest: 6. usa Intl.RelativeTimeFormat (no es un polyfill manual)
+ok 584 - 6. usa Intl.RelativeTimeFormat (no es un polyfill manual)
+  ---
+  duration_ms: 0.4343
+  type: 'test'
+  ...
+# Subtest: 7. tiene un método render() que actualiza el shadow cuando cambia el texto
+ok 585 - 7. tiene un método render() que actualiza el shadow cuando cambia el texto
+  ---
+  duration_ms: 0.6084
+  type: 'test'
+  ...
+# Subtest: 8. atributo sync activa actualización periódica (setInterval)
+ok 586 - 8. atributo sync activa actualización periódica (setInterval)
+  ---
+  duration_ms: 0.6438
+  type: 'test'
+  ...
+# Subtest: 9. shadow DOM expone parte formateada (part="text" o similar)
+ok 587 - 9. shadow DOM expone parte formateada (part="text" o similar)
+  ---
+  duration_ms: 0.7729
+  type: 'test'
+  ...
+# Subtest: 10. custom element registrado correctamente
+ok 588 - 10. custom element registrado correctamente
+  ---
+  duration_ms: 0.9064
+  type: 'test'
+  ...
+# Subtest: 11. maneja format ∈ {long, short, narrow} (Intl.RelativeTimeFormat)
+ok 589 - 11. maneja format ∈ {long, short, narrow} (Intl.RelativeTimeFormat)
+  ---
+  duration_ms: 0.5068
+  type: 'test'
+  ...
+# Subtest: 12. atributo locale es BCP 47 y delega en resolveLocale
+ok 590 - 12. atributo locale es BCP 47 y delega en resolveLocale
+  ---
+  duration_ms: 0.3478
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 591 - 1. módulo existe
+  ---
+  duration_ms: 1.9407
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 592 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.3901
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 593 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.7417
+  type: 'test'
+  ...
+# Subtest: 4. delega en createObserverElement("resize")
+ok 594 - 4. delega en createObserverElement("resize")
+  ---
+  duration_ms: 0.48
+  type: 'test'
+  ...
+# Subtest: 5. importa desde ./observer.js
+ok 595 - 5. importa desde ./observer.js
+  ---
+  duration_ms: 0.3956
+  type: 'test'
+  ...
+# Subtest: 6. está registrado con defineElement
+ok 596 - 6. está registrado con defineElement
+  ---
+  duration_ms: 0.4861
+  type: 'test'
+  ...
+# Subtest: 7. hereda OBSERVED del factory (no redefinir)
+ok 597 - 7. hereda OBSERVED del factory (no redefinir)
+  ---
+  duration_ms: 0.3542
+  type: 'test'
+  ...
+# Subtest: 8. JSDoc documenta que `type` es opcional (default "resize")
+ok 598 - 8. JSDoc documenta que `type` es opcional (default "resize")
+  ---
+  duration_ms: 0.3964
+  type: 'test'
+  ...
+# Subtest: 9. JSDoc documenta evento is-resize
+ok 599 - 9. JSDoc documenta evento is-resize
+  ---
+  duration_ms: 0.5212
+  type: 'test'
+  ...
+# Subtest: 10. registrado en catalog.ts
+ok 600 - 10. registrado en catalog.ts
+  ---
+  duration_ms: 0.8235
+  type: 'test'
+  ...
+# Subtest: 11. CSS host con display:contents
+ok 601 - 11. CSS host con display:contents
+  ---
+  duration_ms: 0.3266
+  type: 'test'
+  ...
+# Subtest: 12. preview.ts existe (el componente tiene demo)
+ok 602 - 12. preview.ts existe (el componente tiene demo)
+  ---
+  duration_ms: 0.2121
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 603 - 1. módulo existe
+  ---
+  duration_ms: 2.5625
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 604 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.4911
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 605 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.7917
+  type: 'test'
+  ...
+# Subtest: 4. exporta constantes BREAKPOINTS = [xs, sm, md, lg, xl]
+ok 606 - 4. exporta constantes BREAKPOINTS = [xs, sm, md, lg, xl]
+  ---
+  duration_ms: 1.3801
+  type: 'test'
+  ...
+# Subtest: 5. exporta BREAKPOINT_W con anchos numéricos
+ok 607 - 5. exporta BREAKPOINT_W con anchos numéricos
+  ---
+  duration_ms: 0.7612
+  type: 'test'
+  ...
+# Subtest: 6. exporta sizewFor(width) para resolver breakpoint desde ancho
+ok 608 - 6. exporta sizewFor(width) para resolver breakpoint desde ancho
+  ---
+  duration_ms: 3.7461
+  type: 'test'
+  ...
+# Subtest: 7. emite is-breakpoint cuando cambia el sizew
+ok 609 - 7. emite is-breakpoint cuando cambia el sizew
+  ---
+  duration_ms: 0.7252
+  type: 'test'
+  ...
+# Subtest: 8. tiene API de geometría (getWidth/getHeight/rect)
+ok 610 - 8. tiene API de geometría (getWidth/getHeight/rect)
+  ---
+  duration_ms: 0.6985
+  type: 'test'
+  ...
+# Subtest: 9. usa codec json2html/html2json (round-trip)
+ok 611 - 9. usa codec json2html/html2json (round-trip)
+  ---
+  duration_ms: 1.1613
+  type: 'test'
+  ...
+# Subtest: 10. soporta scroll memory opt-in (remember-scroll + storage-key)
+ok 612 - 10. soporta scroll memory opt-in (remember-scroll + storage-key)
+  ---
+  duration_ms: 0.9504
+  type: 'test'
+  ...
+# Subtest: 11. OBSERVED incluye atributos principales
+not ok 613 - 11. OBSERVED incluye atributos principales
+  ---
+  duration_ms: 20.0897
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\isp\\block-layout.test.ts:75:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(m)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: ~
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/isp/block-layout.test.ts:78:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 12. custom element registrado
+ok 614 - 12. custom element registrado
+  ---
+  duration_ms: 0.659
+  type: 'test'
+  ...
+# Subtest: 13. CSS hermano tiene reglas para grid/flex (es un layout)
+ok 615 - 13. CSS hermano tiene reglas para grid/flex (es un layout)
+  ---
+  duration_ms: 0.4941
+  type: 'test'
+  ...
+# Subtest: 14. JSON tiene sección intro con lede (no es solo una tabla)
+ok 616 - 14. JSON tiene sección intro con lede (no es solo una tabla)
+  ---
+  duration_ms: 0.4531
+  type: 'test'
+  ...
+# Subtest: 15. preview.ts existe (componente complejo → tiene behavior)
+ok 617 - 15. preview.ts existe (componente complejo → tiene behavior)
+  ---
+  duration_ms: 0.3494
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 618 - 1. módulo existe
+  ---
+  duration_ms: 34.8648
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 619 - 2. CSS hermano existe
+  ---
+  duration_ms: 2.5003
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 620 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 11.393
+  type: 'test'
+  ...
+# Subtest: 4. OBSERVED incluye level, color, mix, mix-with, size
+not ok 621 - 4. OBSERVED incluye level, color, mix, mix-with, size
+  ---
+  duration_ms: 35.8001
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\isp\\heading.test.ts:34:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'replace')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/isp/heading.test.ts:38:22)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 5. level cubre 1-6
+ok 622 - 5. level cubre 1-6
+  ---
+  duration_ms: 1.4803
+  type: 'test'
+  ...
+# Subtest: 6. color cubre brand | neutral | info | success | warning | danger | current
+not ok 623 - 6. color cubre brand | neutral | info | success | warning | danger | current
+  ---
+  duration_ms: 6.9395
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\isp\\heading.test.ts:51:1'
+  failureType: 'testCodeFailure'
+  error: 'color="brand"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/isp/heading.test.ts:54:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 7. usa isp-color helpers (classifyColor, normalizeMix, syncIspColor)
+ok 624 - 7. usa isp-color helpers (classifyColor, normalizeMix, syncIspColor)
+  ---
+  duration_ms: 1.2281
+  type: 'test'
+  ...
+# Subtest: 8. extiende ElementBase (cambios de atributo se procesan)
+ok 625 - 8. extiende ElementBase (cambios de atributo se procesan)
+  ---
+  duration_ms: 0.4858
+  type: 'test'
+  ...
+# Subtest: 9. custom element registrado
+ok 626 - 9. custom element registrado
+  ---
+  duration_ms: 0.7114
+  type: 'test'
+  ...
+# Subtest: 10. preview.ts existe
+ok 627 - 10. preview.ts existe
+  ---
+  duration_ms: 0.8308
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 628 - 1. módulo existe
+  ---
+  duration_ms: 4.1109
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 629 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.5863
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 630 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.5591
+  type: 'test'
+  ...
+# Subtest: 4. reexporta TreeRowViewAdapter / TreeAdapter / TreeCustomsBase
+ok 631 - 4. reexporta TreeRowViewAdapter / TreeAdapter / TreeCustomsBase
+  ---
+  duration_ms: 0.5109
+  type: 'test'
+  ...
+# Subtest: 5. importa customs base compartido (_shared/tree-view/customs-base)
+ok 632 - 5. importa customs base compartido (_shared/tree-view/customs-base)
+  ---
+  duration_ms: 0.4689
+  type: 'test'
+  ...
+# Subtest: 6. importa paintForest para pintar el árbol
+ok 633 - 6. importa paintForest para pintar el árbol
+  ---
+  duration_ms: 0.4341
+  type: 'test'
+  ...
+# Subtest: 7. custom element registrado
+ok 634 - 7. custom element registrado
+  ---
+  duration_ms: 0.4938
+  type: 'test'
+  ...
+# Subtest: 8. integra con confirm-delete
+not ok 635 - 8. integra con confirm-delete
+  ---
+  duration_ms: 1.2493
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\isp\\tree-view.test.ts:57:1'
+  failureType: 'testCodeFailure'
+  error: 'importa is-confirm-delete'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/isp/tree-view.test.ts:59:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 9. integra con flex-options (panel de opciones)
+not ok 636 - 9. integra con flex-options (panel de opciones)
+  ---
+  duration_ms: 23.4091
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\isp\\tree-view.test.ts:62:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(/from\s*['"][./]+flex-options/.test(src))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/isp/tree-view.test.ts:64:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 10. integra con float-card (ficha del item)
+not ok 637 - 10. integra con float-card (ficha del item)
+  ---
+  duration_ms: 5.6139
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\isp\\tree-view.test.ts:67:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(/from\s*['"][./]+float-card/.test(src))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/isp/tree-view.test.ts:69:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 11. el módulo de customs base existe en _shared/tree-view/
+ok 638 - 11. el módulo de customs base existe en _shared/tree-view/
+  ---
+  duration_ms: 0.5289
+  type: 'test'
+  ...
+# Subtest: 12. emite eventos de cambio / selección
+ok 639 - 12. emite eventos de cambio / selección
+  ---
+  duration_ms: 0.5381
+  type: 'test'
+  ...
+# Subtest: 13. CSS tiene reglas para indentación y chevron del árbol
+not ok 640 - 13. CSS tiene reglas para indentación y chevron del árbol
+  ---
+  duration_ms: 6.8058
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\isp\\tree-view.test.ts:82:1'
+  failureType: 'testCodeFailure'
+  error: 'debe tener indentación por nivel'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/isp/tree-view.test.ts:84:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 14. JSON tiene secciones de demo (no es solo tabla de referencia)
+ok 641 - 14. JSON tiene secciones de demo (no es solo tabla de referencia)
+  ---
+  duration_ms: 1.0539
+  type: 'test'
+  ...
+# Subtest: 15. preview.ts existe (componente complejo → behavior obligatorio)
+ok 642 - 15. preview.ts existe (componente complejo → behavior obligatorio)
+  ---
+  duration_ms: 0.5854
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 643 - 1. módulo existe
+  ---
+  duration_ms: 1.333
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 644 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.2531
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 645 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.5675
+  type: 'test'
+  ...
+# Subtest: 4. delega en ModalBase (focus-trap, Escape, restore)
+ok 646 - 4. delega en ModalBase (focus-trap, Escape, restore)
+  ---
+  duration_ms: 0.3598
+  type: 'test'
+  ...
+# Subtest: 5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-variant
+not ok 647 - 5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-variant
+  ---
+  duration_ms: 52.1313
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\layout\\dialog.test.ts:40:1'
+  failureType: 'testCodeFailure'
+  error: 'OBSERVED debe incluir "open"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/layout/dialog.test.ts:46:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 6. emite is-show, is-after-show, is-hide, is-after-hide
+not ok 648 - 6. emite is-show, is-after-show, is-hide, is-after-hide
+  ---
+  duration_ms: 2.0351
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\layout\\dialog.test.ts:50:1'
+  failureType: 'testCodeFailure'
+  error: 'debe emitir is-show'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/layout/dialog.test.ts:53:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 7. métodos show(), hide(), toggle() públicos
+ok 649 - 7. métodos show(), hide(), toggle() públicos
+  ---
+  duration_ms: 1.5092
+  type: 'test'
+  ...
+# Subtest: 8. backdrop-variant acepta "none" | "basic"
+ok 650 - 8. backdrop-variant acepta "none" | "basic"
+  ---
+  duration_ms: 0.4007
+  type: 'test'
+  ...
+# Subtest: 9. integra con is-icon e is-button (chrome)
+not ok 651 - 9. integra con is-icon e is-button (chrome)
+  ---
+  duration_ms: 8.9431
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\layout\\dialog.test.ts:69:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(/from\s*['"][./]+media\/icon/.test(src))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/layout/dialog.test.ts:71:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 10. soporta slot default y header-actions, footer, label
+ok 652 - 10. soporta slot default y header-actions, footer, label
+  ---
+  duration_ms: 0.7007
+  type: 'test'
+  ...
+# Subtest: 11. atributo open es reflected (getter/setter + toggleAttribute)
+not ok 653 - 11. atributo open es reflected (getter/setter + toggleAttribute)
+  ---
+  duration_ms: 2.4447
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\layout\\dialog.test.ts:82:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(/setBooleanAttr|toggleAttribute/.test(src))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/layout/dialog.test.ts:84:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 12. custom element registrado
+ok 654 - 12. custom element registrado
+  ---
+  duration_ms: 0.4555
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 655 - 1. módulo existe
+  ---
+  duration_ms: 3.5418
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 656 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.5315
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 657 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.7499
+  type: 'test'
+  ...
+# Subtest: 4. OBSERVED incluye atributos principales (position, orientation, primary, collapse, snap)
+not ok 658 - 4. OBSERVED incluye atributos principales (position, orientation, primary, collapse, snap)
+  ---
+  duration_ms: 1.4511
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\layout\\split-panel.test.ts:35:1'
+  failureType: 'testCodeFailure'
+  error: 'OBSERVED debe incluir "storage-key"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/layout/split-panel.test.ts:41:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 5. emite `reposition` con bubbles+composed
+ok 659 - 5. emite `reposition` con bubbles+composed
+  ---
+  duration_ms: 0.663
+  type: 'test'
+  ...
+# Subtest: 6. tiene slots start, end, divider
+ok 660 - 6. tiene slots start, end, divider
+  ---
+  duration_ms: 0.7361
+  type: 'test'
+  ...
+# Subtest: 7. expone CSS parts: start, end, panel, divider
+not ok 661 - 7. expone CSS parts: start, end, panel, divider
+  ---
+  duration_ms: 0.7137
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\layout\\split-panel.test.ts:60:1'
+  failureType: 'testCodeFailure'
+  error: 'debe declarar part="start"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/layout/split-panel.test.ts:63:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 8. usa CSS Grid para layout (horizontal y vertical)
+ok 662 - 8. usa CSS Grid para layout (horizontal y vertical)
+  ---
+  duration_ms: 0.5309
+  type: 'test'
+  ...
+# Subtest: 9. persiste tamaño en localStorage bajo clave storage-key
+ok 663 - 9. persiste tamaño en localStorage bajo clave storage-key
+  ---
+  duration_ms: 0.8264
+  type: 'test'
+  ...
+# Subtest: 10. atributo orientation acepta "horizontal" | "vertical"
+ok 664 - 10. atributo orientation acepta "horizontal" | "vertical"
+  ---
+  duration_ms: 0.9335
+  type: 'test'
+  ...
+# Subtest: 11. atributo primary acepta "start" | "end"
+ok 665 - 11. atributo primary acepta "start" | "end"
+  ---
+  duration_ms: 0.6373
+  type: 'test'
+  ...
+# Subtest: 12. expone custom properties (--divider-width, --divider-hit-area)
+ok 666 - 12. expone custom properties (--divider-width, --divider-hit-area)
+  ---
+  duration_ms: 0.4511
+  type: 'test'
+  ...
+# Subtest: 13. tiene snap points para anclar el divisor
+ok 667 - 13. tiene snap points para anclar el divisor
+  ---
+  duration_ms: 0.5028
+  type: 'test'
+  ...
+# Subtest: 14. custom element registrado
+not ok 668 - 14. custom element registrado
+  ---
+  duration_ms: 15.8528
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\layout\\split-panel.test.ts:100:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(/customElements\.define\s*\(\s*['"]is-split-panel['"]/.test(src))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/layout/split-panel.test.ts:102:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 15. CSS hermano tiene estilos para el divisor (.divider)
+ok 669 - 15. CSS hermano tiene estilos para el divisor (.divider)
+  ---
+  duration_ms: 0.424
+  type: 'test'
+  ...
+# node:internal/modules/run_main:123
+#     triggerUncaughtException(
+#     ^
+# file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/media/media-recorder.test.ts:37
+#   const src = readFileSync(TS, 'utf8');
+#   const m = src.match(/observedAttributes\\s*\\(\\s*\\)\\s*\\{[^}]*return\\s*\\[([^\\]]+)\\]/.exec(src);
+#                                                                                              ^
+#   assert.ok(m, 'debe haber observedAttributes getter');
+# SyntaxError [ERR_INVALID_TYPESCRIPT_SYNTAX]: Expected ',', got ';'
+#     at parseTypeScript (node:internal/modules/typescript:67:36)
+#     at processTypeScriptCode (node:internal/modules/typescript:133:42)
+#     at stripTypeScriptModuleTypes (node:internal/modules/typescript:163:10)
+#     at ModuleLoader.<anonymous> (node:internal/modules/esm/translators:536:16)
+#     at \#translate (node:internal/modules/esm/loader:540:12)
+#     at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:587:27)
+#     at async ModuleJob._link (node:internal/modules/esm/module_job:162:19) {
+#   code: 'ERR_INVALID_TYPESCRIPT_SYNTAX'
+# }
+# Node.js v22.19.0
+# Subtest: src\\utils\\health\\exhaustive\\media\\media-recorder.test.ts
+not ok 69 - src\\utils\\health\\exhaustive\\media\\media-recorder.test.ts
+  ---
+  duration_ms: 460.4588
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\media\\media-recorder.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: 1. módulo existe
+ok 671 - 1. módulo existe
+  ---
+  duration_ms: 2.4708
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 672 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.3275
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 673 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.52
+  type: 'test'
+  ...
+# Subtest: 4. OBSERVED incluye src, poster, muted, loop, autoplay, playsinline
+not ok 674 - 4. OBSERVED incluye src, poster, muted, loop, autoplay, playsinline
+  ---
+  duration_ms: 50.602
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\media\\video.test.ts:34:1'
+  failureType: 'testCodeFailure'
+  error: 'OBSERVED debe incluir "src"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/media/video.test.ts:40:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 5. expone métodos play(), pause(), toggleFullscreen(), togglePictureInPicture()
+ok 675 - 5. expone métodos play(), pause(), toggleFullscreen(), togglePictureInPicture()
+  ---
+  duration_ms: 1.0134
+  type: 'test'
+  ...
+# Subtest: 6. emite is-play, is-pause, is-ended
+ok 676 - 6. emite is-play, is-pause, is-ended
+  ---
+  duration_ms: 0.3651
+  type: 'test'
+  ...
+# Subtest: 7. reenvía eventos nativos del elemento <video>
+ok 677 - 7. reenvía eventos nativos del elemento <video>
+  ---
+  duration_ms: 0.5088
+  type: 'test'
+  ...
+# Subtest: 8. maneja atajos de teclado (espacio, flechas, k, m, f)
+ok 678 - 8. maneja atajos de teclado (espacio, flechas, k, m, f)
+  ---
+  duration_ms: 0.2861
+  type: 'test'
+  ...
+# Subtest: 9. soporta pantalla completa y picture-in-picture
+ok 679 - 9. soporta pantalla completa y picture-in-picture
+  ---
+  duration_ms: 0.4724
+  type: 'test'
+  ...
+# Subtest: 10. expone CSS parts para la chrome
+ok 680 - 10. expone CSS parts para la chrome
+  ---
+  duration_ms: 0.637
+  type: 'test'
+  ...
+# Subtest: 11. custom element registrado
+ok 681 - 11. custom element registrado
+  ---
+  duration_ms: 0.4699
+  type: 'test'
+  ...
+# Subtest: 12. preview.ts existe (componente complejo)
+ok 682 - 12. preview.ts existe (componente complejo)
+  ---
+  duration_ms: 0.22
+  type: 'test'
+  ...
+# Subtest: 1. módulo existe
+ok 683 - 1. módulo existe
+  ---
+  duration_ms: 1.5651
+  type: 'test'
+  ...
+# Subtest: 2. CSS hermano existe
+ok 684 - 2. CSS hermano existe
+  ---
+  duration_ms: 0.2889
+  type: 'test'
+  ...
+# Subtest: 3. JSON existe y respeta is-preview/v1
+ok 685 - 3. JSON existe y respeta is-preview/v1
+  ---
+  duration_ms: 0.527
+  type: 'test'
+  ...
+# Subtest: 4. OBSERVED incluye active, placement, activation
+not ok 686 - 4. OBSERVED incluye active, placement, activation
+  ---
+  duration_ms: 0.6885
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\navigation\\tab-group.test.ts:35:1'
+  failureType: 'testCodeFailure'
+  error: "Invalid regular expression: /OBSERVED = ['active', 'placement', 'activation', 'without-scroll-controls', 'url-key'],'active', 'placement', 'activation', 'without-scroll-controls', 'url-key'/: Range out of order in character class"
+  code: 'ERR_TEST_FAILURE'
+  name: 'SyntaxError'
+  stack: |-
+    String.match (<anonymous>)
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/navigation/tab-group.test.ts:37:17)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 5. placement acepta top | bottom | start | end
+ok 687 - 5. placement acepta top | bottom | start | end
+  ---
+  duration_ms: 0.3433
+  type: 'test'
+  ...
+# Subtest: 6. activation acepta auto | manual
+ok 688 - 6. activation acepta auto | manual
+  ---
+  duration_ms: 0.4209
+  type: 'test'
+  ...
+# Subtest: 7. persiste active en URL via url-key (readUrlNav/writeUrlNav)
+ok 689 - 7. persiste active en URL via url-key (readUrlNav/writeUrlNav)
+  ---
+  duration_ms: 0.2855
+  type: 'test'
+  ...
+# Subtest: 8. emite is-change cuando cambia el active
+not ok 690 - 8. emite is-change cuando cambia el active
+  ---
+  duration_ms: 12.1061
+  type: 'test'
+  location: 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\utils\\health\\exhaustive\\navigation\\tab-group.test.ts:62:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(/['"]is-change['"]/.test(src))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/ContaPyme/Personal/apps/is-webcomponents/src/utils/health/exhaustive/navigation/tab-group.test.ts:64:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: 9. integra con is-tab e is-tab-panel (slots)
+ok 691 - 9. integra con is-tab e is-tab-panel (slots)
+  ---
+  duration_ms: 0.7416
+  type: 'test'
+  ...
+# Subtest: 10. registra <is-tab> y <is-tab-panel>
+ok 692 - 10. registra <is-tab> y <is-tab-panel>
+  ---
+  duration_ms: 0.7336
+  type: 'test'
+  ...
+# Subtest: 11. custom element is-tab-group registrado
+ok 693 - 11. custom element is-tab-group registrado
+  ---
+  duration_ms: 0.4002
+  type: 'test'
+  ...
+# Subtest: 12. JSON tiene demo(s) y reference
+ok 694 - 12. JSON tiene demo(s) y reference
+  ---
+  duration_ms: 0.4098
+  type: 'test'
+  ...
+1..694
+# tests 694
+# suites 0
+# pass 673
+# fail 21
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3537.9051
+

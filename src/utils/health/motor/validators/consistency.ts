@@ -128,11 +128,16 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
   }
   // 1b. Variante: return OBSERVED (constante). Extraemos su literal.
   //     Acepta anotación de tipo de retorno: `(): string[] { return OBSERVED; }`.
-  const obsConstMatch = src.match(/static\s+get\s+observedAttributes\s*\(\s*\)\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?\{[\s\S]*?return\s+([A-Z_$][\w$]*)/);
-  if (obsConstMatch) {
+  //     Como puede haber varias clases con `static get observedAttributes()`
+  //     (e.g. BOARD_OBSERVED, COLUMN_OBSERVED, CARD_OBSERVED en kanban.ts),
+  //     iteramos sobre TODAS las coincidencias para recoger cada `return X`.
+  const obsConstMatches = src.matchAll(/static\s+get\s+observedAttributes\s*\(\s*\)\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?\{[\s\S]*?return\s+([A-Z_$][\w$]*)/g);
+  for (const obsConstMatch of obsConstMatches) {
     const constName = obsConstMatch[1];
-    const cMatch = src.match(new RegExp(`(?:const|let|var)\\s+${constName}\\s*[:=]\\s*\\[([^\\]]*)\\]`));
-    if (cMatch) {
+    // Como el nombre de la const puede repetirse (BOARD_OBSERVED = []), iteramos
+    // todas las declaraciones con ese nombre.
+    const aliasMatches = src.matchAll(new RegExp(`(?:const|let|var)\\s+${constName}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`, 'g'));
+    for (const cMatch of aliasMatches) {
       for (const m of cMatch[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) atributosObservados.add(m[1]);
     }
   }

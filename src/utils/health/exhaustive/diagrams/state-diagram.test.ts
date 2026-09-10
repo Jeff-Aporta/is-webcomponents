@@ -5,9 +5,12 @@
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
+
+
 import {
   exists,
-  read,
+  leerConBase,
+  tieneSvg,
   extraerObservados,
   extraerEventos,
   extraerParts,
@@ -18,8 +21,9 @@ import {
   tieneEdgeCaseGuards,
   adoptaCss,
   estaRegistrado,
-} from '../_helpers.ts';
-
+  cleanupCompleto,
+  tieneJsDoc,
+} from '../_helpers.js';
 const MOD = 'src/components/diagrams/state-diagram.ts';
 
 test('is-state-diagram: archivo existe', () => {
@@ -27,45 +31,45 @@ test('is-state-diagram: archivo existe', () => {
 });
 
 test('is-state-diagram: shadow DOM con svg', () => {
-  const src = read(MOD);
+  const src = leerConBase(MOD);
   assert.ok(tieneShadow(src));
   assert.match(src, /<svg\b/);
 });
 
 test('is-state-diagram: observados (color)', () => {
-  const obs = extraerObservados(read(MOD));
+  const obs = extraerObservados(leerConBase(MOD));
   assert.ok(obs.includes('color'));
 });
 
 test('is-state-diagram: eventos', () => {
-  const evts = extraerEventos(read(MOD));
+  const evts = extraerEventos(leerConBase(MOD));
   assert.ok(evts.length >= 1, `state-diagram eventos: ${evts.join(',')}`);
 });
 
 test('is-state-diagram: shadow DOM parts', () => {
-  const parts = extraerParts(read(MOD));
+  const parts = extraerParts(leerConBase(MOD));
   assert.ok(parts.length >= 1, `state-diagram parts: ${parts.join(',')}`);
 });
 
 test('is-state-diagram: JSON payload', () => {
-  const src = read(MOD);
+  const src = leerConBase(MOD);
   assert.ok(leeJsonScript(src));
   assert.ok(parseaJson(src));
 });
 
 test('is-state-diagram: usa MutationObserver', () => {
-  assert.ok(usaMutationObserver(read(MOD)));
+  assert.ok(usaMutationObserver(leerConBase(MOD)));
 });
 
 test('is-state-diagram: edge cases', () => {
-  assert.ok(tieneEdgeCaseGuards(read(MOD)));
+  assert.ok(tieneEdgeCaseGuards(leerConBase(MOD)));
 });
 
 test('is-state-diagram: adopta CSS', () => {
-  assert.ok(adoptaCss(read(MOD)));
+  assert.ok(adoptaCss(leerConBase(MOD)));
 });
 
 test('is-state-diagram: registrado', () => {
-  const src = read(MOD);
+  const src = leerConBase(MOD);
   assert.match(src, /defineElement\s*\(\s*['"`]is-state-diagram['"`]/);
 });
