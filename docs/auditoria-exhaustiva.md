@@ -2,7 +2,7 @@
 
 **Fecha**: 2026-09-09
 **Estrategia**: admin-is-dsh con WT-strategy multi-agent (4 subagentes en paralelo)
-**Estado**: ✅ WT-ROOT consolidado, listo para merge a `main`
+**Estado**: ✅✅ **WT-ROOT mergeado a `feature/limpieza-docs` (commit `5085fe2210`). Cleanup completo.**
 
 ---
 
