@@ -24,16 +24,38 @@ import {
  */
 
 const ICON_INLINE_W = 16;
-const DEFAULT_HUES = [239, 199, 38, 280, 160, 210];
+const DEFAULT_HUES: number[] = [239, 199, 38, 280, 160, 210];
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
 }
 
-function readNode(raw, i: number) {
+interface MindmapNode {
+  id: string;
+  parent?: string;
+  label: string;
+  icon?: string;
+  hue?: number;
+  description?: string;
+}
+
+export interface MindmapSpec {
+  title?: string;
+  subtitle?: string;
+  layout: 'tree' | 'radial';
+  nodes: MindmapNode[];
+}
+
+interface LeadingIcon {
+  iconId?: string;
+  hue?: number;
+  rest?: string;
+}
+
+function readNode(raw: unknown, i: number): MindmapNode {
   const r = asRecord(raw);
   const rawLabel = String(r.label ?? r.text ?? r.id ?? `Idea ${i + 1}`);
-  const leading = extractLeadingIconToken(rawLabel);
+  const leading = extractLeadingIconToken(rawLabel) as LeadingIcon | null;
   return {
     id: String(r.id ?? `n${i}`),
     parent: r.parent != null ? String(r.parent) : undefined,
@@ -45,7 +67,7 @@ function readNode(raw, i: number) {
 }
 
 /** payload → spec normalizada, o null si no hay nodos. */
-export function mindmapSpecFromPayload(payload) {
+export function mindmapSpecFromPayload(payload: unknown): MindmapSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.mindmap ?? p);
   const rawNodes = src.nodes ?? [];
@@ -59,7 +81,7 @@ export function mindmapSpecFromPayload(payload) {
   };
 }
 
-export function resolveMindmapSpec(payload) {
+export function resolveMindmapSpec(payload: unknown): MindmapSpec | null {
   return mindmapSpecFromPayload(payload);
 }
 
@@ -70,7 +92,7 @@ const BRANCH_H = 32;
 const LEAF_H = 24;
 
 /** Ancho estimado según el texto (descuenta tokens {{icon}}), con un padding acorde al estilo del nivel. */
-function nodeWidth(label, depth, hasIcon) {
+function nodeWidth(label: string, depth: number, hasIcon: boolean): number {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label) + (hasIcon ? 1 : 0);
   const perChar = depth === 0 ? 7.4 : depth === 1 ? 6.8 : 6.2;
@@ -78,24 +100,40 @@ function nodeWidth(label, depth, hasIcon) {
   return Math.round(Math.ceil(plain.length * perChar) + pad + icons * ICON_INLINE_W);
 }
 
-function nodeHeight(depth) {
+function nodeHeight(depth: number): number {
   if (depth === 0) return ROOT_H;
   if (depth === 1) return BRANCH_H;
   return LEAF_H;
 }
 
+/** Forma mínima del árbol que devuelve `buildTree` y usan los helpers locales. */
+interface TreeNode {
+  id: string;
+  depth?: number;
+  label?: string;
+  icon?: string;
+  hue?: number;
+  resolvedHue?: number;
+  description?: string;
+  synthetic?: boolean;
+  children: TreeNode[];
+}
+
 /** Marca `depth` en cada nodo del árbol (mutación local, no vive en tree-layout.js). */
-function annotateDepth(node, depth: number) {
+function annotateDepth(node: TreeNode, depth: number): void {
   node.depth = depth;
   for (const c of node.children) annotateDepth(c, depth + 1);
 }
 
 /** Cada rama hereda el tono de su ancestro de nivel 1, salvo que fije el suyo propio. */
-function annotateHue(node, depth: number, inheritedHue, topCounter) {
-  let hue;
+function annotateHue(node: TreeNode, depth: number, inheritedHue: number | undefined, topCounter: { i: number }): void {
+  let hue: number | undefined;
   if (node.hue != null) hue = node.hue;
   else if (depth === 0) hue = 210;
-  else if (depth === 1) { hue = DEFAULT_HUES[topCounter.i % DEFAULT_HUES.length]; topCounter.i += 1; }
+  else if (depth === 1) {
+    hue = DEFAULT_HUES[topCounter.i % DEFAULT_HUES.length];
+    topCounter.i += 1;
+  }
   else hue = inheritedHue;
   node.resolvedHue = hue;
   for (const c of node.children) annotateHue(c, depth + 1, hue, topCounter);
@@ -111,7 +149,7 @@ function annotateHue(node, depth: number, inheritedHue, topCounter) {
  * El eje que NO cambia queda snapeado a 8px (mismo motivo que edgeAnchor()
  * en node-link-layout.js: si no, el tramo manual de salida sale en diagonal).
  */
-function anchorTowards(node, otherCx, otherCy) {
+function anchorTowards(node: { x: number; y: number; w: number; h: number }, otherCx: number, otherCy: number): { x: number; y: number; side: 'left' | 'right' | 'top' | 'bottom' } {
   const nodeCx = node.x + node.w / 2;
   const nodeCy = node.y + node.h / 2;
   const dx = otherCx - nodeCx;
@@ -125,48 +163,82 @@ function anchorTowards(node, otherCx, otherCy) {
 }
 
 /** Desplaza un punto `d` px hacia afuera del nodo, según el lado del ancla. */
-function stepOutPoint(p, side, d) {
+function stepOutPoint(p: { x: number; y: number }, side: 'left' | 'right' | 'top' | 'bottom', d: number): { x: number; y: number } {
   if (side === 'top') return { x: p.x, y: p.y - d };
   if (side === 'bottom') return { x: p.x, y: p.y + d };
   if (side === 'left') return { x: p.x - d, y: p.y };
   return { x: p.x + d, y: p.y };
 }
 
+interface MindmapLayoutNode {
+  id: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  depth: number;
+  kind: 'root' | 'branch' | 'leaf';
+  label: string;
+  icon?: string;
+  description?: string;
+  hue?: number;
+}
+
+interface MindmapLayoutEdge {
+  id: string;
+  from: string;
+  to: string;
+  path: string;
+  hue?: number;
+  width: number;
+}
+
+export interface MindmapLayout {
+  width: number;
+  height: number;
+  nodes: MindmapLayoutNode[];
+  edges: MindmapLayoutEdge[];
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+}
+
 /**
  * spec → objeto `{width, height, nodes, edges, title, subtitle}` listo para pintar.
  */
-export function computeMindmapLayout(spec) {
+export function computeMindmapLayout(spec: MindmapSpec): MindmapLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const headerH = title ? (subtitle ? 54 : 36) : (subtitle ? 30 : 8);
 
-  const root = buildTree(spec.nodes);
+  const root = buildTree(spec.nodes) as unknown as TreeNode;
   annotateDepth(root, 0);
   annotateHue(root, 0, undefined, { i: 0 });
 
-  const measure = (node) => ({
-    w: nodeWidth(node.label ?? '', node.depth, !!node.icon),
-    h: nodeHeight(node.depth),
+  const measure = (node: TreeNode): { w: number; h: number } => ({
+    w: nodeWidth(node.label ?? '', node.depth ?? 0, !!node.icon),
+    h: nodeHeight(node.depth ?? 0),
   });
 
   const placed = spec.layout === 'tree'
-    ? layoutTree(root, { direction: 'LR', levelGap: 44, siblingGap: 10, measure })
+    ? layoutTree(root, { direction: 'LR', levelGap: 44, siblingGap: 10, measure } as Record<string, unknown>)
     // `radiusStep` es aire ADEMÁS de la media caja de cada anillo, y el layout
     // ya crece solo si dos nodos del mismo anillo se solapan. Con 72 el mapa
     // ocupaba mucha más área de la necesaria.
-    : layoutRadialTree(root, { radiusStep: 40, measure });
+    : layoutRadialTree(root, { radiusStep: 40, measure } as Record<string, unknown>);
 
-  const byId = new Map();
-  (function collect(node) {
+  const byId = new Map<string, TreeNode>();
+  (function collect(node: TreeNode) {
     byId.set(node.id, node);
     for (const c of node.children) collect(c);
   })(root);
 
   const offsetX = 16;
   const offsetY = headerH + 16;
-  const nodes = placed.nodes
-    .filter((n) => n.id !== '__root__' || !byId.get(n.id)?.synthetic)
-    .map((n) => {
+  const nodes: MindmapLayoutNode[] = placed.nodes
+    .filter((n: { id: string }) => n.id !== '__root__' || !byId.get(n.id)?.synthetic)
+    .map((n: { id: string; x: number; y: number; w: number; h: number; depth: number }) => {
       const src = byId.get(n.id);
       const depth = src?.depth ?? n.depth;
       return {
@@ -183,14 +255,14 @@ export function computeMindmapLayout(spec) {
         hue: src?.resolvedHue,
       };
     });
-  const nodeById = new Map(nodes.map((n) => [n.id, n]));
+  const nodeById = new Map<string, MindmapLayoutNode>(nodes.map((n) => [n.id, n]));
 
   // Aristas: A* ortogonal para los dos modos (tree y radial). Antes el modo
   // radial usaba curvas Bézier "orgánicas" — se unifica con el mismo lenguaje
   // visual angular que el resto de los diagramas (flowchart, ER, etc.), con
   // sus nodos ya bloqueados en la rejilla de costos para que las ramas los
   // rodeen en vez de atravesarlos.
-  const edges = [];
+  const edges: MindmapLayoutEdge[] = [];
 
   // Rejilla de costos para A* ortogonal: bloquea cada nodo para que las
   // aristas rodeen su contorno, y deja un pasillo limpio entre filas/anillos.
@@ -208,7 +280,7 @@ export function computeMindmapLayout(spec) {
     }
   }
 
-  (function walkEdges(node) {
+  (function walkEdges(node: TreeNode) {
     for (const c of node.children) {
       if (!node.synthetic) {
         const from = nodeById.get(node.id);
@@ -243,7 +315,7 @@ export function computeMindmapLayout(spec) {
             id: `${node.id}->${c.id}`,
             from: node.id,
             to: c.id,
-            path,
+            path: typeof path === 'string' ? path : '',
             hue: to.hue,
             width: to.depth <= 1 ? 2.4 : Math.max(1.2, 2.4 - (to.depth - 1) * 0.4),
           });
