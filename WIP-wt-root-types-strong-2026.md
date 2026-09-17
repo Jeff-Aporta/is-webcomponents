@@ -89,12 +89,13 @@ Las hojas de T2-T3 entregan:
 
 [2026-09-17T19:50:00Z] — WT-0031 listo. Errores: 7,897 → 7,520 (−377). SHAs: cfdad173c4 (sequence-diagram), f6ed148ff5 (state-diagram), 1e7a0f63cf (flowchart), 91c1895f0b (use-case-diagram), e49ae01c64 (venn-diagram), d764389d5d (gantt), 21bc48b965 (block-diagram). Gates: PASS.
 
-## Gate status (Tanda 3 — WT-0031 cierre)
+[2026-09-17T21:30:00Z] — WT-0032-bis listo. Errores: 7,520 → 7,384 (−136). SHAs: e8d12e4a00 (timeline), 52c86a34f9 (component-diagram), e69404e76d (org-chart), de3b7c2aac (diagram-lightbox), ccdbbf5a47 (lightbox), 99ea7c3911 (test:org-chart demo+tests). Gates: PASS.
+
+## Gate status (Tanda 3 — WT-0032-bis cierre)
 
 - npm run typecheck: ✓ verde
-- strict audit: 7,897 → 7,520 (−377)
-- tests básicos (.test.mjs): 52/52 verde (sequence 9, state 7, flowchart 8, use-case 7, venn 7, gantt 7, block 7)
-- Demos HTML: 7/7 existen en `demos/diagramas/<nombre>/<nombre>.html`
-- Tests exhaustivos: 7/7 existen (`.test.mjs` + `.stagehand.test.mjs`)
-- Archivos en scope: 7/7 con 0 errores strict audit
+- strict audit: 7,520 → 7,384 (−136) — 5/5 archivos del scope con 0 errores strict audit
+- tests básicos (.test.mjs): timeline 8/8, component 10/10, org-chart 6/6 verde
+- Demos HTML: timeline, component, org-chart existen en `demos/diagramas/<nombre>/<nombre>.html`
+- Tests exhaustivos: timeline, component, org-chart tienen `.test.mjs` + `.stagehand.test.mjs`
 - round-trip JSON: ✓ preservado
