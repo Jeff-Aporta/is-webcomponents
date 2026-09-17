@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-org-chart></title>
+<meta name="description" content="Demo de is-org-chart con jerarquía de 4 niveles." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; padding: 20px; min-height: 420px; }
+  is-org-chart { width: 100%; min-height: 400px; }
+  is-org-chart:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/org-chart.min.js');
+  await customElements.whenDefined('is-org-chart');
+
+  const el = document.createElement('is-org-chart');
+  el.payload = [
+    { id: 'ceo', title: 'CEO', name: 'Carolina Méndez', parent: null, hue: 199 },
+    { id: 'cto', title: 'CTO', name: 'Pedro Castaño', parent: 'ceo', hue: 210 },
+    { id: 'cfo', title: 'CFO', name: 'Lucía Herrera', parent: 'ceo', hue: 160 },
+    { id: 'coo', title: 'COO', name: 'Andrés Ríos', parent: 'ceo', hue: 38 },
+    { id: 'be', title: 'Backend Lead', name: 'Sofía Pardo', parent: 'cto', hue: 210 },
+    { id: 'fe', title: 'Frontend Lead', name: 'Diego López', parent: 'cto', hue: 210 },
+    { id: 'qa', title: 'QA Lead', name: 'Marina Vidal', parent: 'cto', hue: 210 },
+    { id: 'acc', title: 'Contable', name: 'Pablo Núñez', parent: 'cfo', hue: 160 },
+    { id: 'ops', title: 'Ops Lead', name: 'Inés Calvo', parent: 'coo', hue: 38 },
+  ];
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.orgChartReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo <code>&lt;is-org-chart&gt;</code></h1>
+  <p>Smoke: monta el organigrama desde un array de nodos con `parent`.</p>
+</header>
+<main><div id="host"></div></main>
+<footer>Componente: <code>is-org-chart</code></footer>
+</body>
+</html>
