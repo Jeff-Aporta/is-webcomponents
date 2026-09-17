@@ -1,12 +1,15 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveComponentSpec, computeComponentLayout, packageShapePath, packageTabWidth, LOLLI_R, HTTP_METHOD_BADGE } from './component-spec.js';
+import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE } from './component-spec.js';
+import type { ComponentLayout } from './component-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.js';
 
 /**
  * <is-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
@@ -31,14 +34,17 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
 const FONT = 'Tahoma,Arial,sans-serif';
 
 /** Arco C. `side` nombra abertura: right abre a +X, bottom abre a +Y (hacia el O). */
-function requiredSocketPath(cx, cy, r, side) {
+function requiredSocketPath(cx: number, cy: number, r: number, side: Lado): string {
   if (side === 'right') return `M${cx},${cy - r} A${r},${r} 0 0 0 ${cx},${cy + r}`;
   if (side === 'left') return `M${cx},${cy - r} A${r},${r} 0 0 1 ${cx},${cy + r}`;
   if (side === 'bottom') return `M${cx - r},${cy} A${r},${r} 0 0 1 ${cx + r},${cy}`;
   return `M${cx - r},${cy} A${r},${r} 0 0 0 ${cx + r},${cy}`;
 }
 
-function stemInner(iface, r) {
+/** Forma del círculo O y la C (conector UML `-(O-`). */
+interface InterfaceStemPoint { x: number; y: number; }
+
+function stemInner(iface: { cx: number; cy: number; side: Lado }, r: number): InterfaceStemPoint {
   switch (iface.side) {
     case 'top':    return { x: iface.cx, y: iface.cy + r };
     case 'bottom': return { x: iface.cx, y: iface.cy - r };
@@ -48,15 +54,21 @@ function stemInner(iface, r) {
   }
 }
 
+/** Paquete con la `titleBox` añadida por `computeComponentLayout`. */
+type LayoutPackage = Paquete & { titleBox?: Caja };
+
+/** Punto anchor de una arista. */
+type AnchorPoint = Punto;
+
 class IsComponentDiagram extends DiagramElementBase {
   static get observedAttributes(): string[] {
     return [...DiagramElementBase.observedAttributes, 'min-gap'];
   }
 
   /** Capa superior con las etiquetas de arista (ver #buildEdges). */
-  #etiquetasEdges = null;
+  #etiquetasEdges: SVGGElement | null = null;
 
-  #theme = null;
+  #theme: DiagramTheme | null = null;
 
   constructor() {
     super();
@@ -64,29 +76,29 @@ class IsComponentDiagram extends DiagramElementBase {
     adoptCss(this.shadowRoot!, import.meta.url);
   }
 
-  onDiagramConnected() {
+  onDiagramConnected(): void {
     this.wrap.addEventListener('mousemove', this.#onMouseMove);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.addEventListener('click', this.#onClick);
   }
 
-  onDiagramDisconnected() {
+  onDiagramDisconnected(): void {
     this.wrap.removeEventListener('mousemove', this.#onMouseMove);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  get minGap() {
+  get minGap(): number | null {
     const n = Number(this.getAttribute('min-gap'));
     return Number.isFinite(n) && n > 0 ? n : null;
   }
 
-  set minGap(v) {
+  set minGap(v: number | string | null | undefined) {
     if (v == null || v === '') this.removeAttribute('min-gap');
     else this.setAttribute('min-gap', String(v));
   }
 
-  renderDiagram() {
+  renderDiagram(): void {
     const spec = resolveComponentSpec(this.payload ?? {}, { minGap: this.minGap });
     this.spec = spec;
     if (!spec) {
@@ -100,13 +112,13 @@ class IsComponentDiagram extends DiagramElementBase {
     this.#theme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeComponentLayout(spec);
+    const layout: ComponentLayout = computeComponentLayout(spec);
     this.layout = layout;
     this.#buildSvg(layout, this.#theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: ComponentLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -138,13 +150,14 @@ class IsComponentDiagram extends DiagramElementBase {
     this.#etiquetasEdges = svgEl('g', { class: 'cd-edge-labels' });
     this.#buildEdges(layout, theme);
     this.#buildInterfaces(layout, theme);
-    this.svg.appendChild(this.#etiquetasEdges);
+    if (this.#etiquetasEdges) this.svg.appendChild(this.#etiquetasEdges);
 
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildPackages(layout, theme) {
-    for (const p of layout.packages) {
+  #buildPackages(layout: ComponentLayout, theme: DiagramTheme): void {
+    for (const rawP of layout.packages) {
+      const p = rawP as LayoutPackage;
       const g = svgEl('g', { class: 'cd-pkg' });
       const color = (p.hue != null && tkHueToHex(p.hue)) || theme.accent;
       // Mismo lenguaje que el cajón de grupo del `<is-er-diagram>`: el tono
@@ -163,7 +176,7 @@ class IsComponentDiagram extends DiagramElementBase {
       // color del grupo: es lo que ata el paquete con sus componentes.
       // Título del grupo: caja sólida para que las aristas no lo tapen.
       const tb = p.titleBox;
-      const label = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
+      const label = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : (p.name ?? '');
       if (tb) {
         g.appendChild(svgEl('rect', {
           x: tb.x, y: tb.y, width: tb.w, height: tb.h, rx: 4,
@@ -180,17 +193,25 @@ class IsComponentDiagram extends DiagramElementBase {
         'letter-spacing': '0.04em',
         'font-family': FONT,
       });
-      t.textContent = label;
+      t.textContent = label || '';
       g.appendChild(t);
       this.svg.appendChild(g);
     }
   }
 
-  #buildEdges(layout, theme) {
+  #buildEdges(layout: ComponentLayout, theme: DiagramTheme): void {
     // Varias aristas que salen del mismo componente tienen su punto medio
     // casi en la misma banda. Las chips se colocan en el layout como actores
     // (`placeEdgeActors`): no se pisan entre sí ni a las cajas.
-    for (const e of layout.edges) {
+    for (const rawE of layout.edges) {
+      // LayoutEdge tipa `labelX/labelY/labelW` como `unknown` por el index sig
+      // de `Arista` (`[extra: string]: unknown`). Cast a la forma real del
+      // layout para poder leer los offsets del chip de etiqueta.
+      const e = rawE as typeof rawE & {
+        labelX?: number;
+        labelY?: number;
+        labelW?: number;
+      };
       if (!e.path) continue;
       const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'cd-edge' });
@@ -204,12 +225,20 @@ class IsComponentDiagram extends DiagramElementBase {
       });
       g.appendChild(path);
       if (!ballSocket) {
-        g.appendChild(svgArrowHead({
+        // `svgArrowHead` se tipa con `className?: string | null = null`; la firma
+        // heredada lo trata como `null | undefined` cuando el caller pasa string.
+        // Casteamos la firma para mantener la API tipada y añadimos la clase al
+        // resultado (mismo patrón que `block-diagram.ts`).
+        const head = (svgArrowHead as unknown as (opts: {
+          d: string; tip: { x: number; y: number }; color: string;
+          len?: number; halfWidth?: number;
+        }) => SVGElement)({
           d: e.path,
           tip: { x: e.toX, y: e.toY },
           color,
-          className: 'cd-edge__arrow',
-        }));
+        });
+        head.classList.add('cd-edge__arrow');
+        g.appendChild(head);
       }
       if (e.label) {
         const mx = e.labelX ?? (e.fromX + e.toX) / 2;
@@ -227,13 +256,13 @@ class IsComponentDiagram extends DiagramElementBase {
         });
         t.textContent = e.label;
         etiqueta.appendChild(t);
-        this.#etiquetasEdges.appendChild(etiqueta);
+        if (this.#etiquetasEdges) this.#etiquetasEdges.appendChild(etiqueta);
       }
       this.svg.appendChild(g);
     }
   }
 
-  #buildInterfaces(layout, theme) {
+  #buildInterfaces(layout: ComponentLayout, theme: DiagramTheme): void {
     const r = LOLLI_R;
     for (const iface of layout.interfaces) {
       const g = svgEl('g', { class: 'cd-iface' });
@@ -241,7 +270,8 @@ class IsComponentDiagram extends DiagramElementBase {
       const stroke = (iface.hue != null && tkHueToHex(iface.hue, 48, 30)) || theme.accent;
       const comp = layout.components.find((c) => c.id === iface.component);
       if (comp && !iface.docked) {
-        let bx, by;
+        let bx: number;
+        let by: number;
         switch (iface.side) {
           case 'top':    bx = comp.x + iface.offset; by = comp.y; break;
           case 'bottom': bx = comp.x + iface.offset; by = comp.y + comp.h; break;
@@ -249,7 +279,7 @@ class IsComponentDiagram extends DiagramElementBase {
           case 'right':
           default:       bx = comp.x + comp.w; by = comp.y + iface.offset; break;
         }
-        const inner = stemInner(iface, r);
+        const inner: AnchorPoint = stemInner({ cx: iface.cx, cy: iface.cy, side: iface.side }, r);
         g.appendChild(svgEl('line', {
           x1: inner.x, y1: inner.y, x2: bx, y2: by,
           stroke, 'stroke-width': 1.3,
@@ -284,7 +314,7 @@ class IsComponentDiagram extends DiagramElementBase {
     }
   }
 
-  #buildComponents(layout, theme) {
+  #buildComponents(layout: ComponentLayout, theme: DiagramTheme): void {
     for (const c of layout.components) {
       const g = svgEl('g', { class: 'cd-cmp' });
       g.dataset.cmpId = c.id;
@@ -308,20 +338,22 @@ class IsComponentDiagram extends DiagramElementBase {
         g.appendChild(stereo);
       }
       const t = svgEl('text', {
-        x: c.x + c.w / 2, y: c.labelY, 'text-anchor': 'middle',
+        x: c.x + c.w / 2, y: c.labelY ?? c.y + c.h / 2 + 4, 'text-anchor': 'middle',
         fill: theme.text, 'font-size': '11', 'font-weight': '700',
         'font-family': FONT,
       });
       // Una línea por tspan: el nombre real de un componente rara vez cabe en
       // el ancho de su caja (ver wrapLabel en component-spec.js).
-      const lineas = c.lines ?? [c.name];
-      lineas.forEach((linea, i) => {
-        const ts = svgEl('tspan', { x: c.x + c.w / 2, dy: i === 0 ? 0 : (c.lineHeight ?? 13) });
+      const lineas: string[] = c.lines ?? (c.name ? [c.name] : []);
+      const lineHeight: number = c.lineHeight ?? 13;
+      lineas.forEach((linea: string, i: number) => {
+        const ts = svgEl('tspan', { x: c.x + c.w / 2, dy: i === 0 ? 0 : lineHeight });
         ts.textContent = linea;
         t.appendChild(ts);
       });
       g.appendChild(t);
-      for (const b of c.itemBubbles ?? []) {
+      const bubbles = c.itemBubbles ?? [];
+      for (const b of bubbles) {
         g.appendChild(svgEl('rect', {
           x: b.x, y: b.y, width: b.w, height: b.h, rx: 4,
           fill: theme.chipFillSoft ?? theme.chipFill, stroke: theme.border ?? 'rgba(0,0,0,0.08)',
@@ -355,7 +387,7 @@ class IsComponentDiagram extends DiagramElementBase {
 
   /* ── eventos viewer ── */
 
-  #onClick = () => {
+  #onClick = (_e: MouseEvent): void => {
     if (!this.hasAttribute('open-on-click')) return;
     const ev = new CustomEvent('is-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
@@ -364,8 +396,8 @@ class IsComponentDiagram extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('componentDiagram');
   };
 
-  #onMouseMove = () => { /* placeholder para tooltip por nodo */ };
-  #onMouseLeave = () => { this.tooltipEl.hidden = true; };
+  #onMouseMove = (): void => { /* placeholder para tooltip por nodo */ };
+  #onMouseLeave = (): void => { this.tooltipEl.hidden = true; };
 }
 
 defineElement('is-component-diagram', IsComponentDiagram, 'IsComponentDiagram');
