@@ -15,6 +15,7 @@ import {
   stringComparator,
   typeOf,
 } from './grid-types.js';
+import type { CellValue, ColumnDef, Row } from './grid-types.js';
 
 /* ── Columnas ─────────────────────────────────────────────────────────── */
 
@@ -82,7 +83,7 @@ export function cellValue(row, col, ctx) {
 }
 
 /** Texto mostrado (valueFormatter, si no el formato del tipo). */
-export function formattedValue(value: string, row, col, ctx) {
+export function formattedValue(value: CellValue, row, col, ctx) {
   if (typeof col.valueFormatter === 'function') {
     const out = col.valueFormatter(value, row, col, ctx);
     return out == null ? '' : String(out);
@@ -220,12 +221,12 @@ export function flattenTree(nodes, expanded, out = []) {
 }
 
 /** Hojas de un nodo (para agregar y para seleccionar en cascada). */
-export function leavesOf(node, out = []) {
+export function leavesOf<T extends { kind: string; children?: T[] }>(node: T, out: T[] = []): T[] {
   if (node.kind === 'leaf') {
     out.push(node);
     return out;
   }
-  for (const child of node.children) leavesOf(child, out);
+  for (const child of node.children ?? []) leavesOf(child, out);
   return out;
 }
 
