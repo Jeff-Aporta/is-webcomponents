@@ -93,6 +93,8 @@ Las hojas de T2-T3 entregan:
 
 [2026-09-18T19:00:00Z] — WT-0041 listo. Errores: 7,384 → 6,365 (−1,019, scope 744→0). SHAs: 790b64ae1f (feat:data-grid 534→0), 154dbca120 (feat:data-grid.preview 210→0), d6d970849a (test:data-grid smoke 19/19 PASS). Gates: PASS.
 
+[2026-09-18T20:15:00Z] — WT-0042-bis listo. Errores: 6,872 → 6,653 (−219, scope 219→0). SHAs: 9e7c475409 (feat:icon-explorer-preview 219→0). Gates: PASS.
+
 ## Gate status (Tanda 3 — WT-0032-bis cierre)
 
 - npm run typecheck: ✓ verde
