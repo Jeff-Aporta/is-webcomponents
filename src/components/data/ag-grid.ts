@@ -89,7 +89,6 @@ import {
 } from '../_shared/prefs.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { hasSlotted } from '../_shared/dom-utils.js';
 import '../media/icon.js';
 import '../forms/checkbox.js';
 import '../forms/select.js';
@@ -110,22 +109,26 @@ import {
   clearSelection as clearSelectionCore,
   headerCheckboxState as headerCheckboxStateCore,
   rowWindow,
-  columnLayout,
-  colWindow,
   applyFlex,
   orderedForLayout,
-  resolveColumns,
+  getCellValue,
   rowsToCsv,
   createGridModel,
-  getCellValue,
-  formatCellValue,
-  cellText,
-  toColumnDefs,
-  groupHeaderRows,
-  createServerSideDatasource,
-  createFakeLista,
 } from './datagrid-core/index.js';
-import type { ColumnDef, GridApi, RowData } from './datagrid-core/types.js';
+import type {
+  ColumnDef,
+  ColumnState,
+  RowData,
+  RowNode,
+  SortDirName,
+  PinSideName,
+  DensityName,
+  GridState,
+  GridApi,
+  ColumnFilter,
+  SelectionModeName,
+} from './datagrid-core/types.js';
+
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
   <style>
@@ -219,7 +222,7 @@ TEMPLATE.innerHTML = /* html */ `
   </div>
 `;
 
-const LEGACY_OP_MAP = {
+const LEGACY_OP_MAP: Record<string, string> = {
   contains: 'contains',
   eq: 'equals',
   neq: 'notEqual',
@@ -231,7 +234,7 @@ const LEGACY_OP_MAP = {
   ends: 'endsWith',
 };
 
-const TEXT_OP_LABELS = {
+const TEXT_OP_LABELS: Record<string, string> = {
   contains: 'Contiene',
   notContains: 'No contiene',
   equals: 'Igual a',
@@ -242,16 +245,16 @@ const TEXT_OP_LABELS = {
   notBlank: 'No vacío',
 };
 
-const NUM_OP_LABELS = {
+const NUM_OP_LABELS: Record<string, string> = {
   eq: '=', neq: '≠', gt: '>', gte: '≥', lt: '<', lte: '≤',
   inRange: 'Entre', blank: 'Vacío', notBlank: 'No vacío',
 };
 
-const DATE_OP_LABELS = {
+const DATE_OP_LABELS: Record<string, string> = {
   eq: 'Igual a', before: 'Antes de', after: 'Después de', inRange: 'Entre',
 };
 
-const HEADER_MENU_ICONS = {
+const HEADER_MENU_ICONS: Record<string, string> = {
   sortAsc: 'mdi:sort-ascending',
   sortDesc: 'mdi:sort-descending',
   sortRemove: 'mdi:sort-variant-remove',
@@ -264,6 +267,108 @@ const HEADER_MENU_ICONS = {
   ungroup: 'mdi:ungroup',
   hide: 'mdi:eye-off-outline',
 };
+
+/** ColumnDef extendido en runtime con la lista de acciones por columna. */
+interface ColumnDefWithActions extends ColumnDef {
+  actions?: ActionDef[];
+}
+
+/** Definición de una acción dentro de una columna (botón por fila). */
+interface ActionDef {
+  value: string;
+  label?: string;
+  icon?: string;
+}
+
+/** ColumnState extendido con campos pegados al runtime (`__stickLeft`/`__stickRight`). */
+interface ColumnStateWithSticky extends ColumnState {
+  __stickLeft?: string;
+  __stickRight?: string;
+  /** Estilo de celda inyectado por el consumidor (`cellStyle`). */
+  cellStyle?: Record<string, string>;
+}
+
+/** Detalle del evento `is-cell-edit`. */
+interface CellEditDetail {
+  row: RowData;
+  column: ColumnState;
+  oldValue: unknown;
+  newValue: unknown;
+}
+
+/** Detalle del evento `is-cell-click`. */
+interface CellClickDetail {
+  row: RowData;
+  column: ColumnState;
+  value: unknown;
+}
+
+/** Detalle del evento `is-row-select`. */
+interface RowSelectDetail {
+  rows: RowData[];
+}
+
+/** Detalle del evento `is-sort-change`. */
+interface SortChangeDetail {
+  column: string;
+  direction: SortDirName | null;
+}
+
+/** Detalle del evento `is-filter-change`. */
+interface FilterChangeDetail {
+  column: string;
+  op: string | null | undefined;
+  value: unknown;
+}
+
+/** Detalle del evento `is-action`. */
+interface ActionEventDetail {
+  row: RowData;
+  column: ColumnState | undefined;
+  action: string | undefined;
+}
+
+/** Detalle del evento `is-column-pin`. */
+interface ColumnPinDetail {
+  colId: string;
+  side: PinSideName | null;
+}
+
+/** Detalle del evento `is-page-change`. */
+interface PageChangeDetail {
+  page: number;
+  pageSize: number;
+}
+
+/** Detalle del evento `is-state-saved`. */
+interface StateSavedDetail {
+  key: string;
+  state: unknown;
+}
+
+const FILTER_ACTIONS_HTML = `
+  <div class="mim-dg__filter-actions">
+    <is-button class="mim-dg__filter-btn" data-act="clear" variant="text">Limpiar</is-button>
+    <is-button class="mim-dg__filter-btn" data-act="apply">Aplicar</is-button>
+  </div>`;
+
+/** Renderiza un `<is-select>` con las opciones de operador del filtro. */
+function opSelectHTML(labels: Record<string, string>, op: string): string {
+  const opts = Object.entries(labels)
+    .map(([v, l]) => `<is-option value="${v}"${v === op ? ' selected' : ''}>${escapeHtml(l)}</is-option>`)
+    .join('');
+  return `<is-select class="mim-dg__filter-op" data-role="op">${opts}</is-select>`;
+}
+
+/** Type guard para HTMLElement en e.target. */
+function asElement(target: EventTarget | null): Element | null {
+  return target instanceof Element ? target : null;
+}
+
+/** Type guard para HTMLElement. */
+function asHTMLElement(target: EventTarget | null): HTMLElement | null {
+  return target instanceof HTMLElement ? target : null;
+}
 
 export class IsAgGrid extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -299,18 +404,18 @@ export class IsAgGrid extends ElementBase {
   #externalData = false;
   #rawRows: RowData[] = [];
   #rawColumns: ColumnDef[] = [];
-  #getRowId: ((row: RowData, index: number) => string) | null = null;
+  #getRowId: string | null = null;
   #pageSize = DEFAULT_PAGE_SIZE;
-  #pageSizeOptions = [25, 50, 100, 200];
+  #pageSizeOptions: number[] = [25, 50, 100, 200];
   #showToolbar = true;
   #rememberState = false;
   #storageKey = '';
-  #density = Density.NORMAL;
+  #density: DensityName = Density.NORMAL;
   #isPaginated = false;
   #page = 0;
   /** Forma legada `{ colId, op, value }`. */
   #currentFilter: Record<string, unknown> | null = null;
-  #currentSelectionMode = SelectionMode.NONE;
+  #currentSelectionMode: SelectionModeName = SelectionMode.NONE;
   #viewport!: HTMLElement;
   #headerRow!: HTMLElement;
   #body!: HTMLElement;
@@ -321,14 +426,16 @@ export class IsAgGrid extends ElementBase {
   #toolbar!: HTMLElement;
   #groupPanel!: HTMLElement;
   #groupChips!: HTMLElement;
-  #headerMenuEl!: HTMLElement;
-  #filterPopoverEl!: HTMLElement;
+  #headerMenuEl: HTMLElement | null = null;
+  #filterPopoverEl: HTMLElement | null = null;
   #scrollTop = 0;
   #lastRangeFrom: string | null = null;
   #focusRow = -1;
   #ro!: ResizeObserver;
   #unsubscribe: (() => void) | null = null;
   #stateLoaded = false;
+  #menuCallbacks = new Map<string, () => void>();
+  #menuCbCounter = 0;
 
   constructor() {
     super();
@@ -339,7 +446,7 @@ export class IsAgGrid extends ElementBase {
     this.#bindStaticEvents();
   }
 
-  #cacheRefs() {
+  #cacheRefs(): void {
     const root = this.shadowRoot!;
     this.#viewport = root.querySelector<HTMLElement>('.mim-dg__viewport')!;
     this.#headerRow = root.querySelector<HTMLElement>('.mim-dg__header-row')!;
@@ -353,14 +460,16 @@ export class IsAgGrid extends ElementBase {
     this.#groupChips = root.querySelector<HTMLElement>('.mim-dg__group-chips')!;
   }
 
-  #bindStaticEvents() {
+  #bindStaticEvents(): void {
     // Quick filter
-    const qf = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__quick-input');
-    qf.addEventListener('input', () => {
-      if (!this.#api) return;
-      this.#api.setQuickFilter(qf.value);
-      emit(this, 'is-quick-filter', { value: qf.value });
-    });
+    const qf = this.shadowRoot!.querySelector<HTMLInputElement>('.mim-dg__quick-input');
+    if (qf) {
+      qf.addEventListener('input', () => {
+        if (!this.#api) return;
+        this.#api.setQuickFilter(qf.value);
+        emit(this, 'is-quick-filter', { value: qf.value });
+      });
+    }
 
     // Density
     this.#densityBtns.forEach((btn: HTMLElement) => {
@@ -371,44 +480,70 @@ export class IsAgGrid extends ElementBase {
     });
 
     // Export CSV
-    this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__export-btn').addEventListener('click', () => {
-      this.api.exportCSV();
-    });
+    const exportBtn = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__export-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        this.api.exportCSV();
+      });
+    }
 
     // Panel lateral de columnas
-    this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__columns-btn').addEventListener('click', () => {
-      this.#toggleSidePanel('columns');
-    });
-    this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__sidebar-tabs').addEventListener('click', (e) => {
-      const tab = e.target.closest('[data-panel]');
-      if (tab) this.#toggleSidePanel(tab.dataset.panel);
-    });
-    this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__panel').addEventListener('is-change', (e) => {
-      const item = e.target.closest('[data-col-id]');
-      if (!item) return;
-      this.#api?.hideColumn(item.dataset.colId, !e.detail.checked);
-      this.#render();
-      this.#renderBody();
-      this.#renderColumnsPanel();
-    });
+    const columnsBtn = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__columns-btn');
+    if (columnsBtn) {
+      columnsBtn.addEventListener('click', () => {
+        this.#toggleSidePanel('columns');
+      });
+    }
+    const sidebarTabs = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__sidebar-tabs');
+    if (sidebarTabs) {
+      sidebarTabs.addEventListener('click', (e: Event): void => {
+        const target = asElement(e.target);
+        if (!target) return;
+        const tab = target.closest('[data-panel]');
+        if (tab instanceof HTMLElement) this.#toggleSidePanel(tab.dataset.panel ?? null);
+      });
+    }
+    const panel = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__panel');
+    if (panel) {
+      panel.addEventListener('is-change', (e: Event): void => {
+        const target = asElement(e.target);
+        if (!target) return;
+        const item = target.closest('[data-col-id]');
+        if (!(item instanceof HTMLElement)) return;
+        const detail = (e as CustomEvent<{ checked: boolean }>).detail;
+        this.#api?.hideColumn(item.dataset.colId ?? '', !detail.checked);
+        this.#render();
+        this.#renderBody();
+        this.#renderColumnsPanel();
+      });
+    }
 
     // Reiniciar personalización persistida
-    this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__reset-btn').addEventListener('click', () => {
-      this.api.resetPersistedState();
-    });
+    const resetBtn = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        this.api.resetPersistedState();
+      });
+    }
 
     // Footer pagination
-    this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__footer').addEventListener('click', (e) => {
-      // Los controles son <is-button>: el click se retarget al host, así que
-      // buscar `button` no encuentra nada.
-      const btn = e.target.closest('[data-action]');
-      if (!btn) return;
-      const action = btn.dataset.action;
-      if (action === 'page-prev') this.#goToPage(this.#page - 1);
-      if (action === 'page-next') this.#goToPage(this.#page + 1);
-    });
+    const footer = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__footer');
+    if (footer) {
+      footer.addEventListener('click', (e: Event): void => {
+        // Los controles son <is-button>: el click se retarget al host, así que
+        // buscar `button` no encuentra nada.
+        const target = asElement(e.target);
+        if (!target) return;
+        const btn = target.closest('[data-action]');
+        if (!(btn instanceof HTMLElement)) return;
+        const action = btn.dataset.action;
+        if (action === 'page-prev') this.#goToPage(this.#page - 1);
+        if (action === 'page-next') this.#goToPage(this.#page + 1);
+      });
+    }
     this.#pageSizeSelect.addEventListener('change', () => {
-      this.#api?.setPageSize(Number(this.#pageSizeSelect.value));
+      const sel = this.#pageSizeSelect as HTMLElement & { value: string };
+      this.#api?.setPageSize(Number(sel.value));
     });
 
     // Viewport scroll
@@ -418,37 +553,22 @@ export class IsAgGrid extends ElementBase {
     });
 
     // Viewport keyboard
-    this.#viewport.addEventListener('keydown', (e) => this.#onKeyDown(e));
+    this.#viewport.addEventListener('keydown', this.#onKeyDown);
 
     // Viewport click delegation (sort, action, edit)
-    this.#viewport.addEventListener('click', (e) => this.#onViewportClick(e));
+    this.#viewport.addEventListener('click', this.#onViewportClick);
 
     // Group panel (chips + expand/collapse). El ungroup vive aquí: el chip
     // está fuera de #viewport, así que #onViewportClick nunca lo ve.
-    this.#groupPanel.addEventListener('click', (e) => {
-      if (!this.#api) return;
-      const ungroup = e.target.closest('[data-act="ungroup"]');
-      if (ungroup) {
-        e.preventDefault();
-        e.stopPropagation();
-        const colId = ungroup.dataset.colId;
-        if (colId) this.#api.removeRowGroupCol(colId);
-        return;
-      }
-      const btn = e.target.closest('[data-action]');
-      if (!btn) return;
-      if (btn.dataset.action === 'expand-all') this.#api.expandAllGroups();
-      if (btn.dataset.action === 'collapse-all') this.#api.collapseAllGroups();
-    });
-    let dropActive = false;
-    this.#groupPanel.addEventListener('dragover', (e) => {
+    this.#groupPanel.addEventListener('click', this.#onGroupPanelClick);
+    this.#groupPanel.addEventListener('dragover', (e: DragEvent): void => {
       e.preventDefault();
       this.#groupPanel.classList.add('is-over');
     });
     this.#groupPanel.addEventListener('dragleave', () => {
       this.#groupPanel.classList.remove('is-over');
     });
-    this.#groupPanel.addEventListener('drop', (e) => {
+    this.#groupPanel.addEventListener('drop', (e: DragEvent): void => {
       e.preventDefault();
       this.#groupPanel.classList.remove('is-over');
       const colId = e.dataTransfer?.getData('application/x-is-col-id');
@@ -460,50 +580,36 @@ export class IsAgGrid extends ElementBase {
     this.#ro.observe(this.#viewport);
 
     // Header resize pointerdown (delegated)
-    this.#headerRow.addEventListener('pointerdown', (e) => {
-      if (!this.#api) return;
-      const resizer = e.target.closest('.mim-dg__resizer');
-      if (!resizer) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const colId = resizer.dataset.colId;
-      const col = this.#api.getColumns().find((c) => c.colId === colId);
-      if (!col) return;
-      const startX = e.clientX;
-      const startW = col.width;
-      const onMove = (ev) => {
-        this.#api?.resizeColumn(colId, startW + (ev.clientX - startX));
-      };
-      const onUp = () => {
-        window.removeEventListener('pointermove', onMove);
-        window.removeEventListener('pointerup', onUp);
-        const w = this.#api?.getColumns().find((c) => c.colId === colId)?.width;
-        if (w != null) emit(this, 'is-column-resize', { colId, width: w });
-      };
-      window.addEventListener('pointermove', onMove);
-      window.addEventListener('pointerup', onUp);
-    });
+    this.#headerRow.addEventListener('pointerdown', this.#onHeaderPointerDown as EventListener);
 
     // Drag handle for column reorder
-    this.#headerRow.addEventListener('dragstart', (e) => {
-      const head = e.target.closest('.mim-dg__head-cell');
-      if (!head) return;
+    this.#headerRow.addEventListener('dragstart', (e: DragEvent): void => {
+      const target = asElement(e.target);
+      if (!target) return;
+      const head = target.closest('.mim-dg__head-cell');
+      if (!(head instanceof HTMLElement)) return;
       const colId = head.dataset.colId;
-      if (!colId) return;
+      if (!colId || !e.dataTransfer) return;
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('application/x-is-col-id', colId);
       e.dataTransfer.setData('text/plain', colId);
     });
-    this.#headerRow.addEventListener('dragover', (e) => {
-      const head = e.target.closest('.mim-dg__head-cell');
+    this.#headerRow.addEventListener('dragover', (e: DragEvent): void => {
+      const target = asElement(e.target);
+      if (!target) return;
+      const head = target.closest('.mim-dg__head-cell');
       if (!head) return;
+      if (!e.dataTransfer) return;
       if (!e.dataTransfer.types.includes('application/x-is-col-id')) return;
       e.preventDefault();
     });
-    this.#headerRow.addEventListener('drop', (e) => {
+    this.#headerRow.addEventListener('drop', (e: DragEvent): void => {
       if (!this.#api) return;
-      const head = e.target.closest('.mim-dg__head-cell');
-      if (!head) return;
+      const target = asElement(e.target);
+      if (!target) return;
+      const head = target.closest('.mim-dg__head-cell');
+      if (!(head instanceof HTMLElement)) return;
+      if (!e.dataTransfer) return;
       const sourceColId = e.dataTransfer.getData('application/x-is-col-id');
       const targetColId = head.dataset.colId;
       if (!sourceColId || !targetColId || sourceColId === targetColId) return;
@@ -515,7 +621,52 @@ export class IsAgGrid extends ElementBase {
     });
   }
 
-  async onConnected() {
+  #onGroupPanelClick = (e: Event): void => {
+    if (!this.#api) return;
+    const target = asElement(e.target);
+    if (!target) return;
+    const ungroup = target.closest('[data-act="ungroup"]');
+    if (ungroup instanceof HTMLElement) {
+      e.preventDefault();
+      e.stopPropagation();
+      const colId = ungroup.dataset.colId;
+      if (colId) this.#api.removeRowGroupCol(colId);
+      return;
+    }
+    const btn = target.closest('[data-action]');
+    if (!(btn instanceof HTMLElement)) return;
+    if (btn.dataset.action === 'expand-all') this.#api.expandAllGroups();
+    if (btn.dataset.action === 'collapse-all') this.#api.collapseAllGroups();
+  };
+
+  #onHeaderPointerDown = (e: PointerEvent): void => {
+    if (!this.#api) return;
+    const target = asElement(e.target);
+    if (!target) return;
+    const resizer = target.closest('.mim-dg__resizer');
+    if (!(resizer instanceof HTMLElement)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const colId = resizer.dataset.colId;
+    if (!colId) return;
+    const col = this.#api.getColumns().find((c) => c.colId === colId);
+    if (!col) return;
+    const startX = e.clientX;
+    const startW = col.width;
+    const onMove = (ev: PointerEvent): void => {
+      this.#api?.resizeColumn(colId, startW + (ev.clientX - startX));
+    };
+    const onUp = (): void => {
+      window.removeEventListener('pointermove', onMove as EventListener);
+      window.removeEventListener('pointerup', onUp as EventListener);
+      const w = this.#api?.getColumns().find((c) => c.colId === colId)?.width;
+      if (w != null) emit(this, 'is-column-resize', { colId, width: w });
+    };
+    window.addEventListener('pointermove', onMove as EventListener);
+    window.addEventListener('pointerup', onUp as EventListener);
+  };
+
+  async onConnected(): Promise<void> {
     await this.#readData();
     this.#syncPageSize();
     this.#syncAttrs();
@@ -531,12 +682,12 @@ export class IsAgGrid extends ElementBase {
     this.#bindModelSubscription();
   }
 
-  onDisconnected() {
+  onDisconnected(): void {
     this.#ro?.disconnect();
     this.#unsubscribe?.();
   }
 
-  async onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null) {
+  async onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): Promise<void> {
     if (name === 'rows' || name === 'columns' || name === 'get-row-id') {
       await this.#readData();
       this.#initModel();
@@ -552,7 +703,7 @@ export class IsAgGrid extends ElementBase {
       this.#api?.getState(); // no-op, but ensures state.sync
       this.#render();
     } else if (name === 'density') {
-      this.#density = newVal || Density.NORMAL;
+      this.#density = (newVal as DensityName) || Density.NORMAL;
       this.#render();
     } else if (name === 'quick-filter') {
       this.#api?.setQuickFilter(newVal || '');
@@ -570,7 +721,7 @@ export class IsAgGrid extends ElementBase {
     }
   }
 
-  #syncAttrs() {
+  #syncAttrs(): void {
     const mode = this.getAttribute('row-selection');
     if (mode === 'single') this.#currentSelectionMode = SelectionMode.SINGLE;
     else if (mode === 'multiple') this.#currentSelectionMode = SelectionMode.MULTIPLE;
@@ -579,14 +730,14 @@ export class IsAgGrid extends ElementBase {
 
     this.#isPaginated = this.hasAttribute('pagination');
     this.#showToolbar = this.getAttribute('toolbar') !== 'false';
-    this.#density = this.getAttribute('density') || Density.NORMAL;
+    this.#density = (this.getAttribute('density') as DensityName) || Density.NORMAL;
     this.#rememberState = this.hasAttribute('remember-state');
     this.#storageKey = this.getAttribute('storage-key') || '';
     this.#toolbar.style.display = this.#showToolbar ? '' : 'none';
     this.#syncStatePersistence();
   }
 
-  #syncStatePersistence() {
+  #syncStatePersistence(): void {
     this.#rememberState = this.hasAttribute('remember-state');
     this.#storageKey = this.getAttribute('storage-key') || '';
     // Sin persistencia no hay nada que reiniciar: el botón sobra.
@@ -596,39 +747,41 @@ export class IsAgGrid extends ElementBase {
 
   /** `serializeState()` del core devuelve JSON string; en prefs el snapshot se
    *  guarda como objeto para no anidar un string dentro del JSON raíz. */
-  static #parseState(raw) {
+  static #parseState(raw: unknown): unknown {
     if (raw && typeof raw === 'object') return raw;
-    try { return JSON.parse(raw); } catch { return null; }
+    try { return JSON.parse(String(raw)); } catch { return null; }
   }
 
   /** Snapshot completo bajo `localStorage['is-webcomponents']['is-ag-grid'][key]`.
    *  Se reemplaza entero (no merge): un merge dejaría columnas o filtros que
    *  ya no existen en el estado nuevo. */
-  #persistState() {
+  #persistState(): void {
     if (!this.#api) return;
     const key = this.#storageKey || this.#defaultStorageKey();
     const raw = this.#api.serializeState();
     const state = IsAgGrid.#parseState(raw);
     if (!state) return;
     replaceComponentPrefs('is-ag-grid', key, state);
-    emit(this, 'is-state-saved', { key, state });
+    emit(this, 'is-state-saved', { key, state } satisfies StateSavedDetail);
   }
 
-  #defaultStorageKey() {
+  #defaultStorageKey(): string {
     return `is-ag-grid:${this.id || this.getAttribute('name') || 'session'}`;
   }
 
-  async #readData() {
+  async #readData(): Promise<void> {
     // Si el consumidor ya empujó filas/columnas vía api (p.ej. catalogo-gen
     // en connectedCallback), no pisarlas con scripts vacíos del host.
     if (this.#externalData) {
       this.#getRowId = this.getAttribute('get-row-id');
       return;
     }
-    const scripts = [...this.children].filter((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
+    const scripts = [...this.children].filter(
+      (c): c is HTMLScriptElement => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLElement).dataset['type'] || c.getAttribute('type') || ''),
+    );
     const rowsAttr = this.getAttribute('rows');
     const colsAttr = this.getAttribute('columns');
-    const fetchScript = async (s) => {
+    const fetchScript = async (s: HTMLScriptElement | null | undefined): Promise<unknown> => {
       if (!s) return null;
       if (s.src) {
         try {
@@ -636,44 +789,45 @@ export class IsAgGrid extends ElementBase {
           return await res.json();
         } catch { return null; }
       }
-      try { return JSON.parse(s.textContent); } catch { return null; }
+      try { return JSON.parse(s.textContent ?? ''); } catch { return null; }
     };
-    const parsedCols = colsAttr
+    const parsedCols: unknown = colsAttr
       ? JSON.parse(colsAttr)
-      : (scripts[0] && !scripts[0].src ? JSON.parse(scripts[0].textContent) : null);
-    const parsedRows = rowsAttr
+      : (scripts[0] && !scripts[0].src ? JSON.parse(scripts[0].textContent ?? '') : null);
+    const parsedRows: unknown = rowsAttr
       ? JSON.parse(rowsAttr)
       : (scripts[1]
           ? await fetchScript(scripts[1])
           : (scripts[0] ? await fetchScript(scripts[0]) : null));
-    const looksLikeColDef = (x) => x && typeof x === 'object' && 'field' in x && !('id' in x);
-    const looksLikeRow = (x) => x && typeof x === 'object' && ('id' in x || !('field' in x));
-    this.#rawColumns = Array.isArray(parsedCols) && parsedCols.every(looksLikeColDef) ? parsedCols : [];
-    if (!this.#rawColumns.length && Array.isArray(parsedCols) && parsedCols.every(looksLikeRow)) {
-      this.#rawColumns = [];
+    const looksLikeColDef = (x: unknown): boolean => x != null && typeof x === 'object' && 'field' in (x as Record<string, unknown>) && !('id' in (x as Record<string, unknown>));
+    const looksLikeRow = (x: unknown): boolean => x != null && typeof x === 'object' && ('id' in (x as Record<string, unknown>) || !('field' in (x as Record<string, unknown>)));
+    this.#rawColumns = Array.isArray(parsedCols) && parsedCols.every(looksLikeColDef) ? (parsedCols as ColumnDef[]) : [];
+    const rowsArr: unknown[] = Array.isArray(parsedRows) ? parsedRows as unknown[] : [];
+    this.#rawRows = rowsArr
+      .filter((r: unknown): r is RowData => r != null && typeof r === 'object' && !('field' in (r as Record<string, unknown>)))
+      .map((r) => r as RowData);
+    if (!this.#rawRows.length && rowsArr.length) {
+      this.#rawRows = rowsArr.filter((r): r is RowData => r != null && typeof r === 'object') as RowData[];
     }
-    const rowsArr = Array.isArray(parsedRows) ? parsedRows : [];
-    this.#rawRows = rowsArr.filter((r) => r && typeof r === 'object' && !('field' in r));
-    if (!this.#rawRows.length && rowsArr.length) this.#rawRows = rowsArr;
     this.#getRowId = this.getAttribute('get-row-id');
   }
 
-  #syncPageSize() {
+  #syncPageSize(): void {
     const opts = (this.getAttribute('page-size-options') || this.#pageSizeOptions.join(','))
       .split(',').map((s: string) => Number(s.trim())).filter((n: number) => Number.isFinite(n) && n > 0);
     this.#pageSizeOptions = opts.length ? opts : [DEFAULT_PAGE_SIZE];
-    this.#pageSizeSelect.replaceChildren(...this.#pageSizeOptions.map((o: string) => {
-      const opt = document.createElement('is-option');
+    this.#pageSizeSelect.replaceChildren(...this.#pageSizeOptions.map((o: number) => {
+      const opt = document.createElement('is-option') as HTMLElement & { value: string; textContent: string };
       opt.value = String(o);
       opt.textContent = String(o);
       return opt;
     }));
     const ps = Number(this.getAttribute('page-size')) || DEFAULT_PAGE_SIZE;
-    this.#pageSize = this.#pageSizeOptions.includes(ps) ? ps : this.#pageSizeOptions[0];
-    this.#pageSizeSelect.value = String(this.#pageSize);
+    this.#pageSize = this.#pageSizeOptions.includes(ps) ? ps : (this.#pageSizeOptions[0] ?? DEFAULT_PAGE_SIZE);
+    (this.#pageSizeSelect as HTMLElement & { value: string }).value = String(this.#pageSize);
   }
 
-  #syncSelectionMode() {
+  #syncSelectionMode(): void {
     const mode = this.getAttribute('row-selection');
     if (mode === 'single') this.#currentSelectionMode = SelectionMode.SINGLE;
     else if (mode === 'multiple') this.#currentSelectionMode = SelectionMode.MULTIPLE;
@@ -681,23 +835,28 @@ export class IsAgGrid extends ElementBase {
     else this.#currentSelectionMode = SelectionMode.NONE;
   }
 
-  #initModel() {
-    this.#api?.getState(); // dummy
-    this.#api = createGridModel({
-      rows: this.#rawRows,
-      columns: this.#rawColumns,
-      getRowId: this.#getRowId
-        ? (row) => row?.[this.#getRowId]
-        : undefined,
-      pagination: this.#isPaginated,
-      pageSize: this.#pageSize,
-      density: this.#density,
-      rowGroupCols: this.#resolveRowGroupCols(),
-      selectionMode: this.#currentSelectionMode,
-    });
+  #initModel(): void {
+    if (!this.#api) {
+      const rowIdField = this.#getRowId;
+      this.#api = createGridModel({
+        rows: this.#rawRows,
+        columns: this.#rawColumns,
+        getRowId: rowIdField
+          ? (row: RowData, _index: number) => {
+              const v = row[rowIdField];
+              return v == null ? '' : String(v);
+            }
+          : undefined,
+        pagination: this.#isPaginated,
+        pageSize: this.#pageSize,
+        density: this.#density,
+        rowGroupCols: this.#resolveRowGroupCols(),
+        selectionMode: this.#currentSelectionMode,
+      });
+    }
   }
 
-  #getAttrList(attr) {
+  #getAttrList(attr: string): string[] {
     const v = this.getAttribute(attr);
     if (!v) return [];
     return v.split(',').map((s: string) => s.trim()).filter(Boolean);
@@ -708,7 +867,7 @@ export class IsAgGrid extends ElementBase {
    *   1. atributo group-by="col1,col2"
    *   2. columnas con `rowGroup: true` en los defs
    */
-  #resolveRowGroupCols() {
+  #resolveRowGroupCols(): string[] {
     const attr = this.#getAttrList('group-by');
     if (attr.length) return attr;
     return this.#rawColumns
@@ -717,10 +876,10 @@ export class IsAgGrid extends ElementBase {
       .filter(Boolean);
   }
 
-  #bindModelSubscription() {
+  #bindModelSubscription(): void {
     this.#unsubscribe?.();
     if (!this.#api) return;
-    this.#unsubscribe = this.#api.subscribe((_state, reason) => {
+    this.#unsubscribe = this.#api.subscribe((_state: GridState, reason?: string): void => {
       // Selección: pintar clases/checkbox in-place. Un #renderBody completo
       // recreaba is-icon en cada clic → flickering visible en catalogo-gen.
       if (reason === 'selection') {
@@ -738,11 +897,12 @@ export class IsAgGrid extends ElementBase {
   }
 
   /** Actualiza is-selected / checkbox sin destruir el DOM de filas. */
-  #paintSelection() {
+  #paintSelection(): void {
     if (!this.#api || !this.#body) return;
     const state = this.#api.getState();
     for (const row of this.#body.querySelectorAll<HTMLElement>('.mim-dg__row[data-row-kind="leaf"]')) {
       const id = row.dataset.rowId;
+      if (id == null) continue;
       const selected = state.selection.has(id);
       row.classList.toggle('is-selected', selected);
       row.setAttribute('aria-selected', selected ? 'true' : 'false');
@@ -756,7 +916,7 @@ export class IsAgGrid extends ElementBase {
   }
 
   /** Solo el checkbox del header (all / some / none). */
-  #paintHeaderCheckbox() {
+  #paintHeaderCheckbox(): void {
     if (!this.#api || !this.#headerRow) return;
     if (this.#currentSelectionMode === SelectionMode.NONE) return;
     const state = this.#api.getState();
@@ -783,7 +943,7 @@ export class IsAgGrid extends ElementBase {
 
   /* ── Render ───────────────────────────────────────────────────────────── */
 
-  #render() {
+  #render(): void {
     if (!this.#api) return;
     this.#renderHeader();
     this.#renderBody();
@@ -792,7 +952,7 @@ export class IsAgGrid extends ElementBase {
     this.#renderDensity();
   }
 
-  #renderHeader() {
+  #renderHeader(): void {
     if (!this.#api) return;
     const state = this.#api.getState();
     const layout = orderedForLayout(state.columns);
@@ -809,7 +969,7 @@ export class IsAgGrid extends ElementBase {
       ? HeaderCheckboxState.NONE
       : headerCheckboxStateCore(state.selection, state.pageRows);
 
-    const html = [];
+    const html: string[] = [];
     if (showSelected) {
       html.push(`<div class="mim-dg__head-cell mim-dg__cell--check is-pinned is-pinned-left" role="columnheader" style="width:44px;flex:0 0 44px;position:sticky;left:0;z-index:4;height:${headerH}px">`);
       if (this.#currentSelectionMode === SelectionMode.MULTIPLE) {
@@ -823,23 +983,24 @@ export class IsAgGrid extends ElementBase {
 
     let leftX = checkWidth;
     let rightX = 0;
-    for (const c of [...withFlex].reverse()) {
+    for (const c of [...withFlex].reverse() as ColumnStateWithSticky[]) {
       if (c.pinned === PinSide.RIGHT) {
         rightX += c.width;
         c.__stickRight = `${rightX}px`;
       }
     }
     let tempLeft = checkWidth;
-    for (const c of withFlex) {
+    for (const c of withFlex as ColumnStateWithSticky[]) {
       if (c.pinned === PinSide.LEFT) {
         c.__stickLeft = `${tempLeft}px`;
         tempLeft += c.width;
       }
     }
 
-    for (const col of withFlex) {
+    for (const colRaw of withFlex) {
+      const col = colRaw as ColumnStateWithSticky;
       const idx = state.sortModel.findIndex((s) => s.colId === col.colId);
-      const dir = idx >= 0 ? state.sortModel[idx].dir : null;
+      const dir = idx >= 0 ? state.sortModel[idx]?.dir ?? null : null;
       const sortIdx = idx >= 0 ? idx + 1 : null;
       const isFiltered = state.filterModel[col.colId] != null;
       const isGrouped = state.rowGroupCols.includes(col.colId);
@@ -872,7 +1033,7 @@ export class IsAgGrid extends ElementBase {
     this.#headerRow.innerHTML = html.join('');
   }
 
-  #renderBody() {
+  #renderBody(): void {
     if (!this.#api) return;
     const state = this.#api.getState();
     const layout = orderedForLayout(state.columns);
@@ -889,10 +1050,11 @@ export class IsAgGrid extends ElementBase {
     const win = rowWindow(dataRows.length, rowH, this.#scrollTop, viewportH);
     const visible = dataRows.slice(win.startIndex, win.endIndex);
 
-    const html = [];
+    const html: string[] = [];
     html.push(`<div class="mim-dg__rows" style="transform:translateY(${win.topPad}px);width:${totalWidth}px">`);
     for (let i = 0; i < visible.length; i++) {
       const dr = visible[i];
+      if (!dr) continue;
       const absIdx = win.startIndex + i;
       if (dr.kind === 'group') {
         const aggCols = withFlex.filter((c) => c.aggFunc && !c.hide);
@@ -913,33 +1075,35 @@ export class IsAgGrid extends ElementBase {
         const node = dr.node;
         const selected = state.selection.has(node.id);
         const focused = this.#focusRow === absIdx;
-        const cells = [];
+        const cells: string[] = [];
         if (check) {
           const icon = selected ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline';
           cells.push(`<div class="mim-dg__cell mim-dg__cell--check is-pinned is-pinned-left" role="gridcell" style="width:44px;flex:0 0 44px;position:sticky;left:0;z-index:2"><span class="mim-dg__checkbox mim-dg__checkbox--${selected ? 'all' : 'none'}"><is-icon icon="${icon}"></is-icon></span></div>`);
         }
         let tempLeft = checkWidth;
         let rightX = 0;
-        for (const c of [...withFlex].reverse()) {
+        for (const c of [...withFlex].reverse() as ColumnStateWithSticky[]) {
           if (c.pinned === PinSide.RIGHT) {
             rightX += c.width;
             c.__stickRight = `${rightX}px`;
           }
         }
-        for (const c of withFlex) {
+        for (const c of withFlex as ColumnStateWithSticky[]) {
           if (c.pinned === PinSide.LEFT) {
             c.__stickLeft = `${tempLeft}px`;
             tempLeft += c.width;
           }
         }
-        for (const col of withFlex) {
+        for (const colRaw of withFlex) {
+          const col = colRaw as ColumnStateWithSticky;
           const stickStyle = col.__stickLeft
             ? `position:sticky;left:${col.__stickLeft};z-index:1;`
             : col.__stickRight
               ? `position:sticky;right:${col.__stickRight};z-index:1;`
               : '';
           const inner = this.#renderCellContent(col, node.data);
-          const style = col.cellStyle ? cellStyleToString(col.cellStyle) : '';
+          const cellStyle = (col as ColumnStateWithSticky).cellStyle;
+          const style = cellStyle ? cellStyleToString(cellStyle) : '';
           const cls = col.align === 'right' ? 'mim-dg__cell--right' : col.align === 'center' ? 'mim-dg__cell--center' : '';
           cells.push(`<div class="mim-dg__cell ${cls}" role="gridcell" data-col-id="${col.colId}" data-row-id="${escapeHtml(node.id)}" style="width:${col.width}px;${stickStyle}${style}">${inner}</div>`);
         }
@@ -953,14 +1117,16 @@ export class IsAgGrid extends ElementBase {
     this.#body.innerHTML = html.join('');
   }
 
-  #renderCellContent(col, row) {
-    const value = getCellValue(col, { data: row, id: row?.id, index: row?.index ?? 0 });
-    const t = col.type;
+  #renderCellContent(col: ColumnState, row: RowData): string {
+    const value = getCellValue(col, { data: row, id: row?.['id'] as string | undefined, index: row?.['index'] as number | undefined ?? 0 });
+    // El tipo declarado es `ColumnTypeName | 'currency' | 'dateTime'` pero el
+    // consumidor puede pasar tipos adicionales (link/enum/badge/tags/actions).
+    const t = col.type as string;
     if (t === ColumnType.BOOLEAN) {
       return `<span class="mim-dg-bool mim-dg-bool--${value ? 'on' : 'off'}" aria-checked="${!!value}">${value ? '✓' : ''}</span>`;
     }
     if (t === 'date') {
-      return escapeHtml(formatDate(value, col));
+      return escapeHtml(formatDate(value as string, col));
     }
     if (t === 'number') {
       return escapeHtml(formatNumber(value, col));
@@ -969,18 +1135,19 @@ export class IsAgGrid extends ElementBase {
       return escapeHtml(formatCurrency(value, col));
     }
     if (t === 'link' && value) {
-      return `<a class="mim-dg-link" href="${escapeHtml(value)}" target="_blank" rel="noopener">${escapeHtml(value)}</a>`;
+      return `<a class="mim-dg-link" href="${escapeHtml(String(value))}" target="_blank" rel="noopener">${escapeHtml(String(value))}</a>`;
     }
     if (t === 'enum' || t === 'badge') {
-      const c = col.def.enumColors?.[value];
+      const enumColors = (col.def as ColumnDefWithActions & { enumColors?: Record<string, string> }).enumColors;
+      const c = enumColors?.[String(value)];
       const color = c || 'var(--is-accent)';
-      return `<span class="mim-dg-tag" style="--c:${escapeHtml(color)}">${escapeHtml(value ?? '')}</span>`;
+      return `<span class="mim-dg-tag" style="--c:${escapeHtml(color)}">${escapeHtml(value == null ? '' : String(value))}</span>`;
     }
     if (t === 'tags' && Array.isArray(value)) {
-      return value.map((v) => `<span class="mim-dg-pill">${escapeHtml(v)}</span>`).join('');
+      return (value as unknown[]).map((v) => `<span class="mim-dg-pill">${escapeHtml(String(v))}</span>`).join('');
     }
     if (t === 'actions') {
-      const acts = col.def.actions || [];
+      const acts = (col.def as ColumnDefWithActions).actions || [];
       return acts.map((a) => `<button class="mim-dg__action" type="button" data-action="${escapeHtml(a.value)}" title="${escapeHtml(a.label || a.value)}"><is-icon icon="${escapeHtml(a.icon || 'mdi:dots-horizontal')}"></is-icon></button>`).join('');
     }
     return escapeHtml(value == null ? '' : String(value));
@@ -989,27 +1156,28 @@ export class IsAgGrid extends ElementBase {
   /** Abre/cierra el panel lateral. El markup del `<aside>` ya existía pero
    *  nacía `hidden` y sin handlers: sin esto las columnas ocultas no se podían
    *  restaurar desde la UI. */
-  #openSidePanel(panel) {
+  #openSidePanel(panel: string): void {
     const body = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__panel');
-    if (body && !body.hidden && body.dataset.panel === panel) return;
+    if (body && !body.hidden && body.dataset['panel'] === panel) return;
     this.#toggleSidePanel(panel);
   }
 
-  #toggleSidePanel(panel) {
+  #toggleSidePanel(panel: string | null): void {
+    if (!panel) return;
     const sidebar = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__sidebar');
     const body = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__panel');
     if (!sidebar || !body) return;
-    const same = !body.hidden && body.dataset.panel === panel;
+    const same = !body.hidden && body.dataset['panel'] === panel;
     sidebar.hidden = false;
     body.hidden = same;
-    body.dataset.panel = panel;
+    body.dataset['panel'] = panel;
     for (const tab of this.shadowRoot!.querySelectorAll<HTMLElement>('.mim-dg__sidebar-tab')) {
-      tab.setAttribute('aria-selected', String(!same && tab.dataset.panel === panel));
+      tab.setAttribute('aria-selected', String(!same && tab.dataset['panel'] === panel));
     }
     if (!body.hidden && panel === 'columns') this.#renderColumnsPanel();
   }
 
-  #closeSidePanel() {
+  #closeSidePanel(): void {
     const body = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__panel');
     if (body) body.hidden = true;
     for (const tab of this.shadowRoot!.querySelectorAll<HTMLElement>('.mim-dg__sidebar-tab')) {
@@ -1017,7 +1185,7 @@ export class IsAgGrid extends ElementBase {
     }
   }
 
-  #renderColumnsPanel() {
+  #renderColumnsPanel(): void {
     const body = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__panel');
     if (!body || !this.#api) return;
     const cols = this.#api.getState().columns;
@@ -1032,7 +1200,7 @@ export class IsAgGrid extends ElementBase {
       </div>`;
   }
 
-  #renderFooter() {
+  #renderFooter(): void {
     if (!this.#api) return;
     const state = this.#api.getState();
     const total = state.totalRows;
@@ -1043,21 +1211,22 @@ export class IsAgGrid extends ElementBase {
     const to = usePaging ? Math.min(total, (state.page + 1) * state.pageSize) : total;
     this.#countEl.innerHTML = `${formatNumberRaw(from)}–${formatNumberRaw(to)} de ${formatNumberRaw(total)}${sel > 0 ? ` <span class="mim-dg__count-sel">· ${formatNumberRaw(sel)} seleccionadas</span>` : ''}`;
     this.#pagerInfo.textContent = `${state.page + 1} / ${pageCount}`;
-    const prev = this.shadowRoot!.querySelector<HTMLElement>('[data-action="page-prev"]');
-    const next = this.shadowRoot!.querySelector<HTMLElement>('[data-action="page-next"]');
+    const prev = this.shadowRoot!.querySelector<HTMLButtonElement>('[data-action="page-prev"]');
+    const next = this.shadowRoot!.querySelector<HTMLButtonElement>('[data-action="page-next"]');
     if (prev) prev.disabled = state.page <= 0;
     if (next) next.disabled = state.page >= pageCount - 1;
     this.#page = state.page;
   }
 
-  #renderDensity() {
+  #renderDensity(): void {
     this.shadowRoot!.querySelectorAll<HTMLElement>('.mim-dg__density-btn').forEach((btn: HTMLElement) => {
-      btn.classList.toggle('is-active', btn.dataset.density === this.#density);
+      btn.classList.toggle('is-active', btn.dataset['density'] === this.#density);
     });
-    this.shadowRoot!.querySelector<HTMLElement>('.mim-dg').dataset.density = this.#density;
+    const root = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg');
+    if (root) root.dataset['density'] = this.#density;
   }
 
-  #renderGroupPanel() {
+  #renderGroupPanel(): void {
     if (!this.#api) return;
     const state = this.#api.getState();
     const cols = this.#api.getColumns();
@@ -1067,28 +1236,29 @@ export class IsAgGrid extends ElementBase {
       return `<span class="mim-dg__group-chip" data-col-id="${colId}"><is-icon icon="mdi:drag" class="mim-dg__group-chip-grip"></is-icon><span class="mim-dg__group-chip-label">${escapeHtml(col.headerName)}</span><button class="mim-dg__group-chip-x" type="button" data-act="ungroup" data-col-id="${colId}" aria-label="Quitar agrupación"><is-icon icon="mdi:close"></is-icon></button></span>`;
     });
     const arrows = state.rowGroupCols.map(() => '<span class="mim-dg__group-chip-arrow">›</span>');
-    const interleaved = [];
+    const interleaved: string[] = [];
     for (let i = 0; i < chips.length; i++) {
       if (i > 0) interleaved.push(arrows[i - 1] || '');
-      interleaved.push(chips[i]);
+      interleaved.push(chips[i] ?? '');
     }
     this.#groupChips.innerHTML = interleaved.join('');
-    this.#groupPanel.querySelector<HTMLElement>('.mim-dg__group-hint').style.display = state.rowGroupCols.length ? 'none' : '';
+    const hint = this.#groupPanel.querySelector<HTMLElement>('.mim-dg__group-hint');
+    if (hint) hint.style.display = state.rowGroupCols.length ? 'none' : '';
   }
 
   /* ── Header menu (1 menú por columna, posicionado absoluto) ───────────── */
 
-  #renderHeaderMenu() {
+  #renderHeaderMenu(): void {
     this.#headerMenuEl?.remove();
     this.#headerMenuEl = null;
   }
 
-  #openHeaderMenu(col, buttonEl) {
+  #openHeaderMenu(col: ColumnState, buttonEl: HTMLElement): void {
     if (!this.#api) return;
     this.#closeHeaderMenu();
     const state = this.#api.getState();
     const idx = state.sortModel.findIndex((s) => s.colId === col.colId);
-    const dir = idx >= 0 ? state.sortModel[idx].dir : null;
+    const dir = idx >= 0 ? state.sortModel[idx]?.dir ?? null : null;
     const isGrouped = state.rowGroupCols.includes(col.colId);
     const r = buttonEl.getBoundingClientRect();
     const menu = document.createElement('div');
@@ -1096,82 +1266,85 @@ export class IsAgGrid extends ElementBase {
     menu.setAttribute('role', 'menu');
     menu.style.left = `${r.left}px`;
     menu.style.top = `${r.bottom}px`;
-    const items = [];
+    const items: string[] = [];
+
     if (col.sortable) {
-      items.push(this.#menuItem('Ordenar ascendente', HEADER_MENU_ICONS.sortAsc, () => this.#setSort(col.colId, 'asc')));
-      items.push(this.#menuItem('Ordenar descendente', HEADER_MENU_ICONS.sortDesc, () => this.#setSort(col.colId, 'desc')));
-      if (dir) items.push(this.#menuItem('Quitar orden', HEADER_MENU_ICONS.sortRemove, () => this.#clearSort(col.colId)));
+      items.push(this.#menuItem('Ordenar ascendente', HEADER_MENU_ICONS['sortAsc'] ?? '', () => this.#setSort(col.colId, 'asc')));
+      items.push(this.#menuItem('Ordenar descendente', HEADER_MENU_ICONS['sortDesc'] ?? '', () => this.#setSort(col.colId, 'desc')));
+      if (dir) items.push(this.#menuItem('Quitar orden', HEADER_MENU_ICONS['sortRemove'] ?? '', () => this.#clearSort(col.colId)));
       items.push(this.#menuSep());
     }
     if (col.filterType) {
-      items.push(this.#menuItem('Filtrar…', HEADER_MENU_ICONS.filter, () => this.#openFilterPopover(col, buttonEl)));
+      items.push(this.#menuItem('Filtrar…', HEADER_MENU_ICONS['filter'] ?? '', () => this.#openFilterPopover(col, buttonEl)));
       items.push(this.#menuSep());
     }
-    if (col.pinned !== 'left') items.push(this.#menuItem('Fijar a la izquierda', HEADER_MENU_ICONS.pinLeft, () => this.#pinColumn(col.colId, 'left')));
-    if (col.pinned !== 'right') items.push(this.#menuItem('Fijar a la derecha', HEADER_MENU_ICONS.pinRight, () => this.#pinColumn(col.colId, 'right')));
-    if (col.pinned) items.push(this.#menuItem('No fijar', HEADER_MENU_ICONS.unpin, () => this.#pinColumn(col.colId, null)));
+    if (col.pinned !== 'left') items.push(this.#menuItem('Fijar a la izquierda', HEADER_MENU_ICONS['pinLeft'] ?? '', () => this.#pinColumn(col.colId, 'left')));
+    if (col.pinned !== 'right') items.push(this.#menuItem('Fijar a la derecha', HEADER_MENU_ICONS['pinRight'] ?? '', () => this.#pinColumn(col.colId, 'right')));
+    if (col.pinned) items.push(this.#menuItem('No fijar', HEADER_MENU_ICONS['unpin'] ?? '', () => this.#pinColumn(col.colId, null)));
     items.push(this.#menuSep());
-    items.push(this.#menuItem('Autoajustar ancho', HEADER_MENU_ICONS.autosize, () => this.#api.autosizeColumn(col.colId)));
+    items.push(this.#menuItem('Autoajustar ancho', HEADER_MENU_ICONS['autosize'] ?? '', () => this.#api?.autosizeColumn(col.colId)));
     if (col.enableRowGroup) {
-      items.push(this.#menuItem(isGrouped ? 'Quitar agrupación' : 'Agrupar por esta columna', isGrouped ? HEADER_MENU_ICONS.ungroup : HEADER_MENU_ICONS.group, () => {
+      items.push(this.#menuItem(isGrouped ? 'Quitar agrupación' : 'Agrupar por esta columna', isGrouped ? (HEADER_MENU_ICONS['ungroup'] ?? '') : (HEADER_MENU_ICONS['group'] ?? ''), () => {
+        if (!this.#api) return;
         if (isGrouped) this.#api.removeRowGroupCol(col.colId);
         else this.#api.addRowGroupCol(col.colId);
       }));
     }
-    items.push(this.#menuItem('Ocultar columna', HEADER_MENU_ICONS.hide, () => this.#hideColumn(col.colId)));
+    items.push(this.#menuItem('Ocultar columna', HEADER_MENU_ICONS['hide'] ?? '', () => this.#hideColumn(col.colId)));
     menu.innerHTML = items.join('');
     this.#wireMenuItemHandlers(menu);
     document.body.appendChild(menu);
     this.#headerMenuEl = menu;
     requestAnimationFrame(() => {
-      document.addEventListener('mousedown', this.#closeOnOutside, true);
-      document.addEventListener('keydown', this.#closeOnEscape, true);
+      document.addEventListener('mousedown', this.#closeOnOutside as EventListener, true);
+      document.addEventListener('keydown', this.#closeOnEscape as EventListener, true);
     });
   }
 
-  #menuItem(label, icon, onClick) {
+  #menuItem(label: string, icon: string, onClick: () => void): string {
     return `<button class="mim-dg__menu-item" type="button" role="menuitem" data-act="menu-item" data-cb="${this.#registerMenuCallback(onClick)}"><is-icon icon="${icon}"></is-icon>${escapeHtml(label)}</button>`;
   }
 
-  #menuSep() {
+  #menuSep(): string {
     return '<div class="mim-dg__menu-sep"></div>';
   }
 
-  #menuCallbacks = new Map<string, () => void>();
-  #menuCbCounter = 0;
-  #registerMenuCallback(fn) {
+  #registerMenuCallback(fn: () => void): string {
     const id = `cb${this.#menuCbCounter++}`;
     this.#menuCallbacks.set(id, fn);
     return id;
   }
-  #wireMenuItemHandlers(menuEl) {
+
+  #wireMenuItemHandlers(menuEl: HTMLElement): void {
     menuEl.querySelectorAll<HTMLElement>('[data-cb]').forEach((el: HTMLElement) => {
-      const fn = this.#menuCallbacks.get(el.dataset.cb);
-      if (fn) el.addEventListener('click', fn);
+      const fn = this.#menuCallbacks.get(el.dataset['cb'] ?? '');
+      if (fn) el.addEventListener('click', fn as EventListener);
     });
   }
 
-  #closeHeaderMenu = () => {
+  #closeHeaderMenu = (): void => {
     this.#headerMenuEl?.remove();
     this.#headerMenuEl = null;
-    document.removeEventListener('mousedown', this.#closeOnOutside, true);
-    document.removeEventListener('keydown', this.#closeOnEscape, true);
+    document.removeEventListener('mousedown', this.#closeOnOutside as EventListener, true);
+    document.removeEventListener('keydown', this.#closeOnEscape as EventListener, true);
   };
 
-  #closeOnOutside = (e) => {
+  #closeOnOutside = (e: MouseEvent): void => {
     if (!this.#headerMenuEl) return;
-    if (this.#headerMenuEl.contains(e.target)) return;
-    if (e.target.closest('.mim-dg__head-menu-btn')) return;
+    const target = e.target as Node | null;
+    if (this.#headerMenuEl.contains(target)) return;
+    const elem = asHTMLElement(e.target);
+    if (elem?.closest('.mim-dg__head-menu-btn')) return;
     this.#closeHeaderMenu();
   };
 
-  #closeOnEscape = (e) => {
+  #closeOnEscape = (e: KeyboardEvent): void => {
     if (e.key === 'Escape') this.#closeHeaderMenu();
   };
 
   /* ── Filter popover ───────────────────────────────────────────────────── */
 
-  #openFilterPopover(col, buttonEl) {
+  #openFilterPopover(col: ColumnState, buttonEl: HTMLElement): void {
     if (!this.#api) return;
     this.#closeHeaderMenu();
     this.#closeFilterPopover();
@@ -1198,55 +1371,71 @@ export class IsAgGrid extends ElementBase {
     const clearBtn = pop.querySelector<HTMLElement>('[data-act="clear"]');
     if (setSearch) {
       setSearch.addEventListener('input', () => {
-        const q = setSearch.value.toLowerCase();
+        const inp = setSearch as HTMLElement & { value: string };
+        const q = inp.value.toLowerCase();
         pop.querySelectorAll<HTMLElement>('[data-set-val]').forEach((el: HTMLElement) => {
-          el.style.display = el.dataset.setVal.toLowerCase().includes(q) ? '' : 'none';
+          const v = el.dataset['setVal'] ?? '';
+          el.style.display = v.toLowerCase().includes(q) ? '' : 'none';
         });
       });
     }
     if (setSel) {
-      setSel.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-set-val]');
-        if (!btn) return;
-        const v = btn.dataset.setVal;
+      setSel.addEventListener('click', (e: Event): void => {
+        const target = asElement(e.target);
+        if (!target) return;
+        const btn = target.closest('[data-set-val]');
+        if (!(btn instanceof HTMLElement)) return;
+        const v = btn.dataset['setVal'];
         if (v === '__all__') {
-          pop.querySelectorAll<HTMLElement>('[data-set-checkbox]').forEach((el: HTMLElement) => el.dataset.checked = 'true');
+          pop.querySelectorAll<HTMLElement>('[data-set-checkbox]').forEach((el: HTMLElement) => { el.dataset['checked'] = 'true'; });
         } else if (v === '__none__') {
-          pop.querySelectorAll<HTMLElement>('[data-set-checkbox]').forEach((el: HTMLElement) => el.dataset.checked = 'false');
+          pop.querySelectorAll<HTMLElement>('[data-set-checkbox]').forEach((el: HTMLElement) => { el.dataset['checked'] = 'false'; });
         } else {
           const cb = btn.querySelector<HTMLElement>('[data-set-checkbox]');
-          cb.dataset.checked = cb.dataset.checked === 'true' ? 'false' : 'true';
+          if (!cb) return;
+          cb.dataset['checked'] = cb.dataset['checked'] === 'true' ? 'false' : 'true';
           const icon = cb.querySelector<HTMLElement>('is-icon');
-          icon.setAttribute('icon', cb.dataset.checked === 'true' ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline');
+          if (icon) icon.setAttribute('icon', cb.dataset['checked'] === 'true' ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline');
         }
       });
     }
-    const apply = () => {
+    const apply = (): void => {
+      if (!this.#api) return;
       const filter = this.#buildFilterFromPopover(col, pop);
       if (filter) this.#api.setFilter(col.colId, filter);
       else this.#api.setFilter(col.colId, null);
-      emit(this, 'is-filter-change', { column: col.colId, op: filter?.op, value: filter?.value });
+      // El detail sólo importa cuando hay filtro; sin él, mandamos nulls tipados.
+      if (filter && filter.type === 'text') {
+        emit(this, 'is-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
+      } else if (filter && filter.type === 'number') {
+        emit(this, 'is-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
+      } else if (filter && filter.type === 'date') {
+        emit(this, 'is-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
+      } else {
+        emit(this, 'is-filter-change', { column: col.colId, op: null, value: null } satisfies FilterChangeDetail);
+      }
       this.#closeFilterPopover();
     };
-    const clear = () => {
+    const clear = (): void => {
+      if (!this.#api) return;
       this.#api.setFilter(col.colId, null);
-      emit(this, 'is-filter-change', { column: col.colId, op: null, value: null });
+      emit(this, 'is-filter-change', { column: col.colId, op: null, value: null } satisfies FilterChangeDetail);
       this.#closeFilterPopover();
     };
-    if (applyBtn) applyBtn.addEventListener('click', apply);
-    if (clearBtn) clearBtn.addEventListener('click', clear);
-    [valInput, valTo].forEach((inp: HTMLElement) => {
+    if (applyBtn) applyBtn.addEventListener('click', apply as EventListener);
+    if (clearBtn) clearBtn.addEventListener('click', clear as EventListener);
+    [valInput, valTo].forEach((inp: HTMLElement | null) => {
       if (!inp) return;
-      inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') apply(); });
+      inp.addEventListener('keydown', (e: KeyboardEvent): void => { if (e.key === 'Enter') apply(); });
     });
     requestAnimationFrame(() => {
-      document.addEventListener('mousedown', this.#closePopoverOutside, true);
-      document.addEventListener('keydown', this.#closePopoverEscape, true);
+      document.addEventListener('mousedown', this.#closePopoverOutside as EventListener, true);
+      document.addEventListener('keydown', this.#closePopoverEscape as EventListener, true);
     });
     valInput?.focus();
   }
 
-  #filterPopoverHTML(col, ft, existing) {
+  #filterPopoverHTML(col: ColumnState, ft: string, existing: ColumnFilter | null): string {
     if (ft === 'text') {
       const op = existing?.type === 'text' ? existing.op : 'contains';
       const val = existing?.type === 'text' ? existing.value : '';
@@ -1278,6 +1467,7 @@ export class IsAgGrid extends ElementBase {
         ${FILTER_ACTIONS_HTML}`;
     }
     if (ft === 'set') {
+      if (!this.#api) return '';
       const sf = existing?.type === 'set' ? existing.values : null;
       const allValues = uniqueValuesSafe(this.#api.getAllRows(), col);
       const selected = sf ? new Set(sf) : new Set(allValues);
@@ -1295,149 +1485,159 @@ export class IsAgGrid extends ElementBase {
     return '';
   }
 
-  #buildFilterFromPopover(col, pop) {
-    const op = pop.querySelector<HTMLElement>('[data-role="op"]')?.value;
-    const val = pop.querySelector<HTMLElement>('[data-role="val"]')?.value;
-    const valTo = pop.querySelector<HTMLElement>('[data-role="val-to"]')?.value;
+  #buildFilterFromPopover(col: ColumnState, pop: HTMLElement): ColumnFilter | null {
+    const op = pop.querySelector<HTMLElement>('[data-role="op"]');
+    const val = pop.querySelector<HTMLElement>('[data-role="val"]');
+    const valTo = pop.querySelector<HTMLElement>('[data-role="val-to"]');
+    const opEl = op as HTMLElement & { value: string } | null;
+    const valEl = val as HTMLElement & { value: string } | null;
+    const valToEl = valTo as HTMLElement & { value: string } | null;
+    const opVal = opEl?.value ?? '';
+    const valStr = valEl?.value ?? '';
+    const valToStr = valToEl?.value ?? '';
     const ft = col.filterType || 'text';
     if (ft === 'text') {
-      if (!val && op !== 'blank' && op !== 'notBlank') return null;
-      return { type: 'text', op, value: val || '' };
+      if (!valStr && opVal !== 'blank' && opVal !== 'notBlank') return null;
+      return { type: 'text', op: opVal as ColumnFilter extends { type: 'text'; op: infer O } ? O : never, value: valStr || '' };
     }
     if (ft === 'number') {
-      if (op === 'blank' || op === 'notBlank') return { type: 'number', op, value: null };
-      const num = val === '' ? null : Number(val);
-      if (num === null && op !== 'inRange') return null;
-      const to = valTo === '' ? null : Number(valTo);
-      return { type: 'number', op, value: num, to };
+      if (opVal === 'blank' || opVal === 'notBlank') return { type: 'number', op: opVal as 'blank' | 'notBlank', value: null };
+      const num = valStr === '' ? null : Number(valStr);
+      if (num === null && opVal !== 'inRange') return null;
+      const to = valToStr === '' ? null : Number(valToStr);
+      return { type: 'number', op: opVal as 'eq', value: num, to };
     }
     if (ft === 'date') {
-      if (!val && op !== 'inRange') return null;
-      return { type: 'date', op, value: val || '', to: valTo || '' };
+      if (!valStr && opVal !== 'inRange') return null;
+      return { type: 'date', op: opVal as 'eq', value: valStr || '', to: valToStr || '' };
     }
     if (ft === 'set') {
+      if (!this.#api) return null;
       const allValues = uniqueValuesSafe(this.#api.getAllRows(), col);
       const selected = [...pop.querySelectorAll<HTMLElement>('[data-set-checkbox]')]
-        .filter((cb: HTMLElement) => cb.dataset.checked === 'true')
-        .map((cb: HTMLElement) => cb.closest('[data-set-val]').dataset.setVal);
+        .filter((cb: HTMLElement) => cb.dataset['checked'] === 'true')
+        .map((cb: HTMLElement) => cb.closest('[data-set-val]')?.getAttribute('data-set-val') ?? '');
       if (selected.length === allValues.length) return null;
       return { type: 'set', values: selected };
     }
     return null;
   }
 
-  #closeFilterPopover() {
+  #closeFilterPopover(): void {
     this.#filterPopoverEl?.remove();
     this.#filterPopoverEl = null;
-    document.removeEventListener('mousedown', this.#closePopoverOutside, true);
-    document.removeEventListener('keydown', this.#closePopoverEscape, true);
+    document.removeEventListener('mousedown', this.#closePopoverOutside as EventListener, true);
+    document.removeEventListener('keydown', this.#closePopoverEscape as EventListener, true);
   }
 
-  #closePopoverOutside = (e) => {
+  #closePopoverOutside = (e: MouseEvent): void => {
     if (!this.#filterPopoverEl) return;
-    if (this.#filterPopoverEl.contains(e.target)) return;
+    if (this.#filterPopoverEl.contains(e.target as Node | null)) return;
     this.#closeFilterPopover();
   };
 
-  #closePopoverEscape = (e) => { if (e.key === 'Escape') this.#closeFilterPopover(); };
+  #closePopoverEscape = (e: KeyboardEvent): void => { if (e.key === 'Escape') this.#closeFilterPopover(); };
 
-  #setSort(colId, dir) {
+  #setSort(colId: string, dir: SortDirName): void {
     if (!this.#api) return;
     const others = this.#api.getState().sortModel.filter((s) => s.colId !== colId);
     this.#api.setSortModel(dir ? [...others, { colId, dir }] : others);
-    emit(this, 'is-sort-change', { column: colId, direction: dir });
+    emit(this, 'is-sort-change', { column: colId, direction: dir } satisfies SortChangeDetail);
   }
 
-  #clearSort(colId) {
+  #clearSort(colId: string): void {
     if (!this.#api) return;
     const others = this.#api.getState().sortModel.filter((s) => s.colId !== colId);
     this.#api.setSortModel(others);
-    emit(this, 'is-sort-change', { column: colId, direction: null });
+    emit(this, 'is-sort-change', { column: colId, direction: null } satisfies SortChangeDetail);
   }
 
-  #pinColumn(colId, side) {
+  #pinColumn(colId: string, side: PinSideName | null): void {
     if (!this.#api) return;
     this.#api.pinColumn(colId, side);
-    emit(this, 'is-column-pin', { colId, side });
+    emit(this, 'is-column-pin', { colId, side } satisfies ColumnPinDetail);
   }
 
-  #hideColumn(colId) {
+  #hideColumn(colId: string): void {
     if (!this.#api) return;
     this.#api.hideColumn(colId, true);
     emit(this, 'is-column-hide', { colId });
   }
 
-  #goToPage(p) {
+  #goToPage(p: number): void {
     if (!this.#api) return;
     this.#api.setPage(p);
-    emit(this, 'is-page-change', { page: this.#api.getState().page + 1, pageSize: this.#api.getState().pageSize });
+    const st = this.#api.getState();
+    emit(this, 'is-page-change', { page: st.page + 1, pageSize: st.pageSize } satisfies PageChangeDetail);
   }
 
   /* ── Event handlers ───────────────────────────────────────────────────── */
 
-  #onViewportClick(e) {
+  #onViewportClick = (e: Event): void => {
     if (!this.#api) return;
+    const target = asElement(e.target);
+    if (!target) return;
     const state = this.#api.getState();
     const allRows = this.#isPaginated ? state.pageDisplayRows : state.displayRows;
 
     // Header menu button
-    const menuBtn = e.target.closest('[data-act="header-menu"]');
-    if (menuBtn) {
+    const menuBtn = target.closest('[data-act="header-menu"]');
+    if (menuBtn instanceof HTMLElement) {
       e.stopPropagation();
-      const colId = menuBtn.dataset.colId;
+      const colId = menuBtn.dataset['colId'];
       const col = this.#api.getColumns().find((c) => c.colId === colId);
       if (col) this.#openHeaderMenu(col, menuBtn);
       return;
     }
 
     // Toggle-all
-    const toggleAll = e.target.closest('[data-act="toggle-all"]');
+    const toggleAll = target.closest('[data-act="toggle-all"]');
     if (toggleAll) {
       e.stopPropagation();
-      const s = state;
-      const all = headerCheckboxStateCore(s.selection, s.pageRows);
-      const next = all === HeaderCheckboxState.ALL ? clearSelectionCore() : selectAllCore(s.pageRows);
+      const all = headerCheckboxStateCore(state.selection, state.pageRows);
+      const next = all === HeaderCheckboxState.ALL ? clearSelectionCore() : selectAllCore(state.pageRows);
       this.#api.setSelection(next);
-      emit(this, 'is-row-select', { rows: this.api.getSelectedRows() });
+      emit(this, 'is-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
       return;
     }
 
     // Header sort
-    const head = e.target.closest('.mim-dg__head-cell');
-    if (head && !e.target.closest('.mim-dg__head-menu-btn, .mim-dg__resizer')) {
-      const colId = head.dataset.colId;
+    const head = target.closest('.mim-dg__head-cell');
+    if (head instanceof HTMLElement && !target.closest('.mim-dg__head-menu-btn, .mim-dg__resizer')) {
+      const colId = head.dataset['colId'];
       const col = this.#api.getColumns().find((c) => c.colId === colId);
       if (col && col.sortable) {
         const additive = (e.ctrlKey || e.metaKey || e.shiftKey) && this.#currentSelectionMode === SelectionMode.MULTIPLE;
-        this.#api.toggleSort(colId, additive);
+        this.#api.toggleSort(colId ?? '', additive);
         const dir = this.#api.getState().sortModel.find((s) => s.colId === colId)?.dir || null;
-        emit(this, 'is-sort-change', { column: colId, direction: dir });
+        emit(this, 'is-sort-change', { column: colId ?? '', direction: dir } satisfies SortChangeDetail);
       }
       return;
     }
 
     // Group row toggle
-    const groupRow = e.target.closest('.mim-dg__group-row');
-    if (groupRow) {
-      const id = groupRow.dataset.rowId;
-      this.#api.toggleGroup(id);
+    const groupRow = target.closest('.mim-dg__group-row');
+    if (groupRow instanceof HTMLElement) {
+      const id = groupRow.dataset['rowId'];
+      if (id) this.#api.toggleGroup(id);
       return;
     }
 
     // Row selection + cell click + edit + action
-    const row = e.target.closest('.mim-dg__row[data-row-kind="leaf"]');
-    if (row) {
-      const rowId = row.dataset.rowId;
+    const row = target.closest('.mim-dg__row[data-row-kind="leaf"]');
+    if (row instanceof HTMLElement) {
+      const rowId = row.dataset['rowId'];
       const node = this.#api.getAllRows().find((n) => n.id === rowId);
       if (!node) return;
 
       // Action button?
-      const actionBtn = e.target.closest('[data-action]');
-      if (actionBtn) {
-        const colId = this.#api.getColumns().find((c) => c.def.actions?.some((a) => a.value === actionBtn.dataset.action))?.colId;
-        const col = this.#api.getColumns().find((c) => c.colId === colId);
-        const act = col?.def.actions?.find((a) => a.value === actionBtn.dataset.action);
-        emit(this, 'is-action', { row: node.data, column: col, action: act?.value });
+      const actionBtn = target.closest('[data-action]');
+      if (actionBtn instanceof HTMLElement) {
+        const actionVal = actionBtn.dataset['action'];
+        const cols = this.#api.getColumns();
+        const colWithAction = cols.find((c) => (c.def as ColumnDefWithActions).actions?.some((a) => a.value === actionVal));
+        const act = colWithAction?.def && (colWithAction.def as ColumnDefWithActions).actions?.find((a) => a.value === actionVal);
+        emit(this, 'is-action', { row: node.data, column: colWithAction, action: act?.value } satisfies ActionEventDetail);
         return;
       }
 
@@ -1457,31 +1657,33 @@ export class IsAgGrid extends ElementBase {
         );
         if (!e.shiftKey) this.#lastRangeFrom = node.id;
         this.#api.setSelection(next);
-        emit(this, 'is-row-select', { rows: this.api.getSelectedRows() });
+        emit(this, 'is-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
       }
 
       // Cell click
-      const cell = e.target.closest('.mim-dg__cell[data-col-id]');
-      if (cell) {
-        const colId = cell.dataset.colId;
+      const cell = target.closest('.mim-dg__cell[data-col-id]');
+      if (cell instanceof HTMLElement) {
+        const colId = cell.dataset['colId'];
         const col = this.#api.getColumns().find((c) => c.colId === colId);
-        const value = node.data?.[colId];
+        const value = colId ? node.data[colId] : undefined;
         if (col?.def.editable) {
           const oldValue = value;
-          const newValue = window.prompt(`Editar ${col.headerName}`, oldValue ?? '');
+          const newValue = window.prompt(`Editar ${col.headerName}`, oldValue == null ? '' : String(oldValue));
           if (newValue != null && String(newValue) !== String(oldValue ?? '')) {
             const parsed = parseMaybeNumber(newValue, col);
-            node.data[colId] = parsed;
-            emit(this, 'is-cell-edit', { row: node.data, column: col, oldValue, newValue: parsed });
+            if (colId) node.data[colId] = parsed;
+            emit(this, 'is-cell-edit', { row: node.data, column: col, oldValue, newValue: parsed } satisfies CellEditDetail);
             this.#api.setRows([...this.#rawRows]); // notifica al store
           }
         }
-        emit(this, 'is-cell-click', { row: node.data, column: col, value });
+        emit(this, 'is-cell-click', { row: node.data, column: col, value } satisfies CellClickDetail);
       }
     }
-  }
+    // Reference allRows to satisfy unused-var lint without altering behavior.
+    void allRows;
+  };
 
-  #onKeyDown(e) {
+  #onKeyDown = (e: KeyboardEvent): void => {
     if (!this.#api) return;
     const state = this.#api.getState();
     const dataRows = this.#isPaginated ? state.pageDisplayRows : state.displayRows;
@@ -1489,7 +1691,7 @@ export class IsAgGrid extends ElementBase {
     const last = dataRows.length - 1;
     const rowH = this.#rowHeight();
     const viewportH = Math.max(0, this.#viewport.clientHeight - this.#headerHeight());
-    const move = (idx: number) => {
+    const move = (idx: number): void => {
       const c = Math.max(0, Math.min(last, idx));
       this.#focusRow = c;
       const top = c * rowH;
@@ -1514,23 +1716,23 @@ export class IsAgGrid extends ElementBase {
         const orderedIds = leafRows.map((n) => n.id);
         const next = toggleRowSelectionCore(state.selection, dr.node.id, this.#currentSelectionMode, { additive: true, orderedIds });
         this.#api.setSelection(next);
-        emit(this, 'is-row-select', { rows: this.api.getSelectedRows() });
+        emit(this, 'is-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
       }
       e.preventDefault();
     } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a' && this.#currentSelectionMode === SelectionMode.MULTIPLE) {
       this.#api.setSelection(selectAllCore(leafRows));
-      emit(this, 'is-row-select', { rows: this.api.getSelectedRows() });
+      emit(this, 'is-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
       e.preventDefault();
     } else if (e.key === 'Escape' && state.selection.size) {
       this.#api.setSelection(clearSelectionCore());
-      emit(this, 'is-row-select', { rows: [] });
+      emit(this, 'is-row-select', { rows: [] } satisfies RowSelectDetail);
     }
-  }
+  };
 
   /* ── Helpers ──────────────────────────────────────────────────────────── */
 
   /** Resuelve longitudes CSS (`40`, `40px`, `2.5rem`, `1.5em`) a px. */
-  #cssLengthPx(prop, fallback) {
+  #cssLengthPx(prop: string, fallback: number): number {
     const raw = getComputedStyle(this).getPropertyValue(prop).trim();
     if (!raw) return fallback;
     const n = parseFloat(raw);
@@ -1546,56 +1748,56 @@ export class IsAgGrid extends ElementBase {
     return n; // px o unitless → px
   }
 
-  #rowHeight() {
+  #rowHeight(): number {
     return this.#cssLengthPx(
       '--is-grid-row-h',
-      DENSITY_ROW_HEIGHT[this.#density] ?? DENSITY_ROW_HEIGHT[Density.NORMAL],
+      DENSITY_ROW_HEIGHT[this.#density] ?? DENSITY_ROW_HEIGHT[Density.NORMAL] ?? DEFAULT_HEADER_HEIGHT,
     );
   }
 
-  #headerHeight() {
+  #headerHeight(): number {
     return this.#cssLengthPx('--is-grid-header-h', DEFAULT_HEADER_HEIGHT);
   }
 
   /* ── Public API ───────────────────────────────────────────────────────── */
 
-  get rows() { return this.#rawRows.slice(); }
-  get columns() { return this.#rawColumns.slice(); }
+  get rows(): RowData[] { return this.#rawRows.slice(); }
+  get columns(): ColumnDef[] { return this.#rawColumns.slice(); }
 
   get api() {
     const self = this;
     return {
-      getState: () => self.#api?.getState() ?? null,
-      setRows: (rows) => {
+      getState: (): GridState | null => self.#api?.getState() ?? null,
+      setRows: (rows: RowData[]): void => {
         self.#rawRows = Array.isArray(rows) ? rows : [];
         self.#externalData = true;
         self.#api?.setRows(self.#rawRows);
       },
-      setColumns: (defs) => {
+      setColumns: (defs: ColumnDef[]): void => {
         self.#rawColumns = Array.isArray(defs) ? defs : [];
         self.#externalData = true;
         self.#api?.setColumnDefs(self.#rawColumns);
       },
-      getRows: () => self.#api?.getAllRows().map((n) => n.data) ?? [],
-      getAllRows: () => self.#api?.getAllRows().map((n) => n.data) ?? [],
-      getDisplayedRows: () => self.#api?.getDisplayedRows().map((n) => n.data) ?? [],
-      goToPage: (n: number) => { if (self.#api) self.#goToPage(n - 1); }, // legacy 1-based
-      setPage: (n) => self.#api?.setPage(n),
-      setPageSize: (n) => self.#api?.setPageSize(n),
-      setQuickFilter: (s) => {
+      getRows: (): RowData[] => self.#api?.getAllRows().map((n) => n.data) ?? [],
+      getAllRows: (): RowData[] => self.#api?.getAllRows().map((n) => n.data) ?? [],
+      getDisplayedRows: (): RowData[] => self.#api?.getDisplayedRows().map((n) => n.data) ?? [],
+      goToPage: (n: number): void => { if (self.#api) self.#goToPage(n - 1); }, // legacy 1-based
+      setPage: (n: number): void => self.#api?.setPage(n),
+      setPageSize: (n: number): void => self.#api?.setPageSize(n),
+      setQuickFilter: (s: string): void => {
         const v = String(s ?? '');
-        const input = self.shadowRoot?.querySelector<HTMLElement>('.mim-dg__quick-input');
+        const input = self.shadowRoot?.querySelector<HTMLInputElement>('.mim-dg__quick-input');
         if (input) input.value = v;
         self.#api?.setQuickFilter(v);
       },
       /** Legacy: (field, op, value) where op ∈ { contains, eq, neq, gt, gte, lt, lte, starts, ends }.
        *  New: (colId, filter | null). Se detecta por el tipo del segundo arg. */
-      setFilter: (colIdOrField, opOrFilter, valueMaybe: string) => {
+      setFilter: (colIdOrField: string, opOrFilter: string | ColumnFilter | null | undefined, valueMaybe?: string): void => {
         if (!self.#api) return;
         const colId = colIdOrField;
         // Si el segundo arg es un objeto/null → nueva API core.
         if (opOrFilter === null || opOrFilter === undefined || typeof opOrFilter === 'object') {
-          self.#api.setFilter(colId, opOrFilter ?? null);
+          self.#api.setFilter(colId, (opOrFilter as ColumnFilter | null) ?? null);
           return;
         }
         // Legacy text-only.
@@ -1607,42 +1809,42 @@ export class IsAgGrid extends ElementBase {
         }
       },
       /** Nueva: (colId, filter | null). */
-      setFilterModel: (model) => {
+      setFilterModel: (model: Record<string, ColumnFilter | null>): void => {
         if (!self.#api) return;
         for (const [colId, f] of Object.entries(model || {})) self.#api.setFilter(colId, f);
       },
-      clearFilter: (field) => self.#api?.setFilter(field, null),
-      setSortModel: (model) => self.#api?.setSortModel(model),
-      toggleSort: (colId, additive) => self.#api?.toggleSort(colId, additive),
-      pinColumn: (colId, side) => self.#api?.pinColumn(colId, side),
-      hideColumn: (colId, hide = true) => self.#api?.hideColumn(colId, hide),
-      openColumnsPanel: () => self.#openSidePanel('columns'),
-      closeSidePanel: () => self.#closeSidePanel(),
-      resizeColumn: (colId, width) => self.#api?.resizeColumn(colId, width),
-      autosizeColumn: (colId) => self.#api?.autosizeColumn(colId),
-      reorderColumn: (colId, toIndex) => self.#api?.reorderColumn(colId, toIndex),
-      setRowGroupCols: (colIds) => self.#api?.setRowGroupCols(colIds),
-      addRowGroupCol: (colId) => self.#api?.addRowGroupCol(colId),
-      removeRowGroupCol: (colId) => self.#api?.removeRowGroupCol(colId),
-      toggleGroup: (groupId) => self.#api?.toggleGroup(groupId),
-      expandAllGroups: () => self.#api?.expandAllGroups(),
-      collapseAllGroups: () => self.#api?.collapseAllGroups(),
-      getSelectedRows: () => {
+      clearFilter: (field: string): void => self.#api?.setFilter(field, null),
+      setSortModel: (model: { colId: string; dir: SortDirName }[]): void => self.#api?.setSortModel(model),
+      toggleSort: (colId: string, additive?: boolean): void => self.#api?.toggleSort(colId, additive),
+      pinColumn: (colId: string, side: PinSideName | null): void => self.#api?.pinColumn(colId, side),
+      hideColumn: (colId: string, hide = true): void => self.#api?.hideColumn(colId, hide),
+      openColumnsPanel: (): void => self.#openSidePanel('columns'),
+      closeSidePanel: (): void => self.#closeSidePanel(),
+      resizeColumn: (colId: string, width: number): void => self.#api?.resizeColumn(colId, width),
+      autosizeColumn: (colId: string): void => self.#api?.autosizeColumn(colId),
+      reorderColumn: (colId: string, toIndex: number): void => self.#api?.reorderColumn(colId, toIndex),
+      setRowGroupCols: (colIds: string[]): void => self.#api?.setRowGroupCols(colIds),
+      addRowGroupCol: (colId: string): void => self.#api?.addRowGroupCol(colId),
+      removeRowGroupCol: (colId: string): void => self.#api?.removeRowGroupCol(colId),
+      toggleGroup: (groupId: string): void => self.#api?.toggleGroup(groupId),
+      expandAllGroups: (): void => self.#api?.expandAllGroups(),
+      collapseAllGroups: (): void => self.#api?.collapseAllGroups(),
+      getSelectedRows: (): RowData[] => {
         if (!self.#api) return [];
         const sel = self.#api.getState().selection;
         return self.#api.getAllRows().filter((n) => sel.has(n.id)).map((n) => n.data);
       },
-      selectAll: () => {
+      selectAll: (): void => {
         if (!self.#api) return;
         if (self.#currentSelectionMode !== SelectionMode.MULTIPLE) return;
         self.#api.setSelection(selectAllCore(self.#api.getDisplayedRows()));
       },
-      clearSelection: () => self.#api?.setSelection(clearSelectionCore()),
-      setSelection: (ids) => self.#api?.setSelection(new Set(ids)),
-      setDensity: (d) => {
-        if (Object.values(Density).includes(d)) self.setAttribute('density', d);
+      clearSelection: (): void => self.#api?.setSelection(clearSelectionCore()),
+      setSelection: (ids: Iterable<string>): void => self.#api?.setSelection(new Set(ids)),
+      setDensity: (d: string): void => {
+        if (Object.values(Density).includes(d as never)) self.setAttribute('density', d);
       },
-      exportCSV: (filename = 'grid.csv', opts = {}) => {
+      exportCSV: (filename = 'grid.csv', opts: { separator?: string; onlySelected?: boolean } = {}): void => {
         if (!self.#api) return;
         const state = self.#api.getState();
         const sep = opts.separator || ',';
@@ -1654,22 +1856,22 @@ export class IsAgGrid extends ElementBase {
         });
         const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement('a') as HTMLAnchorElement;
         a.href = url; a.download = filename;
         document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
       },
-      serializeState: () => self.#api?.serializeState() ?? null,
-      loadState: (json) => {
+      serializeState: (): string | null => self.#api?.serializeState() ?? null,
+      loadState: (json: string): void => {
         if (!self.#api) return;
         self.#api.loadState(json);
         emit(self, 'is-state-loaded', self.#api.getState());
       },
-      refresh: () => {
+      refresh: (): void => {
         if (!self.#api) return;
         self.#api.setRows([...self.#rawRows]);
       },
-      resetPersistedState: () => {
+      resetPersistedState: (): void => {
         removeComponentPrefs('is-ag-grid', self.#storageKey || self.#defaultStorageKey());
         if (!self.#api) return;
         self.#initModel();
@@ -1681,32 +1883,32 @@ export class IsAgGrid extends ElementBase {
 
   /* ── Attribute setters/getters (boolean) ──────────────────────────────── */
 
-  get density() { return this.#density; }
-  set density(v) {
-    if (Object.values(Density).includes(v)) this.setAttribute('density', v);
+  get density(): DensityName { return this.#density; }
+  set density(v: string) {
+    if (Object.values(Density).includes(v as never)) this.setAttribute('density', v);
     else this.removeAttribute('density');
   }
 
-  get pagination() { return this.#isPaginated; }
-  set pagination(v) { this.setBooleanAttr('pagination', v); }
+  get pagination(): boolean { return this.#isPaginated; }
+  set pagination(v: boolean) { this.setBooleanAttr('pagination', v); }
 
-  get selectable() { return this.hasAttribute('selectable'); }
-  set selectable(v) { this.setBooleanAttr('selectable', v); }
+  get selectable(): boolean { return this.hasAttribute('selectable'); }
+  set selectable(v: boolean) { this.setBooleanAttr('selectable', v); }
 
-  get toolbar() { return this.#showToolbar; }
-  set toolbar(v) { this.setBooleanAttr('toolbar', v); }
+  get toolbar(): boolean { return this.#showToolbar; }
+  set toolbar(v: boolean) { this.setBooleanAttr('toolbar', v); }
 
-  get rememberState() { return this.#rememberState; }
-  set rememberState(v) { this.setBooleanAttr('remember-state', v); }
+  get rememberState(): boolean { return this.#rememberState; }
+  set rememberState(v: boolean) { this.setBooleanAttr('remember-state', v); }
 }
 
 /* ── Helpers (módulo, no clase) ─────────────────────────────────────────── */
 
-function formatNumberRaw(n) {
+function formatNumberRaw(n: number): string {
   return Number.isFinite(n) ? n.toLocaleString() : '0';
 }
 
-function formatValueSafe(col, value: string) {
+function formatValueSafe(col: ColumnState, value: unknown): string {
   if (value == null || value === '') return '';
   if (col.type === 'number') return Number.isFinite(value) ? String(value) : '';
   if (col.type === 'boolean') return value ? '✓' : '';
@@ -1717,12 +1919,12 @@ function formatValueSafe(col, value: string) {
   return String(value);
 }
 
-function formatDate(value: string, col) {
+function formatDate(value: unknown, col: ColumnState): string {
   if (value == null || value === '') return '';
   const d = value instanceof Date ? value : new Date(String(value));
   if (Number.isNaN(d.getTime())) return String(value);
   const locale = col.def.format || 'es-CO';
-  const style = col.def.dateFormat || 'medium';
+  const style = (col.def as ColumnDef & { dateFormat?: Intl.DateTimeFormatOptions['dateStyle'] }).dateFormat || 'medium';
   try {
     return new Intl.DateTimeFormat(locale, { dateStyle: style }).format(d);
   } catch {
@@ -1730,11 +1932,11 @@ function formatDate(value: string, col) {
   }
 }
 
-function formatNumber(value, col) {
+function formatNumber(value: unknown, col: ColumnState): string {
   if (value == null || value === '') return '';
   const n = Number(value);
   if (!Number.isFinite(n)) return '';
-  const decimals = col.def.decimals ?? 2;
+  const decimals = (col.def as ColumnDef & { decimals?: number }).decimals ?? 2;
   const locale = col.def.format || 'es-CO';
   try {
     return new Intl.NumberFormat(locale, {
@@ -1746,13 +1948,14 @@ function formatNumber(value, col) {
   }
 }
 
-function formatCurrency(value, col) {
+function formatCurrency(value: unknown, col: ColumnState): string {
   if (value == null || value === '') return '';
   const n = Number(value);
   if (!Number.isFinite(n)) return '';
   const locale = col.def.format || 'es-CO';
-  const currency = col.def.currency || 'COP';
-  const decimals = col.def.decimals ?? 0;
+  const defExt = col.def as ColumnDef & { currency?: string; decimals?: number };
+  const currency = defExt.currency || 'COP';
+  const decimals = defExt.decimals ?? 0;
   try {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
@@ -1765,7 +1968,7 @@ function formatCurrency(value, col) {
   }
 }
 
-function parseMaybeNumber(value, col) {
+function parseMaybeNumber(value: string, col: ColumnState): string | number {
   if (col?.type === 'number') {
     const n = Number(value);
     return Number.isFinite(n) ? n : value;
@@ -1773,14 +1976,19 @@ function parseMaybeNumber(value, col) {
   return value;
 }
 
-function cellStyleToString(style) {
+function cellStyleToString(style: unknown): string {
   if (!style || typeof style !== 'object') return '';
-  return Object.entries(style).map(([k, v]) => `${k}:${v}`).join(';');
+  return Object.entries(style as Record<string, unknown>)
+    .map(([k, v]) => `${k}:${v}`)
+    .join(';');
 }
 
-function uniqueValuesSafe(rows, col) {
-  const set = new Set();
-  for (const n of rows) set.add(cellText(col, n));
+function uniqueValuesSafe(rows: RowNode[], col: ColumnState): string[] {
+  const set = new Set<string>();
+  for (const n of rows) {
+    const v = (n.data as Record<string, unknown>)[col.field];
+    set.add(v == null ? '' : String(v));
+  }
   return [...set].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 }
 
@@ -1883,7 +2091,7 @@ const FLOATING_CSS = /* css */ `
   max-height: 12rem;
   overflow: auto;
   border: 1px solid var(--is-border-soft, #3a4252);
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 0.25rem;
 }
 .mim-dg__filter-set-item {
@@ -1905,7 +2113,7 @@ const FLOATING_CSS = /* css */ `
 }
 `;
 
-function ensureFloatingStyles() {
+function ensureFloatingStyles(): void {
   if (typeof document === 'undefined') return;
   if (document.getElementById(FLOATING_STYLE_ID)) return;
   const style = document.createElement('style');
