@@ -1,12 +1,49 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveGanttSpec, computeGanttLayout } from './gantt-spec.js';
+import type { GanttLayout, GanttSpec } from './gantt-spec.js';
+// Tipos internos del spec (no exportados) que el renderer necesita; los
+// redefinimos localmente para no tocar la firma del spec.
+interface GanttRow {
+  id: string;
+  label: string;
+  y: number;
+  h: number;
+  milestone: boolean;
+  cx?: number;
+  cy?: number;
+  size?: number;
+  x: number;
+  w?: number;
+  progress?: number;
+  hue?: number;
+  group?: string;
+  description?: string;
+}
+interface GanttArrow {
+  id: string;
+  from: string;
+  to: string;
+  path: string;
+  arrowTipX: number;
+  arrowTipY: number;
+  arrowAngle: number;
+  hue?: number;
+}
+interface GanttTick {
+  ms: number;
+  label: string;
+  x: number;
+  major: boolean;
+}
 import { shapePath } from './flowchart-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -31,12 +68,32 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/** Estado del callback `onState` del motor de tortuga (path-turtle). */
+interface TurtleState {
+  playing: boolean;
+  idx: number;
+  total: number;
+  replay: number;
+}
+
+/** Fila cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
+interface RowNodeEntry {
+  r: GanttRow;
+  g: SVGGElement;
+}
+
+/** Flecha cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
+interface ArrowNodeEntry {
+  a: GanttArrow;
+  g: SVGGElement;
+}
+
 class IsGantt extends DiagramElementBase {
-  #turtle = null;
-  #hiddenGroups = new Set();
-  #rowNodes = new Map();
-  #arrowNodes = new Map();
-  #hoverId = null;
+  #turtle: PathTurtle | null = null;
+  #hiddenGroups: Set<string> = new Set<string>();
+  #rowNodes: Map<string, RowNodeEntry> = new Map();
+  #arrowNodes: Map<string, ArrowNodeEntry> = new Map();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -44,31 +101,31 @@ class IsGantt extends DiagramElementBase {
     adoptCss(this.shadowRoot!, import.meta.url);
   }
 
-  onDiagramConnected() {
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+  onDiagramConnected(): void {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
+  onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get turtle() { return this.#turtle; }
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get turtle(): PathTurtle | null { return this.#turtle; }
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | Iterable<string> | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? v : new Set(v ?? []);
     this.queueRender();
   }
 
-  renderDiagram() {
-    const spec = resolveGanttSpec(this.payload ?? {});
+  renderDiagram(): void {
+    const spec: GanttSpec | null = resolveGanttSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -78,7 +135,7 @@ class IsGantt extends DiagramElementBase {
     delete this.wrap.dataset.empty;
 
     const hidden = this.#hiddenGroups;
-    let visible = spec;
+    let visible: GanttSpec = spec;
     if (hidden.size) {
       const tasks = spec.tasks.filter((t) => !t.group || !hidden.has(t.group));
       visible = { ...spec, tasks };
@@ -90,18 +147,18 @@ class IsGantt extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
     // `Date.now()` se llama solo aquí (en el componente), nunca dentro del
-    // módulo de spec puro, para que el layout siga siendo determinista.
-    const layout = computeGanttLayout(visible, { now: Date.now() });
+    // módulo de spec puro, para que el layout siga siendo deterministe.
+    const layout: GanttLayout = computeGanttLayout(visible, { now: Date.now() });
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: GanttLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -130,7 +187,7 @@ class IsGantt extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new PathTurtle(turtleGroup);
+    this.#turtle = new PathTurtle(turtleGroup as unknown as HTMLElement);
     this.#turtle.setData({
       messages: layout.arrows.map((a, i: number) => ({
         path: a.path, step: i + 1, log: '', groupHue: a.hue,
@@ -139,20 +196,20 @@ class IsGantt extends DiagramElementBase {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => emit(this, 'is-turtle-state', state),
+      onState: (state: TurtleState) => emit(this, 'is-turtle-state', state),
     });
 
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildGrid(layout, theme) {
+  #buildGrid(layout: GanttLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'gantt-grid' });
     // Divisor entre la columna de etiquetas y el área de tiempo.
     g.appendChild(svgEl('line', {
       x1: layout.gutterX, x2: layout.gutterX, y1: layout.rowsTop - 6, y2: layout.rowsBottom + 6,
       stroke: theme.border, class: 'dg-grid-line',
     }));
-    for (const tk of layout.ticks) {
+    for (const tk of layout.ticks as GanttTick[]) {
       g.appendChild(svgEl('line', {
         x1: tk.x, x2: tk.x, y1: layout.rowsTop - 4, y2: layout.rowsBottom + 4,
         stroke: theme.grid, 'stroke-width': tk.major ? 1.4 : 1, class: 'dg-grid-line',
@@ -168,29 +225,32 @@ class IsGantt extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildRows(layout, theme) {
-    for (const r of layout.rows) {
+  #buildRows(layout: GanttLayout, theme: DiagramTheme): void {
+    for (const r of layout.rows as GanttRow[]) {
       const color = (r.hue != null && tkHueToHex(r.hue)) || theme.accent;
       const g = svgEl('g', { class: 'gantt-row' });
       g.dataset.rowId = r.id;
       if (this.isViewer) g.style.cursor = 'pointer';
 
       if (r.milestone) {
+        const cx = r.cx ?? r.x + (r.w ?? 0) / 2;
+        const cy = r.cy ?? r.y + r.h / 2;
+        const size = r.size ?? 14;
         const box = svgEl('path', {
-          d: shapePath('diamond', r.x, r.cy - r.size / 2, r.size, r.size),
+          d: shapePath('diamond', cx - size / 2, cy - size / 2, size, size),
           fill: color, stroke: theme.panel, 'stroke-width': 1,
           class: 'gantt-row__milestone',
         });
         g.appendChild(box);
       } else {
         const box = svgEl('rect', {
-          x: r.x, y: r.y + 4, width: r.w, height: r.h - 8, rx: 6,
+          x: r.x, y: r.y + 4, width: r.w ?? 0, height: r.h - 8, rx: 6,
           fill: color, opacity: 0.32, stroke: color, 'stroke-width': 1.2,
           class: 'gantt-row__bar',
         });
         g.appendChild(box);
-        if (Number.isFinite(r.progress) && r.progress > 0) {
-          const pw = Math.max(0, Math.min(r.w, (r.w * r.progress) / 100));
+        if (Number.isFinite(r.progress) && (r.progress ?? 0) > 0) {
+          const pw = Math.max(0, Math.min(r.w ?? 0, ((r.w ?? 0) * (r.progress ?? 0)) / 100));
           g.appendChild(svgEl('rect', {
             x: r.x, y: r.y + 4, width: pw, height: r.h - 8, rx: 6,
             fill: color, class: 'gantt-row__progress',
@@ -203,17 +263,21 @@ class IsGantt extends DiagramElementBase {
         'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
       });
       // Wrap del label de la fila si es largo (no debe desbordar la barra).
+      // `overflow` no está declarado en GanttRow; cast para leer.
+      const rawOverflow = (r as { overflow?: string }).overflow;
+      const overflow: 'grow' | 'ellipsis' =
+        (rawOverflow === 'grow' || rawOverflow === 'ellipsis') ? rawOverflow : 'ellipsis';
       const lresult = wrapText({
         text: r.label,
-        maxWidth: Math.max(r.w - 8, 16),
+        maxWidth: Math.max((r.w ?? 0) - 8, 16),
         maxHeight: r.h - 4,
         fontSize: 11,
         fontFamily: 'Tahoma,Arial,sans-serif',
-        overflow: r.overflow ?? 'ellipsis',
+        overflow,
       });
-      const ltspans = buildTspans(
+      const ltspans: TSpanSpec[] = buildTspans(
         lresult.lines,
-        r.x, r.y, r.w, r.h,
+        r.x, r.y, r.w ?? 0, r.h,
         'start', 11, 1.2,
       );
       for (const span of ltspans) {
@@ -227,12 +291,12 @@ class IsGantt extends DiagramElementBase {
       g.appendChild(label);
 
       this.svg.appendChild(g);
-      this.#rowNodes.set(r.id, { r, g });
+      this.#rowNodes.set(r.id, { r, g: g as SVGGElement });
     }
   }
 
-  #buildArrows(layout, theme) {
-    for (const a of layout.arrows) {
+  #buildArrows(layout: GanttLayout, theme: DiagramTheme): void {
+    for (const a of layout.arrows as GanttArrow[]) {
       const color = (a.hue != null && tkHueToHex(a.hue)) || theme.accent;
       const g = svgEl('g', { class: 'gantt-arrow' });
       g.dataset.arrowId = a.id;
@@ -243,20 +307,26 @@ class IsGantt extends DiagramElementBase {
       g.appendChild(path);
       // Orientación tomada del último tramo REAL: el ángulo fijo del layout
       // (90°) daba puntas de lado cuando el router llegaba en horizontal.
-      g.appendChild(svgArrowHead({
+      // Cast: svgArrowHead tiene firma heredada con `any`; añadimos la clase
+      // CSS al resultado en vez de pasarla por el parámetro tipado a null.
+      const head = (svgArrowHead as unknown as (opts: {
+        d: string; tip: { x: number; y: number }; color: string;
+        len?: number; halfWidth?: number;
+      }) => SVGElement)({
         d: a.path,
         tip: { x: a.arrowTipX, y: a.arrowTipY },
         color,
         len: 8,
         halfWidth: 4,
-        className: 'gantt-arrow__head',
-      }));
+      });
+      head.classList.add('gantt-arrow__head');
+      g.appendChild(head);
       this.svg.appendChild(g);
-      this.#arrowNodes.set(a.id, { a, g });
+      this.#arrowNodes.set(a.id, { a, g: g as SVGGElement });
     }
   }
 
-  #buildToday(layout, theme) {
+  #buildToday(layout: GanttLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'gantt-today' });
     g.appendChild(svgEl('line', {
       x1: layout.todayX, x2: layout.todayX, y1: layout.rowsTop - 8, y2: layout.rowsBottom + 8,
@@ -271,9 +341,10 @@ class IsGantt extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: GanttLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'gantt-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    const groups = layout.groups ?? [];
+    groups.forEach((grp, gi: number) => {
       // Título a la izquierda: la leyenda queda arriba a la derecha (y=18).
       const ly = 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
@@ -303,11 +374,11 @@ class IsGantt extends DiagramElementBase {
 
   /* ── hover / click ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: PointerEvent): void => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
@@ -321,10 +392,10 @@ class IsGantt extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('gantt');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: PointerEvent): void => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.rowId);
-    const id = g?.dataset.rowId ?? null;
+    const g = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.rowId);
+    const id: string | null = (g as HTMLElement | undefined)?.dataset.rowId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.wrap.getBoundingClientRect();
@@ -334,12 +405,12 @@ class IsGantt extends DiagramElementBase {
     }
   };
 
-  #onMouseLeave = () => {
+  #onMouseLeave = (_e: MouseEvent): void => {
     if (!this.isViewer) return;
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#rowNodes.get(id) : null;
 
