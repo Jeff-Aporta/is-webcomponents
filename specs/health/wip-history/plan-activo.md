@@ -12,15 +12,14 @@
 
 | Tanda | Hoja | Rama | Estado |
 |---|---|---|---|
-| 3 (impl) | WT-0031 | `wt-root-types-strong-2026` (directo) | sub-agente `ce18143e` en background |
-| 3 (impl) | WT-0032 | `wt-root-types-strong-2026` (directo) | sub-agente `be529970` en background |
+| 4 (data-grid) | WT-0042-bis | `wt-root-types-strong-2026` (directo) | sub-agente `ae502b91` cerrando icon-explorer.preview (último pendiente) |
 
 ## Tandas pendientes
 
 | # | Tanda | Rama base | Hojas | Errores | Mandato extra |
 |---|---|---|---|---|---|
 | 3 | diagrams/impl/* | `wt-root-types-strong-2026` | (cerrada) | ~532 | cerrada con WT-0031 + WT-0032-bis |
-| 4 | data-grid family | `wt-root-types-strong-2026` | WT-0041, WT-0042 | ~1,250 | ninguno |
+| 4 | data-grid family | `wt-root-types-strong-2026` | (casi cerrada) | ~1,250 | 4/5 archivos OK, icon-explorer.preview en WT-0042-bis |
 | 5 | tree-view + helpers | `wt-root-types-strong-2026` | WT-0051, WT-0052 | ~720 | ninguno |
 | 6 | layout + catalog + code | `wt-root-types-strong-2026` | WT-0061, WT-0062 | ~800 | ninguno |
 | 7 | forms | `wt-root-types-strong-2026` | WT-0071, WT-0072 | ~450 | **+ tests para forms críticos** |
@@ -60,7 +59,9 @@
 - Errores strict audit al inicio: **8,777**
 - Errores strict audit después de T1: **8,777** (T1 fue verificación/locks, fixes ya en main)
 - Errores strict audit después de T2: **7,897** (−880)
-- Próximo hito: < 7,500 después de T3
+- Errores strict audit después de T3: **7,384** (−513)
+- Errores strict audit después de T4: **6,365** (−1,019)
+- Próximo hito: < 6,000 después de T5
 
 ## Próxima tanda activa: T3
 
