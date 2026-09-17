@@ -33,5 +33,4 @@ docs/superpowers/
 # Bitácoras de plan/handoff de sesión: nunca versionar (se consolidan en specs/).
 EXEC-PLAN-*.md
 HANDOFF-*.md
-WIP-*.md
 
