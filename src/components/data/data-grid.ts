@@ -38,121 +38,9 @@ import '../forms/select.js';
 import '../forms/option.js';
 import '../forms/checkbox.js';
 
-/* ── Tipos internos ─────────────────────────────────────────────────────── */
-
-/** Hook del usuario: lo que el consumidor puede inyectar al grid. */
-type Hooks = {
-  getRowId?: (row: Row) => CellValue;
-  getRowHeight?: (row: Row) => number;
-  getRowClassName?: (params: { row: Row; id: CellValue; index: number }) => string;
-  getCellClassName?: (params: { value: CellValue; row: Row; id: CellValue; field: string }) => string;
-  getTreeDataPath?: (row: Row) => readonly string[];
-  getDetailPanelContent?: (params: { row: Row; id: CellValue }) => Node | string | { html?: string } | null;
-  isRowSelectable?: (params: { row: Row; id: CellValue }) => boolean;
-  isCellEditable?: (params: { row: Row; id: CellValue; field: string }) => boolean;
-  processRowUpdate?: (row: Row, before: Row) => Promise<Row | void> | Row | void;
-  rowsLoader?: (params: { start: number; api: IsDataGrid }) => Promise<Row[]> | void;
-};
-
-/** Localización y etiquetas. */
-type LocaleText = typeof TEXT & Record<string, string | ((n: number) => string)>;
-
-/** Modelo de paginación. */
-type PaginationModel = { page: number; pageSize: number };
-
-/** Foco del teclado. */
-type FocusArea =
-  | { area?: undefined; id: CellValue; field: string }
-  | { area: 'header'; field: string };
-
-/** Edición en curso. */
-type EditState = {
-  id: CellValue;
-  field: string;
-  fields: string[];
-  values: Record<string, CellValue>;
-  errors: Record<string, string>;
-};
-
-/** Rango de celdas seleccionadas. */
-type CellRange = {
-  start: { id: CellValue; field: string };
-  end: { id: CellValue; field: string };
-};
-
-/** Nodo del árbol de filas. */
-type GridNode = {
-  kind: 'leaf' | 'group';
-  id: CellValue;
-  row?: Row;
-  children?: GridNode[];
-  rows?: Row[];
-  depth?: number;
-  key?: CellValue;
-  aggregates?: Record<string, { fn: string; value: CellValue }>;
-  baseHeight?: number;
-  height?: number;
-  pinned?: 'top' | 'bottom';
-  path?: readonly string[];
-};
-
-/** Acción por fila. */
-type RowAction = {
-  label?: string;
-  icon?: string;
-  onClick?: (params: { id: CellValue; row: Row; api: IsDataGrid }) => void;
-  showInMenu?: boolean;
-  disabled?: boolean;
-};
-
-/** Salida del renderMenu (pop-item). */
-type MenuItem = {
-  label?: string;
-  icon?: string;
-  action?: string;
-  value?: string | number;
-  checked?: boolean;
-  disabled?: boolean;
-  separator?: boolean;
-};
-
-/** Estado de redimensionado de columna. */
-type ResizeState = { field: string; startX: number; startWidth: number };
-
-/** Rango de celdas resuelto en índices. */
-type RangeBounds = {
-  rows: [number, number];
-  cols: [number, number];
-  ids: string[];
-  fields: string[];
-};
-
-/** Resultado de renderCell: una celda + span opcional. */
-type CellRender = { el: HTMLElement; spanCount: number };
-
-/** Lista de modelos. */
-type SortEntry = { field: string; sort: string | null };
-
-/** Parche de undo/redo. */
-type HistoryPatch = Array<{ id: CellValue; before: Row; after: Row }>;
-
-/** Pivot model. */
-type PivotModel = {
-  rows: string[];
-  columns: string[];
-  values: Array<{ field: string; fn: string }>;
-};
-
-/** Detalle de eventos. */
-type RowSelectionDetail = {
-  rowSelectionModel: CellValue[];
-  selectedRows: Row[];
-  selectedIndices: number[];
-};
-
-type CellSelectionDetail = { cellSelectionModel: CellRange | null };
-
-type PageChangeDetail = PaginationModel;
+/* (Los tipos que dependen de `IsDataGrid` viven dentro del IIFE para evitar el
+   problema de ordenación de declaraciones: las clases NO son hoisted como
+   tipo en closures.) */
 
 /**
  * <is-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
@@ -330,8 +218,110 @@ type PageChangeDetail = PaginationModel;
     'aggregation-position', 'selectable', 'filterable',
   ];
 
-  /** Hooks aplicados al elemento real: `this.#hooks`. */
-  interface ResolvedHooks {
+  /** Tipos internos: viven aquí para poder usar `IsDataGrid` como tipo. */
+
+  /** Acción por fila expuesta por `getActions`. */
+  type RowAction = {
+    label?: string;
+    icon?: string;
+    onClick?: (params: { id: CellValue; row: Row; api: IsDataGrid }) => void;
+    showInMenu?: boolean;
+    disabled?: boolean;
+  };
+
+  /** Foco del teclado. */
+  type FocusArea =
+    | { area?: undefined; id: CellValue; field: string }
+    | { area: 'header'; field: string };
+
+  /** Edición en curso. */
+  type EditState = {
+    id: CellValue;
+    field: string;
+    fields: string[];
+    values: Record<string, CellValue>;
+    errors: Record<string, string>;
+  };
+
+  /** Rango de celdas seleccionadas. */
+  type CellRange = {
+    start: { id: CellValue; field: string };
+    end: { id: CellValue; field: string };
+  };
+
+  /** Nodo del árbol de filas. */
+  type GridNode = {
+    kind: 'leaf' | 'group';
+    id: CellValue;
+    row?: Row;
+    children?: GridNode[];
+    rows?: Row[];
+    depth?: number;
+    key?: CellValue;
+    aggregates?: Record<string, { fn: string; value: CellValue }>;
+    baseHeight?: number;
+    height?: number;
+    pinned?: 'top' | 'bottom';
+    path?: readonly string[];
+  };
+
+  /** Salida del renderMenu (pop-item). */
+  type MenuItem = {
+    label?: string;
+    icon?: string;
+    action?: string;
+    value?: string | number;
+    checked?: boolean;
+    disabled?: boolean;
+    separator?: boolean;
+  };
+
+  /** Estado de redimensionado de columna. */
+  type ResizeState = { field: string; startX: number; startWidth: number };
+
+  /** Rango de celdas resuelto en índices. */
+  type RangeBounds = {
+    rows: [number, number];
+    cols: [number, number];
+    ids: string[];
+    fields: string[];
+  };
+
+  /** Resultado de renderCell: una celda + span opcional. */
+  type CellRender = { el: HTMLElement; spanCount: number };
+
+  /** Entrada del modelo de orden. */
+  type SortEntry = { field: string; sort: string | null };
+
+  /** Parche de undo/redo. */
+  type HistoryPatch = Array<{ id: CellValue; before: Row; after: Row }>;
+
+  /** Pivot model. */
+  type PivotModel = {
+    rows: string[];
+    columns: string[];
+    values: Array<{ field: string; fn: string }>;
+  };
+
+  /** Detalle del evento de selección. */
+  type RowSelectionDetail = {
+    rowSelectionModel: CellValue[];
+    selectedRows: Row[];
+    selectedIndices: number[];
+  };
+
+  type CellSelectionDetail = { cellSelectionModel: CellRange | null };
+
+  /** Modelo de paginación. */
+  type PaginationModel = { page: number; pageSize: number };
+
+  type PageChangeDetail = PaginationModel;
+
+  /** Localización y etiquetas del componente. */
+  type LocaleText = typeof TEXT & Record<string, string | ((n: number) => string)>;
+
+  /** Hooks públicos del grid (lo que el consumidor puede inyectar). */
+  type Hooks = {
     getRowId?: (row: Row) => CellValue;
     getRowHeight?: (row: Row) => number;
     getRowClassName?: (params: { row: Row; id: CellValue; index: number }) => string;
@@ -342,7 +332,24 @@ type PageChangeDetail = PaginationModel;
     isCellEditable?: (params: { row: Row; id: CellValue; field: string }) => boolean;
     processRowUpdate?: (row: Row, before: Row) => Promise<Row | void> | Row | void;
     rowsLoader?: (params: { start: number; api: IsDataGrid }) => Promise<Row[]> | void;
-  }
+  };
+
+  /** Hooks aplicados al elemento real: `this.#hooks`. */
+  type ResolvedHooks = {
+    getRowId?: (row: Row) => CellValue;
+    getRowHeight?: (row: Row) => number;
+    getRowClassName?: (params: { row: Row; id: CellValue; index: number }) => string;
+    getCellClassName?: (params: { value: CellValue; row: Row; id: CellValue; field: string }) => string;
+    getTreeDataPath?: (row: Row) => readonly string[];
+    getDetailPanelContent?: (params: { row: Row; id: CellValue }) => Node | string | { html?: string } | null;
+    isRowSelectable?: (params: { row: Row; id: CellValue }) => boolean;
+    isCellEditable?: (params: { row: Row; id: CellValue; field: string }) => boolean;
+    processRowUpdate?: (row: Row, before: Row) => Promise<Row | void> | Row | void;
+    rowsLoader?: (params: { start: number; api: IsDataGrid }) => Promise<Row[]> | void;
+  };
+
+  /** Argumento del `getActions` que acepta el kit (forma más explícita). */
+  type ActionParams = { row: Row; id: CellValue; colDef: ColumnDef };
 
   class IsDataGrid extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -584,7 +591,8 @@ type PageChangeDetail = PaginationModel;
     get quickFilterValue(): string { return this.#quickValue; }
     set quickFilterValue(v: string | null | undefined) {
       this.#quickValue = String(v ?? '');
-      if (this.#quick.value !== this.#quickValue) this.#quick.value = this.#quickValue;
+      const quick = this.#quick as unknown as { value: string };
+      if (quick.value !== this.#quickValue) quick.value = this.#quickValue;
       this.#page = 0;
       this.#refresh();
     }
@@ -720,7 +728,7 @@ type PageChangeDetail = PaginationModel;
 
     get density(): string {
       const d = this.getAttribute('density');
-      return DENSITY[d] ? d : 'standard';
+      return d != null && DENSITY[d] ? d : 'standard';
     }
     set density(v: string) { this.setAttribute('density', v); }
 
@@ -1104,9 +1112,11 @@ type PageChangeDetail = PaginationModel;
         const label = this.treeData
           ? this.#text.groupColumn
           : this.#groupingModel.map((f: string) => this.#cols.find((c: ColumnDef) => c.field === f)?.headerName || f).join(' / ');
+        const groupCol = sysCol('__group', 240);
+        (groupCol as ColumnDef & { group?: boolean }).group = true;
         out.push({
-          ...sysCol('__group', 240),
-          headerName: label, align: 'left', resizable: true, group: true, maxWidth: Infinity,
+          ...groupCol,
+          headerName: label, align: 'left', resizable: true, maxWidth: Infinity,
         });
       }
       return out.concat(this.#visibleCols());
@@ -1223,7 +1233,8 @@ type PageChangeDetail = PaginationModel;
       const showToolbar = this.hasAttribute('show-toolbar') || this.filterable;
       const showSearch = this.hasAttribute('quick-filter') || this.filterable;
       const showTools = this.toolbarTools;
-      this.#toolbar.querySelector<HTMLElement>('.tool-search').hidden = !showSearch;
+      const search = this.#toolbar.querySelector<HTMLElement>('.tool-search');
+      if (search) search.hidden = !showSearch;
       for (const [tool, label] of [['columns', 'columns'], ['filters', 'filters'], ['density', 'density'], ['export', 'export']] as const) {
         const btn = this.#toolbar.querySelector<HTMLElement>(`[data-tool="${tool}"]`);
         if (!btn) continue;
@@ -1236,7 +1247,8 @@ type PageChangeDetail = PaginationModel;
       }
       // Si no hay búsqueda ni tools, la barra no aporta nada: ocultarla.
       this.#toolbar.hidden = !showToolbar || (!showSearch && !showTools);
-      this.#quick.placeholder = this.#text.quickFilter;
+      const quickEl = this.#quick as unknown as { placeholder: string };
+      quickEl.placeholder = this.#text.quickFilter;
       this.#footer.hidden = this.hasAttribute('hide-footer');
       this.#filterHead.hidden = !this.hasAttribute('header-filters');
       this.#pageSizeSelect.setAttribute('aria-label', this.#text.rowsPerPage);
@@ -1402,7 +1414,7 @@ type PageChangeDetail = PaginationModel;
           const label = document.createElement('span');
           label.className = 'hlabel';
           if (typeof col.renderHeader === 'function') {
-            appendContent(label, col.renderHeader({ field: col.field ?? '', colDef: col }));
+            appendContent(label, col.renderHeader({ field: col.field ?? '', colDef: col }) as Parameters<typeof appendContent>[1]);
           } else {
             label.textContent = col.headerName ?? '';
           }
@@ -1483,7 +1495,7 @@ type PageChangeDetail = PaginationModel;
       const ops = col.operators || [];
       const op = ops.find((o: Operator) => o.value === item.operator) || ops[0];
 
-      let opSel = cell.querySelector<HTMLElement>('.fop');
+      let opSel = cell.querySelector<HTMLSelectElement>('.fop');
       if (!opSel) {
         opSel = document.createElement('select');
         opSel.className = 'fop';
@@ -1520,7 +1532,8 @@ type PageChangeDetail = PaginationModel;
         : [item.value];
       inputs.forEach((input: HTMLElement, i: number) => {
         const value = values[i] == null ? '' : String(values[i]).trim();
-        if (input !== this.shadowRoot!.activeElement && input.value !== value) input.value = value;
+        const inputEl = input as HTMLInputElement;
+        if (input !== this.shadowRoot!.activeElement && inputEl.value !== value) inputEl.value = value;
       });
     }
 
@@ -1558,8 +1571,8 @@ type PageChangeDetail = PaginationModel;
 
     /** El valor de la celda: array cuando el operador pide un rango. */
     #filterCellValue(cell: HTMLElement): string | string[] {
-      const inputs = [...cell.querySelectorAll<HTMLElement>('.finput')];
-      return inputs.length > 1 ? inputs.map((el: HTMLElement) => el.value) : (inputs[0]?.value ?? '');
+      const inputs = [...cell.querySelectorAll<HTMLInputElement>('.finput')];
+      return inputs.length > 1 ? inputs.map((el: HTMLInputElement) => el.value) : (inputs[0]?.value ?? '');
     }
 
     #renderPinnedRows(cols: ColumnDef[]): void {
@@ -1825,11 +1838,11 @@ type PageChangeDetail = PaginationModel;
 
       if (typeof col.renderCell === 'function') {
         appendContent(el, col.renderCell({
-          value, row, id: node.id, colDef: col, field: col.field ?? '', api: this,
+          value, row: row as Row, id: node.id, colDef: col, field: col.field ?? '', api: this,
           tabIndex: el.tabIndex, hasFocus: el.tabIndex === 0,
-        }));
+        }) as Parameters<typeof appendContent>[1]);
       } else {
-        const text = formattedValue(value, row as Row, col, ctx);
+        const text = formattedValue(value, row, col, ctx);
         el.textContent = text;
         if (col.showTooltip !== false && text) el.title = text;
       }
@@ -1894,21 +1907,25 @@ type PageChangeDetail = PaginationModel;
       this.#pageInfo.textContent = `${from}–${to} / ${totalRows}`;
 
       const sizeChoices = [...new Set([...this.pageSizeOptions, size])].sort((a: number, b: number) => a - b);
-      const currentOpts = this.#pageSizeSelect.querySelectorAll<HTMLElement>('is-option, option');
-      const current = [...currentOpts].map((o: HTMLElement) => Number(o.value)).join(',');
+      const currentOpts = this.#pageSizeSelect.querySelectorAll<HTMLOptionElement>('is-option, option');
+      const current = [...currentOpts].map((o: HTMLOptionElement) => Number(o.value)).join(',');
       if (current !== sizeChoices.join(',')) {
         this.#pageSizeSelect.replaceChildren(...sizeChoices.map((n: number) => {
-          const opt = document.createElement('is-option');
+          const opt = document.createElement('is-option') as HTMLOptionElement;
           opt.value = String(n);
           opt.textContent = String(n);
           return opt;
         }));
       }
       (this.#pageSizeSelect as unknown as HTMLElement & { value: string }).value = String(size);
-      this.#pager.querySelector<HTMLElement>('[data-page="first"]')!.disabled = this.#page === 0;
-      this.#pager.querySelector<HTMLElement>('[data-page="prev"]')!.disabled = this.#page === 0;
-      this.#pager.querySelector<HTMLElement>('[data-page="next"]')!.disabled = this.#page >= pages - 1;
-      this.#pager.querySelector<HTMLElement>('[data-page="last"]')!.disabled = this.#page >= pages - 1;
+      const firstBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="first"]')!;
+      firstBtn.disabled = this.#page === 0;
+      const prevBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="prev"]')!;
+      prevBtn.disabled = this.#page === 0;
+      const nextBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="next"]')!;
+      nextBtn.disabled = this.#page >= pages - 1;
+      const lastBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="last"]')!;
+      lastBtn.disabled = this.#page >= pages - 1;
     }
 
     #renderOverlay(): void {
@@ -2118,11 +2135,11 @@ type PageChangeDetail = PaginationModel;
       }
       this.#focus = { id: node.id, field };
       this.#compute();
-      const input = this.#rowsEl.querySelector<HTMLElement>(
+      const input = this.#rowsEl.querySelector<HTMLInputElement>(
         `[data-id="${cssEscape(String(node.id))}"] [data-field="${cssEscape(field)}"] .editor`,
       );
       input?.focus();
-      if (input?.select) (input as HTMLInputElement & { select(): void }).select();
+      if (input?.select) input.select();
       emit(this, 'is-edit-start', { id: node.id, field, row: node.row });
     }
 
@@ -2210,12 +2227,12 @@ type PageChangeDetail = PaginationModel;
       this.#edit.values[col.field ?? ''] = value;
       if (typeof col.preProcessEditCellProps !== 'function') return;
       const out = await col.preProcessEditCellProps({
-        props: { value }, row: node.row as Row, id: node.id, field: col.field ?? '',
+        props: { value }, row: node.row ?? {}, id: node.id, field: col.field ?? '',
       });
       const error = (out as { error?: unknown } | undefined)?.error;
       if (error) this.#edit.errors[col.field ?? ''] = typeof error === 'string' ? error : 'Valor inválido';
       else delete this.#edit.errors[col.field ?? ''];
-      const cell = el.closest('.cell');
+      const cell = el.closest('.cell') as HTMLElement | null;
       if (!cell) return;
       cell.toggleAttribute('data-error', !!error);
       cell.title = this.#edit.errors[col.field ?? ''] || '';
@@ -2314,22 +2331,25 @@ type PageChangeDetail = PaginationModel;
       const selected = this.#nodes.filter((n: GridNode) => n.row && this.#selection.has(n.id));
       const source: GridNode[] = selected.length
         ? selected
-        : this.#focus
-          ? this.#nodes.filter((n: GridNode) => String(n.id) === String(this.#focus!.id) && n.row)
+        : (this.#focus && !this.#focus.area)
+          ? (() => {
+            const fid = (this.#focus as Exclude<FocusArea, { area: 'header' }>).id;
+            return this.#nodes.filter((n: GridNode) => String(n.id) === String(fid) && n.row);
+          })()
           : [];
       return source.map((node: GridNode) => cols
         .map((col: ColumnDef) => formattedValue(cellValue(node.row as Row, col, ctx), node.row as Row, col, ctx)));
     }
 
     async #pasteFromClipboard(text?: string): Promise<void> {
-      if (!this.hasAttribute('clipboard') || !this.#focus) return;
+      if (!this.hasAttribute('clipboard') || !this.#focus || this.#focus.area === 'header') return;
       const raw: string = text ?? (await navigator.clipboard?.readText?.().catch(() => '')) ?? '';
       if (!raw) return;
       const matrix: string[][] = raw.replace(/\r/g, '').split('\n').filter((line: string) => line !== '')
         .map((line: string) => line.split('\t'));
       const ids = this.#nodes.map((n: GridNode) => String(n.id));
       const fields = this.#dataFields();
-      const startRow = ids.indexOf(String(this.#focus.id));
+      const startRow = ids.indexOf(String(this.#focus?.id ?? ''));
       const startCol = fields.indexOf(this.#focus.field);
       if (startRow < 0 || startCol < 0) return;
 
@@ -2370,32 +2390,32 @@ type PageChangeDetail = PaginationModel;
     /* ── Cabecera: eventos ───────────────────────────────────────────── */
 
     #onHeadClick = (e: PointerEvent): void => {
-      const cell = e.target.closest('.hcell');
+      const cell = $closest(e,'.hcell');
       if (!cell) return;
-      if (e.target.closest('.check-all')) {
+      if ($closest(e,'.check-all')) {
         const selectable = this.#selectableRows();
         const on = selectable.filter((r: Row) => this.#selection.has(this.#idOf(r))).length;
         this.selectAll(on !== selectable.length);
         return;
       }
-      if (e.target.closest('[data-action="column-menu"]')) {
-        const btn = e.target.closest('button');
+      if ($closest(e,'[data-action="column-menu"]')) {
+        const btn = $closest(e,'button');
         if (btn) this.#openColumnMenu(cell.dataset.field ?? '', btn);
         return;
       }
-      if (e.target.closest('.hgrip')) return;
+      if ($closest(e,'.hgrip')) return;
       if (!cell.classList.contains('sortable')) return;
       this.#applySort(cell.dataset.field ?? '', undefined, e.ctrlKey || e.metaKey || e.shiftKey);
     };
 
-    #onHeadDblClick = (e: PointerEvent): void => {
-      if (!e.target.closest('.hgrip')) return;
-      const cell = e.target.closest('.hcell');
+    #onHeadDblClick = (e: MouseEvent): void => {
+      if (!$closest(e,'.hgrip')) return;
+      const cell = $closest(e,'.hcell');
       if (cell) this.#autosize(cell.dataset.field ?? '');
     };
 
     #onHeadKey = (e: KeyboardEvent): void => {
-      const cell = e.target.closest('.hcell');
+      const cell = $closest(e,'.hcell');
       if (!cell) return;
       const field = cell.dataset.field ?? '';
       const fields = this.#layoutCols().map((c: ColumnDef) => c.field ?? '');
@@ -2432,9 +2452,9 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onHeadPointerDown = (e: PointerEvent): void => {
-      const grip = e.target.closest('.hgrip');
+      const grip = $closest(e,'.hgrip');
       if (!grip) return;
-      const fieldCell = grip.closest('.hcell');
+      const fieldCell = grip.closest<HTMLElement>('.hcell');
       if (!fieldCell) return;
       const field = fieldCell.dataset.field ?? '';
       this.#resizeState = { field, startX: e.clientX, startWidth: this.#widths[field] ?? 0 };
@@ -2484,7 +2504,7 @@ type PageChangeDetail = PaginationModel;
     }
 
     #onColDragStart = (e: DragEvent): void => {
-      const cell = e.target.closest('.hcell');
+      const cell = $closest(e,'.hcell');
       if (!cell || (cell.dataset.field ?? '').startsWith('__')) return;
       if (!e.dataTransfer) return;
       e.dataTransfer.effectAllowed = 'move';
@@ -2493,7 +2513,7 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onColDragOver = (e: DragEvent): void => {
-      const cell = e.target.closest('.hcell');
+      const cell = $closest(e,'.hcell');
       const from = this.#headRow.querySelector<HTMLElement>('[data-dragging]')?.dataset.field;
       if (!cell || (from && !this.#sameColumnGroup(from, cell.dataset.field ?? ''))) return;
       e.preventDefault();
@@ -2511,11 +2531,11 @@ type PageChangeDetail = PaginationModel;
     }
 
     #onColDragLeave = (e: DragEvent): void => {
-      e.target.closest('.hcell')?.removeAttribute('data-drop-target');
+      $closest(e,'.hcell')?.removeAttribute('data-drop-target');
     };
 
     #onColDrop = (e: DragEvent): void => {
-      const target = e.target.closest('.hcell');
+      const target = $closest(e,'.hcell');
       const from = e.dataTransfer?.getData('text/plain');
       if (!target || !from) return;
       e.preventDefault();
@@ -2539,20 +2559,20 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onHeaderFilterInput = (e: Event): void => {
-      const input = (e.target as HTMLElement).closest('.finput');
+      const input = $closest<HTMLInputElement>(e, '.finput');
       if (!input) return;
-      const cell = input.closest('.fcell');
+      const cell = input.closest<HTMLElement>('.fcell');
       if (!cell) return;
       this.#updateFilterItem(cell.dataset.field ?? '', {
-        operator: cell.querySelector<HTMLElement>('.fop')?.value,
+        operator: cell.querySelector<HTMLSelectElement>('.fop')?.value,
         value: this.#filterCellValue(cell),
       });
     };
 
     #onHeaderFilterChange = (e: Event): void => {
-      const sel = (e.target as HTMLElement).closest('.fop');
+      const sel = $closest<HTMLSelectElement>(e, '.fop');
       if (!sel) return;
-      const cell = sel.closest('.fcell');
+      const cell = sel.closest<HTMLElement>('.fcell');
       if (!cell) return;
       this.#updateFilterItem(cell.dataset.field ?? '', {
         operator: sel.value,
@@ -2563,27 +2583,27 @@ type PageChangeDetail = PaginationModel;
     /* ── Cuerpo: eventos ─────────────────────────────────────────────── */
 
     #onBodyClick = (e: PointerEvent): void => {
-      const rowEl = e.target.closest('.row-wrap');
+      const rowEl = $closest(e,'.row-wrap');
       if (!rowEl) return;
       const node = this.#nodeById(rowEl.dataset.id ?? null);
       if (!node) return;
-      const cellEl = e.target.closest('.cell');
+      const cellEl = $closest(e,'.cell');
       const field = cellEl?.dataset.field ?? '';
 
-      if (e.target.closest('[data-action="group"]')) {
+      if ($closest(e,'[data-action="group"]')) {
         this.#toggleGroup(node.id);
         return;
       }
-      if (e.target.closest('[data-action="detail"]')) {
+      if ($closest(e,'[data-action="detail"]')) {
         this.#toggleDetail(node.id);
         return;
       }
-      const actionBtn = e.target.closest('[data-action="row-action"]') as HTMLElement & { __action?: RowAction } | null;
+      const actionBtn = $closest(e,'[data-action="row-action"]') as HTMLElement & { __action?: RowAction } | null;
       if (actionBtn?.__action) {
         actionBtn.__action.onClick?.({ id: node.id, row: node.row as Row, api: this });
         return;
       }
-      const actionMenu = e.target.closest('[data-action="row-action-menu"]') as HTMLElement & { __actions?: RowAction[] } | null;
+      const actionMenu = $closest(e,'[data-action="row-action-menu"]') as HTMLElement & { __actions?: RowAction[] } | null;
       if (actionMenu?.__actions) {
         this.#menuActions = actionMenu.__actions;
         this.#menuActionRow = { id: node.id, row: node.row as Row };
@@ -2596,7 +2616,7 @@ type PageChangeDetail = PaginationModel;
         this.#popAnchor = actionMenu;
         return;
       }
-      const rowCheck = e.target.closest('.row-check') as HTMLInputElement | null;
+      const rowCheck = $closest(e,'.row-check') as HTMLInputElement | null;
       if (rowCheck) {
         this.selectRow(node.id, rowCheck.checked, this.selectionMode === 'multiple');
         return;
@@ -2626,9 +2646,9 @@ type PageChangeDetail = PaginationModel;
       this.#toggleRow(node.id, { additive: e.ctrlKey || e.metaKey, range: e.shiftKey });
     };
 
-    #onBodyDblClick = (e: PointerEvent): void => {
-      const cellEl = e.target.closest('.cell');
-      const rowEl = e.target.closest('.row-wrap');
+    #onBodyDblClick = (e: MouseEvent): void => {
+      const cellEl = $closest(e,'.cell');
+      const rowEl = $closest(e,'.row-wrap');
       if (!cellEl || !rowEl) return;
       const node = this.#nodeById(rowEl.dataset.id ?? null);
       if (!node) return;
@@ -2639,8 +2659,8 @@ type PageChangeDetail = PaginationModel;
 
     #onBodyPointerOver = (e: PointerEvent): void => {
       if (!this.cellSelection || !this.#cellAnchor || e.buttons !== 1) return;
-      const cellEl = e.target.closest('.cell');
-      const rowEl = e.target.closest('.row-wrap');
+      const cellEl = $closest(e,'.cell');
+      const rowEl = $closest(e,'.row-wrap');
       if (!cellEl || !rowEl) return;
       const node = this.#nodeById(rowEl.dataset.id ?? null);
       if (!node) return;
@@ -2648,7 +2668,7 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onRowDragStart = (e: DragEvent): void => {
-      const rowEl = e.target.closest('.row-wrap');
+      const rowEl = $closest(e,'.row-wrap');
       if (!rowEl || !e.dataTransfer) return;
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', rowEl.dataset.id ?? '');
@@ -2661,7 +2681,7 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onRowDrop = (e: DragEvent): void => {
-      const rowEl = e.target.closest('.row-wrap');
+      const rowEl = $closest(e,'.row-wrap');
       const fromId = e.dataTransfer?.getData('text/plain');
       if (!rowEl || !fromId) return;
       e.preventDefault();
@@ -2698,7 +2718,9 @@ type PageChangeDetail = PaginationModel;
     /* ── Foco y teclado ──────────────────────────────────────────────── */
 
     #isCellFocused(id: CellValue, field: string): boolean {
-      return this.#focus?.field === field && String(this.#focus?.id) === String(id);
+      const focus = this.#focus;
+      if (!focus || focus.area === 'header') return false;
+      return focus.field === field && String(focus.id) === String(id);
     }
 
     #focusCell(id: CellValue, field: string): void {
@@ -2738,15 +2760,15 @@ type PageChangeDetail = PaginationModel;
     }
 
     #onFocusIn = (e: FocusEvent): void => {
-      const t = e.target as HTMLElement;
-      const cellEl = t.closest?.('.cell');
-      const rowEl = t.closest?.('.row-wrap');
+      const t = e.target;
+      const cellEl = t instanceof Element ? t.closest<HTMLElement>('.cell') : null;
+      const rowEl = t instanceof Element ? t.closest<HTMLElement>('.row-wrap') : null;
       if (cellEl && rowEl) {
         const node = this.#nodeById(rowEl.dataset.id ?? null);
         this.#focus = { id: node ? node.id : (rowEl.dataset.id ?? ''), field: cellEl.dataset.field ?? '' };
         return;
       }
-      const hcell = t.closest?.('.hcell');
+      const hcell = t instanceof Element ? t.closest<HTMLElement>('.hcell') : null;
       if (hcell) this.#focus = { area: 'header', field: hcell.dataset.field ?? '' };
     };
 
@@ -2841,8 +2863,8 @@ type PageChangeDetail = PaginationModel;
           return;
         case 'End':
           e.preventDefault();
-          if (e.ctrlKey || e.metaKey) this.#focusCell(this.#nodes.at(-1)?.id, fields.at(-1));
-          else this.#focusCell(focus.id, fields.at(-1)!);
+          if (e.ctrlKey || e.metaKey) this.#focusCell(this.#nodes.at(-1)?.id ?? null, fields.at(-1) ?? '');
+          else this.#focusCell(focus.id, fields.at(-1) ?? '');
           return;
         case 'PageDown':
           e.preventDefault();
@@ -2955,7 +2977,7 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onToolbarClick = (e: PointerEvent): void => {
-      const btn = e.target.closest('[data-tool]');
+      const btn = $closest(e,'[data-tool]');
       if (!btn) return;
       const tool = btn.dataset.tool;
       if (!tool) return;
@@ -3044,7 +3066,7 @@ type PageChangeDetail = PaginationModel;
     }
 
     #onMenuClick = (e: PointerEvent): void => {
-      const btn = e.target.closest('.pop-item');
+      const btn = $closest<HTMLElement>(e, '.pop-item') as HTMLButtonElement | null;
       if (!btn || btn.disabled) return;
       const action = btn.dataset.action;
       const value = btn.dataset.value;
@@ -3130,7 +3152,7 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onColumnsPanelClick = (e: PointerEvent): void => {
-      const btn = e.target.closest('[data-action]');
+      const btn = $closest(e,'[data-action]');
       if (!btn) return;
       const model: Record<string, boolean> = {};
       for (const col of this.#activeCols) {
@@ -3143,7 +3165,7 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onFilterPanelClick = (e: PointerEvent): void => {
-      const btn = e.target.closest('[data-action]');
+      const btn = $closest(e,'[data-action]');
       if (!btn) return;
       const action = btn.dataset.action;
       if (action === 'add-filter') {
@@ -3154,7 +3176,7 @@ type PageChangeDetail = PaginationModel;
           items: [...this.#filterModel.items, { field: col.field ?? '', operator: col.operators?.[0]?.value, value: '' }],
         };
       } else if (action === 'remove-filter') {
-        const rowEl = btn.closest('.filter-row-form');
+        const rowEl = btn.closest<HTMLElement>('.filter-row-form');
         const index = Number(rowEl?.dataset.index ?? -1);
         this.#filterModel = {
           ...this.#filterModel,
@@ -3173,18 +3195,18 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onFilterPanelChange = (e: Event): void => {
-      const row = (e.target as HTMLElement).closest('.filter-row-form');
+      const row = $closest<HTMLElement>(e, '.filter-row-form');
       if (!row) return;
       const index = Number(row.dataset.index ?? -1);
       const items = this.#filterModel.items.slice();
       const item = { ...items[index] };
       let rerender = false;
-      const target = e.target as HTMLElement;
+      const target = e.target instanceof HTMLElement ? e.target : null;
 
-      if (target.classList.contains('filter-logic-select')) {
+      if (target?.classList.contains('filter-logic-select')) {
         this.#filterModel = { ...this.#filterModel, logicOperator: (target as HTMLSelectElement).value };
         rerender = true;
-      } else if (target.classList.contains('filter-col')) {
+      } else if (target?.classList.contains('filter-col')) {
         const col = this.#activeCols.find((c: ColumnDef) => c.field === (target as HTMLSelectElement).value);
         item.field = (target as HTMLSelectElement).value;
         item.operator = col?.operators?.[0]?.value;
@@ -3192,12 +3214,12 @@ type PageChangeDetail = PaginationModel;
         items[index] = item;
         this.#filterModel = { ...this.#filterModel, items };
         rerender = true;
-      } else if (target.classList.contains('filter-op')) {
+      } else if (target?.classList.contains('filter-op')) {
         item.operator = (target as HTMLSelectElement).value;
         items[index] = item;
         this.#filterModel = { ...this.#filterModel, items };
         rerender = true;
-      } else if (target.classList.contains('filter-input')) {
+      } else if (target?.classList.contains('filter-input')) {
         item.value = (target as HTMLInputElement).value;
         items[index] = item;
         this.#filterModel = { ...this.#filterModel, items };
@@ -3212,9 +3234,9 @@ type PageChangeDetail = PaginationModel;
     };
 
     #onFilterPanelInput = (e: Event): void => {
-      const target = e.target as HTMLElement;
-      if (!target.classList.contains('filter-input')) return;
-      const row = target.closest('.filter-row-form');
+      const target = e.target;
+      if (!(target instanceof HTMLElement) || !target.classList.contains('filter-input')) return;
+      const row = target.closest<HTMLElement>('.filter-row-form');
       const index = Number(row?.dataset.index ?? -1);
       const items = this.#filterModel.items.slice();
       items[index] = { ...items[index]!, value: (target as HTMLInputElement).value };
@@ -3230,7 +3252,7 @@ type PageChangeDetail = PaginationModel;
     }
 
     #onFooterClick = (e: PointerEvent): void => {
-      const btn = e.target.closest('[data-page]');
+      const btn = $closest<HTMLElement>(e, '[data-page]') as HTMLButtonElement | null;
       if (!btn || btn.disabled) return;
       const total = this.rowCount ?? this.#leafRows.length;
       const pages = Math.max(1, Math.ceil(total / this.pageSize));
@@ -3280,7 +3302,13 @@ type PageChangeDetail = PaginationModel;
 
   function cssEscape(value: string): string {
     const s = String(value);
-    return window.CSS?.escape ? CSS.escape(s) : s.replace(/["\\]/g, '\\$&');
+    return typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(s) : s.replace(/["\\]/g, '\\$&');
+  }
+
+  /** `closest` tipado: el target de un evento puede ser null y no es HTMLElement. */
+  function $closest<T extends HTMLElement = HTMLElement>(e: Event, sel: string): T | null {
+    const t = e.target;
+    return t instanceof Element ? t.closest<T>(sel) : null;
   }
 
   /** Opciones cerradas para el filtro; `null` si la columna se filtra a mano. */
