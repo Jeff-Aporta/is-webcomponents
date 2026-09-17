@@ -79,7 +79,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const VIEWS = ['day', 'month', 'year'];
 
-  function isoSet(attr) {
+  function isoSet(attr: string | null): Set<string> {
     return new Set(String(attr || '').split(/[\s,]+/).filter(Boolean));
   }
 
@@ -102,14 +102,14 @@ import { ElementBase } from '../../core/element-base.js';
     #weekdays!: HTMLElement;
     #grid!: HTMLElement;
     #dayView!: HTMLElement;
-    #monthView!: HTMLElement;
-    #yearView!: HTMLElement;
-    #view = startOfMonth(new Date());
-    #rangeStart = null;
-    #rangeEnd = null;
+    #monthView!: HTMLElement & { value?: string; year?: string; scrollToSelection?: () => void };
+    #yearView!: HTMLElement & { scrollToSelection?: () => void };
+    #view: Date = startOfMonth(new Date());
+    #rangeStart: string | null = null;
+    #rangeEnd: string | null = null;
     #pickingEnd = false;
-    #hoverIso = null;
-    #focusIso = null;
+    #hoverIso: string | null = null;
+    #focusIso: string | null = null;
 
     constructor() {
       super();
@@ -138,11 +138,11 @@ import { ElementBase } from '../../core/element-base.js';
       this.#grid.addEventListener('focusin', this.#onDayEnter);
       this.#grid.addEventListener('pointerleave', this.#onDayLeave);
       this.#grid.addEventListener('focusout', this.#onDayLeave);
-      this.#monthView.addEventListener('is-change', this.#onMonthView);
-      this.#yearView.addEventListener('is-change', this.#onYearView);
+      this.#monthView.addEventListener('is-change', this.#onMonthView as EventListener);
+      this.#yearView.addEventListener('is-change', this.#onYearView as EventListener);
     }
 
-    onConnected() {
+    onConnected(): void {
       if (!this.hasAttribute('mode')) this.setAttribute('mode', 'single');
       if (!this.hasAttribute('view')) {
         this.setAttribute('view', this.getAttribute('open-to') || this.views[0]);
@@ -151,7 +151,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'value' || name === 'mode') this.#parseValueAttr();
       if (name === 'view') emit(this, 'is-view-change', { view: this.view });
       if (name === 'month' && newVal && newVal !== monthKey(this.#view)) {
@@ -164,41 +164,41 @@ import { ElementBase } from '../../core/element-base.js';
 
     /* ── API ──────────────────────────────────────────────────────────── */
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
 
-    get mode() { return this.getAttribute('mode') === 'range' ? 'range' : 'single'; }
-    set mode(v) { this.setAttribute('mode', v === 'range' ? 'range' : 'single'); }
+    get mode(): 'single' | 'range' { return this.getAttribute('mode') === 'range' ? 'range' : 'single'; }
+    set mode(v: 'single' | 'range') { this.setAttribute('mode', v === 'range' ? 'range' : 'single'); }
 
-    get locale() { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
-    set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    get locale(): string | undefined { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
+    set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
-    get min() { return this.getAttribute('min') ?? ''; }
-    set min(v) { v ? this.setAttribute('min', v) : this.removeAttribute('min'); }
+    get min(): string { return this.getAttribute('min') ?? ''; }
+    set min(v: string) { v ? this.setAttribute('min', v) : this.removeAttribute('min'); }
 
-    get max() { return this.getAttribute('max') ?? ''; }
-    set max(v) { v ? this.setAttribute('max', v) : this.removeAttribute('max'); }
+    get max(): string { return this.getAttribute('max') ?? ''; }
+    set max(v: string) { v ? this.setAttribute('max', v) : this.removeAttribute('max'); }
 
     /** Vistas permitidas, en el orden en que se recorren. */
-    get views() {
+    get views(): string[] {
       const raw = String(this.getAttribute('views') || '').toLowerCase().split(/[\s,]+/).filter(Boolean);
       const list = VIEWS.filter((v) => raw.includes(v));
       return list.length ? list : VIEWS.slice();
     }
-    set views(v) { this.setAttribute('views', Array.isArray(v) ? v.join(' ') : String(v)); }
+    set views(v: string | string[]) { this.setAttribute('views', Array.isArray(v) ? v.join(' ') : String(v)); }
 
-    get view() {
+    get view(): string {
       const v = this.getAttribute('view');
-      return this.views.includes(v) ? v : this.views[0];
+      return v != null && this.views.includes(v) ? v : this.views[0];
     }
-    set view(v) { this.setAttribute('view', v); }
+    set view(v: string) { this.setAttribute('view', v); }
 
     /** Mes visible, `yyyy-mm`. Como atributo, fija el mes (modo controlado). */
-    get month() { return monthKey(this.#view); }
-    set month(v) { this.setAttribute('month', String(v)); }
+    get month(): string { return monthKey(this.#view); }
+    set month(v: string) { this.setAttribute('month', String(v)); }
 
     /** Mueve la vista sin pasar por el atributo (útil en modo controlado). */
-    showMonth(key) {
+    showMonth(key: string): void {
       const d = parseISO(`${key}-01`);
       if (d) this.#setView(d, { silent: true });
     }
@@ -207,17 +207,17 @@ import { ElementBase } from '../../core/element-base.js';
      * Fin tentativo del rango impuesto desde fuera: lo usa is-date-range-picker
      * para que el hover en un mes pinte la banda en todos los calendarios.
      */
-    get previewTo() { return this.getAttribute('preview-to') || null; }
-    set previewTo(v) { v ? this.setAttribute('preview-to', v) : this.removeAttribute('preview-to'); }
+    get previewTo(): string | null { return this.getAttribute('preview-to') || null; }
+    set previewTo(v: string | null) { v ? this.setAttribute('preview-to', v) : this.removeAttribute('preview-to'); }
 
     /** Flechas visibles: both | prev | next | none. */
-    get nav() {
+    get nav(): string {
       const v = this.getAttribute('nav');
-      return ['both', 'prev', 'next', 'none'].includes(v) ? v : 'both';
+      return v != null && ['both', 'prev', 'next', 'none'].includes(v) ? v : 'both';
     }
-    set nav(v) { this.setAttribute('nav', v); }
+    set nav(v: string) { this.setAttribute('nav', v); }
 
-    get firstDayOfWeek() {
+    get firstDayOfWeek(): number {
       const attr = this.getAttribute('first-day-of-week');
       const n = Number(attr);
       if (attr != null && attr !== '' && n >= 0 && n <= 6) return n;
@@ -228,50 +228,50 @@ import { ElementBase } from '../../core/element-base.js';
     get showOutsideDays() { return this.hasAttribute('show-outside-days'); }
     set showOutsideDays(v) { this.toggleAttribute('show-outside-days', !!v); }
 
-    get fixedWeeks() { return this.hasAttribute('fixed-weeks'); }
-    set fixedWeeks(v) { this.toggleAttribute('fixed-weeks', !!v); }
+    get fixedWeeks(): boolean { return this.hasAttribute('fixed-weeks'); }
+    set fixedWeeks(v: boolean) { this.toggleAttribute('fixed-weeks', !!v); }
 
-    get showWeekNumbers() { return this.hasAttribute('show-week-numbers'); }
-    set showWeekNumbers(v) { this.toggleAttribute('show-week-numbers', !!v); }
+    get showWeekNumbers(): boolean { return this.hasAttribute('show-week-numbers'); }
+    set showWeekNumbers(v: boolean) { this.toggleAttribute('show-week-numbers', !!v); }
 
-    get disablePast() { return this.hasAttribute('disable-past'); }
-    set disablePast(v) { this.toggleAttribute('disable-past', !!v); }
+    get disablePast(): boolean { return this.hasAttribute('disable-past'); }
+    set disablePast(v: boolean) { this.toggleAttribute('disable-past', !!v); }
 
-    get disableFuture() { return this.hasAttribute('disable-future'); }
-    set disableFuture(v) { this.toggleAttribute('disable-future', !!v); }
+    get disableFuture(): boolean { return this.hasAttribute('disable-future'); }
+    set disableFuture(v: boolean) { this.toggleAttribute('disable-future', !!v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
     /** Días bloqueados uno a uno: `disabled-dates="2026-07-04 2026-07-05"`. */
-    get disabledDates() { return isoSet(this.getAttribute('disabled-dates')); }
-    set disabledDates(v) {
+    get disabledDates(): Set<string> { return isoSet(this.getAttribute('disabled-dates')); }
+    set disabledDates(v: string | string[]) {
       this.setAttribute('disabled-dates', Array.isArray(v) ? v.join(' ') : String(v));
     }
 
     /** Días de la semana bloqueados: `disabled-days="0 6"` (domingo y sábado). */
-    get disabledDays() {
+    get disabledDays(): Set<number> {
       return new Set(
         String(this.getAttribute('disabled-days') || '')
           .split(/[\s,]+/).filter(Boolean).map(Number).filter((n: number) => n >= 0 && n <= 6),
       );
     }
-    set disabledDays(v) {
+    set disabledDays(v: number[] | string) {
       this.setAttribute('disabled-days', Array.isArray(v) ? v.join(' ') : String(v));
     }
 
     /** Mueve la vista N meses (o años, si la vista es de meses). */
-    navigate(delta) {
+    navigate(delta: number): void {
       this.#setView(this.view === 'month'
         ? new Date(this.#view.getFullYear() + delta, this.#view.getMonth(), 1)
         : addMonths(this.#view, delta));
     }
 
     /** Deja el foco del teclado en un día concreto (navega de mes si hace falta). */
-    focusDate(iso) {
+    focusDate(iso: string): void {
       const d = parseISO(iso);
       if (!d) return;
       this.#focusIso = iso;
@@ -280,7 +280,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#grid.querySelector<HTMLElement>(`[data-iso="${iso}"]`)?.focus();
     }
 
-    clear() {
+    clear(): void {
       this.#rangeStart = null;
       this.#rangeEnd = null;
       this.#pickingEnd = false;
@@ -291,13 +291,13 @@ import { ElementBase } from '../../core/element-base.js';
     /* ── Interno ──────────────────────────────────────────────────────── */
 
     /** Punto único de cambio de mes: repinta y avisa una sola vez. */
-    #setView(date, { silent = false } = {}) {
+    #setView(date: Date, { silent = false }: { silent?: boolean } = {}): void {
       this.#view = startOfMonth(date);
       this.#render();
       if (!silent) emit(this, 'is-month-change', { month: monthKey(this.#view) });
     }
 
-    #parseValueAttr() {
+    #parseValueAttr(): void {
       // Un cambio de value/mode desde fuera invalida el día señalado: el puntero
       // no tiene por qué seguir sobre el calendario.
       this.#hoverIso = null;
@@ -307,12 +307,12 @@ import { ElementBase } from '../../core/element-base.js';
         this.#rangeStart = parts[0] && parseISO(parts[0]) ? parts[0] : null;
         this.#rangeEnd = parts[1] && parseISO(parts[1]) ? parts[1] : null;
         this.#pickingEnd = !!this.#rangeStart && !this.#rangeEnd;
-        this.#view = this.#viewForValue(parseISO(this.#rangeStart) || parseISO(this.#rangeEnd));
+        this.#view = this.#viewForValue(parseISO(this.#rangeStart ?? '') || parseISO(this.#rangeEnd ?? ''));
       } else {
         this.#rangeStart = raw && parseISO(raw) ? raw : null;
         this.#rangeEnd = null;
         this.#pickingEnd = false;
-        this.#view = this.#viewForValue(parseISO(this.#rangeStart));
+        this.#view = this.#viewForValue(parseISO(this.#rangeStart ?? ''));
       }
     }
 
@@ -321,14 +321,14 @@ import { ElementBase } from '../../core/element-base.js';
      * empuja el mismo rango a varios calendarios y cada uno muestra el suyo);
      * sin él, la vista sigue al valor.
      */
-    #viewForValue(anchor) {
+    #viewForValue(anchor: Date | null): Date {
       const attr = this.getAttribute('month');
       const controlled = attr && parseISO(`${attr}-01`);
       if (controlled) return controlled;
       return anchor ? startOfMonth(anchor) : this.#view;
     }
 
-    #writeValue() {
+    #writeValue(): void {
       if (this.mode === 'range' && this.#rangeStart && this.#rangeEnd) {
         this.setAttribute('value', `${this.#rangeStart}/${this.#rangeEnd}`);
       } else if (this.#rangeStart) {
@@ -339,7 +339,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /** Reglas de bloqueo acumuladas: rango, pasado/futuro, fechas y días sueltos. */
-    #isDayDisabled(iso, date) {
+    #isDayDisabled(iso: string, date: Date): boolean {
       if (this.disabled) return true;
       if (!inRangeISO(iso, this.min, this.max)) return true;
       if (this.disablePast && iso < todayISO()) return true;
@@ -349,9 +349,9 @@ import { ElementBase } from '../../core/element-base.js';
       return false;
     }
 
-    #monthReachable(year, month) {
-      const first = isoOf(year, month, 1);
-      const last = isoOf(year, month, daysInMonth(year, month));
+    #monthReachable(year: number, month: number): boolean {
+      const first = isoOf(String(year), month, 1);
+      const last = isoOf(String(year), month, daysInMonth(year, month));
       if (this.min && last < this.min) return false;
       if (this.max && first > this.max) return false;
       if (this.disableFuture && first > todayISO()) return false;
@@ -363,7 +363,7 @@ import { ElementBase } from '../../core/element-base.js';
      * Las listas se llenan al abrir: así siempre reflejan la vista actual y no
      * se crean 12 + N custom elements en cada repintado del calendario.
      */
-    #wireJump(dd: HTMLElement, kind) {
+    #wireJump(dd: HTMLElement, kind: 'month' | 'year'): void {
       dd.addEventListener('is-show', () => {
         if (kind === 'month') this.#fillMonths();
         else this.#fillYears();
@@ -379,30 +379,37 @@ import { ElementBase } from '../../core/element-base.js';
         });
       });
 
-      dd.addEventListener('is-select', (e) => {
-        const n = Number(e.detail?.item?.value);
+      dd.addEventListener('is-select', ((e: CustomEvent<{ item?: { value?: string | number } }>) => {
+        const raw = e.detail?.item?.value;
+        const n = Number(raw);
         if (!Number.isFinite(n)) return;
         this.#view = kind === 'month'
           ? new Date(this.#view.getFullYear(), n, 1)
           : new Date(n, this.#view.getMonth(), 1);
         emit(this, 'is-month-change', { month: this.month });
         this.#render();
-      });
+      }) as EventListener);
 
       // Los eventos del dropdown interno no son API de is-date-picker.
       for (const type of ['is-show', 'is-hide', 'is-after-show', 'is-after-hide', 'is-select']) {
-        dd.addEventListener(type, (e) => e.stopPropagation());
+        dd.addEventListener(type, (e: Event) => e.stopPropagation());
       }
     }
 
     /** Solo los ítems: el trigger también es hijo del is-dropdown. */
-    #setJumpItems(dd, items) {
+    #setJumpItems(dd: HTMLElement, items: HTMLElement[]): void {
       for (const old of dd.querySelectorAll<HTMLElement>(':scope > is-dropdown-item')) old.remove();
       dd.append(...items);
     }
 
-    #jumpItem(value: string, label, active, disabled) {
-      const item = document.createElement('is-dropdown-item');
+    #jumpItem(value: string | number, label: string, active: boolean, disabled: boolean): HTMLElement {
+      const item = document.createElement('is-dropdown-item') as HTMLElement & {
+        value?: string | number;
+        textContent: string | null;
+        type?: string;
+        checked?: boolean;
+        disabled?: boolean;
+      };
       item.value = String(value);
       item.textContent = label;
       if (active) {
@@ -413,7 +420,7 @@ import { ElementBase } from '../../core/element-base.js';
       return item;
     }
 
-    #fillMonths() {
+    #fillMonths(): void {
       const year = this.#view.getFullYear();
       const labels = monthLabels(this.locale, { width: 'long', year });
       this.#setJumpItems(this.#monthDd, labels.map((label, m) => this.#jumpItem(
@@ -421,20 +428,20 @@ import { ElementBase } from '../../core/element-base.js';
       )));
     }
 
-    #fillYears() {
+    #fillYears(): void {
       const current = this.#view.getFullYear();
       // Sin min/max no hay lista finita: una ventana alrededor de la vista, que
       // se recentra cada vez que se abre.
       const from = Math.min(this.min ? +this.min.slice(0, 4) : current - 12, current);
       const until = Math.max(this.max ? +this.max.slice(0, 4) : current + 12, current);
-      const items = [];
+      const items: HTMLElement[] = [];
       for (let y = from; y <= until; y++) items.push(this.#jumpItem(y, String(y), y === current, false));
       this.#setJumpItems(this.#yearDd, items);
     }
 
     /* ── Render ───────────────────────────────────────────────────────── */
 
-    #render() {
+    #render(): void {
       const view = this.view;
       this.#base.dataset.view = view;
       const year = this.#view.getFullYear();
@@ -461,24 +468,24 @@ import { ElementBase } from '../../core/element-base.js';
       else this.#renderYearView(year);
     }
 
-    #renderMonthView(year: string) {
+    #renderMonthView(year: number): void {
       this.#monthView.setAttribute('year', String(year));
       const selected = this.#rangeStart && parseISO(this.#rangeStart);
       if (selected && selected.getFullYear() === year) {
-        this.#monthView.setAttribute('value', this.#rangeStart.slice(0, 7));
+        this.#monthView.setAttribute('value', this.#rangeStart!.slice(0, 7));
       } else {
         this.#monthView.removeAttribute('value');
       }
       this.#mirror(this.#monthView, ['min', 'max', 'locale', 'disabled', 'readonly']);
     }
 
-    #renderYearView(year: string) {
+    #renderYearView(year: number): void {
       this.#yearView.setAttribute('value', String(year));
       this.#mirror(this.#yearView, ['min', 'max', 'disabled', 'readonly']);
       this.#yearView.scrollToSelection?.();
     }
 
-    #mirror(el: HTMLElement, names) {
+    #mirror(el: HTMLElement, names: string[]): void {
       for (const name of names) {
         if (name === 'locale') {
           const v = this.locale;
@@ -492,12 +499,12 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
 
-    #renderWeekdays(fdow) {
+    #renderWeekdays(fdow: number): void {
       const labels = weekdayLabels(this.locale, {
         width: this.getAttribute('weekday-width') || 'short',
         firstDay: fdow,
       });
-      const cells = [];
+      const cells: HTMLElement[] = [];
       if (this.showWeekNumbers) {
         const corner = document.createElement('div');
         corner.className = 'wd wk';
@@ -515,7 +522,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#weekdays.replaceChildren(...cells);
     }
 
-    #renderDays(year, month) {
+    #renderDays(year: number, month: number): void {
       const fdow = this.firstDayOfWeek;
       this.#renderWeekdays(fdow);
       this.#base.style.setProperty('--is-dp-cols', this.showWeekNumbers ? '2.2em repeat(7, 1fr)' : 'repeat(7, 1fr)');
@@ -526,7 +533,7 @@ import { ElementBase } from '../../core/element-base.js';
       const today = todayISO();
       const focusTarget = this.#pickFocusIso(year, month, total);
 
-      const weeks = [];
+      const weeks: HTMLElement[] = [];
       for (let r = 0; r < rows; r++) {
         const row = document.createElement('div');
         row.className = 'week';
@@ -583,7 +590,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /** Única parada del tabulador dentro de la rejilla. */
-    #pickFocusIso(year, month, total) {
+    #pickFocusIso(year: number, month: number, total: number): string | null {
       const candidates = [this.#focusIso, this.#rangeStart, this.#rangeEnd, todayISO()];
       for (const iso of candidates) {
         if (!iso) continue;
@@ -592,13 +599,13 @@ import { ElementBase } from '../../core/element-base.js';
         if (!this.#isDayDisabled(iso, d)) return iso;
       }
       for (let day = 1; day <= total; day++) {
-        const iso = isoOf(year, month, day);
+        const iso = isoOf(String(year), month, day);
         if (!this.#isDayDisabled(iso, new Date(year, month, day))) return iso;
       }
       return null;
     }
 
-    #isInSelection(iso) {
+    #isInSelection(iso: string): boolean {
       if (!this.#rangeStart) return false;
       if (this.mode !== 'range' || !this.#rangeEnd) return iso === this.#rangeStart;
       const a = this.#rangeStart < this.#rangeEnd ? this.#rangeStart : this.#rangeEnd;
@@ -607,7 +614,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /** Hay un inicio de rango esperando su fin: se puede previsualizar. */
-    #isPreviewing() {
+    #isPreviewing(): boolean {
       return this.mode === 'range' && this.#pickingEnd && !!this.#rangeStart && !this.#rangeEnd;
     }
 
@@ -616,18 +623,19 @@ import { ElementBase } from '../../core/element-base.js';
      * Toca solo atributos de las celdas ya renderizadas: repintar el grid
      * perdería el hover y el foco en cada movimiento.
      */
-    #paintPreview() {
+    #paintPreview(): void {
       // El hover propio manda; `preview-to` cubre el caso de varios calendarios
       // compartiendo un mismo rango.
       const to = this.#isPreviewing() ? (this.#hoverIso ?? this.previewTo) : null;
-      const back = to && to < this.#rangeStart;
-      const from = back ? to : this.#rangeStart;
-      const until = back ? this.#rangeStart : to;
+      const start = this.#rangeStart;
+      const back = to != null && start != null && to < start;
+      const from: string | null = back && to ? to : start;
+      const until: string | null = back ? start : to;
 
       for (const cell of this.#grid.querySelectorAll<HTMLElement>('.day')) {
         const iso = cell.dataset.iso;
         if (!iso) continue;
-        cell.toggleAttribute('data-in-preview', !!to && iso >= from && iso <= until);
+        cell.toggleAttribute('data-in-preview', !!to && from != null && until != null && iso >= from && iso <= until);
         if (to && iso === to && iso !== this.#rangeStart) {
           cell.setAttribute('data-preview-edge', back ? 'start' : 'end');
         } else {
@@ -636,7 +644,7 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
 
-    #setHover(iso) {
+    #setHover(iso: string | null): void {
       if (this.#hoverIso === iso) return;
       this.#hoverIso = iso;
       this.#paintPreview();
@@ -645,30 +653,34 @@ import { ElementBase } from '../../core/element-base.js';
 
     /* ── Eventos ──────────────────────────────────────────────────────── */
 
-    #onDayEnter = (e) => {
-      const btn = e.target.closest?.('button.day');
-      if (!btn || btn.disabled) return;
-      this.#setHover(btn.dataset.iso);
+    #onDayEnter = (e: PointerEvent | FocusEvent): void => {
+      const target = e.target as Element | null;
+      const btn = target?.closest('button.day');
+      if (!btn || (btn as HTMLButtonElement).disabled) return;
+      this.#setHover((btn as HTMLElement).dataset.iso ?? null);
     };
 
-    #onDayLeave = (e) => {
-      if (e.relatedTarget && this.#grid.contains(e.relatedTarget)) return;
+    #onDayLeave = (e: PointerEvent | FocusEvent): void => {
+      const rt = e.relatedTarget as Node | null;
+      if (rt && this.#grid.contains(rt)) return;
       this.#setHover(null);
     };
 
-    #onNav = (e) => {
-      const btn = e.target.closest('[data-nav]');
+    #onNav = (e: PointerEvent): void => {
+      const target = e.target as Element | null;
+      const btn = target?.closest('[data-nav]');
       if (!btn) return;
-      this.navigate(Number(btn.dataset.nav));
+      this.navigate(Number((btn as HTMLElement).dataset.nav));
     };
 
-    #onPick = (e) => {
-      const btn = e.target.closest('button.day');
-      if (!btn || btn.disabled) return;
-      this.#commitDay(btn.dataset.iso);
+    #onPick = (e: PointerEvent): void => {
+      const target = e.target as Element | null;
+      const btn = target?.closest('button.day');
+      if (!btn || (btn as HTMLButtonElement).disabled) return;
+      this.#commitDay((btn as HTMLElement).dataset.iso ?? '');
     };
 
-    #commitDay(iso) {
+    #commitDay(iso: string): void {
       if (this.readonly || this.disabled) return;
       this.#focusIso = iso;
 
@@ -678,7 +690,7 @@ import { ElementBase } from '../../core/element-base.js';
           this.#rangeEnd = null;
           this.#pickingEnd = true;
         } else {
-          if (iso < this.#rangeStart) {
+          if (this.#rangeStart && iso < this.#rangeStart) {
             this.#rangeEnd = this.#rangeStart;
             this.#rangeStart = iso;
           } else {
@@ -698,26 +710,29 @@ import { ElementBase } from '../../core/element-base.js';
       emit(this, 'is-change', { value: iso });
     }
 
-    #onGridKey = (e) => {
-      const btn = e.target.closest?.('button.day');
+    #onGridKey = (e: KeyboardEvent): void => {
+      const target = e.target as Element | null;
+      const btn = target?.closest('button.day');
       if (!btn) return;
-      const iso = btn.dataset.iso;
+      const iso = (btn as HTMLElement).dataset.iso;
       const shift = e.shiftKey;
-      const moves = {
+      const moves: Record<string, number> = {
         ArrowLeft: -1,
         ArrowRight: 1,
         ArrowUp: -7,
         ArrowDown: 7,
       };
 
-      if (e.key in moves) {
+      if (e.key in moves && iso != null) {
         e.preventDefault();
         this.#moveFocus(iso, moves[e.key]);
         return;
       }
       if (e.key === 'Home' || e.key === 'End') {
+        if (iso == null) return;
         e.preventDefault();
         const d = parseISO(iso);
+        if (!d) return;
         const offset = (d.getDay() - this.firstDayOfWeek + 7) % 7;
         const target = new Date(d);
         target.setDate(d.getDate() + (e.key === 'Home' ? -offset : 6 - offset));
@@ -725,18 +740,20 @@ import { ElementBase } from '../../core/element-base.js';
         return;
       }
       if (e.key === 'PageUp' || e.key === 'PageDown') {
+        if (iso == null) return;
         e.preventDefault();
         const dir = e.key === 'PageUp' ? -1 : 1;
         const d = parseISO(iso);
+        if (!d) return;
         const target = shift
           ? new Date(d.getFullYear() + dir, d.getMonth(), 1)
           : addMonths(d, dir);
         const day = Math.min(d.getDate(), daysInMonth(target.getFullYear(), target.getMonth()));
-        this.#moveFocusTo(isoOf(target.getFullYear(), target.getMonth(), day), dir);
+        this.#moveFocusTo(isoOf(String(target.getFullYear()), target.getMonth(), day), dir);
       }
     };
 
-    #moveFocus(fromIso, step: number) {
+    #moveFocus(fromIso: string, step: number): void {
       const d = parseISO(fromIso);
       if (!d) return;
       d.setDate(d.getDate() + step);
@@ -744,7 +761,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /** Aterriza en `iso`; si está bloqueado, sigue buscando en esa dirección. */
-    #moveFocusTo(iso, dir) {
+    #moveFocusTo(iso: string, dir: number): void {
       let target = clampISO(iso, this.min, this.max);
       for (let i = 0; i < 40; i++) {
         const d = parseISO(target);
@@ -759,9 +776,10 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
 
-    #onMonthView = (e) => {
+    #onMonthView = (e: Event): void => {
       e.stopPropagation();
-      const { year, month } = e.detail;
+      const detail = (e as CustomEvent<{ year: number; month: number }>).detail;
+      const { year, month } = detail;
       this.#view = new Date(year, month, 1);
       emit(this, 'is-month-change', { month: this.month });
       const views = this.views;
@@ -771,12 +789,13 @@ import { ElementBase } from '../../core/element-base.js';
         return;
       }
       // Sin vista de días, elegir mes es elegir valor: primer día alcanzable.
-      this.#commitDay(clampISO(isoOf(year, month, 1), this.min, this.max));
+      this.#commitDay(clampISO(isoOf(String(year), month, 1), this.min, this.max));
     };
 
-    #onYearView = (e) => {
+    #onYearView = (e: Event): void => {
       e.stopPropagation();
-      const { year } = e.detail;
+      const detail = (e as CustomEvent<{ year: number }>).detail;
+      const { year } = detail;
       this.#view = new Date(year, this.#view.getMonth(), 1);
       const views = this.views;
       const next = views.includes('month') ? 'month' : views.includes('day') ? 'day' : null;
@@ -785,7 +804,7 @@ import { ElementBase } from '../../core/element-base.js';
         this.#render();
         return;
       }
-      this.#commitDay(clampISO(isoOf(year, 0, 1), this.min, this.max));
+      this.#commitDay(clampISO(isoOf(String(year), 0, 1), this.min, this.max));
     };
   }
 
