@@ -75,9 +75,9 @@ import { setStringAttr } from '../_shared/reflect.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }
 
-    #internals = null;
-    #input!: HTMLElement;
-    #dialog!: HTMLElement;
+    #internals: ElementInternals | null = null;
+    #input!: HTMLInputElement;
+    #dialog!: HTMLDialogElement;
     #listbox!: HTMLElement;
     #base!: HTMLElement;
     #labelEl!: HTMLElement;
@@ -86,7 +86,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     #trigger!: HTMLElement;
     #slot!: HTMLSlotElement;
     #activeIndex = -1;
-    #options = [];
+    #options: { value: string; label: string; disabled: boolean; el: HTMLElement }[] = [];
     #filter = '';
     #wasOpen = false;
     #ignoreFocusOpen = false;
@@ -97,8 +97,8 @@ import { setStringAttr } from '../_shared/reflect.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
-      this.#input = shadow.querySelector<HTMLElement>('.input')!;
-      this.#dialog = shadow.querySelector<HTMLElement>('.popup')!;
+      this.#input = shadow.querySelector<HTMLInputElement>('.input')!;
+      this.#dialog = shadow.querySelector<HTMLDialogElement>('.popup')!;
       this.#listbox = shadow.querySelector<HTMLElement>('.listbox')!;
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
       this.#labelEl = shadow.querySelector<HTMLElement>('.label')!;
@@ -116,14 +116,14 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#input.addEventListener('focus', this.#onInputFocus);
       this.#clearBtn.addEventListener('click', this.#onClear);
       this.#trigger.addEventListener('click', this.#onTrigger);
-      this.#listbox.addEventListener('mousedown', this.#onListMouseDown);
+      this.#listbox.addEventListener('mousedown', this.#onListMouseDown as EventListener);
       this.#dialog.addEventListener('click', this.#onDialogClick);
       this.#dialog.addEventListener('cancel', this.#onDialogCancel);
       this.#dialog.addEventListener('keydown', this.#onKeydown);
       this.#slot.addEventListener('slotchange', () => this.#collectOptions());
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#syncMeta();
       this.#collectOptions();
       this.#syncValueToInput(false);
@@ -135,13 +135,13 @@ import { setStringAttr } from '../_shared/reflect.js';
       addEventListener('scroll', this.#onReposition, true);
     }
 
-    onDisconnected() {
+    onDisconnected(): void {
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'open') this.#syncOpen();
       else if (name === 'disabled') this.#syncDisabled();
       else if (name === 'value') {
@@ -154,50 +154,50 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (name === 'required') this.#updateValidity();
     }
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) {
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string | null) {
       if (v == null || v === '') this.removeAttribute('value');
       else this.setAttribute('value', String(v));
     }
 
-    get open() { return this.hasAttribute('open'); }
-    set open(v) { this.toggleAttribute('open', !!v); }
+    get open(): boolean { return this.hasAttribute('open'); }
+    set open(v: boolean) { this.toggleAttribute('open', !!v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    get clearable() { return this.hasAttribute('clearable'); }
-    set clearable(v) { this.toggleAttribute('clearable', !!v); }
+    get clearable(): boolean { return this.hasAttribute('clearable'); }
+    set clearable(v: boolean) { this.toggleAttribute('clearable', !!v); }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { setStringAttr(this, 'name', v); }
+    get name(): string { return this.getAttribute('name') ?? ''; }
+    set name(v: string | null) { setStringAttr(this, 'name', v); }
 
-    formResetCallback() {
+    formResetCallback(): void {
       this.value = this.getAttribute('value') ?? '';
       this.#filter = '';
       this.#syncValueToInput(false);
     }
 
-    formDisabledCallback(disabled) { this.#syncDisabled(disabled); }
+    formDisabledCallback(disabled: boolean): void { this.#syncDisabled(disabled); }
 
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg) {
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void {
       if (!this.#internals) return;
       this.#internals.setValidity(msg ? { customError: true } : {}, msg || '', this.#input);
     }
 
-    #setState(name, on) {
+    #setState(name: string, on: boolean): void {
       const s = this.#internals?.states;
       if (!s) return;
       if (on) s.add(name);
       else s.delete(name);
     }
 
-    #syncMeta() {
+    #syncMeta(): void {
       const label = this.getAttribute('label');
       this.#labelEl.hidden = !label;
       this.#labelEl.textContent = label || '';
@@ -209,20 +209,20 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#syncClear();
     }
 
-    #syncClear() {
+    #syncClear(): void {
       this.#clearBtn.hidden = !(this.clearable && !!this.value && !this.disabled);
     }
 
-    #syncDisabled(formDisabled) {
+    #syncDisabled(formDisabled?: boolean): void {
       const disabled = !!formDisabled || this.disabled;
       this.#input.disabled = disabled;
-      this.#trigger.disabled = disabled;
-      this.#clearBtn.disabled = disabled;
+      this.#trigger.toggleAttribute('disabled', disabled);
+      this.#clearBtn.toggleAttribute('disabled', disabled);
       this.#setState('disabled', disabled);
       if (disabled) this.open = false;
     }
 
-    #positionList() {
+    #positionList(): void {
       const rect = this.#base.getBoundingClientRect();
       const maxH = Math.min(14 * 16, Math.max(120, window.innerHeight - rect.bottom - 8));
       const spaceBelow = window.innerHeight - rect.bottom - 8;
@@ -236,7 +236,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       });
     }
 
-    #syncOpen() {
+    #syncOpen(): void {
       const open = this.open && !this.disabled;
       this.#input.setAttribute('aria-expanded', String(open));
       this.#setState('open', open);
@@ -263,7 +263,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#wasOpen = open;
     }
 
-    #syncValueToInput(fromUser) {
+    #syncValueToInput(fromUser: boolean): void {
       const val = this.value;
       const opt = this.#options.find((o) => o.value === val);
       const display = opt ? opt.label : val;
@@ -273,33 +273,33 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#syncClear();
     }
 
-    #collectOptions() {
+    #collectOptions(): void {
       const nodes = this.#slot.assignedElements({ flatten: true });
       this.#options = [];
-      const push = (el: HTMLElement) => {
+      const push = (el: Element) => {
         const tag = el.tagName.toLowerCase();
         if (tag !== 'is-option' && tag !== 'option') return;
         this.#options.push({
-          value: el.hasAttribute('value') ? el.getAttribute('value') : (el.textContent || '').trim(),
+          value: el.hasAttribute('value') ? (el.getAttribute('value') ?? '') : (el.textContent || '').trim(),
           label: (el.textContent || '').trim(),
           disabled: el.hasAttribute('disabled'),
-          el,
+          el: el as HTMLElement,
         });
       };
       for (const el of nodes) push(el);
       if (!this.#options.length) {
-        for (const el of this.children) push(el);
+        for (const el of Array.from(this.children)) push(el);
       }
       this.#renderList();
     }
 
-    #filtered() {
+    #filtered(): { value: string; label: string; disabled: boolean; el: HTMLElement }[] {
       const q = (this.#filter || '').trim().toLowerCase();
       if (!q) return this.#options.filter((o) => !o.disabled);
       return this.#options.filter((o) => !o.disabled && o.label.toLowerCase().includes(q));
     }
 
-    #renderList() {
+    #renderList(): void {
       const items = this.#filtered();
       this.#listbox.replaceChildren();
       items.forEach((opt, i) => {
@@ -316,14 +316,14 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (this.#activeIndex >= items.length) this.#activeIndex = items.length - 1;
     }
 
-    #selectIndex(i: number) {
+    #selectIndex(i: number): void {
       const items = this.#filtered();
       if (i < 0 || i >= items.length) return;
       const opt = items[i];
       this.#commit(opt.value, opt.label);
     }
 
-    #commit(value, label) {
+    #commit(value: string, label?: string): void {
       const prev = this.value;
       this.setAttribute('value', value);
       this.#input.value = label ?? value;
@@ -339,11 +339,11 @@ import { setStringAttr } from '../_shared/reflect.js';
       queueMicrotask(() => { this.#ignoreFocusOpen = false; });
     }
 
-    #setFormValue() {
+    #setFormValue(): void {
       this.#internals?.setFormValue(this.value || null);
     }
 
-    #updateValidity() {
+    #updateValidity(): void {
       if (!this.#internals) return;
       if (this.required && !this.value) {
         this.#internals.setValidity({ valueMissing: true }, 'Seleccione un valor', this.#input);
@@ -352,16 +352,16 @@ import { setStringAttr } from '../_shared/reflect.js';
       }
     }
 
-    #onReposition = () => {
+    #onReposition = (): void => {
       if (this.open) this.#positionList();
     };
 
-    #onInputFocus = () => {
+    #onInputFocus = (): void => {
       if (this.disabled || this.#ignoreFocusOpen) return;
       this.open = true;
     };
 
-    #onInput = () => {
+    #onInput = (): void => {
       this.#filter = this.#input.value;
       this.#activeIndex = 0;
       if (!this.open) this.open = true;
@@ -427,21 +427,22 @@ import { setStringAttr } from '../_shared/reflect.js';
       }
     };
 
-    #scrollActive() {
+    #scrollActive(): void {
       const el = this.#listbox.querySelector<HTMLElement>('[data-active]');
       el?.scrollIntoView({ block: 'nearest' });
     }
 
-    #onListMouseDown = (e: PointerEvent) => {
-      const opt = e.target.closest('[role="option"]');
+    #onListMouseDown = (e: PointerEvent): void => {
+      const target = e.target as Element | null;
+      const opt = target?.closest('[role="option"]');
       if (!opt) return;
       e.preventDefault();
-      const value = opt.getAttribute('data-value');
+      const value = opt.getAttribute('data-value') ?? '';
       const found = this.#options.find((o) => o.value === value);
       this.#commit(value, found?.label);
     };
 
-    #onDialogClick = (e: PointerEvent) => {
+    #onDialogClick = (e: PointerEvent): void => {
       if (e.target !== this.#dialog) return;
       const base = this.#base.getBoundingClientRect();
       const overControl =
@@ -453,13 +454,13 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#syncValueToInput(false);
     };
 
-    #onDialogCancel = (e: Event) => {
+    #onDialogCancel = (e: Event): void => {
       e.preventDefault();
       this.open = false;
       this.#syncValueToInput(false);
     };
 
-    #onClear = (e: Event) => {
+    #onClear = (e: Event): void => {
       e.preventDefault();
       e.stopPropagation();
       const prev = this.value;
@@ -475,7 +476,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.open = true;
     };
 
-    #onTrigger = (e: Event) => {
+    #onTrigger = (e: Event): void => {
       e.preventDefault();
       if (this.disabled) return;
       this.open = !this.open;
