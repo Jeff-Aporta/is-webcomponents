@@ -99,6 +99,8 @@ Las hojas de T2-T3 entregan:
 
 [2026-09-19T23:30:00Z] — WT-0051 listo. Errores: 5,862 → 5,135 (−727 total; scope 650→0 + 14 extra en 01-contract.ts no-locked). SHAs: 7718bb3e0d (feat:_types shared infra: TNode/TreeCustoms/CustomsRuntime), 189b34d7da (feat:00-as-row 125→0), 1702c8fe2e (feat:02-model 71→0), 7afc320270 (feat:01-contract signatures + module augmentation para subclass compat), d91aef440d (feat:03-tree-shape 78→0), c703b4c03f (feat:04-tree-flow 104→0), dd6c4bbb7f (feat:05-view 50→0), 95f6c91ada (feat:06-mutations 112→0), b13401489d (feat:06b-history 59→0), 60a7b81f64 (feat:render-rows 51→0), 93ae751c76 (test:tree-view.smoke 21/21 PASS). Gates: PASS.
 
+[2026-09-20T00:30:00Z] — WT-0062-bis listo. Errores: scope 100→0. SHAs: a1d19771d9 (feat:gallery-app 100→0). Gates: PASS.
+
 ## Gate status (Tanda 3 — WT-0032-bis cierre)
 
 - npm run typecheck: ✓ verde
