@@ -11,7 +11,7 @@
 
 ## Tandas en proceso
 
-(Ninguna — T5 cerrada, T6 pendiente de dispatch)
+(Ninguna — T6 cerrada, T7 pendiente de dispatch)
 
 ## Tandas pendientes
 
@@ -20,8 +20,8 @@
 | 3 | diagrams/impl/* | `wt-root-types-strong-2026` | (cerrada) | ~532 | cerrada con WT-0031 + WT-0032-bis |
 | 4 | data-grid family | `wt-root-types-strong-2026` | cerrada | ~1,250 | cerrada |
 | 5 | tree-view + helpers | `wt-root-types-strong-2026` | cerrada | ~987 | cerrada |
-| 6 | layout + catalog + code | `wt-root-types-strong-2026` | WT-0061, WT-0062 | ~800 | dispatch pendiente |
-| 7 | forms | `wt-root-types-strong-2026` | WT-0071, WT-0072 | ~450 | **+ tests para forms críticos** |
+| 6 | layout + catalog + code | `wt-root-types-strong-2026` | cerrada | ~800 | cerrada (WT-0061-quad + WT-0062 + WT-0062-bis) |
+| 7 | forms | `wt-root-types-strong-2026` | WT-0071, WT-0072 | ~450 | **+ tests para forms críticos** — dispatch pendiente |
 | 8 | nav + media | `wt-root-types-strong-2026` | WT-0081, WT-0082 | ~700 | **+ stagehand tests para componentes UX** |
 | 9 | pages + utils + shared | `wt-root-types-strong-2026` | WT-0091, WT-0092 | ~600 | ninguno |
 | 10 | Sweep final + merge prep | `wt-root-types-strong-2026` | WT-0101, WT-0102 | ~300 | validación global + merge prep |
@@ -61,7 +61,8 @@
 - Errores strict audit después de T3: **7,384** (−513)
 - Errores strict audit después de T4: **6,146** (−1,238 acumulado en T4)
 - Errores strict audit después de T5: **5,135** (−1,011)
-- Próximo hito: < 4,500 después de T6
+- Errores strict audit después de T6: **4,438** (−697)
+- Próximo hito: < 4,000 después de T7
 
 ## Próxima tanda activa: T3
 
