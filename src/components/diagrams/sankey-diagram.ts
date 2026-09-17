@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveSankeySpec, computeSankeyLayout } from './sankey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
@@ -27,15 +28,60 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 
 const DEFAULT_HEIGHT = 320;
 
+interface SkGroup { id: string; name: string; hue?: number; }
+interface SkLayoutNode {
+  id: string;
+  label: string;
+  description?: string;
+  group?: string;
+  hue?: number;
+  layer: number;
+  value: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  labelSide: 'right' | 'left';
+  overflow?: 'grow' | 'ellipsis' | 'shrink';
+}
+interface SkLayoutLink {
+  id: string;
+  from: string;
+  to: string;
+  value: number;
+  label?: string;
+  group?: string;
+  thickness: number;
+  path: string;
+  labelX: number;
+  labelY: number;
+  hue?: number;
+}
+interface SkLayout {
+  width: number;
+  height: number;
+  nodes: SkLayoutNode[];
+  links: SkLayoutLink[];
+  groups?: SkGroup[];
+  unit?: string;
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  legendX: number;
+}
+interface NodeEntry { n: SkLayoutNode; g: SVGGElement; }
+interface LinkEntry { l: SkLayoutLink; g: SVGGElement; }
+
 class IsSankeyDiagram extends DiagramElementBase {
   static get observedAttributes(): string[] {
     return [...DiagramElementBase.observedAttributes, 'height'];
   }
 
-  #hiddenGroups = new Set();
-  #nodeNodes = new Map();
-  #linkNodes = new Map();
-  #hoverId = null;
+  #hiddenGroups = new Set<string>();
+  #nodeNodes = new Map<string, NodeEntry>();
+  #linkNodes = new Map<string, LinkEntry>();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -55,15 +101,15 @@ class IsSankeyDiagram extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | string[] | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? new Set(v) : new Set(v || []);
     this.queueRender();
   }
 
-  renderDiagram() {
+  renderDiagram(): void {
     const spec = resolveSankeySpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
@@ -91,13 +137,13 @@ class IsSankeyDiagram extends DiagramElementBase {
     this.syncThemeAttr();
 
     const height = Number(this.getAttribute('height')) || DEFAULT_HEIGHT;
-    const layout = computeSankeyLayout(visible, { height });
+    const layout = computeSankeyLayout(visible, { height }) as unknown as SkLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: SkLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -132,9 +178,9 @@ class IsSankeyDiagram extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: SkLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'sk-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    (layout.groups ?? []).forEach((grp, gi: number) => {
       const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -161,7 +207,7 @@ class IsSankeyDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLinks(layout, theme) {
+  #buildLinks(layout: SkLayout, theme: DiagramTheme): void {
     for (const l of layout.links) {
       const color = (l.hue != null && tkHueToHex(l.hue)) || theme.accent;
       const g = svgEl('g', { class: 'sk-link' });
@@ -174,7 +220,7 @@ class IsSankeyDiagram extends DiagramElementBase {
     }
   }
 
-  #buildNodes(layout, theme) {
+  #buildNodes(layout: SkLayout, theme: DiagramTheme): void {
     for (const n of layout.nodes) {
       const color = (n.hue != null && tkHueToHex(n.hue)) || theme.accent;
       const g = svgEl('g', { class: 'sk-node' });
@@ -195,8 +241,8 @@ class IsSankeyDiagram extends DiagramElementBase {
       if (labelHasMd) {
         // Markdown inline: foreignObject para preservar el formato.
         const xPos = right ? n.x + n.w + 8 : n.x - 8;
-        t.setAttribute('x', xPos);
-        t.setAttribute('y', n.y + n.h / 2 + 3.5);
+        t.setAttribute('x', String(xPos));
+        t.setAttribute('y', String(n.y + n.h / 2 + 3.5));
         t.setAttribute('text-anchor', right ? 'start' : 'end');
         t.innerHTML = inlineMdWeb(n.label);
       } else {
@@ -209,14 +255,14 @@ class IsSankeyDiagram extends DiagramElementBase {
           maxHeight: 60,
           fontSize: 11,
           fontFamily: 'Tahoma,Arial,sans-serif',
-          overflow: n.overflow ?? 'ellipsis',
+          overflow: (n.overflow ?? 'ellipsis') as 'grow' | 'ellipsis',
         });
         const sktspans = buildTspans(
           skresult.lines,
           xPos, n.y, 200, n.h,
           right ? 'start' : 'end', 11, 1.2,
         );
-        t.setAttribute('y', n.y + 12);
+        t.setAttribute('y', String(n.y + 12));
         for (const span of sktspans) {
           const ts = svgEl('tspan', {
             x: span.x, y: span.y,
@@ -245,9 +291,9 @@ class IsSankeyDiagram extends DiagramElementBase {
 
   /* ── interacción ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.groupId);
       if (item) emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
       return;
     }
@@ -261,9 +307,9 @@ class IsSankeyDiagram extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('sankey');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: MouseEvent) => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.nodeId);
+    const g = e.composedPath().find((n): n is HTMLElement => n instanceof HTMLElement && !!n.dataset?.nodeId);
     const id = g?.dataset.nodeId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
@@ -279,7 +325,7 @@ class IsSankeyDiagram extends DiagramElementBase {
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#nodeNodes.get(id) : null;
 
@@ -308,7 +354,7 @@ class IsSankeyDiagram extends DiagramElementBase {
     this.tooltipEl.appendChild(title);
     const desc = document.createElement('div');
     desc.className = 'dg-tooltip__desc';
-    const unit = this.layout?.unit ? ` ${this.layout.unit}` : '';
+    const unit = (this.layout as SkLayout | null)?.unit ? ` ${(this.layout as SkLayout).unit}` : '';
     desc.innerHTML = n.description
       ? `${inlineMdWeb(n.description)} · ${n.value}${unit}`
       : `${n.value}${unit}`;
