@@ -62,15 +62,15 @@ import { ElementBase } from '../../core/element-base.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #internals = null;
+    #internals: ElementInternals | null = null;
     #dropzone!: HTMLElement;
-    #input!: HTMLElement;
+    #input!: HTMLInputElement;
     #labelEl!: HTMLElement;
     #hintEl!: HTMLElement;
     #list!: HTMLElement;
     #labelSlot!: HTMLSlotElement;
     #hintSlot!: HTMLSlotElement;
-    #files = [];
+    #files: File[] = [];
 
     constructor() {
       super();
@@ -79,7 +79,7 @@ import { ElementBase } from '../../core/element-base.js';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
       this.#dropzone = shadow.querySelector<HTMLElement>('.dropzone')!;
-      this.#input = shadow.querySelector<HTMLElement>('.native')!;
+      this.#input = shadow.querySelector<HTMLInputElement>('.native')!;
       this.#labelEl = shadow.querySelector<HTMLElement>('.label')!;
       this.#hintEl = shadow.querySelector<HTMLElement>('.hint')!;
       this.#list = shadow.querySelector<HTMLElement>('.file-list')!;
@@ -101,7 +101,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#hintSlot.addEventListener('slotchange', () => this.#syncSlots());
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#syncAttrs();
       this.#syncSlots();
       this.#syncDisabled();
@@ -110,16 +110,18 @@ import { ElementBase } from '../../core/element-base.js';
       this.#setState('blank', this.#files.length === 0);
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'disabled') this.#syncDisabled();
       else if (name === 'required') this.#syncRequired();
       else if (name === 'label' || name === 'hint') this.#syncSlots();
       else this.#syncAttrs();
     }
 
-    get files() { return this.#files.slice(); }
-    set files(list) {
-      const arr = Array.isArray(list) ? list.filter((f) => f instanceof File) : [];
+    get files(): File[] { return this.#files.slice(); }
+    set files(list: File[] | unknown) {
+      const arr = Array.isArray(list)
+        ? (list.filter((f: unknown) => f instanceof File) as File[])
+        : [];
       this.#files = arr;
       this.#syncInputFromFiles();
       this.#renderList();
@@ -128,24 +130,24 @@ import { ElementBase } from '../../core/element-base.js';
       this.#emitChange();
     }
 
-    get value() {
-      return this.#files.map((f) => f.name).join(', ');
+    get value(): string {
+      return this.#files.map((f: File) => f.name).join(', ');
     }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get multiple() { return this.hasAttribute('multiple'); }
-    set multiple(v) { this.toggleAttribute('multiple', !!v); }
+    get multiple(): boolean { return this.hasAttribute('multiple'); }
+    set multiple(v: boolean) { this.toggleAttribute('multiple', !!v); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    formDisabledCallback(disabled) {
+    formDisabledCallback(disabled: boolean): void {
       this.#syncDisabled(disabled);
     }
 
-    #setState(name, on) {
+    #setState(name: string, on: boolean): void {
       const s = this.#internals?.states;
       if (s) {
         if (on) s.add(name);
@@ -154,8 +156,8 @@ import { ElementBase } from '../../core/element-base.js';
       this.toggleAttribute(`data-state-${name}`, !!on);
     }
 
-    #syncAttrs() {
-      const map = ['name', 'accept', 'capture'];
+    #syncAttrs(): void {
+      const map: string[] = ['name', 'accept', 'capture'];
       for (const a of map) {
         const v = this.getAttribute(a);
         if (v == null) this.#input.removeAttribute(a);
@@ -165,14 +167,14 @@ import { ElementBase } from '../../core/element-base.js';
       this.#input.toggleAttribute('required', this.required);
     }
 
-    #syncSlots() {
+    #syncSlots(): void {
       const labelAttr = (this.getAttribute('label') || '').trim();
       const hintAttr = (this.getAttribute('hint') || '').trim();
       const hasLabelSlot = this.#labelSlot.assignedNodes({ flatten: true }).some(
-        (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
+        (n: Node) => n.nodeType === 1 || (n.nodeType === 3 && !!n.textContent?.trim()),
       );
       const hasHintSlot = this.#hintSlot.assignedNodes({ flatten: true }).some(
-        (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
+        (n: Node) => n.nodeType === 1 || (n.nodeType === 3 && !!n.textContent?.trim()),
       );
 
       if (!hasLabelSlot) {
@@ -185,7 +187,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#hintEl.hidden = !hintAttr && !hasHintSlot;
     }
 
-    #syncDisabled(formDisabled) {
+    #syncDisabled(formDisabled?: boolean): void {
       const disabled = !!formDisabled || this.disabled;
       this.#input.disabled = disabled;
       this.#dropzone.toggleAttribute('aria-disabled', disabled);
@@ -193,7 +195,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#setState('disabled', disabled);
     }
 
-    #syncRequired() {
+    #syncRequired(): void {
       if (!this.#internals) return;
       if (this.required && this.#files.length === 0) {
         this.#internals.setValidity({ valueMissing: true }, 'Selecciona al menos un archivo', this.#input);
@@ -202,13 +204,14 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
 
-    #onZoneClick = (e: PointerEvent) => {
+    #onZoneClick = (e: PointerEvent): void => {
       if (this.disabled || this.#input.disabled) return;
-      if (e.target.closest('.remove')) return;
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('.remove')) return;
       this.#input.click();
     };
 
-    #onZoneKey = (e) => {
+    #onZoneKey = (e: KeyboardEvent): void => {
       if (this.disabled) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -216,25 +219,26 @@ import { ElementBase } from '../../core/element-base.js';
       }
     };
 
-    #onDragEnter = (e) => {
+    #onDragEnter = (e: DragEvent): void => {
       e.preventDefault();
       if (this.disabled) return;
       this.#setState('dragging', true);
     };
 
-    #onDragOver = (e) => {
+    #onDragOver = (e: DragEvent): void => {
       e.preventDefault();
       if (this.disabled) return;
       this.#setState('dragging', true);
     };
 
-    #onDragLeave = (e) => {
-      if (!this.#dropzone.contains(e.relatedTarget)) {
+    #onDragLeave = (e: DragEvent): void => {
+      const related = e.relatedTarget as Node | null;
+      if (!this.#dropzone.contains(related)) {
         this.#setState('dragging', false);
       }
     };
 
-    #onDrop = (e) => {
+    #onDrop = (e: DragEvent): void => {
       e.preventDefault();
       this.#setState('dragging', false);
       if (this.disabled) return;
@@ -243,14 +247,14 @@ import { ElementBase } from '../../core/element-base.js';
       this.#applyFileList(list);
     };
 
-    #onNativeChange = () => {
+    #onNativeChange = (): void => {
       if (this.#input.files?.length) this.#applyFileList(this.#input.files);
     };
 
-    #applyFileList(fileList) {
+    #applyFileList(fileList: FileList): void {
       const incoming = Array.from(fileList);
       if (this.multiple) {
-        const key = (f) => `${f.name}:${f.size}:${f.lastModified}`;
+        const key = (f: File): string => `${f.name}:${f.size}:${f.lastModified}`;
         const seen = new Set(this.#files.map(key));
         for (const f of incoming) {
           if (!seen.has(key(f))) {
@@ -268,26 +272,28 @@ import { ElementBase } from '../../core/element-base.js';
       this.#emitChange();
     }
 
-    #syncInputFromFiles() {
+    #syncInputFromFiles(): void {
       try {
         const dt = new DataTransfer();
         for (const f of this.#files) dt.items.add(f);
         this.#input.files = dt.files;
-        this.#internals?.setFormValue(this.multiple ? dt.files : (this.#files[0] || null));
+        this.#internals?.setFormValue(
+          this.multiple ? (dt.files as unknown as File) : (this.#files[0] || null),
+        );
       } catch {
         // DataTransfer may fail in some environments; keep internal list
         this.#internals?.setFormValue(this.#files[0]?.name || '');
       }
     }
 
-    #renderList() {
+    #renderList(): void {
       this.#list.replaceChildren();
       if (!this.#files.length) {
         this.#list.hidden = true;
         return;
       }
       this.#list.hidden = false;
-      this.#files.forEach((file, index) => {
+      this.#files.forEach((file: File, index: number) => {
         const li = document.createElement('li');
         li.setAttribute('part', 'file');
         li.className = 'file';
@@ -300,7 +306,7 @@ import { ElementBase } from '../../core/element-base.js';
         size.setAttribute('value', String(file.size));
         size.className = 'file-size';
 
-        const remove = document.createElement('is-button');
+        const remove = document.createElement('is-button') as HTMLElement & { type: string };
         remove.type = 'button';
         remove.className = 'remove';
         remove.setAttribute('part', 'remove-button');
@@ -318,7 +324,7 @@ import { ElementBase } from '../../core/element-base.js';
       });
     }
 
-    #removeAt(index) {
+    #removeAt(index: number): void {
       this.#files.splice(index, 1);
       this.#syncInputFromFiles();
       this.#renderList();
@@ -327,7 +333,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#emitChange();
     }
 
-    #emitChange() {
+    #emitChange(): void {
       const detail = { files: this.files };
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
