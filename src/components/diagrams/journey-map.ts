@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveJourneySpec, computeJourneyLayout } from './journey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
@@ -25,10 +26,57 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Eventos: is-render, is-open-viewer, is-toggle-phase
  */
 
+interface JnLayoutStep {
+  id: string;
+  label: string;
+  phase: string;
+  actor?: string;
+  description?: string;
+  score?: number;
+  hue?: number;
+  cx: number;
+  cy: number;
+  labelY: number;
+  actorY: number;
+  hasScore: boolean;
+}
+interface JnLayoutPhase {
+  id: string;
+  name: string;
+  hue?: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  overflow?: 'grow' | 'ellipsis' | 'shrink';
+}
+interface JnLayoutGridLine {
+  value: number;
+  y: number;
+  x1: number;
+  x2: number;
+  labelX: number;
+}
+interface JnLayout {
+  width: number;
+  height: number;
+  plot: { x: number; y: number; w: number; h: number };
+  phases: JnLayoutPhase[];
+  steps: JnLayoutStep[];
+  line: string;
+  gridLines: JnLayoutGridLine[];
+  scale: { min: number; max: number };
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+}
+interface StepEntry { s: JnLayoutStep; g: SVGGElement; }
+
 class IsJourneyMap extends DiagramElementBase {
-  #hiddenPhases = new Set();
-  #stepNodes = new Map();
-  #hoverId = null;
+  #hiddenPhases = new Set<string>();
+  #stepNodes = new Map<string, StepEntry>();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -48,15 +96,15 @@ class IsJourneyMap extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged() { this.#hiddenPhases = new Set(); }
+  onPayloadChanged(): void { this.#hiddenPhases = new Set(); }
 
-  get hiddenPhases() { return this.#hiddenPhases; }
-  set hiddenPhases(v) {
-    this.#hiddenPhases = v instanceof Set ? v : new Set(v || []);
+  get hiddenPhases(): Set<string> { return this.#hiddenPhases; }
+  set hiddenPhases(v: Set<string> | string[] | null | undefined) {
+    this.#hiddenPhases = v instanceof Set ? new Set(v) : new Set(v || []);
     this.queueRender();
   }
 
-  renderDiagram() {
+  renderDiagram(): void {
     const spec = resolveJourneySpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
@@ -79,13 +127,13 @@ class IsJourneyMap extends DiagramElementBase {
     const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeJourneyLayout(visible);
+    const layout = computeJourneyLayout(visible) as unknown as JnLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: JnLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -120,7 +168,7 @@ class IsJourneyMap extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildGrid(layout, theme) {
+  #buildGrid(layout: JnLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'jn-grid' });
     for (const line of layout.gridLines) {
       g.appendChild(svgEl('line', {
@@ -137,7 +185,7 @@ class IsJourneyMap extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildPhases(layout, theme) {
+  #buildPhases(layout: JnLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'jn-phases' });
     for (const f of layout.phases) {
       const color = tkHueToHex(f.hue) ?? theme.accent;
@@ -161,7 +209,7 @@ class IsJourneyMap extends DiagramElementBase {
         maxHeight: f.h - 4,
         fontSize: 10.5,
         fontFamily: 'Tahoma,Arial,sans-serif',
-        overflow: f.overflow ?? 'ellipsis',
+        overflow: (f.overflow ?? 'ellipsis') as 'grow' | 'ellipsis',
       });
       const ftspans = buildTspans(
         fresult.lines,
@@ -182,7 +230,7 @@ class IsJourneyMap extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLine(layout, theme) {
+  #buildLine(layout: JnLayout, theme: DiagramTheme): void {
     if (!layout.line) return;
     this.svg.appendChild(svgEl('path', {
       d: layout.line, fill: 'none', stroke: theme.accent, 'stroke-width': 1.6,
@@ -190,7 +238,7 @@ class IsJourneyMap extends DiagramElementBase {
     }));
   }
 
-  #buildSteps(layout, theme) {
+  #buildSteps(layout: JnLayout, theme: DiagramTheme): void {
     for (const s of layout.steps) {
       const color = (s.hue != null && tkHueToHex(s.hue)) || theme.accent;
       const g = svgEl('g', { class: 'jn-step' });
@@ -234,9 +282,9 @@ class IsJourneyMap extends DiagramElementBase {
 
   /* ── interacción ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
-      const phase = e.composedPath().find((x) => x?.dataset?.phaseId);
+      const phase = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.phaseId);
       if (phase) emit(this, 'is-toggle-phase', { id: phase.dataset.phaseId });
       return;
     }
@@ -250,9 +298,9 @@ class IsJourneyMap extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('journey');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: MouseEvent) => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.stepId);
+    const g = e.composedPath().find((n): n is HTMLElement => n instanceof HTMLElement && !!n.dataset?.stepId);
     const id = g?.dataset.stepId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
@@ -268,7 +316,7 @@ class IsJourneyMap extends DiagramElementBase {
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#stepNodes.get(id) : null;
 
@@ -290,7 +338,7 @@ class IsJourneyMap extends DiagramElementBase {
     title.innerHTML = inlineMdWeb(s.label);
     this.tooltipEl.appendChild(title);
     const parts = [];
-    if (s.hasScore) parts.push(`Satisfacción ${s.score} de ${this.layout.scale.max}`);
+    if (s.hasScore) parts.push(`Satisfacción ${s.score} de ${(this.layout as JnLayout).scale.max}`);
     if (s.actor) parts.push(s.actor);
     if (s.description) parts.unshift(inlineMdWeb(s.description));
     if (parts.length) {
