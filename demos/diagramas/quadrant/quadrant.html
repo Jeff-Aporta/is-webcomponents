@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-quadrant-chart> impacto vs esfuerzo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; place-items: center; }
+  is-quadrant-chart { width: 720px; height: 540px; display: block; }
+  is-quadrant-chart:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+</style>
+<script type="module">
+  await import('../../../src/components/diagrams/quadrant-chart.ts');
+  await customElements.whenDefined('is-quadrant-chart');
+
+  const el = document.createElement('is-quadrant-chart');
+  el.payload = {
+    title: 'Priorización del roadmap',
+    xAxis: { left: 'Bajo esfuerzo', right: 'Alto esfuerzo' },
+    yAxis: { bottom: 'Bajo impacto', top: 'Alto impacto' },
+    quadrants: {
+      topRight: 'Quick wins',
+      topLeft: 'Inversiones estratégicas',
+      bottomRight: 'Relleno',
+      bottomLeft: 'Reconsiderar',
+    },
+    groups: [
+      { id: 'g1', name: 'Equipo A' },
+      { id: 'g2', name: 'Equipo B' },
+    ],
+    points: [
+      { label: 'Auth v2', x: 0.85, y: 0.90, group: 'g1' },
+      { label: 'Refactor billing', x: 0.30, y: 0.80, group: 'g1' },
+      { label: 'Nuevo dashboard', x: 0.75, y: 0.30, group: 'g2' },
+      { label: 'Limpieza logs', x: 0.20, y: 0.20, group: 'g2' },
+      { label: 'Integración CRM', x: 0.65, y: 0.65, group: 'g1' },
+      { label: 'A11y audit', x: 0.45, y: 0.55, group: 'g2' },
+    ],
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.quadrantReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo funcional — <code>&lt;is-quadrant-chart&gt;</code></h1>
+  <p>Matriz 2×2 con 6 puntos y leyenda de grupos.</p>
+</header>
+<main>
+  <div id="host"></div>
+</main>
+<footer>
+  Estado: layout con plot cuadrado de 320px; etiquetas con stackLabels.
+</footer>
+</body>
+</html>

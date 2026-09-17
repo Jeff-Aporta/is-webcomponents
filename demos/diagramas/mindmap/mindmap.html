@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-mindmap> radial</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; place-items: center; }
+  is-mindmap { width: 720px; height: 640px; display: block; }
+  is-mindmap:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+</style>
+<script type="module">
+  await import('../../../src/components/diagrams/mindmap.ts');
+  await customElements.whenDefined('is-mindmap');
+
+  const el = document.createElement('is-mindmap');
+  el.payload = {
+    title: 'Estrategia de plataforma',
+    subtitle: 'Tres ejes con ramificaciones',
+    layout: 'radial',
+    nodes: [
+      { id: 'root', label: 'Plataforma' },
+      { id: 'obs', label: 'Observabilidad', parent: 'root' },
+      { id: 'logs', label: 'Logs', parent: 'obs' },
+      { id: 'metrics', label: 'Métricas', parent: 'obs' },
+      { id: 'traces', label: 'Trazas', parent: 'obs' },
+      { id: 'deploy', label: 'Deploy', parent: 'root' },
+      { id: 'ci', label: 'CI', parent: 'deploy' },
+      { id: 'cd', label: 'CD', parent: 'deploy' },
+      { id: 'scale', label: 'Escalado', parent: 'deploy' },
+      { id: 'data', label: 'Datos', parent: 'root' },
+      { id: 'etl', label: 'ETL', parent: 'data' },
+      { id: 'dash', label: 'Dashboards', parent: 'data' },
+    ],
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.mindmapReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo funcional — <code>&lt;is-mindmap&gt;</code></h1>
+  <p>Layout radial con 12 nodos en 3 niveles jerárquicos.</p>
+</header>
+<main>
+  <div id="host"></div>
+</main>
+<footer>
+  Estado: <code>buildTree</code> arma el árbol; <code>layoutRadialTree</code> posiciona por ángulo.
+</footer>
+</body>
+</html>

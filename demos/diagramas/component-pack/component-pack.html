@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es" class="theme-light" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — component-pack (motor de empaquetado UML)</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #ffffff; color: #1f2937; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,0.08); background: #f9fafb; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #6b7280; margin: 4px 0 0 0; }
+  main { padding: 20px; }
+  #host { width: 100%; min-height: 480px; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(0,0,0,0.08); background: #f9fafb; font-size: 11px; color: #6b7280; }
+</style>
+<script type="module">
+  import { packDiagram, layoutPackageOutlines, routeAvoidingBoxes } from '../../../src/components/diagrams/component-pack.ts';
+
+  const host = document.getElementById('host');
+  const out = document.createElement('div');
+  out.style.cssText = 'font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px;';
+  host.appendChild(out);
+
+  // Demo: empaquetar 2 paquetes con 3 componentes cada uno
+  const packages = [
+    { id: 'frontend', name: 'Frontend', x: 100, y: 100, w: 240, h: 200 },
+    { id: 'backend', name: 'Backend', x: 100, y: 320, w: 240, h: 200 },
+  ];
+  const components = [
+    { id: 'web', name: 'Web', package: 'frontend', x: 0, y: 0, w: 80, h: 40 },
+    { id: 'mobile', name: 'Mobile', package: 'frontend', x: 0, y: 0, w: 80, h: 40 },
+    { id: 'desktop', name: 'Desktop', package: 'frontend', x: 0, y: 0, w: 80, h: 40 },
+    { id: 'api', name: 'API', package: 'backend', x: 0, y: 0, w: 80, h: 40 },
+    { id: 'auth', name: 'Auth', package: 'backend', x: 0, y: 0, w: 80, h: 40 },
+    { id: 'db', name: 'DB', package: 'backend', x: 0, y: 0, w: 80, h: 40 },
+  ];
+  const edges = [
+    { from: 'web', to: 'api' },
+    { from: 'mobile', to: 'api' },
+    { from: 'desktop', to: 'auth' },
+  ];
+
+  packDiagram(packages, components, edges, { mode: 'pack' });
+  layoutPackageOutlines(packages, components);
+
+  // Render minimalista como SVG inline para visualizar el resultado
+  const minX = Math.min(...packages.map((p) => p.x)) - 20;
+  const minY = Math.min(...packages.map((p) => p.y)) - 20;
+  const maxX = Math.max(...packages.map((p) => p.x + p.w)) + 20;
+  const maxY = Math.max(...packages.map((p) => p.y + p.h)) + 20;
+  const w = maxX - minX;
+  const h = maxY - minY;
+
+  let svg = `<svg viewBox="${minX} ${minY} ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:6px;">`;
+  // paquetes
+  for (const p of packages) {
+    svg += `<g data-package-id="${p.id}">`;
+    if (p.outline && p.outline.length) {
+      const path = 'M' + p.outline.map((q) => `${q.x},${q.y}`).join(' L') + ' Z';
+      svg += `<path d="${path}" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>`;
+    } else {
+      svg += `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>`;
+    }
+    svg += `<text x="${p.x + 8}" y="${p.y + 14}" font-size="11" fill="#475569">${p.name}</text>`;
+    svg += `</g>`;
+  }
+  // componentes
+  for (const c of components) {
+    svg += `<g data-component-id="${c.id}">`;
+    svg += `<rect x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" fill="#ffffff" stroke="#0ea5e9" stroke-width="1.2" rx="4"/>`;
+    svg += `<text x="${c.x + c.w / 2}" y="${c.y + c.h / 2 + 4}" text-anchor="middle" font-size="11" fill="#0f172a">${c.name}</text>`;
+    svg += `</g>`;
+  }
+  // aristas (rectas simples para el demo, no usamos router completo)
+  const byId = new Map(components.map((c) => [c.id, c]));
+  for (const e of edges) {
+    const from = byId.get(e.from);
+    const to = byId.get(e.to);
+    if (!from || !to) continue;
+    const x1 = from.x + from.w;
+    const y1 = from.y + from.h / 2;
+    const x2 = to.x;
+    const y2 = to.y + to.h / 2;
+    svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#475569" stroke-width="1.2" marker-end="url(#arrow)"/>`;
+  }
+  svg += `<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 Z" fill="#475569"/></marker></defs>`;
+  svg += `</svg>`;
+
+  out.innerHTML = `
+    <p><strong>Resultado de packDiagram(mode: pack) + layoutPackageOutlines</strong>:</p>
+    ${svg}
+    <pre style="background:#f1f5f9; padding:12px; border-radius:6px; margin-top:12px;">${
+      packages.map((p) => `${p.id}: x=${p.x} y=${p.y} w=${p.w} h=${p.h} outline=${p.outline?.length ?? 0} pts`).join('\n')
+    }</pre>
+  `;
+
+  document.documentElement.dataset.componentPackReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo funcional — <code>component-pack</code></h1>
+  <p>Llamadas a <code>packDiagram</code> + <code>layoutPackageOutlines</code> directamente desde JS.</p>
+</header>
+<main>
+  <div id="host"></div>
+</main>
+<footer>
+  Estado: el motor de empaquetado reposiciona componentes dentro de paquetes en columnas.
+</footer>
+</body>
+</html>

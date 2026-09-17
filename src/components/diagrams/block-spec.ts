@@ -20,21 +20,59 @@ const GAP = 24;
 const ROW_H = 72;
 const MIN_UNIT_W = 96;
 const MAX_UNIT_W = 200;
-const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
-const SHAPES = new Set(['rect', 'round']);
+const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
+const SHAPES: Set<string> = new Set(['rect', 'round']);
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
 }
 
-function readBlock(raw, i: number) {
+interface BlockSpecGroup {
+  id: string;
+  name: string;
+  hue: number;
+}
+
+interface BlockSpecBlock {
+  id: string;
+  label: string;
+  shape: 'rect' | 'round';
+  icon?: string;
+  hue?: number;
+  group?: string;
+  span: number;
+}
+
+interface BlockSpecEdge {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+}
+
+export interface BlockSpec {
+  title?: string;
+  subtitle?: string;
+  columns: number;
+  groups?: BlockSpecGroup[];
+  blocks: BlockSpecBlock[];
+  edges: BlockSpecEdge[];
+}
+
+interface LeadingIcon {
+  iconId?: string;
+  hue?: number;
+  rest?: string;
+}
+
+function readBlock(raw: unknown, i: number): BlockSpecBlock {
   const r = asRecord(raw);
   const rawLabel = String(r.label ?? r.id ?? `Bloque ${i + 1}`);
-  const leading = extractLeadingIconToken(rawLabel);
+  const leading = extractLeadingIconToken(rawLabel) as LeadingIcon | null;
   return {
     id: String(r.id ?? `b${i}`),
     label: rawLabel,
-    shape: SHAPES.has(String(r.shape)) ? String(r.shape) : 'rect',
+    shape: SHAPES.has(String(r.shape)) ? (String(r.shape) as 'rect' | 'round') : 'rect',
     icon: leading?.iconId ?? (r.icon != null ? String(r.icon) : undefined),
     hue: leading?.hue ?? (r.hue != null ? resolveTkHue(r) : undefined),
     group: String(r.group ?? '') || undefined,
@@ -42,7 +80,7 @@ function readBlock(raw, i: number) {
   };
 }
 
-function readEdge(raw, i) {
+function readEdge(raw: unknown, i: number): BlockSpecEdge {
   const r = asRecord(raw);
   return {
     id: String(r.id ?? `e${i}`),
@@ -52,30 +90,30 @@ function readEdge(raw, i) {
   };
 }
 
-function readGroups(src) {
+function readGroups(src: Record<string, unknown>): BlockSpecGroup[] | undefined {
   const raw = src.groups ?? [];
   if (!Array.isArray(raw) || !raw.length) return undefined;
-  return raw.map((g, i: number) => {
+  return raw.map((g: unknown, i: number) => {
     const r = asRecord(g);
     return {
       id: String(r.id ?? `grp-${i}`),
       name: String(r.name ?? r.label ?? `Grupo ${i + 1}`),
-      hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
+      hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length] ?? 210),
     };
   });
 }
 
 /** payload → spec normalizada, o null si no hay bloques. */
-export function blockSpecFromPayload(payload) {
+export function blockSpecFromPayload(payload: unknown): BlockSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.blockDiagram ?? p.block ?? p);
   const rawBlocks = src.blocks ?? [];
   if (!Array.isArray(rawBlocks) || !rawBlocks.length) return null;
 
-  const blocks = rawBlocks.map(readBlock);
-  const known = new Set(blocks.map((b) => b.id));
+  const blocks: BlockSpecBlock[] = rawBlocks.map(readBlock);
+  const known = new Set<string>(blocks.map((b) => b.id));
   // Descarta aristas colgantes: una arista a un id inexistente rompería el layout.
-  const edges = (Array.isArray(src.edges) ? src.edges : [])
+  const edges: BlockSpecEdge[] = (Array.isArray(src.edges) ? src.edges : [])
     .map(readEdge)
     .filter((e) => known.has(e.from) && known.has(e.to));
 
@@ -89,29 +127,33 @@ export function blockSpecFromPayload(payload) {
   };
 }
 
-export function resolveBlockSpec(payload) {
+export function resolveBlockSpec(payload: unknown): BlockSpec | null {
   return blockSpecFromPayload(payload);
 }
 
-function blockUnitWidth(label) {
+function blockUnitWidth(label: string): number {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label);
   const est = Math.ceil(plain.length * 7) + 32 + icons * 18;
   return snapDiagramGrid(Math.min(MAX_UNIT_W, Math.max(MIN_UNIT_W, est)));
 }
 
+interface BlockPlacement {
+  id: string;
+  row: number;
+  col: number;
+  span: number;
+}
+
 /**
  * Empaqueta bloques en una rejilla de `columns` columnas: fluye izquierda a
  * derecha, `span` ocupa N columnas y hace wrap a la siguiente fila si no cabe
  * en el espacio restante de la fila actual.
- * @param {Array<{id:string, span:number}>} blocks
- * @param {number} columns
- * @returns {Array<{id:string, row:number, col:number, span:number}>}
  */
-export function computeBlockGrid(blocks, columns: number) {
+export function computeBlockGrid(blocks: Array<{ id: string; span: number }>, columns: number): BlockPlacement[] {
   let row = 0;
   let col = 0;
-  const placed = [];
+  const placed: BlockPlacement[] = [];
   for (const b of blocks) {
     const span = Math.min(columns, Math.max(1, b.span || 1));
     if (col + span > columns) {
@@ -124,13 +166,56 @@ export function computeBlockGrid(blocks, columns: number) {
   return placed;
 }
 
-const MARGIN = { top: 16, right: 16, bottom: 16, left: 16 };
+const MARGIN: { top: number; right: number; bottom: number; left: number } = { top: 16, right: 16, bottom: 16, left: 16 };
+
+interface BlockLayoutBlock {
+  id: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  row: number;
+  col: number;
+  label: string;
+  shape: 'rect' | 'round';
+  icon?: string;
+  hue?: number;
+  group?: string;
+}
+
+interface BlockLayoutEdge {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  path: string;
+  arrowTipX: number;
+  arrowTipY: number;
+  arrowAngle: number;
+  labelX: number;
+  labelY: number;
+  hue?: number;
+}
+
+export interface BlockLayout {
+  width: number;
+  height: number;
+  blocks: BlockLayoutBlock[];
+  edges: BlockLayoutEdge[];
+  groups?: BlockSpecGroup[];
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  legendX: number;
+}
+
+interface BlockRect extends BlockLayoutBlock {}
 
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, blocks:Array, edges:Array, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
  */
-export function computeBlockLayout(spec) {
+export function computeBlockLayout(spec: BlockSpec): BlockLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
@@ -152,14 +237,17 @@ export function computeBlockLayout(spec) {
     : MIN_UNIT_W;
 
   const placements = computeBlockGrid(spec.blocks, spec.columns);
-  const byId = new Map(spec.blocks.map((b) => [b.id, b]));
-  const groupHue = new Map((spec.groups ?? []).map((g) => [g.id, g.hue]));
+  const byId = new Map<string, BlockSpecBlock>(spec.blocks.map((b) => [b.id, b]));
+  const groupHue = new Map<string, number>((spec.groups ?? []).map((g) => [g.id, g.hue]));
 
   const offsetX = MARGIN.left;
   const offsetY = MARGIN.top + headerH;
 
-  const blocks = placements.map((pl) => {
+  const blocks: BlockLayoutBlock[] = placements.map((pl) => {
     const b = byId.get(pl.id);
+    if (!b) {
+      throw new Error(`block-spec: placement without block (id=${pl.id})`);
+    }
     return {
       id: b.id,
       x: offsetX + pl.col * (unitW + GAP),
@@ -190,12 +278,26 @@ export function computeBlockLayout(spec) {
 
   // Rejilla de costos: los bloques se bloquean para que el A* los rodee.
   const grid = makeCostGrid(width, height);
-  const posById = new Map(blocks.map((b) => [b.id, b]));
+  const posById = new Map<string, BlockLayoutBlock>(blocks.map((b) => [b.id, b]));
   for (const b of blocks) blockGridRect(grid, b.x - 6, b.y - 6, b.w + 12, b.h + 12);
 
-  const edges = spec.edges.map((e, i) => {
+  const edges: BlockLayoutEdge[] = spec.edges.map((e, i) => {
     const from = posById.get(e.from);
     const to = posById.get(e.to);
+    if (!from || !to) {
+      return {
+        id: e.id ?? `e${i}`,
+        from: e.from,
+        to: e.to,
+        label: e.label,
+        path: '',
+        arrowTipX: 0,
+        arrowTipY: 0,
+        arrowAngle: 0,
+        labelX: 0,
+        labelY: 0,
+      };
+    }
     const sides = pickBlockSides(from, to);
     const a = anchor(from, sides.fromSide);
     const b = anchor(to, sides.toSide);
@@ -213,7 +315,7 @@ export function computeBlockLayout(spec) {
     const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
     const tip = arrowTip(b, sides.toSide);
     const mid = points.length
-      ? { x: points[Math.floor(points.length / 2)].col * grid.grid, y: points[Math.floor(points.length / 2)].row * grid.grid }
+      ? { x: points[Math.floor(points.length / 2)]!.col * grid.grid, y: points[Math.floor(points.length / 2)]!.row * grid.grid }
       : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
 
     if (e.label) applyRectCost(grid, mid.x - 30, mid.y - 9, 60, 18, 6, true);
@@ -223,7 +325,7 @@ export function computeBlockLayout(spec) {
       from: e.from,
       to: e.to,
       label: e.label,
-      path,
+      path: typeof path === 'string' ? path : gridPathToSvg(points, grid.grid),
       arrowTipX: tip.x,
       arrowTipY: tip.y,
       arrowAngle: tip.angle,
@@ -233,7 +335,7 @@ export function computeBlockLayout(spec) {
   });
 
   assignEdgeHues(edges);
-  const layout = {
+  const layout: BlockLayout = {
     width,
     height,
     blocks,
@@ -245,12 +347,14 @@ export function computeBlockLayout(spec) {
     subtitleY,
     legendX,
   };
-  applyEdgeActorLayout(layout, blocks.map((b) => ({ x: b.x, y: b.y, w: b.w, h: b.h })));
+  applyEdgeActorLayout(layout, blocks.map((b) => ({ x: b.x, y: b.y, w: b.w, h: b.h })) as BlockRect[]);
   return layout;
 }
 
+type Side = 'left' | 'right' | 'top' | 'bottom';
+
 /** Elige los lados de anclaje según la posición relativa de los centros de los bloques. */
-function pickBlockSides(from, to) {
+function pickBlockSides(from: BlockLayoutBlock, to: BlockLayoutBlock): { fromSide: Side; toSide: Side } {
   const dx = (to.x + to.w / 2) - (from.x + from.w / 2);
   const dy = (to.y + to.h / 2) - (from.y + from.h / 2);
   if (Math.abs(dx) >= Math.abs(dy)) {
@@ -259,7 +363,7 @@ function pickBlockSides(from, to) {
   return dy >= 0 ? { fromSide: 'bottom', toSide: 'top' } : { fromSide: 'top', toSide: 'bottom' };
 }
 
-function anchor(node, side) {
+function anchor(node: BlockLayoutBlock, side: Side): { x: number; y: number } {
   switch (side) {
     case 'top':
       return { x: node.x + node.w / 2, y: node.y };
@@ -273,20 +377,20 @@ function anchor(node, side) {
   }
 }
 
-function stepOut(p, side, d) {
+function stepOut(p: { x: number; y: number }, side: Side, d: number): { x: number; y: number } {
   if (side === 'top') return { x: p.x, y: p.y - d };
   if (side === 'bottom') return { x: p.x, y: p.y + d };
   if (side === 'left') return { x: p.x - d, y: p.y };
   return { x: p.x + d, y: p.y };
 }
 
-function arrowTip(p, side) {
+function arrowTip(p: { x: number; y: number }, side: Side): { x: number; y: number; angle: number } {
   const angle = side === 'top' ? 90 : side === 'bottom' ? 270 : side === 'left' ? 0 : 180;
   return { x: p.x, y: p.y, angle };
 }
 
 /** Contorno SVG de un bloque: rectángulo con esquinas redondeadas, o "round" con radios mayores. */
-export function blockShapePath(shape, x, y, w, h: number) {
+export function blockShapePath(shape: 'rect' | 'round' | string, x: number, y: number, w: number, h: number): string {
   if (shape === 'round') {
     const r = Math.min(28, h / 2);
     return `M${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h - r} Q${x + w},${y + h} ${x + w - r},${y + h} H${x + r} Q${x},${y + h} ${x},${y + h - r} V${y + r} Q${x},${y} ${x + r},${y} Z`;
