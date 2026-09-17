@@ -1,4 +1,9 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
+import type { BoxSide } from './diagram-types.js';
+
+// `BoxSide` admite `'auto'`; los anclajes efectivos del router son siempre
+// una dirección cardinal. Estrechamos para satisfacer la firma del helper.
+type AnchorSide = 'left' | 'right' | 'top' | 'bottom';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
@@ -27,18 +32,128 @@ const MAX_W = 260;
 const NODE_H = 44;
 const DIAMOND_PAD = 28;
 
+export type FlowDirection = 'TB' | 'BT' | 'LR' | 'RL';
+export type FlowShape = 'rect' | 'round' | 'stadium' | 'circle' | 'diamond' | 'hexagon' | 'parallelogram' | 'cylinder' | 'subroutine';
+export type FlowEdgeKind = 'solid' | 'dashed' | 'thick';
+export type FlowOverflow = 'grow' | 'ellipsis';
+
 /** Direcciones aceptadas (equivalen a las de Mermaid: TB/TD, BT, LR, RL). */
-const DIRECTIONS = new Set(['TB', 'BT', 'LR', 'RL']);
+const DIRECTIONS: Set<string> = new Set(['TB', 'BT', 'LR', 'RL']);
 
 /** Formas soportadas; el resto cae a 'rect'. */
-export const FLOW_SHAPES = new Set([
+export const FLOW_SHAPES: Set<string> = new Set([
   'rect', 'round', 'stadium', 'circle', 'diamond', 'hexagon', 'parallelogram', 'cylinder', 'subroutine',
 ]);
 
-const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+interface LeadingIconToken { iconId: string; hue?: number; rest: string }
+
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
+}
+
+export interface FlowExclusionZone {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label?: string;
+}
+
+export interface FlowNodeSpec {
+  id: string;
+  label: string;
+  shape: FlowShape;
+  icon?: string;
+  hue?: number;
+  group?: string;
+  description?: string;
+  overflow?: FlowOverflow;
+}
+
+export interface FlowEdgeSpec {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  kind: FlowEdgeKind;
+  group?: string;
+  waypoints?: Array<{ x: number; y: number }>;
+}
+
+export interface FlowGroupSpec {
+  id: string;
+  name: string;
+  hue: number;
+}
+
+export interface FlowResolvedSpec {
+  title?: string;
+  subtitle?: string;
+  direction: FlowDirection;
+  defaultOverflow: FlowOverflow;
+  groups?: FlowGroupSpec[];
+  exclusionZones?: FlowExclusionZone[];
+  nodes: FlowNodeSpec[];
+  edges: FlowEdgeSpec[];
+}
+
+export interface FlowLayoutNode {
+  id: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  layer: number;
+  label: string;
+  shape: FlowShape;
+  icon?: string;
+  description?: string;
+  hue?: number;
+  group?: string;
+}
+
+export interface FlowLayoutEdge {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  kind: FlowEdgeKind;
+  path: string;
+  arrowTipX: number;
+  arrowTipY: number;
+  arrowAngle: number;
+  labelX: number;
+  labelY: number;
+  hue?: number;
+}
+
+export interface FlowLayoutExclusionZone {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label?: string;
+}
+
+export interface FlowLayout {
+  width: number;
+  height: number;
+  nodes: FlowLayoutNode[];
+  edges: FlowLayoutEdge[];
+  groups?: FlowGroupSpec[];
+  exclusionZones?: FlowLayoutExclusionZone[];
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  legendX: number;
+}
+
+export interface FlowLayoutOverrides {
+  nodes?: Record<string, { x?: number; y?: number; label?: string; hue?: number }>;
+  edges?: Record<string, { label?: string; hue?: number }>;
 }
 
 /** Ancho estimado de la caja según su etiqueta, descontando tokens {{icon}}.
@@ -48,7 +163,7 @@ function asRecord(v) {
  * si una sola palabra es mas ancha que la caja, el texto se desborda fuera
  * del borde. Para evitarlo se toma el max entre la estimacion agregada y
  * el ancho de la palabra mas larga, mas un pequeno margen. */
-function nodeWidth(label, shape) {
+function nodeWidth(label: string, shape: string): number {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label);
   let longestWord = 0;
@@ -71,57 +186,59 @@ function nodeWidth(label, shape) {
   return base;
 }
 
-function nodeHeight(shape) {
+function nodeHeight(shape: string): number {
   if (shape === 'circle') return snapDiagramGrid(NODE_H * 1.6);
   if (shape === 'diamond') return snapDiagramGrid(NODE_H * 1.35);
   return NODE_H;
 }
 
-function readNode(raw, i: number) {
-  const r = asRecord(raw);
-  const rawLabel = String(r.label ?? r.text ?? r.id ?? `Nodo ${i + 1}`);
-  const leading = extractLeadingIconToken(rawLabel);
-  const shape = FLOW_SHAPES.has(String(r.shape)) ? String(r.shape) : 'rect';
-  const overflowRaw = String(r.overflow ?? '').trim();
-  const overflow = overflowRaw === 'grow' || overflowRaw === 'ellipsis' ? overflowRaw : undefined;
+function readNode(raw: Record<string, unknown>, i: number): FlowNodeSpec {
+  const rawLabel = String(raw.label ?? raw.text ?? raw.id ?? `Nodo ${i + 1}`);
+  const leading = extractLeadingIconToken(rawLabel) as LeadingIconToken | null;
+  const shapeStr = String(raw.shape ?? '');
+  const shape = (FLOW_SHAPES.has(shapeStr) ? shapeStr : 'rect') as FlowShape;
+  const overflowRaw = String(raw.overflow ?? '').trim();
+  const overflow: FlowOverflow | undefined = overflowRaw === 'grow' || overflowRaw === 'ellipsis'
+    ? (overflowRaw as FlowOverflow)
+    : undefined;
   return {
-    id: String(r.id ?? `n${i}`),
+    id: String(raw.id ?? `n${i}`),
     label: rawLabel,
     shape,
-    icon: leading?.iconId ?? (r.icon != null ? String(r.icon) : undefined),
-    hue: leading?.hue ?? (r.hue != null ? resolveTkHue(r) : undefined),
-    group: String(r.group ?? '') || undefined,
-    description: String(r.desc ?? r.description ?? '').trim() || undefined,
+    icon: leading?.iconId ?? (raw.icon != null ? String(raw.icon) : undefined),
+    hue: leading?.hue ?? (raw.hue != null ? resolveTkHue(raw) : undefined),
+    group: String(raw.group ?? '') || undefined,
+    description: String(raw.desc ?? raw.description ?? '').trim() || undefined,
     overflow,
   };
 }
 
-function readEdge(raw, i) {
-  const r = asRecord(raw);
+function readEdge(raw: Record<string, unknown>, i: number): FlowEdgeSpec {
   // Waypoints opcionales: fuerzan el A* a pasar por coordenadas en píxeles.
   // Cada item es { x, y } en el plano del SVG. Sirven para guiar la ruta
   // estéticamente cuando el algoritmo directo cae en zigzag.
-  const waypoints = Array.isArray(r.waypoints)
-    ? r.waypoints
-        .map((w) => asRecord(w))
+  const waypoints: Array<{ x: number; y: number }> | undefined = Array.isArray(raw.waypoints)
+    ? raw.waypoints
+        .map((w: unknown) => asRecord(w))
         .filter((w) => Number.isFinite(w.x) && Number.isFinite(w.y))
         .map((w) => ({ x: Number(w.x), y: Number(w.y) }))
     : undefined;
   return {
-    id: String(r.id ?? `e${i}`),
-    from: String(r.from ?? r.source ?? ''),
-    to: String(r.to ?? r.target ?? ''),
-    label: String(r.label ?? '').trim() || undefined,
-    kind: r.kind === 'dashed' || r.kind === 'thick' ? r.kind : 'solid',
-    group: String(r.group ?? '') || undefined,
+    id: String(raw.id ?? `e${i}`),
+    from: String(raw.from ?? raw.source ?? ''),
+    to: String(raw.to ?? raw.target ?? ''),
+    label: String(raw.label ?? '').trim() || undefined,
+    kind: raw.kind === 'dashed' || raw.kind === 'thick' ? (raw.kind as FlowEdgeKind) : 'solid',
+    group: String(raw.group ?? '') || undefined,
     waypoints: waypoints?.length ? waypoints : undefined,
   };
 }
 
-function readGroups(src) {
-  const raw = src.groups ?? [];
-  if (!Array.isArray(raw) || !raw.length) return undefined;
-  return raw.map((g, i: number) => {
+function readGroups(src: Record<string, unknown>): FlowGroupSpec[] | undefined {
+  const raw = src.groups;
+  const list = Array.isArray(raw) ? raw : [];
+  if (!list.length) return undefined;
+  return list.map((g: unknown, i: number) => {
     const r = asRecord(g);
     return {
       id: String(r.id ?? `grp-${i}`),
@@ -132,56 +249,57 @@ function readGroups(src) {
 }
 
 /** payload → spec normalizada, o null si no hay nodos. */
-export function flowchartSpecFromPayload(payload) {
+export function flowchartSpecFromPayload(payload: unknown): FlowResolvedSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.flowchart ?? p.flow ?? p);
-  const rawNodes = src.nodes ?? [];
+  const rawNodes = src.nodes;
   if (!Array.isArray(rawNodes) || !rawNodes.length) return null;
 
-  const nodes = rawNodes.map(readNode);
-  const known = new Set(nodes.map((n) => n.id));
+  const nodes: FlowNodeSpec[] = rawNodes.map((raw: unknown, i: number) => readNode(asRecord(raw), i));
+  const known = new Set<string>(nodes.map((n) => n.id));
   // Descarta aristas colgantes: una arista a un id inexistente rompería el layout.
-  const edges = (Array.isArray(src.edges) ? src.edges : [])
-    .map(readEdge)
+  const rawEdges = Array.isArray(src.edges) ? src.edges : [];
+  const edges: FlowEdgeSpec[] = rawEdges
+    .map((raw: unknown, i: number) => readEdge(asRecord(raw), i))
     .filter((e) => known.has(e.from) && known.has(e.to));
 
   const dir = String(src.direction ?? 'TB').toUpperCase();
   const defaultOverflowRaw = String(src.defaultOverflow ?? 'grow').trim();
-  const defaultOverflow = defaultOverflowRaw === 'ellipsis' ? 'ellipsis' : 'grow';
+  const defaultOverflow: FlowOverflow = defaultOverflowRaw === 'ellipsis' ? 'ellipsis' : 'grow';
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
-    direction: DIRECTIONS.has(dir) ? dir : (dir === 'TD' ? 'TB' : 'TB'),
+    direction: DIRECTIONS.has(dir) ? (dir as FlowDirection) : (dir === 'TD' ? 'TB' : 'TB'),
     defaultOverflow,
     groups: readGroups(src),
     // Zonas donde nodos y aristas tienen prohibido entrar (espaciado estético).
     // Mismo espacio de coordenadas que los nodos, antes del margen del lienzo.
-    exclusionZones: readExclusionZones(src.exclusionZones),
+    exclusionZones: readExclusionZones(src.exclusionZones) as FlowExclusionZone[] | undefined,
     nodes: nodes.map((n) => ({ ...n, overflow: n.overflow ?? defaultOverflow })),
     edges,
   };
 }
 
-export function resolveFlowchartSpec(payload) {
+export function resolveFlowchartSpec(payload: unknown): FlowResolvedSpec | null {
   return flowchartSpecFromPayload(payload);
 }
 
 /** spec → objeto `flowchart` listo para persistir / mostrar en el editor. */
-export function flowchartSpecToJson(spec) {
-  const out = { direction: spec.direction, nodes: [], edges: [] };
+export function flowchartSpecToJson(spec: FlowResolvedSpec): Record<string, unknown> {
+  const out: Record<string, unknown> = { direction: spec.direction, nodes: [], edges: [] };
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.groups?.length) out.groups = spec.groups;
   if (spec.exclusionZones?.length) out.exclusionZones = spec.exclusionZones;
   out.nodes = spec.nodes.map((n) => {
-    const row = { id: n.id, label: n.label };
+    const row: Record<string, unknown> = { id: n.id, label: n.label };
     if (n.shape !== 'rect') row.shape = n.shape;
     if (n.group) row.group = n.group;
     if (n.description) row.desc = n.description;
     return row;
   });
   out.edges = spec.edges.map((e) => {
-    const row = { from: e.from, to: e.to };
+    const row: Record<string, unknown> = { from: e.from, to: e.to };
     if (e.label) row.label = e.label;
     if (e.kind !== 'solid') row.kind = e.kind;
     if (e.group) row.group = e.group;
@@ -191,8 +309,8 @@ export function flowchartSpecToJson(spec) {
   return out;
 }
 
-export function expandFlowchartPayloadForJson(payload) {
-  const out = { ...asRecord(payload) };
+export function expandFlowchartPayloadForJson(payload: unknown): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...asRecord(payload) };
   const spec = resolveFlowchartSpec(out);
   if (spec) out.flowchart = flowchartSpecToJson(spec);
   return out;
@@ -201,7 +319,7 @@ export function expandFlowchartPayloadForJson(payload) {
 /* ───────────────────────── formas ───────────────────────── */
 
 /** Contorno SVG de una caja según su forma. x/y = esquina superior izquierda. */
-export function shapePath(shape, x: number, y, w: number, h: number) {
+export function shapePath(shape: string, x: number, y: number, w: number, h: number): string {
   const r = 8;
   const cx = x + w / 2;
   const cy = y + h / 2;
@@ -243,17 +361,13 @@ const MARGIN = { top: 16, right: 20, bottom: 20, left: 20 };
 
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, nodes:Array, edges:Array, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
- */
-/**
- * spec → objeto listo para pintar.
  *
  * Acepta un parámetro opcional `overrides` con la forma:
  *   { nodes: { [id]: { x?, y?, label?, hue? } }, edges: { [id]: { label?, hue? } } }
  * Si un nodo tiene x/y en overrides, se respeta esa posición exacta en lugar
  * de la calculada por el layout Sugiyama. Sirve para el modo edición.
  */
-export function computeFlowchartLayout(spec, overrides = null) {
+export function computeFlowchartLayout(spec: FlowResolvedSpec, overrides: FlowLayoutOverrides | null = null): FlowLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
@@ -268,7 +382,7 @@ export function computeFlowchartLayout(spec, overrides = null) {
   const FONT_SIZE = 11;
   const FONT_FAMILY = 'Tahoma,Arial,sans-serif';
 
-  const sized = spec.nodes.map((n) => {
+  const sized: Array<{ id: string; w: number; h: number }> = spec.nodes.map((n) => {
     const w = nodeWidth(n.label, n.shape);
     const baseH = nodeHeight(n.shape);
     if (n.overflow === 'grow' && n.label && !/[*`\[]/.test(n.label) && !n.label.includes('{{')) {
@@ -287,15 +401,17 @@ export function computeFlowchartLayout(spec, overrides = null) {
     nodeGap: 32,
   });
 
-  const byId = new Map(placed.nodes.map((n) => [n.id, n]));
-  const specById = new Map(spec.nodes.map((n) => [n.id, n]));
-  const groupHue = new Map((spec.groups ?? []).map((g) => [g.id, g.hue]));
+  const byId = new Map<string, { id: string; x: number; y: number; w: number; h: number; layer: number }>(
+    placed.nodes.map((n) => [n.id, n]),
+  );
+  const specById = new Map<string, FlowNodeSpec>(spec.nodes.map((n) => [n.id, n]));
+  const groupHue = new Map<string, number>((spec.groups ?? []).map((g) => [g.id, g.hue]));
 
   const offsetX = MARGIN.left;
   const offsetY = MARGIN.top + headerH;
   const zones = spec.exclusionZones ?? [];
 
-  const nodes = placed.nodes.map((n) => {
+  const nodes: FlowLayoutNode[] = placed.nodes.map((n) => {
     const s = specById.get(n.id);
     const ov = overrides?.nodes?.[n.id];
     const hasOverridePos = ov?.x != null && ov?.y != null;
@@ -310,12 +426,12 @@ export function computeFlowchartLayout(spec, overrides = null) {
       w: n.w,
       h: n.h,
       layer: n.layer,
-      label: ov?.label ?? s.label,
-      shape: s.shape,
-      icon: s.icon,
-      description: s.description,
-      hue: ov?.hue ?? s.hue ?? (s.group ? groupHue.get(s.group) : undefined),
-      group: s.group,
+      label: ov?.label ?? (s?.label ?? ''),
+      shape: (s?.shape ?? 'rect') as FlowShape,
+      icon: s?.icon,
+      description: s?.description,
+      hue: ov?.hue ?? s?.hue ?? (s?.group ? groupHue.get(s.group) : undefined),
+      group: s?.group,
     };
   });
 
@@ -331,31 +447,36 @@ export function computeFlowchartLayout(spec, overrides = null) {
 
   // Rejilla de costos: las cajas se bloquean para que el A* las rodee.
   const grid = makeCostGrid(width, height);
-  const posById = new Map(nodes.map((n) => [n.id, n]));
+  const posById = new Map<string, FlowLayoutNode>(nodes.map((n) => [n.id, n]));
   for (const n of nodes) blockRect(grid, n.x - 6, n.y - 6, n.w + 12, n.h + 12);
   // Zonas de exclusión: ni nodos (ya nudgeados) ni aristas pueden cruzarlas.
   blockExclusionZones(grid, zones, offsetX, offsetY);
 
-  const routed = spec.edges.map((e, i) => {
+  const routed: FlowLayoutEdge[] = spec.edges.map((e, i) => {
     const from = posById.get(e.from);
     const to = posById.get(e.to);
     const sides = pickSides(byId.get(e.from), byId.get(e.to), spec.direction);
-    const a = edgeAnchor(from, sides.fromSide);
-    const b = edgeAnchor(to, sides.toSide);
+    // `pickSides` devuelve `sides` con `fromSide`/`toSide` como `string` (no
+    // tipado en el helper); los narrow explícitos aquí para mantener el
+    // contrato BoxSide en el resto del pipeline.
+    const fromSide = sides.fromSide as AnchorSide;
+    const toSide = sides.toSide as AnchorSide;
+    const a = edgeAnchor(from, fromSide);
+    const b = edgeAnchor(to, toSide);
 
     // El anclaje cae sobre el borde bloqueado: se sale un paso antes de rutear.
-    const out = stepOut(a, sides.fromSide, 16);
-    const into = stepOut(b, sides.toSide, 16);
+    const out = stepOut(a, fromSide, 16);
+    const into = stepOut(b, toSide, 16);
     // Snap direccional: nunca redondea de vuelta hacia el nodo del que se aleja
     // (ver snapPointAwayFromSide — corrige el redondeo-al-más-cercano de antes).
-    const outSnap = snapPointAwayFromSide(out, sides.fromSide, grid.grid);
-    const intoSnap = snapPointAwayFromSide(into, sides.toSide, grid.grid);
+    const outSnap = snapPointAwayFromSide(out, fromSide, grid.grid);
+    const intoSnap = snapPointAwayFromSide(into, toSide, grid.grid);
     const aGrid = pixelToGrid(outSnap.x, outSnap.y, grid.grid);
     const bGrid = pixelToGrid(intoSnap.x, intoSnap.y, grid.grid);
     // Convierte waypoints píxel → grid antes de pasarlos al A*, recortados al
     // lienzo: un waypoint fuera de rango (dato de usuario, no del layout) no
     // debe forzar a A* fuera de la rejilla, donde cae en su fallback recto.
-    const wpGrid = (e.waypoints ?? []).map((w) => {
+    const wpGrid: Array<{ col: number; row: number }> = (e.waypoints ?? []).map((w) => {
       const cell = pixelToGrid(snapDiagramGrid(w.x), snapDiagramGrid(w.y), grid.grid);
       return {
         col: Math.max(0, Math.min(grid.cols - 1, cell.col)),
@@ -367,7 +488,7 @@ export function computeFlowchartLayout(spec, overrides = null) {
       : routeOrthogonal(aGrid, bGrid, grid);
 
     const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
-    const tip = arrowTip(b, sides.toSide);
+    const tip = arrowTip(b, toSide);
     const mid = points.length
       ? { x: points[Math.floor(points.length / 2)].col * grid.grid, y: points[Math.floor(points.length / 2)].row * grid.grid }
       : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
@@ -393,7 +514,7 @@ export function computeFlowchartLayout(spec, overrides = null) {
   });
 
   assignEdgeHues(routed);
-  const layout = {
+  const layout: FlowLayout = {
     width,
     height,
     nodes,
@@ -413,7 +534,7 @@ export function computeFlowchartLayout(spec, overrides = null) {
 }
 
 /** Desplaza un punto hacia afuera del nodo, en la dirección de su lado. */
-function stepOut(p, side, d) {
+function stepOut(p: { x: number; y: number }, side: AnchorSide, d: number): { x: number; y: number } {
   if (side === 'top') return { x: p.x, y: p.y - d };
   if (side === 'bottom') return { x: p.x, y: p.y + d };
   if (side === 'left') return { x: p.x - d, y: p.y };
@@ -421,7 +542,7 @@ function stepOut(p, side, d) {
 }
 
 /** Punta de flecha: posición y ángulo de rotación según el lado de llegada. */
-function arrowTip(p, side) {
+function arrowTip(p: { x: number; y: number }, side: AnchorSide): { x: number; y: number; angle: number } {
   const angle = side === 'top' ? 90 : side === 'bottom' ? 270 : side === 'left' ? 0 : 180;
   return { x: p.x, y: p.y, angle };
 }
