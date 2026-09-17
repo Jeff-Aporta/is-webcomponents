@@ -4,30 +4,24 @@
 
 | Archivo | WT que lo lockea | Locked desde | Notas |
 |---|---|---|---|
-| `src/components/_shared/svg-chart-engine.ts` | WT-0001 (cerrado, lock permanente) | T1 | `roundedBarRect` firma cambiada a `number`; no tocar en T2-T9. Solo lectura. |
-| `src/components/_shared/diagram-element-base.ts` | WT-0001 (cerrado, lock permanente) | T1 | Cast HTMLScriptElement añadido; no tocar en T2-T9. Solo lectura. |
-| `src/components/diagrams/diagram-types.ts` | (read-only permanente) | baseline | Shape server de tipos compartidos. NO modificar firmas. Solo añadir al final. |
+| `src/components/_shared/svg-chart-engine.ts` | WT-0001 (cerrado, lock permanente) | T1 | Solo lectura |
+| `src/components/_shared/diagram-element-base.ts` | WT-0001 (cerrado, lock permanente) | T1 | Solo lectura |
+| `src/components/diagrams/diagram-types.ts` | (read-only permanente) | baseline | Solo añadir al final |
 
-## Locks de T6 (temporales — vigentes durante T6)
+## Locks de T7 (temporales — vigentes durante T7)
 
 | Archivo | WT que lo lockea | Locked desde | Notas |
 |---|---|---|---|
-| `src/components/code/code.ts` | WT-0061 | T6 | 120 errores |
-| `src/components/layout/split-panel.ts` | WT-0061 | T6 | 113 |
-| `src/components/_shared/grid-data.ts` | WT-0061 | T6 | 108 (compartido con T4 — ya tipado, verificar) |
-| `src/components/charts/chart.ts` | WT-0061 | T6 | 104 |
-| `src/gallery/app.ts` | WT-0062 | T6 | 100 |
-| `src/components/isp/catalogo-gen.ts` | WT-0062 | T6 | 90 |
-| `src/components/isp/controller-from-config.ts` | WT-0062 | T6 | 87 |
-| `src/components/_shared/date-field-core.ts` | WT-0062 | T6 | 80 |
+| `src/components/forms/select.ts` | WT-0071 | T7 | 79 errores |
+| `src/components/forms/date-picker.ts` | WT-0071 | T7 | 69 |
+| `src/components/forms/combobox.ts` | WT-0071 | T7 | 58 |
+| `src/components/forms/slider.ts` | WT-0071 | T7 | 57 |
+| `src/components/forms/input.ts` | WT-0071 | T7 | 47 |
+| (resto de forms) | WT-0072 | T7 | ~10 archivos |
 
 ## Locks liberados
 
-- T1: archivos cerrados
-- T2: 15 spec files
-- T3: 15 diagram files + 5 lightbox/preview
-- T4: data-grid + data-grid.preview + grid-shared + ag-grid + spreadsheet + icon-explorer.preview
-- T5: 13 tree-view + helpers files (incluyendo _types.ts)
+- T1-T6 cerradas
 
 ## Estrategia T+ — sin nuevos worktrees
 
