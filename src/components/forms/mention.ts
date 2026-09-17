@@ -24,17 +24,19 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   is-select  detail: { trigger, item, range: [start, end] }
  */
 (() => {
-  const OBSERVED = ['value', 'name', 'placeholder', 'disabled', 'readonly', 'trigger', 'max-items'];
+  const OBSERVED: string[] = ['value', 'name', 'placeholder', 'disabled', 'readonly', 'trigger', 'max-items'];
+
+  type SuggestionsMap = Record<string, string[]>;
 
   class IsMention extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #input!: HTMLElement;
-    #onDocPointerDown;
-    #suggestions = {};
+    #input!: HTMLInputElement;
+    #onDocPointerDown!: (e: PointerEvent) => void;
+    #suggestions: SuggestionsMap = {};
     #popup!: HTMLElement;
     #activeIndex = 0;
-    #lastTriggerRange = null;
+    #lastTriggerRange: [number, number] | null = null;
     #lastTriggerChar = '';
     #mounted = false;
 
@@ -48,12 +50,12 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
-      this.#input = this.shadowRoot!.getElementById('input')!;
+      this.#input = this.shadowRoot!.getElementById('input') as HTMLInputElement;
       this.#popup = this.shadowRoot!.querySelector<HTMLElement>('.popup')!;
       this.#input.addEventListener('input', () => this.#onInput());
-      this.#input.addEventListener('keydown', (e) => this.#onKey(e));
+      this.#input.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e));
       this.#input.addEventListener('blur', () => this.#hidePopup());
-      this.#onDocPointerDown = (e: PointerEvent) => {
+      this.#onDocPointerDown = (e: PointerEvent): void => {
         if (!this.isOpen) return;
         if (e.composedPath().includes(this)) return;
         this.#hidePopup();
@@ -80,43 +82,43 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       if (name === 'disabled' || name === 'readonly') this.#syncDisabled();
     }
 
-    get value() { return this.#input?.value ?? ''; }
-    set value(v) {
+    get value(): string { return this.#input?.value ?? ''; }
+    set value(v: string | null | undefined) {
       const next = v ?? '';
       if (this.#input) this.#input.value = next;
       this.setAttribute('value', next);
     }
-    get suggestions() { return this.#suggestions; }
-    set suggestions(obj) { this.#suggestions = obj || {}; }
+    get suggestions(): SuggestionsMap { return this.#suggestions; }
+    set suggestions(obj: SuggestionsMap | null | undefined) { this.#suggestions = obj || {}; }
 
-    get isOpen() { return !this.#popup.hidden; }
+    get isOpen(): boolean { return !this.#popup.hidden; }
 
-    #sync() {
-      if (this.hasAttribute('value')) this.#input.value = this.getAttribute('value');
+    #sync(): void {
+      if (this.hasAttribute('value')) this.#input.value = this.getAttribute('value') ?? '';
       this.#syncDisabled();
     }
 
-    #syncDisabled() {
+    #syncDisabled(): void {
       this.#input.disabled = this.hasAttribute('disabled');
       this.#input.readOnly = this.hasAttribute('readonly');
     }
 
-    #readSlot() {
-      const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
+    #readSlot(): void {
+      const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || ''));
       if (!script) return;
       try {
-        const data = JSON.parse(script.textContent);
-        if (data && typeof data === 'object') this.#suggestions = data;
+        const data = JSON.parse(script.textContent ?? '');
+        if (data && typeof data === 'object') this.#suggestions = data as SuggestionsMap;
       } catch { /* noop */ }
     }
 
-    #onInput() {
+    #onInput(): void {
       this.setAttribute('value', this.#input.value);
       emit(this, 'is-input');
       const triggers = (this.getAttribute('trigger') || '@#').split('');
       const caret = this.#input.selectionStart ?? this.#input.value.length;
       const before = this.#input.value.slice(0, caret);
-      const triggerChar = [...before].reverse().find((c) => triggers.includes(c));
+      const triggerChar = [...before].reverse().find((c: string) => triggers.includes(c));
       if (!triggerChar) { this.#hidePopup(); return; }
       // encontrar el trigger actual más cercano (último)
       const idx = before.lastIndexOf(triggerChar);
@@ -130,9 +132,10 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#lastTriggerRange = [start, caret];
       // buscar candidatos
       const list = this.#suggestions[triggerChar] || [];
+      const maxItems = Number(this.getAttribute('max-items')) || 8;
       const filtered = query
-        ? list.filter((s: string) => String(s).toLowerCase().includes(query.toLowerCase())).slice(0, Number(this.getAttribute('max-items')) || 8)
-        : list.slice(0, Number(this.getAttribute('max-items')) || 8);
+        ? list.filter((s: string) => String(s).toLowerCase().includes(query.toLowerCase())).slice(0, maxItems)
+        : list.slice(0, maxItems);
       if (!filtered.length) { this.#hidePopup(); return; }
       // La lista filtrada cambió de tamaño: un índice viejo puede quedar fuera
       // de rango y Enter seleccionaría undefined.
@@ -141,46 +144,56 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#positionPopup();
     }
 
-    #renderPopup(items, triggerChar) {
+    #renderPopup(items: string[], triggerChar: string): void {
       this.#popup.innerHTML = '';
-      items.forEach((it: string, i) => {
+      items.forEach((it: string, i: number) => {
         const opt = document.createElement('button');
         opt.type = 'button';
         opt.className = 'opt' + (i === this.#activeIndex ? ' is-active' : '');
         opt.setAttribute('role', 'option');
         opt.dataset.value = it;
         opt.innerHTML = `<span class="t">${triggerChar}</span><span>${String(it).replace(/</g, '&lt;')}</span>`;
-        opt.addEventListener('pointerdown', (e) => e.preventDefault());
+        opt.addEventListener('pointerdown', (e: Event) => e.preventDefault());
         opt.addEventListener('click', () => this.#select(it));
         this.#popup.appendChild(opt);
       });
       this.#popup.hidden = false;
     }
 
-    #positionPopup() {
+    #positionPopup(): void {
       // posición debajo del caret, aproximado
       const inputRect = this.#input.getBoundingClientRect();
       this.#popup.style.left = '0px';
       this.#popup.style.top = `${inputRect.height + 4}px`;
     }
 
-    #hidePopup() {
+    #hidePopup(): void {
       this.#popup.hidden = true;
       this.#popup.innerHTML = '';
     }
 
-    #onKey(e) {
+    #onKey(e: KeyboardEvent): void {
       if (!this.isOpen) return;
       const items = [...this.#popup.querySelectorAll<HTMLElement>('.opt')];
-      if (e.key === 'ArrowDown') { e.preventDefault(); this.#activeIndex = (this.#activeIndex + 1) % items.length; this.#renderPopup(items.map((b: HTMLElement) => b.dataset.value), this.#lastTriggerChar); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); this.#activeIndex = (this.#activeIndex - 1 + items.length) % items.length; this.#renderPopup(items.map((b: HTMLElement) => b.dataset.value), this.#lastTriggerChar); }
-      else if (e.key === 'Enter' || e.key === 'Tab') {
-        if (items.length) { e.preventDefault(); this.#select(items[this.#activeIndex].dataset.value); }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        this.#activeIndex = (this.#activeIndex + 1) % items.length;
+        this.#renderPopup(items.map((b: HTMLElement) => b.dataset.value ?? ''), this.#lastTriggerChar);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        this.#activeIndex = (this.#activeIndex - 1 + items.length) % items.length;
+        this.#renderPopup(items.map((b: HTMLElement) => b.dataset.value ?? ''), this.#lastTriggerChar);
+      } else if (e.key === 'Enter' || e.key === 'Tab') {
+        if (items.length) {
+          e.preventDefault();
+          this.#select(items[this.#activeIndex].dataset.value ?? '');
+        }
+      } else if (e.key === 'Escape') {
+        this.#hidePopup();
       }
-      else if (e.key === 'Escape') { this.#hidePopup(); }
     }
 
-    #select(item) {
+    #select(item: string): void {
       if (!this.#lastTriggerRange) return;
       const [start, end] = this.#lastTriggerRange;
       const cur = this.#input.value;
