@@ -4,11 +4,14 @@
 
 | Tanda | SHA cierre | WTs mergeados | Errores antes → después | Notas |
 |---|---|---|---|---|
-| 1 | TBD (post-commit) | (directo en WT-ROOT) | 17 → 0 | Surgical fixes ya aplicados en main → WT-ROOT. Ver `checkpoint-tanda01.md`. |
+| 1 | TBD (post-commit) | (directo en WT-ROOT) | 0 (ya estaban en main) | Surgical fixes ya aplicados en main → WT-ROOT. T1 fue verificación + locks + docs. Ver `checkpoint-tanda01.md`. |
 
 ## Tandas en proceso
 
-(Ninguna)
+| Tanda | Hoja | Rama | Estado |
+|---|---|---|---|
+| 2 (spec) | WT-0021 | `wt/tanda02-spec-A-L` | sub-agente en background |
+| 2 (spec) | WT-0022 | `wt/tanda02-spec-M-Z` | sub-agente en background |
 
 ## Tandas pendientes
 
@@ -31,5 +34,5 @@
 ## Métricas live
 
 - Errores strict audit al inicio: **8,777**
-- Errores strict audit después de T1: **8,760** (T1 cerró 17)
+- Errores strict audit después de T1: **8,777** (T1 fue verificación/locks, fixes ya en main)
 - Commits al WT-ROOT: tracking en `checkpoint-actual.md`
