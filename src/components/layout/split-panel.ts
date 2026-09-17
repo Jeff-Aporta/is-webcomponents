@@ -65,8 +65,8 @@ import { clampTo } from '../_shared/misc-utils.js';
     </div>
   `;
 
-  const OBSERVED = ['position', 'orientation', 'primary', 'collapse', 'disabled', 'snap', 'snap-threshold'];
-  const VALID_SIDE = ['start', 'end'];
+  const OBSERVED: string[] = ['position', 'orientation', 'primary', 'collapse', 'disabled', 'snap', 'snap-threshold'];
+  const VALID_SIDE: string[] = ['start', 'end'];
 
 
   class IsSplitPanel extends withStyleAttrs(HTMLElement) {
@@ -78,24 +78,31 @@ import { clampTo } from '../_shared/misc-utils.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'min-size', 'max-size']; }
 
+    _divider!: HTMLElement;
+    _size: number = 0;
+    _cachedPositionInPixels: number = NaN;
+    _fromPixels: boolean = false;
+    _resizeObserver: ResizeObserver | null = null;
+    _mounted: boolean = false;
+    _isCollapsed: boolean = false;
+    _positionBeforeCollapse: number = 0;
+
+    _onKeyDown!: (e: Event) => void;
+    _onPointerDown!: (e: Event) => void;
+    _onPointerMove!: (e: Event) => void;
+    _onPointerUp!: (e: Event) => void;
+
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this._divider = shadow.querySelector<HTMLElement>('.divider');
-      this._size = 0;
-      this._cachedPositionInPixels = NaN;
-      this._fromPixels = false;
-      this._resizeObserver = null;
-      this._mounted = false;
-      this._isCollapsed = false;
-      this._positionBeforeCollapse = 0;
+      this._divider = shadow.querySelector<HTMLElement>('.divider') as HTMLElement;
 
-      this._onKeyDown = (e: Event) => this._handleKeyDown(e);
-      this._onPointerDown = (e: Event) => this._handlePointerDown(e);
-      this._onPointerMove = (e: Event) => this._handlePointerMove(e);
-      this._onPointerUp = (e: Event) => this._handlePointerUp(e);
+      this._onKeyDown = (e: Event) => this._handleKeyDown(e as KeyboardEvent);
+      this._onPointerDown = (e: Event) => this._handlePointerDown(e as PointerEvent);
+      this._onPointerMove = (e: Event) => this._handlePointerMove(e as PointerEvent);
+      this._onPointerUp = (e: Event) => this._handlePointerUp(e as PointerEvent);
     }
 
     connectedCallback(): void {
@@ -113,7 +120,7 @@ import { clampTo } from '../_shared/misc-utils.js';
 
       // preferir px del markup YA (el track en px no necesita _size)
       this._restorePrefs();
-      const pxAttr = parseFloat(this.getAttribute('position-in-pixels'));
+      const pxAttr = parseFloat(this.getAttribute('position-in-pixels') ?? '');
       if (Number.isFinite(pxAttr)) this._cachedPositionInPixels = pxAttr;
 
       this._detectSize();
@@ -154,22 +161,22 @@ import { clampTo } from '../_shared/misc-utils.js';
 
     // ---- public properties ----
 
-    get position() {
-      const v = parseFloat(this.getAttribute('position'));
+    get position(): number {
+      const v = parseFloat(this.getAttribute('position') ?? '');
       return Number.isFinite(v) ? clampTo(v, 0, 100) : 50;
     }
-    set position(v) {
+    set position(v: number) {
       const n = clampTo(Number(v) || 0, 0, 100);
-      if (parseFloat(this.getAttribute('position')) === n) return;
+      if (parseFloat(this.getAttribute('position') ?? '') === n) return;
       this.setAttribute('position', String(n));
     }
 
-    get positionInPixels() {
+    get positionInPixels(): number {
       if (Number.isFinite(this._cachedPositionInPixels)) return this._cachedPositionInPixels;
-      const v = parseFloat(this.getAttribute('position-in-pixels'));
+      const v = parseFloat(this.getAttribute('position-in-pixels') ?? '');
       return Number.isFinite(v) ? v : this._percentageToPixels(this.position);
     }
-    set positionInPixels(v) {
+    set positionInPixels(v: number) {
       const px = Number(v);
       if (!Number.isFinite(px)) return;
       this._syncPositionFromPixels(px);
@@ -178,18 +185,18 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
 
     /** Id único para persistir en localStorage (`is-webcomponents`). Vacío = no persiste. */
-    get storageKey() {
-      return (this.getAttribute('storage-key') || '').trim();
+    get storageKey(): string {
+      return (this.getAttribute('storage-key') ?? '').trim();
     }
-    set storageKey(v) {
+    set storageKey(v: string | null) {
       if (v == null || v === '') this.removeAttribute('storage-key');
       else this.setAttribute('storage-key', String(v));
     }
 
-    _restorePrefs() {
+    _restorePrefs(): void {
       const key = this.storageKey;
       if (!key) return;
-      let saved = getComponentPrefs('is-split-panel', key);
+      let saved: { positionInPixels?: number; position?: number } | null = getComponentPrefs('is-split-panel', key) as { positionInPixels?: number; position?: number } | null;
       // migra legacy de la galería
       if (!saved && key === 'gallery-nav') {
         const legacy = localStorage.getItem('is-split-nav-pos');
@@ -210,7 +217,7 @@ import { clampTo } from '../_shared/misc-utils.js';
       if (Number.isFinite(pct)) this.setAttribute('position', String(clampTo(pct, 0, 100)));
     }
 
-    _persistPrefs() {
+    _persistPrefs(): void {
       const key = this.storageKey;
       if (!key) return;
       setComponentPrefs('is-split-panel', key, {
@@ -219,47 +226,47 @@ import { clampTo } from '../_shared/misc-utils.js';
       });
     }
 
-    get orientation() {
+    get orientation(): 'horizontal' | 'vertical' {
       return this.getAttribute('orientation') === 'vertical' ? 'vertical' : 'horizontal';
     }
-    set orientation(v) {
+    set orientation(v: 'horizontal' | 'vertical' | string) {
       if (v === 'vertical') this.setAttribute('orientation', 'vertical');
       else this.removeAttribute('orientation');
     }
 
-    get primary() {
+    get primary(): 'start' | 'end' | null {
       const p = this.getAttribute('primary');
       return p === 'start' || p === 'end' ? p : null;
     }
-    set primary(v) {
+    set primary(v: 'start' | 'end' | string) {
       if (v === 'start' || v === 'end') this.setAttribute('primary', v);
       else this.removeAttribute('primary');
     }
 
     /** Panel oculto por completo ('start' | 'end'), o null si ambos se ven. */
-    get collapse() {
+    get collapse(): 'start' | 'end' | null {
       const c = this.getAttribute('collapse');
-      return VALID_SIDE.includes(c) ? c : null;
+      return VALID_SIDE.includes(c ?? '') ? (c as 'start' | 'end') : null;
     }
-    set collapse(v) {
+    set collapse(v: 'start' | 'end' | string) {
       if (VALID_SIDE.includes(v)) this.setAttribute('collapse', v);
       else this.removeAttribute('collapse');
     }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get snap() { return this.getAttribute('snap') || ''; }
-    set snap(v) {
+    get snap(): string { return this.getAttribute('snap') || ''; }
+    set snap(v: string | null) {
       if (v == null || v === '') this.removeAttribute('snap');
       else this.setAttribute('snap', String(v));
     }
 
-    get snapThreshold() {
-      const v = parseFloat(this.getAttribute('snap-threshold'));
+    get snapThreshold(): number {
+      const v = parseFloat(this.getAttribute('snap-threshold') ?? '');
       return Number.isFinite(v) ? v : 12;
     }
-    set snapThreshold(v) {
+    set snapThreshold(v: number) {
       const n = Number(v);
       if (!Number.isFinite(n) || n < 0) return;
       this.setAttribute('snap-threshold', String(n));
@@ -268,7 +275,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     // ---- private ----
 
     /** aplica px → cache + attr + position% (sin pisar cache en attributeChanged) */
-    _syncPositionFromPixels(px) {
+    _syncPositionFromPixels(px: number): void {
       const bounded = this._clampPrimaryPixels(px);
       this._cachedPositionInPixels = bounded;
       this.setAttribute('position-in-pixels', String(Math.round(bounded)));
@@ -279,7 +286,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
 
     /** min-size / max-size del markup → px con el tamaño actual. */
-    _parseSizeAttr(raw, fallbackPct: number) {
+    _parseSizeAttr(raw: string | null, fallbackPct: number): number {
       const s = String(raw ?? '').trim();
       if (!s) return this._size * (fallbackPct / 100);
       if (s.endsWith('%')) return this._size * (parseFloat(s) / 100);
@@ -291,27 +298,29 @@ import { clampTo } from '../_shared/misc-utils.js';
      * Evita el caso minmax(min%, pxPequeño): si el px guardado es menor que
      * min-size, CSS deja la pista en el valor pequeño y la UX inicial se rompe.
      */
-    _clampPrimaryPixels(px) {
+    _clampPrimaryPixels(px: number): number {
       if (!(this._size > 0) || !Number.isFinite(px)) return px;
       const minPx = this._parseSizeAttr(this.getAttribute('min-size'), 0);
       const maxPx = this._parseSizeAttr(this.getAttribute('max-size'), 100);
       return clampTo(px, Math.max(0, minPx), Math.min(this._size, maxPx));
     }
 
-    _detectSize() {
+    _detectSize(): void {
       const rect = this.getBoundingClientRect();
       this._size = this.orientation === 'vertical' ? rect.height : rect.width;
     }
 
-    _percentageToPixels(value: number) { return this._size > 0 ? this._size * (value / 100) : 0; }
-    _pixelsToPercentage(value) { return this._size > 0 ? (value / this._size) * 100 : 50; }
+    _percentageToPixels(value: number): number { return this._size > 0 ? this._size * (value / 100) : 0; }
+    _pixelsToPercentage(value: number): number { return this._size > 0 ? (value / this._size) * 100 : 50; }
 
-    _handleResize(entries) {
-      const { width, height } = entries[0].contentRect;
+    _handleResize(entries: ReadonlyArray<ResizeObserverEntry>): void {
+      const entry = entries[0];
+      if (!entry) return;
+      const { width, height } = entry.contentRect;
       this._size = this.orientation === 'vertical' ? height : width;
       if (!(this._size > 0)) return;
 
-      const pxAttr = parseFloat(this.getAttribute('position-in-pixels'));
+      const pxAttr = parseFloat(this.getAttribute('position-in-pixels') ?? '');
       if (!Number.isFinite(this._cachedPositionInPixels) && Number.isFinite(pxAttr)) {
         this._cachedPositionInPixels = pxAttr;
       }
@@ -327,12 +336,12 @@ import { clampTo } from '../_shared/misc-utils.js';
       this._syncDividerAria();
     }
 
-    _parseSnapValue(value: string) {
+    _parseSnapValue(value: string): number {
       if (value.endsWith('%')) return this._size * (parseFloat(value) / 100);
       return parseFloat(value);
     }
 
-    _applySnap(pixels: number) {
+    _applySnap(pixels: number): number {
       const snapStr = this.snap;
       if (!snapStr) return pixels;
       const snaps = snapStr.split(/\s+/).filter(Boolean);
@@ -345,7 +354,7 @@ import { clampTo } from '../_shared/misc-utils.js';
       return pixels;
     }
 
-    _updateStyles() {
+    _updateStyles(): void {
       const isVertical = this.orientation === 'vertical';
 
       // Colapsado: pista única. El CSS oculta el panel y el divisor, y la
@@ -357,11 +366,11 @@ import { clampTo } from '../_shared/misc-utils.js';
       }
 
       const divider = 'var(--_divider-width)';
-      let primaryTrack;
-      let secondaryTrack = 'minmax(0, 1fr)';
+      let primaryTrack: string;
+      const secondaryTrack = 'minmax(0, 1fr)';
 
       // track primario SIEMPRE en px si hay cache/attr — evita el 50% fantasma
-      const pxAttr = parseFloat(this.getAttribute('position-in-pixels'));
+      const pxAttr = parseFloat(this.getAttribute('position-in-pixels') ?? '');
       const px = Number.isFinite(this._cachedPositionInPixels)
         ? this._cachedPositionInPixels
         : pxAttr;
@@ -388,7 +397,7 @@ import { clampTo } from '../_shared/misc-utils.js';
       }
     }
 
-    _syncDividerAria() {
+    _syncDividerAria(): void {
       const d = this._divider;
       d.setAttribute('aria-valuenow', String(Math.round(this.position)));
       d.setAttribute('aria-orientation', this.orientation);
@@ -397,12 +406,12 @@ import { clampTo } from '../_shared/misc-utils.js';
 
     // ---- drag ----
 
-    _handlePointerDown(event) {
+    _handlePointerDown(event: PointerEvent): void {
       if (this.disabled || this.collapse) return;
       if (event.button !== undefined && event.button !== 0) return;
       event.preventDefault();
       this._detectSize();
-      try { this._divider.setPointerCapture(event.pointerId); } catch {}
+      try { this._divider.setPointerCapture(event.pointerId); } catch { /* noop */ }
       this.toggleAttribute('data-dragging', true);
       this._divider.addEventListener('pointermove', this._onPointerMove);
       this._divider.addEventListener('pointerup', this._onPointerUp);
@@ -410,7 +419,7 @@ import { clampTo } from '../_shared/misc-utils.js';
       this._handlePointerMove(event);
     }
 
-    _handlePointerMove(event) {
+    _handlePointerMove(event: PointerEvent): void {
       if (this.disabled) return;
       if (event.cancelable) event.preventDefault();
       if (!(this._size > 0)) this._detectSize();
@@ -428,14 +437,14 @@ import { clampTo } from '../_shared/misc-utils.js';
       emit(this, 'reposition', this.position);
     }
 
-    _handlePointerUp(event) {
+    _handlePointerUp(event: PointerEvent): void {
       this.toggleAttribute('data-dragging', false);
       this._divider.removeEventListener('pointermove', this._onPointerMove);
       this._divider.removeEventListener('pointerup', this._onPointerUp);
       this._divider.removeEventListener('pointercancel', this._onPointerUp);
       try {
         if (event?.pointerId != null) this._divider.releasePointerCapture(event.pointerId);
-      } catch {}
+      } catch { /* noop */ }
       if (Number.isFinite(this._cachedPositionInPixels)) {
         this.setAttribute('position-in-pixels', String(Math.round(this._cachedPositionInPixels)));
       }
@@ -444,7 +453,7 @@ import { clampTo } from '../_shared/misc-utils.js';
 
     // ---- keyboard ----
 
-    _handleKeyDown(event) {
+    _handleKeyDown(event: KeyboardEvent): void {
       if (this.disabled || this.collapse) return;
       const horizontal = this.orientation === 'horizontal';
       const flip = this.primary === 'end' ? -1 : 1;
