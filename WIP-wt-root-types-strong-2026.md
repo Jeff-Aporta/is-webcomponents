@@ -91,6 +91,8 @@ Las hojas de T2-T3 entregan:
 
 [2026-09-17T21:30:00Z] — WT-0032-bis listo. Errores: 7,520 → 7,384 (−136). SHAs: e8d12e4a00 (timeline), 52c86a34f9 (component-diagram), e69404e76d (org-chart), de3b7c2aac (diagram-lightbox), ccdbbf5a47 (lightbox), 99ea7c3911 (test:org-chart demo+tests). Gates: PASS.
 
+[2026-09-18T19:00:00Z] — WT-0041 listo. Errores: 7,384 → 6,365 (−1,019, scope 744→0). SHAs: 790b64ae1f (feat:data-grid 534→0), 154dbca120 (feat:data-grid.preview 210→0), d6d970849a (test:data-grid smoke 19/19 PASS). Gates: PASS.
+
 ## Gate status (Tanda 3 — WT-0032-bis cierre)
 
 - npm run typecheck: ✓ verde
