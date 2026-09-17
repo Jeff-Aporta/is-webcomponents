@@ -11,10 +11,7 @@
 
 ## Tandas en proceso
 
-| Tanda | Hoja | Rama | Estado |
-|---|---|---|---|
-| 5 (tree-view + helpers) | WT-0051 | `wt-root-types-strong-2026` | sub-agente `d97d4668` background |
-| 5 (tree-view + helpers) | WT-0052 | `wt-root-types-strong-2026` | sub-agente `915534ac` background |
+(Ninguna — T5 cerrada, T6 pendiente de dispatch)
 
 ## Tandas pendientes
 
@@ -22,8 +19,8 @@
 |---|---|---|---|---|---|
 | 3 | diagrams/impl/* | `wt-root-types-strong-2026` | (cerrada) | ~532 | cerrada con WT-0031 + WT-0032-bis |
 | 4 | data-grid family | `wt-root-types-strong-2026` | cerrada | ~1,250 | cerrada |
-| 5 | tree-view + helpers | `wt-root-types-strong-2026` | WT-0051, WT-0052 | ~987 | sub-agentes `d97d4668` y `915534ac` en background |
-| 6 | layout + catalog + code | `wt-root-types-strong-2026` | WT-0061, WT-0062 | ~800 | ninguno |
+| 5 | tree-view + helpers | `wt-root-types-strong-2026` | cerrada | ~987 | cerrada |
+| 6 | layout + catalog + code | `wt-root-types-strong-2026` | WT-0061, WT-0062 | ~800 | dispatch pendiente |
 | 7 | forms | `wt-root-types-strong-2026` | WT-0071, WT-0072 | ~450 | **+ tests para forms críticos** |
 | 8 | nav + media | `wt-root-types-strong-2026` | WT-0081, WT-0082 | ~700 | **+ stagehand tests para componentes UX** |
 | 9 | pages + utils + shared | `wt-root-types-strong-2026` | WT-0091, WT-0092 | ~600 | ninguno |
@@ -63,7 +60,8 @@
 - Errores strict audit después de T2: **7,897** (−880)
 - Errores strict audit después de T3: **7,384** (−513)
 - Errores strict audit después de T4: **6,146** (−1,238 acumulado en T4)
-- Próximo hito: < 5,500 después de T5
+- Errores strict audit después de T5: **5,135** (−1,011)
+- Próximo hito: < 4,500 después de T6
 
 ## Próxima tanda activa: T3
 

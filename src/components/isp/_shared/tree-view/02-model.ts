@@ -106,27 +106,33 @@ class TAModel extends TTreeAdapterContract {
   // ── Contrato a sobreescribir por subclases ─────────────────────────────
   /** Inserta `data` en la lista plana; `onDuplicate` se llama si ya existe. */
   addNode(
-    _data: Partial<TNode> | TRecord,
-    _onDuplicate?: (n: TNode) => void,
+    data: Partial<TNode> | TRecord,
+    onDuplicate?: (n: TNode) => void,
   ): TNode | null {
+    void data;
+    void onDuplicate;
     return null;
   }
 
   /** Elimina `data` (y descendientes) de la lista plana. */
-  removeNode(_data: Partial<TNode> | TRecord): boolean {
+  removeNode(data: Partial<TNode> | TRecord): boolean {
+    void data;
     return false;
   }
 
   /** Actualiza un nodo; `mutate(target, source)` permite mutar in-place. */
   updateNode(
-    _data: Partial<TNode> | TRecord,
-    _mutate?: (target: TNode, source: TNode) => void,
+    data: Partial<TNode> | TRecord,
+    mutate?: (target: TNode, source: TNode) => void,
   ): boolean {
+    void data;
+    void mutate;
     return false;
   }
 
   /** Encuentra el nodo equivalente a `data` por flatPath normalizado. */
-  findNode(_data: Partial<TNode> | TRecord): TRecord | undefined {
+  findNode(data: Partial<TNode> | TRecord): TRecord | undefined {
+    void data;
     return undefined;
   }
 
