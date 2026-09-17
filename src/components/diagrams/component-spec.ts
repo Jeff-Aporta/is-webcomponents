@@ -380,10 +380,9 @@ function wireComponentDiagram(components: Componente[], interfaces: InterfazUml[
   const addIface = (partial: Partial<InterfazUml> & { id?: string; component?: string; kind: 'provided' | 'required'; side: Lado }): InterfazUml => {
     const id = partial.id || `if-${ifaceSeq++}`;
     if (knownIf.has(id)) return ifaces.find((i) => i.id === id) ?? { id, component: '', side: 'right', offset: 30, kind: 'provided' };
-    const iface: InterfazUml = {
+    const iface = {
       ...partial,
       id,
-      name: undefined,
       offset: partial.offset ?? 30,
       kind: partial.kind ?? 'provided',
       side: partial.side ?? 'right',
