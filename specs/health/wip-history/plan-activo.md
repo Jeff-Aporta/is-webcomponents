@@ -7,20 +7,22 @@
 | 1 | `75b0aff595` | (directo en WT-ROOT) | 0 (ya estaban en main) | Surgical fixes ya aplicados en main → WT-ROOT. T1 fue verificación + locks + docs. Ver `checkpoint-tanda01.md`. |
 | 2 | `08fe8f752` | WT-0021 + WT-0022 | 880 → 7,897 (8,777 → 7,897) | 15 spec files tipados (409+450 + cascading), 15 demos, 38 test files (115 tests pasando). Ver `checkpoint-tanda02.md`. |
 | 3 | `f969580589` | WT-0031 + WT-0032 + WT-0032-bis | 513 → 7,384 (7,897 → 7,384) | 15 diagram files tipados + 5 lightbox/preview files. Tests extras para org-chart. Ver `checkpoint-tanda03.md`. |
+| 4 | `a2d223afa` | WT-0041 + WT-0042 + WT-0042-bis | 1,238 → 6,146 (7,384 → 6,146) | data-grid family completo. WT-0041 hizo data-grid + preview + smoke. WT-0042-bis hizo icon-explorer.preview. Capitán commiteó grid-shared + ag-grid (sub-agents no commiteaban). Ver `checkpoint-tanda04.md`. |
 
 ## Tandas en proceso
 
 | Tanda | Hoja | Rama | Estado |
 |---|---|---|---|
-| 4 (data-grid) | WT-0042-bis | `wt-root-types-strong-2026` (directo) | sub-agente `ae502b91` cerrando icon-explorer.preview (último pendiente) |
+| 5 (tree-view + helpers) | WT-0051 | `wt-root-types-strong-2026` | sub-agente `d97d4668` background |
+| 5 (tree-view + helpers) | WT-0052 | `wt-root-types-strong-2026` | sub-agente `915534ac` background |
 
 ## Tandas pendientes
 
 | # | Tanda | Rama base | Hojas | Errores | Mandato extra |
 |---|---|---|---|---|---|
 | 3 | diagrams/impl/* | `wt-root-types-strong-2026` | (cerrada) | ~532 | cerrada con WT-0031 + WT-0032-bis |
-| 4 | data-grid family | `wt-root-types-strong-2026` | (casi cerrada) | ~1,250 | 4/5 archivos OK, icon-explorer.preview en WT-0042-bis |
-| 5 | tree-view + helpers | `wt-root-types-strong-2026` | WT-0051, WT-0052 | ~720 | ninguno |
+| 4 | data-grid family | `wt-root-types-strong-2026` | cerrada | ~1,250 | cerrada |
+| 5 | tree-view + helpers | `wt-root-types-strong-2026` | WT-0051, WT-0052 | ~987 | sub-agentes `d97d4668` y `915534ac` en background |
 | 6 | layout + catalog + code | `wt-root-types-strong-2026` | WT-0061, WT-0062 | ~800 | ninguno |
 | 7 | forms | `wt-root-types-strong-2026` | WT-0071, WT-0072 | ~450 | **+ tests para forms críticos** |
 | 8 | nav + media | `wt-root-types-strong-2026` | WT-0081, WT-0082 | ~700 | **+ stagehand tests para componentes UX** |
@@ -60,8 +62,8 @@
 - Errores strict audit después de T1: **8,777** (T1 fue verificación/locks, fixes ya en main)
 - Errores strict audit después de T2: **7,897** (−880)
 - Errores strict audit después de T3: **7,384** (−513)
-- Errores strict audit después de T4: **6,365** (−1,019)
-- Próximo hito: < 6,000 después de T5
+- Errores strict audit después de T4: **6,146** (−1,238 acumulado en T4)
+- Próximo hito: < 5,500 después de T5
 
 ## Próxima tanda activa: T3
 
