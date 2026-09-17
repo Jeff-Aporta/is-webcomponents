@@ -24,7 +24,7 @@ export function setCustomState(internals: ElementInternals | null, name: string,
  * @param {FormDataEntryValue | null} value
  * @param {FormDataEntryValue | null} [state]
  */
-export function setFormValue(internals: ElementInternals | null, value: FormDataEntryValue | null, state: FormDataEntryValue | null) {
+export function setFormValue(internals: ElementInternals | null, value: FormDataEntryValue | null, state?: FormDataEntryValue | null) {
   if (!internals) return;
   try {
     if (state === undefined) internals.setFormValue(value);
