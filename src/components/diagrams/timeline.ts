@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -25,11 +26,48 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Eventos: is-render, is-open-viewer, is-toggle-group
  */
 
+interface TlGroup { id: string; name: string; hue?: number; }
+interface TlEvent {
+  id: string;
+  label: string;
+  desc?: string;
+  hue?: number;
+  group?: string;
+  ms: number;
+  dateText?: string;
+  dotX: number;
+  dotY: number;
+  side: number;
+  cardX: number;
+  cardY: number;
+  cardW: number;
+  cardH: number;
+}
+interface TlTick { ms: number; label: string; pos: number; major?: boolean; }
+interface TlLayout {
+  width: number;
+  height: number;
+  orientation: 'horizontal' | 'vertical';
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY?: number;
+  axisX0: number;
+  axisY0: number;
+  axisLen: number;
+  events: TlEvent[];
+  ticks: TlTick[];
+  todayPos?: number;
+  groups?: TlGroup[];
+  legendX: number;
+}
+interface EventEntry { e: TlEvent; g: SVGGElement; }
+
 class IsTimeline extends DiagramElementBase {
-  #hiddenGroups = new Set();
-  #eventNodes = new Map();
-  #hoverId = null;
-  #ro = null;
+  #hiddenGroups = new Set<string>();
+  #eventNodes = new Map<string, EventEntry>();
+  #hoverId: string | null = null;
+  #ro: ResizeObserver | null = null;
   #lastWidth = 0;
 
   constructor() {
@@ -62,15 +100,15 @@ class IsTimeline extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | string[] | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? new Set(v) : new Set(v || []);
     this.queueRender();
   }
 
-  renderDiagram() {
+  renderDiagram(): void {
     const spec = resolveTimelineSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
@@ -92,8 +130,7 @@ class IsTimeline extends DiagramElementBase {
       return;
     }
 
-    const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
     // `Date.now()` se llama solo aquí (en el componente), nunca dentro del
@@ -102,14 +139,14 @@ class IsTimeline extends DiagramElementBase {
     const layout = computeTimelineLayout(visible, {
       now: Date.now(),
       width: availW > 80 ? Math.max(160, availW - 8) : undefined,
-    });
+    }) as unknown as TlLayout;
     this.#lastWidth = availW;
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: TlLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -135,7 +172,7 @@ class IsTimeline extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildAxis(layout, theme) {
+  #buildAxis(layout: TlLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'tl-axis' });
     const horizontal = layout.orientation === 'horizontal';
     if (horizontal) {
@@ -154,7 +191,7 @@ class IsTimeline extends DiagramElementBase {
         ? svgEl('line', { x1: tk.pos, x2: tk.pos, y1: layout.axisY0 - 4, y2: layout.axisY0 + 4 })
         : svgEl('line', { x1: layout.axisX0 - 4, x2: layout.axisX0 + 4, y1: tk.pos, y2: tk.pos });
       line.setAttribute('stroke', theme.grid);
-      line.setAttribute('stroke-width', tk.major ? 1.4 : 1);
+      line.setAttribute('stroke-width', String(tk.major ? 1.4 : 1));
       line.setAttribute('class', 'dg-grid-line');
       g.appendChild(line);
     }
@@ -163,14 +200,14 @@ class IsTimeline extends DiagramElementBase {
         ? svgEl('line', { x1: layout.todayPos, x2: layout.todayPos, y1: layout.axisY0 - 10, y2: layout.axisY0 + 10 })
         : svgEl('line', { x1: layout.axisX0 - 10, x2: layout.axisX0 + 10, y1: layout.todayPos, y2: layout.todayPos });
       today.setAttribute('stroke', theme.accent);
-      today.setAttribute('stroke-width', 1.4);
+      today.setAttribute('stroke-width', '1.4');
       today.setAttribute('stroke-dasharray', '4 3');
       g.appendChild(today);
     }
     this.svg.appendChild(g);
   }
 
-  #buildEvents(layout, theme) {
+  #buildEvents(layout: TlLayout, theme: DiagramTheme): void {
     for (const e of layout.events) {
       const color = (e.hue != null && tkHueToHex(e.hue)) || theme.accent;
       const g = svgEl('g', { class: 'tl-event' });
@@ -203,10 +240,10 @@ class IsTimeline extends DiagramElementBase {
       });
       // La fecha del evento va en una línea corta arriba de la tarjeta (solo si
       // el label no la incluye ya: payloads antiguos la llevaban incrustada).
-      const showDate = e.dateText && !/^\s*\d{4}-\d{2}-\d{2}/.test(e.label || '');
+      const showDate = !!e.dateText && !/^\s*\d{4}-\d{2}-\d{2}/.test(e.label || '');
       if (showDate) {
         const d = document.createElement('div');
-        d.textContent = e.dateText;
+        d.textContent = e.dateText ?? '';
         Object.assign(d.style, {
           flex: '0 0 auto', fontSize: '9px', lineHeight: '11px', color: theme.muted,
           fontWeight: '600', letterSpacing: '0.02em', whiteSpace: 'nowrap',
@@ -229,9 +266,10 @@ class IsTimeline extends DiagramElementBase {
     }
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: TlLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'tl-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    const groups = layout.groups ?? [];
+    groups.forEach((grp, gi: number) => {
       const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -260,9 +298,9 @@ class IsTimeline extends DiagramElementBase {
 
   /* ── hover / click ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.groupId);
       if (item) {
         emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
       }
@@ -278,9 +316,9 @@ class IsTimeline extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('timeline');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: MouseEvent) => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.eventId);
+    const g = e.composedPath().find((n): n is HTMLElement => n instanceof HTMLElement && !!n.dataset?.eventId);
     const id = g?.dataset.eventId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
@@ -296,7 +334,7 @@ class IsTimeline extends DiagramElementBase {
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#eventNodes.get(id) : null;
 
