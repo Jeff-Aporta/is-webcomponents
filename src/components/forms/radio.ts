@@ -33,9 +33,9 @@ import { setOptionalAttr } from '../_shared/reflect.js';
     </div>
   `;
 
-  const OBSERVED = ['value', 'checked', 'disabled', 'color', 'label-placement'];
-  const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
-  const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
+  const OBSERVED: string[] = ['value', 'checked', 'disabled', 'color', 'label-placement'];
+  const VARIANTS: string[] = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
   class IsRadio extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -45,7 +45,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 
-    #internals = null;
+    #internals: ElementInternals | null = null;
     #descEl!: HTMLElement;
     #descSlot!: HTMLSlotElement;
 
@@ -64,60 +64,60 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       this.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected() {
+    onConnected(): void {
       if (!this.hasAttribute('role')) this.setAttribute('role', 'radio');
       this.#syncDescription();
       this.#sync();
     }
 
-    onAttributeChanged(_name, oldVal, newVal) {
+    onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#sync();
     }
 
     /** Sin atributo, el valor es el texto de la etiqueta (no el de description). */
-    get value() {
-      if (this.hasAttribute('value')) return this.getAttribute('value');
+    get value(): string {
+      if (this.hasAttribute('value')) return this.getAttribute('value') ?? '';
       return [...this.childNodes]
-        .filter((n) => n.nodeType === 3 || (n.nodeType === 1 && !n.slot))
-        .map((n) => n.textContent)
+        .filter((n: ChildNode) => n.nodeType === 3 || (n.nodeType === 1 && !(n as Element).slot))
+        .map((n: ChildNode) => n.textContent ?? '')
         .join('')
         .trim();
     }
-    set value(v) { setOptionalAttr(this, 'value', v); }
+    set value(v: string | null) { setOptionalAttr(this, 'value', v); }
 
-    get checked() { return this.hasAttribute('checked'); }
-    set checked(v) { this.toggleAttribute('checked', !!v); }
+    get checked(): boolean { return this.hasAttribute('checked'); }
+    set checked(v: boolean) { this.toggleAttribute('checked', !!v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
     /** '' = hereda el del grupo. */
-    get color() {
+    get color(): string {
       const v = this.getAttribute('color');
-      return VARIANTS.includes(v) ? v : '';
+      return VARIANTS.includes(v ?? '') ? v ?? '' : '';
     }
-    set color(v) {
-      if (VARIANTS.includes(v)) this.setAttribute('color', v);
+    set color(v: string | null) {
+      if (typeof v === 'string' && VARIANTS.includes(v)) this.setAttribute('color', v);
       else this.removeAttribute('color');
     }
 
     /** '' = hereda el del grupo. */
-    get labelPlacement() {
+    get labelPlacement(): string {
       const v = this.getAttribute('label-placement');
-      return PLACEMENTS.includes(v) ? v : '';
+      return PLACEMENTS.includes(v ?? '') ? v ?? '' : '';
     }
-    set labelPlacement(v) {
-      if (PLACEMENTS.includes(v)) this.setAttribute('label-placement', v);
+    set labelPlacement(v: string | null) {
+      if (typeof v === 'string' && PLACEMENTS.includes(v)) this.setAttribute('label-placement', v);
       else this.removeAttribute('label-placement');
     }
 
-    get group() { return this.closest('is-radio-group'); }
+    get group(): (HTMLElement & { disabled?: boolean; readonly?: boolean; error?: boolean }) | null { return this.closest('is-radio-group'); }
 
     /**
      * Recalcula lo que hereda del grupo. Lo llama el grupo.
      * El color no pasa por aquí: viaja como custom property heredada.
      */
-    syncFromGroup() {
+    syncFromGroup(): void {
       const group = this.group;
       const placement = this.#inherit('label-placement', PLACEMENTS, group) ?? 'end';
       for (const p of PLACEMENTS) setCustomState(this.#internals, `placement-${p}`, p !== 'end' && p === placement);
@@ -125,19 +125,19 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       setCustomState(this.#internals, 'error', !!group?.error);
     }
 
-    #inherit(attr, allowed, group) {
+    #inherit(attr: string, allowed: string[], group: (HTMLElement & { disabled?: boolean; readonly?: boolean; error?: boolean }) | null): string | null {
       const own = this.getAttribute(attr);
-      if (allowed.includes(own)) return own;
+      if (own != null && allowed.includes(own)) return own;
       const fromGroup = group?.getAttribute(attr);
-      return allowed.includes(fromGroup) ? fromGroup : null;
+      return fromGroup != null && allowed.includes(fromGroup) ? fromGroup : null;
     }
 
-    #syncDescription = () => {
+    #syncDescription = (): void => {
       this.#descEl.hidden = !this.#descSlot.assignedNodes({ flatten: true })
-        .some((n) => n.nodeType === 1 || n.textContent.trim());
+        .some((n: Node) => n.nodeType === 1 || !!((n as Text).textContent ?? '').trim());
     };
 
-    #sync() {
+    #sync(): void {
       this.setAttribute('aria-checked', String(this.checked));
       this.setAttribute('aria-disabled', String(this.disabled));
       // El tabindex de un radio en grupo lo gobierna el grupo (roving tabindex).
@@ -145,7 +145,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       this.syncFromGroup();
     }
 
-    #select() {
+    #select(): void {
       if (this.disabled) return;
       const group = this.group;
       if (!group) {
@@ -156,7 +156,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       emit(this, 'is-radio-select', { value: this.value });
     }
 
-    #onClick = (e: PointerEvent) => {
+    #onClick = (e: PointerEvent): void => {
       if (this.disabled) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -165,7 +165,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       this.#select();
     };
 
-    #onKey = (e: KeyboardEvent) => {
+    #onKey = (e: KeyboardEvent): void => {
       if (e.key !== ' ' && e.key !== 'Spacebar') return;
       e.preventDefault();
       this.#select();
