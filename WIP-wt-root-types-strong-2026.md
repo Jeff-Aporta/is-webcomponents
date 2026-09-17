@@ -87,11 +87,14 @@ Las hojas de T2-T3 entregan:
 
 ## Mensajes recientes con hermanas
 
-(Ninguno aún — Tanda 1 no ha arrancado)
+[2026-09-17T19:50:00Z] — WT-0031 listo. Errores: 7,897 → 7,520 (−377). SHAs: cfdad173c4 (sequence-diagram), f6ed148ff5 (state-diagram), 1e7a0f63cf (flowchart), 91c1895f0b (use-case-diagram), e49ae01c64 (venn-diagram), d764389d5d (gantt), 21bc48b965 (block-diagram). Gates: PASS.
 
-## Gate status (Tanda 0 — baseline)
+## Gate status (Tanda 3 — WT-0031 cierre)
 
 - npm run typecheck: ✓ verde
-- strict audit: 8,777 errores (baseline)
-- Playwright 19/19: ✓ 21/21 (2 skipped)
+- strict audit: 7,897 → 7,520 (−377)
+- tests básicos (.test.mjs): 52/52 verde (sequence 9, state 7, flowchart 8, use-case 7, venn 7, gantt 7, block 7)
+- Demos HTML: 7/7 existen en `demos/diagramas/<nombre>/<nombre>.html`
+- Tests exhaustivos: 7/7 existen (`.test.mjs` + `.stagehand.test.mjs`)
+- Archivos en scope: 7/7 con 0 errores strict audit
 - round-trip JSON: ✓ preservado
