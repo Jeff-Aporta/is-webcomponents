@@ -8,6 +8,8 @@
 | 2 | `08fe8f752` | WT-0021 + WT-0022 | 880 → 7,897 (8,777 → 7,897) | 15 spec files tipados (409+450 + cascading), 15 demos, 38 test files (115 tests pasando). Ver `checkpoint-tanda02.md`. |
 | 3 | `f969580589` | WT-0031 + WT-0032 + WT-0032-bis | 513 → 7,384 (7,897 → 7,384) | 15 diagram files tipados + 5 lightbox/preview files. Tests extras para org-chart. Ver `checkpoint-tanda03.md`. |
 | 4 | `a2d223afa` | WT-0041 + WT-0042 + WT-0042-bis | 1,238 → 6,146 (7,384 → 6,146) | data-grid family completo. WT-0041 hizo data-grid + preview + smoke. WT-0042-bis hizo icon-explorer.preview. Capitán commiteó grid-shared + ag-grid (sub-agents no commiteaban). Ver `checkpoint-tanda04.md`. |
+| 5 | `68492c97e` | WT-0051 + WT-0052 | 1,011 → 5,135 (6,146 → 5,135) | tree-view + helpers completo. _types.ts nuevo. Ver `checkpoint-tanda05.md`. |
+| 6 | `9241ea4ce` | WT-0061-quad + WT-0062 + WT-0062-bis | 697 → 4,438 (5,135 → 4,438) | 7 archivos: code, split-panel, chart, gallery/app, catalogo-gen, controller-from-config, date-field-core. Ver `checkpoint-tanda06.md`. |
 
 ## Tandas en proceso
 
