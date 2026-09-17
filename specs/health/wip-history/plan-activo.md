@@ -6,6 +6,7 @@
 |---|---|---|---|---|
 | 1 | `75b0aff595` | (directo en WT-ROOT) | 0 (ya estaban en main) | Surgical fixes ya aplicados en main → WT-ROOT. T1 fue verificación + locks + docs. Ver `checkpoint-tanda01.md`. |
 | 2 | `08fe8f752` | WT-0021 + WT-0022 | 880 → 7,897 (8,777 → 7,897) | 15 spec files tipados (409+450 + cascading), 15 demos, 38 test files (115 tests pasando). Ver `checkpoint-tanda02.md`. |
+| 3 | `f969580589` | WT-0031 + WT-0032 + WT-0032-bis | 513 → 7,384 (7,897 → 7,384) | 15 diagram files tipados + 5 lightbox/preview files. Tests extras para org-chart. Ver `checkpoint-tanda03.md`. |
 
 ## Tandas en proceso
 
@@ -18,7 +19,7 @@
 
 | # | Tanda | Rama base | Hojas | Errores | Mandato extra |
 |---|---|---|---|---|---|
-| 3 | diagrams/impl/* | `wt-root-types-strong-2026` | WT-0031, WT-0032 | ~532 | **+ completar demos + tests de diagramas restantes** |
+| 3 | diagrams/impl/* | `wt-root-types-strong-2026` | (cerrada) | ~532 | cerrada con WT-0031 + WT-0032-bis |
 | 4 | data-grid family | `wt-root-types-strong-2026` | WT-0041, WT-0042 | ~1,250 | ninguno |
 | 5 | tree-view + helpers | `wt-root-types-strong-2026` | WT-0051, WT-0052 | ~720 | ninguno |
 | 6 | layout + catalog + code | `wt-root-types-strong-2026` | WT-0061, WT-0062 | ~800 | ninguno |
