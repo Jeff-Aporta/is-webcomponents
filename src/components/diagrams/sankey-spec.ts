@@ -13,7 +13,7 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
  * suma de lo que entra o sale de él (la mayor de las dos).
  */
 
-const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
 
 const NODE_W = 14;
 const NODE_GAP = 14;
@@ -26,39 +26,118 @@ const LAYER_GAP_MAX = 560;
 const ANCHO_OBJETIVO = 940;
 const MARGIN = { top: 16, right: 24, bottom: 20, left: 20 };
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 }
 
-function readNode(raw, i: number) {
-  const r = asRecord(raw);
+export interface SankeyNodeSpec {
+  id: string;
+  label: string;
+  hue?: number;
+  group?: string;
+  description?: string;
+}
+
+export interface SankeyLinkSpec {
+  id: string;
+  from: string;
+  to: string;
+  value: number;
+  label?: string;
+  group?: string;
+}
+
+export interface SankeyGroupSpec {
+  id: string;
+  name: string;
+  hue: number;
+}
+
+export interface SankeyResolvedSpec {
+  title?: string;
+  subtitle?: string;
+  unit?: string;
+  groups?: SankeyGroupSpec[];
+  nodes: SankeyNodeSpec[];
+  links: SankeyLinkSpec[];
+}
+
+export interface SankeyLayoutNode {
+  id: string;
+  label: string;
+  description?: string;
+  group?: string;
+  hue?: number;
+  layer: number;
+  value: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  labelSide: 'right';
+}
+
+export interface SankeyLayoutLink {
+  id: string;
+  from: string;
+  to: string;
+  value: number;
+  label?: string;
+  group?: string;
+  thickness: number;
+  path: string;
+  labelX: number;
+  labelY: number;
+  hue?: number;
+}
+
+export interface SankeyLayout {
+  width: number;
+  height: number;
+  nodes: SankeyLayoutNode[];
+  links: SankeyLayoutLink[];
+  groups?: SankeyGroupSpec[];
+  unit?: string;
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  legendX: number;
+}
+
+export interface SankeyLayoutOptions {
+  width?: number;
+  height?: number;
+}
+
+function readNode(raw: Record<string, unknown>, i: number): SankeyNodeSpec {
   return {
-    id: String(r.id ?? `n${i}`),
-    label: String(r.label ?? r.name ?? r.id ?? `Nodo ${i + 1}`),
-    hue: r.hue != null ? resolveTkHue(r) : undefined,
-    group: String(r.group ?? '') || undefined,
-    description: String(r.desc ?? r.description ?? '').trim() || undefined,
+    id: String(raw.id ?? `n${i}`),
+    label: String(raw.label ?? raw.name ?? raw.id ?? `Nodo ${i + 1}`),
+    hue: raw.hue != null ? resolveTkHue(raw) : undefined,
+    group: String(raw.group ?? '') || undefined,
+    description: String(raw.desc ?? raw.description ?? '').trim() || undefined,
   };
 }
 
-function readLink(raw, i) {
-  const r = asRecord(raw);
-  const value = Number(r.value ?? r.weight ?? r.amount ?? 0);
+function readLink(raw: Record<string, unknown>, i: number): SankeyLinkSpec {
+  const value = Number(raw.value ?? raw.weight ?? raw.amount ?? 0);
   return {
-    id: String(r.id ?? `l${i}`),
-    from: String(r.from ?? r.source ?? ''),
-    to: String(r.to ?? r.target ?? ''),
+    id: String(raw.id ?? `l${i}`),
+    from: String(raw.from ?? raw.source ?? ''),
+    to: String(raw.to ?? raw.target ?? ''),
     // Un enlace sin valor positivo no tiene grosor: no es un enlace, es ruido.
     value: Number.isFinite(value) && value > 0 ? value : 0,
-    label: String(r.label ?? '').trim() || undefined,
-    group: String(r.group ?? '') || undefined,
+    label: String(raw.label ?? '').trim() || undefined,
+    group: String(raw.group ?? '') || undefined,
   };
 }
 
-function readGroups(src) {
-  const raw = src.groups ?? [];
-  if (!Array.isArray(raw) || !raw.length) return undefined;
-  return raw.map((g, i: number) => {
+function readGroups(src: Record<string, unknown>): SankeyGroupSpec[] | undefined {
+  const raw = src.groups;
+  const list = Array.isArray(raw) ? raw : [];
+  if (!list.length) return undefined;
+  return list.map((g: unknown, i: number) => {
     const r = asRecord(g);
     return {
       id: String(r.id ?? `grp-${i}`),
@@ -69,17 +148,20 @@ function readGroups(src) {
 }
 
 /** payload → spec normalizada, o null si no hay nodos ni enlaces con valor. */
-export function resolveSankeySpec(payload) {
+export function resolveSankeySpec(payload: unknown): SankeyResolvedSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.sankey ?? p.sankeyDiagram ?? p);
-  const rawLinks = Array.isArray(src.links) ? src.links : [];
-  const links = rawLinks.map(readLink).filter((l) => l.value > 0 && l.from && l.to && l.from !== l.to);
+  const rawLinks: unknown[] = Array.isArray(src.links) ? src.links : [];
+  const links: SankeyLinkSpec[] = rawLinks
+    .map((raw: unknown, i: number) => readLink(asRecord(raw), i))
+    .filter((l) => l.value > 0 && l.from && l.to && l.from !== l.to);
   if (!links.length) return null;
 
   // Los nodos declarados mandan; los que solo aparecen en un enlace se crean
   // al vuelo para que un payload mínimo (solo links) siga siendo válido.
-  const declared = (Array.isArray(src.nodes) ? src.nodes : []).map(readNode);
-  const byId = new Map(declared.map((n) => [n.id, n]));
+  const declared: SankeyNodeSpec[] = (Array.isArray(src.nodes) ? src.nodes : [])
+    .map((raw: unknown, i: number) => readNode(asRecord(raw), i));
+  const byId = new Map<string, SankeyNodeSpec>(declared.map((n) => [n.id, n]));
   let auto = declared.length;
   for (const l of links) {
     for (const id of [l.from, l.to]) {
@@ -98,20 +180,20 @@ export function resolveSankeySpec(payload) {
 }
 
 /** spec → objeto `sankey` listo para persistir / mostrar en el editor. */
-export function sankeySpecToJson(spec) {
-  const out = { nodes: [], links: [] };
+export function sankeySpecToJson(spec: SankeyResolvedSpec): Record<string, unknown> {
+  const out: Record<string, unknown> = { nodes: [], links: [] };
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.unit) out.unit = spec.unit;
   if (spec.groups?.length) out.groups = spec.groups;
   out.nodes = spec.nodes.map((n) => {
-    const row = { id: n.id, label: n.label };
+    const row: Record<string, unknown> = { id: n.id, label: n.label };
     if (n.group) row.group = n.group;
     if (n.description) row.desc = n.description;
     return row;
   });
   out.links = spec.links.map((l) => {
-    const row = { from: l.from, to: l.to, value: l.value };
+    const row: Record<string, unknown> = { from: l.from, to: l.to, value: l.value };
     if (l.label) row.label = l.label;
     if (l.group) row.group = l.group;
     return row;
@@ -124,19 +206,14 @@ export function sankeySpecToJson(spec) {
  * Los ciclos se cortan con un tope de iteraciones — un Sankey cíclico no
  * existe, pero un payload mal armado no puede colgar el render.
  */
-function assignLayers(nodes, links) {
-  const layer = new Map(nodes.map((n) => [n.id, 0]));
-  const outgoing = new Map();
-  for (const l of links) {
-    if (!outgoing.has(l.from)) outgoing.set(l.from, []);
-    outgoing.get(l.from).push(l);
-  }
+function assignLayers(nodes: SankeyNodeSpec[], links: SankeyLinkSpec[]): Map<string, number> {
+  const layer = new Map<string, number>(nodes.map((n) => [n.id, 0]));
   const limit = nodes.length + 1;
   for (let pass = 0; pass < limit; pass++) {
     let moved = false;
     for (const l of links) {
-      const next = layer.get(l.from) + 1;
-      if (next > layer.get(l.to)) {
+      const next = (layer.get(l.from) ?? 0) + 1;
+      if (next > (layer.get(l.to) ?? 0)) {
         layer.set(l.to, next);
         moved = true;
       }
@@ -147,20 +224,20 @@ function assignLayers(nodes, links) {
 }
 
 /** Suma de valores por nodo: la altura del nodo es la mayor de entrada/salida. */
-function nodeTotals(nodes, links) {
-  const inSum = new Map(nodes.map((n) => [n.id, 0]));
-  const outSum = new Map(nodes.map((n) => [n.id, 0]));
+function nodeTotals(nodes: SankeyNodeSpec[], links: SankeyLinkSpec[]): { inSum: Map<string, number>; outSum: Map<string, number>; total: Map<string, number> } {
+  const inSum = new Map<string, number>(nodes.map((n) => [n.id, 0]));
+  const outSum = new Map<string, number>(nodes.map((n) => [n.id, 0]));
   for (const l of links) {
-    outSum.set(l.from, outSum.get(l.from) + l.value);
-    inSum.set(l.to, inSum.get(l.to) + l.value);
+    outSum.set(l.from, (outSum.get(l.from) ?? 0) + l.value);
+    inSum.set(l.to, (inSum.get(l.to) ?? 0) + l.value);
   }
-  const total = new Map();
-  for (const n of nodes) total.set(n.id, Math.max(inSum.get(n.id), outSum.get(n.id)));
+  const total = new Map<string, number>();
+  for (const n of nodes) total.set(n.id, Math.max(inSum.get(n.id) ?? 0, outSum.get(n.id) ?? 0));
   return { inSum, outSum, total };
 }
 
 /** Cinta del enlace: dos bordes cúbicos horizontales cerrados en un solo path. */
-function ribbonPath(x0, y0, x1, y1, thickness: number) {
+function ribbonPath(x0: number, y0: number, x1: number, y1: number, thickness: number): string {
   const cx = (x0 + x1) / 2;
   const top0 = y0 - thickness / 2;
   const top1 = y1 - thickness / 2;
@@ -177,9 +254,8 @@ function ribbonPath(x0, y0, x1, y1, thickness: number) {
 
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, nodes:Array, links:Array, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number, unit?:string}}
  */
-export function computeSankeyLayout(spec, opts = {}) {
+export function computeSankeyLayout(spec: SankeyResolvedSpec, opts: SankeyLayoutOptions = {}): SankeyLayout {
   const height = Math.max(220, Number(opts.height) || 320);
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
@@ -187,16 +263,17 @@ export function computeSankeyLayout(spec, opts = {}) {
   const subtitleY = title ? 40 : 24;
   const headerH = title || subtitle ? (subtitle ? 54 : 36) : 0;
 
-  const anchoLabel = (t: number) => Math.ceil(richTextPlain(t).length * 6.2);
+  const anchoLabel = (t: string): number => Math.ceil(richTextPlain(t).length * 6.2);
   const labelW = Math.max(...spec.nodes.map((n) => anchoLabel(n.label)), 60);
 
   const layerById = assignLayers(spec.nodes, spec.links);
   const { total } = nodeTotals(spec.nodes, spec.links);
-  const layers = new Map();
+  const layers = new Map<number, SankeyNodeSpec[]>();
   for (const n of spec.nodes) {
     const li = layerById.get(n.id) ?? 0;
-    if (!layers.has(li)) layers.set(li, []);
-    layers.get(li).push(n);
+    const list = layers.get(li);
+    if (list) list.push(n);
+    else layers.set(li, [n]);
   }
   const layerKeys = [...layers.keys()].sort((a, b) => a - b);
   const ultimaCapa = layerKeys[layerKeys.length - 1] ?? 0;
@@ -211,30 +288,30 @@ export function computeSankeyLayout(spec, opts = {}) {
   const plotH = height - plotTop - MARGIN.bottom;
   let maxSum = 0;
   for (const li of layerKeys) {
-    const nodesIn = layers.get(li);
-    const sum = nodesIn.reduce((acc, n) => acc + total.get(n.id), 0);
+    const nodesIn = layers.get(li) ?? [];
+    const sum = nodesIn.reduce((acc, n) => acc + (total.get(n.id) ?? 0), 0);
     const gaps = (nodesIn.length - 1) * NODE_GAP;
     maxSum = Math.max(maxSum, sum / Math.max(1, plotH - gaps));
   }
   const unitPx = maxSum > 0 ? 1 / maxSum : 1;
 
-  const nodes = [];
-  const posById = new Map();
+  const nodes: SankeyLayoutNode[] = [];
+  const posById = new Map<string, SankeyLayoutNode>();
   for (const li of layerKeys) {
-    const nodesIn = layers.get(li);
-    const heights = nodesIn.map((n) => Math.max(MIN_BAND, total.get(n.id) * unitPx));
+    const nodesIn = layers.get(li) ?? [];
+    const heights = nodesIn.map((n) => Math.max(MIN_BAND, (total.get(n.id) ?? 0) * unitPx));
     const used = heights.reduce((a, b) => a + b, 0) + (nodesIn.length - 1) * NODE_GAP;
     let y = plotTop + Math.max(0, (plotH - used) / 2);
     nodesIn.forEach((n, i) => {
-      const h = heights[i];
-      const node = {
+      const h = heights[i] ?? MIN_BAND;
+      const node: SankeyLayoutNode = {
         id: n.id,
         label: n.label,
         description: n.description,
         group: n.group,
         hue: n.hue,
         layer: li,
-        value: total.get(n.id),
+        value: total.get(n.id) ?? 0,
         x: MARGIN.left + li * layerGap,
         y,
         w: NODE_W,
@@ -251,18 +328,18 @@ export function computeSankeyLayout(spec, opts = {}) {
 
   // Reparto vertical dentro de cada nodo: las bandas se apilan en el orden de
   // declaración, igual en el lado de salida y en el de entrada.
-  const outCursor = new Map(nodes.map((n) => [n.id, n.y]));
-  const inCursor = new Map(nodes.map((n) => [n.id, n.y]));
-  const links = spec.links.map((l, i) => {
+  const outCursor = new Map<string, number>(nodes.map((n) => [n.id, n.y]));
+  const inCursor = new Map<string, number>(nodes.map((n) => [n.id, n.y]));
+  const links: SankeyLayoutLink[] = spec.links.map((l, i) => {
     const from = posById.get(l.from);
     const to = posById.get(l.to);
     const thickness = Math.max(MIN_BAND, l.value * unitPx);
-    const y0 = outCursor.get(l.from) + thickness / 2;
-    const y1 = inCursor.get(l.to) + thickness / 2;
-    outCursor.set(l.from, outCursor.get(l.from) + thickness);
-    inCursor.set(l.to, inCursor.get(l.to) + thickness);
-    const x0 = from.x + from.w;
-    const x1 = to.x;
+    const y0 = (outCursor.get(l.from) ?? 0) + thickness / 2;
+    const y1 = (inCursor.get(l.to) ?? 0) + thickness / 2;
+    outCursor.set(l.from, (outCursor.get(l.from) ?? 0) + thickness);
+    inCursor.set(l.to, (inCursor.get(l.to) ?? 0) + thickness);
+    const x0 = (from?.x ?? 0) + (from?.w ?? NODE_W);
+    const x1 = to?.x ?? x0;
     return {
       id: l.id ?? `l${i}`,
       from: l.from,
@@ -274,7 +351,7 @@ export function computeSankeyLayout(spec, opts = {}) {
       path: ribbonPath(x0, y0, x1, y1, thickness),
       labelX: (x0 + x1) / 2,
       labelY: (y0 + y1) / 2,
-      hue: from.hue,
+      hue: from?.hue,
     };
   });
 

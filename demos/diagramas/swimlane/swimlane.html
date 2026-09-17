@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-swimlane-diagram></title>
+<meta name="description" content="Demo de is-swimlane-diagram con 3 carriles y 5 pasos incl. decisión." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; padding: 20px; min-height: 420px; }
+  is-swimlane-diagram { width: 100%; min-height: 400px; }
+  is-swimlane-diagram:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/swimlane-diagram.min.js');
+  await customElements.whenDefined('is-swimlane-diagram');
+
+  const el = document.createElement('is-swimlane-diagram');
+  el.payload = {
+    swimlane: {
+      title: 'Proceso de pedido',
+      subtitle: 'carriles cliente · ops · envío',
+      lanes: [
+        { id: 'cli', name: 'Cliente', hue: 210 },
+        { id: 'ops', name: 'Operaciones', hue: 38 },
+        { id: 'env', name: 'Envío', hue: 160 },
+      ],
+      steps: [
+        { id: 's1', lane: 'cli', kind: 'start', label: 'inicio' },
+        { id: 's2', lane: 'cli', kind: 'process', label: 'hace pedido' },
+        { id: 's3', lane: 'ops', kind: 'process', label: 'valida stock' },
+        { id: 's4', lane: 'ops', kind: 'decision', label: 'hay stock?' },
+        { id: 's5', lane: 'env', kind: 'process', label: 'prepara envío' },
+        { id: 's6', lane: 'env', kind: 'end', label: 'entregado' },
+      ],
+      links: [
+        { from: 's1', to: 's2' },
+        { from: 's2', to: 's3' },
+        { from: 's3', to: 's4' },
+        { from: 's4', to: 's5', label: 'sí' },
+        { from: 's5', to: 's6' },
+        { from: 's4', to: 's2', label: 'no · repetir' },
+      ],
+    },
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.swimlaneReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo <code>&lt;is-swimlane-diagram&gt;</code></h1>
+  <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
+</header>
+<main><div id="host"></div></main>
+<footer>Componente: <code>is-swimlane-diagram</code> · Spec: <code>swimlane-spec</code></footer>
+</body>
+</html>

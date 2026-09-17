@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-state-diagram></title>
+<meta name="description" content="Demo de is-state-diagram con start/choice/end y self-loop." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; padding: 20px; min-height: 420px; }
+  is-state-diagram { width: 100%; min-height: 400px; }
+  is-state-diagram:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/state-diagram.min.js');
+  await customElements.whenDefined('is-state-diagram');
+
+  const el = document.createElement('is-state-diagram');
+  el.payload = {
+    stateDiagram: {
+      title: 'Ciclo de pedido',
+      subtitle: 'start · choice · self · end',
+      direction: 'TB',
+      states: [
+        { id: 's0', kind: 'start' },
+        { id: 's1', kind: 'normal', label: 'recibido' },
+        { id: 's2', kind: 'choice', label: 'hay stock?' },
+        { id: 's3', kind: 'normal', label: 'procesando' },
+        { id: 's4', kind: 'normal', label: 'en espera' },
+        { id: 's5', kind: 'normal', label: 'enviado' },
+        { id: 's6', kind: 'end' },
+      ],
+      transitions: [
+        { from: 's0', to: 's1' },
+        { from: 's1', to: 's2' },
+        { from: 's2', to: 's3', label: 'sí' },
+        { from: 's2', to: 's4', label: 'no' },
+        { from: 's4', to: 's1', label: 'reponer' },
+        { from: 's3', to: 's3', label: 'reintento', kind: 'self' },
+        { from: 's3', to: 's5' },
+        { from: 's5', to: 's6' },
+      ],
+    },
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.stateReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo <code>&lt;is-state-diagram&gt;</code></h1>
+  <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
+</header>
+<main><div id="host"></div></main>
+<footer>Componente: <code>is-state-diagram</code> · Spec: <code>state-spec</code></footer>
+</body>
+</html>

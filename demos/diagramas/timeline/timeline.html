@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-timeline></title>
+<meta name="description" content="Demo de is-timeline horizontal con 5 eventos." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; padding: 20px; min-height: 420px; }
+  is-timeline { width: 100%; min-height: 400px; }
+  is-timeline:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/timeline.min.js');
+  await customElements.whenDefined('is-timeline');
+
+  const el = document.createElement('is-timeline');
+  el.payload = {
+    timeline: {
+      title: 'Hitos del proyecto',
+      orientation: 'horizontal',
+      events: [
+        { id: 'e1', label: 'Kickoff', date: '2026-01-15', desc: 'arranque formal del proyecto' },
+        { id: 'e2', label: 'MVP interno', date: '2026-03-01', desc: 'release interno' },
+        { id: 'e3', label: 'Beta cerrada', date: '2026-06-15', desc: '10 clientes seleccionados' },
+        { id: 'e4', label: 'GA', date: '2026-09-01', desc: 'disponibilidad general' },
+        { id: 'e5', label: 'v2', date: '2027-03-01', desc: 'siguiente major' },
+      ],
+    },
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.timelineReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo <code>&lt;is-timeline&gt;</code></h1>
+  <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
+</header>
+<main><div id="host"></div></main>
+<footer>Componente: <code>is-timeline</code> · Spec: <code>timeline-spec</code></footer>
+</body>
+</html>

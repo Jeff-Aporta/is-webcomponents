@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-sequence-diagram></title>
+<meta name="description" content="Demo de is-sequence-diagram con 3 actores y 5 mensajes incl. self-loop." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; padding: 20px; min-height: 420px; }
+  is-sequence-diagram { width: 100%; min-height: 400px; }
+  is-sequence-diagram:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/sequence-diagram.min.js');
+  await customElements.whenDefined('is-sequence-diagram');
+
+  const el = document.createElement('is-sequence-diagram');
+  el.payload = {
+    sequence: {
+      title: 'Demo secuencia',
+      subtitle: '3 actores · 1 self-loop',
+      actors: [
+        { id: 'U', label: '{{iconify: {icon: "mdi:account", hue: 239}}} Usuario', kind: 'actor' },
+        { id: 'A', label: '{{iconify: {icon: "mdi:robot-outline", hue: 199}}} Paty', kind: 'participant' },
+        { id: 'D', label: '{{iconify: {icon: "mdi:database", hue: 210}}} BD', kind: 'participant' },
+      ],
+      messages: [
+        { id: 'm1', from: 'U', to: 'A', label: 'saluda', log: 'usuario saluda', step: 1 },
+        { id: 'm2', from: 'A', to: 'A', label: 'log turno', kind: 'self', log: 'autopersistencia', step: 2 },
+        { id: 'm3', from: 'A', to: 'D', label: 'query SELECT', log: 'consulta BD', step: 3 },
+        { id: 'm4', from: 'D', to: 'A', label: 'filas[]', kind: 'async', log: 'resultados', step: 4 },
+        { id: 'm5', from: 'A', to: 'U', label: 'responde', log: 'respuesta al usuario', step: 5 },
+      ],
+    },
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.sequenceReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo <code>&lt;is-sequence-diagram&gt;</code></h1>
+  <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
+</header>
+<main><div id="host"></div></main>
+<footer>Componente: <code>is-sequence-diagram</code> · Spec: <code>sequence-spec</code></footer>
+</body>
+</html>
