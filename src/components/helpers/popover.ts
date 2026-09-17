@@ -29,8 +29,30 @@ import './floating.js';
  * data-popover="close" en hijos cierra el popover.
  */
 
+// ── Subset del contrato público de <is-floating> que este wrapper consume ──
+interface FloatingElement extends HTMLElement {
+  active: boolean;
+  placement: string;
+  distance: number;
+  skidding: number;
+  arrow: boolean;
+  strategy: string;
+  flip: boolean;
+  shift: boolean;
+  autoSize: string | boolean;
+  boundary: string;
+  flipFallbackPlacements: string;
+  flipFallbackStrategy: string;
+  flipPadding: number;
+  shiftPadding: number;
+  autoSizePadding: number;
+  hoverBridge: boolean;
+  anchor: unknown;
+  reposition(): void;
+}
+
 (() => {
-  let openPopover = null;
+  let openPopover: IsPopover | null = null;
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -53,29 +75,37 @@ import './floating.js';
 
   // Atributos que se delegan literalmente al `<is-floating>` interno. Cualquiera
   // que el building block entienda y que `is-popover` no reinterpretó.
-  const POPUP_DELEGATED = [
+  const POPUP_DELEGATED: readonly string[] = [
     'placement', 'distance', 'skidding', 'without-arrow', 'strategy',
     'flip', 'shift', 'auto-size', 'boundary',
     'flip-fallback-placements', 'flip-fallback-strategy',
     'flip-padding', 'shift-padding', 'auto-size-padding',
   ];
 
-  const OBSERVED = ['for', 'open', ...POPUP_DELEGATED];
+  const OBSERVED: readonly string[] = ['for', 'open', ...POPUP_DELEGATED];
 
   class IsPopover extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'max-width': '--is-popover-max-width',
-    'arrow-size': '--is-popover-arrow-size',
-    'show-duration': '--is-popover-show-duration',
-    'hide-duration': '--is-popover-hide-duration',
+      'max-width': '--is-popover-max-width',
+      'arrow-size': '--is-popover-arrow-size',
+      'show-duration': '--is-popover-show-duration',
+      'hide-duration': '--is-popover-hide-duration',
     };
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration']; }
+    static get observedAttributes(): string[] {
+      return [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration'];
+    }
 
-    #popup!: HTMLElement;
+    // `internals` existe en cualquier HTMLElement con `attachInternals`
+    // declarado en el prototipo del custom element. El kit no usa
+    // `attachInternals` directamente aquí, pero `ElementInternals` lo expone
+    // a través de `HTMLElement.internals`.
+    declare internals: ElementInternals | undefined;
+
+    #popup!: FloatingElement;
     #dialog!: HTMLElement;
-    #anchor = null;
+    #anchor: HTMLElement | null = null;
     #mounted = false;
 
     constructor() {
@@ -83,11 +113,13 @@ import './floating.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#popup = shadow.querySelector<HTMLElement>('is-floating')!;
+      this.#popup = shadow.querySelector<HTMLElement>('is-floating') as FloatingElement;
       this.#dialog = shadow.querySelector<HTMLElement>('.dialog')!;
 
       this.#dialog.addEventListener('click', (e: Event) => {
-        const closer = e.target.closest?.('[data-popover="close"]');
+        const target = e.target;
+        if (!(target instanceof Element)) return;
+        const closer = target.closest('[data-popover="close"]');
         if (closer) this.hide();
       });
     }
@@ -108,8 +140,8 @@ import './floating.js';
       document.removeEventListener('keydown', this.#onDocKey, true);
     }
 
-    attributeChangedCallback(name: string): void {
-      super.attributeChangedCallback(name);
+    attributeChangedCallback(name: string, _oldVal: string | null, _newVal: string | null): void {
+      super.attributeChangedCallback(name, _oldVal, _newVal);
       if (!this.#mounted) return;
       if (name === 'for') this.#bindAnchor();
       else if (name === 'open') {
@@ -119,70 +151,70 @@ import './floating.js';
     }
 
     // ── API pública ───────────────────────────────────────────────────────
-    get open() { return this.hasAttribute('open'); }
+    get open(): boolean { return this.hasAttribute('open'); }
     set open(v) { this.toggleAttribute('open', !!v); }
 
-    get for() { return this.getAttribute('for') || ''; }
+    get for(): string { return this.getAttribute('for') || ''; }
     set for(v) { v ? this.setAttribute('for', v) : this.removeAttribute('for'); }
 
-    get anchor() { return this.#popup.anchor; }
+    get anchor(): unknown { return this.#popup.anchor; }
     set anchor(v) { this.#popup.anchor = v; }
 
-    show() { this.open = true; }
-    hide() { this.open = false; }
-    reposition() { this.#popup.reposition(); }
+    show(): void { this.open = true; }
+    hide(): void { this.open = false; }
+    reposition(): void { this.#popup.reposition(); }
 
     // ── Delegados al popup interno ───────────────────────────────────────
-    get placement() { return this.#popup.placement; }
+    get placement(): string { return this.#popup.placement; }
     set placement(v) { this.#popup.placement = v; }
 
-    get distance() { return this.#popup.distance; }
+    get distance(): number { return this.#popup.distance; }
     set distance(v) { this.#popup.distance = v; }
 
-    get skidding() { return this.#popup.skidding; }
+    get skidding(): number { return this.#popup.skidding; }
     set skidding(v) { this.#popup.skidding = v; }
 
-    get withoutArrow() { return !this.#popup.arrow; }
+    get withoutArrow(): boolean { return !this.#popup.arrow; }
     set withoutArrow(v) { this.#popup.arrow = !v; }
 
-    get strategy() { return this.#popup.strategy; }
+    get strategy(): string { return this.#popup.strategy; }
     set strategy(v) { this.#popup.strategy = v; }
 
-    get flip() { return this.#popup.flip; }
+    get flip(): boolean { return this.#popup.flip; }
     set flip(v) { this.#popup.flip = v; }
 
-    get shift() { return this.#popup.shift; }
+    get shift(): boolean { return this.#popup.shift; }
     set shift(v) { this.#popup.shift = v; }
 
-    get arrow() { return this.#popup.arrow; }
+    get arrow(): boolean { return this.#popup.arrow; }
     set arrow(v) { this.#popup.arrow = v; }
 
-    get autoSize() { return this.#popup.autoSize; }
+    get autoSize(): string | boolean { return this.#popup.autoSize; }
     set autoSize(v) { this.#popup.autoSize = v; }
 
-    get boundary() { return this.#popup.boundary; }
+    get boundary(): string { return this.#popup.boundary; }
     set boundary(v) { this.#popup.boundary = v; }
 
-    get flipFallbackPlacements() { return this.#popup.flipFallbackPlacements; }
+    get flipFallbackPlacements(): string { return this.#popup.flipFallbackPlacements; }
     set flipFallbackPlacements(v) { this.#popup.flipFallbackPlacements = v; }
 
-    get flipFallbackStrategy() { return this.#popup.flipFallbackStrategy; }
+    get flipFallbackStrategy(): string { return this.#popup.flipFallbackStrategy; }
     set flipFallbackStrategy(v) { this.#popup.flipFallbackStrategy = v; }
 
-    get flipPadding() { return this.#popup.flipPadding; }
+    get flipPadding(): number { return this.#popup.flipPadding; }
     set flipPadding(v) { this.#popup.flipPadding = v; }
 
-    get shiftPadding() { return this.#popup.shiftPadding; }
+    get shiftPadding(): number { return this.#popup.shiftPadding; }
     set shiftPadding(v) { this.#popup.shiftPadding = v; }
 
-    get autoSizePadding() { return this.#popup.autoSizePadding; }
+    get autoSizePadding(): number { return this.#popup.autoSizePadding; }
     set autoSizePadding(v) { this.#popup.autoSizePadding = v; }
 
-    get hoverBridge() { return this.#popup.hoverBridge; }
+    get hoverBridge(): boolean { return this.#popup.hoverBridge; }
     set hoverBridge(v) { this.#popup.hoverBridge = v; }
 
     // ── Privados ──────────────────────────────────────────────────────────
-    #syncPopup() {
+    #syncPopup(): void {
       this.#popup.placement = this.getAttribute('placement') || 'top';
       this.#popup.distance = this.hasAttribute('distance')
         ? (Number(this.getAttribute('distance')) || 0)
@@ -201,21 +233,28 @@ import './floating.js';
       const fbStrategy = this.getAttribute('flip-fallback-strategy');
       if (fbStrategy) this.#popup.flipFallbackStrategy = fbStrategy;
       else this.#popup.removeAttribute('flip-fallback-strategy');
-      for (const [attr, prop] of [
+      // Subset mutable de FloatingElement — sólo las props con setter público
+      // que delegamos por nombre.
+      type MutableProp = 'flipPadding' | 'shiftPadding' | 'autoSizePadding';
+      const tuple: ReadonlyArray<readonly [string, MutableProp]> = [
         ['flip-padding', 'flipPadding'],
         ['shift-padding', 'shiftPadding'],
         ['auto-size-padding', 'autoSizePadding'],
-      ]) {
+      ];
+      for (const [attr, prop] of tuple) {
         const v = this.getAttribute(attr);
-        if (v != null) this.#popup[prop] = v; else this.#popup.removeAttribute(attr);
+        if (v != null) (this.#popup[prop] as string | number) = v;
+        else this.#popup.removeAttribute(attr);
       }
     }
 
-    #bindAnchor() {
+    #bindAnchor(): void {
       this.#unbindAnchor();
       if (!this.for) return;
       const root = this.getRootNode();
-      const el = root.getElementById?.(this.for) || document.getElementById(this.for);
+      const el = (root instanceof Document || root instanceof ShadowRoot)
+        ? root.getElementById(this.for)
+        : document.getElementById(this.for);
       if (!el) {
         console.warn(`[is-popover] El ancla #${this.for} debe existir en el DOM antes de conectar.`);
         return;
@@ -227,29 +266,29 @@ import './floating.js';
       el.setAttribute('aria-expanded', String(this.open));
     }
 
-    #unbindAnchor() {
+    #unbindAnchor(): void {
       if (!this.#anchor) return;
       this.#anchor.removeEventListener('click', this.#onAnchorClick);
       this.#anchor = null;
     }
 
-    #onAnchorClick = (e: PointerEvent) => {
+    #onAnchorClick = (e: PointerEvent): void => {
       e.preventDefault();
       this.open = !this.open;
     };
 
-    #onDocPointer = (e: PointerEvent) => {
+    #onDocPointer = (e: PointerEvent): void => {
       if (!this.open) return;
       const path = e.composedPath();
       if (path.includes(this) || (this.#anchor && path.includes(this.#anchor))) return;
       this.hide();
     };
 
-    #onDocKey = (e: KeyboardEvent) => {
+    #onDocKey = (e: KeyboardEvent): void => {
       if (e.key === 'Escape' && this.open) this.hide();
     };
 
-    #setOpenState(on: string) {
+    #setOpenState(on: boolean): void {
       try {
         if (on) this.internals?.states?.add?.('open');
         else this.internals?.states?.delete?.('open');
@@ -257,7 +296,7 @@ import './floating.js';
       if (this.#anchor) this.#anchor.setAttribute('aria-expanded', String(on));
     }
 
-    #doShow(silent) {
+    #doShow(silent?: boolean): void {
       if (!silent) {
         const ev = new CustomEvent('is-show', { bubbles: true, composed: true, cancelable: true });
         if (!this.dispatchEvent(ev)) {
@@ -281,7 +320,7 @@ import './floating.js';
       emit(this, 'is-after-show');
     }
 
-    #doHide(silent) {
+    #doHide(silent?: boolean): void {
       if (!silent) {
         const ev = new CustomEvent('is-hide', { bubbles: true, composed: true, cancelable: true });
         if (!this.dispatchEvent(ev)) {
@@ -301,6 +340,5 @@ import './floating.js';
   }
 
   defineElement('is-popover', IsPopover, 'IsPopover');
-
 
 })();
