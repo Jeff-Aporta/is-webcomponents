@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-use-case-diagram></title>
+<meta name="description" content="Demo de is-use-case-diagram con 2 actores, 3 casos, relaciones include/extend." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; padding: 20px; min-height: 420px; }
+  is-use-case-diagram { width: 100%; min-height: 400px; }
+  is-use-case-diagram:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/use-case-diagram.min.js');
+  await customElements.whenDefined('is-use-case-diagram');
+
+  const el = document.createElement('is-use-case-diagram');
+  el.payload = {
+    useCase: {
+      title: 'Sistema de pedidos',
+      subtitle: '2 actores · 3 casos · include',
+      system: 'Pedidos API',
+      actors: [
+        { id: 'cli', label: 'Cliente', side: 'left', hue: 210 },
+        { id: 'admin', label: 'Admin', side: 'right', hue: 38 },
+      ],
+      cases: [
+        { id: 'create', label: 'Crear pedido' },
+        { id: 'validate', label: 'Validar stock' },
+        { id: 'cancel', label: 'Cancelar pedido' },
+      ],
+      links: [
+        { from: 'cli', to: 'create', kind: 'association' },
+        { from: 'cli', to: 'cancel', kind: 'association' },
+        { from: 'admin', to: 'cancel', kind: 'association' },
+        { from: 'create', to: 'validate', kind: 'include' },
+      ],
+    },
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.useCaseReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo <code>&lt;is-use-case-diagram&gt;</code></h1>
+  <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
+</header>
+<main><div id="host"></div></main>
+<footer>Componente: <code>is-use-case-diagram</code> · Spec: <code>use-case-spec</code></footer>
+</body>
+</html>
