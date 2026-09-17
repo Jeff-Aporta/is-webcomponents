@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-sankey-diagram></title>
+<meta name="description" content="Demo de is-sankey-diagram con flujo de energía 3x3." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; padding: 20px; min-height: 420px; }
+  is-sankey-diagram { width: 100%; min-height: 400px; }
+  is-sankey-diagram:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/sankey-diagram.min.js');
+  await customElements.whenDefined('is-sankey-diagram');
+
+  const el = document.createElement('is-sankey-diagram');
+  el.payload = {
+    sankey: {
+      title: 'Flujo de energía',
+      subtitle: 'fuente → sector → uso final (kWh)',
+      unit: 'kWh',
+      links: [
+        { from: 'red', to: 'residencial', value: 40 },
+        { from: 'red', to: 'industrial', value: 30 },
+        { from: 'red', to: 'comercial', value: 30 },
+        { from: 'industrial', to: 'planta', value: 18 },
+        { from: 'industrial', to: 'maquinaria', value: 12 },
+        { from: 'comercial', to: 'oficinas', value: 20 },
+        { from: 'comercial', to: 'comercios', value: 10 },
+      ],
+    },
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.sankeyReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo <code>&lt;is-sankey-diagram&gt;</code></h1>
+  <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
+</header>
+<main><div id="host"></div></main>
+<footer>Componente: <code>is-sankey-diagram</code> · Spec: <code>sankey-spec</code></footer>
+</body>
+</html>
