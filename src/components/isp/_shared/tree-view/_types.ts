@@ -385,6 +385,15 @@ declare module "./01-contract.js" {
     syncRowAdaptersByFlatPaths(ids: readonly string[]): void;
     createNode(data: Partial<TNode> | TNode): TNode | null;
     List2Rows: TNode[];
+    findNodeByFlatPath(
+      id: string | null | undefined,
+      branches?: TNode[],
+    ): TNode | null;
+    findNodeByPathInit(
+      pathInit: string | null | undefined,
+      branches?: TNode[],
+    ): TNode | null;
+    normalizeFlatPath(id: string | null | undefined): string;
     getEditAttrsForLevel(
       driverAttrs: Record<string, unknown>,
       plan?: TNode,
