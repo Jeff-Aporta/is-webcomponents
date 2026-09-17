@@ -30,7 +30,30 @@
 
 ## Tareas nuevas en cola
 
-(Ninguna)
+### Workstream paralelo: is-editors (handoff `C:\Users\JAGUDELOE\handoff-is-editors.md`)
+
+**Estado**: plan consolidado pendiente de luz verde. Resumen en `specs/health/wip-history/editors-handoff-summary.md`.
+
+**Objetivo**: 16 wrappers `<is-X-editor>` + 16 demos + ≥290 tests + round-trip determinista + 0 skipped.
+
+**Árbol WTs** (binario, profundidad ≤4, 9 WTs):
+- WT-ROOT (`is-wc-wt-root-editors-2026`)
+- WT-0001 master orchestrator
+  - WT-0011 infra (diagram-edit shell, contract)
+  - WT-0012 campaign 12 editores con nesting
+- WT-0002 campaign 4 posicionales
+
+**13 decisiones bloqueadas** (§0 handoff): todas cerradas vía `/grill-me`, no se reabren.
+
+**Estrategia de integración**: secuencial después de types-strong-2026. Cuando strict audit <500 y T10 cerrado, arrancar is-editors.
+
+**Trigger de arranque**:
+1. types-strong T10 cerrado (checkpoint-tanda10.md escrito)
+2. WT-ROOT de types-strong consolidado y limpio
+3. Capitán pregunta al humano: "¿Arranco is-editors o prefieres parar?"
+4. Si OK: `git worktree add C:\ContaPyme\Personal\apps\WT\is-wc-wt-root-editors-2026 -b wt-root-editors-2026 main`
+
+**Riesgo de colisión**: ambos workstreams tocan `src/components/diagrams/*`. Secuencial obligatorio.
 
 ## Métricas live
 
