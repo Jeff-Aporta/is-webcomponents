@@ -9,7 +9,10 @@
 
 ## Tandas en proceso
 
-(Ninguna)
+| Tanda | Hoja | Rama | Estado |
+|---|---|---|---|
+| 3 (impl) | WT-0031 | `wt-root-types-strong-2026` (directo) | sub-agente `ce18143e` en background |
+| 3 (impl) | WT-0032 | `wt-root-types-strong-2026` (directo) | sub-agente `be529970` en background |
 
 ## Tandas pendientes
 
