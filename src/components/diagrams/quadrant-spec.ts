@@ -9,24 +9,64 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
  * ejes continuos, cuatro cuadrantes nombrados y puntos ubicados en 0..1.
  */
 
-const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
 
 const PLOT = 320;                 // lado del área de datos (cuadrada)
-const MARGIN = { top: 16, right: 24, bottom: 44, left: 52 };
+const MARGIN: { top: number; right: number; bottom: number; left: number } = { top: 16, right: 24, bottom: 44, left: 52 };
 const DOT_R = 5.5;
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
 }
 
 /** 0..1 con recorte: un punto fuera de rango se pega al borde, no se sale del lienzo. */
-function unit(value, fallback = 0.5) {
+function unit(value: unknown, fallback = 0.5): number {
   const n = Number(value);
   if (!Number.isFinite(n)) return fallback;
   return Math.min(1, Math.max(0, n));
 }
 
-function readPoint(raw, i: number) {
+interface QuadrantPoint {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  hue?: number;
+  group?: string;
+  description?: string;
+}
+
+interface QuadrantGroup {
+  id: string;
+  name: string;
+  hue: number;
+}
+
+interface QuadrantAxes {
+  left?: string;
+  right?: string;
+  bottom?: string;
+  top?: string;
+}
+
+interface QuadrantQuadrants {
+  topRight: string;
+  bottomRight: string;
+  bottomLeft: string;
+  topLeft: string;
+}
+
+export interface QuadrantSpec {
+  title?: string;
+  subtitle?: string;
+  xAxis: QuadrantAxes;
+  yAxis: QuadrantAxes;
+  quadrants: QuadrantQuadrants;
+  groups?: QuadrantGroup[];
+  points: QuadrantPoint[];
+}
+
+function readPoint(raw: unknown, i: number): QuadrantPoint {
   const r = asRecord(raw);
   return {
     id: String(r.id ?? `p${i}`),
@@ -39,21 +79,21 @@ function readPoint(raw, i: number) {
   };
 }
 
-function readGroups(src) {
+function readGroups(src: Record<string, unknown>): QuadrantGroup[] | undefined {
   const raw = src.groups ?? [];
   if (!Array.isArray(raw) || !raw.length) return undefined;
-  return raw.map((g, i: number) => {
+  return raw.map((g: unknown, i: number) => {
     const r = asRecord(g);
     return {
       id: String(r.id ?? `grp-${i}`),
       name: String(r.name ?? r.label ?? `Grupo ${i + 1}`),
-      hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
+      hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length] ?? 210),
     };
   });
 }
 
 /** Nombres de los cuatro cuadrantes; acepta objeto con claves o arreglo en orden horario desde arriba-derecha. */
-function readQuadrants(raw) {
+function readQuadrants(raw: unknown): QuadrantQuadrants {
   const r = asRecord(raw);
   if (Array.isArray(raw)) {
     const [topRight, bottomRight, bottomLeft, topLeft] = raw.map((q) => String(asRecord(q).name ?? q ?? ''));
@@ -68,7 +108,7 @@ function readQuadrants(raw) {
 }
 
 /** payload → spec normalizada, o null si no hay puntos. */
-export function resolveQuadrantSpec(payload) {
+export function resolveQuadrantSpec(payload: unknown): QuadrantSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.quadrant ?? p.quadrantChart ?? p);
   const rawPoints = src.points ?? src.items ?? [];
@@ -93,9 +133,26 @@ export function resolveQuadrantSpec(payload) {
   };
 }
 
+interface QuadrantJsonOut {
+  title?: string;
+  subtitle?: string;
+  xAxis?: QuadrantAxes;
+  yAxis?: QuadrantAxes;
+  quadrants?: QuadrantQuadrants;
+  groups?: QuadrantGroup[];
+  points: Array<{
+    label: string;
+    x: number;
+    y: number;
+    id?: string;
+    group?: string;
+    desc?: string;
+  }>;
+}
+
 /** spec → objeto `quadrant` listo para persistir / mostrar en el editor. */
-export function quadrantSpecToJson(spec) {
-  const out = { points: [] };
+export function quadrantSpecToJson(spec: QuadrantSpec): QuadrantJsonOut {
+  const out: QuadrantJsonOut = { points: [] };
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.xAxis.left || spec.xAxis.right) out.xAxis = { ...spec.xAxis };
@@ -104,7 +161,7 @@ export function quadrantSpecToJson(spec) {
   if (q.topRight || q.topLeft || q.bottomRight || q.bottomLeft) out.quadrants = { ...q };
   if (spec.groups?.length) out.groups = spec.groups;
   out.points = spec.points.map((pt) => {
-    const row = { label: pt.label, x: pt.x, y: pt.y };
+    const row: QuadrantJsonOut['points'][number] = { label: pt.label, x: pt.x, y: pt.y };
     if (pt.id) row.id = pt.id;
     if (pt.group) row.group = pt.group;
     if (pt.description) row.desc = pt.description;
@@ -117,8 +174,8 @@ export function quadrantSpecToJson(spec) {
  * Separación mínima entre etiquetas: dos puntos casi iguales quedarían con el
  * texto encimado, así que la etiqueta del segundo baja una línea.
  */
-function stackLabels(points) {
-  const placed = [];
+function stackLabels(points: Array<QuadrantPoint & { cx: number; cy: number; r: number; labelDy: number }>): Array<QuadrantPoint & { cx: number; cy: number; r: number; labelDy: number }> {
+  const placed: Array<QuadrantPoint & { cx: number; cy: number; r: number; labelDy: number }> = [];
   for (const pt of points) {
     let dy = 0;
     for (const prev of placed) {
@@ -131,11 +188,61 @@ function stackLabels(points) {
   return points;
 }
 
+interface PlotRect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+interface QuadrantLayoutPoint extends QuadrantPoint {
+  cx: number;
+  cy: number;
+  r: number;
+  labelDy: number;
+}
+
+interface QuadrantLayoutQuadrant {
+  id: string;
+  name: string;
+  cx: number;
+  cy: number;
+}
+
+interface QuadrantLayoutAxisLabel {
+  text: string;
+  x: number;
+  y: number;
+}
+
+interface QuadrantLayoutAxes {
+  midX: number;
+  midY: number;
+  xLeft?: QuadrantLayoutAxisLabel;
+  xRight?: QuadrantLayoutAxisLabel;
+  yBottom?: QuadrantLayoutAxisLabel;
+  yTop?: QuadrantLayoutAxisLabel;
+}
+
+export interface QuadrantLayout {
+  width: number;
+  height: number;
+  plot: PlotRect;
+  points: QuadrantLayoutPoint[];
+  quadrants: QuadrantLayoutQuadrant[];
+  axes: QuadrantLayoutAxes;
+  groups?: QuadrantGroup[];
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  legendX: number;
+}
+
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, plot:object, points:Array, quadrants:Array, axes:object, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
  */
-export function computeQuadrantLayout(spec) {
+export function computeQuadrantLayout(spec: QuadrantSpec): QuadrantLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const titleY = title ? 22 : 14;
@@ -147,7 +254,7 @@ export function computeQuadrantLayout(spec) {
     ? Math.max(...legendGroups.map((g) => Math.ceil(g.name.length * 6) + 30))
     : 0;
 
-  const plot = {
+  const plot: PlotRect = {
     x: MARGIN.left,
     y: MARGIN.top + headerH,
     w: PLOT,
@@ -158,7 +265,7 @@ export function computeQuadrantLayout(spec) {
     + 90;
   const height = plot.y + plot.h + MARGIN.bottom;
 
-  const points = spec.points.map((pt) => ({
+  const points: QuadrantLayoutPoint[] = spec.points.map((pt) => ({
     ...pt,
     cx: plot.x + pt.x * plot.w,
     // El eje Y crece hacia arriba: 1 es el borde superior.
@@ -171,14 +278,14 @@ export function computeQuadrantLayout(spec) {
   const midX = plot.x + plot.w / 2;
   const midY = plot.y + plot.h / 2;
   const q = spec.quadrants;
-  const quadrants = [
+  const quadrants: QuadrantLayoutQuadrant[] = [
     { id: 'topLeft', name: q.topLeft, cx: plot.x + plot.w / 4, cy: plot.y + 18 },
     { id: 'topRight', name: q.topRight, cx: plot.x + (plot.w * 3) / 4, cy: plot.y + 18 },
     { id: 'bottomLeft', name: q.bottomLeft, cx: plot.x + plot.w / 4, cy: plot.y + plot.h - 10 },
     { id: 'bottomRight', name: q.bottomRight, cx: plot.x + (plot.w * 3) / 4, cy: plot.y + plot.h - 10 },
-  ].filter((item) => !!item.name);
+  ].filter((item): item is QuadrantLayoutQuadrant => !!item.name);
 
-  const axes = {
+  const axes: QuadrantLayoutAxes = {
     midX,
     midY,
     xLeft: spec.xAxis.left ? { text: spec.xAxis.left, x: plot.x, y: plot.y + plot.h + 26 } : undefined,
