@@ -11,6 +11,7 @@ import './form.js';
 import './heading.js';
 import './controller-from-config.js';
 
+import type { IspRecord, IspController } from './controller-from-config.js';
 import {
   asStr,
   cloneRecord,
@@ -56,7 +57,126 @@ import {
  * Métodos: refreshGrid(), showFrmCrear(), showFrmModificar(r), …
  */
 
-const DEFAULT_ALLOWED = {
+/* ──────────────────────────── Tipos locales ───────────────────────────── */
+
+type ActionLabel =
+  | 'Crear'
+  | 'Modificar'
+  | 'Visualizar'
+  | 'Verificar'
+  | 'Duplicar'
+  | 'Recodificar'
+  | 'Eliminar'
+  | 'Consolidar';
+
+interface BAllowed {
+  Crear: boolean;
+  Modificar: boolean;
+  Visualizar: boolean;
+  Verificar: boolean;
+  Duplicar: boolean;
+  Recodificar: boolean;
+  Eliminar: boolean;
+  Consolidar: boolean;
+}
+
+type IconKind =
+  | 'crear'
+  | 'modificar'
+  | 'visualizar'
+  | 'verificar'
+  | 'recodificar'
+  | 'duplicar'
+  | 'eliminar'
+  | 'consolidar'
+  | 'refrescar';
+
+type FrmMode = 'create' | 'edit' | 'view';
+
+/** Subset de la API del `<is-input>` que consume este componente. */
+interface InputElement extends HTMLElement {
+  value: string;
+  label: string;
+  readonly: boolean;
+  required: boolean;
+  tabIndex: number;
+  maxlength: number | null;
+}
+
+/** Subset de la API del `<is-button>` que consume este componente. */
+interface ButtonElement extends HTMLElement {
+  disabled: boolean;
+  loading: boolean;
+}
+
+/** Subset de la API del `<is-ag-grid>` que consume este componente. */
+interface AgGridElement extends HTMLElement {
+  api: {
+    setRows(rows: Array<IspRecord & { id: string; __record?: IspRecord }>): void;
+    setColumns(defs: Array<{ field: string; header?: string }>): void;
+    setQuickFilter(text: string): void;
+  };
+}
+
+/** Subset de la API del `<is-modal-verificacion>` que consume este componente. */
+interface VerifyModalElement extends HTMLElement {
+  controller: IspController | null;
+  record: IspRecord | null;
+  entity: string;
+  onError: (msg: string) => void;
+  show(): void;
+  hide(): void;
+}
+
+/** Subset de la API del `<is-confirm-delete>` que consume este componente. */
+interface ConfirmDeleteElement extends HTMLElement {
+  entity: string;
+  show(): void;
+  hide(): void;
+}
+
+/** Subset de la API del `<is-dialog>` que consume este componente. */
+interface DialogElement extends HTMLElement {
+  show(): void;
+  hide(): void;
+}
+
+/** Subset del `<is-drawer>` que consume este componente. */
+interface DrawerElement extends HTMLElement {
+  label: string;
+  show(): void;
+  hide(): void;
+}
+
+/** Detalle del evento `is-row-select` de `<is-ag-grid>`. */
+interface GridRowSelectDetail {
+  rows: Array<{ id?: string | number; __record?: IspRecord }>;
+}
+
+/** Detalle del evento `is-cell-click` de `<is-ag-grid>`. */
+interface GridCellClickDetail {
+  row: { id?: string | number; __record?: IspRecord };
+}
+
+interface PkModalField {
+  key: string;
+  label: string;
+  value?: string;
+  readonly?: boolean;
+  required?: boolean;
+  btnRef?: boolean;
+}
+
+interface PkModalCfg {
+  title: string;
+  fields: PkModalField[];
+  okLabel: string;
+  hint?: string;
+}
+
+/* ──────────────────────────── Constantes ─────────────────────────────── */
+
+const DEFAULT_ALLOWED: BAllowed = {
   Crear: true,
   Modificar: true,
   Visualizar: true,
@@ -67,7 +187,7 @@ const DEFAULT_ALLOWED = {
   Consolidar: true,
 };
 
-const DEFAULT_ICONS = {
+const DEFAULT_ICONS: Record<IconKind, string> = {
   crear: 'mdi:add',
   modificar: 'mdi:pencil-outline',
   visualizar: 'mdi:eye-outline',
@@ -78,6 +198,14 @@ const DEFAULT_ICONS = {
   consolidar: 'mdi:merge',
   refrescar: 'mdi:refresh',
 };
+
+const OBSERVED = [
+  'show-header', 'show-search', 'mode-filter', 'multi-select', 'select-mode',
+  'q-registros', 'q-rows-header',
+  'icon-crear', 'icon-modificar', 'icon-visualizar', 'icon-verificar',
+  'icon-recodificar', 'icon-duplicar', 'icon-eliminar', 'icon-consolidar',
+  'icon-refrescar',
+] as const;
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -109,39 +237,31 @@ const DEFAULT_ICONS = {
     </div>
   `;
 
-  const OBSERVED = [
-    'show-header', 'show-search', 'mode-filter', 'multi-select', 'select-mode',
-    'q-registros', 'q-rows-header',
-    'icon-crear', 'icon-modificar', 'icon-visualizar', 'icon-verificar',
-    'icon-recodificar', 'icon-duplicar', 'icon-eliminar', 'icon-consolidar',
-    'icon-refrescar',
-  ];
-
   class IsCatalogoGen extends HTMLElement {
-    static get observedAttributes(): string[] { return OBSERVED; }
+    static get observedAttributes(): string[] { return [...OBSERVED]; }
 
     #mounted = false;
     #toolbar!: HTMLElement;
     #actionsEl!: HTMLElement;
-    #search!: HTMLElement;
-    #grid!: HTMLElement;
-    #drawer!: HTMLElement;
-    #modalVerify!: HTMLElement;
-    #modalDelete!: HTMLElement;
-    #pkDlg!: HTMLElement;
+    #search!: InputElement;
+    #grid!: AgGridElement;
+    #drawer!: DrawerElement;
+    #modalVerify!: VerifyModalElement;
+    #modalDelete!: ConfirmDeleteElement;
+    #pkDlg!: DialogElement;
     #pkTitle!: HTMLElement;
     #pkFields!: HTMLElement;
-    #pkCancel!: HTMLElement;
-    #pkOk!: HTMLElement;
-    #recordsById = new Map();
-    #working = null;
-    #pkKind = null;
-    #pkResolve = null;
+    #pkCancel!: ButtonElement;
+    #pkOk!: ButtonElement;
+    #recordsById = new Map<string, IspRecord>();
+    #working: IspRecord | null = null;
+    #pkKind: ((value: Record<string, string> | null) => void) | null = null;
+    #pkResolve: (() => Record<string, string> | null) | null = null;
 
-    /** @type {object|null} */
-    #controller = null;
-    get controller() { return this.#controller; }
-    set controller(v) {
+    /** Controller activo. Compatible con `IspController` de `controller-from-config.ts`. */
+    #controller: IspController | null = null;
+    get controller(): IspController | null { return this.#controller; }
+    set controller(v: IspController | null) {
       this.#controller = v;
       if (this.#mounted) {
         this.#actionsEl.replaceChildren();
@@ -150,17 +270,20 @@ const DEFAULT_ICONS = {
       }
     }
 
-    /** @type {typeof DEFAULT_ALLOWED} */
-    bAllowed = { ...DEFAULT_ALLOWED };
-    /** @type {(msg: string) => void} */
-    onError = (msg) => {
+    /** Permisos por acción; ausente → todas permitidas (ver `DEFAULT_ALLOWED`). */
+    bAllowed: BAllowed = { ...DEFAULT_ALLOWED };
+
+    /** Callback de error. Default: emite `is-error` + `console.error`. */
+    onError: (msg: string) => void = (msg) => {
       emit(this, 'is-error', { message: msg });
       console.error(msg);
     };
-    /** @type {(() => Promise<object>)|null} */
-    onNewObject = null;
-    /** @type {object[]} */
-    selectionData = [];
+
+    /** Cómo construir un objeto nuevo; opcional (default = `controller.klass`). */
+    onNewObject: (() => Promise<IspRecord>) | null = null;
+
+    /** Selección viva; se reescribe al disparar `is-row-select` del grid. */
+    selectionData: IspRecord[] = [];
 
     constructor() {
       super();
@@ -170,16 +293,16 @@ const DEFAULT_ICONS = {
 
       this.#toolbar = shadow.querySelector<HTMLElement>('.toolbar')!;
       this.#actionsEl = shadow.querySelector<HTMLElement>('.actions')!;
-      this.#search = shadow.querySelector<HTMLElement>('.search')!;
-      this.#grid = shadow.querySelector<HTMLElement>('.grid')!;
-      this.#drawer = shadow.querySelector<HTMLElement>('.drawer')!;
-      this.#modalVerify = shadow.querySelector<HTMLElement>('.modal-verify')!;
-      this.#modalDelete = shadow.querySelector<HTMLElement>('.modal-delete')!;
-      this.#pkDlg = shadow.querySelector<HTMLElement>('.pk-dlg')!;
+      this.#search = shadow.querySelector<InputElement>('.search')!;
+      this.#grid = shadow.querySelector<AgGridElement>('.grid')!;
+      this.#drawer = shadow.querySelector<DrawerElement>('.drawer')!;
+      this.#modalVerify = shadow.querySelector<VerifyModalElement>('.modal-verify')!;
+      this.#modalDelete = shadow.querySelector<ConfirmDeleteElement>('.modal-delete')!;
+      this.#pkDlg = shadow.querySelector<DialogElement>('.pk-dlg')!;
       this.#pkTitle = shadow.querySelector<HTMLElement>('.pk-title')!;
       this.#pkFields = shadow.querySelector<HTMLElement>('.pk-fields')!;
-      this.#pkCancel = shadow.querySelector<HTMLElement>('.pk-cancel')!;
-      this.#pkOk = shadow.querySelector<HTMLElement>('.pk-ok')!;
+      this.#pkCancel = shadow.querySelector<ButtonElement>('.pk-cancel')!;
+      this.#pkOk = shadow.querySelector<ButtonElement>('.pk-ok')!;
     }
 
     connectedCallback(): void {
@@ -210,60 +333,69 @@ const DEFAULT_ICONS = {
       this.#pkDlg.removeEventListener('is-hide', this.#onPkDismiss);
     }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(): void {
       if (!this.#mounted) return;
       this.#syncChrome();
       this.#rebuildToolbar();
     }
 
-    #upgradeProps() {
-      for (const k of ['bAllowed', 'onError', 'onNewObject', 'selectionData']) {
+    #upgradeProps(): void {
+      type PropKey = 'bAllowed' | 'onError' | 'onNewObject' | 'selectionData';
+      const keys: PropKey[] = ['bAllowed', 'onError', 'onNewObject', 'selectionData'];
+      const self = this as unknown as Record<PropKey, unknown>;
+      for (const k of keys) {
         if (Object.prototype.hasOwnProperty.call(this, k)) {
-          const v = this[k];
-          delete this[k];
-          this[k] = v;
+          const v = self[k];
+          delete self[k];
+          self[k] = v;
         }
       }
     }
 
-    get showHeader() { return this.hasAttribute('show-header') ? this.getAttribute('show-header') !== 'false' : true; }
-    set showHeader(v) { this.toggleAttribute('show-header', !!v); }
+    get showHeader(): boolean {
+      return this.hasAttribute('show-header') ? this.getAttribute('show-header') !== 'false' : true;
+    }
+    set showHeader(v: boolean) { this.toggleAttribute('show-header', !!v); }
 
-    get showSearch() { return this.hasAttribute('show-search') ? this.getAttribute('show-search') !== 'false' : true; }
-    set showSearch(v) { this.toggleAttribute('show-search', !!v); }
+    get showSearch(): boolean {
+      return this.hasAttribute('show-search') ? this.getAttribute('show-search') !== 'false' : true;
+    }
+    set showSearch(v: boolean) { this.toggleAttribute('show-search', !!v); }
 
-    get modeFilter() { return this.hasAttribute('mode-filter') ? this.getAttribute('mode-filter') !== 'false' : true; }
-    set modeFilter(v) { this.toggleAttribute('mode-filter', !!v); }
+    get modeFilter(): boolean {
+      return this.hasAttribute('mode-filter') ? this.getAttribute('mode-filter') !== 'false' : true;
+    }
+    set modeFilter(v: boolean) { this.toggleAttribute('mode-filter', !!v); }
 
-    get multiSelect() { return this.hasAttribute('multi-select'); }
-    set multiSelect(v) { this.toggleAttribute('multi-select', !!v); }
+    get multiSelect(): boolean { return this.hasAttribute('multi-select'); }
+    set multiSelect(v: boolean) { this.toggleAttribute('multi-select', !!v); }
 
-    get selectMode() { return this.hasAttribute('select-mode'); }
-    set selectMode(v) { this.toggleAttribute('select-mode', !!v); }
+    get selectMode(): boolean { return this.hasAttribute('select-mode'); }
+    set selectMode(v: boolean) { this.toggleAttribute('select-mode', !!v); }
 
-    get qRegistros() {
+    get qRegistros(): number {
       const n = Number(this.getAttribute('q-registros'));
       return Number.isFinite(n) && n > 0 ? n : 10000;
     }
-    set qRegistros(v) { this.setAttribute('q-registros', String(v)); }
+    set qRegistros(v: number) { this.setAttribute('q-registros', String(v)); }
 
-    get qRowsHeader() {
+    get qRowsHeader(): number {
       const n = Number(this.getAttribute('q-rows-header'));
       return Number.isFinite(n) && n > 0 ? n : 2;
     }
-    set qRowsHeader(v) { this.setAttribute('q-rows-header', String(v)); }
+    set qRowsHeader(v: number) { this.setAttribute('q-rows-header', String(v)); }
 
-    #icon(kind) {
+    #icon(kind: IconKind): string {
       const attr = this.getAttribute(`icon-${kind}`);
       return attr || DEFAULT_ICONS[kind] || 'mdi:circle';
     }
 
-    #pkField() {
+    #pkField(): string {
       const keys = this.controller?.primaryKeys;
       return keys?.length ? asStr(keys.at(-1)) : 'id';
     }
 
-    #syncChrome() {
+    #syncChrome(): void {
       this.#toolbar.hidden = !this.showHeader || this.selectMode;
       this.#search.hidden = !this.showSearch;
       this.#toolbar.style.setProperty('--is-cat-rows', String(this.qRowsHeader));
@@ -273,15 +405,15 @@ const DEFAULT_ICONS = {
       else this.#grid.removeAttribute('selectable');
     }
 
-    #allowed(action) {
+    #allowed(action: ActionLabel): boolean {
       return this.bAllowed?.[action] !== false;
     }
 
-    #hasAct(name) {
+    #hasAct(name: keyof IspController): boolean {
       return typeof this.controller?.[name] === 'function';
     }
 
-    #rebuildToolbar() {
+    #rebuildToolbar(): void {
       if (this.selectMode || !this.showHeader) {
         this.#actionsEl.replaceChildren();
         return;
@@ -293,25 +425,34 @@ const DEFAULT_ICONS = {
         return;
       }
 
-      const defs = [
-        { act: 'actCrear', allow: 'Crear', icon: 'crear', label: 'Crear', needsSel: false, run: () => this.showFrmCrear() },
-        { act: 'actModificar', allow: 'Modificar', icon: 'modificar', label: 'Modificar', needsSel: true, run: () => this.showFrmModificar(this.selectionData[0]) },
-        { act: 'actVisualizar', allow: 'Visualizar', icon: 'visualizar', label: 'Visualizar', needsSel: true, run: () => this.showFrmVisualizar(this.selectionData[0]) },
-        { act: 'actVerificar', allow: 'Verificar', icon: 'verificar', label: 'Verificar', needsSel: true, run: () => this.showVerificar(this.selectionData[0]) },
-        { act: 'actRecodificar', allow: 'Recodificar', icon: 'recodificar', label: 'Recodificar', needsSel: true, run: () => this.showRecodificar(this.selectionData[0]) },
-        { act: 'actDuplicar', allow: 'Duplicar', icon: 'duplicar', label: 'Duplicar', needsSel: true, run: () => this.showDuplicar(this.selectionData[0]) },
-        { act: 'actEliminar', allow: 'Eliminar', icon: 'eliminar', label: 'Eliminar', needsSel: true, run: () => this.showEliminar(this.selectionData[0]) },
-        { act: 'actConsolidar', allow: 'Consolidar', icon: 'consolidar', label: 'Consolidar', needsSel: true, run: () => this.showConsolidar(this.selectionData[0]) },
+      interface ToolDef {
+        act: keyof IspController;
+        allow: ActionLabel;
+        icon: IconKind;
+        label: string;
+        needsSel: boolean;
+        run: () => void;
+      }
+
+      const defs: ToolDef[] = [
+        { act: 'actCrear',      allow: 'Crear',       icon: 'crear',      label: 'Crear',       needsSel: false, run: () => this.showFrmCrear() },
+        { act: 'actModificar',  allow: 'Modificar',   icon: 'modificar',  label: 'Modificar',   needsSel: true,  run: () => this.showFrmModificar(this.selectionData[0]) },
+        { act: 'actVisualizar', allow: 'Visualizar',  icon: 'visualizar', label: 'Visualizar',  needsSel: true,  run: () => this.showFrmVisualizar(this.selectionData[0]) },
+        { act: 'actVerificar',  allow: 'Verificar',   icon: 'verificar',  label: 'Verificar',   needsSel: true,  run: () => this.showVerificar(this.selectionData[0]) },
+        { act: 'actRecodificar',allow: 'Recodificar', icon: 'recodificar',label: 'Recodificar', needsSel: true,  run: () => this.showRecodificar(this.selectionData[0]) },
+        { act: 'actDuplicar',   allow: 'Duplicar',    icon: 'duplicar',   label: 'Duplicar',    needsSel: true,  run: () => this.showDuplicar(this.selectionData[0]) },
+        { act: 'actEliminar',   allow: 'Eliminar',    icon: 'eliminar',   label: 'Eliminar',    needsSel: true,  run: () => this.showEliminar(this.selectionData[0]) },
+        { act: 'actConsolidar', allow: 'Consolidar',  icon: 'consolidar', label: 'Consolidar',  needsSel: true,  run: () => this.showConsolidar(this.selectionData[0]) },
       ];
 
       for (const d of defs) {
         if (!this.#hasAct(d.act)) continue;
-        const btn = document.createElement('is-button');
+        const btn = document.createElement('is-button') as unknown as ButtonElement;
         btn.setAttribute('variant', 'plain');
         btn.setAttribute('color', 'neutral');
         btn.className = 'tool-btn';
-        btn.dataset.allow = d.allow;
-        btn.dataset.needsSel = d.needsSel ? '1' : '0';
+        btn.dataset['allow'] = d.allow;
+        btn.dataset['needsSel'] = d.needsSel ? '1' : '0';
         btn.innerHTML = `<is-icon slot="start" icon="${this.#icon(d.icon)}"></is-icon>${d.label}`;
         btn.addEventListener('click', () => {
           if (btn.disabled) return;
@@ -321,20 +462,20 @@ const DEFAULT_ICONS = {
         this.#actionsEl.appendChild(btn);
       }
 
-      const refresh = document.createElement('is-button');
+      const refresh = document.createElement('is-button') as unknown as ButtonElement;
       refresh.setAttribute('variant', 'plain');
       refresh.setAttribute('color', 'neutral');
       refresh.className = 'tool-btn';
-      refresh.dataset.static = 'refresh';
+      refresh.dataset['static'] = 'refresh';
       refresh.innerHTML = `<is-icon slot="start" icon="${this.#icon('refrescar')}"></is-icon>Refrescar`;
       refresh.addEventListener('click', () => void this.refreshGrid());
       this.#actionsEl.appendChild(refresh);
 
-      const modeBtn = document.createElement('is-button');
+      const modeBtn = document.createElement('is-button') as unknown as ButtonElement;
       modeBtn.setAttribute('variant', 'plain');
       modeBtn.setAttribute('color', 'neutral');
       modeBtn.className = 'tool-btn';
-      modeBtn.dataset.static = 'mode';
+      modeBtn.dataset['static'] = 'mode';
       const filtro = this.modeFilter;
       modeBtn.innerHTML = `<is-icon slot="start" icon="${filtro ? 'mdi:database-arrow-down-outline' : 'mdi:download-multiple-outline'}"></is-icon>Modo&nbsp;${filtro ? 'filtro' : 'lista'}`;
       modeBtn.addEventListener('click', () => {
@@ -348,31 +489,36 @@ const DEFAULT_ICONS = {
       this.#syncToolbarDisabled();
     }
 
-    #syncToolbarDisabled() {
+    #syncToolbarDisabled(): void {
       const hasSel = isPresent(this.selectionData);
       for (const btn of this.#actionsEl.querySelectorAll<HTMLElement>('.tool-btn')) {
-        if (btn.dataset.static) continue;
-        const needsSel = btn.dataset.needsSel === '1';
-        const allow = btn.dataset.allow;
-        btn.disabled = !this.#allowed(allow) || (needsSel && !hasSel);
+        if (btn.dataset['static']) continue;
+        const needsSel = btn.dataset['needsSel'] === '1';
+        const allow = btn.dataset['allow'] as ActionLabel | undefined;
+        if (!allow) continue;
+        btn.toggleAttribute('disabled', !this.#allowed(allow) || (needsSel && !hasSel));
       }
     }
 
-    #onSearch = () => {
+    #onSearch = (): void => {
       const q = asStr(this.#search.value).trim();
       this.#grid?.api?.setQuickFilter?.(q);
     };
 
-    #onRowSelect = (e) => {
-      const rows = e.detail?.rows || [];
-      this.selectionData = rows.map((r) => r.__record ?? this.#recordsById.get(asStr(r.id)) ?? r).filter(Boolean);
+    #onRowSelect = (e: Event): void => {
+      const detail = (e as CustomEvent<GridRowSelectDetail>).detail;
+      const rows = detail?.rows || [];
+      this.selectionData = rows
+        .map((r) => r.__record ?? this.#recordsById.get(asStr(r.id)) ?? r)
+        .filter((r): r is IspRecord => Boolean(r));
       this.#rebuildToolbar();
       emit(this, 'is-selection-change', { records: this.selectionData });
     };
 
-    #lastClick = { id: null, t: 0 };
-    #onCellClick = (e: PointerEvent) => {
-      const row = e.detail?.row;
+    #lastClick: { id: string | null; t: number } = { id: null, t: 0 };
+    #onCellClick = (e: Event): void => {
+      const detail = (e as CustomEvent<GridCellClickDetail>).detail;
+      const row = detail?.row;
       if (!row) return;
       const id = asStr(row.id);
       const now = Date.now();
@@ -386,11 +532,11 @@ const DEFAULT_ICONS = {
       this.#lastClick = { id, t: now };
     };
 
-    #onDrawerHide = () => {
+    #onDrawerHide = (): void => {
       emit(this, 'is-frm-close', {});
     };
 
-    async refreshGrid() {
+    async refreshGrid(): Promise<void> {
       if (!this.#grid) return;
       const ctrl = this.controller;
       if (!ctrl || typeof ctrl.Lista !== 'function') {
@@ -405,13 +551,13 @@ const DEFAULT_ICONS = {
           qregistros: this.qRegistros,
           filtro: { sql: '' },
         });
-        const datos = lista?.datos || lista?.Datos || [];
+        const datos = lista?.datos || [];
         const arr = Array.isArray(datos) ? datos : [...datos];
         const pks = ctrl.primaryKeys || [];
         this.#recordsById.clear();
         const rows = arr.map((rec) => {
-          const row = toGridRow(rec, pks);
-          this.#recordsById.set(asStr(row.id), rec);
+          const row = toGridRow(rec, pks) as IspRecord & { id: string; __record?: IspRecord };
+          this.#recordsById.set(asStr(row['id']), rec);
           return row;
         });
         this.#grid.api?.setRows?.(rows);
@@ -421,7 +567,7 @@ const DEFAULT_ICONS = {
       }
     }
 
-    #openDrawer(mode, record) {
+    #openDrawer(mode: FrmMode, record: IspRecord): void {
       this.#working = record;
       this.#drawer.label = `${mode === 'create' ? 'Crear' : mode === 'edit' ? 'Modificar' : 'Visualizar'} ${asStr(this.controller?.entrie || '')}`;
       this.#drawer.show?.() ?? this.#drawer.setAttribute('open', '');
@@ -429,33 +575,33 @@ const DEFAULT_ICONS = {
       emit(this, 'is-action', { action: mode === 'create' ? 'Crear' : mode === 'edit' ? 'Modificar' : 'Visualizar', record });
     }
 
-    closeFrm() {
+    closeFrm(): void {
       this.#drawer.hide?.() ?? this.#drawer.removeAttribute('open');
       this.#working = null;
     }
 
-    async showFrmCrear() {
+    async showFrmCrear(): Promise<void> {
       if (!this.#allowed('Crear')) return this.onError('No tiene permisos para crear nuevos registros');
-      let obj;
+      let obj: IspRecord;
       if (this.onNewObject) obj = await this.onNewObject();
       else if (typeof this.controller?.klass === 'function') obj = new this.controller.klass();
       else obj = {};
       this.#openDrawer('create', obj);
     }
 
-    showFrmModificar(obj) {
+    showFrmModificar(obj: IspRecord | undefined): void {
       if (!obj) return;
       if (!this.#allowed('Modificar')) return this.onError('No tiene permisos para modificar este registro');
       this.#openDrawer('edit', obj);
     }
 
-    showFrmVisualizar(obj) {
+    showFrmVisualizar(obj: IspRecord | undefined): void {
       if (!obj) return;
       if (!this.#allowed('Visualizar')) return this.onError('No tiene permisos para visualizar este registro');
       this.#openDrawer('view', obj);
     }
 
-    showVerificar(obj) {
+    showVerificar(obj: IspRecord | undefined): void {
       if (!obj) return;
       if (!this.#allowed('Verificar')) return this.onError('No tiene permisos para verificar este registro');
       this.#modalVerify.controller = this.controller;
@@ -466,7 +612,7 @@ const DEFAULT_ICONS = {
       emit(this, 'is-action', { action: 'Verificar', record: obj });
     }
 
-    showEliminar(obj) {
+    showEliminar(obj: IspRecord | undefined): void {
       if (!obj) return;
       if (!this.#allowed('Eliminar')) return this.onError('No tiene permisos para eliminar este registro');
       this.#working = obj;
@@ -479,10 +625,10 @@ const DEFAULT_ICONS = {
       emit(this, 'is-action', { action: 'Eliminar', record: obj });
     }
 
-    #onDeleteConfirm = async () => {
+    #onDeleteConfirm = async (): Promise<void> => {
       const obj = this.#working;
       this.#modalDelete.hide?.() ?? this.#modalDelete.removeAttribute('open');
-      if (!obj || !this.#hasAct('actEliminar')) return;
+      if (!obj || !this.#hasAct('actEliminar') || !this.controller?.actEliminar) return;
       try {
         await this.controller.actEliminar(obj);
         await this.refreshGrid();
@@ -492,7 +638,7 @@ const DEFAULT_ICONS = {
       }
     };
 
-    async showRecodificar(obj) {
+    async showRecodificar(obj: IspRecord | undefined): Promise<void> {
       if (!obj) return;
       if (!this.#allowed('Recodificar')) return this.onError('No tiene permisos para recodificar este registro');
       const pk = this.#pkField();
@@ -505,10 +651,10 @@ const DEFAULT_ICONS = {
         ],
         okLabel: 'Recodificar',
       });
-      if (!nuevo) return;
+      if (!nuevo || !this.controller?.actRecodificar) return;
       try {
         const work = cloneRecord(obj);
-        setProp(work, pk, nuevo.nuevo);
+        setProp(work, pk, nuevo['nuevo']);
         await this.controller.actRecodificar(obj, work);
         await this.refreshGrid();
       } catch (err) {
@@ -517,7 +663,7 @@ const DEFAULT_ICONS = {
       }
     }
 
-    async showDuplicar(obj) {
+    async showDuplicar(obj: IspRecord | undefined): Promise<void> {
       if (!obj) return;
       if (!this.#allowed('Duplicar')) return this.onError('No tiene permisos para duplicar este registro');
       const pk = this.#pkField();
@@ -529,10 +675,10 @@ const DEFAULT_ICONS = {
         ],
         okLabel: 'Duplicar',
       });
-      if (!nuevo) return;
+      if (!nuevo || !this.controller?.actDuplicar) return;
       try {
         const work = cloneRecord(obj);
-        setProp(work, pk, nuevo.nuevo);
+        setProp(work, pk, nuevo['nuevo']);
         await this.controller.actDuplicar(obj, work);
         await this.refreshGrid();
       } catch (err) {
@@ -541,12 +687,12 @@ const DEFAULT_ICONS = {
       }
     }
 
-    async showConsolidar(obj) {
+    async showConsolidar(obj: IspRecord | undefined): Promise<void> {
       if (!obj) return;
       if (!this.#allowed('Consolidar')) return this.onError('No tiene permisos para consolidar este registro');
       const pk = this.#pkField();
       const label = lowerCase(this.controller?.labelPk || pk);
-      const fields = [
+      const fields: PkModalField[] = [
         { key: 'actual', label: `Actual ${label}`, value: asStr(getProp(obj, pk)), readonly: true },
         { key: 'nuevo', label: `Nuevo ${label}`, value: '', required: true, btnRef: !!this.controller?.CtxBtnRef },
       ];
@@ -556,10 +702,10 @@ const DEFAULT_ICONS = {
         okLabel: 'Consolidar',
         hint: `Seleccione el ${label} con el cual desea consolidar`,
       });
-      if (!nuevo) return;
+      if (!nuevo || !this.controller?.actConsolidar) return;
       try {
         const work = cloneRecord(obj);
-        setProp(work, pk, nuevo.nuevo);
+        setProp(work, pk, nuevo['nuevo']);
         await this.controller.actConsolidar(obj, work);
         await this.refreshGrid();
       } catch (err) {
@@ -569,10 +715,10 @@ const DEFAULT_ICONS = {
     }
 
     /**
-     * @param {{ title: string, fields: Array<{key:string,label:string,value?:string,readonly?:boolean,required?:boolean,btnRef?:boolean}>, okLabel: string, hint?: string }} cfg
-     * @returns {Promise<Record<string,string>|null>}
+     * Abre el modal genérico de captura/edición de PK (Recodificar, Duplicar,
+     * Consolidar). Devuelve `{ key → value }` o `null` si el usuario cancela.
      */
-    async #openPkModal(cfg) {
+    async #openPkModal(cfg: PkModalCfg): Promise<Record<string, string> | null> {
       this.#pkTitle.textContent = cfg.title;
       this.#pkFields.replaceChildren();
       if (cfg.hint) {
@@ -581,11 +727,17 @@ const DEFAULT_ICONS = {
         p.textContent = cfg.hint;
         this.#pkFields.appendChild(p);
       }
-      const inputs = new Map();
+      const inputs = new Map<string, HTMLElement>();
       for (const f of cfg.fields) {
         if (f.btnRef && this.controller?.CtxBtnRef) {
           await import('./btn-ref.js');
-          const br = document.createElement('is-btn-ref');
+          const br = document.createElement('is-btn-ref') as unknown as HTMLElement & {
+            label: string;
+            controller: IspController | null;
+            required: boolean;
+            value: string;
+            tabIndex: number;
+          };
           br.label = f.label;
           br.controller = this.controller.CtxBtnRef;
           br.required = !!f.required;
@@ -594,7 +746,7 @@ const DEFAULT_ICONS = {
           this.#pkFields.appendChild(br);
           inputs.set(f.key, br);
         } else {
-          const inp = document.createElement('is-input');
+          const inp = document.createElement('is-input') as unknown as InputElement;
           inp.setAttribute('label-placement', 'float');
           inp.tabIndex = 0;
           inp.label = f.label;
@@ -611,8 +763,8 @@ const DEFAULT_ICONS = {
       this.#pkDlg.show();
       return new Promise((resolve) => {
         this.#pkResolve = () => {
-          const out = {};
-          for (const [k, el] of inputs) out[k] = asStr(el.value);
+          const out: Record<string, string> = {};
+          for (const [k, el] of inputs) out[k] = asStr((el as InputElement).value);
           const missing = cfg.fields.find((f) => f.required && !isPresent(out[f.key]));
           if (missing) {
             this.onError(`Complete el campo "${missing.label}"`);
@@ -624,11 +776,11 @@ const DEFAULT_ICONS = {
       });
     }
 
-    #onPkOk = () => this.#closePkModal(true);
+    #onPkOk = (): void => { this.#closePkModal(true); };
 
-    #onPkDismiss = () => this.#closePkModal(false);
+    #onPkDismiss = (): void => { this.#closePkModal(false); };
 
-    #closePkModal(ok) {
+    #closePkModal(ok: boolean): void {
       this.#pkDlg.hide();
       const resolve = this.#pkKind;
       const gather = this.#pkResolve;
