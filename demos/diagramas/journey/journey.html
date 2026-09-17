@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-journey-map> onboarding</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; place-items: center; }
+  is-journey-map { width: 100%; max-width: 1080px; height: 520px; display: block; }
+  is-journey-map:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+</style>
+<script type="module">
+  await import('../../../src/components/diagrams/journey-map.ts');
+  await customElements.whenDefined('is-journey-map');
+
+  const el = document.createElement('is-journey-map');
+  el.payload = {
+    title: 'Onboarding de nuevo cliente',
+    subtitle: 'Satisfacción por paso (1–5)',
+    scale: { min: 1, max: 5 },
+    phases: [
+      { id: 'discover', name: 'Descubrir' },
+      { id: 'signup', name: 'Registro' },
+      { id: 'first-use', name: 'Primer uso' },
+    ],
+    steps: [
+      { id: 's1', phase: 'discover', label: 'Buscar solución', score: 4, actor: 'Visitante' },
+      { id: 's2', phase: 'discover', label: 'Comparar opciones', score: 3, actor: 'Visitante' },
+      { id: 's3', phase: 'signup', label: 'Crear cuenta', score: 4, actor: 'Visitante → Cliente' },
+      { id: 's4', phase: 'signup', label: 'Verificar email', score: 2, actor: 'Cliente' },
+      { id: 's5', phase: 'first-use', label: 'Tutorial', score: 5, actor: 'Cliente' },
+      { id: 's6', phase: 'first-use', label: 'Crear primer proyecto', score: 5, actor: 'Cliente' },
+    ],
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.journeyReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo funcional — <code>&lt;is-journey-map&gt;</code></h1>
+  <p>3 fases, 6 pasos con score 1–5 y responsable por paso.</p>
+</header>
+<main>
+  <div id="host"></div>
+</main>
+<footer>
+  Estado: curva une solo pasos con <code>score</code>; bandas de fase agrupadas contiguamente.
+</footer>
+</body>
+</html>

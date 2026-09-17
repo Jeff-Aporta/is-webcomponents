@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-gantt-diagram> con dependencias</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; }
+  is-gantt-diagram { width: 100%; height: 540px; display: block; }
+  is-gantt-diagram:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+</style>
+<script type="module">
+  await import('../../../src/components/diagrams/gantt-diagram.ts');
+  await customElements.whenDefined('is-gantt-diagram');
+
+  const el = document.createElement('is-gantt-diagram');
+  el.payload = {
+    title: 'Lanzamiento del producto',
+    dateFormat: 'YYYY-MM-DD',
+    groups: [
+      { id: 'planning', name: 'Planificación' },
+      { id: 'build', name: 'Construcción' },
+      { id: 'launch', name: 'Lanzamiento' },
+    ],
+    tasks: [
+      { id: 't1', label: 'Roadmap', start: '2026-01-05', end: '2026-01-19', group: 'planning', progress: 100 },
+      { id: 't2', label: 'Spec funcional', start: '2026-01-20', end: '2026-02-02', group: 'planning', progress: 80, after: ['t1'] },
+      { id: 't3', label: 'API base', start: '2026-02-02', end: '2026-03-01', group: 'build', progress: 60, after: ['t2'] },
+      { id: 't4', label: 'UI cliente', start: '2026-02-15', end: '2026-03-15', group: 'build', progress: 40, after: ['t2'] },
+      { id: 't5', label: 'Beta cerrada', milestone: true, start: '2026-03-20', group: 'launch', after: ['t3', 't4'] },
+      { id: 't6', label: 'GA', milestone: true, start: '2026-04-10', group: 'launch', after: ['t5'] },
+    ],
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.ganttReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo funcional — <code>&lt;is-gantt-diagram&gt;</code></h1>
+  <p>Diagrama de Gantt con 6 tareas, 3 grupos y flechas de dependencia A*.</p>
+</header>
+<main>
+  <div id="host"></div>
+</main>
+<footer>
+  Estado: layout determinista; <code>opts.now</code> no se pasa (marcador "hoy" desactivado).
+</footer>
+</body>
+</html>
