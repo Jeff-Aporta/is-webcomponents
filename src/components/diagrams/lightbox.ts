@@ -68,6 +68,23 @@ const PAN_THRESHOLD_PX = 4;
 
 const VALID_VARIANT = ['backdrop', 'solid'];
 
+/** Estado de la transformación (zoom + pan) que se aplica al `.lb-host`. */
+interface ViewTransform { scale: number; x: number; y: number; }
+
+/** Estado del gesto de pan en curso (entre pointerdown y pointerup). */
+interface DragState {
+  sx: number;
+  sy: number;
+  ox: number;
+  oy: number;
+  moved: boolean;
+}
+
+/** Botón de la barra del lightbox (lleva `data-act`). */
+function isActionable(n: EventTarget | null): n is HTMLElement {
+  return n instanceof HTMLElement && !!n.dataset.act;
+}
+
 class IsLightbox extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
@@ -83,16 +100,16 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
       ...IsLightbox.styleAttrNames];
   }
 
-  #dialog!: HTMLElement;
+  #dialog!: HTMLDialogElement;
   #stage!: HTMLElement;
   #host!: HTMLElement;
   #toolbarSlot!: HTMLSlotElement;
   #defaultToolbar!: HTMLElement;
   #defaultLead!: HTMLElement;
   #defaultTrail!: HTMLElement;
-  #drag = null;
+  #drag: DragState | null = null;
   #dragged = false;
-  #view = { scale: 1, x: 0, y: 0 };
+  #view: ViewTransform = { scale: 1, x: 0, y: 0 };
 
   constructor() {
     super();
@@ -135,7 +152,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
       </dialog>
     `;
     adoptCss(shadow, import.meta.url);
-    this.#dialog = shadow.querySelector<HTMLElement>('.lb')!;
+    this.#dialog = shadow.querySelector<HTMLDialogElement>('.lb')!;
     this.#stage = shadow.querySelector<HTMLElement>('.lb-stage')!;
     this.#host = shadow.querySelector<HTMLElement>('.lb-host')!;
     this.#toolbarSlot = shadow.querySelector<HTMLSlotElement>('slot[name="toolbar"]')!;
@@ -143,14 +160,17 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
     this.#defaultLead = shadow.querySelector<HTMLElement>('.lb-bar__lead')!;
     this.#defaultTrail = shadow.querySelector<HTMLElement>('.lb-bar__trail')!;
 
-    shadow.addEventListener('click', this.#onClick);
-    shadow.addEventListener('slotchange', this.#onSlotChange);
-    this.#dialog.addEventListener('close', this.#onDialogClose);
-    this.#dialog.addEventListener('cancel', this.#onDialogCancel);
-    this.#dialog.addEventListener('click', this.#onDialogClick);
-    this.#stage.addEventListener('wheel', this.#onWheel, { passive: false });
-    this.#stage.addEventListener('pointerdown', this.#onPointerDown);
-    this.#stage.addEventListener('click', this.#onStageClick, true);
+    // Los listeners con firmas específicas (PointerEvent) no encajan en la
+    // sobrecarga por defecto de `addEventListener` (`(evt: Event) => any`);
+    // casteamos a `EventListener` para preservar la precisión interna.
+    shadow.addEventListener('click', this.#onClick as EventListener);
+    shadow.addEventListener('slotchange', this.#onSlotChange as EventListener);
+    this.#dialog.addEventListener('close', this.#onDialogClose as EventListener);
+    this.#dialog.addEventListener('cancel', this.#onDialogCancel as EventListener);
+    this.#dialog.addEventListener('click', this.#onDialogClick as EventListener);
+    this.#stage.addEventListener('wheel', this.#onWheel as EventListener, { passive: false });
+    this.#stage.addEventListener('pointerdown', this.#onPointerDown as EventListener);
+    this.#stage.addEventListener('click', this.#onStageClick as EventListener, true);
   }
 
   connectedCallback(): void {
@@ -161,8 +181,11 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
   }
 
   disconnectedCallback(): void {
-    window.removeEventListener('pointermove', this.#onPointerMove);
-    window.removeEventListener('pointerup', this.#onPointerUp, { once: true });
+    window.removeEventListener('pointermove', this.#onPointerMove as EventListener);
+    // `once` vive en `AddEventListenerOptions`, no en `EventListenerOptions`:
+    // casteamos el objeto a la forma completa para silenciar la sobrecarga
+    // estricta de la firma de Window.
+    window.removeEventListener('pointerup', this.#onPointerUp as EventListener, { once: true } as AddEventListenerOptions);
     if (this.#dialog.open) this.#dialog.close();
   }
 
@@ -180,7 +203,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
 
   get variant() {
     const v = this.getAttribute('variant');
-    return VALID_VARIANT.includes(v) ? v : 'backdrop';
+    return v != null && VALID_VARIANT.includes(v) ? v : 'backdrop';
   }
   set variant(v) {
     if (v == null || v === '' || v === 'backdrop') this.removeAttribute('variant');
@@ -201,9 +224,11 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
   get noDefaultActions() { return this.hasAttribute('no-default-actions'); }
   set noDefaultActions(v) { this.toggleAttribute('no-default-actions', !!v); }
 
-  get view() { return { ...this.#view }; }
-  set view(v) {
-    this.#view = { scale: 1, x: 0, y: 0, ...v };
+  get view(): ViewTransform { return { ...this.#view }; }
+  set view(v: Partial<ViewTransform>) {
+    // `Object.assign` evita la trampa de spread (TS marca `scale`/`x`/`y`
+    // como "specified more than once" cuando se hace `{...defaults, ...v}`).
+    this.#view = Object.assign({ scale: 1, x: 0, y: 0 }, v);
     this.#applyView();
   }
 
@@ -215,7 +240,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
   zoomOut(factor: number = 1.2) { this.#zoomBy(1 / factor); }
 
   // ── Privados ────────────────────────────────────────────────────────────
-  #syncOpen() {
+  #syncOpen(): void {
     if (this.open) {
       if (!this.#dialog.open) {
         this.#dialog.showModal();
@@ -253,20 +278,21 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
     emit(this, 'is-after-hide');
   };
 
-  #onDialogCancel = (e) => {
+  #onDialogCancel = (e: Event): void => {
     if (!this.closeOnBackdrop) e.preventDefault();
   };
 
-  #onDialogClick = (e: PointerEvent) => {
+  #onDialogClick = (e: MouseEvent): void => {
     // Click sobre el backdrop (fuera del stage) cierra si está permitido.
     if (!this.closeOnBackdrop) return;
     if (e.target === this.#dialog) this.open = false;
   };
 
-  #onClick = (e: PointerEvent) => {
-    const btn = e.composedPath().find((n) => n?.dataset?.act);
+  #onClick = (e: MouseEvent): void => {
+    const btn = e.composedPath().find(isActionable);
     if (!btn) return;
-    switch (btn.dataset.act) {
+    const act = btn.dataset.act;
+    switch (act) {
       case 'zoom-in': this.zoomIn(); break;
       case 'zoom-out': this.zoomOut(); break;
       case 'zoom-reset': this.resetView(); break;
@@ -276,7 +302,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
     }
   };
 
-  async #share() {
+  async #share(): Promise<void> {
     const url = window.location.href;
     const how = await sharePayload({ title: document.title, url, text: url });
     if (how === 'abort') return;
@@ -290,7 +316,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
 
   /* ── zoom / pan ── */
 
-  #zoomBy(factor: number) {
+  #zoomBy(factor: number): void {
     if (!this.zoomable) return;
     const next = Math.max(0.3, Math.min(6, this.#view.scale * factor));
     const k = next / this.#view.scale;
@@ -304,14 +330,14 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
     this.#applyView();
   }
 
-  #applyView() {
+  #applyView(): void {
     const { scale, x, y } = this.#view;
     this.#host.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
     emit(this, 'is-reposition', { ...this.#view });
   }
 
   /** Zoom anclado al cursor: el punto bajo el puntero no se mueve. */
-  #onWheel = (e) => {
+  #onWheel = (e: WheelEvent): void => {
     if (!this.zoomable) return;
     e.preventDefault();
     const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
@@ -327,16 +353,16 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
     this.#applyView();
   };
 
-  #onPointerDown = (e: PointerEvent) => {
+  #onPointerDown = (e: PointerEvent): void => {
     if (!this.zoomable || e.button !== 0) return;
     this.#drag = {
       sx: e.clientX, sy: e.clientY, ox: this.#view.x, oy: this.#view.y, moved: false,
     };
-    window.addEventListener('pointermove', this.#onPointerMove);
-    window.addEventListener('pointerup', this.#onPointerUp, { once: true });
+    window.addEventListener('pointermove', this.#onPointerMove as EventListener);
+    window.addEventListener('pointerup', this.#onPointerUp as EventListener, { once: true });
   };
 
-  #onPointerMove = (e: PointerEvent) => {
+  #onPointerMove = (e: PointerEvent): void => {
     const drag = this.#drag;
     if (!drag) return;
     const dx = e.clientX - drag.sx;
@@ -349,15 +375,15 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
     this.#applyView();
   };
 
-  #onPointerUp = () => {
+  #onPointerUp = (): void => {
     this.#dragged = !!this.#drag?.moved;
     this.#drag = null;
     delete this.#stage.dataset.panning;
-    window.removeEventListener('pointermove', this.#onPointerMove);
+    window.removeEventListener('pointermove', this.#onPointerMove as EventListener);
   };
 
   /** Tras un pan, el clic de cierre del gesto no debe activar nada del contenido. */
-  #onStageClick = (e: PointerEvent) => {
+  #onStageClick = (e: MouseEvent): void => {
     if (!this.#dragged) return;
     this.#dragged = false;
     e.stopPropagation();
