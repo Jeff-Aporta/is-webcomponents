@@ -9,6 +9,14 @@ import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type {
+  ClassLayout,
+  ClassLayoutEdge,
+  ClassLayoutNode,
+  ClassLayoutSection,
+  DiagramGroup,
+  DiagramTheme,
+} from './diagram-types.js';
 
 /**
  * <is-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
@@ -29,12 +37,12 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 class IsClassDiagram extends DiagramElementBase {
-  #theme = null;
-  #turtle = null;
-  #hiddenGroups = new Set();
-  #nodeNodes = new Map();
-  #edgeNodes = new Map();
-  #hoverId = null;
+  #theme: DiagramTheme | null = null;
+  #turtle: SequenceTurtle | null = null;
+  #hiddenGroups: Set<string> = new Set();
+  #nodeNodes = new Map<string, { n: ClassLayoutNode; g: SVGGElement; box: SVGElement }>();
+  #edgeNodes = new Map<string, { e: ClassLayoutEdge; g: SVGGElement; path: SVGElement }>();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -43,24 +51,24 @@ class IsClassDiagram extends DiagramElementBase {
   }
 
   onDiagramConnected() {
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
   onDiagramDisconnected() {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
   onPayloadChanged() { this.#hiddenGroups = new Set(); }
 
-  get turtle() { return this.#turtle; }
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
+  get turtle(): SequenceTurtle | null { return this.#turtle; }
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | Iterable<string> | null | undefined) {
     this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
     this.queueRender();
   }
@@ -90,7 +98,7 @@ class IsClassDiagram extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
     this.syncThemeAttr();
 
@@ -100,7 +108,7 @@ class IsClassDiagram extends DiagramElementBase {
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: ClassLayout, theme: DiagramTheme) {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -135,7 +143,7 @@ class IsClassDiagram extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup);
+    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
     // La tortuga recorre las relaciones en orden; reutiliza el motor de secuencia.
     this.#turtle.setData({
       messages: layout.edges.map((e, i: number) => ({
@@ -145,15 +153,15 @@ class IsClassDiagram extends DiagramElementBase {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => emit(this, 'is-turtle-state', state),
+      onState: (state: unknown) => emit(this, 'is-turtle-state', state),
     });
 
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: ClassLayout, theme: DiagramTheme) {
     const g = svgEl('g', { class: 'cls-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    (layout.groups as DiagramGroup[]).forEach((grp: DiagramGroup, gi: number) => {
       const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -181,7 +189,7 @@ class IsClassDiagram extends DiagramElementBase {
   }
 
   /** Decoración en la punta target: triángulo hueco (herencia/realización). */
-  #targetTriangle(e, color, hollow) {
+  #targetTriangle(e: ClassLayoutEdge, color: string, hollow: boolean) {
     return svgEl('polygon', {
       points: '0,0 -12,-6 -12,6',
       fill: hollow ? (this.#theme?.chipFill ?? '#0d1b2a') : color,
@@ -193,7 +201,7 @@ class IsClassDiagram extends DiagramElementBase {
   }
 
   /** Decoración en la punta target: flecha abierta (asociación/dependencia). */
-  #targetArrowOpen(e, color) {
+  #targetArrowOpen(e: ClassLayoutEdge, color: string) {
     return svgEl('polyline', {
       points: '-9,-5 0,0 -9,5',
       fill: 'none',
@@ -207,7 +215,7 @@ class IsClassDiagram extends DiagramElementBase {
   }
 
   /** Decoración en la punta source: diamante (composición rellena / agregación hueca). */
-  #sourceDiamond(e, color, hollow) {
+  #sourceDiamond(e: ClassLayoutEdge, color: string, hollow: boolean) {
     return svgEl('polygon', {
       points: '0,0 -8,-5 -16,0 -8,5',
       fill: hollow ? (this.#theme?.chipFill ?? '#0d1b2a') : color,
@@ -218,7 +226,7 @@ class IsClassDiagram extends DiagramElementBase {
     });
   }
 
-  #buildEdges(layout, theme) {
+  #buildEdges(layout: ClassLayout, theme: DiagramTheme) {
     for (const e of layout.edges) {
       const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'cls-rel' });
@@ -274,7 +282,7 @@ class IsClassDiagram extends DiagramElementBase {
     }
   }
 
-  #buildNodes(layout, theme) {
+  #buildNodes(layout: ClassLayout, theme: DiagramTheme) {
     for (const n of layout.nodes) {
       const color = (n.hue != null && tkHueToHex(n.hue)) || theme.accent;
       const g = svgEl('g', { class: 'cls-node' });
@@ -312,7 +320,7 @@ class IsClassDiagram extends DiagramElementBase {
               maxHeight: section.h - 8,
               fontSize: 11.5,
               fontFamily: 'Tahoma,Arial,sans-serif',
-              overflow: n.overflow ?? 'grow',
+              overflow: 'grow',
             });
             const tspans = buildTspans(
               result.lines,
@@ -340,7 +348,7 @@ class IsClassDiagram extends DiagramElementBase {
               maxHeight: section.h - 8,
               fontSize: 11.5,
               fontFamily: 'Tahoma,Arial,sans-serif',
-              overflow: n.overflow ?? 'grow',
+              overflow: 'grow',
             });
             const tspans = buildTspans(
               result.lines,
@@ -382,9 +390,9 @@ class IsClassDiagram extends DiagramElementBase {
 
   #onClick = (e: PointerEvent) => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
@@ -400,8 +408,8 @@ class IsClassDiagram extends DiagramElementBase {
 
   #onMouseMove = (e: PointerEvent) => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.nodeId);
-    const id = g?.dataset.nodeId ?? null;
+    const g = e.composedPath().find((n) => (n as HTMLElement | undefined)?.dataset?.nodeId);
+    const id = (g as HTMLElement | undefined)?.dataset.nodeId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.wrap.getBoundingClientRect();
@@ -416,7 +424,7 @@ class IsClassDiagram extends DiagramElementBase {
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null) {
     this.#hoverId = id;
     const entry = id ? this.#nodeNodes.get(id) : null;
 
@@ -425,7 +433,7 @@ class IsClassDiagram extends DiagramElementBase {
       const active = nodeId === id;
       node.g.classList.toggle('is-active', active);
       node.g.classList.toggle('is-dim', !!id && !active);
-      node.box.setAttribute('stroke-width', active ? 2.1 : 1.3);
+      node.box.setAttribute('stroke-width', String(active ? 2.1 : 1.3));
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);

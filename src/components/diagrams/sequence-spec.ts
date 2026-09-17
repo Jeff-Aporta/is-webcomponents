@@ -75,7 +75,8 @@ function readActor(raw, i: number) {
   };
 }
 
-export function sequenceThemeLight() {
+/** @returns {import('./diagram-types.js').DiagramTheme} */
+export function sequenceThemeLight(): import('./diagram-types.js').DiagramTheme {
   return {
     text: '#1e293b',
     muted: '#64748b',
@@ -92,7 +93,8 @@ export function sequenceThemeLight() {
   };
 }
 
-export function sequenceThemeDark() {
+/** @returns {import('./diagram-types.js').DiagramTheme} */
+export function sequenceThemeDark(): import('./diagram-types.js').DiagramTheme {
   return {
     text: '#e2e8f0',
     muted: '#94a3b8',

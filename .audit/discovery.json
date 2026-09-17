@@ -1,7 +1,8 @@
 {
-  "generatedAt": "2026-09-10T06:19:39.359Z",
+  "generatedAt": "2026-09-10T13:59:32.025Z",
   "project": ".",
-  "philosophy": "TODO lo testeable debe quedar testeado. Esta es la regla dura de deep-test y admin-is.",
+  "profile": "iswc",
+  "philosophy": "TODO lo testeable debe quedar testeado. Regla dura de deep-test y admin-is.",
   "testables": [
     {
       "file": "index.html",
@@ -9,7 +10,8 @@
       "name": "index",
       "categories": [
         "webcomponent",
-        "event"
+        "event",
+        "i18n"
       ],
       "loc": 155
     },
@@ -18,7 +20,8 @@
       "language": "ts",
       "name": "audit-components",
       "categories": [
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 86
     },
@@ -27,7 +30,6 @@
       "language": "ts",
       "name": "audit-is-code",
       "categories": [
-        "webcomponent",
         "event"
       ],
       "loc": 176
@@ -57,10 +59,18 @@
       "name": "demo-file-meta",
       "categories": [
         "webcomponent",
-        "function",
         "event"
       ],
       "loc": 205
+    },
+    {
+      "file": "scripts/diag-failures.mjs",
+      "language": "js",
+      "name": "diag-failures",
+      "categories": [
+        "cli"
+      ],
+      "loc": 25
     },
     {
       "file": "scripts/docs-chrome.js",
@@ -76,9 +86,7 @@
       "language": "js",
       "name": "download-iconify",
       "categories": [
-        "function",
-        "cli",
-        "tour"
+        "cli"
       ],
       "loc": 395
     },
@@ -87,9 +95,7 @@
       "language": "ts",
       "name": "download-iconify",
       "categories": [
-        "function",
-        "cli",
-        "tour"
+        "cli"
       ],
       "loc": 396
     },
@@ -107,7 +113,6 @@
       "language": "ts",
       "name": "fix-icon-viewbox",
       "categories": [
-        "function",
         "cli"
       ],
       "loc": 167
@@ -127,6 +132,7 @@
       "name": "gen-child-previews",
       "categories": [
         "webcomponent",
+        "worker",
         "cli"
       ],
       "loc": 429
@@ -136,8 +142,8 @@
       "language": "ts",
       "name": "generate-templates",
       "categories": [
-        "event",
-        "cli"
+        "cli",
+        "event"
       ],
       "loc": 61
     },
@@ -151,12 +157,21 @@
       "loc": 54
     },
     {
+      "file": "scripts/inject-equiv-flows.ts",
+      "language": "ts",
+      "name": "inject-equiv-flows",
+      "categories": [
+        "auth"
+      ],
+      "loc": 501
+    },
+    {
       "file": "scripts/migrate-previews-to-json.ts",
       "language": "ts",
       "name": "migrate-previews-to-json",
       "categories": [
-        "function",
-        "cli"
+        "cli",
+        "event"
       ],
       "loc": 428
     },
@@ -168,6 +183,15 @@
         "migration"
       ],
       "loc": 100
+    },
+    {
+      "file": "scripts/migrate-tests.mjs",
+      "language": "js",
+      "name": "migrate-tests",
+      "categories": [
+        "cli"
+      ],
+      "loc": 113
     },
     {
       "file": "scripts/preview-boot.js",
@@ -184,18 +208,29 @@
       "name": "preview-chrome",
       "categories": [
         "webcomponent",
-        "event",
+        "sql-query",
         "worker",
-        "browser-api",
-        "storage"
+        "storage",
+        "event",
+        "browser-api"
       ],
       "loc": 198
+    },
+    {
+      "file": "scripts/rewrite-test-imports.mjs",
+      "language": "js",
+      "name": "rewrite-test-imports",
+      "categories": [
+        "cli"
+      ],
+      "loc": 71
     },
     {
       "file": "scripts/serve.mjs",
       "language": "js",
       "name": "serve",
       "categories": [
+        "database",
         "cli"
       ],
       "loc": 101
@@ -205,7 +240,8 @@
       "language": "js",
       "name": "smoke-dropdown-open",
       "categories": [
-        "webcomponent"
+        "webcomponent",
+        "database"
       ],
       "loc": 77
     },
@@ -224,9 +260,7 @@
       "name": "ts-codemod",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "cli",
-        "tour"
+        "cli"
       ],
       "loc": 130
     },
@@ -235,7 +269,8 @@
       "language": "ts",
       "name": "ts-inferir-params",
       "categories": [
-        "cli"
+        "cli",
+        "event"
       ],
       "loc": 167
     },
@@ -249,24 +284,6 @@
       "loc": 101
     },
     {
-      "file": "scripts/ts-parametros-comunes.ts",
-      "language": "ts",
-      "name": "ts-parametros-comunes",
-      "categories": [
-        "function"
-      ],
-      "loc": 58
-    },
-    {
-      "file": "scripts/ts-resolve-hook-impl.ts",
-      "language": "ts",
-      "name": "ts-resolve-hook-impl",
-      "categories": [
-        "function"
-      ],
-      "loc": 23
-    },
-    {
       "file": "scripts/ts-revertir-inferencia.ts",
       "language": "ts",
       "name": "ts-revertir-inferencia",
@@ -274,15 +291,6 @@
         "cli"
       ],
       "loc": 131
-    },
-    {
-      "file": "scripts/ts-tipo-arrays.ts",
-      "language": "ts",
-      "name": "ts-tipo-arrays",
-      "categories": [
-        "tour"
-      ],
-      "loc": 113
     },
     {
       "file": "scripts/ts-tipo-por-selector.ts",
@@ -308,15 +316,15 @@
       "name": "ux-audit",
       "categories": [
         "webcomponent",
-        "http-client",
         "worker",
-        "cli"
+        "cli",
+        "http-client"
       ],
       "loc": 301
     },
     {
       "file": "scripts/verify-fetch.cjs",
-      "language": "other",
+      "language": "js",
       "name": "verify-fetch",
       "categories": [
         "http-client"
@@ -324,43 +332,42 @@
       "loc": 29
     },
     {
+      "file": "scripts/verify-server.cjs",
+      "language": "js",
+      "name": "verify-server",
+      "categories": [
+        "database"
+      ],
+      "loc": 28
+    },
+    {
       "file": "scripts/view-sources.js",
       "language": "js",
       "name": "view-sources",
       "categories": [
         "webcomponent",
-        "function",
         "event"
       ],
       "loc": 326
-    },
-    {
-      "file": "src/cdn/collect-is-tags.ts",
-      "language": "ts",
-      "name": "collect-is-tags",
-      "categories": [
-        "function"
-      ],
-      "loc": 29
     },
     {
       "file": "src/cdn/ensure-element.ts",
       "language": "ts",
       "name": "ensure-element",
       "categories": [
-        "function",
+        "sql-query",
         "worker"
       ],
       "loc": 81
     },
     {
-      "file": "src/cdn/load-plan.ts",
+      "file": "src/cdn/loader.ts",
       "language": "ts",
-      "name": "load-plan",
+      "name": "loader",
       "categories": [
-        "function"
+        "sql-query"
       ],
-      "loc": 146
+      "loc": 628
     },
     {
       "file": "src/cdn/sheet-cache.ts",
@@ -368,7 +375,6 @@
       "name": "sheet-cache",
       "categories": [
         "webcomponent",
-        "function",
         "http-client"
       ],
       "loc": 248
@@ -378,45 +384,18 @@
       "language": "ts",
       "name": "cdn-ref",
       "categories": [
-        "function",
-        "http-client",
-        "storage"
+        "auth",
+        "storage",
+        "http-client"
       ],
       "loc": 84
-    },
-    {
-      "file": "src/components/_shared/chart-palette.ts",
-      "language": "ts",
-      "name": "chart-palette",
-      "categories": [
-        "function"
-      ],
-      "loc": 62
-    },
-    {
-      "file": "src/components/_shared/code-diff.ts",
-      "language": "ts",
-      "name": "code-diff",
-      "categories": [
-        "function"
-      ],
-      "loc": 154
-    },
-    {
-      "file": "src/components/_shared/code-format.ts",
-      "language": "ts",
-      "name": "code-format",
-      "categories": [
-        "function"
-      ],
-      "loc": 177
     },
     {
       "file": "src/components/_shared/code-highlight.ts",
       "language": "ts",
       "name": "code-highlight",
       "categories": [
-        "function"
+        "auth"
       ],
       "loc": 497
     },
@@ -425,45 +404,16 @@
       "language": "ts",
       "name": "code-langs",
       "categories": [
-        "function"
+        "cli"
       ],
       "loc": 163
-    },
-    {
-      "file": "src/components/_shared/code-model.ts",
-      "language": "ts",
-      "name": "code-model",
-      "categories": [
-        "function"
-      ],
-      "loc": 165
-    },
-    {
-      "file": "src/components/_shared/code-text.ts",
-      "language": "ts",
-      "name": "code-text",
-      "categories": [
-        "function"
-      ],
-      "loc": 107
-    },
-    {
-      "file": "src/components/_shared/code-theme.ts",
-      "language": "ts",
-      "name": "code-theme",
-      "categories": [
-        "function"
-      ],
-      "loc": 208
     },
     {
       "file": "src/components/_shared/date-field-core.ts",
       "language": "ts",
       "name": "date-field-core",
       "categories": [
-        "function",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 400
     },
@@ -473,28 +423,17 @@
       "name": "is-datefieldbase",
       "categories": [
         "webcomponent",
-        "function",
-        "lifecycle",
-        "event",
-        "tour"
+        "sql-query",
+        "event"
       ],
       "loc": 311
-    },
-    {
-      "file": "src/components/_shared/date-utils.ts",
-      "language": "ts",
-      "name": "date-utils",
-      "categories": [
-        "function"
-      ],
-      "loc": 185
     },
     {
       "file": "src/components/_shared/diagram-arrow.ts",
       "language": "ts",
       "name": "diagram-arrow",
       "categories": [
-        "function"
+        "auth"
       ],
       "loc": 123
     },
@@ -503,49 +442,21 @@
       "language": "ts",
       "name": "diagram-astar",
       "categories": [
-        "function"
+        "sql-query"
       ],
       "loc": 506
-    },
-    {
-      "file": "src/components/_shared/diagram-edge-actors.ts",
-      "language": "ts",
-      "name": "diagram-edge-actors",
-      "categories": [
-        "function"
-      ],
-      "loc": 225
-    },
-    {
-      "file": "src/components/_shared/diagram-edge-spread.ts",
-      "language": "ts",
-      "name": "diagram-edge-spread",
-      "categories": [
-        "function"
-      ],
-      "loc": 118
-    },
-    {
-      "file": "src/components/_shared/diagram-edge-style.ts",
-      "language": "ts",
-      "name": "diagram-edge-style",
-      "categories": [
-        "function"
-      ],
-      "loc": 25
     },
     {
       "file": "src/components/_shared/diagram-edit.ts",
       "language": "ts",
       "name": "diagram-edit",
       "categories": [
-        "webcomponent",
-        "function",
-        "event",
-        "worker",
+        "auth",
+        "sql-query",
         "migration",
-        "tour",
-        "storage"
+        "worker",
+        "storage",
+        "event"
       ],
       "loc": 320
     },
@@ -564,37 +475,18 @@
       "language": "ts",
       "name": "diagram-grid",
       "categories": [
-        "function"
+        "sql-query"
       ],
       "loc": 265
-    },
-    {
-      "file": "src/components/_shared/diagram-header.ts",
-      "language": "ts",
-      "name": "diagram-header",
-      "categories": [
-        "function"
-      ],
-      "loc": 24
     },
     {
       "file": "src/components/_shared/diagram-kit.css",
       "language": "css",
       "name": "diagram-kit",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 202
-    },
-    {
-      "file": "src/components/_shared/diagram-text-wrap.ts",
-      "language": "ts",
-      "name": "diagram-text-wrap",
-      "categories": [
-        "function"
-      ],
-      "loc": 308
     },
     {
       "file": "src/components/_shared/dom-utils.ts",
@@ -602,26 +494,17 @@
       "name": "dom-utils",
       "categories": [
         "webcomponent",
-        "function",
+        "sql-query",
         "browser-api"
       ],
       "loc": 96
-    },
-    {
-      "file": "src/components/_shared/focus-ring.css",
-      "language": "css",
-      "name": "focus-ring",
-      "categories": [
-        "tour"
-      ],
-      "loc": 22
     },
     {
       "file": "src/components/_shared/form-associated.ts",
       "language": "ts",
       "name": "form-associated",
       "categories": [
-        "function"
+        "sql-query"
       ],
       "loc": 52
     },
@@ -630,8 +513,7 @@
       "language": "ts",
       "name": "is-input",
       "categories": [
-        "webcomponent",
-        "function"
+        "webcomponent"
       ],
       "loc": 194
     },
@@ -640,36 +522,16 @@
       "language": "ts",
       "name": "grid-data",
       "categories": [
-        "function",
         "worker"
       ],
       "loc": 372
-    },
-    {
-      "file": "src/components/_shared/grid-types.ts",
-      "language": "ts",
-      "name": "grid-types",
-      "categories": [
-        "function"
-      ],
-      "loc": 420
-    },
-    {
-      "file": "src/components/_shared/grid-ui.ts",
-      "language": "ts",
-      "name": "grid-ui",
-      "categories": [
-        "function"
-      ],
-      "loc": 298
     },
     {
       "file": "src/components/_shared/highlight-code.ts",
       "language": "ts",
       "name": "highlight-code",
       "categories": [
-        "webcomponent",
-        "function"
+        "webcomponent"
       ],
       "loc": 206
     },
@@ -678,74 +540,19 @@
       "language": "ts",
       "name": "icon-loader",
       "categories": [
-        "function",
+        "sql-query",
         "http-client"
       ],
       "loc": 187
-    },
-    {
-      "file": "src/components/_shared/intent.ts",
-      "language": "ts",
-      "name": "intent",
-      "categories": [
-        "function"
-      ],
-      "loc": 46
-    },
-    {
-      "file": "src/components/_shared/isp-color.ts",
-      "language": "ts",
-      "name": "isp-color",
-      "categories": [
-        "function"
-      ],
-      "loc": 130
-    },
-    {
-      "file": "src/components/_shared/isp-record-utils.ts",
-      "language": "ts",
-      "name": "isp-record-utils",
-      "categories": [
-        "function"
-      ],
-      "loc": 134
-    },
-    {
-      "file": "src/components/_shared/json-html.ts",
-      "language": "ts",
-      "name": "json-html",
-      "categories": [
-        "function"
-      ],
-      "loc": 251
-    },
-    {
-      "file": "src/components/_shared/lane-layout.ts",
-      "language": "ts",
-      "name": "lane-layout",
-      "categories": [
-        "function"
-      ],
-      "loc": 243
     },
     {
       "file": "src/components/_shared/llm-agent-prompt.ts",
       "language": "ts",
       "name": "llm-agent-prompt",
       "categories": [
-        "function",
         "http-client"
       ],
       "loc": 115
-    },
-    {
-      "file": "src/components/_shared/misc-utils.ts",
-      "language": "ts",
-      "name": "misc-utils",
-      "categories": [
-        "function"
-      ],
-      "loc": 67
     },
     {
       "file": "src/components/_shared/modal-base.ts",
@@ -753,10 +560,8 @@
       "name": "is-dialog",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "migration",
-        "tour"
+        "event"
       ],
       "loc": 324
     },
@@ -770,24 +575,12 @@
       "loc": 51
     },
     {
-      "file": "src/components/_shared/node-link-layout.ts",
-      "language": "ts",
-      "name": "node-link-layout",
-      "categories": [
-        "function"
-      ],
-      "loc": 341
-    },
-    {
       "file": "src/components/_shared/picker-element.ts",
       "language": "ts",
       "name": "is-pickerinput",
       "categories": [
         "webcomponent",
-        "function",
-        "lifecycle",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 502
     },
@@ -796,9 +589,8 @@
       "language": "ts",
       "name": "popup-dismiss",
       "categories": [
-        "function",
-        "event",
-        "migration"
+        "migration",
+        "event"
       ],
       "loc": 136
     },
@@ -807,8 +599,7 @@
       "language": "ts",
       "name": "position",
       "categories": [
-        "webcomponent",
-        "function"
+        "webcomponent"
       ],
       "loc": 385
     },
@@ -817,7 +608,6 @@
       "language": "ts",
       "name": "prefs",
       "categories": [
-        "function",
         "storage"
       ],
       "loc": 128
@@ -827,25 +617,16 @@
       "language": "ts",
       "name": "prompt-md",
       "categories": [
-        "function"
+        "auth"
       ],
       "loc": 292
-    },
-    {
-      "file": "src/components/_shared/reflect.ts",
-      "language": "ts",
-      "name": "reflect",
-      "categories": [
-        "function"
-      ],
-      "loc": 74
     },
     {
       "file": "src/components/_shared/resolve-locale.ts",
       "language": "ts",
       "name": "resolve-locale",
       "categories": [
-        "function"
+        "i18n"
       ],
       "loc": 49
     },
@@ -854,21 +635,11 @@
       "language": "ts",
       "name": "scroll-memory",
       "categories": [
-        "function",
-        "event",
         "worker",
-        "storage"
+        "storage",
+        "event"
       ],
       "loc": 252
-    },
-    {
-      "file": "src/components/_shared/svg-chart-engine.ts",
-      "language": "ts",
-      "name": "svg-chart-engine",
-      "categories": [
-        "function"
-      ],
-      "loc": 167
     },
     {
       "file": "src/components/_shared/theme-scope.ts",
@@ -876,98 +647,33 @@
       "name": "theme-scope",
       "categories": [
         "webcomponent",
-        "function",
         "event"
       ],
       "loc": 59
-    },
-    {
-      "file": "src/components/_shared/tk-color.ts",
-      "language": "ts",
-      "name": "tk-color",
-      "categories": [
-        "function"
-      ],
-      "loc": 60
-    },
-    {
-      "file": "src/components/_shared/tk-hue.ts",
-      "language": "ts",
-      "name": "tk-hue",
-      "categories": [
-        "function"
-      ],
-      "loc": 37
     },
     {
       "file": "src/components/_shared/tk-icon-inline.ts",
       "language": "ts",
       "name": "tk-icon-inline",
       "categories": [
-        "function"
+        "auth"
       ],
       "loc": 292
-    },
-    {
-      "file": "src/components/_shared/tk-inline-md.ts",
-      "language": "ts",
-      "name": "tk-inline-md",
-      "categories": [
-        "function"
-      ],
-      "loc": 28
-    },
-    {
-      "file": "src/components/_shared/tk-rich-text.ts",
-      "language": "ts",
-      "name": "tk-rich-text",
-      "categories": [
-        "function"
-      ],
-      "loc": 53
-    },
-    {
-      "file": "src/components/_shared/tone.ts",
-      "language": "ts",
-      "name": "tone",
-      "categories": [
-        "function"
-      ],
-      "loc": 44
-    },
-    {
-      "file": "src/components/_shared/tree-layout.ts",
-      "language": "ts",
-      "name": "tree-layout",
-      "categories": [
-        "function"
-      ],
-      "loc": 382
     },
     {
       "file": "src/components/_shared/url-nav.ts",
       "language": "ts",
       "name": "url-nav",
       "categories": [
-        "function"
+        "sql-query"
       ],
       "loc": 132
-    },
-    {
-      "file": "src/components/_shared/web-otp.ts",
-      "language": "ts",
-      "name": "web-otp",
-      "categories": [
-        "function"
-      ],
-      "loc": 21
     },
     {
       "file": "src/components/_shared/web-share.ts",
       "language": "ts",
       "name": "web-share",
       "categories": [
-        "function",
         "browser-api"
       ],
       "loc": 31
@@ -978,8 +684,7 @@
       "name": "button-group",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 239
     },
@@ -994,24 +699,13 @@
       "loc": 494
     },
     {
-      "file": "src/components/actions/button-group.preview.ts",
-      "language": "ts",
-      "name": "button-group.preview",
-      "categories": [
-        "function"
-      ],
-      "loc": 18
-    },
-    {
       "file": "src/components/actions/button-group.ts",
       "language": "ts",
       "name": "is-button-group",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 300
     },
@@ -1020,9 +714,9 @@
       "language": "css",
       "name": "button",
       "categories": [
+        "auth",
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 357
     },
@@ -1032,9 +726,7 @@
       "name": "button.preview",
       "categories": [
         "webcomponent",
-        "function",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 193
     },
@@ -1044,10 +736,8 @@
       "name": "is-button",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 492
     },
@@ -1057,8 +747,7 @@
       "name": "check-icon-button",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 112
     },
@@ -1068,7 +757,6 @@
       "name": "is-check-icon-button",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
         "css-part"
       ],
@@ -1088,7 +776,6 @@
       "language": "ts",
       "name": "context-menu.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 24
@@ -1099,7 +786,6 @@
       "name": "is-context-menu",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 220
@@ -1110,8 +796,7 @@
       "name": "copy-button",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 104
     },
@@ -1121,21 +806,10 @@
       "name": "is-copy-button",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "worker",
-        "tour"
+        "event"
       ],
       "loc": 377
-    },
-    {
-      "file": "src/components/actions/dropdown-item.css",
-      "language": "css",
-      "name": "dropdown-item",
-      "categories": [
-        "tour"
-      ],
-      "loc": 139
     },
     {
       "file": "src/components/actions/dropdown-item.ts",
@@ -1143,7 +817,6 @@
       "name": "is-dropdown-item",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 260
@@ -1162,7 +835,6 @@
       "language": "ts",
       "name": "dropdown.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 17
@@ -1173,10 +845,8 @@
       "name": "is-dropdown",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 289
     },
@@ -1207,7 +877,6 @@
       "name": "is-share-button",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 69
@@ -1218,8 +887,7 @@
       "name": "speed-dial",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 215
     },
@@ -1228,7 +896,6 @@
       "language": "ts",
       "name": "speed-dial.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 67
@@ -1239,7 +906,6 @@
       "name": "is-speed-dial",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 626
@@ -1249,19 +915,9 @@
       "language": "css",
       "name": "chart",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 325
-    },
-    {
-      "file": "src/components/charts/chart.preview.ts",
-      "language": "ts",
-      "name": "chart.preview",
-      "categories": [
-        "function"
-      ],
-      "loc": 22
     },
     {
       "file": "src/components/charts/chart.ts",
@@ -1269,83 +925,19 @@
       "name": "is-chart",
       "categories": [
         "webcomponent",
-        "lifecycle",
+        "sql-query",
         "event"
       ],
       "loc": 793
-    },
-    {
-      "file": "src/components/charts/marks-cartesian.ts",
-      "language": "ts",
-      "name": "marks-cartesian",
-      "categories": [
-        "function"
-      ],
-      "loc": 227
-    },
-    {
-      "file": "src/components/charts/marks-funnel.ts",
-      "language": "ts",
-      "name": "marks-funnel",
-      "categories": [
-        "function"
-      ],
-      "loc": 88
-    },
-    {
-      "file": "src/components/charts/marks-radial.ts",
-      "language": "ts",
-      "name": "marks-radial",
-      "categories": [
-        "function"
-      ],
-      "loc": 229
-    },
-    {
-      "file": "src/components/charts/marks-waterfall.ts",
-      "language": "ts",
-      "name": "marks-waterfall",
-      "categories": [
-        "function"
-      ],
-      "loc": 120
-    },
-    {
-      "file": "src/components/charts/radar-chart.preview.ts",
-      "language": "ts",
-      "name": "radar-chart.preview",
-      "categories": [
-        "function"
-      ],
-      "loc": 30
-    },
-    {
-      "file": "src/components/charts/scatter-chart.preview.ts",
-      "language": "ts",
-      "name": "scatter-chart.preview",
-      "categories": [
-        "function"
-      ],
-      "loc": 44
     },
     {
       "file": "src/components/charts/sparkline.ts",
       "language": "ts",
       "name": "is-sparkline",
       "categories": [
-        "webcomponent",
-        "lifecycle"
+        "webcomponent"
       ],
       "loc": 157
-    },
-    {
-      "file": "src/components/charts/treemap-spec.ts",
-      "language": "ts",
-      "name": "treemap-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 158
     },
     {
       "file": "src/components/charts/treemap.css",
@@ -1362,28 +954,16 @@
       "name": "is-treemap",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 318
-    },
-    {
-      "file": "src/components/code/code.css",
-      "language": "css",
-      "name": "code",
-      "categories": [
-        "tour"
-      ],
-      "loc": 353
     },
     {
       "file": "src/components/code/code.preview.ts",
       "language": "ts",
       "name": "code.preview",
       "categories": [
-        "function",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 281
     },
@@ -1393,9 +973,9 @@
       "name": "is-code",
       "categories": [
         "webcomponent",
-        "event",
+        "auth",
         "worker",
-        "tour"
+        "event"
       ],
       "loc": 892
     },
@@ -1413,7 +993,6 @@
       "language": "ts",
       "name": "heatmap.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 19
@@ -1424,7 +1003,6 @@
       "name": "is-heatmap",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 279
@@ -1435,27 +1013,16 @@
       "name": "is-maps",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
         "paty-iss"
       ],
       "loc": 261
     },
     {
-      "file": "src/components/data/ag-grid.css",
-      "language": "css",
-      "name": "ag-grid",
-      "categories": [
-        "tour"
-      ],
-      "loc": 710
-    },
-    {
       "file": "src/components/data/ag-grid.preview.ts",
       "language": "ts",
       "name": "ag-grid.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 57
@@ -1466,11 +1033,11 @@
       "name": "is-ag-grid",
       "categories": [
         "webcomponent",
-        "event",
-        "http-client",
+        "auth",
         "migration",
-        "tour",
-        "storage"
+        "storage",
+        "event",
+        "http-client"
       ],
       "loc": 1918
     },
@@ -1479,8 +1046,7 @@
       "language": "css",
       "name": "data-grid",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 697
     },
@@ -1489,8 +1055,6 @@
       "language": "ts",
       "name": "data-grid.preview",
       "categories": [
-        "webcomponent",
-        "function",
         "event"
       ],
       "loc": 329
@@ -1501,83 +1065,28 @@
       "name": "is-data-grid",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
+        "sql-query",
         "worker",
-        "tour",
+        "event",
         "browser-api"
       ],
       "loc": 3125
-    },
-    {
-      "file": "src/components/data/datagrid-core/column-groups.ts",
-      "language": "ts",
-      "name": "column-groups",
-      "categories": [
-        "function"
-      ],
-      "loc": 266
-    },
-    {
-      "file": "src/components/data/datagrid-core/column-state.ts",
-      "language": "ts",
-      "name": "column-state",
-      "categories": [
-        "function"
-      ],
-      "loc": 176
-    },
-    {
-      "file": "src/components/data/datagrid-core/csv-export.ts",
-      "language": "ts",
-      "name": "csv-export",
-      "categories": [
-        "function"
-      ],
-      "loc": 78
     },
     {
       "file": "src/components/data/datagrid-core/grid-model.ts",
       "language": "ts",
       "name": "grid-model",
       "categories": [
-        "function"
+        "sql-query"
       ],
       "loc": 294
-    },
-    {
-      "file": "src/components/data/datagrid-core/pipeline-filtering.ts",
-      "language": "ts",
-      "name": "pipeline-filtering",
-      "categories": [
-        "function"
-      ],
-      "loc": 148
-    },
-    {
-      "file": "src/components/data/datagrid-core/pipeline-grouping.ts",
-      "language": "ts",
-      "name": "pipeline-grouping",
-      "categories": [
-        "function"
-      ],
-      "loc": 147
-    },
-    {
-      "file": "src/components/data/datagrid-core/pipeline-sorting.ts",
-      "language": "ts",
-      "name": "pipeline-sorting",
-      "categories": [
-        "function"
-      ],
-      "loc": 87
     },
     {
       "file": "src/components/data/datagrid-core/selection.ts",
       "language": "ts",
       "name": "selection",
       "categories": [
-        "function"
+        "sql-query"
       ],
       "loc": 99
     },
@@ -1586,29 +1095,12 @@
       "language": "ts",
       "name": "server-datasource",
       "categories": [
-        "function",
-        "http-client",
-        "worker"
+        "service",
+        "worker",
+        "event",
+        "http-client"
       ],
       "loc": 454
-    },
-    {
-      "file": "src/components/data/datagrid-core/value-formatter.ts",
-      "language": "ts",
-      "name": "value-formatter",
-      "categories": [
-        "function"
-      ],
-      "loc": 75
-    },
-    {
-      "file": "src/components/data/datagrid-core/viewport.ts",
-      "language": "ts",
-      "name": "viewport",
-      "categories": [
-        "function"
-      ],
-      "loc": 125
     },
     {
       "file": "src/components/data/gauge.css",
@@ -1624,7 +1116,6 @@
       "language": "ts",
       "name": "gauge.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 19
@@ -1654,7 +1145,6 @@
       "name": "is-kanban",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 271
@@ -1664,7 +1154,6 @@
       "language": "ts",
       "name": "pivot-table.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 18
@@ -1680,22 +1169,13 @@
       "loc": 181
     },
     {
-      "file": "src/components/data/spreadsheet.css",
-      "language": "css",
-      "name": "spreadsheet",
-      "categories": [
-        "tour"
-      ],
-      "loc": 75
-    },
-    {
       "file": "src/components/data/spreadsheet.ts",
       "language": "ts",
       "name": "is-spreadsheet",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "sql-query",
+        "event"
       ],
       "loc": 324
     },
@@ -1723,8 +1203,7 @@
       "language": "css",
       "name": "transfer",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 130
     },
@@ -1734,7 +1213,6 @@
       "name": "is-transfer",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 234
@@ -1759,15 +1237,6 @@
       "loc": 455
     },
     {
-      "file": "src/components/diagrams/block-spec.ts",
-      "language": "ts",
-      "name": "block-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 298
-    },
-    {
       "file": "src/components/diagrams/class-diagram.css",
       "language": "css",
       "name": "class-diagram",
@@ -1785,15 +1254,6 @@
         "event"
       ],
       "loc": 464
-    },
-    {
-      "file": "src/components/diagrams/class-spec.ts",
-      "language": "ts",
-      "name": "class-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 344
     },
     {
       "file": "src/components/diagrams/component-diagram.css",
@@ -1815,39 +1275,11 @@
       "loc": 376
     },
     {
-      "file": "src/components/diagrams/component-pack.ts",
-      "language": "ts",
-      "name": "component-pack",
-      "categories": [
-        "function"
-      ],
-      "loc": 1069
-    },
-    {
-      "file": "src/components/diagrams/component-spec.ts",
-      "language": "ts",
-      "name": "component-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 1023
-    },
-    {
-      "file": "src/components/diagrams/diagram-kinds.ts",
-      "language": "ts",
-      "name": "diagram-kinds",
-      "categories": [
-        "function"
-      ],
-      "loc": 32
-    },
-    {
       "file": "src/components/diagrams/diagram-lightbox.css",
       "language": "css",
       "name": "diagram-lightbox",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 132
     },
@@ -1856,7 +1288,6 @@
       "language": "ts",
       "name": "diagram-lightbox.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 27
@@ -1867,9 +1298,9 @@
       "name": "is-diagram-lightbox",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "worker"
+        "sql-query",
+        "worker",
+        "event"
       ],
       "loc": 337
     },
@@ -1897,18 +1328,9 @@
       "language": "ts",
       "name": "er-spec",
       "categories": [
-        "function"
+        "event"
       ],
       "loc": 507
-    },
-    {
-      "file": "src/components/diagrams/flowchart-spec.ts",
-      "language": "ts",
-      "name": "flowchart-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 410
     },
     {
       "file": "src/components/diagrams/flowchart.css",
@@ -1925,18 +1347,10 @@
       "name": "is-flowchart",
       "categories": [
         "webcomponent",
+        "auth",
         "event"
       ],
       "loc": 527
-    },
-    {
-      "file": "src/components/diagrams/gantt-spec.ts",
-      "language": "ts",
-      "name": "gantt-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 236
     },
     {
       "file": "src/components/diagrams/gantt.css",
@@ -1977,22 +1391,12 @@
       "loc": 310
     },
     {
-      "file": "src/components/diagrams/journey-spec.ts",
-      "language": "ts",
-      "name": "journey-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 190
-    },
-    {
       "file": "src/components/diagrams/lightbox.css",
       "language": "css",
       "name": "lightbox",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 210
     },
@@ -2001,7 +1405,6 @@
       "language": "ts",
       "name": "lightbox.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 68
@@ -2012,20 +1415,10 @@
       "name": "is-lightbox",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 371
-    },
-    {
-      "file": "src/components/diagrams/mindmap-spec.ts",
-      "language": "ts",
-      "name": "mindmap-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 274
     },
     {
       "file": "src/components/diagrams/mindmap.css",
@@ -2060,7 +1453,6 @@
       "language": "ts",
       "name": "org-chart.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 26
@@ -2071,10 +1463,10 @@
       "name": "is-org-chart",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "worker",
+        "sql-query",
         "migration",
+        "worker",
+        "event",
         "animation"
       ],
       "loc": 416
@@ -2099,15 +1491,6 @@
       "loc": 304
     },
     {
-      "file": "src/components/diagrams/quadrant-spec.ts",
-      "language": "ts",
-      "name": "quadrant-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 214
-    },
-    {
       "file": "src/components/diagrams/sankey-diagram.css",
       "language": "css",
       "name": "sankey-diagram",
@@ -2127,15 +1510,6 @@
       "loc": 324
     },
     {
-      "file": "src/components/diagrams/sankey-spec.ts",
-      "language": "ts",
-      "name": "sankey-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 304
-    },
-    {
       "file": "src/components/diagrams/sequence-diagram.css",
       "language": "css",
       "name": "sequence-diagram",
@@ -2149,7 +1523,6 @@
       "language": "ts",
       "name": "sequence-diagram.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 19
@@ -2163,15 +1536,6 @@
         "event"
       ],
       "loc": 561
-    },
-    {
-      "file": "src/components/diagrams/sequence-spec.ts",
-      "language": "ts",
-      "name": "sequence-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 715
     },
     {
       "file": "src/components/diagrams/state-diagram.css",
@@ -2193,15 +1557,6 @@
       "loc": 392
     },
     {
-      "file": "src/components/diagrams/state-spec.ts",
-      "language": "ts",
-      "name": "state-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 275
-    },
-    {
       "file": "src/components/diagrams/swimlane-diagram.css",
       "language": "css",
       "name": "swimlane-diagram",
@@ -2219,24 +1574,6 @@
         "event"
       ],
       "loc": 352
-    },
-    {
-      "file": "src/components/diagrams/swimlane-spec.ts",
-      "language": "ts",
-      "name": "swimlane-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 308
-    },
-    {
-      "file": "src/components/diagrams/timeline-spec.ts",
-      "language": "ts",
-      "name": "timeline-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 330
     },
     {
       "file": "src/components/diagrams/timeline.css",
@@ -2277,15 +1614,6 @@
       "loc": 414
     },
     {
-      "file": "src/components/diagrams/use-case-spec.ts",
-      "language": "ts",
-      "name": "use-case-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 296
-    },
-    {
       "file": "src/components/diagrams/venn-diagram.css",
       "language": "css",
       "name": "venn-diagram",
@@ -2305,15 +1633,6 @@
       "loc": 261
     },
     {
-      "file": "src/components/diagrams/venn-spec.ts",
-      "language": "ts",
-      "name": "venn-spec",
-      "categories": [
-        "function"
-      ],
-      "loc": 197
-    },
-    {
       "file": "src/components/feedback/badge.css",
       "language": "css",
       "name": "badge",
@@ -2327,8 +1646,7 @@
       "language": "ts",
       "name": "is-badge",
       "categories": [
-        "webcomponent",
-        "lifecycle"
+        "webcomponent"
       ],
       "loc": 75
     },
@@ -2337,8 +1655,7 @@
       "language": "css",
       "name": "cdn-snippet",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 302
     },
@@ -2348,10 +1665,8 @@
       "name": "is-cdn-snippet",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "worker",
-        "tour"
+        "event"
       ],
       "loc": 457
     },
@@ -2370,8 +1685,7 @@
       "name": "is-confirm-modal",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 202
     },
@@ -2382,8 +1696,7 @@
       "categories": [
         "webcomponent",
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 189
     },
@@ -2393,9 +1706,9 @@
       "name": "is-palette-selector",
       "categories": [
         "webcomponent",
-        "event",
-        "tour",
-        "storage"
+        "auth",
+        "storage",
+        "event"
       ],
       "loc": 509
     },
@@ -2424,9 +1737,8 @@
       "name": "is-prefs-clear",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "storage"
+        "storage",
+        "event"
       ],
       "loc": 127
     },
@@ -2444,7 +1756,6 @@
       "language": "ts",
       "name": "progress-bar.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 44
@@ -2493,7 +1804,6 @@
       "name": "is-skeleton",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "css-part"
       ],
       "loc": 59
@@ -2513,7 +1823,6 @@
       "name": "is-spinner",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "animation",
         "css-part"
       ],
@@ -2535,7 +1844,6 @@
       "name": "is-theme-toggle",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 153
@@ -2557,10 +1865,9 @@
       "name": "is-toast-item",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "worker",
         "migration",
+        "worker",
+        "event",
         "css-part"
       ],
       "loc": 240
@@ -2579,9 +1886,8 @@
       "language": "ts",
       "name": "toast.preview",
       "categories": [
-        "function",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 76
     },
@@ -2610,7 +1916,6 @@
       "language": "ts",
       "name": "tooltip.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 16
@@ -2621,12 +1926,10 @@
       "name": "is-tooltip",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "worker",
         "migration",
-        "css-part",
-        "tour"
+        "worker",
+        "event",
+        "css-part"
       ],
       "loc": 295
     },
@@ -2635,8 +1938,7 @@
       "language": "css",
       "name": "checkbox",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 154
     },
@@ -2645,7 +1947,6 @@
       "language": "ts",
       "name": "checkbox.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 42
@@ -2656,8 +1957,7 @@
       "name": "is-checkbox",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 280
     },
@@ -2667,8 +1967,7 @@
       "name": "color-picker",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 208
     },
@@ -2677,7 +1976,6 @@
       "language": "ts",
       "name": "color-picker.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 30
@@ -2688,19 +1986,9 @@
       "name": "is-color-picker",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 454
-    },
-    {
-      "file": "src/components/forms/combobox.css",
-      "language": "css",
-      "name": "combobox",
-      "categories": [
-        "tour"
-      ],
-      "loc": 133
     },
     {
       "file": "src/components/forms/combobox.ts",
@@ -2708,38 +1996,19 @@
       "name": "is-combobox",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "sql-query",
+        "event"
       ],
       "loc": 489
-    },
-    {
-      "file": "src/components/forms/date-field.css",
-      "language": "css",
-      "name": "date-field",
-      "categories": [
-        "tour"
-      ],
-      "loc": 99
     },
     {
       "file": "src/components/forms/date-input.css",
       "language": "css",
       "name": "date-input",
       "categories": [
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 164
-    },
-    {
-      "file": "src/components/forms/date-picker.css",
-      "language": "css",
-      "name": "date-picker",
-      "categories": [
-        "tour"
-      ],
-      "loc": 218
     },
     {
       "file": "src/components/forms/date-picker.ts",
@@ -2747,8 +2016,7 @@
       "name": "is-date-picker",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 794
     },
@@ -2763,31 +2031,12 @@
       "loc": 342
     },
     {
-      "file": "src/components/forms/date-time-field.css",
-      "language": "css",
-      "name": "date-time-field",
-      "categories": [
-        "tour"
-      ],
-      "loc": 99
-    },
-    {
-      "file": "src/components/forms/digital-clock.css",
-      "language": "css",
-      "name": "digital-clock",
-      "categories": [
-        "tour"
-      ],
-      "loc": 87
-    },
-    {
       "file": "src/components/forms/digital-clock.ts",
       "language": "ts",
       "name": "is-digital-clock",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 294
     },
@@ -2796,8 +2045,7 @@
       "language": "css",
       "name": "doc-editor",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 95
     },
@@ -2806,7 +2054,6 @@
       "language": "ts",
       "name": "doc-editor.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 24
@@ -2817,9 +2064,7 @@
       "name": "is-doc-editor",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 251
     },
@@ -2828,8 +2073,7 @@
       "language": "css",
       "name": "dropzone",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 109
     },
@@ -2838,7 +2082,6 @@
       "language": "ts",
       "name": "dropzone.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 23
@@ -2849,27 +2092,16 @@
       "name": "is-dropzone",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 226
-    },
-    {
-      "file": "src/components/forms/duration-picker.css",
-      "language": "css",
-      "name": "duration-picker",
-      "categories": [
-        "tour"
-      ],
-      "loc": 69
     },
     {
       "file": "src/components/forms/duration-picker.preview.ts",
       "language": "ts",
       "name": "duration-picker.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 18
@@ -2880,8 +2112,8 @@
       "name": "is-duration-picker",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "sql-query",
+        "event"
       ],
       "loc": 184
     },
@@ -2891,8 +2123,7 @@
       "name": "file-input",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 144
     },
@@ -2901,7 +2132,6 @@
       "language": "ts",
       "name": "file-input.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 19
@@ -2912,6 +2142,7 @@
       "name": "is-file-input",
       "categories": [
         "webcomponent",
+        "sql-query",
         "event",
         "css-part"
       ],
@@ -2922,7 +2153,6 @@
       "language": "ts",
       "name": "full-calendar.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 16
@@ -2933,7 +2163,6 @@
       "name": "is-full-calendar",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 256
@@ -2943,8 +2172,7 @@
       "language": "css",
       "name": "inline-edit",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 73
     },
@@ -2954,10 +2182,8 @@
       "name": "is-inline-edit",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "worker",
-        "tour"
+        "event"
       ],
       "loc": 246
     },
@@ -2966,8 +2192,7 @@
       "language": "css",
       "name": "input",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 272
     },
@@ -2976,7 +2201,6 @@
       "language": "ts",
       "name": "input.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 36
@@ -2987,9 +2211,8 @@
       "name": "is-input",
       "categories": [
         "webcomponent",
-        "event",
         "worker",
-        "tour"
+        "event"
       ],
       "loc": 578
     },
@@ -2998,8 +2221,7 @@
       "language": "css",
       "name": "masked-input",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 67
     },
@@ -3009,9 +2231,8 @@
       "name": "is-masked-input",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "tour"
+        "auth",
+        "event"
       ],
       "loc": 185
     },
@@ -3020,7 +2241,7 @@
       "language": "ts",
       "name": "masks-tokens",
       "categories": [
-        "function"
+        "auth"
       ],
       "loc": 68
     },
@@ -3029,8 +2250,7 @@
       "language": "css",
       "name": "mention",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 63
     },
@@ -3039,7 +2259,6 @@
       "language": "ts",
       "name": "mention.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 20
@@ -3050,20 +2269,10 @@
       "name": "is-mention",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "migration"
+        "migration",
+        "event"
       ],
       "loc": 201
-    },
-    {
-      "file": "src/components/forms/month-calendar.css",
-      "language": "css",
-      "name": "month-calendar",
-      "categories": [
-        "tour"
-      ],
-      "loc": 54
     },
     {
       "file": "src/components/forms/month-calendar.ts",
@@ -3071,8 +2280,7 @@
       "name": "is-month-calendar",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 170
     },
@@ -3100,8 +2308,7 @@
       "language": "css",
       "name": "pin-input",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 75
     },
@@ -3111,8 +2318,7 @@
       "name": "is-pin-input",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 279
     },
@@ -3122,8 +2328,7 @@
       "name": "is-radio-group",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 332
     },
@@ -3132,8 +2337,7 @@
       "language": "css",
       "name": "radio",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 138
     },
@@ -3143,8 +2347,8 @@
       "name": "is-radio",
       "categories": [
         "webcomponent",
-        "event",
-        "migration"
+        "migration",
+        "event"
       ],
       "loc": 177
     },
@@ -3153,8 +2357,7 @@
       "language": "css",
       "name": "rating",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 112
     },
@@ -3163,7 +2366,6 @@
       "language": "ts",
       "name": "rating.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 54
@@ -3174,8 +2376,7 @@
       "name": "is-rating",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 454
     },
@@ -3184,7 +2385,7 @@
       "language": "css",
       "name": "rte",
       "categories": [
-        "tour"
+        "auth"
       ],
       "loc": 129
     },
@@ -3193,7 +2394,6 @@
       "language": "ts",
       "name": "rte.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 19
@@ -3204,9 +2404,8 @@
       "name": "is-rte",
       "categories": [
         "webcomponent",
-        "function",
-        "event",
-        "tour"
+        "auth",
+        "event"
       ],
       "loc": 283
     },
@@ -3215,8 +2414,7 @@
       "language": "css",
       "name": "select",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 304
     },
@@ -3225,7 +2423,6 @@
       "language": "ts",
       "name": "select.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 32
@@ -3236,9 +2433,8 @@
       "name": "is-select",
       "categories": [
         "webcomponent",
-        "event",
         "worker",
-        "tour"
+        "event"
       ],
       "loc": 863
     },
@@ -3247,7 +2443,6 @@
       "language": "ts",
       "name": "signature.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 31
@@ -3258,7 +2453,6 @@
       "name": "is-signature",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 203
@@ -3268,8 +2462,7 @@
       "language": "css",
       "name": "slider",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 281
     },
@@ -3278,7 +2471,6 @@
       "language": "ts",
       "name": "slider.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 52
@@ -3289,8 +2481,7 @@
       "name": "is-slider",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 781
     },
@@ -3299,8 +2490,7 @@
       "language": "css",
       "name": "switch",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 210
     },
@@ -3309,7 +2499,6 @@
       "language": "ts",
       "name": "switch.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 35
@@ -3320,26 +2509,15 @@
       "name": "is-switch",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 285
-    },
-    {
-      "file": "src/components/forms/textarea.css",
-      "language": "css",
-      "name": "textarea",
-      "categories": [
-        "tour"
-      ],
-      "loc": 146
     },
     {
       "file": "src/components/forms/textarea.preview.ts",
       "language": "ts",
       "name": "textarea.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 31
@@ -3350,19 +2528,10 @@
       "name": "is-textarea",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "sql-query",
+        "event"
       ],
       "loc": 414
-    },
-    {
-      "file": "src/components/forms/time-clock.css",
-      "language": "css",
-      "name": "time-clock",
-      "categories": [
-        "tour"
-      ],
-      "loc": 194
     },
     {
       "file": "src/components/forms/time-clock.ts",
@@ -3370,28 +2539,9 @@
       "name": "is-time-clock",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 387
-    },
-    {
-      "file": "src/components/forms/time-field.css",
-      "language": "css",
-      "name": "time-field",
-      "categories": [
-        "tour"
-      ],
-      "loc": 99
-    },
-    {
-      "file": "src/components/forms/year-calendar.css",
-      "language": "css",
-      "name": "year-calendar",
-      "categories": [
-        "tour"
-      ],
-      "loc": 57
     },
     {
       "file": "src/components/forms/year-calendar.ts",
@@ -3399,8 +2549,7 @@
       "name": "is-year-calendar",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 142
     },
@@ -3420,9 +2569,8 @@
       "name": "is-floating",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "migration",
+        "event",
         "css-part"
       ],
       "loc": 442
@@ -3432,8 +2580,7 @@
       "language": "ts",
       "name": "is-format-bytes",
       "categories": [
-        "webcomponent",
-        "function"
+        "webcomponent"
       ],
       "loc": 122
     },
@@ -3442,9 +2589,8 @@
       "language": "ts",
       "name": "format-date.preview",
       "categories": [
-        "function",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 116
     },
@@ -3453,8 +2599,7 @@
       "language": "ts",
       "name": "is-format-date",
       "categories": [
-        "webcomponent",
-        "function"
+        "webcomponent"
       ],
       "loc": 129
     },
@@ -3473,7 +2618,6 @@
       "name": "is-format",
       "categories": [
         "webcomponent",
-        "function",
         "worker"
       ],
       "loc": 542
@@ -3488,20 +2632,11 @@
       "loc": 26
     },
     {
-      "file": "src/components/helpers/md-editor-api.d.ts",
-      "language": "ts",
-      "name": "md-editor-api.d",
-      "categories": [
-        "migration"
-      ],
-      "loc": 79
-    },
-    {
       "file": "src/components/helpers/md-editor-api.ts",
       "language": "ts",
       "name": "md-editor-api",
       "categories": [
-        "function",
+        "auth",
         "http-client"
       ],
       "loc": 148
@@ -3512,8 +2647,7 @@
       "name": "md-editor",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 328
     },
@@ -3523,8 +2657,8 @@
       "name": "is-md-editor",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "sql-query",
+        "event"
       ],
       "loc": 854
     },
@@ -3533,19 +2667,10 @@
       "language": "ts",
       "name": "md-lite",
       "categories": [
-        "function",
+        "auth",
         "migration"
       ],
       "loc": 257
-    },
-    {
-      "file": "src/components/helpers/md-render.css",
-      "language": "css",
-      "name": "md-render",
-      "categories": [
-        "tour"
-      ],
-      "loc": 146
     },
     {
       "file": "src/components/helpers/md-render.ts",
@@ -3562,9 +2687,8 @@
       "language": "ts",
       "name": "mutation-observer.preview",
       "categories": [
-        "function",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 123
     },
@@ -3582,7 +2706,6 @@
       "language": "ts",
       "name": "observer.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 136
@@ -3593,10 +2716,8 @@
       "name": "is-observer",
       "categories": [
         "webcomponent",
-        "function",
-        "lifecycle",
-        "event",
-        "migration"
+        "migration",
+        "event"
       ],
       "loc": 217
     },
@@ -3606,9 +2727,8 @@
       "name": "is-offscreen-canvas",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 68
     },
@@ -3618,11 +2738,9 @@
       "name": "is-popover",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "migration",
-        "css-part",
-        "tour"
+        "event",
+        "css-part"
       ],
       "loc": 307
     },
@@ -3631,8 +2749,8 @@
       "language": "ts",
       "name": "relative-time.preview",
       "categories": [
-        "function",
-        "event"
+        "event",
+        "i18n"
       ],
       "loc": 121
     },
@@ -3651,7 +2769,6 @@
       "language": "ts",
       "name": "resize-observer.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 112
@@ -3670,7 +2787,8 @@
       "language": "ts",
       "name": "response-cache",
       "categories": [
-        "function",
+        "sql-query",
+        "service",
         "worker",
         "storage"
       ],
@@ -3681,9 +2799,7 @@
       "language": "ts",
       "name": "ui.preview",
       "categories": [
-        "webcomponent",
-        "function",
-        "lifecycle"
+        "webcomponent"
       ],
       "loc": 83
     },
@@ -3693,8 +2809,6 @@
       "name": "ui",
       "categories": [
         "webcomponent",
-        "function",
-        "lifecycle",
         "event"
       ],
       "loc": 228
@@ -3705,7 +2819,6 @@
       "name": "is-wake-lock",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
         "http-client"
       ],
@@ -3717,6 +2830,7 @@
       "name": "00-as-row",
       "categories": [
         "webcomponent",
+        "sql-query",
         "migration"
       ],
       "loc": 512
@@ -3735,8 +2849,7 @@
       "language": "ts",
       "name": "05-view",
       "categories": [
-        "worker",
-        "tour"
+        "worker"
       ],
       "loc": 161
     },
@@ -3745,41 +2858,20 @@
       "language": "ts",
       "name": "flex-options",
       "categories": [
-        "function",
-        "event",
-        "migration"
+        "migration",
+        "event"
       ],
       "loc": 152
-    },
-    {
-      "file": "src/components/isp/_shared/tree-view/helpers.ts",
-      "language": "ts",
-      "name": "helpers",
-      "categories": [
-        "function"
-      ],
-      "loc": 54
     },
     {
       "file": "src/components/isp/_shared/tree-view/render-rows.ts",
       "language": "ts",
       "name": "render-rows",
       "categories": [
-        "function",
-        "event",
         "migration",
-        "tour"
+        "event"
       ],
       "loc": 299
-    },
-    {
-      "file": "src/components/isp/_shared/tree-view/row-adapter-base.ts",
-      "language": "ts",
-      "name": "row-adapter-base",
-      "categories": [
-        "tour"
-      ],
-      "loc": 244
     },
     {
       "file": "src/components/isp/_shared/tree-view/row-adapter-drag.ts",
@@ -3795,9 +2887,8 @@
       "language": "ts",
       "name": "row-adapter",
       "categories": [
-        "worker",
         "migration",
-        "tour"
+        "worker"
       ],
       "loc": 204
     },
@@ -3826,7 +2917,6 @@
       "language": "ts",
       "name": "block-layout.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 54
@@ -3837,26 +2927,16 @@
       "name": "is-block-layout",
       "categories": [
         "webcomponent",
-        "function",
+        "database",
         "event"
       ],
       "loc": 241
-    },
-    {
-      "file": "src/components/isp/btn-ref.css",
-      "language": "css",
-      "name": "btn-ref",
-      "categories": [
-        "tour"
-      ],
-      "loc": 83
     },
     {
       "file": "src/components/isp/btn-ref.preview.ts",
       "language": "ts",
       "name": "btn-ref.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 55
@@ -3867,11 +2947,9 @@
       "name": "is-btn-ref",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "worker",
-        "css-part",
-        "tour"
+        "event",
+        "css-part"
       ],
       "loc": 378
     },
@@ -3880,9 +2958,9 @@
       "language": "ts",
       "name": "catalogo-gen.preview",
       "categories": [
-        "function",
-        "event",
-        "storage"
+        "auth",
+        "storage",
+        "event"
       ],
       "loc": 53
     },
@@ -3892,7 +2970,6 @@
       "name": "is-catalogo-gen",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 645
@@ -3904,8 +2981,7 @@
       "categories": [
         "webcomponent",
         "event",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 300
     },
@@ -3914,7 +2990,7 @@
       "language": "ts",
       "name": "controller-from-config",
       "categories": [
-        "function",
+        "auth",
         "http-client"
       ],
       "loc": 306
@@ -3924,7 +3000,6 @@
       "language": "ts",
       "name": "flex-layout.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 67
@@ -3937,15 +3012,6 @@
         "webcomponent"
       ],
       "loc": 107
-    },
-    {
-      "file": "src/components/isp/flex-options.preview.ts",
-      "language": "ts",
-      "name": "flex-options.preview",
-      "categories": [
-        "function"
-      ],
-      "loc": 20
     },
     {
       "file": "src/components/isp/flex-options.ts",
@@ -3971,7 +3037,6 @@
       "language": "ts",
       "name": "float-card.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 24
@@ -3987,15 +3052,6 @@
       "loc": 140
     },
     {
-      "file": "src/components/isp/form-json.ts",
-      "language": "ts",
-      "name": "form-json",
-      "categories": [
-        "function"
-      ],
-      "loc": 112
-    },
-    {
       "file": "src/components/isp/form.css",
       "language": "css",
       "name": "form",
@@ -4009,7 +3065,6 @@
       "language": "ts",
       "name": "form.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 91
@@ -4038,7 +3093,6 @@
       "language": "ts",
       "name": "heading.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 92
@@ -4066,9 +3120,8 @@
       "language": "ts",
       "name": "loading-overlay.preview",
       "categories": [
-        "function",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 32
     },
@@ -4088,9 +3141,8 @@
       "language": "ts",
       "name": "modal-verificacion.preview",
       "categories": [
-        "function",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 36
     },
@@ -4100,10 +3152,8 @@
       "name": "is-modal-verificacion",
       "categories": [
         "webcomponent",
-        "function",
         "event",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 332
     },
@@ -4112,7 +3162,6 @@
       "language": "ts",
       "name": "text.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 72
@@ -4131,8 +3180,7 @@
       "language": "css",
       "name": "tree-view",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 266
     },
@@ -4141,7 +3189,6 @@
       "language": "ts",
       "name": "tree-view.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 71
@@ -4152,11 +3199,9 @@
       "name": "is-tree-view",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "worker",
         "migration",
-        "tour"
+        "worker",
+        "event"
       ],
       "loc": 373
     },
@@ -4195,7 +3240,6 @@
       "name": "is-card",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
         "css-part"
       ],
@@ -4207,7 +3251,6 @@
       "name": "is-demo",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 66
@@ -4219,8 +3262,7 @@
       "categories": [
         "webcomponent",
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 140
     },
@@ -4241,8 +3283,7 @@
       "name": "is-dialog",
       "categories": [
         "webcomponent",
-        "worker",
-        "tour"
+        "worker"
       ],
       "loc": 185
     },
@@ -4251,8 +3292,7 @@
       "language": "ts",
       "name": "is-divider",
       "categories": [
-        "webcomponent",
-        "lifecycle"
+        "webcomponent"
       ],
       "loc": 106
     },
@@ -4261,8 +3301,7 @@
       "language": "css",
       "name": "dock",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 80
     },
@@ -4271,7 +3310,6 @@
       "language": "ts",
       "name": "dock.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 22
@@ -4282,7 +3320,6 @@
       "name": "is-dock",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 170
@@ -4293,8 +3330,7 @@
       "name": "is-drawer",
       "categories": [
         "webcomponent",
-        "worker",
-        "tour"
+        "worker"
       ],
       "loc": 169
     },
@@ -4303,7 +3339,6 @@
       "language": "ts",
       "name": "main.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 22
@@ -4314,7 +3349,7 @@
       "name": "is-main",
       "categories": [
         "webcomponent",
-        "lifecycle",
+        "database",
         "storage"
       ],
       "loc": 60
@@ -4325,9 +3360,8 @@
       "name": "is-preview-component",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "migration"
+        "migration",
+        "event"
       ],
       "loc": 286
     },
@@ -4337,8 +3371,6 @@
       "name": "is-preview-controls",
       "categories": [
         "webcomponent",
-        "function",
-        "lifecycle",
         "event"
       ],
       "loc": 288
@@ -4359,9 +3391,9 @@
       "name": "is-scrollspy",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "migration"
+        "sql-query",
+        "migration",
+        "event"
       ],
       "loc": 329
     },
@@ -4371,8 +3403,7 @@
       "name": "split-panel",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 115
     },
@@ -4382,9 +3413,8 @@
       "name": "is-split-panel",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "storage"
+        "storage",
+        "event"
       ],
       "loc": 494
     },
@@ -4414,9 +3444,8 @@
       "name": "is-barcode-scanner",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "worker",
+        "event",
         "browser-api"
       ],
       "loc": 116
@@ -4427,7 +3456,6 @@
       "name": "is-barcode",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 200
@@ -4438,23 +3466,13 @@
       "name": "icon-explorer.preview",
       "categories": [
         "webcomponent",
-        "function",
-        "event",
-        "http-client",
+        "auth",
+        "migration",
         "worker",
-        "validator",
-        "migration"
+        "event",
+        "http-client"
       ],
       "loc": 615
-    },
-    {
-      "file": "src/components/media/icon.preview.ts",
-      "language": "ts",
-      "name": "icon.preview",
-      "categories": [
-        "function"
-      ],
-      "loc": 23
     },
     {
       "file": "src/components/media/icon.ts",
@@ -4462,7 +3480,6 @@
       "name": "is-icon",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "http-client"
       ],
       "loc": 246
@@ -4481,7 +3498,6 @@
       "language": "ts",
       "name": "image-editor.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 27
@@ -4492,7 +3508,6 @@
       "name": "is-image-editor",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 331
@@ -4503,7 +3518,6 @@
       "name": "is-media-recorder",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
         "browser-api"
       ],
@@ -4515,7 +3529,6 @@
       "name": "is-qrcode",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 149
@@ -4526,7 +3539,6 @@
       "name": "is-speech",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event"
       ],
       "loc": 146
@@ -4546,8 +3558,7 @@
       "language": "css",
       "name": "video-playlist",
       "categories": [
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 326
     },
@@ -4556,7 +3567,6 @@
       "language": "ts",
       "name": "video-playlist.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 36
@@ -4567,9 +3577,7 @@
       "name": "is-video-playlist",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 780
     },
@@ -4579,8 +3587,7 @@
       "name": "video",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 439
     },
@@ -4589,7 +3596,6 @@
       "language": "ts",
       "name": "video.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 19
@@ -4600,11 +3606,11 @@
       "name": "is-video",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
+        "database",
         "worker",
-        "css-part",
-        "browser-api"
+        "event",
+        "browser-api",
+        "css-part"
       ],
       "loc": 589
     },
@@ -4613,8 +3619,7 @@
       "language": "css",
       "name": "breadcrumb-item",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 57
     },
@@ -4663,9 +3668,8 @@
       "name": "is-carousel",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "worker",
+        "event",
         "css-part"
       ],
       "loc": 372
@@ -4685,7 +3689,6 @@
       "language": "ts",
       "name": "mega-menu.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 18
@@ -4696,10 +3699,8 @@
       "name": "is-mega-menu",
       "categories": [
         "webcomponent",
-        "lifecycle",
-        "event",
         "worker",
-        "tour"
+        "event"
       ],
       "loc": 161
     },
@@ -4760,10 +3761,8 @@
       "name": "is-tab-group",
       "categories": [
         "webcomponent",
-        "lifecycle",
         "event",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 452
     },
@@ -4773,8 +3772,7 @@
       "name": "tree",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 129
     },
@@ -4785,8 +3783,7 @@
       "categories": [
         "webcomponent",
         "event",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 308
     },
@@ -4804,7 +3801,6 @@
       "language": "ts",
       "name": "command-palette.preview",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 33
@@ -4815,8 +3811,7 @@
       "name": "is-command-palette",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 272
     },
@@ -4826,8 +3821,7 @@
       "name": "is-pdf-viewer",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 125
     },
@@ -4846,8 +3840,7 @@
       "name": "is-window",
       "categories": [
         "webcomponent",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 314
     },
@@ -4856,9 +3849,7 @@
       "language": "ts",
       "name": "is-foo",
       "categories": [
-        "webcomponent",
-        "function",
-        "lifecycle"
+        "webcomponent"
       ],
       "loc": 324
     },
@@ -4867,8 +3858,7 @@
       "language": "ts",
       "name": "base-sheets",
       "categories": [
-        "webcomponent",
-        "function"
+        "webcomponent"
       ],
       "loc": 64
     },
@@ -4877,8 +3867,7 @@
       "language": "ts",
       "name": "is-foo",
       "categories": [
-        "webcomponent",
-        "lifecycle"
+        "webcomponent"
       ],
       "loc": 134
     },
@@ -4888,7 +3877,6 @@
       "name": "element",
       "categories": [
         "webcomponent",
-        "function",
         "event"
       ],
       "loc": 234
@@ -4898,10 +3886,9 @@
       "language": "ts",
       "name": "app",
       "categories": [
-        "event",
         "worker",
-        "tour",
-        "storage"
+        "storage",
+        "event"
       ],
       "loc": 483
     },
@@ -4910,7 +3897,6 @@
       "language": "ts",
       "name": "ecosystem",
       "categories": [
-        "function",
         "event",
         "http-client"
       ],
@@ -4921,7 +3907,6 @@
       "language": "ts",
       "name": "home",
       "categories": [
-        "function",
         "event",
         "animation"
       ],
@@ -4932,23 +3917,12 @@
       "language": "ts",
       "name": "theming",
       "categories": [
-        "function",
-        "event",
+        "auth",
         "worker",
-        "tour",
-        "storage"
+        "storage",
+        "event"
       ],
       "loc": 392
-    },
-    {
-      "file": "src/previews/_kit/demo-snippet-styles.ts",
-      "language": "ts",
-      "name": "demo-snippet-styles",
-      "categories": [
-        "function",
-        "tour"
-      ],
-      "loc": 333
     },
     {
       "file": "src/previews/_kit/ISComponentPreview.ts",
@@ -4964,7 +3938,6 @@
       "language": "ts",
       "name": "load-json",
       "categories": [
-        "function",
         "http-client"
       ],
       "loc": 24
@@ -4974,27 +3947,9 @@
       "language": "ts",
       "name": "render",
       "categories": [
-        "function"
+        "auth"
       ],
       "loc": 229
-    },
-    {
-      "file": "src/previews/registry.ts",
-      "language": "ts",
-      "name": "registry",
-      "categories": [
-        "function"
-      ],
-      "loc": 100
-    },
-    {
-      "file": "src/styles/palettes.css",
-      "language": "css",
-      "name": "palettes",
-      "categories": [
-        "tour"
-      ],
-      "loc": 236
     },
     {
       "file": "src/styles/presentation.css",
@@ -5002,8 +3957,7 @@
       "name": "presentation",
       "categories": [
         "animation",
-        "css-part",
-        "tour"
+        "css-part"
       ],
       "loc": 1594
     },
@@ -5012,37 +3966,16 @@
       "language": "css",
       "name": "shell",
       "categories": [
-        "animation",
-        "tour"
+        "animation"
       ],
       "loc": 411
-    },
-    {
-      "file": "src/utils/cdn-sources.ts",
-      "language": "ts",
-      "name": "cdn-sources",
-      "categories": [
-        "function"
-      ],
-      "loc": 36
-    },
-    {
-      "file": "src/utils/health/engine/cargar.ts",
-      "language": "ts",
-      "name": "cargar",
-      "categories": [
-        "function"
-      ],
-      "loc": 98
     },
     {
       "file": "src/utils/health/engine/stagehand.ts",
       "language": "ts",
       "name": "stagehand",
       "categories": [
-        "function",
-        "http-client",
-        "tour"
+        "http-client"
       ],
       "loc": 335
     },
@@ -5052,7 +3985,6 @@
       "name": "_helpers",
       "categories": [
         "webcomponent",
-        "function",
         "event"
       ],
       "loc": 409
@@ -5063,30 +3995,36 @@
       "name": "<is-x>",
       "categories": [
         "webcomponent",
-        "function",
-        "event",
-        "tour"
+        "event"
       ],
       "loc": 223
+    },
+    {
+      "file": "src/utils/health/exhaustive/merge-children.mjs",
+      "language": "js",
+      "name": "merge-children",
+      "categories": [
+        "cli"
+      ],
+      "loc": 74
+    },
+    {
+      "file": "src/utils/health/exhaustive/run-all-tests.mjs",
+      "language": "js",
+      "name": "run-all-tests",
+      "categories": [
+        "cli"
+      ],
+      "loc": 74
     },
     {
       "file": "src/utils/health/motor/auditor.ts",
       "language": "ts",
       "name": "auditor",
       "categories": [
-        "function",
         "http-client"
       ],
       "loc": 325
-    },
-    {
-      "file": "src/utils/health/motor/catalog.ts",
-      "language": "ts",
-      "name": "catalog",
-      "categories": [
-        "function"
-      ],
-      "loc": 366
     },
     {
       "file": "src/utils/health/motor/cli.ts",
@@ -5103,7 +4041,6 @@
       "language": "ts",
       "name": "reporter",
       "categories": [
-        "function",
         "migration"
       ],
       "loc": 277
@@ -5113,28 +4050,9 @@
       "language": "ts",
       "name": "${tag}",
       "categories": [
-        "webcomponent",
-        "function"
+        "webcomponent"
       ],
       "loc": 451
-    },
-    {
-      "file": "src/utils/health/motor/validators/json-contenido.ts",
-      "language": "ts",
-      "name": "json-contenido",
-      "categories": [
-        "function"
-      ],
-      "loc": 284
-    },
-    {
-      "file": "src/utils/health/motor/validators/json-schema.ts",
-      "language": "ts",
-      "name": "json-schema",
-      "categories": [
-        "function"
-      ],
-      "loc": 363
     },
     {
       "file": "src/utils/health/motor/validators/runtime.ts",
@@ -5142,9 +4060,8 @@
       "name": "runtime",
       "categories": [
         "webcomponent",
-        "function",
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 202
     },
@@ -5153,9 +4070,9 @@
       "language": "ts",
       "name": "home-cdn",
       "categories": [
-        "function",
-        "event",
+        "sql-query",
         "worker",
+        "event",
         "browser-api"
       ],
       "loc": 412
@@ -5165,7 +4082,6 @@
       "language": "ts",
       "name": "source-paths",
       "categories": [
-        "function",
         "http-client"
       ],
       "loc": 142
@@ -5175,95 +4091,51 @@
       "language": "ts",
       "name": "controles",
       "categories": [
-        "function",
         "event"
       ],
       "loc": 200
-    },
-    {
-      "file": "src/utils/system/toons.ts",
-      "language": "ts",
-      "name": "toons",
-      "categories": [
-        "function"
-      ],
-      "loc": 66
-    },
-    {
-      "file": "src/utils/testing/e2e/lib/e2e-config.ts",
-      "language": "ts",
-      "name": "e2e-config",
-      "categories": [
-        "function"
-      ],
-      "loc": 75
-    },
-    {
-      "file": "src/utils/testing/e2e/lib/env.ts",
-      "language": "ts",
-      "name": "env",
-      "categories": [
-        "function"
-      ],
-      "loc": 102
-    },
-    {
-      "file": "src/utils/testing/e2e/lib/estados.ts",
-      "language": "ts",
-      "name": "estados",
-      "categories": [
-        "function"
-      ],
-      "loc": 42
     },
     {
       "file": "src/utils/testing/e2e/lib/harness.ts",
       "language": "ts",
       "name": "harness",
       "categories": [
-        "function",
         "worker"
       ],
-      "loc": 489
+      "loc": 489,
+      "e2e": true
     },
     {
       "file": "src/utils/testing/e2e/lib/minimax.ts",
       "language": "ts",
       "name": "minimax",
       "categories": [
-        "function",
-        "http-client",
-        "worker"
+        "auth",
+        "worker",
+        "http-client"
       ],
-      "loc": 195
+      "loc": 195,
+      "e2e": true
     },
     {
       "file": "src/utils/testing/e2e/lib/server.ts",
       "language": "ts",
       "name": "server",
       "categories": [
-        "function"
+        "database"
       ],
-      "loc": 107
-    },
-    {
-      "file": "src/utils/testing/e2e/lib/tipos.d.ts",
-      "language": "ts",
-      "name": "tipos.d",
-      "categories": [
-        "webcomponent"
-      ],
-      "loc": 65
+      "loc": 107,
+      "e2e": true
     },
     {
       "file": "src/utils/testing/e2e/lib/vendor-e2e-config.ts",
       "language": "ts",
       "name": "vendor-e2e-config",
       "categories": [
-        "function",
         "http-client"
       ],
-      "loc": 58
+      "loc": 58,
+      "e2e": true
     },
     {
       "file": "src/utils/testing/e2e/run.ts",
@@ -5272,15 +4144,16 @@
       "categories": [
         "cli"
       ],
-      "loc": 111
+      "loc": 111,
+      "e2e": true
     },
     {
       "file": "src/utils/testing/meta/smoke-runtime.html",
       "language": "html",
       "name": "smoke-runtime",
       "categories": [
-        "event",
-        "worker"
+        "worker",
+        "event"
       ],
       "loc": 69
     },
@@ -5304,32 +4177,34 @@
     }
   ],
   "summary": {
-    "total": 522,
+    "total": 424,
     "byCategory": {
-      "webcomponent": 196,
-      "event": 213,
-      "worker": 51,
-      "function": 218,
-      "cli": 19,
-      "tour": 128,
-      "migration": 26,
+      "webcomponent": 192,
+      "event": 218,
+      "i18n": 3,
+      "worker": 52,
+      "cli": 25,
+      "auth": 24,
+      "migration": 25,
       "storage": 15,
+      "sql-query": 27,
       "browser-api": 8,
-      "lifecycle": 72,
+      "database": 7,
       "http-client": 20,
       "animation": 80,
       "css-part": 75,
-      "paty-iss": 1,
-      "validator": 1
+      "service": 2,
+      "paty-iss": 1
     },
     "byLanguage": {
       "html": 4,
-      "ts": 390,
-      "js": 12,
-      "other": 1,
-      "css": 115
+      "ts": 305,
+      "js": 19,
+      "css": 96
     },
-    "e2eFiles": 0,
-    "testsFilesFound": 164
+    "e2eFiles": 5,
+    "testsFilesFound": 166,
+    "ignoredFilesFound": 5,
+    "profile": "iswc"
   }
 }

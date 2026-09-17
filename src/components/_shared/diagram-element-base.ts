@@ -63,21 +63,21 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 export class DiagramElementBase extends ElementBase {
   static get observedAttributes(): string[] { return ['color']; }
 
-  #wrap = null;
-  #svg = null;
-  #tooltipEl = null;
-  #payload = null;
-  #spec = null;
-  #layout = null;
-  #jsonMo = null;
-  #themeObs = null;
-  #renderQueued = null;
-  #ownViewer = null;
+  #wrap: HTMLElement | null = null;
+  #svg: SVGElement | null = null;
+  #tooltipEl: HTMLElement | null = null;
+  #payload: unknown = null;
+  #spec: unknown = null;
+  #layout: unknown = null;
+  #jsonMo: MutationObserver | null = null;
+  #themeObs: MutationObserver | null = null;
+  #renderQueued: Promise<void> | null = null;
+  #ownViewer: HTMLElement | null = null;
 
   /** Construye el scaffold estándar (wrap/svg/tooltip/slot-hidden) y guarda
    *  referencias. Llamar en el constructor de la subclase, ANTES de
    *  `adoptCss` (adoptCss debe correr después de fijar `shadow.innerHTML`). */
-  initDiagramShadow(svgClass: string, tooltipClass: string) {
+  initDiagramShadow(svgClass: string, tooltipClass: string): void {
     const shadow = this.shadowRoot ?? this.attachShadow({ mode: 'open' });
     shadow.innerHTML = /* html */ `
       <div part="base" class="wrap">
@@ -87,31 +87,31 @@ export class DiagramElementBase extends ElementBase {
       </div>
     `;
     this.#wrap = shadow.querySelector<HTMLElement>('.wrap')!;
-    this.#svg = shadow.querySelector<HTMLElement>(`.${svgClass}`)!;
+    this.#svg = shadow.querySelector<SVGElement>(`.${svgClass}`)!;
     this.#tooltipEl = shadow.querySelector<HTMLElement>(`.${tooltipClass}`)!;
   }
 
-  get wrap() { return this.#wrap; }
-  get svg() { return this.#svg; }
-  get tooltipEl() { return this.#tooltipEl; }
+  get wrap(): HTMLElement { return this.#wrap!; }
+  get svg(): SVGElement { return this.#svg!; }
+  get tooltipEl(): HTMLElement { return this.#tooltipEl!; }
 
-  get isViewer() { return this.getAttribute('color') === 'viewer'; }
+  get isViewer(): boolean { return this.getAttribute('color') === 'viewer'; }
 
-  get payload() { return this.#payload; }
-  set payload(v) { this.#payload = v; this.onPayloadChanged(); this.queueRender(); }
+  get payload(): unknown { return this.#payload; }
+  set payload(v: unknown) { this.#payload = v; this.onPayloadChanged(); this.queueRender(); }
   /** Hook opcional: la subclase limpia estado propio (hiddenGroups, etc.)
    *  antes de que se dispare el render. No-op por defecto. */
-  onPayloadChanged() {}
+  onPayloadChanged(): void {}
 
-  get spec() { return this.#spec; }
-  set spec(v) { this.#spec = v; }
-  get layout() { return this.#layout; }
-  set layout(v) { this.#layout = v; }
+  get spec(): unknown { return this.#spec; }
+  set spec(v: unknown) { this.#spec = v; }
+  get layout(): unknown { return this.#layout; }
+  set layout(v: unknown) { this.#layout = v; }
 
   /** Se llama una vez por conexión (ver comentario de ElementBase#onConnected
    *  sobre por qué NO es solo la primera vez): monta el observer de JSON
    *  slot y el de tema, y dispara el primer render. */
-  onConnected() {
+  onConnected(): void {
     this.#readJsonSlot();
     this.#jsonMo = new MutationObserver(() => this.#readJsonSlot());
     this.#jsonMo.observe(this, { childList: true, characterData: true, subtree: true });
@@ -123,35 +123,35 @@ export class DiagramElementBase extends ElementBase {
     this.queueRender();
   }
 
-  onDisconnected() {
+  onDisconnected(): void {
     this.#jsonMo?.disconnect();
     this.#themeObs?.disconnect();
     this.onDiagramDisconnected();
   }
 
-  onAttributeChanged() { this.queueRender(); }
+  onAttributeChanged(): void { this.queueRender(); }
 
   /** Hooks para que la subclase añada listeners/estado propio sin pisar el
    *  connect/disconnect de la base. No-op por defecto. */
-  onDiagramConnected() {}
-  onDiagramDisconnected() {}
+  onDiagramConnected(): void {}
+  onDiagramDisconnected(): void {}
 
   /** true cuando el tema activo es oscuro (mismo criterio que hoy en los
    *  8 diagramas: ausencia de la clase `theme-light` en <html>). */
-  get isDarkTheme() { return !document.documentElement.classList.contains('theme-light'); }
+  get isDarkTheme(): boolean { return !document.documentElement.classList.contains('theme-light'); }
 
   /** Aplica `data-theme` al wrapper del shadow, como hacen hoy todos los
    *  diagramas dentro de su `#render`. La subclase la llama desde
    *  `renderDiagram()` tras resolver el tema. */
-  syncThemeAttr() {
-    this.#wrap.dataset.theme = this.isDarkTheme ? 'dark' : 'light';
+  syncThemeAttr(): void {
+    this.#wrap!.dataset.theme = this.isDarkTheme ? 'dark' : 'light';
   }
 
-  #readJsonSlot() {
-    const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
+  #readJsonSlot(): void {
+    const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || ''));
     if (!script) return;
     try {
-      this.#payload = JSON.parse(script.textContent.trim());
+      this.#payload = JSON.parse((script as HTMLScriptElement).textContent!.trim());
       this.onPayloadChanged();
       this.queueRender();
     } catch { /* JSON inválido: conserva el último válido */ }
@@ -159,7 +159,7 @@ export class DiagramElementBase extends ElementBase {
 
   /** Debounce a microtask: varias llamadas síncronas (cambio de atributo +
    *  cambio de payload, etc.) colapsan en un solo `renderDiagram()`. */
-  queueRender() {
+  queueRender(): Promise<void> {
     if (this.#renderQueued) return this.#renderQueued;
     this.#renderQueued = (async () => {
       await Promise.resolve();
@@ -172,11 +172,11 @@ export class DiagramElementBase extends ElementBase {
     return this.#renderQueued;
   }
 
-  async updateComplete() { await this.queueRender(); }
+  async updateComplete(): Promise<void> { await this.queueRender(); }
 
   /** Abstracto: la subclase construye spec/layout y pinta el SVG
    *  (`this.svg`). Debe asignar `this.spec` / `this.layout`. */
-  renderDiagram() {
+  renderDiagram(): void {
     throw new Error(`${this.constructor.name} debe implementar renderDiagram()`);
   }
 
@@ -185,13 +185,13 @@ export class DiagramElementBase extends ElementBase {
    *  parametrizado por el `kind` de `diagram-kinds.js`.
    *  Pasa de largo atributos opt-in (hoy `animation`) para que la copia
    *  montada dentro del visor conserve los efectos declarados en la fuente. */
-  async openOwnViewer(kind) {
+  async openOwnViewer(kind: string): Promise<void> {
     await import('../diagrams/diagram-lightbox.js');
-    let lb = this.#ownViewer;
+    let lb = this.#ownViewer as HTMLElement & { payload: unknown; open: boolean } | null;
     if (!lb || !lb.isConnected) {
-      lb = document.createElement('is-diagram-lightbox');
+      lb = document.createElement('is-diagram-lightbox') as unknown as HTMLElement & { payload: unknown; open: boolean };
       lb.setAttribute('kind', kind);
-      lb.addEventListener('is-after-hide', () => lb.remove());
+      lb.addEventListener('is-after-hide', () => lb!.remove());
       document.body.appendChild(lb);
       this.#ownViewer = lb;
     }
@@ -200,7 +200,7 @@ export class DiagramElementBase extends ElementBase {
     const anim = this.getAttribute('animation');
     if (anim) lb.setAttribute('animation', anim);
     else lb.removeAttribute('animation');
-    for (const name of this.constructor.observedAttributes ?? []) {
+    for (const name of (this.constructor as typeof DiagramElementBase).observedAttributes ?? []) {
       if (name === 'color' || name === 'animation') continue;
       const v = this.getAttribute(name);
       if (v != null) lb.setAttribute(name, v);

@@ -4,22 +4,25 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
  *  Reimplementada idéntica en 12 componentes (chart, marks-*, treemap,
  *  heatmap, maps, gantt, mindmap, sequence-diagram, org-chart) — usar esta
  *  en vez de copiarla de nuevo. */
-export function svgEl(tag, attrs = {}) {
+export function svgEl<K extends keyof SVGElementTagNameMap>(
+  tag: K,
+  attrs: Record<string, string | number | boolean | null | undefined> = {},
+): SVGElementTagNameMap[K] {
   const n = document.createElementNS(SVG_NS, tag);
   for (const [k, v] of Object.entries(attrs)) {
-    if (v != null) n.setAttribute(k, v);
+    if (v != null) n.setAttribute(k, String(v));
   }
   return n;
 }
 
-export function scaleLinear(domain, range) {
+export function scaleLinear(domain: [number, number], range: [number, number]): (v: number) => number {
   const [d0, d1] = domain;
   const [r0, r1] = range;
   const span = (d1 - d0) || 1;
-  return (v) => r0 + ((v - d0) / span) * (r1 - r0);
+  return (v: number) => r0 + ((v - d0) / span) * (r1 - r0);
 }
 
-export function scaleBand(count: number, range, gapRatio: number = 0.25) {
+export function scaleBand(count: number, range: [number, number], gapRatio: number = 0.25) {
   const [r0, r1] = range;
   const n = Math.max(count, 1);
   const step = (r1 - r0) / n;
@@ -40,12 +43,12 @@ export function niceTicks(min: number, max: number, count = 5) {
   const step = (norm >= 5 ? 5 : norm >= 2 ? 2 : 1) * mag;
   const start = Math.floor(min / step) * step;
   const end = Math.ceil(max / step) * step;
-  const ticks = [];
+  const ticks: number[] = [];
   for (let v = start; v <= end + step / 2; v += step) ticks.push(Number(v.toFixed(10)));
   return ticks;
 }
 
-function stepPath(points) {
+function stepPath(points: Array<{ x: number; y: number }>) {
   let d = `M${points[0].x},${points[0].y}`;
   for (let i = 1; i < points.length; i++) {
     const prev = points[i - 1];
@@ -55,7 +58,7 @@ function stepPath(points) {
   return d;
 }
 
-function catmullRomPath(points, alpha: number = 0.5) {
+function catmullRomPath(points: Array<{ x: number; y: number }>, alpha: number = 0.5) {
   let d = `M${points[0].x},${points[0].y}`;
   const n = points.length;
   for (let i = 0; i < n - 1; i++) {
@@ -72,7 +75,7 @@ function catmullRomPath(points, alpha: number = 0.5) {
   return d;
 }
 
-export function pathLine(points, { curve = 'linear' } = {}) {
+export function pathLine(points: Array<{ x: number; y: number }>, { curve = 'linear' }: { curve?: 'linear' | 'natural' | 'step' } = {}): string {
   if (!points.length) return '';
   if (points.length === 1) return `M${points[0].x},${points[0].y}`;
   if (curve === 'natural') return catmullRomPath(points);
@@ -80,7 +83,7 @@ export function pathLine(points, { curve = 'linear' } = {}) {
   return points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
 }
 
-export function pathArea(points, baselineY: string, opts) {
+export function pathArea(points: Array<{ x: number; y: number }>, baselineY: string, opts?: { curve?: 'linear' | 'natural' | 'step' }): string {
   if (!points.length) return '';
   const line = pathLine(points, opts);
   const last = points[points.length - 1];
@@ -88,21 +91,21 @@ export function pathArea(points, baselineY: string, opts) {
   return `${line} L${last.x},${baselineY} L${first.x},${baselineY} Z`;
 }
 
-export function polarToCartesian(cx, cy, r, angleRad: number) {
+export function polarToCartesian(cx: number, cy: number, r: number, angleRad: number) {
   return { x: cx + r * Math.cos(angleRad), y: cy + r * Math.sin(angleRad) };
 }
 
-export function pathArc(cx: string, cy: string, rOuter: string, rInner: number, startAngle, endAngle) {
+export function pathArc(cx: string, cy: string, rOuter: string, rInner: number, startAngle: number, endAngle: number): string {
   const a0 = startAngle - Math.PI / 2;
   const a1 = endAngle - Math.PI / 2;
   const large = endAngle - startAngle > Math.PI ? 1 : 0;
-  const outerStart = polarToCartesian(cx, cy, rOuter, a0);
-  const outerEnd = polarToCartesian(cx, cy, rOuter, a1);
+  const outerStart = polarToCartesian(Number(cx), Number(cy), Number(rOuter), a0);
+  const outerEnd = polarToCartesian(Number(cx), Number(cy), Number(rOuter), a1);
   if (rInner <= 0) {
     return `M${cx},${cy} L${outerStart.x},${outerStart.y} A${rOuter},${rOuter} 0 ${large} 1 ${outerEnd.x},${outerEnd.y} Z`;
   }
-  const innerStart = polarToCartesian(cx, cy, rInner, a1);
-  const innerEnd = polarToCartesian(cx, cy, rInner, a0);
+  const innerStart = polarToCartesian(Number(cx), Number(cy), rInner, a1);
+  const innerEnd = polarToCartesian(Number(cx), Number(cy), rInner, a0);
   return [
     `M${outerStart.x},${outerStart.y}`,
     `A${rOuter},${rOuter} 0 ${large} 1 ${outerEnd.x},${outerEnd.y}`,
@@ -112,7 +115,7 @@ export function pathArc(cx: string, cy: string, rOuter: string, rInner: number, 
   ].join(' ');
 }
 
-export function roundedBarRect(x: string, y: string, w: number, h: number, radius: number, edge = 'top') {
+export function roundedBarRect(x: number, y: number, w: number, h: number, radius: number, edge: 'top' | 'bottom' | 'left' | 'right' = 'top'): string {
   const isVertical = edge === 'top' || edge === 'bottom';
   const r = Math.max(0, Math.min(radius, isVertical ? w / 2 : h / 2, isVertical ? h : w));
   if (r <= 0 || !Number.isFinite(r)) return `M${x},${y} h${w} v${h} h${-w} Z`;
@@ -153,7 +156,8 @@ export function roundedBarRect(x: string, y: string, w: number, h: number, radiu
   ].join(' ');
 }
 
-export function measureText(svgRoot, text, { fontSize = 12, fontFamily: string = 'sans-serif' } = {}) {
+export function measureText(svgRoot: SVGElement, text: string, { fontSize = 12, fontFamily: fontFamilyOpt = 'sans-serif' }: { fontSize?: number; fontFamily?: string } = {}): { width: number; height: number } {
+  const fontFamily = fontFamilyOpt;
   const t = document.createElementNS(SVG_NS, 'text');
   t.setAttribute('x', '-9999');
   t.setAttribute('y', '-9999');

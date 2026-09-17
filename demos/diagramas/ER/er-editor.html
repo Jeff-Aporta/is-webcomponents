@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Editor visual de <is-er-diagram> · is-webcomponents</title>
+<meta name="description" content="Editor visual completo (drag, click-to-connect, multi-select, undo/redo, panel de estilos, export JSON/SVG) para diagramas entidad-relación." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-er-editor { width: 100%; height: 100%; }
+  /* Anti-FOUC */
+  is-er-editor:not(:defined) { visibility: hidden; }
+  is-er-diagram:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar solo los tags que necesitamos. El bundle del kit NO contiene los
+  // componentes — los descargamos individualmente.
+  await import('../../../src/components/diagrams/er-diagram.ts');
+  await import('../../../src/components/diagrams/er-editor.ts');
+
+  // Definir un payload inicial para que el editor tenga algo que mostrar.
+  const initial = {
+    entities: [
+      { id: 'user', name: 'Usuario', attributes: [
+        { name: 'id', key: 'PK', type: 'uuid' },
+        { name: 'email', key: 'UK', type: 'string' },
+        { name: 'created_at', type: 'datetime' },
+      ], pos: [120, 80] },
+      { id: 'order', name: 'Pedido', attributes: [
+        { name: 'id', key: 'PK', type: 'uuid' },
+        { name: 'total', type: 'decimal' },
+        { name: 'user_id', key: 'FK', type: 'uuid' },
+      ], pos: [440, 80] },
+      { id: 'product', name: 'Producto', attributes: [
+        { name: 'id', key: 'PK', type: 'uuid' },
+        { name: 'sku', key: 'UK', type: 'string' },
+        { name: 'price', type: 'decimal' },
+      ], pos: [120, 320] },
+    ],
+    relations: [
+      { id: 'r1', from: 'user', to: 'order', label: 'places', fromCard: 'one', toCard: 'many', identifying: true },
+      { id: 'r2', from: 'order', to: 'product', label: 'contains', fromCard: 'many', toCard: 'many', identifying: false, dashStyle: 'dashed' },
+    ],
+  };
+
+  // Esperar a que el custom element se defina
+  await customElements.whenDefined('is-er-editor');
+
+  // Crear el editor y asignar payload
+  const editor = document.createElement('is-er-editor');
+  editor.setAttribute('animation', 'trace');
+  editor.payload = initial;
+
+  // Escuchar cambios de estado para logging (útil en tests)
+  editor.addEventListener('is-state-change', (e) => {
+    console.log('[er-editor] state changed', e.detail);
+  });
+
+  document.querySelector('main').appendChild(editor);
+  document.documentElement.dataset.erEditorReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Editor visual — Diagrama Entidad-Relación</h1>
+    <p>Drag para mover · Shift+click para selección múltiple · Doble-click para editar texto · <code>Ctrl+Z</code> undo</p>
+  </div>
+  <div class="spacer"></div>
+  <code data-action="download-svg" id="dl-svg">SVG</code>
+</header>
+<main></main>
+</body>
+</html>

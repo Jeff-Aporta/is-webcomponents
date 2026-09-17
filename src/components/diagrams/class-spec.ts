@@ -6,6 +6,16 @@ import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayF
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type {
+  ClassSpec,
+  ClassSpecClass,
+  ClassSpecRelation,
+  ClassLayout,
+  ClassLayoutNode,
+  ClassLayoutEdge,
+  ClassRelationKind,
+  DiagramGroup,
+} from './diagram-types.js';
 
 /**
  * Especificación y layout de diagramas de clases (sin Mermaid).
@@ -25,17 +35,17 @@ const CHAR_W = 6.4; // ancho monoespaciado aproximado por carácter (filas de mi
 const NAME_CHAR_W = 7.2;
 
 /** Tipos de relación soportados; cualquier otro valor cae a 'association'. */
-export const CLASS_RELATION_KINDS = new Set([
+export const CLASS_RELATION_KINDS = new Set<ClassRelationKind>([
   'association', 'inheritance', 'composition', 'aggregation', 'dependency', 'realization',
 ]);
 
 const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+function asRecord(v: unknown): Record<string, any> {
+  return v && typeof v === 'object' ? v as Record<string, any> : {};
 }
 
-function textWidth(text: number, charW) {
+function textWidth(text: string, charW: number): number {
   return Math.ceil(richTextPlain(text).length * charW);
 }
 
@@ -48,17 +58,18 @@ function textWidth(text: number, charW) {
  * diagrama, sin ningún aviso. Ahora se compone en la notación UML
  * `visibilidad nombre : tipo`.
  */
-function readMember(raw) {
+function readMember(raw: unknown): string {
   if (raw == null) return '';
   if (typeof raw !== 'object') return String(raw);
-  const nombre = String(raw.name ?? raw.label ?? '').trim();
+  const r = raw as Record<string, unknown>;
+  const nombre = String(r.name ?? r.label ?? '').trim();
   if (!nombre) return '';
-  const visibilidad = String(raw.visibility ?? '').trim();
-  const tipo = String(raw.type ?? raw.returns ?? '').trim();
+  const visibilidad = String(r.visibility ?? '').trim();
+  const tipo = String(r.type ?? r.returns ?? '').trim();
   return `${visibilidad ? `${visibilidad} ` : ''}${nombre}${tipo ? ` : ${tipo}` : ''}`;
 }
 
-function readClass(raw, i: number) {
+function readClass(raw: unknown, i: number): ClassSpecClass {
   const r = asRecord(raw);
   const attributes = Array.isArray(r.attributes) ? r.attributes.map(readMember) : [];
   const methods = Array.isArray(r.methods) ? r.methods.map(readMember) : [];
@@ -73,10 +84,13 @@ function readClass(raw, i: number) {
   };
 }
 
-function readRelation(raw, i) {
+function readRelation(raw: unknown, i: number): ClassSpecRelation | null {
   const r = asRecord(raw);
-  const kind = CLASS_RELATION_KINDS.has(String(r.kind)) ? String(r.kind) : 'association';
-  return {
+  const kindRaw = String(r.kind);
+  const kind: ClassRelationKind = CLASS_RELATION_KINDS.has(kindRaw as ClassRelationKind)
+    ? (kindRaw as ClassRelationKind)
+    : 'association';
+  const rel: ClassSpecRelation = {
     id: String(r.id ?? `r${i}`),
     from: String(r.from ?? r.source ?? ''),
     to: String(r.to ?? r.target ?? ''),
@@ -84,14 +98,15 @@ function readRelation(raw, i) {
     label: String(r.label ?? '').trim() || undefined,
     fromLabel: String(r.fromLabel ?? '').trim() || undefined,
     toLabel: String(r.toLabel ?? '').trim() || undefined,
-    group: String(r.group ?? '') || undefined,
+    group: Number.isFinite(r.group) ? Number(r.group) : undefined,
   };
+  return rel;
 }
 
-function readGroups(src) {
+function readGroups(src: Record<string, any>): DiagramGroup[] | undefined {
   const raw = src.groups ?? [];
   if (!Array.isArray(raw) || !raw.length) return undefined;
-  return raw.map((g, i: number) => {
+  return raw.map((g: unknown, i: number): DiagramGroup => {
     const r = asRecord(g);
     return {
       id: String(r.id ?? `grp-${i}`),
@@ -102,25 +117,28 @@ function readGroups(src) {
 }
 
 /** payload → spec normalizada, o null si no hay clases. */
-export function resolveClassSpec(payload) {
+export function resolveClassSpec(payload: unknown): ClassSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.classDiagram ?? p.class ?? p);
   const rawClasses = src.classes ?? [];
   if (!Array.isArray(rawClasses) || !rawClasses.length) return null;
 
-  const classes = rawClasses.map(readClass);
+  const classes: ClassSpecClass[] = rawClasses.map((c: unknown, i: number) => readClass(c, i));
   const known = new Set(classes.map((c) => c.id));
   // Descarta relaciones colgantes: una relación a un id inexistente rompería el layout.
   const relations = (Array.isArray(src.relations) ? src.relations : [])
-    .map(readRelation)
-    .filter((r) => known.has(r.from) && known.has(r.to));
+    .map((r: unknown, i: number) => readRelation(r, i))
+    .filter((r): r is ClassSpecRelation => !!r && known.has(r.from) && known.has(r.to));
 
   const dir = String(src.direction ?? 'TB').toUpperCase();
+  const direction: ClassSpec['direction'] =
+    dir === 'BT' || dir === 'LR' || dir === 'RL' ? dir : 'TB';
+  const groups = readGroups(src);
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
-    direction: ['TB', 'BT', 'LR', 'RL'].includes(dir) ? dir : (dir === 'TD' ? 'TB' : 'TB'),
-    groups: readGroups(src),
+    direction,
+    groups,
     classes,
     relations,
   };
@@ -130,14 +148,16 @@ export function resolveClassSpec(payload) {
  * Geometría de compartimentos de una clase: nombre (+estereotipo), atributos,
  * métodos. Los compartimentos vacíos se omiten junto con su divisor.
  */
-function classGeometry(cls) {
+function classGeometry(cls: ClassSpecClass): { w: number; h: number; headerH: number; sections: Array<{ type: 'header' | 'attributes' | 'methods'; y: number; h: number; rows: string[] }>; dividerYs: number[] } {
   const headerH = HEADER_H + (cls.stereotype ? STEREO_H : 0);
-  const sections = [{ type: 'header', h: headerH, rows: [] }];
+  const sections: Array<{ type: 'header' | 'attributes' | 'methods'; y: number; h: number; rows: string[] }> = [
+    { type: 'header', y: 0, h: headerH, rows: [] },
+  ];
   if (cls.attributes.length) {
-    sections.push({ type: 'attributes', h: cls.attributes.length * ROW_H + SECTION_PAD_V * 2, rows: cls.attributes });
+    sections.push({ type: 'attributes', y: 0, h: cls.attributes.length * ROW_H + SECTION_PAD_V * 2, rows: cls.attributes });
   }
   if (cls.methods.length) {
-    sections.push({ type: 'methods', h: cls.methods.length * ROW_H + SECTION_PAD_V * 2, rows: cls.methods });
+    sections.push({ type: 'methods', y: 0, h: cls.methods.length * ROW_H + SECTION_PAD_V * 2, rows: cls.methods });
   }
 
   let widthEst = Math.max(
@@ -150,7 +170,7 @@ function classGeometry(cls) {
   const w = snapDiagramGrid(Math.min(MAX_W, Math.max(MIN_W, widthEst)));
 
   let cursor = 0;
-  const dividerYs = [];
+  const dividerYs: number[] = [];
   for (let i = 0; i < sections.length; i++) {
     sections[i].y = cursor;
     cursor += sections[i].h;
@@ -162,21 +182,21 @@ function classGeometry(cls) {
 }
 
 /** spec → objeto `classDiagram` listo para persistir / mostrar en el editor. */
-export function classSpecToJson(spec) {
-  const out = { direction: spec.direction, classes: [], relations: [] };
+export function classSpecToJson(spec: ClassSpec): Record<string, unknown> {
+  const out: Record<string, unknown> = { direction: spec.direction, classes: [], relations: [] };
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.groups?.length) out.groups = spec.groups;
-  out.classes = spec.classes.map((c) => {
-    const row = { id: c.id, name: c.name };
+  (out.classes as Array<Record<string, unknown>>) = spec.classes.map((c) => {
+    const row: Record<string, unknown> = { id: c.id, name: c.name };
     if (c.stereotype) row.stereotype = c.stereotype;
     if (c.group) row.group = c.group;
     if (c.attributes.length) row.attributes = c.attributes;
     if (c.methods.length) row.methods = c.methods;
     return row;
   });
-  out.relations = spec.relations.map((r) => {
-    const row = { from: r.from, to: r.to };
+  (out.relations as Array<Record<string, unknown>>) = spec.relations.map((r) => {
+    const row: Record<string, unknown> = { from: r.from, to: r.to };
     if (r.kind !== 'association') row.kind = r.kind;
     if (r.label) row.label = r.label;
     if (r.fromLabel) row.fromLabel = r.fromLabel;
@@ -190,8 +210,10 @@ export function classSpecToJson(spec) {
 
 const MARGIN = { top: 16, right: 20, bottom: 20, left: 20 };
 
+interface Point2D { x: number; y: number; }
+
 /** Desplaza un punto hacia afuera del nodo, en la dirección de su lado. */
-function stepOut(p, side, d) {
+function stepOut(p: Point2D, side: string, d: number): Point2D {
   if (side === 'top') return { x: p.x, y: p.y - d };
   if (side === 'bottom') return { x: p.x, y: p.y + d };
   if (side === 'left') return { x: p.x - d, y: p.y };
@@ -199,22 +221,26 @@ function stepOut(p, side, d) {
 }
 
 /** Punta de decoración (flecha/triángulo/diamante): posición y ángulo según el lado. */
-function tipAt(p, side) {
+function tipAt(p: Point2D, side: string): Point2D & { angle: number } {
   const angle = side === 'top' ? 90 : side === 'bottom' ? 270 : side === 'left' ? 0 : 180;
   return { x: p.x, y: p.y, angle };
 }
 
 /** Lados de anclaje; para self-relations fuerza lados distintos (loop visible). */
-function sidesFor(fromNode, toNode, direction, isSelf) {
+function sidesFor(
+  fromNode: { cx: number; cy: number; x: number; y: number; width: number; height: number },
+  toNode: { cx: number; cy: number; x: number; y: number; width: number; height: number },
+  direction: ClassSpec['direction'],
+  isSelf: boolean,
+): { fromSide: string; toSide: string } {
   if (isSelf) return { fromSide: 'right', toSide: 'top' };
   return pickSides(fromNode, toNode, direction);
 }
 
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, nodes:Array, edges:Array, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
  */
-export function computeClassLayout(spec) {
+export function computeClassLayout(spec: ClassSpec): ClassLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
@@ -224,7 +250,7 @@ export function computeClassLayout(spec) {
 
   const geomById = new Map(spec.classes.map((c) => [c.id, classGeometry(c)]));
   const sized = spec.classes.map((c) => {
-    const g = geomById.get(c.id);
+    const g = geomById.get(c.id)!;
     return { id: c.id, w: g.w, h: g.h };
   });
 
@@ -241,9 +267,9 @@ export function computeClassLayout(spec) {
   const offsetX = MARGIN.left;
   const offsetY = MARGIN.top + headerH;
 
-  const nodes = placed.nodes.map((n) => {
-    const s = specById.get(n.id);
-    const g = geomById.get(n.id);
+  const nodes: ClassLayoutNode[] = placed.nodes.map((n) => {
+    const s = specById.get(n.id)!;
+    const g = geomById.get(n.id)!;
     return {
       id: n.id,
       x: n.x + offsetX,
@@ -275,11 +301,11 @@ export function computeClassLayout(spec) {
   const posById = new Map(nodes.map((n) => [n.id, n]));
   for (const n of nodes) blockRect(grid, n.x - 6, n.y - 6, n.w + 12, n.h + 12);
 
-  const routed = spec.relations.map((r, i) => {
+  const routed: ClassLayoutEdge[] = spec.relations.map((r, i) => {
     const isSelf = r.from === r.to;
-    const from = posById.get(r.from);
-    const to = posById.get(r.to);
-    const sides = sidesFor(byId.get(r.from), byId.get(r.to), spec.direction, isSelf);
+    const from = posById.get(r.from)!;
+    const to = posById.get(r.to)!;
+    const sides = sidesFor(byId.get(r.from)!, byId.get(r.to)!, spec.direction, isSelf);
     const a = edgeAnchor(from, sides.fromSide);
     const b = edgeAnchor(to, sides.toSide);
 
@@ -326,7 +352,7 @@ export function computeClassLayout(spec) {
   });
 
   assignEdgeHues(routed);
-  const layout = {
+  const layout: ClassLayout = {
     width,
     height,
     nodes,

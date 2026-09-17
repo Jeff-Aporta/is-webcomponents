@@ -9,6 +9,7 @@ import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from './diagram-types.js';
 
 /**
  * <is-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
@@ -28,13 +29,30 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+// CSS embebido para animación de aristas dashed. Sobrevive a la exportación del
+// SVG porque vive dentro del propio <svg>. Se desactiva automáticamente cuando
+// el usuario tiene prefers-reduced-motion: reduce.
+const iswcAnimDashCss = `
+.iswc-anim-edge-dashed {
+  stroke-dasharray: 6 4;
+  animation: iswc-dash-march 1.6s linear infinite;
+}
+@keyframes iswc-dash-march {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -20; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iswc-anim-edge-dashed { animation: none !important; }
+}
+`;
+
 class IsErDiagram extends DiagramElementBase {
-  #theme = null;
-  #turtle = null;
-  #hiddenGroups = new Set();
-  #entityNodes = new Map();
-  #relNodes = new Map();
-  #hoverId = null;
+  #theme: DiagramTheme | null = null;
+  #turtle: SequenceTurtle | null = null;
+  #hiddenGroups: Set<string> = new Set();
+  #entityNodes = new Map<string, { e: ErLayoutEntity; g: SVGGElement; box: SVGPathElement }>();
+  #relNodes = new Map<string, { r: ErLayoutEdge; g: SVGGElement; path: SVGPathElement }>();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -43,17 +61,17 @@ class IsErDiagram extends DiagramElementBase {
   }
 
   onDiagramConnected() {
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
   onDiagramDisconnected() {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
   onPayloadChanged() { this.#hiddenGroups = new Set(); }
@@ -90,7 +108,7 @@ class IsErDiagram extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
     this.syncThemeAttr();
 
@@ -100,7 +118,7 @@ class IsErDiagram extends DiagramElementBase {
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: ErLayout, theme: DiagramTheme) {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -111,8 +129,25 @@ class IsErDiagram extends DiagramElementBase {
     this.#relNodes.clear();
     this.#hoverId = null;
 
+    // Activación de animación CSS: opt-in via atributo `animation="trace"` o
+    // via meta.animation="trace" en el payload. El estilo se embebe en el <svg>
+    // para que sobreviva a la exportación. Por defecto está apagado.
+    const traceFromAttr = this.hasAttribute('animation') && this.getAttribute('animation') === 'trace';
+    const specMeta = (this.spec as { meta?: { animation?: 'trace' | 'none' } } | null)?.meta;
+    const traceFromMeta = !!layout.relations?.length && specMeta?.animation === 'trace';
+    const traceEnabled = !!(traceFromAttr || traceFromMeta);
+    if (traceEnabled) {
+      this.svg.setAttribute('data-animation', 'trace');
+      // Inyectar <style> embebido una sola vez por render
+      if (!this.svg.querySelector(':scope > style[data-iswc-anim]')) {
+        const style = svgEl('style', { 'data-iswc-anim': '1' });
+        style.textContent = iswcAnimDashCss;
+        this.svg.insertBefore(style, this.svg.firstChild);
+      }
+    }
+
     if (layout.titleLines?.length || layout.title) {
-      const lines = layout.titleLines?.length ? layout.titleLines : [layout.title];
+      const lines = layout.titleLines?.length ? layout.titleLines : [layout.title].filter((l): l is string => !!l);
       const t = svgEl('text', {
         x: W / 2, y: layout.titleY, 'text-anchor': 'middle', fill: theme.text,
         'font-size': '13', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
@@ -125,7 +160,7 @@ class IsErDiagram extends DiagramElementBase {
       this.svg.appendChild(t);
     }
     if (layout.subtitleLines?.length || layout.subtitle) {
-      const lines = layout.subtitleLines?.length ? layout.subtitleLines : [layout.subtitle];
+      const lines = layout.subtitleLines?.length ? layout.subtitleLines : [layout.subtitle].filter((l): l is string => !!l);
       const t = svgEl('text', {
         x: W / 2, y: layout.subtitleY, 'text-anchor': 'middle', fill: theme.muted,
         'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
@@ -147,7 +182,7 @@ class IsErDiagram extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup);
+    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
     this.#turtle.setData({
       messages: layout.relations.map((r, i: number) => ({
         path: r.path, step: i + 1, log: r.label || '', groupHue: undefined,
@@ -156,14 +191,14 @@ class IsErDiagram extends DiagramElementBase {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => emit(this, 'is-turtle-state', state),
+      onState: (state: unknown) => emit(this, 'is-turtle-state', state),
     });
 
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
   /** Cajón por grupo: marco tenue + cabecera con el nombre del agrupador. */
-  #buildClusters(layout, theme) {
+  #buildClusters(layout: ErLayout, theme: DiagramTheme) {
     for (const c of layout.clusters ?? []) {
       const color = (c.hue != null && tkHueToHex(c.hue)) || theme.accent;
       const g = svgEl('g', { class: 'er-cluster' });
@@ -190,9 +225,9 @@ class IsErDiagram extends DiagramElementBase {
     }
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: ErLayout, theme: DiagramTheme) {
     const g = svgEl('g', { class: 'er-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    layout.groups!.forEach((grp: DiagramGroup, gi: number) => {
       const ly = (layout.legendY ?? ((layout.subtitleY || layout.titleY || 22) + 18)) + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -219,17 +254,33 @@ class IsErDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildRelations(layout, theme) {
+  #buildRelations(layout: ErLayout, theme: DiagramTheme) {
+    const traceEnabled = this.hasAttribute('animation') && this.getAttribute('animation') === 'trace';
     for (const r of layout.relations) {
-      const color = edgeStrokeHex(r.hue, theme.accent);
+      const color = (r.style && r.style.stroke) || edgeStrokeHex(r.hue, theme.accent);
       const g = svgEl('g', { class: 'er-rel' });
       g.dataset.relId = r.id;
+      g.dataset.route = r.route ?? 'orthogonal';
 
+      // dashStyle: 'solid' | 'dashed' | 'dotted' | undefined (default identifying-based)
+      const isIdentifying = r.identifying !== false; // true por defecto
+      let dashAttr = null;
+      if (r.dashStyle === 'dashed') dashAttr = '6 4';
+      else if (r.dashStyle === 'dotted') dashAttr = '2 4';
+      else if (r.dashStyle === 'solid') dashAttr = null;
+      else if (!isIdentifying) dashAttr = '6 4';
+
+      const isAnimatable = r.dashStyle === 'dashed' || (!isIdentifying && r.dashStyle !== 'solid');
+      const animClass = (traceEnabled && isAnimatable) ? ' iswc-anim-edge-dashed' : '';
+
+      const width = (r.style && Number.isFinite(r.style.strokeWidth))
+        ? r.style.strokeWidth
+        : (r.width ?? 1.3);
       const path = svgEl('path', {
-        d: r.path, fill: 'none', stroke: color, 'stroke-width': 1.3,
-        'stroke-dasharray': r.identifying ? null : '6 4',
+        d: r.path, fill: 'none', stroke: color, 'stroke-width': width,
+        'stroke-dasharray': dashAttr,
         'stroke-linejoin': 'round', 'stroke-linecap': 'round',
-        class: 'er-rel__path',
+        class: `er-rel__path${animClass}`,
       });
       g.appendChild(path);
 
@@ -257,7 +308,7 @@ class IsErDiagram extends DiagramElementBase {
   }
 
   /** Marca de cardinalidad (pata de gallo / tick / círculo) en un extremo de relación. */
-  #buildMark(mark, color) {
+  #buildMark(mark: ErLayoutEdgeMark, color: string) {
     const g = svgEl('g', {
       class: 'er-rel__mark',
       transform: `translate(${mark.x},${mark.y}) rotate(${mark.angle})`,
@@ -272,16 +323,22 @@ class IsErDiagram extends DiagramElementBase {
     return g;
   }
 
-  #buildEntities(layout, theme) {
+  #buildEntities(layout: ErLayout, theme: DiagramTheme) {
     for (const e of layout.entities) {
-      const color = (e.hue != null && tkHueToHex(e.hue)) || theme.accent;
+      const st = e.style ?? {};
+      const color = st.stroke || ((e.hue != null && tkHueToHex(e.hue)) || theme.accent);
       const g = svgEl('g', { class: 'er-entity' });
       g.dataset.entityId = e.id;
       if (this.isViewer) g.style.cursor = 'pointer';
 
+      const fill = st.fill || theme.chipFill;
+      const opacity = typeof st.opacity === 'number' ? st.opacity : null;
+      const radius = typeof st.radius === 'number' ? st.radius : 8;
+      const strokeWidth = typeof st.strokeWidth === 'number' ? st.strokeWidth : 1.3;
       const box = svgEl('path', {
-        d: entityBoxPath(e.x, e.y, e.w, e.h),
-        fill: theme.chipFill, stroke: color, 'stroke-width': 1.3,
+        d: entityBoxPath(e.x, e.y, e.w, e.h, radius),
+        fill, stroke: color, 'stroke-width': strokeWidth,
+        ...(opacity != null ? { opacity: String(opacity) } : {}),
         'stroke-linejoin': 'round', class: 'er-entity__box',
       });
       g.appendChild(box);
@@ -305,7 +362,7 @@ class IsErDiagram extends DiagramElementBase {
         maxHeight: ER_HEADER_H - 4,
         fontSize: 11,
         fontFamily: 'Tahoma,Arial,sans-serif',
-        overflow: e.overflow ?? 'grow',
+        overflow: 'grow',
       });
       const entityTspans = buildTspans(
         entityResult.lines,
@@ -360,9 +417,9 @@ class IsErDiagram extends DiagramElementBase {
 
   #onClick = (e: PointerEvent) => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
@@ -378,8 +435,8 @@ class IsErDiagram extends DiagramElementBase {
 
   #onMouseMove = (e: PointerEvent) => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.entityId);
-    const id = g?.dataset.entityId ?? null;
+    const g = e.composedPath().find((n) => (n as HTMLElement | undefined)?.dataset?.entityId);
+    const id = (g as HTMLElement | undefined)?.dataset.entityId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.wrap.getBoundingClientRect();
@@ -394,7 +451,7 @@ class IsErDiagram extends DiagramElementBase {
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null) {
     this.#hoverId = id;
     const entry = id ? this.#entityNodes.get(id) : null;
 
@@ -402,7 +459,7 @@ class IsErDiagram extends DiagramElementBase {
       const active = entityId === id;
       node.g.classList.toggle('is-active', active);
       node.g.classList.toggle('is-dim', !!id && !active);
-      node.box.setAttribute('stroke-width', active ? 2.1 : 1.3);
+      node.box.setAttribute('stroke-width', String(active ? 2.1 : 1.3));
     }
     for (const [, rel] of this.#relNodes) {
       const touches = !!id && (rel.r.from === id || rel.r.to === id);

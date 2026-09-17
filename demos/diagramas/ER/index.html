@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demos de diagramas · is-webcomponents</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: center; padding: 40px 20px; }
+  main { max-width: 760px; width: 100%; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 6px 0; }
+  p.lead { color: #94a3b8; margin: 0 0 24px 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 18px; display: grid; gap: 6px; text-decoration: none; color: inherit;
+    transition: border-color 0.15s ease;
+  }
+  .card:hover { border-color: var(--is-accent, #2563eb); }
+  .card h2 { font-size: 15px; margin: 0; }
+  .card p { font-size: 12px; color: #94a3b8; margin: 0; }
+  .card .tag {
+    display: inline-block; font-size: 10px; text-transform: uppercase;
+    background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px;
+    color: #94a3b8; width: max-content;
+  }
+  .meta {
+    margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 12px; color: #94a3b8;
+  }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Demos de diagramas · is-webcomponents</h1>
+  <p class="lead">Laboratorio de diagramas editables, alineado con archify. Cada demo tiene tests exhaustivos (Playwright + Stagehand).</p>
+
+  <div class="grid">
+    <a class="card" href="./er-editor.html">
+      <span class="tag">Editor · FULL</span>
+      <h2>Editor visual ER</h2>
+      <p>Drag para mover · Shift+click para multi-select · Doble-click para editar texto · Click-to-connect · Undo/redo (Ctrl+Z) · Panel de estilos · Export JSON + SVG con animación CSS embebida.</p>
+    </a>
+    <a class="card" href="./er-static.html">
+      <span class="tag">Lite · read-only</span>
+      <h2>Vista estática con animación</h2>
+      <p>Componente <code>&lt;is-er-diagram&gt;</code> en modo lectura. Aristas <code>dashStyle: "dashed"</code> animan via CSS embebido en el SVG. Mix de rutas (<code>straight</code>, <code>orthogonal-h</code>, <code>orthogonal-v</code>) y estilos por arista.</p>
+    </a>
+  </div>
+
+  <div class="meta">
+    <p><strong>Arquitectura lite / full con core compartido:</strong></p>
+    <ul>
+      <li><code>er-archify.ts</code> — funciones puras: spec, layout, route helpers, serialización determinista, CSS embebible.</li>
+      <li><code>&lt;is-er-diagram&gt;</code> — LITE. Renderiza SVG desde el payload. Sin UI de edición.</li>
+      <li><code>&lt;is-er-editor&gt;</code> — FULL. Compone <code>&lt;is-er-diagram&gt;</code> en su shadow DOM y añade: state, drag, click-to-connect, multi-select, undo/redo, panel de estilos, export JSON/SVG.</li>
+    </ul>
+    <p style="margin-top:14px;">Garantía visual: <strong>mismo payload → mismo SVG</strong> en ambos componentes (comparten spec, layout y SVG builder).</p>
+  </div>
+</main>
+</body>
+</html>

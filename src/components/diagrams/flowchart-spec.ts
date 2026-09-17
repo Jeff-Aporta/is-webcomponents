@@ -41,12 +41,30 @@ function asRecord(v) {
   return v && typeof v === 'object' ? v : {};
 }
 
-/** Ancho estimado de la caja según su etiqueta, descontando tokens {{icon}}. */
+/** Ancho estimado de la caja según su etiqueta, descontando tokens {{icon}}.
+ *
+ * Ademas de la estimacion lineal `chars * factor`, se considera el ancho
+ * real de la PALABRA MAS LARGA del label: el wrap no parte palabras, asi que
+ * si una sola palabra es mas ancha que la caja, el texto se desborda fuera
+ * del borde. Para evitarlo se toma el max entre la estimacion agregada y
+ * el ancho de la palabra mas larga, mas un pequeno margen. */
 function nodeWidth(label, shape) {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label);
+  let longestWord = 0;
+  for (const w of plain.split(/\s+/)) {
+    if (!w) continue;
+    const chars = w.length;
+    // Misma relacion aprox que el factor 7.1/char del estimador agregado:
+    // cada glyph mide ~7.1px a fontSize 11 con Poppins; corregimos por longitud.
+    const wordEst = Math.ceil(chars * 7.1) + 8;
+    if (wordEst > longestWord) longestWord = wordEst;
+  }
   const est = Math.ceil(plain.length * 7.1) + 32 + icons * ICON_INLINE_W;
-  const base = snapDiagramGrid(Math.min(MAX_W, Math.max(MIN_W, est)));
+  // Tomamos el MAYOR entre la estimacion agregada (caja normal) y la palabra
+  // mas larga (para que el wrap no desborde). Esto sacrifica un poco de ancho
+  // en labels cortos con palabras muy largas, pero arregla los desbordes.
+  const base = snapDiagramGrid(Math.min(MAX_W, Math.max(MIN_W, Math.max(est, longestWord))));
   // Rombo y círculo necesitan más caja para que el texto no se salga del contorno.
   if (shape === 'diamond') return snapDiagramGrid(base + DIAMOND_PAD);
   if (shape === 'circle') return snapDiagramGrid(Math.max(base, NODE_H * 2));

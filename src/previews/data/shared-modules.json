@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-09T21:02:18.800Z",
+  "generatedAt": "2026-09-16T16:53:52.595Z",
   "count": 61,
   "modules": [
     {
@@ -608,7 +608,7 @@
       "id": "picker-element",
       "path": "src/components/_shared/picker-element.ts",
       "summary": "Módulo compartido `picker-element.ts`.",
-      "bytes": 19980,
+      "bytes": 20005,
       "exports": [
         "definePickerInput"
       ]
