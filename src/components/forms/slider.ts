@@ -79,7 +79,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
    * "0:0°C, 20:20°C" → [{ value: 0, label: '0°C' }, …]
    * "0,20,37"        → marks sin etiqueta
    */
-  function parseMarks(raw: string) {
+  function parseMarks(raw: string): { value: number; label: string }[] {
     return String(raw)
       .split(',')
       .map((chunk: string) => chunk.trim())
@@ -90,7 +90,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
         const label = i === -1 ? '' : chunk.slice(i + 1).trim();
         return Number.isFinite(value) ? { value, label } : null;
       })
-      .filter(Boolean);
+      .filter((m): m is { value: number; label: string } => m !== null);
   }
 
   class IsSlider extends ElementBase {
@@ -108,7 +108,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-size', 'thumb-size', 'length', 'rail-color', 'fill-color', 'thumb-color', 'focus-color']; }
 
-    #internals = null;
+    #internals: ElementInternals | null = null;
     #base!: HTMLElement;
     #trackEl!: HTMLElement;
     #trackAlt!: HTMLElement;
@@ -117,15 +117,15 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     #hintEl!: HTMLElement;
     #labelSlot!: HTMLSlotElement;
     #hintSlot!: HTMLSlotElement;
-    #thumbs = [];
-    #values = [0];
-    #marks = null;          // override por propiedad
-    #scale = null;
-    #valueLabelFormat = null;
-    #ariaValueText = null;
+    #thumbs: HTMLElement[] = [];
+    #values: number[] = [0];
+    #marks: boolean | { value: number; label: string }[] | null = null;          // override por propiedad
+    #scale: ((v: number) => number) | null = null;
+    #valueLabelFormat: ((v: number, index: number) => string) | null = null;
+    #ariaValueText: ((v: number, index: number) => string) | null = null;
     #dragging = false;
     #activeIndex = 0;
-    #valuesAtStart = [0];
+    #valuesAtStart: number[] = [0];
     #marksKey = '';
 
     constructor() {
@@ -153,12 +153,13 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    onConnected() {
+    onConnected(): void {
+      const self = this as unknown as Record<string, unknown>;
       for (const p of EXTRA_UPGRADE_PROPS) {
         if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          if (v != null) this[p] = v;
+          const v = self[p];
+          delete self[p];
+          if (v != null) self[p] = v;
         }
       }
       this.#values = this.#normalize(this.#readAttrValues());
@@ -167,11 +168,11 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#render();
     }
 
-    onDisconnected() {
+    onDisconnected(): void {
       this.#endDrag();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'value') {
         this.#values = this.#normalize(this.#readAttrValues());
       } else if (name === 'disabled' || name === 'readonly') {
@@ -241,105 +242,105 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       if (raw === 'false') return false;
       return parseMarks(raw);
     }
-    set marks(v) {
-      this.#marks = v == null ? null : v;
+    set marks(v: boolean | { value: number; label?: string }[] | null) {
+      this.#marks = v == null ? null : (v as boolean | { value: number; label: string }[]);
       if (v === null) this.removeAttribute('marks');
       this.#render();
     }
 
-    get orientation() {
+    get orientation(): 'horizontal' | 'vertical' {
       return this.getAttribute('orientation') === 'vertical' ? 'vertical' : 'horizontal';
     }
-    set orientation(v) { this.setAttribute('orientation', v === 'vertical' ? 'vertical' : 'horizontal'); }
+    set orientation(v: 'horizontal' | 'vertical') { this.setAttribute('orientation', v === 'vertical' ? 'vertical' : 'horizontal'); }
 
 
-    get track() {
+    get track(): string {
       const v = this.getAttribute('track');
-      return TRACKS.includes(v) ? v : 'normal';
+      return v != null && TRACKS.includes(v) ? v : 'normal';
     }
-    set track(v) { this.setAttribute('track', TRACKS.includes(v) ? v : 'normal'); }
+    set track(v: string) { this.setAttribute('track', TRACKS.includes(v) ? v : 'normal'); }
 
-    get valueLabel() {
+    get valueLabel(): string {
       const v = this.getAttribute('value-label');
-      if (VALUE_LABELS.includes(v)) return v;
+      if (v != null && VALUE_LABELS.includes(v)) return v;
       return this.hasAttribute('with-tooltip') ? 'auto' : 'off';
     }
-    set valueLabel(v) { this.setAttribute('value-label', VALUE_LABELS.includes(v) ? v : 'off'); }
+    set valueLabel(v: string) { this.setAttribute('value-label', VALUE_LABELS.includes(v) ? v : 'off'); }
 
-    get minDistance() {
+    get minDistance(): number {
       const n = Number(this.getAttribute('min-distance'));
       return Number.isFinite(n) && n > 0 ? n : 0;
     }
-    set minDistance(v) { this.setAttribute('min-distance', String(v)); }
+    set minDistance(v: number) { this.setAttribute('min-distance', String(v)); }
 
-    get disableSwap() { return this.hasAttribute('disable-swap'); }
-    set disableSwap(v) { this.toggleAttribute('disable-swap', !!v); }
+    get disableSwap(): boolean { return this.hasAttribute('disable-swap'); }
+    set disableSwap(v: boolean) { this.toggleAttribute('disable-swap', !!v); }
 
-    get format() { return this.getAttribute('format') ?? ''; }
-    set format(v) { setOptionalAttr(this, 'format', v); }
+    get format(): string { return this.getAttribute('format') ?? ''; }
+    set format(v: string | null) { setOptionalAttr(this, 'format', v); }
 
     /** Escala no lineal: el valor mostrado es scale(value). */
-    get scale() { return this.#scale; }
-    set scale(fn) { this.#scale = typeof fn === 'function' ? fn : null; this.#render(); }
+    get scale(): ((v: number) => number) | null { return this.#scale; }
+    set scale(fn: ((v: number) => number) | null) { this.#scale = typeof fn === 'function' ? fn : null; this.#render(); }
 
-    get valueLabelFormat() { return this.#valueLabelFormat; }
-    set valueLabelFormat(fn) { this.#valueLabelFormat = typeof fn === 'function' ? fn : null; this.#render(); }
+    get valueLabelFormat(): ((v: number, index: number) => string) | null { return this.#valueLabelFormat; }
+    set valueLabelFormat(fn: ((v: number, index: number) => string) | null) { this.#valueLabelFormat = typeof fn === 'function' ? fn : null; this.#render(); }
 
-    get getAriaValueText() { return this.#ariaValueText; }
-    set getAriaValueText(fn) { this.#ariaValueText = typeof fn === 'function' ? fn : null; this.#render(); }
+    get getAriaValueText(): ((v: number, index: number) => string) | null { return this.#ariaValueText; }
+    set getAriaValueText(fn: ((v: number, index: number) => string) | null) { this.#ariaValueText = typeof fn === 'function' ? fn : null; this.#render(); }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { setStringAttr(this, 'name', v); }
+    get name(): string { return this.getAttribute('name') ?? ''; }
+    set name(v: string | null) { setStringAttr(this, 'name', v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    get withTooltip() { return this.valueLabel !== 'off'; }
-    set withTooltip(v) { this.valueLabel = v ? 'auto' : 'off'; }
+    get withTooltip(): boolean { return this.valueLabel !== 'off'; }
+    set withTooltip(v: boolean) { this.valueLabel = v ? 'auto' : 'off'; }
 
-    get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { setOptionalAttr(this, 'label', v); }
+    get label(): string { return this.getAttribute('label') ?? ''; }
+    set label(v: string | null) { setOptionalAttr(this, 'label', v); }
 
-    get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { setOptionalAttr(this, 'hint', v); }
+    get hint(): string { return this.getAttribute('hint') ?? ''; }
+    set hint(v: string | null) { setOptionalAttr(this, 'hint', v); }
 
     // ---- API pública -----------------------------------------------------
 
-    focus(options) { this.#thumbs[0]?.focus(options); }
-    blur() { this.#thumbs.forEach((t) => t.blur()); }
+    focus(options?: FocusOptions): void { this.#thumbs[0]?.focus(options); }
+    blur(): void { this.#thumbs.forEach((t) => t.blur()); }
 
-    stepUp(index = 0) { this.#nudge(index, this.#stepAmount(), true); }
-    stepDown(index = 0) { this.#nudge(index, -this.#stepAmount(), true); }
+    stepUp(index: number = 0): void { this.#nudge(index, this.#stepAmount() ?? 1, true); }
+    stepDown(index: number = 0): void { this.#nudge(index, -(this.#stepAmount() ?? 1), true); }
 
-    get validity() { return this.#internals?.validity; }
-    get validationMessage() { return this.#internals?.validationMessage ?? ''; }
-    get willValidate() { return this.#internals?.willValidate ?? false; }
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg) {
+    get validity(): ValidityState | undefined { return this.#internals?.validity; }
+    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
+    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void {
       if (msg) setValidity(this.#internals, { customError: true }, msg, this.#thumbs[0]);
       else this.#updateValidity();
     }
 
     // ---- form-associated callbacks ---------------------------------------
 
-    formResetCallback() {
+    formResetCallback(): void {
       this.#values = this.#normalize(this.#readAttrValues());
       this.#render();
     }
 
-    formDisabledCallback(disabled) {
+    formDisabledCallback(disabled: boolean): void {
       this.#syncDisabled(disabled);
       this.#render();
     }
 
-    formStateRestoreCallback(state: string) {
+    formStateRestoreCallback(state: string | File | null): void {
       if (state == null) return;
       const parts = String(state).split(',').map(Number).filter(Number.isFinite);
       if (parts.length) this.value = parts.length > 1 ? parts : parts[0];
@@ -352,7 +353,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return this.#values.length > 1;
     }
 
-    #readAttrValues() {
+    #readAttrValues(): number[] {
       const raw = this.getAttribute('value');
       if (raw == null) {
         return this.hasAttribute('range') ? [this.min, this.max] : [this.min];
@@ -363,7 +364,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     }
 
     /** Lista efectiva de marks (auto por step, parseados o por propiedad). */
-    #markList() {
+    #markList(): { value: number; label: string }[] {
       const cfg = this.marks;
       if (!cfg) return [];
       if (Array.isArray(cfg)) {
@@ -379,12 +380,12 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       if (!step || !(max > min)) return [];
       const count = Math.floor((max - min) / step);
       if (count > 200) return [];
-      const out = [];
+      const out: { value: number; label: string }[] = [];
       for (let i = 0; i <= count; i++) out.push({ value: tidyToStep(min + i * step, step), label: '' });
       return out;
     }
 
-    #snap(n: number) {
+    #snap(n: number): number {
       const min = this.min;
       const max = Math.max(min, this.max);
       if (!Number.isFinite(n)) return min;
@@ -404,21 +405,21 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return clampTo(tidyToStep(min + steps * step, step), min, max);
     }
 
-    #normalize(list) {
+    #normalize(list: number | number[]): number[] {
       const arr = (Array.isArray(list) ? list : [list])
         .map((n) => this.#snap(Number(n)));
       if (!arr.length) return [this.min];
       return arr.length > 1 ? arr.slice().sort((a, b) => a - b) : arr;
     }
 
-    #stepAmount(shift) {
+    #stepAmount(shift?: boolean): number | null {
       if (shift) return this.shiftStep;
       const step = this.step;
       if (step !== null) return step;
       return null; // navegación por marks
     }
 
-    #pct(value) {
+    #pct(value: number): number {
       const min = this.min;
       const max = Math.max(min, this.max);
       if (max === min) return 0;
@@ -427,7 +428,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 
     // ---- render ----------------------------------------------------------
 
-    #syncSlots = () => {
+    #syncSlots = (): void => {
       const labelAttr = this.label.trim();
       const hintAttr = this.hint.trim();
       const hasLabelSlot = hasSlotted(this.#labelSlot);
@@ -438,7 +439,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#hintEl.hidden = !hintAttr && !hasHintSlot;
     };
 
-    #syncDisabled(formDisabled) {
+    #syncDisabled(formDisabled?: boolean): void {
       const disabled = !!formDisabled || this.disabled;
       setCustomState(this.#internals, 'disabled', disabled);
       setCustomState(this.#internals, 'readonly', this.readonly);
@@ -449,19 +450,21 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return this.disabled || this.readonly;
     }
 
-    #syncThumbs() {
+    #syncThumbs(): void {
       const want = this.#values.length;
       while (this.#thumbs.length > want) {
-        this.#thumbs.pop().remove();
+        this.#thumbs.pop()?.remove();
       }
       while (this.#thumbs.length < want) {
-        const node = THUMB_TEMPLATE.content.cloneNode(true).firstElementChild;
+        const fragment = THUMB_TEMPLATE.content.cloneNode(true) as DocumentFragment;
+        const node = fragment.firstElementChild;
+        if (!(node instanceof HTMLElement)) return;
         this.#base.appendChild(node);
         this.#thumbs.push(node);
       }
     }
 
-    #renderMarks() {
+    #renderMarks(): { value: number; label: string }[] {
       const marks = this.#markList();
       const key = JSON.stringify([marks, this.orientation, this.min, this.max]);
       if (key === this.#marksKey) return marks;
@@ -491,11 +494,11 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return marks;
     }
 
-    #displayValue(v) {
+    #displayValue(v: number): number {
       return this.#scale ? this.#scale(v) : v;
     }
 
-    #labelText(v, index) {
+    #labelText(v: number, index: number): string {
       if (this.#valueLabelFormat) return String(this.#valueLabelFormat(this.#displayValue(v), index));
       const shown = this.#displayValue(v);
       const tpl = this.format;
@@ -589,18 +592,18 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#updateValidity();
     }
 
-    #syncFormValue() {
+    #syncFormValue(): void {
       const name = this.name;
       if (this.#values.length > 1 && name) {
         const fd = new FormData();
         for (const v of this.#values) fd.append(name, String(v));
-        setFormValue(this.#internals, fd, this.#values.join(','));
+        setFormValue(this.#internals, fd as unknown as FormDataEntryValue, this.#values.join(','));
         return;
       }
       setFormValue(this.#internals, String(this.#values[0]), this.#values.join(','));
     }
 
-    #updateValidity() {
+    #updateValidity(): void {
       if (!this.#internals) return;
       if (this.required && !this.hasAttribute('value')) {
         setValidity(this.#internals, { valueMissing: true }, 'Seleccione un valor', this.#thumbs[0]);
@@ -609,12 +612,12 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       clearValidity(this.#internals, this.#thumbs[0]);
     }
 
-    #emit(name) {
+    #emit(name: string): void {
       emit(this, name, { value: this.value, values: this.values });
     }
 
     /** Aplica `raw` al thumb `index` respetando swap / min-distance. */
-    #apply(index: number, raw, commitChange) {
+    #apply(index: number, raw: number, commitChange: boolean): number {
       const next = this.#snap(raw);
       const values = this.#values.slice();
       const gap = this.minDistance;
@@ -651,7 +654,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     }
 
     /** Suma `delta` (o navega marks si step es null). */
-    #nudge(index, delta: number, commitChange) {
+    #nudge(index: number, delta: number, commitChange: boolean): number {
       const current = this.#values[index] ?? this.min;
       if (this.step === null && Math.abs(delta) > 0) {
         const marks = this.#markList().map((m) => m.value).sort((x, y) => x - y);
@@ -667,11 +670,11 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return this.#apply(index, current + delta, commitChange);
     }
 
-    #valueFromPointer(e) {
+    #valueFromPointer(e: PointerEvent): number {
       const rect = this.#base.getBoundingClientRect();
       const min = this.min;
       const max = Math.max(min, this.max);
-      let ratio;
+      let ratio: number;
       if (this.orientation === 'vertical') {
         if (!rect.height) return this.#values[this.#activeIndex];
         ratio = 1 - (e.clientY - rect.top) / rect.height;
@@ -684,7 +687,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return min + ratio * (max - min);
     }
 
-    #closestIndex(value: number) {
+    #closestIndex(value: number): number {
       let best = 0;
       let bestDist = Infinity;
       this.#values.forEach((v: number, i) => {
@@ -694,13 +697,14 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return best;
     }
 
-    #onPointerDown = (e: PointerEvent) => {
+    #onPointerDown = (e: PointerEvent): void => {
       if (this.#inert() || e.button !== 0) return;
       e.preventDefault();
 
       const raw = this.#valueFromPointer(e);
-      const thumb = e.target.closest?.('.thumb');
-      this.#activeIndex = thumb ? Number(thumb.dataset.index) : this.#closestIndex(raw);
+      const target = e.target as Element | null;
+      const thumb = target?.closest('.thumb');
+      this.#activeIndex = thumb ? Number((thumb as HTMLElement).dataset.index) : this.#closestIndex(raw);
       this.#valuesAtStart = this.#values.slice();
       this.#dragging = true;
       setCustomState(this.#internals, 'dragging', true);
@@ -714,13 +718,13 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#thumbs[index]?.focus({ preventScroll: true });
     };
 
-    #onPointerMove = (e: PointerEvent) => {
+    #onPointerMove = (e: PointerEvent): void => {
       if (!this.#dragging) return;
       e.preventDefault();
       this.#activeIndex = this.#apply(this.#activeIndex, this.#valueFromPointer(e), false);
     };
 
-    #onPointerUp = (e: PointerEvent) => {
+    #onPointerUp = (e: PointerEvent): void => {
       if (!this.#dragging) return;
       this.#apply(this.#activeIndex, this.#valueFromPointer(e), false);
       const differs = this.#values.some((v, i) => v !== this.#valuesAtStart[i]);
@@ -728,7 +732,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       if (differs) this.#emit('is-change');
     };
 
-    #endDrag() {
+    #endDrag(): void {
       if (!this.#dragging) return;
       this.#dragging = false;
       setCustomState(this.#internals, 'dragging', false);
@@ -737,17 +741,18 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#base.removeEventListener('pointercancel', this.#onPointerUp);
     }
 
-    #onKeyDown = (e: KeyboardEvent) => {
+    #onKeyDown = (e: KeyboardEvent): void => {
       if (this.#inert()) return;
-      const thumb = e.target.closest?.('.thumb');
+      const target = e.target as Element | null;
+      const thumb = target?.closest('.thumb');
       if (!thumb) return;
-      const index = Number(thumb.dataset.index) || 0;
+      const index = Number((thumb as HTMLElement).dataset.index) || 0;
       const min = this.min;
       const max = Math.max(min, this.max);
       const unit = e.shiftKey ? this.shiftStep : (this.#stepAmount() ?? 1);
       const big = this.shiftStep;
-      let delta = null;
-      let absolute = null;
+      let delta: number | null = null;
+      let absolute: number | null = null;
 
       switch (e.key) {
         case 'ArrowLeft':
@@ -762,18 +767,18 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       }
 
       e.preventDefault();
-      let nextIndex;
+      let nextIndex: number;
       if (absolute !== null) {
         this.#valuesAtStart = this.#values.slice();
         nextIndex = this.#apply(index, absolute, true);
       } else {
-        nextIndex = this.#nudge(index, delta, true);
+        nextIndex = this.#nudge(index, delta ?? 0, true);
       }
       if (nextIndex !== index) this.#thumbs[nextIndex]?.focus({ preventScroll: true });
     };
 
-    #onFocusIn = () => { setCustomState(this.#internals, 'focused', true); };
-    #onFocusOut = () => { setCustomState(this.#internals, 'focused', false); };
+    #onFocusIn = (): void => { setCustomState(this.#internals, 'focused', true); };
+    #onFocusOut = (): void => { setCustomState(this.#internals, 'focused', false); };
   }
 
   defineElement('is-slider', IsSlider, 'IsSlider');
