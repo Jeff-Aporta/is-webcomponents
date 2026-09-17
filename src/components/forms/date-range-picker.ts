@@ -33,7 +33,7 @@ import { ElementBase } from '../../core/element-base.js';
     </div>
   `;
 
-  const OBSERVED = [
+  const OBSERVED: string[] = [
     'value', 'calendars', 'month', 'shortcuts', 'min', 'max', 'locale',
     'first-day-of-week', 'weekday-width', 'show-outside-days', 'fixed-weeks',
     'show-week-numbers', 'disable-past', 'disable-future', 'disabled-dates',
@@ -41,13 +41,13 @@ import { ElementBase } from '../../core/element-base.js';
   ];
 
   /** Atributos que se copian tal cual a cada calendario hijo. */
-  const MIRRORED = [
+  const MIRRORED: string[] = [
     'min', 'max', 'locale', 'first-day-of-week', 'weekday-width',
     'show-outside-days', 'fixed-weeks', 'show-week-numbers', 'disable-past',
     'disable-future', 'disabled-dates', 'disabled-days', 'disabled', 'readonly',
   ];
 
-  const LABELS = {
+  const LABELS: Record<string, Record<string, string>> = {
     es: {
       'this-week': 'Esta semana',
       'last-week': 'Semana pasada',
@@ -68,24 +68,24 @@ import { ElementBase } from '../../core/element-base.js';
     },
   };
 
-  const PRESETS = Object.keys(LABELS.es);
+  const PRESETS: string[] = Object.keys(LABELS.es);
 
-  function shift(date, days) {
+  function shift(date: Date, days: number): Date {
     const d = new Date(date);
     d.setDate(d.getDate() + days);
     return d;
   }
 
   /** Lunes de la semana de `date` (los atajos siguen la semana ISO). */
-  function weekStart(date) {
+  function weekStart(date: Date): Date {
     return shift(date, -((date.getDay() + 6) % 7));
   }
 
-  function endOfMonth(date) {
+  function endOfMonth(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
-  function presetRange(key) {
+  function presetRange(key: string | undefined): [string, string] | null {
     const today = new Date();
     switch (key) {
       case 'this-week': {
@@ -124,7 +124,7 @@ import { ElementBase } from '../../core/element-base.js';
     #presets!: HTMLElement;
     #calendars!: HTMLElement;
     #pickers: HTMLElement[] = [];
-    #anchor = startOfMonth(new Date());
+    #anchor: Date = startOfMonth(new Date());
 
     constructor() {
       super();
@@ -137,14 +137,14 @@ import { ElementBase } from '../../core/element-base.js';
       this.#shortcuts.addEventListener('click', this.#onShortcut);
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#anchor = this.#anchorFromState();
       this.#syncPickerCount();
       this.#renderShortcuts();
       this.#sync();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
       if (name === 'calendars') this.#syncPickerCount();
       if (name === 'shortcuts' || name === 'locale') this.#renderShortcuts();
       if (name === 'value') this.#anchor = this.#anchorFromState();
@@ -157,55 +157,58 @@ import { ElementBase } from '../../core/element-base.js';
 
     /* ── API ──────────────────────────────────────────────────────────── */
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string | number | null | undefined) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
 
-    get start() { return this.#parts()[0]; }
-    get end() { return this.#parts()[1]; }
+    get start(): string | null { return this.#parts()[0]; }
+    get end(): string | null { return this.#parts()[1]; }
 
-    get calendars() {
+    get calendars(): number {
       const n = Number(this.getAttribute('calendars'));
       return Math.min(3, Math.max(1, Number.isFinite(n) && n ? n : 2));
     }
-    set calendars(v) { this.setAttribute('calendars', String(v)); }
+    set calendars(v: number | string) { this.setAttribute('calendars', String(v)); }
 
-    get locale() { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
-    set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    get locale(): string | undefined { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
+    set locale(v: string | null) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** Mes del primer calendario, `yyyy-mm`. */
-    get month() { return monthKey(this.#anchor); }
-    set month(v) { this.setAttribute('month', String(v)); }
+    get month(): string { return monthKey(this.#anchor); }
+    set month(v: string | number) { this.setAttribute('month', String(v)); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    clear() {
+    clear(): void {
       this.removeAttribute('value');
       emit(this, 'is-change', { start: null, end: null });
     }
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #parts() {
-      const [a = null, b = null] = this.value.split(/\s*[/,|]\s*/).filter(Boolean);
+    #parts(): [string | null, string | null] {
+      const [a, b] = this.value.split(/\s*[/,|]\s*/).filter(Boolean);
       return [a && parseISO(a) ? a : null, b && parseISO(b) ? b : null];
     }
 
-    #anchorFromState() {
+    #anchorFromState(): Date {
       const [start] = this.#parts();
       const d = start ? parseISO(start) : null;
       if (d) return startOfMonth(d);
       const attr = this.getAttribute('month');
-      const fromAttr = attr && parseISO(`${attr}-01`);
+      const fromAttr = attr ? parseISO(`${attr}-01`) : null;
       return fromAttr || this.#anchor;
     }
 
-    #syncPickerCount() {
+    #syncPickerCount(): void {
       const want = this.calendars;
-      while (this.#pickers.length > want) this.#pickers.pop().remove();
+      while (this.#pickers.length > want) {
+        const last = this.#pickers.pop();
+        last?.remove();
+      }
       while (this.#pickers.length < want) {
         const picker = document.createElement('is-date-picker');
         picker.setAttribute('mode', 'range');
@@ -216,7 +219,7 @@ import { ElementBase } from '../../core/element-base.js';
         picker.addEventListener('is-month-change', this.#onPickerMonth);
         // Los eventos de los hijos no son API de is-date-range-picker.
         for (const type of ['is-view-change', 'is-day-hover']) {
-          picker.addEventListener(type, (e) => e.stopPropagation());
+          picker.addEventListener(type, (e: Event) => e.stopPropagation());
         }
         this.#pickers.push(picker);
         this.#calendars.appendChild(picker);
@@ -224,9 +227,9 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /** Empuja rango, mes y opciones a cada calendario. */
-    #sync() {
+    #sync(): void {
       const value = this.value;
-      this.#pickers.forEach((picker, i: string) => {
+      this.#pickers.forEach((picker, i: number) => {
         picker.dataset.index = String(i);
         // Un solo calendario navega libre; con varios, cada extremo mueve el set.
         picker.setAttribute('nav', this.#pickers.length === 1
@@ -244,21 +247,21 @@ import { ElementBase } from '../../core/element-base.js';
       this.#markActiveShortcut();
     }
 
-    #renderShortcuts() {
+    #renderShortcuts(): void {
       const raw = (this.getAttribute('shortcuts') || '').trim().toLowerCase();
       const keys = raw === 'none' || raw === ''
         ? []
-        : raw.split(/[\s,]+/).filter((k) => PRESETS.includes(k));
+        : raw.split(/[\s,]+/).filter((k: string) => PRESETS.includes(k));
       const lang = String(this.locale || 'es').slice(0, 2);
       const dict = LABELS[lang] || LABELS.es;
 
-      this.#presets.replaceChildren(...keys.map((key) => {
+      this.#presets.replaceChildren(...keys.map((key: string) => {
         const btn = document.createElement('is-button');
         btn.setAttribute('variant', 'outlined');
         btn.setAttribute('color', key === 'reset' ? 'neutral' : 'brand');
         btn.setAttribute('pill', '');
         btn.dataset.preset = key;
-        btn.textContent = dict[key];
+        btn.textContent = dict[key] ?? key;
         return btn;
       }));
 
@@ -268,9 +271,9 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /** Resalta el atajo cuyo rango coincide con la selección actual. */
-    #markActiveShortcut() {
+    #markActiveShortcut(): void {
       const current = this.#parts().join('/');
-      for (const btn of this.#presets.children) {
+      for (const btn of Array.from(this.#presets.children) as HTMLElement[]) {
         const range = presetRange(btn.dataset.preset);
         const on = !!range && range.join('/') === current;
         btn.toggleAttribute('data-active', on);
@@ -278,7 +281,7 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
 
-    #applyRange(start, end, source) {
+    #applyRange(start: string | null, end: string | null, source: string): void {
       if (this.disabled || this.readonly) return;
       if (!start) this.removeAttribute('value');
       else this.setAttribute('value', end ? `${start}/${end}` : start);
@@ -287,9 +290,10 @@ import { ElementBase } from '../../core/element-base.js';
       emit(this, 'is-change', { start: start || null, end: end || null, source });
     }
 
-    #onPickerChange = (e) => {
+    #onPickerChange = (e: Event): void => {
       e.stopPropagation();
-      const { start, end } = e.detail;
+      const detail = (e as CustomEvent<{ start: string | null; end: string | null }>).detail;
+      const { start, end } = detail;
       // El ancla no se mueve al elegir: el usuario está mirando estos meses.
       const keep = this.#anchor;
       if (!start) this.removeAttribute('value');
@@ -299,20 +303,23 @@ import { ElementBase } from '../../core/element-base.js';
       emit(this, 'is-change', { start: start || null, end: end || null, source: 'calendar' });
     };
 
-    #onPickerHover = (e) => {
-      const iso = e.detail?.iso || null;
+    #onPickerHover = (e: Event): void => {
+      const detail = (e as CustomEvent<{ iso: string | null }>).detail;
+      const iso = detail?.iso || null;
       for (const picker of this.#pickers) {
         if (iso) picker.setAttribute('preview-to', iso);
         else picker.removeAttribute('preview-to');
       }
     };
 
-    #onPickerMonth = (e) => {
+    #onPickerMonth = (e: Event): void => {
       e.stopPropagation();
-      const key = e.detail?.month;
-      const d = key && parseISO(`${key}-01`);
+      const detail = (e as CustomEvent<{ month: string }>).detail;
+      const key = detail?.month;
+      const d = key ? parseISO(`${key}-01`) : null;
       if (!d) return;
-      const index = Number(e.target.dataset.index) || 0;
+      const target = e.target as HTMLElement;
+      const index = Number(target.dataset.index) || 0;
       const anchor = addMonths(d, -index);
       if (monthKey(anchor) === monthKey(this.#anchor)) return;
       this.#anchor = anchor;
@@ -320,8 +327,9 @@ import { ElementBase } from '../../core/element-base.js';
       emit(this, 'is-month-change', { month: this.month });
     };
 
-    #onShortcut = (e) => {
-      const btn = e.target.closest('[data-preset], [data-range]');
+    #onShortcut = (e: Event): void => {
+      const target = e.target as Element | null;
+      const btn = target?.closest('[data-preset], [data-range]') as HTMLElement | null;
       if (!btn) return;
       if (btn.dataset.preset === 'reset') {
         this.#applyRange(null, null, 'shortcut');
@@ -332,8 +340,9 @@ import { ElementBase } from '../../core/element-base.js';
         : presetRange(btn.dataset.preset);
       if (!range) return;
       const [start, end] = range;
-      this.#anchor = startOfMonth(parseISO(start) || new Date());
-      this.#applyRange(start, end, 'shortcut');
+      const startDate = start ? parseISO(start) : null;
+      this.#anchor = startOfMonth(startDate || new Date());
+      this.#applyRange(start ?? null, end ?? null, 'shortcut');
     };
   }
 
