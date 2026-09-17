@@ -18,10 +18,13 @@ import { ElementBase } from '../../core/element-base.js';
     <div part="base" class="base"></div>
   `;
 
-  const OBSERVED = [
+  const OBSERVED: string[] = [
     'value', 'layout', 'step', 'minutes-step', 'seconds', 'ampm', 'hour24',
     'min-time', 'max-time', 'skip-disabled', 'locale', 'disabled', 'readonly',
   ];
+
+  interface TimeParts { h: number; m: number; s: number; }
+  interface OptionInput { label: string; raw: string | number; selected: boolean; disabled: boolean; }
 
   class IsDigitalClock extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -42,61 +45,61 @@ import { ElementBase } from '../../core/element-base.js';
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#render();
       this.scrollToSelection();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#render();
       if (name === 'value') this.scrollToSelection();
     }
 
     /* ── API ──────────────────────────────────────────────────────────── */
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string | number | null) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
 
-    get layout() { return this.getAttribute('layout') === 'sections' ? 'sections' : 'list'; }
-    set layout(v) { this.setAttribute('layout', v === 'sections' ? 'sections' : 'list'); }
+    get layout(): 'list' | 'sections' { return this.getAttribute('layout') === 'sections' ? 'sections' : 'list'; }
+    set layout(v: 'list' | 'sections') { this.setAttribute('layout', v === 'sections' ? 'sections' : 'list'); }
 
-    get step() {
+    get step(): number {
       const n = Number(this.getAttribute('step'));
       return Number.isFinite(n) && n > 0 ? n : 30;
     }
-    set step(v) { this.setAttribute('step', String(v)); }
+    set step(v: number) { this.setAttribute('step', String(v)); }
 
-    get minutesStep() {
+    get minutesStep(): number {
       const n = Number(this.getAttribute('minutes-step'));
       return Number.isFinite(n) && n > 0 ? n : 5;
     }
-    set minutesStep(v) { this.setAttribute('minutes-step', String(v)); }
+    set minutesStep(v: number) { this.setAttribute('minutes-step', String(v)); }
 
-    get seconds() { return this.hasAttribute('seconds'); }
-    set seconds(v) { this.toggleAttribute('seconds', !!v); }
+    get seconds(): boolean { return this.hasAttribute('seconds'); }
+    set seconds(v: boolean) { this.toggleAttribute('seconds', !!v); }
 
-    get ampm() {
+    get ampm(): boolean {
       if (this.hasAttribute('hour24')) return false;
       if (this.hasAttribute('ampm')) return this.getAttribute('ampm') !== 'false';
       return uses12Hour(this.locale);
     }
-    set ampm(v) { this.toggleAttribute('ampm', !!v); }
+    set ampm(v: boolean) { this.toggleAttribute('ampm', !!v); }
 
-    get skipDisabled() { return this.hasAttribute('skip-disabled'); }
-    set skipDisabled(v) { this.toggleAttribute('skip-disabled', !!v); }
+    get skipDisabled(): boolean { return this.hasAttribute('skip-disabled'); }
+    set skipDisabled(v: boolean) { this.toggleAttribute('skip-disabled', !!v); }
 
-    get locale() { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
-    set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    get locale(): string | undefined { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
+    set locale(v: string | null) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get time() { return parseTime(this.value); }
+    get time(): TimeParts | null { return parseTime(Number(this.value) || NaN) as TimeParts | null; }
 
-    scrollToSelection() {
+    scrollToSelection(): void {
       for (const col of this.#base.querySelectorAll<HTMLElement>('.col, .list')) {
         col.querySelector<HTMLElement>('[data-selected]')?.scrollIntoView({ block: 'center' });
       }
@@ -104,11 +107,11 @@ import { ElementBase } from '../../core/element-base.js';
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #allowed(time) {
+    #allowed(time: TimeParts): boolean {
       const withSeconds = this.seconds;
       const v = toTime(time, withSeconds);
-      const norm = (raw) => {
-        const t = parseTime(raw);
+      const norm = (raw: string | null): string | null => {
+        const t = parseTime(raw == null ? NaN : Number(raw)) as TimeParts | null;
         return t ? toTime(t, withSeconds) : null;
       };
       const lo = norm(this.getAttribute('min-time'));
@@ -118,7 +121,7 @@ import { ElementBase } from '../../core/element-base.js';
       return true;
     }
 
-    #commit(time) {
+    #commit(time: TimeParts): void {
       if (this.disabled || this.readonly) return;
       const next = toTime(time, this.seconds);
       if (next === this.value) return;
@@ -126,7 +129,7 @@ import { ElementBase } from '../../core/element-base.js';
       emit(this, 'is-change', { value: next });
     }
 
-    #option(label, { section, raw, selected, disabled }) {
+    #option(label: string, { section, raw, selected, disabled }: OptionInput & { section: string }): HTMLButtonElement {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'opt';
@@ -145,13 +148,13 @@ import { ElementBase } from '../../core/element-base.js';
       return btn;
     }
 
-    #render() {
+    #render(): void {
       this.#base.dataset.layout = this.layout;
       if (this.layout === 'sections') this.#renderSections();
       else this.#renderList();
     }
 
-    #renderList() {
+    #renderList(): void {
       const list = document.createElement('div');
       list.className = 'list';
       list.setAttribute('role', 'listbox');
@@ -163,15 +166,15 @@ import { ElementBase } from '../../core/element-base.js';
       let anyTabbable = false;
 
       for (let minutes = 0; minutes < 24 * 60; minutes += step) {
-        const time = { h: Math.floor(minutes / 60), m: minutes % 60, s: 0 };
+        const time: TimeParts = { h: Math.floor(minutes / 60), m: minutes % 60, s: 0 };
         const key = toTime(time, false);
         const disabled = this.disabled || !this.#allowed(time);
         if (disabled && this.skipDisabled) continue;
         const selected = key === currentKey;
         if (selected) anyTabbable = true;
         list.appendChild(this.#option(
-          formatTime(time, this.locale, { hour12: this.ampm }),
-          { section: 'time', raw: key, selected, disabled },
+          formatTime(time, this.locale, { hour12: this.ampm } as { hour12?: boolean; seconds?: boolean }) as string,
+          { section: 'time', raw: key, selected, disabled } as OptionInput & { section: string },
         ));
       }
 
@@ -182,40 +185,40 @@ import { ElementBase } from '../../core/element-base.js';
       this.#base.replaceChildren(list);
     }
 
-    #renderSections() {
+    #renderSections(): void {
       const t = this.time;
       const ampm = this.ampm;
-      const cols = [];
+      const cols: HTMLElement[] = [];
 
-      const hours = [];
+      const hours: number[] = [];
       if (ampm) for (let h = 1; h <= 12; h++) hours.push(h);
       else for (let h = 0; h < 24; h++) hours.push(h);
 
-      cols.push(this.#column('hours', 'Horas', hours.map((h: string) => {
+      cols.push(this.#column('hours', 'Horas', hours.map((h: number): OptionInput => {
         const raw = ampm ? from12Hour(h, t ? to12Hour(t.h).meridiem : 'AM') : h;
         const selected = !!t && raw === t.h;
         return {
-          label: ampm ? String(h) : pad(h),
+          label: ampm ? String(h) : pad(String(h)),
           raw,
           selected,
           disabled: this.disabled || !this.#allowed({ ...(t || { m: 0, s: 0 }), h: raw }),
         };
       })));
 
-      const minutes = [];
+      const minutes: number[] = [];
       for (let m = 0; m < 60; m += this.minutesStep) minutes.push(m);
-      cols.push(this.#column('minutes', 'Minutos', minutes.map((m) => ({
-        label: pad(m),
+      cols.push(this.#column('minutes', 'Minutos', minutes.map((m: number): OptionInput => ({
+        label: pad(String(m)),
         raw: m,
         selected: !!t && m === t.m,
         disabled: this.disabled || !this.#allowed({ h: t?.h ?? 0, m, s: t?.s ?? 0 }),
       }))));
 
       if (this.seconds) {
-        const secs = [];
+        const secs: number[] = [];
         for (let s = 0; s < 60; s += 5) secs.push(s);
-        cols.push(this.#column('seconds', 'Segundos', secs.map((s) => ({
-          label: pad(s),
+        cols.push(this.#column('seconds', 'Segundos', secs.map((s: number): OptionInput => ({
+          label: pad(String(s)),
           raw: s,
           selected: !!t && s === t.s,
           disabled: this.disabled || !this.#allowed({ h: t?.h ?? 0, m: t?.m ?? 0, s }),
@@ -223,7 +226,7 @@ import { ElementBase } from '../../core/element-base.js';
       }
 
       if (ampm) {
-        cols.push(this.#column('meridiem', 'AM / PM', ['AM', 'PM'].map((mer) => ({
+        cols.push(this.#column('meridiem', 'AM / PM', ['AM', 'PM'].map((mer: string): OptionInput => ({
           label: mer,
           raw: mer,
           selected: !!t && to12Hour(t.h).meridiem === mer,
@@ -235,7 +238,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#base.replaceChildren(...cols);
     }
 
-    #column(section, label, items) {
+    #column(section: string, label: string, items: OptionInput[]): HTMLElement {
       const col = document.createElement('div');
       col.className = 'col';
       col.setAttribute('role', 'listbox');
@@ -252,14 +255,14 @@ import { ElementBase } from '../../core/element-base.js';
       return col;
     }
 
-    #apply(section, raw) {
+    #apply(section: string, raw: string): void {
       const t = this.time || { h: 0, m: 0, s: 0 };
       if (section === 'time') {
-        const parsed = parseTime(raw);
+        const parsed = parseTime(Number(raw)) as TimeParts | null;
         if (parsed) this.#commit({ ...parsed, s: this.seconds ? parsed.s : 0 });
         return;
       }
-      const next = { ...t };
+      const next: TimeParts = { ...t };
       if (section === 'hours') next.h = Number(raw);
       else if (section === 'minutes') next.m = Number(raw);
       else if (section === 'seconds') next.s = Number(raw);
@@ -267,15 +270,15 @@ import { ElementBase } from '../../core/element-base.js';
       if (this.#allowed(next)) this.#commit(next);
     }
 
-    #onClick = (e: PointerEvent) => {
-      const btn = e.target.closest('button.opt');
+    #onClick = (e: PointerEvent): void => {
+      const btn = (e.target as Element | null)?.closest('button.opt') as HTMLButtonElement | null;
       if (!btn || btn.disabled) return;
-      this.#apply(btn.dataset.section, btn.dataset.raw);
+      this.#apply(btn.dataset.section ?? '', btn.dataset.raw ?? '');
     };
 
-    #onKey = (e: KeyboardEvent) => {
-      const btn = e.target.closest?.('button.opt');
-      if (!btn) return;
+    #onKey = (e: KeyboardEvent): void => {
+      const btn = (e.target as Element | null)?.closest?.('button.opt') as HTMLButtonElement | null;
+      if (!btn || !btn.parentElement) return;
       const step = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0;
       if (!step) return;
       e.preventDefault();
