@@ -116,9 +116,9 @@ import { ModalBase } from '../_shared/modal-base.js';
 
     // ---- placement ----
 
-    get placement() {
+    get placement(): string {
       const v = this.getAttribute('placement');
-      return VALID_PLACEMENT.includes(v) ? v : 'end';
+      return VALID_PLACEMENT.includes(v ?? '') ? (v as string) : 'end';
     }
     set placement(v) {
       if (v == null || v === '') this.removeAttribute('placement');
@@ -127,7 +127,7 @@ import { ModalBase } from '../_shared/modal-base.js';
 
     // ---- animaciones ----
 
-    animateOpen() {
+    animateOpen(): Promise<void> {
       const dur = this.#readDur('--is-drawer-show-duration', 220);
       this.$modal.animate(
         [this.#hiddenKeyframe(), this.#visibleKeyframe()],
@@ -140,7 +140,7 @@ import { ModalBase } from '../_shared/modal-base.js';
       return new Promise((resolve) => setTimeout(resolve, dur));
     }
 
-    animateClose() {
+    animateClose(): Promise<void> {
       const dur = this.#readDur('--is-drawer-hide-duration', 180);
       this.$modal.animate(
         [this.#visibleKeyframe(), this.#hiddenKeyframe()],
@@ -154,11 +154,11 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
 
     /** Posición fuera de pantalla, del lado del borde que ocupa el drawer. */
-    #hiddenKeyframe() { return HIDDEN_KEYFRAME[this.placement]; }
+    #hiddenKeyframe(): Keyframe { return HIDDEN_KEYFRAME[this.placement as keyof typeof HIDDEN_KEYFRAME]; }
 
-    #visibleKeyframe() { return { transform: 'translate(0,0)' }; }
+    #visibleKeyframe(): Keyframe { return { transform: 'translate(0,0)' }; }
 
-    #readDur(propName, fallback) {
+    #readDur(propName: string, fallback: number): number {
       const v = parseFloat(getComputedStyle(this).getPropertyValue(propName));
       return Number.isFinite(v) ? v : fallback;
     }

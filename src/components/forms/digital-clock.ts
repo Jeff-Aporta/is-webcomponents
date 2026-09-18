@@ -265,7 +265,8 @@ import { ElementBase } from '../../core/element-base.js';
     #apply(section: string, raw: string): void {
       const t = this.time || { h: 0, m: 0, s: 0 };
       if (section === 'time') {
-        const parsed = parseTime(Number(raw)) as TimeParts | null;
+        const n = Number(raw);
+        const parsed = parseTime(Number.isFinite(n) ? String(n) : raw) as TimeParts | null;
         if (parsed) this.#commit({ ...parsed, s: this.seconds ? parsed.s : 0 });
         return;
       }
@@ -273,7 +274,7 @@ import { ElementBase } from '../../core/element-base.js';
       if (section === 'hours') next.h = Number(raw);
       else if (section === 'minutes') next.m = Number(raw);
       else if (section === 'seconds') next.s = Number(raw);
-      else if (section === 'meridiem') next.h = from12Hour(to12Hour(t.h).hour, raw);
+      else if (section === 'meridiem') next.h = from12Hour(to12Hour(t.h).hour, raw as 'AM' | 'PM');
       if (this.#allowed(next)) this.#commit(next);
     }
 
