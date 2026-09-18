@@ -36,6 +36,8 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'scale-unit']; }
     #raf = 0;
+    #onMove: ((e: PointerEvent) => void) | null = null;
+    #onLeave: (() => void) | null = null;
 
     constructor() {
       super();
@@ -47,8 +49,10 @@ import { withStyleAttrs } from '../../core/attrs.js';
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#root = this.shadowRoot!.querySelector<HTMLElement>('.root')!;
-      this.#root.addEventListener('pointermove', this.#onMove = (e) => this.#updateMagnification(e));
-      this.#root.addEventListener('pointerleave', this.#onLeave = () => this.#clearMagnification());
+      this.#onMove = (e: PointerEvent): void => this.#updateMagnification(e);
+      this.#onLeave = (): void => this.#clearMagnification();
+      this.#root.addEventListener('pointermove', this.#onMove);
+      this.#root.addEventListener('pointerleave', this.#onLeave);
     }
 
     connectedCallback(): void {
@@ -66,39 +70,29 @@ import { withStyleAttrs } from '../../core/attrs.js';
       if (name === 'position') this.#syncPosition();
     }
 
-    #onMove;
-    #onLeave;
     #root!: HTMLElement;
-    #items() {
+    #items(): HTMLElement[] {
       const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot');
-      return (slot?.assignedElements?.() ?? []);
+      const assigned = slot?.assignedElements?.() ?? [];
+      return assigned.filter((el): el is HTMLElement => el instanceof HTMLElement);
     }
 
-    #syncPosition() {
+    #syncPosition(): void {
       const p = this.getAttribute('position') || 'bottom';
       this.#root.dataset.position = ['bottom', 'top', 'left', 'right'].includes(p) ? p : 'bottom';
     }
 
-    #clearMagnification() {
-      for (const item of this.#items()) item.style?.removeProperty('--scale');
+    #clearMagnification(): void {
+      for (const item of this.#items()) item.style.removeProperty('--scale');
     }
 
-    #updateMagnification(e) {
+    #updateMagnification(e: PointerEvent): void {
       cancelAnimationFrame(this.#raf);
       this.#raf = requestAnimationFrame(() => {
         const max = Number(this.getAttribute('max-scale')) || 1.6;
         const range = Number(this.getAttribute('range')) || 110;
         const pointer = { x: e.clientX, y: e.clientY };
         const items = this.#items();
-        let nearest = null; let nearestDist = Infinity;
-        for (const item of items) {
-          const r = item.getBoundingClientRect();
-          const cx = r.left + r.width / 2;
-          const cy = r.top + r.height / 2;
-          const d = Math.hypot(cx - pointer.x, cy - pointer.y);
-          if (d < nearestDist) { nearestDist = d; nearest = item; }
-        }
-        // cada item: factor según distancia al `nearest`
         for (const item of items) {
           const r = item.getBoundingClientRect();
           const cx = r.left + r.width / 2;
@@ -106,7 +100,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
           const d = Math.hypot(cx - pointer.x, cy - pointer.y);
           const factor = Math.max(0, 1 - d / range);
           const scale = 1 + (max - 1) * factor;
-          item.style?.setProperty('--scale', String(scale.toFixed(3)));
+          item.style.setProperty('--scale', String(scale.toFixed(3)));
         }
       });
     }
@@ -140,6 +134,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
     }
     connectedCallback(): void {
       const link = this.shadowRoot!.querySelector<HTMLAnchorElement>('a');
+      if (!link) return;
       const href = this.getAttribute('href');
       if (href) link.setAttribute('href', href);
       else link.removeAttribute('href');
