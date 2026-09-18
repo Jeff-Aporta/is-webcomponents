@@ -62,8 +62,8 @@ import { ElementBase } from '../../core/element-base.js';
     #viewport!: HTMLElement;
     #btnStart!: HTMLElement;
     #btnEnd!: HTMLElement;
-    #ro;
-    #onScroll;
+    #ro: ResizeObserver | null = null;
+    #onScroll: (() => void) | null = null;
 
     constructor() {
       super();
@@ -83,13 +83,14 @@ import { ElementBase } from '../../core/element-base.js';
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
       this.#ro = new ResizeObserver(this.#syncOverflow);
       this.#ro.observe(this.#viewport);
-      this.#viewport.addEventListener('scroll', this.#onScroll, { passive: true });
+      const onScroll = this.#onScroll;
+      if (onScroll) this.#viewport.addEventListener('scroll', onScroll, { passive: true });
       requestAnimationFrame(() => this.#syncOverflow());
     }
 
     onDisconnected() {
       this.#ro?.disconnect();
-      this.#viewport.removeEventListener('scroll', this.#onScroll);
+      if (this.#onScroll) this.#viewport.removeEventListener('scroll', this.#onScroll);
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
@@ -97,19 +98,35 @@ import { ElementBase } from '../../core/element-base.js';
       if (name === 'without-scroll-buttons') this.#syncOverflow();
     }
 
-    get orientation() {
+    get orientation(): 'horizontal' | 'vertical' | 'both' {
       const v = this.getAttribute('orientation');
       return v === 'vertical' || v === 'both' ? v : 'horizontal';
     }
-    set orientation(v) {
-      if (v == null || v === '') this.removeAttribute('orientation');
+    set orientation(v: 'horizontal' | 'vertical' | 'both' | null | undefined) {
+      if (v == null) this.removeAttribute('orientation');
       else this.setAttribute('orientation', v);
     }
 
     // API pública
-    scrollTo(options) { this.#viewport.scrollTo(options); }
-    scrollBy(options) { this.#viewport.scrollBy(options); }
-    getViewport() { return this.#viewport; }
+    scrollTo(x: number, y: number): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollTo(optionsOrX?: ScrollToOptions | number, y?: number): void {
+      if (typeof optionsOrX === 'number') {
+        this.#viewport.scrollTo({ left: optionsOrX, top: y ?? 0 });
+      } else {
+        this.#viewport.scrollTo(optionsOrX);
+      }
+    }
+    scrollBy(x: number, y: number): void;
+    scrollBy(options?: ScrollToOptions): void;
+    scrollBy(optionsOrX?: ScrollToOptions | number, y?: number): void {
+      if (typeof optionsOrX === 'number') {
+        this.#viewport.scrollBy({ left: optionsOrX, top: y ?? 0 });
+      } else {
+        this.#viewport.scrollBy(optionsOrX);
+      }
+    }
+    getViewport(): HTMLElement { return this.#viewport; }
 
     // ---- private ----
 
