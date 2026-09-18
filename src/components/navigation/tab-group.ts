@@ -97,9 +97,9 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
     #navSlot!: HTMLSlotElement;
     #tabsWrap!: HTMLElement;
     #scrollStart!: HTMLElement;
-    #scrollRo = null;
+    #scrollRo: ResizeObserver | null = null;
     #scrollEnd!: HTMLElement;
-    #upgradeProps = ['active', 'placement', 'activation', 'withoutScrollControls', 'urlKey'];
+    #upgradeProps: string[] = ['active', 'placement', 'activation', 'withoutScrollControls', 'urlKey'];
     /** Evita escribir la URL al restaurar desde ella. */
     #restoringUrl = false;
 
@@ -167,46 +167,47 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       else this.setAttribute('active', v);
     }
 
-    get placement() {
+    get placement(): 'top' | 'bottom' | 'start' | 'end' {
       const v = this.getAttribute('placement');
-      return VALID_PLACEMENT.includes(v) ? v : 'top';
+      return (v && (VALID_PLACEMENT as readonly string[]).includes(v)) ? (v as 'top' | 'bottom' | 'start' | 'end') : 'top';
     }
-    set placement(v) {
-      if (v == null || v === '') this.removeAttribute('placement');
-      else if (VALID_PLACEMENT.includes(v)) this.setAttribute('placement', v);
+    set placement(v: 'top' | 'bottom' | 'start' | 'end' | null | undefined) {
+      if (v == null) this.removeAttribute('placement');
+      else if ((VALID_PLACEMENT as readonly string[]).includes(v)) this.setAttribute('placement', v);
     }
 
-    get activation() {
+    get activation(): 'auto' | 'manual' {
       const v = this.getAttribute('activation');
-      return VALID_ACTIVATION.includes(v) ? v : 'auto';
+      return (v && (VALID_ACTIVATION as readonly string[]).includes(v)) ? (v as 'auto' | 'manual') : 'auto';
     }
-    set activation(v) {
-      if (v == null || v === '') this.removeAttribute('activation');
-      else if (VALID_ACTIVATION.includes(v)) this.setAttribute('activation', v);
+    set activation(v: 'auto' | 'manual' | null | undefined) {
+      if (v == null) this.removeAttribute('activation');
+      else if ((VALID_ACTIVATION as readonly string[]).includes(v)) this.setAttribute('activation', v);
     }
 
     /** Key del query param. Vacío = sin memoria URL. */
-    get urlKey() { return (this.getAttribute('url-key') || '').trim(); }
-    set urlKey(v) {
+    get urlKey(): string { return (this.getAttribute('url-key') || '').trim(); }
+    set urlKey(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('url-key');
       else this.setAttribute('url-key', String(v));
     }
 
-    show(name) { this.active = name; }
+    show(name: string): void { this.active = name; }
 
     // ---- private ----
 
     #upgradeProperties() {
+      const self = this as unknown as Record<string, unknown>;
       for (const a of this.#upgradeProps) {
         if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
+          const v = self[a];
+          delete self[a];
           if (v != null && v !== false) {
             const attr = a === 'withoutScrollControls' ? 'without-scroll-controls'
               : a === 'urlKey' ? 'url-key'
                 : a;
             if (v === true) this.setAttribute(attr, '');
-            else this.setAttribute(attr, v);
+            else this.setAttribute(attr, String(v));
           }
         }
       }
@@ -270,11 +271,12 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       // Si no hay panel activo aún pero hay paneles, activar el primero.
       if (!any && panels.length > 0 && !activeName) {
         const first = panels[0].getAttribute('name');
-        this.active = first;
+        if (first) this.active = first;
       }
     }
 
     #onClick = (e: PointerEvent) => {
+      if (!(e.target instanceof Element)) return;
       const tab = e.target.closest('is-tab[slot="nav"]');
       if (!tab) return;
       if (tab.hasAttribute('disabled')) return;
@@ -288,8 +290,9 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
     };
 
     #onKeyDown = (e: KeyboardEvent) => {
+      if (!(e.target instanceof Element)) return;
       const target = e.target.closest('is-tab[slot="nav"]');
-      if (!target) return;
+      if (!(target instanceof HTMLElement)) return;
       const tabs = this.#allTabs().filter((t: HTMLElement) => !t.hasAttribute('disabled'));
       const idx = tabs.indexOf(target);
       if (idx === -1) return;
@@ -303,7 +306,8 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       else if (e.key === 'End') { next = tabs.length - 1; e.preventDefault(); }
       else if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
-        this.active = tabs[idx].getAttribute('panel');
+        const panel = tabs[idx].getAttribute('panel');
+        if (panel) this.active = panel;
         return;
       } else {
         return;
@@ -312,7 +316,8 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       const nextTab = tabs[next];
       nextTab.focus();
       if (this.activation === 'auto') {
-        this.active = nextTab.getAttribute('panel');
+        const panel = nextTab.getAttribute('panel');
+        if (panel) this.active = panel;
       }
     };
 
@@ -336,8 +341,9 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       check();
       // Un solo observer por instancia; se libera en disconnectedCallback.
       this.#scrollRo?.disconnect();
-      this.#scrollRo = new ResizeObserver(check);
-      this.#scrollRo.observe(this.#tabsWrap);
+      const ro = new ResizeObserver(check);
+      this.#scrollRo = ro;
+      ro.observe(this.#tabsWrap);
     }
 
     #scrollTabs(direction: number) {
@@ -380,6 +386,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       shadow.appendChild(TAB_TEMPLATE.content.cloneNode(true));
       // Capturar el click en el close button y emitir un evento 'is-tab-close' en el host.
       shadow.addEventListener('click', (e: Event) => {
+        if (!(e.target instanceof Element)) return;
         const close = e.target.closest('[data-tab-close]');
         if (!close) return;
         e.stopPropagation();
