@@ -3,6 +3,16 @@
  * Estructura = definition (datos). Comportamiento = mount() con funciones reales.
  */
 import { ISComponentPreview } from '../../previews/_kit/ISComponentPreview.js';
+import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
+
+interface ButtonGroupEl extends HTMLElement {
+  orientation: 'horizontal' | 'vertical';
+  variant: 'joined' | 'segmented' | 'separated';
+  pill: boolean;
+  value: string | string[] | null;
+}
+
+interface GroupChangeDetail { value: string | string[] | null }
 
 const STYLES = /* css */ `
   .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
@@ -423,7 +433,7 @@ export class ButtonGroupPreview extends ISComponentPreview {
   /**
    * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
    */
-  async mount(ctx) {
+  async mount(ctx: PreviewMountContext): Promise<void> {
     const { main } = ctx;
     await this.whenDefined('is-button-group');
 
@@ -431,17 +441,17 @@ export class ButtonGroupPreview extends ISComponentPreview {
     const introGroup = main.querySelector<HTMLElement>('#intro is-button-group');
     if (introLog && introGroup) {
       this.on(introGroup, 'is-change', (e: Event) => {
-        const value = /** @type {CustomEvent} */ (e).detail?.value;
+        const value = (e as CustomEvent<GroupChangeDetail>).detail?.value;
         introLog.innerHTML = `vista: <code class="code">${value || '—'}</code>`;
       });
     }
 
     const selLog = main.querySelector<HTMLElement>('#selLog');
-    const paintSel = () => {
+    const paintSel = (): void => {
       if (!selLog) return;
-      const single = /** @type {any} */ (main.querySelector<HTMLElement>('#selSingle'))?.value;
-      const multi = /** @type {any} */ (main.querySelector<HTMLElement>('#selMulti'))?.values ?? [];
-      const empty = /** @type {any} */ (main.querySelector<HTMLElement>('#selEmpty'))?.value;
+      const single = (main.querySelector<HTMLElement>('#selSingle') as (HTMLElement & { value?: string }) | null)?.value;
+      const multi = (main.querySelector<HTMLElement>('#selMulti') as (HTMLElement & { values?: string[] }) | null)?.values ?? [];
+      const empty = (main.querySelector<HTMLElement>('#selEmpty') as (HTMLElement & { value?: string }) | null)?.value;
       selLog.innerHTML =
         `single: <code class="code">${single || '—'}</code> · ` +
         `multiple: <code class="code">[${multi.join(', ') || ' '}]</code> · ` +
@@ -453,9 +463,9 @@ export class ButtonGroupPreview extends ISComponentPreview {
     }
     paintSel();
 
-    const apiGroup = /** @type {any} */ (main.querySelector<HTMLElement>('#apiGroup'));
+    const apiGroup = main.querySelector<HTMLElement>('#apiGroup') as ButtonGroupEl | null;
     const apiLog = main.querySelector<HTMLElement>('#apiLog');
-    const logLine = (msg) => {
+    const logLine = (msg: string): void => {
       if (!apiLog) return;
       apiLog.querySelector<HTMLElement>('.hint')?.closest('.row')?.remove();
       const t = new Date().toLocaleTimeString();
@@ -465,26 +475,38 @@ export class ButtonGroupPreview extends ISComponentPreview {
       );
     };
     if (apiGroup) {
-      this.on(main.querySelector<HTMLElement>('#apiOrient'), 'click', () => {
-        apiGroup.orientation = apiGroup.orientation === 'vertical' ? 'horizontal' : 'vertical';
-        logLine(`orientation = '${apiGroup.orientation}'`);
-      });
-      const APPEARANCES = ['joined', 'segmented', 'separated'];
-      this.on(main.querySelector<HTMLElement>('#apiAppear'), 'click', () => {
-        const next = APPEARANCES[(APPEARANCES.indexOf(apiGroup.variant) + 1) % APPEARANCES.length];
-        apiGroup.variant = next;
-        logLine(`variant = '${next}'`);
-      });
-      this.on(main.querySelector<HTMLElement>('#apiPill'), 'click', () => {
-        apiGroup.pill = !apiGroup.pill;
-        logLine(`pill = ${apiGroup.pill}`);
-      });
-      this.on(main.querySelector<HTMLElement>('#apiValue'), 'click', () => {
-        apiGroup.value = 'C';
-        logLine(`value = 'C'`);
-      });
+      const apiOrient = main.querySelector<HTMLElement>('#apiOrient');
+      if (apiOrient) {
+        this.on(apiOrient, 'click', () => {
+          apiGroup.orientation = apiGroup.orientation === 'vertical' ? 'horizontal' : 'vertical';
+          logLine(`orientation = '${apiGroup.orientation}'`);
+        });
+      }
+      const apiAppear = main.querySelector<HTMLElement>('#apiAppear');
+      if (apiAppear) {
+        const APPEARANCES: ButtonGroupEl['variant'][] = ['joined', 'segmented', 'separated'];
+        this.on(apiAppear, 'click', () => {
+          const next = APPEARANCES[(APPEARANCES.indexOf(apiGroup.variant) + 1) % APPEARANCES.length];
+          apiGroup.variant = next;
+          logLine(`variant = '${next}'`);
+        });
+      }
+      const apiPill = main.querySelector<HTMLElement>('#apiPill');
+      if (apiPill) {
+        this.on(apiPill, 'click', () => {
+          apiGroup.pill = !apiGroup.pill;
+          logLine(`pill = ${apiGroup.pill}`);
+        });
+      }
+      const apiValue = main.querySelector<HTMLElement>('#apiValue');
+      if (apiValue) {
+        this.on(apiValue, 'click', () => {
+          apiGroup.value = 'C';
+          logLine(`value = 'C'`);
+        });
+      }
       this.on(apiGroup, 'is-change', (e: Event) => {
-        logLine(`is-change → '${/** @type {CustomEvent} */ (e).detail?.value}'`);
+        logLine(`is-change → '${(e as CustomEvent<GroupChangeDetail>).detail?.value}'`);
       });
     }
   }
