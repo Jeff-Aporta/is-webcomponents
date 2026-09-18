@@ -92,10 +92,10 @@ export function parseLooseDate(raw: string|number|null|undefined) {
     }
 
     #buildOptions(): Intl.DateTimeFormatOptions {
-      const opts: Intl.DateTimeFormatOptions = {};
+      const opts: Record<string, string | boolean> = {};
       for (const [attr, key] of Object.entries(OPT_ATTRS)) {
         const v = this.getAttribute(attr);
-        if (v) opts[key as keyof Intl.DateTimeFormatOptions] = v as never;
+        if (v) opts[key] = v;
       }
       const hf = this.getAttribute('hour-format');
       if (hf === '12') opts.hour12 = true;
@@ -104,7 +104,7 @@ export function parseLooseDate(raw: string|number|null|undefined) {
         opts.dateStyle = 'medium';
         opts.timeStyle = 'short';
       }
-      return opts;
+      return opts as unknown as Intl.DateTimeFormatOptions;
     }
 
     #render() {
