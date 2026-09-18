@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T18:03:57.570Z",
+  "generatedAt": "2026-09-18T10:52:55.799Z",
   "count": 61,
   "modules": [
     {
@@ -26,7 +26,7 @@
       "id": "chart-palette",
       "path": "src/components/_shared/chart-palette.ts",
       "summary": "Módulo compartido `chart-palette.ts`.",
-      "bytes": 2568,
+      "bytes": 3206,
       "exports": [
         "resolvePaletteKey",
         "resolveMode",
@@ -41,7 +41,7 @@
       "id": "code-diff",
       "path": "src/components/_shared/code-diff.ts",
       "summary": "code-diff — commit para el motor nativo de `<is-code>`.",
-      "bytes": 6640,
+      "bytes": 7120,
       "exports": [
         "DIFF_LINE_CLASS",
         "DIFF_LINE_CLASSES",
@@ -56,7 +56,7 @@
       "id": "code-format",
       "path": "src/components/_shared/code-format.ts",
       "summary": "code-format — No es Prettier completo (sin AST de terceros). Acepta un JSON de opciones",
-      "bytes": 6259,
+      "bytes": 6591,
       "exports": [
         "DEFAULT_FORMAT",
         "normalizeFormatConfig",
@@ -68,7 +68,7 @@
       "id": "code-highlight",
       "path": "src/components/_shared/code-highlight.ts",
       "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
-      "bytes": 17342,
+      "bytes": 19531,
       "exports": [
         "normalizeLang",
         "emptyState",
@@ -85,7 +85,7 @@
       "id": "code-langs",
       "path": "src/components/_shared/code-langs.ts",
       "summary": "code-langs — El resaltado lo hace el motor NATIVO (code-highlight): aquí solo vive el",
-      "bytes": 4792,
+      "bytes": 5180,
       "exports": [
         "registerLanguage",
         "resolveLanguage",
@@ -99,7 +99,7 @@
       "id": "code-model",
       "path": "src/components/_shared/code-model.ts",
       "summary": "code-model — Analogía con html2json / json2html: el texto plano es `value`; las",
-      "bytes": 5027,
+      "bytes": 6062,
       "exports": [
         "CODE_DOC_SCHEMA",
         "normalizeMark",
@@ -141,7 +141,7 @@
       "id": "date-field-core",
       "path": "src/components/_shared/date-field-core.ts",
       "summary": "Motor de campos de fecha/hora editables por secciones (MUI Fields). — Cada sección (día, mes, año, hora…) es un `role=\"spinbutton\"`: flechas para",
-      "bytes": 13026,
+      "bytes": 17177,
       "exports": [
         "sectionLayout",
         "SectionField"
@@ -152,7 +152,7 @@
       "id": "date-field-element",
       "path": "src/components/_shared/date-field-element.ts",
       "summary": "Módulo compartido `date-field-element.ts`.",
-      "bytes": 11128,
+      "bytes": 11892,
       "exports": [
         "defineDateField"
       ]
@@ -162,7 +162,7 @@
       "id": "date-utils",
       "path": "src/components/_shared/date-utils.ts",
       "summary": "Utilidades de fecha y hora para los componentes de calendario y reloj. — Todo se mueve en ISO local (`yyyy-mm-dd`, `HH:mm[:ss]`): son cadenas",
-      "bytes": 6174,
+      "bytes": 8108,
       "exports": [
         "ISO_DATE",
         "ISO_TIME",
@@ -183,7 +183,7 @@
       "id": "diagram-arrow",
       "path": "src/components/_shared/diagram-arrow.ts",
       "summary": "Puntas de flecha para diagramas. — El problema que resuelve: cada diagrama dibujaba su cabeza asumiendo que la",
-      "bytes": 3931,
+      "bytes": 4159,
       "exports": [
         "pathPoints",
         "pathEndDirection",
@@ -197,7 +197,7 @@
       "id": "diagram-astar",
       "path": "src/components/_shared/diagram-astar.ts",
       "summary": "Rutas ortogonales en rejilla — A* ponderado reutilizable (secuencia, flujo, ER).",
-      "bytes": 19677,
+      "bytes": 22289,
       "exports": [
         "routeOrthogonal",
         "countTurns",
@@ -217,7 +217,7 @@
       "id": "diagram-edge-actors",
       "path": "src/components/_shared/diagram-edge-actors.ts",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 7108,
+      "bytes": 9089,
       "exports": [
         "EDGE_ACTOR_H",
         "parsePathPoints  from",
@@ -232,7 +232,7 @@
       "id": "diagram-edge-spread",
       "path": "src/components/_shared/diagram-edge-spread.ts",
       "summary": "Separa polilíneas ortogonales que corren pegadas. — El A* reutiliza el mismo corredor: varias aristas salen como una sola raya.",
-      "bytes": 4046,
+      "bytes": 4836,
       "exports": [
         "spreadOrthogonalPaths"
       ]
@@ -242,7 +242,7 @@
       "id": "diagram-edge-style",
       "path": "src/components/_shared/diagram-edge-style.ts",
       "summary": "Módulo compartido `diagram-edge-style.ts`.",
-      "bytes": 662,
+      "bytes": 1010,
       "exports": [
         "EDGE_HUES",
         "assignEdgeHues",
@@ -256,7 +256,7 @@
       "id": "diagram-edit",
       "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 10044,
+      "bytes": 12572,
       "exports": [
         "loadOverrides",
         "saveOverrides",
@@ -284,7 +284,7 @@
       "id": "diagram-grid",
       "path": "src/components/_shared/diagram-grid.ts",
       "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
-      "bytes": 11374,
+      "bytes": 13625,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",
@@ -349,7 +349,7 @@
       "id": "form-associated",
       "path": "src/components/_shared/form-associated.ts",
       "summary": "Utilidades mínimas para form-associated custom elements. — No es un mixin de clase: cada CE llama helpers sobre su ElementInternals.",
-      "bytes": 1806,
+      "bytes": 1807,
       "exports": [
         "attachFormInternals",
         "setCustomState",
@@ -363,7 +363,7 @@
       "id": "form-control-mixin",
       "path": "src/components/_shared/form-control-mixin.ts",
       "summary": "form-control-mixin — Muchos componentes de formulario (checkbox, input, select, etc.) repiten",
-      "bytes": 6954,
+      "bytes": 7642,
       "exports": [
         "formControlTemplate",
         "getFormControlTemplate",
@@ -376,7 +376,7 @@
       "id": "grid-data",
       "path": "src/components/_shared/grid-data.ts",
       "summary": "Pipeline de datos del data grid: normalización de columnas, obtención y — formateo de valores, filtrado, ordenación, agrupación (row grouping y tree",
-      "bytes": 14756,
+      "bytes": 19429,
       "exports": [
         "normalizeColumns",
         "resolveWidths",
@@ -397,7 +397,7 @@
       "id": "grid-types",
       "path": "src/components/_shared/grid-types.ts",
       "summary": "Tipos de columna del data grid: alineación por defecto, comparador, — formateo y operadores de filtro. Réplica de los tipos nativos de MUI X",
-      "bytes": 17904,
+      "bytes": 18465,
       "exports": [
         "LOGIC",
         "stringComparator",
@@ -418,7 +418,7 @@
       "id": "grid-ui",
       "path": "src/components/_shared/grid-ui.ts",
       "summary": "Popovers del data grid: menú de columna, panel de columnas, panel de filtros, — menús de densidad y exportación.",
-      "bytes": 11186,
+      "bytes": 13541,
       "exports": [
         "createPopover",
         "showPopover",
@@ -436,7 +436,7 @@
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.ts",
       "summary": "highlight-code — `<pre class=\"code\">` de la documentación (antes se coloreaban con",
-      "bytes": 7241,
+      "bytes": 7956,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -455,7 +455,7 @@
       "id": "icon-loader",
       "path": "src/components/_shared/icon-loader.ts",
       "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component — `<iconify-icon>` ni su script de CDN. Todo el sistema de iconos vive en",
-      "bytes": 6632,
+      "bytes": 7502,
       "exports": [
         "hasIconLocal",
         "iconSourceBase",
@@ -498,7 +498,7 @@
       "id": "isp-record-utils",
       "path": "src/components/_shared/isp-record-utils.ts",
       "summary": "Helpers de registro planos / TObject-like (ispgen) para componentes ISP. — No depende de `@ingenieria_insoft/ispgen`.",
-      "bytes": 4036,
+      "bytes": 6108,
       "exports": [
         "isPresent",
         "asStr",
@@ -516,7 +516,7 @@
       "id": "json-html",
       "path": "src/components/_shared/json-html.ts",
       "summary": "Codec compacto HTML ↔ JSON (lenguaje de definición del kit). — Node     = string | [tag, attrs?, ...children]",
-      "bytes": 7723,
+      "bytes": 8592,
       "exports": [
         "json2html",
         "html2json",
@@ -530,7 +530,7 @@
       "id": "lane-layout",
       "path": "src/components/_shared/lane-layout.ts",
       "summary": "Motor de layout puro (sin DOM) para diagramas de línea de tiempo (Gantt, — timeline). Resuelve fechas, escalas de tiempo, marcas de eje \"agradables\"",
-      "bytes": 9693,
+      "bytes": 11064,
       "exports": [
         "parseDate",
         "addDuration",
@@ -545,7 +545,7 @@
       "id": "llm-agent-prompt",
       "path": "src/components/_shared/llm-agent-prompt.ts",
       "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `src/skills/is-webcomponents/PROMPT.md`",
-      "bytes": 4233,
+      "bytes": 4575,
       "exports": [
         "SKILL_DOCS",
         "LLM_PROMPT_FALLBACK",
@@ -572,7 +572,7 @@
       "id": "modal-base",
       "path": "src/components/_shared/modal-base.ts",
       "summary": "modal-base — Centraliza TODO el ciclo de vida de un modal accesible que no es nativo:",
-      "bytes": 12861,
+      "bytes": 14062,
       "exports": [
         "ModalBase extends withStyleAttrs"
       ]
@@ -582,7 +582,7 @@
       "id": "node-link-layout",
       "path": "src/components/_shared/node-link-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para diagramas de nodos y — enlaces (flowchart, class, state, ER, C4, architecture, block).",
-      "bytes": 11647,
+      "bytes": 13313,
       "exports": [
         "assignLayers",
         "orderLayers",
@@ -596,7 +596,7 @@
       "id": "path-turtle",
       "path": "src/components/_shared/path-turtle.ts",
       "summary": "Módulo compartido `path-turtle.ts`.",
-      "bytes": 10323,
+      "bytes": 11838,
       "exports": [
         "PathTurtle",
         "TURTLE_AUTO_GAP",
@@ -608,7 +608,7 @@
       "id": "picker-element",
       "path": "src/components/_shared/picker-element.ts",
       "summary": "Módulo compartido `picker-element.ts`.",
-      "bytes": 20005,
+      "bytes": 22368,
       "exports": [
         "definePickerInput"
       ]
@@ -618,7 +618,7 @@
       "id": "popup-dismiss",
       "path": "src/components/_shared/popup-dismiss.ts",
       "summary": "popup-dismiss — Todo panel flotante del kit (is-dropdown, is-context-menu, y cualquiera que",
-      "bytes": 5572,
+      "bytes": 5000,
       "exports": [
         "createPopupDismiss"
       ]
@@ -628,7 +628,7 @@
       "id": "position",
       "path": "src/components/_shared/position.ts",
       "summary": "Motor de posicionamiento anclado (flip / shift / arrow). — Sin dependencias — usa getBoundingClientRect + flip/shift.",
-      "bytes": 13343,
+      "bytes": 16254,
       "exports": [
         "PLACEMENTS",
         "computePosition",
@@ -640,7 +640,7 @@
       "id": "prefs",
       "path": "src/components/_shared/prefs.ts",
       "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"is-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
-      "bytes": 3829,
+      "bytes": 4580,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
@@ -657,7 +657,7 @@
       "id": "prompt-md",
       "path": "src/components/_shared/prompt-md.ts",
       "summary": "Módulo compartido `prompt-md.ts`.",
-      "bytes": 9998,
+      "bytes": 10963,
       "exports": [
         "PROMPT_VAR_PATTERN",
         "MALFORMED_PROMPT_VAR_PATTERN",
@@ -702,10 +702,10 @@
       "id": "scroll-memory",
       "path": "src/components/_shared/scroll-memory.ts",
       "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
-      "bytes": 7349,
+      "bytes": 8630,
       "exports": [
         "SCROLL_MEMORY_ATTRS",
-        "ScrollMemory",
+        "ScrollMemory \r\n  host",
         "bindScrollMemoryApi"
       ]
     },
@@ -746,7 +746,7 @@
       "id": "tk-color",
       "path": "src/components/_shared/tk-color.ts",
       "summary": "Contraste de fuente por luminancia OKLCH — todo en JS (sin CSS), para que el — flujo lo resuelva antes de pintar. Equivale a:",
-      "bytes": 2316,
+      "bytes": 2497,
       "exports": [
         "oklchLightness",
         "contrastFontColor"
@@ -757,7 +757,7 @@
       "id": "tk-hue",
       "path": "src/components/_shared/tk-hue.ts",
       "summary": "Tono HSL en BD (0–360) → CSS/hex solo al renderizar.",
-      "bytes": 1234,
+      "bytes": 1503,
       "exports": [
         "normalizeTkHue",
         "tkHueToCss",
@@ -770,7 +770,7 @@
       "id": "tk-icon-inline",
       "path": "src/components/_shared/tk-icon-inline.ts",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 10432,
+      "bytes": 12029,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",
@@ -791,7 +791,7 @@
       "id": "tk-inline-md",
       "path": "src/components/_shared/tk-inline-md.ts",
       "summary": "Módulo compartido `tk-inline-md.ts`.",
-      "bytes": 859,
+      "bytes": 1025,
       "exports": [
         "inlineMdWeb"
       ]
@@ -801,8 +801,9 @@
       "id": "tk-rich-text",
       "path": "src/components/_shared/tk-rich-text.ts",
       "summary": "Módulo compartido `tk-rich-text.ts`.",
-      "bytes": 1441,
+      "bytes": 1815,
       "exports": [
+        "esc",
         "splitRichTextSegments",
         "richTextInline",
         "richTextPlain",
@@ -827,7 +828,7 @@
       "id": "tree-layout",
       "path": "src/components/_shared/tree-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
-      "bytes": 14378,
+      "bytes": 16640,
       "exports": [
         "buildTree",
         "layoutTree",
@@ -857,7 +858,7 @@
       "id": "web-otp",
       "path": "src/components/_shared/web-otp.ts",
       "summary": "Web OTP API: el SMS con el origen rellena el código. AbortError = timeout/cancel.",
-      "bytes": 662,
+      "bytes": 1031,
       "exports": [
         "isOtpAutocomplete",
         "listenWebOtp"
@@ -868,7 +869,7 @@
       "id": "web-share",
       "path": "src/components/_shared/web-share.ts",
       "summary": "Web Share: share nativo, si no copia URL/texto. AbortError = el usuario canceló.",
-      "bytes": 926,
+      "bytes": 1430,
       "exports": [
         "sharePayload"
       ]
