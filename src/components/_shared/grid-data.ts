@@ -15,18 +15,70 @@ import {
   stringComparator,
   typeOf,
 } from './grid-types.js';
-import type { CellValue, ColumnDef, Row } from './grid-types.js';
+import type { CellValue, ColumnDef, ColumnType, Comparator, Operator, Row } from './grid-types.js';
+
+/** Columna con los defaults aplicados: misma forma que `ColumnDef` pero mutable,
+ * porque `normalizeColumns` la construye con spreads + assigns. */
+type ResolvedColumn = {
+  field: string;
+  headerName: string;
+  align: string;
+  headerAlign: string;
+  width: number;
+  minWidth: number;
+  maxWidth: number;
+  flex: number;
+  sortable: boolean;
+  filterable: boolean;
+  hideable: boolean;
+  resizable: boolean;
+  editable: boolean;
+  groupable: boolean;
+  aggregable: boolean;
+  comparator: Comparator;
+  operators: readonly Operator[];
+  type: string;
+  valueFormatter?: ColumnDef['valueFormatter'];
+};
+
+export type NormalizeOptions = { defaultWidth?: number; editableAll?: boolean };
+
+export type PivotModel = {
+  rows?: readonly string[];
+  columns?: readonly string[];
+  values?: readonly { field: string; fn: string }[];
+};
+
+export type SortModelItem = { field: string; sort: 'asc' | 'desc' };
+
+export type FilterModel = {
+  items?: readonly { field?: string; operator?: string; value?: CellValue }[];
+  logicOperator?: 'and' | 'or';
+};
+
+export type AggregationModel = Record<string, string>;
+
+export type BuildTreeOpts = {
+  paths: (row: Row, i: number) => readonly (string | number)[];
+  getRowId: (row: Row, i: number) => CellValue;
+};
+
+export type FilterCtx = unknown;
 
 /* ── Columnas ─────────────────────────────────────────────────────────── */
 
 /** Aplica los defaults del tipo y del grid a cada definición de columna. */
-export function normalizeColumns(columns, opts = {}) {
+export function normalizeColumns(columns: readonly ColumnDef[], opts: NormalizeOptions = {}): ResolvedColumn[] {
   const { defaultWidth = 120, editableAll = false } = opts;
-  return (columns || []).map((raw) => {
+  return (columns || []).map((raw: ColumnDef) => {
     const type = typeOf(raw);
-    const meta = COLUMN_TYPES[type];
-    const col = { ...meta, ...raw, type };
-    col.field = raw.field;
+    const meta: ColumnType = COLUMN_TYPES[type];
+    const col = {
+      ...meta,
+      ...raw,
+      type,
+    } as ResolvedColumn;
+    col.field = raw.field ?? '';
     col.headerName = raw.headerName ?? raw.field ?? '';
     col.align = raw.align ?? meta.align ?? 'left';
     col.headerAlign = raw.headerAlign ?? meta.headerAlign ?? col.align;
@@ -41,22 +93,22 @@ export function normalizeColumns(columns, opts = {}) {
     col.editable = raw.editable ?? meta.editable ?? editableAll;
     col.groupable = raw.groupable ?? (type !== 'actions');
     col.aggregable = raw.aggregable ?? (type !== 'actions');
-    col.comparator = raw.sortComparator ?? meta.comparator ?? stringComparator;
+    col.comparator = (raw as { sortComparator?: Comparator }).sortComparator ?? meta.comparator ?? stringComparator;
     col.operators = operatorsFor(col);
     return col;
   });
 }
 
 /** Ancho final de cada columna repartiendo el espacio libre entre las flex. */
-export function resolveWidths(cols, available: number, overrides = {}) {
-  const fixed = cols.filter((c) => !c.flex || overrides[c.field] != null);
-  const flexed = cols.filter((c) => c.flex && overrides[c.field] == null);
-  const used = fixed.reduce((sum, c) => sum + (overrides[c.field] ?? c.width), 0);
-  const totalFlex = flexed.reduce((sum, c) => sum + c.flex, 0);
+export function resolveWidths(cols: readonly ResolvedColumn[], available: number, overrides: Record<string, number> = {}): Record<string, number> {
+  const fixed = cols.filter((c: ResolvedColumn) => !c.flex || overrides[c.field] != null);
+  const flexed = cols.filter((c: ResolvedColumn) => c.flex && overrides[c.field] == null);
+  const used = fixed.reduce((sum: number, c: ResolvedColumn) => sum + (overrides[c.field] ?? c.width), 0);
+  const totalFlex = flexed.reduce((sum: number, c: ResolvedColumn) => sum + c.flex, 0);
   const free = Math.max(0, available - used);
-  const out = {};
+  const out: Record<string, number> = {};
   for (const c of cols) {
-    if (overrides[c.field] != null) out[c.field] = overrides[c.field];
+    if (overrides[c.field] != null) out[c.field] = overrides[c.field] as number;
     else if (!c.flex) out[c.field] = c.width;
     else {
       const share = totalFlex ? (free * c.flex) / totalFlex : 0;
@@ -68,27 +120,28 @@ export function resolveWidths(cols, available: number, overrides = {}) {
 
 /* ── Valores ──────────────────────────────────────────────────────────── */
 
-export function rawValue(row, col) {
-  if (!row || !col?.field) return undefined;
-  if (col.field.includes('.')) {
-    return col.field.split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), row);
+export function rawValue(row: Row, col: ColumnDef): CellValue {
+  const field = col.field;
+  if (!row || !field) return undefined;
+  if (field.includes('.')) {
+    return field.split('.').reduce((acc: CellValue, key: string) => (acc == null ? acc : (acc as Record<string, CellValue>)[key]), row);
   }
-  return row[col.field];
+  return row[field];
 }
 
 /** Valor usado para filtrar, ordenar y agrupar (respeta valueGetter). */
-export function cellValue(row, col, ctx) {
+export function cellValue(row: Row, col: ColumnDef, ctx: FilterCtx): CellValue {
   const raw = rawValue(row, col);
   return typeof col.valueGetter === 'function' ? col.valueGetter(raw, row, col, ctx) : raw;
 }
 
 /** Texto mostrado (valueFormatter, si no el formato del tipo). */
-export function formattedValue(value: CellValue, row, col, ctx) {
+export function formattedValue(value: CellValue, row: Row, col: ColumnDef, ctx: FilterCtx): string {
   if (typeof col.valueFormatter === 'function') {
     const out = col.valueFormatter(value, row, col, ctx);
     return out == null ? '' : String(out);
   }
-  if (typeof col.format === 'function') return col.format(value, row, col);
+  if (typeof col.format === 'function') return col.format(value);
   return value == null ? '' : String(value);
 }
 
