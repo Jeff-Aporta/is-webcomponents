@@ -11,7 +11,7 @@
     "icons:download": "node scripts/download-icons.ts",
     "typecheck": "tsc -p tsconfig.json",
     "test": "node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/meta/*.test.ts src/utils/health/diagrams/*.test.ts src/utils/health/domain/*.test.ts src/utils/health/audit/*.test.ts",
-    "test:e2e": "node --experimental-strip-types src/utils/health/e2e/run.ts",
+    "test:e2e": "node --experimental-strip-types src/utils/testing/e2e/run.ts",
     "test:demos": "node --experimental-strip-types demos/diagramas/ER/_testing/run.mjs",
     "audit": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json",
     "audit:full": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts",
@@ -28,6 +28,9 @@
     "bundle": "node scripts/bundle-scripts.mjs",
     "tour:local": "node scripts/tour-deploy.mjs --local",
     "tour:remote": "node scripts/tour-deploy.mjs --remote",
+    "tour:content": "node scripts/tour-content.mjs",
+    "tour:content:local": "node scripts/tour-content.mjs --local",
+    "tour:content:remote": "node scripts/tour-content.mjs --remote",
     "prepush": "node scripts/tour-deploy.mjs --local",
     "postpush": "node scripts/tour-deploy.mjs --remote"
   },

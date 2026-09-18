@@ -29,7 +29,11 @@ export class JsonPreview extends ISComponentPreview {
       category: definition.category ?? '',
       $schema: (definition.$schema || 'is-preview/v1') as 'is-preview/v1',
       title: definition.tag,
-      sections: [],
+      // Las sections vienen del JSON (registry.ts las carga con loadDefinitionJson).
+      // NO poner `sections: []` aqui: pisa el array del JSON, y como el chrome
+      // (render.ts) itera `definition.sections` para pintar, el resultado es un
+      // preview vacio. Guardian: jsonpreview-sections-guardian.test.ts.
+      sections: definition.sections ?? [],
     };
     if (normalized.$schema !== 'is-preview/v1') {
       throw new Error(`JsonPreview(${normalized.tag}): $schema debe ser "is-preview/v1"`);

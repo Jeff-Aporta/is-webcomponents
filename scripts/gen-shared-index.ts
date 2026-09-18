@@ -49,6 +49,25 @@ const modules = files.map((file) => {
   };
 });
 
+const payload = `${JSON.stringify({ generatedAt: new Date().toISOString(), count: modules.length, modules }, null, 2)}\n`;
+
 fs.mkdirSync(outDir, { recursive: true });
-fs.writeFileSync(outFile, `${JSON.stringify({ generatedAt: new Date().toISOString(), count: modules.length, modules }, null, 2)}\n`);
+fs.writeFileSync(outFile, payload);
 console.log(`shared-modules.json: ${modules.length} módulos → ${path.relative(root, outFile)}`);
+
+// Espejo en dist/: `ecosystem.ts` lo pide con
+// `new URL('../previews/data/shared-modules.json', import.meta.url)`, que al
+// bundlearse resuelve a `dist/previews/data/`. Sin esta copia la página
+// ecosystem recibe un 404 y pinta el fallback "No se pudo cargar
+// shared-modules.json" en vez del catálogo. Se escribe aquí (y no en
+// bundle-scripts.mjs) porque `npm run build` corre DESPUÉS de `bundle`:
+// copiar en bundle dejaría en dist/ la versión del build anterior.
+const distDir = path.join(root, 'dist/previews/data');
+const distFile = path.join(distDir, 'shared-modules.json');
+try {
+  fs.mkdirSync(distDir, { recursive: true });
+  fs.writeFileSync(distFile, payload);
+  console.log(`shared-modules.json: espejo → ${path.relative(root, distFile)}`);
+} catch (err) {
+  console.error(`⚠ no se pudo escribir el espejo en dist/: ${err instanceof Error ? err.message : err}`);
+}

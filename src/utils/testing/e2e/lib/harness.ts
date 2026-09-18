@@ -396,9 +396,18 @@ export async function contenidoCargado(page: Page): Promise<boolean> {
       const host = document.getElementById('previewHost');
       if (!host || host.hidden) return false;
       const main = host.querySelector('is-main.main');
-      const seccion = host.querySelector('section.section, [data-section]');
-      const largo = (host.textContent ?? '').trim().length;
-      return !!((main || seccion) && largo > 60);
+      if (!main) return false;
+
+      // Contamos las secciones REALMENTE pintadas por render.ts, que itera
+      // `definition.sections`. Antes bastaba con medir el texto del host, y eso
+      // enmascaraba el bug de `sections: []` en JsonPreview: el aside (h1 + TOC)
+      // y los controles siguen aportando texto aunque el cuerpo esté vacío.
+      // Evidencia para exigir >=1 sección sin falsos rojos: los 181
+      // PreviewDefinition del repo tienen >=1 sección (mínimo observado = 1).
+      const secciones = main.querySelectorAll('section.section, [data-section]').length;
+      // El texto se mide SOLO en el main (contenido), no en el host entero.
+      const texto = (main.textContent ?? '').trim().length;
+      return secciones > 0 && texto > 60;
     });
     return !!r;
   } catch {
