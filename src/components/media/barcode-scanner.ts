@@ -10,6 +10,33 @@ import { setStringAttr } from '../_shared/reflect.js';
  * Métodos: start(), stop(), detect(source)
  * Eventos: is-detect { rawValue, format, barcodes }, is-error
  */
+
+// BarcodeDetector no está en lib.dom.d.ts (aún no es estándar en todos los
+// navegadores). Declaramos el subset que usamos para tipar el código.
+interface BarcodeDetectorCtor {
+  new (init?: { formats?: string[] }): BarcodeDetectorInstance;
+}
+interface BarcodeDetectorInstance {
+  detect(source: CanvasImageSource): Promise<DetectedBarcode[]>;
+}
+interface DetectedBarcode {
+  rawValue: string;
+  format: string;
+}
+declare global {
+  interface Window {
+    BarcodeDetector?: BarcodeDetectorCtor;
+  }
+  // Constructor global (Firefox aún lo expone como global, no en window).
+  // eslint-disable-next-line no-var
+  var BarcodeDetector: BarcodeDetectorCtor | undefined;
+}
+function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
+  if (typeof globalThis.BarcodeDetector !== 'undefined') return globalThis.BarcodeDetector;
+  if (typeof window !== 'undefined' && window.BarcodeDetector) return window.BarcodeDetector;
+  return undefined;
+}
+
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -39,9 +66,9 @@ import { setStringAttr } from '../_shared/reflect.js';
       void newVal;
     }
 
-    #video!: HTMLElement;
-    #stream = null;
-    #timer = null;
+    #video!: HTMLVideoElement;
+    #stream: MediaStream | null = null;
+    #timer: ReturnType<typeof setTimeout> | null = null;
     #go!: HTMLElement;
     #hint!: HTMLElement;
     constructor() {
@@ -49,7 +76,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#video = shadow.querySelector<HTMLElement>('.preview')!;
+      this.#video = shadow.querySelector<HTMLVideoElement>('.preview')!;
       this.#go = shadow.querySelector<HTMLElement>('.go')!;
       this.#hint = shadow.querySelector<HTMLElement>('.hint')!;
       this.#go.addEventListener('click', () => this.#stream ? this.stop() : this.start());
@@ -57,28 +84,30 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     disconnectedCallback(): void { this.stop(); }
 
-    get formats() {
+    get formats(): string[] {
       const raw = this.getAttribute('formats');
       return raw ? raw.split(',').map((s: string) => s.trim()).filter(Boolean) : ['qr_code', 'ean_13'];
     }
-    set formats(v) { setStringAttr(this, 'formats', Array.isArray(v) ? v.join(',') : v); }
+    set formats(v: string[] | string) { setStringAttr(this, 'formats', Array.isArray(v) ? v.join(',') : v); }
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
 
-    async detect(source) {
-      if (typeof BarcodeDetector !== 'function') {
+    async detect(source: CanvasImageSource): Promise<DetectedBarcode[]> {
+      const Ctor = getBarcodeDetector();
+      if (!Ctor) {
         emit(this, 'is-error', { message: 'BarcodeDetector no disponible' });
         return [];
       }
-      const det = new BarcodeDetector({ formats: this.formats });
+      const det = new Ctor({ formats: this.formats });
       const barcodes = await det.detect(source);
       if (barcodes.length) emit(this, 'is-detect', { barcodes, rawValue: barcodes[0].rawValue, format: barcodes[0].format });
       return barcodes;
     }
 
-    async start() {
+    async start(): Promise<void> {
       if (this.disabled) return;
-      if (typeof BarcodeDetector !== 'function') {
+      const Ctor = getBarcodeDetector();
+      if (!Ctor) {
         this.#hint.textContent = 'BarcodeDetector no está en este navegador';
         emit(this, 'is-error', { message: 'BarcodeDetector no disponible' });
         return;
@@ -86,7 +115,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       try {
         this.#stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
       } catch (err) {
-        emit(this, 'is-error', { message: err?.message || 'cámara' });
+        emit(this, 'is-error', { message: (err as Error)?.message || 'cámara' });
         return;
       }
       this.#video.srcObject = this.#stream;
@@ -95,18 +124,18 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#tick();
     }
 
-    stop() {
-      clearTimeout(this.#timer);
+    stop(): void {
+      if (this.#timer !== null) clearTimeout(this.#timer);
       this.#timer = null;
-      this.#stream?.getTracks().forEach((t) => t.stop());
+      this.#stream?.getTracks().forEach((t: MediaStreamTrack) => t.stop());
       this.#stream = null;
       this.#video.srcObject = null;
       this.#go.textContent = 'Escanear';
     }
 
-    #tick() {
+    #tick(): void {
       if (!this.#stream) return;
-      this.detect(this.#video).catch(() => {});
+      this.detect(this.#video).catch(() => { /* tick interno: errores ya se emitieron */ });
       this.#timer = setTimeout(() => this.#tick(), 400);
     }
   }
