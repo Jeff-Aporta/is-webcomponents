@@ -22,7 +22,7 @@ definePickerInput({
   kind: 'time',
   cssUrl: import.meta.url,
   fieldTag: 'is-time-field',
-  panels: ({ host }) => {
+  panels: ({ host }: { host: HTMLElement }): HTMLElement[] => {
     const mode = host.getAttribute('panel') || 'sections';
     if (mode === 'clock') {
       const clock = document.createElement('is-time-clock');
