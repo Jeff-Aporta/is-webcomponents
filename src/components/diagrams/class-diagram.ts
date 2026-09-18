@@ -17,6 +17,7 @@ import type {
   DiagramGroup,
   DiagramTheme,
 } from './diagram-types.js';
+import type { TurtleTheme } from '../_shared/path-turtle.js';
 
 /**
  * <is-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
@@ -149,7 +150,7 @@ class IsClassDiagram extends DiagramElementBase {
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: e.hue,
       })),
-      theme,
+      theme: theme as unknown as TurtleTheme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
