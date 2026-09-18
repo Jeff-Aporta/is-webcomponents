@@ -10,6 +10,7 @@ import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from './diagram-types.js';
+import type { TurtleTheme } from '../_shared/path-turtle.js';
 
 /**
  * <is-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
@@ -187,7 +188,7 @@ class IsErDiagram extends DiagramElementBase {
       messages: layout.relations.map((r, i: number) => ({
         path: r.path, step: i + 1, log: r.label || '', groupHue: undefined,
       })),
-      theme,
+      theme: theme as unknown as TurtleTheme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
