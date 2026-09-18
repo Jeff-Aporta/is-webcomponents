@@ -25,13 +25,17 @@ import { TNode, TRecord } from "./_types.js";
 const HISTORY_LIMIT = 50;
 
 class TAHistory extends TAMutations {
-  // ── Re-declaraciones de campos heredados ───────────────────────────────
-  declare _historyPast: string[];
-  declare _historyFuture: string[];
-  declare _historySuspended: number;
-  declare _historyViewingPast: boolean;
-  declare _protectionMode: boolean;
-  declare _protectionPromptOpen: boolean;
+  // ── Inicialización de campos heredados ─────────────────────────────────
+  // Sin estos defaults, getters como `historyCanUndo` rompen con
+  // "Cannot read properties of undefined (reading 'length')" si se
+  // consultan antes del primer historyPush() (caso real: tree-view demo
+  // que asigna tv.list y dispara historyCanRedo antes de mutar nada).
+  _historyPast: string[] = [];
+  _historyFuture: string[] = [];
+  _historySuspended: number = 0;
+  _historyViewingPast: boolean = false;
+  _protectionMode: boolean = false;
+  _protectionPromptOpen: boolean = false;
 
   // ── Getters públicos ───────────────────────────────────────────────────
   /** ¿Hay algo que deshacer? */
@@ -61,20 +65,17 @@ class TAHistory extends TAMutations {
 
   /** ¿El árbol es read-only externo (override del getter de contexto)? */
   get isReadOnlyExternal(): boolean {
-    return (this as unknown as { isReadOnly: boolean }).isReadOnly;
+    return super.isReadOnly;
   }
 
   /** ¿El usuario puede alternar la protección manualmente? */
   get canToggleProtection(): boolean {
-    return !(this as unknown as { isReadOnly: boolean }).isReadOnly;
+    return !super.isReadOnly;
   }
 
   /** Read-only efectivo (externo + viewing-past). */
   override get isReadOnly(): boolean {
-    return (
-      (this as unknown as { isReadOnly: boolean }).isReadOnly ||
-      this._historyViewingPast
-    );
+    return super.isReadOnly || this._historyViewingPast;
   }
 
   /** ¿Se puede mutar? (no readOnly y no protegido) */

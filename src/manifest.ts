@@ -184,6 +184,12 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'is-barcode', title: 'Barcode', category: 'media', script: 'components/media/barcode.js', style: 'components/media/barcode.css', page: 'components/media/barcode.json' },
   { tag: 'is-barcode-scanner', title: 'Barcode Scanner', category: 'media', script: 'components/media/barcode-scanner.js', style: 'components/media/barcode-scanner.css', page: 'components/media/barcode-scanner.json' },
   { tag: 'is-image-editor', title: 'Image Editor', category: 'media', script: 'components/media/image-editor.js', style: 'components/media/image-editor.css', page: 'components/media/image-editor.json' },
+  // is-icon-explorer: meta-página (no es un custom element). El `script` apunta
+  // al behavior del preview porque no hay componente JS separado: el explorador
+  // es 100% UI declarada en el JSON + behavior de mount/unmount en el .preview.
+  // Sin esta entrada en el manifest, el nav no muestra el item y
+  // `selectComponent('is-icon-explorer')` cae a HOME.
+  { tag: 'is-icon-explorer', title: 'Explorador de iconos', category: 'media', script: 'components/media/icon-explorer.preview.ts', page: 'components/media/icon-explorer.json' },
   { tag: 'is-qrcode', title: 'QR Code', category: 'media', script: 'components/media/qrcode.js', style: 'components/media/qrcode.css', page: 'components/media/qrcode.json' },
   { tag: 'is-palette-selector', title: 'Palette Selector', category: 'feedback', script: 'components/feedback/palette-selector.js', style: 'components/feedback/palette-selector.css', page: 'components/feedback/palette-selector.json' },
   { tag: 'is-dock', title: 'Dock', category: 'layout', script: 'components/layout/dock.js', style: 'components/layout/dock.css', page: 'components/layout/dock.json' },

@@ -680,7 +680,13 @@ export const ISWebComponentsLoader = {
   isReady: isElementReady,
 };
 
-if (typeof globalThis !== 'undefined') {
+if (typeof globalThis !== 'undefined' && !(globalThis as Record<string, unknown>).ISWebComponentsLoader) {
+  // Idempotente: si el loader ya está registrado (caso típico: un page bundle
+  // bundleó el loader dentro y se ejecuta después del boot canónico desde
+  // `dist/cdn/core/loader.min.js`), la primera instancia gana. Si tomáramos la
+  // del bundle, su SELF_BASE/CDN_ROOT sería la ruta del bundle (`dist/pages/…`)
+  // y `L.load(tag)` pediría URLs tipo `dist/pages/{cat}/{tag}.min.js` → 48× 404
+  // en cada nav-click posterior. Guardian: tests/loader-global-guardian.test.ts.
   (globalThis as Record<string, unknown>).ISWebComponentsLoader = ISWebComponentsLoader;
 }
 
