@@ -43,7 +43,7 @@ class TAMutations extends TAView {
   declare _pendingInsertFlatPath: string;
   declare _pendingExpandedSnapshot: string[];
   declare _pendingLastLevelParentFlatPath: string;
-  declare bcanMoveOutside: boolean | ((src: TNode, tgt: TNode, pos: DropPosition) => boolean);
+  declare bcanMoveOutside: boolean;
 
   // ── Inserciones ────────────────────────────────────────────────────────
   /** Crea un nuevo root y abre el form de edición para él. */
@@ -374,7 +374,7 @@ class TAMutations extends TAView {
     const sameParent = srcReference === tgtReference;
     if (!this.canDrop(srcId, tgtId, position)) return null;
     if (!sameParent) {
-      const allow = this.bcanMoveOutside;
+      const allow = this.bcanMoveOutside as boolean | ((src: TNode, tgt: TNode, pos: DropPosition) => boolean);
       if (typeof allow === "function") {
         const srcNode = this.findNodeByFlatPath(srcId);
         const tgtNode = this.findNodeByFlatPath(tgtId);
