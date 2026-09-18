@@ -6,22 +6,22 @@ export const TK_DIAGRAM_GRID = 8;
 
 export const TK_DIAGRAM_RADIUS_PX = 8;
 
-export function snapDiagramGrid(value: number, grid: number = TK_DIAGRAM_GRID) {
+export function snapDiagramGrid(value: number, grid: number = TK_DIAGRAM_GRID): number {
   return Math.round(value / grid) * grid;
 }
 
-export function diagramLabelWidth(text, min: number = 120, max: number = 320) {
+export function diagramLabelWidth(text: string, min: number = 120, max: number = 320): number {
   const plain = stripIconTokensPlain(text);
   const icons = countIconTokens(text);
   const est = Math.ceil(plain.length * 6.2) + 20 + icons * 18;
   return snapDiagramGrid(Math.min(max, Math.max(min, est)));
 }
 
-export function diagramGridCols(width: number, grid: number = TK_DIAGRAM_GRID) {
+export function diagramGridCols(width: number, grid: number = TK_DIAGRAM_GRID): number {
   return Math.ceil(width / grid) + 1;
 }
 
-export function diagramGridRows(height: number, grid: number = TK_DIAGRAM_GRID) {
+export function diagramGridRows(height: number, grid: number = TK_DIAGRAM_GRID): number {
   return Math.ceil(height / grid) + 1;
 }
 
@@ -32,23 +32,51 @@ export function diagramGridRows(height: number, grid: number = TK_DIAGRAM_GRID) 
  * los mensajes las crucen pero no corran encima de ellas.
  */
 
+/** Rectángulo simple `{ x, y, w, h }`. */
+export type GridRect = { x: number; y: number; w: number; h: number };
+
+/** Punto en píxeles `{ x, y }`. */
+export type GridPoint = { x: number; y: number };
+
+/** Rejilla de costos (la que produce `makeCostGrid`). */
+export type CostGrid = {
+  cols: number;
+  rows: number;
+  grid: number;
+  cost: Float64Array;
+  forbidden?: Map<string, ForbiddenRegion>;
+};
+
+/** Región prohibida (rect o polígono). */
+export type ForbiddenRegion = {
+  id: string;
+  kind: 'rect' | 'poly';
+  x?: number;
+  y?: number;
+  w?: number;
+  h?: number;
+  points?: readonly (readonly [number, number])[];
+  color?: string;
+  label?: string;
+};
+
 export const COST_BLOCKED = Infinity;
 
-export function makeCostGrid(width, height, grid = TK_DIAGRAM_GRID) {
+export function makeCostGrid(width: number, height: number, grid: number = TK_DIAGRAM_GRID): CostGrid {
   const cols = diagramGridCols(width, grid);
   const rows = diagramGridRows(height, grid);
   const cost = new Float64Array(cols * rows).fill(1);
   return { cols, rows, grid, cost };
 }
 
-export function cellCost(g, col: number, row: number) {
+export function cellCost(g: CostGrid | null | undefined, col: number, row: number): number {
   if (!g?.cost || !Number.isFinite(g.cols) || !Number.isFinite(g.rows)) return COST_BLOCKED;
   if (col < 0 || row < 0 || col >= g.cols || row >= g.rows) return COST_BLOCKED;
   return g.cost[row * g.cols + col];
 }
 
 /** Aplica un costo a todas las celdas que tocan el rectángulo (px). `add=false` fija el valor. */
-export function applyRectCost(g, x: number, y: number, w: number, h: number, cost, add = false) {
+export function applyRectCost(g: CostGrid, x: number, y: number, w: number, h: number, cost: number, add: boolean = false): void {
   // El rect cubre el intervalo semiabierto [x, x+w) × [y, y+h): la última
   // celda que realmente toca es la que contiene x+w-ε, no ceil((x+w)/grid)
   // sin restar 1. Con la fórmula anterior, un nodo que termina justo en un
@@ -70,7 +98,7 @@ export function applyRectCost(g, x: number, y: number, w: number, h: number, cos
 }
 
 /** Bloquea un rectángulo (obstáculo duro). */
-export function blockRect(g, x, y, w, h) {
+export function blockRect(g: CostGrid, x: number, y: number, w: number, h: number): void {
   applyRectCost(g, x, y, w, h, COST_BLOCKED);
 }
 
@@ -91,7 +119,7 @@ export function blockRect(g, x, y, w, h) {
  * ──────────────────────────────────────────────────────────────────────── */
 
 /** Crea o reutiliza el registro de regiones prohibidas en la rejilla. */
-function ensureRegistry(g) {
+function ensureRegistry(g: CostGrid): Map<string, ForbiddenRegion> {
   if (!g.forbidden) g.forbidden = new Map();
   return g.forbidden;
 }
@@ -102,19 +130,19 @@ function ensureRegistry(g) {
  * si quieres re-rutear desde un estado limpio, primero reasigna los costos
  * (p.ej. desde tu layout base) y vuelve a llamar a esta función.
  */
-export function applyForbiddenRegions(g) {
+export function applyForbiddenRegions(g: CostGrid | null | undefined): void {
   if (!g?.forbidden?.size) return;
   for (const region of g.forbidden.values()) {
     if (region.kind === 'rect') {
-      blockRect(g, region.x, region.y, region.w, region.h);
+      blockRect(g, region.x!, region.y!, region.w!, region.h!);
     } else if (region.kind === 'poly') {
-      blockPolygon(g, region.points);
+      blockPolygon(g, region.points!);
     }
   }
 }
 
 /** Bloquea el interior de un polígono (point-in-polygon por scanline). */
-export function blockPolygon(g, points) {
+export function blockPolygon(g: CostGrid, points: readonly (readonly [number, number])[] | null | undefined): void {
   if (!points?.length) return;
   const xs = points.map((p) => p[0]);
   const ys = points.map((p) => p[1]);
@@ -131,18 +159,20 @@ export function blockPolygon(g, points) {
   }
 }
 
-function pointInPolygon(x, y, points) {
+function pointInPolygon(x: number, y: number, points: readonly (readonly [number, number])[]): boolean {
   let inside = false;
   for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
-    const [xi, yi] = points[i];
-    const [xj, yj] = points[j];
+    const pointI = points[i]!;
+    const pointJ = points[j]!;
+    const [xi, yi] = pointI;
+    const [xj, yj] = pointJ;
     const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi + 1e-9) + xi;
     if (intersect) inside = !inside;
   }
   return inside;
 }
 
-function genRegionId(kind: string) {
+function genRegionId(kind: string): string {
   return `fr-${kind}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
@@ -151,25 +181,25 @@ function genRegionId(kind: string) {
  * La rejilla NO se modifica hasta que llames a `applyForbiddenRegions(g)`.
  * Esto permite componer varias regiones antes de aplicarlas en una sola pasada.
  */
-export function addForbiddenRegion(g, region) {
+export function addForbiddenRegion(g: CostGrid, region: Omit<ForbiddenRegion, 'id'> & { id?: string }): ForbiddenRegion {
   ensureRegistry(g);
   const id = region.id || genRegionId(region.kind || 'rect');
-  const stored = { ...region, id };
-  g.forbidden.set(id, stored);
+  const stored: ForbiddenRegion = { ...region, id };
+  g.forbidden!.set(id, stored);
   return stored;
 }
 
-export function removeForbiddenRegion(g, id) {
+export function removeForbiddenRegion(g: CostGrid | null | undefined, id: string): boolean {
   if (!g?.forbidden) return false;
   return g.forbidden.delete(id);
 }
 
-export function clearForbiddenRegions(g) {
+export function clearForbiddenRegions(g: CostGrid | null | undefined): void {
   if (!g?.forbidden) return;
   g.forbidden.clear();
 }
 
-export function listForbiddenRegions(g) {
+export function listForbiddenRegions(g: CostGrid | null | undefined): ForbiddenRegion[] {
   if (!g?.forbidden) return [];
   return [...g.forbidden.values()];
 }
@@ -185,22 +215,28 @@ export function listForbiddenRegions(g) {
  * auto-layout nunca coloque una caja dentro de una zona prohibida.
  * ──────────────────────────────────────────────────────────────────────── */
 
+/** Zona de exclusión leída del payload (rect normalizado a w,h > 0). */
+export type ExclusionZone = { x: number; y: number; w: number; h: number; label?: string };
+
 /** Normaliza `exclusionZones` del payload a rects válidos (w,h > 0). */
-export function readExclusionZones(raw) {
+export function readExclusionZones(raw: unknown): ExclusionZone[] {
   if (!Array.isArray(raw)) return [];
   return raw
     .map((z) => (z && typeof z === 'object' ? z : {}))
-    .map((z) => ({
-      x: Number(z.x) || 0,
-      y: Number(z.y) || 0,
-      w: Math.max(Number(z.w) || 0, 0),
-      h: Math.max(Number(z.h) || 0, 0),
-      label: String(z.label ?? '').trim() || undefined,
-    }))
+    .map((z) => {
+      const o = z as { x?: unknown; y?: unknown; w?: unknown; h?: unknown; label?: unknown };
+      return {
+        x: Number(o.x) || 0,
+        y: Number(o.y) || 0,
+        w: Math.max(Number(o.w) || 0, 0),
+        h: Math.max(Number(o.h) || 0, 0),
+        label: String(o.label ?? '').trim() || undefined,
+      };
+    })
     .filter((z) => z.w > 0 && z.h > 0);
 }
 
-function rectsOverlap(a, b) {
+function rectsOverlap(a: GridRect, b: GridRect): boolean {
   return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 }
 
@@ -216,9 +252,11 @@ function rectsOverlap(a, b) {
  * está a 4px de un bloqueo justo DENTRO de esa celda si cae del lado
  * equivocado del .5; con `direction` fijo eso no puede pasar.
  */
-export function snapAway(value: number, direction: number, grid: number = TK_DIAGRAM_GRID) {
+export function snapAway(value: number, direction: number, grid: number = TK_DIAGRAM_GRID): number {
   return direction > 0 ? Math.ceil(value / grid) * grid : Math.floor(value / grid) * grid;
 }
+
+export type DiagramSide = 'top' | 'bottom' | 'left' | 'right';
 
 /**
  * Snapea el punto de salida/entrada de una arista (tras `stepOut`) sin
@@ -228,19 +266,19 @@ export function snapAway(value: number, direction: number, grid: number = TK_DIA
  * se snapea normal. Usar esto en vez de `snapDiagramGrid` suelto en los
  * puntos de salida/entrada de cualquier spec de diagrama con A*.
  */
-export function snapPointAwayFromSide(point, side, grid = TK_DIAGRAM_GRID) {
+export function snapPointAwayFromSide(point: GridPoint, side: DiagramSide, grid: number = TK_DIAGRAM_GRID): GridPoint {
   if (side === 'top') return { x: snapDiagramGrid(point.x, grid), y: snapAway(point.y, -1, grid) };
   if (side === 'bottom') return { x: snapDiagramGrid(point.x, grid), y: snapAway(point.y, 1, grid) };
   if (side === 'left') return { x: snapAway(point.x, -1, grid), y: snapDiagramGrid(point.y, grid) };
   return { x: snapAway(point.x, 1, grid), y: snapDiagramGrid(point.y, grid) };
 }
 
-export function nudgeRectFromZones(rect, zones) {
+export function nudgeRectFromZones<T extends GridRect>(rect: T, zones: readonly ExclusionZone[]): T {
   if (!zones?.length) return rect;
   let { x, y } = rect;
   const { w, h } = rect;
   for (const z of zones) {
-    const cur = { x, y, w, h };
+    const cur: GridRect = { x, y, w, h };
     if (!rectsOverlap(cur, z)) continue;
     const pushRight = z.x + z.w - x;
     const pushLeft = x + w - z.x;
@@ -259,6 +297,6 @@ export function nudgeRectFromZones(rect, zones) {
 }
 
 /** Bloquea todas las zonas en la rejilla de costos (para el ruteo de aristas). */
-export function blockExclusionZones(g, zones, offsetX = 0, offsetY = 0) {
+export function blockExclusionZones(g: CostGrid, zones: readonly ExclusionZone[], offsetX: number = 0, offsetY: number = 0): void {
   for (const z of zones) blockRect(g, z.x + offsetX, z.y + offsetY, z.w, z.h);
 }
