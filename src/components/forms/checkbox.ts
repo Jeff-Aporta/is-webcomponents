@@ -45,14 +45,14 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     </div>
   `;
 
-  const OBSERVED = [
+  const OBSERVED: string[] = [
     'name', 'value', 'checked', 'disabled', 'readonly', 'required', 'indeterminate',
     'error', 'hint', 'color', 'label-placement',
     'icon', 'checked-icon', 'indeterminate-icon',
   ];
 
-  const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
-  const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
+  const VARIANTS: string[] = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
@@ -73,7 +73,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'radius', 'bg', 'bg-hover', 'border-color', 'accent', 'focus-color', 'mark-color', 'halo']; }
 
-    #internals = null;
+    #internals: ElementInternals | null = null;
     #control!: HTMLElement;
     #mark!: HTMLElement;
     #labelEl!: HTMLElement;
@@ -105,7 +105,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    onConnected() {
+    onConnected(): void {
       if (!this.#defaultsRead) {
         this.#defaultsRead = true;
         this.#defaultChecked = this.checked;
@@ -116,7 +116,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#sync();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'hint') {
         this.#syncSlots();
         return;
@@ -124,90 +124,90 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#sync();
     }
 
-    get checked() { return this.hasAttribute('checked'); }
-    set checked(v) { this.toggleAttribute('checked', !!v); }
+    get checked(): boolean { return this.hasAttribute('checked'); }
+    set checked(v: boolean) { this.toggleAttribute('checked', !!v); }
 
-    get indeterminate() { return this.hasAttribute('indeterminate'); }
-    set indeterminate(v) { this.toggleAttribute('indeterminate', !!v); }
+    get indeterminate(): boolean { return this.hasAttribute('indeterminate'); }
+    set indeterminate(v: boolean) { this.toggleAttribute('indeterminate', !!v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    get error() { return this.hasAttribute('error'); }
-    set error(v) { this.toggleAttribute('error', !!v); }
+    get error(): boolean { return this.hasAttribute('error'); }
+    set error(v: boolean) { this.toggleAttribute('error', !!v); }
 
-    get value() { return this.getAttribute('value') ?? 'on'; }
-    set value(v) { setStringAttr(this, 'value', v); }
+    get value(): string { return this.getAttribute('value') ?? 'on'; }
+    set value(v: string) { setStringAttr(this, 'value', v); }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { setStringAttr(this, 'name', v); }
+    get name(): string { return this.getAttribute('name') ?? ''; }
+    set name(v: string) { setStringAttr(this, 'name', v); }
 
-    get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { setOptionalAttr(this, 'hint', v); }
+    get hint(): string { return this.getAttribute('hint') ?? ''; }
+    set hint(v: string | null) { setOptionalAttr(this, 'hint', v); }
 
-    get color() {
+    get color(): string {
       const v = this.getAttribute('color');
-      return VARIANTS.includes(v) ? v : 'brand';
+      return VARIANTS.includes(v ?? '') ? (v ?? '') : 'brand';
     }
-    set color(v) { this.setAttribute('color', VARIANTS.includes(v) ? v : 'brand'); }
+    set color(v: string) { this.setAttribute('color', VARIANTS.includes(v) ? v : 'brand'); }
 
-    get labelPlacement() {
+    get labelPlacement(): string {
       const v = this.getAttribute('label-placement');
-      return PLACEMENTS.includes(v) ? v : 'end';
+      return PLACEMENTS.includes(v ?? '') ? (v ?? '') : 'end';
     }
-    set labelPlacement(v) { this.setAttribute('label-placement', PLACEMENTS.includes(v) ? v : 'end'); }
+    set labelPlacement(v: string) { this.setAttribute('label-placement', PLACEMENTS.includes(v) ? v : 'end'); }
 
-    get icon() { return this.getAttribute('icon') ?? ''; }
-    set icon(v) { setStringAttr(this, 'icon', v); }
+    get icon(): string { return this.getAttribute('icon') ?? ''; }
+    set icon(v: string) { setStringAttr(this, 'icon', v); }
 
-    get checkedIcon() { return this.getAttribute('checked-icon') ?? ''; }
-    set checkedIcon(v) { setStringAttr(this, 'checked-icon', v); }
+    get checkedIcon(): string { return this.getAttribute('checked-icon') ?? ''; }
+    set checkedIcon(v: string) { setStringAttr(this, 'checked-icon', v); }
 
-    get indeterminateIcon() { return this.getAttribute('indeterminate-icon') ?? ''; }
-    set indeterminateIcon(v) { setStringAttr(this, 'indeterminate-icon', v); }
+    get indeterminateIcon(): string { return this.getAttribute('indeterminate-icon') ?? ''; }
+    set indeterminateIcon(v: string) { setStringAttr(this, 'indeterminate-icon', v); }
 
-    get form() { return this.#internals?.form ?? null; }
-    get validity() { return this.#internals?.validity ?? null; }
-    get validationMessage() { return this.#internals?.validationMessage ?? ''; }
+    get form(): HTMLFormElement | null { return this.#internals?.form ?? null; }
+    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
+    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
 
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg) {
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void {
       if (msg) setValidity(this.#internals, { customError: true }, msg, this.#control);
       else this.#updateValidity();
     }
 
-    formResetCallback() {
+    formResetCallback(): void {
       this.toggleAttribute('checked', this.#defaultChecked);
       this.toggleAttribute('indeterminate', this.#defaultIndeterminate);
       this.#sync();
     }
 
-    formDisabledCallback(disabled) {
+    formDisabledCallback(disabled: boolean): void {
       this.#formDisabled = !!disabled;
       this.#sync();
     }
 
-    get #isDisabled() { return this.disabled || this.#formDisabled; }
+    get #isDisabled(): boolean { return this.disabled || this.#formDisabled; }
 
-    #syncSlots = () => {
+    #syncSlots = (): void => {
       const hint = this.hint.trim();
       const hasHintSlot = hasSlotted(this.#hintSlot);
       if (!hasHintSlot && this.#hintSlot.textContent !== hint) this.#hintSlot.textContent = hint;
       this.#hintEl.hidden = !hint && !hasHintSlot;
       this.#labelEl.hidden = !hasSlotted(this.#labelSlot);
       try {
-        this.#internals.ariaDescribedByElements = this.#hintEl.hidden ? [] : [this.#hintEl];
+        if (this.#internals) this.#internals.ariaDescribedByElements = this.#hintEl.hidden ? [] : [this.#hintEl];
       } catch { /* motores sin ariaDescribedByElements */ }
     };
 
-    #sync() {
+    #sync(): void {
       const disabled = this.#isDisabled;
       const readonly = this.readonly;
       const mixed = this.indeterminate;
@@ -240,7 +240,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#updateValidity();
     }
 
-    #updateValidity() {
+    #updateValidity(): void {
       if (this.required && !this.checked) {
         setValidity(this.#internals, { valueMissing: true }, 'Marque esta casilla', this.#control);
         return;
@@ -249,7 +249,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     }
 
     /** Toggle por interacción: el estado mixto se limpia al primer clic. */
-    #toggle() {
+    #toggle(): void {
       if (this.#isDisabled || this.readonly) return;
       const next = !this.checked;
       if (this.indeterminate) this.indeterminate = false;
@@ -257,7 +257,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       emit(this, 'is-change', { checked: next, value: this.value });
     }
 
-    #onClick = (e: PointerEvent) => {
+    #onClick = (e: PointerEvent): void => {
       if (this.#isDisabled) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -268,7 +268,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#toggle();
     };
 
-    #onKey = (e: KeyboardEvent) => {
+    #onKey = (e: KeyboardEvent): void => {
       if (e.key !== ' ' && e.key !== 'Spacebar') return;
       e.preventDefault();
       this.#toggle();
