@@ -5,7 +5,7 @@
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
   const root = ctx.main;
 
-  const pushLog = (logEl, cls, text) => {
+  const pushLog = (logEl: HTMLElement | null, cls: string, text: string): void => {
     if (!logEl) return;
     logEl.querySelector<HTMLElement>('.hint')?.closest('.row')?.remove();
     const row = document.createElement('div');
@@ -24,18 +24,21 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   // ── intersection ──────────────────────────────────────────────────────────
   const io = root.querySelector<HTMLElement>('#io');
   const ioLog = root.querySelector<HTMLElement>('#ioLog');
-  io?.addEventListener('is-intersect', (e) => {
-    const entry = e.detail?.entry;
+  io?.addEventListener('is-intersect', (e: Event) => {
+    const detail = (e as CustomEvent<{ entry?: IntersectionObserverEntry }>).detail;
+    const entry = detail?.entry;
     const el = entry?.target;
     if (!(el instanceof Element)) return;
     const label = el.getAttribute('data-label') || el.tagName.toLowerCase();
     const badge = el.querySelector<HTMLElement>('[data-badge]');
-    if (badge) badge.textContent = entry.isIntersecting ? 'en vista' : 'fuera';
-    pushLog(
-      ioLog,
-      entry.isIntersecting ? 'type-in' : 'type-out',
-      `${label} → ${entry.isIntersecting ? 'entra' : 'sale'} (${Math.round((entry.intersectionRatio || 0) * 100)}%)`,
-    );
+    if (badge && entry) badge.textContent = entry.isIntersecting ? 'en vista' : 'fuera';
+    if (entry) {
+      pushLog(
+        ioLog,
+        entry.isIntersecting ? 'type-in' : 'type-out',
+        `${label} → ${entry.isIntersecting ? 'entra' : 'sale'} (${Math.round((entry.intersectionRatio || 0) * 100)}%)`,
+      );
+    }
   });
 
   // ── mutation ──────────────────────────────────────────────────────────────
@@ -76,8 +79,8 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     }
   });
 
-  mo?.addEventListener('is-mutate', (e) => {
-    const records = e.detail?.records || [];
+  mo?.addEventListener('is-mutate', (e: Event) => {
+    const records = (e as CustomEvent<{ records?: MutationRecord[] }>).detail?.records || [];
     for (const r of records) {
       if (r.type === 'childList') {
         if (r.addedNodes.length) {
@@ -87,7 +90,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
           pushLog(moLog, 'type-mut', `childList −${r.removedNodes.length} hijo(s)`);
         }
       } else if (r.type === 'attributes') {
-        const v = r.target.getAttribute?.(r.attributeName) ?? '';
+        const v = (r.target as Element).getAttribute?.(r.attributeName as string) ?? '';
         pushLog(moLog, 'type-mut', `attr ${r.attributeName}="${v}"`);
       }
     }
@@ -99,12 +102,12 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const roSize = root.querySelector<HTMLElement>('#roSize');
   const roLog = root.querySelector<HTMLElement>('#roLog');
 
-  const paintSize = (entry) => {
-    const box = entry?.contentBoxSize?.[0]
-      || entry?.borderBoxSize?.[0]
-      || null;
-    let w;
-    let h;
+  const paintSize = (entry: Partial<ResizeObserverEntry> | undefined): { w: number | null; h: number | null } => {
+    const cb = entry?.contentBoxSize;
+    const bb = entry?.borderBoxSize;
+    const box = (cb && cb[0]) || (bb && bb[0]) || null;
+    let w: number | null = null;
+    let h: number | null = null;
     if (box) {
       w = Math.round(box.inlineSize);
       h = Math.round(box.blockSize);
@@ -115,7 +118,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       w = Math.round(roBox.clientWidth);
       h = Math.round(roBox.clientHeight);
     }
-    if (roSize && w != null) roSize.textContent = `${w} × ${h} px`;
+    if (roSize && w != null && h != null) roSize.textContent = `${w} × ${h} px`;
     return { w, h };
   };
 
@@ -123,10 +126,10 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     paintSize({ contentRect: roBox.getBoundingClientRect() });
   }
 
-  ro?.addEventListener('is-resize', (e) => {
-    const entry = e.detail?.entries?.[0];
+  ro?.addEventListener('is-resize', (e: Event) => {
+    const entry = (e as CustomEvent<{ entries?: ResizeObserverEntry[] }>).detail?.entries?.[0];
     const { w, h } = paintSize(entry);
-    if (w != null) pushLog(roLog, 'type-res', `resize → ${w} × ${h} px`);
+    if (w != null && h != null) pushLog(roLog, 'type-res', `resize → ${w} × ${h} px`);
   });
 }
 
