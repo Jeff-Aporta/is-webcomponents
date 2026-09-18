@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo &lt;is-avatar&gt; · is-webcomponents</title>
+<meta name="description" content="Avatares con imagen, iniciales o icono fallback. Tres variantes (image/initials/icon), formas (circle/rounded/square) y estados de carga y error." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 20px; align-content: start; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; min-height: 160px; }
+  section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; font-weight: 600; }
+  .row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .row > * { font-size: 3rem; line-height: 1; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-avatar:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar solo los tags que necesitamos, desde los bundles pre-construidos
+  // en dist/cdn/. Esto hace funcionar los demos con cualquier servidor
+  // estático, no solo con el dev server que transpila TS.
+  await import('../../../dist/cdn/media/icon.min.js');
+  await import('../../../dist/cdn/media/avatar.min.js');
+  await customElements.whenDefined('is-avatar');
+
+  // Suscribirse a is-error para surfacing en consola (útil para tests)
+  document.querySelectorAll('is-avatar').forEach((el) => {
+    el.addEventListener('is-error', (e) => {
+      console.log('[avatar] is-error', e.detail);
+      document.documentElement.dataset.avatarErrorFired = '1';
+    });
+  });
+
+  document.documentElement.dataset.avatarReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-avatar&gt;</code></h1>
+  <p>Tres estados: imagen, iniciales, icono. Caja = <code>1em × 1em</code> (escala con font-size).</p>
+</header>
+<main>
+  <section>
+    <h2>Iniciales</h2>
+    <div class="row">
+      <is-avatar initials="JD" label="Jane Doe"></is-avatar>
+      <is-avatar initials="AB" shape="rounded" label="AB"></is-avatar>
+      <is-avatar initials="MX" shape="square" label="MX"></is-avatar>
+    </div>
+  </section>
+  <section>
+    <h2>Imagen (URL rota → fallback)</h2>
+    <div class="row">
+      <is-avatar image="https://invalid.invalid/missing.png" initials="!!" label="Sin imagen"></is-avatar>
+      <is-avatar label="Sin nada"></is-avatar>
+    </div>
+  </section>
+  <section>
+    <h2>Slot icon (custom)</h2>
+    <div class="row">
+      <is-avatar label="Robot">
+        <is-icon slot="icon" icon="mdi:robot"></is-icon>
+      </is-avatar>
+      <is-avatar shape="rounded" label="Estrella">
+        <is-icon slot="icon" icon="mdi:star"></is-icon>
+      </is-avatar>
+    </div>
+  </section>
+</main>
+<footer>
+  Atributos: <code>image</code> <code>initials</code> <code>label</code> <code>shape</code> <code>loading</code>.
+  Eventos: <code>is-error</code> cuando la imagen falla.
+</footer>
+</body>
+</html>

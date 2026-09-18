@@ -3,57 +3,52 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-mindmap> radial</title>
+<title>Demo — <is-mindmap> · is-webcomponents</title>
+<meta name="description" content="Mapa mental en SVG (sin Mermaid) con layout radial." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
-  body { display: grid; grid-template-rows: auto 1fr auto; }
+  body { display: grid; grid-template-rows: auto 1fr; }
   header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
-  main { padding: 20px; display: grid; place-items: center; }
-  is-mindmap { width: 720px; height: 640px; display: block; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-mindmap { width: 100%; height: 100%; min-height: 480px; display: block; }
   is-mindmap:not(:defined) { visibility: hidden; }
-  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
 </style>
 <script type="module">
-  await import('../../../src/components/diagrams/mindmap.ts');
+  await import('../../../dist/cdn/diagrams/mindmap.min.js');
   await customElements.whenDefined('is-mindmap');
 
   const el = document.createElement('is-mindmap');
   el.payload = {
-    title: 'Estrategia de plataforma',
-    subtitle: 'Tres ejes con ramificaciones',
-    layout: 'radial',
-    nodes: [
-      { id: 'root', label: 'Plataforma' },
-      { id: 'obs', label: 'Observabilidad', parent: 'root' },
-      { id: 'logs', label: 'Logs', parent: 'obs' },
-      { id: 'metrics', label: 'Métricas', parent: 'obs' },
-      { id: 'traces', label: 'Trazas', parent: 'obs' },
-      { id: 'deploy', label: 'Deploy', parent: 'root' },
-      { id: 'ci', label: 'CI', parent: 'deploy' },
-      { id: 'cd', label: 'CD', parent: 'deploy' },
-      { id: 'scale', label: 'Escalado', parent: 'deploy' },
-      { id: 'data', label: 'Datos', parent: 'root' },
-      { id: 'etl', label: 'ETL', parent: 'data' },
-      { id: 'dash', label: 'Dashboards', parent: 'data' },
-    ],
+    mindmap: {
+      title: 'Plan de lanzamiento',
+      subtitle: '1 raíz · 3 ramas · 6 hojas',
+      layout: 'radial',
+      nodes: [
+        { id: 'root', label: 'Lanzamiento', kind: 'root' },
+        { id: 'mkt', label: 'Marketing', kind: 'branch', parent: 'root' },
+        { id: 'prod', label: 'Producto', kind: 'branch', parent: 'root' },
+        { id: 'ops', label: 'Operaciones', kind: 'branch', parent: 'root' },
+        { id: 'mkt-1', label: 'Blog post', kind: 'leaf', parent: 'mkt' },
+        { id: 'mkt-2', label: 'Redes', kind: 'leaf', parent: 'mkt' },
+        { id: 'prod-1', label: 'Beta cerrada', kind: 'leaf', parent: 'prod' },
+        { id: 'prod-2', label: 'Pricing', kind: 'leaf', parent: 'prod' },
+        { id: 'ops-1', label: 'Infraestructura', kind: 'leaf', parent: 'ops' },
+        { id: 'ops-2', label: 'Soporte', kind: 'leaf', parent: 'ops' },
+      ],
+    },
   };
-  document.getElementById('host').appendChild(el);
+  document.querySelector('main').appendChild(el);
 
   document.documentElement.dataset.mindmapReady = '1';
 </script>
 </head>
 <body>
-<header>
-  <h1>Demo funcional — <code>&lt;is-mindmap&gt;</code></h1>
-  <p>Layout radial con 12 nodos en 3 niveles jerárquicos.</p>
-</header>
-<main>
-  <div id="host"></div>
-</main>
-<footer>
-  Estado: <code>buildTree</code> arma el árbol; <code>layoutRadialTree</code> posiciona por ángulo.
-</footer>
+  <header>
+    <h1>Demo — <code>&lt;is-mindmap&gt;</code></h1>
+    <p>Layout radial: raíz central con ramas (pill) y hojas (subrayado). Hover resalta el subárbol.</p>
+  </header>
+  <main></main>
 </body>
 </html>

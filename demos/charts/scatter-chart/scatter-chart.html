@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-scatter-chart&gt; · demo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; padding: 20px; min-height: 0; }
+  is-scatter-chart { width: 720px; height: 360px; }
+  is-scatter-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data-viz/scatter-chart.min.js');
+  await customElements.whenDefined('is-scatter-chart');
+
+  const chart = document.createElement('is-scatter-chart');
+  chart.setAttribute('label', 'Edad vs Ingresos');
+  chart.setAttribute('x-label', 'Edad (años)');
+  chart.setAttribute('y-label', 'Ingresos (k$)');
+  chart.payload = {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Personas',
+        data: [
+          { x: 22, y: 28 }, { x: 25, y: 35 }, { x: 30, y: 45 },
+          { x: 35, y: 52 }, { x: 40, y: 60 }, { x: 45, y: 70 },
+          { x: 50, y: 75 }, { x: 55, y: 72 }, { x: 60, y: 68 },
+        ],
+      }],
+    },
+  };
+
+  document.querySelector('main').appendChild(chart);
+  document.documentElement.dataset.scatterChartReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-scatter-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>scatter</code>. Datos <code>{x, y}</code>.</p>
+</header>
+<main></main>
+</body>
+</html>

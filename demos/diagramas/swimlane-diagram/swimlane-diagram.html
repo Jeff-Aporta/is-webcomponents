@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-swimlane-diagram> · is-webcomponents</title>
+<meta name="description" content="Diagrama de carriles (swimlane): responsables horizontales o verticales con flujo de pasos." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-swimlane-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-swimlane-diagram:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/swimlane-diagram.min.js');
+  await customElements.whenDefined('is-swimlane-diagram');
+
+  const el = document.createElement('is-swimlane-diagram');
+  el.payload = {
+    swimlane: {
+      title: 'Proceso de onboarding',
+      subtitle: '3 carriles · 5 pasos · 5 enlaces',
+      direction: 'horizontal',
+      lanes: [
+        { id: 'cliente', name: 'Cliente' },
+        { id: 'soporte', name: 'Soporte' },
+        { id: 'sistema', name: 'Sistema' },
+      ],
+      steps: [
+        { id: 's1', label: 'Registro', lane: 'cliente' },
+        { id: 's2', label: 'Verificar email', lane: 'soporte' },
+        { id: 's3', label: 'Crear cuenta', lane: 'sistema' },
+        { id: 's4', label: 'Onboarding tour', lane: 'cliente' },
+        { id: 's5', label: 'Notificación', lane: 'sistema' },
+      ],
+      links: [
+        { id: 'l1', from: 's1', to: 's2' },
+        { id: 'l2', from: 's2', to: 's3' },
+        { id: 'l3', from: 's3', to: 's4' },
+        { id: 'l4', from: 's4', to: 's5' },
+        { id: 'l5', from: 's1', to: 's5', label: '?' },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.swimlaneReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-swimlane-diagram&gt;</code></h1>
+    <p>Carriles (lanes) horizontales por responsable: cada paso pertenece a un carril y los enlaces cruzan entre ellos.</p>
+  </header>
+  <main></main>
+</body>
+</html>

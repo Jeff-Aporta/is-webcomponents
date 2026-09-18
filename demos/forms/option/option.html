@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-option> · is-webcomponents</title>
+<meta name="description" content="Opción individual para listas (combobox/select) con valor, disabled, selected, slot start y descripción." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 18px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  header p { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
+  .row { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+  .listbox { display: flex; flex-direction: column; gap: 6px; max-width: 460px; }
+  button { font: inherit; padding: 6px 12px; background: #1f2937; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; cursor: pointer; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
+  /* Anti-FOUC */
+  is-option:not(:defined) { visibility: hidden; }
+  is-icon:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/option.min.js');
+  await import('../../../dist/cdn/media/icon.min.js');
+
+  await customElements.whenDefined('is-option');
+
+  const out = document.getElementById('out');
+  const opts = [...document.querySelectorAll('is-option')];
+
+  const render = (focused) => {
+    out.textContent = JSON.stringify({
+      selected: opts.find((o) => o.selected)?.value ?? null,
+      states: opts.map((o) => ({
+        value: o.value,
+        label: o.label,
+        description: o.description,
+        group: o.group,
+        disabled: o.disabled,
+        selected: o.selected,
+        ariaSelected: o.shadowRoot.querySelector('[role="option"]').getAttribute('aria-selected'),
+      })),
+    }, null, 2);
+  };
+
+  for (const o of opts) {
+    o.addEventListener('click', () => {
+      for (const other of opts) other.selected = other === o;
+      render(o);
+    });
+  }
+
+  document.getElementById('btn-set').addEventListener('click', () => {
+    for (const o of opts) o.selected = false;
+    const second = opts.find((o) => o.value === 'mx');
+    if (second) second.selected = true;
+    render(second);
+  });
+
+  render();
+  document.documentElement.dataset.optionReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Demo de <code>&lt;is-option&gt;</code></h1>
+    <p>Opción individual para listas (combobox/select). Slots: <code>start</code> (icono) y <code>description</code> (texto secundario).</p>
+  </header>
+
+  <section>
+    <h2>Básico</h2>
+    <div class="row">
+      <div class="listbox" id="list">
+        <is-option value="es" selected>
+          España
+          <span slot="description">+34 · Castellano</span>
+        </is-option>
+        <is-option value="mx">
+          México
+          <span slot="description">+52 · Español</span>
+        </is-option>
+        <is-option value="ar">
+          Argentina
+          <span slot="description">+54 · Castellano</span>
+        </is-option>
+        <is-option value="us" disabled>
+          United States
+          <span slot="description">No disponible</span>
+        </is-option>
+      </div>
+      <div>
+        <button id="btn-set" type="button">Seleccionar México</button>
+      </div>
+    </div>
+    <output id="out"></output>
+  </section>
+
+  <section>
+    <h2>Con grupos</h2>
+    <div class="listbox">
+      <is-option value="mad" group="España">Madrid</is-option>
+      <is-option value="bcn" group="España">Barcelona</is-option>
+      <is-option value="cun" group="México">Cancún</is-option>
+      <is-option value="mex" group="México" selected>Ciudad de México</is-option>
+      <is-option value="eze" group="Argentina">Ezeiza</is-option>
+    </div>
+  </section>
+
+  <section>
+    <h2>Estados</h2>
+    <div class="row">
+      <is-option value="a" selected>Selected</is-option>
+      <is-option value="b">Not selected</is-option>
+      <is-option value="c" disabled>Disabled</is-option>
+      <is-option value="d" disabled selected>Disabled selected</is-option>
+    </div>
+  </section>
+</main>
+</body>
+</html>

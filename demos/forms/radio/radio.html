@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-radio> · is-webcomponents</title>
+<meta name="description" content="Radio button individual con role=radio, valor, color y descripción opcional." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 18px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  header p { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
+  .row { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; }
+  button { font: inherit; padding: 6px 12px; background: #1f2937; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; cursor: pointer; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
+  /* Anti-FOUC */
+  is-radio:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/radio.min.js');
+
+  await customElements.whenDefined('is-radio');
+
+  // Standalone (sin grupo): el radio se auto-marca al activarse.
+  const demo = document.getElementById('demo');
+  const out = document.getElementById('out');
+
+  const render = () => {
+    out.textContent = JSON.stringify({
+      value: demo.value,
+      checked: demo.checked,
+      disabled: demo.disabled,
+      role: demo.getAttribute('role'),
+      group: !!demo.closest('is-radio-group'),
+    }, null, 2);
+  };
+  demo.addEventListener('click', () => setTimeout(render, 0));
+  demo.addEventListener('is-radio-select', (e) => {
+    console.log('[radio] select', e.detail);
+    render();
+  });
+
+  document.getElementById('btn-toggle').addEventListener('click', () => {
+    demo.checked = !demo.checked;
+    render();
+  });
+
+  render();
+  document.documentElement.dataset.radioReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Demo de <code>&lt;is-radio&gt;</code></h1>
+    <p>Radio button individual. Sin grupo padre, se marca a sí mismo al activarse. Dentro de <code>&lt;is-radio-group&gt;</code> el dueño del valor es el grupo.</p>
+  </header>
+
+  <section>
+    <h2>Básico (standalone)</h2>
+    <is-radio id="demo" value="opt-1" hint="Opción individual">
+      Opción uno
+      <span slot="description">Texto secundario opcional en el slot <code>description</code>.</span>
+    </is-radio>
+    <div class="row">
+      <button id="btn-toggle" type="button">Toggle</button>
+    </div>
+    <output id="out"></output>
+  </section>
+
+  <section>
+    <h2>Estados</h2>
+    <div class="row">
+      <is-radio value="a">Marcado (checked)</is-radio>
+      <is-radio value="b">Sin marcar</is-radio>
+      <is-radio value="c" disabled>Deshabilitado</is-radio>
+      <is-radio value="d" disabled checked>Marcado y deshabilitado</is-radio>
+    </div>
+  </section>
+
+  <section>
+    <h2>Colores y label-placement</h2>
+    <div class="row">
+      <is-radio value="r1" checked color="brand">brand</is-radio>
+      <is-radio value="r2" checked color="success">success</is-radio>
+      <is-radio value="r3" checked color="danger">danger</is-radio>
+      <is-radio value="r4" checked color="neutral">neutral</is-radio>
+      <is-radio value="r5" checked label-placement="top">top</is-radio>
+      <is-radio value="r6" checked label-placement="bottom">bottom</is-radio>
+    </div>
+  </section>
+</main>
+</body>
+</html>

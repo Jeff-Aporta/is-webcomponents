@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-scrollspy> · is-webcomponents</title>
+<meta name="description" content="Observador de intersección que marca enlaces según la sección visible. target/trigger/root-margin/threshold. Métodos activate(id), refresh(). Eventos is-activated/is-deactivated." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; min-height: 100vh; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 14px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-scrollspy:not(:defined), is-main:not(:defined) { visibility: hidden; }
+
+  /* Layout de la demo principal: aside (scrollspy) + main (sections). */
+  .layout-2col {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 12px;
+    height: 320px;
+  }
+  .layout-2col aside {
+    background: #0a121b;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 12px;
+    overflow: auto;
+  }
+  .layout-2col aside a {
+    display: block;
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 6px 8px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+  .layout-2col aside a.is-scrollspy-active {
+    background: rgba(59, 130, 246, 0.18);
+    color: #93c5fd;
+  }
+  .layout-2col is-main {
+    background: #0a121b;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: auto;
+    padding: 0;
+  }
+  .layout-2col section[id] { padding: 14px 18px; min-height: 220px; border-bottom: 1px dashed rgba(255,255,255,0.08); }
+  .layout-2col section[id]:last-child { border-bottom: 0; }
+
+  /* Demo con trigger custom: data-scrollspy-trigger. */
+  .custom-host { display: grid; grid-template-columns: 180px 1fr; gap: 12px; height: 280px; }
+  .custom-host is-scrollspy { background: #0a121b; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 12px; }
+  .custom-host .target { background: #0a121b; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; overflow: auto; padding: 0; }
+  .custom-host .target div { padding: 14px 18px; min-height: 220px; border-bottom: 1px dashed rgba(255,255,255,0.08); }
+  .custom-host .target div:last-child { border-bottom: 0; }
+
+  /* Demo target custom (selector CSS). */
+  .target-host { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .target-host .target {
+    height: 240px;
+    overflow: auto;
+    background: #0a121b;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+  }
+  .target-host .target article[id] { padding: 14px 18px; min-height: 200px; border-bottom: 1px dashed rgba(255,255,255,0.08); }
+
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  pre.log { margin: 8px 0 0 0; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; max-height: 160px; overflow: auto; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/scrollspy.min.js');
+  await import('../../../dist/cdn/layout/main.min.js');
+  await customElements.whenDefined('is-scrollspy');
+  await customElements.whenDefined('is-main');
+
+  // (1) Demo principal: target auto-resuelto al <is-main> ancestro.
+  //     spy1 está dentro de un <aside> que es hermano del <is-main>, no hijo.
+  //     Sin target explícito, closest() subiría al <main> del shell y
+  //     detectaría también los sections/articles de los otros 2 demos (8 más).
+  //     Por eso usamos `target="#layout-1 is-main"` para anclar al correcto.
+  //     NOTA: ponemos el target vía JS después de innerHTML para evitar el
+  //     problema de timing del parser — al crear <is-scrollspy target=...>
+  //     dentro de un innerHTML, el spy se upgradea antes de que sus hermanos
+  //     estén en el DOM y document.querySelector del target devuelve null.
+  const layout1 = document.getElementById('layout-1');
+  layout1.innerHTML = `
+    <aside>
+      <is-scrollspy id="spy1">
+        <a href="#intro">Introducción</a>
+        <a href="#examples">Ejemplos</a>
+        <a href="#api">API</a>
+        <a href="#changelog">Changelog</a>
+      </is-scrollspy>
+    </aside>
+    <is-main>
+      <section id="intro"><h3>Introducción</h3><p>Texto de intro…</p></section>
+      <section id="examples"><h3>Ejemplos</h3><p>Texto de ejemplos…</p></section>
+      <section id="api"><h3>API</h3><p>Texto del API…</p></section>
+      <section id="changelog"><h3>Changelog</h3><p>Texto del changelog…</p></section>
+    </is-main>
+  `;
+  document.getElementById('spy1').setAttribute('target', '#layout-1 is-main');
+
+  // (2) Trigger custom (data-scrollspy-trigger).
+  const layout2 = document.getElementById('layout-2');
+  layout2.innerHTML = `
+    <is-scrollspy id="spy2">
+      <a href="#step-a">Paso A</a>
+      <a href="#step-b">Paso B</a>
+      <a href="#step-c">Paso C</a>
+    </is-scrollspy>
+    <div class="target" id="target-2">
+      <div id="step-a" data-spy-trigger>Paso A</div>
+      <div id="step-b" data-spy-trigger>Paso B</div>
+      <div id="step-c" data-spy-trigger>Paso C</div>
+    </div>
+  `;
+  // El spy2 debe apuntar a #target-2 con un selector de trigger custom.
+  // NOTA: hay que setear ambos atributos vía JS (no en innerHTML) porque el
+  // componente sólo lee sus atributos en attributeChangedCallback, que se
+  // dispara DESPUÉS de connectedCallback.
+  document.getElementById('spy2').setAttribute('target', '#target-2');
+  document.getElementById('spy2').setAttribute('trigger', '[data-spy-trigger]');
+
+  // (3) target custom (CSS selector) + article[id] triggers.
+  const layout3 = document.getElementById('layout-3');
+  layout3.innerHTML = `
+    <is-scrollspy id="spy3">
+      <a href="#alpha">Alpha</a>
+      <a href="#beta">Beta</a>
+      <a href="#gamma">Gamma</a>
+    </is-scrollspy>
+    <div class="target" id="target-3">
+      <article id="alpha">Alpha article</article>
+      <article id="beta">Beta article</article>
+      <article id="gamma">Gamma article</article>
+    </div>
+  `;
+  document.getElementById('spy3').setAttribute('target', '#target-3');
+
+  // (4) Log de eventos.
+  const log = document.getElementById('log');
+  const append = (line) => { log.textContent = line + '\n' + log.textContent; };
+  ['spy1', 'spy2', 'spy3'].forEach((id) => {
+    const el = document.getElementById(id);
+    el.addEventListener('is-activated', (e) => append(`is-activated ← ${id} id=${e.detail?.id}`));
+    el.addEventListener('is-deactivated', (e) => append(`is-deactivated ← ${id} id=${e.detail?.id}`));
+  });
+
+  // (5) Acciones interactivas sobre spy1.
+  document.getElementById('btn-activate-api').addEventListener('click', () => {
+    document.getElementById('spy1').activate('api');
+    const active = document.getElementById('spy1').active;
+    append(`spy1.activate('api') → active=${active}`);
+  });
+  document.getElementById('btn-refresh').addEventListener('click', () => {
+    document.getElementById('spy1').refresh();
+    append('spy1.refresh()');
+  });
+  document.getElementById('btn-add-section').addEventListener('click', () => {
+    // Añade dinámicamente una nueva sección. El MutationObserver del spy debería recogerla.
+    const main = layout1.querySelector('is-main');
+    const s = document.createElement('section');
+    s.id = 'new-section';
+    s.innerHTML = '<h3>New section</h3><p>Añadida dinámicamente.</p>';
+    main.appendChild(s);
+    document.getElementById('spy1').refresh();
+    // Y un nuevo link en el spy.
+    const newLink = document.createElement('a');
+    newLink.href = '#new-section';
+    newLink.textContent = 'New section';
+    document.getElementById('spy1').appendChild(newLink);
+    append('Added #new-section (section + link + refresh)');
+  });
+
+  document.documentElement.dataset.scrollspyReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-scrollspy&gt;</code></h1>
+  <p>Observa la intersección de triggers dentro de un target y marca el enlace correspondiente. Atributos: <code>target</code>, <code>trigger</code>, <code>root-margin</code>, <code>threshold</code>. API: <code>activate(id)</code>, <code>refresh()</code>, <code>triggers</code>, <code>active</code>. Eventos: <code>is-activated</code>, <code>is-deactivated</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>1. Target auto-resuelto al &lt;is-main&gt;</h2>
+    <div id="layout-1" class="layout-2col"></div>
+    <div class="actions">
+      <button id="btn-activate-api" type="button">spy1.activate('api')</button>
+      <button id="btn-refresh" type="button">spy1.refresh()</button>
+      <button id="btn-add-section" type="button">Añadir sección dinámica</button>
+    </div>
+  </section>
+  <section>
+    <h2>2. Trigger custom (data-scrollspy-trigger) + target=#target-2</h2>
+    <div id="layout-2" class="custom-host"></div>
+  </section>
+  <section>
+    <h2>3. article[id] triggers + target=#target-3</h2>
+    <div id="layout-3" class="target-host"></div>
+  </section>
+  <section>
+    <h2>Eventos</h2>
+    <pre id="log" class="log"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-scrollspy')</code> y <code>is-main</code> resueltos.
+</footer>
+</body>
+</html>

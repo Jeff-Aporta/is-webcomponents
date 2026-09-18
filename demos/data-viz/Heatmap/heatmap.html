@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-heatmap> · is-webcomponents</title>
+<meta name="description" content="Matriz de celdas coloreadas por valor numérico: gradiente de color, etiquetas y tooltips de hover." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  main {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 12px;
+    padding: 12px; min-height: 0;
+  }
+  .panel {
+    background: #0f1620; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 16px;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .panel h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 0 0 12px 0; color: #94a3b8;
+  }
+  .panel .body { flex: 1; display: grid; place-items: stretch; min-height: 0; }
+  is-heatmap { width: 100%; height: 100%; min-height: 320px; display: block; }
+  is-heatmap:not(:defined) { visibility: hidden; }
+  pre#log {
+    margin: 0; padding: 12px; flex: 1; overflow: auto;
+    background: #0c1118; border-radius: 4px;
+    font: 12px ui-monospace, Menlo, Consolas, monospace;
+    color: #cbd5e1; white-space: pre-wrap;
+  }
+</style>
+<script type="module">
+  // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
+  // servidor estático (incluido VS Code Live Server), no solo con dev server.
+  await import('../../../dist/cdn/data-viz/heatmap.min.js');
+  await customElements.whenDefined('is-heatmap');
+
+  // Payload 1: heatmap denso 12x8 con paleta brand + show-values
+  const dense = {
+    xLabels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+    yLabels: ['00', '03', '06', '09', '12', '15', '18', '21'],
+    data: [
+      [120, 80,  60,  90,  180, 240, 320],
+      [300, 210, 95,  60,  120, 200, 290],
+      [420, 360, 180, 110, 80,  140, 240],
+      [560, 480, 320, 200, 150, 90,  180],
+      [710, 640, 520, 410, 280, 200, 110],
+      [620, 580, 470, 360, 250, 180, 130],
+      [520, 430, 320, 230, 180, 150, 110],
+      [380, 310, 220, 160, 130, 110, 90 ],
+    ],
+  };
+
+  // Payload 2: matriz dispersa (algunas celdas null) con paleta divergente
+  const sparse = {
+    xLabels: ['A', 'B', 'C', 'D', 'E', 'F'],
+    yLabels: ['r1', 'r2', 'r3', 'r4', 'r5', 'r6'],
+    points: [
+      { x: 'A', y: 'r1', v: 10 }, { x: 'C', y: 'r1', v: -25 }, { x: 'F', y: 'r1', v: 8 },
+      { x: 'B', y: 'r2', v: -12 }, { x: 'D', y: 'r2', v: 30 }, { x: 'E', y: 'r2', v: -8 },
+      { x: 'A', y: 'r3', v: 15 }, { x: 'C', y: 'r3', v: -30 }, { x: 'F', y: 'r3', v: 22 },
+      { x: 'B', y: 'r4', v: 5 },  { x: 'D', y: 'r4', v: -18 },
+      { x: 'A', y: 'r5', v: -40 }, { x: 'C', y: 'r5', v: 35 }, { x: 'E', y: 'r5', v: -5 },
+      { x: 'B', y: 'r6', v: 12 }, { x: 'D', y: 'r6', v: -22 }, { x: 'F', y: 'r6', v: 18 },
+    ],
+  };
+
+  // Demo 1: paleta brand + show-values + axis labels
+  const h1 = document.createElement('is-heatmap');
+  h1.setAttribute('color', 'brand');
+  h1.setAttribute('show-values', '');
+  h1.setAttribute('cell-radius', '3');
+  h1.setAttribute('legend-position', 'end');
+  h1.setAttribute('x-label', 'Día de la semana');
+  h1.setAttribute('y-label', 'Hora del día');
+  h1.config = dense;
+  document.getElementById('heatmap-brand').appendChild(h1);
+
+  // Demo 2: paleta divergente red-blue + legend a la derecha
+  const h2 = document.createElement('is-heatmap');
+  h2.setAttribute('color', 'red-blue');
+  h2.setAttribute('legend-position', 'end');
+  h2.config = sparse;
+  document.getElementById('heatmap-divergent').appendChild(h2);
+
+  // Log de eventos hover (esencial para verificar tooltips en tests).
+  const log = document.getElementById('log');
+  const append = (line) => { log.textContent = line + '\n' + log.textContent; log.scrollTop = 0; };
+  document.querySelectorAll('is-heatmap').forEach((h) => {
+    h.addEventListener('is-cell-hover', (e) => {
+      append(`hover: ${e.detail.x} · ${e.detail.y} = ${e.detail.value}`);
+    });
+  });
+
+  document.documentElement.dataset.heatmapReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Mapa de calor — <code>&lt;is-heatmap&gt;</code></h1>
+    <p>Gradiente por valor · <code>show-values</code> escribe el número en cada celda · <code>is-cell-hover</code> emite la celda bajo el puntero</p>
+  </div>
+  <div class="spacer"></div>
+  <code data-readout="cells">cells: —</code>
+</header>
+<main>
+  <section class="panel">
+    <h2>Paleta brand (densa)</h2>
+    <div class="body" id="heatmap-brand"></div>
+  </section>
+  <section class="panel">
+    <h2>Paleta red-blue (divergente)</h2>
+    <div class="body" id="heatmap-divergent"></div>
+  </section>
+</main>
+<pre id="log" hidden></pre>
+</body>
+</html>

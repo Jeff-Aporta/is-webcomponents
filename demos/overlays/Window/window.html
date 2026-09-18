@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ventana flotante de <is-window> · is-webcomponents</title>
+<meta name="description" content="Window manager estilo escritorio: drag del header, resize por la esquina, minimize, maximize, close. Soporta múltiples ventanas con z-index." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; overflow: hidden; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+    z-index: 200; position: relative;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  header button {
+    font: inherit; font-size: 12px; padding: 6px 12px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04); color: inherit; cursor: pointer;
+  }
+  header button:hover { border-color: var(--is-accent, #38bdf8); color: var(--is-accent, #38bdf8); }
+  main {
+    position: relative; overflow: hidden;
+    background: radial-gradient(ellipse at center, #11202e 0%, #0c1118 80%);
+  }
+  main .desktopicons {
+    position: absolute; top: 12px; left: 16px; color: #94a3b8;
+    font-size: 11px; line-height: 1.6;
+  }
+  main .desktopicons kbd { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  is-window:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
+  // servidor estático (incluido VS Code Live Server), no solo con dev server.
+  await import('../../../dist/cdn/overlays/window.min.js');
+  await customElements.whenDefined('is-window');
+
+  // Spawner de ventanas — cada botón crea una <is-window> con la config
+  // pedida. Se trackean para evitar duplicados y para que el contador en el
+  // header refleje cuántas hay vivas.
+  let count = 0;
+  const winCounter = document.getElementById('win-count');
+
+  function spawn(kind) {
+    count++;
+    const win = document.createElement('is-window');
+    // Config común: arrancan en posiciones distintas para no superponerse.
+    const baseX = 80 + count * 32;
+    const baseY = 100 + count * 32;
+    win.setAttribute('x', String(baseX));
+    win.setAttribute('y', String(baseY));
+    win.setAttribute('width', kind === 'resizable' ? '420' : '320');
+    win.setAttribute('height', kind === 'resizable' ? '280' : '200');
+
+    // Booleans: presence-based, sin attr="false".
+    if (kind === 'all' || kind === 'resizable') win.setAttribute('resizable', '');
+    if (kind === 'all' || kind === 'resizable') win.setAttribute('minimizable', '');
+    if (kind === 'all' || kind === 'resizable') win.setAttribute('maximizable', '');
+    win.setAttribute('closable', '');
+    if (kind === 'resizable') win.setAttribute('dock', 'bottom-right');
+
+    win.setAttribute('title', `Ventana #${count} · ${kind}`);
+
+    // Contenido principal
+    const p = document.createElement('p');
+    p.style.cssText = 'margin:0 0 .5rem;font-size:.85rem;color:var(--is-text-soft,#94a3b8)';
+    p.textContent = `Esta es la ventana ${count}. Puedes arrastrar el header, redimensionar desde la esquina (si aplica) o usar los controles arriba a la derecha.`;
+    win.appendChild(p);
+
+    // Un botón dentro del body para probar focus trap (Escape lo cierra si closable)
+    const focusBtn = document.createElement('button');
+    focusBtn.textContent = 'Botón interno';
+    focusBtn.style.cssText = 'font:inherit;font-size:.8rem;padding:.3rem .6rem;border-radius:6px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.04);color:inherit;cursor:pointer;margin-bottom:.4rem;margin-right:.4rem';
+    win.appendChild(focusBtn);
+
+    // Slot title opcional (reemplaza el atributo title)
+    const titleSlot = document.createElement('span');
+    titleSlot.setAttribute('slot', 'title');
+    titleSlot.textContent = `#${count}`;
+    win.appendChild(titleSlot);
+
+    // Eventos para tests
+    win.addEventListener('is-show', () => winCounter.textContent = `windows: ${document.querySelectorAll('is-window').length}`);
+    win.addEventListener('is-hide', () => {
+      // El componente hace this.remove() en close(), así que cuando llegue
+      // is-hide aún está en DOM; lo quitamos manualmente en el listener
+      // para que el counter se mantenga sincronizado.
+      winCounter.textContent = `windows: ${document.querySelectorAll('is-window').length - 1}`;
+    });
+
+    document.getElementById('desktop').appendChild(win);
+  }
+
+  document.getElementById('spawn-basic').addEventListener('click', () => spawn('basic'));
+  document.getElementById('spawn-all').addEventListener('click', () => spawn('all'));
+  document.getElementById('spawn-resizable').addEventListener('click', () => spawn('resizable'));
+
+  // Spawn inicial: una ventana completa para que el demo se vea "vivo".
+  spawn('all');
+
+  document.documentElement.dataset.windowReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Window manager — <code>&lt;is-window&gt;</code></h1>
+    <p>Drag el header · Resize por la esquina inferior derecha · <code>Esc</code> cierra · Múltiples ventanas conviven con z-index</p>
+  </div>
+  <div class="spacer"></div>
+  <code id="win-count" data-readout="windows">windows: 0</code>
+  <button id="spawn-basic">+ Básica</button>
+  <button id="spawn-all">+ Completa</button>
+  <button id="spawn-resizable">+ Resizeable</button>
+</header>
+<main>
+  <div class="desktopicons">
+    Crea ventanas con los botones arriba a la derecha. Cada ventana arranca en una posición distinta.<br>
+    Atajos: <kbd>Esc</kbd> cierra · Drag del <kbd>header</kbd> mueve · Click en <kbd>corner</kbd> redimensiona.
+  </div>
+  <div id="desktop" style="position:absolute;inset:0"></div>
+</main>
+</body>
+</html>

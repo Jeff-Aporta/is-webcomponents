@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-checkbox> · is-webcomponents</title>
+<meta name="description" content="Casilla de verificación form-associated (booleana) con estado indeterminate, color, label-placement y validación required." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 18px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  header p { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  button { font: inherit; padding: 6px 12px; background: #1f2937; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; cursor: pointer; }
+  button:hover { border-color: var(--is-accent, #2563eb); }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  /* Anti-FOUC */
+  is-checkbox:not(:defined) { visibility: hidden; }
+  is-icon:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Bundle pre-construido (CDN-friendly). Funciona con cualquier servidor estático.
+  await import('../../../dist/cdn/forms/checkbox.min.js');
+
+  await customElements.whenDefined('is-checkbox');
+
+  const demo = document.getElementById('demo');
+  const out = document.getElementById('out');
+  const refform = document.getElementById('check-form');
+
+  // 1) Estado inicial reflejado en el output en vivo.
+  const render = () => {
+    out.textContent = JSON.stringify({
+      checked: demo.checked,
+      indeterminate: demo.indeterminate,
+      disabled: demo.disabled,
+      required: demo.required,
+      value: demo.value,
+      formChecked: refform.querySelector('is-checkbox[name="tos"]').checked,
+    }, null, 2);
+  };
+  demo.addEventListener('is-change', (e) => {
+    console.log('[checkbox] change', e.detail);
+    render();
+  });
+  render();
+
+  // Botones de control (para inspección humana, no son necesarios en los tests).
+  document.getElementById('btn-toggle').addEventListener('click', () => {
+    demo.checked = !demo.checked;
+    render();
+  });
+  document.getElementById('btn-indet').addEventListener('click', () => {
+    demo.indeterminate = !demo.indeterminate;
+    render();
+  });
+
+  document.documentElement.dataset.checkboxReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Demo de <code>&lt;is-checkbox&gt;</code></h1>
+    <p>Casilla form-associated con <code>checked</code>, <code>indeterminate</code>, <code>required</code>, <code>hint</code> y colores. Pulsa o usa la barra espaciadora para alternar.</p>
+  </header>
+
+  <section>
+    <h2>Básica</h2>
+    <form id="check-form">
+      <is-checkbox id="demo" name="tos" value="accepted" hint="Marca para aceptar los términos">
+        Acepto los términos y condiciones
+      </is-checkbox>
+    </form>
+    <div class="row">
+      <button id="btn-toggle" type="button">Toggle</button>
+      <button id="btn-indet" type="button">Indeterminate</button>
+    </div>
+    <output id="out"></output>
+  </section>
+
+  <section>
+    <h2>Variantes y estados</h2>
+    <div class="row">
+      <is-checkbox checked>Acepto</is-checkbox>
+      <is-checkbox indeterminate>Selección parcial</is-checkbox>
+      <is-checkbox disabled>Deshabilitado</is-checkbox>
+      <is-checkbox checked disabled>Marcado y deshabilitado</is-checkbox>
+      <is-checkbox required error>Required con error</is-checkbox>
+    </div>
+  </section>
+
+  <section>
+    <h2>Colores</h2>
+    <div class="row">
+      <is-checkbox checked color="brand">Brand</is-checkbox>
+      <is-checkbox checked color="success">Success</is-checkbox>
+      <is-checkbox checked color="warning">Warning</is-checkbox>
+      <is-checkbox checked color="danger">Danger</is-checkbox>
+      <is-checkbox checked color="neutral">Neutral</is-checkbox>
+    </div>
+  </section>
+
+  <section>
+    <h2>label-placement</h2>
+    <div class="row">
+      <is-checkbox checked label-placement="end">end (default)</is-checkbox>
+      <is-checkbox checked label-placement="start">start</is-checkbox>
+      <is-checkbox checked label-placement="top">top</is-checkbox>
+      <is-checkbox checked label-placement="bottom">bottom</is-checkbox>
+    </div>
+  </section>
+</main>
+</body>
+</html>

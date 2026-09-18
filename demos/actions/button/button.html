@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo: <is-button> · is-webcomponents</title>
+  <meta name="description" content="Demo de <is-button>: variantes color/variant/shape, iconos start/end, estado loading, href como enlace." />
+  <style>
+    html, body {
+      margin: 0; padding: 24px; min-height: 100%;
+      background: #0c1118; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    body { display: grid; gap: 24px; }
+    header h1 { margin: 0 0 4px 0; font-size: 18px; }
+    header p { margin: 0; color: #94a3b8; font-size: 12px; }
+    section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; }
+    section h2 { margin: 0 0 12px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
+    /* Anti-FOUC */
+    is-button:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Demo: <code>&lt;is-button&gt;</code></h1>
+    <p>Botón base del kit. Color × variant × shape ortogonales. Estados: <code>disabled</code>, <code>loading</code>, <code>with-caret</code>. <code>href</code> lo convierte en enlace.</p>
+  </header>
+
+  <section>
+    <h2>Colors</h2>
+    <div class="row">
+      <is-button>Acción</is-button>
+      <is-button color="neutral">Neutral</is-button>
+      <is-button color="success">Aceptar</is-button>
+      <is-button color="warning">Aviso</is-button>
+      <is-button color="danger">Eliminar</is-button>
+      <is-button color="info">Info</is-button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Variants</h2>
+    <div class="row">
+      <is-button variant="filled">Filled</is-button>
+      <is-button variant="outlined">Outlined</is-button>
+      <is-button variant="plain">Plain</is-button>
+      <is-button variant="ghost">Ghost</is-button>
+      <is-button variant="soft">Soft</is-button>
+      <is-button variant="text">Text</is-button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Shapes</h2>
+    <div class="row">
+      <is-button shape="round">Round</is-button>
+      <is-button shape="rect">Rect</is-button>
+      <is-button shape="pill" pill>Pill</is-button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Estados</h2>
+    <div class="row">
+      <is-button id="loading-btn" loading>Guardando…</is-button>
+      <is-button disabled>Deshabilitado</is-button>
+      <is-button with-caret>Desplegar</is-button>
+      <is-button href="https://example.com" target="_blank" rel="noopener">Ir a docs</is-button>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <is-button id="counter">Clicks: 0</is-button>
+      <pre id="event-log">log: []</pre>
+    </div>
+  </section>
+
+  <script type="module">
+    await import('../../../dist/cdn/actions/button.min.js');
+    await customElements.whenDefined('is-button');
+
+    const counter = document.getElementById('counter');
+    const log = document.getElementById('event-log');
+    let clicks = 0;
+    const events = [];
+    counter.addEventListener('click', () => {
+      clicks += 1;
+      counter.textContent = `Clicks: ${clicks}`;
+    });
+    counter.addEventListener('is-focus', (e) => {
+      events.push(['focus', Date.now()]);
+      log.textContent = JSON.stringify(events, null, 2);
+    });
+    counter.addEventListener('is-blur', (e) => {
+      events.push(['blur', Date.now()]);
+      log.textContent = JSON.stringify(events, null, 2);
+    });
+
+    document.documentElement.dataset.buttonReady = '1';
+  </script>
+</body>
+</html>

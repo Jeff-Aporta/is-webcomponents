@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-modal-verificacion&gt; · is-webcomponents</title>
+<meta name="description" content="Modal de verificación asíncrona: ejecuta controller.actVerificar(record) y pinta mensajes por severidad." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 18px; padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; box-sizing: border-box; align-content: start; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
+  button.btn { padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; }
+  is-modal-verificacion:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Dependencias.
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/media/icon.min.js');
+  await import('../../../dist/cdn/layout/dialog.min.js');
+  await import('../../../dist/cdn/isp/text.min.js');
+  await import('../../../dist/cdn/isp/heading.min.js');
+  await import('../../../dist/cdn/isp/modal-verificacion.min.js');
+  await customElements.whenDefined('is-modal-verificacion');
+
+  const modal = document.getElementById('verif');
+  const eventLog = document.getElementById('event-log');
+  const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
+
+  modal.entity = 'comprobante';
+  modal.controller = {
+    entrie: 'Comprobante',
+    async actVerificar(record) {
+      // Simula una verificación asíncrona con varios tipos de mensajes.
+      await new Promise((r) => setTimeout(r, 200));
+      return {
+        mensajes: [
+          { itdmensaje: 'info', mensaje: `Código ${record?.id || '?'} válido.` },
+          { itdmensaje: 'warning', mensaje: 'Revisar fechas: el documento está próximo a vencer.' },
+          { itdmensaje: 'error', mensaje: 'Falta firma del responsable.' },
+          { itdmensaje: 'success', mensaje: 'Centro de costo válido.' },
+        ],
+      };
+    },
+  };
+  modal.record = { id: 42, nit: '900123456', total: 1250000 };
+
+  for (const evt of ['is-show', 'is-after-show', 'is-hide', 'is-verificacion', 'is-verificacion-error', 'is-cancel']) {
+    modal.addEventListener(evt, (e) => {
+      const detail = JSON.stringify(e.detail || {}).slice(0, 120);
+      log(`${evt}: ${detail}`);
+    });
+  }
+
+  // Botones
+  document.getElementById('btn-show').addEventListener('click', () => modal.show());
+  document.getElementById('btn-verify').addEventListener('click', async () => {
+    const r = await modal.verify();
+    console.log('verify result:', r);
+    log(`verify() devolvió ${r.length} mensajes`);
+  });
+  document.getElementById('btn-hide').addEventListener('click', () => modal.hide());
+
+  document.documentElement.dataset.verifReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-modal-verificacion&gt; — verificación asíncrona</h1>
+    <p>Ejecuta <code>controller.actVerificar(record)</code> y colorea los mensajes por severidad.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-modal-verificacion</code>
+</header>
+<main>
+  <div class="toolbar">
+    <button id="btn-show" type="button" class="btn">show()</button>
+    <button id="btn-verify" type="button" class="btn">verify()</button>
+    <button id="btn-hide" type="button" class="btn">hide()</button>
+  </div>
+
+  <is-modal-verificacion id="verif" entity="comprobante"></is-modal-verificacion>
+
+  <pre id="event-log" class="log"></pre>
+</main>
+</body>
+</html>

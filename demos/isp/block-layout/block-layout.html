@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-block-layout&gt; · is-webcomponents</title>
+<meta name="description" content="Caja de bloque que publica el breakpoint según su propio ancho vía ResizeObserver + json2html/json2json." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 24px; padding: 20px; max-width: 1100px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 12px; min-height: 80px; }
+  .box > h3 { font-size: 12px; color: #94a3b8; margin: 0 0 8px; }
+  .label { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #e2e8f0; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 80px; white-space: pre-wrap; }
+  /* Demo de cómo reacciona el CSS al breakpoint del propio bloque */
+  is-block-layout { border: 1px dashed rgba(255,255,255,0.2); border-radius: 6px; padding: 10px; transition: border-color .2s; }
+  is-block-layout[data-szw-lg] { border-color: #38bdf8; }
+  is-block-layout[data-szw-xl] { border-color: #4ade80; }
+  is-block-layout .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(56,189,248,0.15); color: #38bdf8; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  is-block-layout:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/isp/block-layout.min.js');
+  await customElements.whenDefined('is-block-layout');
+
+  // Suscribirse al breakpoint del primer bloque (reflejado).
+  const host = document.getElementById('host');
+  const label = document.getElementById('sizew-label');
+  const eventLog = document.getElementById('event-log');
+  const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
+
+  host.addEventListener('is-breakpoint', (e) => {
+    log(`breakpoint: sizew=${e.detail.sizew} w=${e.detail.width}px h=${e.detail.height}px lerpw=${(e.detail.lerpw('sm', 'xl') * 100).toFixed(0)}%`);
+  });
+
+  // Reflejar el sizew del bloque 2 (controlado por su propio ancho).
+  const host2 = document.getElementById('host2');
+  const label2 = document.getElementById('sizew-label-2');
+  const sync = () => {
+    label2.textContent = `${host2.sizew} (w=${host2.getWidth()}px)`;
+  };
+  host2.addEventListener('is-breakpoint', sync);
+  sync();
+
+  // Forzar JSON round-trip en el demo 3.
+  const host3 = document.getElementById('host3');
+  host3.fromJSON({
+    inline: true,
+    body: [
+      ['p', { class: 'label' }, 'Bloque montado vía fromJSON()'],
+      ['strong', ' con codec compacto [tag, attrs?, ...hijos]'],
+    ],
+  });
+
+  // Etiqueta del primer bloque al cargar.
+  label.textContent = `${host.sizew} (w=${host.getWidth()}px)`;
+  host.addEventListener('is-breakpoint', () => {
+    label.textContent = `${host.sizew} (w=${host.getWidth()}px)`;
+  });
+
+  document.documentElement.dataset.blockReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-block-layout&gt; — bloque con breakpoint propio</h1>
+    <p>Mide su propio ancho con ResizeObserver y publica <code>data-sizew</code>, <code>--clientw</code>, <code>--lerpw</code> y evento <code>is-breakpoint</code>.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-block-layout</code>
+</header>
+<main>
+  <section>
+    <h2>Breakpoint reacciona al propio ancho (no al viewport)</h2>
+    <div class="row">
+      <div>
+        <div class="label">sizew actual: <span id="sizew-label">…</span></div>
+        <is-block-layout id="host" style="width: 60%; min-width: 14rem; resize: horizontal; overflow: auto;">
+          <p>Re-ajusta el ancho con el handle de la esquina inferior derecha.</p>
+          <p><span class="badge" id="badge-host">…</span></p>
+        </is-block-layout>
+      </div>
+      <div>
+        <div class="label">sizew actual: <span id="sizew-label-2">…</span></div>
+        <is-block-layout id="host2" style="width: 30rem;">
+          <p>Este segundo bloque tiene un ancho fijo de 30rem.</p>
+        </is-block-layout>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>JSON round-trip (json2html / html2json / fromJSON / toJSON)</h2>
+    <is-block-layout id="host3" inline style="display: block;"></is-block-layout>
+    <button id="log-json" type="button" style="margin-top: 8px; padding: 6px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Imprimir toJSON() en consola</button>
+  </section>
+
+  <section>
+    <h2>Eventos <code>is-breakpoint</code></h2>
+    <pre id="event-log" class="log"></pre>
+  </section>
+</main>
+<script>
+  // Demo button: imprime toJSON() al hacer click.
+  document.getElementById('log-json')?.addEventListener('click', () => {
+    console.log('toJSON:', JSON.stringify(document.getElementById('host3').toJSON(), null, 2));
+  });
+</script>
+</body>
+</html>

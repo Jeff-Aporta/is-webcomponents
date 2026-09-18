@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-pivot-table> · is-webcomponents</title>
+<meta name="description" content="Pivot table: agrupa datos por filas × columnas y aplica una función de agregación." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-pivot-table:not(:defined) { visibility: hidden; }
+  is-pivot-table { display: block; }
+  .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 80px; overflow: auto; color: #94a3b8; margin-top: 8px; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data/pivot-table.min.js');
+  await customElements.whenDefined('is-pivot-table');
+
+  // ── (1) Sum básico: ventas por región × trimestre
+  const salesData = [
+    { region: 'Norte', q: 'Q1', sales: 120 },
+    { region: 'Norte', q: 'Q2', sales: 180 },
+    { region: 'Norte', q: 'Q3', sales: 90 },
+    { region: 'Sur', q: 'Q1', sales: 200 },
+    { region: 'Sur', q: 'Q2', sales: 150 },
+    { region: 'Sur', q: 'Q3', sales: 250 },
+    { region: 'Este', q: 'Q1', sales: 80 },
+    { region: 'Este', q: 'Q2', sales: 110 },
+    { region: 'Este', q: 'Q3', sales: 95 },
+    { region: 'Oeste', q: 'Q1', sales: 60 },
+    { region: 'Oeste', q: 'Q2', sales: 75 },
+    { region: 'Oeste', q: 'Q3', sales: 130 },
+  ];
+  const p1 = document.createElement('is-pivot-table');
+  p1.setAttribute('rows', 'region');
+  p1.setAttribute('cols', 'q');
+  p1.setAttribute('measure', 'sales');
+  p1.setAttribute('agg', 'sum');
+  const script1 = document.createElement('script');
+  script1.type = 'application/json';
+  script1.textContent = JSON.stringify(salesData);
+  p1.appendChild(script1);
+  document.getElementById('sum').appendChild(p1);
+
+  // ── (2) Avg + decimals: promedio con 1 decimal
+  const p2 = document.createElement('is-pivot-table');
+  p2.setAttribute('rows', 'region');
+  p2.setAttribute('cols', 'q');
+  p2.setAttribute('measure', 'sales');
+  p2.setAttribute('agg', 'avg');
+  p2.setAttribute('decimals', '1');
+  const script2 = document.createElement('script');
+  script2.type = 'application/json';
+  script2.textContent = JSON.stringify(salesData);
+  p2.appendChild(script2);
+  document.getElementById('avg').appendChild(p2);
+
+  // ── (3) Count: nº de registros por (region, q)
+  const p3 = document.createElement('is-pivot-table');
+  p3.setAttribute('rows', 'region');
+  p3.setAttribute('cols', 'q');
+  p3.setAttribute('agg', 'count');
+  const script3 = document.createElement('script');
+  script3.type = 'application/json';
+  script3.textContent = JSON.stringify(salesData);
+  p3.appendChild(script3);
+  document.getElementById('count').appendChild(p3);
+
+  // ── (4) Max
+  const p4 = document.createElement('is-pivot-table');
+  p4.setAttribute('rows', 'region');
+  p4.setAttribute('cols', 'q');
+  p4.setAttribute('measure', 'sales');
+  p4.setAttribute('agg', 'max');
+  const script4 = document.createElement('script');
+  script4.type = 'application/json';
+  script4.textContent = JSON.stringify(salesData);
+  p4.appendChild(script4);
+  document.getElementById('max').appendChild(p4);
+
+  // ── Event logging: click en celda
+  function attachLog(el, logEl) {
+    el.addEventListener('is-cell-click', (e) => {
+      const { row, col, value } = e.detail || {};
+      const line = `click: row="${row}" col="${col}" value=${JSON.stringify(value)}`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
+      logEl.dataset.lastRow = String(row ?? '');
+      logEl.dataset.lastCol = String(col ?? '');
+      logEl.dataset.lastValue = String(value ?? '');
+    });
+  }
+  attachLog(p1, document.getElementById('log-sum'));
+  attachLog(p2, document.getElementById('log-avg'));
+  attachLog(p3, document.getElementById('log-count'));
+  attachLog(p4, document.getElementById('log-max'));
+
+  document.documentElement.dataset.pivotTableReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-pivot-table&gt;</code></h1>
+  <p>Pivot table: agrupa por <code>rows</code> × <code>cols</code> con función <code>agg</code> (sum/avg/count/min/max).</p>
+</header>
+<main>
+  <section>
+    <h2>Sum (ventas por región × trimestre)</h2>
+    <div id="sum"></div>
+    <div class="log" id="log-sum"></div>
+  </section>
+  <section>
+    <h2>Avg con 1 decimal</h2>
+    <div id="avg"></div>
+    <div class="log" id="log-avg"></div>
+  </section>
+  <section>
+    <h2>Count</h2>
+    <div id="count"></div>
+    <div class="log" id="log-count"></div>
+  </section>
+  <section>
+    <h2>Max</h2>
+    <div id="max"></div>
+    <div class="log" id="log-max"></div>
+  </section>
+</main>
+<footer>
+  Datos via <code>&lt;script type="application/json"&gt;</code>. Evento <code>is-cell-click</code> en cada celda.
+</footer>
+</body>
+</html>

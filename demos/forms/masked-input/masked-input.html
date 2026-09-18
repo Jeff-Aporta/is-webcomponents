@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Input con máscara &lt;is-masked-input&gt; · is-webcomponents</title>
+<meta name="description" content="Input con patrón de tokens (0 dígito requerido, 9 opcional, A/a letra, * alfanumérico) y literales." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-masked-input { width: 100%; }
+  is-masked-input + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-masked-input:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/masked-input.min.js');
+  await customElements.whenDefined('is-masked-input');
+
+  // (1) Teléfono AR: +54 9 11 5555 5555
+  const tel = document.createElement('is-masked-input');
+  tel.id = 'tel';
+  tel.pattern = '+54 9 0000 0000 0000';
+  tel.label = 'Teléfono';
+  tel.placeholder = '+54 9 ____ ____ ____';
+  tel.hint = 'Sólo dígitos, 14 visibles (incluyendo el "+54 9 ")';
+  tel.addEventListener('is-complete', () => {
+    document.getElementById('tel-status').textContent = '✓ completo';
+  });
+  document.querySelector('#sec-tel').appendChild(tel);
+  tel.addEventListener('is-input', () => {
+    document.getElementById('tel-raw').textContent = `raw: "${tel.raw}"`;
+  });
+
+  // (2) Tarjeta de crédito: 9999 9999 9999 9999 (16 dígitos, 9=opcional)
+  const card = document.createElement('is-masked-input');
+  card.id = 'card';
+  card.pattern = '9999 9999 9999 9999';
+  card.label = 'Tarjeta de crédito';
+  card.placeholder = '____ ____ ____ ____';
+  card.hint = 'Hasta 16 dígitos';
+  document.querySelector('#sec-card').appendChild(card);
+
+  // (3) Fecha DD/MM/AAAA
+  const fecha = document.createElement('is-masked-input');
+  fecha.id = 'fecha';
+  fecha.pattern = '00/00/0000';
+  fecha.label = 'Fecha (DD/MM/AAAA)';
+  fecha.placeholder = 'DD/MM/AAAA';
+  fecha.hint = 'Día / mes / año';
+  document.querySelector('#sec-fecha').appendChild(fecha);
+
+  // (4) Placa AAAA 000 (letras + números)
+  const placa = document.createElement('is-masked-input');
+  placa.id = 'placa';
+  placa.pattern = 'AAAA 000';
+  placa.label = 'Placa';
+  placa.placeholder = 'ABCD 123';
+  placa.hint = '4 letras mayúsculas + 3 dígitos';
+  document.querySelector('#sec-placa').appendChild(placa);
+
+  // (5) requerido
+  const req = document.createElement('is-masked-input');
+  req.id = 'req';
+  req.pattern = '0000-0000';
+  req.label = 'Código requerido *';
+  req.required = true;
+  req.hint = 'Pierde foco sin valor → atributo invalid';
+  document.querySelector('#sec-req').appendChild(req);
+
+  document.documentElement.dataset.maskedInputReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-masked-input&gt; · Input con tokens y literales</h1>
+    <p>Tokens: <code>0</code> dígito requerido, <code>9</code> opcional, <code>A</code> letra mayúscula, <code>a</code> minúscula, <code>*</code> alfanumérico. Cualquier otro carácter cuenta como literal. Emite <code>is-input</code>, <code>is-change</code> y <code>is-complete</code>.</p>
+  </header>
+
+  <section id="sec-tel">
+    <h2>Teléfono AR</h2>
+    <p class="desc">Patrón <code>"+54 9 0000 0000 0000"</code>.</p>
+    <div id="tel-raw">raw: ""</div>
+    <div id="tel-status">—</div>
+  </section>
+
+  <section id="sec-card">
+    <h2>Tarjeta de crédito</h2>
+    <p class="desc">Patrón <code>"9999 9999 9999 9999"</code>. Dígitos opcionales (puede haber menos de 16).</p>
+  </section>
+
+  <div class="row">
+    <section id="sec-fecha">
+      <h2>Fecha DD/MM/AAAA</h2>
+      <p class="desc">Patrón <code>"00/00/0000"</code> con literales <code>/</code>.</p>
+    </section>
+    <section id="sec-placa">
+      <h2>Placa AAAA 000</h2>
+      <p class="desc">Mezcla letras mayúsculas <code>A</code> y dígitos <code>0</code>.</p>
+    </section>
+  </div>
+
+  <section id="sec-req">
+    <h2>Requerido</h2>
+    <p class="desc"><code>required</code> activa <code>invalid</code> cuando se pierde el foco con el input vacío.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-radio-group> · is-webcomponents</title>
+<meta name="description" content="Grupo form-associated de radios con orientación, required, error, label y navegación con flechas." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 18px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  header p { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
+  button { font: inherit; padding: 6px 12px; background: #1f2937; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; cursor: pointer; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
+  /* Anti-FOUC */
+  is-radio-group:not(:defined) { visibility: hidden; }
+  is-radio:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // El bundle del grupo importa automáticamente <is-radio>.
+  await import('../../../dist/cdn/forms/radio-group.min.js');
+
+  await customElements.whenDefined('is-radio-group');
+
+  const group = document.getElementById('group');
+  const out = document.getElementById('out');
+
+  const render = () => {
+    out.textContent = JSON.stringify({
+      value: group.value,
+      required: group.required,
+      disabled: group.disabled,
+      readonly: group.readonly,
+      orientation: group.orientation,
+      radios: group.radios.map((r) => ({
+        value: r.value,
+        checked: r.checked,
+        disabled: r.disabled,
+        tabindex: r.getAttribute('tabindex'),
+      })),
+    }, null, 2);
+  };
+  group.addEventListener('is-change', (e) => {
+    console.log('[radio-group] change', e.detail);
+    render();
+  });
+
+  document.getElementById('btn-set').addEventListener('click', () => {
+    group.value = 'dos';
+    render();
+  });
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    group.value = '';
+    render();
+  });
+
+  render();
+  document.documentElement.dataset.radioGroupReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Demo de <code>&lt;is-radio-group&gt;</code></h1>
+    <p>Grupo form-associated de radios. Dueño del valor: el grupo. Navega con flechas o Home/End; activa con Espacio.</p>
+  </header>
+
+  <section>
+    <h2>Básico (vertical)</h2>
+    <is-radio-group id="group" name="answer" label="Elige una opción" hint="Usa las flechas para navegar" value="uno" required>
+      <is-radio value="uno">Uno</is-radio>
+      <is-radio value="dos">Dos</is-radio>
+      <is-radio value="tres">Tres</is-radio>
+      <is-radio value="cuatro" disabled>Cuatro (deshabilitado)</is-radio>
+    </is-radio-group>
+    <div>
+      <button id="btn-set" type="button">Set "dos"</button>
+      <button id="btn-clear" type="button">Clear</button>
+    </div>
+    <output id="out"></output>
+  </section>
+
+  <section>
+    <h2>Horizontal</h2>
+    <is-radio-group id="group-h" name="orientation" label="Orientación" value="h">
+      <is-radio value="v">Vertical</is-radio>
+      <is-radio value="h">Horizontal</is-radio>
+      <is-radio value="b">Both</is-radio>
+    </is-radio-group>
+  </section>
+
+  <section>
+    <h2>Con error</h2>
+    <is-radio-group id="group-err" name="confirm" label="¿Confirmas?" error error-text="Debes elegir una opción" required>
+      <is-radio value="yes">Sí</is-radio>
+      <is-radio value="no">No</is-radio>
+    </is-radio-group>
+  </section>
+
+  <section>
+    <h2>Disabled</h2>
+    <is-radio-group id="group-dis" name="disabled" label="Grupo deshabilitado" disabled value="a">
+      <is-radio value="a">A</is-radio>
+      <is-radio value="b">B</is-radio>
+    </is-radio-group>
+  </section>
+</main>
+</body>
+</html>

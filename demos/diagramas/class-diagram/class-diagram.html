@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-class-diagram> · is-webcomponents</title>
+<meta name="description" content="Diagrama de clases UML (atributos, métodos, herencia, composición) sin Mermaid." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-class-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-class-diagram:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/class-diagram.min.js');
+  await customElements.whenDefined('is-class-diagram');
+
+  const el = document.createElement('is-class-diagram');
+  el.payload = {
+    classDiagram: {
+      title: 'Modelo de dominio',
+      subtitle: 'Herencia + composición + asociación',
+      direction: 'TB',
+      classes: [
+        {
+          id: 'animal', name: 'Animal',
+          attributes: [{ name: 'nombre', type: 'string' }],
+          methods: [{ name: 'respirar', signature: '()' }],
+        },
+        {
+          id: 'perro', name: 'Perro',
+          attributes: [{ name: 'raza', type: 'string' }],
+          methods: [{ name: 'ladrar', signature: '()' }],
+        },
+        {
+          id: 'cola', name: 'Cola',
+          attributes: [{ name: 'largo', type: 'number' }],
+        },
+      ],
+      relations: [
+        { id: 'r1', from: 'perro', to: 'animal', kind: 'inheritance' },
+        { id: 'r2', from: 'perro', to: 'cola', kind: 'composition', toCard: 'one' },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.classDiagramReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-class-diagram&gt;</code></h1>
+    <p>Diagrama de clases UML: secciones (atributos / métodos), herencia y composición.</p>
+  </header>
+  <main></main>
+</body>
+</html>

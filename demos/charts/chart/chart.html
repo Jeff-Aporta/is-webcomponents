@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-chart&gt; · demo genérico</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; padding: 20px; min-height: 0; }
+  is-chart { width: 720px; height: 360px; }
+  is-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // The generic <is-chart> accepts a type attribute or type in payload.
+  // We use the attribute approach here.
+  await import('../../../dist/cdn/data-viz/chart.min.js');
+  await customElements.whenDefined('is-chart');
+
+  const chart = document.createElement('is-chart');
+  chart.setAttribute('type', 'bar');
+  chart.setAttribute('label', 'Multi-tipo: type="bar"');
+  chart.payload = {
+    data: {
+      labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
+      datasets: [{
+        label: '2025',
+        data: [40, 55, 70, 60, 85],
+      }],
+    },
+  };
+
+  document.querySelector('main').appendChild(chart);
+  document.documentElement.dataset.chartReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-chart&gt;</h1>
+  <p>Motor SVG genérico. Acepta <code>type</code> por atributo o en payload. Equivalente a los wrappers tipados.</p>
+</header>
+<main></main>
+</body>
+</html>

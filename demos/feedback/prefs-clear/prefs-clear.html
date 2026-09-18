@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-prefs-clear> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-prefs-clear>: limpia la memoria persistente de los is-* (localStorage)." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  pre { background: #0a0e15; padding: 12px; border-radius: 6px; overflow: auto; font-size: 12px; max-height: 200px; }
+  is-prefs-clear:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/prefs-clear.min.js');
+
+  await customElements.whenDefined('is-prefs-clear');
+  document.documentElement.dataset.prefsClearReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-prefs-clear</h1>
+  <p>Borra la memoria persistente de los is-* en localStorage. Pide confirmación por defecto. Útil para auditar la carga inicial sin arrastrar prefs.</p>
+</header>
+
+<section>
+  <h2>Con confirmación (default)</h2>
+  <p>Hace <code>window.confirm()</code> antes de limpiar y recarga la página.</p>
+  <is-prefs-clear>Limpiar memoria UI</is-prefs-clear>
+</section>
+
+<section>
+  <h2>Sin confirmación, sin recarga</h2>
+  <p>Útil en tests: limpia y emite el evento <code>is-prefs-clear</code> sin recargar.</p>
+  <is-prefs-clear id="silent" confirm="false" reload="false">Limpiar silencioso</is-prefs-clear>
+  <pre id="out"></pre>
+  <script type="module">
+    const out = document.getElementById('out');
+    const silent = document.getElementById('silent');
+    silent.addEventListener('is-prefs-clear', (e) => {
+      out.textContent = JSON.stringify(e.detail, null, 2);
+    });
+    window.__silentClear = () => silent.clear();
+  </script>
+</section>
+
+<section>
+  <h2>Estado de localStorage (peek)</h2>
+  <pre id="peek-out">(vacío)</pre>
+  <button id="btn-peek" type="button">Refrescar peek</button>
+  <script type="module">
+    document.getElementById('btn-peek').addEventListener('click', async () => {
+      const silent = document.getElementById('silent');
+      const peek = silent.peek();
+      document.getElementById('peek-out').textContent = JSON.stringify(peek, null, 2);
+    });
+  </script>
+</section>
+</body>
+</html>

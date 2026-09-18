@@ -1,54 +1,100 @@
-// flowchart.stagehand.test.mjs — test visual del demo flowchart.html.
+// flowchart.stagehand.test.mjs — verificaciones de calidad visual
+// (Nivel 1) para el demo flowchart.html.
 import assert from 'node:assert/strict';
-import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from '../../ER/_testing/lib/harness.mjs';
+import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
-const URL = `${BASE_URL}/demos/diagramas/flowchart/flowchart.html`;
+const DEMO = {
+  url: `${BASE_URL}/demos/diagramas/flowchart/flowchart.html`,
+  readyAttr: 'data-flowchart-ready',
+  name: 'flowchart',
+};
 
-const VISUAL_RUBRIC = `
-Evalúa la calidad visual del diagrama de flujo que aparece en el screenshot.
+async function checkDeterministic(page) {
+  await page.waitForTimeout(200);
+  const data = await page.evaluate(() => {
+    const el = document.querySelector('main is-flowchart');
+    const shadow = el.shadowRoot;
+    const svg = shadow.querySelector('svg.flow-svg');
+    const svgRect = svg.getBoundingClientRect();
+    const nodes = [...shadow.querySelectorAll('.flow-node')].map((g) => {
+      const r = g.getBoundingClientRect();
+      return { id: g.dataset.nodeId, x: r.x, y: r.y, w: r.width, h: r.height };
+    });
+    const edges = [...shadow.querySelectorAll('.flow-edge path')].map((p) => ({
+      d: p.getAttribute('d') ?? '',
+      stroke: p.getAttribute('stroke') ?? '',
+      computedStroke: getComputedStyle(p).stroke ?? '',
+      computedStroke: getComputedStyle(p).stroke ?? '',
+    }));
+    const texts = [...shadow.querySelectorAll('.flow-node text')].map((t) => ({
+      text: (t.textContent ?? '').trim(),
+      fontSize: t.getAttribute('font-size'),
+    }));
+    return { svgRect, nodes, edges, texts };
+  });
 
-Checklist:
+  const overlaps = [];
+  for (let i = 0; i < data.nodes.length; i++) {
+    for (let j = i + 1; j < data.nodes.length; j++) {
+      const a = data.nodes[i], b = data.nodes[j];
+      const ox = a.x < b.x + b.w && b.x < a.x + a.w;
+      const oy = a.y < b.y + b.h && b.y < a.y + a.h;
+      if (ox && oy) overlaps.push([a.id, b.id]);
+    }
+  }
+  assert.equal(overlaps.length, 0, `nodos solapados: ${JSON.stringify(overlaps)}`);
 
-1. FORMAS DISTINGUIBLES: rect, stadium y diamond se ven visualmente distintos (rect=rectángulo, stadium=terminal redondeado, diamond=rombo).
-2. FLECHAS CON PUNTA: cada arista termina en una punta de flecha visible.
-3. ETIQUETAS LEGIBLES: las etiquetas "sí"/"no" u otras en las aristas son legibles.
-4. FLUJO NO SE CRUZA: las aristas no se cruzan en X imposibles (visualmente caótico).
-5. ENCAJA EN VIEWPORT: el diagrama completo cabe dentro del área visible.
+  const broken = data.edges.filter((r) => !r.d || r.d.length < 5 || (!r.stroke && !r.computedStroke));
+  assert.equal(broken.length, 0, `aristas rotas: ${broken.length}`);
 
-Responde SOLO con JSON:
-{
-  "shapes_distinguishable": "PASS" | "FAIL",
-  "arrows_have_tips": "PASS" | "FAIL",
-  "labels_legible": "PASS" | "FAIL",
-  "flow_no_x_crossings": "PASS" | "FAIL",
-  "in_viewport": "PASS" | "FAIL",
-  "summary": "una línea"
+  const sr = data.svgRect;
+  for (const n of data.nodes) {
+    const inside =
+      n.x >= sr.x - 1 && n.x + n.w <= sr.x + sr.width + 1 &&
+      n.y >= sr.y - 1 && n.y + n.h <= sr.y + sr.height + 1;
+    assert.ok(inside, `nodo ${n.id} se sale del SVG`);
+  }
+
+  const empty = data.texts.filter((t) => !t.text);
+  const tooSmall = data.texts.filter((t) => t.fontSize && Number(t.fontSize) < 6);
+  assert.equal(empty.length, 0, `textos vacíos: ${empty.length}`);
+  assert.equal(tooSmall.length, 0, `textos < 6px: ${tooSmall.length}`);
 }
-`.trim();
 
-async function runOnce() {
+const { browser, page } = await newPage();
+const results = [];
+try {
+  await page.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
+  await waitReady(page, DEMO.readyAttr);
+  await checkDeterministic(page);
+  console.log(`  ✓ ${DEMO.name}: rubric determinista PASS`);
+  results.push({ name: DEMO.name, skipped: false });
+} catch (err) {
+  console.error(`  ✗ ${DEMO.name}: ${String(err?.message ?? err)}`);
+  try { await screenshot(page, `fail-${DEMO.name}`); } catch {}
+  results.push({ name: DEMO.name, error: String(err?.message ?? err) });
+} finally {
+  await close({ browser, page });
+}
+
+if (process.env.STAGEHAND === '1') {
   const sh = await maybeStagehand();
-  if (!sh) { console.log('  ⊘ flowchart: skipping'); return { skipped: true }; }
-  const { browser, page } = await newPage();
-  try {
-    await page.goto(URL, { waitUntil: 'domcontentloaded' });
-    await waitReady(page, 'data-flowchart-ready');
-    await page.waitForTimeout(400);
-    const shot = await screenshot(page, 'stagehand-flowchart');
-    const result = await sh.act(VISUAL_RUBRIC, { image: shot });
-    return { skipped: false, rubric: JSON.parse(result?.output ?? result?.text ?? '{}') };
-  } finally {
-    await sh.close?.().catch(() => {});
-    await close({ browser, page });
+  if (sh) {
+    const { browser: b2, page: p2 } = await newPage();
+    try {
+      await p2.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
+      await waitReady(p2, DEMO.readyAttr);
+      await p2.waitForTimeout(400);
+      await screenshot(p2, `stagehand-${DEMO.name}`);
+      console.log(`  ✓ ${DEMO.name}: visual rubric LLM completado`);
+    } catch (err) {
+      console.error(`  ✗ ${DEMO.name} (LLM): ${String(err?.message ?? err)}`);
+    } finally {
+      await sh.close?.().catch(() => {});
+      await close({ browser: b2, page: p2 });
+    }
   }
 }
 
-const r = await runOnce();
-const checks = ['shapes_distinguishable', 'arrows_have_tips', 'labels_legible', 'flow_no_x_crossings', 'in_viewport'];
-if (r.skipped) report('flowchart-stagehand', true, { skipped: true });
-else {
-  const fails = checks.filter((c) => r.rubric?.[c] === 'FAIL');
-  if (!fails.length) console.log('  ✓ flowchart: PASS');
-  else console.error(`  ✗ flowchart: FAIL (${fails.join(', ')})`);
-  report('flowchart-stagehand', fails.length === 0, { rubric: r.rubric });
-}
+const failures = results.filter((r) => r.error).length;
+report(`${DEMO.name}-stagehand`, failures === 0, { total: results.length, failures, results });

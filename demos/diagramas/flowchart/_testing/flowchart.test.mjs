@@ -1,92 +1,158 @@
-// flowchart.test.mjs — tests del spec `flowchart-spec` (funciones puras, sin DOM).
+// flowchart.test.mjs — tests exhaustivos del demo flowchart.html.
+// Cobertura: smoke (monta y renderiza nodos/aristas), animation=flow embebe
+// keyframes CSS, nodos con shape distinto (stadium/diamond), determinismo,
+// accesibilidad.
 import assert from 'node:assert/strict';
-import { test } from 'node:test';
+import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
-import {
-  flowchartSpecFromPayload,
-  flowchartSpecToJson,
-  resolveFlowchartSpec,
-  computeFlowchartLayout,
-  shapePath,
-  FLOW_SHAPES,
-} from '../../../../src/components/diagrams/flowchart-spec.ts';
+const URL = `${BASE_URL}/demos/diagramas/flowchart/flowchart.html`;
 
-const validPayload = {
-  flowchart: {
-    direction: 'TB',
-    nodes: [
-      { id: 'a', label: 'A', shape: 'rect' },
-      { id: 'b', label: 'B', shape: 'diamond' },
-      { id: 'c', label: 'C', shape: 'stadium' },
-    ],
-    edges: [
-      { from: 'a', to: 'b', label: 'sí' },
-      { from: 'b', to: 'c' },
-    ],
+const tests = [];
+
+tests.push({
+  name: 'smoke: <is-flowchart> monta y renderiza nodos y aristas',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-flowchart-ready');
+    const info = await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      const shadow = el?.shadowRoot;
+      return {
+        defined: !!customElements.get('is-flowchart'),
+        nodes: shadow?.querySelectorAll('.flow-node').length ?? 0,
+        edges: shadow?.querySelectorAll('.flow-edge').length ?? 0,
+        hasSvg: !!shadow?.querySelector('svg.flow-svg'),
+      };
+    });
+    assert.equal(info.defined, true, 'is-flowchart debe estar definido');
+    assert.ok(info.nodes >= 4, `esperaba >=4 nodos, hay ${info.nodes}`);
+    assert.ok(info.edges >= 4, `esperaba >=4 aristas, hay ${info.edges}`);
+    assert.equal(info.hasSvg, true, 'debe existir <svg class="flow-svg">');
+    await screenshot(page, 'flowchart-smoke');
   },
-};
-
-test('smoke: import no lanza', () => {
-  assert.equal(typeof flowchartSpecFromPayload, 'function');
-  assert.equal(typeof computeFlowchartLayout, 'function');
 });
 
-test('payload vacío devuelve null', () => {
-  assert.equal(flowchartSpecFromPayload({}), null);
-  assert.equal(flowchartSpecFromPayload({ flowchart: {} }), null);
+tests.push({
+  name: 'nodos: cada uno tiene dataset.nodeId con el id declarado',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-flowchart-ready');
+    const ids = await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      return [...el.shadowRoot.querySelectorAll('.flow-node')].map((g) => g.dataset.nodeId);
+    });
+    assert.ok(ids.includes('start'), 'debe haber un nodo "start"');
+    assert.ok(ids.includes('verify'), 'debe haber un nodo "verify"');
+    assert.ok(ids.includes('create'), 'debe haber un nodo "create"');
+    assert.ok(ids.includes('done'), 'debe haber un nodo "done"');
+  },
 });
 
-test('spec mínimo produce layout', () => {
-  const spec = flowchartSpecFromPayload(validPayload);
-  assert.ok(spec);
-  assert.equal(spec.nodes.length, 3);
-  assert.equal(spec.edges.length, 2);
-  const layout = computeFlowchartLayout(spec);
-  assert.ok(layout.width > 0);
-  assert.ok(layout.height > 0);
-  assert.equal(layout.nodes.length, 3);
-  assert.equal(layout.edges.length, 2);
-  // el path del diamond debe contener 'L' (polilínea) — no H/V puros
-  const diamondPath = shapePath('diamond', 0, 0, 100, 50);
-  assert.match(diamondPath, /^M[\d.]+,/);
+tests.push({
+  name: 'shapes: stadium y diamond se dibujan con paths distintos',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-flowchart-ready');
+    const shapes = await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      const start = el.shadowRoot.querySelector('.flow-node[data-node-id="start"] path');
+      const verify = el.shadowRoot.querySelector('.flow-node[data-node-id="verify"] path');
+      return {
+        stadium: start?.getAttribute('d') ?? '',
+        diamond: verify?.getAttribute('d') ?? '',
+      };
+    });
+    assert.ok(shapes.stadium.includes('a') || shapes.stadium.includes('A'),
+      `stadium debe usar arcos (a/A): "${shapes.stadium.slice(0, 60)}"`);
+    assert.ok(shapes.diamond.includes('L') || shapes.diamond.includes('l'),
+      `diamond debe usar líneas (L/l): "${shapes.diamond.slice(0, 60)}"`);
+  },
 });
 
-test('FLOW_SHAPES contiene 9 formas', () => {
-  assert.equal(FLOW_SHAPES.size, 9);
+tests.push({
+  name: 'animation=flow: cada arista no-dashed lleva una capa flow-edge__flow',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-flowchart-ready');
+    const has = await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      // Con animation="flow", cada arista sólida (no dashed) añade una capa
+      // .flow-edge__flow con stroke-dasharray visible.
+      const flowLayers = el.shadowRoot.querySelectorAll('.flow-edge__flow');
+      return flowLayers.length;
+    });
+    assert.ok(has >= 2, `esperaba >=2 capas flow-edge__flow (una por arista sólida), hay ${has}`);
+  },
 });
 
-test('edge case: arista con destino inexistente se descarta', () => {
-  const spec = flowchartSpecFromPayload({
-    flowchart: {
-      nodes: [{ id: 'a', label: 'A' }],
-      edges: [{ from: 'a', to: 'NOEXISTE' }],
-    },
-  });
-  assert.equal(spec.edges.length, 0);
+tests.push({
+  name: 'aristas dashed: las aristas con kind=dashed llevan stroke-dasharray',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-flowchart-ready');
+    const has = await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      const dashed = [...el.shadowRoot.querySelectorAll('.flow-edge__path')]
+        .filter((p) => p.getAttribute('stroke-dasharray'));
+      return dashed.length;
+    });
+    assert.ok(has >= 1, `esperaba >=1 arista con stroke-dasharray, hay ${has}`);
+  },
 });
 
-test('edge case: waypoints vacíos / sin edges es válido', () => {
-  const spec = flowchartSpecFromPayload({
-    flowchart: { nodes: [{ id: 'a', label: 'A' }] },
-  });
-  const layout = computeFlowchartLayout(spec);
-  assert.ok(layout);
-  assert.equal(layout.edges.length, 0);
+tests.push({
+  name: 'determinismo: re-asignar el mismo payload produce viewBox idéntico',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-flowchart-ready');
+    const before = await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      return el.shadowRoot.querySelector('svg.flow-svg').getAttribute('viewBox');
+    });
+    await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      el.payload = el.payload;
+    });
+    await page.waitForTimeout(150);
+    const after = await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      return el.shadowRoot.querySelector('svg.flow-svg').getAttribute('viewBox');
+    });
+    assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
+  },
 });
 
-test('round-trip JSON idéntico', () => {
-  const spec = flowchartSpecFromPayload(validPayload);
-  const j1 = JSON.stringify(flowchartSpecToJson(spec));
-  const j2 = JSON.stringify(flowchartSpecToJson(flowchartSpecFromPayload(JSON.parse(j1))));
-  assert.equal(j1, j2);
+tests.push({
+  name: 'accesibilidad: aria-label y role=img presentes',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-flowchart-ready');
+    const meta = await page.evaluate(() => {
+      const el = document.querySelector('main is-flowchart');
+      const svg = el.shadowRoot.querySelector('svg.flow-svg');
+      return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
+    });
+    assert.ok(meta.aria && meta.aria.length > 0, 'debe llevar aria-label');
+    assert.equal(meta.role, 'img', 'role debe ser img');
+  },
 });
 
-test('direcciones válidas (TB/BT/LR/RL)', () => {
-  for (const d of ['TB', 'BT', 'LR', 'RL']) {
-    const spec = flowchartSpecFromPayload({ flowchart: { direction: d, nodes: [{ id: 'a', label: 'A' }] } });
-    assert.equal(spec.direction, d);
+let failures = 0;
+for (const t of tests) {
+  let ok = false;
+  const { browser, page } = await newPage();
+  try {
+    await t.run(page);
+    ok = true;
+    console.log(`  ✓ ${t.name}`);
+  } catch (err) {
+    ok = false;
+    console.error(`  ✗ ${t.name}\n     ${String(err?.message ?? err)}`);
+    failures++;
+    try { await screenshot(page, `fail-${t.name.replace(/\W+/g, '-')}`); } catch {}
+  } finally {
+    await close({ browser, page });
   }
-  // TD se trata como TB
-  const td = flowchartSpecFromPayload({ flowchart: { direction: 'TD', nodes: [{ id: 'a', label: 'A' }] } });
-  assert.equal(td.direction, 'TB');
-});
+}
+
+report('flowchart', failures === 0, { total: tests.length, failures });

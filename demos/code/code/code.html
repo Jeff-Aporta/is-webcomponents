@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Editor de código · &lt;is-code&gt; · is-webcomponents</title>
+<meta name="description" content="Editor de código nativo (sin CodeMirror) con highlighting, line numbers, marks, format, code2json/json2code, modo readonly/editable, dark/light." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  html[data-theme="light"], html[data-theme="light"] body { background: #f8fafc; color: #0f172a; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  html[data-theme="light"] header { background: #f1f5f9; border-bottom-color: rgba(0,0,0,0.08); }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  html[data-theme="light"] header p { color: #475569; }
+  header .spacer { flex: 1; }
+  header .btn {
+    font: 12px ui-monospace, Menlo, Consolas, monospace;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    color: inherit; padding: 6px 10px; border-radius: 6px; cursor: pointer;
+  }
+  html[data-theme="light"] header .btn { background: #fff; border-color: rgba(0,0,0,0.1); }
+  header .btn:hover { background: rgba(255,255,255,0.12); }
+  main {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    padding: 14px; min-height: 0; overflow: auto;
+    align-content: start;
+  }
+  main .full { grid-column: 1 / -1; }
+  section {
+    background: #0f1620; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; padding: 12px;
+    display: grid; grid-template-rows: auto 1fr; gap: 10px; min-height: 220px;
+  }
+  html[data-theme="light"] section { background: #fff; border-color: rgba(0,0,0,0.08); }
+  section h2 {
+    margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; color: #94a3b8;
+  }
+  html[data-theme="light"] section h2 { color: #475569; }
+  section h2 small { font-weight: 400; opacity: 0.7; text-transform: none; letter-spacing: 0; }
+  is-code { width: 100%; }
+  /* Anti-FOUC */
+  is-code:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar el bundle pre-construido. Esto hace funcionar el demo con cualquier
+  // servidor estático (incluido VS Code Live Server), no solo con el dev
+  // server que transpila TS. La promesa resuelve cuando is-code está definido.
+  await import('../../../dist/cdn/code/code.min.js');
+  await customElements.whenDefined('is-code');
+
+  const samples = {
+    js: [
+      '// is-code · demo editable',
+      'function greet(name) {',
+      '  return `Hello, ${name}!`;',
+      '}',
+      '',
+      'console.log(greet("is-webcomponents"));',
+    ].join('\n'),
+    css: [
+      '/* estilos del propio editor */',
+      ':host {',
+      '  --is-code-bg: #1e1e1e;',
+      '  --is-code-fg: #eeffff;',
+      '  border-radius: 8px;',
+      '}',
+    ].join('\n'),
+    html: [
+      '<!doctype html>',
+      '<html lang="es">',
+      '  <body>',
+      '    <h1>Hola is-code</h1>',
+      '  </body>',
+      '</html>',
+    ].join('\n'),
+    json: [
+      '{',
+      '  "name": "is-webcomponents",',
+      '  "version": "1.0.0",',
+      '  "kind": "code-editor"',
+      '}',
+    ].join('\n'),
+  };
+
+  // 1) Editable JS — caso típico de uso.
+  const editJs = document.getElementById('code-js');
+  editJs.value = samples.js;
+  editJs.lang = 'javascript';
+  editJs.tabSize = 2;
+
+  // 2) Readonly JS — código fuente que el usuario solo lee.
+  const readJs = document.getElementById('code-js-readonly');
+  readJs.value = samples.js;
+  readJs.lang = 'javascript';
+  readJs.readonly = true;
+
+  // 3) CSS editable.
+  const css = document.getElementById('code-css');
+  css.value = samples.css;
+  css.lang = 'css';
+
+  // 4) HTML editable.
+  const html = document.getElementById('code-html');
+  html.value = samples.html;
+  html.lang = 'html';
+
+  // 5) JSON editable + format on demand.
+  const json = document.getElementById('code-json');
+  json.value = samples.json;
+  json.lang = 'json';
+
+  // 6) Compact snippet — usado en docs, sin chrome de IDE. Asignamos vía
+  //    `value` (no textContent) porque los elementos ya bootearon al
+  //    insertarse en el DOM y la semilla inicial es vacía.
+  const compact = document.getElementById('code-compact');
+  compact.value = 'console.log("snippet");';
+  compact.lang = 'javascript';
+  compact.compact = true;
+
+  // 7) Readonly con marks (error/warning/info) — la marca se pinta y abre
+  //    tooltip al hacer hover. Útil para code review / docs anotadas.
+  const marks = document.getElementById('code-marks');
+  marks.value = 'const x = 1;';
+  marks.lang = 'javascript';
+  marks.readonly = true;
+  marks.marks = [
+    { id: 'm1', from: 6, to: 7, kind: 'underline', tone: 'error',
+      title: 'Evita `var`', message: 'Usa `const` o `let`.' },
+    { id: 'm2', from: 10, to: 11, kind: 'underline', tone: 'warning',
+      title: 'Magic number', message: 'Considera extraer 1 a una constante.' },
+  ];
+
+  // ── Botones de acción (utilizados por tests y por humanos) ──────────────
+
+  document.getElementById('btn-format').addEventListener('click', () => {
+    json.format();
+  });
+
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    const html = document.documentElement;
+    html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    // <is-code> escucha `is-theme-change` en document para resincronizar el
+    // preset (dark/light) sin tener que tocar cada instancia.
+    document.dispatchEvent(new CustomEvent('is-theme-change'));
+  });
+
+  document.getElementById('btn-add-mark').addEventListener('click', () => {
+    const v = editJs.value ?? '';
+    const idx = v.indexOf('greet');
+    if (idx < 0) return;
+    editJs.setMarks([
+      { id: 'tmp', from: idx, to: idx + 5, kind: 'underline', tone: 'info',
+        title: 'Función', message: 'Definida más abajo.' },
+    ]);
+  });
+
+  document.getElementById('btn-clear-marks').addEventListener('click', () => {
+    editJs.clearMarks();
+  });
+
+  document.getElementById('btn-export').addEventListener('click', () => {
+    const doc = editJs.code2json();
+    console.log('[is-code] code2json →', doc);
+  });
+
+  // Listo para los tests.
+  document.documentElement.dataset.codeReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Editor de código · &lt;is-code&gt;</h1>
+    <p>Highlight nativo · line numbers · marks · format · code2json/json2code · dark/light · readonly</p>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn" id="btn-theme" data-action="toggle-theme">Tema</button>
+  <button class="btn" id="btn-format" data-action="format">format()</button>
+  <button class="btn" id="btn-add-mark" data-action="add-mark">setMarks()</button>
+  <button class="btn" id="btn-clear-marks" data-action="clear-marks">clearMarks()</button>
+  <button class="btn" id="btn-export" data-action="export-json">code2json()</button>
+</header>
+<main>
+  <section class="full">
+    <h2>Editable · JavaScript <small>— syntax highlight, line numbers, tab indent</small></h2>
+    <is-code id="code-js" lang="javascript" tab-size="2"></is-code>
+  </section>
+  <section>
+    <h2>Readonly · JavaScript <small>— solo lectura, mismo highlight</small></h2>
+    <is-code id="code-js-readonly" lang="javascript" readonly></is-code>
+  </section>
+  <section>
+    <h2>Editable · CSS</h2>
+    <is-code id="code-css" lang="css"></is-code>
+  </section>
+  <section class="full">
+    <h2>Editable · HTML</h2>
+    <is-code id="code-html" lang="html"></is-code>
+  </section>
+  <section>
+    <h2>Editable · JSON <small>— botón «format()» reformatea con Prettier-like</small></h2>
+    <is-code id="code-json" lang="json" tab-size="2"></is-code>
+  </section>
+  <section>
+    <h2>Marks (anotaciones) <small>— readonly con errores/warnings pintados</small></h2>
+    <is-code id="code-marks" lang="javascript" readonly></is-code>
+  </section>
+  <section class="full">
+    <h2>Compact (snippet) <small>— sin chrome, encaja al contenido</small></h2>
+    <is-code id="code-compact" lang="javascript" compact readonly></is-code>
+  </section>
+</main>
+</body>
+</html>

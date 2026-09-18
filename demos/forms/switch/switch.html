@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-switch> · is-webcomponents</title>
+<meta name="description" content="Interruptor on/off form-associated con track, thumb, colores y on/off-label." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 18px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  header p { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
+  .row { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; }
+  button { font: inherit; padding: 6px 12px; background: #1f2937; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; cursor: pointer; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
+  /* Anti-FOUC */
+  is-switch:not(:defined) { visibility: hidden; }
+  is-icon:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/switch.min.js');
+
+  await customElements.whenDefined('is-switch');
+
+  const demo = document.getElementById('demo');
+  const out = document.getElementById('out');
+  const form = document.getElementById('sw-form');
+
+  const render = () => {
+    out.textContent = JSON.stringify({
+      checked: demo.checked,
+      disabled: demo.disabled,
+      readonly: demo.readonly,
+      required: demo.required,
+      value: demo.value,
+      role: demo.getAttribute('role'),
+      formChecked: form.querySelector('is-switch[name="notify"]').checked,
+    }, null, 2);
+  };
+  demo.addEventListener('is-change', () => render());
+
+  document.getElementById('btn-toggle').addEventListener('click', () => {
+    demo.checked = !demo.checked;
+    render();
+  });
+
+  render();
+  document.documentElement.dataset.switchReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Demo de <code>&lt;is-switch&gt;</code></h1>
+    <p>Interruptor on/off form-associated con <code>checked</code>, <code>required</code>, colores y etiquetas en el track (<code>on-label</code>/<code>off-label</code>). Pulsa o usa Espacio/Enter.</p>
+  </header>
+
+  <section>
+    <h2>Básico</h2>
+    <form id="sw-form">
+      <is-switch id="demo" name="notify" value="yes" hint="Recibir notificaciones por email">
+        Notificaciones
+      </is-switch>
+    </form>
+    <div class="row">
+      <button id="btn-toggle" type="button">Toggle</button>
+    </div>
+    <output id="out"></output>
+  </section>
+
+  <section>
+    <h2>Estados</h2>
+    <div class="row">
+      <is-switch checked>Encendido</is-switch>
+      <is-switch>Apagado</is-switch>
+      <is-switch disabled>Deshabilitado off</is-switch>
+      <is-switch checked disabled>Deshabilitado on</is-switch>
+      <is-switch required error>Requerido con error</is-switch>
+    </div>
+  </section>
+
+  <section>
+    <h2>Colores</h2>
+    <div class="row">
+      <is-switch checked color="brand">Brand</is-switch>
+      <is-switch checked color="success">Success</is-switch>
+      <is-switch checked color="warning">Warning</is-switch>
+      <is-switch checked color="danger">Danger</is-switch>
+      <is-switch checked color="neutral">Neutral</is-switch>
+    </div>
+  </section>
+
+  <section>
+    <h2>on-label / off-label</h2>
+    <div class="row">
+      <is-switch on-label="ON" off-label="OFF" checked>Con etiquetas</is-switch>
+      <is-switch on-label="Sí" off-label="No" checked>Es</is-switch>
+    </div>
+  </section>
+</main>
+</body>
+</html>

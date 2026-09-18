@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-doughnut-chart&gt; · demo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; padding: 20px; min-height: 0; }
+  is-doughnut-chart { width: 480px; height: 360px; }
+  is-doughnut-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Carga el bundle pre-compilado. doughnut-chart.min.js importa transitivamente
+  // chart.min.js + marks-radial.min.js.
+  await import('../../../dist/cdn/data-viz/doughnut-chart.min.js');
+  await customElements.whenDefined('is-doughnut-chart');
+
+  const chart = document.createElement('is-doughnut-chart');
+  chart.setAttribute('label', 'Distribución de gastos 2024');
+  chart.payload = {
+    type: 'doughnut',
+    data: {
+      labels: ['Operaciones', 'Marketing', 'RRHH', 'I+D', 'Otros'],
+      datasets: [{
+        label: '2024',
+        data: [42, 18, 15, 12, 13],
+      }],
+    },
+    options: {
+      cutout: '55',
+    },
+  };
+
+  document.querySelector('main').appendChild(chart);
+  document.documentElement.dataset.doughnutChartReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-doughnut-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>doughnut</code>. Total al centro.</p>
+</header>
+<main></main>
+</body>
+</html>

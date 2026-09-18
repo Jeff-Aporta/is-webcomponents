@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Slider &lt;is-slider&gt; · is-webcomponents</title>
+<meta name="description" content="Range slider form-associated con marks, single/range, orientación horizontal/vertical, navegación por teclado." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-slider { width: 100%; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-slider:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/slider.min.js');
+  await customElements.whenDefined('is-slider');
+
+  // (1) Básico single-value con label de temperatura
+  const volumen = document.createElement('is-slider');
+  volumen.setAttribute('label', 'Volumen');
+  volumen.setAttribute('name', 'volume');
+  volumen.setAttribute('min', '0');
+  volumen.setAttribute('max', '100');
+  volumen.setAttribute('step', '5');
+  volumen.setAttribute('value', '35');
+  volumen.valueLabel = 'on';
+  volumen.format = '{v}%';
+  volumen.setAttribute('hint', 'Step=5, valor inicial 35');
+  document.querySelector('#sec-basico').appendChild(volumen);
+
+  // (2) Rango con dos thumbs
+  const precio = document.createElement('is-slider');
+  precio.setAttribute('label', 'Rango de precio');
+  precio.setAttribute('name', 'price');
+  precio.setAttribute('range', '');
+  precio.setAttribute('min', '0');
+  precio.setAttribute('max', '500');
+  precio.setAttribute('step', '10');
+  precio.setAttribute('value', '50,250');
+  precio.valueLabel = 'auto';
+  precio.format = '${v}';
+  precio.setAttribute('hint', 'Range: dos thumbs');
+  document.querySelector('#sec-rango').appendChild(precio);
+
+  // (3) Con marks personalizados
+  const calidad = document.createElement('is-slider');
+  calidad.setAttribute('label', 'Calidad');
+  calidad.setAttribute('name', 'quality');
+  calidad.setAttribute('min', '0');
+  calidad.setAttribute('max', '100');
+  calidad.setAttribute('marks', '0:baja, 25:media, 50:buena, 75:alta, 100:excelente');
+  calidad.setAttribute('step', '25');
+  calidad.setAttribute('value', '50');
+  calidad.valueLabel = 'on';
+  calidad.setAttribute('hint', 'Marks con etiquetas (low/medium/...)');
+  document.querySelector('#sec-marks').appendChild(calidad);
+
+  // (4) Requerido
+  const requerido = document.createElement('is-slider');
+  requerido.setAttribute('label', 'Aceptación *');
+  requerido.setAttribute('name', 'acceptance');
+  requerido.setAttribute('min', '0');
+  requerido.setAttribute('max', '10');
+  requerido.setAttribute('step', '1');
+  requerido.setAttribute('required', '');
+  requerido.valueLabel = 'auto';
+  requerido.setAttribute('hint', 'Obligatorio para enviar el formulario');
+  document.querySelector('#sec-required').appendChild(requerido);
+
+  // (5) Deshabilitado
+  const bloqueado = document.createElement('is-slider');
+  bloqueado.setAttribute('label', 'Bloqueado');
+  bloqueado.setAttribute('value', '60');
+  bloqueado.setAttribute('disabled', '');
+  bloqueado.valueLabel = 'on';
+  bloqueado.setAttribute('hint', 'No editable');
+  document.querySelector('#sec-disabled').appendChild(bloqueado);
+
+  document.documentElement.dataset.sliderReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-slider&gt; · Range slider form-associated</h1>
+    <p>Single/range · marks · <code>ArrowLeft/Right</code>, <code>Home/End</code>, <code>PageUp/Down</code>.</p>
+  </header>
+
+  <section id="sec-basico">
+    <h2>Básico single-value</h2>
+    <p class="desc"><code>min</code>, <code>max</code>, <code>step</code>, <code>value-label="on"</code>, <code>format</code>.</p>
+  </section>
+
+  <section id="sec-rango">
+    <h2>Range con dos thumbs</h2>
+    <p class="desc"><code>range</code> + <code>value="50,250"</code>.</p>
+  </section>
+
+  <section id="sec-marks">
+    <h2>Marks con etiquetas</h2>
+    <p class="desc"><code>marks="0:baja,25:media,…"</code> genera puntos con texto bajo el rail.</p>
+  </section>
+
+  <section id="sec-required">
+    <h2>Requerido</h2>
+    <p class="desc"><code>required</code> activa <code>valueMissing</code> mientras no haya valor.</p>
+  </section>
+
+  <section id="sec-disabled">
+    <h2>Deshabilitado</h2>
+    <p class="desc"><code>disabled</code> bloquea teclado y drag.</p>
+  </section>
+</main>
+</body>
+</html>

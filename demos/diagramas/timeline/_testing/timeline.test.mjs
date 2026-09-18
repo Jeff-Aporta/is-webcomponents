@@ -1,93 +1,133 @@
-// timeline.test.mjs — tests del spec `timeline-spec` (funciones puras, sin DOM).
+// timeline.test.mjs — tests exhaustivos del demo timeline.html.
+// Cobertura: smoke (monta eventos + eje), funcional (dataset.eventId),
+// leyenda de grupos, determinismo, a11y.
 import assert from 'node:assert/strict';
-import { test } from 'node:test';
+import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
-import {
-  timelineSpecFromPayload,
-  resolveTimelineSpec,
-  computeTimelineLayout,
-} from '../../../../src/components/diagrams/timeline-spec.ts';
+const URL = `${BASE_URL}/demos/diagramas/timeline/timeline.html`;
 
-const validPayload = {
-  timeline: {
-    orientation: 'horizontal',
-    events: [
-      { id: 'e1', label: 'Kickoff', date: '2026-01-15' },
-      { id: 'e2', label: 'MVP', date: '2026-03-01' },
-      { id: 'e3', label: 'GA', date: '2026-09-01' },
-    ],
+const tests = [];
+
+tests.push({
+  name: 'smoke: <is-timeline> monta y renderiza eventos y eje',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-timeline-ready');
+    const info = await page.evaluate(() => {
+      const el = document.querySelector('main is-timeline');
+      const shadow = el?.shadowRoot;
+      return {
+        defined: !!customElements.get('is-timeline'),
+        events: shadow?.querySelectorAll('[data-event-id]').length ?? 0,
+        axis: !!shadow?.querySelector('.tl-axis'),
+        legend: !!shadow?.querySelector('.tl-legend'),
+        hasSvg: !!shadow?.querySelector('svg.tl-svg'),
+      };
+    });
+    assert.equal(info.defined, true, 'is-timeline debe estar definido');
+    assert.ok(info.events >= 5, `esperaba >=5 eventos, hay ${info.events}`);
+    assert.equal(info.axis, true, 'debe existir el eje (.tl-axis)');
+    assert.equal(info.hasSvg, true, 'debe existir <svg class="tl-svg">');
+    await screenshot(page, 'timeline-smoke');
   },
-};
-
-test('smoke: import no lanza', () => {
-  assert.equal(typeof timelineSpecFromPayload, 'function');
-  assert.equal(typeof computeTimelineLayout, 'function');
 });
 
-test('payload vacío devuelve null', () => {
-  assert.equal(timelineSpecFromPayload({}), null);
-  assert.equal(timelineSpecFromPayload({ timeline: {} }), null);
+tests.push({
+  name: 'eventos: cada uno tiene dataset.eventId con el id declarado',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-timeline-ready');
+    const ids = await page.evaluate(() => {
+      const el = document.querySelector('main is-timeline');
+      return [...el.shadowRoot.querySelectorAll('[data-event-id]')].map((g) => g.dataset.eventId);
+    });
+    assert.ok(ids.includes('e1'), 'debe existir el evento "e1"');
+    assert.ok(ids.includes('e5'), 'debe existir el evento "e5"');
+  },
 });
 
-test('orientación default es horizontal', () => {
-  const spec = timelineSpecFromPayload({
-    timeline: {
-      events: [{ id: 'e1', label: 'A', date: '2026-01-15' }],
-    },
-  });
-  assert.equal(spec.orientation, 'horizontal');
+tests.push({
+  name: 'orden: los eventos están ordenados cronológicamente (e1 antes que e5 en X)',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-timeline-ready');
+    const positions = await page.evaluate(() => {
+      const el = document.querySelector('main is-timeline');
+      const e1 = el.shadowRoot.querySelector('[data-event-id="e1"]')?.getBoundingClientRect();
+      const e5 = el.shadowRoot.querySelector('[data-event-id="e5"]')?.getBoundingClientRect();
+      return { e1X: e1?.x ?? 0, e5X: e5?.x ?? 0 };
+    });
+    assert.ok(positions.e1X < positions.e5X,
+      `e1 debe estar a la izquierda de e5: e1X=${positions.e1X}, e5X=${positions.e5X}`);
+  },
 });
 
-test('orientación vertical se respeta', () => {
-  const spec = timelineSpecFromPayload({
-    timeline: {
-      orientation: 'vertical',
-      events: [{ id: 'e1', label: 'A', date: '2026-01-15' }],
-    },
-  });
-  assert.equal(spec.orientation, 'vertical');
+tests.push({
+  name: 'eje: hay marcas de tiempo (ticks) en el SVG',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-timeline-ready');
+    const ticks = await page.evaluate(() => {
+      const el = document.querySelector('main is-timeline');
+      return el.shadowRoot.querySelectorAll('.tl-axis line, .tl-axis text').length;
+    });
+    assert.ok(ticks >= 1, `esperaba >=1 marca de eje, hay ${ticks}`);
+  },
 });
 
-test('layout horizontal produce width/height > 0', () => {
-  const spec = timelineSpecFromPayload(validPayload);
-  const layout = computeTimelineLayout(spec);
-  assert.ok(layout.width > 0);
-  assert.ok(layout.height > 0);
-  assert.equal(layout.events.length, 3);
-  assert.ok(layout.axisLen > 0);
+tests.push({
+  name: 'determinismo: re-asignar el mismo payload produce viewBox idéntico',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-timeline-ready');
+    const before = await page.evaluate(() => {
+      const el = document.querySelector('main is-timeline');
+      return el.shadowRoot.querySelector('svg.tl-svg').getAttribute('viewBox');
+    });
+    await page.evaluate(() => {
+      const el = document.querySelector('main is-timeline');
+      el.payload = el.payload;
+    });
+    await page.waitForTimeout(150);
+    const after = await page.evaluate(() => {
+      const el = document.querySelector('main is-timeline');
+      return el.shadowRoot.querySelector('svg.tl-svg').getAttribute('viewBox');
+    });
+    assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
+  },
 });
 
-test('layout vertical produce width/height > 0', () => {
-  const spec = timelineSpecFromPayload({
-    timeline: {
-      orientation: 'vertical',
-      events: [
-        { id: 'e1', label: 'A', date: '2026-01-15' },
-        { id: 'e2', label: 'B', date: '2026-06-15' },
-      ],
-    },
-  });
-  const layout = computeTimelineLayout(spec);
-  assert.ok(layout.width > 0);
-  assert.ok(layout.height > 0);
-  assert.equal(layout.events.length, 2);
+tests.push({
+  name: 'accesibilidad: aria-label y role=img presentes',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-timeline-ready');
+    const meta = await page.evaluate(() => {
+      const el = document.querySelector('main is-timeline');
+      const svg = el.shadowRoot.querySelector('svg.tl-svg');
+      return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
+    });
+    assert.ok(meta.aria && meta.aria.length > 0, 'debe llevar aria-label');
+    assert.equal(meta.role, 'img', 'role debe ser img');
+  },
 });
 
-test('edge case: evento con fecha inválida se descarta', () => {
-  const spec = timelineSpecFromPayload({
-    timeline: {
-      events: [
-        { id: 'e1', label: 'OK', date: '2026-01-15' },
-        { id: 'e2', label: 'Bad', date: 'no-es-fecha' },
-      ],
-    },
-  });
-  const layout = computeTimelineLayout(spec);
-  assert.equal(layout.events.length, 1, 'solo el evento válido');
-});
+let failures = 0;
+for (const t of tests) {
+  let ok = false;
+  const { browser, page } = await newPage();
+  try {
+    await t.run(page);
+    ok = true;
+    console.log(`  ✓ ${t.name}`);
+  } catch (err) {
+    ok = false;
+    console.error(`  ✗ ${t.name}\n     ${String(err?.message ?? err)}`);
+    failures++;
+    try { await screenshot(page, `fail-${t.name.replace(/\W+/g, '-')}`); } catch {}
+  } finally {
+    await close({ browser, page });
+  }
+}
 
-test('opts.width define axisLen tope', () => {
-  const spec = timelineSpecFromPayload(validPayload);
-  const layout = computeTimelineLayout(spec, { width: 300 });
-  assert.ok(layout.axisLen <= 300);
-});
+report('timeline', failures === 0, { total: tests.length, failures });

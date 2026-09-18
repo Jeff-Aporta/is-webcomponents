@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-flex-options&gt; · is-webcomponents</title>
+<meta name="description" content="Toolbar de acciones a partir de un array tipo ISP FlexOptionsInput[] — pinta is-button, is-check-icon-button y is-dropdown." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 24px; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; }
+  is-flex-options:not(:defined) { visibility: hidden; }
+  /* Forzar visibilidad del toolbar shadow */
+  is-flex-options::part(toolbar) { display: flex; gap: 4px; align-items: center; padding: 8px; background: rgba(255,255,255,0.04); border-radius: 6px; }
+</style>
+<script type="module">
+  // Dependencias transitivas de flex-options.
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/actions/button-group.min.js');
+  await import('../../../dist/cdn/actions/check-icon-button.min.js');
+  await import('../../../dist/cdn/actions/dropdown.min.js');
+  await import('../../../dist/cdn/actions/dropdown-item.min.js');
+  await import('../../../dist/cdn/layout/divider.min.js');
+  await import('../../../dist/cdn/media/icon.min.js');
+  await import('../../../dist/cdn/isp/flex-options.min.js');
+  await customElements.whenDefined('is-flex-options');
+
+  const eventLog = document.getElementById('event-log');
+  const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
+
+  // ── Demo 1: acciones simples ────────────────────────────────────────
+  const opts1 = document.getElementById('opts1');
+  opts1.actions = [
+    { icon: 'mdi:plus', title: 'Agregar', onClick: () => log('Agregar click') },
+    { icon: 'mdi:pencil', title: 'Editar', onClick: () => log('Editar click') },
+    { icon: 'mdi:eye-outline', title: 'Ver', onClick: () => log('Ver click') },
+  ];
+
+  // ── Demo 2: acciones con grupos + separadores + more dropdown ────────
+  const opts2 = document.getElementById('opts2');
+  opts2.actions = [
+    [
+      { icon: 'mdi:arrow-up', title: 'Subir', onClick: () => log('Subir') },
+      { icon: 'mdi:arrow-down', title: 'Bajar', onClick: () => log('Bajar') },
+    ],
+    { icon: 'mdi:plus-circle-outline', title: 'Agregar hijo', onClick: () => log('Hijo') },
+  ];
+  opts2.more = [
+    { icon: 'mdi:content-duplicate', title: 'Duplicar', onClick: () => log('Duplicar') },
+    { icon: 'mdi:delete', title: 'Eliminar', color: 'danger', onClick: () => log('Eliminar') },
+  ];
+
+  // ── Demo 3: compact (sin labels) ─────────────────────────────────────
+  const opts3 = document.getElementById('opts3');
+  opts3.setConfig({
+    compact: true,
+    actions: [
+      { icon: 'mdi:format-bold', title: 'Bold', onClick: () => log('Bold') },
+      { icon: 'mdi:format-italic', title: 'Italic', onClick: () => log('Italic') },
+      { icon: 'mdi:format-underline', title: 'Underline', onClick: () => log('Underline') },
+    ],
+  });
+
+  // ── Demo 4: re-asignar acciones debe re-pintar sin re-crear el host ──
+  const opts4 = document.getElementById('opts4');
+  let firstChild = null;
+  opts4.actions = [
+    { icon: 'mdi:home', title: 'Inicio', onClick: () => log('Inicio') },
+  ];
+  // Capturar referencia al primer botón
+  firstChild = opts4.shadowRoot.querySelector('[role="button"], is-button, button');
+  opts4.actions = [
+    { icon: 'mdi:cog', title: 'Ajustes', onClick: () => log('Ajustes') },
+  ];
+  const secondChild = opts4.shadowRoot.querySelector('[role="button"], is-button, button');
+
+  // Exponer info al test (no al usuario): atributo data-paint-consistent
+  setTimeout(() => {
+    const ok = firstChild && secondChild && firstChild.isEqualNode?.(secondChild) === false;
+    document.documentElement.dataset.flexOptsRepaint = ok ? 'same' : 'different';
+  }, 100);
+
+  document.documentElement.dataset.flexOptsReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-flex-options&gt; — toolbar de acciones declarativa</h1>
+    <p>Pinta is-button / is-check-icon-button / is-dropdown con un array de specs.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-flex-options</code>
+</header>
+<main>
+  <section>
+    <h2>Acciones planas</h2>
+    <is-flex-options id="opts1"></is-flex-options>
+  </section>
+
+  <section>
+    <h2>Grupos + menú "más"</h2>
+    <is-flex-options id="opts2"></is-flex-options>
+  </section>
+
+  <section>
+    <h2>Compact (iconos sin label)</h2>
+    <is-flex-options id="opts3"></is-flex-options>
+  </section>
+
+  <section>
+    <h2>Re-asignación re-pinta</h2>
+    <is-flex-options id="opts4"></is-flex-options>
+    <p style="font-size: 12px; color: #94a3b8;">Cambia la spec de acciones y verifica que el DOM se actualiza.</p>
+  </section>
+
+  <section>
+    <h2>Eventos (clic en acción)</h2>
+    <pre id="event-log" class="log"></pre>
+  </section>
+</main>
+</body>
+</html>

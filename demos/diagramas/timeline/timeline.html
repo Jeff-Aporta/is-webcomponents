@@ -3,19 +3,17 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-timeline></title>
-<meta name="description" content="Demo de is-timeline horizontal con 5 eventos." />
+<title>Demo — <is-timeline> · is-webcomponents</title>
+<meta name="description" content="Línea de tiempo con eventos datados y agrupación por color/grupo." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
-  body { display: grid; grid-template-rows: auto 1fr auto; }
+  body { display: grid; grid-template-rows: auto 1fr; }
   header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
-  main { display: grid; padding: 20px; min-height: 420px; }
-  is-timeline { width: 100%; min-height: 400px; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-timeline { width: 100%; height: 100%; min-height: 480px; display: block; }
   is-timeline:not(:defined) { visibility: hidden; }
-  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
-  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
   await import('../../../dist/cdn/diagrams/timeline.min.js');
@@ -24,28 +22,32 @@
   const el = document.createElement('is-timeline');
   el.payload = {
     timeline: {
-      title: 'Hitos del proyecto',
-      orientation: 'horizontal',
+      title: 'Historia del proyecto',
+      subtitle: '5 eventos · 2 grupos · 2024..2025',
+      dateFormat: 'YYYY-MM-DD',
+      groups: [
+        { id: 'producto', name: 'Producto' },
+        { id: 'equipo', name: 'Equipo' },
+      ],
       events: [
-        { id: 'e1', label: 'Kickoff', date: '2026-01-15', desc: 'arranque formal del proyecto' },
-        { id: 'e2', label: 'MVP interno', date: '2026-03-01', desc: 'release interno' },
-        { id: 'e3', label: 'Beta cerrada', date: '2026-06-15', desc: '10 clientes seleccionados' },
-        { id: 'e4', label: 'GA', date: '2026-09-01', desc: 'disponibilidad general' },
-        { id: 'e5', label: 'v2', date: '2027-03-01', desc: 'siguiente major' },
+        { id: 'e1', label: 'MVP', date: '2024-02-15', group: 'producto' },
+        { id: 'e2', label: 'Primeros clientes', date: '2024-06-01', group: 'producto' },
+        { id: 'e3', label: 'Contratar CTO', date: '2024-08-10', group: 'equipo' },
+        { id: 'e4', label: 'Lanzamiento v2', date: '2024-12-01', group: 'producto' },
+        { id: 'e5', label: 'Seed 2M€', date: '2025-03-20', group: 'equipo' },
       ],
     },
   };
-  document.getElementById('host').appendChild(el);
+  document.querySelector('main').appendChild(el);
 
   document.documentElement.dataset.timelineReady = '1';
 </script>
 </head>
 <body>
-<header>
-  <h1>Demo <code>&lt;is-timeline&gt;</code></h1>
-  <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
+  <header>
+  <h1>Demo — <code>&lt;is-timeline&gt;</code></h1>
+  <p>Línea de tiempo horizontal: eventos datados, agrupados por color y ordenados cronológicamente.</p>
 </header>
-<main><div id="host"></div></main>
-<footer>Componente: <code>is-timeline</code> · Spec: <code>timeline-spec</code></footer>
+<main></main>
 </body>
 </html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo: <is-speed-dial> · is-webcomponents</title>
+  <meta name="description" content="Demo de <is-speed-dial>: FAB que despliega un abanico de acciones. Direcciones: up/down/left/right/radial." />
+  <style>
+    html, body {
+      margin: 0; padding: 0; min-height: 100%;
+      background: #0c1118; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    body { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px; }
+    @media (max-width: 720px) { body { grid-template-columns: 1fr; } }
+    header { grid-column: 1 / -1; }
+    header h1 { margin: 0 0 4px 0; font-size: 18px; }
+    header p { margin: 0; color: #94a3b8; font-size: 12px; }
+    section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; min-height: 360px; position: relative; }
+    section h2 { margin: 0 0 8px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+    .corner-trigger { position: absolute; right: 24px; bottom: 24px; }
+    .inline-trigger { display: inline-block; margin: 16px; }
+    pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
+    /* Anti-FOUC */
+    is-speed-dial:not(:defined) { visibility: hidden; }
+    is-speed-dial-action:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Demo: <code>&lt;is-speed-dial&gt;</code></h1>
+    <p>FAB que despliega acciones. El trigger abre/cierra el dial; click en una acción emite <code>is-select</code>.</p>
+  </header>
+
+  <section>
+    <h2>direction="up" (default)</h2>
+    <is-speed-dial id="sd-up" label="Acciones rápidas" direction="up">
+      <is-speed-dial-action icon="mdi:content-copy" label="Copiar"></is-speed-dial-action>
+      <is-speed-dial-action icon="mdi:share-variant" label="Compartir"></is-speed-dial-action>
+      <is-speed-dial-action icon="mdi:link-variant" label="Copiar enlace"></is-speed-dial-action>
+    </is-speed-dial>
+  </section>
+
+  <section>
+    <h2>direction="radial"</h2>
+    <is-speed-dial id="sd-rad" label="Más acciones" direction="radial">
+      <is-speed-dial-action icon="mdi:pencil" label="Editar"></is-speed-dial-action>
+      <is-speed-dial-action icon="mdi:eye" label="Ver"></is-speed-dial-action>
+      <is-speed-dial-action icon="mdi:archive" label="Archivar"></is-speed-dial-action>
+      <is-speed-dial-action icon="mdi:trash-can" color="danger" label="Eliminar"></is-speed-dial-action>
+    </is-speed-dial>
+  </section>
+
+  <section>
+    <h2>Eventos</h2>
+    <pre id="log">[]</pre>
+  </section>
+
+  <script type="module">
+    await import('../../../dist/cdn/actions/speed-dial.min.js');
+    await import('../../../dist/cdn/actions/check-icon-button.min.js');
+    await customElements.whenDefined('is-speed-dial');
+
+    const log = document.getElementById('log');
+    const events = [];
+    const record = (label, detail) => {
+      events.push({ ev: label, ...detail });
+      log.textContent = JSON.stringify(events, null, 2);
+    };
+
+    document.querySelectorAll('is-speed-dial').forEach((sd) => {
+      sd.addEventListener('is-toggle', (e) => record('toggle', { open: e.detail.open }));
+      sd.addEventListener('is-select', (e) => record('select', { label: e.detail.action.getAttribute('label') }));
+    });
+
+    document.documentElement.dataset.speedDialReady = '1';
+  </script>
+</body>
+</html>

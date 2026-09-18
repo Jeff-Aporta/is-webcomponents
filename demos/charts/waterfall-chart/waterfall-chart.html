@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-waterfall-chart&gt; · demo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; padding: 20px; min-height: 0; }
+  is-waterfall-chart { width: 720px; height: 420px; }
+  is-waterfall-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Carga el bundle pre-compilado. waterfall-chart.min.js importa
+  // transitivamente chart.min.js + marks-waterfall.min.js.
+  await import('../../../dist/cdn/data-viz/waterfall-chart.min.js');
+  await customElements.whenDefined('is-waterfall-chart');
+
+  const chart = document.createElement('is-waterfall-chart');
+  chart.setAttribute('label', 'P&L simplificado Q4 2024');
+  chart.payload = {
+    type: 'waterfall',
+    data: {
+      labels: ['Ingresos', 'COGS', 'Marketing', 'Salarios', 'OpEx', 'Utilidad op.'],
+      datasets: [{
+        label: '2024',
+        data: [500, -120, -80, -200, -40, 60],
+        // Índices absolutos (barras totales, no deltas): 0 = Ingresos, 5 = Utilidad op.
+        totals: [0, 5],
+      }],
+    },
+  };
+
+  document.querySelector('main').appendChild(chart);
+  document.documentElement.dataset.waterfallChartReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-waterfall-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>waterfall</code>. Deltas y totales.</p>
+</header>
+<main></main>
+</body>
+</html>

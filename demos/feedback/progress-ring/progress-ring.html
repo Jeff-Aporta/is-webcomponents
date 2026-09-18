@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-progress-ring> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-progress-ring>: anillo SVG de progreso con stroke-dasharray/offset." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; }
+  is-progress-ring:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/progress-ring.min.js');
+
+  await customElements.whenDefined('is-progress-ring');
+  document.documentElement.dataset.progressRingReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-progress-ring</h1>
+  <p>Anillo de progreso SVG. Calcula <code>stroke-dasharray</code> y <code>stroke-dashoffset</code> a partir de value. Muestra el % en el centro (o label).</p>
+</header>
+
+<section>
+  <h2>Valores</h2>
+  <div class="row">
+    <is-progress-ring value="0"></is-progress-ring>
+    <is-progress-ring value="25"></is-progress-ring>
+    <is-progress-ring value="50"></is-progress-ring>
+    <is-progress-ring value="75"></is-progress-ring>
+    <is-progress-ring value="100"></is-progress-ring>
+  </div>
+</section>
+
+<section>
+  <h2>Con label</h2>
+  <div class="row">
+    <is-progress-ring value="73" label="73 / 100"></is-progress-ring>
+    <is-progress-ring value="42" label="Procesando…"></is-progress-ring>
+  </div>
+</section>
+
+<section>
+  <h2>Custom (color / width)</h2>
+  <div class="row">
+    <is-progress-ring value="60" color="#7c3aed" width="120"></is-progress-ring>
+    <is-progress-ring value="40" color="#10b981" track-color="rgba(255,255,255,0.05)" track-width="6"></is-progress-ring>
+  </div>
+</section>
+</body>
+</html>

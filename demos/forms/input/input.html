@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-input> · is-webcomponents</title>
+<meta name="description" content="Campo de texto form-associated con tipos (text, email, password, number), clearable, password-toggle, label, hint y error." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 18px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  header p { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
+  /* Anti-FOUC */
+  is-input:not(:defined) { visibility: hidden; }
+  is-button:not(:defined) { visibility: hidden; }
+  is-check-icon-button:not(:defined) { visibility: hidden; }
+  is-icon:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/input.min.js');
+
+  await customElements.whenDefined('is-input');
+
+  const demo = document.getElementById('demo');
+  const out = document.getElementById('out');
+
+  const render = () => {
+    out.textContent = JSON.stringify({
+      type: demo.type,
+      value: demo.value,
+      disabled: demo.disabled,
+      required: demo.required,
+      readonly: demo.readonly,
+      blank: demo.matches(':state(blank)'),
+      invalid: demo.matches(':state(invalid)'),
+    }, null, 2);
+  };
+  demo.addEventListener('is-input', () => render());
+  demo.addEventListener('is-change', () => render());
+
+  // Seteo programático (util para tests): un valor y luego limpieza.
+  document.getElementById('btn-set').addEventListener('click', () => {
+    demo.value = 'Hola mundo';
+    render();
+  });
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    demo.value = '';
+    render();
+  });
+
+  render();
+  document.documentElement.dataset.inputReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Demo de <code>&lt;is-input&gt;</code></h1>
+    <p>Campo de texto form-associated con tipos (text, email, password, number), clearable, password-toggle y validación.</p>
+  </header>
+
+  <section>
+    <h2>Básico (text + clearable)</h2>
+    <is-input id="demo" name="full-name" label="Nombre completo" hint="Como aparece en tu documento" clearable placeholder="Ada Lovelace"></is-input>
+    <div class="grid2">
+      <button id="btn-set" type="button">Set "Hola mundo"</button>
+      <button id="btn-clear" type="button">Clear</button>
+    </div>
+    <output id="out"></output>
+  </section>
+
+  <section>
+    <h2>Tipos</h2>
+    <div class="grid2">
+      <is-input type="email" name="email" label="Email" placeholder="ada@example.com"></is-input>
+      <is-input type="password" name="pwd" label="Contraseña" password-toggle placeholder="••••••"></is-input>
+      <is-input type="number" name="age" label="Edad" min="0" max="120" step="1" placeholder="30"></is-input>
+      <is-input type="tel" name="phone" label="Teléfono" placeholder="+34 600 000 000"></is-input>
+      <is-input type="url" name="web" label="Web" placeholder="https://example.com"></is-input>
+      <is-input type="search" name="q" label="Búsqueda" placeholder="Buscar..."></is-input>
+    </div>
+  </section>
+
+  <section>
+    <h2>Estados</h2>
+    <div class="grid2">
+      <is-input name="required1" label="Required" required hint="Obligatorio"></is-input>
+      <is-input name="readonly1" label="Readonly" readonly value="sólo lectura"></is-input>
+      <is-input name="errored" label="Con error" error error-text="Formato inválido" value="abc"></is-input>
+      <is-input name="disabled1" label="Disabled" disabled value="deshabilitado"></is-input>
+      <is-input name="prefixed" label="Precio" prefix="$" suffix="USD" placeholder="0.00"></is-input>
+      <is-input name="counted" label="Con contador" maxlength="20" show-count placeholder="máx 20"></is-input>
+    </div>
+  </section>
+</main>
+</body>
+</html>

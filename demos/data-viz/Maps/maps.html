@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-maps> · is-webcomponents</title>
+<meta name="description" content="Visualizador geográfico: tiles (iframe OpenStreetMap) con attribution, marcadores con lat/lon, viewport interactivo." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  main {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    padding: 12px; min-height: 0;
+  }
+  .panel {
+    background: #0f1620; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 16px;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .panel h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 0 0 12px 0; color: #94a3b8;
+  }
+  .panel .body { flex: 1; display: grid; place-items: stretch; min-height: 320px; }
+  is-maps { width: 100%; height: 100%; display: block; min-height: 320px; }
+  is-maps:not(:defined) { visibility: hidden; }
+  pre#log {
+    margin: 0; padding: 12px;
+    background: #0c1118; border-radius: 4px;
+    font: 12px ui-monospace, Menlo, Consolas, monospace;
+    color: #cbd5e1; white-space: pre-wrap;
+  }
+</style>
+<script type="module">
+  // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
+  // servidor estático (incluido VS Code Live Server).
+  await import('../../../dist/cdn/data-viz/maps.min.js');
+  await customElements.whenDefined('is-maps');
+  await customElements.whenDefined('is-map-marker');
+
+  // ── Demo 1: modo SVG nativo con marcadores sobre Colombia ───────────
+  const svg = document.createElement('is-maps');
+  svg.setAttribute('viewbox', '-85, -5, -65, 15');
+  svg.setAttribute('engine', 'svg');
+  svg.setAttribute('interactive', '');
+  // Marcadores (capitales andinas)
+  const markers = [
+    { lat: 4.6,  lon: -74.1, label: 'Bogotá' },
+    { lat: -0.2, lon: -78.5, label: 'Quito' },
+    { lat: -12.0, lon: -77.0, label: 'Lima' },
+    { lat: -34.6, lon: -58.4, label: 'Buenos Aires' },
+    { lat: -33.4, lon: -70.6, label: 'Santiago' },
+    { lat: 10.5, lon: -66.9, label: 'Caracas' },
+  ];
+  for (const m of markers) {
+    const mk = document.createElement('is-map-marker');
+    mk.setAttribute('lat', String(m.lat));
+    mk.setAttribute('lon', String(m.lon));
+    mk.setAttribute('label', m.label);
+    svg.appendChild(mk);
+  }
+  document.getElementById('map-svg').appendChild(svg);
+
+  // ── Demo 2: modo tile (iframe OSM) con attribution ──────────────────
+  // La attribution pasa por `cfg.attribution` que el componente inyecta con
+  // innerHTML en <small class="attribution">. Esto es una superficie XSS:
+  // el demo usa SOLO texto plano para fines de prueba.
+  const tile = document.createElement('is-maps');
+  tile.setAttribute('engine', 'tile');
+  tile.style.cssText = 'min-height:320px;';
+  const tileScript = document.createElement('script');
+  tileScript.type = 'application/json';
+  tileScript.textContent = JSON.stringify({
+    tileUrl: 'https://www.openstreetmap.org/export/embed.html',
+    bbox: '-85.0,-5.0,-65.0,15.0',
+    zoom: 4,
+    center: 'Lat=-0,Lng=-75',
+    attribution: '© OpenStreetMap contributors (CC BY-SA 2.0)',
+  });
+  tile.appendChild(tileScript);
+  document.getElementById('map-tile').appendChild(tile);
+
+  // ── Log de eventos (útiles para tests visuales) ─────────────────────
+  const log = document.getElementById('log');
+  const append = (line) => { log.textContent = line + '\n' + log.textContent; };
+  svg.addEventListener('is-viewport', (e) => {
+    const v = e.detail;
+    append(`viewport: ${v.minLon.toFixed(2)},${v.minLat.toFixed(2)} → ${v.maxLon.toFixed(2)},${v.maxLat.toFixed(2)}`);
+  });
+  svg.addEventListener('is-marker-click', (e) => {
+    const m = e.detail.marker;
+    append(`marker-click: ${m.getAttribute('label')}`);
+  });
+
+  document.documentElement.dataset.mapsReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Mapas — <code>&lt;is-maps&gt;</code></h1>
+    <p>Modo SVG con marcadores · Modo tile (iframe) con attribution · <code>is-marker-click</code> al pulsar un marcador</p>
+  </div>
+  <div class="spacer"></div>
+  <code>drag para pan · scroll para zoom</code>
+</header>
+<main>
+  <section class="panel">
+    <h2>Modo SVG nativo (América del Sur)</h2>
+    <div class="body" id="map-svg"></div>
+  </section>
+  <section class="panel">
+    <h2>Modo tile (OpenStreetMap embebido)</h2>
+    <div class="body" id="map-tile"></div>
+  </section>
+</main>
+<pre id="log" hidden></pre>
+</body>
+</html>

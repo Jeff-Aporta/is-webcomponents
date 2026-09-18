@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-tag> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-tag>: etiqueta con botón de quitar (with-remove), colores semánticos." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  is-tag:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/tag.min.js');
+
+  await customElements.whenDefined('is-tag');
+  document.documentElement.dataset.tagReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-tag</h1>
+  <p>Etiqueta compacta con botón de quitar opcional (<code>with-remove</code>). Emite <code>is-remove</code> al click.</p>
+</header>
+
+<section>
+  <h2>Colores</h2>
+  <div class="row">
+    <is-tag color="brand">Brand</is-tag>
+    <is-tag color="neutral">Neutral</is-tag>
+    <is-tag color="info">Info</is-tag>
+    <is-tag color="success">Success</is-tag>
+    <is-tag color="warning">Warning</is-tag>
+    <is-tag color="danger">Danger</is-tag>
+  </div>
+</section>
+
+<section>
+  <h2>Variantes</h2>
+  <div class="row">
+    <is-tag variant="accent" color="brand">Accent</is-tag>
+    <is-tag variant="filled" color="brand">Filled</is-tag>
+    <is-tag variant="outlined" color="brand">Outlined</is-tag>
+    <is-tag variant="filled-outlined" color="brand">Filled-outlined</is-tag>
+  </div>
+</section>
+
+<section>
+  <h2>Pill + with-remove (selección múltiple)</h2>
+  <div class="row">
+    <is-tag pill color="success" with-remove>JavaScript</is-tag>
+    <is-tag pill color="info" with-remove>TypeScript</is-tag>
+    <is-tag pill color="warning" with-remove>Vite</is-tag>
+    <is-tag pill color="danger" with-remove>X</is-tag>
+  </div>
+  <pre id="removed-out" style="margin-top:12px;background:#0a0e15;padding:8px;border-radius:6px;font-size:12px;min-height:32px;">(sin eliminar todavía)</pre>
+  <script type="module">
+    const out = document.getElementById('removed-out');
+    document.querySelectorAll('is-tag[with-remove]').forEach((t) => {
+      t.addEventListener('is-remove', () => {
+        out.textContent = `Eliminado: ${t.textContent.trim()}`;
+        t.remove();
+      });
+    });
+  </script>
+</section>
+
+<section>
+  <h2>Slots (start / end)</h2>
+  <div class="row">
+    <is-tag color="brand" variant="filled">
+      <span slot="start" aria-hidden="true">●</span>
+      Destacado
+      <span slot="end" aria-hidden="true">→</span>
+    </is-tag>
+  </div>
+</section>
+</body>
+</html>

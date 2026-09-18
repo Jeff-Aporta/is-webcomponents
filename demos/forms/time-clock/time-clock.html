@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-time-clock> · is-webcomponents</title>
+<meta name="description" content="Reloj analógico circular para seleccionar hora (hours → minutes → seconds). Soporta drag, click en el disco y navegación por teclado." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 900px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 18px; display: grid; gap: 10px; place-items: start;
+  }
+  .card h2 { margin: 0; font-size: 13px; color: #94a3b8; font-weight: 600; }
+  .value-readout { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; align-self: stretch; }
+  .value-readout code { color: #e2e8f0; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-time-clock:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Carga solo el bundle que necesitamos desde los pre-construidos en dist/cdn/.
+  await import('../../../dist/cdn/forms/time-clock.min.js');
+
+  await customElements.whenDefined('is-time-clock');
+
+  // Helper para reflejar el valor en pantalla.
+  const wire = (el, outputId) => {
+    const update = (value) => {
+      const out = document.getElementById(outputId);
+      if (out) out.textContent = value || '(vacío)';
+    };
+    el.addEventListener('is-change', (e) => update(e.detail?.value));
+  };
+
+  // 1. Básico 24h, valor inicial
+  const basic = document.getElementById('basic');
+  basic.setAttribute('value', '14:30');
+  wire(basic, 'basic-value');
+
+  // 2. AM/PM con locale en-US
+  const ampm = document.getElementById('ampm');
+  ampm.setAttribute('ampm', '');
+  ampm.setAttribute('locale', 'en-US');
+  ampm.setAttribute('value', '09:30');
+  wire(ampm, 'ampm-value');
+
+  // 3. Con segundos
+  const withSeconds = document.getElementById('with-seconds');
+  withSeconds.setAttribute('seconds', '');
+  withSeconds.setAttribute('value', '12:00:30');
+  wire(withSeconds, 'with-seconds-value');
+
+  // 4. Step de minutos (cada 15)
+  const step15 = document.getElementById('step-15');
+  step15.setAttribute('minutes-step', '15');
+  step15.setAttribute('value', '10:00');
+  wire(step15, 'step-15-value');
+
+  // 5. Rango limitado (jornada laboral)
+  const restricted = document.getElementById('restricted');
+  restricted.setAttribute('min-time', '08:00');
+  restricted.setAttribute('max-time', '18:00');
+  restricted.setAttribute('value', '12:00');
+  wire(restricted, 'restricted-value');
+
+  // 6. Solo lectura
+  const readonlyClock = document.getElementById('readonly');
+  readonlyClock.setAttribute('readonly', '');
+  readonlyClock.setAttribute('value', '15:45');
+  wire(readonlyClock, 'readonly-value');
+
+  // 7. Deshabilitado
+  const disabledClock = document.getElementById('disabled');
+  disabledClock.setAttribute('disabled', '');
+  disabledClock.setAttribute('value', '08:00');
+  wire(disabledClock, 'disabled-value');
+
+  document.documentElement.dataset.timeClockReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-time-clock&gt; — Reloj analógico circular</h1>
+    <p>Vistas encadenadas: <strong>horas → minutos → segundos</strong> (si <code>seconds</code>). Disco deslizante: arrastra, haz clic en una hora o usa ↑/↓ y ←/→ con el foco en el disco.</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Básico (24h)</h2>
+      <is-time-clock id="basic"></is-time-clock>
+      <div class="value-readout">Valor: <code id="basic-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>AM/PM (en-US)</h2>
+      <is-time-clock id="ampm" ampm locale="en-US"></is-time-clock>
+      <div class="value-readout">Valor: <code id="ampm-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Con segundos</h2>
+      <is-time-clock id="with-seconds" seconds></is-time-clock>
+      <div class="value-readout">Valor: <code id="with-seconds-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Step de minutos = 15</h2>
+      <is-time-clock id="step-15" minutes-step="15"></is-time-clock>
+      <div class="value-readout">Valor: <code id="step-15-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Rango 08:00–18:00</h2>
+      <is-time-clock id="restricted" min-time="08:00" max-time="18:00"></is-time-clock>
+      <div class="value-readout">Valor: <code id="restricted-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Solo lectura</h2>
+      <is-time-clock id="readonly" readonly></is-time-clock>
+      <div class="value-readout">Valor: <code id="readonly-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Deshabilitado</h2>
+      <is-time-clock id="disabled" disabled></is-time-clock>
+      <div class="value-readout">Valor: <code id="disabled-value">(vacío)</code></div>
+    </section>
+  </div>
+</main>
+</body>
+</html>

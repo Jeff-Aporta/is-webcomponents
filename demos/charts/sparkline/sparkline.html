@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-sparkline&gt; · demo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; grid-template-rows: auto 1fr auto; gap: 16px; padding: 20px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 10px 0; color: #94a3b8; }
+  is-sparkline { display: block; width: 100%; height: 60px; }
+  is-sparkline:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data-viz/sparkline.min.js');
+  await customElements.whenDefined('is-sparkline');
+
+  // Demo 1: line sparkline via attribute
+  const s1 = document.createElement('is-sparkline');
+  s1.setAttribute('values', '12,18,15,22,30,28,35,40,38,42');
+  s1.setAttribute('line-color', '#22d3ee');
+
+  // Demo 2: bar sparkline via data property
+  const s2 = document.createElement('is-sparkline');
+  s2.setAttribute('type', 'bar');
+  s2.setAttribute('line-color', '#a78bfa');
+  s2.data = [5, 12, 8, 18, 22, 15, 28];
+
+  // Demo 3: gradient area
+  const s3 = document.createElement('is-sparkline');
+  s3.setAttribute('values', '40,38,42,35,30,33,28,25,28,32,38');
+  s3.setAttribute('variant', 'gradient');
+  s3.setAttribute('line-color', '#22c55e');
+
+  document.getElementById('s1').appendChild(s1);
+  document.getElementById('s2').appendChild(s2);
+  document.getElementById('s3').appendChild(s3);
+  document.documentElement.dataset.sparklineReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-sparkline&gt;</h1>
+  <p>Mini-gráfico inline. Acepta atributo <code>values</code> o propiedad <code>data</code>. Tipos: <code>line</code>, <code>bar</code>.</p>
+</header>
+<main>
+  <section><h2>Line (atributo values)</h2><div id="s1"></div></section>
+  <section><h2>Bar (propiedad data)</h2><div id="s2"></div></section>
+  <section><h2>Gradient area</h2><div id="s3"></div></section>
+</main>
+</body>
+</html>

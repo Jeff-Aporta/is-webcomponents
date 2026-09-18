@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo: <is-context-menu> · is-webcomponents</title>
+  <meta name="description" content="Demo de <is-context-menu>: menú emergente anclado al clic derecho del ratón sobre un target." />
+  <style>
+    html, body {
+      margin: 0; padding: 24px; min-height: 100%;
+      background: #0c1118; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    body { display: grid; gap: 24px; }
+    header h1 { margin: 0 0 4px 0; font-size: 18px; }
+    header p { margin: 0; color: #94a3b8; font-size: 12px; }
+    section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; }
+    section h2 { margin: 0 0 12px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+    .target {
+      background: #0a0f17; border: 1px dashed rgba(255,255,255,0.2); border-radius: 8px;
+      padding: 30px; min-height: 80px; text-align: center; color: #cbd5e1;
+      user-select: none;
+    }
+    pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
+    /* Anti-FOUC */
+    is-context-menu:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Demo: <code>&lt;is-context-menu&gt;</code></h1>
+    <p>Menú emergente en clic derecho. Uso: <code>&lt;is-context-menu for="#target"&gt;…items…&lt;/is-context-menu&gt;</code></p>
+  </header>
+
+  <section>
+    <h2>Target con menú</h2>
+    <div class="target" id="target">Haz clic derecho aquí</div>
+    <is-context-menu for="#target" id="cm" placement="bottom-start" distance="4">
+      <button class="item" data-value="cut">Cortar</button>
+      <button class="item" data-value="copy">Copiar</button>
+      <button class="item" data-value="paste">Pegar</button>
+      <hr />
+      <button class="item" data-value="delete">Eliminar</button>
+    </is-context-menu>
+    <pre id="log">log: []</pre>
+  </section>
+
+  <script type="module">
+    await import('../../../dist/cdn/actions/context-menu.min.js');
+    await customElements.whenDefined('is-context-menu');
+
+    const log = document.getElementById('log');
+    const events = [];
+    const record = (label, detail) => {
+      events.push({ ev: label, ...detail });
+      log.textContent = JSON.stringify(events, null, 2);
+    };
+
+    const cm = document.getElementById('cm');
+    cm.addEventListener('is-open', (e) => record('open', { x: e.detail.x, y: e.detail.y }));
+    cm.addEventListener('is-close', () => record('close', {}));
+    cm.addEventListener('is-select', (e) => record('select', { value: e.detail.value }));
+
+    // API pública
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') cm.close();
+    });
+
+    document.documentElement.dataset.contextMenuReady = '1';
+  </script>
+</body>
+</html>

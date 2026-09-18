@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-card> · is-webcomponents</title>
+<meta name="description" content="Card con slots media/header/body/footer/actions y orientación vertical/horizontal. Variants accent/filled/outlined/filled-outlined/plain." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 18px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .vertical-host { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .horizontal-host { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  is-card { display: block; min-width: 200px; }
+  is-card:not(:defined) { visibility: hidden; }
+  is-card .img-placeholder {
+    display: grid; place-items: center; height: 120px;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    color: #94a3b8; font-size: 12px; border-radius: 4px;
+  }
+  .interactive-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/card.min.js');
+  await customElements.whenDefined('is-card');
+
+  // (1) Cards verticales (default orientation) con todas las slots.
+  function makeVertical({ header, body, footer, media }) {
+    const card = document.createElement('is-card');
+    card.setAttribute('variant', 'outlined');
+    if (media) {
+      const m = document.createElement('div');
+      m.setAttribute('slot', 'media');
+      m.className = 'img-placeholder';
+      m.textContent = 'media';
+      card.appendChild(m);
+    }
+    if (header) {
+      const h = document.createElement('strong');
+      h.setAttribute('slot', 'header');
+      h.textContent = header;
+      card.appendChild(h);
+    }
+    const b = document.createElement('span');
+    b.textContent = body;
+    card.appendChild(b);
+    if (footer) {
+      const f = document.createElement('span');
+      f.setAttribute('slot', 'footer');
+      f.textContent = footer;
+      card.appendChild(f);
+    }
+    return card;
+  }
+  document.getElementById('vertical-all').appendChild(makeVertical({
+    header: 'Card completa',
+    body: 'Slots media + header + body + footer.',
+    footer: 'Footer slot',
+    media: true,
+  }));
+  document.getElementById('vertical-all').appendChild(makeVertical({
+    header: 'Sin media',
+    body: 'Sólo header + body + footer. Las secciones vacías se ocultan.',
+    footer: 'pie',
+  }));
+  document.getElementById('vertical-all').appendChild(makeVertical({
+    body: 'Sólo body. Header, footer, media y actions vacíos → no ocupan espacio.',
+  }));
+
+  // (2) Variants.
+  const variants = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+  const vHost = document.getElementById('variants');
+  for (const v of variants) {
+    const card = document.createElement('is-card');
+    card.setAttribute('variant', v);
+    card.textContent = `variant="${v}"`;
+    vHost.appendChild(card);
+  }
+
+  // (3) Orientación horizontal.
+  const horiz = document.createElement('is-card');
+  horiz.setAttribute('orientation', 'horizontal');
+  horiz.setAttribute('variant', 'outlined');
+  const media = document.createElement('div');
+  media.setAttribute('slot', 'media');
+  media.className = 'img-placeholder';
+  media.style.width = '120px';
+  media.style.height = '80px';
+  media.textContent = 'media';
+  horiz.appendChild(media);
+  horiz.textContent = 'Cuerpo en horizontal — la media queda a la izquierda y las acciones a la derecha.';
+  const actions = document.createElement('div');
+  actions.setAttribute('slot', 'actions');
+  actions.innerHTML = '<button type="button">Aceptar</button> <button type="button">Cancelar</button>';
+  horiz.appendChild(actions);
+  document.getElementById('horizontal-host').appendChild(horiz);
+
+  // (4) Interactivo: cambiar variant en caliente + invalid fallback.
+  const interactive = document.createElement('is-card');
+  interactive.setAttribute('variant', 'filled-outlined');
+  interactive.id = 'interactive';
+  interactive.textContent = 'Cambia variant / orientation para verificar el reflejo en el atributo y los fallbacks.';
+  document.getElementById('interactive-host').appendChild(interactive);
+
+  document.getElementById('btn-variant').addEventListener('click', () => {
+    const order = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+    const next = order[(order.indexOf(interactive.variant) + 1) % order.length];
+    interactive.variant = next;
+    document.getElementById('log').textContent = `variant → ${interactive.variant}`;
+  });
+  document.getElementById('btn-orientation').addEventListener('click', () => {
+    interactive.orientation = interactive.orientation === 'vertical' ? 'horizontal' : 'vertical';
+    document.getElementById('log').textContent = `orientation → ${interactive.orientation}`;
+  });
+  document.getElementById('btn-bad').addEventListener('click', () => {
+    interactive.setAttribute('variant', 'shiny');
+    interactive.setAttribute('orientation', 'diagonal');
+    document.getElementById('log').textContent =
+      `bad: variant="${interactive.variant}" orientation="${interactive.orientation}"`;
+  });
+
+  document.documentElement.dataset.cardReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-card&gt;</code></h1>
+  <p>Card con slots media / header / body / footer / actions. Vertical u horizontal. Variants accent / filled / outlined / filled-outlined / plain. Slots vacíos no ocupan espacio.</p>
+</header>
+<main>
+  <section>
+    <h2>Vertical (default) — slots opcionales</h2>
+    <div class="vertical-host" id="vertical-all"></div>
+  </section>
+  <section>
+    <h2>Variants</h2>
+    <div class="row" id="variants"></div>
+  </section>
+  <section>
+    <h2>Horizontal</h2>
+    <div id="horizontal-host"></div>
+  </section>
+  <section>
+    <h2>Interactivo</h2>
+    <div id="interactive-host"></div>
+    <div class="interactive-actions">
+      <button id="btn-variant" type="button">Cambiar variant</button>
+      <button id="btn-orientation" type="button">Cambiar orientation</button>
+      <button id="btn-bad" type="button">Atributos inválidos</button>
+    </div>
+    <pre id="log" style="margin-top:8px;font:11px ui-monospace,monospace;color:#94a3b8;"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-card')</code> resuelto. Atributos inválidos se resetean a <code>variant="outlined"</code> / <code>orientation="vertical"</code>.
+</footer>
+</body>
+</html>

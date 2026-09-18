@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-breadcrumb-item> · is-webcomponents</title>
+<meta name="description" content="Variantes del item individual: con/sin href, current page, target/rel, icon attribute, slots start/end/separator." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main {
+    padding: 24px 20px; display: grid; gap: 22px;
+    grid-template-columns: 1fr;
+    max-width: 980px; width: 100%;
+  }
+  section {
+    background: #0f1620; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 18px;
+  }
+  section h2 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 0 0 12px 0; color: #94a3b8; font-weight: 600;
+  }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0 0 14px 0; }
+  section code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  .row {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,0.06);
+  }
+  .row:last-child { border-bottom: none; }
+  .label {
+    flex: 0 0 120px; font-size: 11px; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  is-breadcrumb-item:not(:defined) { visibility: hidden; }
+  footer {
+    padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1);
+    background: #0f1620; font-size: 11px; color: #94a3b8;
+  }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/navigation/breadcrumb-item.min.js');
+  await customElements.whenDefined('is-breadcrumb-item');
+
+  // Helper: crea un item con texto + props.
+  function makeItem(text, props = {}) {
+    const item = document.createElement('is-breadcrumb-item');
+    for (const [k, v] of Object.entries(props)) {
+      if (v != null && v !== false) item.setAttribute(k, v === true ? '' : v);
+    }
+    item.textContent = text;
+    return item;
+  }
+
+  // (1) Sin href → <span>
+  document.getElementById('no-href').appendChild(makeItem('Item sin href'));
+
+  // (2) Con href → <a>
+  document.getElementById('href').appendChild(makeItem('Item con href', { href: '/docs' }));
+
+  // (3) Current (href="") → aria-current="page"
+  document.getElementById('current').appendChild(makeItem('Página actual', { href: '' }));
+
+  // (4) Target _blank + rel noopener
+  document.getElementById('target').appendChild(
+    makeItem('Abrir en nueva pestaña', { href: 'https://example.com', target: '_blank', rel: 'noopener' }),
+  );
+
+  // (5) Icon attribute (inyecta <is-icon> interno)
+  document.getElementById('icon-attr').appendChild(makeItem('Inicio', { href: '/', icon: 'mdi:home' }));
+
+  // (6) Slot start custom (gana sobre el icon attribute)
+  const itemStart = makeItem('Perfil', { href: '/me' });
+  const startSlot = document.createElement('span');
+  startSlot.setAttribute('slot', 'start');
+  startSlot.textContent = '👤';
+  startSlot.style.cssText = 'font-size:14px;margin-right:4px;';
+  itemStart.appendChild(startSlot);
+  document.getElementById('slot-start').appendChild(itemStart);
+
+  // (7) Slot end
+  const itemEnd = makeItem('Notificaciones', { href: '/notifications' });
+  const endSlot = document.createElement('span');
+  endSlot.setAttribute('slot', 'end');
+  endSlot.textContent = '(3)';
+  endSlot.style.cssText = 'font-size:11px;color:#94a3b8;margin-left:4px;';
+  itemEnd.appendChild(endSlot);
+  document.getElementById('slot-end').appendChild(itemEnd);
+
+  // (8) Slot separator override (cambia el chevron por defecto por un texto).
+  const itemSep = makeItem('Override separator', { href: '/x' });
+  const sepSlot = document.createElement('span');
+  sepSlot.setAttribute('slot', 'separator');
+  sepSlot.textContent = '·';
+  sepSlot.style.cssText = 'color:#94a3b8;font-size:11px;padding:0 4px;';
+  itemSep.appendChild(sepSlot);
+  document.getElementById('slot-separator').appendChild(itemSep);
+
+  // (9) Item current + icon
+  document.getElementById('current-icon').appendChild(makeItem('Cuenta', { href: '', icon: 'mdi:account' }));
+
+  // (10) Cambio en caliente: pasar de <a> a <span> quitando href.
+  const live = makeItem('Live demo', { href: '/live' });
+  document.getElementById('live').appendChild(live);
+  document.getElementById('live-toggle').addEventListener('click', () => {
+    if (live.hasAttribute('href')) live.removeAttribute('href');
+    else live.setAttribute('href', '/live');
+  });
+
+  document.documentElement.dataset.breadcrumbItemReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-breadcrumb-item&gt;</code></h1>
+  <p>Item individual: <code>href</code> → <code>&lt;a&gt;</code>, <code>href=""</code> → current, sin href → <code>&lt;span&gt;</code>. Slots: <code>start</code>, <code>end</code>, <code>separator</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>Estados básicos</h2>
+    <div class="row"><span class="label">Sin href</span><span id="no-href"></span></div>
+    <div class="row"><span class="label">Con href</span><span id="href"></span></div>
+    <div class="row"><span class="label">Current (href="")</span><span id="current"></span></div>
+    <div class="row"><span class="label">target=_blank</span><span id="target"></span></div>
+  </section>
+  <section>
+    <h2>Icono</h2>
+    <p class="desc">El atributo <code>icon</code> inyecta un <code>&lt;is-icon&gt;</code> interno en el slot start (si start está vacío).</p>
+    <div class="row"><span class="label">icon="mdi:home"</span><span id="icon-attr"></span></div>
+    <div class="row"><span class="label">current + icon</span><span id="current-icon"></span></div>
+  </section>
+  <section>
+    <h2>Slots</h2>
+    <p class="desc">Slot <code>start</code> tiene precedencia sobre el atributo <code>icon</code>.</p>
+    <div class="row"><span class="label">slot=start</span><span id="slot-start"></span></div>
+    <div class="row"><span class="label">slot=end</span><span id="slot-end"></span></div>
+    <div class="row"><span class="label">slot=separator</span><span id="slot-separator"></span></div>
+  </section>
+  <section>
+    <h2>Cambio en caliente</h2>
+    <p class="desc">Toggle: quitar/poner el atributo <code>href</code> para alternar entre <code>&lt;a&gt;</code> y <code>&lt;span&gt;</code>.</p>
+    <div class="row"><span class="label">Item</span><span id="live"></span></div>
+    <div class="row"><span class="label">Toggle</span><button id="live-toggle" type="button">Cambiar href</button></div>
+  </section>
+</main>
+<footer>
+  Estado: <code>is-breadcrumb-item</code> definido. <code>href=""</code> marca current con <code>aria-current="page"</code>.
+</footer>
+</body>
+</html>

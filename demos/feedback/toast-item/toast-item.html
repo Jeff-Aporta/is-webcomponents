@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-toast-item> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-toast-item>: ítem individual de toast con countdown, pausa al hover." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  button { background: #1a2532; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; cursor: pointer; font: inherit; }
+  button:hover { background: #25303f; }
+  .stage { position: relative; min-height: 100px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+  is-toast-item:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/toast-item.min.js');
+
+  await customElements.whenDefined('is-toast-item');
+  document.documentElement.dataset.toastItemReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-toast-item</h1>
+  <p>Ítem individual de toast. Atributos: <code>color</code>, <code>duration</code>, <code>open</code>. Métodos: <code>show()</code>, <code>hide()</code>. Eventos: <code>is-after-show</code>, <code>is-after-hide</code>.</p>
+</header>
+
+<section>
+  <h2>Crear dinámicamente</h2>
+  <div class="row">
+    <button id="btn-success" type="button">Lanzar success (3s)</button>
+    <button id="btn-danger" type="button">Lanzar danger (5s)</button>
+    <button id="btn-warning" type="button">Lanzar warning (persistente)</button>
+  </div>
+  <div class="stage" id="stage-1"></div>
+  <script type="module">
+    function makeToast(color, duration, text) {
+      const t = document.createElement('is-toast-item');
+      t.setAttribute('color', color);
+      if (duration !== null) t.setAttribute('duration', String(duration));
+      t.textContent = text;
+      const stage = document.getElementById('stage-1');
+      stage.appendChild(t);
+      t.show();
+    }
+    document.getElementById('btn-success').addEventListener('click', () => makeToast('success', 3000, '¡Guardado correctamente!'));
+    document.getElementById('btn-danger').addEventListener('click', () => makeToast('danger', 5000, 'No se pudo guardar el archivo.'));
+    document.getElementById('btn-warning').addEventListener('click', () => makeToast('warning', 0, 'Mantené pulsado para reintentar.'));
+  </script>
+</section>
+
+<section>
+  <h2>Con slot caption</h2>
+  <button id="btn-caption" type="button">Lanzar con caption</button>
+  <div class="stage" id="stage-2"></div>
+  <script type="module">
+    document.getElementById('btn-caption').addEventListener('click', () => {
+      const t = document.createElement('is-toast-item');
+      t.setAttribute('color', 'brand');
+      t.setAttribute('duration', '5000');
+      t.textContent = 'Carga completada';
+      const caption = document.createElement('span');
+      caption.setAttribute('slot', 'caption');
+      caption.textContent = '247 filas importadas';
+      t.appendChild(caption);
+      document.getElementById('stage-2').appendChild(t);
+      t.show();
+    });
+  </script>
+</section>
+
+<section>
+  <h2>Eventos</h2>
+  <pre id="event-log" style="background:#0a0e15;padding:8px;border-radius:6px;font-size:12px;min-height:32px;">(sin eventos todavía)</pre>
+  <button id="btn-evt" type="button">Lanzar y observar</button>
+  <script type="module">
+    document.getElementById('btn-evt').addEventListener('click', () => {
+      const log = document.getElementById('event-log');
+      const t = document.createElement('is-toast-item');
+      t.setAttribute('color', 'info');
+      t.setAttribute('duration', '2000');
+      t.textContent = 'Test eventos';
+      t.addEventListener('is-after-show', (e) => {
+        log.textContent = `show @ ${new Date().toISOString()}\n` + JSON.stringify(e.detail, null, 2);
+      });
+      t.addEventListener('is-after-hide', () => {
+        log.textContent += `\n\nhide @ ${new Date().toISOString()}`;
+      });
+      document.body.appendChild(t);
+      t.show();
+    });
+  </script>
+</section>
+</body>
+</html>

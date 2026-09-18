@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-date-time-input> · is-webcomponents</title>
+<meta name="description" content="Campo de fecha y hora con calendario y reloj en top-layer dialog. El panel se posiciona junto al campo y combina selector de día con lista de horas." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 18px; display: grid; gap: 10px;
+  }
+  .card h2 { margin: 0; font-size: 13px; color: #94a3b8; font-weight: 600; }
+  .value-readout { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  .value-readout code { color: #e2e8f0; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-date-time-input:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Carga solo el bundle que necesitamos desde los pre-construidos en dist/cdn/.
+  await import('../../../dist/cdn/forms/date-time-input.min.js');
+
+  await customElements.whenDefined('is-date-time-input');
+
+  // Helper para reflejar el valor en pantalla.
+  const wire = (el, outputId) => {
+    const update = (value) => {
+      const out = document.getElementById(outputId);
+      if (out) out.textContent = value || '(vacío)';
+    };
+    el.addEventListener('is-change', (e) => update(e.detail?.value));
+    el.addEventListener('is-show', () => console.log('[date-time-input] panel abierto'));
+    el.addEventListener('is-hide', () => console.log('[date-time-input] panel cerrado'));
+  };
+
+  // 1. Básico
+  const basic = document.getElementById('basic');
+  wire(basic, 'basic-value');
+
+  // 2. Con valor inicial
+  const initial = document.getElementById('initial');
+  initial.setAttribute('value', '2026-08-21T15:45');
+  wire(initial, 'initial-value');
+
+  // 3. AM/PM
+  const ampm = document.getElementById('ampm');
+  ampm.setAttribute('ampm', '');
+  wire(ampm, 'ampm-value');
+
+  // 4. Móvil (centered dialog con barra de acciones)
+  const mobile = document.getElementById('mobile');
+  mobile.setAttribute('color', 'mobile');
+  mobile.setAttribute('action-bar', '');
+  wire(mobile, 'mobile-value');
+
+  // 5. Deshabilitado
+  const disabledField = document.getElementById('disabled-field');
+  disabledField.setAttribute('value', '2026-01-01T08:00');
+  wire(disabledField, 'disabled-value');
+
+  document.documentElement.dataset.dateTimeInputReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-date-time-input&gt; — Campo + panel combinado</h1>
+    <p>Click en el icono del reloj (o Alt+↓ sobre el campo) abre un panel en top-layer &lt;dialog&gt; con un <code>is-date-picker</code> a la izquierda y un <code>is-digital-clock</code> a la derecha. Ambos actualizan el valor del campo en tiempo real.</p>
+  </header>
+
+  <section class="card">
+    <h2>Básico</h2>
+    <p style="margin:0;font-size:12px;color:#94a3b8;">Click en el icono para abrir el panel combinado.</p>
+    <is-date-time-input id="basic" label="Fecha y hora" name="basic"></is-date-time-input>
+    <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Con valor inicial</h2>
+    <is-date-time-input id="initial" label="Cita" hint="Edita el campo o usa el panel" name="appt" value="2026-08-21T15:45"></is-date-time-input>
+    <div class="value-readout">Valor actual: <code id="initial-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Formato 12 horas (AM/PM)</h2>
+    <is-date-time-input id="ampm" label="Hora local" hint="locale en-US con ampm explícito" name="local" ampm locale="en-US"></is-date-time-input>
+    <div class="value-readout">Valor actual: <code id="ampm-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Modo móvil (centered dialog con barra de acciones)</h2>
+    <p style="margin:0;font-size:12px;color:#94a3b8;"><code>color="mobile"</code> + <code>action-bar</code>: el panel se centra y se cierra con Aceptar/Cancelar.</p>
+    <is-date-time-input id="mobile" label="Inicio del evento" name="event" color="mobile" action-bar></is-date-time-input>
+    <div class="value-readout">Valor actual: <code id="mobile-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Deshabilitado</h2>
+    <is-date-time-input id="disabled-field" label="No editable" name="d" disabled value="2026-01-01T08:00"></is-date-time-input>
+    <div class="value-readout">Valor actual: <code id="disabled-value">(vacío)</code></div>
+  </section>
+</main>
+</body>
+</html>

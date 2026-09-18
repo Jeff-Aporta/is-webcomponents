@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pad de firma &lt;is-signature&gt; · is-webcomponents</title>
+<meta name="description" content="Pad de firma manuscrita (touch + mouse) con export PNG y SVG inline." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-signature { display: block; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  .actions { display: flex; gap: 8px; align-items: center; }
+  .actions button {
+    background: #1e293b; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px; padding: 6px 10px; font-size: 12px; cursor: pointer;
+  }
+  .actions button:hover { border-color: #2563eb; }
+  pre { background: rgba(0,0,0,0.35); color: #94a3b8; padding: 10px; border-radius: 6px; font: 11px ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; max-height: 120px; overflow: auto; margin: 0; }
+  /* Anti-FOUC */
+  is-signature:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/signature.min.js');
+  await customElements.whenDefined('is-signature');
+
+  // (1) Pad por defecto (320 × 140)
+  const pad1 = document.createElement('is-signature');
+  pad1.setAttribute('name', 'signature');
+  pad1.setAttribute('hint', 'Firma aquí con el ratón o el dedo');
+  document.querySelector('#sec-default').appendChild(pad1);
+
+  // (2) Pad con tamaño, color y grosor personalizados
+  const pad2 = document.createElement('is-signature');
+  pad2.setAttribute('name', 'contract');
+  pad2.setAttribute('width', '480');
+  pad2.setAttribute('height', '160');
+  pad2.setAttribute('pen-color', '#22d3ee');
+  pad2.setAttribute('line-width', '3');
+  pad2.setAttribute('background', '#0f1620');
+  pad2.setAttribute('hint', 'Firma del contrato');
+  document.querySelector('#sec-custom').appendChild(pad2);
+
+  // (3) Pad con fondo blanco y trazo oscuro (caso típico "papel")
+  const pad3 = document.createElement('is-signature');
+  pad3.setAttribute('name', 'paper');
+  pad3.setAttribute('width', '360');
+  pad3.setAttribute('height', '120');
+  pad3.setAttribute('pen-color', '#0f172a');
+  pad3.setAttribute('background', '#f8fafc');
+  pad3.setAttribute('hint', 'Firma sobre fondo claro');
+  document.querySelector('#sec-paper').appendChild(pad3);
+
+  // Acciones: limpiar y exportar
+  const wireActions = (pad, container) => {
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.textContent = 'Limpiar';
+    clearBtn.addEventListener('click', () => pad.clear());
+    const exportBtn = document.createElement('button');
+    exportBtn.type = 'button';
+    exportBtn.textContent = 'Exportar PNG';
+    exportBtn.addEventListener('click', () => {
+      const url = pad.toDataURL('image/png');
+      const out = document.createElement('pre');
+      out.textContent = url.slice(0, 120) + (url.length > 120 ? '…' : '');
+      container.appendChild(out);
+    });
+    const exportSvgBtn = document.createElement('button');
+    exportSvgBtn.type = 'button';
+    exportSvgBtn.textContent = 'Exportar SVG';
+    exportSvgBtn.addEventListener('click', () => {
+      const svg = pad.toSVG();
+      const out = document.createElement('pre');
+      out.textContent = svg;
+      container.appendChild(out);
+    });
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    actions.appendChild(clearBtn);
+    actions.appendChild(exportBtn);
+    actions.appendChild(exportSvgBtn);
+    container.appendChild(actions);
+  };
+  wireActions(pad1, document.querySelector('#sec-default'));
+  wireActions(pad2, document.querySelector('#sec-custom'));
+  wireActions(pad3, document.querySelector('#sec-paper'));
+
+  // Eventos
+  [pad1, pad2, pad3].forEach((p) => {
+    p.addEventListener('is-stroke-end', (e) => console.log('[signature] stroke-end', !!e.detail?.dataURL));
+    p.addEventListener('is-change', (e) => console.log('[signature] change strokes', e.detail?.strokes?.length));
+  });
+
+  document.documentElement.dataset.signatureReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-signature&gt; · Pad de firma manuscrita</h1>
+    <p>Canvas con captura de puntero (mouse + touch) · export a PNG (<code>toDataURL</code>) y SVG inline (<code>toSVG</code>) · <code>is-stroke-end</code> por trazo.</p>
+  </header>
+
+  <section id="sec-default">
+    <h2>Por defecto (320 × 140)</h2>
+    <p class="desc">Sin atributos; hereda tamaño, color y grosor por defecto.</p>
+  </section>
+
+  <section id="sec-custom">
+    <h2>Personalizado (color + grosor + tamaño)</h2>
+    <p class="desc">Atributos <code>width</code>, <code>height</code>, <code>pen-color</code>, <code>line-width</code> y <code>background</code>.</p>
+  </section>
+
+  <section id="sec-paper">
+    <h2>Modo "papel" (fondo claro, trazo oscuro)</h2>
+    <p class="desc">Caso típico de formularios en blanco.</p>
+  </section>
+</main>
+</body>
+</html>

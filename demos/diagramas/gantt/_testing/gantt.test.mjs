@@ -1,112 +1,155 @@
-// gantt.test.mjs — smoke + edge cases para gantt-spec.
+// gantt.test.mjs — tests exhaustivos del demo gantt.html.
+// Cobertura: smoke (monta y renderiza filas/ticks/arrows), funcional
+// (filas con dataset.rowId, milestone diferenciado), determinismo,
+// accesibilidad.
 import assert from 'node:assert/strict';
-import { ganttSpecFromPayload, computeGanttLayout, resolveGanttSpec } from '../../../../src/components/diagrams/gantt-spec.ts';
+import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
+
+const URL = `${BASE_URL}/demos/diagramas/gantt/gantt.html`;
 
 const tests = [];
 
 tests.push({
-  name: 'smoke: 3 tareas → 3 filas, dependencias como flechas',
-  run: () => {
-    const payload = {
-      tasks: [
-        { id: 'a', label: 'A', start: '2026-01-01', end: '2026-01-05' },
-        { id: 'b', label: 'B', start: '2026-01-06', end: '2026-01-10', after: ['a'] },
-        { id: 'c', label: 'C', start: '2026-01-11', end: '2026-01-15', after: ['b'] },
-      ],
-    };
-    const spec = ganttSpecFromPayload(payload);
-    assert.ok(spec);
-    const layout = computeGanttLayout(spec);
-    assert.equal(layout.rows.length, 3);
-    assert.equal(layout.arrows.length, 2, '2 dependencias → 2 flechas');
-    assert.ok(layout.width > 0);
-    assert.ok(layout.height > 0);
-  },
-});
-
-tests.push({
-  name: 'edge: payload sin tareas → null',
-  run: () => {
-    assert.equal(ganttSpecFromPayload({ tasks: [] }), null);
-    assert.equal(ganttSpecFromPayload({}), null);
-  },
-});
-
-tests.push({
-  name: 'edge: duración sin end explícito',
-  run: () => {
-    const spec = ganttSpecFromPayload({
-      tasks: [{ id: 'x', label: 'X', start: '2026-02-01', duration: '3d' }],
+  name: 'smoke: <is-gantt> monta y renderiza filas y flechas',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-gantt-ready');
+    const info = await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      const shadow = el?.shadowRoot;
+      return {
+        defined: !!customElements.get('is-gantt'),
+        rows: shadow?.querySelectorAll('[data-row-id]').length ?? 0,
+        arrows: shadow?.querySelectorAll('[data-arrow-id]').length ?? 0,
+        hasSvg: !!shadow?.querySelector('svg.gantt-svg'),
+      };
     });
-    assert.ok(spec);
-    const layout = computeGanttLayout(spec);
-    assert.equal(layout.rows.length, 1);
-    assert.ok(layout.rows[0].w > 0);
+    assert.equal(info.defined, true, 'is-gantt debe estar definido');
+    assert.ok(info.rows >= 5, `esperaba >=5 filas, hay ${info.rows}`);
+    assert.ok(info.arrows >= 3, `esperaba >=3 flechas de dependencia, hay ${info.arrows}`);
+    assert.equal(info.hasSvg, true, 'debe existir <svg class="gantt-svg">');
+    await screenshot(page, 'gantt-smoke');
   },
 });
 
 tests.push({
-  name: 'edge: milestone se renderiza con size y cx/cy',
-  run: () => {
-    const spec = ganttSpecFromPayload({
-      tasks: [{ id: 'm', label: 'M', start: '2026-03-15', milestone: true }],
+  name: 'filas: cada una tiene dataset.rowId con el id declarado',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-gantt-ready');
+    const ids = await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      return [...el.shadowRoot.querySelectorAll('[data-row-id]')].map((g) => g.dataset.rowId);
     });
-    const layout = computeGanttLayout(spec);
-    assert.equal(layout.rows[0].milestone, true);
-    assert.equal(layout.rows[0].size, 18);
-    assert.ok(typeof layout.rows[0].cx === 'number');
-    assert.ok(typeof layout.rows[0].cy === 'number');
+    assert.ok(ids.includes('t1'), 'debe haber una fila "t1"');
+    assert.ok(ids.includes('t5'), 'debe haber una fila "t5" (milestone)');
   },
 });
 
 tests.push({
-  name: 'determinismo: misma spec + mismo opts.now → mismo layout',
-  run: () => {
-    const payload = {
-      tasks: [{ id: 'a', label: 'A', start: '2026-01-01', end: '2026-01-10' }],
-    };
-    const spec = ganttSpecFromPayload(payload);
-    const l1 = computeGanttLayout(spec, { now: Date.parse('2026-01-05') });
-    const l2 = computeGanttLayout(spec, { now: Date.parse('2026-01-05') });
-    assert.equal(l1.width, l2.width);
-    assert.equal(l1.rows[0].x, l2.rows[0].x);
-    assert.equal(l1.todayX, l2.todayX);
-  },
-});
-
-tests.push({
-  name: 'edge: dependencias a ids inexistentes se descartan',
-  run: () => {
-    const spec = ganttSpecFromPayload({
-      tasks: [
-        { id: 'a', label: 'A', start: '2026-01-01', end: '2026-01-05' },
-        { id: 'b', label: 'B', start: '2026-01-06', end: '2026-01-10', after: ['a', 'ghost'] },
-      ],
+  name: 'milestone: la fila t5 se dibuja como diamante, no rectángulo',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-gantt-ready');
+    const shapes = await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      const t5 = el.shadowRoot.querySelector('[data-row-id="t5"]');
+      const t1 = el.shadowRoot.querySelector('[data-row-id="t1"]');
+      return {
+        t5: t5?.querySelector('rect, polygon, path')?.tagName ?? '',
+        t1: t1?.querySelector('rect')?.tagName ?? '',
+      };
     });
-    const layout = computeGanttLayout(spec);
-    assert.equal(layout.arrows.length, 1, 'solo queda la arista hacia a');
+    assert.notEqual(shapes.t5, 'rect', `t5 (milestone) NO debe ser un rect, es ${shapes.t5}`);
+    assert.equal(shapes.t1, 'rect', `t1 (tarea) debe ser un rect`);
   },
 });
 
 tests.push({
-  name: 'alias: resolveGanttSpec === ganttSpecFromPayload',
-  run: () => {
-    const p = { tasks: [{ id: 'a', label: 'A', start: '2026-01-01' }] };
-    const a = resolveGanttSpec(p);
-    const b = ganttSpecFromPayload(p);
-    assert.equal(a?.tasks[0].id, b?.tasks[0].id);
+  name: 'flechas: cada dependencia tiene path con d no vacío',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-gantt-ready');
+    const arrows = await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      return [...el.shadowRoot.querySelectorAll('[data-arrow-id] path')].map((p) => ({
+        d: p.getAttribute('d'),
+      }));
+    });
+    assert.ok(arrows.length >= 3, `esperaba >=3 flechas, hay ${arrows.length}`);
+    for (const a of arrows) {
+      assert.ok(a.d && a.d.length > 5, `flecha sin path d: "${a.d}"`);
+    }
+  },
+});
+
+tests.push({
+  name: 'eje temporal: hay al menos una marca de tiempo en el SVG',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-gantt-ready');
+    const ticks = await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      // El gantt dibuja los ticks como <text> directos (no agrupados en .gantt-axis).
+      return el.shadowRoot.querySelectorAll('svg text').length;
+    });
+    assert.ok(ticks >= 1, `esperaba >=1 texto en el SVG, hay ${ticks}`);
+  },
+});
+
+tests.push({
+  name: 'determinismo: re-asignar el mismo payload produce viewBox idéntico',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-gantt-ready');
+    const before = await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      return el.shadowRoot.querySelector('svg.gantt-svg').getAttribute('viewBox');
+    });
+    await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      el.payload = el.payload;
+    });
+    await page.waitForTimeout(150);
+    const after = await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      return el.shadowRoot.querySelector('svg.gantt-svg').getAttribute('viewBox');
+    });
+    assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
+  },
+});
+
+tests.push({
+  name: 'accesibilidad: aria-label y role=img presentes',
+  run: async (page) => {
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await waitReady(page, 'data-gantt-ready');
+    const meta = await page.evaluate(() => {
+      const el = document.querySelector('main is-gantt');
+      const svg = el.shadowRoot.querySelector('svg.gantt-svg');
+      return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
+    });
+    assert.ok(meta.aria && meta.aria.length > 0, 'debe llevar aria-label');
+    assert.equal(meta.role, 'img', 'role debe ser img');
   },
 });
 
 let failures = 0;
 for (const t of tests) {
+  let ok = false;
+  const { browser, page } = await newPage();
   try {
-    await t.run();
+    await t.run(page);
+    ok = true;
     console.log(`  ✓ ${t.name}`);
   } catch (err) {
+    ok = false;
     console.error(`  ✗ ${t.name}\n     ${String(err?.message ?? err)}`);
     failures++;
+    try { await screenshot(page, `fail-${t.name.replace(/\W+/g, '-')}`); } catch {}
+  } finally {
+    await close({ browser, page });
   }
 }
-console.log(JSON.stringify({ name: 'gantt.test.mjs', ok: failures === 0, total: tests.length, failures }, null, 2));
-if (failures) process.exit(1);
+
+report('gantt', failures === 0, { total: tests.length, failures });

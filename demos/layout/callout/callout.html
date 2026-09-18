@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-callout> · is-webcomponents</title>
+<meta name="description" content="Mensaje en línea con borde y fondo suaves. Variantes de color (brand/neutral/success/warning/danger) y de variant (accent/filled/outlined/filled-outlined/plain)." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 18px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  .grid-colors { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  is-callout { display: block; }
+  is-callout:not(:defined) { visibility: hidden; }
+  .interactive-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/callout.min.js');
+  // El default-icon interno es <is-icon>; necesita estar definido para que el
+  // atributo icon del callout se propague.
+  await import('../../../dist/cdn/media/icon.min.js');
+  await customElements.whenDefined('is-callout');
+  await customElements.whenDefined('is-icon');
+
+  // (1) Colores: brand / neutral / success / warning / danger.
+  const colors = [
+    ['brand', 'Información relevante sobre el cambio de tarifa.'],
+    ['neutral', 'Mensaje neutro sin connotación semántica.'],
+    ['success', 'Cambios guardados correctamente.'],
+    ['warning', 'Atención: revisa los permisos del usuario.'],
+    ['danger', 'Error: no se pudo conectar con el servidor.'],
+  ];
+  const colorsHost = document.getElementById('colors');
+  for (const [c, msg] of colors) {
+    const el = document.createElement('is-callout');
+    el.setAttribute('color', c);
+    el.textContent = msg;
+    colorsHost.appendChild(el);
+  }
+
+  // (2) Variants: accent / filled / outlined / filled-outlined / plain.
+  const variants = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+  const variantsHost = document.getElementById('variants');
+  for (const v of variants) {
+    const el = document.createElement('is-callout');
+    el.setAttribute('color', 'brand');
+    el.setAttribute('variant', v);
+    el.textContent = `Variant="${v}" sobre fondo brand.`;
+    variantsHost.appendChild(el);
+  }
+
+  // (3) Icono explícito vs default por color.
+  const iconHost = document.getElementById('icons');
+  const defaultIcon = document.createElement('is-callout');
+  defaultIcon.setAttribute('color', 'warning');
+  defaultIcon.textContent = 'Icono por defecto (mdi:alert-outline).';
+  iconHost.appendChild(defaultIcon);
+
+  const explicit = document.createElement('is-callout');
+  explicit.setAttribute('color', 'success');
+  explicit.setAttribute('icon', 'mdi:rocket-launch-outline');
+  explicit.textContent = 'Icono explícito: rocket-launch-outline.';
+  iconHost.appendChild(explicit);
+
+  const slotted = document.createElement('is-callout');
+  slotted.setAttribute('color', 'brand');
+  const customIcon = document.createElement('span');
+  customIcon.setAttribute('slot', 'icon');
+  customIcon.textContent = '★';
+  customIcon.style.fontSize = '1.2em';
+  slotted.appendChild(customIcon);
+  // Texto como nodo independiente para no machacar el slot icon al usar textContent.
+  slotted.appendChild(document.createTextNode('Icono slotted: el icono del consumidor gana sobre el default.'));
+  iconHost.appendChild(slotted);
+
+  // (4) Interactivo: cambiar color/variant en caliente para verificar
+  // que las invalid values caen al fallback (neutral/filled-outlined).
+  const interactive = document.createElement('is-callout');
+  interactive.setAttribute('color', 'warning');
+  interactive.setAttribute('variant', 'outlined');
+  interactive.id = 'interactive';
+  interactive.textContent = 'Color/variant se actualizan en caliente. Atributos inválidos caen al fallback.';
+  document.getElementById('interactive-host').appendChild(interactive);
+
+  document.getElementById('btn-color').addEventListener('click', () => {
+    const order = ['brand', 'neutral', 'success', 'warning', 'danger'];
+    const next = order[(order.indexOf(interactive.color) + 1) % order.length];
+    interactive.color = next;
+    document.getElementById('log').textContent = `color → ${interactive.color}`;
+  });
+  document.getElementById('btn-variant').addEventListener('click', () => {
+    const order = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
+    const next = order[(order.indexOf(interactive.variant) + 1) % order.length];
+    interactive.variant = next;
+    document.getElementById('log').textContent = `variant → ${interactive.variant}`;
+  });
+  document.getElementById('btn-bad').addEventListener('click', () => {
+    // Atributos inválidos: el componente debe resetear al default.
+    interactive.setAttribute('color', 'pink-floyd');
+    interactive.setAttribute('variant', 'sparkly');
+    document.getElementById('log').textContent =
+      `bad: color="${interactive.color}" variant="${interactive.variant}" (debió caer al fallback)`;
+  });
+
+  document.documentElement.dataset.calloutReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-callout&gt;</code></h1>
+  <p>Mensajes en línea con borde y fondo suaves. Color + variant + icono por slot o atributo. Atributos inválidos caen al fallback.</p>
+</header>
+<main>
+  <section>
+    <h2>Colores</h2>
+    <div class="grid-colors" id="colors"></div>
+  </section>
+  <section>
+    <h2>Variants</h2>
+    <div id="variants"></div>
+  </section>
+  <section>
+    <h2>Iconos (default · atributo · slot)</h2>
+    <div id="icons"></div>
+  </section>
+  <section>
+    <h2>Interactivo</h2>
+    <div id="interactive-host"></div>
+    <div class="interactive-actions">
+      <button id="btn-color" type="button">Cambiar color</button>
+      <button id="btn-variant" type="button">Cambiar variant</button>
+      <button id="btn-bad" type="button">Atributos inválidos</button>
+    </div>
+    <pre id="log" style="margin-top:8px;font:11px ui-monospace,monospace;color:#94a3b8;"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-callout')</code> resuelto. Atributos inválidos se resetean a <code>color="neutral"</code> / <code>variant="filled-outlined"</code>.
+</footer>
+</body>
+</html>

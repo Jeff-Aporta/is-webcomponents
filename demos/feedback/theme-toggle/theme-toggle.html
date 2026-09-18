@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-theme-toggle> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-theme-toggle>: alterna theme-dark / theme-light en el contenedor más cercano." />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--is-bg, #0c1118); color: var(--is-fg, #e2e8f0); font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: rgba(255,255,255,0.6); margin: 0; }
+  section { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: rgba(255,255,255,0.6); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .light-theme-demo { background: #f8fafc; color: #0f172a; padding: 18px; border-radius: 10px; }
+  .light-theme-demo h2 { color: #475569; }
+  is-theme-toggle:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/theme-toggle.min.js');
+
+  await customElements.whenDefined('is-theme-toggle');
+  document.documentElement.dataset.themeToggleReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-theme-toggle</h1>
+  <p>Alterna <code>theme-dark / theme-light</code> en el contenedor más cercano (incluye Shadow DOM traversal). Emite <code>is-theme-change</code>.</p>
+</header>
+
+<section>
+  <h2>En la página (afecta a <code>&lt;html&gt;</code>)</h2>
+  <is-theme-toggle></is-theme-toggle>
+  <p>El toggle detecta el contenedor con <code>[container-theme]</code>, <code>.container-theme</code>, <code>.theme-dark</code>, <code>.theme-light</code> o <code>[data-theme]</code>; si no, cae a <code>&lt;html&gt;</code>.</p>
+</section>
+
+<section class="light-theme-demo container-theme" data-theme="light">
+  <h2>Sección que arrancará en light</h2>
+  <p>Esta sección tiene fondo claro y la clase <code>container-theme</code> para que el toggle dentro de ella solo afecte a este subárbol.</p>
+  <is-theme-toggle id="nested"></is-theme-toggle>
+</section>
+
+<section>
+  <h2>Eventos</h2>
+  <pre id="event-log" style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;font-size:12px;min-height:32px;">(sin eventos todavía)</pre>
+  <script type="module">
+    document.addEventListener('is-theme-change', (e) => {
+      document.getElementById('event-log').textContent =
+        JSON.stringify({ theme: e.detail.theme, dark: e.detail.dark }, null, 2);
+    });
+  </script>
+</section>
+</body>
+</html>

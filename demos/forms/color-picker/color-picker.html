@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Selector de color &lt;is-color-picker&gt; · is-webcomponents</title>
+<meta name="description" content="Selector de color form-associated (HEX nativo, input de texto, swatches predefinidos) en top-layer dialog." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-color-picker { width: 100%; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-color-picker:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/color-picker.min.js');
+  await customElements.whenDefined('is-color-picker');
+
+  // (1) básico
+  const basico = document.createElement('is-color-picker');
+  basico.setAttribute('label', 'Color de fondo');
+  basico.setAttribute('name', 'bg');
+  basico.value = '#2563eb';
+  basico.setAttribute('hint', 'Color HEX de seis dígitos');
+  document.querySelector('#sec-basico').appendChild(basico);
+
+  // (2) con swatches personalizados
+  const paletta = document.createElement('is-color-picker');
+  paletta.setAttribute('label', 'Acento de la marca');
+  paletta.setAttribute('name', 'accent');
+  paletta.swatches = ['#0ea5e9', '#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#fb923c', '#22c55e', '#14b8a6'];
+  paletta.value = '#6366f1';
+  paletta.setAttribute('hint', 'Paleta reducida (8 colores)');
+  document.querySelector('#sec-swatches').appendChild(paletta);
+
+  // (3) deshabilitado
+  const deshabilitado = document.createElement('is-color-picker');
+  deshabilitado.setAttribute('label', 'Color bloqueado');
+  deshabilitado.value = '#475569';
+  deshabilitado.disabled = true;
+  deshabilitado.setAttribute('hint', 'No editable');
+  document.querySelector('#sec-disabled').appendChild(deshabilitado);
+
+  // (4) requerido para validación de formulario
+  const requerido = document.createElement('is-color-picker');
+  requerido.setAttribute('label', 'Color corporativo *');
+  requerido.setAttribute('name', 'corporate');
+  requerido.required = true;
+  requerido.value = '#7c3aed';
+  requerido.setAttribute('hint', 'Obligatorio en el formulario');
+  document.querySelector('#sec-required').appendChild(requerido);
+
+  // Estado visible por tests: data-color-picker-ready en <html>
+  document.documentElement.dataset.colorPickerReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-color-picker&gt; · Selector de color form-associated</h1>
+    <p>Panel en top-layer &lt;dialog&gt; con picker nativo, input HEX y swatches · <code>is-input</code>/<code>is-change</code> al confirmar.</p>
+  </header>
+
+  <section id="sec-basico">
+    <h2>Básico con label y hint</h2>
+    <p class="desc">Atributo <code>value</code>, <code>label</code> y <code>hint</code>. Click abre el panel en top-layer dialog.</p>
+  </section>
+
+  <section id="sec-swatches">
+    <h2>Swatches personalizados</h2>
+    <p class="desc">Atributo <code>swatches</code> (lista separada por comas) sobrescribe la paleta por defecto.</p>
+  </section>
+
+  <div class="row">
+    <section id="sec-disabled">
+      <h2>Deshabilitado</h2>
+      <p class="desc"><code>disabled</code> cierra el panel si está abierto.</p>
+    </section>
+    <section id="sec-required">
+      <h2>Requerido (form-associated)</h2>
+      <p class="desc"><code>required</code> activa <code>:invalid</code> y <code>valueMissing</code>.</p>
+    </section>
+  </div>
+</main>
+</body>
+</html>

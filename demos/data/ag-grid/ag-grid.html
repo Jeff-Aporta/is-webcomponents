@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-ag-grid> · is-webcomponents</title>
+<meta name="description" content="Data grid avanzado estilo ag-grid.com: columnas declaradas, multi-sort, filtros, selección, paginación, virtualización, grouping y export CSV." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 20px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-ag-grid:not(:defined) { visibility: hidden; }
+  is-ag-grid { display: block; min-height: 280px; --is-grid-height: 280px; }
+  .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 100px; overflow: auto; color: #94a3b8; margin-top: 8px; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  // Cargar el CSS del bundle (algunos componentes lo requieren para que las CSS custom
+  // properties y el layout funcionen correctamente).
+  const cssLink = document.createElement('link');
+  cssLink.rel = 'stylesheet';
+  cssLink.href = '../../../dist/cdn/data/ag-grid.min.css';
+  document.head.appendChild(cssLink);
+
+  await import('../../../dist/cdn/data/ag-grid.min.js');
+  await customElements.whenDefined('is-ag-grid');
+
+  // ── (1) Básico: 6 columnas, 8 filas, paginado.
+  const cols1 = [
+    { field: 'sku', headerName: 'SKU', width: 100 },
+    { field: 'name', headerName: 'Producto', flex: 1, minWidth: 160 },
+    { field: 'category', headerName: 'Categoría', width: 130 },
+    { field: 'price', headerName: 'Precio', type: 'number', width: 100 },
+    { field: 'stock', headerName: 'Stock', type: 'number', width: 90 },
+    { field: 'active', headerName: 'Activo', type: 'boolean', width: 90 },
+  ];
+  const rows1 = [
+    { id: 1, sku: 'A-001', name: 'Tornillo M4', category: 'Ferretería', price: 0.5, stock: 1200, active: true },
+    { id: 2, sku: 'A-002', name: 'Tuerca M4', category: 'Ferretería', price: 0.3, stock: 2500, active: true },
+    { id: 3, sku: 'B-101', name: 'Cable HDMI 2m', category: 'Electrónica', price: 12.5, stock: 80, active: true },
+    { id: 4, sku: 'B-102', name: 'Adaptador USB-C', category: 'Electrónica', price: 8.0, stock: 240, active: false },
+    { id: 5, sku: 'C-300', name: 'Cuaderno A5', category: 'Papelería', price: 3.2, stock: 500, active: true },
+    { id: 6, sku: 'C-301', name: 'Bolígrafo azul', category: 'Papelería', price: 0.8, stock: 3000, active: true },
+    { id: 7, sku: 'D-400', name: 'Cuadro decorativo', category: 'Hogar', price: 25.0, stock: 18, active: false },
+    { id: 8, sku: 'D-401', name: 'Lámpara LED', category: 'Hogar', price: 18.9, stock: 45, active: true },
+  ];
+  const g1 = document.createElement('is-ag-grid');
+  g1.setAttribute('pagination', '');
+  g1.setAttribute('page-size', '5');
+  g1.setAttribute('selectable', '');
+  g1.id = 'g1';
+  document.getElementById('basic').appendChild(g1);
+  g1.api.setColumns(cols1);
+  g1.api.setRows(rows1);
+
+  // ── (2) Density demo: 3 instancias con cada densidad.
+  const cols2 = [
+    { field: 'k', headerName: 'Clave', width: 80 },
+    { field: 'v', headerName: 'Valor', flex: 1 },
+  ];
+  const rows2 = [
+    { id: 1, k: 'lang', v: 'es-CO' },
+    { id: 2, k: 'tz', v: 'America/Bogota' },
+    { id: 3, k: 'currency', v: 'COP' },
+    { id: 4, k: 'date', v: '2026-09-17' },
+    { id: 5, k: 'env', v: 'production' },
+  ];
+  for (const density of ['compact', 'normal', 'comfortable']) {
+    const g = document.createElement('is-ag-grid');
+    g.setAttribute('density', density);
+    g.setAttribute('toolbar', 'false');
+    g.style.setProperty('--is-grid-height', '180px');
+    document.getElementById(density).appendChild(g);
+    g.api.setColumns(cols2);
+    g.api.setRows(rows2);
+  }
+
+  // ── (3) Sin toolbar (sólo grid puro).
+  const g3 = document.createElement('is-ag-grid');
+  g3.setAttribute('toolbar', 'false');
+  g3.id = 'g3';
+  document.getElementById('plain').appendChild(g3);
+  g3.api.setColumns(cols1);
+  g3.api.setRows(rows1);
+
+  // ── Logging: is-cell-click + is-sort-change + is-page-change.
+  function attachLog(el, logEl) {
+    el.addEventListener('is-cell-click', (e) => {
+      const col = e.detail?.column?.field ?? '';
+      const val = e.detail?.value ?? '';
+      const line = `cell-click ${col}=${val}`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
+      logEl.dataset.lastCol = String(col);
+      logEl.dataset.lastValue = String(val);
+    });
+    el.addEventListener('is-sort-change', (e) => {
+      const line = `sort ${e.detail?.column} ${e.detail?.direction}`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
+    });
+    el.addEventListener('is-page-change', (e) => {
+      const line = `page ${e.detail?.page}/${e.detail?.pageSize}`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
+      logEl.dataset.lastPage = String(e.detail?.page ?? '');
+      logEl.dataset.lastPageSize = String(e.detail?.pageSize ?? '');
+    });
+    el.addEventListener('is-row-select', (e) => {
+      const line = `row-select n=${e.detail?.rows?.length ?? 0}`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
+      logEl.dataset.lastSelected = String(e.detail?.rows?.length ?? 0);
+    });
+  }
+  attachLog(g1, document.getElementById('log-basic'));
+  attachLog(g3, document.getElementById('log-plain'));
+
+  document.documentElement.dataset.agGridReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-ag-grid&gt;</code></h1>
+  <p>Data grid estilo ag-grid.com: columnas declaradas, multi-sort, filtros, selección, paginación, virtualización y export CSV.</p>
+</header>
+<main>
+  <section>
+    <h2>Básico (paginación, selección)</h2>
+    <div id="basic"></div>
+    <div class="log" id="log-basic"></div>
+  </section>
+  <section>
+    <h2>Density: compact</h2>
+    <div id="compact"></div>
+  </section>
+  <section>
+    <h2>Density: normal</h2>
+    <div id="normal"></div>
+  </section>
+  <section>
+    <h2>Density: comfortable</h2>
+    <div id="comfortable"></div>
+  </section>
+  <section>
+    <h2>Sin toolbar</h2>
+    <div id="plain"></div>
+    <div class="log" id="log-plain"></div>
+  </section>
+</main>
+<footer>
+  API: <code>grid.api.setRows([...])</code>, <code>grid.api.setColumns([...])</code>, <code>grid.api.selectAll()</code>, <code>grid.api.exportCSV()</code>.
+</footer>
+</body>
+</html>

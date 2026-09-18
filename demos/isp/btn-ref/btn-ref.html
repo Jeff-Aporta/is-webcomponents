@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-btn-ref&gt; · is-webcomponents</title>
+<meta name="description" content="Input + botón filtro que abre un <is-catalogo-gen> en modo selección para FKs de catálogo." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 20px; padding: 20px; max-width: 700px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
+  .row { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 100px; white-space: pre-wrap; }
+  is-btn-ref { width: 22rem; max-width: 100%; }
+  is-btn-ref:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar bundles necesarios para <is-btn-ref> y sus dependencias transitivas.
+  await import('../../../dist/cdn/forms/input.min.js');
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/media/icon.min.js');
+  await import('../../../dist/cdn/layout/dialog.min.js');
+  await import('../../../dist/cdn/isp/catalogo-gen.min.js');
+  await import('../../../dist/cdn/isp/btn-ref.min.js');
+  await customElements.whenDefined('is-btn-ref');
+
+  // ── Controller con datos fake ────────────────────────────────────────
+  const PRODUCTOS = [
+    { app: 'CP', descripcion: 'ContaPyme' },
+    { app: 'AW', descripcion: 'AgroWin' },
+    { app: 'NS', descripcion: 'NominaSoft' },
+    { app: 'IM', descripcion: 'InventarioMax' },
+  ];
+  const ctrlApp = {
+    entrie: 'Aplicación',
+    primaryKeys: ['app'],
+    ColumnsBtnRef: ['app', 'descripcion'],
+    columns: [
+      { field: 'app', header: 'App' },
+      { field: 'descripcion', header: 'Descripción' },
+    ],
+    async Lista({ pagina = 1, qregistros = 50, filtro = null } = {}) {
+      const all = filtro?.sql
+        ? PRODUCTOS.filter((p) => p.app.toLowerCase() === filtro.sql.replace(/.*=\s*'([^']+)'.*/, '$1').toLowerCase())
+        : PRODUCTOS;
+      return { datos: all.slice((pagina - 1) * qregistros, pagina * qregistros), total: all.length };
+    },
+  };
+
+  // ── Asignar controller y listener ────────────────────────────────────
+  const ref = document.getElementById('ref-app');
+  ref.controller = ctrlApp;
+  const eventLog = document.getElementById('event-log');
+  const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
+
+  ref.addEventListener('is-change', (e) => log(`is-change: value="${e.detail.value}"`));
+  ref.addEventListener('is-input', (e) => log(`is-input: value="${e.detail.value}"`));
+  ref.addEventListener('is-selected-record', (e) => log(`is-selected-record: value="${e.detail.value}" label="${e.detail.label}"`));
+
+  // ── Botón para abrir el modal manualmente ────────────────────────────
+  document.getElementById('open-modal').addEventListener('click', () => {
+    ref.open?.();
+  });
+
+  // ── Botón para asignar valor programáticamente ────────────────────────
+  document.getElementById('set-value').addEventListener('click', () => {
+    ref.value = 'NS';
+  });
+
+  document.documentElement.dataset.btnRefReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-btn-ref&gt; — selector de FK con modal</h1>
+    <p>Escribe la clave a mano o pulsa el botón filtro para abrir el catálogo.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-btn-ref</code>
+</header>
+<main>
+  <section>
+    <h2>Ejemplo</h2>
+    <div class="row">
+      <is-btn-ref id="ref-app" label="Aplicación" name="aplicacion" required maxlength="6"></is-btn-ref>
+      <button id="open-modal" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Abrir catálogo</button>
+      <button id="set-value" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Set value = NS</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Eventos</h2>
+    <pre id="event-log" class="log"></pre>
+  </section>
+</main>
+</body>
+</html>

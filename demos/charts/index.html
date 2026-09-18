@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demos de charts · is-webcomponents</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: center; padding: 40px 20px; }
+  main { max-width: 900px; width: 100%; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 6px 0; }
+  p.lead { color: #94a3b8; margin: 0 0 24px 0; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 14px; display: grid; gap: 6px; text-decoration: none; color: inherit;
+    transition: border-color 0.15s ease;
+  }
+  .card:hover { border-color: var(--is-accent, #2563eb); }
+  .card h2 { font-size: 14px; margin: 0; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .card p { font-size: 11px; color: #94a3b8; margin: 0; line-height: 1.4; }
+  .card .tag {
+    display: inline-block; font-size: 9px; text-transform: uppercase;
+    background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px;
+    color: #94a3b8; width: max-content;
+  }
+  .meta {
+    margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 12px; color: #94a3b8;
+  }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  .group-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin: 18px 0 8px 0; grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Demos de charts · is-webcomponents</h1>
+  <p class="lead">Componentes SVG-nativos (sin librerías externas) para visualizar datos. Cada uno tiene tests exhaustivos (Playwright puro, sin Stagehand LLM).</p>
+
+  <div class="grid">
+    <span class="group-title">Custom elements tipados (wrapper sobre <code>&lt;is-chart&gt;</code>)</span>
+
+    <a class="card" href="./bar-chart/bar-chart.html">
+      <span class="tag">typed · bar</span>
+      <h2>&lt;is-bar-chart&gt;</h2>
+      <p>Barras verticales. Acepta <code>{type, data:{labels,datasets}}</code>.</p>
+    </a>
+    <a class="card" href="./line-chart/line-chart.html">
+      <span class="tag">typed · line</span>
+      <h2>&lt;is-line-chart&gt;</h2>
+      <p>Líneas con curva configurable (linear, natural, step).</p>
+    </a>
+    <a class="card" href="./scatter-chart/scatter-chart.html">
+      <span class="tag">typed · scatter</span>
+      <h2>&lt;is-scatter-chart&gt;</h2>
+      <p>XY numérico puro. Datasets con <code>{x, y}</code>.</p>
+    </a>
+    <a class="card" href="./bubble-chart/bubble-chart.html">
+      <span class="tag">typed · bubble</span>
+      <h2>&lt;is-bubble-chart&gt;</h2>
+      <p>XY numérico con radio variable. <code>{x, y, r}</code>.</p>
+    </a>
+    <a class="card" href="./pie-chart/pie-chart.html">
+      <span class="tag">typed · pie</span>
+      <h2>&lt;is-pie-chart&gt;</h2>
+      <p>Rebanadas en SVG. Leyenda interactiva.</p>
+    </a>
+    <a class="card" href="./doughnut-chart/doughnut-chart.html">
+      <span class="tag">typed · doughnut</span>
+      <h2>&lt;is-doughnut-chart&gt;</h2>
+      <p>Pie con hueco central (cutout). Total al centro.</p>
+    </a>
+    <a class="card" href="./polar-area-chart/polar-area-chart.html">
+      <span class="tag">typed · polarArea</span>
+      <h2>&lt;is-polar-area-chart&gt;</h2>
+      <p>Sectores polares con radio variable por valor.</p>
+    </a>
+    <a class="card" href="./radar-chart/radar-chart.html">
+      <span class="tag">typed · radar</span>
+      <h2>&lt;is-radar-chart&gt;</h2>
+      <p>Polígono radar con relleno.</p>
+    </a>
+    <a class="card" href="./funnel-chart/funnel-chart.html">
+      <span class="tag">typed · funnel</span>
+      <h2>&lt;is-funnel-chart&gt;</h2>
+      <p>Embudo. <code>dropPct</code> entre pasos.</p>
+    </a>
+    <a class="card" href="./waterfall-chart/waterfall-chart.html">
+      <span class="tag">typed · waterfall</span>
+      <h2>&lt;is-waterfall-chart&gt;</h2>
+      <p>Cascada con deltas y totales.</p>
+    </a>
+
+    <span class="group-title">Custom elements independientes</span>
+
+    <a class="card" href="./chart/chart.html">
+      <span class="tag">generic · multi-tipo</span>
+      <h2>&lt;is-chart&gt;</h2>
+      <p>Motor genérico. Acepta <code>type</code> y config tipo Chart.js.</p>
+    </a>
+    <a class="card" href="./sparkline/sparkline.html">
+      <span class="tag">standalone</span>
+      <h2>&lt;is-sparkline&gt;</h2>
+      <p>Mini-gráfico inline. Atributo <code>values</code> o propiedad <code>data</code>.</p>
+    </a>
+    <a class="card" href="./treemap/treemap.html">
+      <span class="tag">standalone</span>
+      <h2>&lt;is-treemap&gt;</h2>
+      <p>Teselado squarified anidado en SVG. Tooltip y visor propios.</p>
+    </a>
+
+    <span class="group-title">Utility libraries (funciones puras)</span>
+
+    <a class="card" href="./marks-cartesian/marks-cartesian.html">
+      <span class="tag">pure · lib</span>
+      <h2>marks-cartesian</h2>
+      <p><code>drawBarMarks</code>, <code>drawLineMarks</code>, <code>drawScatterMarks</code>, <code>drawBubbleMarks</code>.</p>
+    </a>
+    <a class="card" href="./marks-funnel/marks-funnel.html">
+      <span class="tag">pure · lib</span>
+      <h2>marks-funnel</h2>
+      <p><code>funnelBands</code>, <code>drawFunnelMarks</code>.</p>
+    </a>
+    <a class="card" href="./marks-radial/marks-radial.html">
+      <span class="tag">pure · lib</span>
+      <h2>marks-radial</h2>
+      <p><code>drawPieMarks</code>, <code>drawDoughnutMarks</code>, <code>drawPolarAreaMarks</code>, <code>drawRadarMarks</code>.</p>
+    </a>
+    <a class="card" href="./marks-waterfall/marks-waterfall.html">
+      <span class="tag">pure · lib</span>
+      <h2>marks-waterfall</h2>
+      <p><code>waterfallBars</code>, <code>drawWaterfallMarks</code>.</p>
+    </a>
+    <a class="card" href="./treemap-spec/treemap-spec.html">
+      <span class="tag">pure · lib</span>
+      <h2>treemap-spec</h2>
+      <p><code>resolveTreemapSpec</code>, <code>computeTreemapLayout</code>.</p>
+    </a>
+  </div>
+
+  <div class="meta">
+    <p><strong>Arquitectura:</strong></p>
+    <ul>
+      <li><code>&lt;is-chart&gt;</code> — motor SVG genérico, expone <code>window.__isDefineTypedChart</code>.</li>
+      <li><code>is-X-chart</code> — wrappers que llaman <code>__isDefineTypedChart</code> con su tipo fijo y su drawMarks.</li>
+      <li><code>marks-*</code> — funciones puras (<code>drawXxxMarks(ctx)</code>) usadas por el motor.</li>
+      <li><code>treemap</code> / <code>sparkline</code> — componentes standalone (no usan el motor <code>is-chart</code>).</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-line-chart&gt; · demo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; padding: 20px; min-height: 0; }
+  is-line-chart { width: 720px; height: 360px; }
+  is-line-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Carga el bundle pre-compilado. line-chart.min.js importa transitivamente
+  // chart.min.js + marks-cartesian.min.js.
+  await import('../../../dist/cdn/data-viz/line-chart.min.js');
+  await customElements.whenDefined('is-line-chart');
+
+  const chart = document.createElement('is-line-chart');
+  chart.setAttribute('label', 'Usuarios activos por mes');
+  chart.payload = {
+    type: 'line',
+    data: {
+      labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+      datasets: [{
+        label: 'Web',
+        data: [120, 145, 162, 178, 200, 235],
+        curve: 'natural',
+        fill: true,
+      }, {
+        label: 'Mobile',
+        data: [80, 110, 130, 150, 165, 190],
+        curve: 'natural',
+      }],
+    },
+  };
+
+  document.querySelector('main').appendChild(chart);
+  document.documentElement.dataset.lineChartReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-line-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>line</code>. Soporta <code>curve</code> (linear/natural/step), <code>fill</code> y múltiples series.</p>
+</header>
+<main></main>
+</body>
+</html>

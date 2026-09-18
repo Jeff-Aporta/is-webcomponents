@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Edición inline &lt;is-inline-edit&gt; · is-webcomponents</title>
+<meta name="description" content="Edición inplace click-to-edit: clic activa el editor, Enter guarda, Esc cancela, blur guarda por defecto." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-inline-edit:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/inline-edit.min.js');
+  await customElements.whenDefined('is-inline-edit');
+
+  // (1) básico: nombre de tarea
+  const task = document.createElement('is-inline-edit');
+  task.setAttribute('name', 'task');
+  task.setAttribute('value', 'Comprar pan');
+  task.setAttribute('placeholder', '¿Qué hay que hacer?');
+  document.querySelector('#sec-task').appendChild(task);
+
+  // (2) descripción multilínea (textarea)
+  const desc = document.createElement('is-inline-edit');
+  desc.setAttribute('name', 'description');
+  desc.setAttribute('mode', 'textarea');
+  desc.setAttribute('value', 'Notas adicionales del proyecto…');
+  desc.setAttribute('rows', '3');
+  desc.setAttribute('placeholder', 'Añade una descripción…');
+  document.querySelector('#sec-desc').appendChild(desc);
+
+  // (3) con cancel-on-blur: blur revierte en lugar de guardar
+  const cancelOnBlur = document.createElement('is-inline-edit');
+  cancelOnBlur.setAttribute('name', 'nickname');
+  cancelOnBlur.setAttribute('value', 'usuario123');
+  cancelOnBlur.setAttribute('cancel-on-blur', '');
+  cancelOnBlur.setAttribute('placeholder', 'Tu apodo');
+  document.querySelector('#sec-cancel').appendChild(cancelOnBlur);
+
+  // (4) deshabilitado
+  const disabled = document.createElement('is-inline-edit');
+  disabled.setAttribute('name', 'locked');
+  disabled.setAttribute('value', 'No editable');
+  disabled.setAttribute('disabled', '');
+  document.querySelector('#sec-disabled').appendChild(disabled);
+
+  // (5) requerido y vacío
+  const required = document.createElement('is-inline-edit');
+  required.setAttribute('name', 'title');
+  required.setAttribute('placeholder', 'Título obligatorio');
+  required.setAttribute('required', '');
+  document.querySelector('#sec-required').appendChild(required);
+
+  // Eventos
+  [task, desc, cancelOnBlur, disabled, required].forEach((r) => {
+    r.addEventListener('is-edit', () => console.log('[inline-edit] edit start'));
+    r.addEventListener('is-save', (e) => console.log('[inline-edit] save', e.detail?.value?.slice(0, 40)));
+    r.addEventListener('is-cancel', (e) => console.log('[inline-edit] cancel', e.detail?.value?.slice(0, 40)));
+  });
+
+  document.documentElement.dataset.inlineEditReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-inline-edit&gt; · Edición inplace click-to-edit</h1>
+    <p>Clic activa el editor · <code>Enter</code> guarda · <code>Esc</code> cancela · <code>blur</code> guarda por defecto · eventos <code>is-edit</code>, <code>is-save</code>, <code>is-cancel</code>.</p>
+  </header>
+
+  <section id="sec-task">
+    <h2>Tarea (modo texto)</h2>
+    <p class="desc">Atributo <code>value</code> inicial, <code>placeholder</code> visible al vaciarse.</p>
+  </section>
+
+  <section id="sec-desc">
+    <h2>Descripción multilínea (textarea)</h2>
+    <p class="desc">Atributo <code>mode="textarea"</code> con <code>rows</code>.</p>
+  </section>
+
+  <section id="sec-cancel">
+    <h2>Cancel-on-blur</h2>
+    <p class="desc">Con <code>cancel-on-blur</code> el blur revierte el cambio en vez de guardarlo.</p>
+  </section>
+
+  <div class="row">
+    <section id="sec-disabled">
+      <h2>Deshabilitado</h2>
+      <p class="desc"><code>disabled</code> impide entrar en modo edición.</p>
+    </section>
+    <section id="sec-required">
+      <h2>Requerido</h2>
+      <p class="desc"><code>required</code> + placeholder; el control expone <code>:invalid</code> si está vacío.</p>
+    </section>
+  </div>
+</main>
+</body>
+</html>

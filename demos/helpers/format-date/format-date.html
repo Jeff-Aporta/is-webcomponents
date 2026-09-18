@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title><is-format-date> · is-webcomponents</title>
+<meta name="description" content="Demo del helper <is-format-date>: formatea fechas con Intl.DateTimeFormat (weekday, year, month, day, hour, etc.)." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 6px 0 0; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  main { padding: 16px 20px; display: grid; gap: 8px; align-content: start; }
+  .row { display: grid; grid-template-columns: 320px 1fr; gap: 12px; align-items: baseline; }
+  .row code { color: #94a3b8; font-size: 12px; }
+  is-format-date:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/helpers/format-date.min.js');
+  await customElements.whenDefined('is-format-date');
+
+  const cases = [
+    { date: '2026-08-15' },
+    { date: '2026-08-15', weekday: 'long' },
+    { date: '2026-08-15', weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' },
+    { date: '2026-08-15T14:30:00', hour: '2-digit', minute: '2-digit', 'hour-format': '24' },
+    { date: '2026-08-15T14:30:00', hour: '2-digit', minute: '2-digit', 'hour-format': '12' },
+    { date: '2026-08-15T14:30:00', hour: 'numeric', minute: '2-digit', second: '2-digit' },
+    { date: '2026-08-15', era: 'short', year: 'numeric' },
+    { date: '2026-08-15', locale: 'es-CO' },
+    { date: '2026-08-15', locale: 'en-US' },
+    { date: '1752864000000' },     // timestamp
+    { date: 'no-válida' },         // fecha inválida → vacío
+  ];
+  const main = document.querySelector('main');
+  for (const c of cases) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const label = document.createElement('code');
+    const attrs = Object.entries(c).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(' ');
+    label.textContent = `<is-format-date ${attrs}>`;
+    const el = document.createElement('is-format-date');
+    for (const [k, v] of Object.entries(c)) el.setAttribute(k, String(v));
+    row.append(label, el);
+    main.appendChild(row);
+  }
+
+  document.documentElement.dataset.formatDateReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1><is-format-date> — fechas con Intl.DateTimeFormat</h1>
+  <p>Atributos: <code>date</code> <code>weekday</code> <code>era</code> <code>year</code> <code>month</code> <code>day</code> <code>hour</code> <code>minute</code> <code>second</code> <code>hour-format</code> <code>locale</code></p>
+</header>
+<main></main>
+</body>
+</html>

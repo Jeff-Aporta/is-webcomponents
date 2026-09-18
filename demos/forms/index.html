@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demos de forms · is-webcomponents</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 40px 20px; }
+  main { max-width: 980px; width: 100%; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 6px 0; }
+  p.lead { color: #94a3b8; margin: 0 0 24px 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 14px; display: grid; gap: 6px; text-decoration: none; color: inherit;
+    transition: border-color 0.15s ease;
+  }
+  .card:hover { border-color: var(--is-accent, #2563eb); }
+  .card h2 { font-size: 14px; margin: 0; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .card p { font-size: 12px; color: #94a3b8; margin: 0; }
+  .meta { margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 12px; color: #94a3b8; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Demos de forms · is-webcomponents</h1>
+  <p class="lead">Componentes form-associated de la categoría <code>forms/</code>. Cada demo tiene tests exhaustivos (Playwright + Stagehand).</p>
+
+  <div class="grid">
+    <a class="card" href="./checkbox/checkbox.html"><h2>&lt;is-checkbox&gt;</h2><p>Casilla form-associated · aria-checked · indeterminate</p></a>
+    <a class="card" href="./color-picker/color-picker.html"><h2>&lt;is-color-picker&gt;</h2><p>Selector de color (HEX/HSL/RGB) · texto e input</p></a>
+    <a class="card" href="./combobox/combobox.html"><h2>&lt;is-combobox&gt;</h2><p>Combobox con typeahead y lista filtrable</p></a>
+    <a class="card" href="./date-field/date-field.html"><h2>&lt;is-date-field&gt;</h2><p>Campo de fecha editable por secciones (spinbutton)</p></a>
+    <a class="card" href="./date-input/date-input.html"><h2>&lt;is-date-input&gt;</h2><p>Campo + popover de calendario (top-layer dialog)</p></a>
+    <a class="card" href="./date-picker/date-picker.html"><h2>&lt;is-date-picker&gt;</h2><p>Calendario mensual standalone con teclado</p></a>
+    <a class="card" href="./date-range-input/date-range-input.html"><h2>&lt;is-date-range-input&gt;</h2><p>Dos campos con rango y atajos</p></a>
+    <a class="card" href="./date-range-picker/date-range-picker.html"><h2>&lt;is-date-range-picker&gt;</h2><p>Calendario de rango con dos meses</p></a>
+    <a class="card" href="./date-time-field/date-time-field.html"><h2>&lt;is-date-time-field&gt;</h2><p>Fecha + hora editables por secciones</p></a>
+    <a class="card" href="./date-time-input/date-time-input.html"><h2>&lt;is-date-time-input&gt;</h2><p>Fecha + hora con picker en top-layer</p></a>
+    <a class="card" href="./digital-clock/digital-clock.html"><h2>&lt;is-digital-clock&gt;</h2><p>Reloj digital en tiempo real</p></a>
+    <a class="card" href="./doc-editor/doc-editor.html"><h2>&lt;is-doc-editor&gt;</h2><p>Editor de texto ligero</p></a>
+    <a class="card" href="./dropzone/dropzone.html"><h2>&lt;is-dropzone&gt;</h2><p>Zona de drop para archivos</p></a>
+    <a class="card" href="./duration-picker/duration-picker.html"><h2>&lt;is-duration-picker&gt;</h2><p>Selector de duración (h/m/s)</p></a>
+    <a class="card" href="./file-input/file-input.html"><h2>&lt;is-file-input&gt;</h2><p>Input de archivo con drag-and-drop</p></a>
+    <a class="card" href="./full-calendar/full-calendar.html"><h2>&lt;is-full-calendar&gt;</h2><p>Calendario completo (mes/semana/día) con eventos</p></a>
+    <a class="card" href="./inline-edit/inline-edit.html"><h2>&lt;is-inline-edit&gt;</h2><p>Edición inline click-to-edit</p></a>
+    <a class="card" href="./input/input.html"><h2>&lt;is-input&gt;</h2><p>Campo de texto base (type, label, hint, error)</p></a>
+    <a class="card" href="./masked-input/masked-input.html"><h2>&lt;is-masked-input&gt;</h2><p>Input con máscara (phone, date, etc.)</p></a>
+    <a class="card" href="./mention/mention.html"><h2>&lt;is-mention&gt;</h2><p>Input de texto con sugerencias tipo @mention</p></a>
+    <a class="card" href="./month-calendar/month-calendar.html"><h2>&lt;is-month-calendar&gt;</h2><p>Calendario mensual standalone</p></a>
+    <a class="card" href="./option/option.html"><h2>&lt;is-option&gt;</h2><p>Opción individual para select/combobox</p></a>
+    <a class="card" href="./pin-input/pin-input.html"><h2>&lt;is-pin-input&gt;</h2><p>Input de PIN con casillas separadas</p></a>
+    <a class="card" href="./radio/radio.html"><h2>&lt;is-radio&gt;</h2><p>Radio button individual</p></a>
+    <a class="card" href="./radio-group/radio-group.html"><h2>&lt;is-radio-group&gt;</h2><p>Grupo de radios form-associated</p></a>
+    <a class="card" href="./rating/rating.html"><h2>&lt;is-rating&gt;</h2><p>Sistema de rating con estrellas</p></a>
+    <a class="card" href="./rte/rte.html"><h2>&lt;is-rte&gt;</h2><p>Rich-text editor con barra de formato</p></a>
+    <a class="card" href="./select/select.html"><h2>&lt;is-select&gt;</h2><p>Select con listbox en top-layer dialog</p></a>
+    <a class="card" href="./signature/signature.html"><h2>&lt;is-signature&gt;</h2><p>Pad de firma con canvas</p></a>
+    <a class="card" href="./slider/slider.html"><h2>&lt;is-slider&gt;</h2><p>Slider horizontal/vertical con marks</p></a>
+    <a class="card" href="./switch/switch.html"><h2>&lt;is-switch&gt;</h2><p>Switch toggle (on/off)</p></a>
+    <a class="card" href="./textarea/textarea.html"><h2>&lt;is-textarea&gt;</h2><p>Área de texto con autosize opcional</p></a>
+    <a class="card" href="./time-clock/time-clock.html"><h2>&lt;is-time-clock&gt;</h2><p>Reloj circular para selección de hora</p></a>
+    <a class="card" href="./time-field/time-field.html"><h2>&lt;is-time-field&gt;</h2><p>Campo de hora editable por secciones</p></a>
+    <a class="card" href="./time-input/time-input.html"><h2>&lt;is-time-input&gt;</h2><p>Campo + popover de reloj</p></a>
+    <a class="card" href="./year-calendar/year-calendar.html"><h2>&lt;is-year-calendar&gt;</h2><p>Calendario anual (12 meses)</p></a>
+  </div>
+
+  <div class="meta">
+    <p>Cada demo es self-contained: importa los bundles desde <code>dist/cdn/forms/</code> y funciona con cualquier servidor estático. Para los tests usa el servidor de demos (<code>scripts/serve-demos.mjs</code>) y corre las suites con Playwright + Stagehand.</p>
+    <p style="margin-top:8px;">Convenciones de los tests:
+      <ul>
+        <li><code>&lt;componente&gt;.test.mjs</code> — suite funcional (smoke + interacciones + estado + accesibilidad)</li>
+        <li><code>&lt;componente&gt;.stagehand.test.mjs</code> — rubric visual determinista (sin LLM por defecto; Stagehand LLM opt-in con <code>STAGEHAND=1</code>)</li>
+      </ul>
+    </p>
+  </div>
+</main>
+</body>
+</html>

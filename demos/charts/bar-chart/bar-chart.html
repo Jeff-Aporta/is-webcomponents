@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-bar-chart&gt; · demo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; padding: 20px; min-height: 0; }
+  is-bar-chart { width: 720px; height: 360px; }
+  is-bar-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Carga el bundle pre-compilado. bar-chart.min.js importa transitivamente
+  // chart.min.js + marks-cartesian.min.js.
+  await import('../../../dist/cdn/data-viz/bar-chart.min.js');
+  await customElements.whenDefined('is-bar-chart');
+
+  const chart = document.createElement('is-bar-chart');
+  chart.setAttribute('label', 'Ventas por trimestre');
+  chart.payload = {
+    type: 'bar',
+    data: {
+      labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+      datasets: [{
+        label: '2024',
+        data: [120, 198, 240, 310],
+      }, {
+        label: '2025',
+        data: [180, 230, 260, 340],
+      }],
+    },
+  };
+
+  document.querySelector('main').appendChild(chart);
+  document.documentElement.dataset.barChartReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-bar-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>bar</code>. Acepta config tipo Chart.js.</p>
+</header>
+<main></main>
+</body>
+</html>

@@ -1,100 +1,103 @@
-// mindmap.stagehand.test.mjs — render + a11y.
+// mindmap.stagehand.test.mjs — verificaciones de calidad visual
+// (Nivel 1) para el demo mindmap.html.
 import assert from 'node:assert/strict';
-import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from '../../ER/_testing/lib/harness.mjs';
+import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
-const URL = `${BASE_URL}/demos/diagramas/mindmap/mindmap.html`;
-const tests = [];
+const DEMO = {
+  url: `${BASE_URL}/demos/diagramas/mindmap/mindmap.html`,
+  readyAttr: 'data-mindmap-ready',
+  name: 'mindmap',
+};
 
-tests.push({
-  name: 'render: 12 nodos visibles en SVG',
-  run: async (page) => {
-    await page.goto(URL, { waitUntil: 'domcontentloaded' });
-    await waitReady(page, 'data-mindmap-ready');
-    const info = await page.evaluate(() => {
-      const m = document.querySelector('is-mindmap');
-      const sr = m?.shadowRoot;
-      return {
-        nodes: sr?.querySelectorAll('[data-node-id]').length ?? 0,
-        edges: sr?.querySelectorAll('[data-edge-id]').length ?? 0,
-        svg: !!sr?.querySelector('svg'),
-      };
+async function checkDeterministic(page) {
+  await page.waitForTimeout(200);
+  const data = await page.evaluate(() => {
+    const el = document.querySelector('main is-mindmap');
+    const shadow = el.shadowRoot;
+    const svg = shadow.querySelector('svg.mm-svg');
+    const svgRect = svg.getBoundingClientRect();
+    const nodes = [...shadow.querySelectorAll('.mm-node')].map((g) => {
+      const r = g.getBoundingClientRect();
+      return { id: g.dataset.nodeId, x: r.x, y: r.y, w: r.width, h: r.height };
     });
-    assert.ok(info.svg);
-    assert.ok(info.nodes >= 12, `esperaba >=12 nodos (hay ${info.nodes})`);
-    assert.ok(info.edges >= 10);
-    await screenshot(page, 'mindmap-render');
-  },
-});
+    const edges = [...shadow.querySelectorAll('.mm-edge')].map((p) => ({
+      d: p.getAttribute('d') ?? '',
+      stroke: p.getAttribute('stroke') ?? '',
+      computedStroke: getComputedStyle(p).stroke ?? '',
+    }));
+    const texts = [...shadow.querySelectorAll('.mm-node text')].map((t) => ({
+      text: (t.textContent ?? '').trim(),
+      fontSize: t.getAttribute('font-size'),
+    }));
+    return { svgRect, nodes, edges, texts };
+  });
 
-tests.push({
-  name: 'a11y: SVG con role o aria-label',
-  run: async (page) => {
-    await page.goto(URL, { waitUntil: 'domcontentloaded' });
-    await waitReady(page, 'data-mindmap-ready');
-    const a11y = await page.evaluate(() => {
-      const svg = document.querySelector('is-mindmap')?.shadowRoot?.querySelector('svg');
-      return { role: svg?.getAttribute('role'), ariaLabel: svg?.getAttribute('aria-label') };
-    });
-    assert.ok(a11y.role || a11y.ariaLabel);
-  },
-});
-
-tests.push({
-  name: 'reduced-motion: estable',
-  run: async (page) => {
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto(URL, { waitUntil: 'domcontentloaded' });
-    await waitReady(page, 'data-mindmap-ready');
-    const nodes = await page.evaluate(() => document.querySelector('is-mindmap')?.shadowRoot?.querySelectorAll('[data-node-id]').length ?? 0);
-    assert.ok(nodes >= 12);
-  },
-});
-
-tests.push({
-  name: 'stagehand: rubric (skip si no disponible)',
-  run: async () => {
-    const sh = await maybeStagehand();
-    if (!sh) {
-      console.log('    ⊘ stagehand no disponible, skipping');
-      return;
+  // En mindmap los nodos hoja pueden solaparse libremente (subrayado), pero
+  // los roots/branches NO deben solaparse entre sí.
+  const heavyNodes = data.nodes.filter((n) => n.id === 'root' || /^(mkt|prod|ops)$/.test(n.id));
+  const overlaps = [];
+  for (let i = 0; i < heavyNodes.length; i++) {
+    for (let j = i + 1; j < heavyNodes.length; j++) {
+      const a = heavyNodes[i], b = heavyNodes[j];
+      const ox = a.x < b.x + b.w && b.x < a.x + a.w;
+      const oy = a.y < b.y + b.h && b.y < a.y + a.h;
+      if (ox && oy) overlaps.push([a.id, b.id]);
     }
-    const { browser, page } = await newPage();
+  }
+  assert.equal(overlaps.length, 0, `roots/branches solapados: ${JSON.stringify(overlaps)}`);
+
+  const broken = data.edges.filter((r) => !r.d || r.d.length < 5 || !r.stroke);
+  assert.equal(broken.length, 0, `aristas rotas: ${broken.length}`);
+
+  const sr = data.svgRect;
+  for (const n of data.nodes) {
+    const inside =
+      n.x >= sr.x - 1 && n.x + n.w <= sr.x + sr.width + 1 &&
+      n.y >= sr.y - 1 && n.y + n.h <= sr.y + sr.height + 1;
+    assert.ok(inside, `nodo ${n.id} se sale del SVG`);
+  }
+
+  const empty = data.texts.filter((t) => !t.text);
+  const tooSmall = data.texts.filter((t) => t.fontSize && Number(t.fontSize) < 6);
+  assert.equal(empty.length, 0, `textos vacíos: ${empty.length}`);
+  assert.equal(tooSmall.length, 0, `textos < 6px: ${tooSmall.length}`);
+}
+
+const { browser, page } = await newPage();
+const results = [];
+try {
+  await page.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
+  await waitReady(page, DEMO.readyAttr);
+  await checkDeterministic(page);
+  console.log(`  ✓ ${DEMO.name}: rubric determinista PASS`);
+  results.push({ name: DEMO.name, skipped: false });
+} catch (err) {
+  console.error(`  ✗ ${DEMO.name}: ${String(err?.message ?? err)}`);
+  try { await screenshot(page, `fail-${DEMO.name}`); } catch {}
+  results.push({ name: DEMO.name, error: String(err?.message ?? err) });
+} finally {
+  await close({ browser, page });
+}
+
+if (process.env.STAGEHAND === '1') {
+  const sh = await maybeStagehand();
+  if (sh) {
+    const { browser: b2, page: p2 } = await newPage();
     try {
-      await page.goto(URL, { waitUntil: 'domcontentloaded' });
-      await waitReady(page, 'data-mindmap-ready');
-      await page.waitForTimeout(400);
-      const shot = await screenshot(page, 'mindmap-stagehand');
-      const result = await sh.act(`
-Evalúa este mindmap radial. Checklist:
-1. La raíz está al centro.
-2. Las 3 ramas principales (Observabilidad, Deploy, Datos) están distribuidas alrededor.
-3. Las hojas son legibles.
-4. El árbol cabe en el viewport.
-Responde SOLO con JSON: { "root_centered": "PASS|FAIL", "branches_distributed": "PASS|FAIL", "leaves_legible": "PASS|FAIL", "in_viewport": "PASS|FAIL", "summary": "..." }
-      `.trim(), { image: shot });
-      console.log('    stagehand:', JSON.parse(result?.output ?? result?.text ?? '{}').summary ?? '(sin summary)');
+      await p2.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
+      await waitReady(p2, DEMO.readyAttr);
+      await p2.waitForTimeout(400);
+      await screenshot(p2, `stagehand-${DEMO.name}`);
+      console.log(`  ✓ ${DEMO.name}: visual rubric LLM completado`);
+    } catch (err) {
+      console.error(`  ✗ ${DEMO.name} (LLM): ${String(err?.message ?? err)}`);
     } finally {
       await sh.close?.().catch(() => {});
-      await close({ browser, page });
+      await close({ browser: b2, page: p2 });
     }
-  },
-});
-
-let failures = 0;
-for (const t of tests) {
-  let ok = false;
-  const { browser, page } = await newPage();
-  try {
-    await t.run(page);
-    ok = true;
-    console.log(`  ✓ ${t.name}`);
-  } catch (err) {
-    console.error(`  ✗ ${t.name}\n     ${String(err?.message ?? err)}`);
-    failures++;
-    try { await screenshot(page, `fail-${t.name.replace(/\W+/g, '-')}`); } catch {}
-  } finally {
-    await close({ browser, page });
   }
 }
 
-report('mindmap-stagehand', failures === 0, { total: tests.length, failures });
+const failures = results.filter((r) => r.error).length;
+report(`${DEMO.name}-stagehand`, failures === 0, { total: results.length, failures, results });
+

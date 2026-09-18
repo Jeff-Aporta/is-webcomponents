@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-spreadsheet> · is-webcomponents</title>
+<meta name="description" content="Hoja de cálculo mínima con edición por celda y fórmulas =SUM/AVERAGE/MIN/MAX/COUNT." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 20px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-spreadsheet:not(:defined) { visibility: hidden; }
+  is-spreadsheet { display: block; overflow: auto; max-height: 320px; }
+  .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 100px; overflow: auto; color: #94a3b8; margin-top: 8px; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data/spreadsheet.min.js');
+  await customElements.whenDefined('is-spreadsheet');
+
+  // Helper para construir un spreadsheet con un value inicial.
+  function build({ rows, cols, value, readOnly }) {
+    const s = document.createElement('is-spreadsheet');
+    s.setAttribute('rows', String(rows));
+    s.setAttribute('cols', String(cols));
+    if (value) s.setAttribute('value', JSON.stringify(value));
+    if (readOnly) s.setAttribute('read-only', '');
+    return s;
+  }
+
+  // (1) 5×6 con números y fórmulas: SUM(A1:A5) en B7, AVERAGE en C7.
+  const v1 = [
+    [10, 20, 30],
+    [40, 50, 60],
+    [70, 80, 90],
+    [100, 110, 120],
+    [130, 140, 150],
+    ['=SUM(A1:A5)', '=SUM(B1:B5)', '=SUM(C1:C5)'],
+  ];
+  const s1 = build({ rows: 7, cols: 3, value: v1 });
+  document.getElementById('formulas').appendChild(s1);
+
+  // (2) Mixto: números, strings y fórmula COUNT.
+  const v2 = [
+    ['Producto', 'Cantidad', 'Estado'],
+    ['A', 10, 'ok'],
+    ['B', 20, 'ok'],
+    ['C', 30, 'fail'],
+    ['D', 40, 'ok'],
+    ['', '=COUNT(B2:B5)', '=SUM(B2:B5)'],
+  ];
+  const s2 = build({ rows: 6, cols: 3, value: v2 });
+  document.getElementById('mixed').appendChild(s2);
+
+  // (3) Read-only con datos estáticos.
+  const v3 = [
+    ['Mes', 'Ingresos'],
+    ['Ene', 1000],
+    ['Feb', 1500],
+    ['Mar', 1200],
+    ['Abr', 1800],
+  ];
+  const s3 = build({ rows: 5, cols: 2, value: v3, readOnly: true });
+  document.getElementById('readonly').appendChild(s3);
+
+  // (4) Empty: 4×4 sin datos (sólo fórmulas básicas para verlas).
+  const v4 = [
+    ['', '', ''],
+    ['', '=MIN(A1:C1)', '=MAX(A1:C1)'],
+  ];
+  const s4 = build({ rows: 4, cols: 4, value: v4 });
+  document.getElementById('empty').appendChild(s4);
+
+  // ── Logging
+  function attachLog(el, logEl) {
+    el.addEventListener('is-change', (e) => {
+      const { row, col, raw, value } = e.detail || {};
+      const line = `change: r=${row} c=${col} raw=${JSON.stringify(raw)} value=${JSON.stringify(value)}`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
+      logEl.dataset.lastRaw = String(raw ?? '');
+      logEl.dataset.lastValue = String(value ?? '');
+      logEl.dataset.lastRC = `${row},${col}`;
+    });
+  }
+  attachLog(s1, document.getElementById('log-formulas'));
+  attachLog(s2, document.getElementById('log-mixed'));
+  attachLog(s4, document.getElementById('log-empty'));
+
+  document.documentElement.dataset.spreadsheetReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-spreadsheet&gt;</code></h1>
+  <p>Hoja mínima con fórmulas: <code>=SUM</code>, <code>=AVERAGE</code>, <code>=MIN</code>, <code>=MAX</code>, <code>=COUNT</code>. Atajos: <kbd>Enter</kbd>, <kbd>Tab</kbd>, <kbd>Esc</kbd>.</p>
+</header>
+<main>
+  <section>
+    <h2>5 filas + fila de fórmulas</h2>
+    <div id="formulas"></div>
+    <div class="log" id="log-formulas"></div>
+  </section>
+  <section>
+    <h2>Mixto: números, strings y fórmulas</h2>
+    <div id="mixed"></div>
+    <div class="log" id="log-mixed"></div>
+  </section>
+  <section>
+    <h2>Read-only</h2>
+    <div id="readonly"></div>
+  </section>
+  <section>
+    <h2>Con MIN/MAX</h2>
+    <div id="empty"></div>
+    <div class="log" id="log-empty"></div>
+  </section>
+</main>
+<footer>
+  Doble click en una celda para editarla. Escribe <code>=FORMULA(celdas)</code> para agregar una fórmula.
+</footer>
+</body>
+</html>

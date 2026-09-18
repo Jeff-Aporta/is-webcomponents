@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-confirm-delete&gt; · is-webcomponents</title>
+<meta name="description" content="Modal de confirmación destructiva que requiere re-escribir la clave del registro antes de habilitar el botón Eliminar." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; place-items: center; gap: 20px; padding: 20px; }
+  .toolbar { display: flex; gap: 12px; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; }
+  is-confirm-delete:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Dependencias de <is-confirm-delete>.
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/forms/input.min.js');
+  await import('../../../dist/cdn/media/icon.min.js');
+  await import('../../../dist/cdn/layout/dialog.min.js');
+  await import('../../../dist/cdn/isp/confirm-delete.min.js');
+  await customElements.whenDefined('is-confirm-delete');
+
+  const cd = document.getElementById('cd');
+  const eventLog = document.getElementById('event-log');
+  const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
+  for (const evt of ['is-show', 'is-after-show', 'is-hide', 'is-after-hide', 'is-confirm-delete', 'is-cancel-delete']) {
+    cd.addEventListener(evt, (e) => log(`${evt}: ${JSON.stringify(e.detail || {}).slice(0, 120)}`));
+  }
+
+  // Configuración inicial: trigger button para abrir el modal.
+  document.getElementById('btn-delete').addEventListener('click', () => {
+    cd.entity = 'tercero';
+    cd.pkLabel = 'NIT';
+    cd.confirmValue = '900123456';
+    cd.show();
+  });
+
+  // Loading simulado (para demostrar el candado durante un borrado).
+  document.getElementById('btn-loading').addEventListener('click', () => {
+    cd.loading = true;
+    setTimeout(() => { cd.loading = false; cd.hide(); }, 800);
+  });
+
+  document.documentElement.dataset.confirmDeleteReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-confirm-delete&gt; — "escribe para confirmar"</h1>
+    <p>El botón Eliminar se habilita sólo cuando lo escrito coincide con <code>confirm-value</code>.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-confirm-delete</code>
+</header>
+<main>
+  <div class="toolbar">
+    <is-button id="btn-delete" color="danger">Eliminar tercero</is-button>
+    <is-button id="btn-loading" variant="outlined">Simular loading</is-button>
+  </div>
+  <is-confirm-delete id="cd" entity="tercero" pk-label="NIT" confirm-value="900123456"></is-confirm-delete>
+  <pre id="event-log" class="log"></pre>
+</main>
+</body>
+</html>

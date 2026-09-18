@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo: <is-dropdown> · is-webcomponents</title>
+  <meta name="description" content="Demo de <is-dropdown>: menú popover anclado a un trigger; soporta placements y emite is-select." />
+  <style>
+    html, body {
+      margin: 0; padding: 24px; min-height: 100%;
+      background: #0c1118; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    body { display: grid; gap: 24px; }
+    header h1 { margin: 0 0 4px 0; font-size: 18px; }
+    header p { margin: 0; color: #94a3b8; font-size: 12px; }
+    section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; }
+    section h2 { margin: 0 0 12px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+    pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
+    /* Anti-FOUC */
+    is-dropdown:not(:defined) { visibility: hidden; }
+    is-dropdown-item:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Demo: <code>&lt;is-dropdown&gt;</code></h1>
+    <p>Menú anclado a un trigger. Apertura por click, cierre por click fuera o Escape. Emite <code>is-select</code>.</p>
+  </header>
+
+  <section>
+    <h2>Menú básico (placement=bottom-start)</h2>
+    <is-dropdown id="d1" label="Acciones">
+      <is-button slot="trigger" variant="outlined">Abrir menú</is-button>
+      <is-dropdown-item value="edit">Editar</is-dropdown-item>
+      <is-dropdown-item value="duplicate">Duplicar</is-dropdown-item>
+      <is-dropdown-item value="move">Mover…</is-dropdown-item>
+      <is-dropdown-item value="delete" color="danger">Eliminar</is-dropdown-item>
+    </is-dropdown>
+  </section>
+
+  <section>
+    <h2>Menú con checkbox items</h2>
+    <is-dropdown id="d2" label="Ver">
+      <is-button slot="trigger" variant="ghost">Ver</is-button>
+      <is-dropdown-item type="checkbox" checked>Mostrar toolbar</is-dropdown-item>
+      <is-dropdown-item type="checkbox">Mostrar sidebar</is-dropdown-item>
+      <is-dropdown-item type="checkbox" checked>Mostrar statusbar</is-dropdown-item>
+    </is-dropdown>
+  </section>
+
+  <section>
+    <h2>Eventos</h2>
+    <pre id="log">[]</pre>
+  </section>
+
+  <script type="module">
+    await import('../../../dist/cdn/actions/dropdown.min.js');
+    await import('../../../dist/cdn/actions/button.min.js');
+    await customElements.whenDefined('is-dropdown');
+
+    const log = document.getElementById('log');
+    const events = [];
+    const record = (label, detail) => {
+      events.push({ ev: label, ...detail });
+      log.textContent = JSON.stringify(events, null, 2);
+    };
+
+    for (const d of document.querySelectorAll('is-dropdown')) {
+      d.addEventListener('is-show', () => record('show', {}));
+      d.addEventListener('is-after-show', () => record('after-show', {}));
+      d.addEventListener('is-hide', () => record('hide', {}));
+      d.addEventListener('is-after-hide', () => record('after-hide', {}));
+      d.addEventListener('is-select', (e) => record('select', { value: e.detail.item.value }));
+    }
+
+    document.documentElement.dataset.dropdownReady = '1';
+  </script>
+</body>
+</html>

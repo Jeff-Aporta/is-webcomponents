@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo: <is-copy-button> · is-webcomponents</title>
+  <meta name="description" content="Demo de <is-copy-button>: copia al portapapeles con feedback visual (éxito/error), tooltip configurable." />
+  <style>
+    html, body {
+      margin: 0; padding: 24px; min-height: 100%;
+      background: #0c1118; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    body { display: grid; gap: 24px; }
+    header h1 { margin: 0 0 4px 0; font-size: 18px; }
+    header p { margin: 0; color: #94a3b8; font-size: 12px; }
+    section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; }
+    section h2 { margin: 0 0 12px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+    .row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    code.block { background: #0a0f17; padding: 10px; border-radius: 6px; display: inline-block; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; max-width: 100%; word-break: break-all; }
+    pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
+    /* Anti-FOUC */
+    is-copy-button:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Demo: <code>&lt;is-copy-button&gt;</code></h1>
+    <p>Copia al portapapeles con feedback visual (success/error). Atributo <code>value</code> o <code>from</code>. Tooltip configurable.</p>
+  </header>
+
+  <section>
+    <h2>value directo</h2>
+    <div class="row">
+      <is-copy-button value="npm install is-webcomponents"></is-copy-button>
+      <is-copy-button value="https://github.com/" copy-label="Copiar URL" success-label="¡Copiado!" error-label="No se pudo copiar"></is-copy-button>
+    </div>
+  </section>
+
+  <section>
+    <h2>from (lee texto de otro elemento)</h2>
+    <div class="row">
+      <code class="block" id="snippet">const is = require('is-webcomponents');</code>
+      <is-copy-button from="snippet"></is-copy-button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Estado disabled</h2>
+    <div class="row">
+      <is-copy-button value="nunca se copia" disabled></is-copy-button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Eventos</h2>
+    <pre id="log">log: []</pre>
+  </section>
+
+  <script type="module">
+    await import('../../../dist/cdn/actions/copy-button.min.js');
+    await import('../../../dist/cdn/actions/button.min.js');
+    await customElements.whenDefined('is-copy-button');
+
+    const log = document.getElementById('log');
+    const events = [];
+    const record = (label, detail) => {
+      events.push({ ev: label, ...detail });
+      log.textContent = JSON.stringify(events, null, 2);
+    };
+
+    document.querySelectorAll('is-copy-button').forEach((b) => {
+      b.addEventListener('is-copy', (e) => record('is-copy', { value: e.detail.value }));
+      b.addEventListener('is-error', () => record('is-error', {}));
+    });
+
+    document.documentElement.dataset.copyButtonReady = '1';
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Editor de documento &lt;is-doc-editor&gt; · is-webcomponents</title>
+<meta name="description" content="Editor de documento basado en bloques (Notion-like) con menú slash para cambiar el tipo de bloque." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 820px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-doc-editor { display: block; min-height: 240px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-doc-editor:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/doc-editor.min.js');
+  await customElements.whenDefined('is-doc-editor');
+
+  const initial = [
+    { id: 'h', type: 'heading-1', text: 'Notas de la reunión' },
+    { id: 'p1', type: 'paragraph', text: 'Puntos clave discutidos hoy:' },
+    { id: 'todo1', type: 'todo', text: 'Revisar el contrato con el cliente', checked: true },
+    { id: 'todo2', type: 'todo', text: 'Enviar el informe semanal', checked: false },
+    { id: 'h2', type: 'heading-2', text: 'Próximos pasos' },
+    { id: 'list', type: 'bullet-list', text: 'Convocar al equipo de diseño' },
+    { id: 'quote', type: 'quote', text: 'La calidad nunca es un accidente.' },
+    { id: 'code', type: 'code', text: 'const ok = isReady;' },
+  ];
+
+  // (1) doc con bloques iniciales
+  const doc1 = document.createElement('is-doc-editor');
+  doc1.setAttribute('name', 'meeting');
+  doc1.value = initial;
+  document.querySelector('#sec-blocks').appendChild(doc1);
+
+  // (2) doc vacío (placeholder)
+  const doc2 = document.createElement('is-doc-editor');
+  doc2.setAttribute('name', 'scratch');
+  doc2.setAttribute('placeholder', 'Empieza a escribir… usa "/" para cambiar el tipo de bloque');
+  document.querySelector('#sec-empty').appendChild(doc2);
+
+  // (3) doc desde JSON inline (mismo convenio que otros componentes)
+  const doc3 = document.createElement('is-doc-editor');
+  doc3.setAttribute('name', 'inline-json');
+  const script = document.createElement('script');
+  script.type = 'application/json';
+  script.textContent = JSON.stringify([
+    { id: 'a', type: 'paragraph', text: 'Cargado desde script inline JSON.' },
+    { id: 'b', type: 'heading-3', text: 'Subsección' },
+    { id: 'c', type: 'numbered-list', text: 'Primer ítem' },
+  ]);
+  doc3.appendChild(script);
+  document.querySelector('#sec-inline').appendChild(doc3);
+
+  // Eventos
+  [doc1, doc2, doc3].forEach((d) => {
+    d.addEventListener('is-change', (e) => console.log('[doc-editor] change', e.detail?.blocks?.length));
+    d.addEventListener('is-focus', (e) => console.log('[doc-editor] focus', e.detail?.id));
+  });
+
+  document.documentElement.dataset.docEditorReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-doc-editor&gt; · Editor de documento por bloques</h1>
+    <p>Bloques <code>heading</code>, <code>paragraph</code>, <code>todo</code>, <code>bullet-list</code>, <code>numbered-list</code>, <code>quote</code>, <code>code</code>, <code>divider</code> · <code>Enter</code> crea bloque, <code>"/"</code> abre el menú de tipos.</p>
+  </header>
+
+  <section id="sec-blocks">
+    <h2>Documento con bloques iniciales</h2>
+    <p class="desc">Atributo <code>value</code> con array JSON de bloques. Eventos <code>is-change</code> con la lista actualizada.</p>
+  </section>
+
+  <section id="sec-empty">
+    <h2>Documento vacío</h2>
+    <p class="desc">Sólo el atributo <code>placeholder</code>; al pulsar <code>/</code> aparece el menú de tipos.</p>
+  </section>
+
+  <section id="sec-inline">
+    <h2>Documento desde JSON inline</h2>
+    <p class="desc">Seeded con un <code>&lt;script type="application/json"&gt;</code> hijo, como el resto de componentes del kit.</p>
+  </section>
+</main>
+</body>
+</html>

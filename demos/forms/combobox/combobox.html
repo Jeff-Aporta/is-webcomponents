@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Combobox &lt;is-combobox&gt; · is-webcomponents</title>
+<meta name="description" content="Input form-associated con listbox filtrable en top-layer dialog, typeahead y selección por teclado." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-combobox { width: 100%; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-combobox:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/combobox.min.js');
+  await import('../../../dist/cdn/forms/option.min.js');
+  await customElements.whenDefined('is-combobox');
+
+  // (1) Básico con filtro
+  const basico = document.createElement('is-combobox');
+  basico.setAttribute('label', 'Ciudad');
+  basico.setAttribute('name', 'city');
+  basico.setAttribute('placeholder', 'Escribe para filtrar…');
+  basico.setAttribute('hint', 'Empieza a escribir para ver sugerencias');
+  basico.value = 'mad';
+  basico.innerHTML = `
+    <is-option value="mad">Madrid</is-option>
+    <is-option value="bcn">Barcelona</is-option>
+    <is-option value="val">Valencia</is-option>
+    <is-option value="sev">Sevilla</is-option>
+    <is-option value="bil">Bilbao</is-option>
+    <is-option value="mal">Málaga</is-option>
+  `;
+  document.querySelector('#sec-basico').appendChild(basico);
+
+  // (2) Con clearable y valor inicial
+  const conClear = document.createElement('is-combobox');
+  conClear.setAttribute('label', 'País');
+  conClear.setAttribute('name', 'country');
+  conClear.setAttribute('placeholder', 'Busca un país…');
+  conClear.clearable = true;
+  conClear.value = 'mexico';
+  conClear.setAttribute('hint', 'Clearable: botón X para limpiar');
+  conClear.innerHTML = `
+    <is-option value="argentina">Argentina</is-option>
+    <is-option value="brasil">Brasil</is-option>
+    <is-option value="chile">Chile</is-option>
+    <is-option value="colombia">Colombia</is-option>
+    <is-option value="mexico">México</is-option>
+    <is-option value="peru">Perú</is-option>
+  `;
+  document.querySelector('#sec-clear').appendChild(conClear);
+
+  // (3) Requerido
+  const requerido = document.createElement('is-combobox');
+  requerido.setAttribute('label', 'Departamento *');
+  requerido.setAttribute('name', 'dept');
+  requerido.required = true;
+  requerido.setAttribute('placeholder', 'Obligatorio');
+  requerido.setAttribute('hint', 'No se puede enviar el formulario vacío');
+  requerido.innerHTML = `
+    <is-option value="eng">Engineering</is-option>
+    <is-option value="des">Design</is-option>
+    <is-option value="ops">Operations</is-option>
+    <is-option value="sup">Support</is-option>
+  `;
+  document.querySelector('#sec-required').appendChild(requerido);
+
+  // (4) Disabled
+  const deshabilitado = document.createElement('is-combobox');
+  deshabilitado.setAttribute('label', 'Estado (bloqueado)');
+  deshabilitado.value = 'archived';
+  deshabilitado.disabled = true;
+  deshabilitado.innerHTML = `
+    <is-option value="active">Activo</is-option>
+    <is-option value="archived">Archivado</is-option>
+  `;
+  document.querySelector('#sec-disabled').appendChild(deshabilitado);
+
+  document.documentElement.dataset.comboboxReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-combobox&gt; · Input + listbox filtrable</h1>
+    <p>Top-layer dialog · filtro en tiempo real · <code>ArrowUp/Down</code>, <code>Enter</code>, <code>Escape</code>.</p>
+  </header>
+
+  <section id="sec-basico">
+    <h2>Básico con valor inicial</h2>
+    <p class="desc">Atributo <code>value="mad"</code> precarga Madrid. Tipear filtra el listbox (incluye el query).</p>
+  </section>
+
+  <section id="sec-clear">
+    <h2>Clearable</h2>
+    <p class="desc"><code>clearable</code> muestra un botón X para borrar el valor.</p>
+  </section>
+
+  <section id="sec-required">
+    <h2>Requerido</h2>
+    <p class="desc"><code>required</code> activa <code>valueMissing</code> si no hay valor.</p>
+  </section>
+
+  <section id="sec-disabled">
+    <h2>Deshabilitado</h2>
+    <p class="desc">No abre ni acepta input.</p>
+  </section>
+</main>
+</body>
+</html>

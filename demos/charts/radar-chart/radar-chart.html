@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-radar-chart&gt; · demo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; padding: 20px; min-height: 0; }
+  is-radar-chart { width: 600px; height: 480px; }
+  is-radar-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data-viz/radar-chart.min.js');
+  await customElements.whenDefined('is-radar-chart');
+
+  const chart = document.createElement('is-radar-chart');
+  chart.setAttribute('label', 'Comparativa de frameworks');
+  chart.payload = {
+    type: 'radar',
+    data: {
+      labels: ['Rendimiento', 'DX', 'Docs', 'Ecosistema', 'Curva', 'Tipado'],
+      datasets: [{
+        label: 'Producto A',
+        data: [85, 70, 60, 90, 75, 95],
+      }, {
+        label: 'Producto B',
+        data: [70, 85, 90, 75, 65, 80],
+      }],
+    },
+  };
+
+  document.querySelector('main').appendChild(chart);
+  document.documentElement.dataset.radarChartReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-radar-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>radar</code>. Polígono con relleno.</p>
+</header>
+<main></main>
+</body>
+</html>

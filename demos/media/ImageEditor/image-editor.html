@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo &lt;is-image-editor&gt; · is-webcomponents</title>
+<meta name="description" content="Editor de imagen con crop, zoom, rotación y aspect-ratio lock. Canvas + selection overlay; emite is-load, is-change, is-crop." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 20px; align-content: start; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; min-height: 360px; }
+  section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; font-weight: 600; }
+  is-image-editor { display: block; width: 100%; height: 400px; max-width: 720px; }
+  .toolbar-row { display: flex; gap: 8px; margin-top: 12px; }
+  button.tool { padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); color: inherit; cursor: pointer; font-size: 12px; }
+  button.tool:hover { background: rgba(255,255,255,0.12); }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-image-editor:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar solo el bundle desde dist/cdn/.
+  await import('../../../dist/cdn/media/image-editor.min.js');
+  await customElements.whenDefined('is-image-editor');
+
+  // Suscribirse a is-load, is-change, is-crop para logging (útil para tests).
+  const editor = document.querySelector('is-image-editor');
+  editor.addEventListener('is-load', (e) => {
+    console.log('[image-editor] is-load', e.detail);
+    document.documentElement.dataset.imageEditorLoaded = '1';
+  });
+  editor.addEventListener('is-change', (e) => {
+    console.log('[image-editor] is-change', e.detail);
+    document.documentElement.dataset.imageEditorChanged = '1';
+  });
+  editor.addEventListener('is-crop', (e) => {
+    console.log('[image-editor] is-crop', e.detail);
+    document.documentElement.dataset.imageEditorCropped = '1';
+  });
+
+  document.documentElement.dataset.imageEditorReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-image-editor&gt;</code></h1>
+  <p>Crop, zoom, rotación. Toolbar por slot (zoom-in/out, rotate, reset, crop).</p>
+</header>
+<main>
+  <section>
+    <h2>Editor con imagen de muestra</h2>
+    <!-- Imagen SVG inline (data URL) — funciona offline, sin CORS. -->
+    <is-image-editor
+      src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='500' fill='url(%23g)'/%3E%3Ccircle cx='200' cy='250' r='80' fill='white' opacity='0.9'/%3E%3Crect x='350' y='150' width='300' height='200' fill='%23fbbf24' rx='12'/%3E%3Ctext x='400' y='430' font-family='sans-serif' font-size='40' fill='white' text-anchor='middle'%3EDemo%20image%3C/text%3E%3C/svg%3E"
+      zoom="1"
+      rotation="0"
+      aspect="1"
+    >
+      <div slot="toolbar" class="toolbar-row">
+        <button class="tool" data-action="zoom-in">+ Zoom</button>
+        <button class="tool" data-action="zoom-out">− Zoom</button>
+        <button class="tool" data-action="rotate">↻ Rotar</button>
+        <button class="tool" data-action="reset">Reset</button>
+        <button class="tool" data-action="crop">Crop</button>
+      </div>
+    </is-image-editor>
+  </section>
+</main>
+<footer>
+  Atributos: <code>src</code> <code>zoom</code> <code>rotation</code> <code>aspect</code>.
+  Eventos: <code>is-load</code>, <code>is-change</code>, <code>is-crop</code>.
+</footer>
+</body>
+</html>
